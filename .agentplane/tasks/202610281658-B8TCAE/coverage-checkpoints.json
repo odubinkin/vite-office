@@ -2126,7 +2126,7 @@
     ],
     "standingApprovalForProvenUnreachable": true,
     "wholeFileOrUnprovedExclusionsApproved": false,
-    "authorizationEvidence": "\u0434\u0430\u0432\u0430\u0439 \u0443\u0436\u0435 \u0432\u0441\u0435 \u0442\u0430\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438, \u043a\u043e\u0433\u0434\u0430 \u0432\u0435\u0442\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430, \u0441\u0440\u0430\u0437\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f\u043c\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0435\u0441\u043b\u0438 \u043e\u043d\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430 \u0438\u0437-\u0437\u0430 \u043f\u0440\u0435\u0434\u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043a\u0438 upstream - \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u0443\u0435\u043c \u044d\u0442\u0443 \u043e\u0448\u0438\u0431\u043a\u0443.",
+    "authorizationEvidence": "давай уже все такие случаи, когда ветка недостижима, сразу делать исключениями. Только если она недостижима из-за предположительной ошибки upstream - документируем эту ошибку.",
     "authorizedNotYetApplied": [
       "D02"
     ]
@@ -2725,5 +2725,126 @@
       ]
     },
     "fullVerifierPassed": false
+  },
+  "ownedGuardsAndChineseCheckedErrors": {
+    "profiles": [
+      {
+        "report": "apps/office/coverage/integration-chinese-checked-errors/coverage-final.json",
+        "sha256": "50515c99a8ed64be25abac1efea12e0a116763f8517dd1750337d2e52e555f2a",
+        "bytes": 62774
+      },
+      {
+        "report": "apps/office/coverage/integration-writer-standard-style-name/coverage-final.json",
+        "sha256": "397e8f2d2567772fffdc0deca8a2bf840ebbc09b8bc213423eeabb7d0ff7400e",
+        "bytes": 8943
+      },
+      {
+        "report": "apps/office/coverage/integration-writer-owned-guards/coverage-final.json",
+        "sha256": "c01960d68f162f3942bd9d6a01443f0865cff2adad7cde6ea15c64acf9460bc0",
+        "bytes": 26245
+      },
+      {
+        "report": "apps/office/coverage/integration-calc-owned-edit-guard/coverage-final.json",
+        "sha256": "8071adb3d7ac6a7c11aacd3a89ae1fb4ea46ad07403087c44194ae69fea36cd7",
+        "bytes": 19030
+      }
+    ],
+    "writer": {
+      "files": 9,
+      "tests": 148,
+      "statements": "154/154",
+      "branches": "62/62",
+      "functions": "34/34",
+      "lines": "137/137"
+    },
+    "calc": {
+      "files": 5,
+      "tests": 15,
+      "statements": "145/145",
+      "branches": "45/45",
+      "functions": "9/9",
+      "lines": "133/133"
+    },
+    "standardStyle": {
+      "files": 2,
+      "tests": 12,
+      "strictCoveragePassed": true
+    },
+    "chinese": {
+      "files": 2,
+      "tests": 36,
+      "nativeHookRows": 23936,
+      "priorRowsRetained": 23912,
+      "coverageGatePassed": false
+    },
+    "exceptions": [
+      "W01",
+      "W02",
+      "C01"
+    ],
+    "audit": "owned-guard-domain-audit.json",
+    "mapProof": "approved-owned-guard-map-proof.json",
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108117,
+          "covered": 107531,
+          "skipped": 0,
+          "pct": 99.45
+        },
+        "statements": {
+          "total": 119427,
+          "covered": 118414,
+          "skipped": 0,
+          "pct": 99.15
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74500,
+          "covered": 73099,
+          "skipped": 0,
+          "pct": 98.11
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 187,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/external/icu/source/common/uresbund.entries.ts",
+        "/external/md4c/src/md4c.mark.ts",
+        "/external/md4c/src/md4c.inline.ts",
+        "/external/md4c/src/md4c.render.ts",
+        "/external/md4c/src/md4c.context.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts",
+        "/sw/source/core/doc/DocumentStylePoolManager.ts",
+        "/sw/source/filter/html/svxcss1.ts",
+        "/sc/browser/filter/xml/calc-document-codec.ts"
+      ]
+    },
+    "limitation": "The pre-existing unsupported-cell test patches getSharedString; its hit is retained but does not prove reachability from a canonical document. No new mock was added and C01 is proved independently from concrete cell ownership. Final full verifier has not passed."
   }
 }

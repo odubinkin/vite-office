@@ -1,6 +1,6 @@
 {
   "status": "Approved prior scopes and proven D02-D11 annotations applied; standing human authorization covers independently proven unreachable cases; A05/M03 remain withdrawn and unapplied.",
-  "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
+  "policy": "Apply only independently proven unreachable exceptions under the standing human authorization; preserve runtime guards, strict thresholds and exact counter proof. Missing tests or elapsed time never prove unreachability.",
   "candidates": [
     {
       "id": "B8TCAE-U01",
@@ -11,7 +11,7 @@
       "upstreamFinding": "CALC-371",
       "sourceSha256": "d66134af740b5da9b3a72dd832f46de4bc68de8382875a09f24fadeefd64c39a",
       "proposedScope": "Only the impossible no-end error alternative; keep the actual source guard and all other coverage obligations.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u044d\u0442\u043e \u0442\u043e\u0447\u0435\u0447\u043d\u043e\u0435 \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
+      "approvalEvidence": "Разрешить это точечное исключение",
       "approvedBy": "human user in this conversation",
       "implementation": "Only the approved Istanbul ignore annotation; runtime statements/guards remain intact. Configured thresholds/discovery unchanged.",
       "sourceHashes": {
@@ -80,7 +80,7 @@
       },
       "existingEvidence": "native-currencies.test.ts enumerates real installed locale values; resource/inventory checks retain the generated data contract.",
       "proposedScope": "Only the missing-identity throw alternative in coverage; retain runtime integrity validation, catalog tests and the100% threshold.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 U02",
+      "approvalEvidence": "Разрешить только исключение U02",
       "approvedBy": "human user in this conversation",
       "implementation": "Approved ignore-if plus an explicit empty normal-path else; the original if(!info) throw remains unchanged. The explicit else prevents Istanbul from also dropping the covered synthetic else.",
       "sourceHashes": {
@@ -170,7 +170,7 @@
       },
       "preparedPatch": "prepared-sax-s01-exception.patch",
       "evidenceBoundary": "Local host XML backend guard only, not an upstream ICU/LibreOffice defect or complete native SAX certification. Pinned converter algorithms are unchanged. Actual remapped-counter/token comparison remains required after approval.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e S01",
+      "approvalEvidence": "Разрешить только S01",
       "verificationProof": "approved-s01-map-proof.json",
       "beforeReportArchivedAt": ".agentplane/tmp/coverage-raw-backup/pre-s01/coverage-final.json"
     },
@@ -214,7 +214,7 @@
       },
       "preparedPatch": "prepared-md4c-m01-exception.patch",
       "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M01",
+      "approvalEvidence": "Разрешить только M01",
       "verificationProof": "approved-m01-m02-map-proof.json",
       "status": "Individually approved narrow scope applied; fresh1912 assertions and strict module100 coverage pass. Native algorithms remain unchanged."
     },
@@ -257,7 +257,7 @@
       },
       "preparedPatch": "prepared-md4c-m02-exception.patch",
       "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M02",
+      "approvalEvidence": "Разрешить только M02",
       "verificationProof": "approved-m01-m02-map-proof.json",
       "status": "Individually approved narrow scope applied; fresh1912 assertions and strict module100 coverage pass. Native algorithms remain unchanged."
     },
@@ -339,7 +339,7 @@
       },
       "preparedPatch": "prepared-md4c-m04-exception.patch",
       "evidenceBoundary": "Native source precondition plus actual public-parser corpus, not a newly demonstrated ordinary-input upstream defect or native invalid-pointer experiment. Each scope needs its own human decision.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M04",
+      "approvalEvidence": "Разрешить только M04",
       "verificationProof": "approved-m04-m05-map-proof.json",
       "initialReviewTestCount": 1998,
       "initialReviewReportSha256": "ea2392a4c346afbb91b7cd2c75d15bf95171f16a51f7e1e73a478f83ce1962ec",
@@ -423,7 +423,7 @@
       },
       "preparedPatch": "prepared-md4c-m05-exception.patch",
       "evidenceBoundary": "Native source precondition plus actual public-parser corpus, not a newly demonstrated ordinary-input upstream defect or native invalid-pointer experiment. Each scope needs its own human decision.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M05",
+      "approvalEvidence": "Разрешить только M05",
       "verificationProof": "approved-m04-m05-map-proof.json",
       "initialReviewTestCount": 1998,
       "initialReviewReportSha256": "ea2392a4c346afbb91b7cd2c75d15bf95171f16a51f7e1e73a478f83ce1962ec",
@@ -507,7 +507,7 @@
       },
       "preparedPatch": "prepared-date-d01-exception.patch",
       "evidenceBoundary": "Normal-build source precondition, not a newly claimed ordinary-input defect or alternate-calendar/native UNO comparison. Future macro-enabled code must re-review this exception.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e D01",
+      "approvalEvidence": "Разрешить только D01",
       "verificationProof": "approved-d01-map-proof.json",
       "status": "Exact approved one-statement/one-alternative scope applied;71 targeted tests and44 consumer suites719 tests pass. Original source paths and every previously covered position are retained."
     },
@@ -622,7 +622,7 @@
       },
       "preparedPatch": "prepared-date-d02-exception.patch",
       "evidenceBoundary": "Original source call-graph invariant plus genuine public regressions; not full native UNO input conversion, direct private-helper misuse or future orchestration that might admit zero-particle dates. Later reactivation must re-review this exception.",
-      "approvalEvidence": "\u0434\u0430\u0432\u0430\u0439 \u0443\u0436\u0435 \u0432\u0441\u0435 \u0442\u0430\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438, \u043a\u043e\u0433\u0434\u0430 \u0432\u0435\u0442\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430, \u0441\u0440\u0430\u0437\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f\u043c\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0435\u0441\u043b\u0438 \u043e\u043d\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430 \u0438\u0437-\u0437\u0430 \u043f\u0440\u0435\u0434\u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043a\u0438 upstream - \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u0443\u0435\u043c \u044d\u0442\u0443 \u043e\u0448\u0438\u0431\u043a\u0443.",
+      "approvalEvidence": "давай уже все такие случаи, когда ветка недостижима, сразу делать исключениями. Только если она недостижима из-за предположительной ошибки upstream - документируем эту ошибку.",
       "verificationProof": "approved-date-d02-d11-map-proof.json",
       "status": "Applied with exact positional map proof and 44 passing consumer suites / 731 tests."
     },
@@ -1814,6 +1814,42 @@
       "sourceAudit": "md4c-producer-domain-audit.json",
       "verificationProof": "approved-md4c-producer-map-proof.json",
       "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-W01",
+      "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "branch": "4",
+      "arm": 0,
+      "statement": "23",
+      "reason": "The readonly pinned character pool has a validated first entry; find(...) ?? pool[0] cannot be undefined. No API clears or replaces this static resource. Invalid private/resource mutation is outside the contract.",
+      "approval": "approved under standing human authorization",
+      "implementation": "Applied only the proven throw/true alternative; runtime guard retained with one no-op normal else for exact source mapping.",
+      "audit": "owned-guard-domain-audit.json",
+      "mapProof": "approved-owned-guard-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-W02",
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.ts",
+      "branch": "6",
+      "arm": 0,
+      "statement": "44",
+      "reason": "The only production DeclarationParsed dispatches are synchronous inside base parsing. Both override entry points bind real non-null sheet/caller item and info owners before delegating; missing inline arguments return via an earlier throw. Both fields are reset only in finally after delegation. No other production assignment exists, and the concrete Writer specialization does not override the empty StyleParsed hook or mutate these fields. Protected direct calls/arbitrary subclasses that replace state/reentrant use are outside the actual parser orchestration.",
+      "approval": "approved under standing human authorization",
+      "implementation": "Applied only the proven throw/true alternative; runtime guard retained with one no-op normal else for exact source mapping.",
+      "audit": "owned-guard-domain-audit.json",
+      "mapProof": "approved-owned-guard-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-C01",
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "branch": "9",
+      "arm": 0,
+      "statement": "38",
+      "reason": "Actual ScRefCellValue sets EDIT only in the non-null EditTextObject constructor arm, copies all tag/pointer fields together, and clears pointer only together with NONE. No other assignment exists. The worker encoder reads pure getType/getEditText consecutively; the cooperative yield is after this complete cell. Therefore an EDIT view cannot have a null edit pointer. Unrepresented C++ null-Edit-pointer overloads, forged subclasses/private storage and invalid borrow lifetimes are not certified.",
+      "approval": "approved under standing human authorization",
+      "implementation": "Applied only the proven throw/true alternative; runtime guard retained with one no-op normal else for exact source mapping.",
+      "audit": "owned-guard-domain-audit.json",
+      "mapProof": "approved-owned-guard-map-proof.json"
     }
   ],
   "additionalAudits": [
@@ -1862,7 +1898,7 @@
         ]
       },
       "approvedBy": "human user in this conversation",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A02",
+      "approvalEvidence": "Разрешить только A02",
       "exceptionApplied": true,
       "verificationProof": "approved-a02-a03-a06-map-proof.json",
       "journal": "WRITER245",
@@ -1943,7 +1979,7 @@
         ]
       },
       "approvedBy": "human user in this conversation",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A03",
+      "approvalEvidence": "Разрешить только A03",
       "exceptionApplied": true,
       "verificationProof": "approved-a02-a03-a06-map-proof.json",
       "journal": "WRITER245",
@@ -2003,7 +2039,7 @@
       "questionSourceCommit": "279a74173a46",
       "questionSourceSha256": "4e0bdb82ba8be75d341211eff27aa6b3f7bfebf59f7e82c9965ad53a96c16a36",
       "auditedFunctionSha256": "c85585e2d3d8920114698dced429538371b9243d3ca9f1569ec886167996f252",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u044d\u0442\u043e\u0442 return",
+      "approvalEvidence": "Разрешить только этот return",
       "approvedBy": "human user in this conversation",
       "implementation": "Only the approved Istanbul ignore annotation; runtime statements/guards remain intact. Configured thresholds/discovery unchanged.",
       "sourceHashes": {
@@ -2056,7 +2092,7 @@
       "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-rtfsprm-a05-exception.patch",
       "proposal": "Express the existing optional entry access as an equivalent nullish ternary and ignore only its absent-entry operand. Keep all lookup results, comparisons, loops, runtime missing-entry handling and configured thresholds. Verify exact instrumentation scope before any commit. Not applied.",
       "status": "Withdrawn: exact raw branch inspection and a genuine reverse-lookup test identify the missing path as the index-selection ternary. Draft reverted before code commit. The prepared patch file now contains only a withdrawal notice. No A05 source change or exclusion is applied.",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A05",
+      "approvalEvidence": "Разрешить только A05",
       "exceptionApplied": false,
       "auditCorrection": "Dense-entry invariant is valid but unrelated to the remaining coverage arm. Original source is byte-restored; no A05 annotation remains.",
       "preparedPatchWithdrawn": true,
@@ -2174,7 +2210,7 @@
       "status": "Only the individually approved alternative is annotated; runtime expressions/guards remain. Fresh strict100 consumer profiles and exact source/counter proof pass.",
       "domainClarification": "WriterCharacterAttributes declares readonly underline:boolean and underlineStyle?:FontLineStyle. Null is outside that optional-enum contract, and state-changing accessors are outside the actual plain-value projection. The guard/counter audit is scoped to those admitted values; runtime expressions remain present even for out-of-contract JavaScript callers.",
       "approvedBy": "human user in this conversation",
-      "approvalEvidence": "\u0440\u0430\u0437\u0440\u0435\u0448\u0430\u044e \u0438 \u043d\u0435 \u0437\u0430\u0431\u0443\u0434\u044c \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0442\u0440\u0430\u043d\u043d\u043e\u0435 \u043f\u043e\u0432\u0435\u0434\u0435\u043d\u0438\u0435 upstream",
+      "approvalEvidence": "разрешаю и не забудь зарегистрировать странное поведение upstream",
       "exceptionApplied": true,
       "verificationProof": "approved-a02-a03-a06-map-proof.json",
       "journal": "WRITER246",
@@ -2272,7 +2308,7 @@
       },
       "status": "Only the individually approved scope is annotated. All41 actual style tests pass with strict100 coverage; exact runtime-token/counter comparison passes.",
       "approvedBy": "human user in this conversation",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0430\u044e A01a \u0438 A01b. \u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u0443\u0439 \u043f\u0440\u0435\u0434\u043f\u043e\u0441\u044b\u043b\u043a\u0438 upstream \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u0438 \u0438 \u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0430\u0439 \u0434\u043e\u0432\u043e\u0434\u0438\u0442\u044c \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0435 \u0434\u043e 100%.",
+      "approvalEvidence": "Разрешаю A01a и A01b. Зафиксируй предпосылки upstream в документации и продолжай доводить покрытие до 100%.",
       "exceptionApplied": true,
       "verificationProof": "approved-a01a-a01b-map-proof.json",
       "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
@@ -2337,7 +2373,7 @@
       },
       "status": "Only the individually approved scope is annotated. All41 actual style tests pass with strict100 coverage; exact runtime-token/counter comparison passes.",
       "approvedBy": "human user in this conversation",
-      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0430\u044e A01a \u0438 A01b. \u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u0443\u0439 \u043f\u0440\u0435\u0434\u043f\u043e\u0441\u044b\u043b\u043a\u0438 upstream \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u0438 \u0438 \u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0430\u0439 \u0434\u043e\u0432\u043e\u0434\u0438\u0442\u044c \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0435 \u0434\u043e 100%.",
+      "approvalEvidence": "Разрешаю A01a и A01b. Зафиксируй предпосылки upstream в документации и продолжай доводить покрытие до 100%.",
       "exceptionApplied": true,
       "verificationProof": "approved-a01a-a01b-map-proof.json",
       "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
@@ -2359,7 +2395,7 @@
   "standingAuthorization": {
     "approvedBy": "human user",
     "date": "2026-10-29",
-    "evidence": "\u0434\u0430\u0432\u0430\u0439 \u0443\u0436\u0435 \u0432\u0441\u0435 \u0442\u0430\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438, \u043a\u043e\u0433\u0434\u0430 \u0432\u0435\u0442\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430, \u0441\u0440\u0430\u0437\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f\u043c\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0435\u0441\u043b\u0438 \u043e\u043d\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430 \u0438\u0437-\u0437\u0430 \u043f\u0440\u0435\u0434\u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043a\u0438 upstream - \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u0443\u0435\u043c \u044d\u0442\u0443 \u043e\u0448\u0438\u0431\u043a\u0443.",
+    "evidence": "давай уже все такие случаи, когда ветка недостижима, сразу делать исключениями. Только если она недостижима из-за предположительной ошибки upstream - документируем эту ошибку.",
     "scope": "Apply independently proven unreachable coverage exceptions without further individual questions. Retain runtime logic/guards, strict100 thresholds and exact source/counter proof. Document suspected upstream bugs when they explain the unreachable path. Missing tests alone are not proof."
   }
 }

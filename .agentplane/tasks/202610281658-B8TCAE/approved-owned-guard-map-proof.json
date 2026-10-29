@@ -1,0 +1,101 @@
+{
+  "W01": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 58,
+          "column": 34
+        },
+        "end": {
+          "line": 58,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "4",
+        "originalLine": 58,
+        "excludedArm": 0,
+        "retainedArmHits": 35
+      }
+    ],
+    "functionsUnchanged": 12,
+    "statements": [
+      51,
+      50
+    ],
+    "branchArms": [
+      20,
+      19
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions."
+  },
+  "W02": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 153,
+          "column": 47
+        },
+        "end": {
+          "line": 153,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "6",
+        "originalLine": 153,
+        "excludedArm": 0,
+        "retainedArmHits": 62
+      }
+    ],
+    "functionsUnchanged": 22,
+    "statements": [
+      105,
+      104
+    ],
+    "branchArms": [
+      44,
+      43
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions."
+  },
+  "C01": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 100,
+          "column": 19
+        },
+        "end": {
+          "line": 100,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "9",
+        "originalLine": 100,
+        "excludedArm": 0,
+        "retainedArmHits": 1
+      }
+    ],
+    "functionsUnchanged": 9,
+    "statements": [
+      146,
+      145
+    ],
+    "branchArms": [
+      46,
+      45
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions."
+  }
+}

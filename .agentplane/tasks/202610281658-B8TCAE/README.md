@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 73
+revision: 74
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T08:28:19.961Z"
+doc_updated_at: "2026-10-29T08:47:01.146Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -270,6 +270,8 @@ sections:
     - Observation: Original public MD4C native cases expand from82 to88 with every prior row retained, plus12 independent flags-disabled reference cases. Genuine inputs cover repeated stale backtick-candidate caches and nested empty-reference rejection; no code-span or empty-reference exception is used. Eight separately audited producer scopes exclude only seven zero-hit alternatives and one leading indented-code trim advance.
       Impact: Exact runtime-token and retained-map comparison needs no syntax or source-position relaxation; a formatter-only directive preserves the original nested selector expression. All8 suites /2017 tests pass. Mark/context/render/code-span owners reach strict100%; combined six-owner coverage is528/528 statements,395/397 alternatives,27/27 functions,467/467 lines, with the two unresolved alternatives still counted. M10/M15 remain unapplied: original native comment expressly discusses out-of-order autolink closers, and63000 read-only public-input counter searches without a hit are not proof. Diagnostic union now has191 incomplete owners,99.14% statements,98.10% branches and100% functions.
       Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Temporary search test was removed; diagnostic counters are never rewritten/merged as proof. Writer/calc sibling tracked trees remain clean on writer778a24dd3 and calc251c2997b. Final full verification, publication and reverse merges remain pending.
+
+    B8TCAE owned-guard checkpoint: W01/W02/C01 each remove exactly one independently proved zero-hit throw and one alternative, retaining runtime tokens, all functions and exact retained source maps. Nine Writer suites/148 tests and five Calc suites/15 tests pass with strict100% for their selected owners. The separate pre-existing getSharedString prototype mock is not new and does not certify canonical-document reachability of the unsupported-cell guard; that guard remains counted. Source-English character-name cases pass12 tests with strict mapper coverage. Chinese/Dangi adds24 checked-overflow native observations, retaining all23912 earlier rows/source/archive/witness hashes;36 tests pass, astronomical gaps remain. Diagnostic compatible-map union now has187 incomplete owners,118414/119427 statements,73099/74500 alternatives,18429/18429 functions,107531/108117 lines. Final complete verification and publication/sibling reverse merges remain pending. Focused formatting/lint and project typecheck pass.
 id_source: "generated"
 ---
 ## Summary
@@ -513,3 +515,5 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Observation: Original public MD4C native cases expand from82 to88 with every prior row retained, plus12 independent flags-disabled reference cases. Genuine inputs cover repeated stale backtick-candidate caches and nested empty-reference rejection; no code-span or empty-reference exception is used. Eight separately audited producer scopes exclude only seven zero-hit alternatives and one leading indented-code trim advance.
   Impact: Exact runtime-token and retained-map comparison needs no syntax or source-position relaxation; a formatter-only directive preserves the original nested selector expression. All8 suites /2017 tests pass. Mark/context/render/code-span owners reach strict100%; combined six-owner coverage is528/528 statements,395/397 alternatives,27/27 functions,467/467 lines, with the two unresolved alternatives still counted. M10/M15 remain unapplied: original native comment expressly discusses out-of-order autolink closers, and63000 read-only public-input counter searches without a hit are not proof. Diagnostic union now has191 incomplete owners,99.14% statements,98.10% branches and100% functions.
   Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Temporary search test was removed; diagnostic counters are never rewritten/merged as proof. Writer/calc sibling tracked trees remain clean on writer778a24dd3 and calc251c2997b. Final full verification, publication and reverse merges remain pending.
+
+B8TCAE owned-guard checkpoint: W01/W02/C01 each remove exactly one independently proved zero-hit throw and one alternative, retaining runtime tokens, all functions and exact retained source maps. Nine Writer suites/148 tests and five Calc suites/15 tests pass with strict100% for their selected owners. The separate pre-existing getSharedString prototype mock is not new and does not certify canonical-document reachability of the unsupported-cell guard; that guard remains counted. Source-English character-name cases pass12 tests with strict mapper coverage. Chinese/Dangi adds24 checked-overflow native observations, retaining all23912 earlier rows/source/archive/witness hashes;36 tests pass, astronomical gaps remain. Diagnostic compatible-map union now has187 incomplete owners,118414/119427 statements,73099/74500 alternatives,18429/18429 functions,107531/108117 lines. Final complete verification and publication/sibling reverse merges remain pending. Focused formatting/lint and project typecheck pass.
