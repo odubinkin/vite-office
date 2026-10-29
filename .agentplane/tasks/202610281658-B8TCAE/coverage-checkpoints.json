@@ -2368,5 +2368,13 @@
     "fullVerifierPassed": false,
     "runtimeTokensChanged": false,
     "thresholdsChanged": false
+  },
+  "sharedDefaultBoundaries": {
+    "files": 4,
+    "tests": 14,
+    "report": "apps/office/coverage/integration-shared-default-boundaries/coverage-final.json",
+    "strictOwnerCoveragePassed": true,
+    "runtimeChanged": false,
+    "hostBoundary": "Only Date.now supplies finite out-of-range failure and ordinary local-date success; no calendar algorithms are mocked."
   }
 }

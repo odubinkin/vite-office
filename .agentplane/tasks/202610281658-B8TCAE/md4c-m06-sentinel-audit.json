@@ -1,0 +1,20 @@
+{
+  "id": "B8TCAE-M06",
+  "authorization": "Standing human approval for independently proven unreachable alternatives.",
+  "path": "apps/office/src/external/md4c/src/md4c.mark.analyze.ts",
+  "reason": "The original collector always appends a resolved ch127 sentinel after every actual mark. Entity analysis dispatches only ch38. The sentinel is never removed; n_marks resets only before collection and then increments only in md_add_mark. Therefore any ampersand index is at most n_marks-2, including a trailing ampersand without a semicolon.",
+  "sourceEvidence": {
+    "vendor/md4c-reference/src/md4c.c": [
+      3338,
+      3663,
+      3676,
+      4102
+    ],
+    "apps/office/src/external/md4c/src/md4c.mark.collect.ts": "final md_add_mark(ctx,127,ctx.size,ctx.size,MD_MARK_RESOLVED)",
+    "apps/office/src/external/md4c/src/md4c.mark.analyze.ts": "entity dispatch only ch38; reset precedes collector",
+    "apps/office/src/external/md4c/src/md4c.mark.ts": "only increment in md_add_mark"
+  },
+  "upstreamDefectSuspected": false,
+  "scope": "Only the zero-hit early return and its true alternative; preserve guard and every runtime token.",
+  "beforeSha256": "fea5f80f4467a28c1694d8569bf22a4f5fe74eea185fd82eadee6e39687ced83"
+}
