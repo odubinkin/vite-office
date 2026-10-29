@@ -91,7 +91,8 @@
     ],
     "preservedResponsibilities": [
       "Original scanner state, locale/text invalidation, input-date ownership and source helper dispatch. Public IsNumberFormat now preserves input length0/over308 rejection, uppercase and native-number conversion, source category/count gates, actual calendar/date/time and numeric result dispatch and final Text/zero failure outputs. Date-order retries retain source THE_FUTURE calendar switching disabled.",
-      "AQF9AG restores the original public CanForceToIso8601 access and inline HasIso8601Tsep field query consumed by SvNFEngine::IsNumberFormat. Recognition state and detection logic are unchanged."
+      "AQF9AG restores the original public CanForceToIso8601 access and inline HasIso8601Tsep field query consumed by SvNFEngine::IsNumberFormat. Recognition state and detection logic are unchanged.",
+      "Additional public compound-input regressions preserve accounting currency sign timing, grouping with scientific exponents, decimal/fraction/category conflicts, malformed numeric/date fragments, ISO date/time transitions and international-first evaluation with a real compiled date format. The two-suite profile passes135 tests. Scalar expectations are independently specified; negative ISO-era dates are checked by a one-day increment rather than a fabricated native absolute-day oracle. No private scanner state, source algorithm, discovery or threshold changes; full native input-scanner parity remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete formatter index selection and Calc column/importer auto-input integration remain pending. Native whole-LibreOffice scanner binary comparison and full unsupported/unconsumed API surfaces remain unverified."
@@ -129,6 +130,14 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforfind.ts",
           "marker": "IsNumberFormatMain"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.compiled-literals.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.date-input.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

@@ -587,3 +587,43 @@ it("uses the filter language's formatter separators for simple numbers", /** Che
   expect(doc.GetValue(new ScAddress(0, 0, 0))).toBe(1.5);
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(1234.5);
 });
+
+it.each([
+  ["😀B", 1, 2, 2],
+  ["A\u{E0100}B", 1, 1, 3],
+  ["A", 1, 1, 1],
+  ["", 1, 0, 0],
+] as const)(
+  "counts native supplementary visual widths for %s",
+  /** ICU character properties determine visual columns while the public cursor remains a UTF16 offset. @param input - Logical source. @param limit - Maximum visual columns. @param width - Native width. @param end - Expected UTF16 cursor. @returns Nothing. */ (
+    input,
+    limit,
+    width,
+    end,
+  ) => {
+    const cursor: [number] = [0];
+    expect(ScImportExport.CountVisualWidth(input, cursor, limit)).toBe(width);
+    expect(cursor[0]).toBe(end);
+  },
+);
+
+it("consumes the caller-owned stream with its actual encoding and final cursor", /** The stream overload retains its own UTF8 encoding even when the separate byte-input option names another charset. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    name = unicode("Stream");
+  try {
+    doc.InsertTab(0, name);
+    const bytes = new TextEncoder().encode("é\n"),
+      stream = new SvStream(bytes, RTL_TEXTENCODING_UTF8),
+      options = new ScAsciiOptions();
+    options.eCharSet = RTL_TEXTENCODING_MS_1251;
+    const converter = new ScImportExport(doc);
+    converter.SetExtOptions(options);
+    expect(converter.ImportStream(stream)).toBe(true);
+    expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("é");
+    expect(stream.Tell()).toBe(bytes.length);
+    expect(stream.eof()).toBe(true);
+  } finally {
+    name.dispose();
+    doc.Dispose();
+  }
+});

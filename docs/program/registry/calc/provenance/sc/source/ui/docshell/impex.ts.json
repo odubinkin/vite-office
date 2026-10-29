@@ -20,7 +20,8 @@
       "AQF9AG finalizes the importer once after all CSV records. Numeric/string/formula fields now use raw native import writes and deferred formula grouping/listeners. Plain multiline construction still uses the existing document bridge until ScFieldEditEngine is ported and explicitly invalidates cached import positions after external writes.",
       "AQF9AG connects original text/force-formula-text recognition and real pooled Text pattern application through the document formatter. Original English-column recognition calls document GetStandardIndex(EN_US)/IsNumberFormat and writes a numeric cell without setting an English cell format. Existing strict CSV recognition tests now pass these two cases; explicit date and original setAutoInput/ParseString branches remain pending, with five strict failures retained.",
       "AQF9AG creates the original per-import primary calendar/IGNORE_CASE transliterator and optional English pair, preserving the source primary-wrapper English reload CALC-383. Both field modes pass actual services to the full original explicit-date branch, which assigns genuine date/datetime formats and numeric values. Auto-input/special-number fallback remains pending.",
-      "AQF9AG replaces the local simple-number/formula shortcut with original ScSetStringParam/SpecialNumberOnly/setAutoInput, preserving scientific/apostrophe/link flags. Original strict ISO precheck uses actual SAX Converter and formatter; empty import uses setAutoInput too. All seven previously strict recognition cases now pass."
+      "AQF9AG replaces the local simple-number/formula shortcut with original ScSetStringParam/SpecialNumberOnly/setAutoInput, preserving scientific/apostrophe/link flags. Original strict ISO precheck uses actual SAX Converter and formatter; empty import uses setAutoInput too. All seven previously strict recognition cases now pass.",
+      "Additional actual Calc document CSV regressions cover standard-column ISO dates with general special-number detection disabled, malformed ISO fallback/rejection,5/7-digit compact dates, impossible calendar fields, original permissive explicit YMD separators, English month/AMPM fallback under German/Japanese import locales, blank-row skip/clear policy, supplementary visual-width cursor units and caller-owned stream encoding/position. Numeric date/time expectations are independent. The guarded ISO-looking2024-12-31T03:04-05 remains text because original ISO qualification prevents the permissive fallback. No private state, callbacks, production algorithm or coverage configuration is replaced; full native branch differential remains unverified."
     ],
     "omittedResponsibilities": [
       "Full LibreOffice text filter, source auto-input chain, input number scanner, contextual charset conversion and UI option dialog are not yet ported."
@@ -34,6 +35,18 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/impex.test.ts",
           "marker": "imports quoted separators"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.date.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

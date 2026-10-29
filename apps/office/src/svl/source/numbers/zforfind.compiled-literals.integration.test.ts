@@ -86,6 +86,38 @@ it.each([
   "12)",
   "12$)",
   "1 2/0",
+  "1.2/3",
+  "1 2.3/4",
+  "1 2/3.4",
+  "1/2.3",
+  "1 2/3/4",
+  ".1 2/3",
+  ".1:2:3",
+  ".1 2 3 4",
+  "FOO1/2/3",
+  "FOO1/2/3/4",
+  "1,234E5,6",
+  "1,234,567E2E3",
+  "1,234,567.89E2.3",
+  "1.2 3E4",
+  "1E2 3 4",
+  "1E2/3",
+  "1E2:3",
+  "1:2:3.4.5",
+  "1:2:3.4,5",
+  "1:2:3,4,5",
+  "2024--01--02",
+  "-2024--01--02",
+  "2024-01--02",
+  "2024-01-02-03",
+  "1%2",
+  "1$2",
+  "1.2,3",
+  "1,2.3",
+  "1. 2.",
+  "(1) 2",
+  "(1/2)",
+  "1E2.3.4",
 ])(
   "rejects conflicting or incomplete numeric input %s through the public owner",
   /** Contradictory category markers, unmatched accounting delimiters and a zero denominator cannot yield a successful scalar. @param input - Complete invalid user input. @returns Nothing. */ (
@@ -114,3 +146,67 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["$(12)", T.CURRENCY, -12],
+  ["$ (12)", T.CURRENCY, -12],
+  ["($12)", T.CURRENCY, -12],
+  ["$12-", T.CURRENCY, -12],
+  ["-$12", T.CURRENCY, -12],
+  ["(12$)", T.CURRENCY, -12],
+  ["1,234,567.89E2", T.SCIENTIFIC, 123456789],
+  ["2024-01-02 03:04:05", T.DATETIME, 45293 + (3 * 3600 + 4 * 60 + 5) / 86400],
+  ["2024-01-02 03:04", T.DATETIME, 45293 + (3 * 3600 + 4 * 60) / 86400],
+  ["2024-01-02T03:04:05", T.DATETIME, 45293 + (3 * 3600 + 4 * 60 + 5) / 86400],
+] as const)(
+  "converts compound public numeric input %s",
+  /** Accounting signs are applied once; grouping and time components retain their independently specified decimal values. @param input - Complete user text. @param expectedType - Original category. @param expected - Independent numeric value. @returns Nothing. */ (
+    input,
+    expectedType,
+    expected,
+  ) => {
+    const mapper = new NumberFormatCodeMapper(),
+      language = createNumberFormatLanguage(mapper, 0x0409),
+      value = unicode(input);
+    try {
+      const type: [number] = [T.NUMBER],
+        out: [number] = [-1];
+      expect(
+        language.pStringScanner.IsNumberFormat(value, type, out, null, new NativeNumberWrapper()),
+      ).toBe(true);
+      expect(type[0]).toBe(expectedType);
+      expect(out[0]).toBeCloseTo(expected, 9);
+    } finally {
+      value.dispose();
+      language.dispose();
+      mapper.dispose();
+    }
+  },
+);
+
+it("keeps consecutive signed-era input dates one day apart", /** Negative ISO years use actual calendar era assignment; compare civil-day increments without fabricating a native absolute-day oracle. @returns Nothing. */ () => {
+  const mapper = new NumberFormatCodeMapper(),
+    language = createNumberFormatLanguage(mapper, 0x0409),
+    results: number[] = [];
+  try {
+    for (const input of ["-2024-01-02T03:04:05", "-2024-01-03T03:04:05"]) {
+      const value = unicode(input);
+      try {
+        const type: [number] = [T.DATE],
+          out: [number] = [0];
+        expect(
+          language.pStringScanner.IsNumberFormat(value, type, out, null, new NativeNumberWrapper()),
+        ).toBe(true);
+        expect(type[0]).toBe(T.DATETIME);
+        expect(out[0]).toBeLessThan(0);
+        results.push(out[0]);
+      } finally {
+        value.dispose();
+      }
+    }
+    expect(results[1]).toBe((results[0] as number) + 1);
+  } finally {
+    language.dispose();
+    mapper.dispose();
+  }
+});

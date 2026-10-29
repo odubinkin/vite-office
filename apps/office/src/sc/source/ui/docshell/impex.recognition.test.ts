@@ -122,3 +122,48 @@ it.each([false, true])(
     }
   },
 );
+
+it.each([
+  ["2024-12-31", 45657],
+  ["2024-12-31T12:34:56", 45657 + 45296 / 86400],
+  ["2024-02-29", 45351],
+] as const)(
+  "keeps ISO date recognition when special-number detection is disabled: %s",
+  /** The original standard-column ISO exception stores a numeric cell and real date format independently from generic special-number recognition. @param input - ISO field. @param expected - Independent spreadsheet serial. @returns Nothing. */ (
+    input,
+    expected,
+  ) => {
+    const options = new ScAsciiOptions();
+    options.eLang = LANGUAGE_ENGLISH_US;
+    options.bDetectSpecialNumber = false;
+    const document = imported(options, input),
+      position = new ScAddress();
+    expect(document.GetCellType(position)).toBe(CellType.CELLTYPE_VALUE);
+    expect(document.GetValue(position)).toBeCloseTo(expected, 9);
+    const key = document.GetPattern(position)?.GetNumberFormat(document.GetFormatTable());
+    expect(key).toBeDefined();
+    expect(document.GetFormatTable().GetType(key as number) & SvNumFormatType.DATE).not.toBe(0);
+  },
+);
+
+it.each(["2024-1", "2024-1-", "2024-123-01", "2024-12-99", "2024-12-31junk"])(
+  "retains malformed ISO-like standard input %s as text",
+  /** Position checks and the actual SAX converter reject malformed ISO text before any date-format adoption. @param input - Invalid field. @returns Nothing. */ (
+    input,
+  ) => {
+    const options = new ScAsciiOptions();
+    options.eLang = LANGUAGE_ENGLISH_US;
+    options.bDetectSpecialNumber = false;
+    const document = imported(options, input);
+    expect(document.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_STRING);
+  },
+);
+
+it("retains text after the real English-column numeric recognizer rejects it", /** The explicit English column still falls through to ordinary text ownership for nonnumeric input. @returns Nothing. */ () => {
+  const options = new ScAsciiOptions();
+  options.eLang = LANGUAGE_GERMAN;
+  options.mvColStart = [1];
+  options.mvColFormat = [SC_COL_ENGLISH];
+  const document = imported(options, "not a number");
+  expect(document.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_STRING);
+});

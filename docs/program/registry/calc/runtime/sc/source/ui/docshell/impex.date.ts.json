@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sc/source/ui/docshell/impex.date.ts",
         "apps/office/src/sc/source/ui/docshell/impex.date.test.ts",
-        "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts"
+        "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts",
+        "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+        "apps/office/src/sc/source/ui/docshell/impex.test.ts"
       ],
-      "justification": "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-384 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending.",
+      "justification": "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-384 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending. Additional actual Calc document CSV regressions cover standard-column ISO dates with general special-number detection disabled, malformed ISO fallback/rejection,5/7-digit compact dates, impossible calendar fields, original permissive explicit YMD separators, English month/AMPM fallback under German/Japanese import locales, blank-row skip/clear policy, supplementary visual-width cursor units and caller-owned stream encoding/position. Numeric date/time expectations are independent. The guarded ISO-looking2024-12-31T03:04-05 remains text because original ISO qualification prevents the permissive fallback. No private state, callbacks, production algorithm or coverage configuration is replaced; full native branch differential remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "PutDate"

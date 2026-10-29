@@ -35,12 +35,22 @@ function imported(value: string, order: number, language = 0x409): ScDocument {
   return document;
 }
 it.each([
+  [SC_COL_DMY, "1122024", 1, 12, 2024, 0],
+  [SC_COL_DMY, "11224", 1, 12, 2024, 0],
   [SC_COL_DMY, "31122024", 31, 12, 2024, 0],
   [SC_COL_MDY, "12312024", 31, 12, 2024, 0],
+  [SC_COL_YMD, "2024--12-31", 31, 12, 2024, 0],
+  [SC_COL_YMD, "2024-012-31", 31, 12, 2024, 0],
+  [SC_COL_YMD, "2024-December-31", 31, 12, 2024, 0],
+  [SC_COL_YMD, "2024-12-31 T03:04:05", 31, 12, 2024, 11045 / 86400],
+  [SC_COL_YMD, "2024-12-31.03:04:05", 31, 12, 2024, 11045 / 86400],
+  [SC_COL_YMD, "2024-12-31+03:04:05", 31, 12, 2024, 11045 / 86400],
+  [SC_COL_YMD, "2024-12-31Z", 31, 12, 2024, 0],
   [SC_COL_YMD, "20241231", 31, 12, 2024, 0],
   [SC_COL_DMY, "31 December 2024", 31, 12, 2024, 0],
   [SC_COL_DMY, "30 Sep 2024", 30, 9, 2024, 0],
   [SC_COL_DMY, "31/12/24", 31, 12, 2024, 0],
+  [SC_COL_DMY, "31/12/2024 12:34   ", 31, 12, 2024, 45240 / 86400],
   [SC_COL_DMY, "31/12/2024 12:00 AM", 31, 12, 2024, 0],
   [SC_COL_DMY, "31/12/2024 1:00 PM", 31, 12, 2024, 13 / 24],
   [SC_COL_DMY, "31/12/2024 12:34:56.125", 31, 12, 2024, 45296.125 / 86400],
@@ -95,3 +105,52 @@ it("preserves source seven-part timezone-colon behavior", /** The offset hour be
   expect(document.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_VALUE);
   expect(document.GetValue(new ScAddress())).toBeCloseTo(45657 + 45296.02 / 86400, 10);
 });
+
+it.each([
+  [SC_COL_YMD, "2024-12-31T03:04-05"],
+  [SC_COL_DMY, "00/12/2024"],
+  [SC_COL_DMY, "32/12/2024"],
+  [SC_COL_DMY, "31/13/2024"],
+  [SC_COL_DMY, "31/02/2024"],
+  [SC_COL_DMY, "29/02/2025"],
+] as const)(
+  "leaves invalid explicit date %i / %s as text",
+  /** Field admission and actual calendar validation reject impossible civil dates. @param order - Native date column code. @param input - Complete date field. @returns Nothing. */ (
+    order,
+    input,
+  ) => {
+    const document = imported(input, order);
+    expect(document.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_STRING);
+  },
+);
+
+it.each([
+  [0x0407, SC_COL_DMY, "31 December 2024", 45657],
+  [0x0411, SC_COL_YMD, "2024/12/31 12:00 AM", 45657],
+  [0x0411, SC_COL_YMD, "2024/12/31 1:00 PM", 45657 + 13 / 24],
+] as const)(
+  "uses actual English fallback date owners for locale %i and input %s",
+  /** Native CSV import retains a separate English month/AMPM calendar for non-English filter locales. @param language - Native import language. @param order - Original column type. @param input - User field. @param expected - Independent serial date/time. @returns Nothing. */ (
+    language,
+    order,
+    input,
+    expected,
+  ) => {
+    const document = imported(input, order, language),
+      position = new ScAddress();
+    expect(document.GetCellType(position)).toBe(CellType.CELLTYPE_VALUE);
+    expect(document.GetValue(position)).toBeCloseTo(expected, 9);
+  },
+);
+
+it.each(["1234", "123456789"])(
+  "retains numeric fallback for an unsupported compact date length: %s",
+  /** A lone numeric field outside the5..8 digit compact range uses original generic numeric import. @param input - Complete field. @returns Nothing. */ (
+    input,
+  ) => {
+    const document = imported(input, SC_COL_DMY),
+      position = new ScAddress();
+    expect(document.GetCellType(position)).toBe(CellType.CELLTYPE_VALUE);
+    expect(document.GetValue(position)).toBe(Number(input));
+  },
+);

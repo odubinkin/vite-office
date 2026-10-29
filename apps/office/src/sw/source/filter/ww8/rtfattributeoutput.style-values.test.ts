@@ -306,3 +306,61 @@ it("uses the actual unowned numbering format and legacy level9 paragraph referen
     },
   );
 });
+
+it("leaves absent explicit style margins at pool defaults when clearing numbering", /** Public style resets remove optional inherited items while effective defaults remain available to layout. @returns Nothing. */ () => {
+  withOutput(
+    /** Preserves a real node and style ancestry. @param doc - Document. @param output - Attribute serializer. @returns Nothing. */ (
+      doc,
+      output,
+    ) => {
+      const node = doc.paragraphs[0];
+      assert(node);
+      const style = doc.MakeTextFormatColl("Unset margins");
+      for (
+        let current: typeof style | undefined = style;
+        current;
+        current = current.DerivedFrom() as typeof style | undefined
+      ) {
+        current.ResetFormatAttr(RES_MARGIN_FIRSTLINE);
+        current.ResetFormatAttr(RES_MARGIN_TEXTLEFT);
+      }
+      node.ChgFormatColl(style);
+      const reset = new SwNumRuleItem("");
+      try {
+        node.SetAttr(reset);
+        expect(node.GetSwAttrSet().GetItemIfSet(RES_MARGIN_FIRSTLINE, true)).toBeUndefined();
+        expect(node.GetSwAttrSet().GetItemIfSet(RES_MARGIN_TEXTLEFT, true)).toBeUndefined();
+        const result = output.WriteParagraphProperties(node);
+        expect(result).not.toContain("\\fi");
+        expect(result).not.toContain("\\li");
+        expect(
+          (node.GetSwAttrSet().Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+        ).toBe(0);
+      } finally {
+        reset.Dispose();
+      }
+    },
+  );
+});
+
+it("uses the Latin default for an empty paragraph with actual proportional line spacing", /** An empty string has no code point to classify; original layout uses the Latin font context. @returns Nothing. */ () => {
+  withOutput(
+    /** Installs an original line-spacing item on the actual empty node. @param doc - Document. @param output - Serializer. @returns Nothing. */ (
+      doc,
+      output,
+    ) => {
+      const node = doc.paragraphs[0];
+      assert(node);
+      expect(node.GetText()).toBe("");
+      const spacing = new SvxLineSpacingItem(240, RES_PARATR_LINESPACING);
+      try {
+        spacing.SetLineSpaceRule(SvxLineSpaceRule.Auto);
+        spacing.SetPropLineSpace(200);
+        node.SetAttr(spacing);
+        expect(output.WriteParagraphProperties(node)).toBe("\\sl480\\slmult1");
+      } finally {
+        spacing.Dispose();
+      }
+    },
+  );
+});

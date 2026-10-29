@@ -299,6 +299,78 @@
         "baselineMapsUnchanged": true,
         "coverageExceptionsApplied": false
       }
+    },
+    {
+      "id": "B8TCAE-A06",
+      "approval": "requested-awaiting-user",
+      "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+      "sourceSha256": "87c8b2d0a877d1401fb64a5c1a12f7a41b69211309545f6daae287b43998f215",
+      "branch": "WriteCharacter: false arm of underline fallback conditional at626",
+      "rawBranchType": "cond-expr",
+      "rawBranchId": "97",
+      "rawHits": [
+        2,
+        0
+      ],
+      "proof": "Readonly WriterCharacterAttributes is an actual stable value projection: outer guard requires underline=true OR underlineStyle!==undefined. Reaching the nullish fallback requires underlineStyle===undefined, therefore underline must be true. The inner false arm cannot run for any such value. The real projection returns a plain object; changing accessors between repeated reads would violate the value contract. This is a redundant host-projection fallback, not a newly claimed upstream defect.",
+      "rejectedAlternative": "Do not fabricate state-changing getters, remove the guard, or rewrite the serializer to hide the branch.",
+      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-rtf-underline-a06-exception.patch",
+      "proposedScope": "Only the conditional false arm FontLineStyle.LINESTYLE_NONE; preserve all source expressions and all four100 thresholds.",
+      "instrumenterDiagnostic": {
+        "scope": "Babel instrumenter diagnostic; actual Vitest/source-map recollection remains required after explicit approval",
+        "beforeBranches": 352,
+        "afterBranches": 351,
+        "statementCounts": [
+          385,
+          385
+        ],
+        "functionCounts": [
+          43,
+          43
+        ],
+        "branchCardinalityChanges": [
+          {
+            "id": "97",
+            "type": "cond-expr",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ],
+        "otherDifferences": "Three enclosing source ranges change only end columns because the inline comment extends the generated line; no other branch count changes."
+      },
+      "status": "Prepared only; no runtime source annotation or exception applied. Fresh complete consumer recollection is required after approval.",
+      "freshConsumerProfile": {
+        "report": "apps/office/coverage/integration-rtf-all-consumers/coverage-final.json",
+        "testFiles": 27,
+        "tests": 443,
+        "allAssertionsPassed": true,
+        "statements": [
+          385,
+          385
+        ],
+        "lines": [
+          333,
+          333
+        ],
+        "functions": [
+          43,
+          43
+        ],
+        "branchArms": [
+          351,
+          352
+        ],
+        "uncoveredAlternative": {
+          "branchId": "97",
+          "type": "cond-expr",
+          "line": 626,
+          "hits": [
+            2,
+            0
+          ]
+        },
+        "sha256": "b580935dd69d1c136a11817d555a6a3152c72160dbcd34df4ef6ddd6b6a790c2"
+      }
     }
   ]
 }

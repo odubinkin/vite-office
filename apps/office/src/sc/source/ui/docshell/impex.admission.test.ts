@@ -112,3 +112,30 @@ it("reports row overflow before mutating the first excluded row", /** Constrains
     shell.Close();
   }
 });
+
+it.each([false, true])(
+  "preserves native blank-row empty-cell policy with skip-empty %s",
+  /** A nonfinal empty row clears only its first cell unless skip-empty is enabled; the following source row must still be imported. @param skip - Original filter flag. @returns Nothing. */ (
+    skip,
+  ) => {
+    const shell = new ScDocShell(),
+      doc = shell.GetDocument();
+    try {
+      doc.SetValue(new ScAddress(), 42);
+      doc.SetValue(new ScAddress(1, 0, 0), 99);
+      const options = new ScAsciiOptions();
+      options.bSkipEmptyCells = skip;
+      const converter = new ScImportExport(doc);
+      converter.SetExtOptions(options);
+      expect(converter.ImportStream(new TextEncoder().encode("\nB\n"))).toBe(true);
+      expect(doc.GetCellType(new ScAddress())).toBe(
+        skip ? CellType.CELLTYPE_VALUE : CellType.CELLTYPE_NONE,
+      );
+      if (skip) expect(doc.GetValue(new ScAddress())).toBe(42);
+      expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(99);
+      expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("B");
+    } finally {
+      shell.Close();
+    }
+  },
+);

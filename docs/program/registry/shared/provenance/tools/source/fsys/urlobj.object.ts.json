@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "uses original GetAbsURL rules"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.public-boundaries.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -68,7 +72,8 @@
     ],
     "preservedResponsibilities": [
       "Original coordinate-bearing URI value with strict/smart absolute scheme inference, all native authority branches, user/password parsing, port/raw-host rules, per-protocol path insertion, query/fragment coordinates, invalidation preserving smart protocol, copied value state, native relative state machine and parent extraction through original LAST_SEGMENT,false rules. Shared native scheme/host/path/scalar owners are consumed directly. Strings bind original UTF16 buffers and returned values bind C++ output objects; native File fallthrough is a shared local block because the TypeScript compiler rejects switch fallthrough. Tests adapt consumed tools CppUnit smart, long-path, file WebDAV and CMIS cases and source-derived edge cases. Nonconsumed full URL mutation/data/service/presentation APIs and native allocation/ABI are not fabricated; compiled complete-class equivalence and actual HTML HREF insertion remain pending.",
-      "The native GetAbsURL static entry now directly serves actual Markdown link callbacks. Its strict-relative mode and default-only failure fallback remain distinct from SmartRel2Abs. Actual SwDoc hyperlink tests cover this production integration; raw HTML HREF wiring remains pending."
+      "The native GetAbsURL static entry now directly serves actual Markdown link callbacks. Its strict-relative mode and default-only failure fallback remain distinct from SmartRel2Abs. Actual SwDoc hyperlink tests cover this production integration; raw HTML HREF wiring remains pending.",
+      "Source-backed public URL regressions cover special help/hierarchy authority, rejected package/CMIS prefixes, empty-host LDAP/SMB ports, native AUTH/ABS_PATH/REL_PATH/FRAGMENT transitions, inherited FTP credentials/ports, dot segments, DOS/UNC smart inference and non-URI delimiter encoding. The full six-suite URL profile passes260 tests. Runtime source bytes and coverage thresholds are unchanged; compiled full-class parity remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete URL/URIHelper services, native string/Link ABI, compiled complete-class equivalence and actual HTML HREF insertion are not certified."

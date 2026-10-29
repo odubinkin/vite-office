@@ -1485,7 +1485,7 @@
   "rtfStyleValues": {
     "report": "apps/office/coverage/integration-rtf-style-values",
     "testFiles": 2,
-    "tests": 19,
+    "tests": 20,
     "allAssertionsPassed": true,
     "productionSourcesChanged": false,
     "coverageExceptionsApplied": false,
@@ -1506,12 +1506,193 @@
     "sourceProvenancePassed": true,
     "invariantsPassed": true,
     "ownerMissingStatements": 0,
-    "ownerMissingBranchArms": 2,
+    "ownerMissingBranchArms": 1,
     "additionalCases": [
       "Empty numbering rule restores inherited margins and retains direct overrides",
       "Actual SetByPointer(undefined) retains default format ownership and level9 legacy paragraph reference",
       "Real paragraph flags and absolute/default tab stops; style zero-widow control"
     ],
-    "lintRepair": "Full lint found non-null assertions in two earlier test files; explicit assertions and readonly input tuples repaired them; 23 focused tests and full lint now pass."
+    "lintRepair": "Full lint found non-null assertions in two earlier test files; explicit assertions and readonly input tuples repaired them; 23 focused tests and full lint now pass.",
+    "sourceUnchanged": true,
+    "additionalMarginCase": "Public resets along actual style ancestry leave optional inherited margins absent while pool defaults remain zero; the previously missing optional-item arm is covered without an exception."
+  },
+  "urlAndCompoundNumericInputs": {
+    "reports": [
+      "apps/office/coverage/integration-url-public-boundaries",
+      "apps/office/coverage/integration-numeric-compound-inputs"
+    ],
+    "testFiles": [
+      6,
+      2
+    ],
+    "tests": [
+      260,
+      135
+    ],
+    "allAssertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "fullVerifierPassed": false,
+    "lintFocusedPassed": true,
+    "typecheckPassed": true,
+    "jsdocPassed": true,
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108168,
+        "covered": 107408,
+        "skipped": 0,
+        "pct": 99.29
+      },
+      "statements": {
+        "total": 119507,
+        "covered": 118219,
+        "skipped": 0,
+        "pct": 98.92
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74577,
+        "covered": 72867,
+        "skipped": 0,
+        "pct": 97.7
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 222,
+    "rawReportSha256": {
+      "integration-url-public-boundaries": "80861cdefa3f3081e80cc54e8f65e88870855ffd52dac1c341dc245bcf767ea4",
+      "integration-numeric-compound-inputs": "401fad642a7ab423fb0eab6a038859ba2cc9fa1d03619dd42727297b5e75be46"
+    },
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "lintPassed": true,
+    "formatPassed": true
+  },
+  "rtfCompleteConsumerRecollection": {
+    "report": "apps/office/coverage/integration-rtf-all-consumers/coverage-final.json",
+    "testFiles": 27,
+    "tests": 443,
+    "allAssertionsPassed": true,
+    "statements": [
+      385,
+      385
+    ],
+    "lines": [
+      333,
+      333
+    ],
+    "functions": [
+      43,
+      43
+    ],
+    "branchArms": [
+      351,
+      352
+    ],
+    "uncoveredAlternative": {
+      "branchId": "97",
+      "type": "cond-expr",
+      "line": 626,
+      "hits": [
+        2,
+        0
+      ]
+    },
+    "sha256": "b580935dd69d1c136a11817d555a6a3152c72160dbcd34df4ef6ddd6b6a790c2",
+    "productionSourcesChanged": false,
+    "coverageExceptionApplied": false,
+    "a06": "Awaiting explicit user decision; source remains unchanged."
+  },
+  "csvDateAndStreamBoundaries": {
+    "report": "apps/office/coverage/integration-csv-date-boundaries/coverage-final.json",
+    "sha256": "4b69e37d66eeeb7ecb72bc90abe4915314b5374a394c4f83e5be844973a0a70c",
+    "testFiles": 4,
+    "tests": 106,
+    "allAssertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "strictCoveragePassed": false,
+    "ownerCounts": {
+      "src/sc/source/ui/docshell/impex.date.ts": {
+        "statements": [
+          189,
+          189
+        ],
+        "branchArms": [
+          168,
+          171
+        ],
+        "functions": [
+          2,
+          2
+        ]
+      },
+      "src/sc/source/ui/docshell/impex.ts": {
+        "statements": [
+          368,
+          368
+        ],
+        "branchArms": [
+          245,
+          253
+        ],
+        "functions": [
+          17,
+          17
+        ]
+      }
+    },
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108168,
+        "covered": 107422,
+        "skipped": 0,
+        "pct": 99.31
+      },
+      "statements": {
+        "total": 119507,
+        "covered": 118243,
+        "skipped": 0,
+        "pct": 98.94
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74577,
+        "covered": 72902,
+        "skipped": 0,
+        "pct": 97.75
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 222,
+    "typecheckPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "fullVerifierPassed": false,
+    "rawBackup": ".agentplane/tmp/coverage-raw-backup/manifest.json",
+    "backupScope": "All289 raw diagnostic reports, including retired profiles, copied unchanged. Compatibility-aware diagnostic merger still selects only its explicit current profiles; backup existence never authorizes merging retired maps.",
+    "lintPassed": true,
+    "formatPassed": true,
+    "jsdocPassed": true
   }
 }
