@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202610290933-WCGEZ6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-29T09:48:38.591Z",
+  "verdict": "pass",
+  "summary": "Corrected SAL zero formatting and current merged Gerrit parity, verified with 185 RTL tests and static checks",
+  "evaluated_sha": "abb5da874bb13266245409f8609343e399e97569",
+  "blueprint_digest": "3c7814f634313d2c0a9eb2c9f2d65dbfa42cf6508ff5e94664a1fae3afa5f37f",
+  "findings": [
+    "Old pinned fixture retained as historical provenance only; current tests require merged upstream zero output"
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610290933-WCGEZ6/README.md",
+    "apps/office/src/sal/rtl/double-format.test.ts",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
