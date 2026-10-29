@@ -112,7 +112,10 @@ export class IndianCalendar extends Calendar {
       year = out[0];
       month = rem[0];
     }
-    const imonth = month === 12 ? 1 : month + 1;
+    const imonth =
+      month === 12
+        ? /* istanbul ignore next -- B8TCAE-I01: normalization above guarantees a month in0..11; original ICU keeps this redundant branch. */ 1
+        : month + 1;
     return BigInt(Math.trunc(IndianToJD(year, imonth, 1)));
   }
   /** Original year precedence. @param status - Sticky status. @returns Year. */

@@ -242,6 +242,7 @@ it("retains URIHelper fragment compatibility and file-preference callback semant
     ),
   ).toBe("file:///dir/www.example.test/a");
   expect(calls).toBe(1);
+  expect(SmartRel2Abs(base, "./report.txt")).toBe("file:///dir/report.txt");
 });
 it("retains source decode modes and explicit filesystem-style constraints", /** ToIUri forces UTF8; strict NONE preserves byte spelling and other modes retain charset. @returns Nothing. */ () => {
   expect(decode("%E9%41", D.NONE, LATIN1)).toBe("%E9%41");

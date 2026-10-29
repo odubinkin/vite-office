@@ -55,6 +55,7 @@ export function rtl_byte_sequence_construct(slot: ByteSequenceSlot, length: numb
   }
   if (length) {
     const sequence = allocate(length);
+    /* istanbul ignore else -- B8TCAE-B01: private browser allocation returns concrete ByteStorage or throws, never null. */
     if (sequence !== null) {
       const cells = sequence.elements as ByteStorage;
       for (let i = 0; i < length; ++i) cells.get(i)[0] = 0;
@@ -97,6 +98,7 @@ export function rtl_byte_sequence_reference2One(slot: ByteSequenceSlot): void {
     const length = sequence.nElements,
       fresh = allocate(length);
     if (length) {
+      /* istanbul ignore else -- B8TCAE-B02: private browser allocation returns concrete ByteStorage or throws, never null. */
       if (fresh !== null) copy(fresh, sequence.elements, length);
       rtl_byte_sequence_release(sequence);
     }
@@ -109,6 +111,7 @@ export function rtl_byte_sequence_realloc(slot: ByteSequenceSlot, size: number):
     length = sequence.nElements;
   if (length === size) return;
   const fresh = allocate(size);
+  /* istanbul ignore else -- B8TCAE-B03: private browser allocation returns concrete ByteStorage or throws, never null. */
   if (fresh !== null) copy(fresh, sequence.elements, Math.min(length, size));
   if (sequence.nRefCount > 1) {
     if (fresh !== null && size > length) {

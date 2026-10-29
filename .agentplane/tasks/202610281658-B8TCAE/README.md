@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 69
+revision: 70
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T07:26:49.849Z"
+doc_updated_at: "2026-10-29T07:33:16.846Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -254,6 +254,10 @@ sections:
     - Observation: Shared helper defaults and platform-clock failure/success now have actual boundary tests (4 suites /14 assertions, four owners at strict100%). MD4C M06 excludes only one impossible entity-bounds return because the collector always appends a resolved sentinel; all8 suites /1999 tests pass and its10 functions remain counted. RTF allocation failure remains a real tested path through the original replaceable allocation function pointer; only the separate impossible post-return null guard is R01.
       Impact: Exact token/map proofs retain every other counter; MD4C owner145/90/10/139 and RTF48/28/4/41 are strict100% across statements/alternatives/functions/lines. The updated diagnostic union has203 incomplete owners, not a final full-verifier pass. Neither ordinary invariant is labeled an upstream bug.
       Resolution: Typecheck, focused ESLint, JSDoc, provenance, routing, focused formatting and diff checks pass. Runtime algorithms and100% thresholds stay unchanged. Continue source-backed coverage work before publication and reverse merges.
+
+    - Observation: Genuine explicit/host default-locale caching, C-string termination, URI ordinary file-relative fallback and empty/ASCII/non-ASCII blank inputs close four further owners without exceptions. Fresh43 suites /713 tests pass with all69 statements,55 alternatives,12 functions and56 lines covered.
+      Impact: B01-B03 separately preserve native malloc-null guards while excluding their three impossible false alternatives in the concrete non-null-returning browser ByteStorage allocator;2 suites /12 tests reach strict100%. I01 excludes only the contradictory IndianCalendar month12 alternative after normalization into0..11; native-hook plus standard-calendar2 suites /36 tests reach strict100%. Exact source-token/map proofs preserve all statements and functions. CALC-393 records the suspicious original redundant branch and the absence of a proven ordinary wrong result. Diagnostic current-map union has197 incomplete owners; final full verification remains pending.
+      Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. No threshold, runtime algorithm, resource package or native output is changed. Continue remaining coverage before main publication and reverse merges.
 id_source: "generated"
 ---
 ## Summary
@@ -481,3 +485,7 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Observation: Shared helper defaults and platform-clock failure/success now have actual boundary tests (4 suites /14 assertions, four owners at strict100%). MD4C M06 excludes only one impossible entity-bounds return because the collector always appends a resolved sentinel; all8 suites /1999 tests pass and its10 functions remain counted. RTF allocation failure remains a real tested path through the original replaceable allocation function pointer; only the separate impossible post-return null guard is R01.
   Impact: Exact token/map proofs retain every other counter; MD4C owner145/90/10/139 and RTF48/28/4/41 are strict100% across statements/alternatives/functions/lines. The updated diagnostic union has203 incomplete owners, not a final full-verifier pass. Neither ordinary invariant is labeled an upstream bug.
   Resolution: Typecheck, focused ESLint, JSDoc, provenance, routing, focused formatting and diff checks pass. Runtime algorithms and100% thresholds stay unchanged. Continue source-backed coverage work before publication and reverse merges.
+
+- Observation: Genuine explicit/host default-locale caching, C-string termination, URI ordinary file-relative fallback and empty/ASCII/non-ASCII blank inputs close four further owners without exceptions. Fresh43 suites /713 tests pass with all69 statements,55 alternatives,12 functions and56 lines covered.
+  Impact: B01-B03 separately preserve native malloc-null guards while excluding their three impossible false alternatives in the concrete non-null-returning browser ByteStorage allocator;2 suites /12 tests reach strict100%. I01 excludes only the contradictory IndianCalendar month12 alternative after normalization into0..11; native-hook plus standard-calendar2 suites /36 tests reach strict100%. Exact source-token/map proofs preserve all statements and functions. CALC-393 records the suspicious original redundant branch and the absence of a proven ordinary wrong result. Diagnostic current-map union has197 incomplete owners; final full verification remains pending.
+  Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. No threshold, runtime algorithm, resource package or native output is changed. Continue remaining coverage before main publication and reverse merges.

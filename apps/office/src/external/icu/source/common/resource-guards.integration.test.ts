@@ -1,5 +1,6 @@
 /** @fileoverview Validates native resource error propagation, empty views and real pinned buffer ownership at public admission boundaries. */
 import { expect, it } from "vitest";
+import { uprv_getDefaultLocaleID } from "../../browser/putil-locale";
 import * as R from "./uresbund";
 import { ResourceDataValue, res_getBuffer } from "./uresdata";
 import { ResourceData, res_load, res_unload } from "./uresdata.package";
@@ -130,4 +131,21 @@ it("clears raw load ownership before failed requests and honors terminated file 
   expect(status[0]).toBe(E.U_FILE_ACCESS_ERROR);
   res_unload(data);
   expect(data.data).toBeNull();
+});
+
+it("reuses the captured host locale and honors C-string termination in explicit default names", /** Actual host locale and source normalization/cache owners run without replacing Intl or private defaults. @returns Nothing. */ () => {
+  const prior = locale_get_default(),
+    host = uprv_getDefaultLocaleID();
+  try {
+    expect(uprv_getDefaultLocaleID()).toBe(host);
+    locale_set_default("de_DE\0ignored");
+    expect(locale_get_default()).toBe("de_DE");
+    const status: [number] = [0];
+    expect(locale_set_default_internal(null, status)).not.toBeNull();
+    expect(status[0]).toBeLessThanOrEqual(0);
+    const normalizedHost = locale_get_default();
+    expect(locale_set_default_internal(null, [0])?.getName()).toBe(normalizedHost);
+  } finally {
+    locale_set_default(prior);
+  }
 });
