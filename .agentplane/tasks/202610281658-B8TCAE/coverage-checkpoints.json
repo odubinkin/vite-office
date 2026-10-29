@@ -2116,7 +2116,8 @@
       "M01",
       "M02",
       "M04",
-      "M05"
+      "M05",
+      "D01"
     ],
     "pending": [],
     "withdrawnUnapplied": [
@@ -2242,5 +2243,56 @@
     "invariantsPassed": true,
     "formatFocusedPassed": true,
     "policyRoutingPassed": true
+  },
+  "dateOrderRetryAndD01": {
+    "tests": 71,
+    "files": 1,
+    "allAssertionsPassed": true,
+    "strictCoveragePassed": false,
+    "report": "apps/office/coverage/integration-date-order-retry/coverage-final.json",
+    "consumerTests": 719,
+    "consumerFiles": 44,
+    "consumerReport": "apps/office/coverage/integration-date-all-consumers/coverage-final.json",
+    "consumerAssertionsPassed": true,
+    "d01Proof": "approved-d01-map-proof.json",
+    "priorCoveredPositionsRetained": true,
+    "enumDomainProof": "date-evaluation-policy-native-proof.json",
+    "enumProofScope": "Only unchanged scoped enum transport, not full native date conversion.",
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108166,
+        "covered": 107519,
+        "skipped": 0,
+        "pct": 99.4
+      },
+      "statements": {
+        "total": 119499,
+        "covered": 118395,
+        "skipped": 0,
+        "pct": 99.07
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74566,
+        "covered": 73063,
+        "skipped": 0,
+        "pct": 97.98
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 210,
+    "fullVerifierPassed": false,
+    "runtimeAlgorithmsChanged": false,
+    "thresholdsChanged": false
   }
 }

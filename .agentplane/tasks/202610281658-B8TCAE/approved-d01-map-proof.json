@@ -1,0 +1,49 @@
+{
+  "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+  "removedStatements": [
+    {
+      "start": {
+        "line": 446,
+        "column": 6
+      },
+      "end": {
+        "line": 446,
+        "column": null
+      }
+    }
+  ],
+  "branchChanges": [
+    {
+      "id": "55",
+      "originalLine": 445,
+      "excludedArm": 0,
+      "retainedArmHits": 68
+    }
+  ],
+  "functionsUnchanged": 1,
+  "statements": [
+    242,
+    241
+  ],
+  "branchArms": [
+    144,
+    143
+  ],
+  "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions.",
+  "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
+  "preAnnotationSourceCommit": "c0bcb60247607ee9a515cdabc9246b1728ec2123",
+  "beforeSourceSha256": "9be48a8795c7c6b9fbb7c45fe3ad519dec0e0294ddcd682e7b531b73dc536fe7",
+  "afterSourceSha256": "2311c77d25ae0a696a2ebace351c73e49588f1019bba6ab1d8bdc4299f4fd6d0",
+  "beforeReportSha256": "4c987d5c21a84b7df87bf470c8dcaccfaa99d8eafe2b3a764faec51b9f6210eb",
+  "afterTargetedReportSha256": "524ca31bb19e1512edd019cd229b32e2c3e01ce8f972b522b615627de12abc62",
+  "afterConsumerReportSha256": "77a7e1fdb78435d6716c0a08205fa8684be73b62d066b8ee21d94e443ac46c43",
+  "configurationSha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c",
+  "consumerRetention": {
+    "scope": "Actual fresh44-suite consumer report retains all previously covered original owner positions; no old counters are rewritten or merged across incompatible maps.",
+    "previousCoveredStatements": 216,
+    "freshCoveredStatements": 216,
+    "previousCoveredArms": 123,
+    "freshCoveredArms": 123,
+    "allPreviousCoveredPositionsRetained": true
+  }
+}

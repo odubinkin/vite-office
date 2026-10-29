@@ -11,5 +11,8 @@
     "2147483647"
   ],
   "sanitizersPassed": true,
-  "scope": "Only the unchanged original scoped enum declaration and its fixed int transport domain; not a compiled full GetDateRef/UNO input-scanner witness. Portable date tests use original public setters/compiled formats/real locale-calendar owners and independent Gregorian civil serial expectations."
+  "scope": "Only the unchanged original scoped enum declaration and its fixed int transport domain; not a compiled full GetDateRef/UNO input-scanner witness. Portable date tests use original public setters/compiled formats/real locale-calendar owners and independent Gregorian civil serial expectations.",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "originalHeaderMatchesPinnedRevision": true,
+  "dateScannerSourceMatchesPinnedRevision": true
 }

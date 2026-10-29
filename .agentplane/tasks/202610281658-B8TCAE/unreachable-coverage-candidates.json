@@ -1,5 +1,5 @@
 {
-  "status": "thirteen scopes approved and annotated; D01 pending separate human decision; A05 and speculative M03 withdrawn/unapplied",
+  "status": "fourteen approved scopes annotated; no pending human decision; A05 and speculative M03 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -431,8 +431,8 @@
     },
     {
       "id": "B8TCAE-D01",
-      "approval": "pending-human-decision",
-      "exceptionApplied": false,
+      "approval": "approved-by-human",
+      "exceptionApplied": true,
       "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
       "originalLine": 445,
       "scope": "Only the nonempty aOrgCalendar true alternative and its one loadCalendar statement.",
@@ -443,7 +443,7 @@
         "No calendar factory, service provider, string owner or private scanner field is replaced to manufacture a changed name."
       ],
       "sourceSha256": "9be48a8795c7c6b9fbb7c45fe3ad519dec0e0294ddcd682e7b531b73dc536fe7",
-      "preAnnotationReport": "apps/office/coverage/integration-date-order-retry/coverage-final.json",
+      "preAnnotationReport": ".agentplane/tmp/coverage-raw-backup/pre-d01/coverage-final.json",
       "preAnnotationReportSha256": "4c987d5c21a84b7df87bf470c8dcaccfaa99d8eafe2b3a764faec51b9f6210eb",
       "testFiles": 1,
       "tests": 71,
@@ -506,7 +506,10 @@
         ]
       },
       "preparedPatch": "prepared-date-d01-exception.patch",
-      "evidenceBoundary": "Normal-build source precondition, not a newly claimed ordinary-input defect or alternate-calendar/native UNO comparison. Future macro-enabled code must re-review this exception."
+      "evidenceBoundary": "Normal-build source precondition, not a newly claimed ordinary-input defect or alternate-calendar/native UNO comparison. Future macro-enabled code must re-review this exception.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e D01",
+      "verificationProof": "approved-d01-map-proof.json",
+      "status": "Exact approved one-statement/one-alternative scope applied;71 targeted tests and44 consumer suites719 tests pass. Original source paths and every previously covered position are retained."
     }
   ],
   "additionalAudits": [
