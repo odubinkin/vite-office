@@ -1,5 +1,5 @@
 {
-  "status": "thirteen individually approved scopes annotated; no pending human coverage decision; A05 withdrawn and unapplied; speculative M03 draft withdrawn before requesting approval",
+  "status": "thirteen scopes approved and annotated; D01 pending separate human decision; A05 and speculative M03 withdrawn/unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -428,6 +428,85 @@
       "initialReviewTestCount": 1998,
       "initialReviewReportSha256": "ea2392a4c346afbb91b7cd2c75d15bf95171f16a51f7e1e73a478f83ce1962ec",
       "status": "Individually approved guard applied; full1999-case parser corpus passes with strict100 coverage for this owner."
+    },
+    {
+      "id": "B8TCAE-D01",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
+      "originalLine": 445,
+      "scope": "Only the nonempty aOrgCalendar true alternative and its one loadCalendar statement.",
+      "preconditions": [
+        "The selected normal build has THE_FUTURE disabled, as explicitly preserved by this port. Alternate macro-enabled implementations are outside this scope.",
+        "The local aOrgCalendar is freshly constructed empty on every retry and is never assigned or passed to another method by reference before the restore check.",
+        "Original zforfind.cxx lines1796,1877..1888,2266..2268 retain the same structure: all possible name assignments belong to the THE_FUTURE-only block.",
+        "No calendar factory, service provider, string owner or private scanner field is replaced to manufacture a changed name."
+      ],
+      "sourceSha256": "9be48a8795c7c6b9fbb7c45fe3ad519dec0e0294ddcd682e7b531b73dc536fe7",
+      "preAnnotationReport": "apps/office/coverage/integration-date-order-retry/coverage-final.json",
+      "preAnnotationReportSha256": "4c987d5c21a84b7df87bf470c8dcaccfaa99d8eafe2b3a764faec51b9f6210eb",
+      "testFiles": 1,
+      "tests": 71,
+      "allAssertionsPassed": true,
+      "rawBranch": {
+        "id": "55",
+        "map": {
+          "loc": {
+            "start": {
+              "line": 445,
+              "column": 4
+            },
+            "end": {
+              "line": 447,
+              "column": null
+            }
+          },
+          "type": "if",
+          "locations": [
+            {
+              "start": {
+                "line": 445,
+                "column": 4
+              },
+              "end": {
+                "line": 447,
+                "column": null
+              }
+            },
+            {
+              "start": {},
+              "end": {}
+            }
+          ]
+        },
+        "hits": [
+          0,
+          68
+        ]
+      },
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 242,
+          "functions": 1,
+          "branchArms": 144
+        },
+        "after": {
+          "statements": 241,
+          "functions": 1,
+          "branchArms": 143
+        },
+        "cardinalityChanges": [
+          {
+            "id": "55",
+            "type": "if",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-date-d01-exception.patch",
+      "evidenceBoundary": "Normal-build source precondition, not a newly claimed ordinary-input defect or alternate-calendar/native UNO comparison. Future macro-enabled code must re-review this exception."
     }
   ],
   "additionalAudits": [

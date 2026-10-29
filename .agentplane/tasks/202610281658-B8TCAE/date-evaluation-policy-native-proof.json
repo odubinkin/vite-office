@@ -1,0 +1,15 @@
+{
+  "originalHeader": "vendor/libreoffice-reference/include/svl/zforlist.hxx",
+  "originalHeaderSha256": "a90ea5e76c3d058ee262743b7ec2841edfabf8dd4ec3d21777f71b03bfd83684",
+  "driverSource": "#include <cstdio>\n#include <climits>\n#include <initializer_list>\n#include <type_traits>\nenum class NfEvalDateFormat\n{\n    /** DateFormat only from International, default. */\n    International,\n\n    /** DateFormat only from date format passed to function (if any).\n        If no date format is passed then the DateFormat is taken from International. */\n    Format,\n\n    /** First try the DateFormat from International. If it doesn't match a\n         valid date try the DateFormat from the date format passed. */\n    InternationalThenFormat,\n\n    /** First try the DateFormat from the date format passed. If it doesn't\n        match a valid date try the DateFormat from International. */\n    FormatThenInternational\n};\nstatic_assert(std::is_same<std::underlying_type<NfEvalDateFormat>::type,int>::value);\nint main(){for(int value : {99,-1,INT_MIN,INT_MAX}){auto policy=static_cast<NfEvalDateFormat>(value);std::printf(\"%d\\n\",static_cast<int>(policy));}return 0;}\n",
+  "driverSha256": "f6d1bd2b03cb811e7d17f864544d72a8a54681699ffc01f200974fa3bc904033",
+  "command": "clang++ -std=c++17 -fsanitize=undefined,enum .agentplane/tmp/date-eval-enum-native.cc -o .agentplane/tmp/date-eval-enum-native && .agentplane/tmp/date-eval-enum-native",
+  "nativeOutput": [
+    "99",
+    "-1",
+    "-2147483648",
+    "2147483647"
+  ],
+  "sanitizersPassed": true,
+  "scope": "Only the unchanged original scoped enum declaration and its fixed int transport domain; not a compiled full GetDateRef/UNO input-scanner witness. Portable date tests use original public setters/compiled formats/real locale-calendar owners and independent Gregorian civil serial expectations."
+}
