@@ -1,5 +1,5 @@
 {
-  "status": "fourteen approved scopes annotated; no pending human decision; A05 and speculative M03 withdrawn and unapplied",
+  "status": "fourteen approved scopes annotated; D02 pending separate human decision; A05 and speculative M03 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -510,6 +510,118 @@
       "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e D01",
       "verificationProof": "approved-d01-map-proof.json",
       "status": "Exact approved one-statement/one-alternative scope applied;71 targeted tests and44 consumer suites719 tests pass. Original source paths and every previously covered position are retained."
+    },
+    {
+      "id": "B8TCAE-D02",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
+      "originalLine": 101,
+      "scope": "Only the entire zero-numerics case: four zero-hit statements, its switch alternative and both zero-hit alternatives of the nested nMonthPos test.",
+      "preconditions": [
+        "Only the original admitted scanner orchestration is considered; private scanner field mutation and invented calls around classification are excluded.",
+        "Original IsNumberFormatMain returns text failure or LOGICAL for every input with zero numeric particles, before any date classification (zforfind.cxx3405..3428).",
+        "Result conversion dispatches GetDateRef only for DATE/DATETIME (zforfind.cxx4273..4286); LOGICAL has its own conversion and cannot become DATE between those stages.",
+        "No-numeric public inputs January and TRUE/FALSE remain text/logical even with an incoming DATE and a real compiled MMMM date format. These genuine public regressions are included in the current74 targeted tests."
+      ],
+      "sourceSha256": "2311c77d25ae0a696a2ebace351c73e49588f1019bba6ab1d8bdc4299f4fd6d0",
+      "preAnnotationReport": "apps/office/coverage/integration-date-all-consumers/coverage-final.json",
+      "preAnnotationReportSha256": "77a7e1fdb78435d6716c0a08205fa8684be73b62d066b8ee21d94e443ac46c43",
+      "preAnnotationConsumerTestFiles": 44,
+      "preAnnotationConsumerTests": 719,
+      "targetedDateTests": 74,
+      "allAssertionsPassed": true,
+      "zeroStatements": [
+        {
+          "id": "45",
+          "location": {
+            "start": {
+              "line": 102,
+              "column": 8
+            },
+            "end": {
+              "line": 107,
+              "column": null
+            }
+          },
+          "hits": 0
+        },
+        {
+          "id": "46",
+          "location": {
+            "start": {
+              "line": 104,
+              "column": 10
+            },
+            "end": {
+              "line": 104,
+              "column": null
+            }
+          },
+          "hits": 0
+        },
+        {
+          "id": "47",
+          "location": {
+            "start": {
+              "line": 106,
+              "column": 10
+            },
+            "end": {
+              "line": 106,
+              "column": null
+            }
+          },
+          "hits": 0
+        },
+        {
+          "id": "48",
+          "location": {
+            "start": {
+              "line": 108,
+              "column": 8
+            },
+            "end": {
+              "line": 108,
+              "column": null
+            }
+          },
+          "hits": 0
+        }
+      ],
+      "zeroBranchScopes": [
+        {
+          "id": "7",
+          "arm": 0,
+          "hits": 0
+        },
+        {
+          "id": "8",
+          "arms": [
+            0,
+            1
+          ],
+          "hits": [
+            0,
+            0
+          ]
+        }
+      ],
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual remapped source-position/counter comparison is still required after explicit approval.",
+        "before": {
+          "statements": 241,
+          "functions": 1,
+          "branchArms": 143
+        },
+        "after": {
+          "statements": 237,
+          "functions": 1,
+          "branchArms": 140
+        }
+      },
+      "preparedPatch": "prepared-date-d02-exception.patch",
+      "evidenceBoundary": "Original source call-graph invariant plus genuine public regressions; not full native UNO input conversion, direct private-helper misuse or future orchestration that might admit zero-particle dates. Later reactivation must re-review this exception."
     }
   ],
   "additionalAudits": [

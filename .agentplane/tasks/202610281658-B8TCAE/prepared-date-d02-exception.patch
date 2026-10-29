@@ -1,0 +1,10 @@
+--- a/apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts
++++ b/apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts
+@@ -98,6 +98,7 @@
+     switch (
+       state.nNumericsCnt // count of numbers in string
+     ) {
++      /* istanbul ignore next -- B8TCAE-D02 proposal: the original zero-numeric classification exits as logical/text before date conversion. */
+       case 0: // none
+         if (state.nMonthPos) // only month (Jan)
+         {
