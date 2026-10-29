@@ -211,7 +211,7 @@
     },
     {
       "id": "B8TCAE-A05",
-      "approval": "not-requested",
+      "approval": "pending-user-response",
       "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts",
       "sourceSha256": "197aa22a6b7b46557eefc591efa271a72b65aafbd73f638fb23c0d9b23d8a709",
       "alternatives": [
@@ -241,7 +241,10 @@
           203
         ]
       },
-      "scope": "Audit only. No exception/annotation/guard deletion/counter change applied. Any coverage exception requires an individually approved exact implementation."
+      "scope": "Audit only. No exception/annotation/guard deletion/counter change applied. Any coverage exception requires an individually approved exact implementation.",
+      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-rtfsprm-a05-exception.patch",
+      "proposal": "Express the existing optional entry access as an equivalent nullish ternary and ignore only its absent-entry operand. Keep all lookup results, comparisons, loops, runtime missing-entry handling and configured thresholds. Verify exact instrumentation scope before any commit. Not applied.",
+      "status": "Individual A05 question displayed. accepted=true confirms delivery only; no source patch or exception applied."
     }
   ]
 }

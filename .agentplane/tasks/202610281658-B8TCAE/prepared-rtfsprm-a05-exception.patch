@@ -1,0 +1,15 @@
+--- a/apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts
++++ b/apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts
+@@ -76,7 +76,11 @@
+     let found: RTFSprmsEntry | undefined;
+     for (let offset = 0; offset < entries.length; ++offset) {
+       const entry = entries[first ? offset : entries.length - offset - 1];
+-      if (entry?.[0] === keyword) {
++      if (
++        (entry == null
++          ? /* istanbul ignore next -- User-approved B8TCAE-A05: the dense private vector and bounded index guarantee a present entry. */ undefined
++          : entry[0]) === keyword
++      ) {
+         found = entry;
+         break;
+       }
