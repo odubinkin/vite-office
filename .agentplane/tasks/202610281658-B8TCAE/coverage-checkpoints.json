@@ -1251,5 +1251,19 @@
     "diagnosticBranchArmsTotal": 74579,
     "remainingOwners": 225,
     "finalFullVerifierPassed": false
+  },
+  "publicCssAndHtmlStyles": {
+    "report": "apps/office/coverage/integration-css-public-properties",
+    "tests": 74,
+    "testFiles": 2,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "diagnosticStatementsCovered": 118117,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72733,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 225,
+    "finalFullVerifierPassed": false
   }
 }
