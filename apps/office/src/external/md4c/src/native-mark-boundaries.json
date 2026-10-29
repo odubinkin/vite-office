@@ -2,7 +2,7 @@
   "version": "md4c 0.5.3",
   "sourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
   "archiveSha256": "353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e",
-  "driverSha256": "8cf8f41a28e0bc47e5d72a78eb242b253fcb1b0c39ffe7158cc708c9a0444567",
+  "driverSha256": "76366830a88f0007769f82fdfa990cee07e6b06b485611d0ca93fd03828f45b7",
   "scope": "Original public md_parse with native WIKILINKS|PERMISSIVEAUTOLINKS flags, unmodified parser and zero-returning consumer callbacks. Span-enter counts and concatenated counted text bytes only; not complete callback-detail/Writer model/native ABI equivalence.",
   "cases": [
     {
@@ -736,6 +736,60 @@
     },
     {
       "text": ">\n>     \n>     code\n",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "636f64650a"
+    },
+    {
+      "text": "`` a ` b ``` c `",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "606020612062206060602063"
+    },
+    {
+      "text": "`` a ` b ``` c\n`",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "606020612062206060602063"
+    },
+    {
+      "text": "`` a ` b ``` c ```` d `",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "60602061206220606060206320606060602064"
+    },
+    {
+      "text": "[x][[missing]]",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "5b785d6d697373696e67"
+    },
+    {
+      "text": "[[x]][]",
+      "result": 0,
+      "spanCounts": [
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0
+      ],
+      "textHex": "785b5d"
+    },
+    {
+      "text": "    \n\n    code\n",
       "result": 0,
       "spanCounts": [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

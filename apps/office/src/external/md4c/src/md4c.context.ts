@@ -56,6 +56,7 @@ export function md_emit_span<T>(
 }
 /** Emits only positive-size text callbacks as the source macro does. @param ctx - Context. @param type - Kind. @param text - Exact byte slice. @returns Nothing. */
 export function md_emit_text<T>(ctx: MD_CTX<T>, type: MD_TEXTTYPE, text: Uint8Array): void {
+  /* istanbul ignore else -- B8TCAE-M14: original callers supply positive guarded spans or nonempty SPACE/LF/NUL constants. */
   if (text.length > 0) check(ctx, ctx.parser.text(type, text, text.length, ctx.userdata), "text");
 }
 /** Preserves the source NULL callback and following chunk progression verbatim. @param ctx - Context. @param type - Original text kind. @param text - Verbatim bytes. @returns Nothing. */

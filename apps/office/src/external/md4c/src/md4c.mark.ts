@@ -58,10 +58,12 @@ export function md_emph_stack(ctx: MD_MARK_CONTEXT, ch: number, flags: number): 
 /** Returns the native stack belonging to a mark family. @param ctx - Context. @param index - Mark index. @returns Stack head. */
 export function md_opener_stack(ctx: MD_MARK_CONTEXT, index: number): MD_MARKSTACK {
   const mark = ctx.marks[index] as MD_MARK;
+  // Preserve the original expression and exact source-map boundary for this single-arm annotation.
+  // prettier-ignore
   return mark.ch === 42 || mark.ch === 95
     ? md_emph_stack(ctx, mark.ch, mark.flags)
     : (ctx.opener_stacks[
-        mark.ch === 126 ? (mark.end - mark.beg === 1 ? 12 : 13) : 14
+        mark.ch === 126 ? (mark.end - mark.beg === 1 ? 12 : 13) : /* istanbul ignore next -- B8TCAE-M08: only emphasis or tilde analysis calls this helper. */ 14
       ] as MD_MARKSTACK);
 }
 /** Reuses or appends a source mark record and applies ADD_MARK initialization. @param ctx - Context. @param ch - Marker byte. @param beg - Start. @param end - End. @param flags - Flags. @returns Actual owned mark. */
@@ -91,6 +93,7 @@ export function md_mark_stack_push(ctx: MD_MARK_CONTEXT, stack: MD_MARKSTACK, in
 /** Pops a source opener without changing the removed mark. @param ctx - Context. @param stack - Head. @returns Index or -1. */
 export function md_mark_stack_pop(ctx: MD_MARK_CONTEXT, stack: MD_MARKSTACK): number {
   const top = stack.top;
+  /* istanbul ignore else -- B8TCAE-M07: both original pop callers require a nonnegative top. */
   if (top >= 0) stack.top = (ctx.marks[top] as MD_MARK).next;
   return top;
 }

@@ -190,6 +190,7 @@ function md_process_leaf_block<U>(ctx: MD_CTX<U>, block: MD_BLOCK): void {
         end = lines.length;
       if (block.data === 0) {
         while (start < end && (lines[start] as MD_LINE).beg === (lines[start] as MD_LINE).end)
+          /* istanbul ignore next -- B8TCAE-M13: blank lines cannot start an indented-code block; retain the defensive trim guard. */
           start++;
         while (end > start && (lines[end - 1] as MD_LINE).beg === (lines[end - 1] as MD_LINE).end)
           end--;
@@ -240,10 +241,12 @@ export function md_process_all_blocks<U>(ctx: MD_CTX<U>): void {
         md_emit_block(ctx, true, block.type, detail);
         if (block.type === B.MD_BLOCK_UL || block.type === B.MD_BLOCK_OL) {
           const item = ctx.containers[ctx.n_containers];
+          /* istanbul ignore else -- B8TCAE-M12a: original queue replay stays within the dense container storage reserved by analysis. */
           if (item !== undefined) item.is_loose = Boolean(block.flags & MD_BLOCK_LOOSE_LIST);
           ctx.n_containers++;
         } else if (block.type === B.MD_BLOCK_QUOTE) {
           const item = ctx.containers[ctx.n_containers];
+          /* istanbul ignore else -- B8TCAE-M12b: quote replay uses the same retained dense container storage. */
           if (item !== undefined) item.is_loose = true;
           ctx.n_containers++;
         }

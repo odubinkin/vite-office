@@ -138,7 +138,10 @@ export function md_process_inlines<U>(ctx: MD_CTX<U>, lines: readonly MD_LINE[])
             opener.ch === 33 ? S.MD_SPAN_IMG : S.MD_SPAN_A,
             text.subarray(dest.beg, dest.end),
             false,
-            (title.pointer ?? new Uint8Array()).subarray(0, title.prev),
+            (
+              title.pointer ??
+              /* istanbul ignore next -- B8TCAE-M09: every resolved ordinary link assigns its real title array, including empty titles. */ new Uint8Array()
+            ).subarray(0, title.prev),
           );
           if (mark.ch === 93) while (mark.end > line.end) line = lines[++lineIndex] as MD_LINE;
           break;
@@ -209,6 +212,7 @@ export function md_process_inlines<U>(ctx: MD_CTX<U>, lines: readonly MD_LINE[])
         md_emit_text(ctx, T.MD_TEXT_HTML, LF);
       } else {
         let breakType = T.MD_TEXT_SOFTBR;
+        /* istanbul ignore else -- B8TCAE-M11: CODE/LATEXMATH and HTML were handled above; only NORMAL remains. */
         if (type === T.MD_TEXT_NORMAL) {
           if (hardBreak || ctx.parser.flags & MD_FLAG_HARD_SOFT_BREAKS) breakType = T.MD_TEXT_BR;
           else {
