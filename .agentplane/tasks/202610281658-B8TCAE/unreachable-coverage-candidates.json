@@ -1,5 +1,5 @@
 {
-  "status": "nine scopes approved and annotated; M01/M02 pending independent human decisions; A05 withdrawn and unapplied",
+  "status": "eleven individually approved scopes annotated; no pending coverage approval; A05 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -176,8 +176,8 @@
     },
     {
       "id": "B8TCAE-M01",
-      "approval": "pending-human-decision",
-      "exceptionApplied": false,
+      "approval": "approved-by-human",
+      "exceptionApplied": true,
       "path": "apps/office/src/external/md4c/src/md4c.block.scan.ts",
       "originalLine": 229,
       "scope": "Only the true alternative and return5 at the shadowed CDATA test.",
@@ -188,7 +188,7 @@
         "Original compiled native helper outputs4 for CDATA,0 for both short and long non-ASCII declarations; WRITER144 documents the pinned dependency issue."
       ],
       "sourceSha256": "e57eeb56d95d96a068b6a8b4156106f0d075f5fdacabcba1e3cec6ba9671b77b",
-      "preAnnotationReport": "apps/office/coverage/integration-md4c-declaration-boundaries/coverage-final.json",
+      "preAnnotationReport": ".agentplane/tmp/coverage-raw-backup/pre-m01-m02/coverage-final.json",
       "preAnnotationReportSha256": "391acdc17b48365121c9cb4c1a889e812b5fc0b18c8c385ab9809c2620045e1e",
       "nativeProof": "md4c-m01-m02-native-proof.json",
       "instrumentationDiagnostic": {
@@ -213,12 +213,15 @@
         ]
       },
       "preparedPatch": "prepared-md4c-m01-exception.patch",
-      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved."
+      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M01",
+      "verificationProof": "approved-m01-m02-map-proof.json",
+      "status": "Individually approved narrow scope applied; fresh1912 assertions and strict module100 coverage pass. Native algorithms remain unchanged."
     },
     {
       "id": "B8TCAE-M02",
-      "approval": "pending-human-decision",
-      "exceptionApplied": false,
+      "approval": "approved-by-human",
+      "exceptionApplied": true,
       "path": "apps/office/src/external/md4c/src/md4c.block.scan.ts",
       "originalLine": 304,
       "scope": "Only the empty-object true alternative of result.end === undefined in the HTML end-condition spread.",
@@ -228,7 +231,7 @@
         "The optional type comes from the shared result interface, not from this helper runtime. Original native hit and miss outputs are1/end4 and0/end3."
       ],
       "sourceSha256": "e57eeb56d95d96a068b6a8b4156106f0d075f5fdacabcba1e3cec6ba9671b77b",
-      "preAnnotationReport": "apps/office/coverage/integration-md4c-declaration-boundaries/coverage-final.json",
+      "preAnnotationReport": ".agentplane/tmp/coverage-raw-backup/pre-m01-m02/coverage-final.json",
       "preAnnotationReportSha256": "391acdc17b48365121c9cb4c1a889e812b5fc0b18c8c385ab9809c2620045e1e",
       "nativeProof": "md4c-m01-m02-native-proof.json",
       "instrumentationDiagnostic": {
@@ -253,7 +256,10 @@
         ]
       },
       "preparedPatch": "prepared-md4c-m02-exception.patch",
-      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved."
+      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M02",
+      "verificationProof": "approved-m01-m02-map-proof.json",
+      "status": "Individually approved narrow scope applied; fresh1912 assertions and strict module100 coverage pass. Native algorithms remain unchanged."
     }
   ],
   "additionalAudits": [
