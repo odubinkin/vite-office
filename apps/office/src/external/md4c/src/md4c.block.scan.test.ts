@@ -107,3 +107,48 @@ it.each(fixture.blockScans)(
     ]).toEqual(result);
   },
 );
+
+it.each([
+  ["<![CDATA[x]]>", 4],
+  ["<!é>", 0],
+  ["<!é long declaration>", 0],
+  ["<custom> \t\v\f\n", 7],
+] as const)(
+  "preserves native declaration classification for %s",
+  /** Independently compiled md4c returns4/0/0/7; real UTF8 buffers cover short and long non-ASCII rejection. @param source - Counted input. @param expected - Original C helper output. @returns Nothing. */ (
+    source,
+    expected,
+  ) => {
+    const text = new TextEncoder().encode(source),
+      ctx: scan.MD_BLOCK_SCAN_CONTEXT = {
+        text,
+        size: text.length,
+        parser: { flags: 0 },
+        code_indent_offset: 4,
+        code_fence_length: 3,
+        html_block_type: 0,
+        html_comment_horizon: 0,
+        html_proc_instr_horizon: 0,
+        html_decl_horizon: 0,
+        html_cdata_horizon: 0,
+      };
+    expect(scan.md_is_html_block_start_condition(ctx, 0)).toBe(expected);
+  },
+);
+
+it("consumes trailing native whitespace after a table separator", /** Original C helper returns success,end7,one column for this counted buffer. @returns Nothing. */ () => {
+  const text = new TextEncoder().encode("|---| \t"),
+    ctx: scan.MD_BLOCK_SCAN_CONTEXT = {
+      text,
+      size: text.length,
+      parser: { flags: 0 },
+      code_indent_offset: 4,
+      code_fence_length: 3,
+      html_block_type: 0,
+      html_comment_horizon: 0,
+      html_proc_instr_horizon: 0,
+      html_decl_horizon: 0,
+      html_cdata_horizon: 0,
+    };
+  expect(scan.md_is_table_underline(ctx, 0)).toEqual({ matched: true, end: 7, col_count: 1 });
+});

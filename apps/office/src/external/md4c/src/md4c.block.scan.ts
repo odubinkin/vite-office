@@ -226,7 +226,11 @@ export function md_is_html_block_start_condition(ctx: MD_BLOCK_SCAN_CONTEXT, beg
   if (off < ctx.size && text[off] === 33) {
     // Pinned source tests ISASCII, not its comment's uppercase-letter condition.
     if (off + 1 < ctx.size && (text[off + 1] as number) <= 127) return 4;
+    /* istanbul ignore if -- B8TCAE-M01: an exact CDATA prefix has ASCII '[' and already returned type four above (WRITER144). */
     if (off + 8 < ctx.size && md_ascii_eq(text.subarray(off), enc.encode("![CDATA["), 8)) return 5;
+    else {
+      /* Preserve the normally exercised non-CDATA source-map alternative. */
+    }
   }
   if (
     off + 1 < ctx.size &&
@@ -301,7 +305,9 @@ export function md_is_html_block_end_condition(
     const result = md_line_contains(ctx, beg, enc.encode(marker));
     return {
       type: result.matched ? ctx.html_block_type : 0,
-      ...(result.end === undefined ? {} : { end: result.end }),
+      ...(result.end === undefined
+        ? /* istanbul ignore next -- B8TCAE-M02: original md_line_contains always returns its end offset, including on failure. */ {}
+        : { end: result.end }),
     };
   }
   return beg >= ctx.size || ISNEWLINE_(text[beg] as number)

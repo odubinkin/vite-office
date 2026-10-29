@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 57
+revision: 59
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-10-29T05:58:16.900Z"
+  updated_by: "CODER"
+  note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
+  attempts: 1
 commit: null
 comments:
   -
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
+  -
+    type: "verify"
+    at: "2026-10-29T05:58:16.900Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T05:55:31.695Z"
+doc_updated_at: "2026-10-29T05:58:16.979Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -47,7 +53,41 @@ sections:
     1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report any unresolved source-domain branches.
     2. Keep coverage thresholds and discovery unchanged; obtain explicit user decision before any unreachable-branch exception.
     3. Run npm run verify on final code, plus ap doctor and policy routing; record exact results. No broad success claim from a narrowed profile.
-  Verification: "In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication."
+  Verification: |-
+    In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-29T05:58:16.900Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T05:58:16.311Z, excerpt_hash=sha256:c0b5b70e409b9c4a9c1638266b6e0d86215a7ed799d30b57fc7c0e94d825b659
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610281658-B8TCAE/blueprint/resolved-snapshot.json
+    - old_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+    - current_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610281658-B8TCAE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610281658-B8TCAE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Keep test and source changes in traceable commits. Revert a faulty change through a new commit; never rewrite published history. Preserve existing Calc untracked output."
   Findings: |-
     The BinaryInputStream smaller remaining-count arm is theoretically reachable after281474976710655 full32768-byte reads; EOF before that terminates the loop. No exception has been approved. User asked for explanation and explicitly chose to expand coverage work. Integration task202610281559-581KM2 awaits this deliverable.
@@ -199,6 +239,7 @@ sections:
     - Command: actual Istanbul token/source-map comparisons for approved S01,M01,M02,M04,M05, plus the corresponding SAX and all-MD4C profiles. Result: pass for exact approved exclusion scope and all assertions; narrow SAX/global MD4C gates still fail where other owners have gaps. Evidence: S01 removes one zero-hit throw/alternative; M01/M02 remove one zero-hit return and two alternatives; M04/M05 remove two zero-hit throws/alternatives. Functions and retained positions remain unchanged. MD4C block scanner strict100 after1912 assertions; span collector strict100 after1999 assertions. Scope: only individually approved contracts; all guards/source algorithms remain present. WRITER144/249 record the precise source preconditions and original defect boundaries.
     - Command: compiled original md_parse span/text boundary driver; original bounded destination and ASCII equality helpers; full1999-case portable replay. Result: pass. Evidence:82 public-parser cases,4 valid-backed independent destination windows,65536 ASCII byte-pair comparisons; source/driver hashes and complete caller source persist in md4c-mark-native-proof.json. Scope: real parser-generated marks/containers and actual counted buffers; no private-state or callback/factory replacement. The repeated-first-mark loop is naturally covered; speculative M03 was withdrawn before a human request or runtime annotation. No full native Writer model or callback-detail parity is claimed.
     - Command: strict source-compatible diagnostic union with stale annotated owners replaced by their approved fresh maps. Result: incomplete coverage, not a full verifier pass. Evidence:118380/119500 statements,73051/74567 branch arms,18429/18429 functions,107504/108167 lines;210 owners remain incomplete. Scope: accumulated current-source diagnostic evidence only. No pending human coverage decision remains.
+    - Command: npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:invariants; focused prettier check; node .agentplane/policy/check-routing.mjs. Result: pass after applying S01/M01/M02/M04/M05 and completing the genuine boundary tests. Evidence: current authored source and metadata checks pass, with exact source/counter proofs repeated after formatting. Scope: this phase only; full project verify and final branch publication/back-merges remain outstanding.
 id_source: "generated"
 ---
 ## Summary
@@ -222,6 +263,39 @@ Execute the user-approved full coverage expansion across the255-file gap set usi
 ## Verification
 
 In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-29T05:58:16.900Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T05:58:16.311Z, excerpt_hash=sha256:c0b5b70e409b9c4a9c1638266b6e0d86215a7ed799d30b57fc7c0e94d825b659
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610281658-B8TCAE/blueprint/resolved-snapshot.json
+- old_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+- current_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610281658-B8TCAE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610281658-B8TCAE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -378,3 +452,4 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Command: actual Istanbul token/source-map comparisons for approved S01,M01,M02,M04,M05, plus the corresponding SAX and all-MD4C profiles. Result: pass for exact approved exclusion scope and all assertions; narrow SAX/global MD4C gates still fail where other owners have gaps. Evidence: S01 removes one zero-hit throw/alternative; M01/M02 remove one zero-hit return and two alternatives; M04/M05 remove two zero-hit throws/alternatives. Functions and retained positions remain unchanged. MD4C block scanner strict100 after1912 assertions; span collector strict100 after1999 assertions. Scope: only individually approved contracts; all guards/source algorithms remain present. WRITER144/249 record the precise source preconditions and original defect boundaries.
 - Command: compiled original md_parse span/text boundary driver; original bounded destination and ASCII equality helpers; full1999-case portable replay. Result: pass. Evidence:82 public-parser cases,4 valid-backed independent destination windows,65536 ASCII byte-pair comparisons; source/driver hashes and complete caller source persist in md4c-mark-native-proof.json. Scope: real parser-generated marks/containers and actual counted buffers; no private-state or callback/factory replacement. The repeated-first-mark loop is naturally covered; speculative M03 was withdrawn before a human request or runtime annotation. No full native Writer model or callback-detail parity is claimed.
 - Command: strict source-compatible diagnostic union with stale annotated owners replaced by their approved fresh maps. Result: incomplete coverage, not a full verifier pass. Evidence:118380/119500 statements,73051/74567 branch arms,18429/18429 functions,107504/108167 lines;210 owners remain incomplete. Scope: accumulated current-source diagnostic evidence only. No pending human coverage decision remains.
+- Command: npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:invariants; focused prettier check; node .agentplane/policy/check-routing.mjs. Result: pass after applying S01/M01/M02/M04/M05 and completing the genuine boundary tests. Evidence: current authored source and metadata checks pass, with exact source/counter proofs repeated after formatting. Scope: this phase only; full project verify and final branch publication/back-merges remain outstanding.

@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity.",
-      "B8TCAE adds6 structured public-input native cases for inline multiline titles in double/single/parenthesis quote forms, multiline image titles, and the63/64-byte email-domain label boundary. Complete callback streams are independently regenerated and checked against unchanged original md4c0.5.3. Current6 suites1860 tests pass; exact-map comparison adds3 statements and2 branch arms, including the admitted multiline-title pointer stack and normal-block temporary cleanup. Callback values and source-path execution are verified, not native allocation/free ABI or fault behavior. Runtime source, counters, discovery and thresholds remain unchanged."
+      "B8TCAE adds6 structured public-input native cases for inline multiline titles in double/single/parenthesis quote forms, multiline image titles, and the63/64-byte email-domain label boundary. Complete callback streams are independently regenerated and checked against unchanged original md4c0.5.3. Current6 suites1860 tests pass; exact-map comparison adds3 statements and2 branch arms, including the admitted multiline-title pointer stack and normal-block temporary cleanup. Callback values and source-path execution are verified, not native allocation/free ABI or fault behavior. Runtime source, counters, discovery and thresholds remain unchanged.",
+      "B8TCAE adds82 original compiled public-parser boundary observations, comparing emitted span counts and concatenated counted text. Inputs cover wiki target bounds/formatting, nested resolved constructs crossing inline destination boundaries, permissive autolinks, actual list indentation and fences. The real parser-generated mark graph covers the repeated-first-mark loop body naturally; its speculative M03 exception draft was withdrawn before a human request or runtime annotation. This preserves WRITER146/147 rather than repairing the source algorithms, and does not claim complete callback-detail or native Writer model parity."
     ],
     "omittedResponsibilities": [
       "Native allocation failures and C pointer ABI are not emulated. Writer callback integration remains pending."
@@ -32,6 +33,10 @@
         {
           "path": "apps/office/src/external/md4c/src/native-edge-callbacks.json",
           "marker": "B8TCAE-structured-inline-title-double-multiline"
+        },
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.mark-boundaries.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

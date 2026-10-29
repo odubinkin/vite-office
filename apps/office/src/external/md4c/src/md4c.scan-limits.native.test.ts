@@ -1,7 +1,7 @@
 /** @fileoverview Original native independent HTML search limits and borrowed source line subsets; backing buffers and source line geometry remain valid. */
 import { assert, expect, it } from "vitest";
 import { md_is_html_tag } from "./md4c.html";
-import { md_lookup_line, type MD_LINE } from "./md4c.scan";
+import { md_lookup_line, md_ascii_case_eq, type MD_LINE } from "./md4c.scan";
 import captured from "./native-scan-limits.json";
 
 /** Original HTML recognizer arguments and normalized success/end result. */
@@ -64,3 +64,44 @@ it.each(observations.cases)(
     }
   },
 );
+
+import { md_is_link_destination } from "./md4c.link";
+it.each([0, 1, 2, 3])(
+  "matches original angle-destination search limit %i inside a valid backing buffer",
+  /** Original C returns0 for limits0/1/2 with output sentinels intact, then1/end3/content1..2 for limit3. @param end - Independent logical search limit. @returns Nothing. */ (
+    end,
+  ) => {
+    const text = new TextEncoder().encode("<x>"),
+      ctx = {
+        text,
+        size: text.length,
+        html_comment_horizon: 0,
+        html_proc_instr_horizon: 0,
+        html_decl_horizon: 0,
+        html_cdata_horizon: 0,
+      };
+    const result = md_is_link_destination(ctx, 0, end);
+    if (end < 3) expect(result).toBeUndefined();
+    else
+      expect(result).toEqual({
+        end: 3,
+        contents_beg: 1,
+        contents_end: 2,
+        beg_line_index: 0,
+        end_line_index: 0,
+      });
+  },
+);
+
+it("matches original ASCII case equality for every counted byte pair", /** The digest is captured from compiled original md_ascii_case_eq across all65536 pairs, including NUL and high bytes. @returns Nothing. */ () => {
+  let digest = 2166136261;
+  const left = new Uint8Array(1),
+    right = new Uint8Array(1);
+  for (let a = 0; a < 256; a++)
+    for (let b = 0; b < 256; b++) {
+      left[0] = a;
+      right[0] = b;
+      digest = Math.imul(digest ^ Number(md_ascii_case_eq(left, right, 1)), 16777619) >>> 0;
+    }
+  expect(digest).toBe(2521229009);
+});

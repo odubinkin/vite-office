@@ -2234,6 +2234,13 @@
     "remainingOwners": 210,
     "fullVerifierPassed": false,
     "runtimeAlgorithmsChanged": false,
-    "thresholdsChanged": false
+    "thresholdsChanged": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "formatFocusedPassed": true,
+    "policyRoutingPassed": true
   }
 }

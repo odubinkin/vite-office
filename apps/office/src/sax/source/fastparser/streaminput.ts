@@ -220,7 +220,11 @@ export function* decodedChunks(entity: Entity): Generator<string> {
       try {
         text = decoder.decode(bytes);
       } catch (error) {
+        /* istanbul ignore if -- B8TCAE-S01: the private decoder cannot construct or receive this outer transport envelope. */
         if (error instanceof XmlByteError) throw error;
+        else {
+          /* Keep the normally exercised alternative visible to source mapping. */
+        }
         throw new XmlByteError(
           error instanceof Error ? error.message : "XML byte decoding failed",
           { cause: error },

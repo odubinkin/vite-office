@@ -19,9 +19,10 @@
         "apps/office/src/external/md4c/src/md4c.block.line.ts",
         "apps/office/src/external/md4c/src/md4c.block.test.ts",
         "apps/office/src/external/md4c/src/native-blocks.json",
-        "scripts/generate-md4c-block-fixtures.py"
+        "scripts/generate-md4c-block-fixtures.py",
+        "apps/office/src/external/md4c/src/md4c.mark-boundaries.native.test.ts"
       ],
-      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity.",
+      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity. B8TCAE native public-parser span/text observations include real nested list blank lines and oversized post-marker indentation. Actual parser containers and source text owners execute the original state machine; no container indices/records are manufactured. Evidence remains bounded span/text equality rather than complete native block-detail/Writer import equivalence.",
       "knownViolations": [],
       "localSymbols": [
         "md_analyze_line",
