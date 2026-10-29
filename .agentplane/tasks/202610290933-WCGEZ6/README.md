@@ -1,10 +1,11 @@
 ---
 id: "202610290933-WCGEZ6"
 title: "Align SAL negative-precision formatter with merged upstream fixes"
-status: "DOING"
+result_summary: "CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-29T09:48:53.023Z"
+  updated_at: "2026-10-29T09:49:39.389Z"
   updated_by: "CODER"
-  note: "verified-202610290933-WCGEZ6"
+  note: "CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass"
   attempts: 0
 quality_review:
   state: "pass"
@@ -39,11 +40,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md"
   findings:
     - "Old pinned fixture retained as historical provenance only; current tests require merged upstream zero output"
-commit: null
+commit:
+  hash: "abb5da874bb13266245409f8609343e399e97569"
+  message: "🧩 WCGEZ6 code: align SAL negative precision with merged upstream fixes"
 comments:
   -
     author: "CODER"
     body: "Start: Verify merged upstream SAL fixes, correct browser number formatting and regression coverage, and commit a scoped change following the declared verification plan."
+  -
+    author: "CODER"
+    body: "Verified: CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610290933-WCGEZ6"
+  -
+    type: "verify"
+    at: "2026-10-29T09:49:39.389Z"
+    author: "CODER"
+    state: "ok"
+    note: "CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass"
+  -
+    type: "status"
+    at: "2026-10-29T09:49:39.468Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-29T09:48:53.072Z"
+doc_updated_at: "2026-10-29T09:49:39.468Z"
 doc_updated_by: "CODER"
 description: "Mark CALC-189 resolved upstream, fix negative-precision zero formatting in browser SAL port while preserving historic native evidence, add regression tests and Gerrit links, verify and commit under repository workflow."
 sections:
@@ -135,6 +154,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610290933-WCGEZ6 --result verified-202610290933-WCGEZ6 --commit abb5da874bb13266245409f8609343e399e97569
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-29T09:49:39.389Z — VERIFY — ok
+
+    By: CODER
+
+    Note: CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T09:48:53.072Z, excerpt_hash=sha256:1ede3cd36b6ac1a0bf7abd01b1ebd3ba06c381bd9f336fc92a63956047078b7d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610290933-WCGEZ6/blueprint/resolved-snapshot.json
+    - old_digest: 3c7814f634313d2c0a9eb2c9f2d65dbfa42cf6508ff5e94664a1fae3afa5f37f
+    - current_digest: 3c7814f634313d2c0a9eb2c9f2d65dbfa42cf6508ff5e94664a1fae3afa5f37f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610290933-WCGEZ6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610290933-WCGEZ6 --result verified-202610290933-WCGEZ6 --commit 74d21061a034857d0a79ba7e3393cfcc64e02720
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -226,6 +275,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610290933-WCGEZ6 --result verified-202610290933-WCGEZ6 --commit abb5da874bb13266245409f8609343e399e97569
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-29T09:49:39.389Z — VERIFY — ok
+
+By: CODER
+
+Note: CALC-189 upstream merged; corrected SAL zero formatting; 185 RTL tests pass
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T09:48:53.072Z, excerpt_hash=sha256:1ede3cd36b6ac1a0bf7abd01b1ebd3ba06c381bd9f336fc92a63956047078b7d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610290933-WCGEZ6/blueprint/resolved-snapshot.json
+- old_digest: 3c7814f634313d2c0a9eb2c9f2d65dbfa42cf6508ff5e94664a1fae3afa5f37f
+- current_digest: 3c7814f634313d2c0a9eb2c9f2d65dbfa42cf6508ff5e94664a1fae3afa5f37f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610290933-WCGEZ6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610290933-WCGEZ6 --result verified-202610290933-WCGEZ6 --commit 74d21061a034857d0a79ba7e3393cfcc64e02720
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
