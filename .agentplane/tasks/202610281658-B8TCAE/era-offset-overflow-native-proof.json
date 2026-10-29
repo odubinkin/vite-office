@@ -1,0 +1,57 @@
+{
+  "before": 23936,
+  "after": 23948,
+  "allPriorRowsRetainedInOrder": true,
+  "sourceLibraryWitnessHashesUnchanged": true,
+  "extra": [
+    [
+      "E 1 0 0 1 0 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 1 0 0 1 -128 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 1 0 0 1 1 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 2 0 0 1 0 2 0 1 1 2147483647",
+      "0 1"
+    ],
+    [
+      "E 2 0 0 1 -128 2 0 1 1 2147483647",
+      "0 1"
+    ],
+    [
+      "E 2 0 0 1 1 2 0 1 1 2147483647",
+      "0 1"
+    ],
+    [
+      "E 5 0 0 1 0 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 5 0 0 1 -128 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 5 0 0 1 1 2 0 0 1 -2147483648",
+      "0 1"
+    ],
+    [
+      "E 6 0 0 1 0 2 0 0 1 -2147483648",
+      "-2147483648 0"
+    ],
+    [
+      "E 6 0 0 1 -128 2 0 0 1 -2147483648",
+      "-2147483648 -128"
+    ],
+    [
+      "E 6 0 0 1 1 2 0 0 1 -2147483648",
+      "0 1"
+    ]
+  ],
+  "scope": "Original Buddhist/Taiwan/Ethiopic/Amete Alem extended-year hooks receive actual ERA/YEAR fields through public setters. The first three kinds check offset overflow before further date computation; Amete Alem preserves its direct year with incoming success/warning and short-circuits failure. No runtime algorithm or coverage exception changes."
+}

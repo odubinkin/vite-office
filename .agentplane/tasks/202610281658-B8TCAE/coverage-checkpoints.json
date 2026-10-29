@@ -1,5 +1,5 @@
 {
-  "status": "in_progress",
+  "status": "remaining coverage deferred by explicit human instruction; publication and reverse merges authorized",
   "finalFullVerifierPassed": false,
   "thresholdsChanged": false,
   "exceptionsApproved": true,
@@ -3053,5 +3053,91 @@
       ]
     },
     "finalFullVerifierPassed": false
+  },
+  "pauseCheckpoint": {
+    "date": "2026-10-29",
+    "humanInstruction": "Stop adding remaining coverage now, commit current changes, push main and reverse merge/push writer and calc. Finish remaining coverage later.",
+    "lastNativeRows": 23948,
+    "lastNativeProof": "era-offset-overflow-native-proof.json",
+    "lastTargetedRun": {
+      "files": 2,
+      "tests": 36,
+      "strictCoveragePassed": true,
+      "coverage": "68/68 statements;54/54 alternatives;27/27 functions;62/62 lines",
+      "report": "apps/office/coverage/integration-era-offset-overflow/coverage-final.json",
+      "sha256": "c50a82cdc9e125c1290763a20fb7d9ba290fd558487f1659af6864d72dbc9d1f",
+      "bytes": 17148
+    },
+    "formatOnlyChanges": [
+      "resource-fallback.native-observations.json",
+      "era.native-observations.json"
+    ],
+    "formatOnlyJSONValuesVerifiedIdentical": true,
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108116,
+          "covered": 107537,
+          "skipped": 0,
+          "pct": 99.46
+        },
+        "statements": {
+          "total": 119426,
+          "covered": 118422,
+          "skipped": 0,
+          "pct": 99.15
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74498,
+          "covered": 73106,
+          "skipped": 0,
+          "pct": 98.13
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 176,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/external/icu/source/common/uresbund.entries.ts",
+        "/external/md4c/src/md4c.mark.ts",
+        "/external/md4c/src/md4c.inline.ts",
+        "/external/md4c/src/md4c.render.ts",
+        "/external/md4c/src/md4c.context.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts",
+        "/sw/source/core/doc/DocumentStylePoolManager.ts",
+        "/sw/source/filter/html/svxcss1.ts",
+        "/sc/browser/filter/xml/calc-document-codec.ts",
+        "/filter/source/msfilter/util.ts",
+        "/sw/source/filter/ww8/docxattributeoutput.ts",
+        "/external/icu/source/common/uloc.keywords.ts"
+      ]
+    },
+    "finalFullVerifierPassed": false,
+    "publicationAuthorizedWithDeferredCoverage": true
   }
 }
