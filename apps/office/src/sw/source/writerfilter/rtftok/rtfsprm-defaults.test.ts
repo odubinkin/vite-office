@@ -95,8 +95,8 @@ it("retains explicit style-category absence and the local empty-back guard", /**
     [N.LN_CT_PPrBase_spacing, N.LN_Value_ST_StyleType_character],
     [N.LN_EG_RPrBase_sz, N.LN_Value_ST_StyleType_paragraph],
     [N.LN_CT_PPrBase_spacing, N.LN_Value_ST_StyleType_table],
-  ]) {
-    const absent = getDefaultSPRM(id!, type!);
+  ] as const) {
+    const absent = getDefaultSPRM(id, type);
     try {
       expect(absent.is()).toBe(false);
     } finally {
