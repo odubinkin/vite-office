@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 46
+revision: 47
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-29T00:06:48.218Z"
+doc_updated_at: "2026-10-29T00:21:30.934Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -171,6 +171,8 @@ sections:
     Two suites/74 tests pass for public CSS parsing against the genuine EditEngine pool and actual Writer HTML style ownership. Overline/case-map tests use existing registered items, not invented Writer pool entries; native oblique maps to ITALIC_NORMAL. No runtime source changed. Typecheck, lint and JSDoc pass. Compatible-map union covers118117/119511 statements,72733/74579 arms and all18429 functions;225 owners still incomplete. No coverage exception or final full verifier success claimed.
 
     Added422 compiled original Hebrew boundary/month/validation calls;23731 native comparisons and18 portable replay tests pass, preserving all prior23309 rows and original source/archive hashes. Strict/lenient changes use the original public setter after actual base-cache preparation. No private state or core method replaced. Updated the exact expected Hebrew fixture count; initial replay stopped on the old count before executing added Hebrew rows. Typecheck, lint and JSDoc pass. Compatible-map union covers118129/119511 statements,72745/74579 arms, all18429 functions;225 owners incomplete. No exclusion or final full verification claimed.
+
+    Two suites/44 tests pass for actual RTF defaults, sparse-list matching, direct indent retention and valid recursive border/shading properties. Existing local empty-back guard is explicitly distinct from undefined native access. All223 statements/203 lines/33 functions covered;152/153 arms. A05 audits the remaining optional undefined-entry arm with the dense private-vector invariant and original forward/reverse iterator evidence; no exception requested/applied. Compatible-map union covers118161/119511 statements,72767/74579 arms and all18429 functions;225 owners incomplete. No final full verifier success claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -322,3 +324,5 @@ One suite/29 public compiled-input tests pass for real literal formats, negative
 Two suites/74 tests pass for public CSS parsing against the genuine EditEngine pool and actual Writer HTML style ownership. Overline/case-map tests use existing registered items, not invented Writer pool entries; native oblique maps to ITALIC_NORMAL. No runtime source changed. Typecheck, lint and JSDoc pass. Compatible-map union covers118117/119511 statements,72733/74579 arms and all18429 functions;225 owners still incomplete. No coverage exception or final full verifier success claimed.
 
 Added422 compiled original Hebrew boundary/month/validation calls;23731 native comparisons and18 portable replay tests pass, preserving all prior23309 rows and original source/archive hashes. Strict/lenient changes use the original public setter after actual base-cache preparation. No private state or core method replaced. Updated the exact expected Hebrew fixture count; initial replay stopped on the old count before executing added Hebrew rows. Typecheck, lint and JSDoc pass. Compatible-map union covers118129/119511 statements,72745/74579 arms, all18429 functions;225 owners incomplete. No exclusion or final full verification claimed.
+
+Two suites/44 tests pass for actual RTF defaults, sparse-list matching, direct indent retention and valid recursive border/shading properties. Existing local empty-back guard is explicitly distinct from undefined native access. All223 statements/203 lines/33 functions covered;152/153 arms. A05 audits the remaining optional undefined-entry arm with the dense private-vector invariant and original forward/reverse iterator evidence; no exception requested/applied. Compatible-map union covers118161/119511 statements,72767/74579 arms and all18429 functions;225 owners incomplete. No final full verifier success claimed.

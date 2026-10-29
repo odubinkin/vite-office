@@ -79,6 +79,40 @@
       "questionSourceSha256": "4e0bdb82ba8be75d341211eff27aa6b3f7bfebf59f7e82c9965ad53a96c16a36",
       "auditedFunctionSha256": "c85585e2d3d8920114698dced429538371b9243d3ca9f1569ec886167996f252",
       "functionUnchangedSinceQuestion": true
+    },
+    {
+      "id": "B8TCAE-A05",
+      "approval": "not-requested",
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts",
+      "sourceSha256": "197aa22a6b7b46557eefc591efa271a72b65aafbd73f638fb23c0d9b23d8a709",
+      "alternatives": [
+        "find: optional entry undefined alternative at line78"
+      ],
+      "proof": "The private RTFSprmsImpl.entries array is created densely and mutated only by push/unshift/splice and replacement of existing reference cells. find loops over offset < entries.length, and both forward and reverse indices are within0..length-1. No user callback runs during this lookup. The exposed iterator borrows entry tuples, not the backing array; valid tuple mutation cannot remove an array slot. The original C++ find uses forward/reverse vector iterators and dereferences only before end. Selecting entry===undefined would require a sparse/corrupted private backing array or a global/prototype replacement outside the admitted native contract.",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm-defaults.test.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-properties.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfsprm.cxx:72"
+      ],
+      "coverage": {
+        "statements": [
+          223,
+          223
+        ],
+        "branchArms": [
+          152,
+          153
+        ],
+        "functions": [
+          33,
+          33
+        ],
+        "lines": [
+          203,
+          203
+        ]
+      },
+      "scope": "Audit only. No exception/annotation/guard deletion/counter change applied. Any coverage exception requires an individually approved exact implementation."
     }
   ]
 }

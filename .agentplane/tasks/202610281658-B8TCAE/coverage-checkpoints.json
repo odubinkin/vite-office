@@ -1286,5 +1286,41 @@
     "diagnosticBranchArmsTotal": 74579,
     "remainingOwners": 225,
     "finalFullVerifierPassed": false
+  },
+  "rtfStyleDefaultsAndSparseLists": {
+    "report": "apps/office/coverage/integration-rtf-style-defaults",
+    "testFiles": 2,
+    "tests": 44,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "ownerStatements": [
+      223,
+      223
+    ],
+    "ownerBranchArms": [
+      152,
+      153
+    ],
+    "ownerFunctions": [
+      33,
+      33
+    ],
+    "ownerLines": [
+      203,
+      203
+    ],
+    "remainingAudit": "A05 not requested; no annotation or guard deletion applied",
+    "diagnosticStatementsCovered": 118161,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72767,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 225,
+    "finalFullVerifierPassed": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true
   }
 }
