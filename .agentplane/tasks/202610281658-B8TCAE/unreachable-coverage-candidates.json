@@ -1118,6 +1118,15 @@
       "sourceAudit": "date-closed-domain-audit.json",
       "verificationProof": "approved-date-d02-d11-map-proof.json",
       "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M06",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-m06-sentinel-audit.json",
+      "verificationProof": "approved-m06-map-proof.json",
+      "scope": "Only one unreachable return and one alternative; collector sentinel bounds every ampersand index.",
+      "upstreamDefectSuspected": false
     }
   ],
   "additionalAudits": [

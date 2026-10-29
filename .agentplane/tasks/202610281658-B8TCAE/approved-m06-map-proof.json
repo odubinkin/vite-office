@@ -1,0 +1,40 @@
+{
+  "M06": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 32,
+          "column": 32
+        },
+        "end": {
+          "line": 32,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "4",
+        "originalLine": 32,
+        "excludedArm": 0,
+        "retainedArmHits": 43
+      }
+    ],
+    "functionsUnchanged": 10,
+    "statements": [
+      146,
+      145
+    ],
+    "branchArms": [
+      91,
+      90
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions.",
+    "hashes": {
+      "apps/office/src/external/md4c/src/md4c.mark.analyze.ts": "1acfab164f9ab9a69d9979c3ad2ac6c0bacfc83aaa0188f2d63f24f0ea1cdb7d",
+      "apps/office/coverage/integration-md4c-sentinel-audit/coverage-final.json": "0e83bdb348dca19fe6f40bb5952fb59d3cb8fb26819756ab4768cdb9de02e875",
+      "vendor/md4c-reference/src/md4c.c": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8"
+    }
+  }
+}
