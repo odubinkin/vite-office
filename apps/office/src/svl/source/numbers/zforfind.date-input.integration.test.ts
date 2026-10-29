@@ -15,6 +15,7 @@ beforeAll(
 );
 it.each([
   ["January", ""],
+  ["January", "MMMM"],
   ["2025 10 January", ""],
   ["2025 10 January 08:23", ""],
   ["02/30/2025", ""],
@@ -22,6 +23,7 @@ it.each([
   ["31/12/2024", "DD/MM/YYYY"],
   ["2024/12", "YYYY/MM"],
   ["12/2024", "MM/YYYY"],
+  ["2025/12", "YYYY-MM-DD"],
 ])(
   "rejects incomplete, impossible or unsupported date %s with compiled pattern %s",
   /** Original admission requires an accepted locale pattern, ISO form or literal match; calendar validation rejects impossible civil dates and unsupported month-at-end order. Ordinary DATESEP tokens are not GetNumForString literals. @param input - Rejected source input. @param pattern - Optional real compiled format. @returns Nothing. */ (
@@ -71,6 +73,14 @@ it.each([
 );
 afterAll(/** Restores the host clock. @returns Nothing. */ () => vi.useRealTimers());
 const dates = [
+  [0x0407, "29.2.23", 'JJ.MM.TT" tag"', E.InternationalThenFormat, 2029, 2, 23],
+  // Accepted locale particles may override a three-field order; a quarter-only
+  // tail supplies a genuine date format whose exact order has only the year.
+  [0x0411, "12/31", "YYYY-MM-DD", E.Format, 2024, 12, 31],
+  [0x0411, "2025/12", 'YYYY"/"QQ', E.Format, 2025, 12, 1],
+  [0x0409, "2025/12", 'YYYY"/"QQ', E.Format, 2025, 12, 1],
+  // The public setter preserves unknown scoped-enum values; source fallback is YMD.
+  [0x0409, "2025-01-10", 'YYYY-MM-DD" tag"', 99, 2025, 1, 10],
   [0x0426, "2025 10 janvāris", "", E.International, 2025, 1, 10],
   [0x0426, "2025 10 janvāris 08:23", "", E.International, 2025, 1, 10, 8, 23],
 
@@ -184,6 +194,54 @@ it.each(dates)(
       format?.dispose();
       code.dispose();
       value.dispose();
+      language.dispose();
+      mapper.dispose();
+    }
+  },
+);
+
+it.each([
+  ["TRUE", 1],
+  ["FALSE", 0],
+] as const)(
+  "keeps zero-digit input %s logical even with an incoming DATE and real date format",
+  /** Original early classification returns logical/text before GetDateRef; a date request does not reinterpret these words as month-only dates. @param input - Original logical word. @param expected - Independent Boolean numeric value. @returns Nothing. */ (
+    input,
+    expected,
+  ) => {
+    const mapper = new NumberFormatCodeMapper(),
+      language = createNumberFormatLanguage(mapper, 0x0409),
+      scanner = language.GetFormatScanner(),
+      code = unicode("MMMM"),
+      value = unicode(input),
+      check: [number] = [0],
+      format = new SvNumberformat(
+        code,
+        scanner,
+        language.pStringScanner,
+        scanner.getColorCallback().GetNatNum(),
+        check,
+        [0x0409],
+      );
+    try {
+      expect(check[0]).toBe(0);
+      language.SetEvalDateFormat(E.Format);
+      const type: [number] = [T.DATE],
+        output: [number] = [-1];
+      expect(
+        language.pStringScanner.IsNumberFormat(
+          value,
+          type,
+          output,
+          format,
+          new NativeNumberWrapper(),
+        ),
+      ).toBe(true);
+      expect([type[0], output[0]]).toEqual([T.LOGICAL, expected]);
+    } finally {
+      format.dispose();
+      value.dispose();
+      code.dispose();
       language.dispose();
       mapper.dispose();
     }

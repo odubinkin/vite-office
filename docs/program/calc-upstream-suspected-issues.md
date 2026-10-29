@@ -4623,3 +4623,18 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` stores pSeq from its const Byte
 ### CALC-390 — Explicit XML transport conversion can leave an ambiguous byte signature
 
 The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its UTF8 output as BOM-free UTF16 when complete UTF7 input encodes the corresponding ASCII/NUL units. Both endian cases produce the actual local `wire` event and successful endDocument using genuine InputSource/Sequence/RTL owners. The pre-reinterpretation NUL-containing text would not itself be well-formed XML. This is a conditional source-format assumption/local admission finding, not certified complete native libxml2 or Calc model/filter behavior. Preserve the existing algorithms and the regression; see WRITER248 for the source boundary and limitations.
+
+
+### CALC-391 — Calendar restoration is dormant with THE_FUTURE disabled
+
+- Pinned `svl/source/numbers/zforfind.cxx` constructs an empty `aOrgCalendar` for every GetDateRef retry. Its only possible assignments are inside the THE_FUTURE-gated calendar-switch block (lines1877..1888); the normal selected build omits that block but retains the later nonempty-name restoration guard at2266..2268.
+- The represented local build deliberately preserves that disabled feature. Its freshly created empty OUString is never assigned or passed by reference before the guard, so the restoration call cannot execute under this build contract. Different macro-enabled native builds are outside this finding and must re-review the assumption.
+- The user separately approved D01 for only the restore-call statement and its true alternative; the runtime guard and code remain. Exact source-token/remapped-counter comparison excludes one zero-hit statement and one zero-hit alternative. A fresh44-suite/719-test consumer report retains all216 previously covered statements and123 covered alternatives without rewriting old counters. This documents a compile-configuration precondition, not a newly confirmed ordinary-input defect or a promise that alternate-calendar input/import is implemented. Real public date retry tests use genuine compiled formats, locale and CalendarWrapper owners; no string/service substitution or private scanner mutation is used.
+
+
+### CALC-392 — Zero-particle date conversion is dormant behind logical-only classification
+
+- Pinned `zforfind.cxx` GetDateRef retains a zero-numeric-particle case described as a month-only date. The original earlier IsNumberFormatMain branch at3405..3428 always returns text failure or LOGICAL when no numeric particle exists, before date classification.
+- The only original GetDateRef call sites are the DATE/DATETIME result-conversion arms at4273..4286. LOGICAL has its own conversion; neither that path nor the intervening checks reclassifies it as a date. Under the existing public pipeline, the zero-particle GetDateRef case and both nested month-position alternatives cannot execute.
+- Actual public regressions retain text rejection for `January` with a compiled `MMMM` date format, and Boolean conversion for `TRUE`/`FALSE` even when the incoming requested type is DATE and that same format is supplied. No private scanner fields or alternate conversion dispatcher are manufactured.
+- D02 is a separately prepared proposal for precisely that dormant case: four zero-hit statements and three zero-hit alternatives, with the code preserved. This documents the current source call-graph precondition, not an assertion that ordinary month-name text should become a date, a full native UNO import comparison or permission to ignore future call-graph changes.

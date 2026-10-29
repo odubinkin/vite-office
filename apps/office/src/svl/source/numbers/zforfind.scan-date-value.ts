@@ -442,8 +442,11 @@ export function GetDateRef(
     } else {
       res = false;
     }
+    /* istanbul ignore if -- B8TCAE-D01: THE_FUTURE is disabled; this local empty calendar name is never assigned or passed by reference. */
     if (aOrgCalendar.getLength() !== 0) {
       pCal.loadCalendar(aOrgCalendar, pLoc.getMyLocale()); // restore calendar
+    } else {
+      /* Retain the normal no-restore source-map alternative. */
     }
     aOrgCalendar.dispose();
   }

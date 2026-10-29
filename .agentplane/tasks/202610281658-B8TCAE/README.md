@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 60
+revision: 67
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-28T16:59:07.481Z"
+  updated_at: "2026-10-29T06:29:41.074Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -42,16 +42,16 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T06:22:18.763Z"
+doc_updated_at: "2026-10-29T06:31:04.298Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
   Summary: "Close the full integration coverage gaps before publication. On2026-10-28 (Asia/Bangkok), the user explicitly chose100 percent coverage and separate review of unreachable branches."
   Scope: "The255-file diagnostic gap set from integration task581KM2, meaningful tests and evidence-backed bug repairs across ICU/calendars, formatting, Writer and remaining runtime owners. Preserve upstream contracts,100 percent thresholds and test discovery. Suspected native defects go into the named Writer/Calc journals. No automatic exclusions or acceptance of unreachable branches."
-  Plan: "Execute the user-approved full coverage expansion across the255-file gap set using actual-owner source-backed tests, individual unreachable-branch review, unchanged strict gates and final complete verification."
+  Plan: "Execute the user-approved full coverage expansion using actual-owner source-backed tests and unchanged strict100 gates. Under the user's standing approval on2026-10-29, independently prove and apply narrowly scoped unreachable-code coverage exceptions without additional permission prompts. Preserve runtime algorithms and guards, retain precise source/counter evidence, and document suspected upstream defects in the requested journals. Missing tests alone are not proof of unreachability. Complete final project verification before publication and branch synchronization."
   Verify Steps: |-
-    1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report any unresolved source-domain branches.
-    2. Keep coverage thresholds and discovery unchanged; obtain explicit user decision before any unreachable-branch exception.
+    1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report unresolved source-domain branches.
+    2. Keep coverage thresholds and discovery unchanged. Apply only proven unreachable-code exceptions under the user standing approval of2026-10-29; record exact source/counter scope and document suspected upstream bugs. Missing tests do not establish unreachability.
     3. Run npm run verify on final code, plus ap doctor and policy routing; record exact results. No broad success claim from a narrowed profile.
   Verification: |-
     In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication.
@@ -243,6 +243,9 @@ sections:
 
     - Command: date input retry profile71 tests and all40 number-format suites plus4 CSV suites (719 tests), with current-source Istanbul date-value coverage. Result: all assertions pass;100 coverage gate remains failing at this owner. Evidence: InternationalThenFormat second-turn, accepted-pattern correction, actual quarter-tail generic year/month fallback and unknown policy99 fallback execute through real public setters/compiled formats/calendars. Initial unsupported two-particle/three-field draft expectations were corrected against actual source admission; no production algorithm change. Independent Gregorian civil dates define expected serials. Native enum domain proof uses unchanged pinned declaration and undefined/enum sanitizers only, not a full native input-scanner claim.
     - Command: exact D01 token/remapped-counter comparison and fresh44-suite consumer retention check. Result: pass. Evidence: exactly one zero-hit restore statement/alternative omitted under explicit human approval; all216 previously covered statements and123 covered alternatives remain covered. Scope: selected THE_FUTURE-disabled build; CALC-391 records the precondition, and no alternate macro-enabled build is certified. Full current-code verifier remains outstanding.
+    - Command: public zero-particle input regressions using actual compiled MMMM format and incoming DATE. Result: pass (74 targeted date tests now). Evidence: January remains text and TRUE/FALSE remain logical; original private GetDateRef is not part of their admitted conversion path. Scope: D02 call-graph proposal is prepared but unapplied pending a separate human decision; four statements/three alternatives are its complete proposed scope. No guard/case is removed and no private field mutation is introduced.
+    - Standing human authorization on2026-10-29 supersedes individual exception questions: independently prove and apply unreachable coverage exceptions, preserve exact scope/runtime behavior and strict100 thresholds, and document suspected upstream bugs when they cause unreachability. Missing tests or low counters alone remain insufficient. Plan and Verify Steps updated through the CLI and re-approved; CODER resumed. D02 is authorized under this rule but not yet applied.
+    - Command: current date-phase typecheck, focused ESLint, JSDoc, source provenance, invariants and focused formatting. Result: pass. Scope: real public date/logical regressions, D01 annotation and evidence metadata. Whole-project verifier/publication/back-merges remain outstanding.
 id_source: "generated"
 ---
 ## Summary
@@ -255,12 +258,12 @@ The255-file diagnostic gap set from integration task581KM2, meaningful tests and
 
 ## Plan
 
-Execute the user-approved full coverage expansion across the255-file gap set using actual-owner source-backed tests, individual unreachable-branch review, unchanged strict gates and final complete verification.
+Execute the user-approved full coverage expansion using actual-owner source-backed tests and unchanged strict100 gates. Under the user's standing approval on2026-10-29, independently prove and apply narrowly scoped unreachable-code coverage exceptions without additional permission prompts. Preserve runtime algorithms and guards, retain precise source/counter evidence, and document suspected upstream defects in the requested journals. Missing tests alone are not proof of unreachability. Complete final project verification before publication and branch synchronization.
 
 ## Verify Steps
 
-1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report any unresolved source-domain branches.
-2. Keep coverage thresholds and discovery unchanged; obtain explicit user decision before any unreachable-branch exception.
+1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report unresolved source-domain branches.
+2. Keep coverage thresholds and discovery unchanged. Apply only proven unreachable-code exceptions under the user standing approval of2026-10-29; record exact source/counter scope and document suspected upstream bugs. Missing tests do not establish unreachability.
 3. Run npm run verify on final code, plus ap doctor and policy routing; record exact results. No broad success claim from a narrowed profile.
 
 ## Verification
@@ -459,3 +462,6 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 
 - Command: date input retry profile71 tests and all40 number-format suites plus4 CSV suites (719 tests), with current-source Istanbul date-value coverage. Result: all assertions pass;100 coverage gate remains failing at this owner. Evidence: InternationalThenFormat second-turn, accepted-pattern correction, actual quarter-tail generic year/month fallback and unknown policy99 fallback execute through real public setters/compiled formats/calendars. Initial unsupported two-particle/three-field draft expectations were corrected against actual source admission; no production algorithm change. Independent Gregorian civil dates define expected serials. Native enum domain proof uses unchanged pinned declaration and undefined/enum sanitizers only, not a full native input-scanner claim.
 - Command: exact D01 token/remapped-counter comparison and fresh44-suite consumer retention check. Result: pass. Evidence: exactly one zero-hit restore statement/alternative omitted under explicit human approval; all216 previously covered statements and123 covered alternatives remain covered. Scope: selected THE_FUTURE-disabled build; CALC-391 records the precondition, and no alternate macro-enabled build is certified. Full current-code verifier remains outstanding.
+- Command: public zero-particle input regressions using actual compiled MMMM format and incoming DATE. Result: pass (74 targeted date tests now). Evidence: January remains text and TRUE/FALSE remain logical; original private GetDateRef is not part of their admitted conversion path. Scope: D02 call-graph proposal is prepared but unapplied pending a separate human decision; four statements/three alternatives are its complete proposed scope. No guard/case is removed and no private field mutation is introduced.
+- Standing human authorization on2026-10-29 supersedes individual exception questions: independently prove and apply unreachable coverage exceptions, preserve exact scope/runtime behavior and strict100 thresholds, and document suspected upstream bugs when they cause unreachability. Missing tests or low counters alone remain insufficient. Plan and Verify Steps updated through the CLI and re-approved; CODER resumed. D02 is authorized under this rule but not yet applied.
+- Command: current date-phase typecheck, focused ESLint, JSDoc, source provenance, invariants and focused formatting. Result: pass. Scope: real public date/logical regressions, D01 annotation and evidence metadata. Whole-project verifier/publication/back-merges remain outstanding.

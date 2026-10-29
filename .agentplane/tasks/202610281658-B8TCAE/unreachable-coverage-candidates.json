@@ -1,5 +1,5 @@
 {
-  "status": "fourteen approved scopes annotated; D02 pending separate human decision; A05 and speculative M03 withdrawn and unapplied",
+  "status": "fourteen approved scopes annotated; standing human authorization covers future proven unreachable cases; D02 authorized but not yet applied; A05/M03 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -513,7 +513,7 @@
     },
     {
       "id": "B8TCAE-D02",
-      "approval": "pending-human-decision",
+      "approval": "approved-under-standing-human-authorization",
       "exceptionApplied": false,
       "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
       "originalLine": 101,
@@ -621,7 +621,8 @@
         }
       },
       "preparedPatch": "prepared-date-d02-exception.patch",
-      "evidenceBoundary": "Original source call-graph invariant plus genuine public regressions; not full native UNO input conversion, direct private-helper misuse or future orchestration that might admit zero-particle dates. Later reactivation must re-review this exception."
+      "evidenceBoundary": "Original source call-graph invariant plus genuine public regressions; not full native UNO input conversion, direct private-helper misuse or future orchestration that might admit zero-particle dates. Later reactivation must re-review this exception.",
+      "approvalEvidence": "\u0434\u0430\u0432\u0430\u0439 \u0443\u0436\u0435 \u0432\u0441\u0435 \u0442\u0430\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438, \u043a\u043e\u0433\u0434\u0430 \u0432\u0435\u0442\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430, \u0441\u0440\u0430\u0437\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f\u043c\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0435\u0441\u043b\u0438 \u043e\u043d\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430 \u0438\u0437-\u0437\u0430 \u043f\u0440\u0435\u0434\u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043a\u0438 upstream - \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u0443\u0435\u043c \u044d\u0442\u0443 \u043e\u0448\u0438\u0431\u043a\u0443."
     }
   ],
   "additionalAudits": [
@@ -1151,5 +1152,11 @@
       "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
       "journal": "WRITER247"
     }
-  ]
+  ],
+  "standingAuthorization": {
+    "approvedBy": "human user",
+    "date": "2026-10-29",
+    "evidence": "\u0434\u0430\u0432\u0430\u0439 \u0443\u0436\u0435 \u0432\u0441\u0435 \u0442\u0430\u043a\u0438\u0435 \u0441\u043b\u0443\u0447\u0430\u0438, \u043a\u043e\u0433\u0434\u0430 \u0432\u0435\u0442\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430, \u0441\u0440\u0430\u0437\u0443 \u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u044f\u043c\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0435\u0441\u043b\u0438 \u043e\u043d\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0438\u0436\u0438\u043c\u0430 \u0438\u0437-\u0437\u0430 \u043f\u0440\u0435\u0434\u043f\u043e\u043b\u043e\u0436\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043a\u0438 upstream - \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0438\u0440\u0443\u0435\u043c \u044d\u0442\u0443 \u043e\u0448\u0438\u0431\u043a\u0443.",
+    "scope": "Apply independently proven unreachable coverage exceptions without further individual questions. Retain runtime logic/guards, strict100 thresholds and exact source/counter proof. Document suspected upstream bugs when they explain the unreachable path. Missing tests alone are not proof."
+  }
 }
