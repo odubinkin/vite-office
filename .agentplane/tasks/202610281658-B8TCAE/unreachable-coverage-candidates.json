@@ -1,5 +1,5 @@
 {
-  "status": "three-scopes-approved-and-annotated; additional audits unapproved",
+  "status": "six-scopes-approved-and-annotated; A01 unapproved; A05 approved-but-withdrawn-and-unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -138,14 +138,14 @@
     },
     {
       "id": "B8TCAE-A02",
-      "approval": "requested-awaiting-user",
+      "approval": "approved",
       "path": "apps/office/src/external/md4c/src/md4c.ref.ts",
       "branch": "md_is_link_reference: added missing covering line alternative at line165",
       "sourceSha256": "5bd623de98b3b53dad8ead9598b672d42f3c506b23f9561335c247142e573464",
       "nativeSource": "vendor/md4c-reference/src/md4c.c",
       "nativeSourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
       "proof": "The original reference helper asserts bracket delimiters, obtains beg_line from md_lookup_line, and immediately reads beg_line->end without a NULL error contract. Public parsing supplies the covering paragraph lines for its collected fragment marks. Reaching the added TypeScript missing-line guard requires an absent fragment in that supplied line set; manufacturing that state would violate the original helper caller invariant. No invalid native dereference is executed or claimed as a native exception.",
-      "status": "Prepared and individually requested; no runtime source annotation or exception applied. Fresh exact remapped-counter comparison remains mandatory after any approval.",
+      "status": "Only the individually approved alternative is annotated; runtime expressions/guards remain. Fresh strict100 consumer profiles and exact source/counter proof pass.",
       "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-md4c-a02-exception.patch",
       "instrumenterDiagnostic": {
         "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
@@ -168,8 +168,13 @@
           }
         ]
       },
-      "freshConsumerProfile": {
-        "report": "apps/office/coverage/integration-md4c-reference-audit/coverage-final.json",
+      "approvedBy": "human user in this conversation",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A02",
+      "exceptionApplied": true,
+      "verificationProof": "approved-a02-a03-a06-map-proof.json",
+      "journal": "WRITER245",
+      "preAnnotationConsumerProfile": {
+        "report": ".agentplane/tmp/coverage-raw-backup/pre-a02-a03-a06/md4c/coverage-final.json",
         "sha256": "beb4151c561ff910ca85aef9b0582ee8b747d26343eda2e816628bfdf315842c",
         "testFiles": 7,
         "tests": 1907,
@@ -208,18 +213,20 @@
             ]
           }
         ]
-      }
+      },
+      "afterSourceSha256": "c106ac2a4bb7218c02012c1d4603808fb9fcec4570419006e1228ef670b870fd",
+      "strictCoveragePassed": true
     },
     {
       "id": "B8TCAE-A03",
-      "approval": "requested-awaiting-user",
+      "approval": "approved",
       "path": "apps/office/src/external/md4c/src/md4c.ref.ts",
       "branch": "md_is_inline_link_spec: added missing covering line alternative at line194",
       "sourceSha256": "5bd623de98b3b53dad8ead9598b672d42f3c506b23f9561335c247142e573464",
       "nativeSource": "vendor/md4c-reference/src/md4c.c",
       "nativeSourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
       "proof": "The original inline helper initializes line_index to0, calls md_lookup_line without checking its returned pointer, then proceeds with lines[line_index]. Its normal caller supplies the covering paragraph for a collected closing bracket followed by an actual opening parenthesis. It defines no absent-line failure result. Reaching the added TypeScript missing-line guard would require a fragment outside that supplied paragraph line set. No invalid caller is used to claim original failure parity.",
-      "status": "Prepared and individually requested; no runtime source annotation or exception applied. Fresh exact remapped-counter comparison remains mandatory after any approval.",
+      "status": "Only the individually approved alternative is annotated; runtime expressions/guards remain. Fresh strict100 consumer profiles and exact source/counter proof pass.",
       "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-md4c-a03-exception.patch",
       "instrumenterDiagnostic": {
         "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
@@ -242,8 +249,13 @@
           }
         ]
       },
-      "freshConsumerProfile": {
-        "report": "apps/office/coverage/integration-md4c-reference-audit/coverage-final.json",
+      "approvedBy": "human user in this conversation",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A03",
+      "exceptionApplied": true,
+      "verificationProof": "approved-a02-a03-a06-map-proof.json",
+      "journal": "WRITER245",
+      "preAnnotationConsumerProfile": {
+        "report": ".agentplane/tmp/coverage-raw-backup/pre-a02-a03-a06/md4c/coverage-final.json",
         "sha256": "beb4151c561ff910ca85aef9b0582ee8b747d26343eda2e816628bfdf315842c",
         "testFiles": 7,
         "tests": 1907,
@@ -282,7 +294,9 @@
             ]
           }
         ]
-      }
+      },
+      "afterSourceSha256": "c106ac2a4bb7218c02012c1d4603808fb9fcec4570419006e1228ef670b870fd",
+      "strictCoveragePassed": true
     },
     {
       "id": "B8TCAE-A04",
@@ -428,7 +442,7 @@
     },
     {
       "id": "B8TCAE-A06",
-      "approval": "requested-awaiting-user",
+      "approval": "approved",
       "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
       "sourceSha256": "87c8b2d0a877d1401fb64a5c1a12f7a41b69211309545f6daae287b43998f215",
       "branch": "WriteCharacter: false arm of underline fallback conditional at626",
@@ -464,9 +478,15 @@
         ],
         "otherDifferences": "Three enclosing source ranges change only end columns because the inline comment extends the generated line; no other branch count changes."
       },
-      "status": "Prepared only; no runtime source annotation or exception applied. Fresh complete consumer recollection is required after approval.",
-      "freshConsumerProfile": {
-        "report": "apps/office/coverage/integration-rtf-all-consumers/coverage-final.json",
+      "status": "Only the individually approved alternative is annotated; runtime expressions/guards remain. Fresh strict100 consumer profiles and exact source/counter proof pass.",
+      "domainClarification": "WriterCharacterAttributes declares readonly underline:boolean and underlineStyle?:FontLineStyle. Null is outside that optional-enum contract, and state-changing accessors are outside the actual plain-value projection. The guard/counter audit is scoped to those admitted values; runtime expressions remain present even for out-of-contract JavaScript callers.",
+      "approvedBy": "human user in this conversation",
+      "approvalEvidence": "\u0440\u0430\u0437\u0440\u0435\u0448\u0430\u044e \u0438 \u043d\u0435 \u0437\u0430\u0431\u0443\u0434\u044c \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0442\u0440\u0430\u043d\u043d\u043e\u0435 \u043f\u043e\u0432\u0435\u0434\u0435\u043d\u0438\u0435 upstream",
+      "exceptionApplied": true,
+      "verificationProof": "approved-a02-a03-a06-map-proof.json",
+      "journal": "WRITER246",
+      "preAnnotationConsumerProfile": {
+        "report": ".agentplane/tmp/coverage-raw-backup/pre-a02-a03-a06/rtf/coverage-final.json",
         "testFiles": 27,
         "tests": 443,
         "allAssertionsPassed": true,
@@ -497,7 +517,8 @@
         },
         "sha256": "b580935dd69d1c136a11817d555a6a3152c72160dbcd34df4ef6ddd6b6a790c2"
       },
-      "domainClarification": "WriterCharacterAttributes declares readonly underline:boolean and underlineStyle?:FontLineStyle. Null is outside that optional-enum contract, and state-changing accessors are outside the actual plain-value projection. The guard/counter audit is scoped to those admitted values; runtime expressions remain present even for out-of-contract JavaScript callers."
+      "afterSourceSha256": "5a63c9982f2d428db493d903e49543ebc78a1c48a1811cbf5699ad486ce1ae40",
+      "strictCoveragePassed": true
     }
   ]
 }

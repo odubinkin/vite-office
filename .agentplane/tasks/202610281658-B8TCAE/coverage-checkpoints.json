@@ -1416,10 +1416,10 @@
     "exactRemovedBranchArms": 2,
     "functionsExcluded": 0,
     "testFiles": 17,
-    "tests": 115,
+    "tests": 116,
     "allAssertionsPassed": true,
     "rawReport": "apps/office/coverage/integration-approved-coverage-exceptions/coverage-final.json",
-    "rawReportSha256": "76d4fa300e1686029c4cb47c4d452c6208ea4c7568bfced4c682250fc621d286",
+    "rawReportSha256": "6984852fb3f29af56889f391d4c6e2a608ff1a5313bc5b8a51e4b9506a1a4fc5",
     "coverageConfiguration": {
       "path": "apps/office/test-projects.ts",
       "sha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c",
@@ -1446,7 +1446,9 @@
     "invariantsPassed": true,
     "toolingTestFiles": 40,
     "toolingTests": 169,
-    "toolingPassed": true
+    "toolingPassed": true,
+    "previousRawReportSha256": "76d4fa300e1686029c4cb47c4d452c6208ea4c7568bfced4c682250fc621d286",
+    "diagnosticMetricsScope": "Historical union at the initial U01/U02/A04 checkpoint. Raw profile/proof refreshed to116 tests after the source-backed sticky-query regression; see approvedA02A03A06 for the current whole-union metrics."
   },
   "rtfReverseLookupCorrection": {
     "report": "apps/office/coverage/integration-rtf-reverse-find",
@@ -1579,7 +1581,7 @@
     "formatPassed": true
   },
   "rtfCompleteConsumerRecollection": {
-    "report": "apps/office/coverage/integration-rtf-all-consumers/coverage-final.json",
+    "report": ".agentplane/tmp/coverage-raw-backup/pre-a02-a03-a06/rtf/coverage-final.json",
     "testFiles": 27,
     "tests": 443,
     "allAssertionsPassed": true,
@@ -1611,7 +1613,8 @@
     "sha256": "b580935dd69d1c136a11817d555a6a3152c72160dbcd34df4ef6ddd6b6a790c2",
     "productionSourcesChanged": false,
     "coverageExceptionApplied": false,
-    "a06": "Awaiting explicit user decision; source remains unchanged."
+    "a06": "Pre-annotation snapshot; explicit human approval is now implemented and verified under approvedA02A03A06.",
+    "supersededBy": "approvedA02A03A06"
   },
   "csvDateAndStreamBoundaries": {
     "report": "apps/office/coverage/integration-csv-date-boundaries/coverage-final.json",
@@ -1795,5 +1798,123 @@
     "jsdocPassed": true,
     "sourceProvenancePassed": true,
     "invariantsPassed": true
+  },
+  "approvedA02A03A06": {
+    "approvedIds": [
+      "B8TCAE-A02",
+      "B8TCAE-A03",
+      "B8TCAE-A06"
+    ],
+    "preAnnotationCommit": "edc6af384a0c97549ae2d0417dd0c5cf6a4e5335",
+    "proof": "approved-a02-a03-a06-map-proof.json",
+    "newExcludedStatements": 2,
+    "newExcludedBranchArms": 3,
+    "functionsExcluded": 0,
+    "md4c": {
+      "tests": 1907,
+      "testFiles": 7,
+      "strictCoveragePassed": true,
+      "statements": [
+        131,
+        131
+      ],
+      "branchArms": [
+        98,
+        98
+      ],
+      "functions": [
+        8,
+        8
+      ],
+      "lines": [
+        108,
+        108
+      ]
+    },
+    "rtf": {
+      "tests": 443,
+      "testFiles": 27,
+      "strictCoveragePassed": true,
+      "statements": [
+        385,
+        385
+      ],
+      "branchArms": [
+        351,
+        351
+      ],
+      "functions": [
+        43,
+        43
+      ],
+      "lines": [
+        333,
+        333
+      ]
+    },
+    "journals": [
+      "WRITER245",
+      "WRITER246"
+    ],
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108168,
+        "covered": 107441,
+        "skipped": 0,
+        "pct": 99.32
+      },
+      "statements": {
+        "total": 119505,
+        "covered": 118272,
+        "skipped": 0,
+        "pct": 98.96
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74574,
+        "covered": 72928,
+        "skipped": 0,
+        "pct": 97.79
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 220,
+    "rawOldAnnotationMapsDiscarded": true,
+    "a05ExceptionApplied": false,
+    "fullVerifierPassed": false,
+    "lintPassed": true,
+    "typecheckPassed": true,
+    "formatFocusedPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "toolingPassed": true,
+    "toolingTestFiles": 40,
+    "toolingTests": 169,
+    "policyRoutingPassed": true
+  },
+  "eraStickyQueryStatus": {
+    "report": "apps/office/coverage/integration-approved-coverage-exceptions",
+    "tests": 116,
+    "testFiles": 17,
+    "allAssertionsPassed": true,
+    "sourceUnchanged": true,
+    "approvedScopeUnchanged": [
+      "U01",
+      "U02",
+      "A04"
+    ],
+    "newGetStartDateStatusPathCovered": true,
+    "fullVerifierPassed": false
   }
 }

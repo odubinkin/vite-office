@@ -162,7 +162,11 @@ export function md_is_link_reference(
   beg += ctx.text[beg] === 33 ? 2 : 1;
   end--;
   const found = md_lookup_line(beg, lines);
+  /* istanbul ignore if -- B8TCAE-A02: the original caller supplies the covering paragraph line; native lookup is dereferenced unconditionally. */
   if (found === undefined) return undefined;
+  else {
+    // Keep the ordinary covered path explicit for exact source-map accounting.
+  }
   const [line, index] = found;
   const label =
     end > line.end
@@ -191,7 +195,11 @@ export function md_is_inline_link_spec(
 ): { readonly end: number; readonly attr: MD_LINK_ATTR } | undefined {
   const text = ctx.text,
     found = md_lookup_line(beg, lines);
+  /* istanbul ignore if -- B8TCAE-A03: the original caller supplies the covering paragraph line; native code assumes its lookup index. */
   if (found === undefined) return undefined;
+  else {
+    // Keep the ordinary covered path explicit for exact source-map accounting.
+  }
   let lineIndex = found[1],
     off = beg + 1;
   while (off < (lines[lineIndex] as MD_LINE).end && ISWHITESPACE_(text[off] as number)) off++;

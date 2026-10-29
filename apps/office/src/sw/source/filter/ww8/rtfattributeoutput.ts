@@ -623,7 +623,9 @@ export class RtfAttributeOutput extends AttributeOutputBase {
     if (attributes.underline || attributes.underlineStyle !== undefined)
       result += this.WriteUnderlineValue(
         attributes.underlineStyle ??
-          (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE),
+          (attributes.underline
+            ? FontLineStyle.LINESTYLE_SINGLE
+            : /* istanbul ignore next -- B8TCAE-A06: the outer guard and nullish fallback require underline=true here. */ FontLineStyle.LINESTYLE_NONE),
         attributes.underlineWordMode ?? false,
         attributes.underlineColor,
         false,

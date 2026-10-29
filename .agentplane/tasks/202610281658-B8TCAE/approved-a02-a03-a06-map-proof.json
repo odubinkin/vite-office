@@ -1,0 +1,96 @@
+{
+  "A02/A03": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 165,
+          "column": 27
+        },
+        "end": {
+          "line": 165,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 194,
+          "column": 27
+        },
+        "end": {
+          "line": 194,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "30",
+        "originalLine": 165,
+        "excludedArm": 0,
+        "retainedArmHits": 1340
+      },
+      {
+        "id": "34",
+        "originalLine": 194,
+        "excludedArm": 0,
+        "retainedArmHits": 192
+      }
+    ],
+    "functionsUnchanged": 8,
+    "statements": [
+      133,
+      131
+    ],
+    "branchArms": [
+      100,
+      98
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions.",
+    "path": "apps/office/src/external/md4c/src/md4c.ref.ts",
+    "preAnnotationCommit": "edc6af384a0c97549ae2d0417dd0c5cf6a4e5335",
+    "beforeSourceSha256": "5bd623de98b3b53dad8ead9598b672d42f3c506b23f9561335c247142e573464",
+    "afterSourceSha256": "c106ac2a4bb7218c02012c1d4603808fb9fcec4570419006e1228ef670b870fd",
+    "beforeReportSha256": "beb4151c561ff910ca85aef9b0582ee8b747d26343eda2e816628bfdf315842c",
+    "afterReportSha256": "8ea82cef78b60f9b4e738536e1098e1bd4b6c2f4809b5c46f4b012978c3e0ab8"
+  },
+  "A06": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "97",
+        "originalLine": 626,
+        "excludedArm": 1,
+        "retainedArmHits": 2
+      }
+    ],
+    "functionsUnchanged": 43,
+    "statements": [
+      385,
+      385
+    ],
+    "branchArms": [
+      352,
+      351
+    ],
+    "sourceMapBoundaryNote": "The retained true-arm start/counter is unchanged; its formatted end span excludes only the separator colon that the old one-line remap included. No additional arm or statement is excluded.",
+    "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+    "preAnnotationCommit": "edc6af384a0c97549ae2d0417dd0c5cf6a4e5335",
+    "beforeSourceSha256": "87c8b2d0a877d1401fb64a5c1a12f7a41b69211309545f6daae287b43998f215",
+    "afterSourceSha256": "5a63c9982f2d428db493d903e49543ebc78a1c48a1811cbf5699ad486ce1ae40",
+    "beforeReportSha256": "b580935dd69d1c136a11817d555a6a3152c72160dbcd34df4ef6ddd6b6a790c2",
+    "afterReportSha256": "fb09ff0e0c63bb936292c64757fe4e6c0b62ddbbfbd2f77facf08d4b7b51d7df"
+  },
+  "configuration": {
+    "path": "apps/office/test-projects.ts",
+    "sha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c",
+    "unchanged": true,
+    "thresholds": {
+      "statements": 100,
+      "lines": 100,
+      "functions": 100,
+      "branches": 100
+    }
+  }
+}

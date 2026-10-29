@@ -1,5 +1,5 @@
 /** @fileoverview Replays compiled original ICU78.3 EraRules sparse indices, sentinel starts and actual resource-backed era lookup. */
-import { afterAll, beforeAll, expect, it, vi } from "vitest";
+import { afterAll, assert, beforeAll, expect, it, vi } from "vitest";
 import observations from "./era.native-observations.json";
 import { EraRules } from "./erarules";
 
@@ -55,3 +55,25 @@ it.each(names)(
       expect(replay(query as string), query).toEqual((output as string).split(" ").map(Number));
   },
 );
+
+it("retains an already-loaded era table and caller outputs under sticky query failure", /** Source-backed follow-up: the original factory succeeds before query statuses fail; normal native fixture rows usually use one shared initial status for both stages. @returns Nothing. */ () => {
+  const status: [number] = [0],
+    rules = EraRules.createInstance("japanese", false, status);
+  assert(rules);
+  const code = rules.getCurrentEraCode(),
+    count = rules.getNumberOfEras(),
+    fields: [number, number, number] = [91, 92, 93];
+  status[0] = 3;
+  rules.getStartDate(code, fields, status);
+  expect(fields).toEqual([91, 92, 93]);
+  expect(rules.getStartYear(code, status)).toBe(2147483647);
+  expect(rules.getEraCode(2024, 1, 1, status)).toBe(-1);
+  expect(status[0]).toBe(3);
+  expect(rules.getNumberOfEras()).toBe(count);
+  status[0] = 0;
+  rules.getStartDate(code, fields, status);
+  expect(fields).toEqual([2019, 5, 1]);
+  expect(rules.getStartYear(code, status)).toBe(2019);
+  expect(rules.getEraCode(2024, 1, 1, status)).toBe(code);
+  expect(status[0]).toBe(0);
+});
