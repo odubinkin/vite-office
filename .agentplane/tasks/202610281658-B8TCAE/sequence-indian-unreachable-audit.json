@@ -1,0 +1,37 @@
+{
+  "authorization": "Standing human authorization for independently proven unreachable branches; retain runtime guards and100% thresholds.",
+  "scopes": [
+    {
+      "id": "B01-B03",
+      "path": "apps/office/src/sal/rtl/byteseq.ts",
+      "arms": {
+        "5": 1,
+        "13": 1,
+        "15": 1
+      },
+      "reason": "The local private allocate function always returns an object containing a real ByteStorage or throws. It has no replaceable allocator pointer and never returns null. These three false alternatives preserve native malloc-failure guards; native malloc-null behavior is not represented or certified by this browser binding.",
+      "sourceSha256": "ec084341af4178255c222a2abaefd817b3714a1a876a660f5cf5f0a40691dd87",
+      "beforeSource": ".agentplane/tmp/B01-B03-before.ts",
+      "beforeCoverage": ".agentplane/tmp/B01-B03-before-coverage.json",
+      "upstreamDefectSuspected": false,
+      "sourceIssue": null
+    },
+    {
+      "id": "I01",
+      "path": "apps/office/src/external/icu/source/i18n/indiancal.ts",
+      "arms": {
+        "18": 0
+      },
+      "reason": "The original signed32 month is either already0..11 or normalized by floorDivide(month,12,&month); its remainder is0..11. Overflow exits before the ternary. Therefore month==12 is impossible at the selection. The pinned original ICU source retains the same contradictory test.",
+      "sourceSha256": "8abd9750b886441969b13b2e40040511e445e835c09c4aea0db88c1d3c9e3ee8",
+      "beforeSource": ".agentplane/tmp/I01-before.ts",
+      "beforeCoverage": ".agentplane/tmp/I01-before-coverage.json",
+      "upstreamDefectSuspected": true,
+      "sourceIssue": "CALC-393"
+    }
+  ],
+  "sources": {
+    "vendor/icu-reference/source/i18n/indiancal.cpp": "1dea12c23e3d48cf4c44eef985e7336e591c29549281e7bcb2dc462cd7b4ed4d",
+    "apps/office/src/external/icu/source/i18n/gregoimp.ts": "07d01a163a4861ad44787bf1a87e2f39eac2d58c55ac9ce48cc637079ce5492b"
+  }
+}
