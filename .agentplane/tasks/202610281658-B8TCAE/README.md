@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 68
+revision: 69
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T07:21:19.470Z"
+doc_updated_at: "2026-10-29T07:26:49.849Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -250,6 +250,10 @@ sections:
     - Observation: Standing user authorization now permits independently proven unreachable coverage exceptions without repeated questions; suspected upstream bugs must still be documented. D02-D11 preserve every GetDateRef runtime token and guard. Exact positional remapping removes only19 zero-hit statements and12 zero-hit alternatives and retains every216 previously positive statement position and123 alternatives.
       Impact: Fresh44 consumer suites /731 tests reach strict100% for this owner (222 statements,131 alternatives,1 function,215 lines). The diagnostic current-map union is99.09% statements /98.01% branches /100% functions with209 incomplete owners; it is not final full verification.
       Resolution: D02 call-graph assumptions remain in CALC-392; D03-D11 ordinary closed-domain guards have audit evidence rather than invented upstream defects. Typecheck, lint, JSDoc, source provenance, inventory invariants, focused formatting and policy routing pass. Continue remaining coverage before main publication and reverse merges.
+
+    - Observation: Shared helper defaults and platform-clock failure/success now have actual boundary tests (4 suites /14 assertions, four owners at strict100%). MD4C M06 excludes only one impossible entity-bounds return because the collector always appends a resolved sentinel; all8 suites /1999 tests pass and its10 functions remain counted. RTF allocation failure remains a real tested path through the original replaceable allocation function pointer; only the separate impossible post-return null guard is R01.
+      Impact: Exact token/map proofs retain every other counter; MD4C owner145/90/10/139 and RTF48/28/4/41 are strict100% across statements/alternatives/functions/lines. The updated diagnostic union has203 incomplete owners, not a final full-verifier pass. Neither ordinary invariant is labeled an upstream bug.
+      Resolution: Typecheck, focused ESLint, JSDoc, provenance, routing, focused formatting and diff checks pass. Runtime algorithms and100% thresholds stay unchanged. Continue source-backed coverage work before publication and reverse merges.
 id_source: "generated"
 ---
 ## Summary
@@ -473,3 +477,7 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Observation: Standing user authorization now permits independently proven unreachable coverage exceptions without repeated questions; suspected upstream bugs must still be documented. D02-D11 preserve every GetDateRef runtime token and guard. Exact positional remapping removes only19 zero-hit statements and12 zero-hit alternatives and retains every216 previously positive statement position and123 alternatives.
   Impact: Fresh44 consumer suites /731 tests reach strict100% for this owner (222 statements,131 alternatives,1 function,215 lines). The diagnostic current-map union is99.09% statements /98.01% branches /100% functions with209 incomplete owners; it is not final full verification.
   Resolution: D02 call-graph assumptions remain in CALC-392; D03-D11 ordinary closed-domain guards have audit evidence rather than invented upstream defects. Typecheck, lint, JSDoc, source provenance, inventory invariants, focused formatting and policy routing pass. Continue remaining coverage before main publication and reverse merges.
+
+- Observation: Shared helper defaults and platform-clock failure/success now have actual boundary tests (4 suites /14 assertions, four owners at strict100%). MD4C M06 excludes only one impossible entity-bounds return because the collector always appends a resolved sentinel; all8 suites /1999 tests pass and its10 functions remain counted. RTF allocation failure remains a real tested path through the original replaceable allocation function pointer; only the separate impossible post-return null guard is R01.
+  Impact: Exact token/map proofs retain every other counter; MD4C owner145/90/10/139 and RTF48/28/4/41 are strict100% across statements/alternatives/functions/lines. The updated diagnostic union has203 incomplete owners, not a final full-verifier pass. Neither ordinary invariant is labeled an upstream bug.
+  Resolution: Typecheck, focused ESLint, JSDoc, provenance, routing, focused formatting and diff checks pass. Runtime algorithms and100% thresholds stay unchanged. Continue source-backed coverage work before publication and reverse merges.

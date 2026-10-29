@@ -1,5 +1,5 @@
 /** @fileoverview Original Date normalization QA examples and native width/BCE/boundary contracts over genuine Date values and shared comphelper algorithms. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import {
   convertDateToDays,
   convertDateToDaysNormalizing,
@@ -12,6 +12,7 @@ import {
   type DateFields,
 } from "../../../comphelper/source/misc/date";
 import { Date } from "./tdate";
+import { GetSystemDateTime } from "./systemdatetime";
 
 it("counts source Gregorian days through the BCE boundary and Calc null date", /** Checks counts source Gregorian days through the BCE boundary and Calc null date. @returns Test completion or assertion result. */ () => {
   expect(yearToDays(-2)).toBe(-731);
@@ -208,5 +209,21 @@ it("retains original tools QA normalization examples and native BCE/short-overfl
     const packed = date.GetDate();
     date.Normalize();
     expect(date.GetDate()).toBe(packed);
+  }
+});
+
+it("preserves caller output and the source 1900 fallback when the host clock cannot form a date", /** Only the platform clock boundary is controlled; Date packing and fallback owners execute normally. @returns Nothing. */ () => {
+  const clock = vi.spyOn(globalThis.Date, "now").mockReturnValue(8_640_000_000_000_001);
+  try {
+    const output: [number] = [123456];
+    expect(GetSystemDateTime(output, null)).toBe(false);
+    expect(output[0]).toBe(123456);
+    expect(new Date(Date.SYSTEM).GetDate()).toBe(19000101);
+    clock.mockReturnValue(new globalThis.Date(2024, 5, 15, 12).getTime());
+    expect(GetSystemDateTime(output, null)).toBe(true);
+    expect(output[0]).toBe(20240615);
+    expect(new Date(Date.SYSTEM).GetDate()).toBe(20240615);
+  } finally {
+    clock.mockRestore();
   }
 });

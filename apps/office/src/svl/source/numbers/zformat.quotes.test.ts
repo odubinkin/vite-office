@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvNumberformat } from "./zformat";
+import { IsInQuote, GetQuoteEnd } from "./zformat.quotes";
 
 it("keeps inclusive quote state, escaped quotes, length sentinels and native nonzero opening results", /** Native unchanged IsInQuote/GetQuoteEnd bodies provide these boundary observations. @returns Nothing. */ () => {
   for (const [value, position, inside, end] of [
@@ -31,5 +32,19 @@ it("keeps inclusive quote state, escaped quotes, length sentinels and native non
     expect(SvNumberformat.GetQuoteEnd(source, 1, 34, 92)).toBe(5);
   } finally {
     source.dispose();
+  }
+});
+
+it("retains default quote and escape conventions at the shared header helper boundary", /** Backslash escapes outside quotes while an interior backslash does not escape a quote by default. @returns Nothing. */ () => {
+  const escaped = unicode('a\\"b'),
+    inside = unicode('"a\\"b');
+  try {
+    expect(IsInQuote(escaped, 2)).toBe(false);
+    expect(GetQuoteEnd(escaped, 2)).toBe(2);
+    expect(IsInQuote(inside, 3)).toBe(false);
+    expect(GetQuoteEnd(inside, 1)).toBe(3);
+  } finally {
+    escaped.dispose();
+    inside.dispose();
   }
 });

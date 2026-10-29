@@ -1,6 +1,7 @@
 /** @fileoverview Native RTL arithmetic cancellation and binary64 equality boundary witnesses. */
 import { expect, it } from "vitest";
-import { approxEqual, approxAdd, approxSub } from "../inc/rtl/math";
+import { approxEqual, approxAdd, approxSub, stringToDouble } from "../inc/rtl/math";
+import { unicode } from "../../i18nlangtag/source/isolang/isolang.tables";
 it("preserves native equality exceptions and cancellation", /** Includes pinned SAL QA witnesses and scalar sign/zero/nonfinite boundaries. @returns Nothing. */ () => {
   for (const [a, b, equal] of [
     [1, 1, true],
@@ -44,4 +45,14 @@ it("preserves native equality exceptions and cancellation", /** Includes pinned 
   expect(approxSub(-1, -2)).toBe(1);
   expect(approxSub(1, -2)).toBe(3);
   expect(approxSub(0, 1)).toBe(-1);
+});
+
+it("parses borrowed UTF16 and owned logical strings with omitted output slots", /** Public inline wrapper keeps logical length, grouping and decimal conventions without requiring status outputs. @returns Nothing. */ () => {
+  const source = unicode("1.234,5tail");
+  try {
+    expect(stringToDouble(source, 44, 46)).toBe(1234.5);
+    expect(stringToDouble(Uint16Array.of(49, 50, 46, 53, 0, 57), 46, 44)).toBe(12.5);
+  } finally {
+    source.dispose();
+  }
 });

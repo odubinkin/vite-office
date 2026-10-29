@@ -1,6 +1,7 @@
 /** @fileoverview Native RTF UTF16-unit emission using the actual checked SAL byte owner. */
 import { expect, it } from "vitest";
 import { OutHex, OutString, OutStringUpr } from "./rtfutil";
+import { rtl_stringAllocation } from "../../../sal/rtl/strimp.hxx";
 import * as enc from "../../../sal/inc/rtl/textenc";
 
 it("preserves original UInt32/UInt8 hex bounds, sign bits and leading zeros", /** Verifies preserves original UInt32/UInt8 hex bounds, sign bits and leading zeros. @returns Nothing. */ () => {
@@ -36,4 +37,19 @@ it("keeps native upr and nested ud grouping", /** Verifies keeps native upr and 
   expect(OutStringUpr("\\name", "é", enc.RTL_TEXTENCODING_MS_1252)).toBe(
     "{\\upr{\\name \\'e9}{\\*\\ud{\\name \\u233\\'e9}}}",
   );
+});
+
+it("propagates allocation failure for control-unit UTF8 conversion and remains usable afterward", /** Uses the original replaceable allocator function pointer; RTF and SAL conversion owners remain real. @returns Nothing. */ () => {
+  const allocate = rtl_stringAllocation.rtl_allocateString;
+  rtl_stringAllocation.rtl_allocateString =
+    /** Native allocation failure. @returns Null allocation. */ () => null;
+  try {
+    expect(
+      /** Exercises the one-byte UTF8 fast path after temporary initialization. @returns RTF text. */ () =>
+        OutString("\0", enc.RTL_TEXTENCODING_UTF8),
+    ).toThrow("assert(*pTarget != nullptr)");
+  } finally {
+    rtl_stringAllocation.rtl_allocateString = allocate;
+  }
+  expect(OutString("\0", enc.RTL_TEXTENCODING_UTF8)).toBe("\\u0\\'00");
 });
