@@ -1,5 +1,5 @@
 /** @fileoverview Original semantic HTML style ownership and script-suffix views through real Writer parser, pool and CSS maps. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwHTMLParser } from "./swhtml";
@@ -17,7 +17,9 @@ import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 /** Owns a genuine HTML reader and existing Writer cursor. @param check - Reads actual CSS/document owners. @returns Nothing. */
 function withParser(check: (doc: SwDoc, css: SwCSS1Parser) => void): void {
   const doc = new SwDoc(),
-    position = new SwPosition(doc.paragraphs[0]!),
+    node = doc.paragraphs[0];
+  assert(node);
+  const position = new SwPosition(node),
     cursor = new SwPaM(position);
   position.Dispose();
   const reader = new SwHTMLParser(doc, cursor, new SvStream(OUStringToOString("", UTF8), UTF8));
@@ -72,8 +74,10 @@ it("creates one class descendant from the real semantic base while preserving it
       try {
         css.ParseStyleOption("color: #123456; font-size: 150%", items, info);
         css.InsertClass("sample", items, info);
-        const base = css.GetChrFormat(T.STRONG_ON, "")!,
-          child = css.GetChrFormat(T.STRONG_ON, "sample-western")!;
+        const base = css.GetChrFormat(T.STRONG_ON, ""),
+          child = css.GetChrFormat(T.STRONG_ON, "sample-western"),
+          entry = css.GetClass("sample");
+        assert(base && child && entry);
         expect(child).not.toBe(base);
         expect(child.GetName()).toBe(base.GetName() + ".sample");
         expect(child.DerivedFrom()).toBe(base);
@@ -82,11 +86,9 @@ it("creates one class descendant from the real semantic base while preserving it
           (child.GetAttrSet().Get(RES_CHRATR_COLOR) as SvxColorItem).GetValue().toUInt32(),
         ).toBe(0x123456);
         expect(child.GetAttrSet().GetItemIfSet(RES_CHRATR_FONTSIZE, false)).toBeUndefined();
-        expect(
-          (
-            css.GetClass("sample")!.GetItemSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
-          ).GetProp(),
-        ).toBe(150);
+        expect((entry.GetItemSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetProp()).toBe(
+          150,
+        );
         expect(css.GetChrFormat(T.STRONG_ON, "sample-cjk")).toBe(child);
         expect(css.GetChrFormat(T.STRONG_ON, "unregistered")).toBe(base);
         expect(css.GetChrFormat(T.PARABREAK_ON, "sample")).toBeUndefined();

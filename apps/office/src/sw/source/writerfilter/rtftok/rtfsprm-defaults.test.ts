@@ -1,7 +1,7 @@
 /** @fileoverview Original RTF style defaults and sparse-list boundaries over genuine intrusive value/property owners; checked empty-back access is a local host guard, not native undefined-access parity. */
 import { expect, it } from "vitest";
 import { SvRef } from "../../../../tools/inc/ref";
-import { RTFSprms, getDefaultSPRM } from "./rtfsprm";
+import { RTFSprms, RTFConflictPolicy, getDefaultSPRM } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -254,3 +254,28 @@ it.each([
     }
   },
 );
+
+it("returns independently owned first and last duplicate matches through both original traversal directions", /** Original forward/reverse iterator lookup preserves duplicate order and nullable misses. @returns Nothing. */ () => {
+  const list = new RTFSprms();
+  try {
+    list.set(N.LN_CT_Ind_left, new RTFValue(240));
+    list.set(N.LN_CT_Ind_right, new RTFValue(480));
+    list.set(N.LN_CT_Ind_left, new RTFValue(720), RTFConflictPolicy.Append);
+    const first = list.find(N.LN_CT_Ind_left, true),
+      last = list.find(N.LN_CT_Ind_left, false),
+      absent = list.find(N.LN_CT_Ind_firstLine, false);
+    try {
+      expect(first.operatorDereference().getInt()).toBe(240);
+      expect(last.operatorDereference().getInt()).toBe(720);
+      expect(first.get()).not.toBe(last.get());
+      expect(absent.is()).toBe(false);
+      expect(list.size()).toBe(3);
+    } finally {
+      absent.dispose();
+      last.dispose();
+      first.dispose();
+    }
+  } finally {
+    list.dispose();
+  }
+});

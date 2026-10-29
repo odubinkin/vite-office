@@ -211,19 +211,50 @@
     },
     {
       "id": "B8TCAE-A05",
-      "approval": "pending-user-response",
+      "approval": "approved-but-not-applied",
       "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts",
       "sourceSha256": "197aa22a6b7b46557eefc591efa271a72b65aafbd73f638fb23c0d9b23d8a709",
-      "alternatives": [
-        "find: optional entry undefined alternative at line78"
-      ],
-      "proof": "The private RTFSprmsImpl.entries array is created densely and mutated only by push/unshift/splice and replacement of existing reference cells. find loops over offset < entries.length, and both forward and reverse indices are within0..length-1. No user callback runs during this lookup. The exposed iterator borrows entry tuples, not the backing array; valid tuple mutation cannot remove an array slot. The original C++ find uses forward/reverse vector iterators and dereferences only before end. Selecting entry===undefined would require a sparse/corrupted private backing array or a global/prototype replacement outside the admitted native contract.",
       "evidence": [
         "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm-defaults.test.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-properties.test.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfsprm.cxx:72"
       ],
-      "coverage": {
+      "scope": "Withdrawn proposal. Do not apply the old draft; original source restored and genuine reverse traversal is tested.",
+      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-rtfsprm-a05-exception.patch",
+      "proposal": "Express the existing optional entry access as an equivalent nullish ternary and ignore only its absent-entry operand. Keep all lookup results, comparisons, loops, runtime missing-entry handling and configured thresholds. Verify exact instrumentation scope before any commit. Not applied.",
+      "status": "Withdrawn: exact raw branch inspection and a genuine reverse-lookup test identify the missing path as the index-selection ternary. Draft reverted before code commit. The prepared patch file now contains only a withdrawal notice. No A05 source change or exclusion is applied.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e A05",
+      "exceptionApplied": false,
+      "auditCorrection": "Dense-entry invariant is valid but unrelated to the remaining coverage arm. Original source is byte-restored; no A05 annotation remains.",
+      "preparedPatchWithdrawn": true,
+      "draftCounterEvidence": {
+        "originalFocusedBranchArms": [
+          149,
+          153
+        ],
+        "draftFocusedBranchArms": [
+          150,
+          154
+        ],
+        "restoredReverseLookupFocusedBranchArms": [
+          150,
+          153
+        ],
+        "originalBranch7Hits": [
+          120,
+          0
+        ],
+        "reverseLookupBranch7Hits": [
+          121,
+          4
+        ]
+      },
+      "withdrawnAlternativeAttribution": [
+        "find: optional entry undefined alternative at line78"
+      ],
+      "denseEntryInvariant": "The private RTFSprmsImpl.entries array is created densely and mutated only by push/unshift/splice and replacement of existing reference cells. find loops over offset < entries.length, and both forward and reverse indices are within0..length-1. No user callback runs during this lookup. The exposed iterator borrows entry tuples, not the backing array; valid tuple mutation cannot remove an array slot. The original C++ find uses forward/reverse vector iterators and dereferences only before end. Selecting entry===undefined would require a sparse/corrupted private backing array or a global/prototype replacement outside the admitted native contract.",
+      "proof": "Raw cond-expr counters identify forward/reverse index selection as the missing alternative. Actual first/last duplicate and reverse-miss calls cover it. Fresh ten-suite/285-test replay has223/223 statements,153/153 arms,33/33 functions and203/203 lines. Source and all maps are byte-/shape-identical to baseline. No exclusion needed or applied.",
+      "preCorrectionDiagnosticCoverage": {
         "statements": [
           223,
           223
@@ -241,10 +272,33 @@
           203
         ]
       },
-      "scope": "Audit only. No exception/annotation/guard deletion/counter change applied. Any coverage exception requires an individually approved exact implementation.",
-      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-rtfsprm-a05-exception.patch",
-      "proposal": "Express the existing optional entry access as an equivalent nullish ternary and ignore only its absent-entry operand. Keep all lookup results, comparisons, loops, runtime missing-entry handling and configured thresholds. Verify exact instrumentation scope before any commit. Not applied.",
-      "status": "Individual A05 question displayed. accepted=true confirms delivery only; no source patch or exception applied."
+      "coverage": {
+        "statements": [
+          223,
+          223
+        ],
+        "branchArms": [
+          153,
+          153
+        ],
+        "functions": [
+          33,
+          33
+        ],
+        "lines": [
+          203,
+          203
+        ]
+      },
+      "finalSourceSha256": "197aa22a6b7b46557eefc591efa271a72b65aafbd73f638fb23c0d9b23d8a709",
+      "verification": {
+        "testFiles": 10,
+        "tests": 285,
+        "allPassed": true,
+        "allMetrics100": true,
+        "baselineMapsUnchanged": true,
+        "coverageExceptionsApplied": false
+      }
     }
   ]
 }

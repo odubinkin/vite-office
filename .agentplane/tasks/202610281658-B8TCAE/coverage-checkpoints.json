@@ -1310,7 +1310,7 @@
       203,
       203
     ],
-    "remainingAudit": "A05 not requested; no annotation or guard deletion applied",
+    "remainingAudit": "A05 attribution superseded; see rtfReverseLookupCorrection.",
     "diagnosticStatementsCovered": 118161,
     "diagnosticStatementsTotal": 119511,
     "diagnosticBranchArmsCovered": 72767,
@@ -1321,7 +1321,8 @@
     "lintPassed": true,
     "jsdocPassed": true,
     "sourceProvenancePassed": true,
-    "invariantsPassed": true
+    "invariantsPassed": true,
+    "scopeClarification": "The owner metrics in this historical checkpoint are the diagnostic union, not the narrowed two-suite report alone. See rtfReverseLookupCorrection for a fresh strict100 consumer run."
   },
   "approvedCoverageExceptions": {
     "approvedIds": [
@@ -1446,5 +1447,71 @@
     "toolingTestFiles": 40,
     "toolingTests": 169,
     "toolingPassed": true
+  },
+  "rtfReverseLookupCorrection": {
+    "report": "apps/office/coverage/integration-rtf-reverse-find",
+    "testFiles": 10,
+    "tests": 285,
+    "allAssertionsPassed": true,
+    "strictCoveragePassed": true,
+    "statements": [
+      223,
+      223
+    ],
+    "branchArms": [
+      153,
+      153
+    ],
+    "functions": [
+      33,
+      33
+    ],
+    "lines": [
+      203,
+      203
+    ],
+    "sourceUnchanged": true,
+    "mapsIdenticalToOriginalBaseline": true,
+    "a05ApprovedButNotApplied": true,
+    "draftRevertedBeforeCodeCommit": true,
+    "rawReportSha256": "196a574be66c57fcf964ff418d80fa00175bbf8c67ce70fcb0764e8af361f6fc",
+    "finalFullVerifierPassed": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true
+  },
+  "rtfStyleValues": {
+    "report": "apps/office/coverage/integration-rtf-style-values",
+    "testFiles": 2,
+    "tests": 19,
+    "allAssertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "suspectedIssue": "WRITER244",
+    "diagnosticStatementsCovered": 118190,
+    "diagnosticStatementsTotal": 119507,
+    "diagnosticBranchArmsCovered": 72807,
+    "diagnosticBranchArmsTotal": 74577,
+    "diagnosticFunctions": [
+      18429,
+      18429
+    ],
+    "remainingOwners": 222,
+    "finalFullVerifierPassed": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "ownerMissingStatements": 0,
+    "ownerMissingBranchArms": 2,
+    "additionalCases": [
+      "Empty numbering rule restores inherited margins and retains direct overrides",
+      "Actual SetByPointer(undefined) retains default format ownership and level9 legacy paragraph reference",
+      "Real paragraph flags and absolute/default tab stops; style zero-widow control"
+    ],
+    "lintRepair": "Full lint found non-null assertions in two earlier test files; explicit assertions and readonly input tuples repaired them; 23 focused tests and full lint now pass."
   }
 }
