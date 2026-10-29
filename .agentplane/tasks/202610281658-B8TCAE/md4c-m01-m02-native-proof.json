@@ -1,0 +1,46 @@
+{
+  "version": "md4c 0.5.3",
+  "archiveSha256": "353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e",
+  "sourceMatchesPinnedArchive": true,
+  "nativeSourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
+  "driver": "md4c-cdata-native.c",
+  "driverSha256": "c77eb4ce2dcde6f0a118e0c364987eb4dee2eee5c75cd114c6a8bb358e94cc4c",
+  "command": "clang -std=c99 .agentplane/tasks/202610281658-B8TCAE/md4c-cdata-native.c -o .agentplane/tmp/md4c-cdata-native && .agentplane/tmp/md4c-cdata-native",
+  "nativeOutput": [
+    "4",
+    "0",
+    "0",
+    "7",
+    "1 7 1",
+    "1 4",
+    "0 3"
+  ],
+  "scope": "Original unchanged native static helpers over actual initialized counted UTF8 buffers. No absent native reference, inconsistent marks or modified algorithm. Not complete native Writer import/model proof.",
+  "portableTestFiles": 7,
+  "portableTests": 1912,
+  "allAssertionsPassed": true,
+  "strictCoveragePassed": false,
+  "remainingZeroHitStatementLines": [
+    229
+  ],
+  "remainingZeroHitAlternatives": [
+    {
+      "id": "53",
+      "hits": [
+        0,
+        2
+      ]
+    },
+    {
+      "id": "83",
+      "hits": [
+        0,
+        74
+      ]
+    }
+  ],
+  "report": "apps/office/coverage/integration-md4c-declaration-boundaries/coverage-final.json",
+  "reportSha256": "391acdc17b48365121c9cb4c1a889e812b5fc0b18c8c385ab9809c2620045e1e",
+  "driverSource": "#include \"../../../vendor/md4c-reference/src/md4c.c\"\nint main(void) {\n  const char* inputs[] = {\"<![CDATA[x]]>\", \"<!\\xc3\\xa9>\", \"<!\\xc3\\xa9 long declaration>\", \"<custom> \\t\\v\\f\\n\"};\n  for (int i=0; i<4; ++i) {\n    MD_CTX ctx;\n    memset(&ctx,0,sizeof(ctx));\n    ctx.text=inputs[i];\n    ctx.size=(MD_SIZE)strlen(inputs[i]);\n    printf(\"%d\\n\",md_is_html_block_start_condition(&ctx,0));\n  }\n  MD_CTX ctx;\n  memset(&ctx,0,sizeof(ctx));\n  ctx.text=\"|---| \\t\";\n  ctx.size=(MD_SIZE)strlen(ctx.text);\n  OFF end=0;\n  unsigned columns=0;\n  int result=md_is_table_underline(&ctx,0,&end,&columns);\n  printf(\"%d %u %u\\n\",result,end,columns);\n  ctx.text=\"x-->y\";ctx.size=(MD_SIZE)strlen(ctx.text);end=0;\n  result=md_line_contains(&ctx,0,\"-->\",3,&end);\n  printf(\"%d %u\\n\",result,end);\n  ctx.text=\"abcdef\";ctx.size=(MD_SIZE)strlen(ctx.text);end=0;\n  result=md_line_contains(&ctx,0,\"-->\",3,&end);\n  printf(\"%d %u\\n\",result,end);\n  return 0;\n}\n",
+  "driverNote": "The transient .c path is intentionally ignored by repository policy; the complete native caller source is persisted in this JSON field for reproduction before running the recorded compile command."
+}

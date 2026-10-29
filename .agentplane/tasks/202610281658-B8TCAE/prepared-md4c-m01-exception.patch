@@ -1,0 +1,12 @@
+--- a/apps/office/src/external/md4c/src/md4c.block.scan.ts
++++ b/apps/office/src/external/md4c/src/md4c.block.scan.ts
+@@ -226,7 +226,9 @@
+   if (off < ctx.size && text[off] === 33) {
+     // Pinned source tests ISASCII, not its comment's uppercase-letter condition.
+     if (off + 1 < ctx.size && (text[off + 1] as number) <= 127) return 4;
++    /* istanbul ignore if -- B8TCAE-M01: an exact CDATA prefix has ASCII '[' and already returned type four above (WRITER144). */
+     if (off + 8 < ctx.size && md_ascii_eq(text.subarray(off), enc.encode("![CDATA["), 8)) return 5;
++    else { /* Preserve the normally exercised non-CDATA source-map alternative. */ }
+   }
+   if (
+     off + 1 < ctx.size &&

@@ -1,5 +1,5 @@
 {
-  "status": "eight-scopes-approved-and-annotated; S01 pending separate human approval; A05 withdrawn and unapplied",
+  "status": "nine scopes approved and annotated; M01/M02 pending independent human decisions; A05 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -124,8 +124,8 @@
     },
     {
       "id": "B8TCAE-S01",
-      "approval": "pending-human-decision",
-      "exceptionApplied": false,
+      "approval": "approved-by-human",
+      "exceptionApplied": true,
       "path": "apps/office/src/sax/source/fastparser/streaminput.ts",
       "originalLine": 223,
       "scope": "Only the true alternative and throw statement of error instanceof XmlByteError inside the decoder.decode catch.",
@@ -136,7 +136,7 @@
         "InputSource read exceptions execute outside the catch; the explicit source exception preservation path remains covered separately."
       ],
       "sourceSha256": "9ba4fda005e2a164eb3a808631206d9575e98675c07ef008cd74a737f87d9aca",
-      "preAnnotationReport": "apps/office/coverage/integration-sax-wire-encodings/coverage-final.json",
+      "preAnnotationReport": ".agentplane/tmp/coverage-raw-backup/pre-s01/coverage-final.json",
       "preAnnotationReportSha256": "e07295302d02aae88de64d0120d445831c3df03b25e3aa5e827e123435802d7f",
       "rawBranch": {
         "id": "53",
@@ -169,7 +169,91 @@
         ]
       },
       "preparedPatch": "prepared-sax-s01-exception.patch",
-      "evidenceBoundary": "Local host XML backend guard only, not an upstream ICU/LibreOffice defect or complete native SAX certification. Pinned converter algorithms are unchanged. Actual remapped-counter/token comparison remains required after approval."
+      "evidenceBoundary": "Local host XML backend guard only, not an upstream ICU/LibreOffice defect or complete native SAX certification. Pinned converter algorithms are unchanged. Actual remapped-counter/token comparison remains required after approval.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e S01",
+      "verificationProof": "approved-s01-map-proof.json",
+      "beforeReportArchivedAt": ".agentplane/tmp/coverage-raw-backup/pre-s01/coverage-final.json"
+    },
+    {
+      "id": "B8TCAE-M01",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/external/md4c/src/md4c.block.scan.ts",
+      "originalLine": 229,
+      "scope": "Only the true alternative and return5 at the shadowed CDATA test.",
+      "preconditions": [
+        "Stable input byte buffer during a synchronous parse/helper call.",
+        "Any exact ![CDATA[ prefix necessarily has ASCII [ at off+1, and the preceding ASCII test already returns4.",
+        "If the preceding test does not return, its non-ASCII byte cannot equal [, so the later exact prefix comparison cannot succeed.",
+        "Original compiled native helper outputs4 for CDATA,0 for both short and long non-ASCII declarations; WRITER144 documents the pinned dependency issue."
+      ],
+      "sourceSha256": "e57eeb56d95d96a068b6a8b4156106f0d075f5fdacabcba1e3cec6ba9671b77b",
+      "preAnnotationReport": "apps/office/coverage/integration-md4c-declaration-boundaries/coverage-final.json",
+      "preAnnotationReportSha256": "391acdc17b48365121c9cb4c1a889e812b5fc0b18c8c385ab9809c2620045e1e",
+      "nativeProof": "md4c-m01-m02-native-proof.json",
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 175,
+          "functions": 14,
+          "branchArms": 214
+        },
+        "after": {
+          "statements": 174,
+          "functions": 14,
+          "branchArms": 213
+        },
+        "cardinalityChanges": [
+          {
+            "id": "53",
+            "type": "if",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-md4c-m01-exception.patch",
+      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved."
+    },
+    {
+      "id": "B8TCAE-M02",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/external/md4c/src/md4c.block.scan.ts",
+      "originalLine": 304,
+      "scope": "Only the empty-object true alternative of result.end === undefined in the HTML end-condition spread.",
+      "preconditions": [
+        "result is returned synchronously by the actual static md_line_contains function without callbacks or replacement.",
+        "Both local return sites explicitly contain end. Both original C paths write *p_end before returning, including a failed search.",
+        "The optional type comes from the shared result interface, not from this helper runtime. Original native hit and miss outputs are1/end4 and0/end3."
+      ],
+      "sourceSha256": "e57eeb56d95d96a068b6a8b4156106f0d075f5fdacabcba1e3cec6ba9671b77b",
+      "preAnnotationReport": "apps/office/coverage/integration-md4c-declaration-boundaries/coverage-final.json",
+      "preAnnotationReportSha256": "391acdc17b48365121c9cb4c1a889e812b5fc0b18c8c385ab9809c2620045e1e",
+      "nativeProof": "md4c-m01-m02-native-proof.json",
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 175,
+          "functions": 14,
+          "branchArms": 214
+        },
+        "after": {
+          "statements": 175,
+          "functions": 14,
+          "branchArms": 213
+        },
+        "cardinalityChanges": [
+          {
+            "id": "83",
+            "type": "cond-expr",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-md4c-m02-exception.patch",
+      "evidenceBoundary": "Only this independently reviewed alternative; no blanket MD4C exclusion. Existing source logic, source defect and coverage thresholds preserved."
     }
   ],
   "additionalAudits": [

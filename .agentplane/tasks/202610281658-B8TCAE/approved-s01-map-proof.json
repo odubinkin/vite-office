@@ -1,0 +1,40 @@
+{
+  "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+  "removedStatements": [
+    {
+      "start": {
+        "line": 223,
+        "column": 43
+      },
+      "end": {
+        "line": 223,
+        "column": null
+      }
+    }
+  ],
+  "branchChanges": [
+    {
+      "id": "53",
+      "originalLine": 223,
+      "excludedArm": 0,
+      "retainedArmHits": 12
+    }
+  ],
+  "functionsUnchanged": 8,
+  "statements": [
+    156,
+    155
+  ],
+  "branchArms": [
+    133,
+    132
+  ],
+  "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions.",
+  "path": "apps/office/src/sax/source/fastparser/streaminput.ts",
+  "beforeSourceSha256": "9ba4fda005e2a164eb3a808631206d9575e98675c07ef008cd74a737f87d9aca",
+  "afterSourceSha256": "65616e8cfb35d12d9cda66d9c672eece03969b89ecdc973f8d3d563564d8738e",
+  "beforeReportSha256": "e07295302d02aae88de64d0120d445831c3df03b25e3aa5e827e123435802d7f",
+  "afterReportSha256": "b428293944d6cd879ed44234ca731fbc31815f70113103dac97f9b42f006aa01",
+  "preAnnotationCommit": "5061e985daa05da7fe70f7d333c22eb8bffaa7e1",
+  "configurationSha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c"
+}

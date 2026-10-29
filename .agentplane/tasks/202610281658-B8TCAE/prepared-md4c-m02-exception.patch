@@ -1,0 +1,11 @@
+--- a/apps/office/src/external/md4c/src/md4c.block.scan.ts
++++ b/apps/office/src/external/md4c/src/md4c.block.scan.ts
+@@ -301,7 +301,7 @@
+     const result = md_line_contains(ctx, beg, enc.encode(marker));
+     return {
+       type: result.matched ? ctx.html_block_type : 0,
+-      ...(result.end === undefined ? {} : { end: result.end }),
++      ...(result.end === undefined ? /* istanbul ignore next -- B8TCAE-M02: original md_line_contains always returns its end offset, including on failure. */ {} : { end: result.end }),
+     };
+   }
+   return beg >= ctx.size || ISNEWLINE_(text[beg] as number)
