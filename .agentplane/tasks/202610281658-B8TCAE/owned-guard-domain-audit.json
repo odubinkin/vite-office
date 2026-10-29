@@ -1,0 +1,50 @@
+{
+  "authorization": "Standing human authorization for independently proven unreachable branches; preserve guards and100% thresholds.",
+  "scopes": [
+    {
+      "id": "B8TCAE-W01",
+      "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "branch": "4",
+      "arm": 0,
+      "statement": "23",
+      "reason": "The readonly pinned character pool has a validated first entry; find(...) ?? pool[0] cannot be undefined. No API clears or replaces this static resource. Invalid private/resource mutation is outside the contract."
+    },
+    {
+      "id": "B8TCAE-W02",
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.ts",
+      "branch": "6",
+      "arm": 0,
+      "statement": "44",
+      "reason": "The only production DeclarationParsed dispatches are synchronous inside base parsing. Both override entry points bind real non-null sheet/caller item and info owners before delegating; missing inline arguments return via an earlier throw. Both fields are reset only in finally after delegation. No other production assignment exists, and the concrete Writer specialization does not override the empty StyleParsed hook or mutate these fields. Protected direct calls/arbitrary subclasses that replace state/reentrant use are outside the actual parser orchestration."
+    },
+    {
+      "id": "B8TCAE-C01",
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "branch": "9",
+      "arm": 0,
+      "statement": "38",
+      "reason": "Actual ScRefCellValue sets EDIT only in the non-null EditTextObject constructor arm, copies all tag/pointer fields together, and clears pointer only together with NONE. No other assignment exists. The worker encoder reads pure getType/getEditText consecutively; the cooperative yield is after this complete cell. Therefore an EDIT view cannot have a null edit pointer. Unrepresented C++ null-Edit-pointer overloads, forged subclasses/private storage and invalid borrow lifetimes are not certified."
+    }
+  ],
+  "pool": {
+    "path": "apps/office/src/sw/inc/charpool-data.json",
+    "sha256": "92bfe3830a7ab38e273a246fb5a105928306a07e1370be996800441d4fb2c5bd",
+    "entries": 26,
+    "first": {
+      "poolId": 1024,
+      "name": "Footnote Symbol",
+      "uiName": "Footnote Characters"
+    }
+  },
+  "sources": {
+    "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts": "9f90a174116d9f40452e3d9d7efa5ec2dc2d20a2013eec74097ff8e158201a1f",
+    "apps/office/src/sw/source/filter/html/svxcss1.ts": "85c626f962e00797eee402bc908dae1d584394cedebdf9c89fc234b70229a299",
+    "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts": "7016064917b089fa83308462bd0eb124091f2797ba79812399af07075905e485",
+    "apps/office/src/sc/source/core/data/cellvalue.ts": "e318ae8e55c5d67d763852d910bf269b38ad6a7f0119eea8ed13eee3ec9a5b10",
+    "apps/office/src/sw/source/filter/html/parcss1.ts": "804d097d544df03029f1fc2cbb2a0551d094291a9c2e7f75e2ad8406dd45ce24",
+    "apps/office/src/sw/source/filter/html/htmlcss1.ts": "fecb6e568426c8afddab7d83d5278fc45edf8f9c8f4dc2f37327294ddbe62275",
+    "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx": "680e7cfb5d39d50b7ea0155190c623e94df8c98e1d0903a27fe4bce6b61449b5"
+  },
+  "upstreamDefectSuspected": false,
+  "scopeBoundary": "Concrete mapped readonly metadata and actual source-owned parser/cell orchestration; these local defensive guards are not asserted to be native upstream defects."
+}
