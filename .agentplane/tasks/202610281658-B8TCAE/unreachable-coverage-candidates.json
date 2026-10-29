@@ -1,5 +1,5 @@
 {
-  "status": "eight-scopes-approved-and-annotated; A01 split into A01a/A01b; A05 withdrawn and unapplied",
+  "status": "eight-scopes-approved-and-annotated; S01 pending separate human approval; A05 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -121,6 +121,55 @@
       },
       "preAnnotationCommit": "fb095d8641915dc6d902a0e3d577d8855bd5ecfd",
       "exceptionApplied": true
+    },
+    {
+      "id": "B8TCAE-S01",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/sax/source/fastparser/streaminput.ts",
+      "originalLine": 223,
+      "scope": "Only the true alternative and throw statement of error instanceof XmlByteError inside the decoder.decode catch.",
+      "preconditions": [
+        "Private XmlByteDecoder accepts only copied Uint8Array chunks and a boolean; no application callbacks, Entity input reads or SAX handlers run inside decode.",
+        "XmlByteError is declared in this module as the outer transport envelope and constructed only after decoder.decode throws; decode/initialize contain only ordinary Error constructors and call standard TextDecoder/typed-array/string routines and original static RTL descriptors.",
+        "The RTL dependency graph does not import XmlByteError or streaminput; no subclass/factory/provider is replaced by admitted inputs.",
+        "InputSource read exceptions execute outside the catch; the explicit source exception preservation path remains covered separately."
+      ],
+      "sourceSha256": "9ba4fda005e2a164eb3a808631206d9575e98675c07ef008cd74a737f87d9aca",
+      "preAnnotationReport": "apps/office/coverage/integration-sax-wire-encodings/coverage-final.json",
+      "preAnnotationReportSha256": "e07295302d02aae88de64d0120d445831c3df03b25e3aa5e827e123435802d7f",
+      "rawBranch": {
+        "id": "53",
+        "type": "if",
+        "line": 223,
+        "hits": [
+          0,
+          12
+        ]
+      },
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 156,
+          "functions": 8,
+          "branchArms": 133
+        },
+        "after": {
+          "statements": 155,
+          "functions": 8,
+          "branchArms": 132
+        },
+        "cardinalityChanges": [
+          {
+            "id": "53",
+            "type": "if",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-sax-s01-exception.patch",
+      "evidenceBoundary": "Local host XML backend guard only, not an upstream ICU/LibreOffice defect or complete native SAX certification. Pinned converter algorithms are unchanged. Actual remapped-counter/token comparison remains required after approval."
     }
   ],
   "additionalAudits": [
