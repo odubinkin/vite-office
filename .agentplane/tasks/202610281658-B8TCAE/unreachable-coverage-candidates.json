@@ -1,20 +1,71 @@
 {
-  "status": "pending-user-decisions",
+  "status": "three-scopes-approved-and-annotated; additional audits unapproved",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
       "id": "B8TCAE-U01",
-      "approval": "pending",
+      "approval": "approved",
       "path": "apps/office/src/external/icu/source/i18n/erarules.ts",
       "branch": "createInstance: missing-start else branch at lines123..125",
       "proof": "The local hasEnd variable starts true and the only later assignment is true. The original ICU erarules.cpp170/194/199 has the same invariant. No admitted input can select the else branch; no private-state mutation is allowed.",
       "upstreamFinding": "CALC-371",
       "sourceSha256": "d66134af740b5da9b3a72dd832f46de4bc68de8382875a09f24fadeefd64c39a",
-      "proposedScope": "Only the impossible no-end error alternative; keep the actual source guard and all other coverage obligations."
+      "proposedScope": "Only the impossible no-end error alternative; keep the actual source guard and all other coverage obligations.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u044d\u0442\u043e \u0442\u043e\u0447\u0435\u0447\u043d\u043e\u0435 \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
+      "approvedBy": "human user in this conversation",
+      "implementation": "Only the approved Istanbul ignore annotation; runtime statements/guards remain intact. Configured thresholds/discovery unchanged.",
+      "sourceHashes": {
+        "beforeSha256": "d66134af740b5da9b3a72dd832f46de4bc68de8382875a09f24fadeefd64c39a",
+        "afterSha256": "fabeb72afa042da0234964e55f589e79cc1c3059776f43ca0ad3d43dffb2db63"
+      },
+      "verification": {
+        "mapProof": {
+          "removedStatements": [
+            {
+              "end": {
+                "column": null,
+                "line": 124
+              },
+              "start": {
+                "column": 14,
+                "line": 124
+              }
+            },
+            {
+              "end": {
+                "column": null,
+                "line": 125
+              },
+              "start": {
+                "column": 14,
+                "line": 125
+              }
+            }
+          ],
+          "branchChanges": [
+            {
+              "originalLine": 122,
+              "ignoredAlternative": 1,
+              "retainedAlternativeHits": 4004
+            }
+          ],
+          "functionCountUnchanged": 12,
+          "beforeSourceSha256": "d66134af740b5da9b3a72dd832f46de4bc68de8382875a09f24fadeefd64c39a",
+          "afterSourceSha256": "fabeb72afa042da0234964e55f589e79cc1c3059776f43ca0ad3d43dffb2db63",
+          "runtimeSourceEquivalentAfterRemovingAnnotationsAndExplicitEmptyElse": true
+        },
+        "testFiles": 17,
+        "tests": 115,
+        "allAssertionsPassed": true,
+        "thresholdsUnchanged": true,
+        "discoveryUnchanged": true
+      },
+      "preAnnotationCommit": "fb095d8641915dc6d902a0e3d577d8855bd5ecfd",
+      "exceptionApplied": true
     },
     {
       "id": "B8TCAE-U02",
-      "approval": "pending",
+      "approval": "approved",
       "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
       "branch": "getAllInstalledLocaleNames: missing identity throw at line246",
       "proof": "Enumeration uses keys of the fixed generated currencies catalog. The private identity Map is built from fixed language-country-info data. All284 enumerated keys have identities; no caller input or permitted mutation changes either catalog. Triggering this guard would require a different/corrupted generated artifact, not a valid runtime input.",
@@ -28,7 +79,48 @@
         }
       },
       "existingEvidence": "native-currencies.test.ts enumerates real installed locale values; resource/inventory checks retain the generated data contract.",
-      "proposedScope": "Only the missing-identity throw alternative in coverage; retain runtime integrity validation, catalog tests and the100% threshold."
+      "proposedScope": "Only the missing-identity throw alternative in coverage; retain runtime integrity validation, catalog tests and the100% threshold.",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 U02",
+      "approvedBy": "human user in this conversation",
+      "implementation": "Approved ignore-if plus an explicit empty normal-path else; the original if(!info) throw remains unchanged. The explicit else prevents Istanbul from also dropping the covered synthetic else.",
+      "sourceHashes": {
+        "beforeSha256": "1502868d5b5beaae7500a42f88023190fc9c71927181fd5a6946c449f93c01a0",
+        "afterSha256": "d8b4ba9aae848c6667a2340aa0d76125f8c8db1c65ca81682011b32f5b5e6d82"
+      },
+      "verification": {
+        "mapProof": {
+          "removedStatements": [
+            {
+              "end": {
+                "column": null,
+                "line": 246
+              },
+              "start": {
+                "column": 17,
+                "line": 246
+              }
+            }
+          ],
+          "branchChanges": [
+            {
+              "originalLine": 246,
+              "ignoredAlternative": 0,
+              "retainedAlternativeHits": 1420
+            }
+          ],
+          "functionCountUnchanged": 34,
+          "beforeSourceSha256": "1502868d5b5beaae7500a42f88023190fc9c71927181fd5a6946c449f93c01a0",
+          "afterSourceSha256": "d8b4ba9aae848c6667a2340aa0d76125f8c8db1c65ca81682011b32f5b5e6d82",
+          "runtimeSourceEquivalentAfterRemovingAnnotationsAndExplicitEmptyElse": true
+        },
+        "testFiles": 17,
+        "tests": 115,
+        "allAssertionsPassed": true,
+        "thresholdsUnchanged": true,
+        "discoveryUnchanged": true
+      },
+      "preAnnotationCommit": "fb095d8641915dc6d902a0e3d577d8855bd5ecfd",
+      "exceptionApplied": true
     }
   ],
   "additionalAudits": [
@@ -68,17 +160,54 @@
     },
     {
       "id": "B8TCAE-A04",
-      "approval": "pending-user-response",
+      "approval": "approved",
       "path": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
       "sourceSha256": "1005397a0e3c2a8859114fc0a8e45d460f3836e22e1bb3f4e467179834670dad",
       "branch": "mergeParenthesis final return after the currency-position switch",
       "nativeSource": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
       "proof": "The private helper is reached only from GetEffectiveNegativeFormat currency cases0,4,14,15. Its own currency switch exhausts those same four values; every inner sign value is0,1,2 and returns, while parenthesized intl formats return earlier. The original comment explicitly restricts this helper to parenthesized currency formats. Public scalar helper tests exercise original unknown intl/currency diagnostic handling without violating that private caller precondition. The final defensive return is not reached through any admitted original public caller.",
-      "status": "Individual approval question displayed via request_user_input_async. accepted=true confirms delivery only. No exclusion or counter/source exception has been applied.",
+      "status": "Individual explicit human approval received; only the final return annotation applied.",
       "questionSourceCommit": "279a74173a46",
       "questionSourceSha256": "4e0bdb82ba8be75d341211eff27aa6b3f7bfebf59f7e82c9965ad53a96c16a36",
       "auditedFunctionSha256": "c85585e2d3d8920114698dced429538371b9243d3ca9f1569ec886167996f252",
-      "functionUnchangedSinceQuestion": true
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e \u044d\u0442\u043e\u0442 return",
+      "approvedBy": "human user in this conversation",
+      "implementation": "Only the approved Istanbul ignore annotation; runtime statements/guards remain intact. Configured thresholds/discovery unchanged.",
+      "sourceHashes": {
+        "beforeSha256": "1005397a0e3c2a8859114fc0a8e45d460f3836e22e1bb3f4e467179834670dad",
+        "afterSha256": "d2deb142d5fbfd65714b1c938c6bcfbfaff02d533720aec1e3cc676fd3137207"
+      },
+      "verification": {
+        "mapProof": {
+          "removedStatements": [
+            {
+              "end": {
+                "column": null,
+                "line": 66
+              },
+              "start": {
+                "column": 2,
+                "line": 66
+              }
+            }
+          ],
+          "branchChanges": [],
+          "functionCountUnchanged": 10,
+          "beforeSourceSha256": "1005397a0e3c2a8859114fc0a8e45d460f3836e22e1bb3f4e467179834670dad",
+          "afterSourceSha256": "d2deb142d5fbfd65714b1c938c6bcfbfaff02d533720aec1e3cc676fd3137207",
+          "runtimeSourceEquivalentAfterRemovingAnnotationsAndExplicitEmptyElse": true
+        },
+        "testFiles": 17,
+        "tests": 115,
+        "allAssertionsPassed": true,
+        "thresholdsUnchanged": true,
+        "discoveryUnchanged": true
+      },
+      "functionComparisonScope": "Before the approved coverage-only comment; the actual function body was byte-equal to questionSourceCommit.",
+      "preAnnotationCommit": "fb095d8641915dc6d902a0e3d577d8855bd5ecfd",
+      "exceptionApplied": true,
+      "preAnnotationFunctionUnchangedSinceQuestion": true,
+      "functionLogicUnchangedSinceQuestion": true
     },
     {
       "id": "B8TCAE-A05",

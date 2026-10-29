@@ -63,6 +63,7 @@ function mergeParenthesis(intl: number, currency: number): number {
     case 15:
       return [8, 13, 10][sign] as number;
   }
+  /* istanbul ignore next -- User-approved B8TCAE-A04: the sole caller passes only0/4/14/15, each of which returns inside the switch. */
   return currency;
 }
 /** Original public GetEffectivePositiveFormat with NF_BANKSYMBOL_FIX_POSITION=1. @param intl - Locale placement. @param currency - Currency placement. @param bank - Bank mode. @returns Effective placement. */

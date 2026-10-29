@@ -243,7 +243,11 @@ export function getAllInstalledLocaleNames(): Locale[] {
   return Object.keys(currencies).map(
     /** Computes the name result. @param name - Name. @returns The computed result. */ (name) => {
       const info = languageCountryResources.get(name);
+      /* istanbul ignore if -- User-approved B8TCAE-U02: all284 fixed catalog keys have immutable LC_INFO identities; keep this integrity guard. */
       if (!info) throw new Error(`Pinned locale identity is absent: ${name}`);
+      else {
+        // Keep the normal path explicit so Istanbul retains its covered branch; U02 excludes only the throw.
+      }
       const language = unicode(info.Language),
         country = unicode(info.Country),
         variant = unicode(info.Variant);

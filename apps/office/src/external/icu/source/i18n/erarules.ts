@@ -119,6 +119,7 @@ export class EraRules {
             }
           }
           if (dates[idx] === 0) {
+            /* istanbul ignore else -- User-approved B8TCAE-U01: hasEnd starts true and is never false; see CALC-371. */
             if (hasEnd) dates[idx] = MIN_ENCODED_START;
             else {
               status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
