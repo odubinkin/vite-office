@@ -1875,6 +1875,25 @@
       "implementation": "Applied exact zero-hit scope with runtime tokens and guards retained.",
       "audit": "palette-run-guard-domain-audit.json",
       "mapProof": "approved-palette-run-guard-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-K01",
+      "authorization": "Standing human authorization2026-10-29",
+      "path": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+      "originalLine": 64,
+      "excludedBranch": "21",
+      "excludedArm": 1,
+      "proof": "Before slicing the value, the parser rejects a semicolon preceding the equals sign, advances equal beyond every leading ASCII space, and rejects end-of-input or equality with the semicolon boundary. Hence the value starts with at least one non-space byte before its end. Removing trailing spaces cannot remove that byte: last>=0 always. The original string_view implementation applies the same separator/leading-space/end checks before find_last_not_of. Immutable primitive strings are required; no input mutation or replaced methods are part of this domain.",
+      "scope": "Only the zero-hit false alternative of the trailing-space trim guard; retain trim, all statements and functions.",
+      "sourceSha256": {
+        "apps/office/src/external/icu/source/common/uloc.keywords.ts": "af3f0be2be0089e54c34ce56b5bb12154ed837ab16424a0fe1a2008cf42ec777",
+        "vendor/icu-reference/source/common/uloc.cpp": "bb47812d836dbfcbb2b7c858ff205b330c1033a273e0864a71f0083158e3717f"
+      },
+      "upstreamDefectSuspected": false,
+      "upstreamNote": "Redundant defensive condition under the established parse invariants; no incorrect upstream result demonstrated.",
+      "approval": "approved under standing human authorization",
+      "mapProof": "approved-keyword-trim-map-proof.json",
+      "implementation": "Applied only the proved zero-hit false alternative; all runtime tokens retained."
     }
   ],
   "additionalAudits": [

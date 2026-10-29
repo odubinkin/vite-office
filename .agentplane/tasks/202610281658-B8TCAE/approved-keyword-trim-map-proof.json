@@ -1,0 +1,24 @@
+{
+  "K01": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "21",
+        "originalLine": 64,
+        "excludedArm": 1,
+        "retainedArmHits": 89
+      }
+    ],
+    "functionsUnchanged": 2,
+    "statements": [
+      67,
+      67
+    ],
+    "branchArms": [
+      54,
+      53
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  }
+}

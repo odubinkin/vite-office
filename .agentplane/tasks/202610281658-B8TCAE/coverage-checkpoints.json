@@ -2958,5 +2958,100 @@
       ]
     },
     "finalFullVerifierPassed": false
+  },
+  "keywordResourceOwnerBoundaries": {
+    "reports": [
+      {
+        "report": "apps/office/coverage/integration-icu-keyword-owner-boundaries/coverage-final.json",
+        "sha256": "b452adfb72fdc8a90440f29b58cdbf86b48137c9eb8a4a897e4a8afb6615b2c7",
+        "bytes": 35421
+      },
+      {
+        "report": "apps/office/coverage/integration-keyword-trim-domain/coverage-final.json",
+        "sha256": "5016eda81d6c8221157b78c762a11ea25d61edf6f8113a44ece8bdf2ee77d7c2",
+        "bytes": 11852
+      }
+    ],
+    "genuineBoundaryTests": {
+      "files": 3,
+      "tests": 14,
+      "allAssertionsPassed": true,
+      "isolatedCoverageGatePassed": false
+    },
+    "trimGuard": {
+      "files": 1,
+      "tests": 5,
+      "strictCoveragePassed": true,
+      "coverage": "67/67 statements;53/53 alternatives;2/2 functions;54/54 lines",
+      "excludedZeroHitAlternatives": 1
+    },
+    "nativeProof": "keyword-week-boundaries-native-proof.json",
+    "audit": "keyword-trim-domain-audit.json",
+    "mapProof": "approved-keyword-trim-map-proof.json",
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108116,
+          "covered": 107531,
+          "skipped": 0,
+          "pct": 99.45
+        },
+        "statements": {
+          "total": 119426,
+          "covered": 118416,
+          "skipped": 0,
+          "pct": 99.15
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74498,
+          "covered": 73103,
+          "skipped": 0,
+          "pct": 98.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 179,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/external/icu/source/common/uresbund.entries.ts",
+        "/external/md4c/src/md4c.mark.ts",
+        "/external/md4c/src/md4c.inline.ts",
+        "/external/md4c/src/md4c.render.ts",
+        "/external/md4c/src/md4c.context.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts",
+        "/sw/source/core/doc/DocumentStylePoolManager.ts",
+        "/sw/source/filter/html/svxcss1.ts",
+        "/sc/browser/filter/xml/calc-document-codec.ts",
+        "/filter/source/msfilter/util.ts",
+        "/sw/source/filter/ww8/docxattributeoutput.ts",
+        "/external/icu/source/common/uloc.keywords.ts"
+      ]
+    },
+    "finalFullVerifierPassed": false
   }
 }

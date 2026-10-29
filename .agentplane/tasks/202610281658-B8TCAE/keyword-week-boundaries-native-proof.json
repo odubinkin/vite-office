@@ -1,0 +1,13 @@
+{
+  "witnessSource": "#include <iostream>\n#include <memory>\n#include <string>\n#define private public\n#define protected public\n#include \"unicode/gregocal.h\"\n#include \"unicode/simpletz.h\"\n#undef private\n#undef protected\n#include \"unicode/locid.h\"\n#include \"unicode/uloc.h\"\n#include \"unicode/putil.h\"\nint main() {\n  u_setDataDirectory(\"vendor/icu-reference/source/data/in\");\n  UErrorCode status=U_ZERO_ERROR;\n  icu::Locale::setDefault(icu::Locale(\"en_US\"),status);\n  char buffer[12]; for(char &c:buffer)c=77;\n  int length=uloc_getKeywordValue(\"en@a=   AbC   ;b=next\",\"a\",buffer,12,&status);\n  std::cout<<\"keyword \"<<length<<' '<<int(status);\n  for(int i=0;i<5;++i)std::cout<<' '<<int(static_cast<unsigned char>(buffer[i]));\n  std::cout<<'\\n';\n  status=U_ZERO_ERROR;\n  std::string locale=\"en_US@fw=\"+std::string(158,'x');\n  icu::GregorianCalendar calendar(new icu::SimpleTimeZone(0,icu::UnicodeString(u\"UTC\")),icu::Locale(\"en_US\"),status);\n  auto cal=&calendar;\n  status=U_ZERO_ERROR;\n  cal->setWeekData(icu::Locale(\"en_US\"),\"gregorian\",status);\n  status=U_ZERO_ERROR;\n  cal->setWeekData(icu::Locale(locale.c_str()),nullptr,status);\n  std::cout<<\"week \"<<int(cal->getFirstDayOfWeek())<<' '<<int(cal->getMinimalDaysInFirstWeek())<<' '<<int(status)<<'\\n';\n}\n",
+  "output": "keyword 3 0 65 98 67 0 77\nweek 1 1 0\n",
+  "libraryAndSourceHashes": {
+    "vendor/icu-reference/source/common/uloc.cpp": "bb47812d836dbfcbb2b7c858ff205b330c1033a273e0864a71f0083158e3717f",
+    "vendor/icu-reference/source/i18n/calendar.cpp": "8f5438923e5b6a285f207d3329bf16a095e3617ed44a888c3c1c75405e21e3a4",
+    "vendor/icu-reference/source/data/in/icudt78l.dat": "d5cf2a40dccbe471781ec7af85693bff542ff12f0b670c9630c4e72d60714b8b",
+    "test-results/native/B8TCAE-icu/lib/libicui18n.a": "cf3979dfdde524fd278b02c2f82783c63c5d91b8f109852f5e72d8a49812e337",
+    "test-results/native/B8TCAE-icu/lib/libicuuc.a": "21a90ae9e2d0ee448a3d8c10640412688c13ab319e4c80d1288e302ccaaa1b59",
+    "test-results/native/B8TCAE-icu/stubdata/libicudata.a": "02b36f4bddb2de058bec34e1daffb9c05df6a57a595e9ed30e556caf79d2e5db"
+  },
+  "scope": "Only exact public keyword trimming and original setWeekData overflow handling are independently witnessed. Header visibility is widened for calling the existing private loader; original algorithm/library/data are unchanged. Native factory construction emits separate fallback warnings unless the original data directory is configured; this witness explicitly uses the pinned dat package and source-equivalent loader/status initialization."
+}
