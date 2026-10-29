@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 45
+revision: 46
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T23:59:51.723Z"
+doc_updated_at: "2026-10-29T00:06:48.218Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -169,6 +169,8 @@ sections:
     One suite/29 public compiled-input tests pass for real literal formats, negative sections, contradictory markers and zero denominators. CALC-388 documents a source-derived leading-decimal path that accepts but drops a later matched numeric fragment; no original algorithm changed or native input-scanner parity inferred. Compatible-map diagnostic union now covers118067/119511 statements and72666/74579 arms, all18429 functions,225 incomplete owners. No coverage exception or final full verification applied.
 
     Two suites/74 tests pass for public CSS parsing against the genuine EditEngine pool and actual Writer HTML style ownership. Overline/case-map tests use existing registered items, not invented Writer pool entries; native oblique maps to ITALIC_NORMAL. No runtime source changed. Typecheck, lint and JSDoc pass. Compatible-map union covers118117/119511 statements,72733/74579 arms and all18429 functions;225 owners still incomplete. No coverage exception or final full verifier success claimed.
+
+    Added422 compiled original Hebrew boundary/month/validation calls;23731 native comparisons and18 portable replay tests pass, preserving all prior23309 rows and original source/archive hashes. Strict/lenient changes use the original public setter after actual base-cache preparation. No private state or core method replaced. Updated the exact expected Hebrew fixture count; initial replay stopped on the old count before executing added Hebrew rows. Typecheck, lint and JSDoc pass. Compatible-map union covers118129/119511 statements,72745/74579 arms, all18429 functions;225 owners incomplete. No exclusion or final full verification claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -318,3 +320,5 @@ Two suites/91 tests pass for locale conversion and29970 native original scanner/
 One suite/29 public compiled-input tests pass for real literal formats, negative sections, contradictory markers and zero denominators. CALC-388 documents a source-derived leading-decimal path that accepts but drops a later matched numeric fragment; no original algorithm changed or native input-scanner parity inferred. Compatible-map diagnostic union now covers118067/119511 statements and72666/74579 arms, all18429 functions,225 incomplete owners. No coverage exception or final full verification applied.
 
 Two suites/74 tests pass for public CSS parsing against the genuine EditEngine pool and actual Writer HTML style ownership. Overline/case-map tests use existing registered items, not invented Writer pool entries; native oblique maps to ITALIC_NORMAL. No runtime source changed. Typecheck, lint and JSDoc pass. Compatible-map union covers118117/119511 statements,72733/74579 arms and all18429 functions;225 owners still incomplete. No coverage exception or final full verifier success claimed.
+
+Added422 compiled original Hebrew boundary/month/validation calls;23731 native comparisons and18 portable replay tests pass, preserving all prior23309 rows and original source/archive hashes. Strict/lenient changes use the original public setter after actual base-cache preparation. No private state or core method replaced. Updated the exact expected Hebrew fixture count; initial replay stopped on the old count before executing added Hebrew rows. Typecheck, lint and JSDoc pass. Compatible-map union covers118129/119511 statements,72745/74579 arms, all18429 functions;225 owners incomplete. No exclusion or final full verification claimed.

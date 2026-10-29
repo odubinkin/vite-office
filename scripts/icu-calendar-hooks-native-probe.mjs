@@ -44,7 +44,7 @@ writeFileSync(
   headers +
     String.raw`
 #include <type_traits>
-template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='A')std::cout<<this->getActualMaximum(UCAL_DATE,s);else if(kind=='I'||kind=='Q'){if constexpr(std::is_base_of<IslamicCalendar,C>::value){if(kind=='I')std::cout<<this->yearStart(a,s);else std::cout<<this->monthStart(a,b,s);}else std::abort();}else if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
+template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();if(kind=='F')this->setLenient(use!=0);for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='V'){this->validateField(UCalendarDateFields(a),s);std::cout<<0;}else if(kind=='O'){if(use)std::cout<<this->Calendar::internalGetMonth(b,s);else std::cout<<this->internalGetMonth(s);}else if(kind=='A')std::cout<<this->getActualMaximum(UCAL_DATE,s);else if(kind=='I'||kind=='Q'){if constexpr(std::is_base_of<IslamicCalendar,C>::value){if(kind=='I')std::cout<<this->yearStart(a,s);else std::cout<<this->monthStart(a,b,s);}else std::abort();}else if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
 template<class C>void run(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;Witness<C>c(Locale("en_US"),s);c.observe(kind,a,b,use,incoming,count);}
 int main(int argc,char**argv){u_setDataDirectory(argv[1]);UErrorCode s=U_ZERO_ERROR;uloc_setDefault("en_US",&s);TimeZone::adoptDefault(new SimpleTimeZone(0,UnicodeString(u"UTC")));char kind;int type,a,b,use,incoming,count;while(std::cin>>kind>>type>>a>>b>>use>>incoming>>count){switch(type){
 ` +
@@ -166,6 +166,55 @@ for (const [year, month] of [
   [178956971, 20],
 ])
   add("Q", 11, year, month, 1, 0);
+// Real Hebrew year starts straddle the original signed32 day-cache boundary.
+// These operand years are far from signed32 year-addition overflow.
+for (const year of [5879540, 5879541, 5879542, 5879543, -5879537, -5879538, -5879539, -5879540])
+  for (const status of [0, -128, 1]) {
+    add("Y", 9, year, 0, 1, status);
+    add("M", 9, year, 0, 1, status);
+    add("M", 9, year, 1, 1, status);
+    add("L", 9, year, 1, 1, status);
+  }
+// Every day remains inside the actual ICU global Julian range. Public APIs prepare
+// time/base caches before the original public leniency setter and protected hook.
+for (const day of [-0x7f000000, -1900000000, -1800000000, 1800000000, 1900000000, 0x7f000000])
+  for (const lenient of [0, 1])
+    for (const status of [0, -128, 1]) add("F", 9, day, 0, lenient, status);
+for (let year = 1; year <= 80; ++year) add("Y", 9, year, 0, 1, 0);
+// Original protected month resolution/validation consumes only real public field writes.
+for (const year of [1, 5783, 5784])
+  for (const month of [-1, 0, 5, 6, 11, 12, 13, 2147483647])
+    for (const useDefault of [0, 1])
+      for (const status of [0, -128, 1])
+        add("O", 9, 0, 3, useDefault, status, [
+          [19, year],
+          [23, month],
+        ]);
+for (const useDefault of [0, 1])
+  for (const status of [0, -128, 1]) add("O", 9, 0, 3, useDefault, status);
+for (const year of [5783, 5784])
+  for (const month of [5, 6])
+    for (const useDefault of [0, 1])
+      for (const status of [0, -128, 1])
+        add("O", 9, 0, 3, useDefault, status, [
+          [19, year],
+          [2, month],
+        ]);
+for (const year of [5783, 5784])
+  for (const [field, month] of [
+    [2, 5],
+    [2, 6],
+    [2, 13],
+    [23, 5],
+    [23, 11],
+    [23, 12],
+  ])
+    for (const status of [0, -128, 1])
+      add("V", 9, field, 0, 1, status, [
+        [19, year],
+        [field, month],
+      ]);
+
 // Japanese era validation and checked year addition are original protected hook responsibilities.
 // These month/year pairs fail original checked normalization before astronomical work.
 for (const type of [7, 8, 11, 12, 13, 14, 15])

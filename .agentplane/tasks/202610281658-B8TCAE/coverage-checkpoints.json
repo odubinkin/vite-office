@@ -1265,5 +1265,26 @@
     "diagnosticBranchArmsTotal": 74579,
     "remainingOwners": 225,
     "finalFullVerifierPassed": false
+  },
+  "hebrewNativeBoundaries": {
+    "report": "apps/office/coverage/integration-hebrew-native-boundaries",
+    "testFiles": 1,
+    "tests": 18,
+    "assertionsPassed": true,
+    "nativeOriginalCalls": 23731,
+    "priorOriginalCallsPreserved": 23309,
+    "addedCalls": 422,
+    "originalSourceAndArchiveHashesUnchanged": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "diagnosticStatementsCovered": 118129,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72745,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 225,
+    "finalFullVerifierPassed": false
   }
 }
