@@ -2645,8 +2645,16 @@ emulation or a claim of a confirmed document-level upstream defect.
 
 ## CALC-189: Negative F precision can under-allocate the native output buffer
 
-Status: an original memory-safety failure was reproduced under AddressSanitizer; no returned value
-is certified for that failing call.
+Status: **fixed in upstream LibreOffice master** by
+[Caolán McNamara's buffer-sizing change (Gerrit #213227)](https://gerrit.libreoffice.org/c/core/+/213227),
+merged as `4fdc6d31ff6c3daf51bb0f6397636690a3474e04`.
+The related incorrect zero formatting, including leading grouping separators,
+was fixed separately by
+[Stephan Bergmann's change (Gerrit #213228)](https://gerrit.libreoffice.org/c/core/+/213228),
+merged as `c4ab814db9c3222a5ff015ad3c030a268e0535c5`.
+These fixes are confirmed for upstream **master**, not necessarily for any
+particular released LibreOffice version. The reproducer and native fixture
+below document the **older pinned source** before these changes.
 
 The pinned
 [doubleToString allocation estimate](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1562)
@@ -2670,10 +2678,17 @@ separate returned-output matrix compares 122,765 states under full normal/ASanUB
 A conservative allocation-domain check excludes 1,203 potentially unsafe matrix inputs; that count
 does not assert 1,203 individually reproduced failures.
 
-Decision: retain the original format selection, precision, rounding, grouping and emission sequence.
-Do not clamp negative precision or repair grouping to make the case look normal. Managed string
-storage does not reproduce native stack corruption, and the aborted native call is not assigned an
-invented normal-output parity certificate. This ledger update changes no kernel code.
+Port decision after the upstream fixes: browser-managed strings have no native `alloca`
+or associated stack-buffer overflow, so the native allocation change requires no equivalent
+capacity fix in `apps/office/src/sal/rtl/strtmpl.math.ts`. However, the port previously copied
+the old malformed zero-emission sequence. It now follows
+[Gerrit #213228](https://gerrit.libreoffice.org/c/core/+/213228): when fixed-point negative
+precision rounds away every significant digit, emit a single `0` after any sign, without a
+leading group separator or extra padded zeroes. Regression tests cover both original overflow
+inputs and the independent `100000/-6` and `0/-6` witnesses. The pinned pre-fix native
+fixture remains source-provenance evidence, **not a normative expected output** for the now-fixed
+zero-rounding cases; the current-port tests require the corrected values. No arbitrary precision
+clamping, grouping changes or unrelated formatting normalization are introduced.
 
 ## CALC-190: OUStringBuffer setLength does not implement its documented zero fill
 

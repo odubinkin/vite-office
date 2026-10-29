@@ -1,4 +1,4 @@
-/** @fileoverview Original strtmpl.hxx numeric presentation; host shortest decimal replaces Dragonbox and BigInt preserves source integer rounding. */
+/** @fileoverview SAL strtmpl.hxx numeric presentation; host shortest decimal replaces Dragonbox and BigInt preserves source integer rounding. Uses managed strings instead of native alloca (https://gerrit.libreoffice.org/c/core/+/213227). */
 import { RTL_STR_MAX_VALUEOFFLOAT } from "../inc/rtl/string.h";
 import {
   rtl_math_StringFormat as Format,
@@ -119,6 +119,11 @@ export function doubleToString(
       }
       let count = digits <= 0 ? places : -exponent - 1;
       while (count-- > 0) result += "0";
+      decimalPosition = 0;
+    } else if (digits <= 0) {
+      // Upstream zero-rounding fix: https://gerrit.libreoffice.org/c/core/+/213228
+      // No significant digit remains, so do not emit grouping or padded zeroes.
+      result += "0";
       decimalPosition = 0;
     } else decimalPosition = exponent + 1;
   }
