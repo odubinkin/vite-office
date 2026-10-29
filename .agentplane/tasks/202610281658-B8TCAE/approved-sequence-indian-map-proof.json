@@ -1,0 +1,58 @@
+{
+  "B01-B03": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "5",
+        "originalLine": 58,
+        "excludedArm": 1,
+        "retainedArmHits": 5
+      },
+      {
+        "id": "13",
+        "originalLine": 100,
+        "excludedArm": 1,
+        "retainedArmHits": 2
+      },
+      {
+        "id": "15",
+        "originalLine": 112,
+        "excludedArm": 1,
+        "retainedArmHits": 7
+      }
+    ],
+    "functionsUnchanged": 15,
+    "statements": [
+      76,
+      76
+    ],
+    "branchArms": [
+      44,
+      41
+    ],
+    "sourceMapBoundaryNote": "All retained source positions match canonically; only the audited zero-hit alternatives are excluded, without removing any statement or function."
+  },
+  "I01": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "18",
+        "originalLine": 115,
+        "excludedArm": 0,
+        "retainedArmHits": 662
+      }
+    ],
+    "functionsUnchanged": 11,
+    "statements": [
+      73,
+      73
+    ],
+    "branchArms": [
+      52,
+      51
+    ],
+    "sourceMapBoundaryNote": "All retained source positions match canonically; only the audited zero-hit alternatives are excluded, without removing any statement or function."
+  }
+}
