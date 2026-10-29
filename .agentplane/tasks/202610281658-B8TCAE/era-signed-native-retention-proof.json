@@ -1,0 +1,9 @@
+{
+  "previousRows": 16302,
+  "currentRows": 20064,
+  "additionalRows": 3762,
+  "allPriorQueriesAndOutputsRetained": true,
+  "sourceLibraryAndWitnessHashesUnchanged": true,
+  "newInputs": "Three valid day/month queries at INT32_MIN year exercise the original sentinel comparison; no private resources or owners are replaced.",
+  "fixtureSha256": "c281466c14dd73e8e42f76a0f1a8de2fe4ed65740abc52e3a9c4304b286dff99"
+}

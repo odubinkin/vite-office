@@ -1170,6 +1170,247 @@
       "approval": "approved-under-standing-human-authorization",
       "exceptionApplied": true,
       "verificationProof": "approved-sequence-indian-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-E01",
+      "branch": "10",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "40"
+      ],
+      "reason": "Existing valid era iteration cannot fail on the fixed mapped table.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E02",
+      "branch": "11",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "45",
+        "46"
+      ],
+      "reason": "Every actual key is a complete unique nonnegative signed32 decimal index.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E03",
+      "branch": "13",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "50",
+        "51"
+      ],
+      "reason": "Validated unique keys have unique parsed indices.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E04",
+      "branch": "14",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "58"
+      ],
+      "reason": "Existing validated property iteration cannot fail on mapped resources.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E05",
+      "branch": "16",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "64"
+      ],
+      "reason": "Every start property is a real int-vector node.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E06",
+      "branch": "17",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "70",
+        "71"
+      ],
+      "reason": "Every fixed start vector has three valid bounded date components.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E07",
+      "branch": "19",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "74",
+        "75",
+        "76"
+      ],
+      "reason": "No mapped era property is named; nested branch20 both alternatives are dormant.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E08",
+      "branch": "21",
+      "arms": [
+        1
+      ],
+      "statements": [],
+      "reason": "After excluding start and named, every actual remaining property is end.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E09",
+      "branch": "24",
+      "arms": [
+        1
+      ],
+      "statements": [
+        "87",
+        "88"
+      ],
+      "reason": "No named property changes hasName; nested branch26 both alternatives are dormant.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E10",
+      "branch": "25",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "85",
+        "86"
+      ],
+      "reason": "firstTentativeIdx stays INT32_MAX while every actual index is smaller.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E11",
+      "branch": "28",
+      "arms": [
+        0,
+        1
+      ],
+      "statements": [
+        "92",
+        "93"
+      ],
+      "reason": "The tentative-removal loop cannot enter because firstTentativeIdx remains INT32_MAX; annotate only its nested unreachable if, retaining the loop condition.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E12a",
+      "branch": null,
+      "arms": [],
+      "statements": [
+        "94"
+      ],
+      "reason": "Same unreachable tentative-removal body; retain the while guard.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E12b",
+      "branch": null,
+      "arms": [],
+      "statements": [
+        "96"
+      ],
+      "reason": "The highest mapped era always has a nonzero encoded start or end sentinel, so trailing-zero trim cannot enter.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E13",
+      "branch": "48",
+      "arms": [
+        1
+      ],
+      "statements": [],
+      "reason": "Actual createDefault clones a non-null TimeZone or throws; native allocator-null returns and invalid clone overrides are outside this browser binding.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-E14",
+      "branch": "50",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "170"
+      ],
+      "reason": "The preceding successful Grego conversion supplies month0..11 and day1..31; getEraCode can only change status for invalid month/day.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "era-fixed-package-audit.json",
+      "verificationProof": "approved-era-fixed-package-map-proof.json",
+      "upstreamDefectSuspected": false
     }
   ],
   "additionalAudits": [

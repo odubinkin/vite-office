@@ -1,0 +1,39 @@
+{
+  "runtimeTokensIdenticalAfterRemovingEightNoOpElseBlocksAndTwoTransparentWrapperBracePairs": true,
+  "wrapperSafety": "Both added blocks contain exactly the same original if statement. Branch-local const already has its original block; no lexical declaration moves across scopes, and field assignments retain their enclosing owners.",
+  "statements": [
+    171,
+    150
+  ],
+  "alternatives": [
+    109,
+    91
+  ],
+  "removedStatements": 21,
+  "removedAlternatives": 18,
+  "retainedPositiveStatements": 150,
+  "retainedPositiveAlternatives": 91,
+  "functionsUnchanged": 12,
+  "hashes": {
+    "apps/office/src/external/icu/source/i18n/erarules.ts": "be84a9a0fd6493e7cbe223db1cf7c46c489591bbe2e19979d5074797345c70f9",
+    "apps/office/coverage/integration-era-fixed-package/coverage-final.json": "1a433048eed4ee880c8bc273fc294f7731246fa074eb613d3247dd6a11e99792",
+    ".agentplane/tasks/202610281658-B8TCAE/era-fixed-package-audit.json": "6aacc7bd601aff33a21c1f2017d83571aebc0ea5e37f6e6ed75ae9d92d383387"
+  },
+  "exceptions": [
+    "B8TCAE-E01",
+    "B8TCAE-E02",
+    "B8TCAE-E03",
+    "B8TCAE-E04",
+    "B8TCAE-E05",
+    "B8TCAE-E06",
+    "B8TCAE-E07",
+    "B8TCAE-E08",
+    "B8TCAE-E09",
+    "B8TCAE-E10",
+    "B8TCAE-E11",
+    "B8TCAE-E12a",
+    "B8TCAE-E12b",
+    "B8TCAE-E13",
+    "B8TCAE-E14"
+  ]
+}
