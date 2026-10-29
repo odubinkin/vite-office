@@ -1,0 +1,105 @@
+{
+  "authorization": "Standing human authorization for independently proven unreachable coverage scopes; retain guards and original behavior.",
+  "scopes": [
+    {
+      "id": "B8TCAE-M07",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.ts",
+      "branch": "9",
+      "arm": 1,
+      "statements": [],
+      "reason": "Both pop callers require a nonnegative stack top: bracket analysis checks top>=0; pop_openers receives actual nonnegative opener indices and loops only while top>=opener. Every pop therefore sees top>=0."
+    },
+    {
+      "id": "B8TCAE-M08",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.ts",
+      "branch": "6",
+      "arm": 1,
+      "statements": [],
+      "reason": "Only emphasis and tilde analysis call md_opener_stack. Emphasis stacks contain only their star/underscore family; tilde dispatch supplies ch126. The bracket-stack fallback14 remains for source fidelity but has no actual caller."
+    },
+    {
+      "id": "B8TCAE-M09",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "branch": "20",
+      "arm": 1,
+      "statements": [],
+      "reason": "Every resolved ordinary link/image is created by the attr-success arm, which assigns title.pointer=attr.title. Every real attr producer supplies Uint8Array, including the empty title. Wiki links bypass this path. Native pointer/null representation is not asserted; the local guarded fallback is retained."
+    },
+    {
+      "id": "B8TCAE-M11",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "branch": "42",
+      "arm": 1,
+      "statements": [],
+      "reason": "The only text-type assignments in this function produce NORMAL, CODE, HTML or LATEXMATH. CODE/LATEXMATH and HTML are handled in preceding arms, so the remaining branch necessarily has NORMAL."
+    },
+    {
+      "id": "B8TCAE-M12a",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": "41",
+      "arm": 1,
+      "statements": [],
+      "reason": "Analysis assigns dense container records at every entered depth and preserves the array when leaving. Balanced emitted list/quote events replay at depth no larger than the analysis peak, so the slot is defined. No callback exposes the parser context."
+    },
+    {
+      "id": "B8TCAE-M12b",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": "43",
+      "arm": 1,
+      "statements": [],
+      "reason": "The same dense retained container/queue invariant applies independently to quote openers."
+    },
+    {
+      "id": "B8TCAE-M13",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": null,
+      "arm": null,
+      "statements": [
+        "102"
+      ],
+      "reason": "For block.data0, CODE is indented code; fenced opening sets data1. Empty lines cannot start indented code: blank classification precedes code classification, and only an existing same-container indented pivot can retain code type on a blank. Container entry/sibling transitions reset the pivot; forced new blocks are only fences/HTML. Therefore the first stored indented-code line is nonempty and this leading-trim advance cannot run. Retain the while guard and body."
+    },
+    {
+      "id": "B8TCAE-M14",
+      "path": "apps/office/src/external/md4c/src/md4c.context.ts",
+      "branch": "5",
+      "arm": 1,
+      "statements": [],
+      "reason": "Every actual md_emit_text caller supplies a positive guarded slice or nonempty SPACE/LF/NUL/SPACES constant. Escape/entity marks have nonzero validated extents; indentation chunks are guarded >0 after draining full space blocks; normal/HTML/code slices are guarded by increasing offsets; null replacement calls only for offset>0 or one NUL. The stable borrowed-input contract excludes detaching/mutating parser-owned storage during callbacks."
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/external/md4c/src/md4c.mark.ts": "054ae5db4fb535986b51dc0bb59e518df23008598bb909cd0fe3aef3dc530706",
+    "apps/office/src/external/md4c/src/md4c.mark.analyze.ts": "1acfab164f9ab9a69d9979c3ad2ac6c0bacfc83aaa0188f2d63f24f0ea1cdb7d",
+    "apps/office/src/external/md4c/src/md4c.mark.collect.ts": "a9e1d297cd3b8c1aa7ca38de15891cb3dadc9008ae60b99ba90a9a0bcf1a3016",
+    "apps/office/src/external/md4c/src/md4c.mark.link.ts": "208179597842308da5de79f6166e3a6485c95a8892fb214af65d7b3395ebd3c2",
+    "apps/office/src/external/md4c/src/md4c.ref.ts": "c106ac2a4bb7218c02012c1d4603808fb9fcec4570419006e1228ef670b870fd",
+    "apps/office/src/external/md4c/src/md4c.inline.ts": "523cca86c79c6972dfdde6d1c7b4531da573dbf33d30610d774052e90354eca1",
+    "apps/office/src/external/md4c/src/md4c.context.ts": "cc8bbce84eb4a9204691633cd9eb7f7a436b4399b2a705dda541be93b7a0e033",
+    "apps/office/src/external/md4c/src/md4c.render.ts": "ac99c3ab5a37697c4d301f65164cc92453fc0de52835a795ccced89487479e21",
+    "apps/office/src/external/md4c/src/md4c.block.ts": "e24547900eb8843d859249e4f3900e83f952ae13749f4d57a3a5097539066430",
+    "apps/office/src/external/md4c/src/md4c.block.line.ts": "cc32fda772f6b3ef33221f19a280fe0dda4fa1e03f3f5f16863ea7ba94286de2",
+    "apps/office/src/external/md4c/src/md4c.block.build.ts": "b98e6f7b62b2bea7120e5fb747e3d65ea8a81575ec2bca28bdb3c9dcca14bc91",
+    "vendor/md4c-reference/src/md4c.c": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8"
+  },
+  "nativeEvidence": [
+    "md4c-followup-native-proof.json",
+    "md4c-reference-topology-native-proof.json"
+  ],
+  "unresolved": [
+    {
+      "candidate": "M10",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "line": 170,
+      "status": "Unapplied. Original C comment explicitly discusses out-of-order permissive closers. Read-only actual-counter search of63000 public inputs found no false hit, which does not prove unreachability; investigate further."
+    },
+    {
+      "candidate": "M15",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.link.ts",
+      "line": 97,
+      "status": "Unapplied. Nested nonempty reference adjacency requires a complete queue-mutation proof or a genuine reaching input. Native flags-disabled cases cover the separate empty-reference nested guard at99."
+    }
+  ],
+  "upstreamDefectSuspected": false,
+  "scopeBoundary": "Actual original parser orchestration with stable borrowed paragraph/input storage and inaccessible private context. No fabricated marks, modified stacks, callback getters, alternate algorithms or coverage-counter edits."
+}
