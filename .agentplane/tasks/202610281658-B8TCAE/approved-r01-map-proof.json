@@ -1,0 +1,35 @@
+{
+  "R01": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 60,
+          "column": 28
+        },
+        "end": {
+          "line": 60,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "5",
+        "originalLine": 60,
+        "excludedArm": 0,
+        "retainedArmHits": 15
+      }
+    ],
+    "functionsUnchanged": 4,
+    "statements": [
+      49,
+      48
+    ],
+    "branchArms": [
+      29,
+      28
+    ],
+    "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions."
+  }
+}

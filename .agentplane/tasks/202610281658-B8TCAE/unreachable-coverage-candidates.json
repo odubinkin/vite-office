@@ -1127,6 +1127,15 @@
       "verificationProof": "approved-m06-map-proof.json",
       "scope": "Only one unreachable return and one alternative; collector sentinel bounds every ampersand index.",
       "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-R01",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "rtf-r01-owner-audit.json",
+      "verificationProof": "approved-r01-map-proof.json",
+      "scope": "Only the unreachable post-conversion null guard throw and true alternative; nullable cleanup remains genuinely tested.",
+      "upstreamDefectSuspected": false
     }
   ],
   "additionalAudits": [

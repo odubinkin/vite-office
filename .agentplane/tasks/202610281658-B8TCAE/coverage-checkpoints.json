@@ -2376,5 +2376,71 @@
     "strictOwnerCoveragePassed": true,
     "runtimeChanged": false,
     "hostBoundary": "Only Date.now supplies finite out-of-range failure and ordinary local-date success; no calendar algorithms are mocked."
+  },
+  "sentinelAndOwnershipBoundaries": {
+    "md4c": {
+      "files": 8,
+      "tests": 1999,
+      "strictCoverage": "145 statements /90 alternatives /10 functions /139 lines, all100%",
+      "proof": "approved-m06-map-proof.json"
+    },
+    "rtf": {
+      "files": 1,
+      "tests": 7,
+      "strictCoverage": "48 statements /28 alternatives /4 functions /41 lines, all100%",
+      "proof": "approved-r01-map-proof.json"
+    },
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108148,
+          "covered": 107527,
+          "skipped": 0,
+          "pct": 99.42
+        },
+        "statements": {
+          "total": 119478,
+          "covered": 118403,
+          "skipped": 0,
+          "pct": 99.1
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74552,
+          "covered": 73078,
+          "skipped": 0,
+          "pct": 98.02
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 203,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts"
+      ]
+    },
+    "fullVerifierPassed": false
   }
 }
