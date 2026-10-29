@@ -120,3 +120,11 @@ it("uses actual canonical key/type maps for Unicode values and preserves missing
   expect(s[0]).toBe(1);
   expect(value).toBe("");
 });
+
+it("trims both edges of the selected legacy keyword value without reading the next key", /** Exercises real counted spaces in the selected value. @returns Nothing. */ () => {
+  const buffer = new Uint8Array(12).fill(77),
+    status: [number] = [0];
+  expect(uloc_getKeywordValue("en@a=   AbC   ;b=next", "a", buffer, 12, status)).toBe(3);
+  expect(status[0]).toBe(0);
+  expect([...buffer.slice(0, 5)]).toEqual([65, 98, 67, 0, 77]);
+});

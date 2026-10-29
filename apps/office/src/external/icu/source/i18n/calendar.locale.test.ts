@@ -85,3 +85,14 @@ it("preserves transition validation and the original full-day weekend classifica
   expect(cal.getWeekendTransition(2, status)).toBe(0);
   expect(status[0]).toBe(1);
 });
+
+it("keeps regional week defaults when the fw keyword exceeds the fixed native query buffer", /** Uses a valid owned locale and the real keyword capacity error. @returns Nothing. */ () => {
+  const cal = new WeekWitness(),
+    status: [number] = [0];
+  cal.load("en_GB", null, status);
+  expect(cal.getFirstDayOfWeek()).toBe(2);
+  status[0] = 0;
+  cal.load("en_US@fw=" + "x".repeat(158), null, status);
+  expect([cal.getFirstDayOfWeek(), cal.getMinimalDaysInFirstWeek()]).toEqual([1, 1]);
+  expect(status[0]).toBe(0);
+});

@@ -61,6 +61,7 @@ export function ulocimp_getKeywords(
     localeID = semicolon >= 0 ? localeID.slice(semicolon + 1) : "";
     let last = value.length - 1;
     while (last >= 0 && value[last] === " ") --last;
+    /* istanbul ignore else -- B8TCAE-K01: the earlier separator/end check follows leading-space removal, so each accepted value contains a non-space byte. */
     if (last >= 0) value = value.slice(0, last + 1);
     const item = { keyword, value };
     let duplicate = false;
