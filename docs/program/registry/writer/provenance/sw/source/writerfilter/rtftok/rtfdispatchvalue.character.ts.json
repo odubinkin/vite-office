@@ -14,7 +14,8 @@
       "RTFDocumentImpl::dispatchValue"
     ],
     "preservedResponsibilities": [
-      "S3HW1E associated-character checkpoint: actual F/AF chooses ascii/eastAsia/cs from saved RunType, while only F changes decoding. FS/AFS and B/AB/I/AI use original ordinary/complex resource IDs and lexical defaults, preserving HICH font-versus-size/toggle asymmetry (WRITER255). Removed the Western-only DTO reconstruction for these migrated properties so inactive defaults cannot overwrite native sprms. Font-table completion seeds the actual default character sprms; checkFirstRun supplies default ASCII font to every saved group only if absent, and PLAIN restores defaults and encoding. Real native character-range queries, stylesheet/marker/Worker and mixed-script RTF round-trips exercise the consumer. Native font table numeric metadata, list-level font ingestion, special section states, unrepresented properties and compiled complete Writer/ABI parity remain unverified. Registered browser save/open/recovery behavior and broad semantic confidence are unchanged."
+      "S3HW1E associated-character checkpoint: actual F/AF chooses ascii/eastAsia/cs from saved RunType, while only F changes decoding. FS/AFS and B/AB/I/AI use original ordinary/complex resource IDs and lexical defaults, preserving HICH font-versus-size/toggle asymmetry (WRITER255). Removed the Western-only DTO reconstruction for these migrated properties so inactive defaults cannot overwrite native sprms. Font-table completion seeds the actual default character sprms; checkFirstRun supplies default ASCII font to every saved group only if absent, and PLAIN restores defaults and encoding. Real native character-range queries, stylesheet/marker/Worker and mixed-script RTF round-trips exercise the consumer. Native font table numeric metadata, list-level font ingestion, special section states, unrepresented properties and compiled complete Writer/ABI parity remain unverified. Registered browser save/open/recovery behavior and broad semantic confidence are unchanged.",
+      "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged."
     ],
     "omittedResponsibilities": [
       "Only the associated font/size/toggle responsibility is consumed here; full native font-table/numbering/substream/module parity remains unverified."
@@ -27,6 +28,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-associated-character.test.ts",
+          "marker": "RtfDocumentImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts",
           "marker": "RtfDocumentImpl"
         }
       ],

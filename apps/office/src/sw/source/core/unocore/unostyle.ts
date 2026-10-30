@@ -323,7 +323,7 @@ export class SwXStyle {
       return this.pending.has(n) ? new UnoAny(this.pending.get(n) as Any) : this.defaultValue(n);
     if (n === "NumberingRules" && this.family === "NumberingStyles")
       return new UnoAny(
-        [new SwXNumberingRules(new SwNumRule(this.owner as SwNumRule))],
+        [new SwXNumberingRules(new SwNumRule(this.owner as SwNumRule), this.doc)],
         ["Reference", indexReplaceType],
       );
     if (n === "FollowStyle")
@@ -339,6 +339,10 @@ export class SwXStyle {
       (this.owner as SwTextFormatColl | SwCharFormat).GetAttrSet().Get(entry.which),
       entry,
     );
+  }
+  /** Original import helper ignores unknown names but preserves declared-property validation and exceptions. @param name - Property name. @param value - Native value. @returns Nothing. */
+  setPropertyValueIgnoreUnknown(name: OUStringConstReference, value: Any): void {
+    if (this.getPropertySetInfo().hasPropertyByName(name)) this.setPropertyValue(name, value);
   }
   /** Applies a typed native property without duplicating model state. @param name - Native property or element name. @param value - Declared native value. @returns Nothing. */
   setPropertyValue(name: OUStringConstReference, value: Any): void {

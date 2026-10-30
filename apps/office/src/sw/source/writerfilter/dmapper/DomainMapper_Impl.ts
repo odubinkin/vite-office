@@ -43,7 +43,7 @@ export class DomainMapper_Impl {
   private readonly contexts: Context[] = [];
   private readonly body: SwXText;
   private appendedParagraph = false;
-  private readonly styleSheetTable = new StyleSheetTable();
+  private readonly styleSheetTable = new StyleSheetTable(this);
   private defaultParaStyleName = "";
   private currentParaStyleName = "";
   private inStyleSheetImport = false;
@@ -130,6 +130,36 @@ export class DomainMapper_Impl {
     const units = new Uint16Array(name.length);
     for (let index = 0; index < name.length; ++index) units[index] = name.charCodeAt(index);
     return new OUString(units, units.length);
+  }
+  private m_xCharacterStyles: SwXStyleFamily | undefined;
+  private m_xNextUnusedCharacterStyleNo: number | undefined;
+  /** Original lazy actual character-style family. @returns Borrowed family. */
+  GetCharacterStyles(): SwXStyleFamily {
+    return (this.m_xCharacterStyles ??= this.model.getStyleFamilies().GetCharacterStyles());
+  }
+  /** Original scan-once ListLabel suffix allocator, including signed prefix parsing. @returns Owned name. */
+  GetUnusedCharacterStyleName(): OUString {
+    if (this.m_xNextUnusedCharacterStyleNo === undefined) {
+      let maximum = 0;
+      for (const name of this.GetCharacterStyles().getElementNames())
+        if (name.startsWith("ListLabel ")) {
+          const suffix = name.slice(10),
+            units = new Uint16Array(suffix.length);
+          for (let index = 0; index < suffix.length; ++index)
+            units[index] = suffix.charCodeAt(index);
+          const value = toInt32(units);
+          if (value > 0 && value > maximum) maximum = value;
+        }
+      this.m_xNextUnusedCharacterStyleNo = maximum + 1;
+    }
+    const name = "ListLabel " + this.m_xNextUnusedCharacterStyleNo++;
+    const units = new Uint16Array(name.length);
+    for (let index = 0; index < name.length; ++index) units[index] = name.charCodeAt(index);
+    return new OUString(units, units.length);
+  }
+  /** Original list context borrows the supplied native level map. @param properties - Actual level. @returns Nothing. */
+  PushListProperties(properties: PropertyMap): void {
+    this.contexts.push({ type: ContextType.CONTEXT_LIST, properties, owned: false });
   }
   /** Original context creation. @param type - Context type. @returns New map. */
   PushProperties(type: ContextType): PropertyMap {

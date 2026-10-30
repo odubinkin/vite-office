@@ -78,6 +78,14 @@ export class DomainMapper implements Properties {
   ) {
     this.impl = new DomainMapper_Impl(this, model, documentType);
   }
+  /** Original list context push forwards the actual level owner. @param properties - Native level map. @returns Nothing. */
+  PushListProperties(properties: PropertyMap): void {
+    this.impl.PushListProperties(properties);
+  }
+  /** Original list context pop does not destroy the borrowed level. @returns Nothing. */
+  PopListProperties(): void {
+    this.impl.PopProperties(C.CONTEXT_LIST);
+  }
   /** Original source-format trait. @returns Whether RTF. */
   IsRTFImport(): boolean {
     return this.impl.IsRTFImport();

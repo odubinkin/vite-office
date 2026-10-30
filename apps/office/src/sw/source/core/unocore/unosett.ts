@@ -8,7 +8,11 @@ import { cppu_detail_getUnoType as indexAccessType } from "../../../../cppu/inc/
 import { cppu_detail_getUnoType as elementAccessType } from "../../../../cppu/inc/com/sun/star/container/XElementAccess";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { IndexOutOfBoundsException } from "../../../../cppu/inc/com/sun/star/lang/IndexOutOfBoundsException";
-import { numberingToSequence, numberingFromAny, numberingSequenceType } from "./unosett-properties";
+import {
+  numberingToSequence,
+  numberingPropertyPatches,
+  numberingSequenceType,
+} from "./unosett-properties";
 import type { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { SwNumFormat, SvxNumType, SwNumRule, type ConstSwNumFormat } from "../doc/number";
@@ -83,6 +87,7 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly startWith?: number;
   readonly parentNumbering?: number;
   readonly listFormat?: string;
+  readonly charStyleName?: string;
 }
 
 /** Writer-owned copy, validation and commit boundary corresponding to SwXNumberingRules. */
@@ -116,8 +121,22 @@ export class SwXNumberingRules {
   }
 
   private readonly rule: SwNumRule;
-  /** Native rule-copy and document-created-rule constructor paths share one real rule owner. @param source - Rule or document. @returns Service. */
-  public constructor(source: SwNumRule | import("../doc/doc").SwDoc) {
+  private readonly m_pDoc: SwDoc | undefined;
+  private readonly m_sNewCharStyleNames: string[];
+  /** Native rule/document constructor forms retain their document or infer it from the first character style. @param source - Rule or document. @param doc - Optional rule document. @returns Service. */
+  public constructor(source: SwNumRule | import("../doc/doc").SwDoc, doc?: SwDoc) {
+    this.m_sNewCharStyleNames = Array<string>(10).fill(
+      source instanceof SwNumRule ? "__XXX___invalid" : "",
+    );
+    this.m_pDoc = source instanceof SwNumRule ? doc : source;
+    if (source instanceof SwNumRule)
+      for (let level = 0; level < 10; ++level) {
+        const style = source.Get(level).GetCharFormat();
+        if (style) {
+          this.m_pDoc = style.GetDoc();
+          break;
+        }
+      }
     this.rule =
       source instanceof SwNumRule
         ? source
@@ -143,7 +162,18 @@ export class SwXNumberingRules {
   public GetPropertiesByIndex(level: number): WriterNumberingRuleProperties {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new IndexOutOfBoundsException();
-    return this.GetNumberingRuleByIndex(this.rule, level);
+    const properties = this.GetNumberingRuleByIndex(this.rule, level),
+      deferred = this.m_sNewCharStyleNames[level];
+    const name =
+      deferred && deferred !== "__XXX___invalid"
+        ? deferred
+        : this.rule.Get(level).GetCharFormatName();
+    return name
+      ? {
+          ...properties,
+          charStyleName: SwStyleNameMapper.FillProgName(name, SwGetPoolIdFromName.ChrFmt),
+        }
+      : properties;
   }
 
   /** Original XNamed numbering-rule identity. @returns Owned native name. */
@@ -215,11 +245,11 @@ export class SwXNumberingRules {
 
   /** Replaces one level through the native UNO application boundary. @param level - Zero-based level. @param properties - Supported property sequence. @returns Nothing. */
   public replaceByIndex(level: number, properties: WriterNumberingRuleProperties | Any): void {
-    const previous = this.GetPropertiesByIndex(level);
+    this.GetPropertiesByIndex(level);
     try {
       this.SetNumberingRuleByIndex(
         this.rule,
-        properties instanceof Any ? numberingFromAny(properties, previous) : properties,
+        properties instanceof Any ? numberingPropertyPatches(properties) : [properties],
         level,
       );
     } catch (error) {
@@ -232,54 +262,88 @@ export class SwXNumberingRules {
   /** Applies supported UNO properties to one independent format, then commits the complete level. @param rule - Writer rule. @param properties - MM100 properties and marker attributes. @param level - Zero-based level. @returns Nothing. */
   private SetNumberingRuleByIndex(
     rule: SwNumRule,
-    properties: WriterNumberingRuleProperties,
+    patches: readonly Partial<WriterNumberingRuleProperties>[],
     level: number,
   ): void {
     const applied = new SwNumFormat(rule.Get(level));
-    const bulletFont = properties.bulletFont;
-    if (
-      bulletFont !== undefined &&
-      (bulletFont === null || typeof bulletFont !== "object" || typeof bulletFont.name !== "string")
-    )
-      throw new NumberingRulePropertyError("Invalid bullet font descriptor.");
-    const converted = numberingPositionToTwips(properties);
-    const type =
-      properties.numberingType ??
-      (properties.kind === "bullet" ? SvxNumType.SVX_NUM_CHAR_SPECIAL : SvxNumType.SVX_NUM_ARABIC);
-    if ((properties.charTextDistance ?? 0) < 0 || (converted.listTabPosition ?? 0) < 0 || type < 0)
-      throw new NumberingRulePropertyError("Invalid numbering property.");
-    applied.SetNumberingType(type);
-    if (properties.bulletChar !== undefined)
-      applied.SetBulletChar(properties.bulletChar.codePointAt(0) ?? 0);
-    // Native UNO ignores a valid descriptor with an empty Name, preserving
-    // the copied format's optional font rather than clearing its owner.
-    if (bulletFont !== undefined && bulletFont.name !== "") {
-      applied.SetBulletFont(fontFromUnoDescriptorName(bulletFont.name));
+    try {
+      for (const properties of patches) {
+        const bulletFont = properties.bulletFont;
+        if (
+          bulletFont !== undefined &&
+          (bulletFont === null ||
+            typeof bulletFont !== "object" ||
+            typeof bulletFont.name !== "string")
+        )
+          throw new NumberingRulePropertyError("Invalid bullet font descriptor.");
+        if (properties.charStyleName !== undefined) {
+          const name = SwStyleNameMapper.FillUIName(
+            properties.charStyleName,
+            SwGetPoolIdFromName.ChrFmt,
+          );
+          if (name === "") {
+            this.m_sNewCharStyleNames[level] = "";
+            applied.SetCharFormat(undefined);
+            applied.SetCharFormatName("");
+          } else if (this.m_pDoc) {
+            const style = this.m_pDoc.FindCharFormatByName(name);
+            // The consumed no-DocShell profile creates ListLabel before this call. Native fallback dereferences DocShell for an unknown style.
+            if (!style) throw new Error("assert(character style exists without DocShell)");
+            applied.SetCharFormat(style);
+            this.m_sNewCharStyleNames[level] = "";
+          } else this.m_sNewCharStyleNames[level] = name;
+        }
+        const converted = numberingPositionToTwips(properties);
+        const type =
+          properties.numberingType ??
+          (properties.kind === undefined
+            ? undefined
+            : properties.kind === "bullet"
+              ? SvxNumType.SVX_NUM_CHAR_SPECIAL
+              : SvxNumType.SVX_NUM_ARABIC);
+        if (
+          (properties.charTextDistance ?? 0) < 0 ||
+          (converted.listTabPosition ?? 0) < 0 ||
+          (type !== undefined && type < 0)
+        )
+          throw new NumberingRulePropertyError("Invalid numbering property.");
+        if (type !== undefined) applied.SetNumberingType(type);
+        if (properties.bulletChar !== undefined)
+          applied.SetBulletChar(properties.bulletChar.codePointAt(0) ?? 0);
+        // Native UNO ignores a valid descriptor with an empty Name, preserving
+        // the copied format's optional font rather than clearing its owner.
+        if (bulletFont !== undefined && bulletFont.name !== "") {
+          applied.SetBulletFont(fontFromUnoDescriptorName(bulletFont.name));
+        }
+        if (converted.absLSpace !== undefined) applied.SetAbsLSpace(converted.absLSpace);
+        if (converted.firstLineOffset !== undefined)
+          applied.SetFirstLineOffset(converted.firstLineOffset);
+        if (converted.charTextDistance !== undefined)
+          applied.SetCharTextDistance(converted.charTextDistance);
+        if (converted.firstLineIndent !== undefined)
+          applied.SetFirstLineIndent(converted.firstLineIndent);
+        if (converted.indentAt !== undefined) applied.SetIndentAt(converted.indentAt);
+        if (converted.labelFollowedBy !== undefined)
+          applied.SetLabelFollowedBy(converted.labelFollowedBy);
+        if (converted.listTabPosition !== undefined)
+          applied.SetListtabPos(converted.listTabPosition);
+        if (converted.positionAndSpaceMode !== undefined)
+          applied.SetPositionAndSpaceMode(converted.positionAndSpaceMode);
+        if (properties.prefix !== undefined) applied.SetPrefix(properties.prefix);
+        if (properties.suffix !== undefined) applied.SetSuffix(properties.suffix);
+        if (properties.startWith !== undefined) applied.SetStart(properties.startWith);
+        if (
+          properties.parentNumbering !== undefined &&
+          properties.parentNumbering >= 0 &&
+          properties.parentNumbering <= 10
+        )
+          applied.SetIncludeUpperLevels(properties.parentNumbering);
+        if (properties.listFormat !== undefined) applied.SetListFormat(properties.listFormat);
+      }
+      rule.Set(level, applied);
+    } finally {
+      applied.Dispose();
     }
-    if (converted.absLSpace !== undefined) applied.SetAbsLSpace(converted.absLSpace);
-    if (converted.firstLineOffset !== undefined)
-      applied.SetFirstLineOffset(converted.firstLineOffset);
-    if (converted.charTextDistance !== undefined)
-      applied.SetCharTextDistance(converted.charTextDistance);
-    if (converted.firstLineIndent !== undefined)
-      applied.SetFirstLineIndent(converted.firstLineIndent);
-    if (converted.indentAt !== undefined) applied.SetIndentAt(converted.indentAt);
-    if (converted.labelFollowedBy !== undefined)
-      applied.SetLabelFollowedBy(converted.labelFollowedBy);
-    if (converted.listTabPosition !== undefined) applied.SetListtabPos(converted.listTabPosition);
-    if (converted.positionAndSpaceMode !== undefined)
-      applied.SetPositionAndSpaceMode(converted.positionAndSpaceMode);
-    if (properties.prefix !== undefined) applied.SetPrefix(properties.prefix);
-    applied.SetSuffix(properties.suffix);
-    if (properties.startWith !== undefined) applied.SetStart(properties.startWith);
-    if (
-      properties.parentNumbering !== undefined &&
-      properties.parentNumbering >= 0 &&
-      properties.parentNumbering <= 10
-    )
-      applied.SetIncludeUpperLevels(properties.parentNumbering);
-    if (properties.listFormat !== undefined) applied.SetListFormat(properties.listFormat);
-    rule.Set(level, applied);
   }
 }
 
@@ -351,3 +415,6 @@ export class SwXLineNumberingProperties {
     return unknown(name);
   }
 }
+
+import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";

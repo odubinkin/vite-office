@@ -336,7 +336,7 @@ it("validates typed numbering sequences before committing native level replaceme
     });
     const typed = new Any(simple.getAddress(), numberingSequenceType);
     simple.dispose();
-    const decoded = numberingFromAny(typed, { kind: "bullet", suffix: "" });
+    const decoded = numberingFromAny(typed);
     typed.dispose();
     expect(decoded.bulletFont).toEqual({ name: "Native bullet" });
     expect(decoded.positionAndSpaceMode).toBe("label-width-and-position");

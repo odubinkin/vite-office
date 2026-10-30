@@ -67,6 +67,7 @@ export enum RunType {
 export interface RtfState {
   characterSprms: RTFSprms;
   paragraphSprms: RTFSprms;
+  tableSprms: RTFSprms;
   runType: RunType;
   destination:
     | "body"

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 188
+revision: 192
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:30:38.841Z"
+  updated_at: "2026-10-30T13:23:40.813Z"
   updated_by: "CODER"
-  note: "Font metadata audit verified: 87 native metadata scenarios and 153 font/associated/encoding regression cases pass; typecheck, lint/format, source/docs/size/tree/provenance/boundary and Writer registry gates pass. Family/pitch/charset/style-name losses match upstream (WRITER256), avoiding unnecessary speculative FontTable work. Native list label formatting and remaining format obligations still need implementation."
-  attempts: 27
+  note: "Native list-label checkpoint verified: 788 related cases passed; two terminal worker-launch failures passed their isolated 52-case recheck. Final ordered setter/lifetime cases23, later numbering/import regressions36 and label cases11 pass; types/lint/format/source/docs/size/tree/dependency/provenance/Writer registry gates pass. Actual ListLabel/BulletFontName/CharStyleName ownership and Worker/native RTF are connected. Numeric list patterns/positions/overrides, sections and HTML/current-model completion audit remain open."
+  attempts: 28
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -437,8 +440,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T13:23:40.813Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native list-label checkpoint verified: 788 related cases passed; two terminal worker-launch failures passed their isolated 52-case recheck. Final ordered setter/lifetime cases23, later numbering/import regressions36 and label cases11 pass; types/lint/format/source/docs/size/tree/dependency/provenance/Writer registry gates pass. Actual ListLabel/BulletFontName/CharStyleName ownership and Worker/native RTF are connected. Numeric list patterns/positions/overrides, sections and HTML/current-model completion audit remain open."
+  -
+    type: "status"
+    at: "2026-10-30T13:24:08.101Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:30:47.380Z"
+doc_updated_at: "2026-10-30T13:24:08.101Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -971,6 +987,36 @@ sections:
     Attempts: 27
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:30:38.075Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T13:23:40.813Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native list-label checkpoint verified: 788 related cases passed; two terminal worker-launch failures passed their isolated 52-case recheck. Final ordered setter/lifetime cases23, later numbering/import regressions36 and label cases11 pass; types/lint/format/source/docs/size/tree/dependency/provenance/Writer registry gates pass. Actual ListLabel/BulletFontName/CharStyleName ownership and Worker/native RTF are connected. Numeric list patterns/positions/overrides, sections and HTML/current-model completion audit remain open.
+    Attempts: 28
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:23:19.679Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1706,6 +1752,30 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
       Result: pass. Evidence: html16-types.txt, html16-style.txt, html16-static.txt. Scope: new test, source-evidence records and matrix/issue documentation. Runtime sources1874/imports10172/allowed edges227 unchanged;4233 documented source files; registry semantic violations0. No all-app replay.
     - Next concrete filter implementation: list-level dispatch currently returns before collecting source font/size/toggle rPr, and ApplyParagraph only installs type/start/bullet character. Native ListsManager resolves rPr through DomainMapper's list context, derives BulletFontName, creates a ListLabel character style through StyleSheetTable and applies it via native numbering rules. Current core has real styles/rules, but the consumed list context, ListLabel allocator/style creation and numbering CharStyleName insertion need connection. This is necessary for represented list label formatting, unlike the metadata losses closed above. Special sections, HTML list/table producers and final capability audit remain open; goal stays active.
+
+    ### Native RTF list-label character formatting and ordered numbering patches (2026-10-30)
+
+    - Implemented real list-level RTFSprms table state, native appended rPr font references, RunType flag handling and source size/weight/posture/strike/kerning dispatch. List-level F/AF does not change list-text decoding. Original length-prefixed level text, strict SAL UTF8 conversions, soft-hyphen normalization and single-digit percent replacement feed the consumed ListLevel character map. WRITER258 preserves the literal percent10 to percent1percent0 behavior without asserting an unverified ordinary tenth-level parser failure.
+    - Original ListsManager delegation borrows ListLevel in DomainMapper's list context. GetCharStyleProperties excludes native geometry and Western font for text length<=1 UTF16 unit while preserving Asian/complex names. ListDef materialization creates actual ListLabel styles once per concrete override/level before paragraphs, including unused levels; no flattened browser label-style DTO substitutes for the owner. Source scan-once signed suffix naming, cache and independent always-create behavior use actual typed UNO style descriptors/property values.
+    - Connected native CharStyleName through typed numbering property sequences, programmatic/UI name conversion, existing-style pointer assignment/reset, constructor document retention/inference and empty typed getter publication. Worker already preserves real style/rule references and now consumes these new owners; RTF re-export collects the actual label font. The no-DocShell unknown-name fallback precondition is recorded as WRITER257; native crash/desktop lookup/whole UNO parity is not certified. Existing host-owned rule construction remains its established binding; the consuming rule operation explicitly owns an independent native copy.
+    - Refactored an old setter shortcut required by partial label assignment: supplied Any properties now apply in original sequence order to one copied format, with one commit, preserving omitted raw geometry, complete optional font and ListFormat. It no longer replays a lossy public format projection. Suffix-after-ListFormat clears its pattern, while the reverse order preserves it. Local temporary formats release native client registrations after copy/commit, including errors.
+    - Original resourceids.py was run unchanged over pinned model.xml to add exact CT_LevelText_val/Lvl_rPr/Lvl_lvlText identities. Evidence: output/playwright/rtf-properties-native/html17-native-resourceids.hxx and existing resourceids.test.ts; no renumbering or hand-selected substitute IDs.
+    - Command: npm run test:writer -- rtf sw/source/core/unocore/unosett sw/source/core/unocore/unostyle sw/source/core/unocore/native-numbering sw/source/core/unocore/native-import-core-lifetimes sw/source/writerfilter/dmapper document-io sw/browser/filter/xml/writer-character-style-codec
+      Result:788 passed/45 files;2 files failed to start workers, with no assertion failure. Evidence: html17-final-related-tests.txt. Scope: related RTF/I/O/native numbering/style/mapper/Worker consumers. The terminal driver reported worker startup timeouts after662seconds; no still-live process was restarted on an observation timeout.
+    - Command: npm run test:writer -- rtfdocumentimpl.document.test native-numbering-publication.test --maxWorkers 1
+      Result: pass;52tests/2files. Evidence: html17-worker-recheck.txt. Scope: exactly the two terminal worker-launch failures; assertions/configuration unchanged.
+    - Command: npm run test:writer -- rtf-list-label unosett.test native-import-core-lifetimes
+      Result: pass;23tests/3files. Evidence: html17-order-tests.txt. Scope: final actual label styles/fonts/script slots, separate body properties, unused level naming, Worker/native export identity, UTF16/UTF8 and source regex behavior, typed style assignment/reset, partial format preservation and ordered suffix/pattern application.
+    - Command: npm run test:writer -- native-numbering-publication native-text-import-api sw/source/core/unocore/unosett sw/source/core/unocore/unostyle
+      Result: pass;36tests/4files. Evidence: html17-order-regressions.txt. Scope: numbering publication and native text/style consumers after the final ordered setter change.
+    - Command: npm run test:writer -- rtf-list-label resourceids.test native-import-core-lifetimes
+      Result: pass;21tests/3files. Evidence: html17-consumers-final.txt. Scope: generated numeric identities and source-level consumer/lifetime checks before the additional ordering assertion; the later changed setter/label file is covered by the final23-case run.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
+      Result: pass. Evidence: html17-force-string-types.txt, html17-order-style.txt, html17-order-gates.txt, html17-final-gates.txt. Counts:1877 provenance modules;1876 runtime sources/10205 imports/227 allowed edges at the earlier gate; broad confidence remains unverified. Final type correction replaced an indexed optional tuple result with the same validated explicit three-value selection; no enforcement/configuration was weakened.
+    - Corrected during development: missing resource identities were generated from original source rather than allowing undefined IDs; fresh test imported SourceDocumentType from its actual factory; raw legacy geometry fixture explicitly selects its native active mode; copied native strings release only allocated nullable C output slots; a type-only strike-item import uses the canonical header. The existing lifetime test only drops the removed decoded-projection base argument; its assertions remain intact. No complete all-app suite replay.
+    - Remaining current-model obligations: native numeric level text/placeholder/list-format conversion, positional/legal properties and concrete overrides; special section dummy paragraphs; HTML list/table producers; final per-capability and UI completion audit. This checkpoint closes the consumed label-character ownership path, not full numbering or the full goal.
+
+    - Final source detail: LEVELTEXT now forwards RTFValue's original force-string=true selector (including empty strings); all other existing string-factory callers retain false. Command: npm run test:writer -- rtf-list-label; targeted ESLint; npm run typecheck --workspace @vite-office/office; npm run check:docs; npm run check:source-provenance. Result: pass,11label cases. Evidence: html17-force-string-tests.txt, html17-force-string-lint.txt, html17-force-string-types.txt, html17-force-string-gates.txt. No broad parity claim.
 id_source: "generated"
 ---
 ## Summary
@@ -2249,6 +2319,36 @@ Note: Font metadata audit verified: 87 native metadata scenarios and 153 font/as
 Attempts: 27
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:30:38.075Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T13:23:40.813Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native list-label checkpoint verified: 788 related cases passed; two terminal worker-launch failures passed their isolated 52-case recheck. Final ordered setter/lifetime cases23, later numbering/import regressions36 and label cases11 pass; types/lint/format/source/docs/size/tree/dependency/provenance/Writer registry gates pass. Actual ListLabel/BulletFontName/CharStyleName ownership and Worker/native RTF are connected. Numeric list patterns/positions/overrides, sections and HTML/current-model completion audit remain open.
+Attempts: 28
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:23:19.679Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2988,3 +3088,27 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
   Result: pass. Evidence: html16-types.txt, html16-style.txt, html16-static.txt. Scope: new test, source-evidence records and matrix/issue documentation. Runtime sources1874/imports10172/allowed edges227 unchanged;4233 documented source files; registry semantic violations0. No all-app replay.
 - Next concrete filter implementation: list-level dispatch currently returns before collecting source font/size/toggle rPr, and ApplyParagraph only installs type/start/bullet character. Native ListsManager resolves rPr through DomainMapper's list context, derives BulletFontName, creates a ListLabel character style through StyleSheetTable and applies it via native numbering rules. Current core has real styles/rules, but the consumed list context, ListLabel allocator/style creation and numbering CharStyleName insertion need connection. This is necessary for represented list label formatting, unlike the metadata losses closed above. Special sections, HTML list/table producers and final capability audit remain open; goal stays active.
+
+### Native RTF list-label character formatting and ordered numbering patches (2026-10-30)
+
+- Implemented real list-level RTFSprms table state, native appended rPr font references, RunType flag handling and source size/weight/posture/strike/kerning dispatch. List-level F/AF does not change list-text decoding. Original length-prefixed level text, strict SAL UTF8 conversions, soft-hyphen normalization and single-digit percent replacement feed the consumed ListLevel character map. WRITER258 preserves the literal percent10 to percent1percent0 behavior without asserting an unverified ordinary tenth-level parser failure.
+- Original ListsManager delegation borrows ListLevel in DomainMapper's list context. GetCharStyleProperties excludes native geometry and Western font for text length<=1 UTF16 unit while preserving Asian/complex names. ListDef materialization creates actual ListLabel styles once per concrete override/level before paragraphs, including unused levels; no flattened browser label-style DTO substitutes for the owner. Source scan-once signed suffix naming, cache and independent always-create behavior use actual typed UNO style descriptors/property values.
+- Connected native CharStyleName through typed numbering property sequences, programmatic/UI name conversion, existing-style pointer assignment/reset, constructor document retention/inference and empty typed getter publication. Worker already preserves real style/rule references and now consumes these new owners; RTF re-export collects the actual label font. The no-DocShell unknown-name fallback precondition is recorded as WRITER257; native crash/desktop lookup/whole UNO parity is not certified. Existing host-owned rule construction remains its established binding; the consuming rule operation explicitly owns an independent native copy.
+- Refactored an old setter shortcut required by partial label assignment: supplied Any properties now apply in original sequence order to one copied format, with one commit, preserving omitted raw geometry, complete optional font and ListFormat. It no longer replays a lossy public format projection. Suffix-after-ListFormat clears its pattern, while the reverse order preserves it. Local temporary formats release native client registrations after copy/commit, including errors.
+- Original resourceids.py was run unchanged over pinned model.xml to add exact CT_LevelText_val/Lvl_rPr/Lvl_lvlText identities. Evidence: output/playwright/rtf-properties-native/html17-native-resourceids.hxx and existing resourceids.test.ts; no renumbering or hand-selected substitute IDs.
+- Command: npm run test:writer -- rtf sw/source/core/unocore/unosett sw/source/core/unocore/unostyle sw/source/core/unocore/native-numbering sw/source/core/unocore/native-import-core-lifetimes sw/source/writerfilter/dmapper document-io sw/browser/filter/xml/writer-character-style-codec
+  Result:788 passed/45 files;2 files failed to start workers, with no assertion failure. Evidence: html17-final-related-tests.txt. Scope: related RTF/I/O/native numbering/style/mapper/Worker consumers. The terminal driver reported worker startup timeouts after662seconds; no still-live process was restarted on an observation timeout.
+- Command: npm run test:writer -- rtfdocumentimpl.document.test native-numbering-publication.test --maxWorkers 1
+  Result: pass;52tests/2files. Evidence: html17-worker-recheck.txt. Scope: exactly the two terminal worker-launch failures; assertions/configuration unchanged.
+- Command: npm run test:writer -- rtf-list-label unosett.test native-import-core-lifetimes
+  Result: pass;23tests/3files. Evidence: html17-order-tests.txt. Scope: final actual label styles/fonts/script slots, separate body properties, unused level naming, Worker/native export identity, UTF16/UTF8 and source regex behavior, typed style assignment/reset, partial format preservation and ordered suffix/pattern application.
+- Command: npm run test:writer -- native-numbering-publication native-text-import-api sw/source/core/unocore/unosett sw/source/core/unocore/unostyle
+  Result: pass;36tests/4files. Evidence: html17-order-regressions.txt. Scope: numbering publication and native text/style consumers after the final ordered setter change.
+- Command: npm run test:writer -- rtf-list-label resourceids.test native-import-core-lifetimes
+  Result: pass;21tests/3files. Evidence: html17-consumers-final.txt. Scope: generated numeric identities and source-level consumer/lifetime checks before the additional ordering assertion; the later changed setter/label file is covered by the final23-case run.
+- Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
+  Result: pass. Evidence: html17-force-string-types.txt, html17-order-style.txt, html17-order-gates.txt, html17-final-gates.txt. Counts:1877 provenance modules;1876 runtime sources/10205 imports/227 allowed edges at the earlier gate; broad confidence remains unverified. Final type correction replaced an indexed optional tuple result with the same validated explicit three-value selection; no enforcement/configuration was weakened.
+- Corrected during development: missing resource identities were generated from original source rather than allowing undefined IDs; fresh test imported SourceDocumentType from its actual factory; raw legacy geometry fixture explicitly selects its native active mode; copied native strings release only allocated nullable C output slots; a type-only strike-item import uses the canonical header. The existing lifetime test only drops the removed decoded-projection base argument; its assertions remain intact. No complete all-app suite replay.
+- Remaining current-model obligations: native numeric level text/placeholder/list-format conversion, positional/legal properties and concrete overrides; special section dummy paragraphs; HTML list/table producers; final per-capability and UI completion audit. This checkpoint closes the consumed label-character ownership path, not full numbering or the full goal.
+
+- Final source detail: LEVELTEXT now forwards RTFValue's original force-string=true selector (including empty strings); all other existing string-factory callers retain false. Command: npm run test:writer -- rtf-list-label; targeted ESLint; npm run typecheck --workspace @vite-office/office; npm run check:docs; npm run check:source-provenance. Result: pass,11label cases. Evidence: html17-force-string-tests.txt, html17-force-string-lint.txt, html17-force-string-types.txt, html17-force-string-gates.txt. No broad parity claim.

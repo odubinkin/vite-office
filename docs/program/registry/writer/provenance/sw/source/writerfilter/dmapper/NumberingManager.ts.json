@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/NumberingManager.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/NumberingManager.cxx",
+    "localSymbols": [
+      "ListLevel",
+      "ResolveListLevelCharacters",
+      "CreateListLevelCharacterProperties"
+    ],
+    "upstreamSymbols": [
+      "ListLevel::GetCharStyleProperties",
+      "ListDef::CreateNumberingRules",
+      "ListsManager::lcl_attribute"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged.",
+      "Original strict OUString toUtf8/fromUtf8 SAL flags, soft-hyphen normalization and single-digit byte regex are preserved; percent10 produces percent1percent0 (WRITER258)."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed character-map and numbering-label responsibilities are implemented here; complete numerical definitions, overrides, outline/bitmap services and compiled native/ABI/module parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/NumberingManager.ts",
+          "marker": "ListLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts",
+          "marker": "RtfDocumentImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/NumberingManager.cxx",
+          "marker": "ListLevel::GetCharStyleProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/NumberingManager.cxx",
+          "marker": "ListDef::CreateNumberingRules"
+        }
+      ]
+    }
+  }
+}

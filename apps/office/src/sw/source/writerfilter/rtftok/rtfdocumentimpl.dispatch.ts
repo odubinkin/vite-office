@@ -33,6 +33,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       paragraphSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
+      tableSprms: new RTFSprms(previous?.tableSprms),
       runType: previous?.runType ?? RunType.NONE,
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
@@ -154,6 +155,26 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
           if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
         }
       }
+      if (previous?.destination === "leveltext") {
+        const parent = this["states"].at(-1);
+        if (parent) {
+          const raw = previous.levelText,
+            length = raw.charCodeAt(0);
+          putNestedAttribute(
+            parent.tableSprms,
+            N.LN_CT_Lvl_lvlText,
+            N.LN_CT_LevelText_val,
+            stringValue(length < raw.length ? raw.slice(1, length + 1) : raw, true),
+          );
+        }
+      }
+      if (previous?.destination === "listlevel") {
+        const level = this["currentListLevels"].at(-1);
+        if (level) {
+          level.tableSprms.dispose();
+          level.tableSprms = new RTFSprms(previous.tableSprms);
+        }
+      }
       if (previous?.destination === "list")
         this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
       if (previous?.destination === "listoverride")
@@ -165,6 +186,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     } finally {
       previous?.characterSprms.dispose();
       previous?.paragraphSprms.dispose();
+      previous?.tableSprms.dispose();
     }
     return;
   }
@@ -309,6 +331,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       kind: "numbered",
       start: 1,
       numberingType: SvxNumType.SVX_NUM_ARABIC,
+      tableSprms: new RTFSprms(),
     });
     return;
   }
@@ -343,6 +366,30 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (state.destination === "list" || state.destination === "listlevel") {
+    if (
+      state.destination === "listlevel" &&
+      [
+        "loch",
+        "hich",
+        "dbch",
+        "ltrch",
+        "rtlch",
+        "ltrpar",
+        "rtlpar",
+        "ltrrow",
+        "rtlrow",
+        "plain",
+      ].includes(token.name)
+    ) {
+      this["DispatchBodyControl"](token.name, token.parameter, state);
+      return;
+    }
+
+    if (
+      state.destination === "listlevel" &&
+      dispatchAssociatedCharacter.call(this, token.name, token.parameter, state)
+    )
+      return;
     if (token.name === "listid") this["currentListId"] = token.parameter ?? 0;
     else if (token.name === "levelnfc") {
       const level = this["currentListLevels"].at(-1);

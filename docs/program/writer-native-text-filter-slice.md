@@ -801,3 +801,33 @@ and its list materialization only applies type/start/bullet character. Native
 ListsManager instead resolves list rPr via DomainMapper and creates a ListLabel
 character style plus BulletFontName. That consumer path remains an implementation
 obligation, distinct from the font-table metadata losses closed by this audit.
+
+
+## Native RTF list-label character formatting checkpoint
+
+RTF list levels now retain real table sprms. Associated F/AF appends native rPr
+containers without changing list-text encoding; ordinary/complex size, weight,
+posture, strike and kerning modifiers follow source table dispatch and original
+RunType selectors. Original level-text length extraction supplies the consumed
+ListLevel character map. ListsManager's modifier delegation borrows that map in
+the DomainMapper list context. Geometry and single-symbol Western font names are
+excluded from character styles by the original UTF16 length rule; Asian/complex
+font names remain admitted.
+
+Concrete list overrides prepare actual ListLabel character styles once per level,
+including unused levels. Native signed suffix allocation, independent always-create
+and property-cache behavior, typed style-property assignment and CharStyleName rule
+application are connected. BulletFontName remains separate from the symbol's style.
+Worker retains actual numbering-to-style identity, so RTF font collection and label
+output consume the same owners. Document body character properties are independent.
+The native unknown-name/DocShell precondition is recorded as WRITER257.
+
+The typed numbering setter now applies only supplied properties, in their original
+sequence order, to its native format copy. It no longer reconstructs an entire format from the public projection when
+applying a label style, preserving optional list patterns, raw geometry and complete
+font values. Local copied formats release their native client registrations.
+
+This checkpoint closes the consumed label-character path, not full numbering import.
+Complete level-number placeholder/pattern conversion, positional/legal level items,
+concrete override semantics and special section/HTML producers still require their
+current-model completion audit. No broad module/ABI parity promotion is made.

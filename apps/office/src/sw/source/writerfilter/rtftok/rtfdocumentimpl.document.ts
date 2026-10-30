@@ -247,6 +247,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         appliedStyles.add(slot);
       }
     }
+    PrepareListLevelCharacters.call(this);
     let firstParagraph = true;
     const sectionStyles = new Map<number, string>();
     for (const block of this["blocks"]) {
@@ -597,12 +598,20 @@ export function ApplyParagraph(
       const rule = node.GetNumRule();
       if (rule !== undefined) {
         const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
-        native.SetNumberingType(format.numberingType);
-        native.SetStart(format.start);
-        if (format.kind === "bullet" && format.bullet !== undefined)
-          native.SetBulletChar(format.bullet);
-        rule.Set(paragraph.state.listLevel, native);
-        node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
+        try {
+          native.SetNumberingType(format.numberingType);
+          native.SetStart(format.start);
+          if (format.kind === "bullet" && format.bullet !== undefined)
+            native.SetBulletChar(format.bullet);
+          rule.Set(paragraph.state.listLevel, native);
+          const characters =
+            this["m_aListLevelProperties"].get(override)?.[paragraph.state.listLevel];
+          if (characters)
+            ApplyListLevelCharacters(node.GetDoc(), rule, paragraph.state.listLevel, characters);
+          node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
+        } finally {
+          native.Dispose();
+        }
       }
     }
   }
@@ -632,3 +641,5 @@ import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+import { PrepareListLevelCharacters, ApplyListLevelCharacters } from "./rtfdocumentimpl.numbering";

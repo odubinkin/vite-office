@@ -30,8 +30,8 @@ const underline = new Map<number, number>([
   [L.LINESTYLE_BOLDWAVE, N.LN_Value_ST_Underline_wavyHeavy],
   [L.LINESTYLE_DOUBLEWAVE, N.LN_Value_ST_Underline_wavyDouble],
 ]);
-/** Copies a real host UTF16 boundary value into the native string constructor. @param value - Character value. @returns Unacquired value pointer. */
-export function stringValue(value: string): RTFValue {
+/** Copies a real host UTF16 boundary value into the native string constructor. @param value - Character value. @param forceString - Original RTFValue force-string selector. @returns Unacquired value pointer. */
+export function stringValue(value: string, forceString = false): RTFValue {
   const text = new OUString(
     Uint16Array.from(
       value.split(""),
@@ -41,7 +41,7 @@ export function stringValue(value: string): RTFValue {
     value.length,
   );
   try {
-    return new RTFValue(text);
+    return new RTFValue(text, forceString);
   } finally {
     text.dispose();
   }

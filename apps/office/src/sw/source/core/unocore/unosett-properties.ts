@@ -71,6 +71,7 @@ export function numberingToSequence(
       "LabelFollowedBy",
       new Any([["listtab", "space", "nothing"].indexOf(properties.labelFollowedBy)], "sal_Int16"),
     );
+  add("CharStyleName", stringAny(properties.charStyleName ?? ""));
   if (properties.bulletFont) add("BulletFontName", stringAny(properties.bulletFont.name));
   const result = new NumberingPropertySequence(
     {
@@ -85,61 +86,58 @@ export function numberingToSequence(
   }
   return result;
 }
-/** Extracts the original Any sequence and validates consumed names/types before the format-copy commit. @param value - Declared native value. @param base - Original base input. @returns The represented native operation result. */
-export function numberingFromAny(
+/** Decodes supplied native values in source sequence order; omitted fields never pass through a public format projection. @param value - Actual property sequence. @returns Ordered single-property patches. */
+export function numberingPropertyPatches(
   value: Any,
-  base: WriterNumberingRuleProperties,
-): WriterNumberingRuleProperties {
-  const seq = new NumberingPropertySequence();
+): readonly Partial<WriterNumberingRuleProperties>[] {
+  const sequence = new NumberingPropertySequence(),
+    result: Partial<WriterNumberingRuleProperties>[] = [];
   try {
-    if (!value.extract(seq.getAddress(), numberingSequenceType))
+    if (!value.extract(sequence.getAddress(), numberingSequenceType))
       illegal("Expected Sequence<PropertyValue>");
-    const result: Record<string, unknown> = { ...base };
-    for (let i = 0; i < seq.getLength(); i++) {
-      const p = readNumberingProperty(seq, i),
-        name = text(p.Name),
-        field = numericFields[name];
+    for (let index = 0; index < sequence.getLength(); ++index) {
+      const property = readNumberingProperty(sequence, index);
       try {
-        if (field) {
-          result[field[0]] = scalar(p.Value, field[1]);
-          continue;
-        }
-        const strings: Record<string, string> = {
-          Prefix: "prefix",
-          Suffix: "suffix",
-          ListFormat: "listFormat",
-          BulletChar: "bulletChar",
-        };
-        if (strings[name]) {
-          result[strings[name] as string] = stringValue(p.Value);
-          continue;
-        }
-        if (name === "BulletFontName") {
-          result.bulletFont = { name: stringValue(p.Value) };
-          continue;
-        }
-        if (name === "PositionAndSpaceMode") {
-          const v = scalar(p.Value, "sal_Int16");
-          if (v !== 0 && v !== 1) illegal("Invalid PositionAndSpaceMode");
-          result.positionAndSpaceMode = v === 1 ? "label-alignment" : "label-width-and-position";
-          continue;
-        }
-        if (name === "LabelFollowedBy") {
-          const v = scalar(p.Value, "sal_Int16") as number;
-          if (v < 0 || v > 2) illegal("Unrepresented LabelFollowedBy");
-          result.labelFollowedBy = ["listtab", "space", "nothing"][v];
-          continue;
-        }
-        illegal(`Unrepresented numbering property: ${name}`);
+        result.push(decodeNumberingProperty(property));
       } finally {
-        p.Name.dispose();
-        p.Value.dispose();
+        property.Name.dispose();
+        property.Value.dispose();
       }
     }
-    return result as unknown as WriterNumberingRuleProperties;
+    return result;
   } finally {
-    seq.dispose();
+    sequence.dispose();
   }
+}
+/** Existing detached decoded-value projection, distinct from ordered native application. @param value - Native sequence. @returns Supplied fields only. */
+export function numberingFromAny(value: Any): Partial<WriterNumberingRuleProperties> {
+  return Object.assign({}, ...numberingPropertyPatches(value));
+}
+/** Original represented name/type admission for one supplied value. @param property - Actual native property. @returns Single decoded property. */
+function decodeNumberingProperty(property: PropertyValue): Partial<WriterNumberingRuleProperties> {
+  const name = text(property.Name),
+    field = numericFields[name];
+  if (field) return { [field[0]]: scalar(property.Value, field[1]) };
+  const strings: Record<string, string> = {
+    Prefix: "prefix",
+    Suffix: "suffix",
+    ListFormat: "listFormat",
+    BulletChar: "bulletChar",
+    CharStyleName: "charStyleName",
+  };
+  if (strings[name]) return { [strings[name] as string]: stringValue(property.Value) };
+  if (name === "BulletFontName") return { bulletFont: { name: stringValue(property.Value) } };
+  if (name === "PositionAndSpaceMode") {
+    const value = scalar(property.Value, "sal_Int16");
+    if (value !== 0 && value !== 1) illegal("Invalid PositionAndSpaceMode");
+    return { positionAndSpaceMode: value === 1 ? "label-alignment" : "label-width-and-position" };
+  }
+  if (name === "LabelFollowedBy") {
+    const value = scalar(property.Value, "sal_Int16") as number;
+    if (value < 0 || value > 2) illegal("Unrepresented LabelFollowedBy");
+    return { labelFollowedBy: value === 0 ? "listtab" : value === 1 ? "space" : "nothing" };
+  }
+  illegal(`Unrepresented numbering property: ${name}`);
 }
 
 /** Copies one original logical compound address into the existing generated value; Sequence's erased E reference exposes native member addresses. @param sequence - Typed sequence. @param index - Native index. @returns Owned property value. */

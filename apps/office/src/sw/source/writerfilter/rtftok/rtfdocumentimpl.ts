@@ -94,6 +94,7 @@ export class RtfDocumentImpl {
       start: number;
       bullet?: number;
       numberingType: SvxNumType;
+      tableSprms: RTFSprms;
     }>[]
   >();
   protected readonly styles = new Map<number, RtfStyleDefinition>();
@@ -124,6 +125,7 @@ export class RtfDocumentImpl {
     for (const state of this.states) {
       lists.add(state.characterSprms);
       lists.add(state.paragraphSprms);
+      lists.add(state.tableSprms);
     }
     lists.add(this.m_aParagraphSprms);
     lists.add(this.m_aDefaultCharacterSprms);
@@ -134,6 +136,15 @@ export class RtfDocumentImpl {
     rows(this.tableRows);
     for (const cell of this.tableRow) for (const value of cell) paragraph(value);
     for (const value of this.tableCell) paragraph(value);
+    for (const levels of [this.currentListLevels, ...this.listFormats.values()])
+      for (const level of levels) lists.add(level.tableSprms);
+    for (const levels of this.m_aListLevelProperties.values())
+      for (const properties of levels)
+        for (const value of properties) {
+          value.Name.dispose();
+          value.Value.dispose();
+        }
+    this.m_aListLevelProperties.clear();
     for (const list of lists) list.dispose();
     this.states.length = 0;
     this.runs.length = 0;
@@ -147,11 +158,16 @@ export class RtfDocumentImpl {
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
+  protected m_aListLevelProperties = new Map<
+    number,
+    import("../../../../udkapi/com/sun/star/beans/PropertyValue").PropertyValue[][]
+  >();
   protected currentListLevels: {
     kind: "bullet" | "numbered";
     start: number;
     bullet?: number;
     numberingType: SvxNumType;
+    tableSprms: RTFSprms;
   }[] = [];
   protected currentOverrideListId = 0;
   protected currentOverrideIndex = 0;
