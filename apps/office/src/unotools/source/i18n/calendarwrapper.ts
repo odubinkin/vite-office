@@ -73,6 +73,16 @@ export class CalendarWrapper {
     }
     return new OUString();
   }
+  /** Original display-name forwarding catches UNO exceptions and returns empty. @param category - Display category. @param index - Item index. @param nameType - Name selector. @returns Owned name or empty. */
+  getDisplayName(category: number, index: number, nameType: number): OUString {
+    try {
+      return this.xC.getDisplayName(category, index, nameType);
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+    return new OUString();
+  }
   /** Original getAllCalendars forwarding and UNO exception default. @param locale - Source argument. @returns Source result. */
   getAllCalendars(locale: LocaleConstReference): OUString[] {
     try {

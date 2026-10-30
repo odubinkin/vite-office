@@ -49,7 +49,8 @@
       "SvNumberformat::HasStringNegativeSign",
       "SvNumberformat::ImpGetNumForStringElementCount",
       "SvNumberformat::StripNewCurrencyDelimiters",
-      "ImpGetNumberOutput"
+      "ImpGetNumberOutput",
+      "SvNumberformat::ImpGetTimeOutput"
     ],
     "preservedResponsibilities": [
       "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
@@ -76,7 +77,8 @@
       "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced.",
       "AQF9AG adds original finite scientific/engineering ImpGetScientificOutput and shared ImpNumberFill. RTL E conversion, exponent zero removal and 0/?/# padding, sign tokens, mutable token/digit cursors, engineering remainder normalization and rounded-up mantissa compensation follow the source. Existing decimal/integer fill is reused. Real-owner tests preserve CALC-395 signed-zero output and CALC-396 zero-integer-placeholder magnitude behavior. This remains the admitted path without complete native-number modifiers; dedicated full native wrapper differential and other display families remain pending.",
       "AQF9AG now routes actual finite FRACTION sections to the original fraction producer and reuses ImpNumberFill/ImpNumberFillWithThousands across source-responsibility fragments. Other unimplemented producers/contracts remain explicit; no fake fraction strings or NativeNumber fallback is introduced.",
-      "AQF9AG removes the scalar precision/decimal/scanner output projection: numeric GetOutputString now accepts the actual NativeNumberWrapper and SvNFLanguageData as upstream does; text retains its original signature and default star flag. Current precision, locale separator and Boolean keywords are read from the supplied owner rather than construction scanner state. Real-owner tests vary the current language/precision independently of the entry constructor scanner. This contract restoration does not claim completed NativeNumber or date/time producers."
+      "AQF9AG removes the scalar precision/decimal/scanner output projection: numeric GetOutputString now accepts the actual NativeNumberWrapper and SvNFLanguageData as upstream does; text retains its original signature and default star flag. Current precision, locale separator and Boolean keywords are read from the supplied owner rather than construction scanner state. Real-owner tests vary the current language/precision independently of the entry constructor scanner. This contract restoration does not claim completed NativeNumber or date/time producers.",
+      "Original finite TIME output dispatch now reaches the actual time fragment for incomplete native metadata, including standard and custom selected sections, while source input-line/section/color handling remains with this owner. Date/datetime and complete native-number modifiers remain unfinished; no fallback strings or CSV unsupported-option policy is introduced."
     ],
     "omittedResponsibilities": [
       "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
@@ -114,6 +116,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.number.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.ts",
+          "marker": "GetTimeOutput"
         }
       ],
       "upstream": [
@@ -160,6 +166,10 @@
         {
           "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
           "marker": "GetFormatPrecision"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetTimeOutput"
         }
       ]
     }

@@ -701,3 +701,46 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["HH:MM:SS.00", 59.99999 / 86400, "00:00:59.99\n"],
+  ["[HH]:MM:SS", -1.5, "-36:00:00\n"],
+  ["HH:MM AM/PM", 0.75, "06:00 PM\n"],
+  ["HH:MM:SS", -0.25, "18:00:00\n"],
+])(
+  "exports original time display pattern %s",
+  /** The actual numeric cell and compiled attribute use the original time producer through ScCellFormat and CSV. @param pattern - Source format. @param value - Numeric content. @param expected - CSV output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);

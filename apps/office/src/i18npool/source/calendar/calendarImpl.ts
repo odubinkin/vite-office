@@ -181,6 +181,10 @@ export class CalendarImpl {
   getDateTime(): number {
     return this.calendar("getDateTime").getDateTime();
   }
+  /** Original display-name forwarding preserves the no-calendar RuntimeException. @param category - Display category. @param index - Item index. @param nameType - Name selector. @returns Owned name. */
+  getDisplayName(category: number, index: number, nameType: number): OUString {
+    return this.calendar("getDisplayName").getDisplayName(category, index, nameType);
+  }
   /** Original forwarding. @param days - Local days. @returns Nothing. */
   setLocalDateTime(days: number): void {
     this.calendar("setLocalDateTime").setLocalDateTime(days);

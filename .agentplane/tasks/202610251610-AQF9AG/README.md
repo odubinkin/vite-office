@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 72
+revision: 75
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T10:37:27.190Z"
+  updated_at: "2026-10-30T10:54:26.301Z"
   updated_by: "CODER"
-  note: "Numeric output owner/policy contracts and source system substitution are restored; focused formatter/Calc/browser tests, typecheck/build and structural gates pass. CSV remains incomplete: date/time/native-number producers, real multiline EditEngine import and full option/UI/native acceptance. Continue approved work without closing the goal."
-  attempts: 10
+  note: "Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 10945-case unchanged native scalar differential in three modes, final build/browser tests and structural gates. CSV task remains incomplete: DATE/DATETIME, complete NativeNumber output, real multiline EditEngine and complete option/UI/native acceptance. Continue approved work without closing the goal."
+  attempts: 11
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -488,8 +491,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T10:54:26.301Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 10945-case unchanged native scalar differential in three modes, final build/browser tests and structural gates. CSV task remains incomplete: DATE/DATETIME, complete NativeNumber output, real multiline EditEngine and complete option/UI/native acceptance. Continue approved work without closing the goal."
+  -
+    type: "status"
+    at: "2026-10-30T10:54:32.792Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T10:37:34.592Z"
+doc_updated_at: "2026-10-30T10:54:32.792Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -787,6 +803,36 @@ sections:
     Attempts: 10
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:37:26.569Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T10:54:26.301Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 10945-case unchanged native scalar differential in three modes, final build/browser tests and structural gates. CSV task remains incomplete: DATE/DATETIME, complete NativeNumber output, real multiline EditEngine and complete option/UI/native acceptance. Continue approved work without closing the goal.
+    Attempts: 11
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:54:25.503Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1214,6 +1260,19 @@ sections:
     - Commands: npm run typecheck; focused ESLint for all8 implementation/test/browser paths plus final2 edited paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: output-contract-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10072 imports225 allowed edges; docs4222 authored sources. No enforcement exemptions or semantic parity promotion.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the fresh build. Evidence: output-contract-browser.log. Scope: basic CSV import/ODS save/active export and real native owner/Worker integration; not all format/option combinations or native ABI equivalence.
     - Remaining: date/time/native-number producers and their consumed contracts, actual multiline EditEngine import, complete CSV option/UI/native differential acceptance. Goal/task remain active. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run. Final tracked diff is task-scoped; reviewed output/native evidence stays untracked and excluded from commit.
+
+    ### Original clock extraction, calendar display names and time output, 2026-10-30
+
+    - Continued the same approved task from8f49f0c99b74. Added the original finite TIME producer and fractional-second output fragment, including ordinary clock extraction versus bracketed elapsed fields, selected-section signs/colors, source latest-star result assignment, blanks/literals, AM/PM and lowercase A/P, source uint32 duration limit/#FMT and fractional input-line precision7 with original minimum digits. Standard and custom TIME dispatch now reaches this producer. Complete native-number metadata still requires the unfinished transliteration producer; DATE/DATETIME remain unported. No Intl/date heuristic, alternate duration rounding, guessed format key or CSV unsupported-option policy was introduced.
+    - Ported tools::Time::GetClock into the existing actual owner. It uses original approximate-floor date removal, date-magnitude precision clamp, corrected RTL round, raw-second restoration at day carry, uint16 clock-field truncation and fractional carry truncation. Added original C rtl_math_pow10Exp and C++ inline wrapper, extending the existing correctly rounded n10s lookup to original[-323,308] constants. Added source OUStringBuffer::stripEnd with default ASCII space, actual truncate and removed-count return for fractional input-line output.
+    - Connected CalendarWrapper -> CalendarImpl -> Calendar_gregorian::getDisplayName using actual locale/calendar resources and original signed16 constants. AM_PM ignores nameType, YEAR returns empty, ERA excludes narrow names, upper item checks and checked Sequence lower assertions retain source order. Both original Hanja classes use Japanese AM/PM, including before calendar loading as source overrides do. CALC-399 records negative display-name index assertion; CALC-400 records elapsed hours greater than12 being reduced by12 only once for AM/PM. Both remain unchanged.
+    - Command: npx tsx scripts/calc-time-clock-native-probe.mjs. Result: pass,10945 unique scalar cases (10875 GetClock,70 pow10Exp) in each of optimized/debug/UBSan clang modes,0 mismatches and no sanitizer diagnostics. Evidence: output/native/AQF9AG-icu-grego/time-clock/comparison.json and time-native.log. The probe hash-checks unchanged pinned GetClock, complete consumed RTL arithmetic functions/helpers/table/inline wrappers, little-endian bit union, enum and original macro header; scalar type/constants declarations are supplied by the fixture. It does not certify full Time/SAL/UNO ABI, complete time display/calendar services, nonfinite integer-cast domains or other-platform libm behavior.
+    - Command: npm run test:shared -- src/svl/source/numbers. Result: pass,45 files757 tests before the final2 locale cases. Related command: npm run test:shared -- src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/tools/source/datetime src/sal/rtl/math.test.ts src/sal/rtl/oustringbuffer.test.ts src/svl/source/numbers/zformat.time.test.ts. Result: pass,13 files115 tests before the later2 input-line and2 locale additions. Evidence: time-format-tests.log/time-related-tests.log. Counts overlap and are not summed.
+    - Final affected arithmetic/clock/time command: npm run test:shared -- src/svl/source/numbers/zformat.time.test.ts src/sal/rtl/math.test.ts src/tools/source/datetime/ttime.test.ts. Result: pass,3 files35 tests after the actual pow10Exp inline-wrapper change. Final locale/time command: npm run test:shared -- src/svl/source/numbers/zformat.time.test.ts. Result: pass,24 cases including seven-digit input-line expansion/minimum retention, German fractional separator and Japanese AM/PM via the real calendar. Evidence: time-final-tests.log/time-locale-tests.log. Initial integer helper incorrectly treated source StringNumber as an owning OUString; materialized it through the original OUString constructor. Initial Hanja_yoil test used a calendar ID absent from Korean locale resources; corrected the fixture to instantiate the actual registered provider and exercise its source override without inventing a locale entry or fallback.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files114 tests. Four new actual styled CSV cases cover truncated fractional seconds, negative elapsed hours, real calendar AM/PM and negative serial wall-clock extraction. Evidence: time-csv-tests.log. All use actual document attributes, formatter/context and ScCellFormat output.
+    - Commands: npm run typecheck; focused ESLint over all changed/new implementation/test/script paths plus final4 edits; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: time-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1870 modules; dependencies1869 sources10090 imports225 allowed edges; docs4228 authored sources. Registry localSymbols were corrected to exclude the C declaration facade re-export and imported time producer, retaining their actual owner records. Native source macro/include declarations and one JSDoc callback annotation were corrected. No enforcement exemptions or broad semantic parity promotion.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the final fresh build. Evidence: time-browser.log. Scope remains actual basic CSV import/ODS save/active export and sparse owner/DOM-free Worker integration, not complete CSV option/time UI or native ABI certification.
+    - Remaining required work: DATE/DATETIME and complete NativeNumber output, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining consumed producer contracts. Task/goal remain active. Same open Agentplane task, so no tenth-task full-suite run is due. Reviewed output/native scratch evidence remains untracked and excluded from the checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -1520,6 +1579,36 @@ Note: Numeric output owner/policy contracts and source system substitution are r
 Attempts: 10
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:37:26.569Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T10:54:26.301Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 10945-case unchanged native scalar differential in three modes, final build/browser tests and structural gates. CSV task remains incomplete: DATE/DATETIME, complete NativeNumber output, real multiline EditEngine and complete option/UI/native acceptance. Continue approved work without closing the goal.
+Attempts: 11
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:54:25.503Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1951,3 +2040,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint for all8 implementation/test/browser paths plus final2 edited paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: output-contract-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10072 imports225 allowed edges; docs4222 authored sources. No enforcement exemptions or semantic parity promotion.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the fresh build. Evidence: output-contract-browser.log. Scope: basic CSV import/ODS save/active export and real native owner/Worker integration; not all format/option combinations or native ABI equivalence.
 - Remaining: date/time/native-number producers and their consumed contracts, actual multiline EditEngine import, complete CSV option/UI/native differential acceptance. Goal/task remain active. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run. Final tracked diff is task-scoped; reviewed output/native evidence stays untracked and excluded from commit.
+
+### Original clock extraction, calendar display names and time output, 2026-10-30
+
+- Continued the same approved task from8f49f0c99b74. Added the original finite TIME producer and fractional-second output fragment, including ordinary clock extraction versus bracketed elapsed fields, selected-section signs/colors, source latest-star result assignment, blanks/literals, AM/PM and lowercase A/P, source uint32 duration limit/#FMT and fractional input-line precision7 with original minimum digits. Standard and custom TIME dispatch now reaches this producer. Complete native-number metadata still requires the unfinished transliteration producer; DATE/DATETIME remain unported. No Intl/date heuristic, alternate duration rounding, guessed format key or CSV unsupported-option policy was introduced.
+- Ported tools::Time::GetClock into the existing actual owner. It uses original approximate-floor date removal, date-magnitude precision clamp, corrected RTL round, raw-second restoration at day carry, uint16 clock-field truncation and fractional carry truncation. Added original C rtl_math_pow10Exp and C++ inline wrapper, extending the existing correctly rounded n10s lookup to original[-323,308] constants. Added source OUStringBuffer::stripEnd with default ASCII space, actual truncate and removed-count return for fractional input-line output.
+- Connected CalendarWrapper -> CalendarImpl -> Calendar_gregorian::getDisplayName using actual locale/calendar resources and original signed16 constants. AM_PM ignores nameType, YEAR returns empty, ERA excludes narrow names, upper item checks and checked Sequence lower assertions retain source order. Both original Hanja classes use Japanese AM/PM, including before calendar loading as source overrides do. CALC-399 records negative display-name index assertion; CALC-400 records elapsed hours greater than12 being reduced by12 only once for AM/PM. Both remain unchanged.
+- Command: npx tsx scripts/calc-time-clock-native-probe.mjs. Result: pass,10945 unique scalar cases (10875 GetClock,70 pow10Exp) in each of optimized/debug/UBSan clang modes,0 mismatches and no sanitizer diagnostics. Evidence: output/native/AQF9AG-icu-grego/time-clock/comparison.json and time-native.log. The probe hash-checks unchanged pinned GetClock, complete consumed RTL arithmetic functions/helpers/table/inline wrappers, little-endian bit union, enum and original macro header; scalar type/constants declarations are supplied by the fixture. It does not certify full Time/SAL/UNO ABI, complete time display/calendar services, nonfinite integer-cast domains or other-platform libm behavior.
+- Command: npm run test:shared -- src/svl/source/numbers. Result: pass,45 files757 tests before the final2 locale cases. Related command: npm run test:shared -- src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/tools/source/datetime src/sal/rtl/math.test.ts src/sal/rtl/oustringbuffer.test.ts src/svl/source/numbers/zformat.time.test.ts. Result: pass,13 files115 tests before the later2 input-line and2 locale additions. Evidence: time-format-tests.log/time-related-tests.log. Counts overlap and are not summed.
+- Final affected arithmetic/clock/time command: npm run test:shared -- src/svl/source/numbers/zformat.time.test.ts src/sal/rtl/math.test.ts src/tools/source/datetime/ttime.test.ts. Result: pass,3 files35 tests after the actual pow10Exp inline-wrapper change. Final locale/time command: npm run test:shared -- src/svl/source/numbers/zformat.time.test.ts. Result: pass,24 cases including seven-digit input-line expansion/minimum retention, German fractional separator and Japanese AM/PM via the real calendar. Evidence: time-final-tests.log/time-locale-tests.log. Initial integer helper incorrectly treated source StringNumber as an owning OUString; materialized it through the original OUString constructor. Initial Hanja_yoil test used a calendar ID absent from Korean locale resources; corrected the fixture to instantiate the actual registered provider and exercise its source override without inventing a locale entry or fallback.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files114 tests. Four new actual styled CSV cases cover truncated fractional seconds, negative elapsed hours, real calendar AM/PM and negative serial wall-clock extraction. Evidence: time-csv-tests.log. All use actual document attributes, formatter/context and ScCellFormat output.
+- Commands: npm run typecheck; focused ESLint over all changed/new implementation/test/script paths plus final4 edits; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: time-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1870 modules; dependencies1869 sources10090 imports225 allowed edges; docs4228 authored sources. Registry localSymbols were corrected to exclude the C declaration facade re-export and imported time producer, retaining their actual owner records. Native source macro/include declarations and one JSDoc callback annotation were corrected. No enforcement exemptions or broad semantic parity promotion.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the final fresh build. Evidence: time-browser.log. Scope remains actual basic CSV import/ODS save/active export and sparse owner/DOM-free Worker integration, not complete CSV option/time UI or native ABI certification.
+- Remaining required work: DATE/DATETIME and complete NativeNumber output, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining consumed producer contracts. Task/goal remain active. Same open Agentplane task, so no tenth-task full-suite run is due. Reviewed output/native scratch evidence remains untracked and excluded from the checkpoint.

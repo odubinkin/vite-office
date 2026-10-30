@@ -291,3 +291,19 @@ it("uses default search/strip arguments and preserves the buffer after invalid s
     value.dispose();
   }
 });
+
+it("strips only matching trailing UTF16 units and returns the original removed count", /** The source stripEnd default is ASCII space and truncates the actual buffer owner. @returns Nothing. */ () => {
+  const buffer = new OUStringBuffer();
+  try {
+    buffer.append(Uint16Array.of(48, 65, 48, 48, 32, 32));
+    expect(buffer.stripEnd()).toBe(2);
+    expect(buffer.stripEnd(48)).toBe(2);
+    expect([...buffer.view()]).toEqual([48, 65]);
+    expect(buffer.stripEnd(48)).toBe(0);
+    expect(buffer.stripEnd(65)).toBe(1);
+    expect(buffer.stripEnd(48)).toBe(1);
+    expect(buffer.stripEnd()).toBe(0);
+  } finally {
+    buffer.dispose();
+  }
+});

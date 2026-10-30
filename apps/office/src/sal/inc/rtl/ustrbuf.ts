@@ -331,6 +331,15 @@ export class OUStringBuffer {
     if (index) this.remove(0, index);
     return index;
   }
+  /** Original trailing-character removal through truncate. @param character - UTF16 unit, default ASCII space. @returns Removed units. */
+  stripEnd(character = 32): number {
+    character &= 65535;
+    const result = this.getLength();
+    let index = this.getLength();
+    for (; index > 0; --index) if (this.getStr()[index - 1] !== character) break;
+    if (index < this.getLength()) this.truncate(index);
+    return result - this.getLength();
+  }
   /** Original removal. @param start - Position. @param length - Native count. @returns This owner. */
   remove(start: number, length: number): this {
     buffer.rtl_uStringbuffer_remove(this.data, start, length);

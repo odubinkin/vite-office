@@ -12,4 +12,5 @@ export {
   rtl_math_approxEqual,
   rtl_math_approxValue,
   rtl_math_round,
+  rtl_math_pow10Exp,
 } from "../../rtl/math";

@@ -7,9 +7,9 @@ import {
 import type { rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { doubleToString } from "./strtmpl.math";
 
-/** Consumed nonnegative n10s lookup uses correctly rounded decimal literals;the out-of-table path is libm pow. @param exponent - Nonnegative original integer exponent. @returns Binary64 power. */
+/** Original n10s lookup uses correctly rounded decimal literals for [-323,308]; the out-of-table path is libm pow. @param exponent - Original integer exponent. @returns Binary64 power. */
 function getN10Exp(exponent: number): number {
-  return exponent <= 308 ? Number("1e" + exponent) : Math.pow(10, exponent);
+  return exponent >= -323 && exponent <= 308 ? Number("1e" + exponent) : Math.pow(10, exponent);
 }
 /** Original representable-integer exception excludes binary64 integers at or above2^53. @param value - Nonnegative finite value. @returns Representable integer. */
 function isRepresentableInteger(value: number): boolean {
@@ -344,4 +344,9 @@ export function rtl_math_doubleToUString(
   for (let index = 0; index < text.length; index++) units[index] = text.charCodeAt(index);
   if (capacity === null) newFromStr_WithLength(result, units, units.length);
   else stringbuffer_insert(result, capacity, offset | 0, units, units.length);
+}
+
+/** Original multiplication by the shared n10s table, with native signed32 exponent binding. @param value - Binary64 multiplier. @param exponent - Signed32 decimal exponent. @returns Scaled binary64. */
+export function rtl_math_pow10Exp(value: number, exponent: number): number {
+  return value * getN10Exp(exponent | 0);
 }

@@ -3,7 +3,7 @@ import type { OUStringConstReference } from "./ustring";
 import { rtl_math_uStringToDouble } from "../../rtl/math";
 import type { rtl_math_ConversionStatus } from "./math-values";
 import { rtl_math_approxEqual } from "../../rtl/math";
-import { rtl_math_approxValue, rtl_math_round } from "../../rtl/math";
+import { rtl_math_approxValue, rtl_math_round, rtl_math_pow10Exp } from "../../rtl/math";
 import { rtl_math_RoundingMode } from "./math-values";
 export { rtl_math_approxEqual as approxEqual } from "../../rtl/math";
 export { rtl_math_approxValue as approxValue } from "../../rtl/math";
@@ -44,4 +44,9 @@ export function stringToDouble(
 ): number {
   const view = value instanceof Uint16Array ? value : value.getStr().subarray(0, value.getLength());
   return rtl_math_uStringToDouble(view, view.length, decimal, group, status, parsedEnd);
+}
+
+/** Original inline forwards to the shared C arithmetic owner. @param value - Binary64 multiplier. @param exponent - Signed32 decimal exponent. @returns Scaled value. */
+export function pow10Exp(value: number, exponent: number): number {
+  return rtl_math_pow10Exp(value, exponent);
 }

@@ -1,4 +1,5 @@
-/** @fileoverview Original tools::Time packed scalar, component normalization and nanosecond/day conversion. Platform clock and GetClock services remain separate. */
+/** @fileoverview Original tools::Time packed scalar, component normalization and nanosecond/day conversion. GetClock follows the original decimal rounding/truncation path; platform clocks remain separate. */
+import { approxFloor, round, pow10Exp } from "../../../sal/inc/rtl/math";
 import type { DateTime as UNODateTime } from "../../../offapi/com/sun/star/util/DateTime";
 
 /** Borrowed Time subobject contract used by DateTime and Duration. */
@@ -90,6 +91,43 @@ export class Time implements TimeConstReference {
   /** Original decimal field assembly. @param h - Hours. @param m - Minutes. @param s - Seconds. @param ns - Nanoseconds. @returns Packed time. */
   private static assemble(h: bigint, m: bigint, s: bigint, ns: bigint): bigint {
     return BigInt.asIntN(64, ns + s * SEC_MASK + m * MIN_MASK + h * HOUR_MASK);
+  }
+  /** Original date-fraction extraction, date-magnitude precision and clock-field truncation. @param days - Serial date/time. @param hour - UInt16 hour output. @param minute - UInt16 minute output. @param second - UInt16 second output. @param fraction - Fractional-second output. @param fractionDecimals - Signed32 requested precision. @returns Nothing. */
+  static GetClock(
+    days: number,
+    hour: [number],
+    minute: [number],
+    second: [number],
+    fraction: [number],
+    fractionDecimals: number,
+  ): void {
+    fractionDecimals |= 0;
+    const time = days - approxFloor(days);
+    if (time <= 0 || time >= 1) {
+      hour[0] = minute[0] = second[0] = 0;
+      fraction[0] = 0;
+      return;
+    }
+    const rawSeconds = time * Number(Time.secondPerDay);
+    let decimals = 9;
+    if (Math.abs(days) >= 1) {
+      const digits = Math.ceil(Math.log10(Math.abs(days)));
+      decimals = Math.min(9, Math.max(2, 10 - digits));
+    }
+    let seconds = round(rawSeconds, decimals);
+    if (seconds >= Number(Time.secondPerDay)) seconds = rawSeconds;
+    hour[0] = Math.trunc(seconds / Number(Time.secondPerHour)) & 65535;
+    seconds -= hour[0] * Number(Time.secondPerHour);
+    minute[0] = Math.trunc(seconds / Number(Time.secondPerMinute)) & 65535;
+    seconds -= minute[0] * Number(Time.secondPerMinute);
+    second[0] = Math.trunc(seconds) & 65535;
+    seconds -= second[0];
+    if (!(seconds < 1)) throw new Error("assert(fSeconds < 1.0)");
+    if (fractionDecimals > 0) {
+      fraction[0] = round(seconds, fractionDecimals);
+      if (fraction[0] >= 1)
+        fraction[0] = pow10Exp(Math.trunc(pow10Exp(seconds, fractionDecimals)), -fractionDecimals);
+    } else fraction[0] = seconds;
   }
   /** Original encoded-value factory, without component normalization. @param value - Packed signed64 value. @returns Time. */
   static fromEncodedTime(value: bigint): Time {

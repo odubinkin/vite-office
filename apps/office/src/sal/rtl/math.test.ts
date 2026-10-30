@@ -172,3 +172,13 @@ describe("RTL decimal parsing", /** Groups source and rounding cases. @returns N
     }
   });
 });
+
+import { rtl_math_pow10Exp } from "../inc/rtl/math.h";
+it("uses original decimal-power table entries including subnormal negative exponents", /** Shared multiplication preserves exact table rounding and signed zero. @returns Nothing. */ () => {
+  expect(rtl_math_pow10Exp(1, -323)).toBe(1e-323);
+  expect(rtl_math_pow10Exp(1, -324)).toBe(0);
+  expect(rtl_math_pow10Exp(1, 308)).toBe(1e308);
+  expect(rtl_math_pow10Exp(1, 309)).toBe(Infinity);
+  expect(rtl_math_pow10Exp(123, -2)).toBe(123 * 0.01);
+  expect(Object.is(rtl_math_pow10Exp(-0, -7), -0)).toBe(true);
+});

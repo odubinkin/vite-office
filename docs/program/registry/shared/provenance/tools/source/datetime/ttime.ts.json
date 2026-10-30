@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "tools/source/datetime/ttime.cxx",
     "localSymbols": [
-      "Time"
+      "Time",
+      "GetClock"
     ],
     "upstreamSymbols": [
-      "Time::Time"
+      "Time::Time",
+      "tools::Time::GetClock"
     ],
     "preservedResponsibilities": [
-      "AQF9AG adds the native tools::Time scalar needed by DateTime and calendar conversion. The signed64 decimal-packed field uses bigint; native component widths, constructor carry normalization and hour clamp, sign-preserving setters without carry, nanosecond/millisecond conversion and day fraction match the source paths. The CSS DateTime time-field constructor ignores IsUTC as upstream. System/UTC-offset/tick services, GetClock, UNO Time output and the remaining Time arithmetic operators are not represented; no JavaScript Date/calendar substitution is introduced. Tests cover ordinary defined scalar inputs, including packed values beyond binary64 exact-integer range and signed32 millisecond narrowing; C++ undefined overflow behavior is not certified. Source release-build hour clamping is retained; debug-only assertion diagnostics and undefined signed-overflow cases are not a certified runtime contract."
+      "AQF9AG adds the native tools::Time scalar needed by DateTime and calendar conversion. The signed64 decimal-packed field uses bigint; native component widths, constructor carry normalization and hour clamp, sign-preserving setters without carry, nanosecond/millisecond conversion and day fraction match the source paths. The CSS DateTime time-field constructor ignores IsUTC as upstream. System/UTC-offset/tick services, GetClock, UNO Time output and the remaining Time arithmetic operators are not represented; no JavaScript Date/calendar substitution is introduced. Tests cover ordinary defined scalar inputs, including packed values beyond binary64 exact-integer range and signed32 millisecond narrowing; C++ undefined overflow behavior is not certified. Source release-build hour clamping is retained; debug-only assertion diagnostics and undefined signed-overflow cases are not a certified runtime contract.",
+      "Original GetClock now uses actual RTL approxFloor, corrected round and pow10Exp. Preserve full-day shortcut, date-magnitude decimal clamp, original-second reconstruction, uint16 truncation and fractional carry truncation. Unchanged extracted native GetClock and RTL helpers compare10945 scalar cases across optimized/debug/UBSan modes with0 mismatches. This does not certify native platform clocks or full Time/SAL ABI."
     ],
     "omittedResponsibilities": [
       "Only the stated scalar constructor/conversion slice is ported; complete native clock/platform/calendar behavior and native compiled differential QA remain unverified."
@@ -27,12 +30,20 @@
         {
           "path": "apps/office/src/tools/source/datetime/ttime.test.ts",
           "marker": "normalizes constructor carries"
+        },
+        {
+          "path": "apps/office/src/tools/source/datetime/ttime.ts",
+          "marker": "GetClock"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/tools/source/datetime/ttime.cxx",
           "marker": "Time::Time"
+        },
+        {
+          "path": "vendor/libreoffice-reference/tools/source/datetime/ttime.cxx",
+          "marker": "tools::Time::GetClock"
         }
       ]
     }

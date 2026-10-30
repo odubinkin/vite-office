@@ -1,5 +1,6 @@
-/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; date/time and complete native-number producers remain unported. */
+/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; DATE/DATETIME and complete native-number producers remain unported. */
 import * as Output from "./zformat.output";
+import { GetTimeOutput } from "./zformat.time";
 import { GetFractionOutput } from "./zformat.fraction";
 import { GetNumberOutput, GetScientificOutput } from "./zformat.number";
 import { Construct } from "./zformat.construct";
@@ -760,6 +761,13 @@ export class SvNumberformat {
       )
         return Output.GetLiteralOutput(section, output, star);
     }
+    if (
+      !(this.eType & SvNumFormatType.TEXT) &&
+      info.eScannedType === SvNumFormatType.TIME &&
+      Number.isFinite(value) &&
+      !section.GetNatNum().IsComplete()
+    )
+      return GetTimeOutput(value, index, section, language, output, star);
     if (
       !hadStandard &&
       Number.isFinite(value) &&

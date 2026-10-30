@@ -1,4 +1,4 @@
-/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display/native-number formatting is a separate unconsumed responsibility. */
+/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; numeric display strings remain a separate responsibility. */
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Locale as ICULocale } from "../../../external/icu/source/common/locid";
 import { U_SUCCESS } from "../../../external/icu/source/common/unicode/utypes";
@@ -7,6 +7,7 @@ import { createInstance } from "../../../external/icu/source/i18n/calendar.facto
 import { createTimeZone } from "../../../external/icu/source/i18n/timezone.create";
 import { UnicodeString } from "../../../external/icu/source/common/unistr";
 import { UCalendarDateFields as F } from "../../../external/icu/source/i18n/unicode/ucal";
+import * as D from "../../../offapi/com/sun/star/i18n/CalendarDisplayIndex";
 import * as C from "../../../offapi/com/sun/star/i18n/CalendarFieldIndex";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { round } from "../../../sal/inc/rtl/math";
@@ -14,6 +15,8 @@ import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.table
 import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import {
   getLocaleCalendars,
+  getLocaleTimeAM,
+  getLocaleTimePM,
   type LocaleCalendarData,
   type LocaleCalendarItemData,
 } from "../localedata/localedata";
@@ -103,6 +106,45 @@ export class Calendar_gregorian {
   /** Original unique ID is the loaded data ID, even when CalendarImpl used its Gregorian-service fallback. @returns Owned ID. */
   getUniqueID(): OUString {
     return unicode(this.aCalendar.id);
+  }
+  /** Original display-name selection, including AM/PM ignoring nameType and YEAR returning empty. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Signed16 abbreviated/full/narrow selector. @returns Owned display name. */
+  getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    displayIndex = int16(displayIndex);
+    index = int16(index);
+    nameType = int16(nameType);
+    if (displayIndex === D.AM_PM) {
+      if (index === 0) return unicode(getLocaleTimeAM(this.aLocale));
+      if (index === 1) return unicode(getLocaleTimePM(this.aLocale));
+      throw new RuntimeException();
+    }
+    if (displayIndex === D.YEAR) return new OUString();
+    let items: readonly LocaleCalendarItemData[];
+    switch (displayIndex) {
+      case D.DAY:
+        items = this.aCalendar.days;
+        break;
+      case D.MONTH:
+        items = this.aCalendar.months;
+        break;
+      case D.GENITIVE_MONTH:
+        items = this.aCalendar.genitiveMonths;
+        break;
+      case D.PARTITIVE_MONTH:
+        items = this.aCalendar.partitiveMonths;
+        break;
+      case D.ERA:
+        items = this.aCalendar.eras;
+        break;
+      default:
+        throw new RuntimeException();
+    }
+    if (index >= items.length) throw new RuntimeException();
+    if (nameType !== 0 && nameType !== 1 && (nameType !== 2 || displayIndex === D.ERA))
+      throw new RuntimeException();
+    // Source Sequence operator[] checks the lower bound when the selected name dereferences the item.
+    if (index < 0) throw new Error("Sequence index assertion");
+    const item = items[index] as LocaleCalendarItemData;
+    return unicode(nameType === 0 ? item.abbreviated : nameType === 1 ? item.full : item.narrow);
   }
   /** Original milliseconds conversion uses RTL corrected round before ICU setTime. @param days - UTC days since1970. @returns Nothing. */
   setDateTime(days: number): void {
@@ -383,6 +425,22 @@ export class Calendar_hanja extends Calendar_gregorian {
     super();
     this.cCalendar = "com.sun.star.i18n.Calendar_hanja";
   }
+  /** Original Hanja AM/PM names come from Japanese locale data. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Name selector. @returns Owned name. */
+  override getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    if (int16(displayIndex) !== D.AM_PM) return super.getDisplayName(displayIndex, index, nameType);
+    const language = unicode("ja"),
+      empty = new OUString(),
+      locale = new Locale(language, empty, empty);
+    try {
+      if (int16(index) === 0) return unicode(getLocaleTimeAM(locale));
+      if (int16(index) === 1) return unicode(getLocaleTimePM(locale));
+      throw new RuntimeException();
+    } finally {
+      locale.dispose();
+      empty.dispose();
+      language.dispose();
+    }
+  }
 }
 /** Original Hanja weekday-name specialization shares the Gregorian temporal implementation. */
 export class Calendar_hanja_yoil extends Calendar_gregorian {
@@ -390,5 +448,21 @@ export class Calendar_hanja_yoil extends Calendar_gregorian {
   constructor() {
     super();
     this.cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
+  }
+  /** Original Hanja AM/PM names come from Japanese locale data. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Name selector. @returns Owned name. */
+  override getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    if (int16(displayIndex) !== D.AM_PM) return super.getDisplayName(displayIndex, index, nameType);
+    const language = unicode("ja"),
+      empty = new OUString(),
+      locale = new Locale(language, empty, empty);
+    try {
+      if (int16(index) === 0) return unicode(getLocaleTimeAM(locale));
+      if (int16(index) === 1) return unicode(getLocaleTimePM(locale));
+      throw new RuntimeException();
+    } finally {
+      locale.dispose();
+      empty.dispose();
+      language.dispose();
+    }
   }
 }

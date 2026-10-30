@@ -4678,3 +4678,16 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Pinned zformat.cxx ImpGetFractionElements preserves floor(-0) as the whole part because fNumber<0 is false; ImpGetFractionOutput then calls o3tl::sprintf(aBuf,"%.f",fNum). Native snprintf preserves the sign and produces `-0`. The final bSign/nonzero check suppresses only an independently added minus, leaving the one already present in sStr.
 - Actual local public reproduction: compiled `# #/#` with input-0 yields `-0`;+0 follows the same optional fraction hiding without a negative sign. This is a separate path from CALC-395's scientific RTL E conversion.
 - The unchanged original fraction-element body agrees on the whole-part negative-zero bits in the native witness; the primitive witness checks actual C snprintf(-0). Full native public format construction/fill/UNO execution remains outside that comparison. Preserve the source sign tests, printf result and digit fill; do not normalize the whole part or strip this minus.
+
+
+### CALC-399 — Calendar display-name negative item index reaches checked Sequence access
+
+- Source: `i18npool/source/calendar/calendar_gregorian.cxx`, `Calendar_gregorian::getDisplayName`; `include/com/sun/star/uno/Sequence.hxx`, const `operator[]`.
+- Observation: DAY/MONTH/GENITIVE_MONTH/PARTITIVE_MONTH/ERA check only `idx >= length`. With a valid name type, negative idx reaches the source Sequence lower-bound assertion rather than RuntimeException. Invalid name types still throw RuntimeException before item dereference. CalendarWrapper catches UNO exceptions only, so the binding's checked assertion propagates.
+- Preserve the original check order and existing local checked Sequence diagnostic. Do not add a lower-bound RuntimeException or swallow the assertion. Full native release-build undefined out-of-bounds behavior is not certified by these source-derived tests.
+
+### CALC-400 — Elapsed hours with AM/PM are reduced by twelve only once
+
+- Source: `svl/source/numbers/zformat.cxx`, `SvNumberformat::ImpGetTimeOutput`.
+- Observation: elapsed `[HH]` can exceed24 hours. The common AM/PM branch changes a positive hour greater than12 by subtracting12 once; it does not reduce modulo24. Thus the admitted `[HH]:MM AM/PM` pattern displays serial1.5 as `24:00 PM`.
+- Preserve this source behavior and the real compiled-pattern regression. Do not add modulo-day normalization to elapsed hours. This observation is source-derived and covered through local public formatter output; a full unchanged native display-wrapper comparison is not claimed.

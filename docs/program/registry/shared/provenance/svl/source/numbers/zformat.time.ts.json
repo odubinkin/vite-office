@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.time.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "GetTimeOutput"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpGetTimeOutput",
+      "SvNumberformat::ImpGetFractionOfSecondString",
+      "SvNumberformat::ImpGetNatNumString"
+    ],
+    "preservedResponsibilities": [
+      "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI."
+    ],
+    "omittedResponsibilities": [
+      "Complete native full display/service/ABI verification remains unproven."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "GetTimeOutput"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetTimeOutput"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.time.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original large zformat translation unit by time-output responsibility, retaining actual compiled token and language/calendar owners."
+    }
+  }
+}
