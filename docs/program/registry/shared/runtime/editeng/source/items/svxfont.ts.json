@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/svxfont.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/svxfont.ts",
+        "apps/office/src/editeng/source/items/native-svx-font-value.test.ts",
+        "editeng/source/items/svxfont.cxx"
+      ],
+      "justification": "Original default/base/derived constructor and assignment differences, SYSTEM language initialization, case-map/escapement/proportion scalar members and derived-only subset equality. Explicit base selector preserves erased static overload choice. Rendering and automatic device escapement remain unported. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxFont"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/items/svxfont.cxx",
+      "upstreamSymbols": [
+        "SvxFont::SvxFont",
+        "SvxFont::operator=",
+        "SvxFont::SvxFontSubsetEquals"
+      ]
+    }
+  }
+}

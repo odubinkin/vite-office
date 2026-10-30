@@ -16,10 +16,12 @@
       "EditCharAttrib",
       "EditCharAttribTab",
       "EditCharAttribLineBreak",
-      "CH_FEATURE"
+      "CH_FEATURE",
+      "EditCharAttribField"
     ],
     "preservedResponsibilities": [
-      "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary."
+      "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary.",
+      "Concrete attribute constructor/value owners, including EditCharAttribField, are reexported from their original source boundary."
     ],
     "omittedResponsibilities": [
       "Complete CSV multiline engine, NatNum12 casing/formatter and process-context service integration remain incomplete. Native layout/memory/thread/ABI and full original QA are not certified."

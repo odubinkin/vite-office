@@ -15,9 +15,12 @@ import { RTL_TEXTENCODING_DONTKNOW, type rtl_TextEncoding } from "../../../sal/i
 
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { Size, type ReadonlySize } from "../../../tools/inc/gen";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { LanguageType, LANGUAGE_DONTKNOW } from "../../../i18nlangtag/inc/lang";
 
 /** Represented ImplFont fields retain their original defaults; no native lifetime machinery. */
 interface FontMetadata {
+  readonly languageTag: LanguageTag;
   readonly familyName: string;
   readonly styleName: string;
   readonly family: FontFamily;
@@ -41,6 +44,7 @@ interface FontMetadata {
   readonly emphasisMark: FontEmphasisMark;
 }
 const globalDefault: Readonly<FontMetadata> = Object.freeze({
+  languageTag: new LanguageTag(LANGUAGE_DONTKNOW),
   familyName: "",
   styleName: "",
   family: FontFamily.FAMILY_DONTKNOW,
@@ -79,6 +83,19 @@ export class Font {
   public assign(font: ConstFont): this {
     this.mpImplFont = (font as Font).mpImplFont;
     return this;
+  }
+  /** Original unresolved language-ID query through the actual LanguageTag value. @returns Original stored ID or SYSTEM. */
+  public GetLanguage(): number {
+    return this.mpImplFont.languageTag.getLanguageType(false);
+  }
+  /** Original guarded LanguageTag reset; immutable ImplFont sharing binds native COW without changing other font values. @param language - Original language ID. @returns Nothing. */
+  public SetLanguage(language: number): void {
+    language = LanguageType(language);
+    if (this.GetLanguage() !== language)
+      this.mpImplFont = Object.freeze({
+        ...this.mpImplFont,
+        languageTag: new LanguageTag(language),
+      });
   }
   /** Native const family name. @returns Family name. */
   public GetFamilyName(): string {
@@ -369,6 +386,7 @@ export class Font {
       this.GetFamilyType() === other.GetFamilyType() &&
       this.GetPitch() === other.GetPitch() &&
       this.GetCharSet() === other.GetCharSet() &&
+      this.mpImplFont.languageTag.equals((other as Font).mpImplFont.languageTag) &&
       this.GetFamilyName() === other.GetFamilyName() &&
       this.GetStyleName() === other.GetStyleName() &&
       this.GetAlignment() === other.GetAlignment() &&

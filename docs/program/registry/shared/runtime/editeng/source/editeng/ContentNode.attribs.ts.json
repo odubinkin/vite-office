@@ -20,7 +20,7 @@
         "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
         "editeng/source/editeng/ContentNode.cxx"
       ],
-      "justification": "Original owning attribute vector and empty flag, insertion ordering, reverse closed/half-open lookup, forward next/empty/feature scans, overlap/bounding predicates, erase/destruction, DeleteEmptyAttribs and one-pass OptimizeRanges. Source reverse early termination and first-candidate merge break are preserved and documented as CALC-424/425. Original start comparator is retained without certifying unspecified native equal-key sort order. Default-font/cache, ContentNode/EditDoc/ImpEditEngine/engine/view/layout integration remain separate; this is a consumed source member group, not a completed text engine or literal-array facade.",
+      "justification": "Original owning attribute vector and empty flag, insertion ordering, reverse closed/half-open lookup, forward next/empty/feature scans, overlap/bounding predicates, erase/destruction, DeleteEmptyAttribs and one-pass OptimizeRanges. Source reverse early termination and first-candidate merge break are preserved and documented as CALC-424/425. Original start comparator is retained without certifying unspecified native equal-key sort order. Default-font/cache, ContentNode/EditDoc/ImpEditEngine/engine/view/layout integration remain separate; this is a consumed source member group, not a completed text engine or literal-array facade. Actual stable default SvxFont member and original member initialization order are now preserved in CharAttribList; enclosing font recalculation/layout and document integration remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "CharAttribList"
@@ -31,7 +31,8 @@
         "CharAttribList",
         "CharAttribList::OptimizeRanges",
         "CharAttribList::HasBoundingAttrib",
-        "CharAttribList::FindFeature"
+        "CharAttribList::FindFeature",
+        "GetDefFont"
       ]
     }
   }

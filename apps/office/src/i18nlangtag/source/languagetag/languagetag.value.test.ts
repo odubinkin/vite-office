@@ -8,6 +8,22 @@ import { ImplPtr } from "../../runtime/implementation-pointer";
 import { getKnowns } from "./languagetag.knowns";
 import { MsLangId } from "../../inc/mslangid";
 
+it("preserves original raw-string versus initialized-ID equality branch selection", /** Cache initialization deliberately changes which original equality branch is taken. @returns Nothing. */ () => {
+  const value = unicode("en-us"),
+    raw = new LanguageTag(value),
+    numeric = new LanguageTag(LANGUAGE_ENGLISH_US);
+  value.dispose();
+  try {
+    expect(raw.equals(numeric)).toBe(false);
+    expect(raw.notEquals(numeric)).toBe(true);
+    expect(raw.getLanguageType()).toBe(LANGUAGE_ENGLISH_US);
+    expect(raw.equals(numeric)).toBe(true);
+  } finally {
+    raw.dispose();
+    numeric.dispose();
+  }
+});
+
 it.each([
   ["en-US", "en-US", "en", "", "US"],
   ["de-Latn-DE", "de-DE", "de", "", "DE"],

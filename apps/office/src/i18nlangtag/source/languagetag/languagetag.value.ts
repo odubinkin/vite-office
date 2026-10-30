@@ -26,6 +26,17 @@ export class LanguageTag extends LanguageTagValueState {
   readonly mpImpl = new ImplPtr<LanguageTagImpl>();
   mbIsFallback = false;
   static readonly ScriptType = LanguageTagScriptType;
+  /** Original SYSTEM/initialized-ID fast paths, then unresolved-system BCP47 comparison. @param other - Original compared value. @returns Source equality, including its cache-state-dependent branch selection. */
+  equals(other: LanguageTag): boolean {
+    if (this.isSystemLocale() && other.isSystemLocale()) return true;
+    if (this.mbInitializedLangID && other.mbInitializedLangID)
+      return this.mnLangID === other.mnLangID && this.isSystemLocale() === other.isSystemLocale();
+    return this.getBcp47(false).equals(other.getBcp47(false));
+  }
+  /** Original negated equality. @param other - Compared value. @returns Source inequality. */
+  notEquals(other: LanguageTag): boolean {
+    return !this.equals(other);
+  }
   /** Original default/numeric, BCP47, Locale and implicit-copy constructors. @param input - Original constructor operand. @param canonicalize - Original BCP47 constructor flag only. @returns Value owner. */
   constructor(
     input: number | OUStringConstReference | LocaleConstReference | LanguageTag = LANGUAGE_SYSTEM,

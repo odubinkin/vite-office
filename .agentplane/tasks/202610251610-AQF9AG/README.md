@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 111
+revision: 114
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T17:11:57.877Z"
+  updated_at: "2026-10-30T17:41:56.676Z"
   updated_by: "CODER"
-  note: "Source NumberText SDK constructor/DeploymentException and actual EditEngine pooled attribute/list member groups pass 150 focused shared cases, 127 Calc cases, current build/type/lint/boundary/provenance/parity/resources and browser CSV workflow. Whole CSV scope remains incomplete: native multiline engine admission, NatNum12 wiring/casing/formatter and final audit remain pending; goal stays active."
-  attempts: 23
+  note: "Verified ContentNode/ContentAttribs owners, concrete MakeCharAttrib dispatch, split/join/field expansion and font/position values: 115 shared tests plus final 4-case value rerun, 197 CSV cases, unchanged browser flow and required repository gates pass. Full CSV remains incomplete: actual EditDoc/ImpEditEngine/ScFieldEditEngine admission and NatNum12 formatter/casing remain. Continue the approved goal; this is a partial checkpoint, not task completion."
+  attempts: 24
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -696,8 +699,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T17:41:56.676Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified ContentNode/ContentAttribs owners, concrete MakeCharAttrib dispatch, split/join/field expansion and font/position values: 115 shared tests plus final 4-case value rerun, 197 CSV cases, unchanged browser flow and required repository gates pass. Full CSV remains incomplete: actual EditDoc/ImpEditEngine/ScFieldEditEngine admission and NatNum12 formatter/casing remain. Continue the approved goal; this is a partial checkpoint, not task completion."
+  -
+    type: "status"
+    at: "2026-10-30T17:42:07.098Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T17:12:14.913Z"
+doc_updated_at: "2026-10-30T17:42:07.098Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1407,6 +1423,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T17:41:56.676Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified ContentNode/ContentAttribs owners, concrete MakeCharAttrib dispatch, split/join/field expansion and font/position values: 115 shared tests plus final 4-case value rerun, 197 CSV cases, unchanged browser flow and required repository gates pass. Full CSV remains incomplete: actual EditDoc/ImpEditEngine/ScFieldEditEngine admission and NatNum12 formatter/casing remain. Continue the approved goal; this is a partial checkpoint, not task completion.
+    Attempts: 24
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:41:39.284Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1994,6 +2040,31 @@ sections:
     - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one browser workflow after the completed current build; evidence edit-context-final-6.log. Scope: CSV import, primary ODS save and active-sheet CSV export.
     - Verification repair: the first generated-helper tests exposed foreign-realm TextEncoder Uint8Arrays selecting the wrong OUString constructor branch in jsdom. Materialized compiler-known ASCII literals in the current realm, as existing SDK value constructors do; retained exact source bytes and the original constructor, without weakening the shared string dispatcher. Tests then pass. Replaced a generic exception matcher with direct caught-value identity checks. All new test positions stay within valid nonnegative source spans. Source prototype fields, native equal-key sort order, C++ const/compiler enforcement, debug/undefined-input behavior, physical ABI/thread/layout and full engine/service bootstrap remain uncertified.
     - Cadence: same executable AQF9AG, no new tenth-task trigger/full-suite replay. Overall task remains DOING and goal active. NatNum12 creation/casing/title/formatter wiring, native multiline admission and the final requirements audit remain incomplete; the two confirmed functional gaps are not claimed to be an exhaustive completion audit.
+
+    ### ContentNode paragraph owner, concrete attributes and split/join checkpoint (2026-10-31)
+
+    - Approved scope: actual EditEngine paragraph/attribute/position ownership required by the CSV multiline chain. The earlier status-only user-answer turn changed no code; this continuation performs implementation and validation. Goal remains active and the entire CSV task remains incomplete.
+    - Source: pinned libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65, ContentNode.cxx/hxx, editattr.cxx/hxx, editdoc.cxx, EditPaM.hxx, EditSelection.hxx, svxfont.cxx/hxx, vcl/source/font/font.cxx and LanguageTag operator equality. No network, other checkout mutations, injected production services, regex-line engine or source-guard weakening.
+    - Actual ContentAttribs owns the original fixed-range SfxItemSet and nonowning style. Preserve changed-style-only hard clearing except BULLETSTATE, hard/style lookup and explicit/default tab arithmetic including unsigned16 narrowing.
+    - Actual ContentNode owns its OUString, paragraph attributes, CharAttribList default SvxFont and optional real WrongList. Preserve raw UTF16 (including NUL, CR/LF and lone surrogate), original range insertion/deletion, empty/edge/feature rules and wrong-list updates. CopyAndCutAttribs and AppendAttribs preserve original owner transfer, ending ranges except ESCAPEMENT, zero-cut copies and asymmetric empty-range melting. No enclosing EditDoc is claimed.
+    - Original complete MakeCharAttrib dispatch now selects actual concrete attribute constructors for all supported IDs, including XML holding base ranges, Ruby nonexpandability and one-unit features; unsupported IDs retain source null instead of a fallback/error. Field actual expanded value, optional colors/line style, reset/copy/equality and lost-copy-feature-flag are preserved. Color optional lvalues copy assigned values as C++ does. Rendering SetFont is unported and no no-op renderer is supplied.
+    - Original field/tab/soft-break text expansion and expanded length plus biased expanded-to-raw position mapping are present. Literal markers without attributes stay literal. EditPaM and EditSelection retain real node pointers, copies, stable endpoint references, original operator! conjunction and Adjust body. A mandatory structural declaration of the original forward-declared EditDoc::GetPos is not a production document implementation.
+    - Actual SvxFont preserves base/derived constructor and assignment overload differences, SYSTEM initialization, case map, escapement/proportion and subset-only equality; Font's original UNKNOWN LanguageTag default, guarded language changes and original LanguageTag equality now back the value. CALC-426/427 document cache-dependent tag equality and copied-field feature loss; source behavior remains unchanged.
+    - Initial failures resolved in scope: EditPaM tuple narrowing used a nonempty check that left index possibly undefined; changed to exact two-argument overload. Initial ContentNode test import used SfxBoolItem from itemset instead of eitem; corrected. FindTabStop used nonexistent lowercase at; corrected to actual At and source unsigned narrowing. Field mapping fixture incorrectly expected 5 for expanded index7; source offset >= position early return proves4, while index8 maps6. Corrected fixture only. Provenance initially qualified header-inline GetDefFont as CharAttribList::GetDefFont in ContentNode.cxx; corrected evidence marker to actual GetDefFont occurrence. No source algorithm adjusted to satisfy tests.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font src/i18nlangtag/source/languagetag/languagetag.value.test.ts
+      Result: pass; 18 files / 115 tests. Evidence: output/native/AQF9AG-libnumbertext/content-transfer-tests-2.log. Scope: actual paragraph, range/field, font, position and existing EditEngine owner regressions. After final optional-color value-copy change, focused native-content-transfer.test.ts rerun passed all4 (content-transfer-value-test.log).
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+      Result: pass; 8 files / 197 tests. Evidence: content-transfer-csv-tests.log. Scope: actual CSV options, admission, dates, recognition, export, shell and browser files UI. An intermediate commentary mistakenly reported140; authoritative terminal output is197.
+    - Command: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npx eslint apps/office/src/editeng/source/editeng/editattr.ts apps/office/src/editeng/source/editeng/native-content-transfer.test.ts --max-warnings 0
+      Result: pass. Evidence: content-transfer-final-typecheck.log, content-transfer-lint.log, content-transfer-final-eslint.log. Scope: repository type/lint and final optional-value binding change. Only intentional native scratch excluded from lint.
+    - Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:parity:calc; npm run check:calc-resources; npm run check:docs; npm run check:file-size
+      Result: pass. Evidence: content-transfer-deps.log (1908 runtime sources / 10344 relative imports / 233 allowed edges); content-transfer-provenance-2.log (1909 runtime modules); content-transfer-registry-2.log; content-transfer-parity-2.log (zero semantic violations); content-transfer-resources.log; content-transfer-final-docs.log; content-transfer-size.log. Registry build completed before dependent checks. New owners remain foundation/unverified, not promoted to complete native parity.
+    - Command: npm run build
+      Result: pass. Evidence: content-transfer-final-build.log. Scope: current production application after final color-copy binding.
+    - Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: content-transfer-browser-final.log. Scope: built application CSV open, primary ODS save and active-sheet CSV download. An initial invocation incorrectly omitted '=' after --project so Playwright consumed the positional test as another project; corrected CLI only. First valid run under concurrent validation timed out on dialog disappearance after5s; trace contained no application page error and final snapshot already showed Name in the opened sheet with no dialog. After final build and heavy checks completed, unchanged test/timeout passed. No timeout increase, test relaxation or UI workaround.
+    - Cadence: continuation of task AQF9AG, not the tenth new Agentplane task since the prior full-suite run. Full suite was not triggered; focused owner and CSV regressions used as requested.
+    - Remaining: actual EditDoc ownership/default-font CreateFont path, ImpEditEngine parsing/paragraph limits and ScFieldEditEngine/DocImport callers remain required before replacing current multiline SetTextCell regex construction. NativeNumberSupplier NatNum12 dispatch/casing/formatter and final requirement-by-requirement CSV audit remain pending. This checkpoint does not satisfy complete CSV acceptance; record verification --rework and restore DOING, without finish or goal pause/completion.
 id_source: "generated"
 ---
 ## Summary
@@ -2712,6 +2783,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T17:41:56.676Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified ContentNode/ContentAttribs owners, concrete MakeCharAttrib dispatch, split/join/field expansion and font/position values: 115 shared tests plus final 4-case value rerun, 197 CSV cases, unchanged browser flow and required repository gates pass. Full CSV remains incomplete: actual EditDoc/ImpEditEngine/ScFieldEditEngine admission and NatNum12 formatter/casing remain. Continue the approved goal; this is a partial checkpoint, not task completion.
+Attempts: 24
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:41:39.284Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3303,3 +3404,28 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one browser workflow after the completed current build; evidence edit-context-final-6.log. Scope: CSV import, primary ODS save and active-sheet CSV export.
 - Verification repair: the first generated-helper tests exposed foreign-realm TextEncoder Uint8Arrays selecting the wrong OUString constructor branch in jsdom. Materialized compiler-known ASCII literals in the current realm, as existing SDK value constructors do; retained exact source bytes and the original constructor, without weakening the shared string dispatcher. Tests then pass. Replaced a generic exception matcher with direct caught-value identity checks. All new test positions stay within valid nonnegative source spans. Source prototype fields, native equal-key sort order, C++ const/compiler enforcement, debug/undefined-input behavior, physical ABI/thread/layout and full engine/service bootstrap remain uncertified.
 - Cadence: same executable AQF9AG, no new tenth-task trigger/full-suite replay. Overall task remains DOING and goal active. NatNum12 creation/casing/title/formatter wiring, native multiline admission and the final requirements audit remain incomplete; the two confirmed functional gaps are not claimed to be an exhaustive completion audit.
+
+### ContentNode paragraph owner, concrete attributes and split/join checkpoint (2026-10-31)
+
+- Approved scope: actual EditEngine paragraph/attribute/position ownership required by the CSV multiline chain. The earlier status-only user-answer turn changed no code; this continuation performs implementation and validation. Goal remains active and the entire CSV task remains incomplete.
+- Source: pinned libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65, ContentNode.cxx/hxx, editattr.cxx/hxx, editdoc.cxx, EditPaM.hxx, EditSelection.hxx, svxfont.cxx/hxx, vcl/source/font/font.cxx and LanguageTag operator equality. No network, other checkout mutations, injected production services, regex-line engine or source-guard weakening.
+- Actual ContentAttribs owns the original fixed-range SfxItemSet and nonowning style. Preserve changed-style-only hard clearing except BULLETSTATE, hard/style lookup and explicit/default tab arithmetic including unsigned16 narrowing.
+- Actual ContentNode owns its OUString, paragraph attributes, CharAttribList default SvxFont and optional real WrongList. Preserve raw UTF16 (including NUL, CR/LF and lone surrogate), original range insertion/deletion, empty/edge/feature rules and wrong-list updates. CopyAndCutAttribs and AppendAttribs preserve original owner transfer, ending ranges except ESCAPEMENT, zero-cut copies and asymmetric empty-range melting. No enclosing EditDoc is claimed.
+- Original complete MakeCharAttrib dispatch now selects actual concrete attribute constructors for all supported IDs, including XML holding base ranges, Ruby nonexpandability and one-unit features; unsupported IDs retain source null instead of a fallback/error. Field actual expanded value, optional colors/line style, reset/copy/equality and lost-copy-feature-flag are preserved. Color optional lvalues copy assigned values as C++ does. Rendering SetFont is unported and no no-op renderer is supplied.
+- Original field/tab/soft-break text expansion and expanded length plus biased expanded-to-raw position mapping are present. Literal markers without attributes stay literal. EditPaM and EditSelection retain real node pointers, copies, stable endpoint references, original operator! conjunction and Adjust body. A mandatory structural declaration of the original forward-declared EditDoc::GetPos is not a production document implementation.
+- Actual SvxFont preserves base/derived constructor and assignment overload differences, SYSTEM initialization, case map, escapement/proportion and subset-only equality; Font's original UNKNOWN LanguageTag default, guarded language changes and original LanguageTag equality now back the value. CALC-426/427 document cache-dependent tag equality and copied-field feature loss; source behavior remains unchanged.
+- Initial failures resolved in scope: EditPaM tuple narrowing used a nonempty check that left index possibly undefined; changed to exact two-argument overload. Initial ContentNode test import used SfxBoolItem from itemset instead of eitem; corrected. FindTabStop used nonexistent lowercase at; corrected to actual At and source unsigned narrowing. Field mapping fixture incorrectly expected 5 for expanded index7; source offset >= position early return proves4, while index8 maps6. Corrected fixture only. Provenance initially qualified header-inline GetDefFont as CharAttribList::GetDefFont in ContentNode.cxx; corrected evidence marker to actual GetDefFont occurrence. No source algorithm adjusted to satisfy tests.
+- Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font src/i18nlangtag/source/languagetag/languagetag.value.test.ts
+  Result: pass; 18 files / 115 tests. Evidence: output/native/AQF9AG-libnumbertext/content-transfer-tests-2.log. Scope: actual paragraph, range/field, font, position and existing EditEngine owner regressions. After final optional-color value-copy change, focused native-content-transfer.test.ts rerun passed all4 (content-transfer-value-test.log).
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+  Result: pass; 8 files / 197 tests. Evidence: content-transfer-csv-tests.log. Scope: actual CSV options, admission, dates, recognition, export, shell and browser files UI. An intermediate commentary mistakenly reported140; authoritative terminal output is197.
+- Command: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npx eslint apps/office/src/editeng/source/editeng/editattr.ts apps/office/src/editeng/source/editeng/native-content-transfer.test.ts --max-warnings 0
+  Result: pass. Evidence: content-transfer-final-typecheck.log, content-transfer-lint.log, content-transfer-final-eslint.log. Scope: repository type/lint and final optional-value binding change. Only intentional native scratch excluded from lint.
+- Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:parity:calc; npm run check:calc-resources; npm run check:docs; npm run check:file-size
+  Result: pass. Evidence: content-transfer-deps.log (1908 runtime sources / 10344 relative imports / 233 allowed edges); content-transfer-provenance-2.log (1909 runtime modules); content-transfer-registry-2.log; content-transfer-parity-2.log (zero semantic violations); content-transfer-resources.log; content-transfer-final-docs.log; content-transfer-size.log. Registry build completed before dependent checks. New owners remain foundation/unverified, not promoted to complete native parity.
+- Command: npm run build
+  Result: pass. Evidence: content-transfer-final-build.log. Scope: current production application after final color-copy binding.
+- Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: content-transfer-browser-final.log. Scope: built application CSV open, primary ODS save and active-sheet CSV download. An initial invocation incorrectly omitted '=' after --project so Playwright consumed the positional test as another project; corrected CLI only. First valid run under concurrent validation timed out on dialog disappearance after5s; trace contained no application page error and final snapshot already showed Name in the opened sheet with no dialog. After final build and heavy checks completed, unchanged test/timeout passed. No timeout increase, test relaxation or UI workaround.
+- Cadence: continuation of task AQF9AG, not the tenth new Agentplane task since the prior full-suite run. Full suite was not triggered; focused owner and CSV regressions used as requested.
+- Remaining: actual EditDoc ownership/default-font CreateFont path, ImpEditEngine parsing/paragraph limits and ScFieldEditEngine/DocImport callers remain required before replacing current multiline SetTextCell regex construction. NativeNumberSupplier NatNum12 dispatch/casing/formatter and final requirement-by-requirement CSV audit remain pending. This checkpoint does not satisfy complete CSV acceptance; record verification --rework and restore DOING, without finish or goal pause/completion.

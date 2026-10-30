@@ -20,12 +20,38 @@
         "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
         "editeng/source/editeng/editattr.cxx"
       ],
-      "justification": "Actual original pooled item-holder/range owner with stable mutable endpoint lvalues, feature/edge/expandable flags, range movement/expansion/collapse and interval predicates. Original one-unit tab/line-break constructors set the feature flag; features never become expandable merely by enabling the independent bit. Original item-holder destruction and constructor constraints are retained. Rendering SetFont/other subtypes and complete EditEngine admission remain unported; no engine facade or raw-text replacement is supplied.",
+      "justification": "Actual original pooled item-holder/range owner with stable mutable endpoint lvalues, feature/edge/expandable flags, range movement/expansion/collapse and interval predicates. Original one-unit tab/line-break constructors set the feature flag; features never become expandable merely by enabling the independent bit. Original item-holder destruction and constructor constraints are retained. Rendering SetFont/other subtypes and complete EditEngine admission remain unported; no engine facade or raw-text replacement is supplied. All original concrete attribute range constructors and Ruby nonexpandable flag now back the complete MakeCharAttrib dispatch. Actual field text/optional Color/line-style value, reset, copy and derived-only equality are retained; field copy deliberately leaves the base feature flag false (CALC-427). Device SetFont rendering remains unported.",
       "knownViolations": [],
       "localSymbols": [
         "EditCharAttrib",
         "EditCharAttribTab",
         "EditCharAttribLineBreak",
+        "EditCharAttribFont",
+        "EditCharAttribItalic",
+        "EditCharAttribWeight",
+        "EditCharAttribUnderline",
+        "EditCharAttribOverline",
+        "EditCharAttribFontHeight",
+        "EditCharAttribFontWidth",
+        "EditCharAttribStrikeout",
+        "EditCharAttribCaseMap",
+        "EditCharAttribColor",
+        "EditCharAttribBackgroundColor",
+        "EditCharAttribLanguage",
+        "EditCharAttribRuby",
+        "EditCharAttribScriptHint",
+        "EditCharAttribShadow",
+        "EditCharAttribEscapement",
+        "EditCharAttribOutline",
+        "EditCharAttribPairKerning",
+        "EditCharAttribKerning",
+        "EditCharAttribWordLineMode",
+        "EditCharAttribEmphasisMark",
+        "EditCharAttribRelief",
+        "EditCharAttribOpticalSizing",
+        "EditCharAttribFontVariations",
+        "EditCharAttribGrabBag",
+        "EditCharAttribField",
         "CH_FEATURE"
       ],
       "sourceResponsibility": "aligned",
@@ -33,7 +59,9 @@
       "upstreamSymbols": [
         "EditCharAttrib::EditCharAttrib",
         "EditCharAttribTab::EditCharAttribTab",
-        "EditCharAttribLineBreak::EditCharAttribLineBreak"
+        "EditCharAttribLineBreak::EditCharAttribLineBreak",
+        "EditCharAttribField::EditCharAttribField",
+        "EditCharAttribField::Reset"
       ]
     }
   }

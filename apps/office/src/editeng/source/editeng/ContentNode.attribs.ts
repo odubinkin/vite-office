@@ -1,10 +1,16 @@
-/** @fileoverview Original CharAttribList ownership and range algorithms from ContentNode.cxx. Default-font/layout responsibilities and the enclosing ContentNode remain separate; no engine facade is provided. */
+/** @fileoverview Original CharAttribList owning vector, default SvxFont value, empty flag and range algorithms from ContentNode.cxx. Layout remains a separate responsibility. */
 import type { EditCharAttrib } from "../../inc/editattr";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
-/** Actual original owning attribute vector and empty-range flag; font-cache access is not advertised by this member group. */
+import { SvxFont } from "../../inc/svxfont";
+/** Actual original owning attribute vector, stable default-font member and empty-range flag. */
 export class CharAttribList {
   private readonly maAttribs: EditCharAttrib[] = [];
+  private readonly maDefFont = new SvxFont();
   private mbHasEmptyAttribs = false;
+  /** Original stable mutable default-font member. @returns Actual derived font value. */
+  GetDefFont(): SvxFont {
+    return this.maDefFont;
+  }
   /** Original vector member destruction releases every actual pooled holder. @returns Nothing. */
   dispose(): void {
     for (let i = this.maAttribs.length - 1; i >= 0; i--)

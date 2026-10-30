@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/EditSelection.ts",
+    "upstreamPath": "editeng/inc/EditSelection.hxx",
+    "localSymbols": [
+      "EditSelection",
+      "EditDocNodePositions"
+    ],
+    "upstreamSymbols": [
+      "EditSelection",
+      "Adjust",
+      "HasRange"
+    ],
+    "preservedResponsibilities": [
+      "Original two stable EditPaM endpoint values, overloads, assignment, range/invalid predicates and editdoc.cxx Adjust ordering/value swap. Mandatory structural EditDoc::GetPos declaration represents the original forward-declared owner; no document provider implementation or clamping is supplied."
+    ],
+    "omittedResponsibilities": [
+      "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/EditSelection.ts",
+          "marker": "EditSelection"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-edit-positions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/EditSelection.hxx",
+          "marker": "EditSelection"
+        }
+      ]
+    }
+  }
+}

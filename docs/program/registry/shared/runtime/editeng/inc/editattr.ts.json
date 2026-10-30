@@ -20,7 +20,7 @@
         "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
         "editeng/inc/editattr.hxx"
       ],
-      "justification": "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary.",
+      "justification": "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary. Concrete attribute constructor/value owners, including EditCharAttribField, are reexported from their original source boundary.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "aligned",
@@ -29,7 +29,8 @@
         "EditCharAttrib",
         "EditCharAttribTab",
         "EditCharAttribLineBreak",
-        "CH_FEATURE"
+        "CH_FEATURE",
+        "EditCharAttribField"
       ]
     }
   }

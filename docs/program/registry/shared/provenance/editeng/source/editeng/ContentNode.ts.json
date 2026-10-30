@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/ContentNode.ts",
+    "upstreamPath": "editeng/source/editeng/ContentNode.cxx",
+    "localSymbols": [
+      "ContentNode",
+      "ContentAttribs"
+    ],
+    "upstreamSymbols": [
+      "ContentNode::CopyAndCutAttribs",
+      "ContentNode::AppendAttribs",
+      "ContentNode::GetExpandedText",
+      "ContentAttribs::FindTabStop"
+    ],
+    "preservedResponsibilities": [
+      "Original paragraph string/attribute/wrong-list owners and text mutations; source ExpandAttribs/CollapseAttribs, split/cut and join ownership, field/tab/soft-break expansion and biased position mapping. Source style-selective hard-attribute clearing, bullet preservation and signed-to-unsigned default-tab arithmetic are preserved. Font recalculation and enclosing document/engine remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/ContentNode.ts",
+          "marker": "ContentNode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-content-transfer.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/ContentNode.cxx",
+          "marker": "ContentNode"
+        }
+      ]
+    }
+  }
+}

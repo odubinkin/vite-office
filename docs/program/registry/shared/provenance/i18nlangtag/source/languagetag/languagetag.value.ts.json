@@ -11,10 +11,13 @@
     ],
     "upstreamSymbols": [
       "LanguageTag",
-      "getLanguageAndScript"
+      "getLanguageAndScript",
+      "LanguageTag::operator==",
+      "LanguageTag::operator!="
     ],
     "preservedResponsibilities": [
-      "Actual numeric/string/Locale/copy constructors and resets, implementation sharing and synchronization, owned component getters, borrowed Locale/BCP47 references, full fallback and real numeric known-set binding, first-known script type, static ID/string/Locale conversion and configured system-language re-registration. Locale constructor/reset initialization difference, component cache-hit synchronization bypass and existing SYSTEM values retaining their bound implementation are preserved. Unconsumed display/platform APIs and native ABI are not claimed."
+      "Actual numeric/string/Locale/copy constructors and resets, implementation sharing and synchronization, owned component getters, borrowed Locale/BCP47 references, full fallback and real numeric known-set binding, first-known script type, static ID/string/Locale conversion and configured system-language re-registration. Locale constructor/reset initialization difference, component cache-hit synchronization bypass and existing SYSTEM values retaining their bound implementation are preserved. Unconsumed display/platform APIs and native ABI are not claimed.",
+      "Original operator==/!= preserves both-SYSTEM shortcut, initialized numeric-ID branch with SYSTEM-origin predicate and unresolved BCP47 comparison. Cache-dependent raw-case equality remains source-identical (CALC-426)."
     ],
     "omittedResponsibilities": [
       "Complete NumberText/native-number mode12 and CSV service integration remain pending. Native C++ memory/thread/ABI layout is not certified."

@@ -4847,3 +4847,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/ContentNode.cxx`, `CharAttribList::OptimizeRanges`.
 - Observation: after finding an adjacent range with the same Which, the inner loop breaks whether or not its item equals the current item. A successful merge does not restart the search for the expanded range. Three equal adjacent ranges `[0,1]`, `[1,2]`, `[2,3]` therefore become `[0,2]`, `[2,3]` after one call.
 - Preserve the first-candidate break and outer iteration. Do not repeatedly merge to a fixed point, or continue past a different item at a matching Which/boundary. Source-derived tests use actual EditEngine pools, color items and owned attributes; native equal-key sort/layout/ABI behavior and complete engine integration remain unverified.
+
+### CALC-426 — LanguageTag equality can change after numeric-ID initialization
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, `LanguageTag::operator==`.
+- Observation: two tags with initialized language IDs compare IDs and SYSTEM origin. Otherwise they compare unresolved BCP47 strings. A raw `en-us` tag and numeric English-US tag therefore compare unequal before the raw tag initializes its ID, and equal after `getLanguageType()` initializes that same ID. The first comparison does not canonicalize raw case.
+- Preserve branch order, cache state and unresolved string comparison; do not normalize strings or force ID initialization in equality. Source-derived LanguageTag tests retain this outcome. Unchanged native whole-service differential execution is not claimed.
+
+### CALC-427 — Copying an EditCharAttribField does not retain its feature flag
+
+- Source: `editeng/source/editeng/editattr.cxx`, the two `EditCharAttribField` constructors.
+- Observation: the pool/item/position constructor calls `SetFeature(true)`. The field-copy constructor constructs the base range directly and copies expanded text and optional colors/line style, but never sets the feature flag. The copy consequently reports `IsFeature() == false` and `IsExpandable() == true`, even though its item Which remains EE_FEATURE_FIELD. Derived equality compares only text and optionals and can still report equality with the source field.
+- Preserve both constructors and equality. Do not copy all base flags or set the feature flag as a correction. Actual pooled field-owner tests cover this difference; rendering and complete native EditEngine execution remain unverified.

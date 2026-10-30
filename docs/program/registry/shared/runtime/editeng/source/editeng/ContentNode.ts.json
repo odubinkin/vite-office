@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/ContentNode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/ContentNode.ts",
+        "apps/office/src/editeng/source/editeng/native-content-transfer.test.ts",
+        "editeng/source/editeng/ContentNode.cxx"
+      ],
+      "justification": "Original paragraph string/attribute/wrong-list owners and text mutations; source ExpandAttribs/CollapseAttribs, split/cut and join ownership, field/tab/soft-break expansion and biased position mapping. Source style-selective hard-attribute clearing, bullet preservation and signed-to-unsigned default-tab arithmetic are preserved. Font recalculation and enclosing document/engine remain unported. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ContentNode",
+        "ContentAttribs"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/ContentNode.cxx",
+      "upstreamSymbols": [
+        "ContentNode::CopyAndCutAttribs",
+        "ContentNode::AppendAttribs",
+        "ContentNode::GetExpandedText",
+        "ContentAttribs::FindTabStop"
+      ]
+    }
+  }
+}
