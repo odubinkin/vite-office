@@ -4811,3 +4811,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `i18nlangtag/source/languagetag/languagetag.cxx`, canonicalize/synCanonicalize, getLanguageFromLangtag and isIsoLocale; liblangtag lt_tag_parse mutates its parsed owner before a later token failure.
 - Observation: canonicalize returns whether the spelling changed, independently of validity. For the prepared EN-1! member state, structural casing changes the spelling to en-1!, then parsing fails with DECISION_NO validity while retaining an allocated tag with the parsed primary language en. Subsequent component getters consult that tag without a validity predicate; synCanonicalize skips reparsing once the tag exists. The ISO Locale query can consequently return true from language/region/length shape while validity is false.
 - Preserve the original state separation and partial parsed-owner reads, without clearing the tag, revalidating cached queries or converting the changed flag into a success flag. Member tests exercise actual liblangtag/table owners; public LanguageTag constructor/registration and native wrapper equivalence remain unverified. The related numeric-region simple-cache branch (CALC-417) also retains ISO Locale true for es-419 in this source member path.
+
+### CALC-420 — ISO ku with an unlisted country omits language-only fallback
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, ISO branch of LanguageTag::getFallbackStrings.
+- Observation: the ku branch handles TR/SY and IQ/IR only, without an else that appends the language. If the ISO owner supplies ku/US, includeFull=true yields only ku-US and includeFull=false yields an empty vector. The usual language-only ku fallback is absent.
+- Preserve the exact branch rather than supplying a generic ku candidate. Tests use explicit original getter/ISO values to cover the member branch; complete constructor/canonicalization/registration selection and native public wrapper behavior are not certified by these prepared-owner cases.
+
+### CALC-421 — Legacy Catalan fallback can include the full tag and duplicates
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, ISO ca/XV branch and non-ISO ca-ES-valencia branch.
+- Observation: the ISO legacy branch constructs ca-ES-valencia and always requests getFallbackStrings(true), irrespective of its own includeFull flag. The nested vector includes ca-XV as an alternate. Therefore the source ISO branch can return ca-XV even with includeFull=false, and include it twice with includeFull=true.
+- Preserve the original nested true argument, vector order, duplicates and temporary destruction. Do not deduplicate this fallback vector or interpret includeFull as a final filter. Only getKnowns separately deduplicates by its original unordered set. Member fixtures select this exact ISO branch explicitly; complete public constructor/registration behavior remains unverified.

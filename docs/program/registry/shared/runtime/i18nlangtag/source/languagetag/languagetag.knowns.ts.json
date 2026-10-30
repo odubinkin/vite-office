@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-fallback-initialization",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Original static known-tag-set initialization over the complete real MsLangId.getDefinedLanguagetags vector, constructing from each raw numeric ID rather than its BCP47 text, requesting full vectors, retaining every definition visit/alias/duplicate, exact case-sensitive membership, one-time successful publication and retry after a failed initializer. Actual Unicode definition values and temporary tags are released on normal/exception paths. The actual original numeric LanguageTag constructor remains a required binding; fixture-supplied vectors are not a completed native known-set membership witness. Complete LanguageTag/NumberText/CSV integration is not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTagIDFactory",
+        "getKnowns"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "getKnowns"
+      ]
+    }
+  }
+}

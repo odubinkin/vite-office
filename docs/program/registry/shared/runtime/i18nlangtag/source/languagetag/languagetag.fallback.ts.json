@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-fallback-initialization",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Original complete ISO fallback decision branches and full/non-full vectors over the original getter/ISO member protocol, with the existing exact non-ISO component kernel reused without duplicating its ordering rules. Preserve Chinese legacy forms, Serbo-Croatian/Pali, all Kurdish branches including missing ku-country default, exact Catalan string constructor/full-vector call, nested duplicate candidates and owned field/temporary cleanup. The actual original LanguageTag string constructor is a required binding, not a guessed parser or replacement class. No script/ISO inference is used in the ISO member path. Complete LanguageTag/NumberText/CSV integration is not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTagFallbackOwner",
+        "LanguageTagFallbackValue",
+        "LanguageTagStringFactory",
+        "getFallbackStrings"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTag::getFallbackStrings"
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 99
+revision: 102
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T14:56:54.402Z"
+  updated_at: "2026-10-30T15:47:35.103Z"
   updated_by: "CODER"
-  note: "Original LanguageTag canonicalization, ISO and Locale/ID member groups pass 305 related tests, full authored lint excluding native scratch, static gates, build, 129 Calc tests and 2 fresh-build browser cases. CALC-419 preserves invalid partial-parser behavior. Whole CSV remains incomplete: enclosing LanguageTag/known-set/registry, NumberText/NatNum12 and multiline EditEngine remain pending."
-  attempts: 19
+  note: "Original fallback/known-set kernels and removal of general split heuristics pass 363 related tests, lint/static gates/final build, 129 Calc regressions and 2 fresh-build browser cases. CALC-420/421 preserve original ku/Catalan behavior. Whole CSV remains incomplete: actual LanguageTag constructor/registration bindings, NumberText/NatNum12, title and multiline EditEngine paths are pending."
+  attempts: 20
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -632,8 +635,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T15:47:35.103Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original fallback/known-set kernels and removal of general split heuristics pass 363 related tests, lint/static gates/final build, 129 Calc regressions and 2 fresh-build browser cases. CALC-420/421 preserve original ku/Catalan behavior. Whole CSV remains incomplete: actual LanguageTag constructor/registration bindings, NumberText/NatNum12, title and multiline EditEngine paths are pending."
+  -
+    type: "status"
+    at: "2026-10-30T15:50:55.006Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T14:57:15.859Z"
+doc_updated_at: "2026-10-30T15:50:55.006Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1223,6 +1239,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T15:47:35.103Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original fallback/known-set kernels and removal of general split heuristics pass 363 related tests, lint/static gates/final build, 129 Calc regressions and 2 fresh-build browser cases. CALC-420/421 preserve original ku/Catalan behavior. Whole CSV remains incomplete: actual LanguageTag constructor/registration bindings, NumberText/NatNum12, title and multiline EditEngine paths are pending.
+    Attempts: 20
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:47:00.062Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1758,6 +1804,19 @@ sections:
     - Command: npm run lint -- --ignore-pattern 'output/native/**'. Result: pass (canonical-final-0.log). Scope: complete authored repository lint; excludes only untracked native/download/build evidence scratch, in addition to existing dependency/generated exclusions. Command: npm run check:calc-resources. Result: pass (canonical-final-2.log). Command: npm run build. Result: pass (canonical-final-1.log), terminal success before browser tests, ordinary existing bundle/plugin timing warnings only. Command: git diff --check. Result: pass.
     - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (canonical-final-3.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases on the successful fresh build (canonical-browser.log). These are existing CSV/UI/Worker regressions, not completed NatNum12 output coverage.
     - Remaining: real enclosing LanguageTag constructor/reset/implementation registration and complete getKnowns/fallback initialization, NumberText and NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/selected date-field output, actual multiline EditEngine path and remaining native CSV option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All native/scratch evidence remains output/native and is excluded from commits.
+
+    ### Original complete fallback member and known-tag initializer, 2026-10-30
+
+    - Previous goal turn made verified progress in d11b9defe66d. This block adds the original complete LanguageTag::getFallbackStrings member protocol and getKnowns initializer, and removes the old general prepared-tag string-splitting grammar from the actual locale/font data path. No empty known-set provider, inferred ISO policy, fake public LanguageTag or constructor-error fallback is supplied. Actual original string/numeric constructors remain mandatory enclosing bindings until the owner is implemented.
+    - Full fallback member preserves source language/country snapshots, ISO decision/getter order, Chinese legacy fallback direction, Serbian/Pali aliases, all Kurdish country-specific branches, the missing generic ku candidate, Catalan constructor/full-vector request, vectors with duplicates, non-ISO legacy prefix order and original krm spelling. Existing non-ISO component candidates are factored once and reused by both the prepared-field and full-member paths. No generic locale canonicalizer, vector deduplication or added language-only recovery.
+    - getKnowns visits the complete real MsLangId.getDefinedLanguagetags vector in original order, including repeated/alias raw numeric IDs. It constructs from mnLang rather than maBcp47 to preserve the original recursion-avoidance rule, requests full vectors and accumulates case-sensitive membership in the original static set. Publish only after successful construction/cleanup; failed initialization does not retain partial membership. Defined actual Unicode values are disposed even if their entries were not visited before a later constructor fails. Original numeric/string constructor temporaries end after vector construction and before vector insertion/iteration, in both getKnowns and Catalan paths. Added direct lifetime observations and corrected this temporary boundary during final source review; repeated related tests/build for the production change.
+    - Replaced general decomposeCanonicalLanguageTag split/regex inference with actual lt_tag_parse and source borrowed subtag/tag getters, plus the original isIsoCountry filter. Preserve the complete existing native simple-cache branch and partial-parser prefix behavior. Canonical grandfathered i-default/i-enochian no longer invent language i or an i fallback. This remains a prepared canonical-input field binding; enclosing LanguageTag constructor/canonicalization/registration and final caller migration are not falsely certified.
+    - Initial new tests incorrectly expected an extlang-looking zh-cmn-Hans-CN input to reach the general branch: original simpleExtract deliberately classifies structural shapes without validating their contents. Left that native branch unchanged and used canonical grandfathered tags to test actual general parsing. The first known-set test also imposed JS Set iteration ordering and counted a repeated alias ID twice; corrected it to verify original ordered constructor visits/destruction and unordered case-sensitive membership/size/cache identity. Production membership logic was unchanged. Evidence: fallback-tests.log, corrected fallback-tests-final.log (3 files107 cases).
+    - CALC-420 records ISO ku/US returning only its full tag or an empty partial vector. CALC-421 records nested Catalan full-vector behavior, original ca-XV inclusion even with includeFull=false and duplication with true. These are conditional source member observations over explicit original getter/ISO fixtures, not a claim that the unported public constructor always selects those branches. Existing CALC-134 krm typo remains preserved.
+    - Command: npm run test:shared -- src/i18nlangtag/source/languagetag src/external/liblangtag/liblangtag src/i18npool/source/localedata src/unotools/source/config/native-default-fonts.test.ts src/external/libnumbertext/src/Numbertext.test.ts. Result: pass,23 files363 cases after the final lifetime correction. Evidence: fallback-related-tests-final.log. Scope: original fallback vectors/flags/aliases/duplicates, full real definition traversal through explicit constructor fixtures, failed initializer retry, actual Unicode/temporary cleanup, prepared general real-parser data, actual locale/calendar/currency/number-format/default-font queries and existing language/parser/library tests. No full native public LanguageTag/known-set data-membership or ABI claim from fixture-supplied vectors. Earlier broader361 tests pass in fallback-related-tests.log.
+    - Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fallback-check-{0,1,2,3,5,6}.log,fallback-final-{0,1,3}.log,fallback-temporary-{0,1,2,3}.log. Provenance1887 runtime modules, dependencies1886 sources10194 relative imports226 allowed edges, docs4259 authored sources, semantic violations0. Full lint excludes only native scratch alongside existing dependency/generated exclusions. Initial docs gate found3 missing comments on constructor-failure assertion callbacks; added comments and reran (fallback-check-4.log, fallback-final-0.log). Existing foundation/unverified statuses are preserved; no native startup footprint or physical XML/allocator/thread ABI certification.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fallback-final-2.log), before the additive temporary-order correction; final related tests cover that correction. Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build (fallback-browser.log). Existing CSV/UI/Worker regressions do not establish completed NatNum12 output forwarding.
+    - Remaining: implement/bind the actual LanguageTag value/implementation constructors, shared registration and known-set constructor dependency; connect NumberText/NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/date-key output, actual multiline EditEngine import and remaining CSV native option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All output/native source/build/probe/install/log scratch remains untracked and excluded from commits.
 id_source: "generated"
 ---
 ## Summary
@@ -2356,6 +2415,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T15:47:35.103Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original fallback/known-set kernels and removal of general split heuristics pass 363 related tests, lint/static gates/final build, 129 Calc regressions and 2 fresh-build browser cases. CALC-420/421 preserve original ku/Catalan behavior. Whole CSV remains incomplete: actual LanguageTag constructor/registration bindings, NumberText/NatNum12, title and multiline EditEngine paths are pending.
+Attempts: 20
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:47:00.062Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2895,3 +2984,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm run lint -- --ignore-pattern 'output/native/**'. Result: pass (canonical-final-0.log). Scope: complete authored repository lint; excludes only untracked native/download/build evidence scratch, in addition to existing dependency/generated exclusions. Command: npm run check:calc-resources. Result: pass (canonical-final-2.log). Command: npm run build. Result: pass (canonical-final-1.log), terminal success before browser tests, ordinary existing bundle/plugin timing warnings only. Command: git diff --check. Result: pass.
 - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (canonical-final-3.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases on the successful fresh build (canonical-browser.log). These are existing CSV/UI/Worker regressions, not completed NatNum12 output coverage.
 - Remaining: real enclosing LanguageTag constructor/reset/implementation registration and complete getKnowns/fallback initialization, NumberText and NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/selected date-field output, actual multiline EditEngine path and remaining native CSV option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All native/scratch evidence remains output/native and is excluded from commits.
+
+### Original complete fallback member and known-tag initializer, 2026-10-30
+
+- Previous goal turn made verified progress in d11b9defe66d. This block adds the original complete LanguageTag::getFallbackStrings member protocol and getKnowns initializer, and removes the old general prepared-tag string-splitting grammar from the actual locale/font data path. No empty known-set provider, inferred ISO policy, fake public LanguageTag or constructor-error fallback is supplied. Actual original string/numeric constructors remain mandatory enclosing bindings until the owner is implemented.
+- Full fallback member preserves source language/country snapshots, ISO decision/getter order, Chinese legacy fallback direction, Serbian/Pali aliases, all Kurdish country-specific branches, the missing generic ku candidate, Catalan constructor/full-vector request, vectors with duplicates, non-ISO legacy prefix order and original krm spelling. Existing non-ISO component candidates are factored once and reused by both the prepared-field and full-member paths. No generic locale canonicalizer, vector deduplication or added language-only recovery.
+- getKnowns visits the complete real MsLangId.getDefinedLanguagetags vector in original order, including repeated/alias raw numeric IDs. It constructs from mnLang rather than maBcp47 to preserve the original recursion-avoidance rule, requests full vectors and accumulates case-sensitive membership in the original static set. Publish only after successful construction/cleanup; failed initialization does not retain partial membership. Defined actual Unicode values are disposed even if their entries were not visited before a later constructor fails. Original numeric/string constructor temporaries end after vector construction and before vector insertion/iteration, in both getKnowns and Catalan paths. Added direct lifetime observations and corrected this temporary boundary during final source review; repeated related tests/build for the production change.
+- Replaced general decomposeCanonicalLanguageTag split/regex inference with actual lt_tag_parse and source borrowed subtag/tag getters, plus the original isIsoCountry filter. Preserve the complete existing native simple-cache branch and partial-parser prefix behavior. Canonical grandfathered i-default/i-enochian no longer invent language i or an i fallback. This remains a prepared canonical-input field binding; enclosing LanguageTag constructor/canonicalization/registration and final caller migration are not falsely certified.
+- Initial new tests incorrectly expected an extlang-looking zh-cmn-Hans-CN input to reach the general branch: original simpleExtract deliberately classifies structural shapes without validating their contents. Left that native branch unchanged and used canonical grandfathered tags to test actual general parsing. The first known-set test also imposed JS Set iteration ordering and counted a repeated alias ID twice; corrected it to verify original ordered constructor visits/destruction and unordered case-sensitive membership/size/cache identity. Production membership logic was unchanged. Evidence: fallback-tests.log, corrected fallback-tests-final.log (3 files107 cases).
+- CALC-420 records ISO ku/US returning only its full tag or an empty partial vector. CALC-421 records nested Catalan full-vector behavior, original ca-XV inclusion even with includeFull=false and duplication with true. These are conditional source member observations over explicit original getter/ISO fixtures, not a claim that the unported public constructor always selects those branches. Existing CALC-134 krm typo remains preserved.
+- Command: npm run test:shared -- src/i18nlangtag/source/languagetag src/external/liblangtag/liblangtag src/i18npool/source/localedata src/unotools/source/config/native-default-fonts.test.ts src/external/libnumbertext/src/Numbertext.test.ts. Result: pass,23 files363 cases after the final lifetime correction. Evidence: fallback-related-tests-final.log. Scope: original fallback vectors/flags/aliases/duplicates, full real definition traversal through explicit constructor fixtures, failed initializer retry, actual Unicode/temporary cleanup, prepared general real-parser data, actual locale/calendar/currency/number-format/default-font queries and existing language/parser/library tests. No full native public LanguageTag/known-set data-membership or ABI claim from fixture-supplied vectors. Earlier broader361 tests pass in fallback-related-tests.log.
+- Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fallback-check-{0,1,2,3,5,6}.log,fallback-final-{0,1,3}.log,fallback-temporary-{0,1,2,3}.log. Provenance1887 runtime modules, dependencies1886 sources10194 relative imports226 allowed edges, docs4259 authored sources, semantic violations0. Full lint excludes only native scratch alongside existing dependency/generated exclusions. Initial docs gate found3 missing comments on constructor-failure assertion callbacks; added comments and reran (fallback-check-4.log, fallback-final-0.log). Existing foundation/unverified statuses are preserved; no native startup footprint or physical XML/allocator/thread ABI certification.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fallback-final-2.log), before the additive temporary-order correction; final related tests cover that correction. Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build (fallback-browser.log). Existing CSV/UI/Worker regressions do not establish completed NatNum12 output forwarding.
+- Remaining: implement/bind the actual LanguageTag value/implementation constructors, shared registration and known-set constructor dependency; connect NumberText/NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/date-key output, actual multiline EditEngine import and remaining CSV native option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All output/native source/build/probe/install/log scratch remains untracked and excluded from commits.
