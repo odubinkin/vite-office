@@ -58,7 +58,7 @@ it.each([false, true])(
             ) => [
               hint.GetStart(),
               hint.GetEnd(),
-              hint.format.QueryValue(),
+              hintValue(hint.format),
               hint instanceof SwTextCharFormat ? hint.GetSortNumber() : -1,
             ],
           ),
@@ -86,7 +86,7 @@ it.each([false, true])(
           .map(
             /** Reads the normal post-import replacement owner. @param hint - Actual remaining hint. @returns Name. */ (
               hint,
-            ) => hint.format.QueryValue(),
+            ) => hintValue(hint.format),
           ),
       ).toEqual(["Strong Emphasis"]);
     } finally {
@@ -126,7 +126,7 @@ it("builds native shared boundaries and style order, and merges complete replace
           ) => [
             h.start,
             h.end,
-            h.format.QueryValue(),
+            hintValue(h.format),
             h instanceof SwTextCharFormat ? h.GetSortNumber() : -1,
           ],
         ),
@@ -333,3 +333,17 @@ it("keeps a direct value equal to the paragraph when a character style would oth
     doc.Dispose();
   }
 });
+
+/** Inspects actual nested item values; core SwFormatAutoFormat::QueryValue is a style-name API. @param item - Native hint item. @returns Native style identity or contained item payloads. */
+function hintValue(item: SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat) {
+  return item instanceof SwFormatAutoFormat
+    ? item
+        .GetStyleHandle()
+        .entries()
+        .map(
+          /** Reads actual nested items without calling the automatic item's style-name query as a persistence API. @param nested - Native item. @returns Native item value. */ (
+            nested,
+          ) => ({ which: nested.Which(), value: nested.QueryValue() }),
+        )
+    : item.QueryValue();
+}

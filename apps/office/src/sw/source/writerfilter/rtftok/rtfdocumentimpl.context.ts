@@ -114,6 +114,7 @@ export interface RtfState {
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
   readonly paragraphSprms?: RTFSprms;
+  readonly marker?: RtfRun;
   readonly runs: readonly RtfRun[];
   readonly state: RtfParagraphState;
   readonly marks: readonly Readonly<{ name: string; offset: number }>[];

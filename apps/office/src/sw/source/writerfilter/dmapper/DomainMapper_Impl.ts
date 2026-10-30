@@ -7,6 +7,13 @@ import type { SwXText } from "../../core/unocore/unotext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
 import { PropertyMap, SectionPropertyMap, ParagraphPropertyMap } from "./PropertyMap";
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  NamedValue,
+  cppu_detail_getUnoType_NamedValue as namedType,
+} from "../../../../udkapi/com/sun/star/beans/NamedValue";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { listAutoFormatType } from "../../core/unocore/unoobj-listautofmt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -286,11 +293,75 @@ export class DomainMapper_Impl {
     const range = this.body.appendTextPortion(value, properties?.GetPropertyValues() ?? []);
     range.dispose();
   }
+  /** Native finishParagraph extracts Char-prefixed values into ListAutoFormat while retaining the original direct properties. The caller owns this value vector. @param properties - Actual paragraph context. @returns Owned generated values. */
+  GetParagraphPropertyValues(properties: PropertyMap | null): PropertyValue[] {
+    const result = (properties?.GetPropertyValues() ?? []).map(
+      /** Native vector copy owns its fields. @param value - Map value. @returns Independent copy. */ (
+        value,
+      ) => new PropertyValue(value),
+    );
+    const chars: NamedValue[] = [];
+    try {
+      for (const value of result)
+        if (text(value.Name).startsWith("Char"))
+          chars.push(new NamedValue(value.Name, value.Value));
+      if (chars.length) {
+        const Values = Sequence.specialize<NamedValue>(namedType, 32);
+        const sequence = new Values(
+          new Map(
+            chars.map(
+              /** Native compound element addresses. @param value - Value. @param index - Index. @returns Address pair. */ (
+                value,
+                index,
+              ) => [index * 32, value],
+            ),
+          ),
+          chars.length,
+        );
+        const name = new OUString(
+          Uint16Array.from(
+            "ListAutoFormat",
+            /** Native ASCII unit. @param c - Character. @returns Unit. */ (c) => c.charCodeAt(0),
+          ),
+          14,
+        );
+        try {
+          const value = new Any(sequence.getAddress(), listAutoFormatType);
+          try {
+            result.push(new PropertyValue(name, 0, value, 0));
+          } finally {
+            value.dispose();
+          }
+        } finally {
+          name.dispose();
+          sequence.dispose();
+        }
+      }
+      return result;
+    } catch (error) {
+      for (const value of result) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+      throw error;
+    } finally {
+      for (const value of chars) value.dispose();
+    }
+  }
+
   /** Finishes the actual paragraph through XParagraphAppend, preserving style-first property order. @param properties - Paragraph map. @returns Nothing. */
   finishParagraph(properties: PropertyMap | null): void {
-    const paragraph = this.body.finishParagraph(properties?.GetPropertyValues() ?? []);
-    paragraph.Release();
-    this.appendedParagraph = true;
+    const values = this.GetParagraphPropertyValues(properties);
+    try {
+      const paragraph = this.body.finishParagraph(values);
+      paragraph.Release();
+      this.appendedParagraph = true;
+    } finally {
+      for (const value of values) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+    }
   }
   /** Original body trailing-paragraph deletion uses XComponent paragraph disposal rather than merging formatting into its predecessor. @returns Nothing. */
   RemoveLastParagraph(): void {

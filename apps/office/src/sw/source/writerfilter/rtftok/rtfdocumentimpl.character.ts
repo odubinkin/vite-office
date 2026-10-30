@@ -540,3 +540,46 @@ export function ApplyRtfParagraphProperties(
     properties.clear();
   }
 }
+
+/** Original PAR calls runProps in paragraph context before the break; apply marker properties at EOF plus the native ListAutoFormat owner without changing visible text ranges. @param mapper - Native mapper. @param node - Actual paragraph. @param marker - Original runProps input. @param table - Raw native style table. @returns Nothing. */
+export function ApplyRtfParagraphMarker(
+  mapper: DomainMapper,
+  node: SwTextNode,
+  marker: RtfRun,
+  table: Map<number, ReferencePointer<Properties>>,
+): void {
+  const properties = getRtfCharacterProperties(marker, table),
+    point = new SwPosition(node, node.Len()),
+    range = new SwPaM(point);
+  point.Dispose();
+  mapper.startParagraphGroup();
+  try {
+    const style = node.GetTextFormatColl();
+    mapper.impl.SetCurrentParaStyleName(
+      SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
+    );
+    mapper.props(properties);
+    mapper.impl.processDeferredCharacterProperties(false);
+    const values = mapper.impl.GetParagraphPropertyValues(mapper.impl.GetTopContext());
+    try {
+      SetPropertyValues(
+        range,
+        values.filter(
+          /** Paragraph/named styles are already owned by the atomic importer. @param value - Actual value. @returns Direct marker admission. */ (
+            value,
+          ) => !["ParaStyleName", "CharStyleName"].includes(textValue(value.Name)),
+        ),
+        SetAttrMode.NOFORMATATTR,
+      );
+    } finally {
+      for (const value of values) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+    }
+  } finally {
+    mapper.endParagraphGroup();
+    range.Dispose();
+    properties.clear();
+  }
+}

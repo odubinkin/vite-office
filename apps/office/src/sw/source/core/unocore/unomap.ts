@@ -8,6 +8,8 @@ import { SfxItemPropertySetInfo } from "../../../../svl/source/items/itemprop";
 import { Property } from "../../../../udkapi/com/sun/star/beans/Property";
 
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
+import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
+import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
 import * as M from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
@@ -77,6 +79,7 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<
 );
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
+  ["ListAutoFormat", { which: FN_UNO_PARA_NUM_AUTO_FORMAT, member: 0, kind: "any", attributes: 1 }],
   ["CharAutoStyleName", { which: H.RES_TXTATR_AUTOFMT, member: 0, kind: "autostyle" }],
   ...["", "Asian", "Complex"].flatMap(
     /** Processes one ordered native value at this boundary. @param suffix - Original suffix input. @param index - Native zero-based index. @returns The represented native operation result. */
@@ -256,6 +259,16 @@ export const SwUnoCharStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> 
     ),
 );
 
+/** Represented native GetAutoCharStylePropertyMap entries, with original direct character properties and hint references. */
+export const SwUnoCharAutoStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
+  ...[...SwUnoCharStylePropertyMap].filter(
+    /** Legacy host background aliases are not native character-auto-style highlight properties. @param property - Name and entry. @returns Whether its native Which is represented. */
+    ([name]) => name !== "CharBackColor" && name !== "CharBackTransparent",
+  ),
+  ["CharAutoStyleName", { which: H.RES_TXTATR_AUTOFMT, member: 0, kind: "any", attributes: 1 }],
+  ["CharStyleName", { which: H.RES_TXTATR_CHARFMT, member: 0, kind: "any", attributes: 1 }],
+]);
+
 /** Builds native property descriptors for the represented property map and explicit semantic properties. @param extra - Extra name/type pairs consumed by the caller. @returns Independent metadata owner. @param includeItems - Original includeItems input. @param itemMap - Original property-map family. */
 export function createPropertySetInfo(
   extra: readonly (readonly [string, UnoTypeArgument])[] = [],
@@ -265,58 +278,60 @@ export function createPropertySetInfo(
   const properties: Property[] = [];
   for (const [name, entry] of includeItems ? itemMap : []) {
     const argument: UnoTypeArgument =
-      name === "FillStyle"
-        ? fillStyleType
-        : name === "FillColor"
-          ? "sal_Int32"
-          : name === "FillTransparence"
-            ? "sal_Int16"
-            : entry.kind === "break"
-              ? breakType
-              : entry.kind === "border"
-                ? borderLineType
-                : entry.kind === "pagedesc"
-                  ? entry.member === MID_PAGEDESC_PAGEDESCNAME
-                    ? "OUString"
-                    : "sal_Int16"
-                  : entry.kind === "string"
-                    ? "OUString"
-                    : entry.kind === "font"
-                      ? entry.member < 3
-                        ? "OUString"
-                        : "sal_Int16"
-                      : entry.kind === "bool"
-                        ? "bool"
-                        : entry.kind === "byte"
-                          ? "sal_Int8"
-                          : entry.kind === "short"
-                            ? "sal_Int16"
-                            : entry.kind === "hyperlink" || entry.kind === "autostyle"
-                              ? "OUString"
-                              : entry.kind === "color" || entry.kind === "long"
-                                ? "sal_Int32"
-                                : name.startsWith("CharLocale")
-                                  ? localeType
-                                  : name.includes("Posture")
-                                    ? fontSlantType
-                                    : name === "ParaLineSpacing"
-                                      ? lineSpacingType
-                                      : name === "ParaTabStops"
-                                        ? ["Sequence", tabStopType]
-                                        : name === "CharUnderlineColor"
-                                          ? "sal_Int32"
-                                          : name === "CharUnderlineHasColor"
-                                            ? "bool"
-                                            : name === "CharStrikeout" ||
-                                                name === "CharEscapement" ||
-                                                name === "ParaAdjust" ||
-                                                name === "ParaLastLineAdjust"
-                                              ? "sal_Int16"
-                                              : name === "CharEscapementHeight"
-                                                ? "sal_Int8"
-                                                : name === "ParaExpandSingleWord"
-                                                  ? "bool"
-                                                  : "float";
+      name === "ListAutoFormat"
+        ? ["Sequence", namedValueType]
+        : name === "FillStyle"
+          ? fillStyleType
+          : name === "FillColor"
+            ? "sal_Int32"
+            : name === "FillTransparence"
+              ? "sal_Int16"
+              : entry.kind === "break"
+                ? breakType
+                : entry.kind === "border"
+                  ? borderLineType
+                  : entry.kind === "pagedesc"
+                    ? entry.member === MID_PAGEDESC_PAGEDESCNAME
+                      ? "OUString"
+                      : "sal_Int16"
+                    : entry.kind === "string"
+                      ? "OUString"
+                      : entry.kind === "font"
+                        ? entry.member < 3
+                          ? "OUString"
+                          : "sal_Int16"
+                        : entry.kind === "bool"
+                          ? "bool"
+                          : entry.kind === "byte"
+                            ? "sal_Int8"
+                            : entry.kind === "short"
+                              ? "sal_Int16"
+                              : entry.kind === "hyperlink" || entry.kind === "autostyle"
+                                ? "OUString"
+                                : entry.kind === "color" || entry.kind === "long"
+                                  ? "sal_Int32"
+                                  : name.startsWith("CharLocale")
+                                    ? localeType
+                                    : name.includes("Posture")
+                                      ? fontSlantType
+                                      : name === "ParaLineSpacing"
+                                        ? lineSpacingType
+                                        : name === "ParaTabStops"
+                                          ? ["Sequence", tabStopType]
+                                          : name === "CharUnderlineColor"
+                                            ? "sal_Int32"
+                                            : name === "CharUnderlineHasColor"
+                                              ? "bool"
+                                              : name === "CharStrikeout" ||
+                                                  name === "CharEscapement" ||
+                                                  name === "ParaAdjust" ||
+                                                  name === "ParaLastLineAdjust"
+                                                ? "sal_Int16"
+                                                : name === "CharEscapementHeight"
+                                                  ? "sal_Int8"
+                                                  : name === "ParaExpandSingleWord"
+                                                    ? "bool"
+                                                    : "float";
     const key = unicode(name);
     properties.push(new Property(key, entry.which, UnoType.get(argument), entry.attributes ?? 1));
     key.dispose();

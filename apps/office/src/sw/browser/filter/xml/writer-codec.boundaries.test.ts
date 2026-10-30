@@ -1,5 +1,6 @@
 /** @fileoverview Validates malformed graph records and actual unregistered style ownership at the Writer transport boundary. */
 import { assert, expect, it } from "vitest";
+import { encodeSfxPoolItem } from "./item-codec";
 import { SwDoc } from "../../../source/core/doc/doc";
 import { SwCharFormat } from "../../../inc/charfmt";
 import { SwFormatCharFormat } from "../../../source/core/txtnode/fmtatr2";
@@ -183,17 +184,24 @@ it("round trips a real character hint with an absent optional style pointer", /*
   }
 });
 
-it("preserves brush color values through an actual automatic character owner", /** Automatic format QueryValue exposes primitive color rather than a mutable brush owner. @returns Nothing. */ () => {
+it("preserves brush color values through an actual automatic character owner", /** Browser codec exposes primitive color records while native QueryValue retains the automatic style name. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     items = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
   let automatic: SwFormatAutoFormat | undefined;
   try {
     items.Put(new SvxBrushItem(new Color(0xabcdef), RES_CHRATR_HIGHLIGHT));
     automatic = new SwFormatAutoFormat(items);
-    expect(automatic.QueryValue()).toEqual([{ which: RES_CHRATR_HIGHLIGHT, value: 0xabcdef }]);
+    expect(encodeSfxPoolItem(automatic)).toEqual({
+      which: automatic.Which(),
+      value: {
+        kind: "writer-auto-format",
+        items: [{ which: RES_CHRATR_HIGHLIGHT, value: 0xabcdef }],
+      },
+    });
     const copy = automatic.Clone();
     try {
       expect(copy.QueryValue()).toEqual(automatic.QueryValue());
+      expect(encodeSfxPoolItem(copy)).toEqual(encodeSfxPoolItem(automatic));
     } finally {
       copy.Dispose();
     }

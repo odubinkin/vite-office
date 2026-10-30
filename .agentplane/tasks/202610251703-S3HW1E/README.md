@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 179
+revision: 182
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T11:27:19.889Z"
+  updated_at: "2026-10-30T12:13:33.319Z"
   updated_by: "CODER"
-  note: "Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,typed Locale/item/mapper transport,paragraph language snapshots and actual script/bidi export with empty-run handling. Related profile896pass/1loading-timeout;current-focused55pass/same timeout;both configuration cases pass isolated with CLI120s budget and unchanged assertions/config. Shared416 and boundary47 pass;typecheck,lint,format,JSDoc,size,source-tree/provenance,registry/routing pass. Preserve WRITER251/252. Overall goal incomplete:paragraph-marker and remaining format obligations remain."
-  attempts: 24
+  note: "Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model regressions plus corrected six-case codec recheck, 12 marker cases and 25 shared StylePool cases pass; typecheck, lint, provenance and both registries pass. Goal remains incomplete pending associated font dispatch, special section audit and HTML/current-model filter obligations."
+  attempts: 25
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -389,8 +392,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:13:33.319Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model regressions plus corrected six-case codec recheck, 12 marker cases and 25 shared StylePool cases pass; typecheck, lint, provenance and both registries pass. Goal remains incomplete pending associated font dispatch, special section audit and HTML/current-model filter obligations."
+  -
+    type: "status"
+    at: "2026-10-30T12:13:40.782Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T11:27:46.528Z"
+doc_updated_at: "2026-10-30T12:13:40.782Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -833,6 +849,36 @@ sections:
     Attempts: 24
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:27:18.941Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:13:33.319Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model regressions plus corrected six-case codec recheck, 12 marker cases and 25 shared StylePool cases pass; typecheck, lint, provenance and both registries pass. Goal remains incomplete pending associated font dispatch, special section audit and HTML/current-model filter obligations.
+    Attempts: 25
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:13:22.796Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1520,6 +1566,26 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
       Result: pass. Evidence: html13-final-static.txt, html13-source-gates.txt (JSDoc/size before the now-corrected edge), html13-format-check.txt; 47 boundary tests;1870 runtime sources/10120 imports/227 allowed edges;1871 provenance modules. Native textitem.cxx includes Locale.hpp; only that witnessed Editeng->UDKAPI edge and forbidden-reverse expectation were added; guard algorithm unchanged.
     - Completed gate details and final status are recorded with AgentPlane verification. The full objective remains open: broad paragraph-marker formatting, remaining associated-font import/production and HTML list/table/current-model capability audit are not certified by this language checkpoint. No full all-app run was repeated.
+
+    ### Native RTF paragraph markers and ListAutoFormat (2026-10-30)
+
+    - Implemented: native Which91/default empty SwFormatAutoFormat, Which/copy/handle assignment, pointer-name scalar/Any QueryValue and immutable PutValue. Actual class implementation moved to fmtatr2 with fmtautofmt header; txatbase retains compatibility re-export. Old snapshot QueryValue is replaced by explicit browser codec records.
+    - Actual ListAutoFormat uses generated Sequence<NamedValue>, represented native auto-character map and real automatic-style interning. No-DocShell SetCharStyle early return is preserved; unrepresented legacy background aliases do not masquerade as native highlight entries. Public list-gated getter, DIRECT state, VOID default and no-op reset are preserved (WRITER253).
+    - Export follows OutputTextNode marker selection, then recursive named/automatic/direct character application and conditional braces around PAR. Terminal INET suppression is retained (WRITER254). Import snapshots actual PAR properties, creates the DomainMapper ListAutoFormat sequence and inserts EOF character properties using native NOFORMATATTR. Removed the old collapsed-character InsertPoolItem shortcut that changed the whole paragraph.
+    - Worker codec preserves automatic/native named-style graphs, interning restored marker handles into the destination style pool. Marker-only fonts/colors are therefore present on subsequent RTF export. Native last-cell end handling stays separate; special section dummy-paragraph behavior and associated-font import remain explicit follow-ups, not certified complete.
+    - Command: npm run test:writer -- rtf sw/source/filter/md document-io hint-pool-ownership character-style-hints writer-model unocrsrhelper unoobj item-codec
+      Result: pass; 636 tests/41 files. Evidence: output/playwright/rtf-properties-native/html14-filter-tests.txt. Scope: RTF/Markdown/I/O/related native hints and codec regressions.
+    - Command: npm run test:writer -- native-import-api-states native-import-style-contracts native-text-import-api native-font-item-enumeration sw/browser/filter/xml txtedt-stylepool sw/source/core/txtnode/thints sw/source/core/undo
+      Result: 1540 passed and 1 obsolete snapshot assertion failed in 61 files. Evidence: html14-modeltests.txt. The failed assertion incorrectly expected native QueryValue to return serialized automatic items. It now checks the identical primitive brush value through encodeSfxPoolItem, plus clone encoding and native name equality; no value/ownership assertion was removed.
+    - Command: npm run test:writer -- writer-codec.boundaries
+      Result: pass; all 6 tests in the corrected file. Evidence: html14-codec-corrected.txt. Scope: graph admission and automatic brush clone/primitive-record boundary. The entire 61-file suite was not redundantly replayed for this assertion migration.
+    - Command: npm run test:writer -- rtf-paragraph-marker
+      Result: pass;12 tests. Evidence: html14-marker-native-visible.txt. Scope: actual typed sequence/Any/defaults/marker selection, languages, Worker styles and marker-only font/color enumeration. A preliminary assertion incorrectly expected the immutable UI projection to always include inherited font height; actual native GetCharacterItemsAt independently confirms visible text200twips versus marker400twips.
+    - Command: npm run test:shared -- stylepool
+      Result: pass;25 tests/3 files. Evidence: html14-sharedtests.txt. Scope: actual automatic style/name/handle owners.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+      Result: pass. Evidence: html14-types-fixed.txt, html14-lint-final.txt, html14-last-lint.txt, html14-last-prettier.txt, html14-provenance-fixed.txt, html14-docs-final.txt, html14-size-final.txt, html14-tree-final.txt, html14-hintids-final.txt, html14-routing-final.txt, html14-writer-registry-final.txt, html14-shared-registry-final.txt. Counts:1874 provenance modules,4230 documented files,80 native Which identities. Initial stale runs found unused imports and missing source/JSDoc markers; corrected without changing enforcement. All broad semantic confidence remains unverified.
+    - Remaining concrete filter dependency: F/AF currently does not select all original RunType font slots; source F changes decoding while AF must not. This affects mixed-script current-model fonts and is the next bounded block. HTML list/table producers and the capability matrix still require completion audit. Goal stays active; no full all-app replay or completeness certificate.
 id_source: "generated"
 ---
 ## Summary
@@ -1973,6 +2039,36 @@ Note: Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,type
 Attempts: 24
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:27:18.941Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:13:33.319Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model regressions plus corrected six-case codec recheck, 12 marker cases and 25 shared StylePool cases pass; typecheck, lint, provenance and both registries pass. Goal remains incomplete pending associated font dispatch, special section audit and HTML/current-model filter obligations.
+Attempts: 25
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:13:22.796Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2664,3 +2760,23 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
   Result: pass. Evidence: html13-final-static.txt, html13-source-gates.txt (JSDoc/size before the now-corrected edge), html13-format-check.txt; 47 boundary tests;1870 runtime sources/10120 imports/227 allowed edges;1871 provenance modules. Native textitem.cxx includes Locale.hpp; only that witnessed Editeng->UDKAPI edge and forbidden-reverse expectation were added; guard algorithm unchanged.
 - Completed gate details and final status are recorded with AgentPlane verification. The full objective remains open: broad paragraph-marker formatting, remaining associated-font import/production and HTML list/table/current-model capability audit are not certified by this language checkpoint. No full all-app run was repeated.
+
+### Native RTF paragraph markers and ListAutoFormat (2026-10-30)
+
+- Implemented: native Which91/default empty SwFormatAutoFormat, Which/copy/handle assignment, pointer-name scalar/Any QueryValue and immutable PutValue. Actual class implementation moved to fmtatr2 with fmtautofmt header; txatbase retains compatibility re-export. Old snapshot QueryValue is replaced by explicit browser codec records.
+- Actual ListAutoFormat uses generated Sequence<NamedValue>, represented native auto-character map and real automatic-style interning. No-DocShell SetCharStyle early return is preserved; unrepresented legacy background aliases do not masquerade as native highlight entries. Public list-gated getter, DIRECT state, VOID default and no-op reset are preserved (WRITER253).
+- Export follows OutputTextNode marker selection, then recursive named/automatic/direct character application and conditional braces around PAR. Terminal INET suppression is retained (WRITER254). Import snapshots actual PAR properties, creates the DomainMapper ListAutoFormat sequence and inserts EOF character properties using native NOFORMATATTR. Removed the old collapsed-character InsertPoolItem shortcut that changed the whole paragraph.
+- Worker codec preserves automatic/native named-style graphs, interning restored marker handles into the destination style pool. Marker-only fonts/colors are therefore present on subsequent RTF export. Native last-cell end handling stays separate; special section dummy-paragraph behavior and associated-font import remain explicit follow-ups, not certified complete.
+- Command: npm run test:writer -- rtf sw/source/filter/md document-io hint-pool-ownership character-style-hints writer-model unocrsrhelper unoobj item-codec
+  Result: pass; 636 tests/41 files. Evidence: output/playwright/rtf-properties-native/html14-filter-tests.txt. Scope: RTF/Markdown/I/O/related native hints and codec regressions.
+- Command: npm run test:writer -- native-import-api-states native-import-style-contracts native-text-import-api native-font-item-enumeration sw/browser/filter/xml txtedt-stylepool sw/source/core/txtnode/thints sw/source/core/undo
+  Result: 1540 passed and 1 obsolete snapshot assertion failed in 61 files. Evidence: html14-modeltests.txt. The failed assertion incorrectly expected native QueryValue to return serialized automatic items. It now checks the identical primitive brush value through encodeSfxPoolItem, plus clone encoding and native name equality; no value/ownership assertion was removed.
+- Command: npm run test:writer -- writer-codec.boundaries
+  Result: pass; all 6 tests in the corrected file. Evidence: html14-codec-corrected.txt. Scope: graph admission and automatic brush clone/primitive-record boundary. The entire 61-file suite was not redundantly replayed for this assertion migration.
+- Command: npm run test:writer -- rtf-paragraph-marker
+  Result: pass;12 tests. Evidence: html14-marker-native-visible.txt. Scope: actual typed sequence/Any/defaults/marker selection, languages, Worker styles and marker-only font/color enumeration. A preliminary assertion incorrectly expected the immutable UI projection to always include inherited font height; actual native GetCharacterItemsAt independently confirms visible text200twips versus marker400twips.
+- Command: npm run test:shared -- stylepool
+  Result: pass;25 tests/3 files. Evidence: html14-sharedtests.txt. Scope: actual automatic style/name/handle owners.
+- Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+  Result: pass. Evidence: html14-types-fixed.txt, html14-lint-final.txt, html14-last-lint.txt, html14-last-prettier.txt, html14-provenance-fixed.txt, html14-docs-final.txt, html14-size-final.txt, html14-tree-final.txt, html14-hintids-final.txt, html14-routing-final.txt, html14-writer-registry-final.txt, html14-shared-registry-final.txt. Counts:1874 provenance modules,4230 documented files,80 native Which identities. Initial stale runs found unused imports and missing source/JSDoc markers; corrected without changing enforcement. All broad semantic confidence remains unverified.
+- Remaining concrete filter dependency: F/AF currently does not select all original RunType font slots; source F changes decoding while AF must not. This affects mixed-script current-model fonts and is the next bounded block. HTML list/table producers and the capability matrix still require completion audit. Goal stays active; no full all-app replay or completeness certificate.

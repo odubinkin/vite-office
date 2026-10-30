@@ -130,7 +130,7 @@ function applyFormattingItem(
   codeFont: SfxPoolItem,
 ): void {
   if (item instanceof SwFormatAutoFormat) {
-    for (const nested of item.GetStyleHandle().entries())
+    for (const nested of (item.GetStyleHandle() as SfxItemSet).entries())
       applyFormattingItem(status, nested, codeFont);
   } else if (item instanceof SwFormatINetFormat) {
     const url = item.GetValue();

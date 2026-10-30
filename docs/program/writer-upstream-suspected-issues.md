@@ -2252,3 +2252,16 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, MoveProperties, emits Western associated properties after HICH. Pinned `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, dispatchCharacterAttributeValue, instead routes LANG/ALANG under RunType::HICH to `LN_CT_Language_bidi`. For `\rtlch\alang1025\ltrch\hich\alang1031` the later HICH value therefore replaces the earlier CTL language with 1031.
 - Resolution: preserve native associated output order and native HICH dispatch. Do not remap HICH language to Western to repair inactive-script metadata. Actual script/bidi run splitting is required to preserve the language used by each visible script; it does not imply that every inactive-script property on every run survives a round-trip unchanged. The literal native control sequence is covered by managed import tests; this is source-derived evidence, not an executed full native round-trip oracle.
+
+
+### WRITER253 — ListAutoFormat public read/state/default/reset are asymmetric
+
+- Pinned source: `sw/source/core/unocore/unocrsrhelper.cxx`, `GetParaListAutoFormat` and `getCursorPropertyValue`; `sw/source/core/unocore/unoobj.cxx`, ListAutoFormat setter and virtual property default/reset routing.
+- Observation: the setter stores `RES_PARATR_LIST_AUTOFMT` on ordinary paragraphs too, and the internal getter can read its handle. The public cursor getter returns the sequence only when the point paragraph `IsInList()`. A property-state query remains DIRECT_VALUE even without a list/handle; its default is VOID and resetting the virtual property leaves the handle unchanged.
+- Resolution: preserve this asymmetry rather than hiding marker formatting in a separate local property or making reset clear it. Actual typed NamedValue input, real handle ownership and ordinary paragraph cursor calls reproduce the represented behavior. This is pinned-source plus managed-owner evidence, not a compiled full native UNO differential.
+
+### WRITER254 — Any terminal non-character-style hint suppresses paragraph marker fallback
+
+- Pinned source: `sw/source/filter/ww8/wrtw8nds.cxx`, `MSWordExportBase::OutputTextNode` paragraph-marker collection (lines3284–3337).
+- Observation: a zero-length hint at paragraph end sets `bCharFormatOnly=false` whenever its Which differs from `RES_TXTATR_CHARFMT`, even when the collector does not copy that hint. In particular a terminal internet hint suppresses direct paragraph character formatting while contributing no marker item. Only a character-style hint preserves paragraph-direct fallback.
+- Resolution: keep the exact selection/order. Real terminal internet, automatic and named-style attributes test the three branches and precedence. This is source/control-flow and actual managed-owner evidence; it does not certify all terminal attribute types or compiled Writer output.

@@ -131,6 +131,8 @@ export const RES_PARATR_LIST_RESTARTVALUE = 89 as const;
 
 /** Paragraph counted-in-list flag. */
 export const RES_PARATR_LIST_ISCOUNTED = 90 as const;
+/** Native paragraph-marker/list automatic style handle. */
+export const RES_PARATR_LIST_AUTOFMT = 91 as const;
 
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
 export const RES_FRM_SIZE = 93 as const;
@@ -212,7 +214,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER],
   [RES_PARATR_OUTLINELEVEL, RES_PARATR_OUTLINELEVEL],
-  [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
+  [RES_PARATR_LIST_ID, RES_PARATR_LIST_AUTOFMT],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_LR_SPACE, RES_LR_SPACE],
   [RES_UL_SPACE, RES_UL_SPACE],

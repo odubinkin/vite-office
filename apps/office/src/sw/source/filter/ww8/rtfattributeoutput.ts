@@ -1,4 +1,5 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import { CollectCharFormatItems } from "./wrtw8nds.paragraph-marker";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import type { wwFont } from "./wrtw8sty";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
@@ -680,6 +681,16 @@ export class RtfAttributeOutput extends AttributeOutputBase {
       return result + this.associated.MoveProperties(local, mode);
     } finally {
       local.Dispose();
+    }
+  }
+
+  /** Original EndParagraphProperties character-item stage over a detached native buffer for the current string sink. @param items - Selected paragraph-marker set. @returns Source StyleDefinition controls. */
+  public WriteParagraphMarkerProperties(items: SfxItemSet): string {
+    const buffer = CollectCharFormatItems(items);
+    try {
+      return this.WriteNativeCharacter(buffer, GetCharacterPropertiesMode.StyleDefinition);
+    } finally {
+      buffer.Dispose();
     }
   }
 

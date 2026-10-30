@@ -81,7 +81,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       (this["runs"].length > 0 ||
         (!this["terminatedParagraph"] && !(this["states"][0] as RtfState).paragraphSprms.empty()))
     )
-      this["CommitParagraph"](this["states"][0]);
+      this["CommitParagraph"](this["states"][0], true);
     const previous = this["states"].pop();
     try {
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
@@ -674,7 +674,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "par") {
-    this["CommitParagraph"](state);
+    this["CommitParagraph"](state, true);
     return;
   }
   if (name === "line" || name === "tab" || name === "~" || name === "-") {

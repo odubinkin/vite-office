@@ -1,5 +1,14 @@
 /** @fileoverview Implements Writer's hyperlink pool item from pinned LibreOffice `sw/source/core/txtnode/fmtatr2.cxx` and `sw/inc/fmtinfmt.hxx`. */
 
+import {
+  StylePool,
+  acquireStyleHandle,
+  releaseStyleHandle,
+} from "../../../../svl/source/items/stylepool";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import type { SwTextCharFormat } from "./txtatr2";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SwModelHint } from "../../../inc/hints";
@@ -272,3 +281,87 @@ const characterFormatFinalizers = new FinalizationRegistry<WeakRef<SvtListener<S
   /** Ends registrations when the actual item becomes unreachable. @param listener - Native receiver. @returns Nothing. */
   (listener) => listener.deref()?.Dispose(),
 );
+
+/** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
+export class SwFormatAutoFormat<
+  TInput extends SfxItemSet | number = SfxItemSet,
+> extends SfxPoolItem {
+  private styleHandle: SfxItemSet | undefined;
+  /** Native Which/copy constructor, retaining the established initialized-handle host binding. The generic preserves that binding's non-null handle precondition without concealing the native default's absence. @param input - Which, native copy or existing initialized handle. @param which - Which for the initialized-handle binding. @returns Actual item. */
+  public constructor(
+    input: TInput | SwFormatAutoFormat<TInput>,
+    which: number = RES_TXTATR_AUTOFMT,
+  ) {
+    super(
+      input instanceof SwFormatAutoFormat
+        ? input.Which()
+        : typeof input === "number"
+          ? input & 0xffff
+          : which & 0xffff,
+    );
+    this.setNonShareable();
+    const handle =
+      input instanceof SwFormatAutoFormat
+        ? input.styleHandle
+        : typeof input === "number"
+          ? undefined
+          : input;
+    if (handle instanceof SfxItemSet) this.styleHandle = acquireStyleHandle(handle);
+  }
+  /** Borrows the native shared pointer; Which-constructed defaults may have no handle. @returns Original pointee. */
+  public GetStyleHandle(): TInput extends number ? SfxItemSet | undefined : SfxItemSet {
+    return this.styleHandle as TInput extends number ? SfxItemSet | undefined : SfxItemSet;
+  }
+  /** Original shared-pointer assignment, including reset to empty. @param handle - New borrowed pointee. @returns Nothing. */
+  public SetStyleHandle(handle: TInput extends number ? SfxItemSet | undefined : SfxItemSet): void {
+    const copy = handle ? acquireStyleHandle(handle) : undefined;
+    if (this.styleHandle) releaseStyleHandle(this.styleHandle);
+    this.styleHandle = copy;
+  }
+  /** Releases the actual owned pointer, including native empty defaults. @returns Nothing. */
+  public override Dispose(): void {
+    if (this.styleHandle) releaseStyleHandle(this.styleHandle);
+  }
+  /** Original independent item copy shares its handle. @returns Copy. */
+  public Clone(): SwFormatAutoFormat<TInput> {
+    return new SwFormatAutoFormat<TInput>(this);
+  }
+  /** Original base identity and shared-pointer equality. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SwFormatAutoFormat &&
+      other.Which() === this.Which() &&
+      other.styleHandle === this.styleHandle
+    );
+  }
+  /** Native style-name projection at the existing host scalar boundary. @returns Native pointer-derived style name. */
+  public override QueryValue(): string;
+  /** Native Any receives StylePool::nameOf, not nested persistence records. @param output - Actual Any. @param member - Ignored source selector. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original pointer-name query. @param output - Optional actual Any. @param member - Ignored source member. @returns Style name or source success. */
+  public override QueryValue(output?: Any, member = 0): string | boolean {
+    void member;
+    const name = StylePool.nameOf(this.styleHandle);
+    if (!output) return name;
+    const text = new OUString(
+      Uint16Array.from(
+        name,
+        /** Copies native UTF16 units. @param c - Character. @returns Unit. */ (c) =>
+          c.charCodeAt(0),
+      ),
+      name.length,
+    );
+    try {
+      output.insert([text.pData], "OUString");
+    } finally {
+      text.dispose();
+    }
+    return true;
+  }
+  /** Original automatic styles cannot be renamed through this item. @param value - Ignored native Any. @param member - Ignored selector. @returns False. */
+  public override PutValue(value: unknown, member = 0): boolean {
+    void value;
+    void member;
+    return false;
+  }
+}

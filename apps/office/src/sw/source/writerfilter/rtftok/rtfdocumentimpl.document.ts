@@ -544,6 +544,13 @@ export function ApplyParagraph(
       if (nativeOffset > start)
         ApplyRtfCharacterProperties(this["Mapper"](), node, start, nativeOffset, run.properties);
     }
+    if (paragraph.marker)
+      ApplyRtfParagraphMarker(
+        this["Mapper"](),
+        node,
+        paragraph.marker,
+        this["m_pStyleTableEntries"],
+      );
   } finally {
     for (const pointer of propertyPointers) pointer.clear();
   }
@@ -608,6 +615,7 @@ import {
   getRtfCharacterProperties,
   ApplyRtfCharacterProperties,
   ApplyRtfParagraphProperties,
+  ApplyRtfParagraphMarker,
 } from "./rtfdocumentimpl.character";
 
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";

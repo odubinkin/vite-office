@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
+import { SetParaListAutoFormat, GetParaListAutoFormat } from "./unoobj-listautofmt";
 import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 
@@ -287,6 +288,10 @@ export function SetPropertyValue(
 ): void {
   const ranges = spans(pam),
     doc = pam.GetPoint().GetNode().GetDoc();
+  if (name === "ListAutoFormat") {
+    for (const r of ranges) SetParaListAutoFormat(r.node, value);
+    return;
+  }
   if (name === "CharAutoStyleName") {
     const handle = doc
       .GetIStyleAccess()
@@ -433,6 +438,12 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
   if (name === "PageDescName")
     return stringAny((node.GetAttr(H.RES_PAGEDESC) as SwFormatPageDesc).GetPageDescName());
   if (name === "ListId") return stringAny(node.GetListId());
+  if (name === "ListAutoFormat") {
+    const point = pam.GetPoint().GetNode();
+    return point instanceof SwTextNode && point.IsInList()
+      ? GetParaListAutoFormat(point)
+      : new Any();
+  }
   const out = new Any();
   if (name === "NumberingLevel" || name === "NumberingStartValue") {
     out.insert(
@@ -485,6 +496,7 @@ export function SetPropertyValues(
       "NumberingStartValue",
       "NumberingRules",
       "CharAutoStyleName",
+      "ListAutoFormat",
     ]),
     items = new Map<number, SfxPoolItem>(),
     special: PropertyValue[] = [],

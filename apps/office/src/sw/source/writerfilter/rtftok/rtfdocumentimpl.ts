@@ -79,6 +79,7 @@ export class RtfDocumentImpl {
       ) => {
         for (const run of value.runs) lists.add(run.characterSprms);
         if (value.paragraphSprms) lists.add(value.paragraphSprms);
+        if (value.marker) lists.add(value.marker.characterSprms);
       };
     const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
       values: readonly RtfTableRow[],
@@ -236,34 +237,39 @@ export class RtfDocumentImpl {
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
-    else
-      this.runs.push({
-        text: value,
-        characterSprms: new RTFSprms(state.characterSprms),
-        attributes: { ...state.character },
-        ...(state.paragraph.styleIndex === undefined
-          ? {}
-          : { paragraphStyleIndex: state.paragraph.styleIndex }),
-        ...(state.currentCharacterStyleIndex === undefined
-          ? {}
-          : { currentCharacterStyleIndex: state.currentCharacterStyleIndex }),
-        ...(state.characterStyleIndex === undefined
-          ? {}
-          : { characterStyleIndex: state.characterStyleIndex }),
-
-        ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
-        controls: new Set(state.characterControls),
-        ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
-      });
+    else this.runs.push(this.SnapshotRun(value, state));
     this.terminatedParagraph = false;
   }
 
-  /** Completes a paragraph at native \par or document end. @param state - Current group.  @returns Nothing. */
-  protected CommitParagraph(state = this.states.at(-1)): void {
+  /** Captures original runProps input at the atomic import boundary, including empty paragraph markers. @param value - Native text. @param state - Current group. @returns Owned state snapshot. */
+  protected SnapshotRun(value: string, state: RtfState): RtfRun {
+    return {
+      text: value,
+      characterSprms: new RTFSprms(state.characterSprms),
+      attributes: { ...state.character },
+      ...(state.paragraph.styleIndex === undefined
+        ? {}
+        : { paragraphStyleIndex: state.paragraph.styleIndex }),
+      ...(state.currentCharacterStyleIndex === undefined
+        ? {}
+        : { currentCharacterStyleIndex: state.currentCharacterStyleIndex }),
+      ...(state.characterStyleIndex === undefined
+        ? {}
+        : { characterStyleIndex: state.characterStyleIndex }),
+
+      ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
+      controls: new Set(state.characterControls),
+      ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
+    };
+  }
+
+  /** Completes a paragraph at native \par or document end. @param state - Current group. @param marker - Capture PAR run properties. @returns Nothing. */
+  protected CommitParagraph(state = this.states.at(-1), marker = false): void {
     this.firstRun = false;
     if (state) this.checkNeedPap(state);
     const paragraph: RtfParagraph = {
       paragraphSprms: new RTFSprms(this.m_aParagraphSprms),
+      ...(marker && state ? { marker: this.SnapshotRun("", state) } : {}),
       runs: this.runs.splice(0),
       state: {
         ...(state?.paragraph ?? DEFAULT_PARAGRAPH),

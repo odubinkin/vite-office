@@ -130,6 +130,8 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
+    register(WriterWhich.RES_TXTATR_AUTOFMT);
     register(
       WriterWhich.RES_TEXTGRID,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (

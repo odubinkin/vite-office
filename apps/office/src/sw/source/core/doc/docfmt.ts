@@ -11,6 +11,7 @@ import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import {
   isDrawingLayerAttribute,
   RES_CHRATR_BEGIN,
+  RES_TXTATR_AUTOFMT,
   RES_TXTATR_END,
   RES_PARATR_BEGIN,
   RES_PARATR_LIST_END,
@@ -24,7 +25,6 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
-import { MakeTextAttr } from "../txtnode/thints";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -218,23 +218,17 @@ export function InsertPoolItem(
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
     if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
     else if (item instanceof SwFormatINetFormat) node.InsertItem(item, start, end, mode);
-    else if (item instanceof SwFormatAutoFormat) node.InsertItem(item, start, end, mode);
-    else if (
-      item.Which() < RES_CHRATR_END &&
-      start !== end &&
-      ((mode & SetAttrMode.NOFORMATATTR) !== 0 ||
-        start !== 0 ||
-        end !== node.Len() ||
-        node
-          .GetpSwpHints()
-          ?.entries()
-          .some(
-            /** Native whole-paragraph SetAttr retains hints when a character style is present. @param hint - Actual hint. @returns Named character owner. */
-            (hint) => hint.IsCharFormatAttr(),
-          ))
-    )
-      node.InsertHint(MakeTextAttr(document, item, start, end), mode);
-    else node.SetAttr(item);
+    else if (item instanceof SwFormatAutoFormat && item.Which() === RES_TXTATR_AUTOFMT)
+      node.InsertItem(item, start, end, mode);
+    else if (item.Which() >= RES_CHRATR_BEGIN && item.Which() < RES_CHRATR_END) {
+      const set = new SfxItemSet(document.GetAttrPool(), [[item.Which(), item.Which()]]);
+      try {
+        set.Put(item);
+        node.SetAttr(set, start, end, mode);
+      } finally {
+        set.Dispose();
+      }
+    } else node.SetAttr(item);
   }
 }
 

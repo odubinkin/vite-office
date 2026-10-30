@@ -181,6 +181,7 @@ export class SwXTextCursor extends SwXTextRange {
   }
   /** Reads direct versus inherited native property state. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyState(name: OUStringConstReference): PropertyState {
+    if (text(name) === "ListAutoFormat") return PropertyState.DIRECT_VALUE;
     const entry = SwUnoPropertyMap.get(text(name));
     if (!entry) unknown(text(name));
     let result: PropertyState | undefined;
@@ -212,12 +213,14 @@ export class SwXTextCursor extends SwXTextRange {
   }
   /** Implements the represented native getPropertyDefault operation. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyDefault(name: OUStringConstReference): ReturnType<typeof queryItem> {
+    if (text(name) === "ListAutoFormat") return new Any();
     const entry = SwUnoPropertyMap.get(text(name));
     if (!entry) unknown(text(name));
     return queryItem(this.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry);
   }
   /** Removes the supported direct property delta. @param name - Native property or element name. @returns Nothing. */
   setPropertyToDefault(name: OUStringConstReference): void {
+    if (text(name) === "ListAutoFormat") return;
     const entry = SwUnoPropertyMap.get(text(name));
     if (!entry) unknown(text(name));
     ResetPoolItem(this.GetDoc(), this.GetPaM(), entry.which);

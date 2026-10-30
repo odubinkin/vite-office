@@ -49,7 +49,7 @@ export function SetTextNodeAttributes(
       }
       const automatic = text.GetItemIfSet(RES_TXTATR_AUTOFMT, false);
       if (automatic instanceof SwFormatAutoFormat) {
-        const changed = node.SetAttr(automatic.GetStyleHandle());
+        const changed = node.SetAttr(automatic.GetStyleHandle() as SfxItemSet);
         if (text.Count() === 1) return changed;
       }
       selected = text;

@@ -1,4 +1,5 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
+import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
 import { OutString } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
@@ -392,7 +393,10 @@ export class RtfExport extends MSWordExportBase {
           }
           for (const box of boxes) {
             for (const [paragraphIndex, paragraph] of box.GetParagraphs().entries()) {
-              if (paragraphIndex > 0) output += "\\par ";
+              if (paragraphIndex > 0)
+                output +=
+                  this.WriteParagraphEnd(box.GetParagraphs()[paragraphIndex - 1] as SwTextNode) +
+                  " ";
               output += `\\pard\\intbl ${this.WriteParagraph(paragraph)}`;
             }
             output += "\\cell ";
@@ -529,19 +533,22 @@ export class RtfExport extends MSWordExportBase {
       follow === currentPage ||
       this.IsPlausibleSingleWordSection(currentPage, follow)
     )
-      return { output: `\\pard${this.WriteParagraph(paragraph)}\\par\n`, currentPage };
+      return {
+        output: `\\pard${this.WriteParagraph(paragraph)}${this.WriteParagraphEnd(paragraph)}\n`,
+        currentPage,
+      };
     let output = "";
     let start = 0;
     for (const offset of positions) {
       const nextPage = currentPage.GetFollow();
       if (nextPage === currentPage) break;
-      output += `\\pard${this.WriteParagraph(paragraph, start, offset)}\\par\n`;
+      output += `\\pard${this.WriteParagraph(paragraph, start, offset)}${this.WriteParagraphEnd(paragraph)}\n`;
       if (previousPageDesc?.GetFollow() !== nextPage)
         output += this.WriteLaterSection(nextPage).output;
       currentPage = nextPage;
       start = offset;
     }
-    output += `\\pard${this.WriteParagraph(paragraph, start)}\\par\n`;
+    output += `\\pard${this.WriteParagraph(paragraph, start)}${this.WriteParagraphEnd(paragraph)}\n`;
     return { output, currentPage };
   }
 
@@ -552,6 +559,17 @@ export class RtfExport extends MSWordExportBase {
         ? block.GetTable().GetFrameFormat().GetAttrSet()
         : block.GetSwAttrSet();
     return set.Get(RES_PAGEDESC) as SwFormatPageDesc;
+  }
+
+  /** Native EndParagraph wraps the actual terminator only when marker properties exist. Last cell paragraphs retain the source cell-end path. @param paragraph - Actual text node. @returns Paragraph terminator markup. */
+  private WriteParagraphEnd(paragraph: SwTextNode): string {
+    const items = GetParagraphMarkerProperties(paragraph);
+    try {
+      const properties = this.attributeOutput.WriteParagraphMarkerProperties(items);
+      return properties ? "{" + properties + "\\par}" : "\\par";
+    } finally {
+      items.Dispose();
+    }
   }
 
   /** Reads only a block's authored item, as OutputSectionBreaks receives GetpSwAttrSet.  @param block - Block. @returns The SwFormatPageDesc | undefined result. */
