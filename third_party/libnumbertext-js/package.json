@@ -1,0 +1,29 @@
+{
+  "name": "@vite-office/libnumbertext",
+  "version": "1.0.11",
+  "private": true,
+  "description": "Package wrapper for the unchanged official libnumbertext 1.0.11 Soros.js",
+  "license": "BSD-3-Clause",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./data.json": "./data.json"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "Soros.js",
+    "data.json",
+    "COPYING",
+    "AUTHORS",
+    "README.md",
+    "UPSTREAM-README.md",
+    "source.json",
+    "upstream"
+  ],
+  "type": "module"
+}

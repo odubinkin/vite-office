@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 90
+revision: 93
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T13:39:35.441Z"
+  updated_at: "2026-10-30T14:10:17.900Z"
   updated_by: "CODER"
-  note: "Numeric native output and fractional-second source-call correction passed 1048 related tests, final 28-case native output file, 129 Calc tests, two fresh-build browser cases and static/build gates. Whole CSV remains incomplete: mode12/NumberText, multiline import and full acceptance remain."
-  attempts: 16
+  note: "Official Soros.js 1.0.11 installed through package.json file dependency; 50 original programs, loader/cache, integrity/tooling/shared tests, 129 Calc regressions and 2 fresh-build browser cases pass. User explicitly accepts original JS differences. Whole CSV task remains incomplete: NatNum12 service/casing/formatter and actual multiline EditEngine remain pending."
+  attempts: 17
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -584,8 +587,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T14:10:17.900Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Official Soros.js 1.0.11 installed through package.json file dependency; 50 original programs, loader/cache, integrity/tooling/shared tests, 129 Calc regressions and 2 fresh-build browser cases pass. User explicitly accepts original JS differences. Whole CSV task remains incomplete: NatNum12 service/casing/formatter and actual multiline EditEngine remain pending."
+  -
+    type: "status"
+    at: "2026-10-30T14:10:29.764Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T13:41:44.370Z"
+doc_updated_at: "2026-10-30T14:10:29.764Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1063,6 +1079,36 @@ sections:
     Attempts: 16
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:39:34.591Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T14:10:17.900Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Official Soros.js 1.0.11 installed through package.json file dependency; 50 original programs, loader/cache, integrity/tooling/shared tests, 129 Calc regressions and 2 fresh-build browser cases pass. User explicitly accepts original JS differences. Whole CSV task remains incomplete: NatNum12 service/casing/formatter and actual multiline EditEngine remain pending.
+    Attempts: 17
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:09:59.644Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1580,6 +1626,19 @@ sections:
     - Commands: npm run typecheck; focused ESLint across all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-native-{typecheck-final,lint,provenance,dependencies,docs,size,parity,resources,build}.log; final test-only lint/typecheck also pass in number-native-final-test-{lint,typecheck}.log. Provenance1876 modules; dependencies1875 sources10143 imports225 allowed edges; docs4240 authored sources; semantic violations0. No checker exemptions or broad semantic parity promotion. All implementation was frozen before the related test/build/browser runs; subsequent edits are test/documentation only.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the successful fresh build. Evidence: number-native-browser.log. Scope remains actual basic CSV/ODS file UI and owner/DOM-free Worker integration, not all native-number format/CSV option combinations or full native wrapper ABI.
     - Required follow-ups remain actual mode12 NumberText/selected-field/case handling and dependency data, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining admitted-domain audit. libnumbertext1.0.11 source download permission is still pending; no network access occurred. Goal/task remain active/incomplete. This is the same open Agentplane task, so this checkpoint creates no tenth-task full-suite trigger. Reviewed output/native evidence remains untracked/excluded from commits.
+
+    ### Official JavaScript libnumbertext package dependency, 2026-10-30
+
+    - User authorized the pinned source archive download, then explicitly chose the official JavaScript interpreter as-is despite observed C++ differences and required package.json library integration. This is a scoped exception for this dependency, not a relaxation for other CSV/core contracts. No custom interpreter was implemented. The official 1.0.11 JS file at f29639e7623a6dc6803995176621b06fafe10f4f has SHA256 62f1c7f303651684a573cf4a7675059c50c84df0f04d11d092b14e47d3ff40a1; the source data archive SHA256 matches pinned download.lst (5dcb4db3b2340f81f601ce86d8d76b69e34d70f84f804192c901e4b7f84d5fb0).
+    - No official npm publication/manifest exists under libnumbertext or numbertext; npm soros is unrelated. Added private @vite-office/libnumbertext 1.0.11 through apps/office/package.json file:../../third_party/libnumbertext-js and package-lock.json. The package preserves the byte-exact official Soros.js, its notices and all50 distinct original LibreOffice-packaged programs; source.json retains per-program hashes and ordered51-entry packaging list including duplicated fr. The ES module entry adds only source temporary variable declarations and export, without eval/global injection or algorithm edits. Source C++ reference files are included for loader provenance. The source-only dependency is excluded from authored lint/format rewriting, and provenance evidence readers now resolve this actual third_party source root without semantic gate exemptions.
+    - The first package placement followed the existing vendor symlink into the shared main checkout. Moved only the newly created package into this Calc checkout's third_party directory, removed its stale sibling dependency/lock references and regenerated the installation. No existing shared vendor files were edited; final manifest/lock/symlink resolve only inside Calc. Initial failed workspace relative-path install and stale-lock errors are preserved in install logs; corrected final installation passes. Initial new Norwegian test expectations omitted the original accent; corrected expectations to the actual no.sor output (én/éin), without changing production behavior.
+    - Original Numbertext loader/cache is implemented as a small owner around the installed library: exact filename, original two-character country removal regex, original Norwegian aliases, exact language keys, non-replacing map insertion, original missing-file boolean/input preservation. Packaged programs replace browser-unavailable filesystem readfile. Note that the source C++ \? string literal is a question-mark character, so the original Norwegian regex contains an optional country group; it is not a literal question-mark regex. Full NativeNumberSupplier12/casing/formatter forwarding remains pending.
+    - Command: unchanged downloaded C++ Soros.cxx/Numbertext.cxx compiled with clang++ -std=c++17 -O2; node output/native/AQF9AG-libnumbertext/compare-package.mjs. Result: bounded comparison,12412 inputs,12405 matching and7 differing outputs, identical to official unmodified JS. Evidence: package-esm-cpp-comparison.log and package-cpp-comparison.json. Scope: all archive programs plus selected regional variants,0..200 and special numeric/prefix/help inputs; not full parser/recursion/native ABI parity. CALC-416 records the accepted original JS differences and absent C++250-level recursion guard.
+    - Commands: npm run test:shared -- src/external/libnumbertext/src/Numbertext.test.ts; npx vitest run scripts/libnumbertext-package.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/registry-validation.test.ts. Result: pass,15 shared cases and15 tooling cases. Evidence: esm-1.log,esm-3.log. Scope: real installed dependency, regional/Norwegian selection, source cache lifetime/missing inputs, accepted JS outputs, byte-exact original body, complete program hashes/notices and registry validation. Initial provenance resolvers assumed only vendor/apps roots; added explicit third_party evidence-root support in both readers, preserving all validations, and reran their tests/checks.
+    - Commands: npm pack ./third_party/libnumbertext-js --pack-destination output/native/AQF9AG-libnumbertext --ignore-scripts; npm install --prefix output/native/AQF9AG-libnumbertext/clean-install ./output/native/AQF9AG-libnumbertext/vite-office-libnumbertext-1.0.11.tgz --ignore-scripts --no-audit --no-fund --cache output/native/AQF9AG-libnumbertext/npm-cache; installed-tarball import smoke. Result: pass. Evidence: pack.log,clean-install.log. Scope: portable package contents independent of the development link. Vite config-free browser ES library build and actual exported Numbertext execution also pass3 cases (browser-bundle.log), including the accepted JS ordinal result and Norwegian alias.
+    - Commands: npm run typecheck; focused ESLint on all authored changed source/tests/checkers; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: esm-{0,2,4}.log,final-5.log,end-{0,1,2,3}.log,build.log. Provenance1877 runtime modules; dependency1876 sources10143 relative imports225 allowed edges; docs4243 authored sources; semantic violations0. Ordinary existing large-chunk build warning only. No broad parity status promotion.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests (calc-tests.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful fresh build (browser.log). These are existing CSV/UI regressions, not evidence of completed NatNum12 CSV forwarding.
+    - Remaining work: original NumberText service/NatNum12 casing and selected date-field forwarding, actual multiline EditEngine path, remaining CSV option/UI/native acceptance audit. Goal/task remain active and incomplete. This is the same Agentplane task, so no tenth-task full-suite trigger arises. All native downloads/builds/comparison/pack/install logs remain output/native scratch and are excluded from commits.
 id_source: "generated"
 ---
 ## Summary
@@ -2066,6 +2125,36 @@ Note: Numeric native output and fractional-second source-call correction passed 
 Attempts: 16
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:39:34.591Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T14:10:17.900Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Official Soros.js 1.0.11 installed through package.json file dependency; 50 original programs, loader/cache, integrity/tooling/shared tests, 129 Calc regressions and 2 fresh-build browser cases pass. User explicitly accepts original JS differences. Whole CSV task remains incomplete: NatNum12 service/casing/formatter and actual multiline EditEngine remain pending.
+Attempts: 17
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:09:59.644Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2587,3 +2676,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint across all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-native-{typecheck-final,lint,provenance,dependencies,docs,size,parity,resources,build}.log; final test-only lint/typecheck also pass in number-native-final-test-{lint,typecheck}.log. Provenance1876 modules; dependencies1875 sources10143 imports225 allowed edges; docs4240 authored sources; semantic violations0. No checker exemptions or broad semantic parity promotion. All implementation was frozen before the related test/build/browser runs; subsequent edits are test/documentation only.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the successful fresh build. Evidence: number-native-browser.log. Scope remains actual basic CSV/ODS file UI and owner/DOM-free Worker integration, not all native-number format/CSV option combinations or full native wrapper ABI.
 - Required follow-ups remain actual mode12 NumberText/selected-field/case handling and dependency data, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining admitted-domain audit. libnumbertext1.0.11 source download permission is still pending; no network access occurred. Goal/task remain active/incomplete. This is the same open Agentplane task, so this checkpoint creates no tenth-task full-suite trigger. Reviewed output/native evidence remains untracked/excluded from commits.
+
+### Official JavaScript libnumbertext package dependency, 2026-10-30
+
+- User authorized the pinned source archive download, then explicitly chose the official JavaScript interpreter as-is despite observed C++ differences and required package.json library integration. This is a scoped exception for this dependency, not a relaxation for other CSV/core contracts. No custom interpreter was implemented. The official 1.0.11 JS file at f29639e7623a6dc6803995176621b06fafe10f4f has SHA256 62f1c7f303651684a573cf4a7675059c50c84df0f04d11d092b14e47d3ff40a1; the source data archive SHA256 matches pinned download.lst (5dcb4db3b2340f81f601ce86d8d76b69e34d70f84f804192c901e4b7f84d5fb0).
+- No official npm publication/manifest exists under libnumbertext or numbertext; npm soros is unrelated. Added private @vite-office/libnumbertext 1.0.11 through apps/office/package.json file:../../third_party/libnumbertext-js and package-lock.json. The package preserves the byte-exact official Soros.js, its notices and all50 distinct original LibreOffice-packaged programs; source.json retains per-program hashes and ordered51-entry packaging list including duplicated fr. The ES module entry adds only source temporary variable declarations and export, without eval/global injection or algorithm edits. Source C++ reference files are included for loader provenance. The source-only dependency is excluded from authored lint/format rewriting, and provenance evidence readers now resolve this actual third_party source root without semantic gate exemptions.
+- The first package placement followed the existing vendor symlink into the shared main checkout. Moved only the newly created package into this Calc checkout's third_party directory, removed its stale sibling dependency/lock references and regenerated the installation. No existing shared vendor files were edited; final manifest/lock/symlink resolve only inside Calc. Initial failed workspace relative-path install and stale-lock errors are preserved in install logs; corrected final installation passes. Initial new Norwegian test expectations omitted the original accent; corrected expectations to the actual no.sor output (én/éin), without changing production behavior.
+- Original Numbertext loader/cache is implemented as a small owner around the installed library: exact filename, original two-character country removal regex, original Norwegian aliases, exact language keys, non-replacing map insertion, original missing-file boolean/input preservation. Packaged programs replace browser-unavailable filesystem readfile. Note that the source C++ \? string literal is a question-mark character, so the original Norwegian regex contains an optional country group; it is not a literal question-mark regex. Full NativeNumberSupplier12/casing/formatter forwarding remains pending.
+- Command: unchanged downloaded C++ Soros.cxx/Numbertext.cxx compiled with clang++ -std=c++17 -O2; node output/native/AQF9AG-libnumbertext/compare-package.mjs. Result: bounded comparison,12412 inputs,12405 matching and7 differing outputs, identical to official unmodified JS. Evidence: package-esm-cpp-comparison.log and package-cpp-comparison.json. Scope: all archive programs plus selected regional variants,0..200 and special numeric/prefix/help inputs; not full parser/recursion/native ABI parity. CALC-416 records the accepted original JS differences and absent C++250-level recursion guard.
+- Commands: npm run test:shared -- src/external/libnumbertext/src/Numbertext.test.ts; npx vitest run scripts/libnumbertext-package.test.ts scripts/check-source-provenance.test.ts scripts/libreoffice-inventory/registry-validation.test.ts. Result: pass,15 shared cases and15 tooling cases. Evidence: esm-1.log,esm-3.log. Scope: real installed dependency, regional/Norwegian selection, source cache lifetime/missing inputs, accepted JS outputs, byte-exact original body, complete program hashes/notices and registry validation. Initial provenance resolvers assumed only vendor/apps roots; added explicit third_party evidence-root support in both readers, preserving all validations, and reran their tests/checks.
+- Commands: npm pack ./third_party/libnumbertext-js --pack-destination output/native/AQF9AG-libnumbertext --ignore-scripts; npm install --prefix output/native/AQF9AG-libnumbertext/clean-install ./output/native/AQF9AG-libnumbertext/vite-office-libnumbertext-1.0.11.tgz --ignore-scripts --no-audit --no-fund --cache output/native/AQF9AG-libnumbertext/npm-cache; installed-tarball import smoke. Result: pass. Evidence: pack.log,clean-install.log. Scope: portable package contents independent of the development link. Vite config-free browser ES library build and actual exported Numbertext execution also pass3 cases (browser-bundle.log), including the accepted JS ordinal result and Norwegian alias.
+- Commands: npm run typecheck; focused ESLint on all authored changed source/tests/checkers; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: esm-{0,2,4}.log,final-5.log,end-{0,1,2,3}.log,build.log. Provenance1877 runtime modules; dependency1876 sources10143 relative imports225 allowed edges; docs4243 authored sources; semantic violations0. Ordinary existing large-chunk build warning only. No broad parity status promotion.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests (calc-tests.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful fresh build (browser.log). These are existing CSV/UI regressions, not evidence of completed NatNum12 CSV forwarding.
+- Remaining work: original NumberText service/NatNum12 casing and selected date-field forwarding, actual multiline EditEngine path, remaining CSV option/UI/native acceptance audit. Goal/task remain active and incomplete. This is the same Agentplane task, so no tenth-task full-suite trigger arises. All native downloads/builds/comparison/pack/install logs remain output/native scratch and are excluded from commits.

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/libnumbertext/src/Numbertext.ts",
+    "upstreamPath": "third_party/libnumbertext-js/upstream/Numbertext.cxx",
+    "localSymbols": [
+      "Numbertext",
+      "readfile"
+    ],
+    "upstreamSymbols": [
+      "Numbertext",
+      "readfile"
+    ],
+    "preservedResponsibilities": [
+      "Original Numbertext filename selection, exact lazy module keys, non-replacing insertion and missing-file input preservation. Managed packaged data replaces filesystem reads. The user explicitly accepted the official Soros.js 1.0.11 as-is on 2026-10-30, including observed C++ differences; no interpreter rewrite or full parity claim. NativeNumberSupplier mode12, casing and formatter/UI forwarding remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Physical filesystem and UTF-8/wchar_t overloads; unchanged official JavaScript interpreter behavior is a user-approved exception to C++ parity."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Installed npm file dependency supplies the official JS interpreter and complete packaged text programs in place of native libnumbertext and filesystem data."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libnumbertext/src/Numbertext.ts",
+          "marker": "class Numbertext"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "third_party/libnumbertext-js/upstream/Numbertext.cxx",
+          "marker": "Numbertext::load"
+        }
+      ]
+    }
+  }
+}
