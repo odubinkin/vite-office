@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.ts",
         "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.test.ts",
-        "i18nlangtag/source/languagetag/languagetag.cxx"
+        "i18nlangtag/source/languagetag/languagetag.cxx",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.test.ts"
       ],
-      "justification": "Original private LanguageTagImpl component getters and cacheSimpleLSCV over actual OUString members and actual liblangtag Tag fields. Original enclosing synCanonicalize remains an explicit required dependency, not a no-op production implementation or invented public LanguageTag facade. Preserve canonicalization-before-empty, borrowed cache identity, empty-result caching, all-four simple cache writes, numeric-region versus country distinction and exact ASCII ISO predicates. Liblangtag getters/list transport use the existing managed Tag/RegistryEntry field representation. Public LanguageTag constructor/reset/canonicalization/registration and NumberText integration remain pending; prepared member tests do not claim those services.",
+      "justification": "Original private LanguageTagImpl component getters and cacheSimpleLSCV over actual OUString members and actual liblangtag Tag fields. Original enclosing synCanonicalize remains an explicit required dependency, not a no-op production implementation or invented public LanguageTag facade. Preserve canonicalization-before-empty, borrowed cache identity, empty-result caching, all-four simple cache writes, numeric-region versus country distinction and exact ASCII ISO predicates. Liblangtag getters/list transport use the existing managed Tag/RegistryEntry field representation. Public LanguageTag constructor/reset/canonicalization/registration and NumberText integration remain pending; prepared member tests do not claim those services. AQF9AG adds original cached ISO Locale/ODF decisions with canonicalization-before-query, script-first ODF evaluation, raw region rather than country, exact length gates and variants exclusion. The simple-cache es-419 branch still yields ISO Locale true because its numeric region was discarded upstream; no validity guard or general tag classifier is invented.",
       "knownViolations": [],
       "localSymbols": [
         "LanguageTagFieldState",
@@ -36,7 +37,10 @@
         "getScript",
         "getCountry",
         "getRegion",
-        "getVariants"
+        "getVariants",
+        "LanguageTagIsoState",
+        "isIsoLocale",
+        "isIsoODF"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
@@ -53,7 +57,9 @@
         "LanguageTagImpl::getScript",
         "LanguageTagImpl::getCountry",
         "LanguageTagImpl::getRegion",
-        "LanguageTagImpl::getVariants"
+        "LanguageTagImpl::getVariants",
+        "LanguageTagImpl::isIsoLocale",
+        "LanguageTagImpl::isIsoODF"
       ]
     }
   }

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-canonicalization",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Original canonicalize/synCanonicalize/isValidBcp47 state transitions: initial resolved getBcp47 side effect, temporary Locale/ID flags and cleanup, source structural casing, real table alias/override decisions, lazy getKnowns membership, actual liblangtag parse/canonicalize/reparse, sticky parser owner, independent changed/validity and Locale-before-ID refresh. Original process-global one-way parser disable is preserved. The original free getKnowns is an explicit required provider argument for this responsibility fragment; it is not a default-empty replacement or an invented public LanguageTag service. Physical XML/data-ref initialization and C allocation/diagnostics use the already established managed liblangtag data representation, not a native startup-footprint/ABI claim. Public LanguageTag/native ABI and complete NumberText/NatNum12 integration are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "KnownTagSetProvider",
+        "LanguageTagCanonicalState",
+        "disable_lt_tag_parse",
+        "canonicalize",
+        "synCanonicalize",
+        "isValidBcp47"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "KnownTagSet",
+        "LanguageTag::disable_lt_tag_parse",
+        "LanguageTagImpl::canonicalize",
+        "LanguageTagImpl::synCanonicalize",
+        "LanguageTagImpl::isValidBcp47"
+      ]
+    }
+  }
+}

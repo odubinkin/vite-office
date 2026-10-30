@@ -12,6 +12,7 @@ import { lt_script_get_tag } from "../../../external/liblangtag/liblangtag/lt-sc
 import { lt_region_get_tag } from "../../../external/liblangtag/liblangtag/lt-region";
 import { lt_variant_get_tag } from "../../../external/liblangtag/liblangtag/lt-variant";
 import { text, unicode } from "../isolang/isolang.tables";
+import { Decision as D } from "./languagetag.conversion";
 import { Extraction, simpleExtract } from "./languagetag.extract";
 
 /** Actual private member fields and original canonicalization dependency consumed by this source responsibility fragment. */
@@ -225,4 +226,57 @@ export function getVariants(this: LanguageTagFieldState): OUStringConstReference
     this.mbCachedVariants = true;
   }
   return this.maCachedVariants;
+}
+
+/** Original ISO decision caches shared with the enclosing LanguageTagImpl. */
+export interface LanguageTagIsoState extends LanguageTagFieldState {
+  meIsIsoLocale: D;
+  meIsIsoODF: D;
+}
+
+/** Original ISO Locale query uses the raw region getter, not the country getter that can clear it. @param this - Actual private owner. @returns Original cached decision. */
+export function isIsoLocale(this: LanguageTagIsoState): boolean {
+  if (this.meIsIsoLocale === D.DECISION_DONTKNOW) {
+    this.synCanonicalize();
+    let result = this.maBcp47.getLength() === 0;
+    if (!result && this.maBcp47.getLength() <= 6 && isIsoLanguage(getLanguage.call(this))) {
+      const region = getRegion.call(this);
+      try {
+        result = isIsoCountry(region);
+      } finally {
+        region.dispose();
+      }
+    }
+    this.meIsIsoLocale = result ? D.DECISION_YES : D.DECISION_NO;
+  }
+  return this.meIsIsoLocale === D.DECISION_YES;
+}
+
+/** Original ISO/ODF query preserves script-first evaluation, raw region distinction and length/variant gates. @param this - Actual private owner. @returns Original cached decision. */
+export function isIsoODF(this: LanguageTagIsoState): boolean {
+  if (this.meIsIsoODF === D.DECISION_DONTKNOW) {
+    this.synCanonicalize();
+    if (!isIsoScript(getScript.call(this))) {
+      this.meIsIsoODF = D.DECISION_NO;
+      return false;
+    }
+    if (isIsoLocale.call(this)) {
+      this.meIsIsoODF = D.DECISION_YES;
+      return true;
+    }
+    let result = false;
+    if (this.maBcp47.getLength() <= 11 && isIsoLanguage(getLanguage.call(this))) {
+      const region = getRegion.call(this);
+      try {
+        result =
+          isIsoCountry(region) &&
+          isIsoScript(getScript.call(this)) &&
+          getVariants.call(this).getLength() === 0;
+      } finally {
+        region.dispose();
+      }
+    }
+    this.meIsIsoODF = result ? D.DECISION_YES : D.DECISION_NO;
+  }
+  return this.meIsIsoODF === D.DECISION_YES;
 }

@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "KnownTagSetProvider",
+      "LanguageTagCanonicalState",
+      "disable_lt_tag_parse",
+      "canonicalize",
+      "synCanonicalize",
+      "isValidBcp47"
+    ],
+    "upstreamSymbols": [
+      "KnownTagSet",
+      "LanguageTag::disable_lt_tag_parse",
+      "LanguageTagImpl::canonicalize",
+      "LanguageTagImpl::synCanonicalize",
+      "LanguageTagImpl::isValidBcp47"
+    ],
+    "preservedResponsibilities": [
+      "Original canonicalize/synCanonicalize/isValidBcp47 state transitions: initial resolved getBcp47 side effect, temporary Locale/ID flags and cleanup, source structural casing, real table alias/override decisions, lazy getKnowns membership, actual liblangtag parse/canonicalize/reparse, sticky parser owner, independent changed/validity and Locale-before-ID refresh. Original process-global one-way parser disable is preserved. The original free getKnowns is an explicit required provider argument for this responsibility fragment; it is not a default-empty replacement or an invented public LanguageTag service. Physical XML/data-ref initialization and C allocation/diagnostics use the already established managed liblangtag data representation, not a native startup-footprint/ABI claim."
+    ],
+    "omittedResponsibilities": [
+      "Full enclosing LanguageTag constructor/reset/registration/shared implementation maps, complete known-tag set initialization, native memory/XML/data-ref/diagnostic ABI and NumberText/CSV service forwarding remain unported. Tests bind explicit prepared private state to actual production member groups, not a replacement public LanguageTag."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.ts",
+          "marker": "isValidBcp47"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.test.ts",
+          "marker": "class Owner"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::isValidBcp47"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private canonicalization and conversion members are split into explicit source responsibility groups while retaining actual owner dependencies rather than inventing a public LanguageTag facade."
+    }
+  }
+}
