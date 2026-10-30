@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.legacy-numbering.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": [
+      "DispatchLegacyNumberingDestination",
+      "DispatchLegacyNumbering",
+      "FinishLegacyNumbering"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::afterPopState"
+    ],
+    "preservedResponsibilities": [
+      "Original PN destination, flag/value and afterPopState responsibilities emit an independent native abstract/concrete reference table and parent NumPr, with fixed IDs, prefix/suffix, raw start and ASCII font properties. Native first-ID collisions and registered Roman/font-size no-ops are preserved as WRITER277-WRITER278; actual SAL buffers retain source owner/current-pointer distinctions. S3HW1E legacy/malformed checkpoint: bounded actual RTF/Worker tests cover these consumed paths. Remaining section/HTML/current-model producer/export and marker-style-context audits remain required. No full filter-slice, module or ABI completion claim; intentional browser open/save/autosave/recovery deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Complete rtftok module and compiled native ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.legacy-numbering.ts",
+          "marker": "DispatchLegacyNumberingDestination"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-legacy-numbering.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "Destination::PARAGRAPHNUMBERING"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFKeyword::PNLVLBODY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "RTFKeyword::PNSTART"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+          "marker": "RTFKeyword::PN"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.legacy-numbering.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The actual RtfDocumentImpl and RTFParserState retain native ownership. This split contains the cohesive legacy PN producer across original dispatch and after-pop methods, keeping the existing dispatch fragment within the repository file-size budget without another model or numbering service."
+    }
+  }
+}

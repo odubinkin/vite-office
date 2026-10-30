@@ -32,6 +32,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       previous.runType !== RunType.RTLCH_LTRCH_2
     )
       previous.runType = RunType.NONE;
+    const destinationText = new OUStringBuffer(previous?.destinationText ?? 512);
+    destinationText.setLength(0);
     this["states"].push({
       destination: previous?.destination ?? "body",
       characterSprms:
@@ -72,6 +74,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       levelNumbers: [...(previous?.levelNumbers ?? [])],
       levelNumbersValid: previous?.levelNumbersValid ?? true,
       listLevelNum: previous?.listLevelNum ?? 0,
+      currentListIndex: previous?.currentListIndex ?? -1,
+      currentListOverrideIndex: previous?.currentListOverrideIndex ?? -1,
+      destinationText,
+      currentDestinationText: previous?.currentDestinationText ?? null,
       ...(previous?.field === undefined ? {} : { field: previous.field }),
       ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
       ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
@@ -158,13 +164,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
             ),
           });
       }
-      if (previous) FinishListLevelGroup.call(this, previous);
+      if (previous) {
+        FinishLegacyNumbering.call(this, previous);
+        FinishListLevelGroup.call(this, previous);
+      }
       if (previous?.destination === "fldinst" && previous.field !== undefined) {
         const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
         if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
       }
     } finally {
       previous?.characterSprms.dispose();
+      previous?.destinationText.dispose();
       previous?.paragraphSprms.dispose();
       previous?.tableSprms.dispose();
       previous?.tableAttributes.dispose();
@@ -204,7 +214,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
       state.bookmarkName += value;
     else if (state.destination === "leveltext") state.levelText += value;
-    else if (state.destination === "colortbl") this["ReadColorText"](value);
+    else if (state.destination === "pntxta" || state.destination === "pntxtb") {
+      const native = unicode(value);
+      try {
+        state.currentDestinationText?.append(native);
+      } finally {
+        native.dispose();
+      }
+    } else if (state.destination === "colortbl") this["ReadColorText"](value);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;
     else if (state.destination === "body") this["AppendText"](value, state);
@@ -282,6 +299,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = false;
     return;
   }
+  if (DispatchTextSymbol.call(this, token.name, state)) return;
+  if (DispatchLegacyNumberingDestination(token.name, state)) return;
+  if (token.name === "listid") state.currentListIndex = token.parameter ?? 0;
+  if (
+    state.destination !== "skip" &&
+    DispatchLegacyNumbering.call(this, token.name, token.parameter, state)
+  )
+    return;
   if (state.destination === "stylesheet" && (token.name === "s" || token.name === "cs")) {
     state.starred = false;
     state.styleType = token.name === "cs" ? "character" : "paragraph";
@@ -326,6 +351,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     token.name === "listlevel"
   ) {
     state.destination = "listlevel";
+    this["m_nListLevel"]++;
     return;
   }
   if (state.destination === "list" && token.name === "listname") {
@@ -372,6 +398,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else if (token.name === "blue") this["color"].blue = token.parameter ?? 0;
     return;
   }
+  if (
+    state.destination === "pn" ||
+    state.destination === "pntxta" ||
+    state.destination === "pntxtb"
+  ) {
+    this["DispatchBodyControl"](token.name, token.parameter, state);
+    return;
+  }
   if (state.destination === "list" || state.destination === "listlevel") {
     if (
       state.destination === "listlevel" &&
@@ -402,13 +436,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       if (name) state.tableSprms.set(N.LN_CT_Lvl_pStyle, stringValue(name));
       return;
     }
-    if (token.name === "listid")
-      state.tableAttributes.set(
-        N.LN_CT_AbstractNum_abstractNumId,
-        new RTFValue(token.parameter ?? 0),
-      );
-    else if (state.destination === "listlevel")
+    if (token.name === "listid") {
+      if (state.destination === "list")
+        state.tableAttributes.set(
+          N.LN_CT_AbstractNum_abstractNumId,
+          new RTFValue(token.parameter ?? 0),
+        );
+    } else if (state.destination === "listlevel") {
+      if (token.name === "fi" && !state.levelNumbersValid)
+        this["m_aInvalidListLevelFirstIndents"].set(this["m_nListLevel"], token.parameter ?? 0);
       dispatchNumberingValue(token.name, token.parameter, state);
+    }
     return;
   }
   if (
@@ -418,10 +456,12 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   )
     return;
   if (state.destination === "listoverride") {
-    if (token.name === "listid")
+    if (token.name === "listid") {
       state.tableSprms.set(N.LN_CT_Num_abstractNumId, new RTFValue(token.parameter ?? 0));
-    else if (token.name === "ls")
+    } else if (token.name === "ls") {
+      state.currentListOverrideIndex = token.parameter ?? 0;
       state.tableAttributes.set(N.LN_CT_AbstractNum_nsid, new RTFValue(token.parameter ?? 0));
+    }
     return;
   }
   if (state.destination === "lfolevel") {
@@ -760,13 +800,6 @@ export function DispatchBodyControl(
     this["CommitParagraph"](state, true);
     return;
   }
-  if (name === "line" || name === "tab" || name === "~" || name === "-") {
-    this["AppendText"](
-      name === "line" ? "\n" : name === "tab" ? "\t" : name === "~" ? "\u00a0" : "\u00ad",
-      state,
-    );
-    return;
-  }
   if (name === "kerning") {
     state.autoKerning = (parameter ?? 0) !== 0;
     return;
@@ -947,3 +980,14 @@ import { FinishListLevelGroup, ReadLevelNumbers } from "./rtfdocumentimpl.number
 import { dispatchNumberingValue } from "./rtfdispatchvalue.numbering";
 
 import { dispatchStyleParagraphNumbering } from "./rtfdispatchvalue.numbering";
+
+import {
+  FinishLegacyNumbering,
+  DispatchLegacyNumbering,
+  DispatchLegacyNumberingDestination,
+} from "./rtfdocumentimpl.legacy-numbering";
+
+import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
+import { unicode } from "../../core/unocore/unocrsrhelper";
+
+import { DispatchTextSymbol } from "./rtfdispatchsymbol";

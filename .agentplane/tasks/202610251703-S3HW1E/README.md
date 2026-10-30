@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 207
+revision: 210
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T15:38:12.783Z"
+  updated_at: "2026-10-30T16:24:40.969Z"
   updated_by: "CODER"
-  note: "Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23 fresh cases and required static gates pass. WRITER273-WRITER276 documented and preserved. Full goal remains active/incomplete pending malformed-level, old-style and remaining producer/export audits."
-  attempts: 33
+  note: "Native legacy PN, malformed-list recovery and text symbols checkpoint verified: 938 targeted tests/55 files,33 fresh cases and required static gates pass. WRITER277-WRITER279 documented and preserved. Goal remains incomplete pending section/HTML/current-model and marker-style-context audits."
+  attempts: 34
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -533,8 +536,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T16:24:40.969Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native legacy PN, malformed-list recovery and text symbols checkpoint verified: 938 targeted tests/55 files,33 fresh cases and required static gates pass. WRITER277-WRITER279 documented and preserved. Goal remains incomplete pending section/HTML/current-model and marker-style-context audits."
+  -
+    type: "status"
+    at: "2026-10-30T16:24:50.293Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T15:39:03.535Z"
+doc_updated_at: "2026-10-30T16:24:50.293Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1247,6 +1263,36 @@ sections:
     Attempts: 33
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:38:11.062Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T16:24:40.969Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native legacy PN, malformed-list recovery and text symbols checkpoint verified: 938 targeted tests/55 files,33 fresh cases and required static gates pass. WRITER277-WRITER279 documented and preserved. Goal remains incomplete pending section/HTML/current-model and marker-style-context audits.
+    Attempts: 34
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:24:39.933Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2098,6 +2144,21 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html22-types-final2.txt, html22-eslint.txt, html22-prettier-check.txt, html22-docs-final.txt, html22-provenance-final.txt, html22-registry-final.txt, html22-boundaries-final.txt, html22-size.txt, html22-tree.txt, html22-doctor.txt. Scope: changed source/docs,4250 authored files for JSDoc,1883 provenance modules,1882 runtime sources/10282 relative imports/227 allowed edges, Writer registry semantic violations0. Doctor errors0 with the unchanged pre-existing managed-shim readiness warning. No hook, tooling, approval, test configuration or unrelated policy edits.
     - Initial failures retained and corrected within approved scope: html22-types.txt caught an enum alias, original conflict-policy constant name, an unread private field used through fragment indexing, unused import and direct compound-sequence storage typing; switched to actual ContextType alias/Overwrite constant, passed the original override set to the fragment, removed the obsolete import and reused owned readNumberingProperty. html22-first-tests.txt contains86 failures from the missing ContextType alias; subsequent159/6 passed (html22-second-tests.txt). Fresh test fixtures initially used nonexistent GetParagraphFormat/instance Write APIs; corrected to actual native getters/static WriteDocument after source inspection. Style-only assertions then exposed missing native pStyle producer/consumer, which were implemented (not waived). Re-export identity equality was replaced only after confirming the explicit DOCX-only upstream guard, with WRITER274 and both import/export assertions retained. A local text insertion initially placed named-getter special handling in getByIndex; compiler html22-types4.txt caught it, restored getByIndex and moved handling to the named getter; final types and903-case run pass. html22-final-focused.txt recorded898/899 before the source-backed fi40000 import expectation migration; export assertion remains exact. Initial JSDoc gate required function-attached comments on two arrow initializers; corrected attachment and final JSDoc passed. Optional path searches caused no code edits; routes were revalidated before dependent retries. No enforcement or acceptance was weakened to mask a local implementation defect.
+
+    ### Native legacy PN, malformed-list recovery and text symbols checkpoint (html23)
+
+    - Connected original legacy PN destinations, flags/values and afterPopState to independent actual numbering reference tables. Preserved fixed body/bullet IDs2/1, prefix + percent1 + suffix, raw start, ASCII font rPr, parent NumPr ReplaceAtStart and pntext fallback skipping. Destination handling precedes style-entry handling, so PN numbering metadata also reaches actual paragraph styles. Retained native repeated-ID/modern-ID collision and registered no-op behavior as WRITER277-WRITER278.
+    - Parser states now retain actual SAL OUStringBuffer destination owners and borrowed current pointers. Original pushState copy/reset, explicit destination selection and nested plain PN text groups are preserved. Buffer and intrusive raw-table lifetimes end on group pop/parser cleanup; no alternate model/list service or string-buffer substitute was introduced.
+    - Connected native raw abstract/override maps, global/per-state list indices and invalid first-indent snapshots. checkNeedPap invokes the original numbering stage of getProperties on an owned copy: deduplicateList followed by duplicateList. Equal bad indents are removed, distinct authored indents remain, global LISTID updates its side channel separately from context-limited attributes, and per-list invalid maps are copied/cleared at LISTENTRY boundaries. Original helpers' nested alias/COW semantics remain unchanged.
+    - Added exact LN_CT_LevelSuffix_val93116 using unchanged pinned resourceids.py/model.xml; generated ID comparison passes. Added original dispatchSymbol text stage required by PN buffers and ordinary body punctuation: actual fixed-MS1252 SAL conversion, original shared SVT constants, destination-aware text callbacks and separate LINE singleChar/runProps capture. LINE does not prematurely dispatch paragraph properties; WRITER279 documents its body-run behavior within a PN prefix. Existing paragraph/table/section handlers retain their owner.
+    - 33 fresh cases across rtf-legacy-numbering.test.ts (17) and rtf-text-symbol.test.ts (16) cover decimal/bullet PN, start/punctuation/PNF, Worker values, duplicate and modern/legacy collisions, required IDs, global flags/indices, PN styles, actual buffer pointer/lifetime behavior, registered no-ops, malformed equal/different/cross-list recovery, forced encoding and destination-aware symbols/LINE. The shared lngmisc header only gains original scalar macros; existing IsControlChar behavior is unchanged.
+    - This closes the identified legacy PN and malformed first-indent producer gaps. Remaining completion work is still explicit: section/HTML/current-model producer/export audit and atomic paragraph-marker style-context verification after pStyle routing. Full goal remains active/incomplete; broad module/ABI/semantic confidence unchanged, as are intentional browser open/save/autosave/recovery deviations.
+
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,938tests/55files. Evidence: output/playwright/rtf-properties-native/html23-all-final.txt. Scope: actual RTF/parser/mapper/numbering and text symbols, generated resource IDs, native UNO lifetimes, related TXT/Markdown/Worker/document-I/O. Earlier related921/54 passed before the text-symbol stage, and final-confirm48/3 passed after global LISTID correction; final938 includes all later code and33 new cases. No all-application full test run.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html23-types-final3.txt, html23-eslint-final2.txt, html23-prettier-final.txt, html23-docs-final.txt, html23-provenance-final2.txt, html23-registry-final2.txt, html23-boundaries-final.txt, html23-size-final.txt, html23-tree.txt, html23-doctor-final.txt. Scope:4254 authored files for docs,1885 provenance modules,1884 runtime sources/10304 relative imports/227 allowed edges, Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim readiness warning. No unrelated hooks, policy, test configuration, network or vendor source changes.
+    - Initial failures and corrections retained: html23-types.txt identified the missing generated suffix resource; obtained exact93116 from the pinned generator. Bounded editing scripts reported substring-not-found after formatting; inspected actual text and recomputed route before dependent retries, without reconstructing repo state or changing acceptance. Native source review caught an accidentally inserted buffer disposal in first-run font initialization; removed it, kept disposal only at pop/cleanup and added a concrete first-run-font/later-PN regression, included in final938. Initial no-op fixtures incorrectly assumed the core default label character format was absent; retained literal Arabic-type assertions and compared actual label height to the identical native PN baseline instead. The source default label style remains intact. Initial symbol fixtures omitted literal spaces after one-character control symbols; corrected test expectations to native lexical behavior without changing the tokenizer. html23-symbol-tests.txt records those three failures; final16-case symbol run and full938 pass. Provenance/registry initially rejected secondary-source dispatchFlag/dispatchValue symbols listed under primary rtfdocumentimpl.cxx; corrected primary symbol mapping to afterPopState and retained exact secondary-source file/marker evidence, then both gates pass. No production acceptance was relaxed to hide an implementation defect.
 id_source: "generated"
 ---
 ## Summary
@@ -2821,6 +2882,36 @@ Note: Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23
 Attempts: 33
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:38:11.062Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T16:24:40.969Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native legacy PN, malformed-list recovery and text symbols checkpoint verified: 938 targeted tests/55 files,33 fresh cases and required static gates pass. WRITER277-WRITER279 documented and preserved. Goal remains incomplete pending section/HTML/current-model and marker-style-context audits.
+Attempts: 34
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:24:39.933Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3676,3 +3767,18 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html22-types-final2.txt, html22-eslint.txt, html22-prettier-check.txt, html22-docs-final.txt, html22-provenance-final.txt, html22-registry-final.txt, html22-boundaries-final.txt, html22-size.txt, html22-tree.txt, html22-doctor.txt. Scope: changed source/docs,4250 authored files for JSDoc,1883 provenance modules,1882 runtime sources/10282 relative imports/227 allowed edges, Writer registry semantic violations0. Doctor errors0 with the unchanged pre-existing managed-shim readiness warning. No hook, tooling, approval, test configuration or unrelated policy edits.
 - Initial failures retained and corrected within approved scope: html22-types.txt caught an enum alias, original conflict-policy constant name, an unread private field used through fragment indexing, unused import and direct compound-sequence storage typing; switched to actual ContextType alias/Overwrite constant, passed the original override set to the fragment, removed the obsolete import and reused owned readNumberingProperty. html22-first-tests.txt contains86 failures from the missing ContextType alias; subsequent159/6 passed (html22-second-tests.txt). Fresh test fixtures initially used nonexistent GetParagraphFormat/instance Write APIs; corrected to actual native getters/static WriteDocument after source inspection. Style-only assertions then exposed missing native pStyle producer/consumer, which were implemented (not waived). Re-export identity equality was replaced only after confirming the explicit DOCX-only upstream guard, with WRITER274 and both import/export assertions retained. A local text insertion initially placed named-getter special handling in getByIndex; compiler html22-types4.txt caught it, restored getByIndex and moved handling to the named getter; final types and903-case run pass. html22-final-focused.txt recorded898/899 before the source-backed fi40000 import expectation migration; export assertion remains exact. Initial JSDoc gate required function-attached comments on two arrow initializers; corrected attachment and final JSDoc passed. Optional path searches caused no code edits; routes were revalidated before dependent retries. No enforcement or acceptance was weakened to mask a local implementation defect.
+
+### Native legacy PN, malformed-list recovery and text symbols checkpoint (html23)
+
+- Connected original legacy PN destinations, flags/values and afterPopState to independent actual numbering reference tables. Preserved fixed body/bullet IDs2/1, prefix + percent1 + suffix, raw start, ASCII font rPr, parent NumPr ReplaceAtStart and pntext fallback skipping. Destination handling precedes style-entry handling, so PN numbering metadata also reaches actual paragraph styles. Retained native repeated-ID/modern-ID collision and registered no-op behavior as WRITER277-WRITER278.
+- Parser states now retain actual SAL OUStringBuffer destination owners and borrowed current pointers. Original pushState copy/reset, explicit destination selection and nested plain PN text groups are preserved. Buffer and intrusive raw-table lifetimes end on group pop/parser cleanup; no alternate model/list service or string-buffer substitute was introduced.
+- Connected native raw abstract/override maps, global/per-state list indices and invalid first-indent snapshots. checkNeedPap invokes the original numbering stage of getProperties on an owned copy: deduplicateList followed by duplicateList. Equal bad indents are removed, distinct authored indents remain, global LISTID updates its side channel separately from context-limited attributes, and per-list invalid maps are copied/cleared at LISTENTRY boundaries. Original helpers' nested alias/COW semantics remain unchanged.
+- Added exact LN_CT_LevelSuffix_val93116 using unchanged pinned resourceids.py/model.xml; generated ID comparison passes. Added original dispatchSymbol text stage required by PN buffers and ordinary body punctuation: actual fixed-MS1252 SAL conversion, original shared SVT constants, destination-aware text callbacks and separate LINE singleChar/runProps capture. LINE does not prematurely dispatch paragraph properties; WRITER279 documents its body-run behavior within a PN prefix. Existing paragraph/table/section handlers retain their owner.
+- 33 fresh cases across rtf-legacy-numbering.test.ts (17) and rtf-text-symbol.test.ts (16) cover decimal/bullet PN, start/punctuation/PNF, Worker values, duplicate and modern/legacy collisions, required IDs, global flags/indices, PN styles, actual buffer pointer/lifetime behavior, registered no-ops, malformed equal/different/cross-list recovery, forced encoding and destination-aware symbols/LINE. The shared lngmisc header only gains original scalar macros; existing IsControlChar behavior is unchanged.
+- This closes the identified legacy PN and malformed first-indent producer gaps. Remaining completion work is still explicit: section/HTML/current-model producer/export audit and atomic paragraph-marker style-context verification after pStyle routing. Full goal remains active/incomplete; broad module/ABI/semantic confidence unchanged, as are intentional browser open/save/autosave/recovery deviations.
+
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,938tests/55files. Evidence: output/playwright/rtf-properties-native/html23-all-final.txt. Scope: actual RTF/parser/mapper/numbering and text symbols, generated resource IDs, native UNO lifetimes, related TXT/Markdown/Worker/document-I/O. Earlier related921/54 passed before the text-symbol stage, and final-confirm48/3 passed after global LISTID correction; final938 includes all later code and33 new cases. No all-application full test run.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html23-types-final3.txt, html23-eslint-final2.txt, html23-prettier-final.txt, html23-docs-final.txt, html23-provenance-final2.txt, html23-registry-final2.txt, html23-boundaries-final.txt, html23-size-final.txt, html23-tree.txt, html23-doctor-final.txt. Scope:4254 authored files for docs,1885 provenance modules,1884 runtime sources/10304 relative imports/227 allowed edges, Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim readiness warning. No unrelated hooks, policy, test configuration, network or vendor source changes.
+- Initial failures and corrections retained: html23-types.txt identified the missing generated suffix resource; obtained exact93116 from the pinned generator. Bounded editing scripts reported substring-not-found after formatting; inspected actual text and recomputed route before dependent retries, without reconstructing repo state or changing acceptance. Native source review caught an accidentally inserted buffer disposal in first-run font initialization; removed it, kept disposal only at pop/cleanup and added a concrete first-run-font/later-PN regression, included in final938. Initial no-op fixtures incorrectly assumed the core default label character format was absent; retained literal Arabic-type assertions and compared actual label height to the identical native PN baseline instead. The source default label style remains intact. Initial symbol fixtures omitted literal spaces after one-character control symbols; corrected test expectations to native lexical behavior without changing the tokenizer. html23-symbol-tests.txt records those three failures; final16-case symbol run and full938 pass. Provenance/registry initially rejected secondary-source dispatchFlag/dispatchValue symbols listed under primary rtfdocumentimpl.cxx; corrected primary symbol mapping to afterPopState and retained exact secondary-source file/marker evidence, then both gates pass. No production acceptance was relaxed to hide an implementation defect.

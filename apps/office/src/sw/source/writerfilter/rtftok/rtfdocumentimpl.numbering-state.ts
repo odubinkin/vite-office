@@ -78,11 +78,16 @@ export function FinishListLevelGroup(this: RtfDocumentImplContext, state: RtfSta
   } else if (state.destination === "list") {
     for (const [id, value] of state.listLevelEntries)
       state.tableSprms.set(id, value, RTFConflictPolicy.Append);
-    this["m_aListTableSprms"].set(
-      N.LN_CT_Numbering_abstractNum,
-      new RTFValue(state.tableAttributes, state.tableSprms),
-      RTFConflictPolicy.Append,
+    const value = new RTFValue(state.tableAttributes, state.tableSprms);
+    this["m_aListTableSprms"].set(N.LN_CT_Numbering_abstractNum, value, RTFConflictPolicy.Append);
+    this["m_aListTable"].get(state.currentListIndex)?.clear();
+    this["m_aListTable"].set(state.currentListIndex, new SvRef(value));
+    this["m_nListLevel"] = -1;
+    this["m_aInvalidListTableFirstIndents"].set(
+      state.currentListIndex,
+      new Map(this["m_aInvalidListLevelFirstIndents"]),
     );
+    this["m_aInvalidListLevelFirstIndents"].clear();
   } else if (state.destination === "listoverridetable") {
     QueueListTable.call(this);
   } else if (state.destination === "listoverride") {
@@ -91,15 +96,19 @@ export function FinishListLevelGroup(this: RtfDocumentImplContext, state: RtfSta
       parent.tableSprms = new RTFSprms(state.tableSprms);
       parent.tableAttributes.dispose();
       parent.tableAttributes = new RTFSprms(state.tableAttributes);
-    } else
+    } else {
+      this["m_aListOverrideTable"].set(state.currentListOverrideIndex, state.currentListIndex);
       this["m_aListTableSprms"].set(
         N.LN_CT_Numbering_num,
         new RTFValue(state.tableAttributes, state.tableSprms),
         RTFConflictPolicy.Append,
       );
+    }
   }
 }
 import { RTFValue } from "./rtfvalue";
 import { RTFConflictPolicy } from "./rtfsprm";
 
 import { QueueListTable } from "./rtfdocumentimpl.numbering";
+
+import { SvRef } from "../../../../tools/inc/ref";

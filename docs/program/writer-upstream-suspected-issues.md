@@ -2422,3 +2422,24 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: export writes the full authored first-line item, such as fi40000. Import calls the limited conversion helper, which returns zero for positive twips at or above32768; negative values are not subject to the same ceiling. The source comment attributes this to legacy MSO handling.
 - Impact: a positive wide indentation can export intact and return as zero on native re-import. An equally wide negative value follows the signed conversion instead. This is an intentional source compatibility rule, not a confirmed upstream defect.
 - Local behavior: preserve raw item export and original asymmetric import admission. `rtfexport.table-list.test.ts` verifies fi40000 emission and zero re-import; `rtf-paragraph-numbering.test.ts` pins32767,32768 and minus40000. Do not restore the former scalar import bypass to make the roundtrip lossless.
+
+### WRITER277 — Legacy PN fixed IDs can reuse an earlier definition or collide with modern lists
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx`, PNLVLBODY/PNLVLBLT; `rtfdocumentimpl.cxx`, PARAGRAPHNUMBERING after-pop; `dmapper/NumberingManager.cxx`, GetList/GetAbstractList.
+- Observation: old paragraph numbering always uses ID2 for body numbering and ID1 for bullets. Each PN group emits another abstract/concrete definition, while native mapper lookup retains the first matching ID.
+- Impact: a later pnstart can create another unused style without changing the numbering used by its paragraph. A modern concrete list with the same ID can also remain the rule used by a later PN paragraph, despite the new PN definition.
+- Local behavior: preserve fixed IDs, independent table callbacks, first-match lookup and unused style allocation. `rtf-legacy-numbering.test.ts` covers repeated PN starts and modern/legacy ID2 collision. Do not allocate synthetic unique IDs or paragraph restarts.
+
+### WRITER278 — Registered legacy PN switches have no native dispatch handler
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, PNUCRM/PNLCRM/PNFS registrations; `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx` and `rtfdocumentimpl.cxx` dispatch implementations.
+- Observation: pnucrm, pnlcrm and pnfs are known tokenizer spellings but have no implementation in those native dispatch switches. The consumed legacy format handler implements pndec, while the numbering writer's default fallback remains Arabic when no format was assigned.
+- Impact: Roman-numbering switches can leave Arabic numbering active, and pnfs does not assign the requested label height. This is a native implementation omission, not evidence that the local core lacks Roman numbering or font-height support.
+- Local behavior: preserve these no-ops. Tests verify Arabic numbering and unchanged native label height against the same PN definition without the switch. Do not implement additional semantics merely to make old PN more feature-complete than upstream.
+
+### WRITER279 — LINE uses direct singleChar emission even inside PN text destinations
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, the early LINE branch; `rtfdocumentimpl.cxx`, `singleChar` and PN text after-pop handling.
+- Observation: ordinary text symbols call destination-aware text(), but LINE calls singleChar with runProps=true. That operation emits directly to the mapper/current buffer and does not call checkNeedPap.
+- Impact: a LINE inside a PN prefix can become visible body text while surrounding prefix characters remain in the numbering pattern. Paragraph properties emitted after PN must still apply to that run.
+- Local behavior: preserve separate text() versus singleChar paths. The atomic adapter snapshots the direct LINE run without prematurely capturing paragraph properties. `rtf-text-symbol.test.ts` verifies a body LF, an AB prefix pattern and the final PN numbering rule. Do not redirect LINE into the PN text buffer for consistency with TAB.

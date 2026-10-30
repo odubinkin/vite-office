@@ -70,6 +70,9 @@ export interface RtfState {
     | "bookmarkstart"
     | "bookmarkend"
     | "colortbl"
+    | "pn"
+    | "pntxta"
+    | "pntxtb"
     | "listtable"
     | "list"
     | "listlevel"
@@ -110,6 +113,10 @@ export interface RtfState {
   levelNumbers: number[];
   levelNumbersValid: boolean;
   listLevelNum: number;
+  currentListIndex: number;
+  currentListOverrideIndex: number;
+  destinationText: OUStringBuffer;
+  currentDestinationText: OUStringBuffer | null;
 }
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
@@ -452,3 +459,5 @@ export interface RtfStyleDefinition {
 }
 
 import type { RTFSprms } from "./rtfsprm";
+
+import type { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";

@@ -1004,3 +1004,46 @@ format are omitted as direct attributes, preserving list indentation priority;
 left/hanging compensation keeps the original overwrite flags. The source export
 assertion for fi40000 remains intact, while re-import now applies the native
 positive32768 ceiling rather than the removed scalar bypass (WRITER276).
+
+
+### Native legacy PN and malformed-list property checkpoint
+
+Legacy PN destinations now emit their original independent numbering reference
+tables: fixed body/bullet IDs, prefix plus percent1 plus suffix, raw start and
+ASCII font rPr, followed by parent paragraph NumPr with ReplaceAtStart. PN text
+is consumed through the actual SAL OUStringBuffer owner and its borrowed current
+text pointer. Native pushState copy/reset and destination selection are retained,
+including plain nested prefix/suffix groups. Destination dispatch precedes style
+entry handling, so PN can supply paragraph-style numbering metadata as well.
+The pntext display fallback is skipped by the numbering-aware reader.
+
+Native raw abstract/override tables, current list indices and per-list malformed
+first-indent snapshots are retained on the actual RTF reader. The numbering part
+of getProperties now runs at original checkNeedPap capture time, calling existing
+RTFSprms deduplicateList followed by duplicateList. Only equal invalid first
+indents are removed; a different authored value remains. Per-list recovery state
+is copied and cleared at LISTENTRY boundaries, and unknown overrides skip the
+normalization. Intrusive raw references and native text buffers are released on
+normal group pop and parser cleanup.
+
+Actual RTF tests cover ordinary/bullet PN, starts and punctuation, PNF, repeated
+fixed IDs, modern/legacy collisions, PN style metadata, nested text pointers,
+first-run font initialization, required ID flags, registered no-op switches,
+malformed equal/different indents and cross-list recovery isolation. WRITER277
+and WRITER278 preserve native fixed-ID behavior and registered PN switches with
+no upstream implementation. One required LevelSuffix resource ID was obtained
+from the unchanged pinned resourceids.py/model.xml generator.
+
+This supersedes the earlier checkpoints' missing PN and malformed first-indent
+producer statements. Remaining section/HTML/current-model producer/export audits
+and atomic paragraph-marker style-context verification still prevent full goal
+completion. Full module/ABI confidence is unchanged; intentional browser file UI,
+autosave and recovery deviations remain unchanged.
+
+The PN consumer audit also connected original dispatchSymbol text emission.
+Trivial punctuation/TAB bytes use the actual fixed MS1252 SAL conversion and
+then destination-aware text(), including PN and level-text buffers. Hard space,
+hard hyphen and soft hyphen use original SVT constants from their shared owner.
+LINE retains singleChar with runProps and bypasses early paragraph capture,
+rather than following the text-destination path (WRITER279). Tests verify body
+characters under ansicpg932, buffered PN symbols and the distinct direct LINE run.

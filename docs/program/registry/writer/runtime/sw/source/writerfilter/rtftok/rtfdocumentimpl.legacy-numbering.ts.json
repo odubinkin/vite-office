@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.legacy-numbering.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.legacy-numbering.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-legacy-numbering.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx"
+      ],
+      "justification": " Original PN destination, flag/value and afterPopState responsibilities emit an independent native abstract/concrete reference table and parent NumPr, with fixed IDs, prefix/suffix, raw start and ASCII font properties. Native first-ID collisions and registered Roman/font-size no-ops are preserved as WRITER277-WRITER278; actual SAL buffers retain source owner/current-pointer distinctions. S3HW1E legacy/malformed checkpoint: bounded actual RTF/Worker tests cover these consumed paths. Remaining section/HTML/current-model producer/export and marker-style-context audits remain required. No full filter-slice, module or ABI completion claim; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DispatchLegacyNumberingDestination",
+        "DispatchLegacyNumbering",
+        "FinishLegacyNumbering"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::afterPopState"
+      ]
+    }
+  }
+}

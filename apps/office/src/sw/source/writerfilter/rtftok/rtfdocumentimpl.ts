@@ -76,7 +76,7 @@ export class RtfDocumentImpl {
     if (!this.m_bNeedPap) return;
     this.m_bNeedPap = false;
     this.m_aParagraphSprms.dispose();
-    this.m_aParagraphSprms = new RTFSprms(state.paragraphSprms);
+    this.m_aParagraphSprms = GetNumberingProperties.call(this, state.paragraphSprms);
   }
   protected readonly blocks: RtfBlock[] = [];
   protected readonly runs: RtfRun[] = [];
@@ -87,6 +87,14 @@ export class RtfDocumentImpl {
   protected defaultFontIndex = -1;
   protected readonly colors: string[] = [];
   protected readonly m_aListTableSprms = new RTFSprms();
+  protected readonly m_aListTable = new Map<number, SvRef<RTFValue>>();
+  protected readonly m_aListOverrideTable = new Map<number, number>();
+  protected readonly m_aInvalidListLevelFirstIndents = new Map<number, number>();
+  protected readonly m_aInvalidListTableFirstIndents = new Map<
+    number,
+    ReadonlyMap<number, number>
+  >();
+  protected m_nListLevel = -1;
   protected readonly m_aListTables: import("./rtfreferencetable").RTFReferenceTable[] = [];
   protected readonly styles = new Map<number, RtfStyleDefinition>();
   protected readonly m_pStyleTableEntries = new Map<number, ReferencePointer<Properties>>();
@@ -114,6 +122,7 @@ export class RtfDocumentImpl {
         for (const cell of row.cells) for (const value of cell) paragraph(value);
     };
     for (const state of this.states) {
+      state.destinationText.dispose();
       lists.add(state.characterSprms);
       lists.add(state.paragraphSprms);
       lists.add(state.tableSprms);
@@ -132,6 +141,12 @@ export class RtfDocumentImpl {
     lists.add(this.m_aListTableSprms);
     for (const table of this.m_aListTables) table.dispose();
     this.m_aListTables.length = 0;
+    for (const value of this.m_aListTable.values()) value.clear();
+    this.m_aListTable.clear();
+    this.m_aListOverrideTable.clear();
+    this.m_aInvalidListLevelFirstIndents.clear();
+    this.m_aInvalidListTableFirstIndents.clear();
+    this.m_nListLevel = -1;
     for (const list of lists) list.dispose();
     this.states.length = 0;
     this.runs.length = 0;
@@ -377,3 +392,7 @@ import { RTFSprms } from "./rtfsprm";
 
 import { getNestedAttribute, putNestedAttribute } from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+
+import { SvRef } from "../../../../tools/inc/ref";
+import { RTFValue } from "./rtfvalue";
+import { GetNumberingProperties } from "./rtfdocumentimpl.numbering";
