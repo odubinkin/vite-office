@@ -14,10 +14,11 @@
       "getKnowns"
     ],
     "preservedResponsibilities": [
-      "Original static known-tag-set initialization over the complete real MsLangId.getDefinedLanguagetags vector, constructing from each raw numeric ID rather than its BCP47 text, requesting full vectors, retaining every definition visit/alias/duplicate, exact case-sensitive membership, one-time successful publication and retry after a failed initializer. Actual Unicode definition values and temporary tags are released on normal/exception paths. The actual original numeric LanguageTag constructor remains a required binding; fixture-supplied vectors are not a completed native known-set membership witness."
+      "Original static known-tag-set initialization over the complete real MsLangId.getDefinedLanguagetags vector, constructing from each raw numeric ID rather than its BCP47 text, requesting full vectors, retaining every definition visit/alias/duplicate, exact case-sensitive membership, one-time successful publication and retry after a failed initializer. Actual Unicode definition values and temporary tags are released on normal/exception paths. The actual original numeric LanguageTag constructor remains a required binding; fixture-supplied vectors are not a completed native known-set membership witness.",
+      "The actual LanguageTag numeric constructor now supplies the required production binding; the real full definition vector initializes the known set successfully in owner tests. Complete NumberText/CSV integration and native physical static-guard/thread ABI remain unverified."
     ],
     "omittedResponsibilities": [
-      "Actual enclosing LanguageTag constructors/shared implementation registration and physical C++ vector/shared_ptr/static-guard/thread ABI are not implemented by this member fragment. Required constructor bindings have no empty, heuristic or throwing production substitutes."
+      "Physical C++ vector/shared_ptr/static-guard/thread ABI and complete NumberText/CSV service integration are not certified."
     ],
     "evidence": {
       "local": [

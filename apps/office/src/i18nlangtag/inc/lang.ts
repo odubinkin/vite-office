@@ -19,6 +19,12 @@ export const LANGUAGE_NONE = LanguageType(0x00ff);
 export const LANGUAGE_HID_HUMAN_INTERFACE_DEVICE = LanguageType(0x04ff);
 /** Original application/system selection ID. */
 export const LANGUAGE_SYSTEM = LanguageType(0x0000);
+/** Original dynamic primary language ID range. */
+export const LANGUAGE_ON_THE_FLY_START = LanguageType(0x03e0);
+export const LANGUAGE_ON_THE_FLY_END = LanguageType(0x03fe);
+/** Original dynamic sublanguage ID range. */
+export const LANGUAGE_ON_THE_FLY_SUB_START = LanguageType(0x01);
+export const LANGUAGE_ON_THE_FLY_SUB_END = LanguageType(0x3e);
 /** Original invariant locale ID; declared but explicitly unsupported by native locale tables. */
 export const LANGUAGE_INVARIANT = LanguageType(0x007f);
 /** Original German ID used by SvxLanguageItem factory. */

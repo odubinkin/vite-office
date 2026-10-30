@@ -43,19 +43,37 @@ export function convertLangToLocale(state: LanguageTagConversionState): void {
     state.mnLangID = MsLangId.getRealLanguage(LANGUAGE_SYSTEM);
     state.mbInitializedLangID = true;
   }
-  state.maLocale.assign(MsLangId.Conversion.convertLanguageToLocale(state.mnLangID, false));
+  const locale = MsLangId.Conversion.convertLanguageToLocale(state.mnLangID, false);
+  try {
+    state.maLocale.assign(locale);
+  } finally {
+    locale.dispose();
+  }
   state.mbInitializedLocale = true;
 }
 
 /** Native Locale-to-BCP47 transition, including SYSTEM fallback and qlt decision side effect. The total private converter also returns empty for the source diagnostic bad-luck empty-Locale branch. @param state - Actual conversion fields. @returns Nothing. */
 export function convertLocaleToBcp47(state: LanguageTagConversionState): void {
   if (state.mbSystemLocale && !state.mbInitializedLocale) convertLangToLocale(state);
-  if (state.maLocale.Language.getLength() === 0)
-    state.maLocale.assign(MsLangId.Conversion.convertLanguageToLocale(LANGUAGE_SYSTEM, false));
+  if (state.maLocale.Language.getLength() === 0) {
+    const locale = MsLangId.Conversion.convertLanguageToLocale(LANGUAGE_SYSTEM, false);
+    try {
+      state.maLocale.assign(locale);
+    } finally {
+      locale.dispose();
+    }
+  }
   if (text(state.maLocale.Language) === "qlt") {
     state.maBcp47.assign(state.maLocale.Variant);
     state.meIsIsoLocale = Decision.DECISION_NO;
-  } else state.maBcp47.assign(convertToBcp47(state.maLocale));
+  } else {
+    const bcp = convertToBcp47(state.maLocale);
+    try {
+      state.maBcp47.assign(bcp);
+    } finally {
+      bcp.dispose();
+    }
+  }
   state.mbInitializedBcp47 = true;
 }
 

@@ -17,7 +17,7 @@ export interface LanguageTagLocaleToLangState
   /** Original ISO/ODF query. @returns Original predicate. */
   isIsoODF(): boolean;
   /** Original registration owner dispatch; returned ImplPtr is ignored by this member upstream. @param id - Suggested original ID. @returns Enclosing owner's original implementation pointer. */
-  registerOnTheFly(id: number): unknown;
+  registerOnTheFly(id: number): { dispose(): void } | null;
 }
 
 /** Original Locale-to-ID member, including remapped-name refresh and source last-resort suppression. @param this - Actual private owner. @param allowOnTheFlyID - Original registration policy. @returns Whether BCP47 was remapped. */
@@ -61,7 +61,8 @@ export function convertLocaleToLang(
           locale.dispose();
         }
       }
-      this.registerOnTheFly(this.mnLangID);
+      const registered = this.registerOnTheFly(this.mnLangID);
+      registered?.dispose();
     }
   }
   this.mbInitializedLangID = true;

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registration.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-value-registration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registration.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Original ASCII-case-insensitive BCP47 and numeric-ID shared maps, unknown/system caches, alias re-registration, exact round-trip cross insertion, suggested-ID conflict checks, primary/sublanguage allocation and source exhaustion behavior. Map entries retain original strong ownership; ordered-tree/mutex layout is erased. Complete NumberText/CSV integration remains pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "registerImpl",
+        "registerOnTheFly",
+        "isOnTheFlyID",
+        "getOnTheFlyScriptType",
+        "systemLocale"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTag::registerImpl",
+        "LanguageTagImpl::registerOnTheFly",
+        "LanguageTag::isOnTheFlyID",
+        "LanguageTag::getOnTheFlyScriptType"
+      ]
+    }
+  }
+}

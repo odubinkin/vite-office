@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value-state.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagValueState",
+      "LanguageTagScriptType"
+    ],
+    "upstreamSymbols": [
+      "LanguageTag",
+      "LanguageTagImpl"
+    ],
+    "preservedResponsibilities": [
+      "Original shared value fields, implicit value-copy and field destruction; script-type enumerators retain original values. Private implementation decisions remain separately owned."
+    ],
+    "omittedResponsibilities": [
+      "Complete NumberText/native-number mode12 and CSV service integration remain pending. Native C++ memory/thread/ABI layout is not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value-state.ts",
+          "marker": "LanguageTagValueState"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+          "marker": "actual numeric owners"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value-state.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original public value, private implementation and shared registration groups are split under the unchanged source-file budget, preserving original ownership and calls."
+    }
+  }
+}

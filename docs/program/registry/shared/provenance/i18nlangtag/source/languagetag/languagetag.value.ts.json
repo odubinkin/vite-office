@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTag"
+    ],
+    "upstreamSymbols": [
+      "LanguageTag",
+      "getLanguageAndScript"
+    ],
+    "preservedResponsibilities": [
+      "Actual numeric/string/Locale/copy constructors and resets, implementation sharing and synchronization, owned component getters, borrowed Locale/BCP47 references, full fallback and real numeric known-set binding, first-known script type, static ID/string/Locale conversion and configured system-language re-registration. Locale constructor/reset initialization difference, component cache-hit synchronization bypass and existing SYSTEM values retaining their bound implementation are preserved. Unconsumed display/platform APIs and native ABI are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete NumberText/native-number mode12 and CSV service integration remain pending. Native C++ memory/thread/ABI layout is not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+          "marker": "LanguageTag"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+          "marker": "actual numeric owners"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original public value, private implementation and shared registration groups are split under the unchanged source-file budget, preserving original ownership and calls."
+    }
+  }
+}

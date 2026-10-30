@@ -81,9 +81,9 @@ class Owner implements canon.LanguageTagCanonicalState {
     return fields.isIsoODF.call(this);
   }
   /** Observes the original unconsumed ImplPtr-returning registry call; it does not fabricate registered IDs. @param id - Actual source suggestion. @returns No fixture implementation pointer. */
-  registerOnTheFly(id: number): unknown {
+  registerOnTheFly(id: number): null {
     this.registered.push(id);
-    return undefined;
+    return null;
   }
   /** Releases actual shared members. @returns Nothing. */
   dispose(): void {

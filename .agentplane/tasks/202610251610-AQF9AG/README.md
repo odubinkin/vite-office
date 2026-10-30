@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 102
+revision: 105
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T15:47:35.103Z"
+  updated_at: "2026-10-30T16:17:59.977Z"
   updated_by: "CODER"
-  note: "Original fallback/known-set kernels and removal of general split heuristics pass 363 related tests, lint/static gates/final build, 129 Calc regressions and 2 fresh-build browser cases. CALC-420/421 preserve original ku/Catalan behavior. Whole CSV remains incomplete: actual LanguageTag constructor/registration bindings, NumberText/NatNum12, title and multiline EditEngine paths are pending."
-  attempts: 20
+  note: "Actual LanguageTag value/registry checkpoint passes focused core and CSV tests, build, lint, provenance, boundaries and browser CSV workflow. Overall CSV task remains incomplete: NumberText service/mode12 and original multiline EditEngine admission still require integration. Goal remains active; this is not final verification."
+  attempts: 21
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -648,8 +651,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T16:17:59.977Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual LanguageTag value/registry checkpoint passes focused core and CSV tests, build, lint, provenance, boundaries and browser CSV workflow. Overall CSV task remains incomplete: NumberText service/mode12 and original multiline EditEngine admission still require integration. Goal remains active; this is not final verification."
+  -
+    type: "status"
+    at: "2026-10-30T16:18:07.672Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T15:50:55.006Z"
+doc_updated_at: "2026-10-30T16:18:07.672Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1269,6 +1285,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T16:17:59.977Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual LanguageTag value/registry checkpoint passes focused core and CSV tests, build, lint, provenance, boundaries and browser CSV workflow. Overall CSV task remains incomplete: NumberText service/mode12 and original multiline EditEngine admission still require integration. Goal remains active; this is not final verification.
+    Attempts: 21
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:17:58.494Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1817,6 +1863,18 @@ sections:
     - Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fallback-check-{0,1,2,3,5,6}.log,fallback-final-{0,1,3}.log,fallback-temporary-{0,1,2,3}.log. Provenance1887 runtime modules, dependencies1886 sources10194 relative imports226 allowed edges, docs4259 authored sources, semantic violations0. Full lint excludes only native scratch alongside existing dependency/generated exclusions. Initial docs gate found3 missing comments on constructor-failure assertion callbacks; added comments and reran (fallback-check-4.log, fallback-final-0.log). Existing foundation/unverified statuses are preserved; no native startup footprint or physical XML/allocator/thread ABI certification.
     - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fallback-final-2.log), before the additive temporary-order correction; final related tests cover that correction. Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build (fallback-browser.log). Existing CSV/UI/Worker regressions do not establish completed NatNum12 output forwarding.
     - Remaining: implement/bind the actual LanguageTag value/implementation constructors, shared registration and known-set constructor dependency; connect NumberText/NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/date-key output, actual multiline EditEngine import and remaining CSV native option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All output/native source/build/probe/install/log scratch remains untracked and excluded from commits.
+
+    ### AQF9AG actual LanguageTag value and registration checkpoint (2026-10-30)
+
+    - Implemented the actual public LanguageTag value and private LanguageTagImpl constructors/copy/reset/synchronization over the previously ported production member groups. Shared BCP47/ID maps, unknown/system caches, alias sharing, exact round-trip insertion, dynamic primary/sublanguage allocation and source exhaustion behavior follow pinned i18nlangtag/source/languagetag/languagetag.cxx. Added original lang.h range constants and the public declaration re-export. Numeric/string/Locale conversion, component getters, complete fallback vectors, real numeric known-set initialization, first-known script type and configured-system re-registration are bound to these actual owners.
+    - Preserved the Locale-constructor versus reset initialization difference, component cache-hit synchronization bypass, case-sensitive known membership and suggested-ID conflict comparisons, ASCII-case-insensitive BCP47 keys, non-replacing insertion, and already-bound SYSTEM values retaining their original implementation. Static unresolved SYSTEM conversion returns before consulting getRealLanguage, exactly as lcl_isSystem does. No new canonicalization heuristics or fake known-set/registration providers were introduced.
+    - Managed TypeScript support retains consumed shared_ptr copy/assignment/reset/get/last-release semantics; it does not claim native atomic/control-block layout. Original discarded registration returns and Locale/BCP47 conversion temporaries now have explicit full-expression destruction. The official Soros.js package dependency remains unchanged.
+    - Command: npm run test:shared -- src/i18nlangtag src/external/liblangtag src/external/libnumbertext. Result: pass, 21 files/452 cases after conversion temporary cleanup; evidence output/native/AQF9AG-libnumbertext/owner-tests-final.log. Scope: source member groups, actual value/registry/known initialization, liblangtag and packaged official interpreter. The final source-reviewed SYSTEM fast-path ordering repair adds one case; the affected owner suite then passes 12 cases in owner-early-system-tests.log.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence owner-calc-final.log. Scope: CSV options, import/admission/date/recognition and export.
+    - Commands: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:shared; npm run inventory:parity:calc. Result: pass. Evidence: owner-typecheck-final.log, owner-build-terminal.log, owner-lint-terminal.log (plus final affected-file ESLint), owner-deps-final.log, owner-provenance-final.log, owner-docs-final.log, owner-check-2.log, owner-resources.log, owner-parity-final.log, owner-calc-parity.log. Provenance covers 1893 modules; dependencies cover 1892 runtime sources/10230 relative imports/226 edges; both parity checks report zero semantic violations. Only intentionally untracked native scratch is excluded from ESLint.
+    - Verification repairs: initial provenance data rejected an empty header symbol list and basename-only evidence; authored exact method evidence and kept re-export names out of physical runtime localSymbols. An invalid runtime responsibility enum was corrected to unverified. Dependency validation rejected placement of the managed pointer helper in browser; moved the browser-independent TypeScript execution binding to runtime/local-infrastructure without changing enforcement or introducing a browser-to-core reverse edge. Test JSDoc failures were corrected. All failed checks were rerun successfully; route was recomputed before further mutation. No network was needed.
+    - Cadence: same executable task AQF9AG, no tenth-task full-suite trigger. Full suite intentionally not repeated. This is a partial checkpoint: actual NumberText service forwarding, NativeNumberSupplier mode12/casing/title dependencies, formatter consumers and native multiline EditEngine CSV admission remain incomplete. Overall task stays DOING and the CSV goal remains active; no complete-parity or full CSV readiness claim.
+    - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one actual browser workflow imports CSV, saves the primary ODS copy and exports the active sheet; evidence owner-browser-final.log. Scope: current static build after the final SYSTEM-ordering repair. The first invocation put the spec after the variadic --project option, so Playwright interpreted it as a second project and ran no tests; corrected CLI argument placement and reran after route recomputation. No application failure or behavior change was involved.
 id_source: "generated"
 ---
 ## Summary
@@ -2445,6 +2503,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T16:17:59.977Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual LanguageTag value/registry checkpoint passes focused core and CSV tests, build, lint, provenance, boundaries and browser CSV workflow. Overall CSV task remains incomplete: NumberText service/mode12 and original multiline EditEngine admission still require integration. Goal remains active; this is not final verification.
+Attempts: 21
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:17:58.494Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2997,3 +3085,15 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fallback-check-{0,1,2,3,5,6}.log,fallback-final-{0,1,3}.log,fallback-temporary-{0,1,2,3}.log. Provenance1887 runtime modules, dependencies1886 sources10194 relative imports226 allowed edges, docs4259 authored sources, semantic violations0. Full lint excludes only native scratch alongside existing dependency/generated exclusions. Initial docs gate found3 missing comments on constructor-failure assertion callbacks; added comments and reran (fallback-check-4.log, fallback-final-0.log). Existing foundation/unverified statuses are preserved; no native startup footprint or physical XML/allocator/thread ABI certification.
 - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fallback-final-2.log), before the additive temporary-order correction; final related tests cover that correction. Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build (fallback-browser.log). Existing CSV/UI/Worker regressions do not establish completed NatNum12 output forwarding.
 - Remaining: implement/bind the actual LanguageTag value/implementation constructors, shared registration and known-set constructor dependency; connect NumberText/NativeNumberSupplier12 scanner/cache/casing, source title word boundaries/date-key output, actual multiline EditEngine import and remaining CSV native option/UI audit. Goal/task remain active and incomplete. Same open Agentplane task, so no tenth-task full-suite trigger. All output/native source/build/probe/install/log scratch remains untracked and excluded from commits.
+
+### AQF9AG actual LanguageTag value and registration checkpoint (2026-10-30)
+
+- Implemented the actual public LanguageTag value and private LanguageTagImpl constructors/copy/reset/synchronization over the previously ported production member groups. Shared BCP47/ID maps, unknown/system caches, alias sharing, exact round-trip insertion, dynamic primary/sublanguage allocation and source exhaustion behavior follow pinned i18nlangtag/source/languagetag/languagetag.cxx. Added original lang.h range constants and the public declaration re-export. Numeric/string/Locale conversion, component getters, complete fallback vectors, real numeric known-set initialization, first-known script type and configured-system re-registration are bound to these actual owners.
+- Preserved the Locale-constructor versus reset initialization difference, component cache-hit synchronization bypass, case-sensitive known membership and suggested-ID conflict comparisons, ASCII-case-insensitive BCP47 keys, non-replacing insertion, and already-bound SYSTEM values retaining their original implementation. Static unresolved SYSTEM conversion returns before consulting getRealLanguage, exactly as lcl_isSystem does. No new canonicalization heuristics or fake known-set/registration providers were introduced.
+- Managed TypeScript support retains consumed shared_ptr copy/assignment/reset/get/last-release semantics; it does not claim native atomic/control-block layout. Original discarded registration returns and Locale/BCP47 conversion temporaries now have explicit full-expression destruction. The official Soros.js package dependency remains unchanged.
+- Command: npm run test:shared -- src/i18nlangtag src/external/liblangtag src/external/libnumbertext. Result: pass, 21 files/452 cases after conversion temporary cleanup; evidence output/native/AQF9AG-libnumbertext/owner-tests-final.log. Scope: source member groups, actual value/registry/known initialization, liblangtag and packaged official interpreter. The final source-reviewed SYSTEM fast-path ordering repair adds one case; the affected owner suite then passes 12 cases in owner-early-system-tests.log.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence owner-calc-final.log. Scope: CSV options, import/admission/date/recognition and export.
+- Commands: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:shared; npm run inventory:parity:calc. Result: pass. Evidence: owner-typecheck-final.log, owner-build-terminal.log, owner-lint-terminal.log (plus final affected-file ESLint), owner-deps-final.log, owner-provenance-final.log, owner-docs-final.log, owner-check-2.log, owner-resources.log, owner-parity-final.log, owner-calc-parity.log. Provenance covers 1893 modules; dependencies cover 1892 runtime sources/10230 relative imports/226 edges; both parity checks report zero semantic violations. Only intentionally untracked native scratch is excluded from ESLint.
+- Verification repairs: initial provenance data rejected an empty header symbol list and basename-only evidence; authored exact method evidence and kept re-export names out of physical runtime localSymbols. An invalid runtime responsibility enum was corrected to unverified. Dependency validation rejected placement of the managed pointer helper in browser; moved the browser-independent TypeScript execution binding to runtime/local-infrastructure without changing enforcement or introducing a browser-to-core reverse edge. Test JSDoc failures were corrected. All failed checks were rerun successfully; route was recomputed before further mutation. No network was needed.
+- Cadence: same executable task AQF9AG, no tenth-task full-suite trigger. Full suite intentionally not repeated. This is a partial checkpoint: actual NumberText service forwarding, NativeNumberSupplier mode12/casing/title dependencies, formatter consumers and native multiline EditEngine CSV admission remain incomplete. Overall task stays DOING and the CSV goal remains active; no complete-parity or full CSV readiness claim.
+- Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one actual browser workflow imports CSV, saves the primary ODS copy and exports the active sheet; evidence owner-browser-final.log. Scope: current static build after the final SYSTEM-ordering repair. The first invocation put the spec after the variadic --project option, so Playwright interpreted it as a second project and ran no tests; corrected CLI argument placement and reran after route recomputation. No application failure or behavior change was involved.

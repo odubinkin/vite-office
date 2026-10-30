@@ -75,7 +75,11 @@
         "LANGUAGE_TIBETAN",
         "LANGUAGE_TIGRIGNA_ETHIOPIA",
         "LANGUAGE_NF_SYSTEM_TIME",
-        "LANGUAGE_NF_SYSTEM_DATE"
+        "LANGUAGE_NF_SYSTEM_DATE",
+        "LANGUAGE_ON_THE_FLY_START",
+        "LANGUAGE_ON_THE_FLY_END",
+        "LANGUAGE_ON_THE_FLY_SUB_START",
+        "LANGUAGE_ON_THE_FLY_SUB_END"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/i18nlangtag/lang.h",
@@ -119,7 +123,11 @@
         "LANGUAGE_TIBETAN",
         "LANGUAGE_TIGRIGNA_ETHIOPIA",
         "LANGUAGE_NF_SYSTEM_TIME",
-        "LANGUAGE_NF_SYSTEM_DATE"
+        "LANGUAGE_NF_SYSTEM_DATE",
+        "LANGUAGE_ON_THE_FLY_START",
+        "LANGUAGE_ON_THE_FLY_END",
+        "LANGUAGE_ON_THE_FLY_SUB_START",
+        "LANGUAGE_ON_THE_FLY_SUB_END"
       ]
     }
   }

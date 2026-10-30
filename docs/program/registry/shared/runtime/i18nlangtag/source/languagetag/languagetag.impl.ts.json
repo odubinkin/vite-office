@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-value-registration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Actual implementation constructor, copy assignment and destruction bind original field, canonicalization, ISO, Locale/ID and fallback member groups to the real lazy known-set and dynamic registration. Native C liblangtag storage layout and thread ABI are erased. Complete NumberText/CSV integration remains pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTagImpl"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTagImpl"
+      ]
+    }
+  }
+}

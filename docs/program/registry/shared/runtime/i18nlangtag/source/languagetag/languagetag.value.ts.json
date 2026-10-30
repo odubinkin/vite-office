@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-value-registration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Actual numeric/string/Locale/copy constructors and resets, implementation sharing and synchronization, owned component getters, borrowed Locale/BCP47 references, full fallback and real numeric known-set binding, first-known script type, static ID/string/Locale conversion and configured system-language re-registration. Locale constructor/reset initialization difference, component cache-hit synchronization bypass and existing SYSTEM values retaining their bound implementation are preserved. Unconsumed display/platform APIs and native ABI are not claimed. Complete NumberText/CSV integration remains pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTag"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTag",
+        "getLanguageAndScript"
+      ]
+    }
+  }
+}

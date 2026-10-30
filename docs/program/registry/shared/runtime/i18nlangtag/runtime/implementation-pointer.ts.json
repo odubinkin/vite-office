@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/runtime/implementation-pointer.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-value-registration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/runtime/implementation-pointer.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts"
+      ],
+      "justification": "Managed TypeScript binding for consumed shared_ptr implementation operations: copy/assignment/reset/get and last-reference explicit field destruction. Native atomic control-block and ordered-map ABI are not reproduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplementationValue",
+        "ImplPtr"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
