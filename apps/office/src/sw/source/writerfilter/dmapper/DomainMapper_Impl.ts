@@ -16,7 +16,7 @@ import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyVal
 import { listAutoFormatType } from "../../core/unocore/unoobj-listautofmt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { text } from "../../core/unocore/unocrsrhelper";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
 import { PropertyIds as P, isCharacterProperty } from "./PropertyIds";
 import { StyleSheetTable, type StyleSheetEntry } from "./StyleSheetTable";
 
@@ -61,6 +61,33 @@ export class DomainMapper_Impl {
   /** Original document-default phase. @param value - Import phase. @returns Nothing. */
   SetDocDefaultsImport(value: boolean): void {
     this.m_bInDocDefaultsImport = value;
+  }
+  private m_pListTable: ListsManager | undefined;
+  private m_bInNumberingImport = false;
+  private m_bInAnyTableImport = false;
+  /** Original lazy numbering manager belongs to this import owner. @returns Actual manager. */
+  GetListTable(): ListsManager {
+    return (this.m_pListTable ??= new ListsManager(this.m_rDMapper));
+  }
+  /** Original list-style query uses the actual concrete definition. @param id - Concrete ID. @returns Owned native name. */
+  GetListStyleName(id: number): OUString {
+    return unicode(this.GetListTable().GetList(id)?.GetStyleName() ?? "");
+  }
+  /** Original numbering-table phase. @param value - Phase state. @returns Nothing. */
+  SetNumberingImport(value: boolean): void {
+    this.m_bInNumberingImport = value;
+  }
+  /** Native numbering phase query. @returns Phase state. */
+  IsNumberingImport(): boolean {
+    return this.m_bInNumberingImport;
+  }
+  /** Original any-resource-table phase. @param value - Phase state. @returns Nothing. */
+  SetAnyTableImport(value: boolean): void {
+    this.m_bInAnyTableImport = value;
+  }
+  /** Native any-table phase query. @returns Phase state. */
+  IsAnyTableImport(): boolean {
+    return this.m_bInAnyTableImport;
   }
   /** Original document-default query. @returns Import phase. */
   IsDocDefaultsImport(): boolean {
@@ -414,8 +441,12 @@ export class DomainMapper_Impl {
     for (const stream of this.m_StreamStateStack)
       for (const value of stream.deferredCharacterProperties.values()) value.dispose();
     this.m_StreamStateStack.length = 0;
+    this.m_pListTable?.dispose();
+    this.m_pListTable = undefined;
     this.styleSheetTable.dispose();
   }
 }
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+import { ListsManager } from "./NumberingManager";

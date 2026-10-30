@@ -64,11 +64,42 @@ export function FinishListLevelGroup(this: RtfDocumentImplContext, state: RtfSta
     if (parent.destination === "levelnumbers" || parent.destination === "listlevel")
       parent.levelNumbersValid = state.levelNumbersValid;
   } else if (state.destination === "listlevel") {
-    parent.listLevelNum++;
-    const level = this["currentListLevels"].at(-1);
-    if (level) {
-      level.tableSprms.dispose();
-      level.tableSprms = new RTFSprms(state.tableSprms);
-    }
+    state.tableAttributes.set(N.LN_CT_Lvl_ilvl, new RTFValue(parent.listLevelNum++));
+    const value = new RTFValue(state.tableAttributes, state.tableSprms);
+    if (parent.destination === "lfolevel") parent.tableSprms.set(N.LN_CT_NumLvl_lvl, value);
+    else parent.listLevelEntries.set(N.LN_CT_AbstractNum_lvl, value, RTFConflictPolicy.Append);
+  } else if (state.destination === "lfolevel") {
+    state.tableAttributes.set(N.LN_CT_NumLvl_ilvl, new RTFValue(parent.listLevelNum++));
+    parent.tableSprms.set(
+      N.LN_CT_Num_lvlOverride,
+      new RTFValue(state.tableAttributes, state.tableSprms),
+      RTFConflictPolicy.Append,
+    );
+  } else if (state.destination === "list") {
+    for (const [id, value] of state.listLevelEntries)
+      state.tableSprms.set(id, value, RTFConflictPolicy.Append);
+    this["m_aListTableSprms"].set(
+      N.LN_CT_Numbering_abstractNum,
+      new RTFValue(state.tableAttributes, state.tableSprms),
+      RTFConflictPolicy.Append,
+    );
+  } else if (state.destination === "listoverridetable") {
+    QueueListTable.call(this);
+  } else if (state.destination === "listoverride") {
+    if (parent.destination === "listoverride") {
+      parent.tableSprms.dispose();
+      parent.tableSprms = new RTFSprms(state.tableSprms);
+      parent.tableAttributes.dispose();
+      parent.tableAttributes = new RTFSprms(state.tableAttributes);
+    } else
+      this["m_aListTableSprms"].set(
+        N.LN_CT_Numbering_num,
+        new RTFValue(state.tableAttributes, state.tableSprms),
+        RTFConflictPolicy.Append,
+      );
   }
 }
+import { RTFValue } from "./rtfvalue";
+import { RTFConflictPolicy } from "./rtfsprm";
+
+import { QueueListTable } from "./rtfdocumentimpl.numbering";

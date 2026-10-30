@@ -112,6 +112,17 @@ export class DomainMapper implements Properties {
   /** Original run context pop. @returns Nothing. */ endCharacterGroup(): void {
     this.impl.PopProperties(C.CONTEXT_CHARACTER);
   }
+  /** Original numbering resource-table callback retains native import flags and manager ownership. Other table producers remain with their existing owners. @param id - Table identity. @param table - Native reference. @returns Nothing. */
+  table(id: Id, table: Reference<import("../inc/dmapper/resourcemodel").Table>): void {
+    this.impl.SetAnyTableImport(true);
+    if (id === N.LN_NUMBERING) {
+      this.impl.SetNumberingImport(true);
+      table.resolve(this.impl.GetListTable());
+      this.impl.GetListTable().CreateNumberingRules();
+      this.impl.SetNumberingImport(false);
+    }
+    this.impl.SetAnyTableImport(false);
+  }
   /** Original property-set callback resolves against this mapper. @param properties - Reference. @returns Nothing. */ props(
     properties: Reference<Properties>,
   ): void {

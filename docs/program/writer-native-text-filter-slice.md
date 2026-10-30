@@ -855,3 +855,50 @@ This closes ordinary abstract numeric levels consumed by current list-table inpu
 Concrete LFOLEVEL overrides, malformed-level recovery, old-style paragraph lists,
 special section and HTML producers remain under audit. Compiled full native/ABI
 parity is unverified; browser recovery/open/save deviations are unchanged.
+
+### Native concrete RTF list checkpoint
+
+Saved parser states now retain the original table attributes, level entries and
+LFOLEVEL nested modifiers as actual RTFValue/RTFSprms owners. Each original
+LISTOVERRIDETABLE pop captures a reference table, preserving repeated cumulative
+callbacks at the existing atomic document application boundary. LISTNAME has its
+own destination; nested override-entry properties propagate upward as upstream.
+
+DomainMapper's numbering-table callback and native import flags resolve through
+its lazy, retained ListsManager. Actual AbstractListDef/ListDef owners preserve
+sparse levels, first matching IDs, native numeric HasValues admission, name-based
+property merging, distinct absent/empty level text and source style allocation.
+NumberingRules services stay with the concrete definition through import teardown.
+Detached list-format/override maps and per-reader rule-name projections are removed.
+
+The original ignored override flags, unused temporary character merge, omitted
+concrete LISTTAB reset and geometry-only stub gate are documented as
+WRITER264-WRITER267 and preserved. Tests cover multiple independent concrete
+rules, nested levels, unused overrides, typed property merging, native styles and
+reference ownership, Worker/RTF persistence and repeated cumulative tables.
+
+Concrete LFOLEVEL paths for the current ordinary numbering profile are connected.
+Malformed-level first-indent recovery, old-style paragraph lists and special
+section/HTML producers still require completion. Chapter/style-linked and picture
+bullet producers are not claimed by this RTF profile; their applicability to the
+current model remains in the remaining audit. No broad ABI/module promotion is made.
+
+Concrete rules sharing one abstract definition now use its native MapListId
+first-identity binding. Default-list identities come from the existing document
+list manager; synthetic per-override RTF-list IDs are removed. Different abstract
+definitions stay separate. Worker tests retain shared list membership alongside
+distinct concrete rules. Native paragraph NumPr edge cases and the full re-export
+identity audit remain part of completion work.
+
+The group audit preserves inherited LISTLEVEL counter advancement (WRITER268).
+It also corrects the local run-selector copy to native pushState behavior:
+ordinary current/child selectors reset before the copy, while completed RTL pairs
+survive. Tests query actual font, size and weight items inside and after groups.
+
+Required remaining producer confirmed from source: rtfdispatchvalue.cxx dispatches
+S inside LISTLEVEL as CT_Lvl_pStyle when the style name resolves. It is not absent
+from RTF. The current ordinary-level implementation does not yet connect that
+producer, AddParaProperties, chapter-numbering selection or related stylesheet
+postprocessing. These are required completion work within the current style/core
+slice, alongside paragraph NumPr edge cases and malformed/old-style numbering.
+No completion claim for all RTF numbering is made by the LFOLEVEL checkpoint.

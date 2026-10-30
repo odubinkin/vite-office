@@ -2328,3 +2328,38 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: LEVELNUMBERS checks `aStr.toChar() != ';'`, then appends `sal_Int32(ch)`. In normal mode `ch` is the delimiter which ended the run and was rewound; in hex mode it is the single decoded signed char. The branch also does not apply the earlier hex fallback skip guard.
 - Impact: literal position bytes and equivalent hex escapes need not produce the same position vector; skipped hex fallback can still contribute a position. Reinterpreting all decoded destination text as positions changes native behavior.
 - Local behavior: preserve resolveChars source events separately from decoded text and keep the signed Unicode control parameter. Tests distinguish source-origin positions, ASCII termination and invalidating Unicode semicolons. The signed-char profile follows the pinned source's default signed-char build; no cross-platform ABI certification is claimed.
+
+### WRITER264 — RTF list override flags do not produce paragraph start overrides
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx`; `sw/source/writerfilter/dmapper/NumberingManager.cxx`.
+- Observation: `listoverridestartat` and `listoverrideformat` are recognized keywords but have no active dispatch cases; `listoverridecount` is explicitly ignored. `levelstartat` emits ordinary `CT_Lvl_start`, including in LFOLEVEL, rather than `CT_NumLvl_startOverride`.
+- Impact: an LFO start updates the concrete format's StartWith through ordinary numeric merging. It does not reach the DomainMapper paragraph restart branch which consumes GetStartOverride, even when listoverridestartat is present.
+- Local behavior: preserve ignored flags/count and ordinary starts; do not synthesize ParaIsNumberingRestart or NumberingStartValue from these flags. Covered by `rtf-list-overrides.test.ts`.
+
+### WRITER265 — Concrete label character properties merge into an unused temporary
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListDef::CreateNumberingRules`.
+- Observation: the abstract character sequence is passed as the source to lcl_mergeProperties and the concrete character sequence as the destination. Style creation subsequently consumes the unchanged abstract sequence, while the merged concrete temporary is discarded.
+- Impact: concrete bold/italic/script-font character overrides do not reach the generated ListLabel style. Numeric BulletFontName and explicit concrete ListFormat still have their separate override paths.
+- Local behavior: retain the source/destination direction and unused temporary, with owned sequence cleanup. Do not correct the merge direction. Covered through actual character styles and concrete bullet-font assignment.
+
+### WRITER266 — A concrete LISTTAB follower cannot reset an abstract space/nothing follower
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties` and `ListDef::GetMergedPropertyValues`.
+- Observation: concrete numeric collection uses bDefaults=false. A following character equal to LISTTAB is omitted even if SetValue explicitly assigned it, so it does not replace an abstract LabelFollowedBy property during the subsequent name merge.
+- Impact: explicit concrete levelfollow0 leaves an abstract space or nothing follower active; omission differs from an explicit typed LabelFollowedBy=LISTTAB call to the final numbering setter.
+- Local behavior: retain the omission and merge order. Covered by `rtf-list-overrides.test.ts`.
+
+### WRITER267 — Geometry-only concrete levels are classified as stub overrides
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::SetValue`, `ListsManager::lcl_attribute`, `ListDef::GetMergedPropertyValues`.
+- Observation: HasValues tracks calls to SetValue. Indent attributes insert directly into PropertyMap, while text and character properties also do not set that flag. Numeric merging requires HasValues in addition to a nonempty property sequence.
+- Impact: an explicit geometry-only concrete level does not override abstract indentation. An otherwise ineffective numeric SetValue call, such as legacy or negative start, can admit the same geometry into the merge. Explicit concrete text still follows its separate presence check.
+- Local behavior: preserve the native flag boundary and the separate numeric, text and character paths. Tests compare actual typed numeric property vectors before and after a SetValue visit.
+
+### WRITER268 — An inherited LISTLEVEL destination advances its parent's level counter
+
+- Source: `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `RTFDocumentImpl::pushState`, `afterPopState` and LEVELNUMBERS before-pop handling.
+- Observation: a plain nested group copies LISTLEVEL as its destination. Closing it takes the LISTLEVEL after-pop branch and increments the parent's listLevelNum even though no new listlevel keyword occurred. Later LEVELNUMBERS uses that modified counter when generating placeholders.
+- Impact: a nested formatting group before level text can change a first-level placeholder from percent1 to percent2; the child level entry remains separate from the enclosing level's table modifiers.
+- Local behavior: retain copied destinations, original counter mutation and placeholder equation. Covered by `rtf-list-overrides.test.ts`; do not normalize nesting into a flat level descriptor.

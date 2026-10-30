@@ -25,6 +25,13 @@ import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (token.kind === "group-start") {
     const previous = this["states"].at(-1);
+    // Original pushState resets the current state before copying, except the two completed RTL pairs (fdo#85812).
+    if (
+      previous &&
+      previous.runType !== RunType.LTRCH_RTLCH_2 &&
+      previous.runType !== RunType.RTLCH_LTRCH_2
+    )
+      previous.runType = RunType.NONE;
     this["states"].push({
       destination: previous?.destination ?? "body",
       characterSprms:
@@ -32,6 +39,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       paragraphSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
       tableSprms: new RTFSprms(previous?.tableSprms),
+      tableAttributes: new RTFSprms(previous?.tableAttributes),
+      listLevelEntries: new RTFSprms(previous?.listLevelEntries),
       runType: previous?.runType ?? RunType.NONE,
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
@@ -146,10 +155,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
           });
       }
       if (previous) FinishListLevelGroup.call(this, previous);
-      if (previous?.destination === "list")
-        this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
-      if (previous?.destination === "listoverride")
-        this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
       if (previous?.destination === "fldinst" && previous.field !== undefined) {
         const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
         if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
@@ -158,6 +163,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       previous?.characterSprms.dispose();
       previous?.paragraphSprms.dispose();
       previous?.tableSprms.dispose();
+      previous?.tableAttributes.dispose();
+      previous?.listLevelEntries.dispose();
     }
     return;
   }
@@ -308,13 +315,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (state.destination === "stylesheet") return;
   if (state.destination === "listtable" && token.name === "list") {
     state.destination = "list";
-    this["currentListId"] = 0;
-    this["currentListLevels"] = [];
     return;
   }
-  if (state.destination === "list" && token.name === "listlevel") {
+  if (
+    (state.destination === "list" || state.destination === "lfolevel") &&
+    token.name === "listlevel"
+  ) {
     state.destination = "listlevel";
-    this["currentListLevels"].push({ tableSprms: new RTFSprms() });
+    return;
+  }
+  if (state.destination === "list" && token.name === "listname") {
+    state.destination = "listname";
     return;
   }
   if (state.destination === "listlevel" && token.name === "leveltext") {
@@ -326,10 +337,16 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.destination = "levelnumbers";
     return;
   }
-  if (state.destination === "listoverridetable" && token.name === "listoverride") {
+  if (
+    (state.destination === "listoverridetable" || state.destination === "listoverride") &&
+    token.name === "listoverride"
+  ) {
     state.destination = "listoverride";
-    this["currentOverrideListId"] = 0;
-    this["currentOverrideIndex"] = 0;
+    return;
+  }
+  if (state.destination === "listoverride" && token.name === "lfolevel") {
+    state.destination = "lfolevel";
+    state.tableSprms.clear();
     return;
   }
   if (SKIPPED_DESTINATIONS.has(token.name) || state.starred) {
@@ -376,15 +393,31 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       dispatchAssociatedCharacter.call(this, token.name, token.parameter, state)
     )
       return;
-    if (token.name === "listid") this["currentListId"] = token.parameter ?? 0;
+    if (token.name === "listid")
+      state.tableAttributes.set(
+        N.LN_CT_AbstractNum_abstractNumId,
+        new RTFValue(token.parameter ?? 0),
+      );
     else if (state.destination === "listlevel")
       dispatchNumberingValue(token.name, token.parameter, state);
     return;
   }
-  if (state.destination === "leveltext" || state.destination === "levelnumbers") return;
+  if (
+    state.destination === "leveltext" ||
+    state.destination === "levelnumbers" ||
+    state.destination === "listname"
+  )
+    return;
   if (state.destination === "listoverride") {
-    if (token.name === "listid") this["currentOverrideListId"] = token.parameter ?? 0;
-    else if (token.name === "ls") this["currentOverrideIndex"] = token.parameter ?? 0;
+    if (token.name === "listid")
+      state.tableSprms.set(N.LN_CT_Num_abstractNumId, new RTFValue(token.parameter ?? 0));
+    else if (token.name === "ls")
+      state.tableAttributes.set(N.LN_CT_AbstractNum_nsid, new RTFValue(token.parameter ?? 0));
+    return;
+  }
+  if (state.destination === "lfolevel") {
+    if (["levelnfc", "levelstartat", "levellegal", "leveljc", "levelfollow"].includes(token.name))
+      dispatchNumberingValue(token.name, token.parameter, state);
     return;
   }
   if (state.destination === "listtable" || state.destination === "listoverridetable") return;

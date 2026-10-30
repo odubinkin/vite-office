@@ -170,3 +170,47 @@ for (const keyword of ["f", "af"])
     documents.push(doc);
     expect(family(doc, H.RES_CHRATR_FONT)).toBe("BareDefault");
   });
+
+it.each(runs)(
+  "resets both group and parent run type for %s except completed RTL pairs",
+  /** Original pushState mutates the parent before copying, so restoration does not recover a reset run type. @param run - Original controls. @param originalFont - Original slot retained for independent table context. @param originalComplex - Original size selector. @returns Nothing. */ (
+    run,
+    originalFont,
+    originalComplex,
+  ) => {
+    void originalFont;
+    void originalComplex;
+    const preservedComplex = run === String.raw`\ltrch\rtlch`,
+      doc = read(run + String.raw`{\af1\afs34\b X}\af2\afs40\b Y`),
+      node = doc.paragraphs[0];
+    assert(node);
+    expect(node.GetText()).toBe("XY");
+    const fontSlot = preservedComplex ? H.RES_CHRATR_CTL_FONT : H.RES_CHRATR_FONT;
+    expect(family(doc, fontSlot, 0)).toBe("Cyrillic");
+    expect(family(doc, fontSlot, 1)).toBe("Asian");
+    for (const [offset, size] of [
+      [0, 340],
+      [1, 400],
+    ] as const) {
+      const items = characterItems(node, offset);
+      try {
+        expect(
+          (
+            items.Get(
+              preservedComplex ? H.RES_CHRATR_CTL_FONTSIZE : H.RES_CHRATR_FONTSIZE,
+            ) as SvxFontHeightItem
+          ).GetHeight(),
+        ).toBe(size);
+        expect(
+          (
+            items.Get(
+              preservedComplex ? H.RES_CHRATR_CTL_WEIGHT : H.RES_CHRATR_WEIGHT,
+            ) as SvxWeightItem
+          ).GetWeight(),
+        ).toBe(FontWeight.WEIGHT_BOLD);
+      } finally {
+        items.Dispose();
+      }
+    }
+  },
+);

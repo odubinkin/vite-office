@@ -584,15 +584,28 @@ export function ApplyParagraph(
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
   const override = paragraph.state.listOverride;
   if (override !== undefined) {
-    const name = this["m_aListRuleNames"].get(override),
-      rule = name === undefined ? undefined : node.GetDoc().FindNumRulePtr(name);
+    const name = this["Mapper"]().impl.GetListStyleName(override);
+    let rule;
+    try {
+      rule = node.GetDoc().FindNumRulePtr(text(name));
+    } finally {
+      name.dispose();
+    }
     if (rule)
       applyWriterParagraphList(node, {
         kind: getWriterNumFormatKind(rule.Get(paragraph.state.listLevel)),
         level: paragraph.state.listLevel,
         ruleName: rule.GetName(),
-        listId: `RTF-list-${override}`,
       });
+    const abstract = this["Mapper"]()
+        .impl.GetListTable()
+        .GetList(override)
+        ?.GetAbstractDefinition(),
+      listId = node.GetListId();
+    if (abstract && listId !== "") {
+      const mapped = abstract.MapListId(listId);
+      if (mapped !== listId) node.SetListId(mapped);
+    }
   }
 }
 
@@ -615,7 +628,7 @@ import {
   deduplicateRtfStyleTable,
 } from "./rtfdocumentimpl.character";
 
-import { unicode } from "../../core/unocore/unocrsrhelper";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 

@@ -86,12 +86,8 @@ export class RtfDocumentImpl {
   protected defaultCodepage = 1252;
   protected defaultFontIndex = -1;
   protected readonly colors: string[] = [];
-  protected readonly listFormats = new Map<
-    number,
-    readonly Readonly<{
-      tableSprms: RTFSprms;
-    }>[]
-  >();
+  protected readonly m_aListTableSprms = new RTFSprms();
+  protected readonly m_aListTables: import("./rtfreferencetable").RTFReferenceTable[] = [];
   protected readonly styles = new Map<number, RtfStyleDefinition>();
   protected readonly m_pStyleTableEntries = new Map<number, ReferencePointer<Properties>>();
   protected readonly m_aStyleNames = new Map<number, string>();
@@ -121,6 +117,8 @@ export class RtfDocumentImpl {
       lists.add(state.characterSprms);
       lists.add(state.paragraphSprms);
       lists.add(state.tableSprms);
+      lists.add(state.tableAttributes);
+      lists.add(state.listLevelEntries);
     }
     lists.add(this.m_aParagraphSprms);
     lists.add(this.m_aDefaultCharacterSprms);
@@ -131,8 +129,9 @@ export class RtfDocumentImpl {
     rows(this.tableRows);
     for (const cell of this.tableRow) for (const value of cell) paragraph(value);
     for (const value of this.tableCell) paragraph(value);
-    for (const levels of [this.currentListLevels, ...this.listFormats.values()])
-      for (const level of levels) lists.add(level.tableSprms);
+    lists.add(this.m_aListTableSprms);
+    for (const table of this.m_aListTables) table.dispose();
+    this.m_aListTables.length = 0;
     for (const list of lists) list.dispose();
     this.states.length = 0;
     this.runs.length = 0;
@@ -144,14 +143,6 @@ export class RtfDocumentImpl {
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
-  protected readonly listOverrides = new Map<number, number>();
-  protected currentListId = 0;
-  protected currentListLevels: {
-    tableSprms: RTFSprms;
-  }[] = [];
-  protected readonly m_aListRuleNames = new Map<number, string>();
-  protected currentOverrideListId = 0;
-  protected currentOverrideIndex = 0;
   protected fontName = "";
   protected color = { red: 0, green: 0, blue: 0 };
   protected sawHeader = false;

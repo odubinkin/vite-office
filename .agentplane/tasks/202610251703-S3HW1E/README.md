@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 195
+revision: 198
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T13:52:55.033Z"
+  updated_at: "2026-10-30T14:21:10.752Z"
   updated_by: "CODER"
-  note: "Native numeric RTF list checkpoint passes targeted parser, style-service, Worker, TXT/Markdown/RTF and static checks; goal remains active for LFOLEVEL overrides and remaining current-model completeness audit."
-  attempts: 29
+  note: "LFOLEVEL/native definition/reference-table checkpoint passes855 related tests and static gates. Goal remains active for required pStyle-linked numbering, NumPr edges, malformed and old-style producers plus remaining slice audit."
+  attempts: 30
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -469,8 +472,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T14:21:10.752Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "LFOLEVEL/native definition/reference-table checkpoint passes855 related tests and static gates. Goal remains active for required pStyle-linked numbering, NumPr edges, malformed and old-style producers plus remaining slice audit."
+  -
+    type: "status"
+    at: "2026-10-30T14:21:28.451Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T13:52:59.887Z"
+doc_updated_at: "2026-10-30T14:21:28.451Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1063,6 +1079,36 @@ sections:
     Attempts: 29
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:52:54.474Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T14:21:10.752Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: LFOLEVEL/native definition/reference-table checkpoint passes855 related tests and static gates. Goal remains active for required pStyle-linked numbering, NumPr edges, malformed and old-style producers plus remaining slice audit.
+    Attempts: 30
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:21:10.158Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1843,6 +1889,27 @@ sections:
       Result: pass,219tests/18files. Evidence: html18-other-filters-final.txt. Scope: related TXT/Markdown/RTF output and native document-I/O/graph boundaries.
     - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html18-types-confirm.txt, html18-eslint-confirm.txt, html18-prettier-confirm.txt, html18-docs-final.txt, html18-doc-lint.txt, html18-provenance-confirm.txt, html18-registry-confirm.txt, html18-boundaries-confirm.txt, html18-size.txt, html18-tree.txt, html18-doctor.txt. Scope: changed source/docs,1879 provenance records, Writer registry zero semantic violations,1878 runtime modules/10224 imports/227 allowed edges. Docs checker initially required the local add arrow's documentation to be attached to the function; it is now a documented local function, with no runtime behavior change. Doctor reports zero errors and the pre-existing managed-hook readiness warning; no unrelated hook mutation was attempted. No full all-application test run was needed for this checkpoint.
+
+    ### 2026-10-30 S3HW1E concrete-list definitions and LFOLEVEL checkpoint (html19)
+
+    - Previous goal turn classified as progress: clean implementation checkpoint7e51cbb4afb5 was authoritative before this work. Preflight revalidated writer/current checkout and approved DOING CODER task; no network/outside-repository access, delegation or publication.
+    - Replaced detached listFormats/listOverrides/current-level/rule-name maps with actual saved RTF tableAttributes/listLevelEntries, nested CT_NumLvl_lvl/Num_lvlOverride values and cumulative m_aListTableSprms. LISTNAME is a native destination; nested LISTOVERRIDEENTRY properties propagate upward. Original ilvl counters/unsigned16 selection and signed16 size are retained.
+    - Added native RTFReferenceTable, copying actual intrusive references in signed map-key order. Each original LISTOVERRIDETABLE pop captures a COW reference table. The existing atomic model boundary delivers every captured table in source order, preserving cumulative duplicates, first-ID lookup, WWNum suffixes and ListLabel allocation.
+    - DomainMapper.table numbering import flags and lazy DomainMapper_Impl.GetListTable/GetListStyleName now use native ListsManager. Actual AbstractListDef/ListDef own sparse levels, default/override numeric property sequences, first-ID tables, retained NumberingRules service copies and cleanup. Native HasValues gates numeric merging; explicit empty text remains distinct from absence.
+    - Existing typed NumberingStyles/NumberingRules contracts create and commit actual native rules. AbstractListDef.MapListId now reuses the first real paragraph identity among concrete rules sharing one abstract definition; synthetic RTF-list per-override identities were removed. Different abstract definitions remain separate, with Worker retaining shared identities and distinct rule owners.
+    - Original source oddities WRITER264-WRITER268 are documented and retained: ignored override flags/count/no synthetic paragraph restart; character merge into an unused temporary; omitted concrete LISTTAB default; geometry-only stub gate; inherited LISTLEVEL after-pop counter advancement.
+    - Corrected local pushState RunType copying against original fdo#85812 logic: reset the current parent before copying unless it is one of the two completed RTL pairs. Eight actual font/size/weight cases verify child and subsequent parent behavior. No upstream defect was inferred for this documented source reset.
+    - Remaining requirements explicitly remain open: native S inside LISTLEVEL emits CT_Lvl_pStyle in pinned rtfdispatchvalue.cxx when a style resolves. This producer DOES exist in RTF. Connecting it, AddParaProperties, chapter/outline choice and stylesheet postprocessing is required in the current style/core slice. Earlier ordinary-profile implementation comments implying no RTF pStyle producer were corrected immediately; no all-numbering completion claim is made. Paragraph NumPr direct-format edges, malformed-level first-indent recovery, old-style numbering, special sections/HTML and full re-export identity audit also remain open. All broad semantic/native/ABI confidence stays unverified.
+
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,855tests/47files. Evidence: output/playwright/rtf-properties-native/html19-confirmed-tests.txt. Scope: final parser/group/LFOLEVEL/native definitions, RTF export, related native styles/lifetimes, TXT, Markdown, generated numeric IDs and existing document I/O. No test configuration or unrelated expectations were changed.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1
+      Result: pass,120tests/5files. Evidence: html19-identity-tests.txt in the same evidence directory. Scope: final common abstract-list identity, actual distinct rules, shared Worker list membership, ordered reference lifetime and related RTF marker ownership.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-associated-character.test.ts src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts --maxWorkers 1
+      Result: pass,89tests/3files. Evidence: html19-group-tests.txt. Scope: all eight original group run selectors and parent mutation; inherited destination counter; concrete numeric/text/character/Worker behavior. Broad final855-case run includes these changes.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html19-types-confirmed.txt, html19-eslint-confirmed.txt, html19-prettier-confirmed.txt, html19-docs-confirmed.txt, html19-provenance-confirmed.txt, html19-registry-confirmed.txt, html19-boundaries-confirmed.txt, html19-size-confirmed.txt, html19-tree.txt, html19-doctor.txt, html19-audit-lint.txt. Scope: changed source/docs,1880 provenance modules; Writer registry zero semantic violations;1879 runtime sources/10233 relative imports/227 allowed edges. Doctor has zero errors and the unchanged managed-shim readiness warning, with no unrelated hook edit. Final audit-only comment/doc corrections preserve code and tests. No full all-application run was needed.
+    - Initial local verification failure: html19-types.txt and html19-base-tests.txt reported a missing unicode import in the new mapper accessor. Added the existing native helper import within approved scope; rerun html19-base-tests2.txt passed80tests. A bounded editing script also stopped on a stale comment anchor before writing NumberingManager; inspected actual state and recomputed the route before applying the targeted patch. No evidence was fabricated and no enforcement was bypassed.
 id_source: "generated"
 ---
 ## Summary
@@ -2446,6 +2513,36 @@ Note: Native numeric RTF list checkpoint passes targeted parser, style-service, 
 Attempts: 29
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:52:54.474Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T14:21:10.752Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: LFOLEVEL/native definition/reference-table checkpoint passes855 related tests and static gates. Goal remains active for required pStyle-linked numbering, NumPr edges, malformed and old-style producers plus remaining slice audit.
+Attempts: 30
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:21:10.158Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3230,3 +3327,24 @@ Native HTML HREF and complete native internet-item transport checkpoint:
   Result: pass,219tests/18files. Evidence: html18-other-filters-final.txt. Scope: related TXT/Markdown/RTF output and native document-I/O/graph boundaries.
 - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html18-types-confirm.txt, html18-eslint-confirm.txt, html18-prettier-confirm.txt, html18-docs-final.txt, html18-doc-lint.txt, html18-provenance-confirm.txt, html18-registry-confirm.txt, html18-boundaries-confirm.txt, html18-size.txt, html18-tree.txt, html18-doctor.txt. Scope: changed source/docs,1879 provenance records, Writer registry zero semantic violations,1878 runtime modules/10224 imports/227 allowed edges. Docs checker initially required the local add arrow's documentation to be attached to the function; it is now a documented local function, with no runtime behavior change. Doctor reports zero errors and the pre-existing managed-hook readiness warning; no unrelated hook mutation was attempted. No full all-application test run was needed for this checkpoint.
+
+### 2026-10-30 S3HW1E concrete-list definitions and LFOLEVEL checkpoint (html19)
+
+- Previous goal turn classified as progress: clean implementation checkpoint7e51cbb4afb5 was authoritative before this work. Preflight revalidated writer/current checkout and approved DOING CODER task; no network/outside-repository access, delegation or publication.
+- Replaced detached listFormats/listOverrides/current-level/rule-name maps with actual saved RTF tableAttributes/listLevelEntries, nested CT_NumLvl_lvl/Num_lvlOverride values and cumulative m_aListTableSprms. LISTNAME is a native destination; nested LISTOVERRIDEENTRY properties propagate upward. Original ilvl counters/unsigned16 selection and signed16 size are retained.
+- Added native RTFReferenceTable, copying actual intrusive references in signed map-key order. Each original LISTOVERRIDETABLE pop captures a COW reference table. The existing atomic model boundary delivers every captured table in source order, preserving cumulative duplicates, first-ID lookup, WWNum suffixes and ListLabel allocation.
+- DomainMapper.table numbering import flags and lazy DomainMapper_Impl.GetListTable/GetListStyleName now use native ListsManager. Actual AbstractListDef/ListDef own sparse levels, default/override numeric property sequences, first-ID tables, retained NumberingRules service copies and cleanup. Native HasValues gates numeric merging; explicit empty text remains distinct from absence.
+- Existing typed NumberingStyles/NumberingRules contracts create and commit actual native rules. AbstractListDef.MapListId now reuses the first real paragraph identity among concrete rules sharing one abstract definition; synthetic RTF-list per-override identities were removed. Different abstract definitions remain separate, with Worker retaining shared identities and distinct rule owners.
+- Original source oddities WRITER264-WRITER268 are documented and retained: ignored override flags/count/no synthetic paragraph restart; character merge into an unused temporary; omitted concrete LISTTAB default; geometry-only stub gate; inherited LISTLEVEL after-pop counter advancement.
+- Corrected local pushState RunType copying against original fdo#85812 logic: reset the current parent before copying unless it is one of the two completed RTL pairs. Eight actual font/size/weight cases verify child and subsequent parent behavior. No upstream defect was inferred for this documented source reset.
+- Remaining requirements explicitly remain open: native S inside LISTLEVEL emits CT_Lvl_pStyle in pinned rtfdispatchvalue.cxx when a style resolves. This producer DOES exist in RTF. Connecting it, AddParaProperties, chapter/outline choice and stylesheet postprocessing is required in the current style/core slice. Earlier ordinary-profile implementation comments implying no RTF pStyle producer were corrected immediately; no all-numbering completion claim is made. Paragraph NumPr direct-format edges, malformed-level first-indent recovery, old-style numbering, special sections/HTML and full re-export identity audit also remain open. All broad semantic/native/ABI confidence stays unverified.
+
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,855tests/47files. Evidence: output/playwright/rtf-properties-native/html19-confirmed-tests.txt. Scope: final parser/group/LFOLEVEL/native definitions, RTF export, related native styles/lifetimes, TXT, Markdown, generated numeric IDs and existing document I/O. No test configuration or unrelated expectations were changed.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1
+  Result: pass,120tests/5files. Evidence: html19-identity-tests.txt in the same evidence directory. Scope: final common abstract-list identity, actual distinct rules, shared Worker list membership, ordered reference lifetime and related RTF marker ownership.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-associated-character.test.ts src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts --maxWorkers 1
+  Result: pass,89tests/3files. Evidence: html19-group-tests.txt. Scope: all eight original group run selectors and parent mutation; inherited destination counter; concrete numeric/text/character/Worker behavior. Broad final855-case run includes these changes.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html19-types-confirmed.txt, html19-eslint-confirmed.txt, html19-prettier-confirmed.txt, html19-docs-confirmed.txt, html19-provenance-confirmed.txt, html19-registry-confirmed.txt, html19-boundaries-confirmed.txt, html19-size-confirmed.txt, html19-tree.txt, html19-doctor.txt, html19-audit-lint.txt. Scope: changed source/docs,1880 provenance modules; Writer registry zero semantic violations;1879 runtime sources/10233 relative imports/227 allowed edges. Doctor has zero errors and the unchanged managed-shim readiness warning, with no unrelated hook edit. Final audit-only comment/doc corrections preserve code and tests. No full all-application run was needed.
+- Initial local verification failure: html19-types.txt and html19-base-tests.txt reported a missing unicode import in the new mapper accessor. Added the existing native helper import within approved scope; rerun html19-base-tests2.txt passed80tests. A bounded editing script also stopped on a stale comment anchor before writing NumberingManager; inspected actual state and recomputed the route before applying the targeted patch. No evidence was fabricated and no enforcement was bypassed.

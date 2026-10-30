@@ -67,6 +67,8 @@ export interface RtfState {
   characterSprms: RTFSprms;
   paragraphSprms: RTFSprms;
   tableSprms: RTFSprms;
+  tableAttributes: RTFSprms;
+  listLevelEntries: RTFSprms;
   runType: RunType;
   destination:
     | "body"
@@ -79,10 +81,12 @@ export interface RtfState {
     | "listtable"
     | "list"
     | "listlevel"
+    | "listname"
     | "leveltext"
     | "levelnumbers"
     | "listoverridetable"
     | "listoverride"
+    | "lfolevel"
     | "field"
     | "fldinst"
     | "skip";

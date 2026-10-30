@@ -2,6 +2,16 @@
 
 /** Exact original generated resource IDs for the represented Writer DOCX slice. */
 export const NS_ooxml = Object.freeze({
+  LN_NUMBERING: 93157,
+  LN_CT_Numbering_abstractNum: 93159,
+  LN_CT_Numbering_num: 93160,
+  LN_CT_AbstractNum_abstractNumId: 93150,
+  LN_CT_AbstractNum_nsid: 93143,
+  LN_CT_Num_abstractNumId: 93154,
+  LN_CT_Num_lvlOverride: 93155,
+  LN_CT_NumLvl_ilvl: 93153,
+  LN_CT_NumLvl_lvl: 93152,
+  LN_CT_Num_numId: 93156,
   LN_CT_TblPPr_vertAnchor: 92733,
   LN_CT_TblPPr_tblpYSpec: 92734,
   LN_CT_TblPPr_horzAnchor: 92735,

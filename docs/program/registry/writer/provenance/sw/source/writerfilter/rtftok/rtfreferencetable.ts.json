@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfreferencetable.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfreferencetable.cxx",
+    "localSymbols": [
+      "RTFReferenceTable"
+    ],
+    "upstreamSymbols": [
+      "RTFReferenceTable::RTFReferenceTable",
+      "RTFReferenceTable::resolve"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E concrete-list checkpoint: actual saved tableAttributes/listLevelEntries and RTFValue containers carry LISTLEVEL/LFOLEVEL/NumLvl overrides; RTFReferenceTable retains intrusive property references and signed map order. Each original LISTOVERRIDETABLE callback captures the cumulative raw table for ordered delivery at the existing atomic model boundary. DomainMapper table import flags and its lazy ListsManager own actual AbstractListDef/ListDef sparse levels, first-ID lookup, retained numbering service and native numeric HasValues merge. Native WWNum style creation, typed NumberingRules replacement/commit and property-owner lifetimes replace the detached list-ID/level maps. Explicit empty concrete text remains distinct from absent text. Original ignored listoverride flags, reversed temporary character merge, omitted LISTTAB reset and geometry-only stub exclusion are retained and documented as WRITER264-WRITER267. Repeated table callbacks preserve duplicate style suffixes and label allocation. Malformed-level first-indent recovery, old-style paragraph numbering, special sections/HTML and full native/compiled ABI/module parity remain unverified; broad confidence and intentional browser save/open/recovery behavior are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "The consumed logical ordered-map/intrusive-reference table profile is implemented; compiled native/ABI/module parity remains unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfreferencetable.ts",
+          "marker": "RTFReferenceTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts",
+          "marker": "GetRefCount"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfreferencetable.cxx",
+          "marker": "RTFReferenceTable::resolve"
+        }
+      ]
+    }
+  }
+}

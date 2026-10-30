@@ -12,6 +12,8 @@ import {
   type Reference,
   type Sprm,
   type Value,
+  ReferencePointer,
+  releaseReturnedReference,
 } from "../inc/dmapper/resourcemodel";
 /** Native ListLevel uses the same actual PropertyMap as DomainMapper's borrowed list context. Unconsumed numeric level fields remain with their existing importer owner. */
 export class ListLevel extends PropertyMap {
@@ -22,6 +24,7 @@ export class ListLevel extends PropertyMap {
   private m_nXChFollow = 0;
   private m_nTabstop: number | undefined;
   private m_bIsLegal = false;
+  private m_bHasValues = false;
   private m_aCustomNumberFormat = "";
   /** Original numeric level assignments, including isLegal's presence semantics and negative-tab exclusion. @param id - Source identity. @param value - Original signed value. @returns Nothing. */
   SetValue(id: number, value: number): void {
@@ -47,6 +50,15 @@ export class ListLevel extends PropertyMap {
       case N.LN_CT_Lvl_legacy:
         break;
     }
+    this.m_bHasValues = true;
+  }
+  /** Native stub override admission records only SetValue calls. @returns Whether a numeric value was assigned. */
+  HasValues(): boolean {
+    return this.m_bHasValues;
+  }
+  /** Original optional text distinguishes absence from an explicit empty label. @returns Whether text was assigned. */
+  HasBulletChar(): boolean {
+    return this.m_sBulletChar !== undefined;
   }
   /** Native custom format storage. @param value - Original description. @returns Nothing. */
   SetCustomNumberFormat(value: string): void {
@@ -60,8 +72,12 @@ export class ListLevel extends PropertyMap {
   GetStartOverride(): number {
     return this.m_nStartOverride;
   }
+  /** Original public level-property boundary for ordinary levels; native pStyle contribution remains to be connected. @param defaults - Original default selector. @returns Owned native property vector. */
+  GetProperties(defaults: boolean): PropertyValue[] {
+    return this.GetLevelProperties(defaults);
+  }
   /** Original current-model GetLevelProperties, preserving UNO types, omissions and Word zero defaults. @param defaults - Include abstract-level defaults. @returns Owned generated values. */
-  GetLevelProperties(defaults: boolean): PropertyValue[] {
+  private GetLevelProperties(defaults: boolean): PropertyValue[] {
     const result: PropertyValue[] = [];
     /** Copies one original property and takes ownership of its temporary Any. @param name - Native name. @param value - Owned Any. @returns Nothing. */
     function add(name: string, value: Any): void {
@@ -157,9 +173,23 @@ export function ResolveListLevelCharacters(
   level: ListLevel,
   properties: Reference<Properties>,
 ): void {
+  properties.resolve(
+    createListLevelHandler(
+      mapper,
+      /** Borrows the explicitly supplied native level. @returns Actual level. */ () => level,
+    ),
+  );
+}
+/** Shared original ListsManager level-property cases use the definition's actual current level. @param mapper - Native mapper. @param current - Current native level supplier. @returns Borrowed handler. */
+function createListLevelHandler(
+  mapper: DomainMapper,
+  current: () => ListLevel | undefined,
+): Properties {
   const handler: Properties = {
     /** Original level text normalizes soft hyphen and digit placeholders before storage. @param id - Resource identity. @param value - Native value. @returns Nothing. */
     attribute(id: number, value: Value): void {
+      const level = current();
+      if (!level) return;
       const number = value.getInt();
       if (
         (
@@ -218,7 +248,12 @@ export function ResolveListLevelCharacters(
     /** Original rPr/lvlText recurse through this manager; actual character handlers borrow the selected level. @param modifier - Native modifier. @returns Nothing. */
     sprm(modifier: Sprm): void {
       const id = modifier.getId(),
-        number = modifier.getValue()?.getInt() ?? 0;
+        number = modifier.getValue()?.getInt() ?? 0,
+        level = current();
+      if (!level) {
+        if (id === N.LN_CT_Lvl_start) bIsStartVisited = true;
+        return;
+      }
       if (id === N.LN_CT_Lvl_start) {
         level.SetValue(id, number);
         bIsStartVisited = true;
@@ -287,15 +322,26 @@ export function ResolveListLevelCharacters(
       }
     },
   };
-  properties.resolve(handler);
+  return handler;
 }
-/** Native ListDef::CreateNumberingRules builds a fresh ListLabel style even for an empty property vector, plus the font-name contribution of GetLevelProperties. @param mapper - Actual stream. @param level - Actual resolved level. @returns Owned numbering property vector. */
+/** Native ListDef::CreateNumberingRules builds a fresh ListLabel style even for an empty property vector, plus the font-name contribution of GetLevelProperties. @param mapper - Actual stream. @param level - Actual abstract level. @param override - Optional concrete level. @param properties - Optional owned merged numeric vector. @returns Owned numbering property vector. */
 export function CreateListLevelCharacterProperties(
   mapper: DomainMapper,
-  level: ListLevel,
+  level: ListLevel | undefined,
+  override?: ListLevel,
+  properties?: PropertyValue[],
 ): PropertyValue[] {
-  const characters = level.GetCharStyleProperties(),
-    result: PropertyValue[] = level.GetLevelProperties(true);
+  const characters = level?.GetCharStyleProperties() ?? [],
+    result = properties ?? level?.GetProperties(true) ?? [];
+  if (override) {
+    const concrete = override.GetCharStyleProperties();
+    try {
+      mergeProperties(characters, concrete);
+    } finally {
+      releaseProperties(concrete);
+    }
+    // Original CreateNumberingRules merges into the temporary concrete vector, then uses the unchanged abstract vector (WRITER265).
+  }
   try {
     const name = mapper.impl.GetStyleSheetTable().getOrCreateCharStyle(characters, true),
       key = unicode("CharStyleName");
@@ -311,7 +357,12 @@ export function CreateListLevelCharacterProperties(
       name.dispose();
     }
     for (const [name, value] of [
-      ["ListFormat", stringAny(level.GetBulletChar())],
+      [
+        "ListFormat",
+        stringAny(
+          override?.HasBulletChar() ? override.GetBulletChar() : (level?.GetBulletChar() ?? ""),
+        ),
+      ],
       ["PositionAndSpaceMode", new Any([1], "sal_Int16")],
     ] as const) {
       const key = unicode(name);
@@ -407,3 +458,332 @@ import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingT
 import { HoriOrientation as Hori } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Original function-static flag in ListsManager::lcl_sprm intentionally persists across definitions and imports. */
 let bIsStartVisited = false;
+
+/** Releases actual generated vector elements at their native temporary lifetime boundary. @param values - Owned native properties. @returns Nothing. */
+function releaseProperties(values: readonly PropertyValue[]): void {
+  for (const value of values) {
+    value.Name.dispose();
+    value.Value.dispose();
+  }
+}
+/** Original lcl_mergeProperties replaces the first matching destination property in place and appends missing names. @param source - Borrowed source sequence. @param destination - Owned destination vector. @returns Nothing. */
+function mergeProperties(source: readonly PropertyValue[], destination: PropertyValue[]): void {
+  for (const property of source) {
+    const index = destination.findIndex(
+      /** Native property-name comparison. @param value - Existing property. @returns Name equality. */ (
+        value,
+      ) => value.Name.equals(property.Name),
+    );
+    const copy = new PropertyValue(property.Name, property.Handle, property.Value, property.State);
+    if (index < 0) destination.push(copy);
+    else {
+      const previous = destination[index] as PropertyValue;
+      previous.Name.dispose();
+      previous.Value.dispose();
+      destination[index] = copy;
+    }
+  }
+}
+/** Native abstract definition owns sparse levels and its current level; definitions are retained by ListsManager for the import. */
+export class AbstractListDef {
+  private m_nId = -1;
+  private m_oListId: string | undefined;
+  protected readonly m_aLevels: (ListLevel | undefined)[] = [];
+  private m_pCurrentLevel: ListLevel | undefined;
+  /** Original definition identity. @param id - Signed original ID. @returns Nothing. */
+  SetId(id: number): void {
+    this.m_nId = id | 0;
+  }
+  /** Native identity query. @returns Original ID. */
+  GetId(): number {
+    return this.m_nId;
+  }
+  /** Original first paragraph list identity is reused by concrete definitions sharing this abstract list. @param id - Actual paragraph list identity. @returns Mapped native identity. */
+  MapListId(id: string): string {
+    return (this.m_oListId ??= id);
+  }
+  /** Original sparse vector size. @returns Number of level slots. */
+  Size(): number {
+    return (this.m_aLevels.length << 16) >> 16;
+  }
+  /** Native level selection creates a missing slot and retains the current level. @param index - Original level index. @returns Nothing. */
+  AddLevel(index: number): void {
+    index &= 65535;
+    this.m_pCurrentLevel = this.m_aLevels[index] ??= new ListLevel();
+  }
+  /** Original optional sparse lookup. @param index - Level slot. @returns Borrowed level. */
+  GetLevel(index: number): ListLevel | undefined {
+    return this.m_aLevels[index & 65535];
+  }
+  /** Original parser current-level query. @returns Borrowed selected level. */
+  GetCurrentLevel(): ListLevel | undefined {
+    return this.m_pCurrentLevel;
+  }
+  /** Native abstract/concrete numeric property collection. @param defaults - Original default selector. @returns Owned generated vectors. */
+  GetPropertyValues(defaults: boolean): PropertyValue[][] {
+    const values: PropertyValue[][] = [];
+    try {
+      for (let i = 0; i < this.m_aLevels.length; ++i)
+        values.push(this.m_aLevels[i]?.GetProperties(defaults) ?? []);
+      return values;
+    } catch (error) {
+      for (const level of values) releaseProperties(level);
+      throw error;
+    }
+  }
+  /** Native definition destructor releases only its owned levels. @returns Nothing. */
+  dispose(): void {
+    for (const level of this.m_aLevels) level?.dispose();
+    this.m_aLevels.length = 0;
+    this.m_pCurrentLevel = undefined;
+  }
+}
+/** Native concrete list retains its abstract definition and merges only numeric overrides with HasValues. */
+export class ListDef extends AbstractListDef {
+  private m_pAbstractDef: AbstractListDef | undefined;
+  private m_StyleName = "";
+  private m_xNumRules: SwXNumberingRules | undefined;
+  /** Native abstract binding is borrowed from ListsManager's retained table. @param definition - Actual abstract definition. @returns Nothing. */
+  SetAbstractDefinition(definition: AbstractListDef | undefined): void {
+    this.m_pAbstractDef = definition;
+  }
+  /** Original abstract owner query. @returns Borrowed definition. */
+  GetAbstractDefinition(): AbstractListDef | undefined {
+    return this.m_pAbstractDef;
+  }
+  /** Original style identity after creation. @returns Concrete style name. */
+  GetStyleName(): string {
+    return this.m_StyleName;
+  }
+  /** Native numeric merge starts from abstract defaults and excludes stub overrides. @returns Owned merged vectors. */
+  GetMergedPropertyValues(): PropertyValue[][] {
+    if (!this.m_pAbstractDef) return [];
+    const result = this.m_pAbstractDef.GetPropertyValues(true),
+      concrete = this.GetPropertyValues(false);
+    try {
+      for (let i = 0; i < Math.min(result.length, concrete.length); ++i) {
+        const values = concrete[i] as PropertyValue[];
+        if (values.length && this.GetLevel(i)?.HasValues())
+          mergeProperties(values, result[i] as PropertyValue[]);
+      }
+      return result;
+    } catch (error) {
+      for (const level of result) releaseProperties(level);
+      throw error;
+    } finally {
+      for (const level of concrete) releaseProperties(level);
+    }
+  }
+  /** Ordinary concrete levels create a native NumberingStyle and commit its typed service once; native pStyle-linked outline selection remains to be connected. @param mapper - Actual document mapper. @returns Nothing. */
+  CreateNumberingRules(mapper: DomainMapper): void {
+    if (this.m_xNumRules) return;
+    const model = mapper.model,
+      familyKey = unicode("NumberingStyles"),
+      family = model.getStyleFamilies().getByName(familyKey);
+    familyKey.dispose();
+    let name = `WWNum${this.GetId()}`;
+    for (;;) {
+      const key = unicode(name);
+      try {
+        if (!family.hasByName(key)) break;
+      } finally {
+        key.dispose();
+      }
+      name += "a";
+    }
+    this.m_StyleName = name;
+    const descriptor = model.createNumberingStyle(),
+      styleName = unicode(name);
+    try {
+      family.insertStyleByName(styleName, descriptor);
+    } finally {
+      styleName.dispose();
+    }
+    const key = unicode("NumberingRules"),
+      value = descriptor.getPropertyValue(key),
+      reference = new UnoReference(value, UNO_QUERY, indexReplaceType),
+      service = reference.get();
+    try {
+      if (!(service instanceof SwXNumberingRules))
+        throw new Error("Expected native numbering service");
+      service.acquire();
+      this.m_xNumRules = service;
+      {
+        const merged = this.GetMergedPropertyValues();
+        try {
+          for (let i = 0; i < (this.m_pAbstractDef?.Size() ?? 0); ++i) {
+            const initial = merged[i] ?? [];
+            merged[i] = [];
+            const properties = CreateListLevelCharacterProperties(
+              mapper,
+              this.m_pAbstractDef?.GetLevel(i),
+              this.GetLevel(i),
+              initial,
+            );
+            try {
+              replaceLevel(service, i, properties);
+            } finally {
+              releaseProperties(properties);
+            }
+          }
+          descriptor.setPropertyValue(key, value);
+        } finally {
+          for (const properties of merged) releaseProperties(properties);
+        }
+      }
+    } finally {
+      reference.dispose();
+      value.dispose();
+      key.dispose();
+    }
+  }
+  /** Original concrete destructor releases its retained rule-service copy and owned override levels. @returns Nothing. */
+  override dispose(): void {
+    this.m_xNumRules?.GetNumRule().Dispose();
+    this.m_xNumRules?.release();
+    this.m_xNumRules = undefined;
+    super.dispose();
+  }
+}
+/** ListsManager owns actual abstract/concrete definitions and resolves the original numbering table before creating native rules. */
+export class ListsManager implements Properties, Table {
+  private m_pCurrentDefinition: AbstractListDef | undefined;
+  private readonly m_aAbstractLists: AbstractListDef[] = [];
+  private readonly m_aLists: ListDef[] = [];
+  private readonly levelHandler: Properties;
+  /** Native manager borrows the actual destination mapper. @param mapper - Original stream owner. @returns Manager. */
+  constructor(private readonly mapper: DomainMapper) {
+    this.levelHandler = createListLevelHandler(
+      mapper,
+      /** Borrows this definition's current level. @returns Actual selected level. */ () =>
+        this.m_pCurrentDefinition?.GetCurrentLevel(),
+    );
+  }
+  /** Original table callback resolves the delivered properties against the same manager. @param position - Table entry index. @param properties - Actual resource reference. @returns Nothing. */
+  entry(position: number, properties: Reference<Properties>): void {
+    void position;
+    properties.resolve(this);
+  }
+  /** Original numbered definitions use IDs and sparse ilvl attributes before their level modifiers. @param id - Resource identity. @param value - Native value. @returns Nothing. */
+  attribute(id: number, value: Value): void {
+    const current = this.m_pCurrentDefinition;
+    if (!current) return;
+    if (id === N.LN_CT_AbstractNum_abstractNumId || id === N.LN_CT_Num_numId) {
+      const number = value.getString();
+      try {
+        current.SetId(number.toInt32());
+      } finally {
+        number.dispose();
+      }
+    } else if (id === N.LN_CT_AbstractNum_nsid) current.SetId(value.getInt());
+    else if (id === N.LN_CT_Lvl_ilvl || id === N.LN_CT_NumLvl_ilvl) {
+      const number = value.getString();
+      try {
+        current.AddLevel(toUInt32(number.getStr()));
+      } finally {
+        number.dispose();
+      }
+    } else this.levelHandler.attribute(id, value);
+  }
+  /** Original table/definition recursion retains the current definition and original modifier order. @param modifier - Native modifier. @returns Nothing. */
+  sprm(modifier: Sprm): void {
+    const id = modifier.getId();
+    if (id === N.LN_CT_Numbering_abstractNum || id === N.LN_CT_Numbering_num) {
+      const properties = modifier.getProps();
+      if (properties === null || (properties instanceof ReferencePointer && !properties.is())) {
+        releaseReturnedReference(properties);
+        return;
+      }
+      const definition = id === N.LN_CT_Numbering_num ? new ListDef() : new AbstractListDef();
+      this.m_pCurrentDefinition = definition;
+      resolveReturnedReference(properties, this);
+      if (definition instanceof ListDef) this.m_aLists.push(definition);
+      else this.m_aAbstractLists.push(definition);
+      this.m_pCurrentDefinition = undefined;
+      return;
+    }
+    if (!this.m_pCurrentDefinition) return;
+    if (id === N.LN_CT_Num_abstractNumId) {
+      if (this.m_pCurrentDefinition instanceof ListDef)
+        this.m_pCurrentDefinition.SetAbstractDefinition(
+          this.GetAbstractList(modifier.getValue()?.getInt() ?? 0),
+        );
+    } else if (
+      id === N.LN_CT_AbstractNum_lvl ||
+      id === N.LN_CT_Num_lvlOverride ||
+      id === N.LN_CT_NumLvl_lvl
+    )
+      resolveReturnedReference(modifier.getProps(), this);
+    else if (id === N.LN_CT_NumLvl_startOverride)
+      this.m_pCurrentDefinition.GetCurrentLevel()?.SetValue(id, modifier.getValue()?.getInt() ?? 0);
+    else this.levelHandler.sprm(modifier);
+  }
+  /** Original first matching abstract ID wins for the consumed RTF profile without style links. @param id - Original ID. @returns Borrowed definition. */
+  GetAbstractList(id: number): AbstractListDef | undefined {
+    return this.m_aAbstractLists.find(
+      /** Selects original first identity match. @param definition - Stored definition. @returns Equality. */ (
+        definition,
+      ) => definition.GetId() === id,
+    );
+  }
+  /** Original first concrete match and minus-one sentinel. @param id - Original ID. @returns Borrowed list. */
+  GetList(id: number): ListDef | undefined {
+    return id === -1
+      ? undefined
+      : this.m_aLists.find(
+          /** Selects original first identity match. @param definition - Stored definition. @returns Equality. */ (
+            definition,
+          ) => definition.GetId() === id,
+        );
+  }
+  /** Creates ordinary numbering definitions; native pStyle-linked outline selection and stylesheet postprocessing remain to be connected. @returns Nothing. */
+  CreateNumberingRules(): void {
+    for (const list of this.m_aLists) list.CreateNumberingRules(this.mapper);
+  }
+  /** Original manager destructor releases retained definitions and their level maps. @returns Nothing. */
+  dispose(): void {
+    this.m_pCurrentDefinition?.dispose();
+    this.m_pCurrentDefinition = undefined;
+    for (const definition of [...this.m_aAbstractLists, ...this.m_aLists]) definition.dispose();
+    this.m_aAbstractLists.length = 0;
+    this.m_aLists.length = 0;
+  }
+}
+/** Typed native index replacement borrows generated values only for the setter call. @param service - Native service copy. @param index - Level. @param properties - Generated values. @returns Nothing. */
+function replaceLevel(
+  service: SwXNumberingRules,
+  index: number,
+  properties: readonly PropertyValue[],
+): void {
+  const sequence = new NumberingPropertySequence(
+    {
+      get: /** Native generated element addressing. @param offset - Logical address. @returns Borrowed property. */ (
+        offset: number,
+      ) => properties[offset / 48],
+    },
+    properties.length,
+  );
+  try {
+    const value = new Any(sequence.getAddress(), numberingSequenceType);
+    try {
+      service.replaceByIndex(index, value);
+    } finally {
+      value.dispose();
+    }
+  } finally {
+    sequence.dispose();
+  }
+}
+import type { Table } from "../inc/dmapper/resourcemodel";
+import { SwXNumberingRules } from "../../core/unocore/unosett";
+import {
+  NumberingPropertySequence,
+  numberingSequenceType,
+} from "../../core/unocore/unosett-properties";
+import {
+  Reference as UnoReference,
+  UNO_QUERY,
+} from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+
+import { toUInt32 } from "../../../../o3tl/inc/string_view";
