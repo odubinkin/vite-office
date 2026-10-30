@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.paragraph-numbering.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.paragraph-numbering.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-numbering.test.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/paragraph-numbering.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts"
+      ],
+      "justification": " Original finishParagraph numbering resolution preserves direct/style precedence, inherited levels, level9 cancellation, one-parent indentation compensation, ID0 no-list margin recovery, actual named numbering-rule lookup, abstract MapListId and once-per-concrete startOverride. WRITER273 through WRITER275 preserve source truth-test, RTF export identity and missing-entry behavior. S3HW1E paragraph NumPr checkpoint: actual native/RTF cases cover these consumed paths. Malformed-level recovery, old-style numbering and remaining section/HTML/current-core export producer audits remain required. No complete current-slice or full module/ABI confidence claim; intentional browser open/save/autosave/recovery behavior is unchanged. Direct-context getCurrentNumberingProperty follows actual XIndexAccess/getByIndex property sequences: missing active-mode properties return zero and native index errors propagate. This differs from getNumberingProperty, which catches native UNO exceptions for malformed named-style levels. These are bounded consumed filter contracts, not full module/ABI or current-slice completion claims; browser open/save/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PrepareParagraphNumbering",
+        "FinishParagraphNumbering",
+        "getNumberingProperty",
+        "lcl_GetPropertyFromParaStyleSheetNoNum",
+        "getCurrentNumberingProperty"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+      "upstreamSymbols": [
+        "DomainMapper_Impl::finishParagraph",
+        "DomainMapper_Impl::getNumberingProperty",
+        "lcl_GetPropertyFromParaStyleSheetNoNum",
+        "DomainMapper_Impl::getCurrentNumberingProperty"
+      ]
+    }
+  }
+}

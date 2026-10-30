@@ -441,7 +441,7 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
-  if (state.destination === "styleentry") dispatchStyleParagraphNumbering(name, parameter, state);
+  dispatchStyleParagraphNumbering(name, parameter, state);
   if (name === "outlinelevel") {
     state.paragraphSprms.set(N.LN_CT_PPrBase_outlineLvl, new RTFValue(parameter ?? 0));
     return;
@@ -840,20 +840,19 @@ export function DispatchBodyControl(
       N.LN_EG_RPrBase_position,
       new RTFValue((parameter ?? 6) * (name === "up" ? 1 : -1)),
     );
-  } else if (name === "ls" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, listOverride: parameter };
-  else if (name === "cs" && parameter !== undefined) {
+  } else if (name === "cs" && parameter !== undefined) {
     state.currentCharacterStyleIndex = parameter;
     if (this["styles"].has(parameter)) {
       state.characterStyleIndex = parameter;
       const name = this["m_aStyleNames"].get(parameter);
       if (name) state.characterSprms.set(N.LN_EG_RPrBase_rStyle, stringValue(name));
     }
-  } else if (name === "s" && parameter !== undefined)
+  } else if (name === "s" && parameter !== undefined) {
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
-  else if (name === "ilvl" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
-  else if (name === "cf" && parameter !== undefined) {
+    const styleName = this["m_aStyleNames"].get(parameter);
+    if (styleName && state.destination !== "styleentry")
+      state.paragraphSprms.set(N.LN_CT_PPrBase_pStyle, stringValue(styleName));
+  } else if (name === "cf" && parameter !== undefined) {
     state.colorIndex = parameter;
     const character = { ...state.character };
     Reflect.deleteProperty(character, "color");
@@ -876,20 +875,6 @@ export function DispatchBodyControl(
       alignment:
         name === "ql" ? "left" : name === "qc" ? "center" : name === "qr" ? "right" : "justify",
     };
-  else if (name === "li" && parameter !== undefined)
-    state.paragraph = {
-      ...state.paragraph,
-      left: Math.max(0, parameter),
-      leftSet: true,
-      // rtftok LI inserts firstLine=0 with Ignore conflict policy.
-      ...(!state.paragraph.firstLineSet ? { firstLine: 0, firstLineSet: true } : {}),
-    };
-  else if (name === "lin" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, left: Math.max(0, parameter), leftSet: true };
-  else if ((name === "ri" || name === "rin") && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, right: Math.max(0, parameter), rightSet: true };
-  else if (name === "fi" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, firstLine: parameter, firstLineSet: true };
   else if (name === "sb" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, before: Math.max(0, parameter), beforeSet: true };
   else if (name === "sa" && parameter !== undefined)

@@ -530,9 +530,14 @@ export function ApplyRtfParagraphProperties(
   mark.Dispose();
   mapper.startParagraphGroup();
   try {
+    const style = node.GetTextFormatColl();
+    mapper.impl.SetCurrentParaStyleName(
+      SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
+    );
     mapper.props(properties);
     const context = mapper.impl.GetTopContext();
-    if (!context) throw new Error("assert(paragraph context)");
+    if (!(context instanceof ParagraphPropertyMap)) throw new Error("assert(ParagraphPropertyMap)");
+    const numbering = mapper.impl.PrepareParagraphNumbering(context);
     SetPropertyValues(
       range,
       context
@@ -543,6 +548,12 @@ export function ApplyRtfParagraphProperties(
           ) => textValue(property.Name) !== "ParaStyleName",
         ),
     );
+    const paragraph = new SwXParagraph(node, mapper.model.getText());
+    try {
+      mapper.impl.FinishParagraphNumbering(paragraph, context, numbering);
+    } finally {
+      paragraph.Release();
+    }
   } finally {
     mapper.endParagraphGroup();
     range.Dispose();
@@ -597,3 +608,6 @@ import { getNestedAttribute, eraseNestedAttribute } from "./rtfdocumentimpl.prop
 import { unicode } from "../../core/unocore/unocrsrhelper";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+
+import { ParagraphPropertyMap } from "../dmapper/PropertyMap";
+import { SwXParagraph } from "../../core/unocore/unoparagraph";

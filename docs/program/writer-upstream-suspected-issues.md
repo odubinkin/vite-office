@@ -2392,3 +2392,33 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: the selected concrete ID is stored in sal_Int16, while ListDef retains its full-width ID. Rule creation compares GetId() against the narrowed selection.
 - Impact: a suitable concrete ID65540 becomes4, so that candidate creates WWNum65540 instead of Outline; a separate ID4 can compare equal to the selection. This differs from ordinary low-range IDs.
 - Local behavior: preserve signed16 selection and full-width comparison. `numbering-style-postprocess.test.ts` verifies weight6 and the resulting ordinary style for ID65540.
+
+
+### WRITER273 — No-numbering margin lookup treats absent list metadata as a list
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `lcl_GetPropertyFromParaStyleSheetNoNum`.
+- Observation: the first matching margin is rejected when GetListId() converts to true. The absent metadata sentinel is minus1, which also converts to true; only zero passes this check.
+- Impact: a style with no list metadata can stop margin lookup with an empty Any instead of contributing its margin or continuing to its parent. The numId0/no-definition recovery phase can consequently insert unsigned zero margins.
+- Local behavior: preserve the truth test, first-match stop, native unsigned-zero fallback and self-parent guard. `paragraph-numbering.test.ts` compares otherwise identical metadata minus1 and zero.
+
+### WRITER274 — RTF export does not preserve shared SwList identity across different rules
+
+- Source: `sw/source/filter/ww8/ww8atr.cxx`, `AttributeOutputBase::ParaNumRule`; `wrtw8num.cxx`, `AbstractNumberingDefinitions` and `NumberingDefinitions`.
+- Observation: shared-list/abstract-rule remapping is guarded by GetExportFormat()==DOCX, with an upstream FIXME. RTF follows the ordinary one-numbering-rule to one-abstract-definition path, regardless of a shared paragraph ListId.
+- Impact: RTF import can join different concrete definitions through one abstract list, but native RTF re-export separates their abstract definitions. Reopening that export gives distinct list identities even though the original imported paragraphs shared one.
+- Local behavior: retain the RTF path and the format-specific DOCX guard. `rtf-paragraph-numbering.test.ts` verifies shared imported IDs and distinct IDs after RTF re-export, plus retained numbering and paragraph level. Do not introduce a synthetic RTF identity extension.
+
+### WRITER275 — Body-level9 cancellation depends on resolving a stylesheet entry
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper.cxx`, LN_CT_NumPr_ilvl; `DomainMapper_Impl.cxx`, `finishParagraph`.
+- Observation: ilvl9 is initially admitted as native level9. Its conversion to no numbering sits inside the finishParagraph block guarded by a resolved paragraph-style entry. When that entry is absent, the conversion is skipped.
+- Impact: the same direct ilvl9 produces an unnumbered paragraph with a resolved source paragraph style, but can remain the tenth native numbering level without that entry.
+- Local behavior: retain the entry guard, original level range and cancellation sequence. `rtf-paragraph-numbering.test.ts` exercises both paths. Do not manufacture a default style entry or unconditionally reinterpret level9.
+
+
+### WRITER276 — RTF exports wide positive indentation that its native importer turns into zero
+
+- Source: `sw/source/filter/ww8/rtfattributeoutput.cxx`, `FormatFirstLineIndent`; `sw/source/writerfilter/dmapper/DomainMapper.cxx`, LN_CT_Ind_firstLine; `ConversionHelper.cxx`, `convertTwipToMm100_Limited`.
+- Observation: export writes the full authored first-line item, such as fi40000. Import calls the limited conversion helper, which returns zero for positive twips at or above32768; negative values are not subject to the same ceiling. The source comment attributes this to legacy MSO handling.
+- Impact: a positive wide indentation can export intact and return as zero on native re-import. An equally wide negative value follows the signed conversion instead. This is an intentional source compatibility rule, not a confirmed upstream defect.
+- Local behavior: preserve raw item export and original asymmetric import admission. `rtfexport.table-list.test.ts` verifies fi40000 emission and zero re-import; `rtf-paragraph-numbering.test.ts` pins32767,32768 and minus40000. Do not restore the former scalar import bypass to make the roundtrip lossless.

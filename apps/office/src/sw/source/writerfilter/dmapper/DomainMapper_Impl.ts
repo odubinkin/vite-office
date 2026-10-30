@@ -64,6 +64,7 @@ export class DomainMapper_Impl {
   }
   private m_pListTable: ListsManager | undefined;
   private m_bInNumberingImport = false;
+  private readonly m_aListOverrideApplied = new Set<number>();
   private m_bInAnyTableImport = false;
   /** Original lazy numbering manager belongs to this import owner. @returns Actual manager. */
   GetListTable(): ListsManager {
@@ -80,6 +81,36 @@ export class DomainMapper_Impl {
   /** Original style-level conflict validation. @param id - Native identifier. @returns Nothing. */
   ValidateListLevel(id: string): void {
     ValidateListLevel.call(this, id);
+  }
+  /** Original numbering phase before applying a paragraph property vector. @param properties - Native paragraph map. @param remove - Original removal flag. @param noNumbering - Original cancellation flag. @returns Original finish locals. */
+  PrepareParagraphNumbering(
+    properties: ParagraphPropertyMap | null,
+    remove = false,
+    noNumbering = false,
+  ): ParagraphNumbering {
+    return PrepareParagraphNumbering.call(this, properties, remove, noNumbering);
+  }
+  /** Original numbering phase after creation/property application. @param paragraph - Actual paragraph API. @param properties - Native paragraph map. @param numbering - Original locals. @returns Nothing. */
+  FinishParagraphNumbering(
+    paragraph: SwXParagraph,
+    properties: ParagraphPropertyMap | null,
+    numbering: ParagraphNumbering,
+  ): void {
+    FinishParagraphNumbering.call(
+      this,
+      paragraph,
+      properties,
+      numbering,
+      this.m_aListOverrideApplied,
+    );
+  }
+  /** Native named numbering-style property lookup. @param id - Concrete list. @param level - Original index. @param property - Native name. @returns Signed32 result. */
+  getNumberingProperty(id: number, level: number, property: string): number {
+    return getNumberingProperty.call(this, id, level, property);
+  }
+  /** Native property lookup on the directly applied numbering service and level in the top context. @param property - Native name. @returns Signed32 value or zero. */
+  getCurrentNumberingProperty(property: string): number {
+    return getCurrentNumberingProperty.call(this, property);
   }
   /** Original numbering-table phase. @param value - Phase state. @returns Nothing. */
   SetNumberingImport(value: boolean): void {
@@ -416,10 +447,16 @@ export class DomainMapper_Impl {
 
   /** Finishes the actual paragraph through XParagraphAppend, preserving style-first property order. @param properties - Paragraph map. @returns Nothing. */
   finishParagraph(properties: PropertyMap | null): void {
-    const values = this.GetParagraphPropertyValues(properties);
+    const context = properties instanceof ParagraphPropertyMap ? properties : null,
+      numbering = this.PrepareParagraphNumbering(context),
+      values = this.GetParagraphPropertyValues(properties);
     try {
       const paragraph = this.body.finishParagraph(values);
-      paragraph.Release();
+      try {
+        this.FinishParagraphNumbering(paragraph, context, numbering);
+      } finally {
+        paragraph.Release();
+      }
       this.appendedParagraph = true;
     } finally {
       for (const value of values) {
@@ -460,3 +497,11 @@ import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 import { ListsManager } from "./NumberingManager";
 
 import { GetListLevel, ValidateListLevel } from "./DomainMapper_Impl.numbering";
+
+import {
+  PrepareParagraphNumbering,
+  FinishParagraphNumbering,
+  getNumberingProperty,
+  getCurrentNumberingProperty,
+  type ParagraphNumbering,
+} from "./DomainMapper_Impl.paragraph-numbering";

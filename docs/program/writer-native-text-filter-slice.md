@@ -24,7 +24,7 @@ For every remaining kernel dependency, record the calling filter, the affected c
 | Native paragraph borders and border connection | Visual formatting omitted | Four native edges, line styles/colors/widths and distances, uniform `\\box`, explicit no-border overrides, stylesheet inheritance and source `\\brdrbtw` handling with prior-bottom removal and `RES_PARATR_CONNECT_BORDER=false` | The native thematic-line style has no general border syntax in Markdown | Paragraph and table borders now share source-shaped RTF border output and source RTF-to-OOXML-to-native metric conversion. `\\brdrth` is source-ignored (WRITER120); hairline width and distances retain source quantization. Full page-frame border/section interaction remains in the page-descriptor audit. |
 | Paragraph upper/lower and contextual spacing, line spacing, keep-with-next, split and widow controls | Visual formatting omitted | Native paragraph and stylesheet items map spacing, keep/split/widow controls and `SvxLineSpacingItem` through `\\sl`/`\\slmult`: fixed, minimum and proportional rules round-trip; leading adds the selected script font's measured height | No equivalent simple syntax | Pinned `AttributeOutputBase::ParaWidows` deliberately omits the separate orphan count because Word shares one widow/orphan control. The source Word/RTF leading representation imports as minimum height, losing the original leading rule. Browser font measurement uses Canvas; physical `RenderContext::GetTextHeight` equivalence and headless leading export remain unverified. |
 | Explicit tab stops and default tab distance | Literal tab characters | Native `SvxTabStopItem` positions, alignment and leaders map through `\\tx` with source-relative export offset and absolute imported positions; `\\deftab` maps through the document pool user default | No format-level tab-stop definitions | Pinned writer and reader differ for hyphen and equals leaders (WRITER097); source behavior retained. Further tab/default differential cases remain to verify. |
-| Lists, numbering rules, levels, restarts and counted state | Visible labels through native ASCII path | Kind/level/identity, source-mapped `levelnfc` type, per-level start/bullet and `listtext`; uncounted paragraphs omit list controls | Reader uses a document-owned rule across mixed nested list types, initializes the first format used at each level, fills unused levels on outer-list completion and marks list items counted; writer emits native labels and parent-prefix indentation | RTF paragraph restart value is not carried by the pinned upstream `ParaNumRule_Impl` path (WRITER096); some types share an `nfc` value. A later Markdown nested list with a different marker kind at an already-used level retains the first kind in pinned source (WRITER107). Further list semantics still require audit. |
+| Lists, numbering rules, levels, restarts and counted state | Visible labels through native ASCII path | Kind/level/identity, source-mapped `levelnfc` type, per-level start/bullet and `listtext`; uncounted paragraphs omit list controls  Native paragraph NumPr now covers style-only levels, direct rule precedence, missing-ID/body-level cancellation, signed indentation and original shared abstract IDs/startOverride. | Reader uses a document-owned rule across mixed nested list types, initializes the first format used at each level, fills unused levels on outer-list completion and marks list items counted; writer emits native labels and parent-prefix indentation | RTF paragraph restart value is not carried by the pinned upstream `ParaNumRule_Impl` path (WRITER096); some types share an `nfc` value. A later Markdown nested list with a different marker kind at an already-used level retains the first kind in pinned source (WRITER107). Further list semantics still require audit.  The native paragraph checkpoint closes the former scalar body-path gap; malformed/old-style and remaining producer/export audits stay open. RTF shared-identity loss on re-export is native (WRITER274). |
 | Table rows/cells and multiple cell paragraphs | Tab-separated rows | Rows/cells, paragraph order, native cell widths via `cellx`, table alignment/left offset, default left-to-right row direction, row minimum/fixed height and no-split state in pinned `TableDefinition` order, direct cell vertical alignment, four-side cell border style/width/color, table default and per-cell padding. Incoming `\trhdr` maps the contiguous header-row prefix with the upstream 10-row limit. | GFM table rows; multiple cell paragraphs are flattened | **Open:** remaining represented table properties need RTF coverage; merge structure has no current core box-span owner; Markdown is format-limited. Pinned RTF export omits the represented header-row count even though import accepts `\trhdr` (WRITER100). Table background and cell direction lack registered Writer which IDs in this core, so shared `SvxBrushItem`/`SvxFrameDirectionItem` types alone do not place them in the current model slice. |
 | Bookmarks and soft page breaks | No structural text encoding | Point bookmarks map through `bkmkstart`/`bkmkend`. The RTF writer uses document-owned soft page positions to split a text node only when its follow page needs a distinct section, retaining character hints, hyperlinks and point marks at their source offsets. The pinned previous-page suppression can omit the section token for a later node (WRITER104). | No structural Markdown mapping | **Open:** compiled upstream differential behavior for the later-node suppression and deeper multi-page chains; table soft-break rows are outside the represented text-node path. |
 | Page descriptors and paragraph/page break items | No structural text encoding | The first page descriptor emits global paper dimensions, margins, landscape and first-section controls; import applies physical geometry through `SwDoc::ChgPageDesc`. Direct later paragraph/table page descriptors emit RTF sections, physical geometry and page-number restart, with source follow-page suppression. Later export combines a first/follow page chain only when its represented physical geometry matches, following `IsPlausableSingleWordSection`; otherwise it keeps the first page geometry. Later `\\sect`/`\\sectd` groups import physical geometry into document-owned `ConvertedN` page descriptors attached to the first block; global fields seed each reset. Direct page-before emits `\\pagebb`; incoming `\\page` and one-column `\\column` defer a `RES_BREAK` page-before item to the next paragraph or table, while an in-cell symbol is ignored | No structural Markdown mapping | **Open:** the pinned importer appears to discard the numeric `\\pgnstarts` value and map `\\pgnrestart` to 1 (WRITER103), preserved here. First-page/follow-page metadata beyond physical geometry, section types and page-style chains still need source comparison. Pinned RTF loses direct page-after/page-both without section metadata and column breaks in this one-column/default-setting model (WRITER099); no synthetic `\\page` is added on export. |
@@ -962,3 +962,45 @@ Style-only body numbering and direct NumPr edge cases remain required work, alon
 with malformed-level recovery, old-style numbering and the remaining producer /
 re-export audit. Full RTF/current-slice completion and full module/ABI parity are
 not claimed. Browser open/save/autosave/recovery deviations are unchanged.
+
+
+### Native paragraph NumPr and style numbering checkpoint
+
+RTF body LS/ILVL and signed left/right/first-line indentation now use the same
+RTFSprms producers as stylesheet properties. LS uses original ReplaceAtStart
+ordering. S emits the original pStyle reference, and DomainMapper resolves it
+into the actual paragraph context. Removed the body scalar list-ID/level fields,
+clamped level handling, detached applyWriterParagraphList path and duplicate
+clamped margin replay.
+
+DomainMapper numId now retains actual ListDef NumberingRules in typed UNO Any,
+records the paragraph ListId, erases stale numbering-style/indent properties and
+preserves native missing-list cancellation. The numbering phase of native
+finishParagraph runs both for streamed paragraphs and for the existing atomic
+RTF binding: direct versus style precedence, inherited levels, level9 cancellation,
+one-parent indentation compensation, explicit ID0 no-list recovery, abstract
+MapListId and once-per-concrete startOverride. SwXNumberingRules named-property
+lookup preserves active-mode admission, absent ListFormat void and false legal
+values; chapter getters exclude ordinary bullet properties. Native style lookup
+reads the current actual named rule rather than a retained import-time copy.
+
+Tests cover actual RTF style-only level2, missing direct IDs, valid/invalid levels,
+signed geometry and token order, shared abstract IDs, Worker state, style/direct
+margin precedence, native named-property failures and once-only start overrides.
+Source oddities WRITER273-WRITER275 are preserved. In particular, RTF re-export
+separates a shared list across different concrete rules because the upstream
+identity-remapping branch is DOCX-only. This closes that specific identity-audit
+case without promising a stronger roundtrip than upstream.
+
+Malformed-level recovery, old-style numbering and remaining section/HTML and
+current-core re-export producer audits are still required completion work. The
+complete goal and broad module/ABI parity remain unverified. Intentional browser
+open/save/autosave/recovery deviations are unchanged.
+
+
+The paragraph NumPr checkpoint also restores native direct-context numbering
+geometry lookup. Nonzero left/first-line values equal to the active numbering
+format are omitted as direct attributes, preserving list indentation priority;
+left/hanging compensation keeps the original overwrite flags. The source export
+assertion for fi40000 remains intact, while re-import now applies the native
+positive32768 ceiling rather than the removed scalar bypass (WRITER276).

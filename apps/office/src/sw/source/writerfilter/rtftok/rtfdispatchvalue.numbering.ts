@@ -132,7 +132,7 @@ export function dispatchNumberingValue(
   return false;
 }
 
-/** Original paragraph numbering/indent producers consumed by style entries; document-body producers retain their current owner. @param name - Keyword. @param parameter - Native parameter/default. @param state - Actual group. @returns Nothing. */
+/** Original shared paragraph numbering/indent producers for body and stylesheet contexts. @param name - Keyword. @param parameter - Native parameter/default. @param state - Actual group. @returns Nothing. */
 export function dispatchStyleParagraphNumbering(
   name: string,
   parameter: number | undefined,
@@ -144,6 +144,7 @@ export function dispatchStyleParagraphNumbering(
       N.LN_CT_PPrBase_numPr,
       name === "ls" ? N.LN_CT_NumPr_numId : N.LN_CT_NumPr_ilvl,
       new RTFValue(parameter ?? 0),
+      name === "ls" ? RTFConflictPolicy.ReplaceAtStart : RTFConflictPolicy.Overwrite,
     );
   else if (["li", "lin", "ri", "rin", "fi"].includes(name)) {
     const id =

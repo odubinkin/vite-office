@@ -19,9 +19,6 @@ export interface RtfParagraphState {
   borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfCellBorder>>;
   alignment: WriterParagraphAlignment;
   distributeLastLine: boolean;
-  left: number;
-  right: number;
-  firstLine: number;
   before: number;
   after: number;
   contextual: boolean;
@@ -35,9 +32,6 @@ export interface RtfParagraphState {
   lineSpace: number;
   lineMulti: number;
   alignmentSet?: boolean;
-  leftSet?: boolean;
-  rightSet?: boolean;
-  firstLineSet?: boolean;
   beforeSet?: boolean;
   afterSet?: boolean;
   contextualSet?: boolean;
@@ -48,8 +42,6 @@ export interface RtfParagraphState {
   pageBreakBeforeSet?: boolean;
   lineSpacingSet?: boolean;
   styleIndex?: number;
-  listOverride?: number;
-  listLevel: number;
 }
 /** Original RTFParserState run-type order, saved/restored with the group. */
 export enum RunType {
@@ -199,9 +191,6 @@ export function hasRtfUnderlineControl(controls: ReadonlySet<string>): boolean {
 export const DEFAULT_PARAGRAPH: RtfParagraphState = {
   alignment: "left",
   distributeLastLine: false,
-  left: 0,
-  right: 0,
-  firstLine: 0,
   before: 0,
   after: 0,
   contextual: false,
@@ -214,7 +203,6 @@ export const DEFAULT_PARAGRAPH: RtfParagraphState = {
   pageBreakBefore: false,
   lineSpace: 240,
   lineMulti: 0,
-  listLevel: 0,
 };
 export const SKIPPED_DESTINATIONS = new Set([
   "stylesheet",

@@ -250,13 +250,16 @@ export class DomainMapper implements Properties {
         this.insert(context, P.PROP_CHAR_UNDERLINE_COLOR, new Any([n], "sal_Int32"));
         break;
       case N.LN_CT_Ind_left:
-      case N.LN_CT_Ind_start:
-        this.insert(
-          context,
-          P.PROP_PARA_LEFT_MARGIN,
-          new Any([convertTwipToMm100_Limited(n)], "sal_Int32"),
-        );
+      case N.LN_CT_Ind_start: {
+        const first = this.impl.getCurrentNumberingProperty("FirstLineIndent"),
+          left = this.impl.getCurrentNumberingProperty("IndentAt"),
+          amount = convertTwipToMm100_Limited(n);
+        if (amount !== 0 && left === amount) break;
+        if (first !== 0)
+          this.insert(context, P.PROP_PARA_FIRST_LINE_INDENT, new Any([first], "sal_Int32"), false);
+        this.insert(context, P.PROP_PARA_LEFT_MARGIN, new Any([amount], "sal_Int32"));
         break;
+      }
       case N.LN_CT_Ind_right:
       case N.LN_CT_Ind_end:
         this.insert(
@@ -271,14 +274,20 @@ export class DomainMapper implements Properties {
           P.PROP_PARA_FIRST_LINE_INDENT,
           new Any([-convertTwipToMm100_Limited(n)], "sal_Int32"),
         );
-        break;
-      case N.LN_CT_Ind_firstLine:
         this.insert(
           context,
-          P.PROP_PARA_FIRST_LINE_INDENT,
-          new Any([convertTwipToMm100_Limited(n)], "sal_Int32"),
+          P.PROP_PARA_LEFT_MARGIN,
+          new Any([this.impl.getCurrentNumberingProperty("IndentAt")], "sal_Int32"),
+          false,
         );
         break;
+      case N.LN_CT_Ind_firstLine: {
+        const first = this.impl.getCurrentNumberingProperty("FirstLineIndent"),
+          amount = convertTwipToMm100_Limited(n);
+        if (amount !== 0 && first === amount) break;
+        this.insert(context, P.PROP_PARA_FIRST_LINE_INDENT, new Any([amount], "sal_Int32"));
+        break;
+      }
       case N.LN_CT_Spacing_before:
       case N.LN_CT_Spacing_after:
         this.insert(
@@ -373,10 +382,33 @@ export class DomainMapper implements Properties {
             this.insert(context, P.PROP_NUMBERING_LEVEL, new Any([n], "sal_Int16"));
         }
         break;
-      case N.LN_CT_NumPr_numId:
-        if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)
-          context.props().SetListId(n);
+      case N.LN_CT_NumPr_numId: {
+        const list = this.impl.GetListTable().GetList(n);
+        if (this.IsStyleSheetImport()) {
+          if (context instanceof StyleSheetPropertyMap) context.props().SetListId(n);
+        } else if (list) {
+          this.insert(
+            context,
+            P.PROP_NUMBERING_RULES,
+            new Any([list.GetNumberingRules() ?? null], ["Reference", indexReplaceType]),
+          );
+          context.Erase(P.PROP_NUMBERING_STYLE_NAME);
+          const paragraph = this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH);
+          if (paragraph) {
+            if (!(paragraph instanceof ParagraphPropertyMap))
+              throw new Error("assert(ParagraphPropertyMap)");
+            paragraph.props().SetListId(list.GetId());
+          }
+          context.Erase(P.PROP_PARA_FIRST_LINE_INDENT);
+          context.Erase(P.PROP_PARA_LEFT_MARGIN);
+          context.Erase(P.PROP_PARA_RIGHT_MARGIN);
+        } else {
+          this.insert(context, P.PROP_NUMBERING_STYLE_NAME, stringAny(""));
+          this.insert(context, P.PROP_PARA_LEFT_MARGIN, new Any([0], "sal_Int32"), false);
+          this.insert(context, P.PROP_PARA_FIRST_LINE_INDENT, new Any([0], "sal_Int32"), false);
+        }
         break;
+      }
       case N.LN_CT_PPrBase_numPr:
         resolveReturnedReference(modifier.getProps(), this);
         break;
@@ -463,6 +495,19 @@ export class DomainMapper implements Properties {
           const handler = new ThemeColorHandler();
           resolveReturnedReference(properties, handler);
           this.insert(context, P.PROP_CHAR_COLOR, new Any([handler.mnColor], "sal_Int32"));
+        }
+        break;
+      }
+      case N.LN_CT_PPrBase_pStyle: {
+        const name = value?.getString();
+        if (!name) break;
+        try {
+          const converted = this.impl.GetStyleSheetTable().ConvertStyleNameExt(text(name));
+          this.impl.SetCurrentParaStyleName(converted);
+          if (this.impl.GetTopContextType() !== C.CONTEXT_SECTION)
+            this.insert(context, P.PROP_PARA_STYLE_NAME, stringAny(converted));
+        } finally {
+          name.dispose();
         }
         break;
       }
@@ -604,3 +649,7 @@ import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 import { StyleType } from "./StyleSheetTable";
 
 import { StyleSheetPropertyMap } from "./PropertyMap";
+
+import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+
+import { ParagraphPropertyMap } from "./PropertyMap";

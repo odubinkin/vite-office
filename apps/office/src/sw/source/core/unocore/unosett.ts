@@ -10,6 +10,7 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { IndexOutOfBoundsException } from "../../../../cppu/inc/com/sun/star/lang/IndexOutOfBoundsException";
 import {
   numberingToSequence,
+  readNumberingProperty,
   numberingPropertyPatches,
   numberingSequenceType,
 } from "./unosett-properties";
@@ -163,6 +164,39 @@ export class SwXNumberingRules {
     return numberingToSequence(this.GetPropertiesByIndex(level));
   }
 
+  /** Original named property lookup retains index validation, active-mode property admission and unknown-property errors. @param level - Native index. @param name - Requested native property. @returns Owned value. */
+  public getPropertyByIndex(
+    level: number,
+    name: import("../../../../sal/inc/rtl/ustring").OUStringConstReference,
+  ): Any {
+    const properties = this.GetPropertiesByIndex(level),
+      propertyName = text(name),
+      format = this.rule.Get(level);
+    if (propertyName === "ListFormat")
+      return format.HasListFormat() ? stringAny(format.GetListFormat()) : new Any();
+    if (propertyName === "LevelIsLegal") return new Any([format.GetIsLegal()], "bool");
+    if (!this.m_pChapterDoc && format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL) {
+      if (propertyName === "BulletId")
+        return new Any([(format.GetBulletChar() << 16) >> 16], "sal_Int16");
+      if (propertyName === "BulletFontName")
+        return stringAny(format.GetBulletFont()?.GetFamilyName() ?? "");
+    }
+    const sequence = numberingToSequence(properties);
+    try {
+      for (let index = 0; index < sequence.getLength(); index++) {
+        const property = readNumberingProperty(sequence, index);
+        try {
+          if (text(property.Name) === text(name)) return new Any(property.Value);
+        } finally {
+          property.Name.dispose();
+          property.Value.dispose();
+        }
+      }
+      return unknown(text(name));
+    } finally {
+      sequence.dispose();
+    }
+  }
   /** Existing ODF transport projection of the same rule; this does not own numbering state. @param level - Native index. @returns Independent represented values. */
   public GetPropertiesByIndex(level: number): WriterNumberingRuleProperties {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
@@ -207,7 +241,10 @@ export class SwXNumberingRules {
 
   /** Resolves the original document-owned level without cloning its format. @param rule - Borrowed native rule. @param level - Validated level. @returns Supported property record. */
   public GetNumberingRuleByIndex(rule: SwNumRule, level: number): WriterNumberingRuleProperties {
-    const properties = SwXNumberingRules.GetPropertiesForNumFormat(rule.Get(level));
+    const properties = SwXNumberingRules.GetPropertiesForNumFormat(
+      rule.Get(level),
+      !!this.m_pChapterDoc,
+    );
     if (!this.m_pChapterDoc) return properties;
     let name = `Heading ${level + 1}`;
     for (const style of this.m_pChapterDoc.GetTextFormatColls()) {
@@ -227,8 +264,11 @@ export class SwXNumberingRules {
     };
   }
 
-  /** Publishes only native active geometry and represented optional marker properties. @param format - Borrowed const format. @returns Independent supported record; full UNO sequence remains unrepresented. */
-  public static GetPropertiesForNumFormat(format: ConstSwNumFormat): WriterNumberingRuleProperties {
+  /** Publishes only native active geometry and represented optional marker properties. @param format - Borrowed const format. @param chapter - Original chapter-property selector. @returns Independent supported record; full UNO sequence remains unrepresented. */
+  public static GetPropertiesForNumFormat(
+    format: ConstSwNumFormat,
+    chapter = false,
+  ): WriterNumberingRuleProperties {
     const mode = format.GetPositionAndSpaceMode(),
       type = format.GetNumberingType(),
       font = format.GetBulletFont();
@@ -265,7 +305,7 @@ export class SwXNumberingRules {
       ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
       ...position,
       positionAndSpaceMode: mode,
-      ...(type === SvxNumType.SVX_NUM_CHAR_SPECIAL
+      ...(!chapter && type === SvxNumType.SVX_NUM_CHAR_SPECIAL
         ? {
             bulletChar: String.fromCodePoint(format.GetBulletChar()),
             ...(font === undefined ? {} : { bulletFont: { name: font.GetFamilyName() } }),

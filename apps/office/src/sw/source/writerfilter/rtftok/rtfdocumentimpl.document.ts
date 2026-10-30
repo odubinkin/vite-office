@@ -31,8 +31,6 @@ import {
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { applyWriterParagraphList } from "../../core/doc/list";
-import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SwpHints } from "../../core/txtnode/ndhints";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
@@ -540,9 +538,6 @@ export function ApplyParagraph(
     if (paragraph.state.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
     node.SetAttr(adjust);
   }
-  if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
-  if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
-  if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
   if (paragraph.state.beforeSet || paragraph.state.afterSet || paragraph.state.contextualSet) {
     const spacing = (node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).Clone();
     if (paragraph.state.beforeSet) spacing.SetUpper(paragraph.state.before);
@@ -560,31 +555,6 @@ export function ApplyParagraph(
   if (paragraph.state.pageBreakBeforeSet)
     node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
-  const override = paragraph.state.listOverride;
-  if (override !== undefined) {
-    const name = this["Mapper"]().impl.GetListStyleName(override);
-    let rule;
-    try {
-      rule = node.GetDoc().FindNumRulePtr(text(name));
-    } finally {
-      name.dispose();
-    }
-    if (rule)
-      applyWriterParagraphList(node, {
-        kind: getWriterNumFormatKind(rule.Get(paragraph.state.listLevel)),
-        level: paragraph.state.listLevel,
-        ruleName: rule.GetName(),
-      });
-    const abstract = this["Mapper"]()
-        .impl.GetListTable()
-        .GetList(override)
-        ?.GetAbstractDefinition(),
-      listId = node.GetListId();
-    if (abstract && listId !== "") {
-      const mapped = abstract.MapListId(listId);
-      if (mapped !== listId) node.SetListId(mapped);
-    }
-  }
 }
 
 import type { SwCharFormat } from "../../../inc/charfmt";
@@ -606,7 +576,7 @@ import {
   deduplicateRtfStyleTable,
 } from "./rtfdocumentimpl.character";
 
-import { text, unicode } from "../../core/unocore/unocrsrhelper";
+import { unicode } from "../../core/unocore/unocrsrhelper";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 

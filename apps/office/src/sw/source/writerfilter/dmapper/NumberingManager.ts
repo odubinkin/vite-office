@@ -608,6 +608,10 @@ export class ListDef extends AbstractListDef {
   GetAbstractDefinition(): AbstractListDef | undefined {
     return this.m_pAbstractDef;
   }
+  /** Borrows the original retained XIndexReplace numbering service; no replacement rules are manufactured. @returns Native service or absent pointer. */
+  GetNumberingRules(): SwXNumberingRules | undefined {
+    return this.m_xNumRules;
+  }
   /** Original style identity after creation. @returns Concrete style name. */
   GetStyleName(): string {
     return this.m_StyleName;

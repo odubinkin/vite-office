@@ -609,7 +609,7 @@ it("retains upstream default-height escapement suppression", /** Checks the sour
   }
 });
 
-it("exports the authored first-line item without layout short narrowing", /** Checks source FormatFirstLineIndent reads the item value. @returns Nothing. */ () => {
+it("exports the authored first-line item and preserves native import ceiling", /** Export reads the full item value; native import applies ConversionHelper positive signed16 admission. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const node = source.paragraphs[0];
   if (node === undefined) throw new Error("Missing paragraph.");
@@ -624,7 +624,7 @@ it("exports the authored first-line item without layout short narrowing", /** Ch
       (
         imported.paragraphs[0]?.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
       ).ResolveTextFirstLineOffset(),
-    ).toBe(40000);
+    ).toBe(0);
   } finally {
     imported?.Dispose();
     source.Dispose();

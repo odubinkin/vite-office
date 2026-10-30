@@ -3,6 +3,15 @@ import type { DomainMapper_Impl } from "./DomainMapper_Impl";
 import type { StyleSheetEntry, StyleSheetTable } from "./StyleSheetTable";
 import type { ParagraphPropertyMap } from "./PropertyMap";
 import { PropertyIds as P } from "./PropertyIds";
+/** Original parent lookup rejects an empty base identifier before touching the actual stylesheet index. @param entry - Current source style. @param table - Actual stylesheet. @returns Borrowed parent or null. */
+export function lcl_getParent(
+  entry: StyleSheetEntry,
+  table: StyleSheetTable,
+): StyleSheetEntry | null {
+  return entry.m_sBaseStyleIdentifier === ""
+    ? null
+    : table.FindStyleSheetByISTD(entry.m_sBaseStyleIdentifier);
+}
 /** Original list-ID recursion retains its direct self-parent guard and original base-style side channel. @param entry - Style entry. @param table - Actual style table. @param inherited - Original output flag. @returns First nonnegative list ID. */
 export function lcl_getListId(
   entry: StyleSheetEntry | null,
@@ -12,7 +21,7 @@ export function lcl_getListId(
   if (!entry) return -1;
   const id = entry.m_pProperties.props().GetListId();
   if (id >= 0) return id;
-  const parent = table.FindStyleSheetByISTD(entry.m_sBaseStyleIdentifier);
+  const parent = lcl_getParent(entry, table);
   if (!parent || parent === entry) return -1;
   inherited[0] = true;
   return lcl_getListId(parent, table, inherited);
@@ -36,7 +45,7 @@ export function GetListLevel(
   if (!entry) return -1;
   const level = entry.m_pProperties.GetListLevel();
   if (level >= 0) return level;
-  const parent = this.GetStyleSheetTable().FindStyleSheetByISTD(entry.m_sBaseStyleIdentifier);
+  const parent = lcl_getParent(entry, this.GetStyleSheetTable());
   if (!parent || parent === entry) return -1;
   return GetListLevel.call(this, parent);
 }

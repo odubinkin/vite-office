@@ -20,9 +20,11 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
         "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
-        "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts"
+        "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-numbering.test.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/paragraph-numbering.test.ts"
       ],
-      "justification": " Original inherited list-ID/list-level recursion, direct paragraph precedence, signed8 validation and first-style level claim are preserved on actual mapper entries. A second claimant receives body metadata9 while its original property vector remains unchanged (WRITER271). S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "justification": " Original inherited list-ID/list-level recursion, direct paragraph precedence, signed8 validation and first-style level claim are preserved on actual mapper entries. A second claimant receives body metadata9 while its original property vector remains unchanged (WRITER271). S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged. Original lcl_getParent now rejects an empty base identifier before index lookup; inherited list-ID/level recursion uses this actual native parent contract. S3HW1E paragraph NumPr checkpoint: actual native/RTF cases cover these consumed paths. Malformed-level recovery, old-style numbering and remaining section/HTML/current-core export producer audits remain required. No complete current-slice or full module/ABI confidence claim; intentional browser open/save/autosave/recovery behavior is unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "GetListLevel",

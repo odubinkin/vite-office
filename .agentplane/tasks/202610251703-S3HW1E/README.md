@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 204
+revision: 207
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T15:08:43.500Z"
+  updated_at: "2026-10-30T15:38:12.783Z"
   updated_by: "CODER"
-  note: "Native chapter numbering checkpoint verified: 962 targeted tests/62 files and required static gates pass; WRITER270-WRITER272 preserved and documented. Full goal remains incomplete: style-only body NumPr and remaining numbering producer/export audit still required."
-  attempts: 32
+  note: "Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23 fresh cases and required static gates pass. WRITER273-WRITER276 documented and preserved. Full goal remains active/incomplete pending malformed-level, old-style and remaining producer/export audits."
+  attempts: 33
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -517,8 +520,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T15:38:12.783Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23 fresh cases and required static gates pass. WRITER273-WRITER276 documented and preserved. Full goal remains active/incomplete pending malformed-level, old-style and remaining producer/export audits."
+  -
+    type: "status"
+    at: "2026-10-30T15:39:03.535Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T15:08:51.486Z"
+doc_updated_at: "2026-10-30T15:39:03.535Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1201,6 +1217,36 @@ sections:
     Attempts: 32
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:08:42.396Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T15:38:12.783Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23 fresh cases and required static gates pass. WRITER273-WRITER276 documented and preserved. Full goal remains active/incomplete pending malformed-level, old-style and remaining producer/export audits.
+    Attempts: 33
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:38:11.062Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2035,6 +2081,23 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html21-types-final.txt, html21-eslint-final.txt, html21-prettier-final.txt, html21-docs-final.txt, html21-provenance-final.txt, html21-registry-final.txt, html21-boundaries.txt, html21-size.txt, html21-tree.txt, html21-doctor.txt. Scope: changed source/docs,4247 authored source docs,1882 provenance modules,1881 runtime sources/10263 imports/227 allowed edges; Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim warning. Metadata remains broadly unverified; no confidence promotion.
     - Initial failures and corrections: html21-core-types.txt caught an accidental overwrite of existing unoutl.ts; restored exact HEAD SwUndoOutlineLeftRight and appended the new action, then the outline/editor82/12 regression run passed. html21-uno-types.txt caught missing TxtColl mapper admission, fixed with source paragraph-family conversion. New test literals initially omitted compatibility-record kind/suffix (html21-types-final.txt was subsequently superseded by passing final typecheck); corrected the literals without weakening native typed property paths. Initial child numbering expectation failed because actual RTF style dedup emits source numId0, which deliberately cancels inheritance; preserved source behavior and separately tested genuinely absent metadata minus1 restoration. A registered-node correction fixture initially attached a style with no numbering rule, so the node was not registered until later PropagateOutlineRule; made the fixture genuinely registered before SetOutlineNumRule and retained the exact expected level2 assertion, plus a separate empty-style propagation assertion. html21-focused.txt records that earlier591/592 run; final962 passes. Initial docs gate required JSDoc on a new throw assertion callback; added documentation and final docs passed. Failed optional path searches caused no source changes; route was recomputed before dependent retries. No acceptance/policy/hook changes.
+
+    ### Native paragraph NumPr checkpoint (html22)
+
+    - Replaced the remaining RTF body scalar list-ID/level and clamped margin paths with original RTFSprms NumPr and signed indentation producers. LS retains ReplaceAtStart; ILVL retains raw input and original DomainMapper0..9 admission. S now emits the original known-style pStyle reference, and DomainMapper converts it into the actual paragraph context with the section guard. Fresh-document import uses the represented native profile; no insert-document desktop service was invented.
+    - Direct numId now borrows actual retained ListDef NumberingRules into a typed XIndexReplace Any, records paragraph ListId, erases stale numbering-style/indent properties, and preserves native missing-list cancellation. Removed applyWriterParagraphList from the RTF body path, obsolete scalar list/indent fields and duplicate clamped indentation replay.
+    - Added original finishParagraph numbering pre/post phases on the actual DomainMapper_Impl owner, consumed by both streamed XParagraphAppend and the existing atomic RTF binding. Preserved style/direct rule distinction, source inherited list/level lookup, level9 body cancellation guard, one-parent indentation compensation/overwrite flags, ID0 no-list unsigned-zero fallback, actual named-style lookup, shared abstract MapListId and once-per-concrete startOverride set.
+    - Added actual direct-context getCurrentNumberingProperty through XIndexAccess/getByIndex property sequences, plus original nonzero left/first-line equality suppression and list-indent compensation for represented twip fields. The named-style getNumberingProperty instead reads the current actual named rule and catches native UNO exceptions for malformed levels. Native parent lookup rejects an empty base ID and retains original self-parent guards.
+    - Added native numbering named-property getter with index/active-mode admission, absent ListFormat void versus false legal values, ordinary BulletId/empty BulletFontName and chapter bullet exclusion. Existing getByIndex remains unchanged. Named-style getter temporary rule copies release registrations, while borrowed direct-context numbering services remain retained by their native owner.
+    - 23 fresh cases across paragraph-numbering.test.ts and rtf-paragraph-numbering.test.ts cover actual RTF style-only level2, direct cancellation, invalid levels, resolved/missing style entry behavior at level9, signed indentation/token ordering/positive ceiling/equality suppression, Worker state, shared abstract IDs, native re-export loss, margin precedence, first parent behavior, current named-rule mutation, native exception admission, once-only startOverride and chapter/named-property distinctions.
+    - Preserved and documented WRITER273 (NoNum margin lookup treats absent minus1 ListId as true), WRITER274 (shared-list/abstract remapping is DOCX-only; RTF re-export separates rule identities), WRITER275 (level9 cancellation requires resolved paragraph-style entry), WRITER276 (raw wide-positive first-line export versus limited native import). The old fi40000 export assertion remains unchanged; its former lossless import expectation used the removed scalar bypass and now correctly expects source zero. No stronger roundtrip than upstream is promised.
+    - Current numbering body/style gap is closed for these consumed producers. Required remaining work: malformed-level first-indent recovery, old-style paragraph numbering, remaining section/HTML/current-core producer/export audit and source-based verification of atomic paragraph-marker style context after pStyle routing. Whole goal remains active/incomplete. Existing open/save/autosave/recovery UI deviations remain unchanged; no broad module/ABI/semantic confidence promotion.
+
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,903tests/52files. Evidence: output/playwright/rtf-properties-native/html22-final-focused2.txt. Scope: actual RTF/parser/mapper/numbering exports, native UNO lifetimes, related TXT/Markdown/Worker/document-I/O workflows. No all-application full test run. Fresh related39/3 passed before the final broad run (html22-native-tests4.txt); final903 includes all23 fresh cases and migrated source-backed import acceptance.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html22-types-final2.txt, html22-eslint.txt, html22-prettier-check.txt, html22-docs-final.txt, html22-provenance-final.txt, html22-registry-final.txt, html22-boundaries-final.txt, html22-size.txt, html22-tree.txt, html22-doctor.txt. Scope: changed source/docs,4250 authored files for JSDoc,1883 provenance modules,1882 runtime sources/10282 relative imports/227 allowed edges, Writer registry semantic violations0. Doctor errors0 with the unchanged pre-existing managed-shim readiness warning. No hook, tooling, approval, test configuration or unrelated policy edits.
+    - Initial failures retained and corrected within approved scope: html22-types.txt caught an enum alias, original conflict-policy constant name, an unread private field used through fragment indexing, unused import and direct compound-sequence storage typing; switched to actual ContextType alias/Overwrite constant, passed the original override set to the fragment, removed the obsolete import and reused owned readNumberingProperty. html22-first-tests.txt contains86 failures from the missing ContextType alias; subsequent159/6 passed (html22-second-tests.txt). Fresh test fixtures initially used nonexistent GetParagraphFormat/instance Write APIs; corrected to actual native getters/static WriteDocument after source inspection. Style-only assertions then exposed missing native pStyle producer/consumer, which were implemented (not waived). Re-export identity equality was replaced only after confirming the explicit DOCX-only upstream guard, with WRITER274 and both import/export assertions retained. A local text insertion initially placed named-getter special handling in getByIndex; compiler html22-types4.txt caught it, restored getByIndex and moved handling to the named getter; final types and903-case run pass. html22-final-focused.txt recorded898/899 before the source-backed fi40000 import expectation migration; export assertion remains exact. Initial JSDoc gate required function-attached comments on two arrow initializers; corrected attachment and final JSDoc passed. Optional path searches caused no code edits; routes were revalidated before dependent retries. No enforcement or acceptance was weakened to mask a local implementation defect.
 id_source: "generated"
 ---
 ## Summary
@@ -2728,6 +2791,36 @@ Note: Native chapter numbering checkpoint verified: 962 targeted tests/62 files 
 Attempts: 32
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:08:42.396Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T15:38:12.783Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native paragraph NumPr checkpoint verified: 903 targeted tests/52 files,23 fresh cases and required static gates pass. WRITER273-WRITER276 documented and preserved. Full goal remains active/incomplete pending malformed-level, old-style and remaining producer/export audits.
+Attempts: 33
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:38:11.062Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3566,3 +3659,20 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html21-types-final.txt, html21-eslint-final.txt, html21-prettier-final.txt, html21-docs-final.txt, html21-provenance-final.txt, html21-registry-final.txt, html21-boundaries.txt, html21-size.txt, html21-tree.txt, html21-doctor.txt. Scope: changed source/docs,4247 authored source docs,1882 provenance modules,1881 runtime sources/10263 imports/227 allowed edges; Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim warning. Metadata remains broadly unverified; no confidence promotion.
 - Initial failures and corrections: html21-core-types.txt caught an accidental overwrite of existing unoutl.ts; restored exact HEAD SwUndoOutlineLeftRight and appended the new action, then the outline/editor82/12 regression run passed. html21-uno-types.txt caught missing TxtColl mapper admission, fixed with source paragraph-family conversion. New test literals initially omitted compatibility-record kind/suffix (html21-types-final.txt was subsequently superseded by passing final typecheck); corrected the literals without weakening native typed property paths. Initial child numbering expectation failed because actual RTF style dedup emits source numId0, which deliberately cancels inheritance; preserved source behavior and separately tested genuinely absent metadata minus1 restoration. A registered-node correction fixture initially attached a style with no numbering rule, so the node was not registered until later PropagateOutlineRule; made the fixture genuinely registered before SetOutlineNumRule and retained the exact expected level2 assertion, plus a separate empty-style propagation assertion. html21-focused.txt records that earlier591/592 run; final962 passes. Initial docs gate required JSDoc on a new throw assertion callback; added documentation and final docs passed. Failed optional path searches caused no source changes; route was recomputed before dependent retries. No acceptance/policy/hook changes.
+
+### Native paragraph NumPr checkpoint (html22)
+
+- Replaced the remaining RTF body scalar list-ID/level and clamped margin paths with original RTFSprms NumPr and signed indentation producers. LS retains ReplaceAtStart; ILVL retains raw input and original DomainMapper0..9 admission. S now emits the original known-style pStyle reference, and DomainMapper converts it into the actual paragraph context with the section guard. Fresh-document import uses the represented native profile; no insert-document desktop service was invented.
+- Direct numId now borrows actual retained ListDef NumberingRules into a typed XIndexReplace Any, records paragraph ListId, erases stale numbering-style/indent properties, and preserves native missing-list cancellation. Removed applyWriterParagraphList from the RTF body path, obsolete scalar list/indent fields and duplicate clamped indentation replay.
+- Added original finishParagraph numbering pre/post phases on the actual DomainMapper_Impl owner, consumed by both streamed XParagraphAppend and the existing atomic RTF binding. Preserved style/direct rule distinction, source inherited list/level lookup, level9 body cancellation guard, one-parent indentation compensation/overwrite flags, ID0 no-list unsigned-zero fallback, actual named-style lookup, shared abstract MapListId and once-per-concrete startOverride set.
+- Added actual direct-context getCurrentNumberingProperty through XIndexAccess/getByIndex property sequences, plus original nonzero left/first-line equality suppression and list-indent compensation for represented twip fields. The named-style getNumberingProperty instead reads the current actual named rule and catches native UNO exceptions for malformed levels. Native parent lookup rejects an empty base ID and retains original self-parent guards.
+- Added native numbering named-property getter with index/active-mode admission, absent ListFormat void versus false legal values, ordinary BulletId/empty BulletFontName and chapter bullet exclusion. Existing getByIndex remains unchanged. Named-style getter temporary rule copies release registrations, while borrowed direct-context numbering services remain retained by their native owner.
+- 23 fresh cases across paragraph-numbering.test.ts and rtf-paragraph-numbering.test.ts cover actual RTF style-only level2, direct cancellation, invalid levels, resolved/missing style entry behavior at level9, signed indentation/token ordering/positive ceiling/equality suppression, Worker state, shared abstract IDs, native re-export loss, margin precedence, first parent behavior, current named-rule mutation, native exception admission, once-only startOverride and chapter/named-property distinctions.
+- Preserved and documented WRITER273 (NoNum margin lookup treats absent minus1 ListId as true), WRITER274 (shared-list/abstract remapping is DOCX-only; RTF re-export separates rule identities), WRITER275 (level9 cancellation requires resolved paragraph-style entry), WRITER276 (raw wide-positive first-line export versus limited native import). The old fi40000 export assertion remains unchanged; its former lossless import expectation used the removed scalar bypass and now correctly expects source zero. No stronger roundtrip than upstream is promised.
+- Current numbering body/style gap is closed for these consumed producers. Required remaining work: malformed-level first-indent recovery, old-style paragraph numbering, remaining section/HTML/current-core producer/export audit and source-based verification of atomic paragraph-marker style context after pStyle routing. Whole goal remains active/incomplete. Existing open/save/autosave/recovery UI deviations remain unchanged; no broad module/ABI/semantic confidence promotion.
+
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,903tests/52files. Evidence: output/playwright/rtf-properties-native/html22-final-focused2.txt. Scope: actual RTF/parser/mapper/numbering exports, native UNO lifetimes, related TXT/Markdown/Worker/document-I/O workflows. No all-application full test run. Fresh related39/3 passed before the final broad run (html22-native-tests4.txt); final903 includes all23 fresh cases and migrated source-backed import acceptance.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html22-types-final2.txt, html22-eslint.txt, html22-prettier-check.txt, html22-docs-final.txt, html22-provenance-final.txt, html22-registry-final.txt, html22-boundaries-final.txt, html22-size.txt, html22-tree.txt, html22-doctor.txt. Scope: changed source/docs,4250 authored files for JSDoc,1883 provenance modules,1882 runtime sources/10282 relative imports/227 allowed edges, Writer registry semantic violations0. Doctor errors0 with the unchanged pre-existing managed-shim readiness warning. No hook, tooling, approval, test configuration or unrelated policy edits.
+- Initial failures retained and corrected within approved scope: html22-types.txt caught an enum alias, original conflict-policy constant name, an unread private field used through fragment indexing, unused import and direct compound-sequence storage typing; switched to actual ContextType alias/Overwrite constant, passed the original override set to the fragment, removed the obsolete import and reused owned readNumberingProperty. html22-first-tests.txt contains86 failures from the missing ContextType alias; subsequent159/6 passed (html22-second-tests.txt). Fresh test fixtures initially used nonexistent GetParagraphFormat/instance Write APIs; corrected to actual native getters/static WriteDocument after source inspection. Style-only assertions then exposed missing native pStyle producer/consumer, which were implemented (not waived). Re-export identity equality was replaced only after confirming the explicit DOCX-only upstream guard, with WRITER274 and both import/export assertions retained. A local text insertion initially placed named-getter special handling in getByIndex; compiler html22-types4.txt caught it, restored getByIndex and moved handling to the named getter; final types and903-case run pass. html22-final-focused.txt recorded898/899 before the source-backed fi40000 import expectation migration; export assertion remains exact. Initial JSDoc gate required function-attached comments on two arrow initializers; corrected attachment and final JSDoc passed. Optional path searches caused no code edits; routes were revalidated before dependent retries. No enforcement or acceptance was weakened to mask a local implementation defect.
