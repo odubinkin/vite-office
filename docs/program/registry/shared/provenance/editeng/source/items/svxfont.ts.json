@@ -12,10 +12,12 @@
     "upstreamSymbols": [
       "SvxFont::SvxFont",
       "SvxFont::operator=",
-      "SvxFont::SvxFontSubsetEquals"
+      "SvxFont::SvxFontSubsetEquals",
+      "SvxFont::SetNonAutoEscapement"
     ],
     "preservedResponsibilities": [
-      "Original default/base/derived constructor and assignment differences, SYSTEM language initialization, case-map/escapement/proportion scalar members and derived-only subset equality. Explicit base selector preserves erased static overload choice. Rendering and automatic device escapement remain unported."
+      "Original default/base/derived constructor and assignment differences, SYSTEM language initialization, case-map/escapement/proportion scalar members and derived-only subset equality. Explicit base selector preserves erased static overload choice. Rendering and automatic device escapement remain unported.",
+      "Original consumed null-device SetNonAutoEscapement branch uses .8/.2 constants, signed16 assignment, floating-to-short truncation and MAX_ESC_POS clamp. No synthetic OutputDevice or metrics provider is supplied; nonnull-device overload remains unported. ConstSvxFont binds original const derived references without exposing setters/assignment."
     ],
     "omittedResponsibilities": [
       "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."

@@ -1,4 +1,4 @@
-/** @fileoverview Original ContentNode text/paragraph/character/wrong-list owners and range-update members. Style-font recalculation and the enclosing document/engine remain separate source responsibilities. */
+/** @fileoverview Original ContentNode text/paragraph/character/wrong-list owners and range-update members. Style-font recalculation uses the real editdoc font assembly; the enclosing engine remains a separate responsibility. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import { SfxItemPool } from "../../../svl/source/items/itempool";
@@ -8,8 +8,9 @@ import { SvxTabStop, SvxTabStopItem } from "../../inc/tstpitem";
 import { EE_PARA_START, EE_CHAR_END, EE_PARA_TABS, EE_PARA_BULLETSTATE } from "../../inc/eeitem";
 import { CharAttribList } from "./ContentNode.attribs";
 import { CH_FEATURE, type EditCharAttrib } from "../../inc/editattr";
+import { SvxFont } from "../../inc/svxfont";
 import { WrongList } from "../../inc/edtspell";
-import { MakeCharAttrib } from "../../inc/editdoc";
+import { MakeCharAttrib, CreateFont } from "../../inc/editdoc";
 import { EditCharAttribField } from "../../inc/editattr";
 import {
   EE_CHAR_ESCAPEMENT,
@@ -124,6 +125,28 @@ export class ContentNode {
   /** Original forwarded nonowning style pointer. @returns Style or null. */
   GetStyleSheet(): SfxStyleSheet | null {
     return this.maContentAttribs.GetStyleSheet();
+  }
+  /** Original style-first then hard-paragraph font assembly. @returns Nothing. */
+  CreateDefFont(): void {
+    const style = this.maContentAttribs.GetStyleSheet();
+    if (style) CreateFont(this.maCharAttribList.GetDefFont(), style.GetItemSet());
+    CreateFont(
+      this.maCharAttribList.GetDefFont(),
+      this.maContentAttribs.GetItems(),
+      style === null,
+    );
+  }
+  /** Original selected-style overloads; explicit false skips font recalculation. @param style - Actual nonowning style. @param fontOrRecalc - Source style-font value or original recalc flag. @returns Nothing. */
+  SetStyleSheet(style: SfxStyleSheet | null, fontOrRecalc: SvxFont | boolean = true): void {
+    this.maContentAttribs.SetStyleSheet(style);
+    if (fontOrRecalc instanceof SvxFont) {
+      this.maCharAttribList.GetDefFont().assign(fontOrRecalc);
+      CreateFont(
+        this.maCharAttribList.GetDefFont(),
+        this.maContentAttribs.GetItems(),
+        style === null,
+      );
+    } else if (fontOrRecalc) this.CreateDefFont();
   }
   /** Original borrowed text value. @returns Actual member. */
   GetString(): OUStringConstReference {

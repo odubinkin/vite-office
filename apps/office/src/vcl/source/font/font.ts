@@ -10,7 +10,7 @@ import {
   FontStrikeout,
   FontEmphasisMark,
 } from "../../../tools/inc/fontenum";
-import { FontRelief } from "../../inc/fntstyle";
+import { FontRelief, FontKerning } from "../../inc/fntstyle";
 import { RTL_TEXTENCODING_DONTKNOW, type rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
@@ -18,8 +18,18 @@ import { Size, type ReadonlySize } from "../../../tools/inc/gen";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { LanguageType, LANGUAGE_DONTKNOW } from "../../../i18nlangtag/inc/lang";
 
+import { Variation } from "../../inc/font/Variation";
+import type { Degree10 } from "../../../tools/inc/degree";
+
 /** Represented ImplFont fields retain their original defaults; no native lifetime machinery. */
 interface FontMetadata {
+  readonly orientation: Degree10;
+  readonly vertical: boolean;
+  readonly kerning: FontKerning;
+  readonly spacing: number;
+  readonly wordLine: boolean;
+  readonly opticalSizing: boolean;
+  readonly variations: readonly Readonly<Variation>[];
   readonly languageTag: LanguageTag;
   readonly familyName: string;
   readonly styleName: string;
@@ -44,6 +54,13 @@ interface FontMetadata {
   readonly emphasisMark: FontEmphasisMark;
 }
 const globalDefault: Readonly<FontMetadata> = Object.freeze({
+  orientation: 0,
+  vertical: false,
+  kerning: FontKerning.FontSpecific,
+  spacing: 0,
+  wordLine: false,
+  opticalSizing: false,
+  variations: Object.freeze([]),
   languageTag: new LanguageTag(LANGUAGE_DONTKNOW),
   familyName: "",
   styleName: "",
@@ -83,6 +100,94 @@ export class Font {
   public assign(font: ConstFont): this {
     this.mpImplFont = (font as Font).mpImplFont;
     return this;
+  }
+  /** Original stored orientation value. @returns Source member. */
+  public GetOrientation(): Degree10 {
+    return this.mpImplFont.orientation;
+  }
+  /** Original guarded orientation assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetOrientation(value: Degree10): void {
+    value = (value << 16) >> 16;
+    if (this.GetOrientation() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, orientation: value });
+  }
+  /** Original stored vertical value. @returns Source member. */
+  public IsVertical(): boolean {
+    return this.mpImplFont.vertical;
+  }
+  /** Original guarded vertical assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetVertical(value: boolean): void {
+    if (this.IsVertical() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, vertical: value });
+  }
+  /** Original stored kerning value. @returns Source member. */
+  public GetKerning(): FontKerning {
+    return this.mpImplFont.kerning;
+  }
+  /** Original guarded kerning assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetKerning(value: FontKerning): void {
+    if (this.GetKerning() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, kerning: value });
+  }
+  /** Original stored spacing value. @returns Source member. */
+  public GetFixKerning(): number {
+    return this.mpImplFont.spacing;
+  }
+  /** Original guarded spacing assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetFixKerning(value: number): void {
+    value = (value << 16) >> 16;
+    if (this.GetFixKerning() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, spacing: value });
+  }
+  /** Original stored wordLine value. @returns Source member. */
+  public IsWordLineMode(): boolean {
+    return this.mpImplFont.wordLine;
+  }
+  /** Original guarded wordLine assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetWordLineMode(value: boolean): void {
+    if (this.IsWordLineMode() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, wordLine: value });
+  }
+  /** Original stored opticalSizing value. @returns Source member. */
+  public GetOpticalSizing(): boolean {
+    return this.mpImplFont.opticalSizing;
+  }
+  /** Original guarded opticalSizing assignment. @param value - Original assigned value. @returns Nothing. */
+  public SetOpticalSizing(value: boolean): void {
+    if (this.GetOpticalSizing() !== value)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, opticalSizing: value });
+  }
+  /** Original nonzero kerning predicate includes either flag. @returns Kerning enabled. */
+  public IsKerning(): boolean {
+    return this.GetKerning() !== FontKerning.NONE;
+  }
+  /** Original nonzero signed spacing predicate. @returns Fixed kerning enabled. */
+  public IsFixKerning(): boolean {
+    return this.GetFixKerning() !== 0;
+  }
+  /** Original borrowed ordered axis vector. @returns Represented immutable vector. */
+  public GetVariations(): readonly Readonly<Variation>[] {
+    return this.mpImplFont.variations;
+  }
+  /** Original ordered vector equality guard and aggregate value copy, including float NaN inequality. @param values - Borrowed axes. @returns Nothing. */
+  public SetVariations(values: readonly Readonly<Variation>[]): void {
+    if (
+      this.mpImplFont.variations.length === values.length &&
+      this.mpImplFont.variations.every(
+        /** Original axis equality at its ordered position. @param axis - Existing axis. @param index - Position. @returns Equality. */
+        (axis, index) => axis.equals(values[index] as Variation),
+      )
+    )
+      return;
+    this.mpImplFont = Object.freeze({
+      ...this.mpImplFont,
+      variations: Object.freeze(
+        values.map(
+          /** Original aggregate value copy. @param axis - Borrowed axis. @returns Owned immutable axis. */
+          (axis) => Object.freeze(new Variation(axis)),
+        ),
+      ),
+    });
   }
   /** Original unresolved language-ID query through the actual LanguageTag value. @returns Original stored ID or SYSTEM. */
   public GetLanguage(): number {
@@ -374,6 +479,17 @@ export class Font {
   /** Native comparison excludes only color/fill;all other represented font fields participate. Full unrepresented font attributes remain pending. @param other - Native font. @returns Equal represented noncolor value. */
   public EqualIgnoreColor(other: ConstFont): boolean {
     return (
+      this.GetOrientation() === other.GetOrientation() &&
+      this.IsVertical() === other.IsVertical() &&
+      this.GetKerning() === other.GetKerning() &&
+      this.GetFixKerning() === other.GetFixKerning() &&
+      this.IsWordLineMode() === other.IsWordLineMode() &&
+      this.GetOpticalSizing() === other.GetOpticalSizing() &&
+      this.GetVariations().length === other.GetVariations().length &&
+      this.GetVariations().every(
+        /** Original axis vector equality. @param axis - Left value. @param index - Position. @returns Equality. */
+        (axis, index) => axis.equals(other.GetVariations()[index] as Variation),
+      ) &&
       this.GetWeight() === other.GetWeight() &&
       this.GetItalic() === other.GetItalic() &&
       this.IsOutline() === other.IsOutline() &&
@@ -398,9 +514,10 @@ export class Font {
   /** Native represented value equality includes color and fill after the noncolor comparison. @param other - Native font. @returns Equality. */
   public Equals(other: ConstFont): boolean {
     return (
-      this.EqualIgnoreColor(other) &&
-      this.GetColor().equals(other.GetColor()) &&
-      this.GetFillColor().equals(other.GetFillColor())
+      this.mpImplFont === (other as Font).mpImplFont ||
+      (this.EqualIgnoreColor(other) &&
+        this.GetColor().equals(other.GetColor()) &&
+        this.GetFillColor().equals(other.GetFillColor()))
     );
   }
 }

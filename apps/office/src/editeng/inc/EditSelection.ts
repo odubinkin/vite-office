@@ -1,11 +1,6 @@
-/** @fileoverview Original EditSelection.hxx values and editdoc.cxx Adjust body. The original EditDoc::GetPos boundary is mandatory; no paragraph owner/provider implementation is supplied here. */
+/** @fileoverview Original EditSelection.hxx values and editdoc.cxx Adjust body. Adjust uses the actual EditDoc paragraph owner through the original forward-declared type boundary. */
 import { EditPaM } from "./EditPaM";
-import type { ContentNode } from "./ContentNode";
-/** Consumed original forward-declared EditDoc method, erased structurally until the actual owner is bound. */
-export interface EditDocNodePositions {
-  /** Original paragraph-position lookup. @param node - Borrowed source node. @returns Original position or not-found marker. */
-  GetPos(node: ContentNode | null): number;
-}
+import type { EditDoc } from "./editdoc";
 /** Original two owned position values retain stable mutable endpoint identity. */
 export class EditSelection {
   private readonly aStartPaM = new EditPaM();
@@ -47,7 +42,7 @@ export class EditSelection {
     return this.aStartPaM.equals(other.aStartPaM) && this.aEndPaM.equals(other.aEndPaM);
   }
   /** Original paragraph-position/index ordering and value swap without endpoint replacement or clamping. @param nodes - Actual original document position boundary. @returns Nothing. */
-  Adjust(nodes: EditDocNodePositions): void {
+  Adjust(nodes: EditDoc): void {
     const start = nodes.GetPos(this.aStartPaM.GetNode()),
       end = nodes.GetPos(this.aEndPaM.GetNode());
     if (start > end || (start === end && this.aStartPaM.GetIndex() > this.aEndPaM.GetIndex())) {

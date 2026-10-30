@@ -1,6 +1,7 @@
 /** @fileoverview Original SvxFont value constructors, assignment and consumed case/escapement/proportion fields. Device rendering and automatic escapement adjustment remain separate. */
 import { Font, type ConstFont } from "../../../vcl/source/font/font";
 import { LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
+import { MAX_ESC_POS, DFLT_ESC_AUTO_SUPER } from "../../inc/escapementitem.constants";
 import { SvxCaseMap } from "../../inc/svxenum";
 /** Original derived font value used by ContentNode's cached default font. */
 export class SvxFont extends Font {
@@ -26,6 +27,16 @@ export class SvxFont extends Font {
       this.nPropr = source.nPropr;
     }
     return this;
+  }
+  /** Original SetNonAutoEscapement body for the consumed null-device overload. Device metrics overload remains separate; no synthetic device is supplied. @param value - Source signed16 escapement. @returns Nothing. */
+  SetNonAutoEscapement(value: number): void {
+    this.nEsc = (value << 16) >> 16;
+    if (Math.abs(this.nEsc) === DFLT_ESC_AUTO_SUPER) {
+      if (this.nEsc === DFLT_ESC_AUTO_SUPER) this.nEsc = Math.trunc(0.8 * (100 - this.nPropr));
+      else this.nEsc = Math.trunc(0.2 * -(100 - this.nPropr));
+    }
+    if (this.nEsc > MAX_ESC_POS) this.nEsc = MAX_ESC_POS;
+    else if (this.nEsc < -MAX_ESC_POS) this.nEsc = -MAX_ESC_POS;
   }
   /** Original signed16 escapement value. @returns Stored value. */
   GetEscapement(): number {
@@ -68,7 +79,7 @@ export class SvxFont extends Font {
     return this.nEsc !== 0;
   }
   /** Original derived-field-only equality, deliberately independent of base Font data. @param source - Compared derived font. @returns Source subset equality. */
-  SvxFontSubsetEquals(source: SvxFont): boolean {
+  SvxFontSubsetEquals(source: ConstSvxFont): boolean {
     return (
       this.nEsc === source.GetEscapement() &&
       this.nPropr === source.GetPropr() &&
@@ -76,3 +87,8 @@ export class SvxFont extends Font {
     );
   }
 }
+/** Original const derived-font reference excludes all represented mutators and assignment. */
+export type ConstSvxFont = Omit<
+  SvxFont,
+  Extract<keyof SvxFont, `Set${string}` | `Get${string}MaybeAskConfig`> | "assign"
+>;

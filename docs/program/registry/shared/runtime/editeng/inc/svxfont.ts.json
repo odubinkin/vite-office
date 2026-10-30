@@ -20,7 +20,7 @@
         "apps/office/src/editeng/source/items/native-svx-font-value.test.ts",
         "include/editeng/svxfont.hxx"
       ],
-      "justification": "Original header reexports the real derived font value, without a second cache or rendering provider. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified.",
+      "justification": "Original header reexports the real derived font value, without a second cache or rendering provider. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified. ConstSvxFont now binds original const SvxFont reference declarations to the same actual value owner.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "aligned",

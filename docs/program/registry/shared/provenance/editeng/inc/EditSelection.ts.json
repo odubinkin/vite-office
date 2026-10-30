@@ -7,8 +7,7 @@
     "localPath": "apps/office/src/editeng/inc/EditSelection.ts",
     "upstreamPath": "editeng/inc/EditSelection.hxx",
     "localSymbols": [
-      "EditSelection",
-      "EditDocNodePositions"
+      "EditSelection"
     ],
     "upstreamSymbols": [
       "EditSelection",
@@ -16,7 +15,8 @@
       "HasRange"
     ],
     "preservedResponsibilities": [
-      "Original two stable EditPaM endpoint values, overloads, assignment, range/invalid predicates and editdoc.cxx Adjust ordering/value swap. Mandatory structural EditDoc::GetPos declaration represents the original forward-declared owner; no document provider implementation or clamping is supplied."
+      "Original two stable EditPaM endpoint values, overloads, assignment, range/invalid predicates and editdoc.cxx Adjust ordering/value swap. Mandatory structural EditDoc::GetPos declaration represents the original forward-declared owner; no document provider implementation or clamping is supplied.",
+      "Now that the actual EditDoc owner is ported, Adjust directly consumes that original type. The interim structural forward-declaration interface and prepared position table are removed; original position tests bind the actual document owner. This supersedes the earlier unbound-owner description."
     ],
     "omittedResponsibilities": [
       "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."

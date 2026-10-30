@@ -1,2 +1,10 @@
-/** @fileoverview Internal editeng/inc/editdoc.hxx concrete item-pool declaration boundary. */
-export { EditEngineItemPool, GetSepStr, MakeCharAttrib } from "../source/editeng/editdoc";
+/** @fileoverview Internal editeng/inc/editdoc.hxx document, item-pool and font-helper declaration boundary. */
+export {
+  EditEngineItemPool,
+  EditDoc,
+  DEFTAB,
+  GetSepStr,
+  MakeCharAttrib,
+  CreateFont,
+  GetScriptItemId,
+} from "../source/editeng/editdoc";

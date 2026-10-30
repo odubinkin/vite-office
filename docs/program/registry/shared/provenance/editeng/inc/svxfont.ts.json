@@ -7,14 +7,16 @@
     "localPath": "apps/office/src/editeng/inc/svxfont.ts",
     "upstreamPath": "include/editeng/svxfont.hxx",
     "localSymbols": [
-      "SvxFont"
+      "SvxFont",
+      "ConstSvxFont"
     ],
     "upstreamSymbols": [
       "SvxFont",
       "SetProprRel"
     ],
     "preservedResponsibilities": [
-      "Original header reexports the real derived font value, without a second cache or rendering provider."
+      "Original header reexports the real derived font value, without a second cache or rendering provider.",
+      "ConstSvxFont now binds original const SvxFont reference declarations to the same actual value owner."
     ],
     "omittedResponsibilities": [
       "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."

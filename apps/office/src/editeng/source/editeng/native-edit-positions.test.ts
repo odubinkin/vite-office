@@ -1,10 +1,9 @@
-/** @fileoverview Original EditPaM/EditSelection value and Adjust contracts over real ContentNodes and an explicit enclosing document-position table. */
+/** @fileoverview Original EditPaM/EditSelection value and Adjust contracts over real ContentNodes and the actual EditDoc owner. */
 import { expect, it } from "vitest";
 import { ContentNode } from "../../inc/ContentNode";
 import { EditPaM } from "../../inc/EditPaM";
-import { EditSelection, type EditDocNodePositions } from "../../inc/EditSelection";
-import { EditEngineItemPool } from "../../inc/editdoc";
-import { EE_PARA_MAX } from "../../inc/EPaM";
+import { EditSelection } from "../../inc/EditSelection";
+import { EditEngineItemPool, EditDoc } from "../../inc/editdoc";
 
 it("copies nonowning node/index values and preserves original null/index negation", /** Null with a nonzero index is deliberately not the source zero value. @returns Nothing. */ () => {
   const pool = new EditEngineItemPool(),
@@ -24,18 +23,13 @@ it("copies nonowning node/index values and preserves original null/index negatio
   }
 });
 
-it("adjusts source paragraph order by value while keeping borrowed endpoint identities", /** The mandatory position table is a prepared enclosing dependency, not a fabricated production EditDoc. @returns Nothing. */ () => {
+it("adjusts source paragraph order by value while keeping borrowed endpoint identities", /** The actual document supplies paragraph positions and owns the nodes. @returns Nothing. */ () => {
   const pool = new EditEngineItemPool(),
     first = new ContentNode(pool),
     second = new ContentNode(pool);
-  const nodes = [first, second];
-  const document: EditDocNodePositions = {
-    /** Supplies the original prepared paragraph-position lookup. @param node - Source node pointer. @returns Prepared position or original not-found marker. */
-    GetPos(node: ContentNode | null): number {
-      const index = nodes.indexOf(node as ContentNode);
-      return index < 0 ? EE_PARA_MAX : index;
-    },
-  };
+  const document = new EditDoc(pool);
+  document.Insert(0, first);
+  document.Insert(1, second);
   const selection = new EditSelection(new EditPaM(second, 0), new EditPaM(first, 0)),
     start = selection.Min(),
     end = selection.Max(),
@@ -54,7 +48,6 @@ it("adjusts source paragraph order by value while keeping borrowed endpoint iden
     const zero = new EditSelection();
     expect(zero.IsInvalid()).toBe(true);
   } finally {
-    first.dispose();
-    second.dispose();
+    document.dispose();
   }
 });

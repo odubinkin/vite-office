@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 114
+revision: 117
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T17:41:56.676Z"
+  updated_at: "2026-10-30T18:00:17.145Z"
   updated_by: "CODER"
-  note: "Verified ContentNode/ContentAttribs owners, concrete MakeCharAttrib dispatch, split/join/field expansion and font/position values: 115 shared tests plus final 4-case value rerun, 197 CSV cases, unchanged browser flow and required repository gates pass. Full CSV remains incomplete: actual EditDoc/ImpEditEngine/ScFieldEditEngine admission and NatNum12 formatter/casing remain. Continue the approved goal; this is a partial checkpoint, not task completion."
-  attempts: 24
+  note: "EditDoc/default-font block verified: 110 shared cases plus final 10-case owner/position rerun, 197 CSV cases, current-built browser CSV flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete. User requested stop after this block: commit verified changes and pause goal; do not start next block."
+  attempts: 25
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -712,8 +715,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T18:00:17.145Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "EditDoc/default-font block verified: 110 shared cases plus final 10-case owner/position rerun, 197 CSV cases, current-built browser CSV flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete. User requested stop after this block: commit verified changes and pause goal; do not start next block."
+  -
+    type: "status"
+    at: "2026-10-30T18:00:31.563Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T17:42:07.098Z"
+doc_updated_at: "2026-10-30T18:00:31.563Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1453,6 +1469,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T18:00:17.145Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: EditDoc/default-font block verified: 110 shared cases plus final 10-case owner/position rerun, 197 CSV cases, current-built browser CSV flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete. User requested stop after this block: commit verified changes and pause goal; do not start next block.
+    Attempts: 25
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:06.667Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2065,6 +2111,31 @@ sections:
       Result: pass. Evidence: content-transfer-browser-final.log. Scope: built application CSV open, primary ODS save and active-sheet CSV download. An initial invocation incorrectly omitted '=' after --project so Playwright consumed the positional test as another project; corrected CLI only. First valid run under concurrent validation timed out on dialog disappearance after5s; trace contained no application page error and final snapshot already showed Name in the opened sheet with no dialog. After final build and heavy checks completed, unchanged test/timeout passed. No timeout increase, test relaxation or UI workaround.
     - Cadence: continuation of task AQF9AG, not the tenth new Agentplane task since the prior full-suite run. Full suite was not triggered; focused owner and CSV regressions used as requested.
     - Remaining: actual EditDoc ownership/default-font CreateFont path, ImpEditEngine parsing/paragraph limits and ScFieldEditEngine/DocImport callers remain required before replacing current multiline SetTextCell regex construction. NativeNumberSupplier NatNum12 dispatch/casing/formatter and final requirement-by-requirement CSV audit remain pending. This checkpoint does not satisfy complete CSV acceptance; record verification --rework and restore DOING, without finish or goal pause/completion.
+
+    ### Verified EditDoc/default-font checkpoint and requested stop (2026-10-31)
+
+    - User stop rule: stop after completing the current block. Finish its tests/verification and commit, then pause the goal. Do not begin the next ImpEditEngine, ScFieldEditEngine or NatNum12 block. Overall CSV task acceptance remains incomplete; do not call task finish or mark the goal complete.
+    - Scope/source: real EditDoc ownership and font assembly required by the upstream multiline CSV chain, pinned libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65. Source editdoc.cxx/hxx, ContentNode.cxx/hxx, svxfont.cxx, vcl/source/font/font.cxx, include/tools/degree.hxx and include/vcl/fntstyle.hxx. All changes stay in Calc checkout, branch calc; no network, other checkout mutations or source guards weakened.
+    - Actual EditDoc now owns real ContentNodes with the source deliberately-empty constructor, Clear, pool binding, default tab720, raw/effective vertical/rotation/fixed-height/modified state, cached reverse lookup, unique-owner insertion/erase/release and actual modification notifications. Original Link is bound to its optional JavaScript callable, without a synthetic service or default callback. Text/feature insertion, paragraph split and join, character deletion, text removal preserving first style/hard items/base font, expanded text/length, separator selection and spelling-list clearing follow original order and by-value EditPaM semantics. Split enables bullet visibility, clears AUTOWRITINGDIR, resolves the real follow style and propagates real range owners.
+    - Full original CreateFont/GetScriptItemId consumed groups bind actual pooled font/language/color/height/weight/line/effect/escapement/kerning/axis values in source order. Exact ASIAN/COMPLEX selectors map to CJK/CTL; combined flags retain the Latin item exactly as upstream. Style font is assembled first and hard paragraph items follow with original parent-search flags. Base Font restoration intentionally leaves derived SvxFont scalar state unchanged.
+    - VCL Font adds the actual FontSpecific default kerning flags, signed16 fixed spacing/orientation, raw vertical, word-line and optical-sizing flags, ordered copied Variation values and original guarded setters/equality. Native cow_wrapper shared-object shortcut is restored by Equals: copies sharing NaN axes compare equal, while independent NaN vectors remain unequal. No NaN sorting/deduplication/normalization. Native physical COW/reference lifetime and unrepresented fields/rendering are not certified.
+    - SvxFont SetNonAutoEscapement implements only the consumed original null-device branch: .8/.2 source constants, floating-to-short truncation and MAX_ESC_POS13999 clamp. No replacement OutputDevice/metrics provider is created; nonnull-device metrics/rendering remain a separate unported responsibility. ConstSvxFont binds original const derived-font references.
+    - ContentNode CreateDefFont and both style setters now use the actual font assembly. EditSelection Adjust binds the actual EditDoc forward-declared type. The interim structural EditDocNodePositions declaration and its prepared table are removed; existing position tests use the real document owner.
+    - Initial failures and corrections: missing explicit0 in OUString.subView produced empty appended text and a subsequent SAL erase assertion; corrected the source caller to subView(0), not the SAL guard. EEPARA_MAX fixture imported from the wrong header; corrected to EPaM. Escapement fixture expected10000 although source MAX_ESC_POS is13999; corrected fixture. New style fixtures omitted mandatory SfxStyleSearchBits; supplied UserDefined, with no production style behavior change. Parity check observed the removed EditDocNodePositions in an older generated compatibility view; rebuilt canonical views, awaited completion, then reran provenance/parity successfully. Font shared-NaN equality was aligned with the actual source COW shortcut rather than weakening an assertion.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font
+      Result: pass; 18 files / 110 tests. Evidence: output/native/AQF9AG-libnumbertext/editdoc-tests-2.log. Scope: actual EditEngine owners, new EditDoc, font assembly/defaults/copies and existing VCL regressions. After final real-EditDoc position binding and style-mask fixture correction, focused native-edit-document.test.ts plus native-edit-positions.test.ts passed 2 files / 10 cases (editdoc-target-tests-final.log); the position-only run also passed both cases.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+      Result: pass; 8 files / 197 tests. Evidence: editdoc-csv-tests.log. Scope: current CSV options, admission, dates, recognition, export, shell and browser files UI.
+    - Command: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size
+      Result: pass. Evidence: editdoc-typecheck-final.log, editdoc-lint.log, editdoc-deps.log, editdoc-resources.log, editdoc-docs.log, editdoc-size.log. Scope: required repository gates; only intentional native scratch excluded from lint. Dependencies1908 sources /10382 imports /233 allowed edges; docs4293 authored files. File-size gate unchanged; no authored source >=1000 lines.
+    - Command: npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc
+      Result: pass. Evidence: editdoc-registry-final.log, editdoc-provenance-final.log (1909 runtime modules), editdoc-parity-final.log (zero semantic violations). Build completed before final dependent checks. Existing histories/classifications remain; no completed whole-engine/native parity promotion.
+    - Command: npm run build
+      Result: pass. Evidence: editdoc-build-final.log. Scope: production application after final source/test changes. Normal existing large-chunk advisory retained; no build configuration changes.
+    - Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 browser flow. Evidence: editdoc-browser-final.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, unchanged timeouts and assertions.
+    - Cadence: same approved Agentplane task AQF9AG; no tenth new-task trigger. Focused suites used instead of a full all-application run, as requested.
+    - Remaining after pause: ImpEditEngine text scanning, paragraph capacity/feature handling, layout/undo/view state ownership and ScFieldEditEngine/DocImport callers still need to replace current SetTextCell multiline regex construction. NatNum12 supplier/casing/formatter and final exhaustive CSV audit also remain. Preserve intentional browser save/open/autosave/no-recovery deviations. Reusable user-facing native CSV completion is not claimed by this owner checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -2813,6 +2884,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T18:00:17.145Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: EditDoc/default-font block verified: 110 shared cases plus final 10-case owner/position rerun, 197 CSV cases, current-built browser CSV flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete. User requested stop after this block: commit verified changes and pause goal; do not start next block.
+Attempts: 25
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:06.667Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3429,3 +3530,28 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass. Evidence: content-transfer-browser-final.log. Scope: built application CSV open, primary ODS save and active-sheet CSV download. An initial invocation incorrectly omitted '=' after --project so Playwright consumed the positional test as another project; corrected CLI only. First valid run under concurrent validation timed out on dialog disappearance after5s; trace contained no application page error and final snapshot already showed Name in the opened sheet with no dialog. After final build and heavy checks completed, unchanged test/timeout passed. No timeout increase, test relaxation or UI workaround.
 - Cadence: continuation of task AQF9AG, not the tenth new Agentplane task since the prior full-suite run. Full suite was not triggered; focused owner and CSV regressions used as requested.
 - Remaining: actual EditDoc ownership/default-font CreateFont path, ImpEditEngine parsing/paragraph limits and ScFieldEditEngine/DocImport callers remain required before replacing current multiline SetTextCell regex construction. NativeNumberSupplier NatNum12 dispatch/casing/formatter and final requirement-by-requirement CSV audit remain pending. This checkpoint does not satisfy complete CSV acceptance; record verification --rework and restore DOING, without finish or goal pause/completion.
+
+### Verified EditDoc/default-font checkpoint and requested stop (2026-10-31)
+
+- User stop rule: stop after completing the current block. Finish its tests/verification and commit, then pause the goal. Do not begin the next ImpEditEngine, ScFieldEditEngine or NatNum12 block. Overall CSV task acceptance remains incomplete; do not call task finish or mark the goal complete.
+- Scope/source: real EditDoc ownership and font assembly required by the upstream multiline CSV chain, pinned libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65. Source editdoc.cxx/hxx, ContentNode.cxx/hxx, svxfont.cxx, vcl/source/font/font.cxx, include/tools/degree.hxx and include/vcl/fntstyle.hxx. All changes stay in Calc checkout, branch calc; no network, other checkout mutations or source guards weakened.
+- Actual EditDoc now owns real ContentNodes with the source deliberately-empty constructor, Clear, pool binding, default tab720, raw/effective vertical/rotation/fixed-height/modified state, cached reverse lookup, unique-owner insertion/erase/release and actual modification notifications. Original Link is bound to its optional JavaScript callable, without a synthetic service or default callback. Text/feature insertion, paragraph split and join, character deletion, text removal preserving first style/hard items/base font, expanded text/length, separator selection and spelling-list clearing follow original order and by-value EditPaM semantics. Split enables bullet visibility, clears AUTOWRITINGDIR, resolves the real follow style and propagates real range owners.
+- Full original CreateFont/GetScriptItemId consumed groups bind actual pooled font/language/color/height/weight/line/effect/escapement/kerning/axis values in source order. Exact ASIAN/COMPLEX selectors map to CJK/CTL; combined flags retain the Latin item exactly as upstream. Style font is assembled first and hard paragraph items follow with original parent-search flags. Base Font restoration intentionally leaves derived SvxFont scalar state unchanged.
+- VCL Font adds the actual FontSpecific default kerning flags, signed16 fixed spacing/orientation, raw vertical, word-line and optical-sizing flags, ordered copied Variation values and original guarded setters/equality. Native cow_wrapper shared-object shortcut is restored by Equals: copies sharing NaN axes compare equal, while independent NaN vectors remain unequal. No NaN sorting/deduplication/normalization. Native physical COW/reference lifetime and unrepresented fields/rendering are not certified.
+- SvxFont SetNonAutoEscapement implements only the consumed original null-device branch: .8/.2 source constants, floating-to-short truncation and MAX_ESC_POS13999 clamp. No replacement OutputDevice/metrics provider is created; nonnull-device metrics/rendering remain a separate unported responsibility. ConstSvxFont binds original const derived-font references.
+- ContentNode CreateDefFont and both style setters now use the actual font assembly. EditSelection Adjust binds the actual EditDoc forward-declared type. The interim structural EditDocNodePositions declaration and its prepared table are removed; existing position tests use the real document owner.
+- Initial failures and corrections: missing explicit0 in OUString.subView produced empty appended text and a subsequent SAL erase assertion; corrected the source caller to subView(0), not the SAL guard. EEPARA_MAX fixture imported from the wrong header; corrected to EPaM. Escapement fixture expected10000 although source MAX_ESC_POS is13999; corrected fixture. New style fixtures omitted mandatory SfxStyleSearchBits; supplied UserDefined, with no production style behavior change. Parity check observed the removed EditDocNodePositions in an older generated compatibility view; rebuilt canonical views, awaited completion, then reran provenance/parity successfully. Font shared-NaN equality was aligned with the actual source COW shortcut rather than weakening an assertion.
+- Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font
+  Result: pass; 18 files / 110 tests. Evidence: output/native/AQF9AG-libnumbertext/editdoc-tests-2.log. Scope: actual EditEngine owners, new EditDoc, font assembly/defaults/copies and existing VCL regressions. After final real-EditDoc position binding and style-mask fixture correction, focused native-edit-document.test.ts plus native-edit-positions.test.ts passed 2 files / 10 cases (editdoc-target-tests-final.log); the position-only run also passed both cases.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+  Result: pass; 8 files / 197 tests. Evidence: editdoc-csv-tests.log. Scope: current CSV options, admission, dates, recognition, export, shell and browser files UI.
+- Command: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size
+  Result: pass. Evidence: editdoc-typecheck-final.log, editdoc-lint.log, editdoc-deps.log, editdoc-resources.log, editdoc-docs.log, editdoc-size.log. Scope: required repository gates; only intentional native scratch excluded from lint. Dependencies1908 sources /10382 imports /233 allowed edges; docs4293 authored files. File-size gate unchanged; no authored source >=1000 lines.
+- Command: npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc
+  Result: pass. Evidence: editdoc-registry-final.log, editdoc-provenance-final.log (1909 runtime modules), editdoc-parity-final.log (zero semantic violations). Build completed before final dependent checks. Existing histories/classifications remain; no completed whole-engine/native parity promotion.
+- Command: npm run build
+  Result: pass. Evidence: editdoc-build-final.log. Scope: production application after final source/test changes. Normal existing large-chunk advisory retained; no build configuration changes.
+- Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 browser flow. Evidence: editdoc-browser-final.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, unchanged timeouts and assertions.
+- Cadence: same approved Agentplane task AQF9AG; no tenth new-task trigger. Focused suites used instead of a full all-application run, as requested.
+- Remaining after pause: ImpEditEngine text scanning, paragraph capacity/feature handling, layout/undo/view state ownership and ScFieldEditEngine/DocImport callers still need to replace current SetTextCell multiline regex construction. NatNum12 supplier/casing/formatter and final exhaustive CSV audit also remain. Preserve intentional browser save/open/autosave/no-recovery deviations. Reusable user-facing native CSV completion is not claimed by this owner checkpoint.

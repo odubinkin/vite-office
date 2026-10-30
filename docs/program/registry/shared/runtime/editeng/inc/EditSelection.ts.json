@@ -20,7 +20,7 @@
         "apps/office/src/editeng/source/editeng/native-edit-positions.test.ts",
         "editeng/inc/EditSelection.hxx"
       ],
-      "justification": "Original two stable EditPaM endpoint values, overloads, assignment, range/invalid predicates and editdoc.cxx Adjust ordering/value swap. Mandatory structural EditDoc::GetPos declaration represents the original forward-declared owner; no document provider implementation or clamping is supplied. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified.",
+      "justification": "Original two stable EditPaM endpoint values, overloads, assignment, range/invalid predicates and editdoc.cxx Adjust ordering/value swap. Mandatory structural EditDoc::GetPos declaration represents the original forward-declared owner; no document provider implementation or clamping is supplied. Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified. Actual EditDoc now backs Adjust and its original position tests; the interim structural declaration/table has been removed.",
       "knownViolations": [],
       "localSymbols": [
         "EditSelection"
