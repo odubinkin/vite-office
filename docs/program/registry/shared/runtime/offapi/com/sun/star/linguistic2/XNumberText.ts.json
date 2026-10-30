@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/linguistic2/XNumberText.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "numbertext-service-integration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/linguistic2/XNumberText.ts",
+        "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+        "offapi/com/sun/star/linguistic2/XNumberText.idl"
+      ],
+      "justification": "Original XNumberText declared methods and cppumaker-normal type initialization reuse the actual CPPU root/type owner. No service/context implementation is manufactured by the interface contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XNumberText",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/linguistic2/XNumberText.idl",
+      "upstreamSymbols": [
+        "XNumberText",
+        "getNumberText",
+        "getAvailableLanguages"
+      ]
+    }
+  }
+}

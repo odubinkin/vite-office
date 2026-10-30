@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 105
+revision: 108
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T16:17:59.977Z"
+  updated_at: "2026-10-30T16:40:57.955Z"
   updated_by: "CODER"
-  note: "Actual LanguageTag value/registry checkpoint passes focused core and CSV tests, build, lint, provenance, boundaries and browser CSV workflow. Overall CSV task remains incomplete: NumberText service/mode12 and original multiline EditEngine admission still require integration. Goal remains active; this is not final verification."
-  attempts: 21
+  note: "Actual NumberText component and source NatNum12 prefix/cache group pass 360 focused shared tests, 127 Calc cases, module-boundary checks, build/type/lint/provenance/parity and browser CSV workflow. Overall task remains incomplete: process-context service creation, full casing/title/formatter integration and native multiline EditEngine admission remain pending. Goal stays active."
+  attempts: 22
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -664,8 +667,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T16:40:57.955Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual NumberText component and source NatNum12 prefix/cache group pass 360 focused shared tests, 127 Calc cases, module-boundary checks, build/type/lint/provenance/parity and browser CSV workflow. Overall task remains incomplete: process-context service creation, full casing/title/formatter integration and native multiline EditEngine admission remain pending. Goal stays active."
+  -
+    type: "status"
+    at: "2026-10-30T16:41:14.297Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T16:18:07.672Z"
+doc_updated_at: "2026-10-30T16:41:14.297Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1315,6 +1331,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T16:40:57.955Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual NumberText component and source NatNum12 prefix/cache group pass 360 focused shared tests, 127 Calc cases, module-boundary checks, build/type/lint/provenance/parity and browser CSV workflow. Overall task remains incomplete: process-context service creation, full casing/title/formatter integration and native multiline EditEngine admission remain pending. Goal stays active.
+    Attempts: 22
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:40:56.398Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1875,6 +1921,20 @@ sections:
     - Verification repairs: initial provenance data rejected an empty header symbol list and basename-only evidence; authored exact method evidence and kept re-export names out of physical runtime localSymbols. An invalid runtime responsibility enum was corrected to unverified. Dependency validation rejected placement of the managed pointer helper in browser; moved the browser-independent TypeScript execution binding to runtime/local-infrastructure without changing enforcement or introducing a browser-to-core reverse edge. Test JSDoc failures were corrected. All failed checks were rerun successfully; route was recomputed before further mutation. No network was needed.
     - Cadence: same executable task AQF9AG, no tenth-task full-suite trigger. Full suite intentionally not repeated. This is a partial checkpoint: actual NumberText service forwarding, NativeNumberSupplier mode12/casing/title dependencies, formatter consumers and native multiline EditEngine CSV admission remain incomplete. Overall task stays DOING and the CSV goal remains active; no complete-parity or full CSV readiness claim.
     - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one actual browser workflow imports CSV, saves the primary ODS copy and exports the active sheet; evidence owner-browser-final.log. Scope: current static build after the final SYSTEM-ordering repair. The first invocation put the spec after the variadic --project option, so Playwright interpreted it as a second project and ran no tests; corrected CLI argument placement and reran after route recomputation. No application failure or behavior change was involved.
+
+    ### AQF9AG NumberText component and NatNum12 prefix/cache checkpoint (2026-10-30)
+
+    - Added the actual lingucomponent/source/numbertext NumberText_Impl over the existing original ordered WeakImplHelper<XNumberText,XServiceInfo>, acquired constructor factory, exact service/implementation names, shared supportsService and original empty getAvailableLanguages TODO. Actual LanguageTag Locale construction and language/country/script getter order select the original language-script-country module key. The installed official package remains unchanged. Native installed-file paths bind to the package-root program resources; OS path settings, native mutex/codecvt/thread ABI and general deployment are not certified.
+    - Added original XNumberText, XComponentContext and XMultiComponentFactory IDL contracts with cppumaker-normal static type getters; these do not manufacture a context, manager or service. Added the actual normal three-string Locale type initializer for its empty owned Sequence. New lingucomponent dependency edges are limited to actual NumberText library/SDK dependencies; a focused boundary test continues to forbid a direct i18npool-to-lingucomponent production edge and reverse/browser edges.
+    - Added the complete original NatNum12 number-prefix/count scan, locale-separator and nested result caches, exact cardinal suppression, count-zero full-input selection, no-match fallback and suffix reattachment as a production member group with the original context-based service constructor still a mandatory enclosing binding. Integration tests supply the actual NumberText component, not a fabricated provider/result. Shared OUString/buffer/reference owners retain original local destruction and cached-result copying. The supplier dispatch is deliberately not advertised as completed: real process-context service creation and original CharacterClassification/title dependencies remain pending.
+    - Preserved source non-Windows SAL input conversion, including its malformed-surrogate grouping. Added actual OUString::fromUtf8 with the original strict error flags and checked converter for the returned external UTF8 transport, rather than reusing the ordinary replacement decoder. The accepted JS interpreter returns Unicode directly; standard UTF8 byte materialization replaces its external wchar/UTF8 representation. Native codecvt/platform ABI and a complete native component differential are not claimed. CALC-422 records minus/count-zero suffix duplication; CALC-423 records SAL consuming the non-low unit after a pending high surrogate. Both source behaviors are retained.
+    - Command: npm run test:shared -- src/lingucomponent src/i18npool/source/nativenumber src/i18nlangtag/source/languagetag src/udkapi/com/sun/star/lang/Locale.test.ts src/external/libnumbertext src/sal/rtl/ustring. Result: pass, 22 files/360 cases; evidence output/native/AQF9AG-libnumbertext/service-final-0.log. Scope: actual NumberText/registered LanguageTag, source numeric prefix/separator/cache, Locale and shared SAL strings including counted/strict fromUtf8, official interpreter loading and existing native-number modes.
+    - Command: npm exec -- vitest run scripts/numbertext-module-boundaries.test.ts. Result: pass, one boundary test; evidence service-check-1.log. Scope: original component edges, continued direct supplier-link prohibition and browser/core direction.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence service-terminal-4.log. Scope: CSV options/import/admission/date/recognition/export.
+    - Commands: npm run build; npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:shared; npm run inventory:parity:calc. Result: pass. Evidence service-final-1.log, service-terminal-3.log, service-lint-fixed.log, service-terminal-0.log, service-terminal-1.log, service-terminal-2.log, service-final-3.log and service-gates-0/1/2.log. Provenance covers1898 modules; boundaries cover1897 runtime sources/10288 relative imports/233 edges. Both parity checks report zero semantic violations. Only intentionally untracked native scratch is excluded from ESLint.
+    - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one workflow after the completed current production build; evidence service-gates-3.log. Scope: browser CSV import, primary ODS save and active-sheet CSV export.
+    - Verification repairs: initial typecheck found an unused SDK-contract import; removed it. An initial query test passed Type values instead of erased template getters; corrected the test to use the existing Reference declaration contract. Initial malformed-surrogate expectation incorrectly retained B after U+D800; checked the original tcvtutf8 loop and existing SAL regression and corrected the oracle to A?, without changing production conversion. Added missing test/type JSDoc. Runtime metadata excludes erased interface method signatures from physical localSymbols. Replaced test-only nonnull assertion syntax with exact known component/interface casts to retain the unchanged ESLint rule. All failed checks were rerun successfully; no enforcement or thresholds were weakened. Scope is source-derived integration, not an unchanged full native UNO/NumberText/casing comparison.
+    - Cadence and state: same executable task AQF9AG, no tenth-task trigger and no full-suite replay. Native NumberText process-context construction, full NatNum12 casing/title and formatter integration, and original multiline EditEngine CSV admission remain incomplete. The task remains DOING and the goal active. No complete CSV readiness or broad native parity status is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -2533,6 +2593,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T16:40:57.955Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual NumberText component and source NatNum12 prefix/cache group pass 360 focused shared tests, 127 Calc cases, module-boundary checks, build/type/lint/provenance/parity and browser CSV workflow. Overall task remains incomplete: process-context service creation, full casing/title/formatter integration and native multiline EditEngine admission remain pending. Goal stays active.
+Attempts: 22
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:40:56.398Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3097,3 +3187,17 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Verification repairs: initial provenance data rejected an empty header symbol list and basename-only evidence; authored exact method evidence and kept re-export names out of physical runtime localSymbols. An invalid runtime responsibility enum was corrected to unverified. Dependency validation rejected placement of the managed pointer helper in browser; moved the browser-independent TypeScript execution binding to runtime/local-infrastructure without changing enforcement or introducing a browser-to-core reverse edge. Test JSDoc failures were corrected. All failed checks were rerun successfully; route was recomputed before further mutation. No network was needed.
 - Cadence: same executable task AQF9AG, no tenth-task full-suite trigger. Full suite intentionally not repeated. This is a partial checkpoint: actual NumberText service forwarding, NativeNumberSupplier mode12/casing/title dependencies, formatter consumers and native multiline EditEngine CSV admission remain incomplete. Overall task stays DOING and the CSV goal remains active; no complete-parity or full CSV readiness claim.
 - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one actual browser workflow imports CSV, saves the primary ODS copy and exports the active sheet; evidence owner-browser-final.log. Scope: current static build after the final SYSTEM-ordering repair. The first invocation put the spec after the variadic --project option, so Playwright interpreted it as a second project and ran no tests; corrected CLI argument placement and reran after route recomputation. No application failure or behavior change was involved.
+
+### AQF9AG NumberText component and NatNum12 prefix/cache checkpoint (2026-10-30)
+
+- Added the actual lingucomponent/source/numbertext NumberText_Impl over the existing original ordered WeakImplHelper<XNumberText,XServiceInfo>, acquired constructor factory, exact service/implementation names, shared supportsService and original empty getAvailableLanguages TODO. Actual LanguageTag Locale construction and language/country/script getter order select the original language-script-country module key. The installed official package remains unchanged. Native installed-file paths bind to the package-root program resources; OS path settings, native mutex/codecvt/thread ABI and general deployment are not certified.
+- Added original XNumberText, XComponentContext and XMultiComponentFactory IDL contracts with cppumaker-normal static type getters; these do not manufacture a context, manager or service. Added the actual normal three-string Locale type initializer for its empty owned Sequence. New lingucomponent dependency edges are limited to actual NumberText library/SDK dependencies; a focused boundary test continues to forbid a direct i18npool-to-lingucomponent production edge and reverse/browser edges.
+- Added the complete original NatNum12 number-prefix/count scan, locale-separator and nested result caches, exact cardinal suppression, count-zero full-input selection, no-match fallback and suffix reattachment as a production member group with the original context-based service constructor still a mandatory enclosing binding. Integration tests supply the actual NumberText component, not a fabricated provider/result. Shared OUString/buffer/reference owners retain original local destruction and cached-result copying. The supplier dispatch is deliberately not advertised as completed: real process-context service creation and original CharacterClassification/title dependencies remain pending.
+- Preserved source non-Windows SAL input conversion, including its malformed-surrogate grouping. Added actual OUString::fromUtf8 with the original strict error flags and checked converter for the returned external UTF8 transport, rather than reusing the ordinary replacement decoder. The accepted JS interpreter returns Unicode directly; standard UTF8 byte materialization replaces its external wchar/UTF8 representation. Native codecvt/platform ABI and a complete native component differential are not claimed. CALC-422 records minus/count-zero suffix duplication; CALC-423 records SAL consuming the non-low unit after a pending high surrogate. Both source behaviors are retained.
+- Command: npm run test:shared -- src/lingucomponent src/i18npool/source/nativenumber src/i18nlangtag/source/languagetag src/udkapi/com/sun/star/lang/Locale.test.ts src/external/libnumbertext src/sal/rtl/ustring. Result: pass, 22 files/360 cases; evidence output/native/AQF9AG-libnumbertext/service-final-0.log. Scope: actual NumberText/registered LanguageTag, source numeric prefix/separator/cache, Locale and shared SAL strings including counted/strict fromUtf8, official interpreter loading and existing native-number modes.
+- Command: npm exec -- vitest run scripts/numbertext-module-boundaries.test.ts. Result: pass, one boundary test; evidence service-check-1.log. Scope: original component edges, continued direct supplier-link prohibition and browser/core direction.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence service-terminal-4.log. Scope: CSV options/import/admission/date/recognition/export.
+- Commands: npm run build; npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:shared; npm run inventory:parity:calc. Result: pass. Evidence service-final-1.log, service-terminal-3.log, service-lint-fixed.log, service-terminal-0.log, service-terminal-1.log, service-terminal-2.log, service-final-3.log and service-gates-0/1/2.log. Provenance covers1898 modules; boundaries cover1897 runtime sources/10288 relative imports/233 edges. Both parity checks report zero semantic violations. Only intentionally untracked native scratch is excluded from ESLint.
+- Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one workflow after the completed current production build; evidence service-gates-3.log. Scope: browser CSV import, primary ODS save and active-sheet CSV export.
+- Verification repairs: initial typecheck found an unused SDK-contract import; removed it. An initial query test passed Type values instead of erased template getters; corrected the test to use the existing Reference declaration contract. Initial malformed-surrogate expectation incorrectly retained B after U+D800; checked the original tcvtutf8 loop and existing SAL regression and corrected the oracle to A?, without changing production conversion. Added missing test/type JSDoc. Runtime metadata excludes erased interface method signatures from physical localSymbols. Replaced test-only nonnull assertion syntax with exact known component/interface casts to retain the unchanged ESLint rule. All failed checks were rerun successfully; no enforcement or thresholds were weakened. Scope is source-derived integration, not an unchanged full native UNO/NumberText/casing comparison.
+- Cadence and state: same executable task AQF9AG, no tenth-task trigger and no full-suite replay. Native NumberText process-context construction, full NatNum12 casing/title and formatter integration, and original multiline EditEngine CSV admission remain incomplete. The task remains DOING and the goal active. No complete CSV readiness or broad native parity status is claimed.

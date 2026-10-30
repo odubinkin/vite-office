@@ -1,5 +1,27 @@
 /** @fileoverview Original Locale.idl string fields and cppumaker plain-struct value semantics, reusing the shared OUString owner. */
 import { OUString, type OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
+import type { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
+import { UnoType, getTypeFromTypeDescriptionReference } from "../../../../../cppu/inc/unotype";
+import {
+  typelib_static_struct_type_init,
+  type typelib_TypeDescriptionReference as R,
+} from "../../../../../cppu/inc/typelib/typedescription";
+const the_type: [R | null] = [null];
+/** Original cppumaker-normal struct type with three declared string members. @returns Borrowed cached type. */
+export function cppu_detail_getUnoType_Locale(): Type {
+  if (the_type[0] === null) {
+    const string = UnoType.get("OUString").getTypeLibType() as R;
+    typelib_static_struct_type_init(
+      the_type,
+      new TextEncoder().encode("com.sun.star.lang.Locale\0"),
+      null,
+      3,
+      [string, string, string],
+      null,
+    );
+  }
+  return getTypeFromTypeDescriptionReference(the_type);
+}
 
 /** Original borrowed const Locale value; fields retain actual shared string identity. */
 export interface LocaleConstReference {

@@ -39,9 +39,16 @@ import {
   RTL_USTR_MAX_VALUEOFINT64,
   RTL_USTR_MAX_VALUEOFDOUBLE,
   rtl_string2UString,
+  rtl_convertStringToUString,
   OSTRING_TO_OUSTRING_CVTFLAGS,
 } from "./ustring.h";
 import type { rtl_TextEncoding } from "./textenc";
+import { RTL_TEXTENCODING_UTF8 } from "./textenc";
+import {
+  RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR,
+  RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR,
+  RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+} from "./textcvt.h";
 import { rtl_math_doubleToUString, rtl_math_StringFormat } from "./math.h";
 import { SAL_NO_ACQUIRE } from "../types";
 import { ConstCharArrayDetector } from "./stringutils";
@@ -104,6 +111,25 @@ export type OUStringConstReference = Readonly<
 
 /** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
 export class OUString {
+  /** Original fromUtf8 counted byte-view conversion and strict error flags; the original debug0 build ignores the success assertion. @param source - Complete UTF8 byte view, including embedded zeros. @returns Owned converted string, retaining original partial-output behavior on malformed bytes. */
+  static fromUtf8(source: Uint8Array): OUString {
+    const target = new OUString();
+    try {
+      rtl_convertStringToUString(
+        target.slot,
+        source,
+        source.length,
+        RTL_TEXTENCODING_UTF8,
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+          RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+          RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+      );
+      return target;
+    } catch (error) {
+      target.dispose();
+      throw error;
+    }
+  }
   /** Original NUL-terminated signed32 query, with native radix and overflow rules. @param radix - Original default decimal radix. @returns Signed32 or zero. */
   public toInt32(radix = 10): number {
     return rtl_ustr_toInt32(this.pData.buffer, radix);

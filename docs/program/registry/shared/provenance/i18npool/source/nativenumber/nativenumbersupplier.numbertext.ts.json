@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.ts",
+    "upstreamPath": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+    "localSymbols": [
+      "NumberTextFactory",
+      "getNumberText",
+      "getLocaleSeparators"
+    ],
+    "upstreamSymbols": [
+      "getNumberText",
+      "getLocaleSeparators"
+    ],
+    "preservedResponsibilities": [
+      "Complete original NatNum12 number-prefix scan, locale separator cache keyed by static uncanonicalized Locale-to-BCP47, source lazy service reference and nested numeric-string/prefix-locale result cache. Exact cardinal suppression, empty-result fallback, count-zero full-input selection, nonzero scan-offset suffix append, output shared-string copying and local buffer/string destruction are preserved. The real process-context NumberText constructor remains an explicit mandatory binding; tests bind the actual production component, never a fake result/provider. Full supplier/casing/context integration is not advertised. CALC-422 records the preserved minus/count-zero suffix duplication."
+    ],
+    "omittedResponsibilities": [
+      "Complete original native component-context/service-manager, NatNum12 casing/formatter/CSV integration and native ABI/thread behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.ts",
+          "marker": "NumberTextFactory"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts",
+          "marker": "NumberText"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/nativenumber/nativenumbersupplier.cxx",
+          "marker": "getNumberText"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original NatNum12 prefix/separator/cache functions are split from the original supplier dispatch and character conversion groups under the unchanged source-file budget."
+    }
+  }
+}

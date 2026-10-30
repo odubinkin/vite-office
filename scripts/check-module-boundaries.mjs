@@ -29,6 +29,7 @@ const moduleNames = [
   "i18nlangtag",
   "i18npool",
   "i18nutil",
+  "lingucomponent",
   "o3tl",
   "offapi",
   "oox",
@@ -115,6 +116,11 @@ const allowedEdges = new Map([
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
+  // Original Library_numbertext links cppu/cppuhelper/i18nlangtag/SAL and libnumbertext, using SDK interfaces.
+  [
+    "lingucomponent",
+    new Set(["cppu", "cppuhelper", "external", "i18nlangtag", "offapi", "sal", "udkapi"]),
+  ],
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
   // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
