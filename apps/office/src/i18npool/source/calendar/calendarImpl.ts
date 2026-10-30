@@ -163,11 +163,14 @@ export class CalendarImpl {
   }
   /** Original source-order calendar IDs. @param locale - Locale. @returns Owned names. */
   getAllCalendars(locale: LocaleConstReference): OUString[] {
-    return getLocaleCalendars(locale).map(
-      /** Original owned-name conversion. @param item - Locale calendar row. @returns Name. */ (
-        item,
-      ) => unicode(item.id),
-    );
+    const names: OUString[] = [];
+    try {
+      for (const item of getLocaleCalendars(locale)) names.push(unicode(item.id));
+      return names;
+    } catch (error) {
+      for (const name of names) name.dispose();
+      throw error;
+    }
   }
   /** Original forwarding. @returns Owned ID. */
   getUniqueID(): OUString {

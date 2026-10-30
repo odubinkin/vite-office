@@ -764,6 +764,12 @@ export class SvNumberformat {
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
+      info.eScannedType === SvNumFormatType.LOGICAL &&
+      !section.GetNatNum().IsComplete()
+    )
+      return Output.GetLogicalOutput(value, section, language, output);
+    if (
+      !(this.eType & SvNumFormatType.TEXT) &&
       !section.GetNatNum().IsComplete() &&
       section.GetNatNum().GetNatNum() === 0
     ) {

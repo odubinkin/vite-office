@@ -6,6 +6,7 @@ import { SvNumFormatType as T } from "../../inc/zforlist";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { SvNumberformatLimitOps as O } from "./zformat.prefix";
+import type { SvNFLanguageData } from "./zforlist";
 import type { SvNumberformat, ImpSvNumFor } from "./zformat";
 /** Original ASCII character width table used by InsertBlanks, independent of actual rendering fonts. */
 const cCharWidths = [
@@ -152,6 +153,38 @@ export function GetLiteralOutput(section: ImpSvNumFor, output: OUString, star: b
       text.dispose();
     }
     return result;
+  } finally {
+    buffer.dispose();
+  }
+}
+
+/** Original ImpGetLogicalOutput for incomplete native metadata; only BOOLEAN and STRING tokens emit output. @param value - Native double. @param section - Selected actual section. @param current - Actual language owner. @param output - Mutable result. @returns Original false fill result. */
+export function GetLogicalOutput(
+  value: number,
+  section: ImpSvNumFor,
+  current: SvNFLanguageData,
+  output: OUString,
+): boolean {
+  const buffer = new OUStringBuffer(),
+    info = section.Info();
+  try {
+    for (let index = 0; index < section.GetCount(); ++index) {
+      switch (info.nTypeArray[index]) {
+        case K.BOOLEAN:
+          buffer.append(value !== 0 ? current.GetTrueString() : current.GetFalseString());
+          break;
+        case S.STRING:
+          buffer.append(info.sStrArray[index] as OUString);
+          break;
+      }
+    }
+    const text = buffer.makeStringAndClear();
+    try {
+      output.assign(text);
+    } finally {
+      text.dispose();
+    }
+    return false;
   } finally {
     buffer.dispose();
   }

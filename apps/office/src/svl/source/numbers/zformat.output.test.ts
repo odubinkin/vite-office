@@ -203,3 +203,31 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["[RED]BOOLEAN", 0, "FALSE"],
+  ['BOOLEAN"!"', 1, "TRUE!"],
+  ['"x"BOOLEAN', NaN, "xTRUE"],
+  ["BOOLEAN*x", 1, "TRUE"],
+])(
+  "uses the original logical token producer in %s",
+  /** Source logical output emits only BOOLEAN/STRING tokens and ignores star tokens, while public dispatch retains section color. @param pattern - Source code. @param value - Double. @param expected - Source output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x409),
+      output = new OUString(),
+      color: [Color | null] = [null];
+    try {
+      const key = insert(formatter, pattern),
+        entry = formatter.GetEntry(key) as SvNumberformat;
+      formatter.GetOutputString(value, key, output, color, true);
+      expect(text(output)).toBe(expected);
+      expect(color[0]).toBe(entry["NumFor"][0]?.GetColor());
+    } finally {
+      output.dispose();
+      formatter.dispose();
+    }
+  },
+);

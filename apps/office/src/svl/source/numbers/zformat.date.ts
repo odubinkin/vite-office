@@ -400,10 +400,11 @@ export function GetDateOutput(
   }
   current.GetCalendar().setLocalDateTime(value[0]);
   const state = calendarState(current, section),
-    buffer = new OUStringBuffer(),
     result: [boolean] = [false],
     info = section.Info();
+  let buffer: OUStringBuffer | undefined;
   try {
+    buffer = new OUStringBuffer();
     for (let index = 0; index < section.GetCount(); ++index)
       dateToken(
         info.nTypeArray[index] as number,
@@ -420,7 +421,7 @@ export function GetDateOutput(
     assignOutput(buffer, output);
     return result[0];
   } finally {
-    buffer.dispose();
+    buffer?.dispose();
     state.original.dispose();
   }
 }
@@ -450,14 +451,15 @@ export function GetDateTimeOutput(
   const calendar = current.GetCalendar();
   calendar.setLocalDateTime(value[0]);
   const state = calendarState(current, section),
-    secondsText = new OUStringBuffer(),
-    buffer = new OUStringBuffer(),
     result: [boolean] = [false];
+  let secondsText: OUStringBuffer | undefined, buffer: OUStringBuffer | undefined;
   let hour = 0,
     minute = 0,
     second = 0,
     secondPosition = 0;
   try {
+    secondsText = new OUStringBuffer();
+    buffer = new OUStringBuffer();
     if (!info.bThousand) {
       const hours: [number] = [0],
         minutes: [number] = [0],
@@ -568,8 +570,8 @@ export function GetDateTimeOutput(
     assignOutput(buffer, output);
     return result[0];
   } finally {
-    buffer.dispose();
-    secondsText.dispose();
+    buffer?.dispose();
+    secondsText?.dispose();
     state.original.dispose();
   }
 }

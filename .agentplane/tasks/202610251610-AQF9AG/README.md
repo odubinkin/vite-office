@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 78
+revision: 81
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T11:35:23.428Z"
+  updated_at: "2026-10-30T12:17:52.730Z"
   updated_by: "CODER"
-  note: "DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related tests,119 Calc/CSV tests, final build/browser and structural checks. Whole CSV task remains incomplete: native-number/spellout modes/contracts, custom logical output, constructor RAII audit, multiline EditEngine and complete option/UI/native acceptance. Continue approved work; do not close the goal."
-  attempts: 12
+  note: "Output ownership and logical-token checkpoint passed 191 related tests, 106 Calc tests, two browser cases and static/build gates. Whole CSV task remains incomplete: native-number modes/spellout, multiline import and full acceptance remain."
+  attempts: 13
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -520,8 +523,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:17:52.730Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Output ownership and logical-token checkpoint passed 191 related tests, 106 Calc tests, two browser cases and static/build gates. Whole CSV task remains incomplete: native-number modes/spellout, multiline import and full acceptance remain."
+  -
+    type: "status"
+    at: "2026-10-30T12:18:06.838Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T11:35:53.230Z"
+doc_updated_at: "2026-10-30T12:18:06.838Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -879,6 +895,36 @@ sections:
     Attempts: 12
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:35:22.423Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:17:52.730Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Output ownership and logical-token checkpoint passed 191 related tests, 106 Calc tests, two browser cases and static/build gates. Whole CSV task remains incomplete: native-number modes/spellout, multiline import and full acceptance remain.
+    Attempts: 13
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:17:51.760Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1336,6 +1382,18 @@ sections:
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the fresh build. Evidence: date-browser.log. date-build-contract.log confirms the final value!=0 Boolean branch is present in both built main and Worker bundles. Browser scope remains basic real CSV import/ODS save/active export and sparse native owner/Worker integration, not every date/native format or CSV option combination.
     - Required follow-ups remain complete native-number modes/spellout and source signatures, custom LOGICAL token output, true multiline EditEngine import and complete CSV option/UI/native differential acceptance. Temporary-string/buffer construction also needs a C++ RAII unwinding audit: constructor/argument-evaluation allocation failures around displayInteger/combineDisplay and date/time buffer setup are not covered or certified by this block's normal-output checks. The new mode0 producer is not treated as full native/SAL/UNO/allocator equivalence. No full native display wrapper is claimed.
     - Goal/task remain active and incomplete. The same open Agentplane task continues, so no tenth-task full-suite run is due. Reviewed local output/native evidence remains untracked and excluded from the checkpoint.
+
+    ### Output temporary ownership and original logical tokens, 2026-10-30
+
+    - Continued from 5bd1650ae27c. Calendar concatenation now evaluates the second owned operand inside cleanup of the first. Calendar-name arrays release already-created names on a later constructor exception. Integer padding and DATE/DATETIME/TIME buffer construction release the previously-created owners if a subsequent constructor throws. Successful formatting order, calendar state and upstream output are unchanged.
+    - Added original ImpGetLogicalOutput for the existing incomplete-native-metadata slice: only BOOLEAN and STRING tokens emit, double truth is value!=0, star is ignored, the fill result remains false and selected-section colors remain with their original owner. Four real compiled formats and three actual ScDocShell CSV cases cover literals, NaN, colors and star behavior. Complete native transliteration remains pending; no unsupported-parameter rejection is added.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.output-allocation.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.date.test.ts src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper. Result: pass,12 files191 tests. Evidence: output/native/AQF9AG-icu-grego/output-lifetime-related-tests.log. Scope: actual formatter/calendar owners, nine allocation fixtures (normal return and first three allocation slots each) plus a real Buddhist missing-era RuntimeException after left-operand construction. Real allocator/free slots are delegated; services and scanners are not replaced. Exception type-registry initialization is warmed before temporary tracking because its original cached type owners have persistent lifetime.
+    - Exploratory all-slot allocation failure assertions were too broad: original raw C buffer growth overwrites the destination pointer before its fatal non-null assertion and releases the old owner last. Native process abort does not perform ordinary C++ exception unwinding. Preserved original strtmpl.hxx ordering and narrowed the constructor-scope test to the source-valid domain, with explicit comments; no rollback or raw C behavior changes were made. The exploratory failure log remains output-lifetime-debug.log. This is not full native OOM/allocator or UNO ABI certification. CALC-408 documents the source abort frontier.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,3 files106 tests. Evidence: output-lifetime-csv-tests.log. Scope includes real formatted CSV logical output and existing import/export/input-line paths.
+    - Commands: npm run typecheck; focused ESLint over the changed implementation/tests; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:calc; npm run check:file-size; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: output-lifetime-{typecheck,lint,docs,provenance,dependencies,parity,size,resources,build}.log. Provenance1873 runtime modules; dependencies1872 sources10115 imports225 allowed edges; docs4234 authored sources; semantic violations0. No enforcement exemptions or parity promotion. The prior process handle was already retired on later observation; terminal logs show build completion and subsequent successful browser execution, so it was not restarted.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: output-lifetime-browser.log. Scope remains real basic CSV/ODS file UI and native owner/DOM-free Worker integration, not complete CSV format/options acceptance.
+    - Read-only source analysis identifies remaining NativeNumber0..11 locale/table/text conversion contracts and mode12 NumberText dependency. CALC-405..407 record source digit-ordinal NativeChar0 output, mode3 validity versus unknown-locale identity, and shared mutable locale punctuation across supplier instances. These source behaviors must be preserved; complete native witnesses are not claimed. libnumbertext1.0.11 archive/data are absent locally; a repository-network approval request is pending, so no download was performed. Pinned download.lst SHA256 must be verified before extraction if approved.
+    - Task/goal remain active and incomplete: full native-number modes and spellout, true multiline EditEngine import and complete CSV options/UI/native acceptance still remain. Same open task, no tenth-task full-suite run due. Reviewed output/native scratch is excluded from commits.
 id_source: "generated"
 ---
 ## Summary
@@ -1702,6 +1760,36 @@ Note: DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related te
 Attempts: 12
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:35:22.423Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:17:52.730Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Output ownership and logical-token checkpoint passed 191 related tests, 106 Calc tests, two browser cases and static/build gates. Whole CSV task remains incomplete: native-number modes/spellout, multiline import and full acceptance remain.
+Attempts: 13
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:17:51.760Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2163,3 +2251,15 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the fresh build. Evidence: date-browser.log. date-build-contract.log confirms the final value!=0 Boolean branch is present in both built main and Worker bundles. Browser scope remains basic real CSV import/ODS save/active export and sparse native owner/Worker integration, not every date/native format or CSV option combination.
 - Required follow-ups remain complete native-number modes/spellout and source signatures, custom LOGICAL token output, true multiline EditEngine import and complete CSV option/UI/native differential acceptance. Temporary-string/buffer construction also needs a C++ RAII unwinding audit: constructor/argument-evaluation allocation failures around displayInteger/combineDisplay and date/time buffer setup are not covered or certified by this block's normal-output checks. The new mode0 producer is not treated as full native/SAL/UNO/allocator equivalence. No full native display wrapper is claimed.
 - Goal/task remain active and incomplete. The same open Agentplane task continues, so no tenth-task full-suite run is due. Reviewed local output/native evidence remains untracked and excluded from the checkpoint.
+
+### Output temporary ownership and original logical tokens, 2026-10-30
+
+- Continued from 5bd1650ae27c. Calendar concatenation now evaluates the second owned operand inside cleanup of the first. Calendar-name arrays release already-created names on a later constructor exception. Integer padding and DATE/DATETIME/TIME buffer construction release the previously-created owners if a subsequent constructor throws. Successful formatting order, calendar state and upstream output are unchanged.
+- Added original ImpGetLogicalOutput for the existing incomplete-native-metadata slice: only BOOLEAN and STRING tokens emit, double truth is value!=0, star is ignored, the fill result remains false and selected-section colors remain with their original owner. Four real compiled formats and three actual ScDocShell CSV cases cover literals, NaN, colors and star behavior. Complete native transliteration remains pending; no unsupported-parameter rejection is added.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.output-allocation.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.date.test.ts src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper. Result: pass,12 files191 tests. Evidence: output/native/AQF9AG-icu-grego/output-lifetime-related-tests.log. Scope: actual formatter/calendar owners, nine allocation fixtures (normal return and first three allocation slots each) plus a real Buddhist missing-era RuntimeException after left-operand construction. Real allocator/free slots are delegated; services and scanners are not replaced. Exception type-registry initialization is warmed before temporary tracking because its original cached type owners have persistent lifetime.
+- Exploratory all-slot allocation failure assertions were too broad: original raw C buffer growth overwrites the destination pointer before its fatal non-null assertion and releases the old owner last. Native process abort does not perform ordinary C++ exception unwinding. Preserved original strtmpl.hxx ordering and narrowed the constructor-scope test to the source-valid domain, with explicit comments; no rollback or raw C behavior changes were made. The exploratory failure log remains output-lifetime-debug.log. This is not full native OOM/allocator or UNO ABI certification. CALC-408 documents the source abort frontier.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,3 files106 tests. Evidence: output-lifetime-csv-tests.log. Scope includes real formatted CSV logical output and existing import/export/input-line paths.
+- Commands: npm run typecheck; focused ESLint over the changed implementation/tests; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:calc; npm run check:file-size; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: output-lifetime-{typecheck,lint,docs,provenance,dependencies,parity,size,resources,build}.log. Provenance1873 runtime modules; dependencies1872 sources10115 imports225 allowed edges; docs4234 authored sources; semantic violations0. No enforcement exemptions or parity promotion. The prior process handle was already retired on later observation; terminal logs show build completion and subsequent successful browser execution, so it was not restarted.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: output-lifetime-browser.log. Scope remains real basic CSV/ODS file UI and native owner/DOM-free Worker integration, not complete CSV format/options acceptance.
+- Read-only source analysis identifies remaining NativeNumber0..11 locale/table/text conversion contracts and mode12 NumberText dependency. CALC-405..407 record source digit-ordinal NativeChar0 output, mode3 validity versus unknown-locale identity, and shared mutable locale punctuation across supplier instances. These source behaviors must be preserved; complete native witnesses are not claimed. libnumbertext1.0.11 archive/data are absent locally; a repository-network approval request is pending, so no download was performed. Pinned download.lst SHA256 must be verified before extraction if approved.
+- Task/goal remain active and incomplete: full native-number modes and spellout, true multiline EditEngine import and complete CSV options/UI/native acceptance still remain. Same open task, no tenth-task full-suite run due. Reviewed output/native scratch is excluded from commits.

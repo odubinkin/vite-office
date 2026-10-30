@@ -21,14 +21,15 @@ export function ImpGetNatNumString(value: number, minimum = 0): OUString {
     return new OUString(Uint16Array.of(48, 48 + value), 2);
   const result = new OUString(OUString.number(BigInt(value)));
   if (minimum && result.getLength() < minimum) {
-    const buffer = new OUStringBuffer();
+    let buffer: OUStringBuffer | undefined;
     try {
+      buffer = new OUStringBuffer();
       for (let index = 0; index < minimum - result.getLength(); ++index)
         buffer.append(Uint16Array.of(48));
       buffer.append(result);
       return buffer.makeStringAndClear();
     } finally {
-      buffer.dispose();
+      buffer?.dispose();
       result.dispose();
     }
   }
@@ -92,14 +93,15 @@ export function GetTimeOutput(
   const info = section.Info(),
     inputLine =
       current.GetStandardPrec() === INPUTSTRING_PRECISION && info.nCntPost > 0 && info.nCntPost < 7,
-    secondsText = new OUStringBuffer(),
-    buffer = new OUStringBuffer();
+    secondsText = new OUStringBuffer();
+  let buffer: OUStringBuffer | undefined;
   let decimals = inputLine ? 7 : info.nCntPost,
     hour = 0,
     minute = 0,
     second = 0,
     secondPosition = 0;
   try {
+    buffer = new OUStringBuffer();
     if (!info.bThousand) {
       const hours: [number] = [0],
         minutes: [number] = [0],
@@ -245,7 +247,7 @@ export function GetTimeOutput(
     }
     return result;
   } finally {
-    buffer.dispose();
+    buffer?.dispose();
     secondsText.dispose();
   }
 }

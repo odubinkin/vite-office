@@ -4717,3 +4717,28 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput`; `i18npool/source/calendar/calendar_gregorian.cxx`, `setLocalDateTime`; `tools/source/datetime/ttime.cxx`, `GetClock`.
 - Observation: the calendar date uses corrected rounding to integer milliseconds, while the clock path retains source second/fraction truncation and datetime's separate first rounding. Serial2.999999999 displays date `1900-01-02`; the date+clock pattern `YYYY-MM-DD HH:MM:SS.00` displays `1900-01-02 23:59:59.99` in the represented source path.
 - Preserve those separate source conversions. Do not force the calendar to truncate or replace the clock with calendar milliseconds. Source-derived real-owner tests retain both outputs; complete native display-wrapper comparison remains pending.
+
+
+### CALC-405 — NativeNumberChar NATNUM0 returns a digit ordinal as the character value
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `NativeNumberSupplierService::getNativeNumberChar`.
+- Observation: the NATNUM0 branch searches each NumberChar row and returns `j`, not `NUMBER_ZERO+j`. A recognized zero therefore returns UTF16 unit0 rather than ASCII48; one returns unit1 rather than ASCII49.
+- Preserve the source return contract when this currently unported character API is connected. Do not correct it to an ASCII code point. This finding is source-derived; a native character-service comparison is not claimed by the current string-only implementation.
+
+### CALC-406 — NatNum3 validation accepts a locale whose conversion still returns identity
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `isValidNatNumImpl`, `getNativeNumberString`, `getNativeNumberChar`.
+- Observation: NATNUM3 validation returns true independently of language. Both conversion paths subsequently return the original input if getLanguageNumber returns-1, before their full-width conversion switch. Thus validation alone does not imply full-width conversion for an unlisted language such as en.
+- Preserve both validation and conversion gates. Do not infer full-width output for all locales from the validation result. The finding is source-derived; the corresponding new modes are not yet implemented locally.
+
+### CALC-407 — Per-instance locale cache controls writes to shared punctuation arrays
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getNativeNumberString`; `i18npool/inc/nativenumbersupplier.hxx`, `aLocale`; `i18npool/source/nativenumber/data/numberchar.h`, mutable static DecimalChar/SeparatorChar.
+- Observation: punctuation array updates occur only when the service instance's cached aLocale differs from the requested locale, but the arrays are shared across instances. Another instance can change the shared half/full-width entries while the first instance still sees its own locale unchanged and skips the refresh. NativeToAscii also reads the current shared arrays and uses their half-width entries as output punctuation.
+- Preserve the source shared storage and per-instance refresh predicate when the remaining modes are ported. Do not normalize punctuation per call or replace the arrays with independent locale maps. This is a source-derived state-contract finding; a new multi-instance native witness remains pending.
+
+### CALC-408 — Raw C string growth overwrites its destination before asserting allocation success
+
+- Source: `sal/rtl/strtmpl.hxx`, `newFromStr_WithLength`/`stringbuffer_ensureCapacity`.
+- Observation: newFromStr_WithLength saves pOrg, replaces *ppThis with Alloc's result, then asserts nonnull before copying and releasing pOrg. A null allocation during growth leaves the destination null and reaches a fatal native assertion; it is not a recoverable std::bad_alloc path with ordinary C++ RAII unwinding. The local checked-assertion representation can consequently encounter another assertion when a caller disposes that invalidated buffer.
+- Preserve the original C mutation/assert/release order. Do not add destination rollback or reinterpret this fatal path as ordinary exception cleanup. Constructor/defined-exception lifetime tests are bounded separately from full native OOM/abort behavior.

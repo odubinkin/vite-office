@@ -28,26 +28,29 @@ import {
 function displayInteger(value: number, minimum: number): OUString {
   const text = new OUString(OUString.number(value));
   if (text.getLength() >= minimum) return text;
-  const buffer = new OUStringBuffer();
+  let buffer: OUStringBuffer | undefined;
   try {
+    buffer = new OUStringBuffer();
     for (let index = 0; index < minimum - text.getLength(); ++index)
       buffer.append(Uint16Array.of(48));
     buffer.append(text);
     return buffer.makeStringAndClear();
   } finally {
+    buffer?.dispose();
     text.dispose();
-    buffer.dispose();
   }
 }
-/** Native string concatenation acquires the actual returned values before local destruction. @param first - Owned first value. @param second - Owned second value. @returns Combined owner. */
-function combineDisplay(first: OUString, second: OUString): OUString {
-  const buffer = new OUStringBuffer();
+/** Native temporary cleanup covers right-operand evaluation and buffer construction. @param first - Owned first value. @param produceSecond - Original right-operand evaluation. @returns Combined owner. */
+function combineDisplay(first: OUString, produceSecond: () => OUString): OUString {
+  let second: OUString | undefined, buffer: OUStringBuffer | undefined;
   try {
+    second = produceSecond();
+    buffer = new OUStringBuffer();
     buffer.append(first).append(second);
     return buffer.makeStringAndClear();
   } finally {
-    buffer.dispose();
-    second.dispose();
+    buffer?.dispose();
+    second?.dispose();
     first.dispose();
   }
 }
@@ -283,11 +286,12 @@ export class Calendar_gregorian {
             0,
             true,
           ),
-          this.getDisplayStringImpl(
-            code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
-            0,
-            true,
-          ),
+          /** Evaluates the original right operand under left-temporary cleanup. @returns Owned right value. */ () =>
+            this.getDisplayStringImpl(
+              code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
+              0,
+              true,
+            ),
         );
       default:
         throw new RuntimeException();
@@ -577,11 +581,12 @@ export class Calendar_buddhist extends Calendar_gregorian {
           native,
           true,
         ),
-        this.getDisplayStringImpl(
-          code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
-          native,
-          true,
-        ),
+        /** Evaluates the original right operand under left-temporary cleanup. @returns Owned right value. */ () =>
+          this.getDisplayStringImpl(
+            code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
+            native,
+            true,
+          ),
       );
     return super.getDisplayString(code, native);
   }

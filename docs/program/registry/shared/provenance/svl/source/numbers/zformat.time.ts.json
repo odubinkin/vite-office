@@ -18,7 +18,8 @@
     ],
     "preservedResponsibilities": [
       "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI.",
-      "Shared original integer-padding and fractional-second responsibilities are now exported under original method names for the date/datetime fragment. Their admitted incomplete-native metadata behavior and source rounding remain unchanged."
+      "Shared original integer-padding and fractional-second responsibilities are now exported under original method names for the date/datetime fragment. Their admitted incomplete-native metadata behavior and source rounding remain unchanged.",
+      "Original integer padding and clock-output temporary owners now begin cleanup scopes before later buffer constructors. Only constructed buffers are disposed; successful source formatting and original C allocation guards remain unchanged. Normal-output/early-constructor allocation tests are bounded, not full native OOM certification."
     ],
     "omittedResponsibilities": [
       "Complete native full display/service/ABI verification remains unproven."
