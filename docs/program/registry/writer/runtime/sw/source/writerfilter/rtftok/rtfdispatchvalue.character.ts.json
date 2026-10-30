@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.character.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.character.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-associated-character.test.ts"
+      ],
+      "justification": "S3HW1E associated-character checkpoint: actual F/AF chooses ascii/eastAsia/cs from saved RunType, while only F changes decoding. FS/AFS and B/AB/I/AI use original ordinary/complex resource IDs and lexical defaults, preserving HICH font-versus-size/toggle asymmetry (WRITER255). Removed the Western-only DTO reconstruction for these migrated properties so inactive defaults cannot overwrite native sprms. Font-table completion seeds the actual default character sprms; checkFirstRun supplies default ASCII font to every saved group only if absent, and PLAIN restores defaults and encoding. Real native character-range queries, stylesheet/marker/Worker and mixed-script RTF round-trips exercise the consumer. Native font table numeric metadata, list-level font ingestion, special section states, unrepresented properties and compiled complete Writer/ABI parity remain unverified. Registered browser save/open/recovery behavior and broad semantic confidence are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "dispatchAssociatedCharacter"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::dispatchCharacterSprmValue",
+        "RTFDocumentImpl::dispatchValue"
+      ]
+    }
+  }
+}

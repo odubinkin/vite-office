@@ -9,14 +9,7 @@ import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import {
-  RES_CHRATR_WEIGHT,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_UNDERLINE,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_COLOR,
-} from "../../../inc/hintids";
+import { RES_CHRATR_UNDERLINE, RES_CHRATR_COLOR } from "../../../inc/hintids";
 /** Represented native underline token conversion shared with the actual mapper's admitted families. */
 const underline = new Map<number, number>([
   [L.LINESTYLE_NONE, N.LN_Value_ST_Underline_none],
@@ -60,17 +53,6 @@ function characterProperties(
   has: (which: number) => boolean,
   underlineColorSet = false,
 ): void {
-  if (has(RES_CHRATR_WEIGHT)) target.set(N.LN_EG_RPrBase_b, new RTFValue(Number(values.bold)));
-  if (has(RES_CHRATR_POSTURE)) target.set(N.LN_EG_RPrBase_i, new RTFValue(Number(values.italic)));
-  if (has(RES_CHRATR_FONTSIZE) && values.fontSizeTwips !== undefined)
-    target.set(N.LN_EG_RPrBase_sz, new RTFValue(values.fontSizeTwips / 10));
-  if (has(RES_CHRATR_FONT) && values.fontFamily !== undefined)
-    putNestedAttribute(
-      target,
-      N.LN_EG_RPrBase_rFonts,
-      N.LN_CT_Fonts_ascii,
-      stringValue(values.fontFamily),
-    );
   if (has(RES_CHRATR_COLOR))
     putNestedAttribute(
       target,
@@ -173,16 +155,8 @@ function writeRtfCharacterProperties(
       which,
     ) => {
       switch (which) {
-        case RES_CHRATR_WEIGHT:
-          return controls.has("b");
-        case RES_CHRATR_POSTURE:
-          return controls.has("i");
         case RES_CHRATR_UNDERLINE:
           return hasRtfUnderlineControl(controls);
-        case RES_CHRATR_FONT:
-          return controls.has("f");
-        case RES_CHRATR_FONTSIZE:
-          return controls.has("fs");
         case RES_CHRATR_COLOR:
           return controls.has("cf");
         default:

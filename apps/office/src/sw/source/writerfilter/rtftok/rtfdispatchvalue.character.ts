@@ -1,0 +1,59 @@
+/** @fileoverview Consumed associated font/size dispatch from rtfdispatchvalue.cxx and weight/posture dispatch from RTFDocumentImpl::dispatchToggle. */
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { RunType, type RtfState, type RtfDocumentImplContext } from "./rtfdocumentimpl.context";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";
+import { stringValue } from "./rtfdocumentimpl.character";
+import { RTFValue } from "./rtfvalue";
+/** Original associated controls choose resource identities from saved RunType, not from the control's associated prefix or visible text. F alone changes the current encoding. @param name - Actual keyword. @param parameter - Optional lexical parameter. @param state - Actual group. @param this - Original reader. @returns Whether consumed. */
+export function dispatchAssociatedCharacter(
+  this: RtfDocumentImplContext,
+  name: string,
+  parameter: number | undefined,
+  state: RtfState,
+): boolean {
+  const complex =
+    state.runType === RunType.HICH ||
+    state.runType === RunType.RTLCH_LTRCH_1 ||
+    state.runType === RunType.LTRCH_RTLCH_2;
+  if (name === "f" || name === "af") {
+    const index = parameter ?? 0;
+    const id =
+      state.runType === RunType.RTLCH_LTRCH_1 || state.runType === RunType.LTRCH_RTLCH_2
+        ? N.LN_CT_Fonts_cs
+        : state.runType === RunType.DBCH
+          ? N.LN_CT_Fonts_eastAsia
+          : N.LN_CT_Fonts_ascii;
+    putNestedAttribute(
+      state.characterSprms,
+      N.LN_EG_RPrBase_rFonts,
+      id,
+      stringValue(this["fonts"].get(index) ?? ""),
+    );
+    state.fontIndex = index;
+    if (name === "f")
+      state.currentCodepage = this["fontCodepages"].get(index) ?? this["defaultCodepage"];
+    return true;
+  }
+  if (name === "fs" || name === "afs") {
+    state.characterSprms.set(
+      complex ? N.LN_EG_RPrBase_szCs : N.LN_EG_RPrBase_sz,
+      new RTFValue(parameter ?? 24),
+    );
+    return true;
+  }
+  if (name === "b" || name === "ab" || name === "i" || name === "ai") {
+    const bold = name === "b" || name === "ab";
+    state.characterSprms.set(
+      bold
+        ? complex
+          ? N.LN_EG_RPrBase_bCs
+          : N.LN_EG_RPrBase_b
+        : complex
+          ? N.LN_EG_RPrBase_iCs
+          : N.LN_EG_RPrBase_i,
+      new RTFValue(Number(parameter !== 0)),
+    );
+    return true;
+  }
+  return false;
+}

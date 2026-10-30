@@ -2265,3 +2265,10 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Pinned source: `sw/source/filter/ww8/wrtw8nds.cxx`, `MSWordExportBase::OutputTextNode` paragraph-marker collection (lines3284–3337).
 - Observation: a zero-length hint at paragraph end sets `bCharFormatOnly=false` whenever its Which differs from `RES_TXTATR_CHARFMT`, even when the collector does not copy that hint. In particular a terminal internet hint suppresses direct paragraph character formatting while contributing no marker item. Only a character-style hint preserves paragraph-direct fallback.
 - Resolution: keep the exact selection/order. Real terminal internet, automatic and named-style attributes test the three branches and precedence. This is source/control-flow and actual managed-owner evidence; it does not certify all terminal attribute types or compiled Writer output.
+
+
+### WRITER255 — HICH chooses Western font but complex size and toggles
+
+- Pinned source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, F/AF and `dispatchCharacterSprmValue`; `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `dispatchToggle`.
+- Observation: under HICH, F/AF selects `LN_CT_Fonts_ascii`, whereas FS/AFS selects `szCs`, B/AB selects `bCs`, and I/AI selects `iCs`. Under DBCH, the font is `eastAsia` but size/toggles use ordinary `sz`/`b`/`i`; DomainMapper applies those ordinary properties to Western and Asian items. Together with associated Western export properties after HICH, this can overwrite inactive complex-script formatting, like the language behavior in WRITER252.
+- Resolution: preserve the distinct native selectors, not a single generalized script-slot rule or a rule based on the A prefix. Literal controls across all eight original RunType states are tested through actual Writer items and ranges. This is source-derived plus managed-owner evidence; full compiled native round-trip behavior is not certified.

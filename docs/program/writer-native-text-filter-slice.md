@@ -759,3 +759,22 @@ it does not claim the desktop style lookup branch. Native last-cell paragraph ou
 continues to skip the ordinary `\par` path. Special section dummy-paragraph marker
 suppression and broader section transitions still require an explicit audit. This
 checkpoint closes the ordinary paragraph-marker path, not the full format goal.
+
+
+## Associated RTF character controls checkpoint
+
+Body/style/marker F and AF now feed actual `rFonts` attributes for Western,
+Asian or complex fonts using the original saved RunType. F updates byte decoding;
+AF leaves it unchanged. FS/AFS, B/AB and I/AI use original ordinary or complex
+property tokens, including bare size24 and explicit zero toggles. HICH's asymmetric
+font/size/toggle choice is preserved (WRITER255). These properties no longer pass
+through the Western-only DTO reconstruction before native property normalization.
+
+Font-table completion seeds the requested default ASCII font. Native first-run
+initialization fills only absent ASCII values across the saved state stack; PLAIN
+restores actual default character sprms and the default font's encoding. Tests use
+visible one-character ranges rather than insertion-caret boundary inheritance and
+cover all eight RunType states, nested groups, source size defaults, AF/F decoding,
+styles, markers and mixed-script native export through Worker transport. List-level
+font/character ingestion and complete font-table metadata remain separate current-model
+obligations; this checkpoint does not close the entire RTF or format goal.

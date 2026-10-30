@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 182
+revision: 185
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:13:33.319Z"
+  updated_at: "2026-10-30T12:23:13.527Z"
   updated_by: "CODER"
-  note: "Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model regressions plus corrected six-case codec recheck, 12 marker cases and 25 shared StylePool cases pass; typecheck, lint, provenance and both registries pass. Goal remains incomplete pending associated font dispatch, special section audit and HTML/current-model filter obligations."
-  attempts: 25
+  note: "Associated-character checkpoint verified: 615 filter regressions and final 54 RunType/default/decoding/Worker cases pass; original 60-case parser file also passes. Final typecheck, lint/format, source/provenance/dependency/docs/size/tree gates and Writer/shared registries pass. Font-table metadata, list-level font ingestion, special sections and HTML/current-model audit remain open."
+  attempts: 26
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -405,8 +408,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:23:13.527Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Associated-character checkpoint verified: 615 filter regressions and final 54 RunType/default/decoding/Worker cases pass; original 60-case parser file also passes. Final typecheck, lint/format, source/provenance/dependency/docs/size/tree gates and Writer/shared registries pass. Font-table metadata, list-level font ingestion, special sections and HTML/current-model audit remain open."
+  -
+    type: "status"
+    at: "2026-10-30T12:23:23.147Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:13:40.782Z"
+doc_updated_at: "2026-10-30T12:23:23.147Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -879,6 +895,36 @@ sections:
     Attempts: 25
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:13:22.796Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:23:13.527Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Associated-character checkpoint verified: 615 filter regressions and final 54 RunType/default/decoding/Worker cases pass; original 60-case parser file also passes. Final typecheck, lint/format, source/provenance/dependency/docs/size/tree gates and Writer/shared registries pass. Font-table metadata, list-level font ingestion, special sections and HTML/current-model audit remain open.
+    Attempts: 26
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:22:40.144Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1586,6 +1632,22 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
       Result: pass. Evidence: html14-types-fixed.txt, html14-lint-final.txt, html14-last-lint.txt, html14-last-prettier.txt, html14-provenance-fixed.txt, html14-docs-final.txt, html14-size-final.txt, html14-tree-final.txt, html14-hintids-final.txt, html14-routing-final.txt, html14-writer-registry-final.txt, html14-shared-registry-final.txt. Counts:1874 provenance modules,4230 documented files,80 native Which identities. Initial stale runs found unused imports and missing source/JSDoc markers; corrected without changing enforcement. All broad semantic confidence remains unverified.
     - Remaining concrete filter dependency: F/AF currently does not select all original RunType font slots; source F changes decoding while AF must not. This affects mixed-script current-model fonts and is the next bounded block. HTML list/table producers and the capability matrix still require completion audit. Goal stays active; no full all-app replay or completeness certificate.
+
+    ### Native RTF associated script controls and default font state (2026-10-30)
+
+    - Implemented: F/AF resource IDs selected by all eight original RunType states; only F changes decoder encoding. HICH font is ASCII, whereas HICH FS/AFS and B/AB/I/AI use complex properties; DBCH font is Asian but size/toggles use ordinary properties. Original lexical size24, numeric font0 and toggle/explicit-zero behavior are preserved. WRITER255 documents the asymmetric source behavior.
+    - Font-table completion seeds real default character sprms. Original first-run initialization fills only absent ASCII font values in every saved parser group; PLAIN restores actual default character sprms and default font encoding. Bare F/AF in flat font tables resets numeric index to0. No synthetic general script rule, prefix-based CTL assumption or guessed decoding is used.
+    - Removed legacy Western-only font/size/weight/posture reconstruction from DTO fields. Original real RTFSprms now carry these controls into existing style deduplication, DomainMapper, UNO and document item owners, including marker properties. Other admitted color/underline responsibilities retain their existing path.
+    - Command: npm run test:writer -- rtf-associated-character rtfdocumentimpl.test
+      Result: pass;112 tests/2 files. Evidence: output/playwright/rtf-properties-native/html15-associated-corrected.txt. Scope: all original RunType states and existing parser cases, actual per-character script item queries, default font/PLAIN/group behavior, independent AF/F byte decoding, styles and mixed-script Worker/RTF round-trip.
+    - Command: npm run test:writer -- rtf-associated-character
+      Result: pass;54 tests. Evidence: html15-associated-final-corrected.txt. Scope: same consumer plus two final flat-font-table bare F/AF default cases.
+    - Command: npm run test:writer -- rtf sw/source/filter/md document-io
+      Result: pass;615 tests/34 files. Evidence: html15-filter-regressions.txt. Scope: all RTF consumers, markers, language/style/encoding/numbering exports plus Markdown and existing document I/O.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+      Result: pass. Evidence: html15-types-final.txt, html15-last-typecheck.txt, html15-format-lint-final.txt, html15-last-lint.txt, html15-static.txt, html15-provenance.txt, html15-registry.txt. Source metadata covers1875 modules; broad semantic confidence stays unverified.
+    - Corrected during development: removing legacy ordinary-property cases initially also removed underline admission; restored the unrelated underline case and reran all parser/filter tests. Fresh fixtures initially queried insertion-caret left-boundary inheritance rather than visible ranges and supplied raw UTF8 under an ANSI RTF header; changed to actual one-character GetParaAttr queries and original Unicode controls. A final raw-template quoting typo in the two new bare-font fixtures was corrected before passing their complete file. Enforcement and old regression assertions were not weakened.
+    - Remaining concrete dependencies: native font-table numeric metadata and list-level font/character ingestion still affect represented font/numbering items; special section dummy paragraphs, HTML list/table producers and the current-model completion audit remain open. No unrelated shared-kernel expansion or full all-app replay; goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -2069,6 +2131,36 @@ Note: Paragraph-marker checkpoint verified: 636 filter regressions, 1540 model r
 Attempts: 25
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:13:22.796Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:23:13.527Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Associated-character checkpoint verified: 615 filter regressions and final 54 RunType/default/decoding/Worker cases pass; original 60-case parser file also passes. Final typecheck, lint/format, source/provenance/dependency/docs/size/tree gates and Writer/shared registries pass. Font-table metadata, list-level font ingestion, special sections and HTML/current-model audit remain open.
+Attempts: 26
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:22:40.144Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2780,3 +2872,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
   Result: pass. Evidence: html14-types-fixed.txt, html14-lint-final.txt, html14-last-lint.txt, html14-last-prettier.txt, html14-provenance-fixed.txt, html14-docs-final.txt, html14-size-final.txt, html14-tree-final.txt, html14-hintids-final.txt, html14-routing-final.txt, html14-writer-registry-final.txt, html14-shared-registry-final.txt. Counts:1874 provenance modules,4230 documented files,80 native Which identities. Initial stale runs found unused imports and missing source/JSDoc markers; corrected without changing enforcement. All broad semantic confidence remains unverified.
 - Remaining concrete filter dependency: F/AF currently does not select all original RunType font slots; source F changes decoding while AF must not. This affects mixed-script current-model fonts and is the next bounded block. HTML list/table producers and the capability matrix still require completion audit. Goal stays active; no full all-app replay or completeness certificate.
+
+### Native RTF associated script controls and default font state (2026-10-30)
+
+- Implemented: F/AF resource IDs selected by all eight original RunType states; only F changes decoder encoding. HICH font is ASCII, whereas HICH FS/AFS and B/AB/I/AI use complex properties; DBCH font is Asian but size/toggles use ordinary properties. Original lexical size24, numeric font0 and toggle/explicit-zero behavior are preserved. WRITER255 documents the asymmetric source behavior.
+- Font-table completion seeds real default character sprms. Original first-run initialization fills only absent ASCII font values in every saved parser group; PLAIN restores actual default character sprms and default font encoding. Bare F/AF in flat font tables resets numeric index to0. No synthetic general script rule, prefix-based CTL assumption or guessed decoding is used.
+- Removed legacy Western-only font/size/weight/posture reconstruction from DTO fields. Original real RTFSprms now carry these controls into existing style deduplication, DomainMapper, UNO and document item owners, including marker properties. Other admitted color/underline responsibilities retain their existing path.
+- Command: npm run test:writer -- rtf-associated-character rtfdocumentimpl.test
+  Result: pass;112 tests/2 files. Evidence: output/playwright/rtf-properties-native/html15-associated-corrected.txt. Scope: all original RunType states and existing parser cases, actual per-character script item queries, default font/PLAIN/group behavior, independent AF/F byte decoding, styles and mixed-script Worker/RTF round-trip.
+- Command: npm run test:writer -- rtf-associated-character
+  Result: pass;54 tests. Evidence: html15-associated-final-corrected.txt. Scope: same consumer plus two final flat-font-table bare F/AF default cases.
+- Command: npm run test:writer -- rtf sw/source/filter/md document-io
+  Result: pass;615 tests/34 files. Evidence: html15-filter-regressions.txt. Scope: all RTF consumers, markers, language/style/encoding/numbering exports plus Markdown and existing document I/O.
+- Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+  Result: pass. Evidence: html15-types-final.txt, html15-last-typecheck.txt, html15-format-lint-final.txt, html15-last-lint.txt, html15-static.txt, html15-provenance.txt, html15-registry.txt. Source metadata covers1875 modules; broad semantic confidence stays unverified.
+- Corrected during development: removing legacy ordinary-property cases initially also removed underline admission; restored the unrelated underline case and reran all parser/filter tests. Fresh fixtures initially queried insertion-caret left-boundary inheritance rather than visible ranges and supplied raw UTF8 under an ANSI RTF header; changed to actual one-character GetParaAttr queries and original Unicode controls. A final raw-template quoting typo in the two new bare-font fixtures was corrected before passing their complete file. Enforcement and old regression assertions were not weakened.
+- Remaining concrete dependencies: native font-table numeric metadata and list-level font/character ingestion still affect represented font/numbering items; special section dummy paragraphs, HTML list/table producers and the current-model completion audit remain open. No unrelated shared-kernel expansion or full all-app replay; goal remains active.

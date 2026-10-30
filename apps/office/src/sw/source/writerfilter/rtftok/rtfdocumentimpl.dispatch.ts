@@ -86,6 +86,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     try {
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
         this["CommitFont"](previous);
+      if (
+        previous?.destination === "fonttbl" &&
+        this["states"].at(-1)?.destination !== "fonttbl" &&
+        this["defaultFontIndex"] >= 0
+      )
+        putNestedAttribute(
+          this["m_aDefaultCharacterSprms"],
+          N.LN_EG_RPrBase_rFonts,
+          N.LN_CT_Fonts_ascii,
+          stringValue(this["fonts"].get(this["defaultFontIndex"]) ?? ""),
+        );
       if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
         const name = (previous.styleName.split(";")[0] as string).trim();
         if (name.length > 0) {
@@ -318,9 +329,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (state.destination === "fonttbl") {
-    if (token.name === "f" && token.parameter !== undefined) {
+    if (token.name === "f" || token.name === "af") {
       this["CommitFont"](state);
-      state.fontIndex = token.parameter;
+      state.fontIndex = token.parameter ?? 0;
       Reflect.deleteProperty(state, "fontCodepage");
     }
     return;
@@ -366,6 +377,7 @@ export function DispatchBodyControl(
 ): void {
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (dispatchLanguageValue.call(this, name, parameter ?? 0, state)) return;
+  if (dispatchAssociatedCharacter.call(this, name, parameter, state)) return;
   if (name === "loch" || name === "hich" || name === "dbch") {
     state.runType = name === "loch" ? RunType.LOCH : name === "hich" ? RunType.HICH : RunType.DBCH;
     return;
@@ -691,6 +703,7 @@ export function DispatchBodyControl(
   if (name === "plain") {
     state.runType = RunType.NONE;
     state.characterSprms.clear();
+    for (const [id, value] of this["m_aDefaultCharacterSprms"]) state.characterSprms.set(id, value);
     delete state.characterStyleIndex;
     delete state.currentCharacterStyleIndex;
     delete state.autoKerning;
@@ -706,13 +719,6 @@ export function DispatchBodyControl(
     if (!this["inTable"] && this["tableRows"].length > 0) this["FlushTable"]();
     state.paragraph = { ...DEFAULT_PARAGRAPH };
     delete state.paragraphBorder;
-    return;
-  }
-  if (name === "b" || name === "i") {
-    state.character = {
-      ...state.character,
-      [name === "b" ? "bold" : "italic"]: parameter !== 0,
-    };
     return;
   }
   const underlineStyle = Object.hasOwn(RTF_UNDERLINE_STYLES, name)
@@ -776,16 +782,7 @@ export function DispatchBodyControl(
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
   else if (name === "ilvl" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
-  else if (name === "fs" && parameter !== undefined && parameter > 0)
-    state.character = { ...state.character, fontSizeTwips: parameter * 10 };
-  else if (name === "f" && parameter !== undefined) {
-    state.fontIndex = parameter;
-    state.currentCodepage = this["fontCodepages"].get(parameter) ?? this["defaultCodepage"];
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "fontFamily");
-    const fontFamily = this["fonts"].get(parameter);
-    state.character = { ...character, ...(fontFamily === undefined ? {} : { fontFamily }) };
-  } else if (name === "cf" && parameter !== undefined) {
+  else if (name === "cf" && parameter !== undefined) {
     state.colorIndex = parameter;
     const character = { ...state.character };
     Reflect.deleteProperty(character, "color");
@@ -886,3 +883,6 @@ import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import { stringValue } from "./rtfdocumentimpl.character";
 
 import { dispatchLanguageValue } from "./rtfdispatchvalue.language";
+
+import { dispatchAssociatedCharacter } from "./rtfdispatchvalue.character";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";

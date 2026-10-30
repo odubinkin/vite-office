@@ -38,6 +38,40 @@ export class RtfDocumentImpl {
   protected readonly states: RtfState[] = [];
   protected m_bNeedPap = true;
   protected m_aParagraphSprms = new RTFSprms();
+  protected readonly m_aDefaultCharacterSprms = new RTFSprms();
+  /** Original first-run initialization supplies the requested default ASCII font only where a group has none. Settings/section callbacks remain on their existing owners. @returns Nothing. */
+  protected checkFirstRun(): void {
+    if (!this.firstRun) return;
+    this.firstRun = false;
+    const font = getNestedAttribute(
+      this.m_aDefaultCharacterSprms,
+      N.LN_EG_RPrBase_rFonts,
+      N.LN_CT_Fonts_ascii,
+    );
+    try {
+      if (!font.is()) return;
+      for (const state of this.states) {
+        const current = getNestedAttribute(
+          state.characterSprms,
+          N.LN_EG_RPrBase_rFonts,
+          N.LN_CT_Fonts_ascii,
+        );
+        try {
+          if (!current.is())
+            putNestedAttribute(
+              state.characterSprms,
+              N.LN_EG_RPrBase_rFonts,
+              N.LN_CT_Fonts_ascii,
+              font,
+            );
+        } finally {
+          current.dispose();
+        }
+      }
+    } finally {
+      font.dispose();
+    }
+  }
   /** Captures source paragraph properties when the stream first needs them. The atomic reader retains this emitted value until materialization. @param state - Actual current group. @returns Nothing. */
   protected checkNeedPap(state: RtfState): void {
     if (!this.m_bNeedPap) return;
@@ -92,6 +126,7 @@ export class RtfDocumentImpl {
       lists.add(state.paragraphSprms);
     }
     lists.add(this.m_aParagraphSprms);
+    lists.add(this.m_aDefaultCharacterSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
     for (const block of this.blocks)
       if (block.kind === "paragraph") paragraph(block.paragraph);
@@ -221,8 +256,8 @@ export class RtfDocumentImpl {
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group.  @returns Nothing. */
   protected AppendText(value: string, state: RtfState): void {
     if (value.length === 0) return;
+    this.checkFirstRun();
     this.checkNeedPap(state);
-    this.firstRun = false;
     if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
     const previous = this.runs.at(-1);
     if (
@@ -265,7 +300,7 @@ export class RtfDocumentImpl {
 
   /** Completes a paragraph at native \par or document end. @param state - Current group. @param marker - Capture PAR run properties. @returns Nothing. */
   protected CommitParagraph(state = this.states.at(-1), marker = false): void {
-    this.firstRun = false;
+    this.checkFirstRun();
     if (state) this.checkNeedPap(state);
     const paragraph: RtfParagraph = {
       paragraphSprms: new RTFSprms(this.m_aParagraphSprms),
@@ -351,3 +386,6 @@ import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel"
 import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
 
 import { RTFSprms } from "./rtfsprm";
+
+import { getNestedAttribute, putNestedAttribute } from "./rtfdocumentimpl.properties";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
