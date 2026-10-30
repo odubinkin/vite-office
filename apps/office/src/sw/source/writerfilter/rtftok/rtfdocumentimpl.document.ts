@@ -93,10 +93,12 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
     nativeStyles = deduplicateRtfStyleTable(this["m_pStyleTableEntries"]);
-    const sectionStyles = new Map<number, { name: string; numOffset?: number }>();
-    for (const [id, section] of this["m_aSectionSprms"]) {
-      sectionStyles.set(id, ApplyRtfSectionProperties(mapper, section));
-    }
+    const settings = this["m_pSettingsTable"].get();
+    if (settings) mapper.table(N.LN_settings_settings, settings);
+    const sectionStyles = new Map<
+      number,
+      { name: string; numOffset?: number; continuous: boolean }
+    >();
     // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
     document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
     const defaultTabs = (
@@ -240,6 +242,9 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       }
     }
     PrepareListNumbering.call(this);
+    for (const [id, section] of this["m_aSectionSprms"]) {
+      sectionStyles.set(id, ApplyRtfSectionProperties(mapper, section));
+    }
     let firstParagraph = true;
     const startedSections = new Set<number>();
     for (const block of this["blocks"]) {
@@ -255,9 +260,18 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         if (
           startsSection &&
           sectionStyle !== undefined &&
-          (block.section > 0 || sectionStyle.numOffset !== undefined)
+          (sectionStyle.continuous
+            ? block.section === 0
+            : block.section > 0 ||
+              sectionStyle.name !== "Standard" ||
+              sectionStyle.numOffset !== undefined)
         )
-          node.SetAttr(new SwFormatPageDesc(sectionStyle.name, sectionStyle.numOffset));
+          node.SetAttr(
+            new SwFormatPageDesc(
+              sectionStyle.name,
+              sectionStyle.continuous ? undefined : sectionStyle.numOffset,
+            ),
+          );
         firstParagraph = false;
       } else {
         const table = firstParagraph
@@ -266,11 +280,20 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         if (
           startsSection &&
           sectionStyle !== undefined &&
-          (block.section > 0 || sectionStyle.numOffset !== undefined)
+          (sectionStyle.continuous
+            ? block.section === 0
+            : block.section > 0 ||
+              sectionStyle.name !== "Standard" ||
+              sectionStyle.numOffset !== undefined)
         )
           table
             .GetFrameFormat()
-            .SetFormatAttr(new SwFormatPageDesc(sectionStyle.name, sectionStyle.numOffset));
+            .SetFormatAttr(
+              new SwFormatPageDesc(
+                sectionStyle.name,
+                sectionStyle.continuous ? undefined : sectionStyle.numOffset,
+              ),
+            );
         if (block.pageBreakBefore)
           table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
         const firstRow = block.rows[0];
@@ -576,3 +599,5 @@ import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 import { PrepareListNumbering } from "./rtfdocumentimpl.numbering";
 
 import { ApplyRtfSectionProperties } from "./rtfdocumentimpl.section";
+
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";

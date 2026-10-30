@@ -120,7 +120,8 @@ export class DomainMapper implements Properties {
   /** Original numbering resource-table callback retains native import flags and manager ownership. Other table producers remain with their existing owners. @param id - Table identity. @param table - Native reference. @returns Nothing. */
   table(id: Id, table: Reference<import("../inc/dmapper/resourcemodel").Table>): void {
     this.impl.SetAnyTableImport(true);
-    if (id === N.LN_NUMBERING) {
+    if (id === N.LN_settings_settings) table.resolve(this.impl.GetSettingsTable());
+    else if (id === N.LN_NUMBERING) {
       this.impl.SetNumberingImport(true);
       table.resolve(this.impl.GetListTable());
       this.impl.GetListTable().CreateNumberingRules();
@@ -402,6 +403,21 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_EG_SectPrContents_type: {
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        if (
+          section instanceof SectionPropertyMap &&
+          (n !== N.LN_Value_ST_SectionMark_continuous ||
+            this.impl.GetLastSectionContext() ||
+            this.impl.GetParaSectpr())
+        )
+          section.SetBreakType(n);
+        break;
+      }
+      case N.LN_CT_PPr_sectPr:
+        this.impl.SetParaSectpr(true);
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
       case N.LN_EG_SectPrContents_pgSz: {
         const letter = new PaperInfo(Paper.PAPER_LETTER);
         this.CT_PageSz.w = letter.getWidth();

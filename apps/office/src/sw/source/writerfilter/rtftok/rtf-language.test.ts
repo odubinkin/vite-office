@@ -149,7 +149,7 @@ it("round-trips independent script languages through native RTF export and impor
   ).toEqual([0x407, 0x411, 0x401]);
 });
 
-it("retains native language on empty paragraphs with and without an explicit par", /** Root-group completion preserves pending paragraph properties without adding a second explicit final paragraph. @returns Nothing. */ () => {
+it("retains the native first-run distinction for language-only input and explicit empty paragraphs", /** Native LANG stores pending properties but root-pop emits them only after checkFirstRun; explicit PAR starts that path. @returns Nothing. */ () => {
   for (const tail of ["", "\\par"]) {
     const doc = read(`{\\rtf1\\lang1031${tail}}`);
     expect(doc.paragraphs).toHaveLength(1);
@@ -157,13 +157,13 @@ it("retains native language on empty paragraphs with and without an explicit par
     assert(node);
     const item = node.GetAttr(H.RES_CHRATR_LANGUAGE);
     assert(item instanceof SvxLanguageItem);
-    expect(item.GetLanguage()).toBe(0x407);
+    expect(item.GetLanguage()).toBe(tail === "" ? 0x3ff : 0x407);
     const other = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(doc));
     docs.push(other);
     expect(other.paragraphs).toHaveLength(1);
     const result = other.paragraphs[0]?.GetAttr(H.RES_CHRATR_LANGUAGE);
     assert(result instanceof SvxLanguageItem);
-    expect(result.GetLanguage()).toBe(0x407);
+    expect(result.GetLanguage()).toBe(tail === "" ? 0x3ff : 0x407);
   }
 });
 

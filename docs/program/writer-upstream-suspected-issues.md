@@ -2450,3 +2450,31 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: LINE calls singleChar with runProps=true; neither singleChar nor runProps calls checkFirstRun. setNeedSect ignores pre-first-run requests in the ordinary one-column/non-table profile, and root-pop section finalization is guarded by !m_bFirstRun.
 - Impact: a stream containing paper geometry and a lone LINE can insert a body LF without applying its pending section geometry. Adding ordinary text after LINE invokes checkFirstRun and causes that geometry to be applied. This follows the inspected source control flow; it is not a compiled desktop ABI claim.
 - Local behavior: preserve the direct LINE run and native first-run guard; do not initialize the section from LINE for consistency with ordinary text. `rtf-section-properties.test.ts` compares a LINE-only stream with the same stream followed by ordinary text and verifies actual page geometry and body text.
+
+### WRITER281 — Continuous sections can retain a requested page restart without applying it
+
+- Source: `sw/source/writerfilter/dmapper/PropertyMap.cxx`, continuous branch of CloseSectionGroup; `rtfdispatchflag.cxx`, PGNRESTART.
+- Observation: page-number assignment in the continuous branch is under the fallback for changed header/footer linkage. With the original all-linked defaults, a first continuous section only attaches its style name; later continuous sections inherit that name. Neither branch applies m_nPageNumber to a range.
+- Impact: a requested restart can be dropped even though it exists in the native section properties. The only-section final continuous type is erased by RTF sectBreak, so the same request then reaches ordinary page-section assignment and survives.
+- Local behavior: preserve both paths. Actual RTF fixtures compare an explicit continuous section followed by SECT with an only-section continuous stream, checking the real SwFormatPageDesc offset. Do not add a compensating restart outside the native branch.
+
+### WRITER282 — Default section grid line count precedes the item's minimum-height clamp
+
+- Source: `sw/source/writerfilter/dmapper/PropertyMap.cxx`, section defaults and CloseSectionGroup grid calculation; `sw/source/core/layout/atrfrm.cxx`, SwTextGridItem::PutValue.
+- Observation: the default section grid pitch is1mm100, so the Letter page with one-inch body margins computes22860 lines. Applying GridBaseHeight then converts units and clamps to100twips in the item, while the previously computed line count stays22860.
+- Impact: stored line count and effective base height describe different pitches. The default grid mode is NONE, so this observation does not by itself establish a visible layout bug.
+- Local behavior: keep original calculation, property ordering and item clamp. Actual section tests verify22860 lines and100twip base height, plus the original ten-point default/Standard Asian-height preference for base width. Do not recalculate line count after item insertion.
+
+### WRITER283 — The native RTF writer does not emit represented text-grid properties
+
+- Source: `sw/source/filter/ww8/rtfattributeoutput.cxx`, FormatTextGrid.
+- Observation: FormatTextGrid contains an explicit TODO/logging body and emits no RTF controls.
+- Impact: authored native grid mode and dimensions can be lost on native RTF export/import; the reader applies its own section defaults. Existing core grid support does not imply RTF syntax support in this pinned writer.
+- Local behavior: retain the export no-op. A real document with LinesAndChars and800twip base height re-imports with NONE and the original100twip item-clamped default. Do not invent RTF grid controls to force lossless output.
+
+### WRITER284 — Language-only input stays pending without an initial native run
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, dispatchCharacterAttributeValue LANG branch; `rtfdocumentimpl.cxx`, text/checkFirstRun and guarded root-pop finalization.
+- Observation: LANG writes character sprms and, while needPap is true, paragraph sprms, but does not initialize the first run. Root-pop finalization is guarded by !m_bFirstRun. Ordinary body text or an explicit PAR initializes the run and emits those properties.
+- Impact: a language-only empty stream can retain the document's initial language rather than its authored LANG value; adding PAR applies the language to the empty paragraph. The former local test incorrectly promised the same authored language for both forms.
+- Local behavior: preserve the native guard and pending-property ownership. `rtf-language.test.ts` checks initial LANGUAGE_DONTKNOW for control-only input, German for explicit empty PAR, and both outcomes after native export/import. Do not initialize a run solely to retain formatting-only input.

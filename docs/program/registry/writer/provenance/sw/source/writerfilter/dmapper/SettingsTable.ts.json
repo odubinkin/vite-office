@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/SettingsTable.cxx",
+    "localSymbols": [
+      "SettingsTable"
+    ],
+    "upstreamSymbols": [
+      "SettingsTable::SettingsTable",
+      "SettingsTable::GetMirrorMarginSettings",
+      "SettingsTable::lcl_entry",
+      "SettingsTable::lcl_sprm"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E section type/parity checkpoint: raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD use exact generated resource tokens and original paragraph sectPr wrapper. SectionPropertyMap preserves nextPage default, one-column nextColumn promotion, continuous orientation promotion and inherited page-style identity. Real metadata-driven even/odd style copies retain the native denylist, unrestricted/mirrored regular follow style, even-only mirrored margin swap and actual Converted name allocation. DomainMapper_Impl now retains the last top-level section map with genuine tools::SvRef, leaving nested maps out of that slot and releasing old maps only after replacement. Original page-section grid defaults, document DefaultPageMode and Standard Asian-height precedence are applied after styles are imported. Original first-run SettingsTable emission snapshots actual RTFReferenceTable/RTFReferenceProperties and delivers the consumed mirror-margin flag through native mapper callbacks; late flags do not mutate the emitted table. Actual RTF/UNO tests preserve continuous restart omission and grid defaults/export no-op (WRITER281-283). Remaining PAGE/terminal-SECT state and first/follow/title-page producer/export checks, plus HTML/current-model audits, prevent full goal completion. No whole-module/ABI confidence promotion; intentional browser file UI/autosave/recovery deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Unrepresented header/footer content, multi-column sections, frames and full SettingsTable/mapper/Writer API or ABI are not certified. PAGE/terminal-SECT state, first/follow/title-page producers and remaining HTML/current-model audits are still required."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.ts",
+          "marker": "SettingsTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SectionPropertyMap.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SettingsTable.cxx",
+          "marker": "SettingsTable::SettingsTable"
+        }
+      ]
+    }
+  }
+}

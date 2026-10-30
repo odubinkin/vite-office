@@ -37,9 +37,26 @@ export class RtfDocumentImpl {
   protected m_bNeedPap = true;
   protected m_aParagraphSprms = new RTFSprms();
   protected readonly m_aDefaultCharacterSprms = new RTFSprms();
+  protected readonly m_aSettingsTableSprms = new RTFSprms();
+  protected readonly m_pSettingsTable = new SvRef<RTFReferenceTable>();
+  /** Original first-run settings reference-table emission captured until the atomic mapper exists. @returns Nothing. */
+  protected outputSettingsTable(): void {
+    const attributes = new RTFSprms(),
+      properties = new ReferencePointer<Properties>(
+        new RTFReferenceProperties(attributes, this.m_aSettingsTableSprms),
+      );
+    attributes.dispose();
+    try {
+      this.m_pSettingsTable.assign(new RTFReferenceTable(new Map([[0, properties]])));
+    } finally {
+      properties.clear();
+    }
+  }
+
   /** Original first-run initialization supplies the requested default ASCII font only where a group has none. Settings/section callbacks remain on their existing owners. @returns Nothing. */
   protected checkFirstRun(): void {
     if (!this.firstRun) return;
+    this.outputSettingsTable();
     this.firstRun = false;
     const font = getNestedAttribute(
       this.m_aDefaultCharacterSprms,
@@ -129,6 +146,8 @@ export class RtfDocumentImpl {
       lists.add(state.tableAttributes);
       lists.add(state.listLevelEntries);
     }
+    lists.add(this.m_aSettingsTableSprms);
+    this.m_pSettingsTable.clear();
     lists.add(this.m_aDefaultSectionSprms);
     for (const section of this.m_aSectionSprms.values()) lists.add(section);
     this.m_aSectionSprms.clear();
@@ -189,6 +208,7 @@ export class RtfDocumentImpl {
   protected readonly m_aDefaultSectionSprms = new RTFSprms();
   protected readonly m_aSectionSprms = new Map<number, RTFSprms>();
   protected m_bNeedPar = true;
+  protected m_bHadSect = false;
   protected currentSection = 0;
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
@@ -389,7 +409,7 @@ import type { SwCharFormat } from "../../../inc/charfmt";
 
 import type { DomainMapper } from "../dmapper/DomainMapper";
 
-import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel";
+import { ReferencePointer, type Properties } from "../inc/dmapper/resourcemodel";
 import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
 
 import { RTFSprms } from "./rtfsprm";
@@ -400,3 +420,6 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { SvRef } from "../../../../tools/inc/ref";
 import { RTFValue } from "./rtfvalue";
 import { GetNumberingProperties } from "./rtfdocumentimpl.numbering";
+
+import { RTFReferenceTable } from "./rtfreferencetable";
+import { RTFReferenceProperties } from "./rtfreferenceproperties";

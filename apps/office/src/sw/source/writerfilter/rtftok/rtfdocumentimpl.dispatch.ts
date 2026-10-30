@@ -102,7 +102,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     )
       this["CommitParagraph"](this["states"][0], true);
     if (this["states"].length === 1 && !this["firstRun"])
-      CaptureSection.call(this, this["states"][0] as RtfState);
+      CaptureSection.call(this, this["states"][0] as RtfState, true);
     const previous = this["states"].pop();
     try {
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
@@ -238,6 +238,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   }
   if (token.name === "rtf") {
     this["sawHeader"] = token.parameter === 1;
+    return;
+  }
+  if (token.name === "margmirror" && state.destination !== "skip") {
+    this["m_aSettingsTableSprms"].set(N.LN_CT_Settings_mirrorMargins, new RTFValue(1));
     return;
   }
   if (token.name === "deff" && token.parameter !== undefined) {

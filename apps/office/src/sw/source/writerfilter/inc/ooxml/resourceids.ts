@@ -743,4 +743,12 @@ export const NS_ooxml = Object.freeze({
   LN_CT_PageNumber_start: 92408,
   LN_Value_ST_PageOrientation_landscape: 92367,
   LN_Value_ST_PageOrientation_portrait: 92366,
+  LN_EG_SectPrContents_type: 92458,
+  LN_Value_ST_SectionMark_continuous: 92299,
+  LN_Value_ST_SectionMark_nextColumn: 92300,
+  LN_Value_ST_SectionMark_nextPage: 92301,
+  LN_Value_ST_SectionMark_evenPage: 92302,
+  LN_Value_ST_SectionMark_oddPage: 92303,
+  LN_settings_settings: 93294,
+  LN_CT_Settings_mirrorMargins: 93031,
 });

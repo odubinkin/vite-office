@@ -53,10 +53,30 @@ interface Context {
   readonly type: ContextType;
   readonly properties: PropertyMap;
   readonly owned: boolean;
+  readonly sectionReference?: SvRef<SectionPropertyMap>;
 }
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
 export class DomainMapper_Impl {
+  private readonly m_pSettingsTable: SettingsTable;
+  /** Original document settings owner. @returns Actual table. */
+  GetSettingsTable(): SettingsTable {
+    return this.m_pSettingsTable;
+  }
+  private readonly m_pLastSectionContext = new SvRef<SectionPropertyMap>();
+  private m_bParaSectpr = false;
+  /** Borrows the original last top-level section context. @returns Previous section or null. */
+  GetLastSectionContext(): SectionPropertyMap | null {
+    return this.m_pLastSectionContext.get();
+  }
+  /** Original paragraph sectPr context flag. @param value - Flag. @returns Nothing. */
+  SetParaSectpr(value: boolean): void {
+    this.m_bParaSectpr = value;
+  }
+  /** Original paragraph sectPr context flag. @returns Flag. */
+  GetParaSectpr(): boolean {
+    return this.m_bParaSectpr;
+  }
   private m_aPageMargins = new PageMar();
   /** Original pgMar reset, independent of previous section or document geometry. @returns Nothing. */
   InitPageMargins(): void {
@@ -93,6 +113,7 @@ export class DomainMapper_Impl {
     private readonly m_eDocumentType: SourceDocumentType,
   ) {
     this.body = model.getText();
+    this.m_pSettingsTable = new SettingsTable(m_rDMapper);
   }
   /** Original document-default phase. @param value - Import phase. @returns Nothing. */
   SetDocDefaultsImport(value: boolean): void {
@@ -272,7 +293,14 @@ export class DomainMapper_Impl {
           ? new ParagraphPropertyMap()
           : new PropertyMap();
     if (type === ContextType.CONTEXT_SECTION) this.m_bIsFirstSection = false;
-    this.contexts.push({ type, properties, owned: true });
+    this.contexts.push({
+      type,
+      properties,
+      owned: true,
+      ...(properties instanceof SectionPropertyMap
+        ? { sectionReference: new SvRef(properties) }
+        : {}),
+    });
     return properties;
   }
   /** Original style context retains the shared supplied map. @param properties - Shared map. @returns Nothing. */
@@ -284,8 +312,21 @@ export class DomainMapper_Impl {
     const current = this.contexts.at(-1);
     if (!current || current.type !== type)
       throw new Error("DomainMapper context nesting is invalid.");
+    if (
+      type === ContextType.CONTEXT_SECTION &&
+      this.contexts.filter(
+        /** Counts the original section stack independently of paragraph/run contexts. @param entry - Actual stack entry. @returns Whether a section. */ (
+          entry,
+        ) => entry.type === ContextType.CONTEXT_SECTION,
+      ).length === 1
+    ) {
+      if (!(current.properties instanceof SectionPropertyMap))
+        throw new Error("assert(SectionPropertyMap)");
+      this.m_pLastSectionContext.assign(current.properties);
+    }
     this.contexts.pop();
-    if (current.owned) current.properties.dispose();
+    if (current.sectionReference) current.sectionReference.clear();
+    else if (current.owned) current.properties.dispose();
   }
   /** Original nullable current map. @returns Map or null. */ GetTopContext(): PropertyMap | null {
     return this.contexts.at(-1)?.properties ?? null;
@@ -517,11 +558,13 @@ export class DomainMapper_Impl {
   dispose(): void {
     while (this.contexts.length) {
       const context = this.contexts.pop() as Context;
-      if (context.owned) context.properties.dispose();
+      if (context.sectionReference) context.sectionReference.clear();
+      else if (context.owned) context.properties.dispose();
     }
     for (const stream of this.m_StreamStateStack)
       for (const value of stream.deferredCharacterProperties.values()) value.dispose();
     this.m_StreamStateStack.length = 0;
+    this.m_pLastSectionContext.clear();
     this.m_pListTable?.dispose();
     this.m_pListTable = undefined;
     this.styleSheetTable.dispose();
@@ -545,3 +588,7 @@ import {
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+
+import { SvRef } from "../../../../tools/inc/ref";
+
+import { SettingsTable } from "./SettingsTable";

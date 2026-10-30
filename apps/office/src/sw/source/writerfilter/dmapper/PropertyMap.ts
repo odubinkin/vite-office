@@ -320,6 +320,12 @@ export class PropertyMap extends SvRefBase {
   }
 }
 
+/** Original start-page parity selector. */
+export enum PageBreakType {
+  Even,
+  Odd,
+  Both,
+}
 /** Native section property owner. The current admission supplies page defaults, actual style attachment and property application; section finalization is ported on this same owner. */
 export class SectionPropertyMap extends PropertyMap {
   private readonly m_sPageStyleName = new OUString();
@@ -329,6 +335,30 @@ export class SectionPropertyMap extends PropertyMap {
   private m_nTopMargin = Number(convert(1n, Length.in, Length.mm100));
   private m_nBottomMargin = Number(convert(1n, Length.in, Length.mm100));
   protected m_nPageNumber = -1;
+  protected m_nBreakType = -1;
+  /** Original stored break type. @param value - Generated section token. @returns Nothing. */
+  SetBreakType(value: number): void {
+    this.m_nBreakType = value;
+  }
+  /** Original continuous section page-style inheritance/finalization. @param mapper - Actual mapper. @returns Nothing. */
+  InheritOrFinalizePageStyles(mapper: DomainMapper_Impl): void {
+    const previous = mapper.GetLastSectionContext();
+    if (previous && this.m_sPageStyleName.getLength() === 0)
+      this.m_sPageStyleName.assign(previous.GetPageStyleName());
+    else {
+      this.HandleMarginsHeaderFooter(mapper);
+      this.GetPageStyle(mapper);
+      this.ApplyProperties_(this.m_aPageStyle);
+    }
+  }
+  /** Original parity style deep copy over native property metadata. @param mapper - Actual mapper. @param type - Native parity. @returns Nothing. */
+  CreateEvenOddPageStyleCopy(mapper: DomainMapper_Impl, type: PageBreakType): void {
+    CreateEvenOddPageStyleCopy.call(this, mapper, type);
+  }
+  /** Original consumed one-column/no-header section finalization, with atomic range attachment owned by the importer. @param mapper - Actual mapper. @returns Nothing. */
+  CloseSectionGroup(mapper: DomainMapper_Impl): void {
+    CloseSectionGroup.call(this, mapper);
+  }
   /** Original deferred page restart. @param value - Native number. @returns Nothing. */
   SetPageNumber(value: number): void {
     this.m_nPageNumber = value;
@@ -864,3 +894,5 @@ export class TablePropertyMap extends PropertyMap {
     }
   }
 }
+
+import { CreateEvenOddPageStyleCopy, CloseSectionGroup } from "./PropertyMap.section";

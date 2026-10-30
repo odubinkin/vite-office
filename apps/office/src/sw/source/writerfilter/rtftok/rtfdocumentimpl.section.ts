@@ -25,12 +25,22 @@ const geometry = new Map<string, readonly [number, number, boolean]>([
   ["margb", [N.LN_EG_SectPrContents_pgMar, N.LN_CT_PageMar_bottom, true]],
   ["margbsxn", [N.LN_EG_SectPrContents_pgMar, N.LN_CT_PageMar_bottom, false]],
 ]);
-/** Captures the previous section's original sprms at sectBreak, before the current group can pop. @param this - Actual reader. @param state - Current parser state. @returns Nothing. */
-export function CaptureSection(this: RtfDocumentImplContext, state: RtfState): void {
+/** Captures the previous section's original sprms at sectBreak, before the current group can pop. @param this - Actual reader. @param state - Current parser state. @param final - Original final-section selector. @returns Nothing. */
+export function CaptureSection(this: RtfDocumentImplContext, state: RtfState, final = false): void {
   const sections = this["m_aSectionSprms"],
     id = this["currentSection"];
   sections.get(id)?.dispose();
-  sections.set(id, new RTFSprms(state.sectionSprms));
+  const captured = new RTFSprms(state.sectionSprms);
+  if (final && !this["m_bHadSect"]) {
+    const type = captured.find(N.LN_EG_SectPrContents_type);
+    try {
+      if (type.get()?.getInt() === N.LN_Value_ST_SectionMark_continuous)
+        captured.erase(N.LN_EG_SectPrContents_type);
+    } finally {
+      type.dispose();
+    }
+  }
+  sections.set(id, captured);
 }
 /** Consumes native section control families without flattening parser state into physical DTOs. @param this - Actual reader. @param name - Original control. @param parameter - Optional integer. @param state - Actual group owner. @returns Whether consumed. */
 export function DispatchSectionControl(
@@ -40,12 +50,18 @@ export function DispatchSectionControl(
   state: RtfState,
 ): boolean {
   if (name === "sect") {
+    this["m_bHadSect"] = true;
     if (this["runs"].length > 0 || this["m_bNeedPar"]) this["CommitParagraph"](state);
     this["FlushTable"]();
     CaptureSection.call(this, state);
     this["currentSection"]++;
     this["m_bNeedPar"] = true;
     this["terminatedParagraph"] = true;
+    return true;
+  }
+  const type = sectionTypes.get(name);
+  if (type !== undefined) {
+    state.sectionSprms.set(N.LN_EG_SectPrContents_type, new RTFValue(type));
     return true;
   }
   if (name === "sectd") {
@@ -92,20 +108,22 @@ export function DispatchSectionControl(
 export function ApplyRtfSectionProperties(
   mapper: DomainMapper,
   sprms: RTFSprms,
-): { name: string; numOffset?: number } {
+): { name: string; numOffset?: number; continuous: boolean } {
   const attributes = new RTFSprms(),
-    properties = new RTFReferenceProperties(attributes, sprms);
+    section = new RTFSprms();
+  section.set(N.LN_CT_PPr_sectPr, new RTFValue(attributes, sprms));
+  const properties = new RTFReferenceProperties(attributes, section);
+  section.dispose();
   attributes.dispose();
   const context = mapper.impl.PushProperties(ContextType.CONTEXT_SECTION);
   try {
     if (!(context instanceof SectionPropertyMap)) throw new Error("assert(SectionPropertyMap)");
     mapper.props(properties);
-    context.HandleMarginsHeaderFooter(mapper.impl);
-    const style = context.GetPageStyle(mapper.impl);
-    context["ApplyProperties_"](style);
+    context.CloseSectionGroup(mapper.impl);
     const number = context["m_nPageNumber"];
     return {
       name: text(context.GetPageStyleName()),
+      continuous: context["m_nBreakType"] === N.LN_Value_ST_SectionMark_continuous,
       ...(number < 0 ? {} : { numOffset: (number << 16) >> 16 }),
     };
   } finally {
@@ -113,3 +131,12 @@ export function ApplyRtfSectionProperties(
     properties.dispose();
   }
 }
+
+/** Native generated section-type flag mapping. */
+const sectionTypes = new Map<string, number>([
+  ["sbknone", N.LN_Value_ST_SectionMark_continuous],
+  ["sbkcol", N.LN_Value_ST_SectionMark_nextColumn],
+  ["sbkpage", N.LN_Value_ST_SectionMark_nextPage],
+  ["sbkeven", N.LN_Value_ST_SectionMark_evenPage],
+  ["sbkodd", N.LN_Value_ST_SectionMark_oddPage],
+]);

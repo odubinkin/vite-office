@@ -1127,3 +1127,64 @@ applying pending section properties. The LINE-only stream is a source quirk:
 singleChar/runProps does not initialize the first run, so pending paper geometry
 is ignored until ordinary text follows LINE (WRITER280). Both sides are covered
 on actual text nodes and page descriptors; LINE is not rerouted to text().
+
+
+### Native section types, parity page styles and settings checkpoint
+
+SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD now produce the original generated section
+type tokens. Captured section properties are wrapped in the native paragraph
+sectPr resource before mapper delivery. The original first-run/previous-context
+conditions, nextPage default and one-column nextColumn promotion are retained.
+Continuous sections inherit the previous page-style name instead of allocating
+and applying a new page style, unless an orientation change promotes them to a
+page section. A single final continuous section with no SECT loses that type
+before delivery, as in native sectBreak. The no-header profile retains source
+continuous restart omission (WRITER281).
+
+The last top-level SectionPropertyMap is retained through the actual tools::SvRef
+owner. PopProperties publishes that shared reference before dropping the current
+stack reference; nested section maps do not replace the last top-level context.
+This preserves the prior context's properties/name until the following section
+has finished using them. Tests verify real reference counts and destruction on
+replacement and nested pop. Other existing map owners are not replaced.
+
+Even/odd page starts now use original CreateEvenOddPageStyleCopy: create a new
+native page-style wrapper, iterate actual writable property descriptors with the
+source denylist, copy values, set its regular style as FollowStyle, constrain only
+the copy to LEFT/RIGHT and use the copy's allocated name at the section start.
+Ordinary/follow styles keep unrestricted or mirrored usage. This is a native
+property copy, not a flattened geometry clone. Converted names advance for both
+the regular later style and its parity copy.
+
+MARGMIRROR now reaches the actual document-scoped SettingsTable via original
+first-run RTFReferenceTable emission. The raw settings sprms and emitted reference
+table retain native COW ownership; a later flag cannot mutate the already emitted
+table. The flag has no numeric-off form and survives group pop. Mirror usage is
+applied to ordinary page styles, and only an even-page copy swaps physical left
+and right margins. Odd copies keep the original physical margins.
+
+The original page-section grid defaults now pass through native typed properties
+and the actual SwTextGridItem. Document DefaultPageMode becomes false; default
+line count is22860 for Letter with one-inch body margins. GridBaseHeight1mm100
+becomes the item's minimum100twips without recomputing that line count (WRITER282).
+GridBaseWidth uses imported ten-point character defaults, with a Standard Asian
+height overriding them. Section finalization therefore occurs after stylesheet
+import in the atomic binding. The native RTF FormatTextGrid TODO remains an
+export no-op; authored grid mode/dimensions are intentionally lost (WRITER283).
+
+Actual RTF cases cover first/later parity, follow identity/name allocation,
+continuous inheritance/orientation/restart, one-column promotion, raw group scope,
+mirror settings timing, even-only margin swap, grid defaults/Asian height and grid
+export loss. These close the identified type/parity/default-setting paths. Remaining
+PAGE and terminal-SECT state, first/follow/title-page producer/export checks and
+HTML/current-model audits still prevent full goal completion. Header/footer content,
+columns and frames have no current model owners; their desktop APIs are not
+invented. No broad module/ABI confidence is promoted and intentional browser file
+UI/autosave/recovery behavior is unchanged.
+
+The broad section regression also corrected an older empty-language acceptance:
+LANG-only input has no first run and leaves language properties pending, whereas
+an explicit PAR initializes the native path and applies them. The existing
+first-run guard is retained (WRITER284); both variants and their native re-export
+are covered. The old promise that both variants import German was a local test
+error, not a reason to override the source's root-pop condition.

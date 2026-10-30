@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 216
+revision: 219
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T16:48:03.763Z"
+  updated_at: "2026-10-30T17:13:53.305Z"
   updated_by: "CODER"
-  note: "Section ownership/geometry checkpoint passes 976 related cases and final affected135/5 including21 new cases, plus all required static checks. Full goal remains incomplete: section types/follow chains/PAGE interactions and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html25-* logs and Findings."
-  attempts: 36
+  note: "Native section type/parity/mirror/grid checkpoint passes1002 related cases/58files and final75/3, all required static checks pass. Full goal remains incomplete pending PAGE/terminal-SECT, first/follow/title-page and HTML/current-model audits. Evidence: output/playwright/rtf-properties-native/html26 logs and Findings."
+  attempts: 37
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -581,8 +584,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T17:13:53.305Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native section type/parity/mirror/grid checkpoint passes1002 related cases/58files and final75/3, all required static checks pass. Full goal remains incomplete pending PAGE/terminal-SECT, first/follow/title-page and HTML/current-model audits. Evidence: output/playwright/rtf-properties-native/html26 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-30T17:14:08.984Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T16:48:13.874Z"
+doc_updated_at: "2026-10-30T17:14:08.984Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1385,6 +1401,36 @@ sections:
     Attempts: 36
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:48:02.665Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T17:13:53.305Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native section type/parity/mirror/grid checkpoint passes1002 related cases/58files and final75/3, all required static checks pass. Full goal remains incomplete pending PAGE/terminal-SECT, first/follow/title-page and HTML/current-model audits. Evidence: output/playwright/rtf-properties-native/html26 logs and Findings.
+    Attempts: 37
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:13:52.006Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2278,6 +2324,22 @@ sections:
     - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html25-types-final2.txt, html25-lint-final.txt, html25-format-final.txt, html25-docs-final.txt, html25-provenance-final.txt, html25-registry-final.txt, html25-boundaries.txt, html25-size.txt, html25-tree.txt and html25-doctor.txt under output/playwright/rtf-properties-native. Scope:4256 authored source files,1886 provenance modules,1885 runtime sources/10320 imports/227 allowed edges, Writer semantic violations0. Doctor errors0 with unchanged pre-existing managed-shim warning. No hooks, policy, network, vendor source or unrelated tooling changed.
     - Initial failures retained: html25-first-tests.txt shows the old scalar13000 expectation failing against real native12983 conversion; source-backed expectation migrated while authored export acceptance remains intact. html25-types.txt caught an unread private field accessed by atomic fragment; changed to protected source-owned boundary access. html25-types2.txt caught direct private numOffset access in the new test; replaced with original GetNumOffset after source inspection. Initial provenance/registry correctly rejected removed RtfSectionPage evidence; removed stale symbol/marker metadata without recreating the DTO. ESLint caught unused native mapper parameter; explicit void preserves the method signature for the current no-header branch. A formatter wrapper misplaced heredoc redirection and failed before mutation; route was recomputed and corrected command passed. Empty optional searches changed no code. No acceptance or enforcement was weakened to mask a local implementation defect.
+
+    ### Native section types, parity styles, mirror settings and grid defaults checkpoint (html26)
+
+    - Connected raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD to exact generated section tokens and restored the original paragraph sectPr wrapper before mapper delivery. Original nextPage default, one-column nextColumn promotion, continuous orientation promotion and continuous page-style inheritance run on actual SectionPropertyMap owners. Native m_bHadSect now tracks actual SECT dispatch for the no-SECT final-continuous removal case; PAGE/terminal-SECT needSect interactions remain required next work.
+    - DomainMapper_Impl now retains the last top-level section through genuine tools::SvRef, publishes it before dropping the stack reference, excludes nested section maps from that slot and releases replaced/remaining owners at original lifetime boundaries. Actual reference-count/destructor tests cover replacement and nested pop. Other map owner paths are unchanged.
+    - Original metadata-driven CreateEvenOddPageStyleCopy deep-copies real writable page-style properties with the native denylist, sets actual FollowStyle, restricts only the copy to LEFT/RIGHT and advances the real Converted allocator. Mirrored regular styles retain Mirror use, while an even copy alone swaps physical left/right margins. First-section parity now receives its own descriptor attachment as in source.
+    - Added actual consumed SettingsTable owner/callbacks and original false mirror-margin default. Native first-run outputSettingsTable snapshots real RTFReferenceProperties/RTFReferenceTable through intrusive references; mapper table delivery handles the native settings ID. MARGMIRROR is a global flag (including numeric0 and nested-group spelling); late settings changes do not mutate already emitted COW references. No alternate document settings store was added.
+    - Original page-section grid defaults now reach real typed UNO/page/grid owners after stylesheet import: DefaultPageMode false, original line count/pitch and Standard Asian font preference. Preserved the native100twip item clamp without recalculating22860-line metadata, original10pt default width and Standard20pt override. Source FormatTextGrid remains a TODO/no-op; a real authored LinesAndChars/800twip item imports native NONE/100twip instead of claiming lossless RTF grid support.
+    - Added20 fresh cases (19 RTF section cases plus one section ownership case), covering first/later parity, copied values/follow identity/name allocation, raw flags/scope, continuous orientation/inheritance/restart, one-column promotion, mirror timing/even-only swap, grid/default-font/stylesheet/export loss and intrusive lifetimes. Preserved/documented WRITER281 continuous restart omission, WRITER282 pre-clamp grid count, WRITER283 native grid export no-op and WRITER284 LANG-only first-run omission. The existing empty-language test now distinguishes control-only input from explicit empty PAR after inspecting native dispatchCharacterAttributeValue and guarded root-pop; its native re-export assertions remain.
+    - This closes identified section type/parity/mirror/default-grid paths. Remaining required current-slice work: PAGE/terminal-SECT state/reset interactions, first/follow/title-page producers/export checks and HTML/current-model capability audit. Full goal stays active/incomplete; no full module/ABI confidence promotion, no new header/footer/column/frame services for unrepresented content, no intentional browser file UI/autosave/recovery changes.
+
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,1002tests/58files. Evidence: output/playwright/rtf-properties-native/html26-all-final.txt. Scope: related TXT/RTF/Markdown/parser/mapper, original resource generator, native UNO/grid/numbering/lifetimes and document I/O. After replacing the section-ID no-SECT inference with original m_bHadSect state, final affected75/3 pass (html26-final-affected2.txt), covering all20 fresh cases plus language/section regressions. No all-application full run.
+    - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html26-types-final2.txt, html26-lint-final.txt, html26-format-final.txt, html26-docs-final.txt, html26-provenance-final.txt, html26-registry-final.txt, html26-boundaries.txt, html26-size.txt, html26-tree.txt and html26-doctor.txt under output/playwright/rtf-properties-native. Scope:4258 authored source files,1888 provenance modules,1887 runtime sources/10338 relative imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks, policies, tooling gates, network or vendor sources changed.
+    - Initial failures retained: html26-types.txt caught an incomplete atomic-result type; added its actual continuous selector. html26-new-tests.txt/html26-types2.txt caught a guessed GetName test accessor; replaced with original GetPageDescName. html26-new-tests2.txt caught incorrect Any construction from a borrowed OUString object; switched to the existing typed stringAny owner. Native source inspection corrected two fresh grid expectations: PutValue clamps height100, and StyleSheetTable defaults to10pt/width200; the authored Standard20pt/width400 check remains independent. html26-new-tests5.txt/html26-types4.txt caught duplicate SvRef import and type-only ReferencePointer import; corrected imports, not reference semantics. html26-all-tests.txt recorded1001passes/one old empty-language failure; pinned LANG dispatch/root-pop proved the old same-language promise incorrect, so the test now preserves native first-run distinction (WRITER284). Final1002/58 and final75/3 pass. Optional path searches changed no code and routes were recomputed before dependent corrections. No production behavior or enforcement was relaxed to force tests green.
 id_source: "generated"
 ---
 ## Summary
@@ -3091,6 +3153,36 @@ Note: Section ownership/geometry checkpoint passes 976 related cases and final a
 Attempts: 36
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:48:02.665Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T17:13:53.305Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native section type/parity/mirror/grid checkpoint passes1002 related cases/58files and final75/3, all required static checks pass. Full goal remains incomplete pending PAGE/terminal-SECT, first/follow/title-page and HTML/current-model audits. Evidence: output/playwright/rtf-properties-native/html26 logs and Findings.
+Attempts: 37
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:13:52.006Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3988,3 +4080,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html25-types-final2.txt, html25-lint-final.txt, html25-format-final.txt, html25-docs-final.txt, html25-provenance-final.txt, html25-registry-final.txt, html25-boundaries.txt, html25-size.txt, html25-tree.txt and html25-doctor.txt under output/playwright/rtf-properties-native. Scope:4256 authored source files,1886 provenance modules,1885 runtime sources/10320 imports/227 allowed edges, Writer semantic violations0. Doctor errors0 with unchanged pre-existing managed-shim warning. No hooks, policy, network, vendor source or unrelated tooling changed.
 - Initial failures retained: html25-first-tests.txt shows the old scalar13000 expectation failing against real native12983 conversion; source-backed expectation migrated while authored export acceptance remains intact. html25-types.txt caught an unread private field accessed by atomic fragment; changed to protected source-owned boundary access. html25-types2.txt caught direct private numOffset access in the new test; replaced with original GetNumOffset after source inspection. Initial provenance/registry correctly rejected removed RtfSectionPage evidence; removed stale symbol/marker metadata without recreating the DTO. ESLint caught unused native mapper parameter; explicit void preserves the method signature for the current no-header branch. A formatter wrapper misplaced heredoc redirection and failed before mutation; route was recomputed and corrected command passed. Empty optional searches changed no code. No acceptance or enforcement was weakened to mask a local implementation defect.
+
+### Native section types, parity styles, mirror settings and grid defaults checkpoint (html26)
+
+- Connected raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD to exact generated section tokens and restored the original paragraph sectPr wrapper before mapper delivery. Original nextPage default, one-column nextColumn promotion, continuous orientation promotion and continuous page-style inheritance run on actual SectionPropertyMap owners. Native m_bHadSect now tracks actual SECT dispatch for the no-SECT final-continuous removal case; PAGE/terminal-SECT needSect interactions remain required next work.
+- DomainMapper_Impl now retains the last top-level section through genuine tools::SvRef, publishes it before dropping the stack reference, excludes nested section maps from that slot and releases replaced/remaining owners at original lifetime boundaries. Actual reference-count/destructor tests cover replacement and nested pop. Other map owner paths are unchanged.
+- Original metadata-driven CreateEvenOddPageStyleCopy deep-copies real writable page-style properties with the native denylist, sets actual FollowStyle, restricts only the copy to LEFT/RIGHT and advances the real Converted allocator. Mirrored regular styles retain Mirror use, while an even copy alone swaps physical left/right margins. First-section parity now receives its own descriptor attachment as in source.
+- Added actual consumed SettingsTable owner/callbacks and original false mirror-margin default. Native first-run outputSettingsTable snapshots real RTFReferenceProperties/RTFReferenceTable through intrusive references; mapper table delivery handles the native settings ID. MARGMIRROR is a global flag (including numeric0 and nested-group spelling); late settings changes do not mutate already emitted COW references. No alternate document settings store was added.
+- Original page-section grid defaults now reach real typed UNO/page/grid owners after stylesheet import: DefaultPageMode false, original line count/pitch and Standard Asian font preference. Preserved the native100twip item clamp without recalculating22860-line metadata, original10pt default width and Standard20pt override. Source FormatTextGrid remains a TODO/no-op; a real authored LinesAndChars/800twip item imports native NONE/100twip instead of claiming lossless RTF grid support.
+- Added20 fresh cases (19 RTF section cases plus one section ownership case), covering first/later parity, copied values/follow identity/name allocation, raw flags/scope, continuous orientation/inheritance/restart, one-column promotion, mirror timing/even-only swap, grid/default-font/stylesheet/export loss and intrusive lifetimes. Preserved/documented WRITER281 continuous restart omission, WRITER282 pre-clamp grid count, WRITER283 native grid export no-op and WRITER284 LANG-only first-run omission. The existing empty-language test now distinguishes control-only input from explicit empty PAR after inspecting native dispatchCharacterAttributeValue and guarded root-pop; its native re-export assertions remain.
+- This closes identified section type/parity/mirror/default-grid paths. Remaining required current-slice work: PAGE/terminal-SECT state/reset interactions, first/follow/title-page producers/export checks and HTML/current-model capability audit. Full goal stays active/incomplete; no full module/ABI confidence promotion, no new header/footer/column/frame services for unrepresented content, no intentional browser file UI/autosave/recovery changes.
+
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,1002tests/58files. Evidence: output/playwright/rtf-properties-native/html26-all-final.txt. Scope: related TXT/RTF/Markdown/parser/mapper, original resource generator, native UNO/grid/numbering/lifetimes and document I/O. After replacing the section-ID no-SECT inference with original m_bHadSect state, final affected75/3 pass (html26-final-affected2.txt), covering all20 fresh cases plus language/section regressions. No all-application full run.
+- Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html26-types-final2.txt, html26-lint-final.txt, html26-format-final.txt, html26-docs-final.txt, html26-provenance-final.txt, html26-registry-final.txt, html26-boundaries.txt, html26-size.txt, html26-tree.txt and html26-doctor.txt under output/playwright/rtf-properties-native. Scope:4258 authored source files,1888 provenance modules,1887 runtime sources/10338 relative imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks, policies, tooling gates, network or vendor sources changed.
+- Initial failures retained: html26-types.txt caught an incomplete atomic-result type; added its actual continuous selector. html26-new-tests.txt/html26-types2.txt caught a guessed GetName test accessor; replaced with original GetPageDescName. html26-new-tests2.txt caught incorrect Any construction from a borrowed OUString object; switched to the existing typed stringAny owner. Native source inspection corrected two fresh grid expectations: PutValue clamps height100, and StyleSheetTable defaults to10pt/width200; the authored Standard20pt/width400 check remains independent. html26-new-tests5.txt/html26-types4.txt caught duplicate SvRef import and type-only ReferencePointer import; corrected imports, not reference semantics. html26-all-tests.txt recorded1001passes/one old empty-language failure; pinned LANG dispatch/root-pop proved the old same-language promise incorrect, so the test now preserves native first-run distinction (WRITER284). Final1002/58 and final75/3 pass. Optional path searches changed no code and routes were recomputed before dependent corrections. No production behavior or enforcement was relaxed to force tests green.
