@@ -215,3 +215,45 @@ export function rtl_TextEncodingToWinCharsetRTF(
   }
   return result;
 }
+
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+/** Original effective Word side margins include box padding and unscaled border width. @param frame - Actual frame owner. @returns Native cloned LR item. */
+function lcl_getWordLRSpace(frame: SwFrameFormat): ReturnType<SwFrameFormat["GetLRSpace"]> {
+  const lr = frame.GetLRSpace().Clone(),
+    box = frame.GetBox();
+  lr.SetLeft(
+    SvxIndentValue.twips(
+      lr.ResolveLeft() + box.GetDistance(SvxBoxItemLine.LEFT) + (box.GetLeft()?.GetWidth() ?? 0),
+    ),
+  );
+  lr.SetRight(
+    SvxIndentValue.twips(
+      lr.ResolveRight() + box.GetDistance(SvxBoxItemLine.RIGHT) + (box.GetRight()?.GetWidth() ?? 0),
+    ),
+  );
+  return lr;
+}
+/** Consumed original header/footer distance glue. The current model has no header/footer content owners, so both native presence branches are false. */
+export class HdFtDistanceGlue {
+  private readonly m_DyaTop: number;
+  private readonly m_DyaBottom: number;
+  /** Original no-header/footer distance construction includes box line space even without a border. @param frame - Actual frame. @returns Distance glue. */
+  constructor(frame: SwFrameFormat) {
+    const box = frame.GetBox(),
+      ul = frame.GetULSpace();
+    this.m_DyaTop = box.CalcLineSpace(SvxBoxItemLine.TOP, true) + ul.GetUpper();
+    this.m_DyaBottom = box.CalcLineSpace(SvxBoxItemLine.BOTTOM, true) + ul.GetLower();
+  }
+  /** Original equality for the represented both-without-header/footer profile. @param other - Original other distances. @returns Whether both physical distances match. */
+  StrictEqualTopBottom(other: HdFtDistanceGlue): boolean {
+    return this.m_DyaTop === other.m_DyaTop && this.m_DyaBottom === other.m_DyaBottom;
+  }
+}
+/** Original single-Word-section admission on actual native frame items; column sets are absent in the current model. @param title - Actual selected first-page frame. @param follow - Actual follow master. @returns Whether one Word section can represent them. */
+export function IsPlausableSingleWordSection(title: SwFrameFormat, follow: SwFrameFormat): boolean {
+  if (!lcl_getWordLRSpace(title).equals(lcl_getWordLRSpace(follow))) return false;
+  if (!title.GetFrameSize().equals(follow.GetFrameSize())) return false;
+  return new HdFtDistanceGlue(title).StrictEqualTopBottom(new HdFtDistanceGlue(follow));
+}

@@ -1222,3 +1222,31 @@ The source test itself records uncertainty about the ideal empty-paragraph count
 its asserted behavior is retained (WRITER287). First/follow/title-page producers
 and export, plus HTML/current-model coverage audits, remain required. No broad
 module/ABI confidence or full-goal completion is claimed.
+
+
+### S3HW1E first-page export and frame-item chain admission
+
+Native SwPageDesc IsFirstShared/ChgFirstShare now query and update the existing
+FirstShare usage bit. Copy construction retains it; side usage and other sharing
+bits remain independent. Initial RTF OutPageDescription uses the selected follow
+page's unshared-first flag as well as a distinct first/follow identity to emit
+TITLEPG. Later section output initializes the title-page decision from the
+original descriptor even without combining a chain.
+
+The former master-geometry scalar comparison is replaced by the actual consumed
+writerwordglue IsPlausableSingleWordSection/HdFtDistanceGlue path. It compares
+native first/follow frame items: effective Word LR margins include box distances
+and unscaled border width, frame size uses full item equality, and no-header/footer
+top/bottom distances include CalcLineSpace even without a border. Later chain
+admission selects FirstMaster and requires both side bits. Native columns and
+header/footer content have no current model owners; their service branches are
+not synthesized. Layout-dependent follow-node admission remains unverified.
+
+A source check changed the initial interpretation of missing FirstIsShared UNO
+wiring: with no header/footer item sets, the native setter itself has no target.
+TITLEPG import therefore must not directly toggle the core sharing bit to force
+a lossless roundtrip. WRITER288 records that conditional source behavior; an
+actual export/import test retains it. This closes the identified current flag and
+frame-comparison export gaps without claiming complete native page-layout ABI.
+Remaining HTML/Markdown paths and current-model/UI audit still prevent full goal
+completion. Work stops after verification of this block at the user's request.

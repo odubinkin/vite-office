@@ -3,7 +3,11 @@ import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
 import { OutString } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
-import { rtl_TextEncodingToWinCharset, getPseudoCharRunsForDirection } from "./writerwordglue";
+import {
+  rtl_TextEncodingToWinCharset,
+  getPseudoCharRunsForDirection,
+  IsPlausableSingleWordSection,
+} from "./writerwordglue";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
@@ -48,7 +52,7 @@ import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { type SwNumRule } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
-import type { SwPageDesc } from "../../core/layout/pagedesc";
+import { type SwPageDesc, UseOnPage } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -453,29 +457,20 @@ export class RtfExport extends MSWordExportBase {
     if (value.rightMargin !== 0) output += `\\margrsxn${value.rightMargin}`;
     if (value.topMargin !== 0) output += `\\margtsxn${value.topMargin}`;
     if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
-    if (titlePage && follow !== page) output += "\\titlepg";
+    if (titlePage && (follow !== page || !follow.IsFirstShared())) output += "\\titlepg";
     return output;
   }
 
   /** Projects the represented physical tests in IsPlausableSingleWordSection.  @param page - Page. @returns The boolean result. */
   private IsSingleWordSectionPageChain(page: SwPageDesc): boolean {
     const follow = page.GetFollow();
-    if (follow === page || follow.GetFollow() !== follow) return false;
-    return this.IsPlausibleSingleWordSection(page, follow);
-  }
-
-  /** Projects the physical fields tested by the pinned section plausibility helper.  @param page - Page. @param follow - Follow. @returns The boolean result. */
-  private IsPlausibleSingleWordSection(page: SwPageDesc, follow: SwPageDesc): boolean {
-    const first = page.GetValue(),
-      next = follow.GetValue();
-    return (
-      first.width === next.width &&
-      first.height === next.height &&
-      first.leftMargin === next.leftMargin &&
-      first.rightMargin === next.rightMargin &&
-      first.topMargin === next.topMargin &&
-      first.bottomMargin === next.bottomMargin
-    );
+    if (
+      follow === page ||
+      follow.GetFollow() !== follow ||
+      (page.ReadUseOn() & UseOnPage.All) !== UseOnPage.All
+    )
+      return false;
+    return IsPlausableSingleWordSection(page.GetFirstMaster(), follow.GetMaster());
   }
 
   /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @returns The { output: string; currentPage: SwPageDesc } result. */
@@ -483,8 +478,9 @@ export class RtfExport extends MSWordExportBase {
     page: SwPageDesc,
     restart?: number,
   ): { output: string; currentPage: SwPageDesc } {
-    const titlePage = this.IsSingleWordSectionPageChain(page);
-    const currentPage = titlePage ? page.GetFollow() : page;
+    const combined = this.IsSingleWordSectionPageChain(page);
+    const titlePage = combined || !page.IsFirstShared();
+    const currentPage = combined ? page.GetFollow() : page;
     let output = "\\sect\\sectd\\sectunlocked1";
     output += this.WriteSectionPageDescription(currentPage, false);
     if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
@@ -531,7 +527,7 @@ export class RtfExport extends MSWordExportBase {
     if (
       positions.length === 0 ||
       follow === currentPage ||
-      this.IsPlausibleSingleWordSection(currentPage, follow)
+      IsPlausableSingleWordSection(currentPage.GetFirstMaster(), follow.GetMaster())
     )
       return {
         output: `\\pard${this.WriteParagraph(paragraph)}${this.WriteParagraphEnd(paragraph)}\n`,

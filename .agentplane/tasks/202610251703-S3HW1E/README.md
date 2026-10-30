@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 223
+revision: 226
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T17:51:00.938Z"
+  updated_at: "2026-10-30T18:01:07.525Z"
   updated_by: "CODER"
-  note: "Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and114 focused/4, required static checks pass; exact1814enum/1823control metadata is source-compared. Full goal remains incomplete pending first/follow/title-page and HTML/current-model audits. Evidence: html27 logs and Findings."
-  attempts: 38
+  note: "Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, format, provenance/registry/boundary/tree/docs checks pass. WRITER288 preserves conditional native sharing loss. Parent goal remains incomplete; user requested pause after this block. Evidence: html28 logs and Findings."
+  attempts: 39
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -613,8 +616,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T18:01:07.525Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, format, provenance/registry/boundary/tree/docs checks pass. WRITER288 preserves conditional native sharing loss. Parent goal remains incomplete; user requested pause after this block. Evidence: html28 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-30T18:01:24.880Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T17:52:25.263Z"
+doc_updated_at: "2026-10-30T18:01:24.880Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1477,6 +1493,36 @@ sections:
     Attempts: 38
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:50:57.076Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T18:01:07.525Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, format, provenance/registry/boundary/tree/docs checks pass. WRITER288 preserves conditional native sharing loss. Parent goal remains incomplete; user requested pause after this block. Evidence: html28 logs and Findings.
+    Attempts: 39
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:46.578Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2402,6 +2448,17 @@ sections:
     - Remaining: first/follow/title-page producer/export audit, HTML/Markdown paths and full current-model/UI completion audit. Specific current-model requirements determine further changes; broad unrelated parity statuses are not prerequisites. The parent goal/task remains incomplete.
 
     - Checkpoint process correction: ap commit auto-staged the intended25paths but rejected the unprefixed subject before committing. Recomputed the route and retained the same intentional index; retry uses the required emoji/suffix/scope subject. A second slow route/verify-show command was inadvertently followed before its terminal result; subsequent polling confirmed exit0 and the unchanged safe route. No new implementation or verification scope resulted.
+
+    ### HTML28: first-page export and native frame-item chain admission; requested pause
+
+    - Scope: implement original SwPageDesc IsFirstShared/ChgFirstShare on existing usage bits; restore initial and later TITLEPG conditions; replace scalar geometry-chain predicate with actual writerwordglue IsPlausableSingleWordSection and no-header/footer HdFtDistanceGlue. Original FirstMaster selection, both-side chain admission, effective Word LR padding/unscaled-border width, full frame-size equality and top/bottom box line-space are retained. No new geometry or sharing owner, header/footer/column service, network or intentional file UI/autosave/recovery change.
+    - Source finding: the initial interpretation that TITLEPG should directly set the core sharing bit was corrected before any such implementation. Native FirstIsShared setter has no target without header/footer item sets; preserve this conditional loss and record WRITER288. Source references are pinned pagedesc.cxx414-425, rtfexport.cxx1491+, wrtw8sty.cxx1791+/1898+, writerwordglue.cxx356-468, unostyle.cxx848+/3013+ and PropertyMap.cxx setHeaderFooterProperties. No broad native/ABI confidence promotion. Layout-dependent IsFollowNextPageOfNode admission remains unverified.
+    - Command: `npm run test:writer -- src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/writerwordglue src/sw/source/core/layout/pagedesc.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-break-state.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence:218tests/12files, including13new real-document first-page cases; html28-tests.txt, duration75.70s. Scope: actual core usage/copy behavior, initial/later RTF TITLEPG, current first/follow frames, side restrictions, size mode/padding differences, compensating native margins and no-header import/export loss. Existing export/section regressions stay unchanged.
+    - Commands: `npm run typecheck`; targeted `npm exec eslint -- <four changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+    - Result: pass. Evidence: html28-types/lint/format-check/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4262authored; provenance1889runtime(1677mapped/182browser/30infra); boundary1888sources/10350imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning. Full all-app suite is not repeated for this module-local block.
+    - Process observations: read-only lookup guessed unostyle.test.ts and editeng/inc/boxitem.ts paths which do not exist; recovered via route oracle and actual file inventory, no scope expansion. Preflight and route sessions were awaited to completion before execution. No verification failure occurred in this block.
+    - Stop rule: user requested stopping after the current task/block. Commit the verified current block and pause the goal. The parent S3HW1E goal remains incomplete, so it must not be marked finished. Resume with remaining native page producer/layout audit where represented, HTML/Markdown and current-model/UI completion audit after the user resumes. No next block starts before then.
 id_source: "generated"
 ---
 ## Summary
@@ -3275,6 +3332,36 @@ Note: Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and1
 Attempts: 38
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:50:57.076Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T18:01:07.525Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, format, provenance/registry/boundary/tree/docs checks pass. WRITER288 preserves conditional native sharing loss. Parent goal remains incomplete; user requested pause after this block. Evidence: html28 logs and Findings.
+Attempts: 39
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:46.578Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -4204,3 +4291,14 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Remaining: first/follow/title-page producer/export audit, HTML/Markdown paths and full current-model/UI completion audit. Specific current-model requirements determine further changes; broad unrelated parity statuses are not prerequisites. The parent goal/task remains incomplete.
 
 - Checkpoint process correction: ap commit auto-staged the intended25paths but rejected the unprefixed subject before committing. Recomputed the route and retained the same intentional index; retry uses the required emoji/suffix/scope subject. A second slow route/verify-show command was inadvertently followed before its terminal result; subsequent polling confirmed exit0 and the unchanged safe route. No new implementation or verification scope resulted.
+
+### HTML28: first-page export and native frame-item chain admission; requested pause
+
+- Scope: implement original SwPageDesc IsFirstShared/ChgFirstShare on existing usage bits; restore initial and later TITLEPG conditions; replace scalar geometry-chain predicate with actual writerwordglue IsPlausableSingleWordSection and no-header/footer HdFtDistanceGlue. Original FirstMaster selection, both-side chain admission, effective Word LR padding/unscaled-border width, full frame-size equality and top/bottom box line-space are retained. No new geometry or sharing owner, header/footer/column service, network or intentional file UI/autosave/recovery change.
+- Source finding: the initial interpretation that TITLEPG should directly set the core sharing bit was corrected before any such implementation. Native FirstIsShared setter has no target without header/footer item sets; preserve this conditional loss and record WRITER288. Source references are pinned pagedesc.cxx414-425, rtfexport.cxx1491+, wrtw8sty.cxx1791+/1898+, writerwordglue.cxx356-468, unostyle.cxx848+/3013+ and PropertyMap.cxx setHeaderFooterProperties. No broad native/ABI confidence promotion. Layout-dependent IsFollowNextPageOfNode admission remains unverified.
+- Command: `npm run test:writer -- src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/writerwordglue src/sw/source/core/layout/pagedesc.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-break-state.test.ts --maxWorkers 1`.
+- Result: pass. Evidence:218tests/12files, including13new real-document first-page cases; html28-tests.txt, duration75.70s. Scope: actual core usage/copy behavior, initial/later RTF TITLEPG, current first/follow frames, side restrictions, size mode/padding differences, compensating native margins and no-header import/export loss. Existing export/section regressions stay unchanged.
+- Commands: `npm run typecheck`; targeted `npm exec eslint -- <four changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+- Result: pass. Evidence: html28-types/lint/format-check/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4262authored; provenance1889runtime(1677mapped/182browser/30infra); boundary1888sources/10350imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning. Full all-app suite is not repeated for this module-local block.
+- Process observations: read-only lookup guessed unostyle.test.ts and editeng/inc/boxitem.ts paths which do not exist; recovered via route oracle and actual file inventory, no scope expansion. Preflight and route sessions were awaited to completion before execution. No verification failure occurred in this block.
+- Stop rule: user requested stopping after the current task/block. Commit the verified current block and pause the goal. The parent S3HW1E goal remains incomplete, so it must not be marked finished. Resume with remaining native page producer/layout audit where represented, HTML/Markdown and current-model/UI completion audit after the user resumes. No next block starts before then.

@@ -144,6 +144,15 @@ export class SwPageDesc extends BroadcastingModify {
   /** Original follow pointer. @returns Descriptor. */ GetFollow(): SwPageDesc {
     return this.m_pFollow;
   }
+  /** Original first header/footer sharing bit, independent of page-side usage. @returns Sharing flag. */
+  IsFirstShared(): boolean {
+    return Boolean(this.m_eUse & UseOnPage.FirstShare);
+  }
+  /** Original first-page sharing mutation preserves every other use flag. @param value - Sharing flag. @returns Nothing. */
+  ChgFirstShare(value: boolean): void {
+    if (value) this.m_eUse |= UseOnPage.FirstShare;
+    else this.m_eUse &= UseOnPage.NoFirstShare;
+  }
   /** Original complete page usage bits. @returns Flags. */ ReadUseOn(): UseOnPage {
     return this.m_eUse;
   }

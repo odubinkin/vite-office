@@ -2500,3 +2500,11 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: the upstream test explicitly questions the ideal paragraph count between SECOND and THIRD but asserts an empty third paragraph carrying PageDescName, followed by THIRD without a direct break/style and a final empty paragraph.
 - Impact: removing the apparently redundant empty paragraph changes the pinned native regression contract.
 - Local behavior: preserve the asserted sequence and native synthetic section/reset logic. Both a required standalone literal case and the unchanged upstream fixture check the actual model. No alternative paragraph normalization is applied.
+
+
+### WRITER288 — FirstIsShared has no setter target without header/footer item sets
+
+- Source: `sw/source/core/unocore/unostyle.cxx`, lcl_GetHeaderFooterItem and SwXPageStyle property setter; `sw/source/writerfilter/dmapper/PropertyMap.cxx`, setHeaderFooterProperties; `sw/source/filter/ww8/rtfexport.cxx`, OutPageDescription.
+- Observation: the FirstIsShared setter searches for an existing header or footer set. When neither exists, its shared-first case does not create either set or write the core sharing flag. The getter can likewise return an empty Any. Export independently reads SwPageDesc::IsFirstShared and can emit TITLEPG without a follow chain.
+- Impact: in the represented no-header/footer profile, an authored unshared-first bit can emit TITLEPG and return to the ordinary shared default after import. This is a conditional source-control-flow finding, not a claim about every desktop document with inactive headers.
+- Local behavior: preserve export of the original bit and do not introduce a direct TITLEPG-to-core-bit bypass on import. `rtfexport.first-page.test.ts` verifies this loss alongside initial/later emission, actual frame-item chain admission, side restrictions and independent sharing flags. Full header/footer services remain outside the represented model.
