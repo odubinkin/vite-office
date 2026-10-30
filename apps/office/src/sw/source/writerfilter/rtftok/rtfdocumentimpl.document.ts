@@ -517,6 +517,8 @@ export function ApplyParagraph(
         )
         .join(""),
     );
+    if (paragraph.paragraphSprms)
+      ApplyRtfParagraphProperties(this["Mapper"](), node, paragraph.paragraphSprms);
     const hints = new SwpHints(node.GetDoc().GetAttrPool());
     let offset = 0;
     for (const run of runs) {
@@ -605,6 +607,7 @@ import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import {
   getRtfCharacterProperties,
   ApplyRtfCharacterProperties,
+  ApplyRtfParagraphProperties,
 } from "./rtfdocumentimpl.character";
 
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";

@@ -302,6 +302,8 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
+    expect(isForbiddenModuleEdge("editeng", "udkapi")).toBe(false);
+    expect(isForbiddenModuleEdge("udkapi", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
     expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "xmloff")).toBe(false);

@@ -14,6 +14,10 @@ import {
 } from "../../../i18nlangtag/inc/lang";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { MID_LANG_INT as INT, MID_LANG_LOCALE as LOCALE } from "../../inc/memberids";
+import {
+  Locale,
+  cppu_detail_getUnoType_Locale as localeType,
+} from "../../../udkapi/com/sun/star/lang/Locale";
 import { SfxInt16Item } from "../../../svl/inc/intitem";
 
 it("retains native special/default identities and primitive unsigned16 conversion", /** Native strong_int is a compile-time tag, not a JS memory object. @returns Nothing. */ () => {
@@ -70,8 +74,10 @@ it("queries signed16 Any and preserves unknown or unsupported Locale destination
   const before = new Any(out);
   expect(item.QueryValue(out, 99)).toBe(true);
   expect(out.operatorEquals(before)).toBe(true);
-  expect(item.QueryValue(out, LOCALE)).toBe(false);
-  expect(out.operatorEquals(before)).toBe(true);
+  expect(item.QueryValue(out, LOCALE)).toBe(true);
+  const locale = new Locale();
+  expect(out.extract(locale, localeType)).toBe(true);
+  locale.dispose();
 });
 it("extracts native int32 before unsigned16 narrowing and rejects wrong types unchanged", /** Query short and Put long are deliberately asymmetric native contracts. @returns Nothing. */ () => {
   const item = new Item(LANGUAGE_DONTKNOW, 110);

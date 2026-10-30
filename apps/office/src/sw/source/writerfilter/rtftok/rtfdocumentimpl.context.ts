@@ -52,9 +52,22 @@ export interface RtfParagraphState {
   listOverride?: number;
   listLevel: number;
 }
+/** Original RTFParserState run-type order, saved/restored with the group. */
+export enum RunType {
+  NONE,
+  LOCH,
+  HICH,
+  DBCH,
+  LTRCH_RTLCH_1,
+  LTRCH_RTLCH_2,
+  RTLCH_LTRCH_1,
+  RTLCH_LTRCH_2,
+}
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
   characterSprms: RTFSprms;
+  paragraphSprms: RTFSprms;
+  runType: RunType;
   destination:
     | "body"
     | "fonttbl"
@@ -100,6 +113,7 @@ export interface RtfState {
 }
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
+  readonly paragraphSprms?: RTFSprms;
   readonly runs: readonly RtfRun[];
   readonly state: RtfParagraphState;
   readonly marks: readonly Readonly<{ name: string; offset: number }>[];
@@ -215,6 +229,16 @@ export const SKIPPED_DESTINATIONS = new Set([
   "xmlnstbl",
 ]);
 export const STYLE_PROPERTY_CONTROLS = new Set([
+  "lang",
+  "alang",
+  "langfe",
+  "loch",
+  "hich",
+  "dbch",
+  "rtlch",
+  "ltrch",
+  "deflang",
+  "adeflang",
   "kerning",
   "box",
   "brdrt",
@@ -270,6 +294,9 @@ export const STYLE_PROPERTY_CONTROLS = new Set([
   "slmult",
 ]);
 export const CHARACTER_PROPERTY_CONTROLS = new Set([
+  "lang",
+  "alang",
+  "langfe",
   "kerning",
   "b",
   "i",

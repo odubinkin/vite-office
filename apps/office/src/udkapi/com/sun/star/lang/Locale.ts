@@ -1,5 +1,28 @@
 /** @fileoverview Original Locale.idl string fields and cppumaker plain-struct value semantics, reusing the shared OUString owner. */
 import { OUString, type OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
+import type { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
+import { UnoType, getTypeFromTypeDescriptionReference } from "../../../../../cppu/inc/unotype";
+import {
+  typelib_static_struct_type_init,
+  type typelib_TypeDescriptionReference as R,
+} from "../../../../../cppu/inc/typelib/typedescription";
+/** Original generated static type-reference cell. */
+const the_type: [R | null] = [null];
+/** Publishes the three original string member types in IDL order. @returns Borrowed native type. */
+export function cppu_detail_getUnoType_Locale(): Type {
+  if (the_type[0] === null) {
+    const string = UnoType.get("OUString").getTypeLibType() as R;
+    typelib_static_struct_type_init(
+      the_type,
+      new TextEncoder().encode("com.sun.star.lang.Locale\0"),
+      null,
+      3,
+      [string, string, string],
+      null,
+    );
+  }
+  return getTypeFromTypeDescriptionReference(the_type);
+}
 
 /** Original borrowed const Locale value; fields retain actual shared string identity. */
 export interface LocaleConstReference {
@@ -104,6 +127,13 @@ export class Locale implements LocaleConstReference {
   /** Original generated operator!=. @param other - Borrowed live value. @returns Negated complete value equality. */
   notEquals(other: LocaleConstReference): boolean {
     return !this.equals(other);
+  }
+
+  /** Borrows the actual string member address for native compound copy/extraction. Valid metadata offsets are the producer precondition. @param offset - Original string field offset. @returns Stable member address. */
+  get(offset: number): ReturnType<OUString["getDataAddress"]> {
+    return (
+      offset === 0 ? this.fields.Language : offset === 8 ? this.fields.Country : this.fields.Variant
+    ).getDataAddress();
   }
 
   /** Original implicit destructor destroys members in reverse declaration order. @returns Nothing. */

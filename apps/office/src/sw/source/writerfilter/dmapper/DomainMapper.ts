@@ -34,6 +34,11 @@ import { getEnumAsINT32 } from "../../../../comphelper/source/misc/types";
 import { PropertyMap } from "./PropertyMap";
 import { DomainMapper_Impl, ContextType as C } from "./DomainMapper_Impl";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
+import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
+import {
+  Locale,
+  cppu_detail_getUnoType_Locale as localeType,
+} from "../../../../udkapi/com/sun/star/lang/Locale";
 import { ThemeColorHandler } from "./ThemeColorHandler";
 
 /** Original underline token mapping, with unknown tokens retaining NONE. */
@@ -156,6 +161,36 @@ export class DomainMapper implements Properties {
     if (!context) return;
     const n = value.getInt();
     switch (id) {
+      case N.LN_CT_Language_val:
+      case N.LN_CT_Language_eastAsia:
+      case N.LN_CT_Language_bidi: {
+        const string = value.getString();
+        let locale: Locale;
+        try {
+          if (string.getLength() >= 1 && string.getLength() <= 3) {
+            const tag = new LanguageTag(string).makeFallback();
+            locale = tag.getLanguage().equals(string)
+              ? new Locale(tag.getLocale())
+              : LanguageTag.convertToLocale(string);
+          } else locale = LanguageTag.convertToLocale(string);
+          try {
+            this.insert(
+              context,
+              id === N.LN_CT_Language_val
+                ? P.PROP_CHAR_LOCALE
+                : id === N.LN_CT_Language_eastAsia
+                  ? P.PROP_CHAR_LOCALE_ASIAN
+                  : P.PROP_CHAR_LOCALE_COMPLEX,
+              new Any(locale, localeType),
+            );
+          } finally {
+            locale.dispose();
+          }
+        } finally {
+          string.dispose();
+        }
+        break;
+      }
       case N.LN_CT_Fonts_ascii:
       case N.LN_CT_Fonts_eastAsia:
       case N.LN_CT_Fonts_cs: {
@@ -501,6 +536,7 @@ export class DomainMapper implements Properties {
         );
         break;
       }
+      case N.LN_EG_RPrBase_lang:
       case N.LN_EG_RPrBase_rFonts:
       case N.LN_EG_RPrBase_u:
       case N.LN_CT_PPrBase_ind:

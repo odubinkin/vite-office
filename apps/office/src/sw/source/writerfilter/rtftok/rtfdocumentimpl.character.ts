@@ -504,3 +504,39 @@ import { ContextType } from "../dmapper/DomainMapper_Impl";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+
+/** Resolves the paragraph properties previously emitted by native checkNeedPap. Actual UNO setters retain full-paragraph character attributes on the node, including empty paragraphs. @param mapper - Native mapper. @param node - Current paragraph. @param sprms - Original emitted paragraph sprms. @returns Nothing. */
+export function ApplyRtfParagraphProperties(
+  mapper: DomainMapper,
+  node: SwTextNode,
+  sprms: RTFSprms,
+): void {
+  const attributes = new RTFSprms(),
+    properties = new ReferencePointer<Properties>(new RTFReferenceProperties(attributes, sprms));
+  attributes.dispose();
+  const point = new SwPosition(node, 0),
+    mark = new SwPosition(node, node.Len()),
+    range = new SwPaM(point, mark);
+  point.Dispose();
+  mark.Dispose();
+  mapper.startParagraphGroup();
+  try {
+    mapper.props(properties);
+    const context = mapper.impl.GetTopContext();
+    if (!context) throw new Error("assert(paragraph context)");
+    SetPropertyValues(
+      range,
+      context
+        .GetPropertyValues()
+        .filter(
+          /** The actual style is already selected by this atomic import boundary. @param property - Native property. @returns Direct property admission. */ (
+            property,
+          ) => textValue(property.Name) !== "ParaStyleName",
+        ),
+    );
+  } finally {
+    mapper.endParagraphGroup();
+    range.Dispose();
+    properties.clear();
+  }
+}

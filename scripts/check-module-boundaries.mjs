@@ -77,6 +77,8 @@ const allowedEdges = new Map([
       "comphelper",
       "docmodel",
       "cppu",
+      // Original textitem.cxx includes com/sun/star/lang/Locale.hpp for language member transport.
+      "udkapi",
       // Original langitem.hxx uses i18nlangtag/lang.h language values.
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.

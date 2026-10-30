@@ -7,6 +7,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySetInfo } from "../../../../svl/source/items/itemprop";
 import { Property } from "../../../../udkapi/com/sun/star/beans/Property";
 
+import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import * as M from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
@@ -81,6 +82,16 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     /** Processes one ordered native value at this boundary. @param suffix - Original suffix input. @param index - Native zero-based index. @returns The represented native operation result. */
     (suffix, index) =>
       [
+        [
+          `CharLocale${suffix}`,
+          {
+            which: [H.RES_CHRATR_LANGUAGE, H.RES_CHRATR_CJK_LANGUAGE, H.RES_CHRATR_CTL_LANGUAGE][
+              index
+            ] as number,
+            member: M.MID_LANG_LOCALE,
+            kind: "any",
+          },
+        ],
         [
           `CharWeight${suffix}`,
           {
@@ -237,7 +248,9 @@ export const SwUnoCharStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> 
         {
           ...entry,
           attributes:
-            /^Char(?:Height|Weight|Posture|Font)/u.test(name) || name === "CharStrikeout" ? 1 : 0,
+            /^Char(?:Height|Weight|Posture|Font|Locale)/u.test(name) || name === "CharStrikeout"
+              ? 1
+              : 0,
         },
       ],
     ),
@@ -282,26 +295,28 @@ export function createPropertySetInfo(
                               ? "OUString"
                               : entry.kind === "color" || entry.kind === "long"
                                 ? "sal_Int32"
-                                : name.includes("Posture")
-                                  ? fontSlantType
-                                  : name === "ParaLineSpacing"
-                                    ? lineSpacingType
-                                    : name === "ParaTabStops"
-                                      ? ["Sequence", tabStopType]
-                                      : name === "CharUnderlineColor"
-                                        ? "sal_Int32"
-                                        : name === "CharUnderlineHasColor"
-                                          ? "bool"
-                                          : name === "CharStrikeout" ||
-                                              name === "CharEscapement" ||
-                                              name === "ParaAdjust" ||
-                                              name === "ParaLastLineAdjust"
-                                            ? "sal_Int16"
-                                            : name === "CharEscapementHeight"
-                                              ? "sal_Int8"
-                                              : name === "ParaExpandSingleWord"
-                                                ? "bool"
-                                                : "float";
+                                : name.startsWith("CharLocale")
+                                  ? localeType
+                                  : name.includes("Posture")
+                                    ? fontSlantType
+                                    : name === "ParaLineSpacing"
+                                      ? lineSpacingType
+                                      : name === "ParaTabStops"
+                                        ? ["Sequence", tabStopType]
+                                        : name === "CharUnderlineColor"
+                                          ? "sal_Int32"
+                                          : name === "CharUnderlineHasColor"
+                                            ? "bool"
+                                            : name === "CharStrikeout" ||
+                                                name === "CharEscapement" ||
+                                                name === "ParaAdjust" ||
+                                                name === "ParaLastLineAdjust"
+                                              ? "sal_Int16"
+                                              : name === "CharEscapementHeight"
+                                                ? "sal_Int8"
+                                                : name === "ParaExpandSingleWord"
+                                                  ? "bool"
+                                                  : "float";
     const key = unicode(name);
     properties.push(new Property(key, entry.which, UnoType.get(argument), entry.attributes ?? 1));
     key.dispose();

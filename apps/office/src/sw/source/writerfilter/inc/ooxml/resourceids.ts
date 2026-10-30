@@ -710,4 +710,7 @@ export const NS_ooxml = Object.freeze({
   LN_CT_PrBase_shd: 92206,
   LN_Value_doc_ST_LineSpacingRule_auto: 91971,
   LN_CT_PBdr_between: 92193,
+  LN_CT_Language_val: 91896,
+  LN_CT_Language_eastAsia: 91897,
+  LN_CT_Language_bidi: 91898,
 });

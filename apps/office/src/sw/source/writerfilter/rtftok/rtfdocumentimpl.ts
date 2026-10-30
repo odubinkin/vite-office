@@ -36,6 +36,15 @@ export class RtfDocumentImpl {
     return this.m_pMapperStream;
   }
   protected readonly states: RtfState[] = [];
+  protected m_bNeedPap = true;
+  protected m_aParagraphSprms = new RTFSprms();
+  /** Captures source paragraph properties when the stream first needs them. The atomic reader retains this emitted value until materialization. @param state - Actual current group. @returns Nothing. */
+  protected checkNeedPap(state: RtfState): void {
+    if (!this.m_bNeedPap) return;
+    this.m_bNeedPap = false;
+    this.m_aParagraphSprms.dispose();
+    this.m_aParagraphSprms = new RTFSprms(state.paragraphSprms);
+  }
   protected readonly blocks: RtfBlock[] = [];
   protected readonly runs: RtfRun[] = [];
   protected readonly marks: { name: string; offset: number }[] = [];
@@ -69,6 +78,7 @@ export class RtfDocumentImpl {
         value: RtfParagraph,
       ) => {
         for (const run of value.runs) lists.add(run.characterSprms);
+        if (value.paragraphSprms) lists.add(value.paragraphSprms);
       };
     const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
       values: readonly RtfTableRow[],
@@ -76,7 +86,11 @@ export class RtfDocumentImpl {
       for (const row of values)
         for (const cell of row.cells) for (const value of cell) paragraph(value);
     };
-    for (const state of this.states) lists.add(state.characterSprms);
+    for (const state of this.states) {
+      lists.add(state.characterSprms);
+      lists.add(state.paragraphSprms);
+    }
+    lists.add(this.m_aParagraphSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
     for (const block of this.blocks)
       if (block.kind === "paragraph") paragraph(block.paragraph);
@@ -206,6 +220,7 @@ export class RtfDocumentImpl {
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group.  @returns Nothing. */
   protected AppendText(value: string, state: RtfState): void {
     if (value.length === 0) return;
+    this.checkNeedPap(state);
     this.firstRun = false;
     if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
     const previous = this.runs.at(-1);
@@ -246,7 +261,9 @@ export class RtfDocumentImpl {
   /** Completes a paragraph at native \par or document end. @param state - Current group.  @returns Nothing. */
   protected CommitParagraph(state = this.states.at(-1)): void {
     this.firstRun = false;
+    if (state) this.checkNeedPap(state);
     const paragraph: RtfParagraph = {
+      paragraphSprms: new RTFSprms(this.m_aParagraphSprms),
       runs: this.runs.splice(0),
       state: {
         ...(state?.paragraph ?? DEFAULT_PARAGRAPH),
@@ -262,6 +279,7 @@ export class RtfDocumentImpl {
       this.pendingPageBreak = false;
     }
     this.terminatedParagraph = true;
+    this.m_bNeedPap = true;
   }
 
   /** Completes rows as one native table block.  @returns Nothing. */

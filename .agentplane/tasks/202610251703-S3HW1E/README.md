@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 176
+revision: 179
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T10:58:38.922Z"
+  updated_at: "2026-10-30T11:27:19.889Z"
   updated_by: "CODER"
-  note: "HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 boundary tests,typecheck,targeted ESLint/Prettier,source/JSDoc/tree/boundary/registry/routing gates. Native LanguageTag canonicalization/fallback and actual script-specific insertion connected;WRITER250 preserved. Overall task remains incomplete:RTF language control import is the next witnessed gap;no full format parity claim. See html12 evidence and Findings."
-  attempts: 23
+  note: "Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,typed Locale/item/mapper transport,paragraph language snapshots and actual script/bidi export with empty-run handling. Related profile896pass/1loading-timeout;current-focused55pass/same timeout;both configuration cases pass isolated with CLI120s budget and unchanged assertions/config. Shared416 and boundary47 pass;typecheck,lint,format,JSDoc,size,source-tree/provenance,registry/routing pass. Preserve WRITER251/252. Overall goal incomplete:paragraph-marker and remaining format obligations remain."
+  attempts: 24
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -373,8 +376,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T11:27:19.889Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,typed Locale/item/mapper transport,paragraph language snapshots and actual script/bidi export with empty-run handling. Related profile896pass/1loading-timeout;current-focused55pass/same timeout;both configuration cases pass isolated with CLI120s budget and unchanged assertions/config. Shared416 and boundary47 pass;typecheck,lint,format,JSDoc,size,source-tree/provenance,registry/routing pass. Preserve WRITER251/252. Overall goal incomplete:paragraph-marker and remaining format obligations remain."
+  -
+    type: "status"
+    at: "2026-10-30T11:27:46.528Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T10:58:44.565Z"
+doc_updated_at: "2026-10-30T11:27:46.528Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -787,6 +803,36 @@ sections:
     Attempts: 23
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:58:11.373Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T11:27:19.889Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,typed Locale/item/mapper transport,paragraph language snapshots and actual script/bidi export with empty-run handling. Related profile896pass/1loading-timeout;current-focused55pass/same timeout;both configuration cases pass isolated with CLI120s budget and unchanged assertions/config. Shared416 and boundary47 pass;typecheck,lint,format,JSDoc,size,source-tree/provenance,registry/routing pass. Preserve WRITER251/252. Overall goal incomplete:paragraph-marker and remaining format obligations remain.
+    Attempts: 24
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:27:18.941Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1456,6 +1502,24 @@ sections:
       Result: pass. Evidence: html12-static.txt, html12-gates-final.txt, html12-registry.txt under output/playwright/rtf-properties-native. Scope: changed implementation and source/registry boundaries; all semantic parity statuses remain unverified.
     - Corrected during verification: an old snapshot duplicated the now-merged LANGUAGE_SPANISH_DATED declaration; removed only the duplicate. Corrected integration-fixture API usage and header re-export inventory localSymbols (no declarations are fabricated for re-exports).
     - Remaining concrete failure: HTML LANG imports/Worker pass and RTF writes lang1031, but the current RTF reader ignores language controls and imports default1033. The initial round-trip assertion exposed this already-listed import gap; it is recorded in the format matrix and html12-lang-tests.txt. The passing test promises native RTF export only. Next native language block must connect source run-type selection, lang/alang/langfe/default controls, mapper Locale and language-item conversion, then close the actual round-trip regression. No broad completeness or goal completion claim.
+
+    ### Native RTF languages, Locale transport and actual script runs (2026-10-30)
+
+    - Implemented: LANG/ALANG/LANGFE and exact RunType routing; group copy/restore, PLAIN/direction resets, original UInt16 conversion and real nested RTFSprms. DEFLANG/ADEFLANG retain native zero-child nesting (WRITER251). The HICH inactive-script language overwrite is retained (WRITER252).
+    - Native API chain: generated Locale type/string member addresses, SvxLanguageItem MID_LANG_LOCALE QueryValue/PutValue, all three CharLocale Which/member/MAYBEVOID/type descriptors and DomainMapper short-language fallback. Existing semantic state remains unverified, not a full ABI/library or compiled import certificate.
+    - Paragraph languages use actual owned RTFSprms snapshots at native checkNeedPap emission within the existing atomic reader boundary. Later run changes and nested-group close cannot change already emitted paragraph values. Empty final paragraphs and exact native single-empty-run output are retained.
+    - Actual RTF export now consumes existing source-derived pseudo character runs alongside hint/bookmark boundaries and calls RTLAndCJKState. The current direction-less core profile explicitly supplies pinned Environment default; no GetTextDirection facade, guessed locale/text direction or authored frame-direction model is introduced. Mixed Latin/CJK/CTL and Markdown/Worker/RTF round-trips now pass. Native script/bidi production is no longer merely an unconsumed helper.
+    - Command: npm run test:writer -- rtf sw/source/filter/html sw/source/filter/md document-io native-character-runs sw/source/core/unocore
+      Result: 896 passed, 1 timed out in 64 files; no functional assertion failure. Evidence: output/playwright/rtf-properties-native/html13-writer-tests.txt. Scope: all related RTF/HTML/MD/I/O/native Unicode and UNO consumers.
+    - Command: npm run test:writer -- swmd.user-config.integration rtf-language swhtml.language.integration DomainMapper.test
+      Result: 55 passed, same configuration test timed out at30seconds; all current language/mapper/round-trip assertions pass. Evidence: html13-final-focused.txt. Scope: current added language tests and failed configuration consumer.
+    - Command: npm run test:writer -- swmd.user-config.integration --maxWorkers 1 --testTimeout 120000
+      Result: pass, 2 tests. Evidence: html13-config-isolated-long.txt; transformation85.88seconds,total140.92seconds, assertions unchanged. The default-budget isolated run had52.09seconds transformation and timed out; the extended CLI budget diagnoses loading cost, does not change committed tests/configuration or skip an assertion.
+    - Command: npm run test:shared -- native-language i18nlangtag external/liblangtag udkapi/com/sun/star/lang/Locale
+      Result: pass,416tests/20files. Evidence: html13-shared-tests.txt. Scope: actual typed Locale/Any copy, unresolved SYSTEM, language items, script-bearing tags and canonicalization/parser ownership.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
+      Result: pass. Evidence: html13-final-static.txt, html13-source-gates.txt (JSDoc/size before the now-corrected edge), html13-format-check.txt; 47 boundary tests;1870 runtime sources/10120 imports/227 allowed edges;1871 provenance modules. Native textitem.cxx includes Locale.hpp; only that witnessed Editeng->UDKAPI edge and forbidden-reverse expectation were added; guard algorithm unchanged.
+    - Completed gate details and final status are recorded with AgentPlane verification. The full objective remains open: broad paragraph-marker formatting, remaining associated-font import/production and HTML list/table/current-model capability audit are not certified by this language checkpoint. No full all-app run was repeated.
 id_source: "generated"
 ---
 ## Summary
@@ -1879,6 +1943,36 @@ Note: HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 bo
 Attempts: 23
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:58:11.373Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T11:27:19.889Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native language checkpoint: RTF run-type and LANG/ALANG/LANGFE import,typed Locale/item/mapper transport,paragraph language snapshots and actual script/bidi export with empty-run handling. Related profile896pass/1loading-timeout;current-focused55pass/same timeout;both configuration cases pass isolated with CLI120s budget and unchanged assertions/config. Shared416 and boundary47 pass;typecheck,lint,format,JSDoc,size,source-tree/provenance,registry/routing pass. Preserve WRITER251/252. Overall goal incomplete:paragraph-marker and remaining format obligations remain.
+Attempts: 24
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:27:18.941Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2552,3 +2646,21 @@ Native HTML HREF and complete native internet-item transport checkpoint:
   Result: pass. Evidence: html12-static.txt, html12-gates-final.txt, html12-registry.txt under output/playwright/rtf-properties-native. Scope: changed implementation and source/registry boundaries; all semantic parity statuses remain unverified.
 - Corrected during verification: an old snapshot duplicated the now-merged LANGUAGE_SPANISH_DATED declaration; removed only the duplicate. Corrected integration-fixture API usage and header re-export inventory localSymbols (no declarations are fabricated for re-exports).
 - Remaining concrete failure: HTML LANG imports/Worker pass and RTF writes lang1031, but the current RTF reader ignores language controls and imports default1033. The initial round-trip assertion exposed this already-listed import gap; it is recorded in the format matrix and html12-lang-tests.txt. The passing test promises native RTF export only. Next native language block must connect source run-type selection, lang/alang/langfe/default controls, mapper Locale and language-item conversion, then close the actual round-trip regression. No broad completeness or goal completion claim.
+
+### Native RTF languages, Locale transport and actual script runs (2026-10-30)
+
+- Implemented: LANG/ALANG/LANGFE and exact RunType routing; group copy/restore, PLAIN/direction resets, original UInt16 conversion and real nested RTFSprms. DEFLANG/ADEFLANG retain native zero-child nesting (WRITER251). The HICH inactive-script language overwrite is retained (WRITER252).
+- Native API chain: generated Locale type/string member addresses, SvxLanguageItem MID_LANG_LOCALE QueryValue/PutValue, all three CharLocale Which/member/MAYBEVOID/type descriptors and DomainMapper short-language fallback. Existing semantic state remains unverified, not a full ABI/library or compiled import certificate.
+- Paragraph languages use actual owned RTFSprms snapshots at native checkNeedPap emission within the existing atomic reader boundary. Later run changes and nested-group close cannot change already emitted paragraph values. Empty final paragraphs and exact native single-empty-run output are retained.
+- Actual RTF export now consumes existing source-derived pseudo character runs alongside hint/bookmark boundaries and calls RTLAndCJKState. The current direction-less core profile explicitly supplies pinned Environment default; no GetTextDirection facade, guessed locale/text direction or authored frame-direction model is introduced. Mixed Latin/CJK/CTL and Markdown/Worker/RTF round-trips now pass. Native script/bidi production is no longer merely an unconsumed helper.
+- Command: npm run test:writer -- rtf sw/source/filter/html sw/source/filter/md document-io native-character-runs sw/source/core/unocore
+  Result: 896 passed, 1 timed out in 64 files; no functional assertion failure. Evidence: output/playwright/rtf-properties-native/html13-writer-tests.txt. Scope: all related RTF/HTML/MD/I/O/native Unicode and UNO consumers.
+- Command: npm run test:writer -- swmd.user-config.integration rtf-language swhtml.language.integration DomainMapper.test
+  Result: 55 passed, same configuration test timed out at30seconds; all current language/mapper/round-trip assertions pass. Evidence: html13-final-focused.txt. Scope: current added language tests and failed configuration consumer.
+- Command: npm run test:writer -- swmd.user-config.integration --maxWorkers 1 --testTimeout 120000
+  Result: pass, 2 tests. Evidence: html13-config-isolated-long.txt; transformation85.88seconds,total140.92seconds, assertions unchanged. The default-budget isolated run had52.09seconds transformation and timed out; the extended CLI budget diagnoses loading cost, does not change committed tests/configuration or skip an assertion.
+- Command: npm run test:shared -- native-language i18nlangtag external/liblangtag udkapi/com/sun/star/lang/Locale
+  Result: pass,416tests/20files. Evidence: html13-shared-tests.txt. Scope: actual typed Locale/Any copy, unresolved SYSTEM, language items, script-bearing tags and canonicalization/parser ownership.
+- Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
+  Result: pass. Evidence: html13-final-static.txt, html13-source-gates.txt (JSDoc/size before the now-corrected edge), html13-format-check.txt; 47 boundary tests;1870 runtime sources/10120 imports/227 allowed edges;1871 provenance modules. Native textitem.cxx includes Locale.hpp; only that witnessed Editeng->UDKAPI edge and forbidden-reverse expectation were added; guard algorithm unchanged.
+- Completed gate details and final status are recorded with AgentPlane verification. The full objective remains open: broad paragraph-marker formatting, remaining associated-font import/production and HTML list/table/current-model capability audit are not certified by this language checkpoint. No full all-app run was repeated.

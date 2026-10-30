@@ -15,6 +15,7 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfExport } from "../ww8/rtfexport";
 import * as H from "../../../inc/hintids";
 const documents: SwDoc[] = [];
@@ -125,7 +126,7 @@ it("connects existing semantic, legacy font, anchor and paragraph producers", /*
   );
   expect(languages(doc)).toEqual([[0x407, 0x40c, 0x411, 0x401], [0x40c], [0x411], [0x401]]);
 });
-it("preserves actual Markdown embedded HTML language items through Worker and native RTF export", /** No browser language parser or portable run metadata substitutes for native hints. @returns Nothing. */ () => {
+it("preserves actual Markdown embedded HTML language items through Worker and native RTF round-trip", /** No browser language parser or portable run metadata substitutes for native hints. @returns Nothing. */ () => {
   // Block HTML enters the actual HTML parser through MarkdownReader::InsertHtmlData.
   const doc = new MarkdownReader().Read(
     OUStringToOString('<p lang="de-DE">A漢ع</p>', RTL_TEXTENCODING_UTF8),
@@ -137,6 +138,9 @@ it("preserves actual Markdown embedded HTML language items through Worker and na
   expect(languages(restored)).toEqual(languages(doc));
   const rtf = RtfExport.WriteDocument(doc);
   expect(new TextDecoder().decode(rtf)).toContain("\\lang1031");
+  const imported = new RtfDocumentImpl().ResolveBytes(rtf);
+  documents.push(imported);
+  expect(languages(imported)).toEqual(languages(doc));
 });
 
 it("applies native so-language expressions before the LANG option override", /** IDENT/STRING admission and original option order are distinct from browser CSS. @returns Nothing. */ () => {

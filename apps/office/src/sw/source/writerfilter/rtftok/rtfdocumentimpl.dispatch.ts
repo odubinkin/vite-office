@@ -6,6 +6,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
 import {
+  RunType,
   CHARACTER_PROPERTY_CONTROLS,
   DEFAULT_CHARACTER,
   DEFAULT_PARAGRAPH,
@@ -30,6 +31,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       destination: previous?.destination ?? "body",
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
+      paragraphSprms:
+        previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
+      runType: previous?.runType ?? RunType.NONE,
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
 
@@ -72,7 +76,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (token.kind === "group-end") {
-    if (this["states"].length === 1 && this["runs"].length > 0)
+    if (
+      this["states"].length === 1 &&
+      (this["runs"].length > 0 ||
+        (!this["terminatedParagraph"] && !(this["states"][0] as RtfState).paragraphSprms.empty()))
+    )
       this["CommitParagraph"](this["states"][0]);
     const previous = this["states"].pop();
     try {
@@ -145,6 +153,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       }
     } finally {
       previous?.characterSprms.dispose();
+      previous?.paragraphSprms.dispose();
     }
     return;
   }
@@ -356,6 +365,23 @@ export function DispatchBodyControl(
   state: RtfState,
 ): void {
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
+  if (dispatchLanguageValue.call(this, name, parameter ?? 0, state)) return;
+  if (name === "loch" || name === "hich" || name === "dbch") {
+    state.runType = name === "loch" ? RunType.LOCH : name === "hich" ? RunType.HICH : RunType.DBCH;
+    return;
+  }
+  if (name === "ltrch") {
+    state.runType =
+      state.runType === RunType.RTLCH_LTRCH_1 ? RunType.RTLCH_LTRCH_2 : RunType.LTRCH_RTLCH_1;
+    return;
+  }
+  if (name === "rtlch") {
+    state.runType =
+      state.runType === RunType.LTRCH_RTLCH_1 ? RunType.LTRCH_RTLCH_2 : RunType.RTLCH_LTRCH_1;
+    if (this["defaultCodepage"] === 1255) state.currentCodepage = 1255;
+    return;
+  }
+  if (["ltrpar", "rtlpar", "ltrrow", "rtlrow"].includes(name)) state.runType = RunType.NONE;
   if (name === "sect") {
     if (this["runs"].length > 0) this["CommitParagraph"](state);
     this["FlushTable"]();
@@ -449,6 +475,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "trowd") {
+    this["m_bNeedPap"] = true;
     this["inTable"] = true;
     this["rowBoundaries"] = [];
     this["rowAlignment"] = "left";
@@ -662,6 +689,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "plain") {
+    state.runType = RunType.NONE;
     state.characterSprms.clear();
     delete state.characterStyleIndex;
     delete state.currentCharacterStyleIndex;
@@ -673,6 +701,8 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "pard") {
+    state.paragraphSprms.clear();
+    this["m_bNeedPap"] = true;
     if (!this["inTable"] && this["tableRows"].length > 0) this["FlushTable"]();
     state.paragraph = { ...DEFAULT_PARAGRAPH };
     delete state.paragraphBorder;
@@ -854,3 +884,5 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 
 import { stringValue } from "./rtfdocumentimpl.character";
+
+import { dispatchLanguageValue } from "./rtfdispatchvalue.language";

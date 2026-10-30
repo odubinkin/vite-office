@@ -18,14 +18,15 @@
       "evidence": [
         "apps/office/src/editeng/source/items/textitem.language.ts",
         "apps/office/src/editeng/source/items/native-language-item.test.ts",
-        "docs/program/calc-core.md#Native language item values for Calc font defaults (task146)"
+        "docs/program/calc-core.md#Native language item values for Calc font defaults (task146)",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-language.test.ts"
       ],
-      "justification": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
+      "justification": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained. S3HW1E connects native RTF lang/alang/langfe through saved RTFParserState run types, LanguageTag numeric-to-BCP47 conversion, real nested RTFSprms, DomainMapper Locale properties, typed UNO Locale transport and original SvxLanguageItem conversion. LANG-before-text paragraph properties are captured at checkNeedPap emission with owned snapshots, preserving nested-group and later-run order; plain/paragraph resets and empty paragraphs are tested. Source-derived pseudo character runs split actual export at script/bidi boundaries and feed RTLAndCJKState; for this direction-less Writer paragraph profile the caller explicitly supplies the pinned Environment pool default, not guessed text/locale direction. Native single-empty-run output omits braces. Deflang/adeflang zero-child nesting remains as upstream (WRITER251). Actual mixed-script and Markdown/Worker/RTF round-trips pass. Generic layout-direction/frame owners, fields and full RTF/OOXML/ABI parity are not claimed; all broad parity confidence remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "SvxLanguageItem"
       ],
-      "sourceResponsibility": "divergent",
+      "sourceResponsibility": "unverified",
       "upstreamFile": "editeng/source/items/textitem.cxx",
       "upstreamSymbols": [
         "SvxLanguageItem::QueryValue",

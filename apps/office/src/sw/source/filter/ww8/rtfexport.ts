@@ -2,7 +2,8 @@
 import { OutString } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
-import { rtl_TextEncodingToWinCharset } from "./writerwordglue";
+import { rtl_TextEncodingToWinCharset, getPseudoCharRunsForDirection } from "./writerwordglue";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { CharFormat } from "../../core/text/atrstck";
@@ -607,7 +608,7 @@ export class RtfExport extends MSWordExportBase {
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
       run: RtfTextRun,
     ): void => {
-      if (run.text.length === 0) return;
+      if (run.text.length === 0 && paragraph.Len() !== 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
         if (activeLink !== undefined) output += "}}";
         if (run.hyperlink !== undefined) output += this.StartURL(run.hyperlink);
@@ -620,7 +621,7 @@ export class RtfExport extends MSWordExportBase {
       offset += run.text.length;
       const sliceStart = Math.max(start, runStart);
       const sliceEnd = Math.min(end, offset);
-      if (sliceEnd <= sliceStart) continue;
+      if (sliceEnd < sliceStart || (sliceEnd === sliceStart && paragraph.Len() !== 0)) continue;
       let cursor = sliceStart;
       while (markIndex < marks.length) {
         // filter() produced a dense local array and this loop is bounded by its unchanged length.
@@ -659,13 +660,25 @@ export class RtfExport extends MSWordExportBase {
   private *GetTextRuns(paragraph: SwTextNode): Generator<RtfTextRun> {
     const text = paragraph.GetText();
     const hints = paragraph.GetpSwpHints()?.entries() ?? [];
-    const boundaries = new Set([0, text.length]);
+    // The current paragraph model has no authored frame direction or layout frame.
+    // Preserve init.cxx's native Environment default rather than guessing from text/locale.
+    // GetPseudoCharRuns only tests Horizontal_RL_TB; this binds its represented non-RTL path.
+    const characterRuns = getPseudoCharRunsForDirection(paragraph, SvxFrameDirection.Environment);
+    const boundaries = new Set([
+      0,
+      text.length,
+      ...characterRuns.map(
+        /** Native pseudo-run ends also split attribute iteration. @param run - Source run. @returns UTF16 boundary. */ (
+          run,
+        ) => run.mnEndPos,
+      ),
+    ]);
     for (const hint of hints) {
       boundaries.add(Math.min(text.length, hint.start));
       boundaries.add(Math.min(text.length, hint.end));
     }
     const iterator = new SwAttrIter(paragraph);
-    const ordered = [...boundaries].sort(
+    const ordered = (text.length ? [...boundaries] : [0, 0]).sort(
       /** Applies sort to left, right. @param left - left value. @param right - right value. @returns Callback result. */ (
         left,
         right,
@@ -674,6 +687,13 @@ export class RtfExport extends MSWordExportBase {
     for (let index = 0; index + 1 < ordered.length; index++) {
       const start = ordered[index] as number;
       const end = ordered[index + 1] as number;
+      const characterRun =
+        characterRuns.find(
+          /** Selects the same logical pseudo-run as IterToCurrent. @param run - Source run. @returns Coverage. */ (
+            run,
+          ) => run.mnEndPos > start,
+        ) ?? (text.length === 0 ? characterRuns[0] : undefined);
+      if (!characterRun) throw new Error("assert(nonempty character run)");
       const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       items.SetParent(paragraph.GetSwAttrSet());
       const active = hints.filter(
@@ -707,6 +727,8 @@ export class RtfExport extends MSWordExportBase {
       try {
         yield {
           ...(named?.format instanceof SwFormatCharFormat ? { charFormat: named.format } : {}),
+          script: characterRun.mnScript,
+          isRTL: characterRun.mbRTL,
           text: text.slice(start, end),
           items,
           attributes: projectWriterCharacterAttributes(items, items.GetParent()),
@@ -722,14 +744,15 @@ export class RtfExport extends MSWordExportBase {
 
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
   private WriteRun(run: RtfTextRun): string {
-    // The paragraph writer admits only nonempty slices before calling this private method.
+    // Native StartRun/EndRun omit braces only for the single empty paragraph run.
+    this.attributeOutput.RTLAndCJKState(run.isRTL, run.script);
     const controls =
       (run.charFormat === undefined
         ? ""
         : this.attributeOutput.OutputTextCharFormat(run.charFormat)) +
       this.attributeOutput.WriteNativeCharacter(run.items, GetCharacterPropertiesMode.ForRun);
     return (
-      "{" +
+      (run.text.length ? "{" : "") +
       controls +
       (controls.length === 0 ? "" : " ") +
       this.attributeOutput.RunText(
@@ -737,7 +760,7 @@ export class RtfExport extends MSWordExportBase {
         this.GetCurrentEncoding(),
         "",
       ) +
-      "}"
+      (run.text.length ? "}" : "")
     );
   }
 
@@ -811,4 +834,9 @@ import { StyleType } from "./attributeoutputbase";
 
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 /** The real run items and optional borrowed native named-style item for the existing RTF string sink. */
-type RtfTextRun = WriterTextRun & { items: SfxItemSet; charFormat?: SwFormatCharFormat };
+type RtfTextRun = WriterTextRun & {
+  items: SfxItemSet;
+  charFormat?: SwFormatCharFormat;
+  script: number;
+  isRTL: boolean;
+};

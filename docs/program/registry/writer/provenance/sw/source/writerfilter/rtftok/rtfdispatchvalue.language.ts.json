@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.language.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+    "localSymbols": [
+      "dispatchLanguageValue"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::dispatchCharacterAttributeValue",
+      "RTFDocumentImpl::dispatchValue"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E connects native RTF lang/alang/langfe through saved RTFParserState run types, LanguageTag numeric-to-BCP47 conversion, real nested RTFSprms, DomainMapper Locale properties, typed UNO Locale transport and original SvxLanguageItem conversion. LANG-before-text paragraph properties are captured at checkNeedPap emission with owned snapshots, preserving nested-group and later-run order; plain/paragraph resets and empty paragraphs are tested. Source-derived pseudo character runs split actual export at script/bidi boundaries and feed RTLAndCJKState; for this direction-less Writer paragraph profile the caller explicitly supplies the pinned Environment pool default, not guessed text/locale direction. Native single-empty-run output omits braces. Deflang/adeflang zero-child nesting remains as upstream (WRITER251). Actual mixed-script and Markdown/Worker/RTF round-trips pass. Generic layout-direction/frame owners, fields and full RTF/OOXML/ABI parity are not claimed; all broad parity confidence remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed language value responsibility is mapped here; unrelated numeric dispatch remains on its existing owners. No whole-module/compiled ABI claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.language.ts",
+          "marker": "dispatchLanguageValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-language.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "dispatchCharacterAttributeValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.language.ts",
+      "rationale": "Original numeric language dispatch is split by responsibility; native RTF state, property containers, LanguageTag and resource identities remain the actual owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
