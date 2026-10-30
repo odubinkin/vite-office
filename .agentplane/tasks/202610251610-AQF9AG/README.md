@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 81
+revision: 84
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:17:52.730Z"
+  updated_at: "2026-10-30T12:31:48.471Z"
   updated_by: "CODER"
-  note: "Output ownership and logical-token checkpoint passed 191 related tests, 106 Calc tests, two browser cases and static/build gates. Whole CSV task remains incomplete: native-number modes/spellout, multiline import and full acceptance remain."
-  attempts: 13
+  note: "NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comparisons, 883 related tests, 122 Calc tests, two browser cases and static/build gates. Whole CSV remains incomplete: consumer forwarding, NumberText, multiline import and full acceptance remain."
+  attempts: 14
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -536,8 +539,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:31:48.471Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comparisons, 883 related tests, 122 Calc tests, two browser cases and static/build gates. Whole CSV remains incomplete: consumer forwarding, NumberText, multiline import and full acceptance remain."
+  -
+    type: "status"
+    at: "2026-10-30T12:31:57.860Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:18:06.838Z"
+doc_updated_at: "2026-10-30T12:31:57.860Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -925,6 +941,36 @@ sections:
     Attempts: 13
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:17:51.760Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:31:48.471Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comparisons, 883 related tests, 122 Calc tests, two browser cases and static/build gates. Whole CSV remains incomplete: consumer forwarding, NumberText, multiline import and full acceptance remain.
+    Attempts: 14
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:31:47.852Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1394,6 +1440,20 @@ sections:
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: output-lifetime-browser.log. Scope remains real basic CSV/ODS file UI and native owner/DOM-free Worker integration, not complete CSV format/options acceptance.
     - Read-only source analysis identifies remaining NativeNumber0..11 locale/table/text conversion contracts and mode12 NumberText dependency. CALC-405..407 record source digit-ordinal NativeChar0 output, mode3 validity versus unknown-locale identity, and shared mutable locale punctuation across supplier instances. These source behaviors must be preserved; complete native witnesses are not claimed. libnumbertext1.0.11 archive/data are absent locally; a repository-network approval request is pending, so no download was performed. Pinned download.lst SHA256 must be verified before extraction if approved.
     - Task/goal remain active and incomplete: full native-number modes and spellout, true multiline EditEngine import and complete CSV options/UI/native acceptance still remain. Same open task, no tenth-task full-suite run due. Reviewed output/native scratch is excluded from commits.
+
+    ### Original NativeNumber0..11 service conversion, 2026-10-30
+
+    - Continued from aef4eafb1344. Ported the original supplier validity/dispatch, character lookahead and CJK recursive text conversion, zero/one omission flags, decimal toggling and native offset sequences. Hebrew/Cyrillic producers retain their original digit-count admission, prefix and suffix handling, thousands recursion,15/16 and teen substitutions and geresh/gershayim/titlo insertion. Their output offsets remain untouched as upstream. Existing NATNUM0 now reads the shared mutable punctuation arrays as the original NativeToAscii does.
+    - Original per-instance aLocale and shared static DecimalChar/SeparatorChar refresh behavior are retained, including CALC-406's mode3 validity versus unknown-locale identity and CALC-407's stale per-instance cache after another supplier changes shared punctuation. Actual ja_JP/fa_IR owner tests preserve that state sequence. No per-call punctuation normalization, invented locale/format fallback or unsupported-mode error was added.
+    - generate-native-number-data.py now compiles unchanged numberchar.h, Number declarations/flags, all mode specifications, source language ordering and alphabetic numeral tables from pinned9bc445578031fecf56086729d8e4940c77e14d65. Minimal scalar type aliases transport table values; this is not SAL/UNO ABI certification. --check compares the entire scalar object independently of JSON formatting. All original32 digit rows and punctuation retain their values; remaining multiplier/spec/alphabetic tables are added. No handwritten language-mode mapping substitutes for the source declarations.
+    - Command: python3 scripts/native-number-native-probe.py. Result: pass,3016 comparisons, zero output/offset mismatches. Evidence: output/native/AQF9AG-icu-grego/natnum-all-native-final.log and output/native/AQF9AG-native-number/{probe.cpp,cases.json,compare.ts}. Native character/CJK/NativeToAscii/Hebrew/Cyrillic helpers and tables are extracted unchanged; only scalar OUString/Sequence/buffer transports and the test driver are supplied.348 cases whose actual locale punctuation differs from the witness's fixed ASCII dot/comma initialization are explicitly excluded, not accepted as matching. Complete native service creation, locale resolution, allocator/UNO ABI, mode12 and signed-overflow behavior are not certified. Runtime tests cover the source locale-cache state separately.
+    - CALC-409 documents original Hebrew19-digit admission exceeding signed64's defined arithmetic domain before the20th-digit guard. Removed an initial proposed fixed-width wrap during implementation review: source signed overflow is not assigned invented wrap, saturation or a new input rejection. Defined-range comparisons include9223372036854775807; larger signed-overflow values are outside parity certification.
+    - Command: npm run test:shared -- src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,3 files74 tests. Evidence: natnum-all-tests.log. Scope: real supplier mode output, compiled source expected strings/offsets, validity/identity gates, unchanged alphabetic offsets/count limits/suffixes, shared punctuation state and existing wrapper exception contracts. Later edits remove test-only non-null assertions and attach two existing helper comments directly to arrow declarations; they do not change producer behavior.
+    - Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,50 files883 tests in208.73s. Evidence: natnum-all-related-tests.log. Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files122 tests. Evidence: natnum-all-csv-tests.log. Counts overlap the focused supplier run and are not summed.
+    - Commands: python3 scripts/generate-native-number-data.py --check; npm run typecheck; focused ESLint over native-number implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: natnum-all-{data-check,typecheck,lint-final,provenance,dependencies,docs-final,size,parity,resources,build}.log. Provenance1875 modules; dependencies1874 sources10124 imports225 allowed edges; docs4237 authored sources; semantic violations0. Initial typecheck found a scalar indexOf argument, optional-field representation and TS-prohibited fallthrough; corrected to the source scalar overload/explicit same-result predicate. Initial lint rejected two test non-null assertions, and docs required arrow-attached comments; affected checks reran to pass. No enforcement exemptions or semantic parity promotion.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: natnum-all-browser.log. This remains basic CSV import/ODS save/active export and real owner/DOM-free Worker acceptance, not full native-number CSV formatting acceptance.
+    - This block represents service modes0..11 only; calendar/formatter producers still need their original forwarding and placement of transliteration. Calendar source already shows mode12 is skipped for whole-date conversion; NumberText is still required by the formatter's selected spellout parts. No whole-CSV completion is claimed. Mode12 NumberText source/data remain absent and the repository-network download approval remains pending; no network access occurred. True multiline import, remaining producer forwarding and complete CSV options/native/UI acceptance remain required.
+    - Task/goal remain active and incomplete. Same open task, no tenth-task full-suite run due. Final reviewed status is natnum-all-status.log; output/native scratch is excluded from commits. The probe's accidental scripts/__pycache__ file was removed and bytecode generation disabled for its imported generator; no generated global/outside-repo artifacts are required.
 id_source: "generated"
 ---
 ## Summary
@@ -1790,6 +1850,36 @@ Note: Output ownership and logical-token checkpoint passed 191 related tests, 10
 Attempts: 13
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:17:51.760Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:31:48.471Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comparisons, 883 related tests, 122 Calc tests, two browser cases and static/build gates. Whole CSV remains incomplete: consumer forwarding, NumberText, multiline import and full acceptance remain.
+Attempts: 14
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:31:47.852Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2263,3 +2353,17 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: output-lifetime-browser.log. Scope remains real basic CSV/ODS file UI and native owner/DOM-free Worker integration, not complete CSV format/options acceptance.
 - Read-only source analysis identifies remaining NativeNumber0..11 locale/table/text conversion contracts and mode12 NumberText dependency. CALC-405..407 record source digit-ordinal NativeChar0 output, mode3 validity versus unknown-locale identity, and shared mutable locale punctuation across supplier instances. These source behaviors must be preserved; complete native witnesses are not claimed. libnumbertext1.0.11 archive/data are absent locally; a repository-network approval request is pending, so no download was performed. Pinned download.lst SHA256 must be verified before extraction if approved.
 - Task/goal remain active and incomplete: full native-number modes and spellout, true multiline EditEngine import and complete CSV options/UI/native acceptance still remain. Same open task, no tenth-task full-suite run due. Reviewed output/native scratch is excluded from commits.
+
+### Original NativeNumber0..11 service conversion, 2026-10-30
+
+- Continued from aef4eafb1344. Ported the original supplier validity/dispatch, character lookahead and CJK recursive text conversion, zero/one omission flags, decimal toggling and native offset sequences. Hebrew/Cyrillic producers retain their original digit-count admission, prefix and suffix handling, thousands recursion,15/16 and teen substitutions and geresh/gershayim/titlo insertion. Their output offsets remain untouched as upstream. Existing NATNUM0 now reads the shared mutable punctuation arrays as the original NativeToAscii does.
+- Original per-instance aLocale and shared static DecimalChar/SeparatorChar refresh behavior are retained, including CALC-406's mode3 validity versus unknown-locale identity and CALC-407's stale per-instance cache after another supplier changes shared punctuation. Actual ja_JP/fa_IR owner tests preserve that state sequence. No per-call punctuation normalization, invented locale/format fallback or unsupported-mode error was added.
+- generate-native-number-data.py now compiles unchanged numberchar.h, Number declarations/flags, all mode specifications, source language ordering and alphabetic numeral tables from pinned9bc445578031fecf56086729d8e4940c77e14d65. Minimal scalar type aliases transport table values; this is not SAL/UNO ABI certification. --check compares the entire scalar object independently of JSON formatting. All original32 digit rows and punctuation retain their values; remaining multiplier/spec/alphabetic tables are added. No handwritten language-mode mapping substitutes for the source declarations.
+- Command: python3 scripts/native-number-native-probe.py. Result: pass,3016 comparisons, zero output/offset mismatches. Evidence: output/native/AQF9AG-icu-grego/natnum-all-native-final.log and output/native/AQF9AG-native-number/{probe.cpp,cases.json,compare.ts}. Native character/CJK/NativeToAscii/Hebrew/Cyrillic helpers and tables are extracted unchanged; only scalar OUString/Sequence/buffer transports and the test driver are supplied.348 cases whose actual locale punctuation differs from the witness's fixed ASCII dot/comma initialization are explicitly excluded, not accepted as matching. Complete native service creation, locale resolution, allocator/UNO ABI, mode12 and signed-overflow behavior are not certified. Runtime tests cover the source locale-cache state separately.
+- CALC-409 documents original Hebrew19-digit admission exceeding signed64's defined arithmetic domain before the20th-digit guard. Removed an initial proposed fixed-width wrap during implementation review: source signed overflow is not assigned invented wrap, saturation or a new input rejection. Defined-range comparisons include9223372036854775807; larger signed-overflow values are outside parity certification.
+- Command: npm run test:shared -- src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,3 files74 tests. Evidence: natnum-all-tests.log. Scope: real supplier mode output, compiled source expected strings/offsets, validity/identity gates, unchanged alphabetic offsets/count limits/suffixes, shared punctuation state and existing wrapper exception contracts. Later edits remove test-only non-null assertions and attach two existing helper comments directly to arrow declarations; they do not change producer behavior.
+- Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,50 files883 tests in208.73s. Evidence: natnum-all-related-tests.log. Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files122 tests. Evidence: natnum-all-csv-tests.log. Counts overlap the focused supplier run and are not summed.
+- Commands: python3 scripts/generate-native-number-data.py --check; npm run typecheck; focused ESLint over native-number implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: natnum-all-{data-check,typecheck,lint-final,provenance,dependencies,docs-final,size,parity,resources,build}.log. Provenance1875 modules; dependencies1874 sources10124 imports225 allowed edges; docs4237 authored sources; semantic violations0. Initial typecheck found a scalar indexOf argument, optional-field representation and TS-prohibited fallthrough; corrected to the source scalar overload/explicit same-result predicate. Initial lint rejected two test non-null assertions, and docs required arrow-attached comments; affected checks reran to pass. No enforcement exemptions or semantic parity promotion.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: natnum-all-browser.log. This remains basic CSV import/ODS save/active export and real owner/DOM-free Worker acceptance, not full native-number CSV formatting acceptance.
+- This block represents service modes0..11 only; calendar/formatter producers still need their original forwarding and placement of transliteration. Calendar source already shows mode12 is skipped for whole-date conversion; NumberText is still required by the formatter's selected spellout parts. No whole-CSV completion is claimed. Mode12 NumberText source/data remain absent and the repository-network download approval remains pending; no network access occurred. True multiline import, remaining producer forwarding and complete CSV options/native/UI acceptance remain required.
+- Task/goal remain active and incomplete. Same open task, no tenth-task full-suite run due. Final reviewed status is natnum-all-status.log; output/native scratch is excluded from commits. The probe's accidental scripts/__pycache__ file was removed and bytecode generation disabled for its imported generator; no generated global/outside-repo artifacts are required.

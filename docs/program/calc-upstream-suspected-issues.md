@@ -4729,16 +4729,23 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `isValidNatNumImpl`, `getNativeNumberString`, `getNativeNumberChar`.
 - Observation: NATNUM3 validation returns true independently of language. Both conversion paths subsequently return the original input if getLanguageNumber returns-1, before their full-width conversion switch. Thus validation alone does not imply full-width conversion for an unlisted language such as en.
-- Preserve both validation and conversion gates. Do not infer full-width output for all locales from the validation result. The finding is source-derived; the corresponding new modes are not yet implemented locally.
+- Preserve both validation and conversion gates. Do not infer full-width output for all locales from the validation result. Real supplier tests now preserve this validity/identity distinction for en_US. The complete native service-wrapper comparison is still pending.
 
 ### CALC-407 — Per-instance locale cache controls writes to shared punctuation arrays
 
 - Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getNativeNumberString`; `i18npool/inc/nativenumbersupplier.hxx`, `aLocale`; `i18npool/source/nativenumber/data/numberchar.h`, mutable static DecimalChar/SeparatorChar.
 - Observation: punctuation array updates occur only when the service instance's cached aLocale differs from the requested locale, but the arrays are shared across instances. Another instance can change the shared half/full-width entries while the first instance still sees its own locale unchanged and skips the refresh. NativeToAscii also reads the current shared arrays and uses their half-width entries as output punctuation.
-- Preserve the source shared storage and per-instance refresh predicate when the remaining modes are ported. Do not normalize punctuation per call or replace the arrays with independent locale maps. This is a source-derived state-contract finding; a new multi-instance native witness remains pending.
+- Preserve the source shared storage and per-instance refresh predicate when the remaining modes are ported. Do not normalize punctuation per call or replace the arrays with independent locale maps. Real supplier tests now preserve the ja_JP/fa_IR inter-instance state sequence, including NatNum0 returning the current shared decimal separator. A complete multi-instance native service witness remains pending.
 
 ### CALC-408 — Raw C string growth overwrites its destination before asserting allocation success
 
 - Source: `sal/rtl/strtmpl.hxx`, `newFromStr_WithLength`/`stringbuffer_ensureCapacity`.
 - Observation: newFromStr_WithLength saves pOrg, replaces *ppThis with Alloc's result, then asserts nonnull before copying and releasing pOrg. A null allocation during growth leaves the destination null and reaches a fatal native assertion; it is not a recoverable std::bad_alloc path with ordinary C++ RAII unwinding. The local checked-assertion representation can consequently encounter another assertion when a caller disposes that invalidated buffer.
 - Preserve the original C mutation/assert/release order. Do not add destination rollback or reinterpret this fatal path as ordinary exception cleanup. Constructor/defined-exception lifetime tests are bounded separately from full native OOM/abort behavior.
+
+
+### CALC-409 — Hebrew digit-count admission permits signed64 overflow before the20-digit limit
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getHebrewNativeNumberString`.
+- Observation: the count guard rejects the20th digit, but19-digit values can exceed SAL_MAX_INT64. The source `value = value * 10 + (ch - NUMBER_ZERO)` then exceeds signed64's defined arithmetic domain. The Cyrillic branch rejects the8th digit and does not encounter this range issue.
+- Preserve the original count/prefix/suffix logic for defined values. Do not add a19-digit rejection, saturation or invented two's-complement wrap rule. Native signed overflow remains outside parity certification; the comparison corpus ends at9223372036854775807 for19-digit values. No sanitizer or complete service behavior is claimed for larger inputs.

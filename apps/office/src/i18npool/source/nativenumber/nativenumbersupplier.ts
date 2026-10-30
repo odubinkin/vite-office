@@ -1,36 +1,23 @@
-/** @fileoverview NativeNumberSupplierService NATNUM0 path from the pinned i18npool source. */
+/** @fileoverview NativeNumberSupplierService NATNUM0 through NATNUM11 paths from the pinned i18npool source. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import data from "./data/numberchar.json" with { type: "json" };
 
-const natnum1Locales = [
-  "zh_CN",
-  "zh_TW",
-  "ja",
-  "ko",
-  "he",
-  "ar",
-  "th",
-  "hi",
-  "or",
-  "mr",
-  "bn",
-  "pa",
-  "gu",
-  "ta",
-  "te",
-  "kn",
-  "ml",
-  "lo",
-  "bo",
-  "my",
-  "km",
-  "mn",
-  "ne",
-  "dz",
-  "fa",
-  "cu",
-] as const;
+import { getLocaleDecimalSeparator, getLocaleThousandSeparator } from "../localedata/localedata";
+import {
+  AsciiToNative,
+  AsciiToNativeChar,
+  DecimalChar,
+  SeparatorChar,
+  type NumberSpec,
+} from "./nativenumbersupplier.text";
+import {
+  getHebrewNativeNumberString,
+  getCyrillicNativeNumberString,
+} from "./nativenumbersupplier.alphabetic";
+/** The represented source modes; mode12 needs the original NumberText dependency. */
+export type NativeNumberMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+const natnum1Locales = data.natnum1Locales;
 const numberChar = data.numberChar.flat();
 const multiplierChar = data.multiplierChar7Cjk.flat();
 const multiplierExponent = data.multiplierExponent7Cjk;
@@ -140,10 +127,10 @@ function nativeToAscii(input: OUStringConstReference, offsets?: number[]): OUStr
       const followedByNumber = numberChar.indexOf(next) >= 0 || multiplierChar.indexOf(next) >= 0;
       let converted = current;
       if (index >= 0) converted = (index % 10) + 48;
-      else if (data.separatorChar.includes(current) && followedByNumber)
-        converted = data.separatorChar[0] as number;
-      else if (data.decimalChar.includes(current) && followedByNumber)
-        converted = data.decimalChar[0] as number;
+      else if (SeparatorChar.includes(current) && followedByNumber)
+        converted = SeparatorChar[0] as number;
+      else if (DecimalChar.includes(current) && followedByNumber)
+        converted = DecimalChar[0] as number;
       else if (data.minusChar.includes(current) && followedByNumber)
         converted = data.minusChar[0] as number;
       state.output[state.count] = converted;
@@ -155,17 +142,95 @@ function nativeToAscii(input: OUStringConstReference, offsets?: number[]): OUStr
   return new OUString(Uint16Array.from(state.output.slice(0, state.count)), state.count);
 }
 
-/** Represented NativeNumberSupplierService field consumed by TransformInput. */
+/** Source supplier locale cache and shared-table dispatch. NumberText/mode12 and unconsumed XML/char service methods remain unported. */
 export class NativeNumberSupplierService {
-  /** Source getNativeNumberString NATNUM0 dispatch, including unsupported-language identity.  @param input - Input. @param locale - Locale. @param mode - Mode. @param offsets - Offsets. @returns The OUString result. */
+  private readonly aLocale = new Locale();
+  /** Native value-member destruction. @returns Nothing. */
+  dispose(): void {
+    this.aLocale.dispose();
+  }
+  /** Original mode validity including the source mode12 validity declaration, independent of conversion availability. @param locale - Actual locale. @param mode - Native mode scalar. @returns Original validity. */
+  static isValidNatNumImpl(locale: LocaleConstReference, mode: number): boolean {
+    const langnum = getLanguageNumber(locale);
+    switch (mode) {
+      case 0:
+      case 3:
+      case 12:
+        return true;
+      case 1:
+        return langnum >= 0;
+      case 2:
+        return langnum === 4 || (langnum >= 0 && langnum < 4);
+      // Original mode2 falls through to the CJK-only text modes.
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+        return langnum >= 0 && langnum < 4;
+      case 9:
+      case 10:
+      case 11:
+        return langnum === 3;
+    }
+    return false;
+  }
+  /** Source getNativeNumberString dispatch. Unknown locales retain identity even for mode3; locale changes mutate the original shared punctuation arrays. @param input - Input. @param locale - Locale. @param mode - Represented original mode. @param offsets - Optional output sequence. @returns Owned result. */
   getNativeNumberString(
     input: OUStringConstReference,
     locale: LocaleConstReference,
-    mode: 0,
+    mode: NativeNumberMode,
     offsets?: number[],
   ): OUString {
-    void mode;
-    if (getLanguageNumber(locale) < 0) return new OUString(input);
-    return nativeToAscii(input, offsets);
+    if (!NativeNumberSupplierService.isValidNatNumImpl(locale, mode)) return new OUString(input);
+    const langnum = getLanguageNumber(locale);
+    if (langnum === -1) return new OUString(input);
+    let number: NumberSpec | undefined,
+      num = -1;
+    switch (mode) {
+      case 0:
+        return nativeToAscii(input, offsets);
+      case 1:
+        num = data.natnum1[langnum] as number;
+        break;
+      case 2:
+        num = data.natnum2[langnum] as number;
+        break;
+      case 3:
+        num = 1;
+        break;
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+        number = data.numberSpecs[mode][langnum];
+        break;
+      case 9:
+        num = 9;
+        break;
+      case 10:
+      case 11:
+        number = data.numberSpecs[mode][0];
+        break;
+    }
+    if (number || num >= 0) {
+      if (!this.aLocale.equals(locale)) {
+        const decimal = getLocaleDecimalSeparator(locale),
+          separator = getLocaleThousandSeparator(locale);
+        this.aLocale.assign(locale);
+        DecimalChar[0] = decimal.charCodeAt(0) || 0;
+        DecimalChar[1] =
+          DecimalChar[0] > 0x7e || DecimalChar[0] < 0x21 ? 0xff0e : DecimalChar[0] + 0xfee0;
+        SeparatorChar[0] = separator.charCodeAt(0) || 0;
+        SeparatorChar[1] =
+          SeparatorChar[0] > 0x7e || SeparatorChar[0] < 0x21 ? 0xff0c : SeparatorChar[0] + 0xfee0;
+      }
+      if (number) return AsciiToNative(input, number, offsets);
+      if (num === 28) return getHebrewNativeNumberString(input, mode === 2);
+      if (num === 31) return getCyrillicNativeNumberString(input);
+      return AsciiToNativeChar(input, num, offsets);
+    }
+    return new OUString(input);
   }
 }
