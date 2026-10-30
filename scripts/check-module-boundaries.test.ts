@@ -730,6 +730,7 @@ it("keeps primitive language identities below Editeng and browser owners", /** N
   expect(isForbiddenModuleEdge("sc", "i18nlangtag")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nlangtag", "external")).toBe(false);
   for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
   expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");

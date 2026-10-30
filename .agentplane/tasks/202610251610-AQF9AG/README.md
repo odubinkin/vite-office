@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 93
+revision: 96
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T14:10:17.900Z"
+  updated_at: "2026-10-30T14:29:58.375Z"
   updated_by: "CODER"
-  note: "Official Soros.js 1.0.11 installed through package.json file dependency; 50 original programs, loader/cache, integrity/tooling/shared tests, 129 Calc regressions and 2 fresh-build browser cases pass. User explicitly accepts original JS differences. Whole CSV task remains incomplete: NatNum12 service/casing/formatter and actual multiline EditEngine remain pending."
-  attempts: 17
+  note: "Original LanguageTag component/cache and liblangtag getter contracts plus cclass lowercase pass 319 related tests, 47 boundary tests, static checks, final build and 2 browser regressions. Source quirks preserved as CALC-417/418. Whole CSV remains incomplete: enclosing LanguageTag, NumberText/NatNum12 casing/title/formatter and multiline EditEngine remain pending."
+  attempts: 18
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -600,8 +603,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T14:29:58.375Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original LanguageTag component/cache and liblangtag getter contracts plus cclass lowercase pass 319 related tests, 47 boundary tests, static checks, final build and 2 browser regressions. Source quirks preserved as CALC-417/418. Whole CSV remains incomplete: enclosing LanguageTag, NumberText/NatNum12 casing/title/formatter and multiline EditEngine remain pending."
+  -
+    type: "status"
+    at: "2026-10-30T14:30:10.638Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T14:10:29.764Z"
+doc_updated_at: "2026-10-30T14:30:10.638Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1109,6 +1125,36 @@ sections:
     Attempts: 17
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:09:59.644Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T14:29:58.375Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original LanguageTag component/cache and liblangtag getter contracts plus cclass lowercase pass 319 related tests, 47 boundary tests, static checks, final build and 2 browser regressions. Source quirks preserved as CALC-417/418. Whole CSV remains incomplete: enclosing LanguageTag, NumberText/NatNum12 casing/title/formatter and multiline EditEngine remain pending.
+    Attempts: 18
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:29:48.288Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1639,6 +1685,20 @@ sections:
     - Commands: npm run typecheck; focused ESLint on all authored changed source/tests/checkers; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: esm-{0,2,4}.log,final-5.log,end-{0,1,2,3}.log,build.log. Provenance1877 runtime modules; dependency1876 sources10143 relative imports225 allowed edges; docs4243 authored sources; semantic violations0. Ordinary existing large-chunk build warning only. No broad parity status promotion.
     - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests (calc-tests.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful fresh build (browser.log). These are existing CSV/UI regressions, not evidence of completed NatNum12 CSV forwarding.
     - Remaining work: original NumberText service/NatNum12 casing and selected date-field forwarding, actual multiline EditEngine path, remaining CSV option/UI/native acceptance audit. Goal/task remain active and incomplete. This is the same Agentplane task, so no tenth-task full-suite trigger arises. All native downloads/builds/comparison/pack/install logs remain output/native scratch and are excluded from commits.
+
+    ### Original LanguageTag component contracts and lowercase path for NatNum12, 2026-10-30
+
+    - Previous continuation made verified progress: commit eb71a1ac7 installed the user-approved official JS dependency through package.json. This block advances required LanguageTag/CharacterClassification responsibilities without introducing a replacement locale splitter, Intl casing/word segmentation or a fake completed service. NatNum12 formatter guards remain until its actual dependency path is complete.
+    - Added original private LanguageTagImpl component methods as a responsibility fragment: cacheSimpleLSCV; getLanguage/Script/Region/VariantsFromLangtag; cached getLanguage/Script/Country/Variants; raw getRegion; exact LanguageTag ASCII ISO language/country/script predicates. Original shared OUString fields retain borrowed cache identity, actual copied return ownership, canonicalization-before-empty order, empty-result caching and all-four simple-cache flag writes. The original enclosing synCanonicalize is an explicit required owner contract; there is no no-op production canonicalizer or fabricated public LanguageTag class. Prepared private-state fixtures exercise the bounded member group and do not certify constructor/canonicalizer/registration/system-ID ownership.
+    - Preserved liblangtag module boundaries by adding its original consumed DEFUNC_GET_SUBTAG getters (language/script/region/variants) and lt_lang/script/region/variant_get_tag in corresponding source-shaped files. Getters borrow actual immutable registered entries/list identity, retain null-owner guards and map managed empty variants to the source null list. LanguageTag now calls these original getter contracts rather than projecting another library's private fields. Existing managed Tag/RegistryEntry transport is retained; physical C-pointer/list/refcount lifetime and diagnostics are not claimed.
+    - Added original cclass_Unicode::toLower range clamp and original MappingType::ToLower dispatch through actual Transliteration_casemapping/getValue with explicit temporary owner destruction. No string.toLowerCase/toLocaleLowerCase/Intl replacement is used. Preserve source next-unit context beyond the selected logical range, missing preceding context at a nonzero start, supplementary/split-surrogate behavior, embedded NUL and the original conditional tables. CALC-417 documents numeric-region loss in the simple component-cache branch; CALC-418 documents U+0130 identity outside tr/az. Both are preserved rather than corrected. Title word-boundary support is still pending.
+    - Initial new tests expected generic Unicode lowercase i+combining-dot for English U+0130, and used variants outside registered source prefixes in es/sl fixtures. The source mapping_0130 explicitly returns U+0130 unchanged outside tr/az; the actual original-prefix parser correctly rejects the malformed prepared tag combinations. Corrected only test expectations/input tags to their source contracts, leaving production mappings/parser unchanged. Initial failure logs are fields-tests.log and fields-all-related-tests.log.
+    - Initial provenance/dependency gates rejected an unrecorded filename split and the newly needed i18nlangtag->external edge. Recorded the explicit source responsibility split; added the actual edge supported by languagetag.cxx's liblangtag/langtag.h include and Library_i18nlangtag.mk's liblangtag/ICU external links. Existing reverse/application/browser restrictions remain intact; updated the boundary test for this original dependency. No arbitrary bypass, new service facade or broad parity-status promotion.
+    - Command: npm run test:shared -- src/external/liblangtag/liblangtag src/i18nlangtag/source/languagetag src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts src/i18nutil/source/utility/casefolding-value.test.ts src/unotools/source/i18n/native-uppercase.test.ts src/external/libnumbertext/src/Numbertext.test.ts. Result: pass,16 files319 tests. Evidence: fields-all-related-tests-final.log. Scope: actual parser/getter boundaries, source private cache transitions/borrowing, numeric region versus ISO country, registered variants, existing unchanged-native casefolding value corpus, actual lowercase and uppercase paths, installed JS library. Earlier focused group passes7 files181 cases (fields-related-tests.log).
+    - Command: npx vitest run scripts/check-module-boundaries.test.ts. Result: pass,47 cases (fields-final-4.log). Commands: npm run typecheck; focused ESLint on every authored changed implementation/test/checker; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fields-accessors-{0,1,2,3,4,5,6}.log,fields-final-3.log,fields-build-final.log. Provenance1882 modules; dependencies1881 sources10156 relative imports226 allowed edges; docs4251 authored sources; semantic violations0. Final build completed successfully after the library accessor changes, with ordinary pre-existing bundle/plugin timing warnings.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fields-regression-1.log). This preceded the additive liblangtag getters; final full related liblangtag/member tests cover those additions. Existing CSV browser regression is repeated after terminal successful final build; see fields-browser-final.log. These checks do not prove complete NativeNumberSupplier12/CSV output forwarding.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build. Evidence: fields-browser-final.log. Scope: existing CSV file UI and actual browser/DOM-free Worker regressions, not completed NatNum12 output.
+    - Remaining: actual enclosing LanguageTag canonicalization/registration/public access path, NumberText adapter and NativeNumberSupplier12 scanner/cache/casing, true title word boundaries, selected date-field formatter forwarding, actual multiline EditEngine import and remaining CSV option/UI/native audit. Goal/task remain active and incomplete. This is the same open Agentplane task, so no tenth-task full-suite trigger arises. Scratch/native evidence remains inside output/native and is excluded from commits.
 id_source: "generated"
 ---
 ## Summary
@@ -2177,6 +2237,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T14:29:58.375Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original LanguageTag component/cache and liblangtag getter contracts plus cclass lowercase pass 319 related tests, 47 boundary tests, static checks, final build and 2 browser regressions. Source quirks preserved as CALC-417/418. Whole CSV remains incomplete: enclosing LanguageTag, NumberText/NatNum12 casing/title/formatter and multiline EditEngine remain pending.
+Attempts: 18
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:29:48.288Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2689,3 +2779,17 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint on all authored changed source/tests/checkers; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: esm-{0,2,4}.log,final-5.log,end-{0,1,2,3}.log,build.log. Provenance1877 runtime modules; dependency1876 sources10143 relative imports225 allowed edges; docs4243 authored sources; semantic violations0. Ordinary existing large-chunk build warning only. No broad parity status promotion.
 - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests (calc-tests.log). Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful fresh build (browser.log). These are existing CSV/UI regressions, not evidence of completed NatNum12 CSV forwarding.
 - Remaining work: original NumberText service/NatNum12 casing and selected date-field forwarding, actual multiline EditEngine path, remaining CSV option/UI/native acceptance audit. Goal/task remain active and incomplete. This is the same Agentplane task, so no tenth-task full-suite trigger arises. All native downloads/builds/comparison/pack/install logs remain output/native scratch and are excluded from commits.
+
+### Original LanguageTag component contracts and lowercase path for NatNum12, 2026-10-30
+
+- Previous continuation made verified progress: commit eb71a1ac7 installed the user-approved official JS dependency through package.json. This block advances required LanguageTag/CharacterClassification responsibilities without introducing a replacement locale splitter, Intl casing/word segmentation or a fake completed service. NatNum12 formatter guards remain until its actual dependency path is complete.
+- Added original private LanguageTagImpl component methods as a responsibility fragment: cacheSimpleLSCV; getLanguage/Script/Region/VariantsFromLangtag; cached getLanguage/Script/Country/Variants; raw getRegion; exact LanguageTag ASCII ISO language/country/script predicates. Original shared OUString fields retain borrowed cache identity, actual copied return ownership, canonicalization-before-empty order, empty-result caching and all-four simple-cache flag writes. The original enclosing synCanonicalize is an explicit required owner contract; there is no no-op production canonicalizer or fabricated public LanguageTag class. Prepared private-state fixtures exercise the bounded member group and do not certify constructor/canonicalizer/registration/system-ID ownership.
+- Preserved liblangtag module boundaries by adding its original consumed DEFUNC_GET_SUBTAG getters (language/script/region/variants) and lt_lang/script/region/variant_get_tag in corresponding source-shaped files. Getters borrow actual immutable registered entries/list identity, retain null-owner guards and map managed empty variants to the source null list. LanguageTag now calls these original getter contracts rather than projecting another library's private fields. Existing managed Tag/RegistryEntry transport is retained; physical C-pointer/list/refcount lifetime and diagnostics are not claimed.
+- Added original cclass_Unicode::toLower range clamp and original MappingType::ToLower dispatch through actual Transliteration_casemapping/getValue with explicit temporary owner destruction. No string.toLowerCase/toLocaleLowerCase/Intl replacement is used. Preserve source next-unit context beyond the selected logical range, missing preceding context at a nonzero start, supplementary/split-surrogate behavior, embedded NUL and the original conditional tables. CALC-417 documents numeric-region loss in the simple component-cache branch; CALC-418 documents U+0130 identity outside tr/az. Both are preserved rather than corrected. Title word-boundary support is still pending.
+- Initial new tests expected generic Unicode lowercase i+combining-dot for English U+0130, and used variants outside registered source prefixes in es/sl fixtures. The source mapping_0130 explicitly returns U+0130 unchanged outside tr/az; the actual original-prefix parser correctly rejects the malformed prepared tag combinations. Corrected only test expectations/input tags to their source contracts, leaving production mappings/parser unchanged. Initial failure logs are fields-tests.log and fields-all-related-tests.log.
+- Initial provenance/dependency gates rejected an unrecorded filename split and the newly needed i18nlangtag->external edge. Recorded the explicit source responsibility split; added the actual edge supported by languagetag.cxx's liblangtag/langtag.h include and Library_i18nlangtag.mk's liblangtag/ICU external links. Existing reverse/application/browser restrictions remain intact; updated the boundary test for this original dependency. No arbitrary bypass, new service facade or broad parity-status promotion.
+- Command: npm run test:shared -- src/external/liblangtag/liblangtag src/i18nlangtag/source/languagetag src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts src/i18nutil/source/utility/casefolding-value.test.ts src/unotools/source/i18n/native-uppercase.test.ts src/external/libnumbertext/src/Numbertext.test.ts. Result: pass,16 files319 tests. Evidence: fields-all-related-tests-final.log. Scope: actual parser/getter boundaries, source private cache transitions/borrowing, numeric region versus ISO country, registered variants, existing unchanged-native casefolding value corpus, actual lowercase and uppercase paths, installed JS library. Earlier focused group passes7 files181 cases (fields-related-tests.log).
+- Command: npx vitest run scripts/check-module-boundaries.test.ts. Result: pass,47 cases (fields-final-4.log). Commands: npm run typecheck; focused ESLint on every authored changed implementation/test/checker; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: fields-accessors-{0,1,2,3,4,5,6}.log,fields-final-3.log,fields-build-final.log. Provenance1882 modules; dependencies1881 sources10156 relative imports226 allowed edges; docs4251 authored sources; semantic violations0. Final build completed successfully after the library accessor changes, with ordinary pre-existing bundle/plugin timing warnings.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 cases (fields-regression-1.log). This preceded the additive liblangtag getters; final full related liblangtag/member tests cover those additions. Existing CSV browser regression is repeated after terminal successful final build; see fields-browser-final.log. These checks do not prove complete NativeNumberSupplier12/CSV output forwarding.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after terminal successful final build. Evidence: fields-browser-final.log. Scope: existing CSV file UI and actual browser/DOM-free Worker regressions, not completed NatNum12 output.
+- Remaining: actual enclosing LanguageTag canonicalization/registration/public access path, NumberText adapter and NativeNumberSupplier12 scanner/cache/casing, true title word boundaries, selected date-field formatter forwarding, actual multiline EditEngine import and remaining CSV option/UI/native audit. Goal/task remain active and incomplete. This is the same open Agentplane task, so no tenth-task full-suite trigger arises. Scratch/native evidence remains inside output/native and is excluded from commits.

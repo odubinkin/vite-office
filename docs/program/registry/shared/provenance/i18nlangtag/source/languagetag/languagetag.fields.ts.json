@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagFieldState",
+      "isIsoLanguage",
+      "isIsoCountry",
+      "isIsoScript",
+      "cacheSimpleLSCV",
+      "getLanguageFromLangtag",
+      "getScriptFromLangtag",
+      "getRegionFromLangtag",
+      "getVariantsFromLangtag",
+      "getLanguage",
+      "getScript",
+      "getCountry",
+      "getRegion",
+      "getVariants"
+    ],
+    "upstreamSymbols": [
+      "LanguageTag::isIsoLanguage",
+      "LanguageTag::isIsoCountry",
+      "LanguageTag::isIsoScript",
+      "LanguageTagImpl::cacheSimpleLSCV",
+      "LanguageTagImpl::getLanguageFromLangtag",
+      "LanguageTagImpl::getScriptFromLangtag",
+      "LanguageTagImpl::getRegionFromLangtag",
+      "LanguageTagImpl::getVariantsFromLangtag",
+      "LanguageTagImpl::getLanguage",
+      "LanguageTagImpl::getScript",
+      "LanguageTagImpl::getCountry",
+      "LanguageTagImpl::getRegion",
+      "LanguageTagImpl::getVariants"
+    ],
+    "preservedResponsibilities": [
+      "Original private LanguageTagImpl component getters and cacheSimpleLSCV over actual OUString members and actual liblangtag Tag fields. Original enclosing synCanonicalize remains an explicit required dependency, not a no-op production implementation or invented public LanguageTag facade. Preserve canonicalization-before-empty, borrowed cache identity, empty-result caching, all-four simple cache writes, numeric-region versus country distinction and exact ASCII ISO predicates. Liblangtag getters/list transport use the existing managed Tag/RegistryEntry field representation. Public LanguageTag constructor/reset/canonicalization/registration and NumberText integration remain pending; prepared member tests do not claim those services."
+    ],
+    "omittedResponsibilities": [
+      "Enclosing canonicalization, registration, public LanguageTag state synchronization/factory and physical liblangtag/UNO ABI. Native diagnostic logging is not input validation."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.ts",
+          "marker": "cacheSimpleLSCV"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.test.ts",
+          "marker": "raw liblangtag numeric regions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "bool LanguageTagImpl::cacheSimpleLSCV()"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "DEFUNC_GET_SUBTAG"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fields.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private component access/cache members are separated from extraction and conversion groups while preserving their explicit enclosing canonicalization dependency and actual liblangtag data owner."
+    }
+  }
+}

@@ -4793,3 +4793,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: libnumbertext1.0.11 `src/Soros.js` at f29639e7623a6dc6803995176621b06fafe10f4f versus `src/Soros.cxx` in the SHA-256-pinned LibreOffice source archive; dependency identities and notices are in `third_party/libnumbertext-js`.
 - Observation: an unchanged native C++ comparison across12,412 inputs found12,405 equal outputs and7 differences. Italian ordinal1 yields `$1primo` in JS and `primo` in C++; Marathi ordinal1/21 are nonempty only in JS; Romanian USD1.25 has a leading space only in JS; Ukrainian0.25/1.25 use `пʼят` in JS versus `пʼять` in C++; Italian help reflects the same ordinal difference. JS also lacks the C++250-level recursion guard. The tested corpus is bounded, not a complete difference inventory.
 - User-approved exception,2026-10-30: use the official JS library as-is and connect through package.json rather than port or repair its interpreter. The private npm file dependency retains the exact official JS body with packaging declarations/export only. Preserve these JS behaviors; do not describe them as C++ parity. All other LibreOffice CSV/core contracts remain subject to the original upstream requirement.
+
+### CALC-417 — The simple LanguageTag component cache discards numeric region output
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, `cacheSimpleLSCV`, `getRegionFromLangtag`, `getCountry`.
+- Observation: simpleExtract returns a separate numeric aRegion for shapes such as es-419, but cacheSimpleLSCV copies only aCountry to maCachedCountry. With no mpImplLangtag, getRegionFromLangtag returns that same country cache, so this branch loses the numeric region even for the raw region getter. With an actual liblangtag owner, the raw region getter returns419 while the country getter clears it using isIsoCountry.
+- Preserve both source branches and the all-four cache flags. Tests use explicit prepared private states and an actual parsed es-Latn-419 liblangtag owner; they do not certify the enclosing LanguageTag canonicalizer/registration path or claim all public callers select the same branch.
+
+### CALC-418 — Native lowercase preserves dotted capital I outside Turkish/Azeri
+
+- Source: `i18nutil/source/utility/casefolding.cxx`, mapping_0130 and getConditionalValue; `i18npool/source/characterclassification/cclass_unicode.cxx`, toLower.
+- Observation: the original conditional mapping returns U+0130 unchanged unless the locale language is exactly tr or az. cclass_Unicode uses this mapping for its ToLower operation, so English Iİ becomes iİ, while tr/az produce ıi. Generic Unicode/JavaScript lowercase would instead expand the English dotted I to i plus combining dot.
+- Preserve the original initialized mapping and locale decision, including the source range context and lifetime chain. The existing unchanged-native getValue/conditional fixture and new actual classifier tests cover these responsibilities; a complete native CharacterClassification/UNO wrapper ABI is not claimed.
