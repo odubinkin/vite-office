@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 173
+revision: 176
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T15:39:48.164Z"
+  updated_at: "2026-10-30T10:58:38.922Z"
   updated_by: "CODER"
-  note: "HTML HREF/native item transport checkpoint verified: 45 focused cases, 9669 related Writer/core/codec tests and 11 API caller tests pass; static/provenance/registry gates pass. Native HTML language/remaining properties/lists/tables and final RTF/current-core/UI audit keep original goal open."
-  attempts: 22
+  note: "HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 boundary tests,typecheck,targeted ESLint/Prettier,source/JSDoc/tree/boundary/registry/routing gates. Native LanguageTag canonicalization/fallback and actual script-specific insertion connected;WRITER250 preserved. Overall task remains incomplete:RTF language control import is the next witnessed gap;no full format parity claim. See html12 evidence and Findings."
+  attempts: 23
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -357,8 +360,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T10:58:38.922Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 boundary tests,typecheck,targeted ESLint/Prettier,source/JSDoc/tree/boundary/registry/routing gates. Native LanguageTag canonicalization/fallback and actual script-specific insertion connected;WRITER250 preserved. Overall task remains incomplete:RTF language control import is the next witnessed gap;no full format parity claim. See html12 evidence and Findings."
+  -
+    type: "status"
+    at: "2026-10-30T10:58:44.565Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T15:40:19.097Z"
+doc_updated_at: "2026-10-30T10:58:44.565Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -741,6 +757,36 @@ sections:
     Attempts: 22
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:39:47.575Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T10:58:38.922Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 boundary tests,typecheck,targeted ESLint/Prettier,source/JSDoc/tree/boundary/registry/routing gates. Native LanguageTag canonicalization/fallback and actual script-specific insertion connected;WRITER250 preserved. Overall task remains incomplete:RTF language control import is the next witnessed gap;no full format parity claim. See html12 evidence and Findings.
+    Attempts: 23
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:58:11.373Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1394,6 +1440,22 @@ sections:
       Result: pass after adding the native known-pool assertion at the CSS wrapper's optional local return type. Boundaries: 1711 sources/9039 imports/210 edges. Provenance: 1712 modules. JSDoc: 3924 authored sources. Existing registry classifications/confidence remain unchanged. Logs output/playwright/rtf-properties-native/html11-*.txt.
     - Remaining actual format work: original LanguageTag fallback entry consumed by HTML LANG and resulting existing language heads, represented CSS paragraph border/background shorthand, native HTML lists/tables; then reconcile represented RTF rows with current code and complete cross-format/UI acceptance audit. Current parser has no alternate fake language, direction, macro or footnote producer. No full filter/core parity or goal completion is claimed.
     - User-requested estimate: approximately 8-12 substantial work blocks after this HREF checkpoint, provisionally 3-4 embedded-HTML blocks, 3-5 remaining RTF scenario/audit blocks and 2-3 final matrix/UI/verification blocks. This is a low-confidence planning estimate, not a newly approved task graph or a count of existing executable task IDs. Historical matrix open notes must first be reconciled against current source/tests; unconsumed generic module completeness does not add closure gates.
+
+    ### Connected HTML LANG and native LanguageTag fallback (2026-10-30)
+
+    - Implemented: actual SwHTMLParser existing standard/semantic/font/anchor/paragraph/heading/block LANG producers, ParseStyleOptions order, all three language Which map slots and context heads; original CSS so-language IDENT/STRING branch.
+    - Shared dependency: reused source-responsibility files from the repository's deferred task197 snapshot after review against pinned languagetag.cxx/header. Native value/lazy canonicalization/Locale/ID/ISO fallback/semantic registries consume the already integrated liblangtag parser and data. Task197 status/artifacts/Calc milestone remain unchanged. No network/native SDK or browser language parser.
+    - Source quirk: WRITER250 records short numeric-region cache/registry initialization behavior. Managed tests preserve fresh and preinitialized paths; this is not a compiled native differential.
+    - Command: npm run test:shared -- i18nlangtag external/liblangtag
+      Result: pass. Evidence: 402 tests, 17 files; output/playwright/rtf-properties-native/html12-shared-tests.txt. Scope: native shared LanguageTag, conversion/tables and parser consumers.
+    - Command: npm run test:writer -- sw/source/filter/html sw/source/filter/md document-io native-text-language
+      Result: pass. Evidence: 302 tests, 25 files; output/playwright/rtf-properties-native/html12-writer-tests.txt. Scope: actual HTML/Markdown/native language insertion, nested script ranges, Worker codec and RTF language export.
+    - Command: npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
+      Result: pass. Evidence: 47 tests; output/playwright/rtf-properties-native/html12-boundary-tests.txt. Scope: source-backed i18nlangtag->external link and forbidden reverse/application edges; guard algorithm unchanged.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint on changed source and boundary metadata; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+      Result: pass. Evidence: html12-static.txt, html12-gates-final.txt, html12-registry.txt under output/playwright/rtf-properties-native. Scope: changed implementation and source/registry boundaries; all semantic parity statuses remain unverified.
+    - Corrected during verification: an old snapshot duplicated the now-merged LANGUAGE_SPANISH_DATED declaration; removed only the duplicate. Corrected integration-fixture API usage and header re-export inventory localSymbols (no declarations are fabricated for re-exports).
+    - Remaining concrete failure: HTML LANG imports/Worker pass and RTF writes lang1031, but the current RTF reader ignores language controls and imports default1033. The initial round-trip assertion exposed this already-listed import gap; it is recorded in the format matrix and html12-lang-tests.txt. The passing test promises native RTF export only. Next native language block must connect source run-type selection, lang/alang/langfe/default controls, mapper Locale and language-item conversion, then close the actual round-trip regression. No broad completeness or goal completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -1787,6 +1849,36 @@ Note: HTML HREF/native item transport checkpoint verified: 45 focused cases, 966
 Attempts: 22
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:39:47.575Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T10:58:38.922Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML LANG and so-language checkpoint passes 302 Writer,402 shared and47 boundary tests,typecheck,targeted ESLint/Prettier,source/JSDoc/tree/boundary/registry/routing gates. Native LanguageTag canonicalization/fallback and actual script-specific insertion connected;WRITER250 preserved. Overall task remains incomplete:RTF language control import is the next witnessed gap;no full format parity claim. See html12 evidence and Findings.
+Attempts: 23
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:58:11.373Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2444,3 +2536,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
   Result: pass after adding the native known-pool assertion at the CSS wrapper's optional local return type. Boundaries: 1711 sources/9039 imports/210 edges. Provenance: 1712 modules. JSDoc: 3924 authored sources. Existing registry classifications/confidence remain unchanged. Logs output/playwright/rtf-properties-native/html11-*.txt.
 - Remaining actual format work: original LanguageTag fallback entry consumed by HTML LANG and resulting existing language heads, represented CSS paragraph border/background shorthand, native HTML lists/tables; then reconcile represented RTF rows with current code and complete cross-format/UI acceptance audit. Current parser has no alternate fake language, direction, macro or footnote producer. No full filter/core parity or goal completion is claimed.
 - User-requested estimate: approximately 8-12 substantial work blocks after this HREF checkpoint, provisionally 3-4 embedded-HTML blocks, 3-5 remaining RTF scenario/audit blocks and 2-3 final matrix/UI/verification blocks. This is a low-confidence planning estimate, not a newly approved task graph or a count of existing executable task IDs. Historical matrix open notes must first be reconciled against current source/tests; unconsumed generic module completeness does not add closure gates.
+
+### Connected HTML LANG and native LanguageTag fallback (2026-10-30)
+
+- Implemented: actual SwHTMLParser existing standard/semantic/font/anchor/paragraph/heading/block LANG producers, ParseStyleOptions order, all three language Which map slots and context heads; original CSS so-language IDENT/STRING branch.
+- Shared dependency: reused source-responsibility files from the repository's deferred task197 snapshot after review against pinned languagetag.cxx/header. Native value/lazy canonicalization/Locale/ID/ISO fallback/semantic registries consume the already integrated liblangtag parser and data. Task197 status/artifacts/Calc milestone remain unchanged. No network/native SDK or browser language parser.
+- Source quirk: WRITER250 records short numeric-region cache/registry initialization behavior. Managed tests preserve fresh and preinitialized paths; this is not a compiled native differential.
+- Command: npm run test:shared -- i18nlangtag external/liblangtag
+  Result: pass. Evidence: 402 tests, 17 files; output/playwright/rtf-properties-native/html12-shared-tests.txt. Scope: native shared LanguageTag, conversion/tables and parser consumers.
+- Command: npm run test:writer -- sw/source/filter/html sw/source/filter/md document-io native-text-language
+  Result: pass. Evidence: 302 tests, 25 files; output/playwright/rtf-properties-native/html12-writer-tests.txt. Scope: actual HTML/Markdown/native language insertion, nested script ranges, Worker codec and RTF language export.
+- Command: npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2
+  Result: pass. Evidence: 47 tests; output/playwright/rtf-properties-native/html12-boundary-tests.txt. Scope: source-backed i18nlangtag->external link and forbidden reverse/application edges; guard algorithm unchanged.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint on changed source and boundary metadata; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; git diff --check
+  Result: pass. Evidence: html12-static.txt, html12-gates-final.txt, html12-registry.txt under output/playwright/rtf-properties-native. Scope: changed implementation and source/registry boundaries; all semantic parity statuses remain unverified.
+- Corrected during verification: an old snapshot duplicated the now-merged LANGUAGE_SPANISH_DATED declaration; removed only the duplicate. Corrected integration-fixture API usage and header re-export inventory localSymbols (no declarations are fabricated for re-exports).
+- Remaining concrete failure: HTML LANG imports/Worker pass and RTF writes lang1031, but the current RTF reader ignores language controls and imports default1033. The initial round-trip assertion exposed this already-listed import gap; it is recorded in the format matrix and html12-lang-tests.txt. The passing test promises native RTF export only. Next native language block must connect source run-type selection, lang/alang/langfe/default controls, mapper Locale and language-item conversion, then close the actual round-trip regression. No broad completeness or goal completion claim.

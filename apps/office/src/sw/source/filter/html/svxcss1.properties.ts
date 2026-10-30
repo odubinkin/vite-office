@@ -26,6 +26,10 @@ import {
 } from "../../../../tools/inc/fontenum";
 import { SvxCaseMap as C, SvxAdjust as A } from "../../../../editeng/inc/svxenum";
 import { ParseCSS1ParagraphProperty } from "./svxcss1.paragraph";
+import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
+import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { Color } from "../../../../tools/inc/color";
 /** Original ASCII case folding; no Unicode/browser normalization is added. @param value - Native string. @returns Folded string. */
 export function cssAsciiLower(value: string): string {
@@ -363,6 +367,19 @@ export function ParseCSS1Property(
       ]).get(value);
       if ((type === T.IDENT || type === T.STRING) && adjust !== undefined)
         put(set, new SvxAdjustItem(adjust, aItemIds.nAdjust));
+      break;
+    }
+    case "so-language": {
+      if (type !== T.IDENT && type !== T.STRING) break;
+      const language = LanguageTag.convertToLanguageTypeWithFallback(
+        unicode(expression.GetString()),
+      );
+      if (language !== LANGUAGE_DONTKNOW)
+        scripts(set, new SvxLanguageItem(language, aItemIds.nLanguage), [
+          aItemIds.nLanguage,
+          aItemIds.nLanguageCJK,
+          aItemIds.nLanguageCTL,
+        ]);
       break;
     }
     case "white-space":

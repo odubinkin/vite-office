@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "getKnowns",
+      "disableParsing",
+      "isParsingDisabled",
+      "getNextOnTheFlyLanguage",
+      "isOnTheFlyID",
+      "isKnownOnTheFlyID",
+      "insertID",
+      "insertBcp",
+      "registerOnTheFly",
+      "registerImpl",
+      "getOnTheFlyScriptType",
+      "setConfiguredSystemLanguage"
+    ],
+    "upstreamSymbols": [
+      "getKnowns",
+      "getNextOnTheFlyLanguage",
+      "LanguageTagImpl::registerOnTheFly",
+      "LanguageTag::registerImpl",
+      "LanguageTag::getOnTheFlyScriptType",
+      "LanguageTag::setConfiguredSystemLanguage"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "POSIX rtl_Locale/glibc APIs, native ABI and physical ownership/lifetime machinery; no full-library parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+          "marker": "registerImpl"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+          "marker": "replays native normal LanguageTag QA"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "getKnowns"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
+          "marker": "class"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
+    }
+  }
+}

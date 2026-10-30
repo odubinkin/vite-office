@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
         "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx"
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx",
+        "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts"
       ],
-      "justification": "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion.",
+      "justification": "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion. S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion.",
       "knownViolations": [],
       "localSymbols": [
         "ParseStyleOptions"

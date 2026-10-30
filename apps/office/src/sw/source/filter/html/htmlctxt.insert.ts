@@ -63,6 +63,9 @@ export function InsertAttrs(
     }
   }
   const heads = new Map<number, HTMLAttrHead>([
+    [H.RES_CHRATR_LANGUAGE, tab.pLanguage],
+    [H.RES_CHRATR_CJK_LANGUAGE, tab.pLanguageCJK],
+    [H.RES_CHRATR_CTL_LANGUAGE, tab.pLanguageCTL],
     [H.RES_CHRATR_WEIGHT, tab.pBold],
     [H.RES_CHRATR_CJK_WEIGHT, tab.pBoldCJK],
     [H.RES_CHRATR_CTL_WEIGHT, tab.pBoldCTL],

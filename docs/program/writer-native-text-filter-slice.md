@@ -665,3 +665,40 @@ completeness. Remaining RTF rows still need a fresh current-state reconciliation
 earlier historical pending notes are not independent proof that those paths are
 still missing. The overall TXT/RTF/Markdown goal remains open until that final
 capability and UI audit is complete.
+
+### Connected native HTML LANG
+
+The embedded HTML caller now admits nonempty LANG on existing standard, semantic,
+legacy-font, anchor, paragraph, heading and text-block producers. The shared
+`LanguageTag::convertToLanguageTypeWithFallback` path uses actual canonicalization,
+Locale conversion, ordered ISO/non-ISO fallback and semantic registry owners;
+no browser language parser or direct language-ID shortcut is substituted. The
+normal liblangtag parser and registry data were already present after integration.
+The necessary LanguageTag responsibilities reuse the reviewed deferred task197
+snapshot under the concrete S3HW1E filter caller; task197 and its Calc milestone
+remain untouched. Source-derived QA and isolated registry-order tests accompany
+actual model/Markdown/Worker/RTF-export tests. WRITER250 preserves the short numeric-region
+cache/initialization quirk.
+
+`SvxCSS1Parser` now initializes all three language slots in its actual Which map.
+`ParseStyleOptions` inserts real SvxLanguageItem values after inline declarations,
+and `InsertAttrs` routes them through Western/CJK/CTL attribute heads with original
+script filtering and context restoration. Empty LANG does not apply an override;
+invalid input follows upstream fallback rather than browser rejection.
+
+This closes the historical language gap for these connected HTML producers.
+Document/body defaults, unimplemented HTML list/table producers and frame direction
+remain separate: the current Writer core has no RES_FRAMEDIR item, and paragraph
+alignment is not used as a substitute. Full library/HTML/CSS, ABI and compiled
+LibreOffice parity remain unverified.
+
+The new mixed-script LANG fixture also witnesses the previously listed RTF import
+gap: emitted `\lang1031` is currently ignored by the RTF reader and restored
+text uses its default 1033. HTML/Markdown/Worker and native RTF export are checked
+independently; RTF language dispatch, associated run-state selection, mapper Locale
+properties and native language-item conversion remain a concrete follow-up, not
+a claimed round-trip capability.
+
+Native CSS `so-language` now shares the actual LanguageTag fallback owner and
+three language slots. Only IDENT/STRING expressions are admitted, and explicit
+LANG is applied after inline CSS as in upstream.

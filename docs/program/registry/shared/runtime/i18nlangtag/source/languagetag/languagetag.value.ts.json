@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-value-fallback",
+    "capabilityIds": [
+      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
+        "docs/program/writer-native-text-filter-slice.md"
+      ],
+      "justification": "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTagInput",
+        "LanguageTag"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTag::LanguageTag",
+        "LanguageTag::reset",
+        "LanguageTag::syncFromImpl",
+        "LanguageTag::getLanguageType",
+        "LanguageTag::getIsoLanguageScriptCountry",
+        "LanguageTag::makeFallback",
+        "LanguageTag::isValidBcp47"
+      ]
+    }
+  }
+}

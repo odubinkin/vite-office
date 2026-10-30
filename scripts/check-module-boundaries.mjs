@@ -105,7 +105,8 @@ const allowedEdges = new Map([
   ["framework", new Set(["sfx2", "svl"])],
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
-  ["i18nlangtag", new Set(["sal", "udkapi"])],
+  // Native Library_i18nlangtag.mk uses liblangtag; languagetag.cxx includes langtag.h.
+  ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
   // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
   // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.

@@ -254,3 +254,19 @@ export const LANGUAGE_NF_SYSTEM_TIME = LanguageType(0xf400);
 
 /** Original lang.h identity consumed by format locale/calendar prefixes. */
 export const LANGUAGE_NF_SYSTEM_DATE = LanguageType(0xf800);
+/** Original primary range for dynamically registered language IDs. */
+export const LANGUAGE_ON_THE_FLY_START = LanguageType(0x03e0);
+/** Original inclusive dynamic primary end. */
+export const LANGUAGE_ON_THE_FLY_END = LanguageType(0x03fe);
+/** Original first dynamic sublanguage. */
+export const LANGUAGE_ON_THE_FLY_SUB_START = LanguageType(0x01);
+/** Original inclusive dynamic sublanguage end. */
+export const LANGUAGE_ON_THE_FLY_SUB_END = LanguageType(0x3e);
+/** Original native ID composition. @param sub - Sublanguage UInt16 value. @param pri - Primary UInt16 value. @returns Native UInt16 ID. */
+export function makeLangID(sub: number, pri: number): number {
+  return LanguageType((LanguageType(sub) << 10) | LanguageType(pri));
+}
+/** Original native sublanguage extraction. @param value - Native UInt16 ID. @returns Sublanguage. */
+export function subLanguage(value: number): number {
+  return LanguageType(value) >>> 10;
+}

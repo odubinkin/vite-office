@@ -33,7 +33,8 @@ export function NewAnchor(parser: SwHTMLParser): void {
     className = "",
     hasHref = false,
     href = "",
-    target = "";
+    target = "",
+    language = "";
   for (const option of [...parser.GetOptions()].reverse()) {
     switch (option.GetToken()) {
       case O.NAME:
@@ -52,6 +53,9 @@ export function NewAnchor(parser: SwHTMLParser): void {
         href = option.GetString();
         hasHref = true;
         break;
+      case O.LANG:
+        language = option.GetString();
+        break;
       case O.TARGET:
         target = option.GetString();
         break;
@@ -68,11 +72,11 @@ export function NewAnchor(parser: SwHTMLParser): void {
   }
   const context = new HTMLAttrContext(T.ANCHOR_ON);
   const [strippedClass] = SwCSS1Parser.GetScriptFromClass(className, false);
-  if (style || id || strippedClass) {
+  if (style || id || strippedClass || language) {
     const items = new SfxItemSet(parser.m_xDoc.GetAttrPool(), parser.m_pCSS1Parser.GetWhichMap());
     try {
       const info = new SvxCSS1PropertyInfo();
-      if (parser.ParseStyleOptions(style, id, className, items, info))
+      if (parser.ParseStyleOptions(style, id, className, items, info, language))
         parser.InsertAttrs(items, info, context, true);
     } finally {
       items.Dispose();

@@ -102,15 +102,16 @@ export class SwHTMLParser extends HTMLParser {
   GetCurrFormatColl() {
     return this.GetTextNode().GetTextFormatColl();
   }
-  /** Original style-option entry over actual CSS maps and property state. @param style - Inline declarations. @param id - ID. @param className - Class. @param items - Actual set. @param info - Actual flags. @returns Whether applied. */
+  /** Original style-option entry over actual CSS maps and property state. @param style - Inline declarations. @param id - ID. @param className - Class. @param items - Actual set. @param info - Actual flags. @param language - Original LANG option. @returns Whether applied. */
   ParseStyleOptions(
     style: string,
     id: string,
     className: string,
     items: SfxItemSet,
     info: SvxCSS1PropertyInfo,
+    language?: string,
   ): boolean {
-    return ParseStyleOptions(this, style, id, className, items, info);
+    return ParseStyleOptions(this, style, id, className, items, info, language);
   }
   /** Original deferred bookmark producer. @param name - Exact source name. @returns Nothing. */
   InsertBookmark(name: string): void {
@@ -237,13 +238,14 @@ export class SwHTMLParser extends HTMLParser {
     try {
       const style = this.GetStyleOption(O.STYLE),
         id = this.GetStyleOption(O.ID),
-        className = this.GetStyleOption(O.CLASS);
-      if (style || id || className) {
+        className = this.GetStyleOption(O.CLASS),
+        language = this.GetStyleOption(O.LANG);
+      if (style || id || className || language) {
         const set = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
         try {
           for (const [, item] of items) set.Put(item);
           const info = new SvxCSS1PropertyInfo();
-          this.ParseStyleOptions(style, id, className, set, info);
+          this.ParseStyleOptions(style, id, className, set, info, language);
           this.InsertAttrs(set, info, context, true);
         } finally {
           set.Dispose();
@@ -310,12 +312,13 @@ export class SwHTMLParser extends HTMLParser {
     const context = new HTMLAttrContext(token);
     const format = this.m_pCSS1Parser.GetChrFormat(token, this.GetStyleOption(O.CLASS));
     const style = this.GetStyleOption(O.STYLE),
-      id = this.GetStyleOption(O.ID);
-    if (style || id) {
+      id = this.GetStyleOption(O.ID),
+      language = this.GetStyleOption(O.LANG);
+    if (style || id || language) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info);
+        this.ParseStyleOptions(style, id, "", items, info, language);
         this.InsertAttrs(items, info, context, true);
       } finally {
         items.Dispose();
@@ -533,12 +536,13 @@ export class SwHTMLParser extends HTMLParser {
     else this.AddParSpace();
     const context = new HTMLAttrContext(T.PARABREAK_ON);
     const style = this.GetStyleOption(O.STYLE),
-      id = this.GetStyleOption(O.ID);
-    if (style || id) {
+      id = this.GetStyleOption(O.ID),
+      language = this.GetStyleOption(O.LANG);
+    if (style || id || language) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info);
+        this.ParseStyleOptions(style, id, "", items, info, language);
         this.InsertAttrs(items, info, context);
         if (info.m_bPreserveSpace) this.SetPreserveSpaces(true);
       } finally {
@@ -576,12 +580,13 @@ export class SwHTMLParser extends HTMLParser {
       SwPoolFormatId.COLL_HEADLINE1 + (token - T.HEAD1_ON) / 2,
     );
     const style = this.GetStyleOption(O.STYLE),
-      id = this.GetStyleOption(O.ID);
-    if (style || id) {
+      id = this.GetStyleOption(O.ID),
+      language = this.GetStyleOption(O.LANG);
+    if (style || id || language) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info);
+        this.ParseStyleOptions(style, id, "", items, info, language);
         this.InsertAttrs(items, info, context);
       } finally {
         items.Dispose();
@@ -620,12 +625,13 @@ export class SwHTMLParser extends HTMLParser {
     else if (mode === A.AM_SPACE) this.AddParSpace();
     const context = new HTMLAttrContext(token, pool);
     const style = this.GetStyleOption(O.STYLE),
-      id = this.GetStyleOption(O.ID);
-    if (style || id) {
+      id = this.GetStyleOption(O.ID),
+      language = this.GetStyleOption(O.LANG);
+    if (style || id || language) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info);
+        this.ParseStyleOptions(style, id, "", items, info, language);
         this.InsertAttrs(items, info, context);
       } finally {
         items.Dispose();
