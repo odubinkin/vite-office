@@ -4835,3 +4835,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` source increment, pending-high-surrogate branch and `bad_input`; consumed by the non-Windows `NumberText_Impl::getNumberText` input conversion.
 - Observation: after retaining a high surrogate, the loop consumes the next source unit before checking whether it is a low surrogate. A non-low unit goes to the invalid-input handler without being retried independently. With the original OUString-to-OString default flags, `A` + U+D800 + `B` encodes as `A?`, losing `B`; the existing SAL wrapper regression and actual NumberText missing-language path retain that outcome. A final unmatched high surrogate follows the separate end-of-input flag behavior.
 - Preserve the actual SAL conversion and flags at the NumberText boundary. Do not bypass them with TextEncoder, normalize malformed UTF16, or reprocess the following unit as a correction. This is source-derived evidence plus existing production SAL/component tests; no new unchanged native NumberText/UNO differential execution is claimed.
+
+### CALC-424 — EditEngine bounding-attribute lookup can stop before an earlier matching endpoint
+
+- Source: `editeng/source/editeng/ContentNode.cxx`, `CharAttribList::HasBoundingAttrib` and `InsertAttrib`.
+- Observation: attributes are ordered by start position, but reverse bounding lookup immediately returns false if the current attribute ends before the requested boundary. Earlier attributes may extend farther. With a color range `[0,10]` followed by a background-color range `[5,6]`, querying boundary10 returns false without inspecting the first range's matching endpoint.
+- Preserve this source scan and early return. Do not replace it with a complete endpoint search or sort the list by ends. Actual pooled attribute/range tests retain the outcome; unchanged native full EditEngine execution is not claimed.
+
+### CALC-425 — One OptimizeRanges pass can leave adjacent equal ranges unmerged
+
+- Source: `editeng/source/editeng/ContentNode.cxx`, `CharAttribList::OptimizeRanges`.
+- Observation: after finding an adjacent range with the same Which, the inner loop breaks whether or not its item equals the current item. A successful merge does not restart the search for the expanded range. Three equal adjacent ranges `[0,1]`, `[1,2]`, `[2,3]` therefore become `[0,2]`, `[2,3]` after one call.
+- Preserve the first-candidate break and outer iteration. Do not repeatedly merge to a fixed point, or continue past a different item at a matching Which/boundary. Source-derived tests use actual EditEngine pools, color items and owned attributes; native equal-key sort/layout/ABI behavior and complete engine integration remain unverified.

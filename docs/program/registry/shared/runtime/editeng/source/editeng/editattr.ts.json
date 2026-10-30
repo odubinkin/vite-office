@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editattr.ts",
+        "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
+        "editeng/source/editeng/editattr.cxx"
+      ],
+      "justification": "Actual original pooled item-holder/range owner with stable mutable endpoint lvalues, feature/edge/expandable flags, range movement/expansion/collapse and interval predicates. Original one-unit tab/line-break constructors set the feature flag; features never become expandable merely by enabling the independent bit. Original item-holder destruction and constructor constraints are retained. Rendering SetFont/other subtypes and complete EditEngine admission remain unported; no engine facade or raw-text replacement is supplied.",
+      "knownViolations": [],
+      "localSymbols": [
+        "EditCharAttrib",
+        "EditCharAttribTab",
+        "EditCharAttribLineBreak",
+        "CH_FEATURE"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editattr.cxx",
+      "upstreamSymbols": [
+        "EditCharAttrib::EditCharAttrib",
+        "EditCharAttribTab::EditCharAttribTab",
+        "EditCharAttribLineBreak::EditCharAttribLineBreak"
+      ]
+    }
+  }
+}

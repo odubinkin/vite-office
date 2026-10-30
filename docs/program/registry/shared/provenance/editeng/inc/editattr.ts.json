@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/editattr.ts",
+    "upstreamPath": "editeng/inc/editattr.hxx",
+    "localSymbols": [
+      "EditCharAttrib",
+      "EditCharAttribTab",
+      "EditCharAttribLineBreak",
+      "CH_FEATURE"
+    ],
+    "upstreamSymbols": [
+      "EditCharAttrib",
+      "EditCharAttribTab",
+      "EditCharAttribLineBreak",
+      "CH_FEATURE"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary."
+    ],
+    "omittedResponsibilities": [
+      "Complete CSV multiline engine, NatNum12 casing/formatter and process-context service integration remain incomplete. Native layout/memory/thread/ABI and full original QA are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/editattr.ts",
+          "marker": "EditCharAttrib"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
+          "marker": "EditCharAttrib"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/editattr.hxx",
+          "marker": "EditCharAttrib"
+        }
+      ]
+    }
+  }
+}

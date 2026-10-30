@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 108
+revision: 111
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T16:40:57.955Z"
+  updated_at: "2026-10-30T17:11:57.877Z"
   updated_by: "CODER"
-  note: "Actual NumberText component and source NatNum12 prefix/cache group pass 360 focused shared tests, 127 Calc cases, module-boundary checks, build/type/lint/provenance/parity and browser CSV workflow. Overall task remains incomplete: process-context service creation, full casing/title/formatter integration and native multiline EditEngine admission remain pending. Goal stays active."
-  attempts: 22
+  note: "Source NumberText SDK constructor/DeploymentException and actual EditEngine pooled attribute/list member groups pass 150 focused shared cases, 127 Calc cases, current build/type/lint/boundary/provenance/parity/resources and browser CSV workflow. Whole CSV scope remains incomplete: native multiline engine admission, NatNum12 wiring/casing/formatter and final audit remain pending; goal stays active."
+  attempts: 23
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -680,8 +683,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T17:11:57.877Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Source NumberText SDK constructor/DeploymentException and actual EditEngine pooled attribute/list member groups pass 150 focused shared cases, 127 Calc cases, current build/type/lint/boundary/provenance/parity/resources and browser CSV workflow. Whole CSV scope remains incomplete: native multiline engine admission, NatNum12 wiring/casing/formatter and final audit remain pending; goal stays active."
+  -
+    type: "status"
+    at: "2026-10-30T17:12:14.913Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T16:41:14.297Z"
+doc_updated_at: "2026-10-30T17:12:14.913Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1361,6 +1377,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-30T17:11:57.877Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Source NumberText SDK constructor/DeploymentException and actual EditEngine pooled attribute/list member groups pass 150 focused shared cases, 127 Calc cases, current build/type/lint/boundary/provenance/parity/resources and browser CSV workflow. Whole CSV scope remains incomplete: native multiline engine admission, NatNum12 wiring/casing/formatter and final audit remain pending; goal stays active.
+    Attempts: 23
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:11:56.199Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1935,6 +1981,19 @@ sections:
     - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one workflow after the completed current production build; evidence service-gates-3.log. Scope: browser CSV import, primary ODS save and active-sheet CSV export.
     - Verification repairs: initial typecheck found an unused SDK-contract import; removed it. An initial query test passed Type values instead of erased template getters; corrected the test to use the existing Reference declaration contract. Initial malformed-surrogate expectation incorrectly retained B after U+D800; checked the original tcvtutf8 loop and existing SAL regression and corrected the oracle to A?, without changing production conversion. Added missing test/type JSDoc. Runtime metadata excludes erased interface method signatures from physical localSymbols. Replaced test-only nonnull assertion syntax with exact known component/interface casts to retain the unchanged ESLint rule. All failed checks were rerun successfully; no enforcement or thresholds were weakened. Scope is source-derived integration, not an unchanged full native UNO/NumberText/casing comparison.
     - Cadence and state: same executable task AQF9AG, no tenth-task trigger and no full-suite replay. Native NumberText process-context construction, full NatNum12 casing/title and formatter integration, and original multiline EditEngine CSV admission remain incomplete. The task remains DOING and the goal active. No complete CSV readiness or broad native parity status is claimed.
+
+    ### AQF9AG source service constructor and multiline-attribute prerequisites checkpoint (2026-10-31)
+
+    - Added the actual cppumaker NumberText service default constructor normal context/manager path, including exact service name, temporary manager/root/queried-reference lifetimes, move assignment, UNO_QUERY followed by original missing-interface DeploymentException, unchanged RuntimeException/non-UNO propagation and checked-Exception wrapping with original prefix, Message and caller Context. Added the actual generated DeploymentException owner/type over RuntimeException, shared string/reference values and typelib registration. The native static-constructor-environment macro branch is not selected. Tests use explicit prepared enclosing context/manager boundaries but invoke the real NumberText component factory/library; no production context/service-manager facade, fake successful converter or general UNO-completion claim is introduced.
+    - Audited the direct multiline CSV path: sc/source/ui/docshell/impex.ts still invokes SetTextCell plus manual block-position invalidation where pinned impex.cxx invokes GetEditEngine, SetTextCurrentDefaults and setEditCell(CreateTextObject()). Current documen7.ts still splits text into an EditTextObjectImpl with a hard-coded LATIN script. Confirmed these remain incomplete, rather than defining CSV readiness around passing browser output. Priority is the actual unformatted source edit path, not automatic expansion into complete unrelated UNO infrastructure.
+    - Implemented the original EditCharAttrib pooled-holder/range owner and actual tab/line-break constructors, including one-unit feature lengths, feature/edge/expandable flags, original mutable endpoint lvalues, interval predicates and actual holder destruction. Added original CharAttribList owning-vector/empty-flag and range members: source insert/reverse boundary lookup, half-open/forward/empty/feature queries, overlap/bounding scans, erase/destruction, DeleteEmptyAttribs and one-pass OptimizeRanges. No array-of-lines EditEngine or placeholder default-font/layout provider is supplied. The default-font member responsibility and enclosing ContentNode/EditDoc/ImpEditEngine remain unported. This is a prerequisite source member group, not completed multiline admission. CALC-424/425 document the preserved reverse early-return and first-match merge behavior.
+    - Next concrete multiline source chain: editeng/inc/ContentNode.hxx and source/editeng/ContentNode.cxx -> real ContentNode/ContentAttribs/default-font/character state; EditPaM/EditSelection and EditDoc::RemoveText/InsertText/InsertParaBreak/InsertFeature; ImpEditEngine::InitDoc/SetText/ImpInsertText and whole-selection CreateTextObject; ScEditEngineDefaulter/ScFieldEditEngine, ScDocument::GetEditEngine and the actual import setEditCell call. ImpInsertText must retain convertLineEnd, tab markers/attributes, the source MAXCHARSINPARA=0x3FFF-CHARPOSGROW branch and its original 84-unit category/hyphen decisions, original paragraph defaults, script initialization and source flags. Do not replace this with regex paragraph splitting, fixed script or a new arbitrary long-line cutoff. Layout is explicitly disabled by original ScDocument::GetEditEngine setup; unrelated rendering APIs must not become invented prerequisites.
+    - Command: npm run test:shared -- src/offapi/com/sun/star/linguistic2 src/lingucomponent src/editeng/source/editeng src/i18npool/source/nativenumber src/cppuhelper/source/native-implbase.test.ts. Result: pass, 14 files/150 cases; evidence output/native/AQF9AG-libnumbertext/edit-context-check-0.log. Scope: actual generated service/exception/weak/reference behavior, actual NumberText/library, existing edit-object/pool/script owners and the new pooled attribute/list algorithms. Separate SDK tests prove real NumberText operation after caller-context release, exact failure messages, exception Context lifetime and unchanged failure identity. Native full component-context/EditEngine differential is not claimed.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence edit-context-final-5.log. Scope: CSV options, import/admission/date/recognition and export. These checks retain existing behavior; they do not certify the still-unported native multiline pipeline.
+    - Commands: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources. Result: pass. Evidence edit-context-final-4.log, edit-context-check-4.log, edit-context-final-0.log, edit-context-check-1/2/3.log, edit-context-final-1/2/3.log, edit-context-resources.log. Boundaries1902 runtime sources/10311 relative imports/233 edges; provenance1903 modules; JSDoc4282 files; both parity checks report zero semantic violations. Only intentional native scratch is excluded from ESLint; no enforcement/threshold changes.
+    - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one browser workflow after the completed current build; evidence edit-context-final-6.log. Scope: CSV import, primary ODS save and active-sheet CSV export.
+    - Verification repair: the first generated-helper tests exposed foreign-realm TextEncoder Uint8Arrays selecting the wrong OUString constructor branch in jsdom. Materialized compiler-known ASCII literals in the current realm, as existing SDK value constructors do; retained exact source bytes and the original constructor, without weakening the shared string dispatcher. Tests then pass. Replaced a generic exception matcher with direct caught-value identity checks. All new test positions stay within valid nonnegative source spans. Source prototype fields, native equal-key sort order, C++ const/compiler enforcement, debug/undefined-input behavior, physical ABI/thread/layout and full engine/service bootstrap remain uncertified.
+    - Cadence: same executable AQF9AG, no new tenth-task trigger/full-suite replay. Overall task remains DOING and goal active. NatNum12 creation/casing/title/formatter wiring, native multiline admission and the final requirements audit remain incomplete; the two confirmed functional gaps are not claimed to be an exhaustive completion audit.
 id_source: "generated"
 ---
 ## Summary
@@ -2623,6 +2682,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-30T17:11:57.877Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Source NumberText SDK constructor/DeploymentException and actual EditEngine pooled attribute/list member groups pass 150 focused shared cases, 127 Calc cases, current build/type/lint/boundary/provenance/parity/resources and browser CSV workflow. Whole CSV scope remains incomplete: native multiline engine admission, NatNum12 wiring/casing/formatter and final audit remain pending; goal stays active.
+Attempts: 23
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:11:56.199Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3201,3 +3290,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one workflow after the completed current production build; evidence service-gates-3.log. Scope: browser CSV import, primary ODS save and active-sheet CSV export.
 - Verification repairs: initial typecheck found an unused SDK-contract import; removed it. An initial query test passed Type values instead of erased template getters; corrected the test to use the existing Reference declaration contract. Initial malformed-surrogate expectation incorrectly retained B after U+D800; checked the original tcvtutf8 loop and existing SAL regression and corrected the oracle to A?, without changing production conversion. Added missing test/type JSDoc. Runtime metadata excludes erased interface method signatures from physical localSymbols. Replaced test-only nonnull assertion syntax with exact known component/interface casts to retain the unchanged ESLint rule. All failed checks were rerun successfully; no enforcement or thresholds were weakened. Scope is source-derived integration, not an unchanged full native UNO/NumberText/casing comparison.
 - Cadence and state: same executable task AQF9AG, no tenth-task trigger and no full-suite replay. Native NumberText process-context construction, full NatNum12 casing/title and formatter integration, and original multiline EditEngine CSV admission remain incomplete. The task remains DOING and the goal active. No complete CSV readiness or broad native parity status is claimed.
+
+### AQF9AG source service constructor and multiline-attribute prerequisites checkpoint (2026-10-31)
+
+- Added the actual cppumaker NumberText service default constructor normal context/manager path, including exact service name, temporary manager/root/queried-reference lifetimes, move assignment, UNO_QUERY followed by original missing-interface DeploymentException, unchanged RuntimeException/non-UNO propagation and checked-Exception wrapping with original prefix, Message and caller Context. Added the actual generated DeploymentException owner/type over RuntimeException, shared string/reference values and typelib registration. The native static-constructor-environment macro branch is not selected. Tests use explicit prepared enclosing context/manager boundaries but invoke the real NumberText component factory/library; no production context/service-manager facade, fake successful converter or general UNO-completion claim is introduced.
+- Audited the direct multiline CSV path: sc/source/ui/docshell/impex.ts still invokes SetTextCell plus manual block-position invalidation where pinned impex.cxx invokes GetEditEngine, SetTextCurrentDefaults and setEditCell(CreateTextObject()). Current documen7.ts still splits text into an EditTextObjectImpl with a hard-coded LATIN script. Confirmed these remain incomplete, rather than defining CSV readiness around passing browser output. Priority is the actual unformatted source edit path, not automatic expansion into complete unrelated UNO infrastructure.
+- Implemented the original EditCharAttrib pooled-holder/range owner and actual tab/line-break constructors, including one-unit feature lengths, feature/edge/expandable flags, original mutable endpoint lvalues, interval predicates and actual holder destruction. Added original CharAttribList owning-vector/empty-flag and range members: source insert/reverse boundary lookup, half-open/forward/empty/feature queries, overlap/bounding scans, erase/destruction, DeleteEmptyAttribs and one-pass OptimizeRanges. No array-of-lines EditEngine or placeholder default-font/layout provider is supplied. The default-font member responsibility and enclosing ContentNode/EditDoc/ImpEditEngine remain unported. This is a prerequisite source member group, not completed multiline admission. CALC-424/425 document the preserved reverse early-return and first-match merge behavior.
+- Next concrete multiline source chain: editeng/inc/ContentNode.hxx and source/editeng/ContentNode.cxx -> real ContentNode/ContentAttribs/default-font/character state; EditPaM/EditSelection and EditDoc::RemoveText/InsertText/InsertParaBreak/InsertFeature; ImpEditEngine::InitDoc/SetText/ImpInsertText and whole-selection CreateTextObject; ScEditEngineDefaulter/ScFieldEditEngine, ScDocument::GetEditEngine and the actual import setEditCell call. ImpInsertText must retain convertLineEnd, tab markers/attributes, the source MAXCHARSINPARA=0x3FFF-CHARPOSGROW branch and its original 84-unit category/hyphen decisions, original paragraph defaults, script initialization and source flags. Do not replace this with regex paragraph splitting, fixed script or a new arbitrary long-line cutoff. Layout is explicitly disabled by original ScDocument::GetEditEngine setup; unrelated rendering APIs must not become invented prerequisites.
+- Command: npm run test:shared -- src/offapi/com/sun/star/linguistic2 src/lingucomponent src/editeng/source/editeng src/i18npool/source/nativenumber src/cppuhelper/source/native-implbase.test.ts. Result: pass, 14 files/150 cases; evidence output/native/AQF9AG-libnumbertext/edit-context-check-0.log. Scope: actual generated service/exception/weak/reference behavior, actual NumberText/library, existing edit-object/pool/script owners and the new pooled attribute/list algorithms. Separate SDK tests prove real NumberText operation after caller-context release, exact failure messages, exception Context lifetime and unchanged failure identity. Native full component-context/EditEngine differential is not claimed.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass, 6 files/127 cases; evidence edit-context-final-5.log. Scope: CSV options, import/admission/date/recognition and export. These checks retain existing behavior; they do not certify the still-unported native multiline pipeline.
+- Commands: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:source-provenance; npm run check:docs; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources. Result: pass. Evidence edit-context-final-4.log, edit-context-check-4.log, edit-context-final-0.log, edit-context-check-1/2/3.log, edit-context-final-1/2/3.log, edit-context-resources.log. Boundaries1902 runtime sources/10311 relative imports/233 edges; provenance1903 modules; JSDoc4282 files; both parity checks report zero semantic violations. Only intentional native scratch is excluded from ESLint; no enforcement/threshold changes.
+- Command: npm exec -- playwright test apps/office/e2e/calc/csv.spec.ts --config=apps/office/playwright.config.ts --project=calc. Result: pass, one browser workflow after the completed current build; evidence edit-context-final-6.log. Scope: CSV import, primary ODS save and active-sheet CSV export.
+- Verification repair: the first generated-helper tests exposed foreign-realm TextEncoder Uint8Arrays selecting the wrong OUString constructor branch in jsdom. Materialized compiler-known ASCII literals in the current realm, as existing SDK value constructors do; retained exact source bytes and the original constructor, without weakening the shared string dispatcher. Tests then pass. Replaced a generic exception matcher with direct caught-value identity checks. All new test positions stay within valid nonnegative source spans. Source prototype fields, native equal-key sort order, C++ const/compiler enforcement, debug/undefined-input behavior, physical ABI/thread/layout and full engine/service bootstrap remain uncertified.
+- Cadence: same executable AQF9AG, no new tenth-task trigger/full-suite replay. Overall task remains DOING and goal active. NatNum12 creation/casing/title/formatter wiring, native multiline admission and the final requirements audit remain incomplete; the two confirmed functional gaps are not claimed to be an exhaustive completion audit.
