@@ -58,6 +58,7 @@ export class RtfDocumentImpl {
     if (!this.firstRun) return;
     this.outputSettingsTable();
     this.firstRun = false;
+    this.setNeedSect(true);
     const font = getNestedAttribute(
       this.m_aDefaultCharacterSprms,
       N.LN_EG_RPrBase_rFonts,
@@ -209,6 +210,26 @@ export class RtfDocumentImpl {
   protected readonly m_aSectionSprms = new Map<number, RTFSprms>();
   protected m_bNeedPar = true;
   protected m_bHadSect = false;
+  protected m_bNeedSect = false;
+  protected m_bNeedCr = false;
+  protected m_bNeedFinalPar = false;
+  protected m_bParAtEndOfSection = false;
+  protected m_bIgnoreNextContSectBreak = false;
+  protected m_nResetBreakOnSectBreak: RTFKeyword = RTFKeyword.invalid;
+  /** Atomic capture of the original mapper paragraph flow; zero-length utext still ends first-run state. */
+  protected m_bIsFirstRun = false;
+  protected m_bIsFirstParaInSection = true;
+  protected m_bParagraphPageBreak = false;
+  /** Original new-document, body-stream setNeedSect profile. @param value - Whether a section is needed. @returns Nothing. */
+  protected setNeedSect(value: boolean): void {
+    if (!this.m_bNeedSect && value && !this.firstRun) {
+      this.m_bNeedSect = true;
+      this.m_bNeedPar = true;
+      this.m_bIsFirstParaInSection = true;
+      this.m_bIsFirstRun = true;
+      this.m_bParagraphPageBreak = this.pendingPageBreak;
+    } else if (this.m_bNeedSect && !value) this.m_bNeedSect = false;
+  }
   protected currentSection = 0;
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
@@ -285,6 +306,7 @@ export class RtfDocumentImpl {
     this.checkFirstRun();
     this.checkNeedPap(state);
     if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
+    FlushDeferredPageBreak.call(this, state);
     const previous = this.runs.at(-1);
     if (
       previous !== undefined &&
@@ -300,6 +322,8 @@ export class RtfDocumentImpl {
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
     else this.runs.push(this.SnapshotRun(value, state));
     this.terminatedParagraph = false;
+    this.m_bNeedCr = true;
+    this.m_bIsFirstRun = false;
   }
 
   /** Captures original runProps input at the atomic import boundary, including empty paragraph markers. @param value - Native text. @param state - Current group. @returns Owned state snapshot. */
@@ -324,17 +348,20 @@ export class RtfDocumentImpl {
     };
   }
 
-  /** Completes a paragraph at native \par or document end. @param state - Current group. @param marker - Capture PAR run properties. @returns Nothing. */
-  protected CommitParagraph(state = this.states.at(-1), marker = false): void {
+  /** Completes a paragraph at native \par or document end. @param state - Current group. @param marker - Capture PAR run properties. @param mapperSplit - Original mapper-only paragraph split. @returns Nothing. */
+  protected CommitParagraph(state = this.states.at(-1), marker = false, mapperSplit = false): void {
     this.checkFirstRun();
     if (state) this.checkNeedPap(state);
+    if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
     const paragraph: RtfParagraph = {
       paragraphSprms: new RTFSprms(this.m_aParagraphSprms),
-      ...(marker && state ? { marker: this.SnapshotRun("", state) } : {}),
+      ...(marker && state && !this.m_bParAtEndOfSection
+        ? { marker: this.SnapshotRun("", state) }
+        : {}),
       runs: this.runs.splice(0),
       state: {
         ...(state?.paragraph ?? DEFAULT_PARAGRAPH),
-        ...(this.pendingPageBreak && !this.inTable
+        ...(this.m_bParagraphPageBreak && !this.inTable
           ? { pageBreakBefore: true, pageBreakBeforeSet: true }
           : {}),
       },
@@ -343,11 +370,19 @@ export class RtfDocumentImpl {
     if (this.inTable) this.tableCell.push(paragraph);
     else {
       this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
-      this.pendingPageBreak = false;
     }
     this.terminatedParagraph = true;
-    this.m_bNeedPar = false;
-    this.m_bNeedPap = true;
+    this.m_bIsFirstParaInSection = false;
+    this.m_bIsFirstRun = !this.m_bParAtEndOfSection;
+    this.m_bParagraphPageBreak = this.m_bParAtEndOfSection ? false : this.pendingPageBreak;
+    if (!mapperSplit) {
+      this.m_bNeedCr = false;
+      if (!this.inTable || marker) {
+        this.m_bNeedPar = false;
+        this.m_bNeedFinalPar = false;
+      }
+      this.m_bNeedPap = true;
+    }
   }
 
   /** Completes rows as one native table block.  @returns Nothing. */
@@ -360,6 +395,8 @@ export class RtfDocumentImpl {
       pageBreakBefore: this.pendingPageBreak,
     });
     this.pendingPageBreak = false;
+    this.m_bParagraphPageBreak = false;
+    this.m_bIsFirstRun = true;
   }
 
   /** Adds one font-family table token. @param value - Font text. @param state - Current group.  @returns Nothing. */
@@ -423,3 +460,6 @@ import { GetNumberingProperties } from "./rtfdocumentimpl.numbering";
 
 import { RTFReferenceTable } from "./rtfreferencetable";
 import { RTFReferenceProperties } from "./rtfreferenceproperties";
+
+import { RTFKeyword } from "./rtfcontrolwords";
+import { FlushDeferredPageBreak } from "./rtfdocumentimpl.section";

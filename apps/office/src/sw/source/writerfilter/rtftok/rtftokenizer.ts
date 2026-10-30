@@ -86,6 +86,7 @@ export class RtfTokenizer {
       } else if (byte === 0x5c) {
         this.ReadEscape();
       } else {
+        if (this.depth === 0 && (byte === 0x0d || byte === 0x0a || byte === 0x00)) continue;
         this.rawRun = true;
         if (byte === 0x0d || byte === 0x0a || byte === 0x00) continue;
         if (this.fallback === 0 && this.rawFirstByte === undefined) this.rawFirstByte = byte;
@@ -231,4 +232,37 @@ function isLetter(byte: number | undefined): boolean {
 /** Tests ASCII control-parameter digit syntax. @param byte - Candidate. @returns Whether a digit. */
 function isDigit(byte: number | undefined): boolean {
   return byte !== undefined && byte >= 48 && byte <= 57;
+}
+
+import controlWordData from "./rtftokenizer.controlwords.json";
+import type { RTFKeyword } from "./rtfcontrolwords";
+/** Original control-word dispatch kind order. */
+export enum RTFControlType {
+  FLAG,
+  DESTINATION,
+  SYMBOL,
+  TOGGLE,
+  VALUE,
+}
+/** Original immutable native symbol metadata. */
+export interface RTFSymbol {
+  readonly controlType: RTFControlType;
+  readonly index: RTFKeyword;
+  readonly defValue: number;
+}
+/** Original static unordered lookup, preserving exact case-sensitive spellings and first insertion. */
+const controlWords = new Map<string, Readonly<RTFSymbol>>();
+for (const row of controlWordData.controls) {
+  const [keyword, controlType, index, defValue] = row as [
+    string,
+    RTFControlType,
+    RTFKeyword,
+    number,
+  ];
+  if (!controlWords.has(keyword))
+    controlWords.set(keyword, Object.freeze({ controlType, index, defValue }));
+}
+/** Original null-on-unknown symbol lookup. @param keyword - Exact spelling. @returns Borrowed immutable metadata or null. */
+export function getSymbolData(keyword: string): Readonly<RTFSymbol> | null {
+  return controlWords.get(keyword) ?? null;
 }

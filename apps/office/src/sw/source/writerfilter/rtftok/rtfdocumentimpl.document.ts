@@ -80,8 +80,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   if (
     this["runs"].length > 0 ||
     (this["blocks"].length === 0 && this["tableRows"].length === 0) ||
-    !this["terminatedParagraph"] ||
-    (this["pendingPageBreak"] && this["tableRows"].length === 0)
+    !this["terminatedParagraph"]
   )
     this["CommitParagraph"]();
   this["FlushTable"]();

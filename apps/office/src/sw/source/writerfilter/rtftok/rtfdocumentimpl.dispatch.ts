@@ -93,18 +93,19 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (token.kind === "group-end") {
-    if (
-      this["states"].length === 1 &&
-      !this["firstRun"] &&
-      (this["runs"].length > 0 ||
-        this["m_bNeedPar"] ||
-        (!this["terminatedParagraph"] && !(this["states"][0] as RtfState).paragraphSprms.empty()))
-    )
-      this["CommitParagraph"](this["states"][0], true);
     if (this["states"].length === 1 && !this["firstRun"])
-      CaptureSection.call(this, this["states"][0] as RtfState, true);
+      FinishRtfSections.call(this, this["states"][0] as RtfState);
     const previous = this["states"].pop();
     try {
+      const parent = this["states"].at(-1);
+      if (this["m_nResetBreakOnSectBreak"] !== RTFKeyword.invalid && previous && parent) {
+        const type = previous.sectionSprms.find(N.LN_EG_SectPrContents_type);
+        try {
+          if (type.is()) parent.sectionSprms.set(N.LN_EG_SectPrContents_type, type);
+        } finally {
+          type.dispose();
+        }
+      }
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
         this["CommitFont"](previous);
       if (
@@ -189,6 +190,22 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   }
   const state = this["states"].at(-1);
   if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
+  if (token.kind === "control" && state.destination !== "skip") {
+    const symbol = getSymbolData(token.name);
+    if (symbol) {
+      this["setNeedSect"](true);
+      if (symbol.index === RTFKeyword.PAR) token = { ...token, name: "par" };
+      if (symbol.controlType === RTFControlType.VALUE && token.parameter === undefined)
+        token = { ...token, parameter: symbol.defValue };
+      else if (
+        token.name !== "rtf" &&
+        symbol.controlType !== RTFControlType.TOGGLE &&
+        symbol.controlType !== RTFControlType.VALUE &&
+        token.parameter !== undefined
+      )
+        token = { kind: "control", name: token.name };
+    }
+  }
   if (token.kind === "character-source") {
     if (state.destination === "levelnumbers")
       ReadLevelNumbers(state, token.firstByte, token.lastByte);
@@ -197,7 +214,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (token.kind === "hex-break") {
     // resolveChars converts hex CR and LF into separate PAR controls except
     // in destinations such as LEVELTEXT, where their bytes remain data.
-    if (state.destination === "body") this["DispatchBodyControl"]("par", undefined, state);
+    if (state.destination === "body") this["Dispatch"]({ kind: "control", name: "par" });
     else if (state.destination === "leveltext") state.levelText += token.value;
     return;
   }
@@ -529,13 +546,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "page" || name === "column") {
-    // The represented document has one column: pinned COLUMN dispatches PAGE.
-    // PAGE is ignored while the RTF table buffer owns the current row.
-    if (this["inTable"]) return;
-    if (this["runs"].length > 0 || (this["pendingPageBreak"] && this["tableRows"].length === 0))
-      this["CommitParagraph"](state);
-    if (this["tableRows"].length > 0) this["FlushTable"]();
-    this["pendingPageBreak"] = true;
+    DispatchPageBreak.call(this, name, state);
     return;
   }
   if (name === "trowd") {
@@ -734,6 +745,7 @@ export function DispatchBodyControl(
         defaultPaddings: this["rowDefaultPaddings"],
       });
     this["inTable"] = false;
+    this["m_bNeedFinalPar"] = true;
     this["terminatedParagraph"] = true;
     return;
   }
@@ -933,4 +945,10 @@ import { unicode } from "../../core/unocore/unocrsrhelper";
 
 import { DispatchTextSymbol } from "./rtfdispatchsymbol";
 
-import { CaptureSection, DispatchSectionControl } from "./rtfdocumentimpl.section";
+import {
+  FinishRtfSections,
+  DispatchSectionControl,
+  DispatchPageBreak,
+} from "./rtfdocumentimpl.section";
+import { RTFKeyword } from "./rtfcontrolwords";
+import { getSymbolData, RTFControlType } from "./rtftokenizer";

@@ -2478,3 +2478,25 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: LANG writes character sprms and, while needPap is true, paragraph sprms, but does not initialize the first run. Root-pop finalization is guarded by !m_bFirstRun. Ordinary body text or an explicit PAR initializes the run and emits those properties.
 - Impact: a language-only empty stream can retain the document's initial language rather than its authored LANG value; adding PAR applies the language to the empty paragraph. The former local test incorrectly promised the same authored language for both forms.
 - Local behavior: preserve the native guard and pending-property ownership. `rtf-language.test.ts` checks initial LANGUAGE_DONTKNOW for control-only input, German for explicit empty PAR, and both outcomes after native export/import. Do not initialize a run solely to retain formatting-only input.
+
+
+### WRITER285 — A recognized no-op after terminal SECT can create another section
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, dispatchKeyword; `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx`, `rtfdispatchsymbol.cxx`, `rtfdispatchdestination.cxx` and `rtfdocumentimpl.cxx`, dispatch entry points and setNeedSect/root-pop.
+- Observation: recognized commands enter a dispatcher that calls setNeedSect(true) before its switch. This includes registered commands without a handled case, such as PNFS. Unknown spellings return in the tokenizer without reaching that operation.
+- Impact: a registered no-op after terminal SECT can cause another final section/page style; an unknown word at the same location does not. This follows source control flow rather than an intentional new format feature.
+- Local behavior: preserve the distinction with the complete native metadata table. `rtf-break-state.test.ts` checks PNFS, known section/character flags and unknown words, including grouped suffixes. Do not classify commands by their local visible effects.
+
+### WRITER286 — A deferred trailing PAGE does not force a page-break paragraph
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, PAGE; `rtfdocumentimpl.cxx`, root-pop; `dmapper/DomainMapper.cxx`, lcl_utext newline and non-newline paths.
+- Observation: PAGE defers a break in the mapper. With the original SplitPgBreakAndParaMark=false profile, PAR does not consume it. Non-newline text consumes it, but root-pop alone need not provide such text.
+- Impact: a final PAGE can leave the deferred break unused rather than creating another paragraph with PAGE_BEFORE. This is a source-level finding, not a compiled desktop pagination claim.
+- Local behavior: preserve the deferred lifecycle. Tests distinguish trailing PAGE from leading, consecutive and PAGE-PAR-text cases. Do not add a synthetic final page-break paragraph to make the input appear more regular.
+
+### WRITER287 — Continuous PAGE retains an empty styled paragraph despite upstream uncertainty
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, PAGE/SECT; `sw/qa/extras/rtfimport/rtfimport.cxx`, testContSectionPageBreak and its unchanged fixture.
+- Observation: the upstream test explicitly questions the ideal paragraph count between SECOND and THIRD but asserts an empty third paragraph carrying PageDescName, followed by THIRD without a direct break/style and a final empty paragraph.
+- Impact: removing the apparently redundant empty paragraph changes the pinned native regression contract.
+- Local behavior: preserve the asserted sequence and native synthetic section/reset logic. Both a required standalone literal case and the unchanged upstream fixture check the actual model. No alternative paragraph normalization is applied.

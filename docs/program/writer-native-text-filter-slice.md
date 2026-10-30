@@ -1188,3 +1188,37 @@ an explicit PAR initializes the native path and applies them. The existing
 first-run guard is retained (WRITER284); both variants and their native re-export
 are covered. The old promise that both variants import German was a local test
 error, not a reason to override the source's root-pop condition.
+
+
+### S3HW1E PAGE and section lifecycle checkpoint
+
+The reader now uses the original needSect, needCr, needFinalPar, parAtEndOfSection,
+ignore-next-continuous and lazy section-break reset states. Root-pop follows the
+native guarded paragraph/section sequence. A terminal SECT still needs an ordinary
+final paragraph, but does not alone create another section/page descriptor. A
+recognized command after it can start a final section even when its handler has
+no represented effect; an unknown command cannot (WRITER285).
+
+All1814 RTFKeyword values and1823 control-word metadata rows are literal pinned
+source data. Native dispatch kinds, numeric defaults, case sensitivity and PAR
+aliases are preserved. A direct source comparison checks every declaration and
+row. This closes the metadata requirement, not every handler in the vocabulary.
+The existing strict RTF1 lexical admission remains unchanged. Ignored raw CR, LF
+and NUL after the final root do not create an auxiliary character-source event;
+ordinary content outside the root remains rejected.
+
+The atomic mapper binding now captures the native non-newline deferred PAGE
+phase, including the zero-length utext first-run transition. PAGE followed by PAR
+keeps the break for subsequent text; leading and consecutive breaks preserve
+required paragraph boundaries. A trailing deferred PAGE does not manufacture a
+paragraph carrying that break (WRITER286). Continuous PAGE uses the native
+synthetic section, TITLEPG exclusion, ignore-next-SECT and lazy reset sequence.
+Completed table buffers precede their required final non-table paragraph.
+
+Standalone literal tests and the unchanged pinned cont-section-pagebreak.rtf
+fixture preserve FIRST, SECOND, an empty paragraph with a page-style switch,
+THIRD and the final empty paragraph, matching upstream testContSectionPageBreak.
+The source test itself records uncertainty about the ideal empty-paragraph count;
+its asserted behavior is retained (WRITER287). First/follow/title-page producers
+and export, plus HTML/current-model coverage audits, remain required. No broad
+module/ABI confidence or full-goal completion is claimed.

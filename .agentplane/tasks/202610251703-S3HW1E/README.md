@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 219
+revision: 223
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T17:13:53.305Z"
+  updated_at: "2026-10-30T17:51:00.938Z"
   updated_by: "CODER"
-  note: "Native section type/parity/mirror/grid checkpoint passes1002 related cases/58files and final75/3, all required static checks pass. Full goal remains incomplete pending PAGE/terminal-SECT, first/follow/title-page and HTML/current-model audits. Evidence: output/playwright/rtf-properties-native/html26 logs and Findings."
-  attempts: 37
+  note: "Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and114 focused/4, required static checks pass; exact1814enum/1823control metadata is source-compared. Full goal remains incomplete pending first/follow/title-page and HTML/current-model audits. Evidence: html27 logs and Findings."
+  attempts: 38
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -597,8 +600,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T17:51:00.938Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and114 focused/4, required static checks pass; exact1814enum/1823control metadata is source-compared. Full goal remains incomplete pending first/follow/title-page and HTML/current-model audits. Evidence: html27 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-30T17:51:15.103Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T17:14:08.984Z"
+doc_updated_at: "2026-10-30T17:52:25.263Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1431,6 +1447,36 @@ sections:
     Attempts: 37
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:13:52.006Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T17:51:00.938Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and114 focused/4, required static checks pass; exact1814enum/1823control metadata is source-compared. Full goal remains incomplete pending first/follow/title-page and HTML/current-model audits. Evidence: html27 logs and Findings.
+    Attempts: 38
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:50:57.076Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2340,6 +2386,22 @@ sections:
     - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html26-types-final2.txt, html26-lint-final.txt, html26-format-final.txt, html26-docs-final.txt, html26-provenance-final.txt, html26-registry-final.txt, html26-boundaries.txt, html26-size.txt, html26-tree.txt and html26-doctor.txt under output/playwright/rtf-properties-native. Scope:4258 authored source files,1888 provenance modules,1887 runtime sources/10338 relative imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks, policies, tooling gates, network or vendor sources changed.
     - Initial failures retained: html26-types.txt caught an incomplete atomic-result type; added its actual continuous selector. html26-new-tests.txt/html26-types2.txt caught a guessed GetName test accessor; replaced with original GetPageDescName. html26-new-tests2.txt caught incorrect Any construction from a borrowed OUString object; switched to the existing typed stringAny owner. Native source inspection corrected two fresh grid expectations: PutValue clamps height100, and StyleSheetTable defaults to10pt/width200; the authored Standard20pt/width400 check remains independent. html26-new-tests5.txt/html26-types4.txt caught duplicate SvRef import and type-only ReferencePointer import; corrected imports, not reference semantics. html26-all-tests.txt recorded1001passes/one old empty-language failure; pinned LANG dispatch/root-pop proved the old same-language promise incorrect, so the test now preserves native first-run distinction (WRITER284). Final1002/58 and final75/3 pass. Optional path searches changed no code and routes were recomputed before dependent corrections. No production behavior or enforcement was relaxed to force tests green.
+
+    ### HTML27: native PAGE, terminal-SECT and complete lexical metadata
+
+    - Scope: original RTF section lifecycle flags and root-pop conditions; synthetic continuous PAGE, TITLEPG exception, ignored-next-SECT and lazy break reset; atomic capture of native deferred-page paragraph phases; exact pinned RTFKeyword and tokenizer metadata. No network or intentional browser file UI/autosave/recovery changes.
+    - Evidence: all1814 enum values and1823 literal table entries independently compared with unchanged pinned rtfcontrolwords.hxx/rtftokenizer.cxx. New standalone scenarios plus unchanged cont-section-pagebreak.rtf preserve native QA paragraph/style boundaries. Added WRITER285-287 source observations without correcting upstream behavior. All broad semantic/module/ABI statuses remain unverified.
+    - Corrections during verification: initial normalization incorrectly discarded the existing RTF1 lexical admission parameter (105 failures); restored that pre-existing admission gate. The second run found the actual fixture's ignored trailing newline emitted a character-source event outside root and9 table cases placed the required final body paragraph before the buffered table. Fixed ignored raw CR/LF/NUL only outside the root and flushed completed tables before body paragraphs. No expected table behavior was relaxed. Latest114 focused and1028 broader cases pass.
+    - Process observations: one malformed orchestration JavaScript call failed before any nested tool ran. One route command yielded a session and dependent read/edit continued before its terminal result; subsequently polled exit0 confirming unchanged safe continue_direct route. Two read-only source lookups guessed nonexistent filenames; recomputed the route and located actual files with rg. No scope/risk change or external action occurred.
+    - Command: `npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence:1028tests/60files, duration204.57s; html27-related-tests.txt. Scope: RTF reader/mapper/export, TXT, Markdown, native page/list/lifetime owners and Writer document IO.
+    - Command: `npm run test:writer -- src/sw/source/writerfilter/rtftok/rtf-break-state.test.ts src/sw/source/writerfilter/rtftok/rtfcontrolwords.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence:114tests/4files; html27-third-tests.txt. Scope: specific section/break/default/metadata/table regressions.
+    - Commands: `npm run typecheck`; targeted `npm exec eslint -- <changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+    - Result: pass. Evidence: html27-final-types/lint/final-format/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4261authored, provenance1889runtime (1677mapped/182browser/30infra), boundary1888sources/10347imports/227edges. Writer semantic violations0. Doctor0errors with the known pre-existing managed-shim warning; hooks unchanged.
+    - Remaining: first/follow/title-page producer/export audit, HTML/Markdown paths and full current-model/UI completion audit. Specific current-model requirements determine further changes; broad unrelated parity statuses are not prerequisites. The parent goal/task remains incomplete.
+
+    - Checkpoint process correction: ap commit auto-staged the intended25paths but rejected the unprefixed subject before committing. Recomputed the route and retained the same intentional index; retry uses the required emoji/suffix/scope subject. A second slow route/verify-show command was inadvertently followed before its terminal result; subsequent polling confirmed exit0 and the unchanged safe route. No new implementation or verification scope resulted.
 id_source: "generated"
 ---
 ## Summary
@@ -3183,6 +3245,36 @@ Note: Native section type/parity/mirror/grid checkpoint passes1002 related cases
 Attempts: 37
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:13:52.006Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T17:51:00.938Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native PAGE/terminal-SECT checkpoint passes1028 related cases/60files and114 focused/4, required static checks pass; exact1814enum/1823control metadata is source-compared. Full goal remains incomplete pending first/follow/title-page and HTML/current-model audits. Evidence: html27 logs and Findings.
+Attempts: 38
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T17:50:57.076Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -4096,3 +4188,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html26-types-final2.txt, html26-lint-final.txt, html26-format-final.txt, html26-docs-final.txt, html26-provenance-final.txt, html26-registry-final.txt, html26-boundaries.txt, html26-size.txt, html26-tree.txt and html26-doctor.txt under output/playwright/rtf-properties-native. Scope:4258 authored source files,1888 provenance modules,1887 runtime sources/10338 relative imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks, policies, tooling gates, network or vendor sources changed.
 - Initial failures retained: html26-types.txt caught an incomplete atomic-result type; added its actual continuous selector. html26-new-tests.txt/html26-types2.txt caught a guessed GetName test accessor; replaced with original GetPageDescName. html26-new-tests2.txt caught incorrect Any construction from a borrowed OUString object; switched to the existing typed stringAny owner. Native source inspection corrected two fresh grid expectations: PutValue clamps height100, and StyleSheetTable defaults to10pt/width200; the authored Standard20pt/width400 check remains independent. html26-new-tests5.txt/html26-types4.txt caught duplicate SvRef import and type-only ReferencePointer import; corrected imports, not reference semantics. html26-all-tests.txt recorded1001passes/one old empty-language failure; pinned LANG dispatch/root-pop proved the old same-language promise incorrect, so the test now preserves native first-run distinction (WRITER284). Final1002/58 and final75/3 pass. Optional path searches changed no code and routes were recomputed before dependent corrections. No production behavior or enforcement was relaxed to force tests green.
+
+### HTML27: native PAGE, terminal-SECT and complete lexical metadata
+
+- Scope: original RTF section lifecycle flags and root-pop conditions; synthetic continuous PAGE, TITLEPG exception, ignored-next-SECT and lazy break reset; atomic capture of native deferred-page paragraph phases; exact pinned RTFKeyword and tokenizer metadata. No network or intentional browser file UI/autosave/recovery changes.
+- Evidence: all1814 enum values and1823 literal table entries independently compared with unchanged pinned rtfcontrolwords.hxx/rtftokenizer.cxx. New standalone scenarios plus unchanged cont-section-pagebreak.rtf preserve native QA paragraph/style boundaries. Added WRITER285-287 source observations without correcting upstream behavior. All broad semantic/module/ABI statuses remain unverified.
+- Corrections during verification: initial normalization incorrectly discarded the existing RTF1 lexical admission parameter (105 failures); restored that pre-existing admission gate. The second run found the actual fixture's ignored trailing newline emitted a character-source event outside root and9 table cases placed the required final body paragraph before the buffered table. Fixed ignored raw CR/LF/NUL only outside the root and flushed completed tables before body paragraphs. No expected table behavior was relaxed. Latest114 focused and1028 broader cases pass.
+- Process observations: one malformed orchestration JavaScript call failed before any nested tool ran. One route command yielded a session and dependent read/edit continued before its terminal result; subsequently polled exit0 confirming unchanged safe continue_direct route. Two read-only source lookups guessed nonexistent filenames; recomputed the route and located actual files with rg. No scope/risk change or external action occurred.
+- Command: `npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1`.
+- Result: pass. Evidence:1028tests/60files, duration204.57s; html27-related-tests.txt. Scope: RTF reader/mapper/export, TXT, Markdown, native page/list/lifetime owners and Writer document IO.
+- Command: `npm run test:writer -- src/sw/source/writerfilter/rtftok/rtf-break-state.test.ts src/sw/source/writerfilter/rtftok/rtfcontrolwords.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts --maxWorkers 1`.
+- Result: pass. Evidence:114tests/4files; html27-third-tests.txt. Scope: specific section/break/default/metadata/table regressions.
+- Commands: `npm run typecheck`; targeted `npm exec eslint -- <changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+- Result: pass. Evidence: html27-final-types/lint/final-format/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4261authored, provenance1889runtime (1677mapped/182browser/30infra), boundary1888sources/10347imports/227edges. Writer semantic violations0. Doctor0errors with the known pre-existing managed-shim warning; hooks unchanged.
+- Remaining: first/follow/title-page producer/export audit, HTML/Markdown paths and full current-model/UI completion audit. Specific current-model requirements determine further changes; broad unrelated parity statuses are not prerequisites. The parent goal/task remains incomplete.
+
+- Checkpoint process correction: ap commit auto-staged the intended25paths but rejected the unprefixed subject before committing. Recomputed the route and retained the same intentional index; retry uses the required emoji/suffix/scope subject. A second slow route/verify-show command was inadvertently followed before its terminal result; subsequent polling confirmed exit0 and the unchanged safe route. No new implementation or verification scope resulted.

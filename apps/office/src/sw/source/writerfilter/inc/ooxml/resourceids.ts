@@ -751,4 +751,5 @@ export const NS_ooxml = Object.freeze({
   LN_Value_ST_SectionMark_oddPage: 92303,
   LN_settings_settings: 93294,
   LN_CT_Settings_mirrorMargins: 93031,
+  LN_EG_SectPrContents_titlePg: 92457,
 });

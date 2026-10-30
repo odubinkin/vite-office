@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
+    "localSymbols": [
+      "RTFKeyword"
+    ],
+    "upstreamSymbols": [
+      "RTFKeyword"
+    ],
+    "preservedResponsibilities": [
+      "Exact pinned RTFKeyword numeric declaration data, including invalid=-1 and all 1814 source enum entries, shared with the literal 1823-row native tokenizer table. No parser grammar is replaced. Every enum value, spelling, dispatch kind and default is independently compared with unchanged pinned source; full tokenizer and reader semantics remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete native tokenizer and reader semantics are not asserted by this literal-data declaration."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.ts",
+          "marker": "RTFKeyword"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.test.ts",
+          "marker": "matches every literal native table entry and keyword declaration"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
+          "marker": "enum class RTFKeyword"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "controlWords[]{"
+        }
+      ]
+    }
+  }
+}
