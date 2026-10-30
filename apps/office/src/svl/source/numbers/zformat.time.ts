@@ -15,7 +15,7 @@ import type { ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
 import { InsertBlanks } from "./zformat.output";
 /** Original ImpGetNatNumString integer/padding branch for admitted incomplete native metadata. @param value - Integer field. @param minimum - Native uint16 minimum digits. @returns Owned field text. */
-function integer(value: number, minimum = 0): OUString {
+export function ImpGetNatNumString(value: number, minimum = 0): OUString {
   minimum &= 65535;
   if (minimum === 2 && value >= 0 && value < 10)
     return new OUString(Uint16Array.of(48, 48 + value), 2);
@@ -35,7 +35,7 @@ function integer(value: number, minimum = 0): OUString {
   return result;
 }
 /** Original ImpGetFractionOfSecondString keeps one extra decimal only for GetClock's truncated fraction. @param buffer - Fraction output. @param fraction - Fractional seconds. @param decimals - Requested digits. @param extra - Add one rounding decimal. @param minimum - Original minimum input-line digits. @returns Actual emitted digit count. */
-function fractionOfSecond(
+export function ImpGetFractionOfSecondString(
   buffer: OUStringBuffer,
   fraction: number,
   decimals: number,
@@ -109,7 +109,7 @@ export function GetTimeOutput(
       hour = hours[0];
       minute = minutes[0];
       second = seconds[0];
-      decimals = fractionOfSecond(
+      decimals = ImpGetFractionOfSecondString(
         secondsText,
         fraction[0],
         decimals,
@@ -124,7 +124,7 @@ export function GetTimeOutput(
         return false;
       }
       const seconds = Math.trunc(time) >>> 0;
-      decimals = fractionOfSecond(
+      decimals = ImpGetFractionOfSecondString(
         secondsText,
         time - seconds,
         decimals,
@@ -223,7 +223,10 @@ export function GetTimeOutput(
                 : type === K.H || type === K.HH
                   ? hour
                   : second,
-            text = integer(field, type === K.MMI || type === K.HH || type === K.SS ? 2 : 0);
+            text = ImpGetNatNumString(
+              field,
+              type === K.MMI || type === K.HH || type === K.SS ? 2 : 0,
+            );
           try {
             buffer.append(text);
           } finally {

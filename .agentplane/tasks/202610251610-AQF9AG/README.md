@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 75
+revision: 78
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T10:54:26.301Z"
+  updated_at: "2026-10-30T11:35:23.428Z"
   updated_by: "CODER"
-  note: "Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 10945-case unchanged native scalar differential in three modes, final build/browser tests and structural gates. CSV task remains incomplete: DATE/DATETIME, complete NativeNumber output, real multiline EditEngine and complete option/UI/native acceptance. Continue approved work without closing the goal."
-  attempts: 11
+  note: "DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related tests,119 Calc/CSV tests, final build/browser and structural checks. Whole CSV task remains incomplete: native-number/spellout modes/contracts, custom logical output, constructor RAII audit, multiline EditEngine and complete option/UI/native acceptance. Continue approved work; do not close the goal."
+  attempts: 12
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -504,8 +507,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T11:35:23.428Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related tests,119 Calc/CSV tests, final build/browser and structural checks. Whole CSV task remains incomplete: native-number/spellout modes/contracts, custom logical output, constructor RAII audit, multiline EditEngine and complete option/UI/native acceptance. Continue approved work; do not close the goal."
+  -
+    type: "status"
+    at: "2026-10-30T11:35:53.230Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T10:54:32.792Z"
+doc_updated_at: "2026-10-30T11:35:53.230Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -833,6 +849,36 @@ sections:
     Attempts: 11
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:54:25.503Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T11:35:23.428Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related tests,119 Calc/CSV tests, final build/browser and structural checks. Whole CSV task remains incomplete: native-number/spellout modes/contracts, custom logical output, constructor RAII audit, multiline EditEngine and complete option/UI/native acceptance. Continue approved work; do not close the goal.
+    Attempts: 12
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:35:22.423Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1273,6 +1319,23 @@ sections:
     - Commands: npm run typecheck; focused ESLint over all changed/new implementation/test/script paths plus final4 edits; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: time-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1870 modules; dependencies1869 sources10090 imports225 allowed edges; docs4228 authored sources. Registry localSymbols were corrected to exclude the C declaration facade re-export and imported time producer, retaining their actual owner records. Native source macro/include declarations and one JSDoc callback annotation were corrected. No enforcement exemptions or broad semantic parity promotion.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the final fresh build. Evidence: time-browser.log. Scope remains actual basic CSV import/ODS save/active export and sparse owner/DOM-free Worker integration, not complete CSV option/time UI or native ABI certification.
     - Remaining required work: DATE/DATETIME and complete NativeNumber output, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining consumed producer contracts. Task/goal remain active. Same open Agentplane task, so no tenth-task full-suite run is due. Reviewed output/native scratch evidence remains untracked and excluded from the checkpoint.
+
+    ### Original calendar display and DATE/DATETIME output, 2026-10-30
+
+    - Continued the same approved task frome12366a51475. Ported original DATE/DATETIME output into a zformat responsibility fragment: tools::Date range and epoch mutation, source implicit/explicit calendar switching, Dummy-era Gregorian fallback and original final calendar reload, token-order grammatical month case, Gregorian signed/year padding versus era years, names/week/quarter/era and source literal/star/blank behavior. DATETIME retains its separate initial rounding, day carry, original epoch-adjusted GetClock argument and bracketed-time branch. Existing source integer/fraction helpers are shared under their original ImpGetNatNumString/ImpGetFractionOfSecondString names.
+    - CalendarWrapper header audit found a prior local defect: loadDefaultCalendar/loadCalendar defaulted to false, whereas original bTimeZoneUTC defaults true. Corrected both to true. Actual ICU fixed +05:30 default-zone test proves omitted arguments request UTC and explicit false still uses the real configured zone; system state is restored after the test. This is a local defect correction, not a suspected upstream issue or a browser save/open policy change.
+    - Added original CalendarDisplayCode/reservedWords constants, actual CalendarImpl/CalendarWrapper display forwarding and loaded Calendar2 projection, plus Calendar_gregorian's native-mode0 display strings and original Buddhist era ordering. Source unsigned16 calendar field widening, %02 integer display, source short-year rules, Gengou width and previously omitted ROC forced-long-year flag are preserved. Nonzero native-number conversion/spellout is still unported; the new callable slice is explicitly typed mode0 rather than silently passing a nonzero mode through the NATNUM0-only supplier. Complete source contracts/native modes remain required before whole-task completion.
+    - Original LC_MISC projection now retains all12 reserved words for all284 registered locale services, including actual ref chains and missing-node defaults extracted from LocaleNode.cxx. scripts/generate-locale-reserved-words.py verifies the pinned source commit, registered locale roots and original ReserveWord order; --check compares the entire artifact. Existing true/false values are unchanged in all284 locales. The source-owned quarter fields feed calendar display; no inferred English or Intl naming fallback is added. Full generated C++ locale/UNO ABI remains unverified.
+    - CALC-401 records proleptic tools::Date arithmetic meeting ICU's unchanged default hybrid Gregorian cutover; early year1/BCE examples retain January3 output. CALC-402 records implicit era selection of the first non-Gregorian locale calendar, including Jewish CE in en_US combined with Gregorian YYYY. CALC-403 records Buddhist before-era reversed short/long era-name selection. CALC-404 records calendar millisecond rounding moving the displayed date ahead while GetClock remains before midnight. Source-derived real-owner tests preserve these outputs; complete unchanged native formatter-wrapper comparison is not claimed.
+    - Initial date tests assumed modern Gregorian January1 for early dates, lowercase Russian nominative names, elapsed brackets in DATETIME and ISO editing for a slash-separated code. Reviewed source initialization/cutover, original ru_RU XML, DATETIME FinalScan default literal branch and GetEditFormat's IsIso8601 hyphen predicate. Corrected the test oracle to those source values, without changing production behavior to match assumptions. Real Thai before-era tests retain original abbreviated/full name choice. Original C++ Boolean truth was also restored to value!=0: NaN is TRUE, unlike JS truthiness. DATE nonfinite values follow source lcl_getValidDate and return #FMT rather than an invented rejection.
+    - Focused evidence already terminal: date-final-tests.log,3 files64 cases covering date/time output, native-mode0 calendar display and wrapper UTC defaults; date-csv-tests.log,4 files119 cases including5 new actual CSV cases. Actual CSV ISO-date import stores45351 with its native format and exports through that formatter in both SaveAsShown modes. Locale editing selection, formatted comma quoting, datetime negative serial and calendar restoration are covered without service/cell-format substitutes.
+    - Final broad command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/i18npool/source/localedata/native-long-date-separators.test.ts src/i18npool/source/localedata/native-calendar-items.test.ts. Result: pass,56 files892 tests on the frozen final source state. Evidence: date-related-tests.log. An earlier long-running instance had loaded the pre-fix Boolean module before the later NaN test edit and failed that one case (891/892); its log is preserved as date-related-stale-tests.log. Fresh affected2-file61-case run passes, and the entire related command was then rerun to terminal pass without further source edits. No expected-value weakening was used for NaN.
+    - Final focused command: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/i18npool/source/calendar/calendar.display-string.test.ts src/unotools/source/i18n/calendarwrapper.integration.test.ts. Result: pass,3 files64 tests, including CALC-403/404 and source nonfinite #FMT. Additional command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.date.test.ts. Result: pass,2 files61 cases including original C++ NaN truth. Evidence: date-final-tests.log/date-bool-tests.log. Counts overlap and are not summed.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files119 tests. Evidence: date-csv-tests.log. This includes the actual recognized-date import/format/export path, plus display/edit-date selection and CSV quoting.
+    - Commands: python3 scripts/generate-locale-reserved-words.py --check; npm run typecheck; focused ESLint over changed/new implementation/test paths and final corrected/Boolean paths; npm run check:source-provenance; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: date-{reserved-words,typecheck,lint,final-lint,bool-lint,provenance,docs,dependencies,size,resources,parity,build}.log. Original first lint found an unnecessary initializer on the switch-assigned display code; removed it and reran the affected lint. Provenance1873 modules; dependencies1872 sources10114 imports225 allowed edges; docs4233 authored sources; semantic violations0. No checker exemptions or semantic parity promotion.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the fresh build. Evidence: date-browser.log. date-build-contract.log confirms the final value!=0 Boolean branch is present in both built main and Worker bundles. Browser scope remains basic real CSV import/ODS save/active export and sparse native owner/Worker integration, not every date/native format or CSV option combination.
+    - Required follow-ups remain complete native-number modes/spellout and source signatures, custom LOGICAL token output, true multiline EditEngine import and complete CSV option/UI/native differential acceptance. Temporary-string/buffer construction also needs a C++ RAII unwinding audit: constructor/argument-evaluation allocation failures around displayInteger/combineDisplay and date/time buffer setup are not covered or certified by this block's normal-output checks. The new mode0 producer is not treated as full native/SAL/UNO/allocator equivalence. No full native display wrapper is claimed.
+    - Goal/task remain active and incomplete. The same open Agentplane task continues, so no tenth-task full-suite run is due. Reviewed local output/native evidence remains untracked and excluded from the checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -1609,6 +1672,36 @@ Note: Time output checkpoint passes related formatter/calendar/RTL/Calc tests, 1
 Attempts: 11
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:54:25.503Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T11:35:23.428Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DATE/DATETIME mode0 and original UTC calendar defaults pass 892 related tests,119 Calc/CSV tests, final build/browser and structural checks. Whole CSV task remains incomplete: native-number/spellout modes/contracts, custom logical output, constructor RAII audit, multiline EditEngine and complete option/UI/native acceptance. Continue approved work; do not close the goal.
+Attempts: 12
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T11:35:22.423Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2053,3 +2146,20 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint over all changed/new implementation/test/script paths plus final4 edits; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: time-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1870 modules; dependencies1869 sources10090 imports225 allowed edges; docs4228 authored sources. Registry localSymbols were corrected to exclude the C declaration facade re-export and imported time producer, retaining their actual owner records. Native source macro/include declarations and one JSDoc callback annotation were corrected. No enforcement exemptions or broad semantic parity promotion.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the final fresh build. Evidence: time-browser.log. Scope remains actual basic CSV import/ODS save/active export and sparse owner/DOM-free Worker integration, not complete CSV option/time UI or native ABI certification.
 - Remaining required work: DATE/DATETIME and complete NativeNumber output, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining consumed producer contracts. Task/goal remain active. Same open Agentplane task, so no tenth-task full-suite run is due. Reviewed output/native scratch evidence remains untracked and excluded from the checkpoint.
+
+### Original calendar display and DATE/DATETIME output, 2026-10-30
+
+- Continued the same approved task frome12366a51475. Ported original DATE/DATETIME output into a zformat responsibility fragment: tools::Date range and epoch mutation, source implicit/explicit calendar switching, Dummy-era Gregorian fallback and original final calendar reload, token-order grammatical month case, Gregorian signed/year padding versus era years, names/week/quarter/era and source literal/star/blank behavior. DATETIME retains its separate initial rounding, day carry, original epoch-adjusted GetClock argument and bracketed-time branch. Existing source integer/fraction helpers are shared under their original ImpGetNatNumString/ImpGetFractionOfSecondString names.
+- CalendarWrapper header audit found a prior local defect: loadDefaultCalendar/loadCalendar defaulted to false, whereas original bTimeZoneUTC defaults true. Corrected both to true. Actual ICU fixed +05:30 default-zone test proves omitted arguments request UTC and explicit false still uses the real configured zone; system state is restored after the test. This is a local defect correction, not a suspected upstream issue or a browser save/open policy change.
+- Added original CalendarDisplayCode/reservedWords constants, actual CalendarImpl/CalendarWrapper display forwarding and loaded Calendar2 projection, plus Calendar_gregorian's native-mode0 display strings and original Buddhist era ordering. Source unsigned16 calendar field widening, %02 integer display, source short-year rules, Gengou width and previously omitted ROC forced-long-year flag are preserved. Nonzero native-number conversion/spellout is still unported; the new callable slice is explicitly typed mode0 rather than silently passing a nonzero mode through the NATNUM0-only supplier. Complete source contracts/native modes remain required before whole-task completion.
+- Original LC_MISC projection now retains all12 reserved words for all284 registered locale services, including actual ref chains and missing-node defaults extracted from LocaleNode.cxx. scripts/generate-locale-reserved-words.py verifies the pinned source commit, registered locale roots and original ReserveWord order; --check compares the entire artifact. Existing true/false values are unchanged in all284 locales. The source-owned quarter fields feed calendar display; no inferred English or Intl naming fallback is added. Full generated C++ locale/UNO ABI remains unverified.
+- CALC-401 records proleptic tools::Date arithmetic meeting ICU's unchanged default hybrid Gregorian cutover; early year1/BCE examples retain January3 output. CALC-402 records implicit era selection of the first non-Gregorian locale calendar, including Jewish CE in en_US combined with Gregorian YYYY. CALC-403 records Buddhist before-era reversed short/long era-name selection. CALC-404 records calendar millisecond rounding moving the displayed date ahead while GetClock remains before midnight. Source-derived real-owner tests preserve these outputs; complete unchanged native formatter-wrapper comparison is not claimed.
+- Initial date tests assumed modern Gregorian January1 for early dates, lowercase Russian nominative names, elapsed brackets in DATETIME and ISO editing for a slash-separated code. Reviewed source initialization/cutover, original ru_RU XML, DATETIME FinalScan default literal branch and GetEditFormat's IsIso8601 hyphen predicate. Corrected the test oracle to those source values, without changing production behavior to match assumptions. Real Thai before-era tests retain original abbreviated/full name choice. Original C++ Boolean truth was also restored to value!=0: NaN is TRUE, unlike JS truthiness. DATE nonfinite values follow source lcl_getValidDate and return #FMT rather than an invented rejection.
+- Focused evidence already terminal: date-final-tests.log,3 files64 cases covering date/time output, native-mode0 calendar display and wrapper UTC defaults; date-csv-tests.log,4 files119 cases including5 new actual CSV cases. Actual CSV ISO-date import stores45351 with its native format and exports through that formatter in both SaveAsShown modes. Locale editing selection, formatted comma quoting, datetime negative serial and calendar restoration are covered without service/cell-format substitutes.
+- Final broad command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/i18npool/source/localedata/native-long-date-separators.test.ts src/i18npool/source/localedata/native-calendar-items.test.ts. Result: pass,56 files892 tests on the frozen final source state. Evidence: date-related-tests.log. An earlier long-running instance had loaded the pre-fix Boolean module before the later NaN test edit and failed that one case (891/892); its log is preserved as date-related-stale-tests.log. Fresh affected2-file61-case run passes, and the entire related command was then rerun to terminal pass without further source edits. No expected-value weakening was used for NaN.
+- Final focused command: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/i18npool/source/calendar/calendar.display-string.test.ts src/unotools/source/i18n/calendarwrapper.integration.test.ts. Result: pass,3 files64 tests, including CALC-403/404 and source nonfinite #FMT. Additional command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.date.test.ts. Result: pass,2 files61 cases including original C++ NaN truth. Evidence: date-final-tests.log/date-bool-tests.log. Counts overlap and are not summed.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files119 tests. Evidence: date-csv-tests.log. This includes the actual recognized-date import/format/export path, plus display/edit-date selection and CSV quoting.
+- Commands: python3 scripts/generate-locale-reserved-words.py --check; npm run typecheck; focused ESLint over changed/new implementation/test paths and final corrected/Boolean paths; npm run check:source-provenance; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: date-{reserved-words,typecheck,lint,final-lint,bool-lint,provenance,docs,dependencies,size,resources,parity,build}.log. Original first lint found an unnecessary initializer on the switch-assigned display code; removed it and reran the affected lint. Provenance1873 modules; dependencies1872 sources10114 imports225 allowed edges; docs4233 authored sources; semantic violations0. No checker exemptions or semantic parity promotion.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the fresh build. Evidence: date-browser.log. date-build-contract.log confirms the final value!=0 Boolean branch is present in both built main and Worker bundles. Browser scope remains basic real CSV import/ODS save/active export and sparse native owner/Worker integration, not every date/native format or CSV option combination.
+- Required follow-ups remain complete native-number modes/spellout and source signatures, custom LOGICAL token output, true multiline EditEngine import and complete CSV option/UI/native differential acceptance. Temporary-string/buffer construction also needs a C++ RAII unwinding audit: constructor/argument-evaluation allocation failures around displayInteger/combineDisplay and date/time buffer setup are not covered or certified by this block's normal-output checks. The new mode0 producer is not treated as full native/SAL/UNO/allocator equivalence. No full native display wrapper is claimed.
+- Goal/task remain active and incomplete. The same open Agentplane task continues, so no tenth-task full-suite run is due. Reviewed local output/native evidence remains untracked and excluded from the checkpoint.

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/reservedWords.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/i18n/reservedWords.idl",
+    "localSymbols": [
+      "TRUE_WORD",
+      "QUARTER1_WORD",
+      "QUARTER1_ABBREVIATION",
+      "COUNT"
+    ],
+    "upstreamSymbols": [
+      "TRUE_WORD",
+      "QUARTER1_WORD",
+      "QUARTER1_ABBREVIATION",
+      "COUNT"
+    ],
+    "preservedResponsibilities": [
+      "Original reservedWords12 slot constants consumed by real calendar quarter display and original generated data. Full UNO constant ABI remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete native-number conversion, service/native ABI and full CSV acceptance remain unproven."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/reservedWords.ts",
+          "marker": "TRUE_WORD"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/reservedWords.idl",
+          "marker": "TRUE_WORD"
+        }
+      ]
+    }
+  }
+}

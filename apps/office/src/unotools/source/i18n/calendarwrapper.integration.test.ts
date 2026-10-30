@@ -225,3 +225,36 @@ it.each(["language", "country", "variant"] as const)(
     }
   },
 );
+
+import {
+  createDefault,
+  setDefault,
+  adoptDefault,
+} from "../../../external/icu/source/i18n/timezone.default";
+import { createTimeZone } from "../../../external/icu/source/i18n/timezone.create";
+import { UnicodeString } from "../../../external/icu/source/common/unistr";
+it("defaults both wrapper loads to UTC independently of the actual system default zone", /** Original header defaults are true; explicit false still requests the real configured zone. @returns Nothing. */ () => {
+  const original = createDefault(),
+    changed = createTimeZone(new UnicodeString("GMT+05:30")),
+    wrapper = new CalendarWrapper(),
+    en = locale("en", "US"),
+    id = unicode("gregorian");
+  try {
+    if (!changed) throw new Error("Missing real fixed timezone");
+    setDefault(changed);
+    wrapper.loadDefaultCalendar(en);
+    wrapper.setDateTime(0);
+    expect(wrapper.getValue(C.ZONE_OFFSET)).toBe(0);
+    wrapper.loadCalendar(id, en);
+    wrapper.setDateTime(0);
+    expect(wrapper.getValue(C.ZONE_OFFSET)).toBe(0);
+    wrapper.loadDefaultCalendar(en, false);
+    wrapper.setDateTime(0);
+    expect(wrapper.getValue(C.ZONE_OFFSET)).toBe(330);
+  } finally {
+    wrapper.dispose();
+    id.dispose();
+    en.dispose();
+    adoptDefault(original);
+  }
+});

@@ -177,7 +177,7 @@ const timeResources = new Map<
   { timeSeparator: string; time100SecSeparator: string; timeAM: string; timePM: string }
 >(Object.entries(timeFields));
 /** Generated LC_MISC TRUE_WORD/FALSE_WORD fields after native ref and missing-field fallback. */
-const reservedResources = new Map<string, { trueWord: string; falseWord: string }>(
+const reservedResources = new Map<string, (typeof reservedWords)["en_US"]>(
   Object.entries(reservedWords),
 );
 /** Actual loaded LC_INFO fields use the same native service resolution as other fields;the caller receives its own value projection. @param locale - Original requested locale. @returns Loaded locale identity fields. */
@@ -280,6 +280,24 @@ export function getLocaleTimeAM(locale: LocaleConstReference): string {
 /** Original locale PM token from generated LC_CTYPE. @param locale - Requested locale. @returns Source field. */
 export function getLocaleTimePM(locale: LocaleConstReference): string {
   return getLocaleDataField(locale, timeResources).timePM;
+}
+/** Original getReservedWord ordered scalar data projection after native LC_MISC ref/default resolution. @param locale - Requested locale. @returns Original12 words. */
+export function getLocaleReservedWords(locale: LocaleConstReference): readonly string[] {
+  const row = getLocaleDataField(locale, reservedResources);
+  return [
+    row.trueWord,
+    row.falseWord,
+    row.quarter1Word,
+    row.quarter2Word,
+    row.quarter3Word,
+    row.quarter4Word,
+    row.aboveWord,
+    row.belowWord,
+    row.quarter1Abbreviation,
+    row.quarter2Abbreviation,
+    row.quarter3Abbreviation,
+    row.quarter4Abbreviation,
+  ];
 }
 /** Original reservedWords TRUE_WORD slot. @param locale - Requested locale. @returns Loaded native word. */
 export function getLocaleTrueWord(locale: LocaleConstReference): string {

@@ -4691,3 +4691,29 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `svl/source/numbers/zformat.cxx`, `SvNumberformat::ImpGetTimeOutput`.
 - Observation: elapsed `[HH]` can exceed24 hours. The common AM/PM branch changes a positive hour greater than12 by subtracting12 once; it does not reduce modulo24. Thus the admitted `[HH]:MM AM/PM` pattern displays serial1.5 as `24:00 PM`.
 - Preserve this source behavior and the real compiled-pattern regression. Do not add modulo-day normalization to elapsed hours. This observation is source-derived and covered through local public formatter output; a full unchanged native display-wrapper comparison is not claimed.
+
+
+### CALC-401 — Proleptic tools dates are displayed through the default hybrid Gregorian calendar
+
+- Source: `svl/source/numbers/zformat.cxx`, `lcl_getValidDate`/`ImpGetDateOutput`; `i18npool/source/calendar/calendar_gregorian.cxx`, `init`; ICU `gregocal.cpp` constructor/default cutover.
+- Observation: range/epoch arithmetic uses proleptic `tools::Date`, while the calendar provider creates ICU Gregorian without replacing its historical1582 cutover. A serial derived from tools date1 January1CE is displayed as `0001-01-03`; the corresponding1BCE serial displays `-0001-01-03` in mode0.
+- Preserve the source arithmetic, provider initialization and cutover. Do not insert a proleptic-calendar override or date adjustment. These examples are source-derived and covered by real-owner output tests; complete unchanged native formatter-wrapper comparison is not claimed.
+
+### CALC-402 — Implicit era tokens can select a non-Gregorian calendar in an English locale
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpIsOtherCalendar`, `SwitchToOtherCalendar`, `ImpGetDateOutput`.
+- Observation: an implicit G/era token triggers selection of the first locale calendar other than Gregorian, without a Japanese-only language gate. en_US lists the Jewish calendar, so `YYYY G` combines the Gregorian YYYY path with the Jewish era name; a1BCE tools serial produces `1 CE` in the represented source path.
+- Preserve token-order detection, source locale calendar order and temporary Gregorian switches for YYYY/DDD. Do not infer another calendar from the requested era token or language. Local real-owner tests cover the result and final calendar-ID restoration; complete native wrapper comparison remains pending.
+
+### CALC-403 — Buddhist before-era combined display reverses abbreviated and full era selection
+
+- Source: `i18npool/source/calendar/calendar_gregorian.cxx`, `Calendar_buddhist::getDisplayString`.
+- Observation: when ERA==0, LONG_YEAR_AND_ERA selects SHORT_YEAR then SHORT_ERA; SHORT_YEAR_AND_ERA selects LONG_YEAR then LONG_ERA. This reverses the abbreviated/full era-name choice suggested by the display codes. The combined eraMode retains full numeric years for both paths.
+- Preserve this exact branch and ordering. Do not swap the source short/long calls. Complete native display/service ABI verification remains unproven.
+
+
+### CALC-404 — Calendar milliseconds can advance the displayed date while clock fields stay before midnight
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput`; `i18npool/source/calendar/calendar_gregorian.cxx`, `setLocalDateTime`; `tools/source/datetime/ttime.cxx`, `GetClock`.
+- Observation: the calendar date uses corrected rounding to integer milliseconds, while the clock path retains source second/fraction truncation and datetime's separate first rounding. Serial2.999999999 displays date `1900-01-02`; the date+clock pattern `YYYY-MM-DD HH:MM:SS.00` displays `1900-01-02 23:59:59.99` in the represented source path.
+- Preserve those separate source conversions. Do not force the calendar to truncate or replace the clock with calendar milliseconds. Source-derived real-owner tests retain both outputs; complete native display-wrapper comparison remains pending.

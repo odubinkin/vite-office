@@ -21,10 +21,12 @@
         "apps/office/src/svl/source/numbers/zformat.time.test.ts",
         "scripts/calc-time-clock-native-probe.mjs"
       ],
-      "justification": "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI.",
+      "justification": "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI. Shared original integer-padding and fractional-second responsibilities are now exported under original method names for the date/datetime fragment. Their admitted incomplete-native metadata behavior and source rounding remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
-        "GetTimeOutput"
+        "GetTimeOutput",
+        "ImpGetNatNumString",
+        "ImpGetFractionOfSecondString"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svl/source/numbers/zformat.cxx",

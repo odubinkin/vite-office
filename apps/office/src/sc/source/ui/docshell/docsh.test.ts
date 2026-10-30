@@ -744,3 +744,74 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["YYYY-MM-DD", 2, "1900-01-01\n", true],
+  ["YYYY/MM/DD", 2, "01/01/1900\n", false],
+  ["YYYY-MM-DD HH:MM:SS", -0.25, "1899-12-29 18:00:00\n", true],
+  ["DDD, MMM D, YYYY", 2, '"Mon, Jan 1, 1900"\n', true],
+])(
+  "exports the original date producer for %s",
+  /** Real date attributes choose display or original input-line editing formats before CSV quoting. @param pattern - Actual format. @param value - Serial. @param expected - CSV bytes. @param shown - Source save-as-shown option. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+    shown,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      pos = new ScAddress(),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0];
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = shown;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+import { ScAsciiOptions } from "../dbgui/asciiopt";
+it("imports a recognized ISO date and exports it through its actual date format", /** Original recognition, setAutoInput attributes, calendar producer and shell CSV output run together without a formatted-text cell. @returns Test completion. */ async () => {
+  const shell = new ScDocShell(),
+    bytes = new TextEncoder().encode("2024-02-29\n"),
+    options = new ScAsciiOptions();
+  options.eLang = 0x409;
+  options.bDetectSpecialNumber = true;
+  try {
+    await shell.Open(bytes, state("Recognized CSV date"), {
+      kind: "input",
+      name: "date.csv",
+      filterId: ScDocShell.CSV_FILTER_NAME,
+      mediaType: ScDocShell.CSV_MEDIA_TYPE,
+      filterOptions: options.WriteToString(),
+      source: { kind: "external", reference: bytes },
+    });
+    expect(shell.GetDocument().GetValue(new ScAddress())).toBe(45351);
+    const output = new ScImportOptions();
+    output.bSaveAsShown = true;
+    expect(new TextDecoder().decode(shell.AsciiSave(output))).toBe("2024-02-29\n");
+    output.bSaveAsShown = false;
+    expect(new TextDecoder().decode(shell.AsciiSave(output))).toBe("2024-02-29\n");
+  } finally {
+    shell.Close();
+  }
+});

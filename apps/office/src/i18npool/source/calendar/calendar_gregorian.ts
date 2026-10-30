@@ -1,4 +1,4 @@
-/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; numeric display strings remain a separate responsibility. */
+/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; native-mode0 display strings use source field/name/era rules; nonzero native-number conversion remains unported. */
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Locale as ICULocale } from "../../../external/icu/source/common/locid";
 import { U_SUCCESS } from "../../../external/icu/source/common/unicode/utypes";
@@ -7,6 +7,9 @@ import { createInstance } from "../../../external/icu/source/i18n/calendar.facto
 import { createTimeZone } from "../../../external/icu/source/i18n/timezone.create";
 import { UnicodeString } from "../../../external/icu/source/common/unistr";
 import { UCalendarDateFields as F } from "../../../external/icu/source/i18n/unicode/ucal";
+import * as Display from "../../../offapi/com/sun/star/i18n/CalendarDisplayCode";
+import * as Reserved from "../../../offapi/com/sun/star/i18n/reservedWords";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import * as D from "../../../offapi/com/sun/star/i18n/CalendarDisplayIndex";
 import * as C from "../../../offapi/com/sun/star/i18n/CalendarFieldIndex";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
@@ -17,14 +20,43 @@ import {
   getLocaleCalendars,
   getLocaleTimeAM,
   getLocaleTimePM,
+  getLocaleReservedWords,
   type LocaleCalendarData,
   type LocaleCalendarItemData,
 } from "../localedata/localedata";
-/** Original Era fields consumed by temporal mapping. Display flags are not consumed here. */
+/** Source decimal %02 integer display for the unsigned16 calendar values. @param value - Calendar value. @param minimum - Minimum width. @returns Owned text. */
+function displayInteger(value: number, minimum: number): OUString {
+  const text = new OUString(OUString.number(value));
+  if (text.getLength() >= minimum) return text;
+  const buffer = new OUStringBuffer();
+  try {
+    for (let index = 0; index < minimum - text.getLength(); ++index)
+      buffer.append(Uint16Array.of(48));
+    buffer.append(text);
+    return buffer.makeStringAndClear();
+  } finally {
+    text.dispose();
+    buffer.dispose();
+  }
+}
+/** Native string concatenation acquires the actual returned values before local destruction. @param first - Owned first value. @param second - Owned second value. @returns Combined owner. */
+function combineDisplay(first: OUString, second: OUString): OUString {
+  const buffer = new OUStringBuffer();
+  try {
+    buffer.append(first).append(second);
+    return buffer.makeStringAndClear();
+  } finally {
+    buffer.dispose();
+    second.dispose();
+    first.dispose();
+  }
+}
+/** Original Era fields consumed by temporal mapping. Display flags retain original aggregate initialization. */
 export interface Era {
   readonly year: number;
   readonly month: number;
   readonly day: number;
+  readonly flags?: number;
 }
 /** Original signed16 scalar boundary. @param value - Input. @returns Signed16 value. */
 function int16(value: number): number {
@@ -145,6 +177,121 @@ export class Calendar_gregorian {
     if (index < 0) throw new Error("Sequence index assertion");
     const item = items[index] as LocaleCalendarItemData;
     return unicode(nameType === 0 ? item.abbreviated : nameType === 1 ? item.full : item.narrow);
+  }
+  /** Original represented native-mode0 display entry point; nonzero native-number conversion remains unported. @param code - Signed32 display code. @param native - Native mode0. @returns Owned text. */
+  getDisplayString(code: number, native: 0): OUString {
+    return this.getDisplayStringImpl(code, native, false);
+  }
+  /** Original display-code to field/name/numeric formatting for mode0, including source era combinations. @param code - Signed32 display code. @param _native - Represented native mode0. @param eraMode - Combined era/year context. @returns Owned text. */
+  protected getDisplayStringImpl(code: number, _native: 0, eraMode: boolean): OUString {
+    code |= 0;
+    let field = C.AM_PM;
+    switch (code) {
+      case Display.SHORT_DAY:
+      case Display.LONG_DAY:
+        field = C.DAY_OF_MONTH;
+        break;
+      case Display.SHORT_DAY_NAME:
+      case Display.LONG_DAY_NAME:
+      case Display.NARROW_DAY_NAME:
+        field = C.DAY_OF_WEEK;
+        break;
+      case Display.SHORT_MONTH:
+      case Display.LONG_MONTH:
+      case Display.SHORT_MONTH_NAME:
+      case Display.LONG_MONTH_NAME:
+      case Display.NARROW_MONTH_NAME:
+      case Display.SHORT_GENITIVE_MONTH_NAME:
+      case Display.LONG_GENITIVE_MONTH_NAME:
+      case Display.NARROW_GENITIVE_MONTH_NAME:
+      case Display.SHORT_PARTITIVE_MONTH_NAME:
+      case Display.LONG_PARTITIVE_MONTH_NAME:
+      case Display.NARROW_PARTITIVE_MONTH_NAME:
+      case Display.SHORT_QUARTER:
+      case Display.LONG_QUARTER:
+        field = C.MONTH;
+        break;
+      case Display.SHORT_YEAR:
+      case Display.LONG_YEAR:
+      case Display.SHORT_YEAR_AND_ERA:
+      case Display.LONG_YEAR_AND_ERA:
+        field = C.YEAR;
+        break;
+      case Display.SHORT_ERA:
+      case Display.LONG_ERA:
+        field = C.ERA;
+        break;
+    }
+    const value = this.getValue(field) & 65535;
+    if (code === Display.SHORT_QUARTER || code === Display.LONG_QUARTER) {
+      let quarter = Math.trunc(value / 3);
+      if (quarter > 3) quarter = 3;
+      quarter +=
+        code === Display.SHORT_QUARTER ? Reserved.QUARTER1_ABBREVIATION : Reserved.QUARTER1_WORD;
+      return unicode(getLocaleReservedWords(this.aLocale)[quarter] as string);
+    }
+    switch (code) {
+      case Display.SHORT_MONTH:
+        return new OUString(OUString.number(value + 1));
+      case Display.SHORT_DAY:
+        return new OUString(OUString.number(value));
+      case Display.LONG_YEAR:
+        return displayInteger(value, this.aCalendar.id === "gengou" ? 2 : 0);
+      case Display.LONG_MONTH:
+        return displayInteger(value + 1, 2);
+      case Display.SHORT_YEAR:
+        return value < 100 ||
+          eraMode ||
+          (this.eraArray !== null && (((this.eraArray[0] as Era).flags ?? 0) & 1) !== 0)
+          ? new OUString(OUString.number(value))
+          : displayInteger(value % 100, 2);
+      case Display.LONG_DAY:
+        return displayInteger(value, 2);
+      case Display.SHORT_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 0);
+      case Display.LONG_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 1);
+      case Display.NARROW_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 2);
+      case Display.SHORT_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 0);
+      case Display.LONG_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 1);
+      case Display.NARROW_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 2);
+      case Display.SHORT_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 0);
+      case Display.LONG_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 1);
+      case Display.NARROW_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 2);
+      case Display.SHORT_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 0);
+      case Display.LONG_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 1);
+      case Display.NARROW_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 2);
+      case Display.SHORT_ERA:
+        return this.getDisplayName(D.ERA, value, 0);
+      case Display.LONG_ERA:
+        return this.getDisplayName(D.ERA, value, 1);
+      case Display.SHORT_YEAR_AND_ERA:
+      case Display.LONG_YEAR_AND_ERA:
+        return combineDisplay(
+          this.getDisplayStringImpl(
+            code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
+            0,
+            true,
+          ),
+          this.getDisplayStringImpl(
+            code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
+            0,
+            true,
+          ),
+        );
+      default:
+        throw new RuntimeException();
+    }
   }
   /** Original milliseconds conversion uses RTL corrected round before ICU setTime. @param days - UTC days since1970. @returns Nothing. */
   setDateTime(days: number): void {
@@ -371,9 +518,9 @@ const gengou_eraArray: readonly Era[] = [
   { year: 2019, month: 5, day: 1 },
   { year: 0, month: 0, day: 0 },
 ];
-/** Original ROC temporal era data; display flags belong to the display responsibility. */
+/** Original ROC era data, including forced-long-year display flag. */
 const ROC_eraArray: readonly Era[] = [
-  { year: 1912, month: 1, day: 1 },
+  { year: 1912, month: 1, day: 1, flags: 1 },
   { year: 0, month: 0, day: 0 },
 ];
 /** Original Dangi solar-era data (distinct from ICU's lunisolar Dangi class). */
@@ -416,6 +563,27 @@ export class Calendar_buddhist extends Calendar_gregorian {
   constructor() {
     super(buddhist_eraArray);
     this.cCalendar = "com.sun.star.i18n.Calendar_buddhist";
+  }
+  /** Original Buddhist era/year ordering retains its historical short/long code selection. @param code - Display code. @param native - Represented native mode0. @returns Owned text. */
+  override getDisplayString(code: number, native: 0): OUString {
+    code |= 0;
+    if (
+      (code === Display.LONG_YEAR_AND_ERA || code === Display.SHORT_YEAR_AND_ERA) &&
+      this.getValue(C.ERA) === 0
+    )
+      return combineDisplay(
+        this.getDisplayStringImpl(
+          code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
+          native,
+          true,
+        ),
+        this.getDisplayStringImpl(
+          code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
+          native,
+          true,
+        ),
+      );
+    return super.getDisplayString(code, native);
   }
 }
 /** Original Hanja service uses the Gregorian temporal implementation. */

@@ -178,3 +178,28 @@ it("reads current output language state rather than the entry's construction sca
     formatter.dispose();
   }
 });
+
+import { ZF_STANDARD_LOGICAL } from "./zforlist.index";
+it.each([
+  [0, "FALSE"],
+  [-0, "FALSE"],
+  [NaN, "TRUE"],
+  [Infinity, "TRUE"],
+  [-Infinity, "TRUE"],
+])(
+  "preserves native double-to-bool output for %s",
+  /** C++ numeric truth is value!=0, including NaN; JavaScript truthiness would incorrectly return FALSE for NaN. @param value - Native double. @param expected - Source Boolean word. @returns Nothing. */ (
+    value,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x409),
+      output = new OUString();
+    try {
+      formatter.GetOutputString(value, ZF_STANDARD_LOGICAL, output, [null]);
+      expect(text(output)).toBe(expected);
+    } finally {
+      output.dispose();
+      formatter.dispose();
+    }
+  },
+);

@@ -1,5 +1,6 @@
-/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; DATE/DATETIME and complete native-number producers remain unported. */
+/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; Finite DATE/TIME/DATETIME native-mode0 output is connected; complete native-number producers remain unported. */
 import * as Output from "./zformat.output";
+import { GetDateOutput, GetDateTimeOutput } from "./zformat.date";
 import { GetTimeOutput } from "./zformat.time";
 import { GetFractionOutput } from "./zformat.fraction";
 import { GetNumberOutput, GetScientificOutput } from "./zformat.number";
@@ -712,7 +713,7 @@ export class SvNumberformat {
         language.GetKeywords()[NfKeywordIndex.BOOLEAN] as OUStringConstReference,
       )
     ) {
-      output.assign(value ? language.GetTrueString() : language.GetFalseString());
+      output.assign(value !== 0 ? language.GetTrueString() : language.GetFalseString());
       return false;
     }
     if (
@@ -760,6 +761,16 @@ export class SvNumberformat {
           info.eScannedType === SvNumFormatType.DEFINED)
       )
         return Output.GetLiteralOutput(section, output, star);
+    }
+    if (
+      !(this.eType & SvNumFormatType.TEXT) &&
+      !section.GetNatNum().IsComplete() &&
+      section.GetNatNum().GetNatNum() === 0
+    ) {
+      if (info.eScannedType === SvNumFormatType.DATE)
+        return GetDateOutput(value, section, language, output, star);
+      if (info.eScannedType === SvNumFormatType.DATETIME)
+        return GetDateTimeOutput(value, section, language, output, star);
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&

@@ -7,7 +7,9 @@
     "status": "mapped",
     "upstreamPath": "svl/source/numbers/zformat.cxx",
     "localSymbols": [
-      "GetTimeOutput"
+      "GetTimeOutput",
+      "ImpGetNatNumString",
+      "ImpGetFractionOfSecondString"
     ],
     "upstreamSymbols": [
       "SvNumberformat::ImpGetTimeOutput",
@@ -15,7 +17,8 @@
       "SvNumberformat::ImpGetNatNumString"
     ],
     "preservedResponsibilities": [
-      "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI."
+      "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI.",
+      "Shared original integer-padding and fractional-second responsibilities are now exported under original method names for the date/datetime fragment. Their admitted incomplete-native metadata behavior and source rounding remain unchanged."
     ],
     "omittedResponsibilities": [
       "Complete native full display/service/ABI verification remains unproven."
@@ -25,12 +28,28 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
           "marker": "GetTimeOutput"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "ImpGetNatNumString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "ImpGetFractionOfSecondString"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
           "marker": "SvNumberformat::ImpGetTimeOutput"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetNatNumString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetFractionOfSecondString"
         }
       ]
     },

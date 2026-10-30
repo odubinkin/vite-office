@@ -1,1138 +1,3978 @@
 {
   "af_NA": {
     "trueWord": "waar",
-    "falseWord": "vals"
+    "falseWord": "vals",
+    "quarter1Word": "1e kwartaal",
+    "quarter2Word": "2e kwartaal",
+    "quarter3Word": "3e kwartaal",
+    "quarter4Word": "4e kwartaal",
+    "aboveWord": "bo",
+    "belowWord": "onder",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "af_ZA": {
     "trueWord": "waar",
-    "falseWord": "vals"
+    "falseWord": "vals",
+    "quarter1Word": "1e kwartaal",
+    "quarter2Word": "2e kwartaal",
+    "quarter3Word": "3e kwartaal",
+    "quarter4Word": "4e kwartaal",
+    "aboveWord": "bo",
+    "belowWord": "onder",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "ak_GH": {
     "trueWord": "Yiw",
-    "falseWord": "Daabi"
+    "falseWord": "Daabi",
+    "quarter1Word": "Abosomanan-koro",
+    "quarter2Word": "Abosomanan-ebien",
+    "quarter3Word": "Abosomanan-ebiasa",
+    "quarter4Word": "Abosomanan-anan",
+    "aboveWord": "Soro",
+    "belowWord": "Ase",
+    "quarter1Abbreviation": "A1",
+    "quarter2Abbreviation": "A2",
+    "quarter3Abbreviation": "A3",
+    "quarter4Abbreviation": "A4"
   },
   "am_ET": {
     "trueWord": "አውነት",
-    "falseWord": "ሔሰት"
+    "falseWord": "ሔሰት",
+    "quarter1Word": "ክፍል አንድ",
+    "quarter2Word": "ክፍል ሁለት",
+    "quarter3Word": "ክፍል ሶስት",
+    "quarter4Word": "ክፍል አራት",
+    "aboveWord": "በላይ",
+    "belowWord": "በታች",
+    "quarter1Abbreviation": "ክአ",
+    "quarter2Abbreviation": "ክሁ",
+    "quarter3Abbreviation": "ክሶ",
+    "quarter4Abbreviation": "ክአ"
   },
   "an_ES": {
     "trueWord": "Verdadero",
-    "falseWord": "Falso"
+    "falseWord": "Falso",
+    "quarter1Word": "Primer trimestre",
+    "quarter2Word": "Segundo trimestre",
+    "quarter3Word": "Tercer trimestre",
+    "quarter4Word": "Quatreno trimestre",
+    "aboveWord": "Dencima",
+    "belowWord": "Debaixo",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "ar_AE": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_BH": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_DZ": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_EG": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_IQ": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_JO": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_KW": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_LB": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_LY": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_MA": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_OM": {
     "trueWord": "صحيح",
-    "falseWord": "خاطئ"
+    "falseWord": "خاطئ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "فوق",
+    "belowWord": "تحت",
+    "quarter1Abbreviation": "الربع 1",
+    "quarter2Abbreviation": "الربع 2",
+    "quarter3Abbreviation": "الربع 3",
+    "quarter4Abbreviation": "الربع 4"
   },
   "ar_QA": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_SA": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_SY": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_TN": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ar_YE": {
     "trueWord": "صح",
-    "falseWord": "خطأ"
+    "falseWord": "خطأ",
+    "quarter1Word": "الربع الأول",
+    "quarter2Word": "الربع الثاني",
+    "quarter3Word": "الربع الثالث",
+    "quarter4Word": "الربع الرابع",
+    "aboveWord": "أعلى",
+    "belowWord": "أسفل",
+    "quarter1Abbreviation": "الربع الأول",
+    "quarter2Abbreviation": "الربع الثاني",
+    "quarter3Abbreviation": "الربع الثالث",
+    "quarter4Abbreviation": "الربع الرابع"
   },
   "ast_ES": {
     "trueWord": "Braero",
-    "falseWord": "Falso"
+    "falseWord": "Falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2u trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4u trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abaxo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "axk_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "az_AZ": {
     "trueWord": "düz",
-    "falseWord": "yanlış"
+    "falseWord": "yanlış",
+    "quarter1Word": "1-ci kvartal",
+    "quarter2Word": "2-ci kvartal",
+    "quarter3Word": "3-cü kvartal",
+    "quarter4Word": "4-cü kvartal",
+    "aboveWord": "daha yuxarı",
+    "belowWord": "daha aşağı",
+    "quarter1Abbreviation": "1-ci kv.",
+    "quarter2Abbreviation": "2-ci kv.",
+    "quarter3Abbreviation": "3-cü kv.",
+    "quarter4Abbreviation": "4-cü kv."
   },
   "be_BY": {
     "trueWord": "сапраўдна",
-    "falseWord": "несапраўдна"
+    "falseWord": "несапраўдна",
+    "quarter1Word": "1-ы квартал",
+    "quarter2Word": "2-ы квартал",
+    "quarter3Word": "3-ы квартал",
+    "quarter4Word": "4-ы квартал",
+    "aboveWord": "вышэй",
+    "belowWord": "ніжэй",
+    "quarter1Abbreviation": "1-ы кв.",
+    "quarter2Abbreviation": "2-ы кв.",
+    "quarter3Abbreviation": "3-ы кв.",
+    "quarter4Abbreviation": "4-ы кв."
   },
   "beq_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "bg_BG": {
     "trueWord": "вярно",
-    "falseWord": "невярно"
+    "falseWord": "невярно",
+    "quarter1Word": "1-во тримесечие",
+    "quarter2Word": "2-ро тримесечие",
+    "quarter3Word": "3-то тримесечие",
+    "quarter4Word": "4-то тримесечие",
+    "aboveWord": "по-горе",
+    "belowWord": "по-долу",
+    "quarter1Abbreviation": "1. трим.",
+    "quarter2Abbreviation": "2. трим.",
+    "quarter3Abbreviation": "3. трим.",
+    "quarter4Abbreviation": "4. трим."
   },
   "bkw_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "bm_ML": {
     "trueWord": "Tiɲɛ",
-    "falseWord": "Nkalon"
+    "falseWord": "Nkalon",
+    "quarter1Word": "Kalo saba fɔlɔ",
+    "quarter2Word": "Kalo saba filanan",
+    "quarter3Word": "Kalo saba sabanan",
+    "quarter4Word": "Kalo saba naaninan",
+    "aboveWord": "sanfɛ",
+    "belowWord": "jukɔrɔ",
+    "quarter1Abbreviation": "KS1",
+    "quarter2Abbreviation": "KS2",
+    "quarter3Abbreviation": "KS3",
+    "quarter4Abbreviation": "KS4"
   },
   "bn_BD": {
     "trueWord": "সত্য",
-    "falseWord": "মিথ্যা"
+    "falseWord": "মিথ্যা",
+    "quarter1Word": "প্রথম তিন মাস",
+    "quarter2Word": "দ্বিতীয় তিন মাস",
+    "quarter3Word": "তৃতীয় তিন মাস",
+    "quarter4Word": "চতুর্থ তিন মাস",
+    "aboveWord": "উপর",
+    "belowWord": "নিচ",
+    "quarter1Abbreviation": "১ম ৩ মাস",
+    "quarter2Abbreviation": "২য় ৩ মাস",
+    "quarter3Abbreviation": "৩য় ৩ মাস",
+    "quarter4Abbreviation": "৪র্থ ৩ মাস"
   },
   "bn_IN": {
     "trueWord": "সত্য",
-    "falseWord": "মিথ্যা"
+    "falseWord": "মিথ্যা",
+    "quarter1Word": "Q1",
+    "quarter2Word": "Q2",
+    "quarter3Word": "Q3",
+    "quarter4Word": "Q4",
+    "aboveWord": "উপর",
+    "belowWord": "নিচ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "bo_CN": {
     "trueWord": "ཨིན་",
-    "falseWord": "མེན་"
+    "falseWord": "མེན་",
+    "quarter1Word": "བཞི་དཔྱ་དང་པ་",
+    "quarter2Word": "བཞི་དཔྱ་གཉིས་པ་",
+    "quarter3Word": "བཞི་དཔྱ་གསུམ་པ་",
+    "quarter4Word": "བཞི་དཔྱ་བཞི་པ་",
+    "aboveWord": "ལྟག་ལུ་",
+    "belowWord": "འོག་ལུ་",
+    "quarter1Abbreviation": "བཞི་དཔྱ་༡",
+    "quarter2Abbreviation": "བཞི་དཔྱ་༢",
+    "quarter3Abbreviation": "བཞི་དཔྱ་༣",
+    "quarter4Abbreviation": "བཞི་དཔྱ་༤"
   },
   "bo_IN": {
     "trueWord": "ཨིན་",
-    "falseWord": "མེན་"
+    "falseWord": "མེན་",
+    "quarter1Word": "བཞི་དཔྱ་དང་པ་",
+    "quarter2Word": "བཞི་དཔྱ་གཉིས་པ་",
+    "quarter3Word": "བཞི་དཔྱ་གསུམ་པ་",
+    "quarter4Word": "བཞི་དཔྱ་བཞི་པ་",
+    "aboveWord": "ལྟག་ལུ་",
+    "belowWord": "འོག་ལུ་",
+    "quarter1Abbreviation": "བཞི་དཔྱ་༡",
+    "quarter2Abbreviation": "བཞི་དཔྱ་༢",
+    "quarter3Abbreviation": "བཞི་དཔྱ་༣",
+    "quarter4Abbreviation": "བཞི་དཔྱ་༤"
   },
   "br_FR": {
     "trueWord": "gwir",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "1añ trimiziad",
+    "quarter2Word": "2l trimiziad",
+    "quarter3Word": "3de trimiziad",
+    "quarter4Word": "4vet trimiziad",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "bs_BA": {
     "trueWord": "tacno",
-    "falseWord": "netacno"
+    "falseWord": "netacno",
+    "quarter1Word": "Prvi kvartal",
+    "quarter2Word": "Drugi kvartal",
+    "quarter3Word": "Treći kvartal",
+    "quarter4Word": "Četvrti kvartal",
+    "aboveWord": "iznad",
+    "belowWord": "ispod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "bvx_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ca_ES": {
     "trueWord": "veritat",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "1r trimestre",
+    "quarter2Word": "2n trimestre",
+    "quarter3Word": "3r trimestre",
+    "quarter4Word": "4t trimestre",
+    "aboveWord": "sobre",
+    "belowWord": "sota",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "ca_ES_valencia": {
     "trueWord": "veritat",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "1r trimestre",
+    "quarter2Word": "2n trimestre",
+    "quarter3Word": "3r trimestre",
+    "quarter4Word": "4t trimestre",
+    "aboveWord": "sobre",
+    "belowWord": "sota",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "cs_CZ": {
     "trueWord": "pravda",
-    "falseWord": "nepravda"
+    "falseWord": "nepravda",
+    "quarter1Word": "1. čtvrtletí",
+    "quarter2Word": "2. čtvrtletí",
+    "quarter3Word": "3. čtvrtletí",
+    "quarter4Word": "4. čtvrtletí",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "cu_RU": {
     "trueWord": "вѣ́рнѡ",
-    "falseWord": "ло́жнѡ"
+    "falseWord": "ло́жнѡ",
+    "quarter1Word": "пе́рваѧ че́тверть",
+    "quarter2Word": "втора́ѧ че́тверть",
+    "quarter3Word": "тре́тїѧ че́тверть",
+    "quarter4Word": "четве́ртаѧ че́тверть",
+    "aboveWord": "вы́ше",
+    "belowWord": "ни́же",
+    "quarter1Abbreviation": "чт. а҃",
+    "quarter2Abbreviation": "чт. в҃",
+    "quarter3Abbreviation": "чт. г҃",
+    "quarter4Abbreviation": "чт. д҃"
   },
   "cv_RU": {
     "trueWord": "тĕрĕс",
-    "falseWord": "суя"
+    "falseWord": "суя",
+    "quarter1Word": "1-мĕш квартал",
+    "quarter2Word": "2-мĕш квартал",
+    "quarter3Word": "3-мĕш квартал",
+    "quarter4Word": "4-мĕш квартал",
+    "aboveWord": "çӳлелле",
+    "belowWord": "аялалла",
+    "quarter1Abbreviation": "1-мĕш кв.",
+    "quarter2Abbreviation": "2-мĕш кв.",
+    "quarter3Abbreviation": "3-мĕш кв.",
+    "quarter4Abbreviation": "4-мĕш кв."
   },
   "cy_GB": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "da_DK": {
     "trueWord": "sand",
-    "falseWord": "falsk"
+    "falseWord": "falsk",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "ovenfor",
+    "belowWord": "nedenfor",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "dde_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "de_AT": {
     "trueWord": "wahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Quartal",
+    "quarter2Word": "2. Quartal",
+    "quarter3Word": "3. Quartal",
+    "quarter4Word": "4. Quartal",
+    "aboveWord": "oben",
+    "belowWord": "unten",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "de_CH": {
     "trueWord": "wahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Quartal",
+    "quarter2Word": "2. Quartal",
+    "quarter3Word": "3. Quartal",
+    "quarter4Word": "4. Quartal",
+    "aboveWord": "oben",
+    "belowWord": "unten",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "de_DE": {
     "trueWord": "wahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Quartal",
+    "quarter2Word": "2. Quartal",
+    "quarter3Word": "3. Quartal",
+    "quarter4Word": "4. Quartal",
+    "aboveWord": "oben",
+    "belowWord": "unten",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "de_LI": {
     "trueWord": "wahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Quartal",
+    "quarter2Word": "2. Quartal",
+    "quarter3Word": "3. Quartal",
+    "quarter4Word": "4. Quartal",
+    "aboveWord": "oben",
+    "belowWord": "unten",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "de_LU": {
     "trueWord": "wahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Quartal",
+    "quarter2Word": "2. Quartal",
+    "quarter3Word": "3. Quartal",
+    "quarter4Word": "4. Quartal",
+    "aboveWord": "oben",
+    "belowWord": "unten",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "dsb_DE": {
     "trueWord": "wěrno",
-    "falseWord": "njewěrno"
+    "falseWord": "njewěrno",
+    "quarter1Word": "prědny kwartal",
+    "quarter2Word": "drugi kwartal",
+    "quarter3Word": "tśeśi kwartal",
+    "quarter4Word": "stwórty kwartal",
+    "aboveWord": "nad",
+    "belowWord": "pód",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "dv_MV": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "dz_BT": {
     "trueWord": "ཨིན་",
-    "falseWord": "མེན་"
+    "falseWord": "མེན་",
+    "quarter1Word": "བཞི་དཔྱ་དང་པ་",
+    "quarter2Word": "བཞི་དཔྱ་གཉིས་པ་",
+    "quarter3Word": "བཞི་དཔྱ་གསུམ་པ་",
+    "quarter4Word": "བཞི་དཔྱ་བཞི་པ་",
+    "aboveWord": "ལྟག་ལུ་",
+    "belowWord": "འོག་ལུ་",
+    "quarter1Abbreviation": "བཞི་དཔྱ་༡",
+    "quarter2Abbreviation": "བཞི་དཔྱ་༢",
+    "quarter3Abbreviation": "བཞི་དཔྱ་༣",
+    "quarter4Abbreviation": "བཞི་དཔྱ་༤"
   },
   "ebo_CG": {
     "trueWord": "ngaŋwa",
-    "falseWord": "mpya"
+    "falseWord": "mpya",
+    "quarter1Word": "Trimeste 1",
+    "quarter2Word": "Trimeste 2",
+    "quarter3Word": "Trimeste 3",
+    "quarter4Word": "Trimeste 4",
+    "aboveWord": "ku ntsina a",
+    "belowWord": "ku yulu a",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ee_GH": {
     "trueWord": "ɛ",
-    "falseWord": "ao"
+    "falseWord": "ao",
+    "quarter1Word": "kɔta",
+    "quarter2Word": "afa",
+    "quarter3Word": "mama etɔlia",
+    "quarter4Word": "mama enelia",
+    "aboveWord": "dzi",
+    "belowWord": "gɔme",
+    "quarter1Abbreviation": "B",
+    "quarter2Abbreviation": "A",
+    "quarter3Abbreviation": "MT",
+    "quarter4Abbreviation": "MN"
   },
   "el_GR": {
     "trueWord": "σωστό",
-    "falseWord": "λάθος"
+    "falseWord": "λάθος",
+    "quarter1Word": "1ο τρίμηνο",
+    "quarter2Word": "2ο τρίμηνο",
+    "quarter3Word": "3ο τρίμηνο",
+    "quarter4Word": "4ο τρίμηνο",
+    "aboveWord": "επάνω",
+    "belowWord": "κάτω",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_AU": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_BW": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_BZ": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_CA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_DK": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_GB": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_GH": {
     "trueWord": "True",
-    "falseWord": "False"
+    "falseWord": "False",
+    "quarter1Word": "Quarter 1",
+    "quarter2Word": "Quarter 2",
+    "quarter3Word": "Quarter 3",
+    "quarter4Word": "Quarter 4",
+    "aboveWord": "Above",
+    "belowWord": "Below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_GM": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_GY": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_HK": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_IE": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_IL": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_IN": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_JM": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_KE": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_LK": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_MU": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_MW": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_MY": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_NA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_NG": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_NZ": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_PH": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_TT": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_US": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_ZM": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "en_ZW": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "eo": {
     "trueWord": "vera",
-    "falseWord": "falsa"
+    "falseWord": "falsa",
+    "quarter1Word": "1a kvaronjaro",
+    "quarter2Word": "2a kvaronjaro",
+    "quarter3Word": "3a kvaronjaro",
+    "quarter4Word": "4a kvaronjaro",
+    "aboveWord": "super",
+    "belowWord": "sub",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "es_AR": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_BO": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_CL": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_CO": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_CR": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_DO": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_EC": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_ES": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_GT": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_HN": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_MX": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_NI": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_PA": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_PE": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_PR": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_PY": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_SV": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_UY": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "es_VE": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "et_EE": {
     "trueWord": "tõene",
-    "falseWord": "väär"
+    "falseWord": "väär",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "ülal",
+    "belowWord": "allpool",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "eu_ES": {
     "trueWord": "egiazkoa",
-    "falseWord": "faltsua"
+    "falseWord": "faltsua",
+    "quarter1Word": "1. hiruhilekoa",
+    "quarter2Word": "2. hiruhilekoa",
+    "quarter3Word": "3. hiruhilekoa",
+    "quarter4Word": "4. hiruhilekoa",
+    "aboveWord": "gainean",
+    "belowWord": "azpian",
+    "quarter1Abbreviation": "Hh1",
+    "quarter2Abbreviation": "Hh2",
+    "quarter3Abbreviation": "Hh3",
+    "quarter4Abbreviation": "Hh4"
   },
   "ext_ES": {
     "trueWord": "verdadero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3er trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "arriba",
+    "belowWord": "abajo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fa_IR": {
     "trueWord": "درست",
-    "falseWord": "نادرست"
+    "falseWord": "نادرست",
+    "quarter1Word": "سه ماههٔ اول",
+    "quarter2Word": "سه ماههٔ دوم",
+    "quarter3Word": "سه ماههٔ سوم",
+    "quarter4Word": "سه ماههٔ چهارم",
+    "aboveWord": "بالای",
+    "belowWord": "پایین",
+    "quarter1Abbreviation": "سه ماههٔ اول",
+    "quarter2Abbreviation": "سه ماههٔ دوم",
+    "quarter3Abbreviation": "سه ماههٔ سوم",
+    "quarter4Abbreviation": "سه ماههٔ چهارم"
   },
   "fi_FI": {
     "trueWord": "Tosi",
-    "falseWord": "Epätosi"
+    "falseWord": "Epätosi",
+    "quarter1Word": "1. neljännes",
+    "quarter2Word": "2. neljännes",
+    "quarter3Word": "3. neljännes",
+    "quarter4Word": "4. neljännes",
+    "aboveWord": "Yllä",
+    "belowWord": "Alla",
+    "quarter1Abbreviation": "N1",
+    "quarter2Abbreviation": "N2",
+    "quarter3Abbreviation": "N3",
+    "quarter4Abbreviation": "N4"
   },
   "fo_FO": {
     "trueWord": "sonn",
-    "falseWord": "ósonn"
+    "falseWord": "ósonn",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "yvir",
+    "belowWord": "undir",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "fr_BE": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_BF": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_BJ": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_CA": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_CH": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_CI": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_FR": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_GN": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_LU": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_MC": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_ML": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_NE": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_SN": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fr_TG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supérieur",
+    "belowWord": "inférieur",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "fur_IT": {
     "trueWord": "vêr",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "Prin trimestri",
+    "quarter2Word": "Secont trimestri",
+    "quarter3Word": "Tierç trimestri",
+    "quarter4Word": "Cuart trimestri",
+    "aboveWord": "parsore",
+    "belowWord": "disot",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "fy_NL": {
     "trueWord": "wier",
-    "falseWord": "net wier"
+    "falseWord": "net wier",
+    "quarter1Word": "earste fearnsjier",
+    "quarter2Word": "twadde fearnsjier",
+    "quarter3Word": "tredde fearnsjier",
+    "quarter4Word": "fjirde fearnsjier",
+    "aboveWord": "boppe",
+    "belowWord": "ûnder",
+    "quarter1Abbreviation": "1e fj",
+    "quarter2Abbreviation": "2e fj",
+    "quarter3Abbreviation": "3e fj",
+    "quarter4Abbreviation": "4e fj"
   },
   "ga_IE": {
     "trueWord": "fíor",
-    "falseWord": "falsa"
+    "falseWord": "falsa",
+    "quarter1Word": "1ú ráithe",
+    "quarter2Word": "2ú ráithe",
+    "quarter3Word": "3ú ráithe",
+    "quarter4Word": "4ú ráithe",
+    "aboveWord": "thuas",
+    "belowWord": "thíos",
+    "quarter1Abbreviation": "R1",
+    "quarter2Abbreviation": "R2",
+    "quarter3Abbreviation": "R3",
+    "quarter4Abbreviation": "R4"
   },
   "gd_GB": {
     "trueWord": "Fìor",
-    "falseWord": "Breug"
+    "falseWord": "Breug",
+    "quarter1Word": "Ràithe 1",
+    "quarter2Word": "Ràithe 2",
+    "quarter3Word": "Ràithe 3",
+    "quarter4Word": "Ràithe 4",
+    "aboveWord": "Os cionn",
+    "belowWord": "Fo",
+    "quarter1Abbreviation": "R 1",
+    "quarter2Abbreviation": "R 2",
+    "quarter3Abbreviation": "R 3",
+    "quarter4Abbreviation": "R 4"
   },
   "gl_ES": {
     "trueWord": "verdadeiro",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1.º trimestre",
+    "quarter2Word": "2.º trimestre",
+    "quarter3Word": "3.º trimestre",
+    "quarter4Word": "4.º trimestre",
+    "aboveWord": "enriba",
+    "belowWord": "debaixo",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "gos_NL": {
     "trueWord": "woar",
-    "falseWord": "onwoar"
+    "falseWord": "onwoar",
+    "quarter1Word": "1ste kwartoal",
+    "quarter2Word": "2de kwartoal",
+    "quarter3Word": "3de kwartoal",
+    "quarter4Word": "4de kwartoal",
+    "aboveWord": "boven",
+    "belowWord": "onder",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "gsc_FR": {
     "trueWord": "exacte",
-    "falseWord": "faus"
+    "falseWord": "faus",
+    "quarter1Word": "purmèr trimèstre",
+    "quarter2Word": "segond trimèstre",
+    "quarter3Word": "tresau trimèstre",
+    "quarter4Word": "quatau trimèstre",
+    "aboveWord": "dessús",
+    "belowWord": "devath",
+    "quarter1Abbreviation": "1èr trim.",
+    "quarter2Abbreviation": "2nd trim.",
+    "quarter3Abbreviation": "3au trim.",
+    "quarter4Abbreviation": "4au trim."
   },
   "gu_IN": {
     "trueWord": "ખરું",
-    "falseWord": "ખોટું"
+    "falseWord": "ખોટું",
+    "quarter1Word": "ચતુર્થાંશ૧",
+    "quarter2Word": "ચતુર્થાંશ૨",
+    "quarter3Word": "ચતુર્થાંશ૩",
+    "quarter4Word": "ચતુર્થાંશ૪",
+    "aboveWord": "ઊપર",
+    "belowWord": "નીચે",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "gug_PY": {
     "trueWord": "te'ete",
-    "falseWord": "gua'u"
+    "falseWord": "gua'u",
+    "quarter1Word": "Arahaku",
+    "quarter2Word": "Araroguekúi",
+    "quarter3Word": "Araro'y",
+    "quarter4Word": "Arapoty",
+    "aboveWord": "yvate",
+    "belowWord": "yvýpe",
+    "quarter1Abbreviation": "Arahaku",
+    "quarter2Abbreviation": "Araroguekúi",
+    "quarter3Abbreviation": "Araro'y",
+    "quarter4Abbreviation": "Arapoty"
   },
   "ha_Latn_GH": {
     "trueWord": "Gaskiya",
-    "falseWord": "Karya"
+    "falseWord": "Karya",
+    "quarter1Word": "Rubu'i Na Farko",
+    "quarter2Word": "Rubu'i Na Biyu",
+    "quarter3Word": "Rubu'i Na Uku",
+    "quarter4Word": "Rubu'i Na Hudu",
+    "aboveWord": "Sama",
+    "belowWord": "Kasa",
+    "quarter1Abbreviation": "R1",
+    "quarter2Abbreviation": "R2",
+    "quarter3Abbreviation": "R3",
+    "quarter4Abbreviation": "R4"
   },
   "ha_Latn_NG": {
     "trueWord": "Gaskiya",
-    "falseWord": "Karya"
+    "falseWord": "Karya",
+    "quarter1Word": "Rubu'i Na Farko",
+    "quarter2Word": "Rubu'i Na Biyu",
+    "quarter3Word": "Rubu'i Na Uku",
+    "quarter4Word": "Rubu'i Na Hudu",
+    "aboveWord": "Sama",
+    "belowWord": "Kasa",
+    "quarter1Abbreviation": "R1",
+    "quarter2Abbreviation": "R2",
+    "quarter3Abbreviation": "R3",
+    "quarter4Abbreviation": "R4"
   },
   "haw_US": {
     "trueWord": "ʻOiaʻiʻo",
-    "falseWord": "Hewa"
+    "falseWord": "Hewa",
+    "quarter1Word": "Kau Hapahā 1",
+    "quarter2Word": "Kau Hapaha 2",
+    "quarter3Word": "Kau Hapahā 3",
+    "quarter4Word": "Kau Hapahā 4",
+    "aboveWord": "Luna",
+    "belowWord": "Lalo",
+    "quarter1Abbreviation": "KH1",
+    "quarter2Abbreviation": "KH2",
+    "quarter3Abbreviation": "KH3",
+    "quarter4Abbreviation": "KH4"
   },
   "he_IL": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "למעלה",
+    "belowWord": "למטה",
+    "quarter1Abbreviation": "רבעון ראשון",
+    "quarter2Abbreviation": "רבעון שני",
+    "quarter3Abbreviation": "רבעון שלישי",
+    "quarter4Abbreviation": "רבעון רביעי"
   },
   "hi_IN": {
     "trueWord": "सही",
-    "falseWord": "गलत"
+    "falseWord": "गलत",
+    "quarter1Word": "पॆहला हंत 1",
+    "quarter2Word": "दूसरा हंत 2",
+    "quarter3Word": "तीसरा हंत 3",
+    "quarter4Word": "चौता हंत 4",
+    "aboveWord": "ऊपर",
+    "belowWord": "नीचॆ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "hil_PH": {
     "trueWord": "tuod",
-    "falseWord": "palso"
+    "falseWord": "palso",
+    "quarter1Word": "una nga kwarto",
+    "quarter2Word": "ika-duha nga kwarto",
+    "quarter3Word": "ika-tatlo nga kwarto",
+    "quarter4Word": "ika-apat nga kwarto",
+    "aboveWord": "ibabaw",
+    "belowWord": "idalum",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "hr_HR": {
     "trueWord": "točno",
-    "falseWord": "netočno"
+    "falseWord": "netočno",
+    "quarter1Word": "Prvi kvartal",
+    "quarter2Word": "Drugi kvartal",
+    "quarter3Word": "Treći kvartal",
+    "quarter4Word": "Četvrti kvartal",
+    "aboveWord": "iznad",
+    "belowWord": "ispod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "hsb_DE": {
     "trueWord": "prawje",
-    "falseWord": "wopak"
+    "falseWord": "wopak",
+    "quarter1Word": "prěni kwartal",
+    "quarter2Word": "druhi kwartal",
+    "quarter3Word": "třeći kwartal",
+    "quarter4Word": "štwórty kwartal",
+    "aboveWord": "horjeka",
+    "belowWord": "deleka",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "ht_HT": {
     "trueWord": "Vre",
-    "falseWord": "Fo"
+    "falseWord": "Fo",
+    "quarter1Word": "Trimès 1",
+    "quarter2Word": "Trimès 2",
+    "quarter3Word": "Trimès 3",
+    "quarter4Word": "Trimès 4",
+    "aboveWord": "Anwo",
+    "belowWord": "Anba",
+    "quarter1Abbreviation": "Trimès 1",
+    "quarter2Abbreviation": "Trimès 2",
+    "quarter3Abbreviation": "Trimès 3",
+    "quarter4Abbreviation": "Trimès 4"
   },
   "hu_HU": {
     "trueWord": "Igaz",
-    "falseWord": "Hamis"
+    "falseWord": "Hamis",
+    "quarter1Word": "I. negyedév",
+    "quarter2Word": "II. negyedév",
+    "quarter3Word": "III. negyedév",
+    "quarter4Word": "IV. negyedév",
+    "aboveWord": "fentebb",
+    "belowWord": "alább",
+    "quarter1Abbreviation": "N1",
+    "quarter2Abbreviation": "N2",
+    "quarter3Abbreviation": "N3",
+    "quarter4Abbreviation": "N4"
   },
   "hy_AM": {
     "trueWord": "ճշմարիտ",
-    "falseWord": "կեղծ"
+    "falseWord": "կեղծ",
+    "quarter1Word": "1-ին կիսամյակ",
+    "quarter2Word": "2-րդ կիսամյակ",
+    "quarter3Word": "3-րդ կիսամյակ",
+    "quarter4Word": "4-րդ կիսամյակ",
+    "aboveWord": "վերև",
+    "belowWord": "ներքև",
+    "quarter1Abbreviation": "I կսմ.",
+    "quarter2Abbreviation": "II կսմ.",
+    "quarter3Abbreviation": "III կսմ.",
+    "quarter4Abbreviation": "IV կսմ."
   },
   "ia": {
     "trueWord": "ver",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1-me trimestre",
+    "quarter2Word": "2-nde trimestre",
+    "quarter3Word": "3-tie trimestre",
+    "quarter4Word": "4-te trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "id_ID": {
     "trueWord": "benar",
-    "falseWord": "salah"
+    "falseWord": "salah",
+    "quarter1Word": "kuartal pertama",
+    "quarter2Word": "kuartal kedua",
+    "quarter3Word": "kuartal ketiga",
+    "quarter4Word": "kuartal keempat",
+    "aboveWord": "lebih dari",
+    "belowWord": "kurang dari",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "ilo_PH": {
     "trueWord": "pudno",
-    "falseWord": "ubbaw"
+    "falseWord": "ubbaw",
+    "quarter1Word": "umuna a kakapat",
+    "quarter2Word": "maika-2 a kakapat",
+    "quarter3Word": "maika-3 a kakapat",
+    "quarter4Word": "maika-4 a kakapat",
+    "aboveWord": "iti ngato",
+    "belowWord": "iti baba",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "is_IS": {
     "trueWord": "Rétt",
-    "falseWord": "Rangt"
+    "falseWord": "Rangt",
+    "quarter1Word": "fyrsti fjórðungur",
+    "quarter2Word": "annar fjórðungur",
+    "quarter3Word": "þriðji fjórðungur",
+    "quarter4Word": "fjórði fjórðungur",
+    "aboveWord": "yfir",
+    "belowWord": "undir",
+    "quarter1Abbreviation": "F1",
+    "quarter2Abbreviation": "F2",
+    "quarter3Abbreviation": "F3",
+    "quarter4Abbreviation": "F4"
   },
   "it_CH": {
     "trueWord": "vero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1o trimestre",
+    "quarter2Word": "2o trimestre",
+    "quarter3Word": "3o trimestre",
+    "quarter4Word": "4o trimestre",
+    "aboveWord": "sopra",
+    "belowWord": "sotto",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "it_IT": {
     "trueWord": "vero",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1o trimestre",
+    "quarter2Word": "2o trimestre",
+    "quarter3Word": "3o trimestre",
+    "quarter4Word": "4o trimestre",
+    "aboveWord": "sopra",
+    "belowWord": "sotto",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "iyx_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ja_JP": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "第１四半期",
+    "quarter2Word": "第２四半期",
+    "quarter3Word": "第３四半期",
+    "quarter4Word": "第４四半期",
+    "aboveWord": "前述",
+    "belowWord": "後述",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "jbo": {
     "trueWord": "jetnu",
-    "falseWord": "jitfa"
+    "falseWord": "jitfa",
+    "quarter1Word": "pa moi vo si'e",
+    "quarter2Word": "re moi vo si'e",
+    "quarter3Word": "ci moi vo si'e",
+    "quarter4Word": "vo moi vo si'e",
+    "aboveWord": "gapru",
+    "belowWord": "cnita",
+    "quarter1Abbreviation": "1MVS",
+    "quarter2Abbreviation": "2MVS",
+    "quarter3Abbreviation": "3MVS",
+    "quarter4Abbreviation": "4MVS"
   },
   "ka_GE": {
     "trueWord": "ჭეშმარიტი",
-    "falseWord": "მცდარი"
+    "falseWord": "მცდარი",
+    "quarter1Word": "1-ლი კვარტალი",
+    "quarter2Word": "მე-2 კვარტალი",
+    "quarter3Word": "მე-3 კვარტალი",
+    "quarter4Word": "მე-4 კვარტალი",
+    "aboveWord": "ზევით",
+    "belowWord": "ქვევით",
+    "quarter1Abbreviation": "I კვ.",
+    "quarter2Abbreviation": "II კვ.",
+    "quarter3Abbreviation": "III კვ.",
+    "quarter4Abbreviation": "IV კვ."
   },
   "kab_DZ": {
     "trueWord": "ih",
-    "falseWord": "ala"
+    "falseWord": "ala",
+    "quarter1Word": "akraḍaggur amenzu",
+    "quarter2Word": "akraḍaggur wis-sin",
+    "quarter3Word": "akraḍaggur wis-kraḍ",
+    "quarter4Word": "akraḍaggur wis-kuẓ",
+    "aboveWord": "Nnig",
+    "belowWord": "Ddaw",
+    "quarter1Abbreviation": "Kḍg1",
+    "quarter2Abbreviation": "Kḍg2",
+    "quarter3Abbreviation": "Kḍg3",
+    "quarter4Abbreviation": "Kḍg4"
   },
   "kk_KZ": {
     "trueWord": "ақиқат",
-    "falseWord": "жалған"
+    "falseWord": "жалған",
+    "quarter1Word": "бірінші тоқсан",
+    "quarter2Word": "екінші тоқсан",
+    "quarter3Word": "үшінші тоқсан",
+    "quarter4Word": "төртінші тоқсан",
+    "aboveWord": "дейін",
+    "belowWord": "кейін",
+    "quarter1Abbreviation": "1 тоқс.",
+    "quarter2Abbreviation": "2 тоқс.",
+    "quarter3Abbreviation": "3 тоқс.",
+    "quarter4Abbreviation": "4 тоқс."
   },
   "kkw_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "kl_GL": {
     "trueWord": "eqqortoq",
-    "falseWord": "eqqunngitsoq"
+    "falseWord": "eqqunngitsoq",
+    "quarter1Word": "ukiup sisamararterutaata siullia",
+    "quarter2Word": "ukiup sisamararterutaata tullia",
+    "quarter3Word": "ukiup sisamararterutaata pingajua",
+    "quarter4Word": "ukiup sisamararterutaata sisamaa",
+    "aboveWord": "qulleq",
+    "belowWord": "alleq",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "km_KH": {
     "trueWord": "ត្រូវ",
-    "falseWord": "ខុស"
+    "falseWord": "ខុស",
+    "quarter1Word": "ត្រីមាសទី១",
+    "quarter2Word": "ត្រីមាសទី២",
+    "quarter3Word": "ត្រីមាសទី៣",
+    "quarter4Word": "ត្រីមាសទី៤",
+    "aboveWord": "លើ",
+    "belowWord": "ក្រោម",
+    "quarter1Abbreviation": "ត្រី១",
+    "quarter2Abbreviation": "ត្រី២",
+    "quarter3Abbreviation": "ត្រី៣",
+    "quarter4Abbreviation": "ត្រី៤"
   },
   "kmr_Latn_TR": {
     "trueWord": "rast",
-    "falseWord": "şaş"
+    "falseWord": "şaş",
+    "quarter1Word": "çarêka yekemîn",
+    "quarter2Word": "çarêka duyemîn",
+    "quarter3Word": "çarêka sêyemîn",
+    "quarter4Word": "çarêka çaremîn",
+    "aboveWord": "jor",
+    "belowWord": "jêr",
+    "quarter1Abbreviation": "Ç1",
+    "quarter2Abbreviation": "Ç2",
+    "quarter3Abbreviation": "Ç3",
+    "quarter4Abbreviation": "Ç4"
   },
   "kn_IN": {
     "trueWord": "ಸಹೀ",
-    "falseWord": "ಗಲತ್"
+    "falseWord": "ಗಲತ್",
+    "quarter1Word": "ಒಂದು  1",
+    "quarter2Word": "ಎರಡು 2",
+    "quarter3Word": "ಮೂರು 3",
+    "quarter4Word": "ನಾಲೃಕ  4",
+    "aboveWord": "ಮೇಲೆ",
+    "belowWord": "ಕೆಳಗೆ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "kng_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ko_KR": {
     "trueWord": "참",
-    "falseWord": "거짓"
+    "falseWord": "거짓",
+    "quarter1Word": "1",
+    "quarter2Word": "2",
+    "quarter3Word": "3",
+    "quarter4Word": "4",
+    "aboveWord": "위",
+    "belowWord": "아래",
+    "quarter1Abbreviation": "일",
+    "quarter2Abbreviation": "이",
+    "quarter3Abbreviation": "삼",
+    "quarter4Abbreviation": "사"
   },
   "ky_KG": {
     "trueWord": "чындык",
-    "falseWord": "жалган"
+    "falseWord": "жалган",
+    "quarter1Word": "1-квартал",
+    "quarter2Word": "2-квартал",
+    "quarter3Word": "3-квартал",
+    "quarter4Word": "4-квартал",
+    "aboveWord": "жогору",
+    "belowWord": "төмөн",
+    "quarter1Abbreviation": "1-кв.",
+    "quarter2Abbreviation": "2-кв.",
+    "quarter3Abbreviation": "3-кв.",
+    "quarter4Abbreviation": "4-кв."
   },
   "la_VA": {
     "trueWord": "verum",
-    "falseWord": "falsum"
+    "falseWord": "falsum",
+    "quarter1Word": "prima quarta pars",
+    "quarter2Word": "secunda quarta pars",
+    "quarter3Word": "tertia quarta pars",
+    "quarter4Word": "quarta quarta pars",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "lb_LU": {
     "trueWord": "wouer",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1. Trimester",
+    "quarter2Word": "2. Trimester",
+    "quarter3Word": "3. Trimester",
+    "quarter4Word": "4. Trimester",
+    "aboveWord": "uewen",
+    "belowWord": "ënnen",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ldi_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "lg_UG": {
     "trueWord": "Kituufu",
-    "falseWord": "Ssi Kituufu"
+    "falseWord": "Ssi Kituufu",
+    "quarter1Word": "Kyakuna 1",
+    "quarter2Word": "Kyakuna 2",
+    "quarter3Word": "Kyakuna 3",
+    "quarter4Word": "Kyakuna 4",
+    "aboveWord": "Waggulu",
+    "belowWord": "Wammanga",
+    "quarter1Abbreviation": "Kna1",
+    "quarter2Abbreviation": "Kna2",
+    "quarter3Abbreviation": "Kna3",
+    "quarter4Abbreviation": "Kna4"
   },
   "lgr_SB": {
     "trueWord": "Uthui",
-    "falseWord": "Teigha"
+    "falseWord": "Teigha",
+    "quarter1Word": "Quarter 1",
+    "quarter2Word": "Quarter 2",
+    "quarter3Word": "Quarter 3",
+    "quarter4Word": "Quarter 4",
+    "aboveWord": "Teghea",
+    "belowWord": "Rughu",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "lif_NP": {
     "trueWord": "ठीक",
-    "falseWord": "बेठीक"
+    "falseWord": "बेठीक",
+    "quarter1Word": "पहिलो सत्र",
+    "quarter2Word": "दोस्रो सत्र",
+    "quarter3Word": "तेस्रो सत्र",
+    "quarter4Word": "चौथो सत्र",
+    "aboveWord": "माथि",
+    "belowWord": "तल",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "lij_IT": {
     "trueWord": "veo",
-    "falseWord": "fäso"
+    "falseWord": "fäso",
+    "quarter1Word": "1o trimestre",
+    "quarter2Word": "2o trimestre",
+    "quarter3Word": "3o trimestre",
+    "quarter4Word": "4o trimestre",
+    "aboveWord": "sorve",
+    "belowWord": "sotta",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "lld_IT": {
     "trueWord": "Veira",
-    "falseWord": "Fauz"
+    "falseWord": "Fauz",
+    "quarter1Word": "trimester 1",
+    "quarter2Word": "trimester 2",
+    "quarter3Word": "trimester 3",
+    "quarter4Word": "trimester 4",
+    "aboveWord": "sëura",
+    "belowWord": "ju",
+    "quarter1Abbreviation": "tr 1",
+    "quarter2Abbreviation": "tr 2",
+    "quarter3Abbreviation": "tr 3",
+    "quarter4Abbreviation": "tr 4"
   },
   "ln_CD": {
     "trueWord": "mpenzá",
-    "falseWord": "mpenzá tɛ́"
+    "falseWord": "mpenzá tɛ́",
+    "quarter1Word": "sánzá mísáto ya yambo",
+    "quarter2Word": "sánzá mísáto ya míbalé",
+    "quarter3Word": "sánzá mísáto ya mísáto",
+    "quarter4Word": "sánzá mísáto ya mínei",
+    "aboveWord": "likoló",
+    "belowWord": "nsé",
+    "quarter1Abbreviation": "SM1",
+    "quarter2Abbreviation": "SM2",
+    "quarter3Abbreviation": "SM3",
+    "quarter4Abbreviation": "SM4"
   },
   "lo_LA": {
     "trueWord": "ແມ່ນແລ້ວ",
-    "falseWord": "ບໍ່ແມ່ນ"
+    "falseWord": "ບໍ່ແມ່ນ",
+    "quarter1Word": "Q 1",
+    "quarter2Word": "Q 2",
+    "quarter3Word": "Q 3",
+    "quarter4Word": "Q 4",
+    "aboveWord": "ທາງເທີງ",
+    "belowWord": "ທາງລູມ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "lt_LT": {
     "trueWord": "teisingai",
-    "falseWord": "neteisingai"
+    "falseWord": "neteisingai",
+    "quarter1Word": "pirmas ketvirtis",
+    "quarter2Word": "antras ketvirtis",
+    "quarter3Word": "trečias ketvirtis",
+    "quarter4Word": "ketvirtas ketvirtis",
+    "aboveWord": "Virš",
+    "belowWord": "Iki",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "ltg_LV": {
     "trueWord": "patīss",
-    "falseWord": "oploms"
+    "falseWord": "oploms",
+    "quarter1Word": "1. catūrksnis",
+    "quarter2Word": "2. catūrksnis",
+    "quarter3Word": "3. catūrksnis",
+    "quarter4Word": "4. catūrksnis",
+    "aboveWord": "viers",
+    "belowWord": "zam",
+    "quarter1Abbreviation": "C1",
+    "quarter2Abbreviation": "C2",
+    "quarter3Abbreviation": "C3",
+    "quarter4Abbreviation": "C4"
   },
   "lv_LV": {
     "trueWord": "patiess",
-    "falseWord": "aplams"
+    "falseWord": "aplams",
+    "quarter1Word": "1. ceturksnis",
+    "quarter2Word": "2. ceturksnis",
+    "quarter3Word": "3. ceturksnis",
+    "quarter4Word": "4. ceturksnis",
+    "aboveWord": "augstāk",
+    "belowWord": "zemāk",
+    "quarter1Abbreviation": "C1",
+    "quarter2Abbreviation": "C2",
+    "quarter3Abbreviation": "C3",
+    "quarter4Abbreviation": "C4"
   },
   "mai_IN": {
     "trueWord": "सही",
-    "falseWord": "गलत"
+    "falseWord": "गलत",
+    "quarter1Word": "पहिल तीन मास",
+    "quarter2Word": "दोसर तीन मास",
+    "quarter3Word": "तेसर तीन मास",
+    "quarter4Word": "चौथा तीन मास",
+    "aboveWord": "उप्पर",
+    "belowWord": "नीच्चाँ",
+    "quarter1Abbreviation": "पहिल चौथाई",
+    "quarter2Abbreviation": "दोसर चौथाई",
+    "quarter3Abbreviation": "तेसर चौथाई",
+    "quarter4Abbreviation": "चौथा चौथाई"
   },
   "mdw_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "mfe_MU": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "min_ID": {
     "trueWord": "bana",
-    "falseWord": "salah"
+    "falseWord": "salah",
+    "quarter1Word": "kuartal partamo",
+    "quarter2Word": "kuartal kaduo",
+    "quarter3Word": "kuartal katigo",
+    "quarter4Word": "kuartal kaampek",
+    "aboveWord": "labiah dari",
+    "belowWord": "kurang dari",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "mk_MK": {
     "trueWord": "точно",
-    "falseWord": "неточно"
+    "falseWord": "неточно",
+    "quarter1Word": "1-ви квартал",
+    "quarter2Word": "2-ри квартал",
+    "quarter3Word": "3-ти квартал",
+    "quarter4Word": "4-ти квартал",
+    "aboveWord": "над",
+    "belowWord": "под",
+    "quarter1Abbreviation": "К1",
+    "quarter2Abbreviation": "К2",
+    "quarter3Abbreviation": "К3",
+    "quarter4Abbreviation": "К4"
   },
   "mkw_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ml_IN": {
     "trueWord": "അതെ",
-    "falseWord": "അല്ല"
+    "falseWord": "അല്ല",
+    "quarter1Word": "ആദ്യ കാല്‍ഭാഗം‍",
+    "quarter2Word": "രണ്ടാം കാല്‍ഭാഗം‍",
+    "quarter3Word": "മൂന്നാം കാല്‍ഭാഗം‍",
+    "quarter4Word": "നാലാം കാല്‍ഭാഗം‍",
+    "aboveWord": "മുകളില്‍",
+    "belowWord": "താഴെ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "mn_Cyrl_MN": {
     "trueWord": "үнэн",
-    "falseWord": "худал"
+    "falseWord": "худал",
+    "quarter1Word": "дөрөвний нэг",
+    "quarter2Word": "дөрөвний хоёр",
+    "quarter3Word": "дөрөвний гурав",
+    "quarter4Word": "дөрөвний дөрөв",
+    "aboveWord": "дээр",
+    "belowWord": "доор",
+    "quarter1Abbreviation": "1/4",
+    "quarter2Abbreviation": "2/4",
+    "quarter3Abbreviation": "4/4",
+    "quarter4Abbreviation": "4/4"
   },
   "mn_Mong_MN": {
     "trueWord": "ᠦᠨᠡᠨ",
-    "falseWord": "ᠬᠤᠳᠠᠯ"
+    "falseWord": "ᠬᠤᠳᠠᠯ",
+    "quarter1Word": "ᠳᠥᠷᠪᠡᠨ ᠦ ᠨᠢᠭᠡ",
+    "quarter2Word": "ᠳᠥᠷᠪᠡᠨ ᠦ ᠬᠣᠶᠠᠷ",
+    "quarter3Word": "ᠳᠥᠷᠪᠡᠨ ᠦ ᠭᠤᠷᠪᠠ",
+    "quarter4Word": "ᠳᠥᠷᠪᠡᠨ ᠦ ᠳᠥᠷᠪᠡ",
+    "aboveWord": "ᠳᠡᠭᠡᠷ᠎ᠡ",
+    "belowWord": "ᠳᠣᠣᠷ᠎ᠠ",
+    "quarter1Abbreviation": "1/4",
+    "quarter2Abbreviation": "2/4",
+    "quarter3Abbreviation": "4/4",
+    "quarter4Abbreviation": "4/4"
   },
   "mos_BF": {
     "trueWord": "sɩda",
-    "falseWord": "zĩri"
+    "falseWord": "zĩri",
+    "quarter1Word": "yʋʋmdã pipi kis a tãabo",
+    "quarter2Word": "yʋʋmdã kis a tãab a yiib n soaba",
+    "quarter3Word": "yʋʋmdã kis a tãab a tãab n soaba",
+    "quarter4Word": "yʋʋmdã yaoolem kis a tãab soaba",
+    "aboveWord": "zugẽ",
+    "belowWord": "tẽngre",
+    "quarter1Abbreviation": "Kis a tãab 1",
+    "quarter2Abbreviation": "Kis a tãab 2",
+    "quarter3Abbreviation": "Kis a tãab 3",
+    "quarter4Abbreviation": "Kis a tãab 4"
   },
   "mr_IN": {
     "trueWord": "सही",
-    "falseWord": "गलत"
+    "falseWord": "गलत",
+    "quarter1Word": "पॆहला हंत 1",
+    "quarter2Word": "दूसरा हंत 2",
+    "quarter3Word": "तीसरा हंत 3",
+    "quarter4Word": "चौता हंत 4",
+    "aboveWord": "ऊपर",
+    "belowWord": "नीचॆ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "ms_MY": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "suku pertama",
+    "quarter2Word": "suku kedua",
+    "quarter3Word": "suku ketiga",
+    "quarter4Word": "suku keempat",
+    "aboveWord": "atas",
+    "belowWord": "bawah",
+    "quarter1Abbreviation": "S1",
+    "quarter2Abbreviation": "S2",
+    "quarter3Abbreviation": "S3",
+    "quarter4Abbreviation": "S4"
   },
   "mt_MT": {
     "trueWord": "Veru",
-    "falseWord": "Falz"
+    "falseWord": "Falz",
+    "quarter1Word": "L-ewwel kwart",
+    "quarter2Word": "It-tieni kwart",
+    "quarter3Word": "It-tielet kwart",
+    "quarter4Word": "Ir-raba' kwart",
+    "aboveWord": "fuq",
+    "belowWord": "taħt",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "my_MM": {
     "trueWord": "မှန်",
-    "falseWord": "မှား"
+    "falseWord": "မှား",
+    "quarter1Word": "ပထမ သုံးလပတ်",
+    "quarter2Word": "ဒုတိယ သုံးလပတ်",
+    "quarter3Word": "တတိယ သုံးလပတ်",
+    "quarter4Word": "စတုတ္ထ သုံးလပတ်",
+    "aboveWord": "အပေါ်",
+    "belowWord": "အောက်",
+    "quarter1Abbreviation": "ပ-စိတ်",
+    "quarter2Abbreviation": "ဒု-စိတ်",
+    "quarter3Abbreviation": "တ-စိတ်",
+    "quarter4Abbreviation": "စ-စိတ်"
   },
   "myv_RU": {
     "trueWord": "Виде",
-    "falseWord": "Авиде"
+    "falseWord": "Авиде",
+    "quarter1Word": "Васенце колмоков",
+    "quarter2Word": "Омбоце колмоков",
+    "quarter3Word": "Колмоце колмоков",
+    "quarter4Word": "Нилеце колмоков",
+    "aboveWord": "Вере",
+    "belowWord": "Ало",
+    "quarter1Abbreviation": "1кк",
+    "quarter2Abbreviation": "2кк",
+    "quarter3Abbreviation": "3кк",
+    "quarter4Abbreviation": "4кк"
   },
   "nb_NO": {
     "trueWord": "sann",
-    "falseWord": "usann"
+    "falseWord": "usann",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "over",
+    "belowWord": "under",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "nds_DE": {
     "trueWord": "waor",
-    "falseWord": "falsk"
+    "falseWord": "falsk",
+    "quarter1Word": "1. Veerdeljaor",
+    "quarter2Word": "2. Veerdeljaor",
+    "quarter3Word": "3. Veerdeljaor",
+    "quarter4Word": "4. Veerdeljaor",
+    "aboveWord": "buowen",
+    "belowWord": "unnen",
+    "quarter1Abbreviation": "VJ1",
+    "quarter2Abbreviation": "VJ2",
+    "quarter3Abbreviation": "VJ3",
+    "quarter4Abbreviation": "VJ4"
   },
   "ne_NP": {
     "trueWord": "ठीक",
-    "falseWord": "बेठीक"
+    "falseWord": "बेठीक",
+    "quarter1Word": "पहिलो सत्र",
+    "quarter2Word": "दोस्रो सत्र",
+    "quarter3Word": "तेस्रो सत्र",
+    "quarter4Word": "चौथो सत्र",
+    "aboveWord": "माथि",
+    "belowWord": "तल",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "ngz_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "njx_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "njy_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "nl_BE": {
     "trueWord": "waar",
-    "falseWord": "onwaar"
+    "falseWord": "onwaar",
+    "quarter1Word": "1ste kwartaal",
+    "quarter2Word": "2de kwartaal",
+    "quarter3Word": "3de kwartaal",
+    "quarter4Word": "4de kwartaal",
+    "aboveWord": "boven",
+    "belowWord": "onder",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "nl_NL": {
     "trueWord": "waar",
-    "falseWord": "onwaar"
+    "falseWord": "onwaar",
+    "quarter1Word": "1ste kwartaal",
+    "quarter2Word": "2de kwartaal",
+    "quarter3Word": "3de kwartaal",
+    "quarter4Word": "4de kwartaal",
+    "aboveWord": "boven",
+    "belowWord": "onder",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "nn_NO": {
     "trueWord": "sann",
-    "falseWord": "usann"
+    "falseWord": "usann",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "over",
+    "belowWord": "under",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "no_NO": {
     "trueWord": "sann",
-    "falseWord": "usann"
+    "falseWord": "usann",
+    "quarter1Word": "1. kvartal",
+    "quarter2Word": "2. kvartal",
+    "quarter3Word": "3. kvartal",
+    "quarter4Word": "4. kvartal",
+    "aboveWord": "over",
+    "belowWord": "under",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "nr_ZA": {
     "trueWord": "qiniso",
-    "falseWord": "mamala"
+    "falseWord": "mamala",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "ngaphezulu",
+    "belowWord": "ngaphasi",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "nso_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "ny_MW": {
     "trueWord": "Choona",
-    "falseWord": "Chabodza"
+    "falseWord": "Chabodza",
+    "quarter1Word": "Kota yoyamba",
+    "quarter2Word": "Kota yachiwiri",
+    "quarter3Word": "Kota yachitatu",
+    "quarter4Word": "Kota yachinai",
+    "aboveWord": "Pamwamba",
+    "belowWord": "Pansi",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "oc_ES_aranes": {
     "trueWord": "vertat",
-    "falseWord": "faus"
+    "falseWord": "faus",
+    "quarter1Word": "1r trimèstre",
+    "quarter2Word": "2n trimèstre",
+    "quarter3Word": "3r trimèstre",
+    "quarter4Word": "4t trimèstre",
+    "aboveWord": "dessús",
+    "belowWord": "dejós",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "oc_FR_lengadoc": {
     "trueWord": "verai",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "1èr trimèstre",
+    "quarter2Word": "2nd trimèstre",
+    "quarter3Word": "3en trimèstre",
+    "quarter4Word": "4en trimèstre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "om_ET": {
     "trueWord": "Dhugaa",
-    "falseWord": "Soba"
+    "falseWord": "Soba",
+    "quarter1Word": "Bona",
+    "quarter2Word": "Arfaasaa",
+    "quarter3Word": "Ganna",
+    "quarter4Word": "Birraa",
+    "aboveWord": "Gubbaa",
+    "belowWord": "Jala",
+    "quarter1Abbreviation": "Bn",
+    "quarter2Abbreviation": "Ar",
+    "quarter3Abbreviation": "Gn",
+    "quarter4Abbreviation": "Br"
   },
   "or_IN": {
     "trueWord": "ସତ",
-    "falseWord": "ମିଛ"
+    "falseWord": "ମିଛ",
+    "quarter1Word": "ପ୍ରଥମ ତ୍ରୈମାସିକ",
+    "quarter2Word": "ଦ୍ବିତୀୟ ତ୍ରୈମାସିକ",
+    "quarter3Word": "ତୃତୀୟ ତ୍ରୈମାସିକ",
+    "quarter4Word": "ଚତୁର୍ଥ ତ୍ରୈମାସିକ",
+    "aboveWord": "ଉପରେ",
+    "belowWord": "ତଳେ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "pa_IN": {
     "trueWord": "ਸਹੀ",
-    "falseWord": "ਗਲਤ"
+    "falseWord": "ਗਲਤ",
+    "quarter1Word": "ਪ੆ਹਲਾ ਹਂਤ 1",
+    "quarter2Word": "ਦੂਸਰਾ ਹਂਤ 2",
+    "quarter3Word": "ਤੀਸਰਾ ਹਂਤ 3",
+    "quarter4Word": "ਚੌਤਾ ਹਂਤ 4",
+    "aboveWord": "ਊਪਰ",
+    "belowWord": "ਨੀਚ੆",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "pap_BQ": {
     "trueWord": "Berdat",
-    "falseWord": "No Berdat"
+    "falseWord": "No Berdat",
+    "quarter1Word": "Kwart 1",
+    "quarter2Word": "Kwart 2",
+    "quarter3Word": "Kwart 3",
+    "quarter4Word": "Kwart 4",
+    "aboveWord": "Ariba",
+    "belowWord": "Abou",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "pap_CW": {
     "trueWord": "Berdat",
-    "falseWord": "No Berdat"
+    "falseWord": "No Berdat",
+    "quarter1Word": "Kwart 1",
+    "quarter2Word": "Kwart 2",
+    "quarter3Word": "Kwart 3",
+    "quarter4Word": "Kwart 4",
+    "aboveWord": "Ariba",
+    "belowWord": "Abou",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "pdc_US": {
     "trueWord": "waahr",
-    "falseWord": "falsch"
+    "falseWord": "falsch",
+    "quarter1Word": "1scht Vaddel",
+    "quarter2Word": "2tt Vaddel",
+    "quarter3Word": "3tt Vaddel",
+    "quarter4Word": "4rt Vaddel",
+    "aboveWord": "drowwe",
+    "belowWord": "drunne",
+    "quarter1Abbreviation": "V1",
+    "quarter2Abbreviation": "V2",
+    "quarter3Abbreviation": "V3",
+    "quarter4Abbreviation": "V4"
   },
   "pjt_AU": {
     "trueWord": "tjukaṟuru",
-    "falseWord": "ngunti"
+    "falseWord": "ngunti",
+    "quarter1Word": "Quarter 1",
+    "quarter2Word": "Quarter 2",
+    "quarter3Word": "Quarter 3",
+    "quarter4Word": "Quarter 4",
+    "aboveWord": "katu",
+    "belowWord": "tjaṟu",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "pl_PL": {
     "trueWord": "prawda",
-    "falseWord": "fałsz"
+    "falseWord": "fałsz",
+    "quarter1Word": "I kwartał",
+    "quarter2Word": "II kwartał",
+    "quarter3Word": "III kwartał",
+    "quarter4Word": "IV kwartał",
+    "aboveWord": "powyżej",
+    "belowWord": "poniżej",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "plt_MG": {
     "trueWord": "Marina",
-    "falseWord": "Diso"
+    "falseWord": "Diso",
+    "quarter1Word": "Quarter 1",
+    "quarter2Word": "Quarter 2",
+    "quarter3Word": "Quarter 3",
+    "quarter4Word": "Quarter 4",
+    "aboveWord": "Ambony",
+    "belowWord": "Ambany",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "pt_AO": {
     "trueWord": "verdadeiro",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1º trimestre",
+    "quarter2Word": "2º trimestre",
+    "quarter3Word": "3º trimestre",
+    "quarter4Word": "4º trimestre",
+    "aboveWord": "acima",
+    "belowWord": "abaixo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "pt_BR": {
     "trueWord": "verdadeiro",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1.º trimestre",
+    "quarter2Word": "2.º trimestre",
+    "quarter3Word": "3.º trimestre",
+    "quarter4Word": "4.º trimestre",
+    "aboveWord": "acima",
+    "belowWord": "abaixo",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "pt_MZ": {
     "trueWord": "verdadeiro",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1.º trimestre",
+    "quarter2Word": "2.º trimestre",
+    "quarter3Word": "3.º trimestre",
+    "quarter4Word": "4.º trimestre",
+    "aboveWord": "acima",
+    "belowWord": "abaixo",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "pt_PT": {
     "trueWord": "verdadeiro",
-    "falseWord": "falso"
+    "falseWord": "falso",
+    "quarter1Word": "1.º trimestre",
+    "quarter2Word": "2.º trimestre",
+    "quarter3Word": "3.º trimestre",
+    "quarter4Word": "4.º trimestre",
+    "aboveWord": "acima",
+    "belowWord": "abaixo",
+    "quarter1Abbreviation": "1T",
+    "quarter2Abbreviation": "2T",
+    "quarter3Abbreviation": "3T",
+    "quarter4Abbreviation": "4T"
   },
   "pui_CO": {
     "trueWord": "ȓ",
-    "falseWord": "üi"
+    "falseWord": "üi",
+    "quarter1Word": "wig bigsude",
+    "quarter2Word": "üt-yrg",
+    "quarter3Word": "üt-yrg jámai",
+    "quarter4Word": "üt dug bat",
+    "aboveWord": "jajuseat",
+    "belowWord": "janomat",
+    "quarter1Abbreviation": "wig",
+    "quarter2Abbreviation": "üt-y",
+    "quarter3Abbreviation": "üt-j",
+    "quarter4Abbreviation": "üt-d"
   },
   "puu_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ro_MD": {
     "trueWord": "adevărat",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "trimestrul 1",
+    "quarter2Word": "trimestrul 2",
+    "quarter3Word": "trimestrul 3",
+    "quarter4Word": "trimestrul 4",
+    "aboveWord": "deasupra",
+    "belowWord": "sub",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ro_RO": {
     "trueWord": "adevărat",
-    "falseWord": "fals"
+    "falseWord": "fals",
+    "quarter1Word": "trimestrul 1",
+    "quarter2Word": "trimestrul 2",
+    "quarter3Word": "trimestrul 3",
+    "quarter4Word": "trimestrul 4",
+    "aboveWord": "deasupra",
+    "belowWord": "sub",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ru_RU": {
     "trueWord": "истина",
-    "falseWord": "ложь"
+    "falseWord": "ложь",
+    "quarter1Word": "1-й квартал",
+    "quarter2Word": "2-й квартал",
+    "quarter3Word": "3-й квартал",
+    "quarter4Word": "4-й квартал",
+    "aboveWord": "выше",
+    "belowWord": "ниже",
+    "quarter1Abbreviation": "1-й кв.",
+    "quarter2Abbreviation": "2-й кв.",
+    "quarter3Abbreviation": "3-й кв.",
+    "quarter4Abbreviation": "4-й кв."
   },
   "rue_SK": {
     "trueWord": "Правда",
-    "falseWord": "Неправда"
+    "falseWord": "Неправда",
+    "quarter1Word": "1. четвертина",
+    "quarter2Word": "2. четвертина",
+    "quarter3Word": "3. четвертина",
+    "quarter4Word": "4. четвертина",
+    "aboveWord": "Над",
+    "belowWord": "Під",
+    "quarter1Abbreviation": "1.чет.",
+    "quarter2Abbreviation": "2.чет.",
+    "quarter3Abbreviation": "3.чет.",
+    "quarter4Abbreviation": "4.чет."
   },
   "rw_RW": {
     "trueWord": "nibyo",
-    "falseWord": "sibyo"
+    "falseWord": "sibyo",
+    "quarter1Word": "igihembwe cya mbere",
+    "quarter2Word": "igihembwe cya kabiri",
+    "quarter3Word": "igihembwe cya gatatu",
+    "quarter4Word": "igihembwe cya kane",
+    "aboveWord": "hejuru",
+    "belowWord": "hasi",
+    "quarter1Abbreviation": "I1",
+    "quarter2Abbreviation": "I2",
+    "quarter3Abbreviation": "I3",
+    "quarter4Abbreviation": "I4"
   },
   "sat_IN": {
     "trueWord": "ᱥᱟᱹᱨᱤ",
-    "falseWord": "ᱵᱷᱩᱞ"
+    "falseWord": "ᱵᱷᱩᱞ",
+    "quarter1Word": "ᱯᱩᱭᱞᱩ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter2Word": "ᱫᱚᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter3Word": "ᱛᱮᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter4Word": "ᱯᱩᱱᱟᱹᱜ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "aboveWord": "ᱪᱮᱛᱟᱱ",
+    "belowWord": "ᱞᱟᱛᱟᱨ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "sat_Olck_IN": {
     "trueWord": "ᱥᱟᱹᱨᱤ",
-    "falseWord": "ᱵᱷᱩᱞ"
+    "falseWord": "ᱵᱷᱩᱞ",
+    "quarter1Word": "ᱯᱩᱭᱞᱩ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter2Word": "ᱫᱚᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter3Word": "ᱛᱮᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "quarter4Word": "ᱯᱩᱱᱟᱹᱜ ᱯᱮ ᱪᱟᱸᱫᱚ",
+    "aboveWord": "ᱪᱮᱛᱟᱱ",
+    "belowWord": "ᱞᱟᱛᱟᱨ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "sc_IT": {
     "trueWord": "Beru",
-    "falseWord": "Farsu"
+    "falseWord": "Farsu",
+    "quarter1Word": "Cuartu 1",
+    "quarter2Word": "Cuartu 2",
+    "quarter3Word": "Cuartu 3",
+    "quarter4Word": "Cuartu 4",
+    "aboveWord": "Subra",
+    "belowWord": "Suta",
+    "quarter1Abbreviation": "C.tu 1",
+    "quarter2Abbreviation": "C.tu 2",
+    "quarter3Abbreviation": "C.tu 3",
+    "quarter4Abbreviation": "C.tu 4"
   },
   "sdj_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "sg_CF": {
     "trueWord": "Taâ-tënë",
-    "falseWord": "Wätäkä"
+    "falseWord": "Wätäkä",
+    "quarter1Word": "Kôzo nzetâ",
+    "quarter2Word": "Ûse nzetâ",
+    "quarter3Word": "Otâ nzetâ",
+    "quarter4Word": "Usyö nzetâ",
+    "aboveWord": "Na ndönî",
+    "belowWord": "Na gbenî",
+    "quarter1Abbreviation": "1-Nzetâ",
+    "quarter2Abbreviation": "2-Nzetâ",
+    "quarter3Abbreviation": "3-Nzetâ",
+    "quarter4Abbreviation": "4-Nzetâ"
   },
   "shs_CA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "sid_ET": {
     "trueWord": "Halale",
-    "falseWord": "Xara"
+    "falseWord": "Xara",
+    "quarter1Word": "Bocuboco 1",
+    "quarter2Word": "Bocuboco 2",
+    "quarter3Word": "Bocuboco 3",
+    "quarter4Word": "Bocuboco 4",
+    "aboveWord": "Aleenni",
+    "belowWord": "Woroonni",
+    "quarter1Abbreviation": "boc 1",
+    "quarter2Abbreviation": "boc 2",
+    "quarter3Abbreviation": "boc 3",
+    "quarter4Abbreviation": "boc 4"
   },
   "sk_SK": {
     "trueWord": "pravda",
-    "falseWord": "nepravda"
+    "falseWord": "nepravda",
+    "quarter1Word": "1. štvrťrok",
+    "quarter2Word": "2. štvrťrok",
+    "quarter3Word": "3. štvrťrok",
+    "quarter4Word": "4. štvrťrok",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "sl_SI": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "Prvo četrtletje",
+    "quarter2Word": "Drugo četrtletje",
+    "quarter3Word": "Tretje četrtletje",
+    "quarter4Word": "Četrto četrtletje",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "so_SO": {
     "trueWord": "Run",
-    "falseWord": "Been"
+    "falseWord": "Been",
+    "quarter1Word": "Afarmeeloodka 1aad",
+    "quarter2Word": "Afarmeeloodka 2aad",
+    "quarter3Word": "Afarmeeloodka 3aad",
+    "quarter4Word": "Afarmeeloodka 4aad",
+    "aboveWord": "Kor",
+    "belowWord": "Hoos",
+    "quarter1Abbreviation": "AM1",
+    "quarter2Abbreviation": "AM2",
+    "quarter3Abbreviation": "AM3",
+    "quarter4Abbreviation": "AM4"
   },
   "sq_AL": {
     "trueWord": "e vërtetë",
-    "falseWord": "e rremë"
+    "falseWord": "e rremë",
+    "quarter1Word": "tremujori i parë",
+    "quarter2Word": "tremujori i dytë",
+    "quarter3Word": "tremujori i tretë",
+    "quarter4Word": "tremujori i katërt",
+    "aboveWord": "sipër",
+    "belowWord": "nën",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "sr_CS": {
     "trueWord": "тачно",
-    "falseWord": "нетачно"
+    "falseWord": "нетачно",
+    "quarter1Word": "Први квартал године",
+    "quarter2Word": "Други квартал године",
+    "quarter3Word": "Трећи квартал године",
+    "quarter4Word": "Четврти квартал године",
+    "aboveWord": "над",
+    "belowWord": "под",
+    "quarter1Abbreviation": "К1",
+    "quarter2Abbreviation": "К2",
+    "quarter3Abbreviation": "К3",
+    "quarter4Abbreviation": "К4"
   },
   "sr_Latn_CS": {
     "trueWord": "tačno",
-    "falseWord": "netačno"
+    "falseWord": "netačno",
+    "quarter1Word": "Prvi kvartal godine",
+    "quarter2Word": "Drugi kvartal godine",
+    "quarter3Word": "Treći kvartal godine",
+    "quarter4Word": "Četvrti kvartal godine",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "sr_Latn_ME": {
     "trueWord": "tačno",
-    "falseWord": "netačno"
+    "falseWord": "netačno",
+    "quarter1Word": "Prvi kvartal godine",
+    "quarter2Word": "Drugi kvartal godine",
+    "quarter3Word": "Treći kvartal godine",
+    "quarter4Word": "Četvrti kvartal godine",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "sr_Latn_RS": {
     "trueWord": "tačno",
-    "falseWord": "netačno"
+    "falseWord": "netačno",
+    "quarter1Word": "Prvi kvartal godine",
+    "quarter2Word": "Drugi kvartal godine",
+    "quarter3Word": "Treći kvartal godine",
+    "quarter4Word": "Četvrti kvartal godine",
+    "aboveWord": "nad",
+    "belowWord": "pod",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "sr_ME": {
     "trueWord": "тачно",
-    "falseWord": "нетачно"
+    "falseWord": "нетачно",
+    "quarter1Word": "Први квартал године",
+    "quarter2Word": "Други квартал године",
+    "quarter3Word": "Трећи квартал године",
+    "quarter4Word": "Четврти квартал године",
+    "aboveWord": "над",
+    "belowWord": "под",
+    "quarter1Abbreviation": "К1",
+    "quarter2Abbreviation": "К2",
+    "quarter3Abbreviation": "К3",
+    "quarter4Abbreviation": "К4"
   },
   "sr_RS": {
     "trueWord": "тачно",
-    "falseWord": "нетачно"
+    "falseWord": "нетачно",
+    "quarter1Word": "Први квартал године",
+    "quarter2Word": "Други квартал године",
+    "quarter3Word": "Трећи квартал године",
+    "quarter4Word": "Четврти квартал године",
+    "aboveWord": "над",
+    "belowWord": "под",
+    "quarter1Abbreviation": "К1",
+    "quarter2Abbreviation": "К2",
+    "quarter3Abbreviation": "К3",
+    "quarter4Abbreviation": "К4"
   },
   "ss_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "st_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "sun_ID": {
     "trueWord": "leres",
-    "falseWord": "lepat"
+    "falseWord": "lepat",
+    "quarter1Word": "saparapat kahiji",
+    "quarter2Word": "saparapat kadua",
+    "quarter3Word": "saparapat katilu",
+    "quarter4Word": "saparapat kaopat",
+    "aboveWord": "luhur",
+    "belowWord": "handap",
+    "quarter1Abbreviation": "S1",
+    "quarter2Abbreviation": "S2",
+    "quarter3Abbreviation": "S3",
+    "quarter4Abbreviation": "S4"
   },
   "sv_FI": {
     "trueWord": "sant",
-    "falseWord": "falskt"
+    "falseWord": "falskt",
+    "quarter1Word": "1 kvartalet",
+    "quarter2Word": "2 kvartalet",
+    "quarter3Word": "3 kvartalet",
+    "quarter4Word": "4 kvartalet",
+    "aboveWord": "ovan",
+    "belowWord": "nedan",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "sv_SE": {
     "trueWord": "sant",
-    "falseWord": "falskt"
+    "falseWord": "falskt",
+    "quarter1Word": "1 kvartalet",
+    "quarter2Word": "2 kvartalet",
+    "quarter3Word": "3 kvartalet",
+    "quarter4Word": "4 kvartalet",
+    "aboveWord": "ovan",
+    "belowWord": "nedan",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "sw_TZ": {
     "trueWord": "kweli",
-    "falseWord": "sikweli"
+    "falseWord": "sikweli",
+    "quarter1Word": "robo ya kwanza",
+    "quarter2Word": "robo ya pili",
+    "quarter3Word": "robo ya tatu",
+    "quarter4Word": "robo ya nne",
+    "aboveWord": "juu ya",
+    "belowWord": "chini ya",
+    "quarter1Abbreviation": "R1",
+    "quarter2Abbreviation": "R2",
+    "quarter3Abbreviation": "R3",
+    "quarter4Abbreviation": "R4"
   },
   "szl_PL": {
     "trueWord": "prowda",
-    "falseWord": "fałsz"
+    "falseWord": "fałsz",
+    "quarter1Word": "I sztwierć roku",
+    "quarter2Word": "II sztwierć roku",
+    "quarter3Word": "III sztwierć roku",
+    "quarter4Word": "IV sztwierć roku",
+    "aboveWord": "bez",
+    "belowWord": "hned",
+    "quarter1Abbreviation": "S1",
+    "quarter2Abbreviation": "S2",
+    "quarter3Abbreviation": "S3",
+    "quarter4Abbreviation": "S4"
   },
   "ta_IN": {
     "trueWord": "ஸரி",
-    "falseWord": "தப்ப"
+    "falseWord": "தப்ப",
+    "quarter1Word": "வந்ந௧  1",
+    "quarter2Word": "ரெஂட௨ 2",
+    "quarter3Word": "மூடு௩ 3",
+    "quarter4Word": "நால்௪ 4",
+    "aboveWord": "மேலெ",
+    "belowWord": "கூளெ",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "te_IN": {
     "trueWord": "నిజము",
-    "falseWord": "అపాదము"
+    "falseWord": "అపాదము",
+    "quarter1Word": "ఒకటి  1",
+    "quarter2Word": "రెండు  2",
+    "quarter3Word": "మూడు 3",
+    "quarter4Word": "నాలుగు 4",
+    "aboveWord": "పయ్న",
+    "belowWord": "కింద",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "tek_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "tg_TJ": {
     "trueWord": "Ҳаққонӣ",
-    "falseWord": "Қалбакӣ"
+    "falseWord": "Қалбакӣ",
+    "quarter1Word": "Чоряки 1-ум",
+    "quarter2Word": "Чоряки 2-юм",
+    "quarter3Word": "Чоряки 3-юм",
+    "quarter4Word": "Чоряки 4-ум",
+    "aboveWord": "боло",
+    "belowWord": "поён",
+    "quarter1Abbreviation": "чор. 1-ум",
+    "quarter2Abbreviation": "чор. 2-юм",
+    "quarter3Abbreviation": "чор. 3-юм",
+    "quarter4Abbreviation": "чор. 4-ум"
   },
   "th_TH": {
     "trueWord": "จริง",
-    "falseWord": "เท็จ"
+    "falseWord": "เท็จ",
+    "quarter1Word": "ไตรมาส 1",
+    "quarter2Word": "ไตรมาส 2",
+    "quarter3Word": "ไตรมาส 3",
+    "quarter4Word": "ไตรมาส 4",
+    "aboveWord": "ข้างบน",
+    "belowWord": "ข้างล่าง",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "ti_ER": {
     "trueWord": "ሓቂ",
-    "falseWord": "ሓሶት"
+    "falseWord": "ሓሶት",
+    "quarter1Word": "1ይ ርብዒ",
+    "quarter2Word": "2ይ ርብዒ",
+    "quarter3Word": "3ይ ርብዒ",
+    "quarter4Word": "4ይ ርብዒ",
+    "aboveWord": "ላዕሊ",
+    "belowWord": "ታሕቲ",
+    "quarter1Abbreviation": "1ይ ርብዒ",
+    "quarter2Abbreviation": "2ይ ርብዒ",
+    "quarter3Abbreviation": "3ይ ርብዒ",
+    "quarter4Abbreviation": "4ይ ርብዒ"
   },
   "tk_TM": {
     "trueWord": "Dogry",
-    "falseWord": "Ýalňyş"
+    "falseWord": "Ýalňyş",
+    "quarter1Word": "1-nji çärýek",
+    "quarter2Word": "2-nji çärýek",
+    "quarter3Word": "3-nji çärýek",
+    "quarter4Word": "4-nji çärýek",
+    "aboveWord": "Ýokaryda",
+    "belowWord": "Aşakda",
+    "quarter1Abbreviation": "Çärýek 1",
+    "quarter2Abbreviation": "Çärýek 2",
+    "quarter3Abbreviation": "Çärýek 3",
+    "quarter4Abbreviation": "Çärýek 4"
   },
   "tn_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "tpi_PG": {
     "trueWord": "Tru",
-    "falseWord": "Giaman"
+    "falseWord": "Giaman",
+    "quarter1Word": "Namba Wan Kota",
+    "quarter2Word": "Namba Tu Kota",
+    "quarter3Word": "Namba Tri Kota",
+    "quarter4Word": "Namba Foa Kota",
+    "aboveWord": "Antap",
+    "belowWord": "Daunbilo",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "tr_TR": {
     "trueWord": "doğru",
-    "falseWord": "yanlış"
+    "falseWord": "yanlış",
+    "quarter1Word": "1. çeyrek",
+    "quarter2Word": "2. çeyrek",
+    "quarter3Word": "3. çeyrek",
+    "quarter4Word": "4. çeyrek",
+    "aboveWord": "yukarı",
+    "belowWord": "aşağı",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "ts_ZA": {
     "trueWord": "ntiyiso",
-    "falseWord": "vunwa"
+    "falseWord": "vunwa",
+    "quarter1Word": "Kotara yo sungula",
+    "quarter2Word": "Kotara ya vumbirhi",
+    "quarter3Word": "Kotara ya vunharhu",
+    "quarter4Word": "Kotara ya vumune",
+    "aboveWord": "henhla",
+    "belowWord": "hansi",
+    "quarter1Abbreviation": "K1",
+    "quarter2Abbreviation": "K2",
+    "quarter3Abbreviation": "K3",
+    "quarter4Abbreviation": "K4"
   },
   "tsa_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "tt_RU": {
     "trueWord": "чын",
-    "falseWord": "ялган"
+    "falseWord": "ялган",
+    "quarter1Word": "1 нче чирек",
+    "quarter2Word": "2 нче чирек",
+    "quarter3Word": "3 нче чирек",
+    "quarter4Word": "4 нче чирек",
+    "aboveWord": "өскә",
+    "belowWord": "аска",
+    "quarter1Abbreviation": "1 чр.",
+    "quarter2Abbreviation": "2 чр.",
+    "quarter3Abbreviation": "3 чр.",
+    "quarter4Abbreviation": "4 чр."
   },
   "tyx_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "ug_CN": {
     "trueWord": "راست",
-    "falseWord": "يالغان"
+    "falseWord": "يالغان",
+    "quarter1Word": "بىرىنچى چارەك",
+    "quarter2Word": "ئىككىنچى چارەك",
+    "quarter3Word": "ئۈچىنچى چارەك",
+    "quarter4Word": "تۆتىنچى چارەك",
+    "aboveWord": "ئۈستى",
+    "belowWord": "ئاستى",
+    "quarter1Abbreviation": "1 چارەك",
+    "quarter2Abbreviation": "2 چارەك",
+    "quarter3Abbreviation": "3 چارەك",
+    "quarter4Abbreviation": "4 چارەك"
   },
   "uk_UA": {
     "trueWord": "істина",
-    "falseWord": "брехня"
+    "falseWord": "брехня",
+    "quarter1Word": "1-й квартал",
+    "quarter2Word": "2-й квартал",
+    "quarter3Word": "3-й квартал",
+    "quarter4Word": "4-й квартал",
+    "aboveWord": "вище",
+    "belowWord": "нижче",
+    "quarter1Abbreviation": "1-й кв.",
+    "quarter2Abbreviation": "2-й кв.",
+    "quarter3Abbreviation": "3-й кв.",
+    "quarter4Abbreviation": "4-й кв."
   },
   "ur_PK": {
     "trueWord": "راست",
-    "falseWord": "غلط"
+    "falseWord": "غلط",
+    "quarter1Word": "ایک چوتھائی",
+    "quarter2Word": "دو چوتھائی",
+    "quarter3Word": "تین چوتھائی",
+    "quarter4Word": "چار چوتھائی",
+    "aboveWord": "اوپر",
+    "belowWord": "نیچے",
+    "quarter1Abbreviation": "چوتھائی 1",
+    "quarter2Abbreviation": "چوتھائی 2 ",
+    "quarter3Abbreviation": "چوتھائی 3",
+    "quarter4Abbreviation": "چوتھائی 4"
   },
   "uz_UZ": {
     "trueWord": "haqiqiy",
-    "falseWord": "Soxta"
+    "falseWord": "Soxta",
+    "quarter1Word": "1-chi chorak",
+    "quarter2Word": "2-chi chorak",
+    "quarter3Word": "3-chi chorak",
+    "quarter4Word": "4-chi chorak",
+    "aboveWord": "yuqori",
+    "belowWord": "past",
+    "quarter1Abbreviation": "1-chi chorak",
+    "quarter2Abbreviation": "2-chi chorak",
+    "quarter3Abbreviation": "3-chi chorak",
+    "quarter4Abbreviation": "4-chi chorak"
   },
   "ve_ZA": {
     "trueWord": "ngoho",
-    "falseWord": "a si ngoho"
+    "falseWord": "a si ngoho",
+    "quarter1Word": "K1",
+    "quarter2Word": "K2",
+    "quarter3Word": "K3",
+    "quarter4Word": "K4",
+    "aboveWord": "nṱha",
+    "belowWord": "fhasi",
+    "quarter1Abbreviation": "Kotara ya u thoma",
+    "quarter2Abbreviation": "Kotara ya vhuvhili",
+    "quarter3Abbreviation": "Kotara ya vhuraru",
+    "quarter4Abbreviation": "Kotara ya vhuṋa"
   },
   "vec_IT": {
     "trueWord": "Vero",
-    "falseWord": "Falso"
+    "falseWord": "Falso",
+    "quarter1Word": "Primo Cuarto",
+    "quarter2Word": "Secondo Cuarto",
+    "quarter3Word": "Terso Cuarto",
+    "quarter4Word": "Cuarto Cuarto",
+    "aboveWord": "Sora",
+    "belowWord": "Soto",
+    "quarter1Abbreviation": "C1",
+    "quarter2Abbreviation": "C2",
+    "quarter3Abbreviation": "C3",
+    "quarter4Abbreviation": "C4"
   },
   "vi_VN": {
     "trueWord": "đúng",
-    "falseWord": "sai"
+    "falseWord": "sai",
+    "quarter1Word": "quý 1",
+    "quarter2Word": "quý 2",
+    "quarter3Word": "quý 3",
+    "quarter4Word": "quý 4",
+    "aboveWord": "trên",
+    "belowWord": "dưới",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "vif_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "vro_EE": {
     "trueWord": "tõtõ",
-    "falseWord": "võlsś"
+    "falseWord": "võlsś",
+    "quarter1Word": "1. aastagaveerändik",
+    "quarter2Word": "2. aastagaveerändik",
+    "quarter3Word": "3. aastagaveerändik",
+    "quarter4Word": "4. aastagaveerändik",
+    "aboveWord": "iinpuul",
+    "belowWord": "allpuul",
+    "quarter1Abbreviation": "AV1",
+    "quarter2Abbreviation": "AV2",
+    "quarter3Abbreviation": "AV3",
+    "quarter4Abbreviation": "AV4"
   },
   "wa_BE": {
     "trueWord": "vraiy",
-    "falseWord": "fås"
+    "falseWord": "fås",
+    "quarter1Word": "1î troes-moes",
+    "quarter2Word": "2inme troes-moes",
+    "quarter3Word": "3inme troes-moes",
+    "quarter4Word": "4inme troes-moes",
+    "aboveWord": "dizeu",
+    "belowWord": "dizo",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "xh_ZA": {
     "trueWord": "yinyaniso",
-    "falseWord": "asiyonyaniso"
+    "falseWord": "asiyonyaniso",
+    "quarter1Word": "1 unyangantathu",
+    "quarter2Word": "2 unyangantathu",
+    "quarter3Word": "3 unyangantathu",
+    "quarter4Word": "4 unyangantathu",
+    "aboveWord": "ngasentla",
+    "belowWord": "emazantsi",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "xku_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "yi_US": {
     "trueWord": "אמת",
-    "falseWord": "פֿאַלש"
+    "falseWord": "פֿאַלש",
+    "quarter1Word": "ערשט יאָרפֿערטל",
+    "quarter2Word": "צװײט יאָרפֿערטל",
+    "quarter3Word": "דריט  יאָרפֿערטל",
+    "quarter4Word": "פֿערט יאָרפֿערטל",
+    "aboveWord": "אױבן",
+    "belowWord": "אונטן",
+    "quarter1Abbreviation": "י“פֿ1",
+    "quarter2Abbreviation": "י“פֿ2",
+    "quarter3Abbreviation": "י“פֿ3",
+    "quarter4Abbreviation": "י“פֿ4"
   },
   "yom_CG": {
     "trueWord": "vrai",
-    "falseWord": "faux"
+    "falseWord": "faux",
+    "quarter1Word": "1er trimestre",
+    "quarter2Word": "2e trimestre",
+    "quarter3Word": "3e trimestre",
+    "quarter4Word": "4e trimestre",
+    "aboveWord": "supra",
+    "belowWord": "infra",
+    "quarter1Abbreviation": "T1",
+    "quarter2Abbreviation": "T2",
+    "quarter3Abbreviation": "T3",
+    "quarter4Abbreviation": "T4"
   },
   "zh_CN": {
     "trueWord": "TRUE",
-    "falseWord": "FALSE"
+    "falseWord": "FALSE",
+    "quarter1Word": "第1季度",
+    "quarter2Word": "第2季度",
+    "quarter3Word": "第3季度",
+    "quarter4Word": "第4季度",
+    "aboveWord": "上方",
+    "belowWord": "下方",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "zh_HK": {
     "trueWord": "真",
-    "falseWord": "假"
+    "falseWord": "假",
+    "quarter1Word": "第1季",
+    "quarter2Word": "第2季",
+    "quarter3Word": "第3季",
+    "quarter4Word": "第4季",
+    "aboveWord": "上面",
+    "belowWord": "下面",
+    "quarter1Abbreviation": "1季",
+    "quarter2Abbreviation": "2季",
+    "quarter3Abbreviation": "3季",
+    "quarter4Abbreviation": "4季"
   },
   "zh_MO": {
     "trueWord": "真",
-    "falseWord": "假"
+    "falseWord": "假",
+    "quarter1Word": "第1季",
+    "quarter2Word": "第2季",
+    "quarter3Word": "第3季",
+    "quarter4Word": "第4季",
+    "aboveWord": "上面",
+    "belowWord": "下面",
+    "quarter1Abbreviation": "1季",
+    "quarter2Abbreviation": "2季",
+    "quarter3Abbreviation": "3季",
+    "quarter4Abbreviation": "4季"
   },
   "zh_SG": {
     "trueWord": "TRUE",
-    "falseWord": "FALSE"
+    "falseWord": "FALSE",
+    "quarter1Word": "第1季度",
+    "quarter2Word": "第2季度",
+    "quarter3Word": "第3季度",
+    "quarter4Word": "第4季度",
+    "aboveWord": "上方",
+    "belowWord": "下方",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   },
   "zh_TW": {
     "trueWord": "真",
-    "falseWord": "假"
+    "falseWord": "假",
+    "quarter1Word": "第1季",
+    "quarter2Word": "第2季",
+    "quarter3Word": "第3季",
+    "quarter4Word": "第4季",
+    "aboveWord": "上面",
+    "belowWord": "下面",
+    "quarter1Abbreviation": "1季",
+    "quarter2Abbreviation": "2季",
+    "quarter3Abbreviation": "3季",
+    "quarter4Abbreviation": "4季"
   },
   "zu_ZA": {
     "trueWord": "true",
-    "falseWord": "false"
+    "falseWord": "false",
+    "quarter1Word": "1st quarter",
+    "quarter2Word": "2nd quarter",
+    "quarter3Word": "3rd quarter",
+    "quarter4Word": "4th quarter",
+    "aboveWord": "above",
+    "belowWord": "below",
+    "quarter1Abbreviation": "Q1",
+    "quarter2Abbreviation": "Q2",
+    "quarter3Abbreviation": "Q3",
+    "quarter4Abbreviation": "Q4"
   }
 }

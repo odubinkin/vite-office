@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.date.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "GetDateOutput",
+      "GetDateTimeOutput"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpGetDateOutput",
+      "SvNumberformat::ImpGetDateTimeOutput",
+      "SvNumberformat::ImpUseMonthCase",
+      "SvNumberformat::SwitchToOtherCalendar",
+      "SvNumberformat::SwitchToGregorianCalendar",
+      "SvNumberformat::ImpFallBackToGregorianCalendar",
+      "lcl_getValidDate"
+    ],
+    "preservedResponsibilities": [
+      "Original finite DATE/DATETIME mode0 producers use actual calendar, compiled token and Date/Time owners. Source Gregorian range/epoch mutation, original calendar switching/Dummy-era fallback/restoration, implicit other-calendar detection, grammatical month case, years/eras/week/quarter, literals/star/blanks and separate datetime date/clock rounding are connected. Dormant nonzero native-number/spellout branches remain unported and are not admitted. Complete native display/parser/service ABI closure remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete native-number conversion, service/native ABI and full CSV acceptance remain unproven."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.date.ts",
+          "marker": "GetDateOutput"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetDateOutput"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.date.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original zformat translation unit by date/datetime output responsibility, retaining actual source calendar/current-language and compiled section ownership."
+    }
+  }
+}
