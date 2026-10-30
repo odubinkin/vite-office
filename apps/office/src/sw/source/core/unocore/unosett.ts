@@ -13,7 +13,7 @@ import {
   numberingPropertyPatches,
   numberingSequenceType,
 } from "./unosett-properties";
-import type { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { SwNumFormat, SvxNumType, SwNumRule, type ConstSwNumFormat } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
@@ -90,6 +90,7 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly charStyleName?: string;
   readonly adjust?: number;
   readonly isLegal?: boolean;
+  readonly headingStyleName?: string;
 }
 
 /** Writer-owned copy, validation and commit boundary corresponding to SwXNumberingRules. */
@@ -124,14 +125,16 @@ export class SwXNumberingRules {
 
   private readonly rule: SwNumRule;
   private readonly m_pDoc: SwDoc | undefined;
+  private readonly m_pChapterDoc: SwDoc | undefined;
   private readonly m_sNewCharStyleNames: string[];
-  /** Native rule/document constructor forms retain their document or infer it from the first character style. @param source - Rule or document. @param doc - Optional rule document. @returns Service. */
-  public constructor(source: SwNumRule | import("../doc/doc").SwDoc, doc?: SwDoc) {
+  /** Native rule/document constructor forms retain their document or infer it from the first character style. @param source - Rule or document. @param doc - Optional rule document. @param chapter - Native chapter binding supplied by SwXChapterNumbering. @returns Service. */
+  public constructor(source: SwNumRule | import("../doc/doc").SwDoc, doc?: SwDoc, chapter = false) {
+    this.m_pChapterDoc = chapter ? doc : undefined;
     this.m_sNewCharStyleNames = Array<string>(10).fill(
-      source instanceof SwNumRule ? "__XXX___invalid" : "",
+      !chapter && source instanceof SwNumRule ? "__XXX___invalid" : "",
     );
-    this.m_pDoc = source instanceof SwNumRule ? doc : source;
-    if (source instanceof SwNumRule)
+    this.m_pDoc = chapter ? undefined : source instanceof SwNumRule ? doc : source;
+    if (!chapter && source instanceof SwNumRule)
       for (let level = 0; level < 10; ++level) {
         const style = source.Get(level).GetCharFormat();
         if (style) {
@@ -204,7 +207,24 @@ export class SwXNumberingRules {
 
   /** Resolves the original document-owned level without cloning its format. @param rule - Borrowed native rule. @param level - Validated level. @returns Supported property record. */
   public GetNumberingRuleByIndex(rule: SwNumRule, level: number): WriterNumberingRuleProperties {
-    return SwXNumberingRules.GetPropertiesForNumFormat(rule.Get(level));
+    const properties = SwXNumberingRules.GetPropertiesForNumFormat(rule.Get(level));
+    if (!this.m_pChapterDoc) return properties;
+    let name = `Heading ${level + 1}`;
+    for (const style of this.m_pChapterDoc.GetTextFormatColls()) {
+      if (style === this.m_pChapterDoc.GetDfltTextFormatColl()) continue;
+      const assigned = style.IsAssignedToListLevelOfOutlineStyle()
+        ? style.GetAssignedOutlineStyleLevel()
+        : 10;
+      if (assigned === level) {
+        name = style.GetName();
+        break;
+      }
+      if (name === style.GetName()) name = "";
+    }
+    return {
+      ...properties,
+      headingStyleName: SwStyleNameMapper.FillProgName(name, SwGetPoolIdFromName.TxtColl),
+    };
   }
 
   /** Publishes only native active geometry and represented optional marker properties. @param format - Borrowed const format. @returns Independent supported record; full UNO sequence remains unrepresented. */
@@ -257,16 +277,22 @@ export class SwXNumberingRules {
   /** Replaces one level through the native UNO application boundary. @param level - Zero-based level. @param properties - Supported property sequence. @returns Nothing. */
   public replaceByIndex(level: number, properties: WriterNumberingRuleProperties | Any): void {
     this.GetPropertiesByIndex(level);
+    const copy = this.m_pChapterDoc
+      ? new SwNumRule(this.m_pChapterDoc.GetOutlineNumRule())
+      : undefined;
     try {
       this.SetNumberingRuleByIndex(
-        this.rule,
+        copy ?? this.rule,
         properties instanceof Any ? numberingPropertyPatches(properties) : [properties],
         level,
       );
+      if (copy && this.m_pChapterDoc) this.m_pChapterDoc.SetOutlineNumRule(copy);
     } catch (error) {
       if (properties instanceof Any && error instanceof NumberingRulePropertyError)
         illegal(error.message);
       throw error;
+    } finally {
+      copy?.Dispose();
     }
   }
 
@@ -277,6 +303,7 @@ export class SwXNumberingRules {
     level: number,
   ): void {
     const applied = new SwNumFormat(rule.Get(level));
+    let heading = "";
     try {
       for (const properties of patches) {
         const bulletFont = properties.bulletFont;
@@ -287,6 +314,13 @@ export class SwXNumberingRules {
             typeof bulletFont.name !== "string")
         )
           throw new NumberingRulePropertyError("Invalid bullet font descriptor.");
+        if (properties.headingStyleName !== undefined) {
+          if (!this.m_pChapterDoc) unknown("HeadingStyleName");
+          heading = SwStyleNameMapper.FillUIName(
+            properties.headingStyleName,
+            SwGetPoolIdFromName.TxtColl,
+          );
+        }
         if (properties.charStyleName !== undefined) {
           const name = SwStyleNameMapper.FillUIName(
             properties.charStyleName,
@@ -296,8 +330,9 @@ export class SwXNumberingRules {
             this.m_sNewCharStyleNames[level] = "";
             applied.SetCharFormat(undefined);
             applied.SetCharFormatName("");
-          } else if (this.m_pDoc) {
-            const style = this.m_pDoc.FindCharFormatByName(name);
+          } else if (this.m_pChapterDoc || this.m_pDoc) {
+            const document = this.m_pChapterDoc ?? (this.m_pDoc as SwDoc),
+              style = document.FindCharFormatByName(name);
             // The consumed no-DocShell profile creates ListLabel before this call. Native fallback dereferences DocShell for an unknown style.
             if (!style) throw new Error("assert(character style exists without DocShell)");
             applied.SetCharFormat(style);
@@ -364,6 +399,18 @@ export class SwXNumberingRules {
         )
           applied.SetIncludeUpperLevels(properties.parentNumbering);
         if (properties.listFormat !== undefined) applied.SetListFormat(properties.listFormat);
+      }
+      if (heading && this.m_pChapterDoc) {
+        for (const style of this.m_pChapterDoc.GetTextFormatColls()) {
+          if (style === this.m_pChapterDoc.GetDfltTextFormatColl()) continue;
+          if (
+            style.IsAssignedToListLevelOfOutlineStyle() &&
+            style.GetAssignedOutlineStyleLevel() === level &&
+            style.GetName() !== heading
+          )
+            style.DeleteAssignmentToListLevelOfOutlineStyle();
+          else if (style.GetName() === heading) style.AssignToListLevelOfOutlineStyle(level);
+        }
       }
       rule.Set(level, applied);
     } finally {
@@ -446,3 +493,45 @@ import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation as Hori } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+
+/** Original chapter service uses the actual document outline owner; the standalone filter model supplies SwDoc at the native chapter-shell boundary. */
+export class SwXChapterNumbering extends SwXNumberingRules {
+  /** Original chapter constructor binds document-owned outline data, not a new ordinary numbering style. @param document - Actual document. @returns Service. */
+  constructor(document: SwDoc) {
+    super(document.GetOutlineNumRule(), document, true);
+  }
+  /** Original implementation identity. @returns Owned native string. */
+  getImplementationName(): import("../../../../sal/inc/rtl/ustring").OUString {
+    return unicode("SwXChapterNumbering");
+  }
+  /** Original generated string sequence advertises both native chapter and numbering services. @returns Owned sequence. */
+  getSupportedServiceNames(): InstanceType<typeof ChapterServiceNames> {
+    const names = [
+      unicode("com.sun.star.text.ChapterNumbering"),
+      unicode("com.sun.star.text.NumberingRules"),
+    ];
+    try {
+      return new ChapterServiceNames(
+        {
+          get: /** Native string-element stride. @param offset - Logical address. @returns Borrowed source slot. */ (
+            offset: number,
+          ) => names[offset / 8]?.getDataAddress(),
+        },
+        names.length,
+      );
+    } finally {
+      for (const name of names) name.dispose();
+    }
+  }
+  /** Original chapter and ordinary-numbering service admission. @param name - Requested service. @returns Support. */
+  supportsService(name: import("../../../../sal/inc/rtl/ustring").OUStringConstReference): boolean {
+    return ["com.sun.star.text.ChapterNumbering", "com.sun.star.text.NumberingRules"].includes(
+      text(name),
+    );
+  }
+}
+
+const ChapterServiceNames = Sequence.specialize<import("../../../../sal/inc/rtl/ustring").OUString>(
+  "OUString",
+  8,
+);

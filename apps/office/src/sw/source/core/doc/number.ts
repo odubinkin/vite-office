@@ -405,6 +405,32 @@ export class SwNumRule {
     return this.name;
   }
 
+  /** Original name assignment updates the registered map and list-style references in source order. @param name - Native new identity. @param lists - Actual list access owner. @returns Nothing. */
+  public SetName(name: string, lists: import("./DocumentListsManager").DocumentListsManager): void {
+    if (this.name === name) return;
+    if (this.mpNumRuleMap) {
+      this.mpNumRuleMap.delete(this.name);
+      this.mpNumRuleMap.set(name, this);
+      if (this.GetDefaultListId() !== "") lists.trackChangeOfListStyleName(this.name, name);
+    }
+    this.name = name;
+  }
+  /** Original foreign character-format correction visits explicit owned levels only. @param document - Destination owner. @returns Nothing. */
+  public CheckCharFormats(document: SwDoc): void {
+    for (let level = 0; level < 10; ++level) {
+      const owned = this.GetNumFormat(level),
+        style = owned?.GetCharFormat();
+      if (owned && style && style.GetDoc() !== document) {
+        const copy = new SwNumFormat(owned);
+        try {
+          copy.SetCharFormat(document.CopyCharFormat(style));
+          this.Set(level, copy);
+        } finally {
+          copy.Dispose();
+        }
+      }
+    }
+  }
   /** Returns the browser-supported marker family. @returns Bullet or numbered kind. */
   public GetKind(): Exclude<WriterParagraphListKind, "none"> {
     return getWriterNumFormatKind(this.Get(0));

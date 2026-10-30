@@ -2370,3 +2370,25 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: lcl_findProperty returns an index or minus one. AddParaProperties assigns that integer directly to bool instead of comparing it with minus one. A property at index zero becomes false, while an absent property becomes true.
 - Impact: when both geometry properties are absent, the method returns without adding paragraph margins. A geometry property at index zero can instead receive a duplicate property copied from the paragraph style; later sequential setters/merging can give the appended value priority.
 - Local behavior: preserve index-zero and minus-one conversion, the early return, names and append order. Tests query actual owned PropertyValue vectors for absent/default and duplicate cases. Do not repair the checks to conventional presence tests.
+
+
+### WRITER270 — Outline assignment can remove another numbering rule's name index
+
+- Source: `sw/source/core/doc/number.cxx`, `SwNumRule::operator=` and `SwNumRule::SetName`; `sw/source/core/doc/docnum.cxx`, `SwDoc::SetOutlineNumRule`.
+- Observation: assignment copies the incoming name without updating the retained recipient map pointer. SetOutlineNumRule then calls SetName("Outline"), which erases the incoming name from that map before registering Outline. It does not check which rule owns the erased entry.
+- Impact: assigning a differently named registered donor leaves the donor in the rule table while its name lookup disappears; default-list style references also follow the original rename callback. Ordinary chapter-service calls copy Outline itself and do not trigger this case.
+- Local behavior: preserve assignment, map erasure and callback order. `chapter-numbering.test.ts` verifies persistent outline identity and the donor table/index disagreement. Do not repair the map based on owner identity.
+
+### WRITER271 — List-level validation deliberately leaves the property vector stale
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `DomainMapper_Impl::ValidateListLevel`.
+- Observation: when another paragraph style has claimed a list level, validation sets StyleSheetPropertyMap list-level metadata to WW_OUTLINE_MAX (9). The existing PROP_NUMBERING_LEVEL property is not changed; the source explicitly warns about the disagreement.
+- Impact: metadata lookup reports body level9 while consumers of the original property vector still read the previous level. A direct paragraph NumberingLevel continues to take precedence.
+- Local behavior: retain first-claim ownership and update only the metadata. `numbering-style-postprocess.test.ts` verifies both results on actual property owners.
+
+### WRITER272 — Chapter selection narrows an ID before comparing it with full-width IDs
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListsManager::CreateNumberingRules` and `ListDef::CreateNumberingRules`.
+- Observation: the selected concrete ID is stored in sal_Int16, while ListDef retains its full-width ID. Rule creation compares GetId() against the narrowed selection.
+- Impact: a suitable concrete ID65540 becomes4, so that candidate creates WWNum65540 instead of Outline; a separate ID4 can compare equal to the selection. This differs from ordinary low-range IDs.
+- Local behavior: preserve signed16 selection and full-width comparison. `numbering-style-postprocess.test.ts` verifies weight6 and the resulting ordinary style for ID65540.

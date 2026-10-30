@@ -75,6 +75,8 @@ export function numberingToSequence(
   if (properties.isLegal !== undefined) add("LevelIsLegal", new Any([properties.isLegal], "bool"));
   add("CharStyleName", stringAny(properties.charStyleName ?? ""));
   if (properties.bulletFont) add("BulletFontName", stringAny(properties.bulletFont.name));
+  if (properties.headingStyleName !== undefined)
+    add("HeadingStyleName", stringAny(properties.headingStyleName));
   const result = new NumberingPropertySequence(
     {
       /** Processes one ordered native value at this boundary. @param offset - Original offset input. @returns The represented native operation result. */
@@ -127,6 +129,15 @@ function decodeNumberingProperty(property: PropertyValue): Partial<WriterNumberi
     BulletChar: "bulletChar",
     CharStyleName: "charStyleName",
   };
+  if (name === "HeadingStyleName") {
+    const heading = new OUString();
+    try {
+      property.Value.extract(heading, "OUString");
+      return { headingStyleName: text(heading) };
+    } finally {
+      heading.dispose();
+    }
+  }
   if (strings[name]) {
     if (name === "BulletChar") {
       const character = new OUString();

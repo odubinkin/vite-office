@@ -9,7 +9,7 @@ import {
 } from "../../../inc/hintids";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import type { SwNumRuleItem } from "../para/paratr";
+import { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -85,6 +85,13 @@ export class SwTextFormatColl extends SwFormatColl {
       throw new Error("Writer outline level is outside 0-9.");
     this.mbAssignedToOutlineStyle = true;
     this.SetAttrOutlineLevel(level + 1);
+    for (const child of new SwIterator(SwTextFormatColl, this)) {
+      if (child.IsAssignedToListLevelOfOutlineStyle()) continue;
+      if (child.GetAttrSet().GetItemState(RES_PARATR_NUMRULE, false) === SfxItemState.DEFAULT)
+        child.SetFormatAttr(new SwNumRuleItem(""));
+      if (child.GetAttrSet().GetItemState(RES_PARATR_OUTLINELEVEL, false) === SfxItemState.DEFAULT)
+        child.SetAttrOutlineLevel(0);
+    }
   }
 
   /** Reports assignment to the outline rule. @returns Assignment flag. */
@@ -182,3 +189,5 @@ function GetNumRuleForParagraphStyle(collection: SwTextFormatColl): SwNumRule | 
     ? collection.GetDoc().FindNumRulePtr(item.GetValue())
     : undefined;
 }
+
+import { SwIterator } from "../../../inc/calbck";

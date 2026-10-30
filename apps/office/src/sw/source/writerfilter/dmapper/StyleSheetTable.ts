@@ -785,6 +785,14 @@ export class StyleSheetTable {
     }
     return name;
   }
+  /** Original numbering-name postprocessing operates on this same entry table. @returns Nothing. */
+  ApplyNumberingStyleNameToParaStyles(): void {
+    ApplyNumberingStyleNameToParaStyles.call(this);
+  }
+  /** Original outline inheritance recovery operates on this same entry table. @returns Nothing. */
+  ReApplyInheritedOutlineLevelFromChapterNumbering(): void {
+    ReApplyInheritedOutlineLevelFromChapterNumbering.call(this);
+  }
   /** Native entry completion admission and first-ID insertion, used by the parser's entry callback. @param entry - Completed native entry. @returns Nothing. */
   AppendEntry(entry: StyleSheetEntry): void {
     if (entry.m_sStyleName === "") {
@@ -932,3 +940,8 @@ import type { DomainMapper_Impl } from "./DomainMapper_Impl";
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
 
 import { text } from "../../core/unocore/unocrsrhelper";
+
+import {
+  ApplyNumberingStyleNameToParaStyles,
+  ReApplyInheritedOutlineLevelFromChapterNumbering,
+} from "./StyleSheetTable.numbering";

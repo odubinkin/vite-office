@@ -9,7 +9,27 @@ import {
 /** Bounded pool-ID lookup used by the native internet item constructor. */
 export const SwStyleNameMapper = {
   /** Consumes the native character-family FillProgName branch, including name disambiguation and the default-style special case. @param name - Native UI name. @param flags - Character format family. @returns Programmatic name. */
-  FillProgName(name: string, flags: SwGetPoolIdFromName.ChrFmt): string {
+  FillProgName(
+    name: string,
+    flags: SwGetPoolIdFromName.ChrFmt | SwGetPoolIdFromName.TxtColl,
+  ): string {
+    if (flags === SwGetPoolIdFromName.TxtColl) {
+      const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+        /** Original English paragraph resource lookup. @param style - Pool metadata. @returns UI equality. */ (
+          style,
+        ) => (style.name === "Standard" ? "Default Paragraph Style" : style.name) === name,
+      );
+      if (entry) return entry.name;
+      if (
+        WRITER_PARAGRAPH_STYLE_POOL.some(
+          /** Original programmatic collision. @param style - Pool metadata. @returns Equality. */ (
+            style,
+          ) => style.name === name,
+        )
+      )
+        return name + " (user)";
+      return name.length > 8 && name.endsWith(" (user)") ? name.slice(0, -7) : name;
+    }
     void flags;
     if (name === "No Character Style") return "Standard";
     const entry = WRITER_CHARACTER_STYLE_POOL.find(
@@ -27,7 +47,27 @@ export const SwStyleNameMapper = {
     return name.length > 8 && name.endsWith(" (user)") ? name.slice(0, -7) : name;
   },
   /** Original character-family FillUIName, including Standard and the source suffix-length guard. @param name - Programmatic name. @param flags - Original character family. @returns UI name. */
-  FillUIName(name: string, flags: SwGetPoolIdFromName.ChrFmt): string {
+  FillUIName(
+    name: string,
+    flags: SwGetPoolIdFromName.ChrFmt | SwGetPoolIdFromName.TxtColl,
+  ): string {
+    if (flags === SwGetPoolIdFromName.TxtColl) {
+      const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+        /** Original paragraph programmatic lookup. @param style - Pool metadata. @returns Equality. */ (
+          style,
+        ) => style.name === name,
+      );
+      if (entry) return entry.name === "Standard" ? "Default Paragraph Style" : entry.name;
+      if (
+        WRITER_PARAGRAPH_STYLE_POOL.some(
+          /** Original custom-name collision. @param style - Pool metadata. @returns UI equality. */ (
+            style,
+          ) => (style.name === "Standard" ? "Default Paragraph Style" : style.name) === name,
+        )
+      )
+        return name + " (user)";
+      return name.length > 8 && name.endsWith(" (user)") ? name.slice(0, -7) : name;
+    }
     void flags;
     if (name === "Standard") return "No Character Style";
     const entry = WRITER_CHARACTER_STYLE_POOL.find(

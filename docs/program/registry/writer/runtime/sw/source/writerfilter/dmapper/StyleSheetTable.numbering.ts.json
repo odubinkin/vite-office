@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.numbering.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.numbering.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+        "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts"
+      ],
+      "justification": " Original chapter postprocessing restores absent inherited numbering and outline metadata, then applies explicit source list names including ID0 cancellation. Native missing-style break/continue and whole-operation UNO exception handling remain distinct. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ApplyNumberingStyleNameToParaStyles",
+        "ReApplyInheritedOutlineLevelFromChapterNumbering"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+      "upstreamSymbols": [
+        "StyleSheetTable::ApplyNumberingStyleNameToParaStyles",
+        "StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering"
+      ]
+    }
+  }
+}

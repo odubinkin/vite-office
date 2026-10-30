@@ -73,6 +73,14 @@ export class DomainMapper_Impl {
   GetListStyleName(id: number): OUString {
     return unicode(this.GetListTable().GetList(id)?.GetStyleName() ?? "");
   }
+  /** Original direct/style metadata level lookup. @param entry - Native style. @param paragraph - Optional direct context. @returns Signed level. */
+  GetListLevel(entry: StyleSheetEntry | null, paragraph?: ParagraphPropertyMap): number {
+    return GetListLevel.call(this, entry, paragraph);
+  }
+  /** Original style-level conflict validation. @param id - Native identifier. @returns Nothing. */
+  ValidateListLevel(id: string): void {
+    ValidateListLevel.call(this, id);
+  }
   /** Original numbering-table phase. @param value - Phase state. @returns Nothing. */
   SetNumberingImport(value: boolean): void {
     this.m_bInNumberingImport = value;
@@ -450,3 +458,5 @@ export class DomainMapper_Impl {
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 
 import { ListsManager } from "./NumberingManager";
+
+import { GetListLevel, ValidateListLevel } from "./DomainMapper_Impl.numbering";

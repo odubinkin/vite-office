@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 201
+revision: 204
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T14:41:41.058Z"
+  updated_at: "2026-10-30T15:08:43.500Z"
   updated_by: "CODER"
-  note: "pStyle/native stylesheet metadata and source AddParaProperties checkpoint passes857 related tests/static gates; goal remains active for chapter selection/service, style-numbering postprocessing and remaining producers."
-  attempts: 31
+  note: "Native chapter numbering checkpoint verified: 962 targeted tests/62 files and required static gates pass; WRITER270-WRITER272 preserved and documented. Full goal remains incomplete: style-only body NumPr and remaining numbering producer/export audit still required."
+  attempts: 32
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -501,8 +504,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T15:08:43.500Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native chapter numbering checkpoint verified: 962 targeted tests/62 files and required static gates pass; WRITER270-WRITER272 preserved and documented. Full goal remains incomplete: style-only body NumPr and remaining numbering producer/export audit still required."
+  -
+    type: "status"
+    at: "2026-10-30T15:08:51.486Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T14:42:10.827Z"
+doc_updated_at: "2026-10-30T15:08:51.486Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1155,6 +1171,36 @@ sections:
     Attempts: 31
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:41:40.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T15:08:43.500Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native chapter numbering checkpoint verified: 962 targeted tests/62 files and required static gates pass; WRITER270-WRITER272 preserved and documented. Full goal remains incomplete: style-only body NumPr and remaining numbering producer/export audit still required.
+    Attempts: 32
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:08:42.396Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1974,6 +2020,21 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html20-types-final.txt, html20-eslint.txt, html20-prettier-final.txt, html20-docs-final.txt, html20-provenance.txt, html20-registry.txt, html20-boundaries.txt, html20-size.txt, html20-tree.txt, html20-doctor.txt. Scope: changed source/docs,1880 provenance modules, Writer registry zero semantic violations,1879 runtime sources/10241 imports/227 allowed edges. Doctor has zero errors and the unchanged pre-existing managed-shim readiness warning. No unrelated hook or policy changes; no all-application full test run.
     - Initial local failures retained: html20-types2.txt/html20-style-tests.txt reported a missing original IsStyleSheetImport forwarding method and unused imports after removal of legacy style margins; added the actual mapper-state delegate and removed only obsolete imports. html20-style-tests2.txt then passed13 new cases. Docs initially reported the new paragraphSprms argument missing its param tag (html20-docs.txt); fixed the function documentation and final docs gate passed4242 authored files. An initial editing script had a syntax error before any mutation; its old-source checks are not used as final evidence. Route was revalidated before dependent retries; no assertion/enforcement was weakened.
+
+    ### Native chapter numbering checkpoint (html21)
+
+    - Implemented weighted ListsManager selection: strict greater-than5, first ties, early break above17 and signed16 selected concrete IDs. Selected definitions use actual Outline style and chapter HeadingStyleName; ordinary definitions keep native WWNum behavior. ListsManager invokes both original stylesheet postprocessors after all definitions.
+    - Added native SwXChapterNumbering and cached SwXTextDocument supplier. Chapter replacement copies/commits the persistent document outline, updates actual heading-style assignments, preserves native getter defaults and rejects HeadingStyleName on ordinary numbering rules. Paragraph-family name conversion uses the existing native pool metadata and source collision/suffix rules.
+    - Added native SwDoc.SetOutlineNumRule, PropagateOutlineRule and UpdateNumRule, native SwNumRule.SetName/CheckCharFormats, list-style rename tracking and SwUndoOutlineEdit. Existing SetNumRule moved unchanged to docnum responsibility. Outline identity, native type/auto flags, registered-node level correction, empty-direct-item propagation, protected nonempty style numbering, foreign label-style copying and repeated undo/redo are covered. Existing SwUndoOutlineLeftRight remains intact.
+    - Added destructive immediate derived-style defaults from AssignToListLevelOfOutlineStyle and original stylesheet numbering/outline recovery, explicit ID0 cancellation, missing-style break/continue and whole-method UNO exception handling. Added actual inherited list/level lookup and first-claim validation, including sal_Int8 narrowing at validation. Recorded and retained WRITER270 (Assign/rename map erasure), WRITER271 (stale property vector after body metadata9), WRITER272 (selected ID signed16 versus full-width comparison).
+    - Thirteen new cases across chapter-numbering.test.ts, numbering-style-postprocess.test.ts and rtf-chapter-numbering.test.ts exercise actual native owners, RTF producer paths, Worker ownership, thresholds, ties, early stop, narrowed IDs, direct precedence, style restoration/cancellation, source metadata disagreement, foreign formats and history. No substitute numbering service or detached outline state was introduced.
+    - Required remaining work: style-only body numbering/NumPr paragraph integration, malformed-level first-indent recovery, old-style numbering, special section/HTML producers and complete current-slice re-export audit. Footnote-index/expression-field update services are not represented by this SwDoc; no placeholder was added. Full goal remains active and incomplete; no complete module/ABI/semantic-confidence claim. Browser open/save/autosave/recovery deviations unchanged.
+
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/doc/number src/sw/source/core/doc/native-outline src/sw/source/core/undo/unnum src/sw/browser/editor/native-outline-tab.test.tsx src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,962tests/62files. Evidence: output/playwright/rtf-properties-native/html21-final-focused.txt. Scope: chapter import/core/history and related native TXT/RTF/Markdown/Worker/document-I/O modules; no all-application test run. Earlier focused59/7 and selection5/1 also passed before later fixture assertions; final962 supersedes them.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html21-types-final.txt, html21-eslint-final.txt, html21-prettier-final.txt, html21-docs-final.txt, html21-provenance-final.txt, html21-registry-final.txt, html21-boundaries.txt, html21-size.txt, html21-tree.txt, html21-doctor.txt. Scope: changed source/docs,4247 authored source docs,1882 provenance modules,1881 runtime sources/10263 imports/227 allowed edges; Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim warning. Metadata remains broadly unverified; no confidence promotion.
+    - Initial failures and corrections: html21-core-types.txt caught an accidental overwrite of existing unoutl.ts; restored exact HEAD SwUndoOutlineLeftRight and appended the new action, then the outline/editor82/12 regression run passed. html21-uno-types.txt caught missing TxtColl mapper admission, fixed with source paragraph-family conversion. New test literals initially omitted compatibility-record kind/suffix (html21-types-final.txt was subsequently superseded by passing final typecheck); corrected the literals without weakening native typed property paths. Initial child numbering expectation failed because actual RTF style dedup emits source numId0, which deliberately cancels inheritance; preserved source behavior and separately tested genuinely absent metadata minus1 restoration. A registered-node correction fixture initially attached a style with no numbering rule, so the node was not registered until later PropagateOutlineRule; made the fixture genuinely registered before SetOutlineNumRule and retained the exact expected level2 assertion, plus a separate empty-style propagation assertion. html21-focused.txt records that earlier591/592 run; final962 passes. Initial docs gate required JSDoc on a new throw assertion callback; added documentation and final docs passed. Failed optional path searches caused no source changes; route was recomputed before dependent retries. No acceptance/policy/hook changes.
 id_source: "generated"
 ---
 ## Summary
@@ -2637,6 +2698,36 @@ Note: pStyle/native stylesheet metadata and source AddParaProperties checkpoint 
 Attempts: 31
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:41:40.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T15:08:43.500Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native chapter numbering checkpoint verified: 962 targeted tests/62 files and required static gates pass; WRITER270-WRITER272 preserved and documented. Full goal remains incomplete: style-only body NumPr and remaining numbering producer/export audit still required.
+Attempts: 32
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T15:08:42.396Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3460,3 +3551,18 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html20-types-final.txt, html20-eslint.txt, html20-prettier-final.txt, html20-docs-final.txt, html20-provenance.txt, html20-registry.txt, html20-boundaries.txt, html20-size.txt, html20-tree.txt, html20-doctor.txt. Scope: changed source/docs,1880 provenance modules, Writer registry zero semantic violations,1879 runtime sources/10241 imports/227 allowed edges. Doctor has zero errors and the unchanged pre-existing managed-shim readiness warning. No unrelated hook or policy changes; no all-application full test run.
 - Initial local failures retained: html20-types2.txt/html20-style-tests.txt reported a missing original IsStyleSheetImport forwarding method and unused imports after removal of legacy style margins; added the actual mapper-state delegate and removed only obsolete imports. html20-style-tests2.txt then passed13 new cases. Docs initially reported the new paragraphSprms argument missing its param tag (html20-docs.txt); fixed the function documentation and final docs gate passed4242 authored files. An initial editing script had a syntax error before any mutation; its old-source checks are not used as final evidence. Route was revalidated before dependent retries; no assertion/enforcement was weakened.
+
+### Native chapter numbering checkpoint (html21)
+
+- Implemented weighted ListsManager selection: strict greater-than5, first ties, early break above17 and signed16 selected concrete IDs. Selected definitions use actual Outline style and chapter HeadingStyleName; ordinary definitions keep native WWNum behavior. ListsManager invokes both original stylesheet postprocessors after all definitions.
+- Added native SwXChapterNumbering and cached SwXTextDocument supplier. Chapter replacement copies/commits the persistent document outline, updates actual heading-style assignments, preserves native getter defaults and rejects HeadingStyleName on ordinary numbering rules. Paragraph-family name conversion uses the existing native pool metadata and source collision/suffix rules.
+- Added native SwDoc.SetOutlineNumRule, PropagateOutlineRule and UpdateNumRule, native SwNumRule.SetName/CheckCharFormats, list-style rename tracking and SwUndoOutlineEdit. Existing SetNumRule moved unchanged to docnum responsibility. Outline identity, native type/auto flags, registered-node level correction, empty-direct-item propagation, protected nonempty style numbering, foreign label-style copying and repeated undo/redo are covered. Existing SwUndoOutlineLeftRight remains intact.
+- Added destructive immediate derived-style defaults from AssignToListLevelOfOutlineStyle and original stylesheet numbering/outline recovery, explicit ID0 cancellation, missing-style break/continue and whole-method UNO exception handling. Added actual inherited list/level lookup and first-claim validation, including sal_Int8 narrowing at validation. Recorded and retained WRITER270 (Assign/rename map erasure), WRITER271 (stale property vector after body metadata9), WRITER272 (selected ID signed16 versus full-width comparison).
+- Thirteen new cases across chapter-numbering.test.ts, numbering-style-postprocess.test.ts and rtf-chapter-numbering.test.ts exercise actual native owners, RTF producer paths, Worker ownership, thresholds, ties, early stop, narrowed IDs, direct precedence, style restoration/cancellation, source metadata disagreement, foreign formats and history. No substitute numbering service or detached outline state was introduced.
+- Required remaining work: style-only body numbering/NumPr paragraph integration, malformed-level first-indent recovery, old-style numbering, special section/HTML producers and complete current-slice re-export audit. Footnote-index/expression-field update services are not represented by this SwDoc; no placeholder was added. Full goal remains active and incomplete; no complete module/ABI/semantic-confidence claim. Browser open/save/autosave/recovery deviations unchanged.
+
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/doc/number src/sw/source/core/doc/native-outline src/sw/source/core/undo/unnum src/sw/browser/editor/native-outline-tab.test.tsx src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,962tests/62files. Evidence: output/playwright/rtf-properties-native/html21-final-focused.txt. Scope: chapter import/core/history and related native TXT/RTF/Markdown/Worker/document-I/O modules; no all-application test run. Earlier focused59/7 and selection5/1 also passed before later fixture assertions; final962 supersedes them.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html21-types-final.txt, html21-eslint-final.txt, html21-prettier-final.txt, html21-docs-final.txt, html21-provenance-final.txt, html21-registry-final.txt, html21-boundaries.txt, html21-size.txt, html21-tree.txt, html21-doctor.txt. Scope: changed source/docs,4247 authored source docs,1882 provenance modules,1881 runtime sources/10263 imports/227 allowed edges; Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim warning. Metadata remains broadly unverified; no confidence promotion.
+- Initial failures and corrections: html21-core-types.txt caught an accidental overwrite of existing unoutl.ts; restored exact HEAD SwUndoOutlineLeftRight and appended the new action, then the outline/editor82/12 regression run passed. html21-uno-types.txt caught missing TxtColl mapper admission, fixed with source paragraph-family conversion. New test literals initially omitted compatibility-record kind/suffix (html21-types-final.txt was subsequently superseded by passing final typecheck); corrected the literals without weakening native typed property paths. Initial child numbering expectation failed because actual RTF style dedup emits source numId0, which deliberately cancels inheritance; preserved source behavior and separately tested genuinely absent metadata minus1 restoration. A registered-node correction fixture initially attached a style with no numbering rule, so the node was not registered until later PropagateOutlineRule; made the fixture genuinely registered before SetOutlineNumRule and retained the exact expected level2 assertion, plus a separate empty-style propagation assertion. html21-focused.txt records that earlier591/592 run; final962 passes. Initial docs gate required JSDoc on a new throw assertion callback; added documentation and final docs passed. Failed optional path searches caused no source changes; route was recomputed before dependent retries. No acceptance/policy/hook changes.

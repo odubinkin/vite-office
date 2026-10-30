@@ -927,3 +927,38 @@ SwXChapterNumbering/SetOutlineNumRule, heading assignment and stylesheet
 postprocessing. Those components and style-only paragraph numbering inheritance
 are required work in the current represented core slice. No all-RTF-numbering,
 full module or ABI completion claim is made.
+
+
+### Native chapter numbering selection and services checkpoint
+
+ListsManager now consumes native chapter weights with the strict greater-than5
+threshold, first-tie retention and early stop above17. Selected definitions use
+the existing Outline style and native SwXChapterNumbering service. Typed
+HeadingStyleName changes actual paragraph-style assignments; ordinary numbering
+services reject that property. SwXTextDocument caches its chapter supplier.
+
+SwDoc.SetOutlineNumRule preserves the document outline owner, records native
+SwUndoOutlineEdit, fixes foreign character-format ownership, aligns registered
+paragraph list levels, propagates the rule to assigned styles with an empty
+direct numbering item, and validates invalid numbering rules. Outline undo/redo
+uses the same operation. The existing SetNumRule implementation was moved to
+its upstream docnum responsibility without changing its application contract.
+Footnote-index and expression-field update services are not represented by this
+SwDoc implementation; no placeholder service was introduced.
+
+AssignToListLevelOfOutlineStyle retains the original destructive defaults for
+immediate derived styles. Native stylesheet postprocessing restores absent
+inherited numbering/outline metadata and then applies explicit list names,
+including ID0 cancellation. RTF default numId0 can therefore cancel a child's
+numbering while its outline level is restored. GetListLevel and ValidateListLevel
+operate on original style metadata, direct paragraph precedence and first-claim
+ownership. Source oddities WRITER270-WRITER272 are documented and preserved.
+
+Targeted tests cover actual RTF import and Worker outline identity, thresholds,
+ties, early stop, signed ID narrowing, style inheritance/cancellation, first-claim
+metadata disagreement, outline undo/redo and foreign label-format ownership.
+This supersedes the previous checkpoint's unfinished chapter-selection statement.
+Style-only body numbering and direct NumPr edge cases remain required work, along
+with malformed-level recovery, old-style numbering and the remaining producer /
+re-export audit. Full RTF/current-slice completion and full module/ABI parity are
+not claimed. Browser open/save/autosave/recovery deviations are unchanged.

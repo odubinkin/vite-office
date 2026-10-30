@@ -78,12 +78,8 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_LIST_ISCOUNTED,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_TEXTLEFT,
-  RES_MARGIN_RIGHT,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwNumRule, SwNumRuleType } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
@@ -587,6 +583,18 @@ export class SwDoc {
   public GetOutlineNumRule(): SwNumRule {
     return this.mpOutlineRule;
   }
+  /** Applies native outline rule editing and its owned undo payload. @param rule - Native source rule. @returns Nothing. */
+  public SetOutlineNumRule(rule: SwNumRule): void {
+    SetOutlineNumRule(this, rule);
+  }
+  /** Original propagation to assigned paragraph styles. @returns Nothing. */
+  public PropagateOutlineRule(): void {
+    PropagateOutlineRule(this);
+  }
+  /** Original invalid numbering-rule validation. @returns Nothing. */
+  public UpdateNumRule(): void {
+    UpdateNumRule(this);
+  }
   /** Transfers a native numbering rule into document ownership without implicit cloning. @param rule - Transferred owner. @returns Borrowed stored identity. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
     return this.listsManager.AddNumRule(rule);
@@ -653,78 +661,7 @@ export class SwDoc {
     mode = SetNumRuleMode.Default,
     continuedListId = "",
   ): string {
-    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
-      throw new Error("Writer numbering range belongs to another node array.");
-    return this.RunModelTransaction(
-      /** Applies native rule ownership before paragraph attributes. @returns Applied explicit list identity. */ () => {
-        let stored = this.FindNumRulePtr(rule.GetName());
-        const created = stored === undefined;
-        if (stored === undefined) {
-          stored = this.AddNumRule(new SwNumRule(rule));
-          // AddNumRule materializes the named rule's default list and nonempty ID.
-        } else if (!stored.Equals(rule)) {
-          stored.Assign(rule);
-          this.listsManager.InvalidateAllLists();
-        }
-        let listId = "";
-        if (!(mode & SetNumRuleMode.DontSetItem)) {
-          if (mode & SetNumRuleMode.CreateNewList)
-            listId = created
-              ? stored.GetDefaultListId()
-              : this.listsManager.CreateList(stored.GetName()).GetListId();
-          else if (continuedListId.length > 0) listId = continuedListId;
-        }
-        const start = range.Start().GetNodeIndex(),
-          end = range.End().GetNodeIndex();
-        if (listId.length > 0) {
-          for (let index = start; index <= end; index++) {
-            const node = this.nodes.at(index);
-            if (node instanceof SwTextNode)
-              node.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
-          }
-        }
-        let flags = mode;
-        if (!range.HasMark()) {
-          const node = range.GetPoint().GetNode();
-          if (node instanceof SwTextNode) {
-            const current = node.GetNumRule();
-            if (current?.GetName() === stored.GetName()) {
-              flags |= SetNumRuleMode.DontSetItem;
-              if (!node.IsInList()) node.AddToList();
-            } else if (
-              current === undefined &&
-              this.FindNumRulePtr(node.GetTextFormatColl().GetNumRule().GetValue()) === stored
-            ) {
-              node.ResetAttr(RES_PARATR_NUMRULE);
-              flags |= SetNumRuleMode.DontSetItem;
-            }
-          }
-        }
-        if (!(flags & SetNumRuleMode.DontSetItem)) {
-          for (let index = start; index <= end; index++) {
-            const node = this.nodes.at(index);
-            if (
-              node instanceof SwTextNode &&
-              (!(flags & SetNumRuleMode.DontSetIfAlreadyApplied) ||
-                node.GetNumRule(true) !== stored)
-            )
-              node.SetAttr(new SwNumRuleItem(stored.GetName()));
-          }
-        }
-        if (
-          flags & SetNumRuleMode.ResetIndentAttrs &&
-          stored.Get(0).GetPositionAndSpaceMode() === "label-alignment"
-        ) {
-          for (let index = start; index <= end; index++) {
-            const node = this.nodes.at(index);
-            if (node instanceof SwTextNode)
-              node.ResetAttr([RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT]);
-          }
-        }
-        this.NotifyModelChange({ kind: "numbering-changed", ruleName: stored.GetName() });
-        return listId;
-      },
-    );
+    return SetNumRule(this, range, rule, mode, continuedListId);
   }
 
   /** Changes native restart only on a numbered text node with a different flag. @param position - Actual node position. @param flag - Requested restart state. @returns Whether a flag changed. */
@@ -994,3 +931,5 @@ export function createWriterDocument(): SwDoc {
 }
 
 import { SwModule } from "../../uibase/app/swmodule";
+
+import { SetNumRule, SetOutlineNumRule, PropagateOutlineRule, UpdateNumRule } from "./docnum";

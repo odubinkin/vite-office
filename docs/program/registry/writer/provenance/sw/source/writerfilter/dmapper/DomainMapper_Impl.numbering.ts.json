@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.numbering.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.numbering.ts",
+          "marker": "GetListLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::GetListLevel"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+    "localSymbols": [
+      "GetListLevel",
+      "ValidateListLevel",
+      "lcl_getListId"
+    ],
+    "upstreamSymbols": [
+      "DomainMapper_Impl::GetListLevel",
+      "DomainMapper_Impl::ValidateListLevel"
+    ],
+    "preservedResponsibilities": [
+      "Original inherited list-ID/list-level recursion, direct paragraph precedence, signed8 validation and first-style level claim are preserved on actual mapper entries. A second claimant receives body metadata9 while its original property vector remains unchanged (WRITER271). S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Complete parent module, compiled native ABI and unconsumed numbering producers remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.numbering.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Numbering-specific native methods retain the original mapper/table owner and state; the split keeps the existing large owner within the repository file-size budget without introducing a substitute service."
+    }
+  }
+}

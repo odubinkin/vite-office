@@ -41,3 +41,34 @@ export class SwUndoOutlineLeftRight extends SwUndo {
     }
   }
 }
+
+import { SwNumRule } from "../doc/number";
+/** Original action owns independent old/new rules; undo and redo use the same native document operation with recording disabled by the manager. */
+export class SwUndoOutlineEdit extends SwUndo {
+  private readonly m_aNewNumRule: SwNumRule;
+  private readonly m_aOldNumRule: SwNumRule;
+  /** Original copied rule values preserve sparse formats and registrations. @param oldRule - Previous rule. @param newRule - Requested rule. @returns Action. */
+  constructor(oldRule: SwNumRule, newRule: SwNumRule) {
+    super("Modify outline");
+    this.m_aNewNumRule = new SwNumRule(newRule);
+    this.m_aOldNumRule = new SwNumRule(oldRule);
+  }
+  /** Native undo applies the retained old rule. @param context - Actual context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    context.GetDoc().SetOutlineNumRule(this.m_aOldNumRule);
+  }
+  /** Native redo applies the retained new rule. @param context - Actual context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    context.GetDoc().SetOutlineNumRule(this.m_aNewNumRule);
+  }
+  /** Native repeat applies the retained new rule. @param context - Actual repeat context. @returns Nothing. */
+  public RepeatImpl(context: Pick<SwUndoRedoContext, "GetDoc">): void {
+    context.GetDoc().SetOutlineNumRule(this.m_aNewNumRule);
+  }
+  /** Original owned-rule destructors release level/style registrations. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_aNewNumRule.Dispose();
+    this.m_aOldNumRule.Dispose();
+    super.Dispose();
+  }
+}

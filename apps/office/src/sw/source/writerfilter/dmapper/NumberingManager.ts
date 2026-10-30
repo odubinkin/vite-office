@@ -652,15 +652,15 @@ export class ListDef extends AbstractListDef {
       for (const level of concrete) releaseProperties(level);
     }
   }
-  /** Ordinary concrete levels create a native NumberingStyle and commit its typed service once; native pStyle-linked outline selection remains to be connected. @param mapper - Actual document mapper. @returns Nothing. */
-  CreateNumberingRules(mapper: DomainMapper): void {
+  /** Creates ordinary or selected Outline numbering through actual native services and commits its typed style once. @param mapper - Actual document mapper. @param outline - Selected signed16 concrete ID. @returns Nothing. */
+  CreateNumberingRules(mapper: DomainMapper, outline = -1): void {
     if (this.m_xNumRules) return;
     const model = mapper.model,
       familyKey = unicode("NumberingStyles"),
       family = model.getStyleFamilies().getByName(familyKey);
     familyKey.dispose();
-    let name = `WWNum${this.GetId()}`;
-    for (;;) {
+    let name = this.GetId() === outline ? "Outline" : `WWNum${this.GetId()}`;
+    for (; this.GetId() !== outline;) {
       const key = unicode(name);
       try {
         if (!family.hasByName(key)) break;
@@ -670,10 +670,14 @@ export class ListDef extends AbstractListDef {
       name += "a";
     }
     this.m_StyleName = name;
-    const descriptor = model.createNumberingStyle(),
-      styleName = unicode(name);
+    const styleName = unicode(name);
+    let descriptor;
     try {
-      family.insertStyleByName(styleName, descriptor);
+      if (this.GetId() === outline) descriptor = family.getStyleByName(styleName);
+      else {
+        descriptor = model.createNumberingStyle();
+        family.insertStyleByName(styleName, descriptor);
+      }
     } finally {
       styleName.dispose();
     }
@@ -700,6 +704,19 @@ export class ListDef extends AbstractListDef {
             );
             try {
               replaceLevel(service, i, properties);
+              const style = this.m_pAbstractDef?.GetLevel(i)?.GetParaStyle();
+              if (this.GetId() === outline && style) {
+                style.m_bAssignedAsChapterNumbering = true;
+                const key = unicode("HeadingStyleName"),
+                  value = stringAny(style.m_sConvertedStyleName);
+                try {
+                  properties.push(new PropertyValue(key, 0, value, 0));
+                } finally {
+                  key.dispose();
+                  value.dispose();
+                }
+                replaceLevel(model.getChapterNumberingRules(), i, properties);
+              }
             } finally {
               releaseProperties(properties);
             }
@@ -814,9 +831,21 @@ export class ListsManager implements Properties, Table {
           ) => definition.GetId() === id,
         );
   }
-  /** Creates ordinary numbering definitions; native pStyle-linked outline selection and stylesheet postprocessing remain to be connected. @returns Nothing. */
+  /** Original weighted chapter selection preserves strict thresholds, first ties and the early break before applying every definition and stylesheet postprocessing. @returns Nothing. */
   CreateNumberingRules(): void {
-    for (const list of this.m_aLists) list.CreateNumberingRules(this.mapper);
+    let chosen = -1,
+      highest = 5;
+    for (const list of this.m_aLists) {
+      const weight = list.GetChapterNumberingWeight();
+      if (weight > highest) {
+        highest = weight;
+        chosen = (list.GetId() << 16) >> 16;
+        if (highest > 17) break;
+      }
+    }
+    for (const list of this.m_aLists) list.CreateNumberingRules(this.mapper, chosen);
+    this.mapper.impl.GetStyleSheetTable().ReApplyInheritedOutlineLevelFromChapterNumbering();
+    this.mapper.impl.GetStyleSheetTable().ApplyNumberingStyleNameToParaStyles();
   }
   /** Original manager destructor releases retained definitions and their level maps. @returns Nothing. */
   dispose(): void {

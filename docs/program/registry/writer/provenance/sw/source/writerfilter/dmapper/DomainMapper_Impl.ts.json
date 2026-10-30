@@ -50,6 +50,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts",
           "marker": "RtfDocumentImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -77,7 +89,9 @@
       "GetAnyProperty",
       "GetPropertyFromCharStyleSheet",
       "deferCharacterProperty",
-      "processDeferredCharacterProperties"
+      "processDeferredCharacterProperties",
+      "GetListLevel",
+      "ValidateListLevel"
     ],
     "upstreamSymbols": [
       "DomainMapper_Impl::GetPropertyFromStyleSheet",
@@ -89,7 +103,9 @@
       "DomainMapper_Impl::GetAnyProperty",
       "DomainMapper_Impl::GetPropertyFromCharStyleSheet",
       "DomainMapper_Impl::deferCharacterProperty",
-      "DomainMapper_Impl::processDeferredCharacterProperties"
+      "DomainMapper_Impl::processDeferredCharacterProperties",
+      "DomainMapper_Impl::GetListLevel",
+      "DomainMapper_Impl::ValidateListLevel"
     ],
     "preservedResponsibilities": [
       "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending.",
@@ -99,7 +115,8 @@
       "S3HW1E native position/vertAlign checkpoint supersedes earlier legacy escapement notes: raw RTF up/dn and super/sub now retain independent original RTFSprms values and source ordering; nosupersub erases only vertAlign and zero position replaces raw state while remaining a mapper no-op. Actual native style/run normalization precedes model insertion. DomainMapper owns nonzero stylesheet substitution and deferred run/negative-paragraph calculation; DomainMapper_Impl retains actual Any copies in the represented body SubstreamContext, resolves final height through direct paragraph/character maps, retained stylesheet entries and original defaults, and flushes at nonempty text application. Named SwFormatCharFormat insertion remains with the existing atomic hint binding; its mapper property participates in final-height lookup without duplicate named-reference application. Obsolete half-point DTO state, pendingUpDn interpretation, difference-based escapement hints and unused projected character callbacks were removed. Native writerfilter ignores the legacy exporter updnprop extension, preserving source reductions rather than inventing roundtrip fidelity. Related actual-model integration and mapper tests cover these consumed branches; whole desktop parser, substream replay, unrelated UNO API and physical ABI parity are not certified or independent filter completion gates.",
       "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
       "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged.",
-      "S3HW1E concrete-list checkpoint: actual saved tableAttributes/listLevelEntries and RTFValue containers carry LISTLEVEL/LFOLEVEL/NumLvl overrides; RTFReferenceTable retains intrusive property references and signed map order. Each original LISTOVERRIDETABLE callback captures the cumulative raw table for ordered delivery at the existing atomic model boundary. DomainMapper table import flags and its lazy ListsManager own actual AbstractListDef/ListDef sparse levels, first-ID lookup, retained numbering service and native numeric HasValues merge. Native WWNum style creation, typed NumberingRules replacement/commit and property-owner lifetimes replace the detached list-ID/level maps. Explicit empty concrete text remains distinct from absent text. Original ignored listoverride flags, reversed temporary character merge, omitted LISTTAB reset and geometry-only stub exclusion are retained and documented as WRITER264-WRITER267. Repeated table callbacks preserve duplicate style suffixes and label allocation. Malformed-level first-indent recovery, old-style paragraph numbering, special sections/HTML and full native/compiled ABI/module parity remain unverified; broad confidence and intentional browser save/open/recovery behavior are unchanged."
+      "S3HW1E concrete-list checkpoint: actual saved tableAttributes/listLevelEntries and RTFValue containers carry LISTLEVEL/LFOLEVEL/NumLvl overrides; RTFReferenceTable retains intrusive property references and signed map order. Each original LISTOVERRIDETABLE callback captures the cumulative raw table for ordered delivery at the existing atomic model boundary. DomainMapper table import flags and its lazy ListsManager own actual AbstractListDef/ListDef sparse levels, first-ID lookup, retained numbering service and native numeric HasValues merge. Native WWNum style creation, typed NumberingRules replacement/commit and property-owner lifetimes replace the detached list-ID/level maps. Explicit empty concrete text remains distinct from absent text. Original ignored listoverride flags, reversed temporary character merge, omitted LISTTAB reset and geometry-only stub exclusion are retained and documented as WRITER264-WRITER267. Repeated table callbacks preserve duplicate style suffixes and label allocation. Malformed-level first-indent recovery, old-style paragraph numbering, special sections/HTML and full native/compiled ABI/module parity remain unverified; broad confidence and intentional browser save/open/recovery behavior are unchanged.",
+      "Actual mapper delegates source GetListLevel and ValidateListLevel to its numbering responsibility, retaining direct/style precedence, source parent recursion and first-claim semantics. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
