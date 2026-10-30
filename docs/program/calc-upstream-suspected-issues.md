@@ -4749,3 +4749,10 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getHebrewNativeNumberString`.
 - Observation: the count guard rejects the20th digit, but19-digit values can exceed SAL_MAX_INT64. The source `value = value * 10 + (ch - NUMBER_ZERO)` then exceeds signed64's defined arithmetic domain. The Cyrillic branch rejects the8th digit and does not encounter this range issue.
 - Preserve the original count/prefix/suffix logic for defined values. Do not add a19-digit rejection, saturation or invented two's-complement wrap rule. Native signed overflow remains outside parity certification; the comparison corpus ends at9223372036854775807 for19-digit values. No sanitizer or complete service behavior is claimed for larger inputs.
+
+
+### CALC-410 — Native year padding can shrink after its width decision
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput` YYYY branches and original `impTransliterate`/`ImpGetNatNumString`; `i18npool/source/calendar/calendar_gregorian.cxx`, `NatNumForCalendar`.
+- Observation: YYYY decides to prepend4-minus-calendar-year-length ASCII zeros, transliterates only that padding buffer, then appends the already-rendered year. It does not recheck width after transliteration. For Japanese calendar mode4, NatNumForCalendar returns0 for calendar fields, while the separate zero-prefix conversion uses the actual mode4 metadata and collapses `000` to `〇`. An early year1 therefore displays `〇1` under `[NatNum4]YYYY`, with fewer than4 characters and mixed zero/ASCII digits.
+- Preserve the original width decision, separate conversion and append order. Do not pad again, blanket-convert the final date or reinterpret calendar mode4 as general-number mode4. Real formatter tests retain this source-derived result; prior unchanged native-number scalar comparisons cover the zero-collapse kernel, not a complete native date formatter-wrapper ABI.

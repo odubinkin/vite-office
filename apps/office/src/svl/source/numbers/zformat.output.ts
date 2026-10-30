@@ -6,6 +6,8 @@ import { SvNumFormatType as T } from "../../inc/zforlist";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { SvNumberformatLimitOps as O } from "./zformat.prefix";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import { impTransliterate } from "./zformat.transliterate";
 import type { SvNFLanguageData } from "./zforlist";
 import type { SvNumberformat, ImpSvNumFor } from "./zformat";
 /** Original ASCII character width table used by InsertBlanks, independent of actual rendering fonts. */
@@ -158,10 +160,11 @@ export function GetLiteralOutput(section: ImpSvNumFor, output: OUString, star: b
   }
 }
 
-/** Original ImpGetLogicalOutput for incomplete native metadata; only BOOLEAN and STRING tokens emit output. @param value - Native double. @param section - Selected actual section. @param current - Actual language owner. @param output - Mutable result. @returns Original false fill result. */
+/** Original ImpGetLogicalOutput; only BOOLEAN and STRING tokens emit output. @param value - Native double. @param section - Selected actual section. @param native - Original native-number owner. @param current - Actual language owner. @param output - Mutable result. @returns Original false fill result. */
 export function GetLogicalOutput(
   value: number,
   section: ImpSvNumFor,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
 ): boolean {
@@ -178,6 +181,7 @@ export function GetLogicalOutput(
           break;
       }
     }
+    impTransliterate(buffer, section.GetNatNum(), native);
     const text = buffer.makeStringAndClear();
     try {
       output.assign(text);

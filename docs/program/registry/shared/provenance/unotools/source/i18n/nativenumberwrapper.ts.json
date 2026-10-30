@@ -6,13 +6,37 @@
     "localPath": "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts",
     "status": "mapped",
     "upstreamPath": "unotools/source/i18n/nativenumberwrapper.cxx",
-    "localSymbols": ["NativeNumberWrapper"],
-    "upstreamSymbols": ["NativeNumberWrapper::getNativeNumberString"],
-    "preservedResponsibilities": ["Task AQF9AG forwards the represented NATNUM0 mode to the native supplier and catches only UNO exceptions, returning an empty string on that failure."],
-    "omittedResponsibilities": ["The other native-number modes and UNO service construction remain outside this represented path."],
+    "localSymbols": [
+      "NativeNumberWrapper"
+    ],
+    "upstreamSymbols": [
+      "NativeNumberWrapper::getNativeNumberString",
+      "NativeNumberWrapper::getNativeNumberStringParams"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG forwards the represented NATNUM0 mode to the native supplier and catches only UNO exceptions, returning an empty string on that failure.",
+      "Original modes0..11 and parameter-overload forwarding now reach the actual supplier. UNO exceptions return an empty string and their original caught-owner lifetime is released; unexpected host exceptions propagate. Actual owned supplier value state is released on wrapper destruction. Supersedes the former NATNUM0-only forwarding limitation; mode12 and complete native service/context ABI remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Mode12 NumberText and complete native UNO service/context ABI remain unported."
+    ],
     "evidence": {
-      "local": [{"path": "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts", "marker": "class NativeNumberWrapper"}],
-      "upstream": [{"path": "unotools/source/i18n/nativenumberwrapper.cxx", "marker": "NativeNumberWrapper::getNativeNumberString("}]
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts",
+          "marker": "class NativeNumberWrapper"
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/native-wrapper-failures.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/i18n/nativenumberwrapper.cxx",
+          "marker": "NativeNumberWrapper::getNativeNumberString("
+        }
+      ]
     }
   }
 }

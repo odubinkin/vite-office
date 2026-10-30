@@ -9,6 +9,8 @@ import { CalendarImpl } from "../../../i18npool/source/calendar/calendarImpl";
 import * as D from "../../../offapi/com/sun/star/i18n/CalendarDisplayCode";
 import * as C from "../../../offapi/com/sun/star/i18n/CalendarFieldIndex";
 import { SvNumberFormatter } from "./zforlist";
+import { SvNumberNatNum } from "./zformat.natnum";
+import { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { ImpGetNatNumString } from "./zformat.time";
 /** A real owner fixture stays outside the controlled allocator lifetime. */
 interface Fixture {
@@ -125,11 +127,13 @@ const cases: [string, () => Fixture][] = [
   [
     "integer padding",
     /** Actual shared source helper. @returns Owner fixture. */ () => {
+      const number = new SvNumberNatNum(),
+        native = new NativeNumberWrapper();
       let output: OUString | undefined;
       return {
         /** No persistent scalar state. @returns Nothing. */ reset() {},
         /** Source helper. @returns Nothing. */ invoke() {
-          output = ImpGetNatNumString(1, 4);
+          output = ImpGetNatNumString(number, 1, 4, native);
         },
         /** Owned return cleanup. @returns Nothing. */ clear() {
           output?.dispose();
@@ -137,6 +141,8 @@ const cases: [string, () => Fixture][] = [
         },
         /** Owner cleanup. @returns Nothing. */ dispose() {
           this.clear();
+          native.dispose();
+          number.dispose();
         },
       };
     },

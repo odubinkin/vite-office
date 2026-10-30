@@ -175,13 +175,24 @@ export class NativeNumberSupplierService {
     }
     return false;
   }
-  /** Source getNativeNumberString dispatch. Unknown locales retain identity even for mode3; locale changes mutate the original shared punctuation arrays. @param input - Input. @param locale - Locale. @param mode - Represented original mode. @param offsets - Optional output sequence. @returns Owned result. */
+  /** Original XNativeNumberSupplier2 forwarding to the shared conversion entry. @param input - Source text. @param locale - Actual locale. @param mode - Represented mode. @param params - Actual parameters. @returns Owned result. */
+  getNativeNumberStringParams(
+    input: OUStringConstReference,
+    locale: LocaleConstReference,
+    mode: number,
+    params: OUStringConstReference,
+  ): OUString {
+    return this.getNativeNumberString(input, locale, mode, undefined, params);
+  }
+  /** Source getNativeNumberString dispatch. Unknown locales retain identity even for mode3; locale changes mutate the original shared punctuation arrays. @param input - Input. @param locale - Locale. @param mode - Represented original mode. @param offsets - Optional output sequence. @param params - Original parameter view, ignored by represented modes0..11. @returns Owned result. */
   getNativeNumberString(
     input: OUStringConstReference,
     locale: LocaleConstReference,
-    mode: NativeNumberMode,
+    mode: number,
     offsets?: number[],
+    params?: OUStringConstReference,
   ): OUString {
+    void params;
     if (!NativeNumberSupplierService.isValidNatNumImpl(locale, mode)) return new OUString(input);
     const langnum = getLanguageNumber(locale);
     if (langnum === -1) return new OUString(input);

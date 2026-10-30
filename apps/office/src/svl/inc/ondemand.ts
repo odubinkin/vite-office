@@ -98,4 +98,9 @@ export class OnDemandNativeNumberWrapper {
     if (!this.moNativeNumber) this.moNativeNumber = new NativeNumberWrapper();
     return this.moNativeNumber;
   }
+  /** Original optional wrapper member destruction. @returns Nothing. */
+  dispose(): void {
+    this.moNativeNumber?.dispose();
+    this.moNativeNumber = null;
+  }
 }

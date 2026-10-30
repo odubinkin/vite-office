@@ -1,4 +1,4 @@
-/** @fileoverview Original finite DATE/DATETIME output with native mode0: calendar switching, Gregorian range checks, month case and actual token/name owners. Complete native-number conversion/spellout remains unported. */
+/** @fileoverview Original finite DATE/DATETIME output with original native-number fields: calendar switching, Gregorian range checks, month case and actual token/name owners. Selected NatNum12 spellout remains unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -17,6 +17,8 @@ import { ImpSvNumberformatScan } from "./zforscan";
 import type { ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
 import { ImpGetNatNumString, ImpGetFractionOfSecondString } from "./zformat.time";
+import { impTransliterate } from "./zformat.transliterate";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { InsertBlanks } from "./zformat.output";
 import type { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
 /** Original current-calendar literal equality over its independently returned name. @param calendar - Actual owner. @returns Whether Gregorian. */
@@ -67,7 +69,7 @@ function saveCalendar(calendar: CalendarWrapper, state: CalendarState): void {
     state.dateTime = calendar.getDateTime();
   }
 }
-/** Original SwitchToOtherCalendar selects the first actual non-Gregorian locale calendar. @param current - Language. @param state - Original references. @returns Nothing. */
+/** Original SwitchToOtherCalendar selects the first actual non-Gregorian locale calendar. @param native - Original native-number owner. @param current - Language. @param state - Original references. @returns Nothing. */
 function switchToOther(current: SvNFLanguageData, state: CalendarState): void {
   const calendar = current.GetCalendar();
   if (!gregorian(calendar)) return;
@@ -86,7 +88,7 @@ function switchToOther(current: SvNFLanguageData, state: CalendarState): void {
     for (const id of calendars) id.dispose();
   }
 }
-/** Original SwitchToGregorianCalendar keeps the saved UTC instant. @param current - Language. @param state - Original references. @returns Nothing. */
+/** Original SwitchToGregorianCalendar keeps the saved UTC instant. @param native - Original native-number owner. @param current - Language. @param state - Original references. @returns Nothing. */
 function switchToGregorian(current: SvNFLanguageData, state: CalendarState): void {
   const calendar = current.GetCalendar();
   if (state.original.getLength() && !gregorian(calendar)) {
@@ -99,7 +101,7 @@ function switchToGregorian(current: SvNFLanguageData, state: CalendarState): voi
     calendar.setDateTime(state.dateTime);
   }
 }
-/** Original Dummy-era fallback retains saved-calendar clear/save ordering. @param current - Language. @param state - Original references. @returns Whether fallback happened. */
+/** Original Dummy-era fallback retains saved-calendar clear/save ordering. @param native - Original native-number owner. @param current - Language. @param state - Original references. @returns Whether fallback happened. */
 function fallbackGregorian(current: SvNFLanguageData, state: CalendarState): boolean {
   const calendar = current.GetCalendar();
   if (!gregorian(calendar)) {
@@ -188,7 +190,7 @@ function hasEra(section: ImpSvNumFor): boolean {
   return false;
 }
 let dateBounds: readonly [number, number] | undefined;
-/** Original lcl_getValidDate mutates epoch offset even when rejecting the tools::Date range. @param current - Language. @param value - Serial in/out. @returns Within source range. */
+/** Original lcl_getValidDate mutates epoch offset even when rejecting the tools::Date range. @param native - Original native-number owner. @param current - Language. @param value - Serial in/out. @returns Within source range. */
 function validDate(current: SvNFLanguageData, value: [number]): boolean {
   const ce = new DateTime(new Date(1, 1, 1));
   if (!dateBounds) {
@@ -202,7 +204,7 @@ function validDate(current: SvNFLanguageData, value: [number]): boolean {
   value[0] += difference;
   return dateBounds[0] <= offset && offset <= dateBounds[1];
 }
-/** Original initial switch/fallback sequence after setting the calendar's local date. @param current - Language. @param section - Actual section. @returns Original state owner. */
+/** Original initial switch/fallback sequence after setting the calendar's local date. @param native - Original native-number owner. @param current - Language. @param section - Actual section. @returns Original state owner. */
 function calendarState(current: SvNFLanguageData, section: ImpSvNumFor): CalendarState {
   const state: CalendarState = {
     original: new OUString(),
@@ -219,11 +221,12 @@ function calendarState(current: SvNFLanguageData, section: ImpSvNumFor): Calenda
     throw error;
   }
 }
-/** Original common calendar/date token cases; native-mode0 makes DATE-only spellout branches dormant. @param type - Token kind. @param token - Actual string. @param section - Actual section. @param current - Language. @param state - Switch/month references. @param buffer - Output. @param star - Source fill flag. @param result - In/out latest star result. @returns Nothing. */
+/** Original common calendar/date token cases; caller leaves NatNum12 spellout branches pending. @param type - Token kind. @param token - Actual string. @param section - Actual section. @param native - Original native-number owner. @param current - Language. @param state - Switch/month references. @param buffer - Output. @param star - Source fill flag. @param result - In/out latest star result. @returns Nothing. */
 function dateToken(
   type: number,
   token: OUStringConstReference,
   section: ImpSvNumFor,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   state: CalendarState,
   buffer: OUStringBuffer,
@@ -308,7 +311,12 @@ function dateToken(
       code = Display.LONG_DAY_NAME;
       break;
     case K.WW: {
-      const value = ImpGetNatNumString(calendar.getValue(C.WEEK_OF_YEAR));
+      const value = ImpGetNatNumString(
+        section.GetNatNum(),
+        calendar.getValue(C.WEEK_OF_YEAR),
+        0,
+        native,
+      );
       try {
         buffer.append(value);
       } finally {
@@ -365,11 +373,20 @@ function dateToken(
     !hasEra(section)
   )
     buffer.append(Uint16Array.of(45));
-  const value = calendar.getDisplayString(code, 0);
+  const value = calendar.getDisplayString(code, section.GetNatNum().GetNatNum());
   try {
-    if (type === K.YYYY && value.getLength() < 4 && !hasEra(section))
-      for (let digit = 0; digit < 4 - value.getLength(); ++digit) buffer.append(Uint16Array.of(48));
-    buffer.append(value);
+    if (type === K.YYYY && value.getLength() < 4 && !hasEra(section)) {
+      const padding = new OUStringBuffer();
+      try {
+        for (let digit = 0; digit < 4 - value.getLength(); ++digit)
+          padding.append(Uint16Array.of(48));
+        impTransliterate(padding, section.GetNatNum(), native);
+        padding.append(value);
+        buffer.append(OUString.unacquired(padding));
+      } finally {
+        padding.dispose();
+      }
+    } else buffer.append(value);
   } finally {
     value.dispose();
   }
@@ -385,10 +402,11 @@ function assignOutput(buffer: OUStringBuffer, output: OUString): void {
     value.dispose();
   }
 }
-/** Original ImpGetDateOutput mode0 path. Caller retains source section/sign/color selection. @param input - Serial value. @param section - Actual section. @param current - Language/calendar owner. @param output - Mutable result. @param star - Fill flag. @returns Latest star result. */
+/** Original ImpGetDateOutput native-number field path. Caller retains source section/sign/color selection. @param input - Serial value. @param section - Actual section. @param native - Original native-number owner. @param current - Language/calendar owner. @param output - Mutable result. @param star - Fill flag. @returns Latest star result. */
 export function GetDateOutput(
   input: number,
   section: ImpSvNumFor,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
   star: boolean,
@@ -410,6 +428,7 @@ export function GetDateOutput(
         info.nTypeArray[index] as number,
         info.sStrArray[index] as OUString,
         section,
+        native,
         current,
         state,
         buffer,
@@ -425,10 +444,11 @@ export function GetDateOutput(
     state.original.dispose();
   }
 }
-/** Original ImpGetDateTimeOutput mode0 path retains its separate date-rounding and bracketed-clock behavior. @param input - Serial value. @param section - Actual section. @param current - Language/calendar owner. @param output - Mutable result. @param star - Fill flag. @returns Latest star result. */
+/** Original ImpGetDateTimeOutput native-number field path retains its separate date-rounding and bracketed-clock behavior. @param input - Serial value. @param section - Actual section. @param native - Original native-number owner. @param current - Language/calendar owner. @param output - Mutable result. @param star - Fill flag. @returns Latest star result. */
 export function GetDateTimeOutput(
   input: number,
   section: ImpSvNumFor,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
   star: boolean,
@@ -551,8 +571,10 @@ export function GetDateTimeOutput(
                   ? hour
                   : second,
             value = ImpGetNatNumString(
+              section.GetNatNum(),
               field,
               type === K.MMI || type === K.HH || type === K.SS ? 2 : 0,
+              native,
             );
           try {
             buffer.append(value);
@@ -562,7 +584,7 @@ export function GetDateTimeOutput(
           break;
         }
         default:
-          dateToken(type, token, section, current, state, buffer, star, result);
+          dateToken(type, token, section, native, current, state, buffer, star, result);
       }
     }
     if (state.original.getLength())

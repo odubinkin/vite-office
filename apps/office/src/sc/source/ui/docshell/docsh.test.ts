@@ -857,3 +857,57 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["[NatNum1]YYYY-MM-DD", "二〇二四-一-一\n"],
+  ["[NatNum3]YYYY-MM-DD", "２０２４-０１-０１\n"],
+  ["[NatNum1]YYYY-MM-DD HH:MM:SS.00", "二〇二四-一-一 〇〇:〇〇:〇〇.00\n"],
+])(
+  "exports recognized CSV dates using original native fields in %s",
+  /** Real text filter recognition creates the numeric date and format attribute; compiling a native display format changes only that attribute before source CSV export. @param pattern - Original display code. @param expected - Source output. @returns Test completion. */ async (
+    pattern,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      bytes = new TextEncoder().encode("2024-01-01\n"),
+      input = new ScAsciiOptions(),
+      code = unicode(pattern);
+    input.eLang = 0x409;
+    input.bDetectSpecialNumber = true;
+    try {
+      await shell.Open(bytes, state("Native CSV date"), {
+        kind: "input",
+        name: "native.csv",
+        filterId: ScDocShell.CSV_FILTER_NAME,
+        mediaType: ScDocShell.CSV_MEDIA_TYPE,
+        filterOptions: input.WriteToString(),
+        source: { kind: "external", reference: bytes },
+      });
+      const document = shell.GetDocument(),
+        formatter = document.GetFormatTable(),
+        key: [number] = [0],
+        check: [number] = [0],
+        type: [number] = [0],
+        position = new ScAddress();
+      expect(document.GetValue(position)).toBe(45292);
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x411,
+      );
+      expect(check[0]).toBe(0);
+      document.SetNumberFormat(position, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+      expect(document.GetValue(position)).toBe(45292);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);

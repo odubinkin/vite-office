@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.transliterate.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "impTransliterateImpl",
+      "impTransliterate"
+    ],
+    "upstreamSymbols": [
+      "impTransliterateImpl",
+      "impTransliterate"
+    ],
+    "preservedResponsibilities": [
+      "Original free impTransliterateImpl and complete-modifier string/buffer overloads use actual NatNum metadata, source ID-to-Locale conversion and NativeNumberWrapper parameters. Buffer input borrows its actual shared pointer field before assigning the returned result. No fabricated LanguageTag/provider is introduced. Full LanguageTag wrapper/cache and native UNO/SAL ABI remain unverified; represented callers admit modes0..11 and mode12 NumberText is pending."
+    ],
+    "omittedResponsibilities": [
+      "Mode12 NumberText, complete public LanguageTag cache/wrapper and native allocator/UNO ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.transliterate.ts",
+          "marker": "impTransliterateImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/numbers/zformat.cxx",
+          "marker": "OUString impTransliterateImpl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.transliterate.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original zformat translation unit by the original free native-number conversion overloads while retaining actual owners and call placements."
+    }
+  }
+}

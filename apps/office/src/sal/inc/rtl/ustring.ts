@@ -1,4 +1,5 @@
 /** @fileoverview Original internal OUString literal, lifetime and reference contracts from include/rtl/ustring.hxx. */
+import { OUStringBuffer } from "./ustrbuf";
 import {
   rtl_uString_acquire,
   rtl_uString_assign,
@@ -286,8 +287,9 @@ export class OUString {
     return result;
   }
 
-  /** Original reinterpret reference over a caller's pointer field, with stable JS view identity and no constructor/acquire/release. @param slot - Live field storage. @returns Live const view following pointer replacement. */
-  static unacquired(slot: rtl_uStringSlot): OUStringConstReference {
+  /** Original reinterpret reference over a caller's pointer field, with stable JS view identity and no constructor/acquire/release. @param source - Live pointer field or original friend OUStringBuffer owner. @returns Live const view following pointer replacement. */
+  static unacquired(source: rtl_uStringSlot | OUStringBuffer): OUStringConstReference {
+    const slot = source instanceof OUStringBuffer ? source["data"] : source;
     let reference = OUString.references.get(slot);
     if (reference === undefined) {
       const view = Object.create(OUString.prototype) as OUString;

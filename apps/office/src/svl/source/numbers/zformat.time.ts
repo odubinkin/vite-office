@@ -1,4 +1,4 @@
-/** @fileoverview Original finite time output and fractional-second production over actual compiled sections, tools::Time and calendar owners; complete native-number modifiers remain with the unfinished transliteration producer. */
+/** @fileoverview Original finite time output and fractional-second production over actual compiled sections, tools::Time and calendar owners; native-number integer fields use the original metadata and service owner; fractional-second digits and literals remain unconverted as upstream. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { rtl_math_doubleToUString, rtl_math_StringFormat as F } from "../../../sal/inc/rtl/math.h";
@@ -13,9 +13,12 @@ import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
 import { ImpSvNumberformatScan } from "./zforscan";
 import type { ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import type { SvNumberNatNumConstReference } from "./zformat.natnum";
+import { impTransliterate } from "./zformat.transliterate";
 import { InsertBlanks } from "./zformat.output";
-/** Original ImpGetNatNumString integer/padding branch for admitted incomplete native metadata. @param value - Integer field. @param minimum - Native uint16 minimum digits. @returns Owned field text. */
-export function ImpGetNatNumString(value: number, minimum = 0): OUString {
+/** Original ImpGetNatNumString integer/padding stage. @param value - Integer field. @param minimum - Native uint16 minimum digits. @returns Owned field text. */
+function integerString(value: number, minimum: number): OUString {
   minimum &= 65535;
   if (minimum === 2 && value >= 0 && value < 10)
     return new OUString(Uint16Array.of(48, 48 + value), 2);
@@ -34,6 +37,20 @@ export function ImpGetNatNumString(value: number, minimum = 0): OUString {
     }
   }
   return result;
+}
+/** Original ImpGetNatNumString completes padding before applying native-number conversion. @param number - Actual metadata. @param value - Signed64 field in its represented number range. @param minimum - Native uint16 minimum digits. @param native - Actual native-number wrapper. @returns Owned converted field. */
+export function ImpGetNatNumString(
+  number: SvNumberNatNumConstReference,
+  value: number,
+  minimum: number,
+  native: NativeNumberWrapper,
+): OUString {
+  const result = integerString(value, minimum);
+  try {
+    return impTransliterate(result, number, native);
+  } finally {
+    result.dispose();
+  }
 }
 /** Original ImpGetFractionOfSecondString keeps one extra decimal only for GetClock's truncated fraction. @param buffer - Fraction output. @param fraction - Fractional seconds. @param decimals - Requested digits. @param extra - Add one rounding decimal. @param minimum - Original minimum input-line digits. @returns Actual emitted digit count. */
 export function ImpGetFractionOfSecondString(
@@ -73,11 +90,12 @@ export function ImpGetFractionOfSecondString(
   }
   return decimals & 65535;
 }
-/** Original time output, with wall-clock modulo-day extraction versus bracketed elapsed fields. Caller admits finite values and incomplete native metadata. @param input - Original serial value after selected-section sign handling. @param index - Selected native subformat. @param section - Actual compiled section. @param current - Current language/calendar owner. @param output - Mutable result. @param star - Source fill flag. @returns Whether the latest enabled star token emitted a fill. */
+/** Original time output, with wall-clock modulo-day extraction versus bracketed elapsed fields. Caller admits finite values; native integer fields retain their original conversion order. @param input - Original serial value after selected-section sign handling. @param index - Selected native subformat. @param section - Actual compiled section. @param native - Original native-number wrapper. @param current - Current language/calendar owner. @param output - Mutable result. @param star - Source fill flag. @returns Whether the latest enabled star token emitted a fill. */
 export function GetTimeOutput(
   input: number,
   index: number,
   section: ImpSvNumFor,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
   star: boolean,
@@ -226,8 +244,10 @@ export function GetTimeOutput(
                   ? hour
                   : second,
             text = ImpGetNatNumString(
+              section.GetNatNum(),
               field,
               type === K.MMI || type === K.HH || type === K.SS ? 2 : 0,
+              native,
             );
           try {
             buffer.append(text);

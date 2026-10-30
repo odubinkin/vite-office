@@ -1,4 +1,5 @@
-/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; native-mode0 display strings use source field/name/era rules; nonzero native-number conversion remains unported. */
+/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; display strings use the original field/name/era and native-number mapping rules, including the source NatNum12 whole-field bypass. */
+import { NativeNumberSupplierService } from "../nativenumber/nativenumbersupplier";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Locale as ICULocale } from "../../../external/icu/source/common/locid";
 import { U_SUCCESS } from "../../../external/icu/source/common/unicode/utypes";
@@ -54,6 +55,39 @@ function combineDisplay(first: OUString, produceSecond: () => OUString): OUStrin
     first.dispose();
   }
 }
+/** Original NatNumForCalendar changes Asian number modes by calendar field and original (unshortened) year value. @param locale - Loaded source locale. @param code - Display code. @param mode - Native signed16 mode. @param value - Original unsigned16 field, with source month increment. @returns Mapped source mode. */
+function NatNumForCalendar(
+  locale: LocaleConstReference,
+  code: number,
+  mode: number,
+  value: number,
+): number {
+  const short =
+    ((code === Display.SHORT_YEAR || code === Display.LONG_YEAR) && value >= 100) ||
+    code === Display.SHORT_QUARTER ||
+    code === Display.LONG_QUARTER;
+  const language = text(locale.Language),
+    chinese = language === "zh",
+    japanese = language === "ja",
+    korean = language === "ko";
+  if (chinese || japanese || korean) {
+    switch (mode) {
+      case 1:
+        if (!short) mode = japanese ? 4 : 7;
+        break;
+      case 2:
+        if (!short) mode = japanese ? 5 : 8;
+        break;
+      case 3:
+        break;
+      case 4:
+        return korean ? (short ? 9 : 11) : 0;
+      default:
+        return 0;
+    }
+  }
+  return mode;
+}
 /** Original Era fields consumed by temporal mapping. Display flags retain original aggregate initialization. */
 export interface Era {
   readonly year: number;
@@ -95,6 +129,7 @@ export class Calendar_gregorian {
   protected readonly fieldSetValue = new Int16Array(C.FIELD_COUNT2);
   protected fieldSet = 0;
   protected readonly aLocale = new Locale();
+  private readonly mxNatNum = new NativeNumberSupplierService();
   protected aCalendar: Omit<LocaleCalendarData, "minimumDays"> & { minimumDays: number } = {
     id: "",
     isDefault: false,
@@ -117,6 +152,7 @@ export class Calendar_gregorian {
   /** Original locale member destruction; actual ICU objects are garbage-collected after the service owner is released. @returns Nothing. */
   dispose(): void {
     this.aLocale.dispose();
+    this.mxNatNum.dispose();
   }
   /** Original load first materializes fields, then copies locale/calendar data and installs week settings. @param id - Calendar ID. @param locale - Locale. @returns Nothing. */
   loadCalendar(id: OUStringConstReference, locale: LocaleConstReference): void {
@@ -181,13 +217,14 @@ export class Calendar_gregorian {
     const item = items[index] as LocaleCalendarItemData;
     return unicode(nameType === 0 ? item.abbreviated : nameType === 1 ? item.full : item.narrow);
   }
-  /** Original represented native-mode0 display entry point; nonzero native-number conversion remains unported. @param code - Signed32 display code. @param native - Native mode0. @returns Owned text. */
-  getDisplayString(code: number, native: 0): OUString {
+  /** Original display entry point. @param code - Signed32 display code. @param native - Original signed16 native mode. @returns Owned text. */
+  getDisplayString(code: number, native: number): OUString {
     return this.getDisplayStringImpl(code, native, false);
   }
-  /** Original display-code to field/name/numeric formatting for mode0, including source era combinations. @param code - Signed32 display code. @param _native - Represented native mode0. @param eraMode - Combined era/year context. @returns Owned text. */
-  protected getDisplayStringImpl(code: number, _native: 0, eraMode: boolean): OUString {
+  /** Original display-code to field/name/numeric formatting, including native modes and source era combinations. @param code - Signed32 display code. @param native - Original signed16 native mode. @param eraMode - Combined era/year context. @returns Owned text. */
+  protected getDisplayStringImpl(code: number, native: number, eraMode: boolean): OUString {
     code |= 0;
+    native = int16(native);
     let field = C.AM_PM;
     switch (code) {
       case Display.SHORT_DAY:
@@ -231,25 +268,45 @@ export class Calendar_gregorian {
       if (quarter > 3) quarter = 3;
       quarter +=
         code === Display.SHORT_QUARTER ? Reserved.QUARTER1_ABBREVIATION : Reserved.QUARTER1_WORD;
-      return unicode(getLocaleReservedWords(this.aLocale)[quarter] as string);
+      return this.nativeDisplay(
+        unicode(getLocaleReservedWords(this.aLocale)[quarter] as string),
+        code,
+        native,
+        value,
+      );
     }
     switch (code) {
       case Display.SHORT_MONTH:
-        return new OUString(OUString.number(value + 1));
+        return this.nativeDisplay(
+          new OUString(OUString.number(value + 1)),
+          code,
+          native,
+          value + 1,
+        );
       case Display.SHORT_DAY:
-        return new OUString(OUString.number(value));
+        return this.nativeDisplay(new OUString(OUString.number(value)), code, native, value);
       case Display.LONG_YEAR:
-        return displayInteger(value, this.aCalendar.id === "gengou" ? 2 : 0);
+        return this.nativeDisplay(
+          displayInteger(value, this.aCalendar.id === "gengou" ? 2 : 0),
+          code,
+          native,
+          value,
+        );
       case Display.LONG_MONTH:
-        return displayInteger(value + 1, 2);
+        return this.nativeDisplay(displayInteger(value + 1, 2), code, native, value + 1);
       case Display.SHORT_YEAR:
-        return value < 100 ||
-          eraMode ||
-          (this.eraArray !== null && (((this.eraArray[0] as Era).flags ?? 0) & 1) !== 0)
-          ? new OUString(OUString.number(value))
-          : displayInteger(value % 100, 2);
+        return this.nativeDisplay(
+          value < 100 ||
+            eraMode ||
+            (this.eraArray !== null && (((this.eraArray[0] as Era).flags ?? 0) & 1) !== 0)
+            ? new OUString(OUString.number(value))
+            : displayInteger(value % 100, 2),
+          code,
+          native,
+          value,
+        );
       case Display.LONG_DAY:
-        return displayInteger(value, 2);
+        return this.nativeDisplay(displayInteger(value, 2), code, native, value);
       case Display.SHORT_DAY_NAME:
         return this.getDisplayName(D.DAY, value, 0);
       case Display.LONG_DAY_NAME:
@@ -283,18 +340,42 @@ export class Calendar_gregorian {
         return combineDisplay(
           this.getDisplayStringImpl(
             code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
-            0,
+            native,
             true,
           ),
           /** Evaluates the original right operand under left-temporary cleanup. @returns Owned right value. */ () =>
             this.getDisplayStringImpl(
               code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
-              0,
+              native,
               true,
             ),
         );
       default:
         throw new RuntimeException();
+    }
+  }
+  /** Original final numeric/quarter conversion; name and combined branches return before reaching it. The passed owner binds the original local aOUStr lifetime. @param valueString - Owned original aOUStr. @param code - Display code. @param native - Original mode. @param value - Original field. @returns Owned result. */
+  private nativeDisplay(
+    valueString: OUString,
+    code: number,
+    native: number,
+    value: number,
+  ): OUString {
+    if (native <= 0 || native === 12) return valueString;
+    try {
+      if (
+        this.eraArray === gengou_eraArray &&
+        value === 1 &&
+        (code === Display.SHORT_YEAR || code === Display.LONG_YEAR) &&
+        (native === 1 || native === 2)
+      )
+        return unicode("元");
+      const mapped = NatNumForCalendar(this.aLocale, code, native, value);
+      return mapped > 0
+        ? this.mxNatNum.getNativeNumberString(valueString, this.aLocale, mapped)
+        : new OUString(valueString);
+    } finally {
+      valueString.dispose();
     }
   }
   /** Original milliseconds conversion uses RTL corrected round before ICU setTime. @param days - UTC days since1970. @returns Nothing. */
@@ -569,7 +650,7 @@ export class Calendar_buddhist extends Calendar_gregorian {
     this.cCalendar = "com.sun.star.i18n.Calendar_buddhist";
   }
   /** Original Buddhist era/year ordering retains its historical short/long code selection. @param code - Display code. @param native - Represented native mode0. @returns Owned text. */
-  override getDisplayString(code: number, native: 0): OUString {
+  override getDisplayString(code: number, native: number): OUString {
     code |= 0;
     if (
       (code === Display.LONG_YEAR_AND_ERA || code === Display.SHORT_YEAR_AND_ERA) &&

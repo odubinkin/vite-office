@@ -184,8 +184,8 @@ export class CalendarImpl {
   getDateTime(): number {
     return this.calendar("getDateTime").getDateTime();
   }
-  /** Original represented zero-mode display forwarding. @param code - Display code. @param native - Original native mode0. @returns Owned text. */
-  getDisplayString(code: number, native: 0): OUString {
+  /** Original native-mode display forwarding. @param code - Display code. @param native - Original signed16 native mode. @returns Owned text. */
+  getDisplayString(code: number, native: number): OUString {
     return this.calendar("getDisplayString").getDisplayString(code, native);
   }
   /** Original display-name forwarding preserves the no-calendar RuntimeException. @param category - Display category. @param index - Item index. @param nameType - Name selector. @returns Owned name. */

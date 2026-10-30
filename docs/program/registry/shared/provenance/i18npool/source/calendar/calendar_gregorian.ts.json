@@ -24,7 +24,8 @@
       "Calendar_gregorian::getDisplayName",
       "Calendar_gregorian::getDisplayString",
       "Calendar_gregorian::getDisplayStringImpl",
-      "Calendar_buddhist::getDisplayString"
+      "Calendar_buddhist::getDisplayString",
+      "NatNumForCalendar"
     ],
     "preservedResponsibilities": [
       "Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display/native-number formatting is a separate unconsumed responsibility.",
@@ -34,7 +35,8 @@
       "B8TCAE adds12 source-contract checks for requested minimum-week scalar storage, signed16 host narrowing and real pinned de_DE Gregorian reload. The getter retains the requested signed16 value independently of ICU byte conversion/clamping; loading the real locale restores four minimum days and Monday start. No ICU/body/provider replacement, private state write or new high-level native ABI claim.",
       "Original getDisplayName categories now select actual locale/calendar abbreviated/full/narrow resources. AM_PM ignores nameType; YEAR returns empty; ERA excludes narrow names. Preserve source upper-only index validation and checked Sequence lower-bound assertion. Both original Hanja providers override AM/PM using Japanese locale resources. Numeric getDisplayString remains unfinished; no Intl naming or heuristic calendar fallback is introduced.",
       "AQF9AG connects original native-mode0 display strings through actual signed16 cached fields, source unsigned16-to-signed32 widening, original quarter resources, numeric padding, names, source era combinations and ROC forced-long-year flag. Preserve Buddhist before-era inverted short/long era-name choice. Nonzero native-number modes remain unported; the represented callable is explicitly typed0 rather than silently forwarding nonzero modes to the existing NATNUM0-only supplier. Full native display ABI/formatting remains unverified.",
-      "Original numeric/concatenation temporaries now have constructor-completion cleanup scopes. The right era/year operand is evaluated inside the left owner cleanup scope, and successful buffer construction is tracked before disposal. A real Buddhist source RuntimeException in the right era lookup releases the left numeric temporary. Normal result/names/era rules remain unchanged. Native aborting raw C-buffer growth/OOM and complete allocator ABI are not certified."
+      "Original numeric/concatenation temporaries now have constructor-completion cleanup scopes. The right era/year operand is evaluated inside the left owner cleanup scope, and successful buffer construction is tracked before disposal. A real Buddhist source RuntimeException in the right era lookup releases the left numeric temporary. Normal result/names/era rules remain unchanged. Native aborting raw C-buffer growth/OOM and complete allocator ABI are not certified.",
+      "Original display native-number routing is connected: numeric/quarter-only NatNumForCalendar conversion, actual gengou_eraArray identity for GAN, recursive era/year conversion, direct name returns and whole-field NatNum12 bypass. The original owned supplier is released with the calendar. Supersedes the former mode0-only display limitation; full native service/ICU/UNO ABI remains unverified."
     ],
     "omittedResponsibilities": [
       "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
@@ -64,6 +66,10 @@
         {
           "path": "apps/office/src/i18npool/source/calendar/calendar_gregorian.ts",
           "marker": "getDisplayStringImpl"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/calendar/calendar.native-display.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

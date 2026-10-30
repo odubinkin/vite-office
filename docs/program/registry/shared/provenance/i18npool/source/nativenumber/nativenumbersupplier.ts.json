@@ -15,10 +15,12 @@
       "NativeNumberSupplierService::isValidNatNumImpl",
       "NativeToAscii",
       "NativeToAscii_numberMaker",
-      "getLanguageNumber"
+      "getLanguageNumber",
+      "NativeNumberSupplierService::getNativeNumberStringParams"
     ],
     "preservedResponsibilities": [
-      "Original modes0..11 supplier dispatch, validity and unknown-locale identity gates, per-instance Locale with source shared mutable DecimalChar/SeparatorChar refresh, character/CJK/alphabetic producers and offsets. Mode12 NumberText and unconsumed XML/character service methods remain unported. Scalar helper comparisons are not full native service/SAL/UNO ABI certification."
+      "Original modes0..11 supplier dispatch, validity and unknown-locale identity gates, per-instance Locale with source shared mutable DecimalChar/SeparatorChar refresh, character/CJK/alphabetic producers and offsets. Mode12 NumberText and unconsumed XML/character service methods remain unported. Scalar helper comparisons are not full native service/SAL/UNO ABI certification.",
+      "Original XNativeNumberSupplier2 getNativeNumberStringParams delegates to the shared conversion entry with offsets absent and actual parameter view. Modes0..11 ignore parameters exactly as the original non12 branches do; mode12 NumberText remains unported."
     ],
     "omittedResponsibilities": [
       "Mode12 NumberText, native allocator/UNO/service ABI and native signed-overflow behavior are not certified."

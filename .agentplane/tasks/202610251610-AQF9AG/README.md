@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 84
+revision: 87
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:31:48.471Z"
+  updated_at: "2026-10-30T12:52:39.336Z"
   updated_by: "CODER"
-  note: "NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comparisons, 883 related tests, 122 Calc tests, two browser cases and static/build gates. Whole CSV remains incomplete: consumer forwarding, NumberText, multiline import and full acceptance remain."
-  attempts: 14
+  note: "Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related tests, 125 Calc tests, final type/static/build gates and two fresh-build browser cases. Whole CSV remains incomplete: native numeric producers, NumberText, multiline import and full acceptance remain."
+  attempts: 15
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -552,8 +555,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:52:39.336Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related tests, 125 Calc tests, final type/static/build gates and two fresh-build browser cases. Whole CSV remains incomplete: native numeric producers, NumberText, multiline import and full acceptance remain."
+  -
+    type: "status"
+    at: "2026-10-30T12:52:57.459Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:31:57.860Z"
+doc_updated_at: "2026-10-30T12:52:57.459Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -971,6 +987,36 @@ sections:
     Attempts: 14
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:31:47.852Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:52:39.336Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related tests, 125 Calc tests, final type/static/build gates and two fresh-build browser cases. Whole CSV remains incomplete: native numeric producers, NumberText, multiline import and full acceptance remain.
+    Attempts: 15
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:52:38.722Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1454,6 +1500,24 @@ sections:
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: natnum-all-browser.log. This remains basic CSV import/ODS save/active export and real owner/DOM-free Worker acceptance, not full native-number CSV formatting acceptance.
     - This block represents service modes0..11 only; calendar/formatter producers still need their original forwarding and placement of transliteration. Calendar source already shows mode12 is skipped for whole-date conversion; NumberText is still required by the formatter's selected spellout parts. No whole-CSV completion is claimed. Mode12 NumberText source/data remain absent and the repository-network download approval remains pending; no network access occurred. True multiline import, remaining producer forwarding and complete CSV options/native/UI acceptance remain required.
     - Task/goal remain active and incomplete. Same open task, no tenth-task full-suite run due. Final reviewed status is natnum-all-status.log; output/native scratch is excluded from commits. The probe's accidental scripts/__pycache__ file was removed and bytecode generation disabled for its imported generator; no generated global/outside-repo artifacts are required.
+
+    ### Original calendar/date/time/logical native-number forwarding, 2026-10-30
+
+    - Continued from da048e473bb1. Actual Calendar_gregorian now owns its original NativeNumberSupplierService and implements source NatNumForCalendar for numeric/quarter display. Names return directly; combined era/year returns recursive operands, and NatNum12 bypasses whole-field conversion as upstream. Japanese GAN substitution uses actual gengou_eraArray pointer identity and year1 for modes1/2, not a loaded-calendar-name heuristic. Other Asian calendar modes retain original mapping/default identity. CalendarImpl/CalendarWrapper forward the signed16 mode with unchanged UNO defaults.
+    - NativeNumberWrapper now forwards original scalar mode and parameter overloads to the same actual supplier, catching only UNO failures and releasing the caught exception owner. Modes0..11 ignore parameters as the original non12 branches do; no spellout imitation is added. Original optional wrapper/value member destruction is connected through OnDemandNativeNumberWrapper and SvNumberFormatter constructor unwinding/normal destruction. Calendar providers independently own their original supplier locale caches; shared static punctuation remains source-global.
+    - Added original free impTransliterateImpl/impTransliterate string/buffer overloads in a zformat responsibility fragment. They use actual NatNum metadata and its source ID-to-Locale conversion, independently of current calendar language. No fabricated LanguageTag facade/cache/provider is introduced; full public LanguageTag/native UNO ABI is not claimed. Removed an initial type-only SVL-to-i18npool import after the module-edge gate correctly rejected it; source wrapper/service mode parameters retain original scalar signatures, with no new dependency exemption.
+    - Original OUString::unacquired(const OUStringBuffer&) now borrows the actual friend buffer pointer field. Initial Array.isArray overload discrimination failed for existing native compound pointer-slot transports, so it was replaced by positive actual-buffer instanceof dispatch, preserving all existing pointer-slot objects. No field snapshot/acquire or public synthetic buffer getter is added. Real buffer tests check unchanged refcount, stable borrow identity and following pointer replacement, including embedded NUL. Broader RTL/header and actual compound format tests pass. Complete raw allocator/SAL ABI remains uncertified.
+    - Original ImpGetNatNumString now accepts genuine metadata/value/minimum/native arguments and pads before conversion. TIME/DATETIME integer fields and WW use that original path; literal text, separators, fractional-second digits and elapsed-time minus remain in their original unconverted positions. DATE/DATETIME calendar fields receive the actual compiled mode, and YYYY padding separately converts zeros before appending the already-rendered calendar year. Custom LOGICAL converts its complete BOOLEAN/STRING output buffer, including explicit complete NatNum0; source star behavior/color selection and fast Boolean path remain unchanged.
+    - CALC-410 records source YYYY width decision preceding native zero-prefix conversion: Japanese mode4 collapses000 to〇 while calendar mode4 returns raw year1, producing〇1 without re-padding. Real output retains this behavior. An additional actual metadata-language mutation demonstrates calendar Japanese fields with Thai zero padding (๐๐๐一-一-三), preserving distinct source locale ownership. No final-date blanket conversion, invented digit-width repair or temporary mode error is added.
+    - Initial calendar assertions assumed full Japanese month name1月 and default Thai Buddhist year. Pinned ja_JP.xml defines abbreviated1月/full一月; th_TH.xml declares Gregorian default=true and Buddhist=false. Corrected expected values to actual source data. Both raw abbreviated/full names are tested. A test attempted a setter through GetNatNum's const borrow; changed it to original ImpSvNumFor::SetNatNumLang. No production mutability contract was weakened.
+    - Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/calendar src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts src/unotools/source/i18n/calendarwrapper src/svl/inc/ondemand.test.ts src/sal/rtl/oustringbuffer.test.ts src/sal/rtl/ustring-prefix.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-xlsx.test.ts. Result: pass,64 files1037 tests in74.82s. Evidence: output/native/AQF9AG-icu-grego/calendar-native-related-tests.log. Scope: actual formatter tables, calendar/ICU/supplier/wrapper owners, all existing allocation fixtures, on-demand lifetime and related real RTL header/compound pointer transport. No new full native calendar/display wrapper comparison is claimed.
+    - Earlier focused command: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.output-allocation.test.ts src/i18npool/source/calendar/calendar.native-display.test.ts src/unotools/source/i18n/native-wrapper-failures.test.ts src/sal/rtl/oustringbuffer.test.ts. Result: pass,7 files148 tests before the final additional name/NatNum0/metadata-locale cases. Evidence: calendar-native-output-tests.log. Final affected command after const-setter typing correction: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/sal/rtl/oustringbuffer.test.ts. Result: pass,2 files47 tests, evidence calendar-native-final-affected-tests.log. Counts overlap and are not summed.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files125 tests. Evidence: calendar-native-csv-tests.log. Three new real shell cases import ISO date to numeric45292, compile/apply actual Japanese NatNum1/3 date/datetime attributes, export shown text and confirm numeric storage is unchanged. No formatted-text cell or replacement serializer is used.
+    - Commands: npm run typecheck; focused ESLint over all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: calendar-native-{typecheck-final,lint,provenance-current,dependencies-current,docs-current,size,parity,resources,build-final}.log. Provenance1876 modules; dependencies1875 sources10138 imports225 allowed edges; docs4239 authored sources; semantic violations0. Earlier typechecks caught a buffer append overload and two test types, and provenance required markers on appended references. Fixed actual overload/const setter/test pointer typing/record markers and reran affected gates. No enforcement exemptions or broad semantic parity promotion.
+    - Browser evidence is recorded only from the fresh successful final build. An earlier build failed on the test const-setter type while its sequential shell proceeded to browser tests against an older bundle; calendar-native-build-type-failure.log and calendar-native-browser-stale-build.log preserve that rejected evidence. They do not certify this block. The corrected build completed successfully before the final browser command was launched separately.
+    - Required follow-ups remain original ordinary-number/scientific/fraction native conversion placements, mode12 selected-field/NumberText dependency and case handling, true multiline EditEngine import and complete CSV option/UI/native acceptance. libnumbertext download permission remains pending; no network was accessed. Task/goal remain active/incomplete, the same open Agentplane task means no tenth-task full suite is due. Reviewed output/native scratch remains untracked and excluded from commits.
+
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the verified fresh build. Evidence: calendar-native-browser-final.log. Scope remains actual basic CSV import/ODS save/active export and real owner/DOM-free Worker flow, not every native-number/date UI or complete CSV options. Final focused ESLint on the corrected two test files passes (calendar-native-final-test-lint.log).
 id_source: "generated"
 ---
 ## Summary
@@ -1880,6 +1944,36 @@ Note: NativeNumber0..11 service checkpoint passed 3016 unchanged-C++ scalar comp
 Attempts: 14
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:31:47.852Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:52:39.336Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related tests, 125 Calc tests, final type/static/build gates and two fresh-build browser cases. Whole CSV remains incomplete: native numeric producers, NumberText, multiline import and full acceptance remain.
+Attempts: 15
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:52:38.722Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2367,3 +2461,21 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after fresh build. Evidence: natnum-all-browser.log. This remains basic CSV import/ODS save/active export and real owner/DOM-free Worker acceptance, not full native-number CSV formatting acceptance.
 - This block represents service modes0..11 only; calendar/formatter producers still need their original forwarding and placement of transliteration. Calendar source already shows mode12 is skipped for whole-date conversion; NumberText is still required by the formatter's selected spellout parts. No whole-CSV completion is claimed. Mode12 NumberText source/data remain absent and the repository-network download approval remains pending; no network access occurred. True multiline import, remaining producer forwarding and complete CSV options/native/UI acceptance remain required.
 - Task/goal remain active and incomplete. Same open task, no tenth-task full-suite run due. Final reviewed status is natnum-all-status.log; output/native scratch is excluded from commits. The probe's accidental scripts/__pycache__ file was removed and bytecode generation disabled for its imported generator; no generated global/outside-repo artifacts are required.
+
+### Original calendar/date/time/logical native-number forwarding, 2026-10-30
+
+- Continued from da048e473bb1. Actual Calendar_gregorian now owns its original NativeNumberSupplierService and implements source NatNumForCalendar for numeric/quarter display. Names return directly; combined era/year returns recursive operands, and NatNum12 bypasses whole-field conversion as upstream. Japanese GAN substitution uses actual gengou_eraArray pointer identity and year1 for modes1/2, not a loaded-calendar-name heuristic. Other Asian calendar modes retain original mapping/default identity. CalendarImpl/CalendarWrapper forward the signed16 mode with unchanged UNO defaults.
+- NativeNumberWrapper now forwards original scalar mode and parameter overloads to the same actual supplier, catching only UNO failures and releasing the caught exception owner. Modes0..11 ignore parameters as the original non12 branches do; no spellout imitation is added. Original optional wrapper/value member destruction is connected through OnDemandNativeNumberWrapper and SvNumberFormatter constructor unwinding/normal destruction. Calendar providers independently own their original supplier locale caches; shared static punctuation remains source-global.
+- Added original free impTransliterateImpl/impTransliterate string/buffer overloads in a zformat responsibility fragment. They use actual NatNum metadata and its source ID-to-Locale conversion, independently of current calendar language. No fabricated LanguageTag facade/cache/provider is introduced; full public LanguageTag/native UNO ABI is not claimed. Removed an initial type-only SVL-to-i18npool import after the module-edge gate correctly rejected it; source wrapper/service mode parameters retain original scalar signatures, with no new dependency exemption.
+- Original OUString::unacquired(const OUStringBuffer&) now borrows the actual friend buffer pointer field. Initial Array.isArray overload discrimination failed for existing native compound pointer-slot transports, so it was replaced by positive actual-buffer instanceof dispatch, preserving all existing pointer-slot objects. No field snapshot/acquire or public synthetic buffer getter is added. Real buffer tests check unchanged refcount, stable borrow identity and following pointer replacement, including embedded NUL. Broader RTL/header and actual compound format tests pass. Complete raw allocator/SAL ABI remains uncertified.
+- Original ImpGetNatNumString now accepts genuine metadata/value/minimum/native arguments and pads before conversion. TIME/DATETIME integer fields and WW use that original path; literal text, separators, fractional-second digits and elapsed-time minus remain in their original unconverted positions. DATE/DATETIME calendar fields receive the actual compiled mode, and YYYY padding separately converts zeros before appending the already-rendered calendar year. Custom LOGICAL converts its complete BOOLEAN/STRING output buffer, including explicit complete NatNum0; source star behavior/color selection and fast Boolean path remain unchanged.
+- CALC-410 records source YYYY width decision preceding native zero-prefix conversion: Japanese mode4 collapses000 to〇 while calendar mode4 returns raw year1, producing〇1 without re-padding. Real output retains this behavior. An additional actual metadata-language mutation demonstrates calendar Japanese fields with Thai zero padding (๐๐๐一-一-三), preserving distinct source locale ownership. No final-date blanket conversion, invented digit-width repair or temporary mode error is added.
+- Initial calendar assertions assumed full Japanese month name1月 and default Thai Buddhist year. Pinned ja_JP.xml defines abbreviated1月/full一月; th_TH.xml declares Gregorian default=true and Buddhist=false. Corrected expected values to actual source data. Both raw abbreviated/full names are tested. A test attempted a setter through GetNatNum's const borrow; changed it to original ImpSvNumFor::SetNatNumLang. No production mutability contract was weakened.
+- Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/calendar src/i18npool/source/nativenumber src/unotools/source/i18n/native-wrapper-failures.test.ts src/unotools/source/i18n/calendarwrapper src/svl/inc/ondemand.test.ts src/sal/rtl/oustringbuffer.test.ts src/sal/rtl/ustring-prefix.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-xlsx.test.ts. Result: pass,64 files1037 tests in74.82s. Evidence: output/native/AQF9AG-icu-grego/calendar-native-related-tests.log. Scope: actual formatter tables, calendar/ICU/supplier/wrapper owners, all existing allocation fixtures, on-demand lifetime and related real RTL header/compound pointer transport. No new full native calendar/display wrapper comparison is claimed.
+- Earlier focused command: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.output-allocation.test.ts src/i18npool/source/calendar/calendar.native-display.test.ts src/unotools/source/i18n/native-wrapper-failures.test.ts src/sal/rtl/oustringbuffer.test.ts. Result: pass,7 files148 tests before the final additional name/NatNum0/metadata-locale cases. Evidence: calendar-native-output-tests.log. Final affected command after const-setter typing correction: npm run test:shared -- src/svl/source/numbers/zformat.date.test.ts src/sal/rtl/oustringbuffer.test.ts. Result: pass,2 files47 tests, evidence calendar-native-final-affected-tests.log. Counts overlap and are not summed.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files125 tests. Evidence: calendar-native-csv-tests.log. Three new real shell cases import ISO date to numeric45292, compile/apply actual Japanese NatNum1/3 date/datetime attributes, export shown text and confirm numeric storage is unchanged. No formatted-text cell or replacement serializer is used.
+- Commands: npm run typecheck; focused ESLint over all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: calendar-native-{typecheck-final,lint,provenance-current,dependencies-current,docs-current,size,parity,resources,build-final}.log. Provenance1876 modules; dependencies1875 sources10138 imports225 allowed edges; docs4239 authored sources; semantic violations0. Earlier typechecks caught a buffer append overload and two test types, and provenance required markers on appended references. Fixed actual overload/const setter/test pointer typing/record markers and reran affected gates. No enforcement exemptions or broad semantic parity promotion.
+- Browser evidence is recorded only from the fresh successful final build. An earlier build failed on the test const-setter type while its sequential shell proceeded to browser tests against an older bundle; calendar-native-build-type-failure.log and calendar-native-browser-stale-build.log preserve that rejected evidence. They do not certify this block. The corrected build completed successfully before the final browser command was launched separately.
+- Required follow-ups remain original ordinary-number/scientific/fraction native conversion placements, mode12 selected-field/NumberText dependency and case handling, true multiline EditEngine import and complete CSV option/UI/native acceptance. libnumbertext download permission remains pending; no network was accessed. Task/goal remain active/incomplete, the same open Agentplane task means no tenth-task full suite is due. Reviewed output/native scratch remains untracked and excluded from commits.
+
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the verified fresh build. Evidence: calendar-native-browser-final.log. Scope remains actual basic CSV import/ODS save/active export and real owner/DOM-free Worker flow, not every native-number/date UI or complete CSV options. Final focused ESLint on the corrected two test files passes (calendar-native-final-test-lint.log).

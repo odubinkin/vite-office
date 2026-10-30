@@ -1,5 +1,6 @@
 /** @fileoverview Original DATE/DATETIME output through actual parsed patterns, calendar services and input-line selection. */
 import { expect, it } from "vitest";
+import type { SvNumberformat } from "./zformat";
 import { SvNumberFormatter } from "./zforlist";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -11,6 +12,21 @@ function serial(day: number, month: number, year: number): number {
   );
 }
 it.each([
+  ["[NatNum1]YYYY-MM-DD", serial(1, 1, 2024), "二〇二四-一-一", 0x411],
+  ["[NatNum3]YYYY-MM-DD", serial(1, 1, 2024), "２０２４-０１-０１", 0x411],
+  ["[NatNum3]YYYY-MM-DD", serial(1, 1, 1), "０００１-０１-０３", 0x411],
+  ["[NatNum4]YYYY-MM-DD", serial(1, 1, 1), "〇1-01-03", 0x411],
+  ["[NatNum4]YYYY-MM-DD", serial(1, 1, 2024), "2024-01-01", 0x411],
+  [
+    "[NatNum1]YYYY-MM-DD HH:MM:SS.00",
+    serial(1, 1, 2024) + 0.5,
+    "二〇二四-一-一 一二:〇〇:〇〇.00",
+    0x411,
+  ],
+  ["[NatNum1][~gengou]G EE-MM-DD", serial(1, 5, 2019), "R 元-五-一", 0x411],
+  ["[NatNum3]YYYY-MM-DD", serial(1, 1, 2024), "2024-01-01", 0x409],
+  ["[NatNum1]YYYY-MM-DD", serial(1, 1, 2024), "๒๐๒๔-๐๑-๐๑", 0x41e],
+  ["[NatNum2]WW", 2, "א׳", 0x40d],
   ["YYYY-MM-DD", 0, "1899-12-30", 0x409],
   ["YYYY-MM-DD", -1, "1899-12-29", 0x409],
   ["YYYY-MM-DD", 60, "1900-02-28", 0x409],
@@ -114,5 +130,34 @@ it("uses original DATE editing selection instead of keeping a custom display pat
   } finally {
     code.dispose();
     formatter.dispose();
+  }
+});
+
+it("uses original metadata locale for year padding independently of the calendar locale", /** Original calendar fields use current language while impTransliterate obtains the modifier language. Changing the genuine compiled metadata tests this ownership distinction without replacing either service. @returns Nothing. */ () => {
+  const owner = new SvNumberFormatter(0x411),
+    code = unicode("[NatNum1]YYYY-MM-DD"),
+    out = new OUString(),
+    check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0];
+  try {
+    owner["m_aFormatData"].PutEntry(
+      owner["m_aCurrentLanguage"],
+      owner.GetNatNum(),
+      code,
+      check,
+      type,
+      key,
+      0x411,
+    );
+    expect(check[0]).toBe(0);
+    const entry = owner.GetEntry(key[0]) as SvNumberformat;
+    entry["NumFor"][0]?.SetNatNumLang(0x41e);
+    owner.GetOutputString(serial(1, 1, 1), key[0], out, [null]);
+    expect(text(out)).toBe("๐๐๐一-一-三");
+  } finally {
+    out.dispose();
+    code.dispose();
+    owner.dispose();
   }
 });

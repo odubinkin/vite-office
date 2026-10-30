@@ -86,8 +86,8 @@ it("returns an independently owned empty native number string on UNO service fai
         throw failure;
       },
     );
+  const wrapper = new NativeNumberWrapper();
   try {
-    const wrapper = new NativeNumberWrapper();
     const result = wrapper.getNativeNumberString(input, locale, 0);
     expect(result.isEmpty()).toBe(true);
     result.dispose();
@@ -104,7 +104,7 @@ it("returns an independently owned empty native number string on UNO service fai
     ).toThrow(unexpected);
   } finally {
     provider.mockRestore();
-    failure.dispose();
+    wrapper.dispose();
     input.dispose();
     locale.dispose();
   }

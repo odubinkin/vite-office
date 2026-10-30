@@ -702,7 +702,8 @@ export class SvNumberformat {
       Output.GetStringOutput.call(this, value, output, color, nativeOrStar as boolean);
       return;
     }
-    const language = current as SvNFLanguageData,
+    const native = nativeOrStar as NativeNumberWrapper,
+      language = current as SvNFLanguageData,
       precision = language.GetStandardPrec(),
       decimal = language.GetNumDecimalSep().getStr()[0] as number;
     output.clear();
@@ -765,26 +766,22 @@ export class SvNumberformat {
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
       info.eScannedType === SvNumFormatType.LOGICAL &&
-      !section.GetNatNum().IsComplete()
+      section.GetNatNum().GetNatNum() !== 12
     )
-      return Output.GetLogicalOutput(value, section, language, output);
-    if (
-      !(this.eType & SvNumFormatType.TEXT) &&
-      !section.GetNatNum().IsComplete() &&
-      section.GetNatNum().GetNatNum() === 0
-    ) {
+      return Output.GetLogicalOutput(value, section, native, language, output);
+    if (!(this.eType & SvNumFormatType.TEXT) && section.GetNatNum().GetNatNum() !== 12) {
       if (info.eScannedType === SvNumFormatType.DATE)
-        return GetDateOutput(value, section, language, output, star);
+        return GetDateOutput(value, section, native, language, output, star);
       if (info.eScannedType === SvNumFormatType.DATETIME)
-        return GetDateTimeOutput(value, section, language, output, star);
+        return GetDateTimeOutput(value, section, native, language, output, star);
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
       info.eScannedType === SvNumFormatType.TIME &&
       Number.isFinite(value) &&
-      !section.GetNatNum().IsComplete()
+      section.GetNatNum().GetNatNum() !== 12
     )
-      return GetTimeOutput(value, index, section, language, output, star);
+      return GetTimeOutput(value, index, section, native, language, output, star);
     if (
       !hadStandard &&
       Number.isFinite(value) &&

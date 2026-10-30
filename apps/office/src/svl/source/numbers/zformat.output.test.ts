@@ -205,6 +205,9 @@ it.each([
 );
 
 it.each([
+  ['[NatNum0][$-411]"１２３"BOOLEAN', 1, "123TRUE"],
+  ['[NatNum3][$-411]"123"BOOLEAN', 1, "１２３TRUE"],
+  ['[NatNum4][$-411]"15"BOOLEAN', 1, "十五TRUE"],
   ["[RED]BOOLEAN", 0, "FALSE"],
   ['BOOLEAN"!"', 1, "TRUE!"],
   ['"x"BOOLEAN', NaN, "xTRUE"],

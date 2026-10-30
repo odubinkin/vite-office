@@ -100,7 +100,8 @@
       "Original normal-build match/fromIndex and startsWith no-output/non-null explicit-output overloads use the shared shortened C comparison and actual copied suffix assignment. Native complete pinned OUString header and unchanged RTL lifetime bodies match 1662 cases including original source/prefix/rest aliasing and embedded NUL. Const borrows expose both queries.",
       "Original operator+=/internalAppend uses the real temporary C data slot, native allocation failure, assign/acquire/release and return-owner identity; source-pointer and empty/self alias cases match the 1662-case full native prefix/append witness.",
       "Original owned-string replaceAt adopts the C result without acquiring or inventing a null-to-empty fallback; normal-build raw-view append uses the direct C overload. The2586-case full pinned OUString/RTL witness compares payload, sharing and initialized counts. No physical OOM/ABI parity is claimed.",
-      "AQF9AG restores original internal view replaceAll with real C no-acquire adoption and the checked operator[] binding. No-match returns source-shared data; no empty-format syntax error is fabricated."
+      "AQF9AG restores original internal view replaceAll with real C no-acquire adoption and the checked operator[] binding. No-match returns source-shared data; no empty-format syntax error is fabricated.",
+      "Original OUString::unacquired(const OUStringBuffer&) overload now borrows the actual friend buffer pointer field without acquire, copy or snapshot. Positive buffer-overload dispatch preserves existing non-array native compound pointer slots; the borrowed reference follows buffer pointer replacement. Full raw allocator/OOM ABI remains outside this evidence."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -188,6 +189,10 @@
         {
           "path": "include/rtl/ustring.hxx",
           "marker": "sal_Int64 toInt64("
+        },
+        {
+          "path": "include/rtl/ustrbuf.hxx",
+          "marker": "OUString::unacquired(const OUStringBuffer& str)"
         }
       ]
     },

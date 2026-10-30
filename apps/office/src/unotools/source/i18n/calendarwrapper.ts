@@ -86,8 +86,8 @@ export class CalendarWrapper {
     }
     return new OUString();
   }
-  /** Original represented zero-mode display forwarding; complete native-number modes remain with their unported supplier. @param code - Display code. @param native - Original native mode0. @returns Owned display text. */
-  getDisplayString(code: number, native: 0): OUString {
+  /** Original native-mode display forwarding. @param code - Display code. @param native - Original signed16 native mode. @returns Owned display text. */
+  getDisplayString(code: number, native: number): OUString {
     try {
       return this.xC.getDisplayString(code, native);
     } catch (error) {

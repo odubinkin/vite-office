@@ -26,7 +26,8 @@
     ],
     "preservedResponsibilities": [
       "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
-      "Original ImpGetLogicalOutput is connected for incomplete native metadata: only BOOLEAN and STRING tokens emit content, star tokens are ignored and the fill result remains false. C++ double truth value!=0 includes NaN as true. Actual compiled/color and styled CSV tests cover this producer. Complete native-number transliteration remains unported."
+      "Original ImpGetLogicalOutput is connected for incomplete native metadata: only BOOLEAN and STRING tokens emit content, star tokens are ignored and the fill result remains false. C++ double truth value!=0 includes NaN as true. Actual compiled/color and styled CSV tests cover this producer. Complete native-number transliteration remains unported.",
+      "Original logical token output now performs final whole-buffer impTransliterate with the selected section metadata and actual native wrapper. Source-only BOOLEAN/STRING emission and ignored star behavior remain unchanged. Modes0..11 are connected; mode12 remains unported."
     ],
     "omittedResponsibilities": [
       "Full display families/native ABI and full native output differential remain pending."

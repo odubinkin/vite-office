@@ -815,6 +815,7 @@ export class SvNumberFormatter {
       this.m_aFormatData.dispose();
       current.dispose();
       this.mapper.dispose();
+      this.m_xNatNum.dispose();
       throw error;
     }
   }
@@ -991,5 +992,6 @@ export class SvNumberFormatter {
     this.m_aFormatData.dispose();
     this.m_aCurrentLanguage.dispose();
     this.mapper.dispose();
+    this.m_xNatNum.dispose();
   }
 }
