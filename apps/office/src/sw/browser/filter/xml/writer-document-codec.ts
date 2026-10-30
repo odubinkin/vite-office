@@ -636,6 +636,18 @@ export function* decodeWriterDocumentSteps(
               format.bulletGlyph > 0xffffffff))
         )
           throw new Error("Stored Writer numbering marker ownership is invalid.");
+        if (
+          (format.nativeNumberingType !== undefined &&
+            (!Number.isInteger(format.nativeNumberingType) ||
+              format.nativeNumberingType < -32768 ||
+              format.nativeNumberingType > 32767)) ||
+          (format.numAdjust !== undefined &&
+            (!Number.isInteger(format.numAdjust) ||
+              format.numAdjust < 0 ||
+              format.numAdjust > 7)) ||
+          (format.isLegal !== undefined && typeof format.isLegal !== "boolean")
+        )
+          throw new Error("Stored Writer numbering level scalar state is invalid.");
         const metadata = format.bulletFontMetadata;
         if (metadata !== undefined && format.bulletFontPresent !== true)
           throw new Error("Stored Writer numbering font metadata is invalid.");
@@ -656,6 +668,10 @@ export function* decodeWriterDocumentSteps(
           start: format.start,
           suffix: format.suffix,
         });
+        if (format.nativeNumberingType !== undefined)
+          decoded.SetNumberingType(format.nativeNumberingType);
+        if (format.numAdjust !== undefined) decoded.SetNumAdjust(format.numAdjust);
+        if (format.isLegal !== undefined) decoded.SetIsLegal(format.isLegal);
         decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);

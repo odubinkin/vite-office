@@ -267,7 +267,12 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
   for (const rule of legacy.numRules) {
     delete (rule as { ownedLevels?: readonly boolean[] }).ownedLevels;
     delete (rule as { defaultPositionAndSpaceMode?: string }).defaultPositionAndSpaceMode;
-    for (const format of rule.formats) delete (format as { numberingType?: string }).numberingType;
+    for (const format of rule.formats) {
+      delete (format as { numberingType?: string }).numberingType;
+      delete (format as { nativeNumberingType?: number }).nativeNumberingType;
+      delete (format as { numAdjust?: number }).numAdjust;
+      delete (format as { isLegal?: boolean }).isLegal;
+    }
   }
   for (const rule of decodeWriterDocument(legacy).GetNumRuleTable().slice(1)) {
     expect(rule.GetNumFormat(0)).toBeDefined();

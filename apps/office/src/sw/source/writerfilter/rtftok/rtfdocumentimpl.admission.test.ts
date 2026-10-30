@@ -95,7 +95,9 @@ it("keeps escaped CR and LF inside list level text and ignores unrelated destina
     const paragraph = doc.paragraphs[0];
     assert(paragraph);
     expect(paragraph.GetText()).toBe("Item");
-    expect(paragraph.GetNumRule()?.Get(0).GetBulletChar()).toBe(0x2a);
+    // Native LEVELTEXT consumes the declared one UTF16 unit; it does not scan ahead for a printable glyph.
+    expect(paragraph.GetNumRule()?.Get(0).GetBulletChar()).toBe(0x0d);
+    expect(paragraph.GetNumRule()?.Get(0).GetListFormat()).toBe("\r");
     expect(projectWriterTextRuns(paragraph)[0]?.attributes).toMatchObject({
       bold: false,
       italic: false,

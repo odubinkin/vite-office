@@ -1,5 +1,4 @@
 /** @fileoverview Maps RTF tokenizer events into native Writer nodes following rtftok/rtfdocumentimpl.cxx. */
-import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
@@ -90,10 +89,6 @@ export class RtfDocumentImpl {
   protected readonly listFormats = new Map<
     number,
     readonly Readonly<{
-      kind: "bullet" | "numbered";
-      start: number;
-      bullet?: number;
-      numberingType: SvxNumType;
       tableSprms: RTFSprms;
     }>[]
   >();
@@ -138,13 +133,6 @@ export class RtfDocumentImpl {
     for (const value of this.tableCell) paragraph(value);
     for (const levels of [this.currentListLevels, ...this.listFormats.values()])
       for (const level of levels) lists.add(level.tableSprms);
-    for (const levels of this.m_aListLevelProperties.values())
-      for (const properties of levels)
-        for (const value of properties) {
-          value.Name.dispose();
-          value.Value.dispose();
-        }
-    this.m_aListLevelProperties.clear();
     for (const list of lists) list.dispose();
     this.states.length = 0;
     this.runs.length = 0;
@@ -158,17 +146,10 @@ export class RtfDocumentImpl {
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
-  protected m_aListLevelProperties = new Map<
-    number,
-    import("../../../../udkapi/com/sun/star/beans/PropertyValue").PropertyValue[][]
-  >();
   protected currentListLevels: {
-    kind: "bullet" | "numbered";
-    start: number;
-    bullet?: number;
-    numberingType: SvxNumType;
     tableSprms: RTFSprms;
   }[] = [];
+  protected readonly m_aListRuleNames = new Map<number, string>();
   protected currentOverrideListId = 0;
   protected currentOverrideIndex = 0;
   protected fontName = "";

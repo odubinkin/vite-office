@@ -82,6 +82,10 @@ export class SwXTextDocument {
   createCharacterStyle(): SwXStyle {
     return new SwXStyle(this.GetDoc(), "CharacterStyles");
   }
+  /** Original typed numbering-style factory over the actual document. @returns Detached numbering descriptor. */
+  createNumberingStyle(): SwXStyle {
+    return new SwXStyle(this.GetDoc(), "NumberingStyles");
+  }
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(name: OUStringConstReference): SwXStyle | SwXNumberingRules | SwXBookmark {
     const n = text(name),

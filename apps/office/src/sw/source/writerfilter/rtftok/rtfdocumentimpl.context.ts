@@ -1,9 +1,8 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxLineSpaceRule, SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
@@ -81,6 +80,7 @@ export interface RtfState {
     | "list"
     | "listlevel"
     | "leveltext"
+    | "levelnumbers"
     | "listoverridetable"
     | "listoverride"
     | "field"
@@ -111,6 +111,9 @@ export interface RtfState {
   characterControls: Set<string>;
   bookmarkName: string;
   levelText: string;
+  levelNumbers: number[];
+  levelNumbersValid: boolean;
+  listLevelNum: number;
 }
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
@@ -434,63 +437,6 @@ export function parseRtfHyperlinkInstruction(instruction: string): WriterHyperli
     ...(targetFrame.length === 0 ? {} : { targetFrame }),
     ...(name.length === 0 ? {} : { name }),
   };
-}
-/** Resolves RTF list level formats accepted by the current native numbering model.  @param value - Value. @returns The SvxNumType result. */
-export function fromRtfNfc(value: number): SvxNumType {
-  switch (value) {
-    case 1:
-      return SvxNumType.SVX_NUM_ROMAN_UPPER;
-    case 2:
-      return SvxNumType.SVX_NUM_ROMAN_LOWER;
-    case 3:
-      return SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
-    case 4:
-      return SvxNumType.SVX_NUM_CHARS_LOWER_LETTER;
-    case 14:
-      return SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC;
-    case 18:
-      return SvxNumType.SVX_NUM_CIRCLE_NUMBER;
-    case 35:
-      return SvxNumType.SVX_NUM_NUMBER_LOWER_ZH;
-    case 38:
-      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH;
-    case 34:
-      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW;
-    case 30:
-      return SvxNumType.SVX_NUM_TIAN_GAN_ZH;
-    case 31:
-      return SvxNumType.SVX_NUM_DI_ZI_ZH;
-    case 16:
-      return SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA;
-    case 20:
-      return SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA;
-    case 12:
-      return SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA;
-    case 21:
-      return SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA;
-    case 13:
-      return SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA;
-    case 24:
-      return SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO;
-    case 25:
-      return SvxNumType.SVX_NUM_HANGUL_JAMO_KO;
-    case 42:
-      return SvxNumType.SVX_NUM_NUMBER_HANGUL_KO;
-    case 41:
-      return NumberingType.NUMBER_DIGITAL_KO as SvxNumType;
-    case 44:
-      return NumberingType.NUMBER_DIGITAL2_KO as SvxNumType;
-    case 43:
-      return NumberingType.NUMBER_LEGAL_KO as SvxNumType;
-    case 23:
-      return SvxNumType.SVX_NUM_CHAR_SPECIAL;
-    case 255:
-      return SvxNumType.SVX_NUM_NUMBER_NONE;
-    case 22:
-      return SvxNumType.SVX_NUM_ARABIC_ZERO;
-    default:
-      return SvxNumType.SVX_NUM_ARABIC;
-  }
 }
 /** Original native owner used by its out-of-class implementation fragments; no state is copied. */
 export type RtfDocumentImplContext = RtfDocumentImpl;

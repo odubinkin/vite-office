@@ -40,7 +40,7 @@ import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { applyWriterParagraphList } from "../../core/doc/list";
-import { SwNumFormat } from "../../core/doc/number";
+import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SwpHints } from "../../core/txtnode/ndhints";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
@@ -247,7 +247,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         appliedStyles.add(slot);
       }
     }
-    PrepareListLevelCharacters.call(this);
+    PrepareListNumbering.call(this);
     let firstParagraph = true;
     const sectionStyles = new Map<number, string>();
     for (const block of this["blocks"]) {
@@ -584,36 +584,15 @@ export function ApplyParagraph(
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
   const override = paragraph.state.listOverride;
   if (override !== undefined) {
-    const sourceList = this["listOverrides"].get(override),
-      format =
-        sourceList === undefined
-          ? undefined
-          : this["listFormats"].get(sourceList)?.[paragraph.state.listLevel];
-    if (format !== undefined) {
+    const name = this["m_aListRuleNames"].get(override),
+      rule = name === undefined ? undefined : node.GetDoc().FindNumRulePtr(name);
+    if (rule)
       applyWriterParagraphList(node, {
-        kind: format.kind,
+        kind: getWriterNumFormatKind(rule.Get(paragraph.state.listLevel)),
         level: paragraph.state.listLevel,
+        ruleName: rule.GetName(),
         listId: `RTF-list-${override}`,
       });
-      const rule = node.GetNumRule();
-      if (rule !== undefined) {
-        const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
-        try {
-          native.SetNumberingType(format.numberingType);
-          native.SetStart(format.start);
-          if (format.kind === "bullet" && format.bullet !== undefined)
-            native.SetBulletChar(format.bullet);
-          rule.Set(paragraph.state.listLevel, native);
-          const characters =
-            this["m_aListLevelProperties"].get(override)?.[paragraph.state.listLevel];
-          if (characters)
-            ApplyListLevelCharacters(node.GetDoc(), rule, paragraph.state.listLevel, characters);
-          node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
-        } finally {
-          native.Dispose();
-        }
-      }
-    }
   }
 }
 
@@ -642,4 +621,4 @@ import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 
-import { PrepareListLevelCharacters, ApplyListLevelCharacters } from "./rtfdocumentimpl.numbering";
+import { PrepareListNumbering } from "./rtfdocumentimpl.numbering";

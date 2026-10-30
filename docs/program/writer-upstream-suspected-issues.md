@@ -2293,3 +2293,38 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Pinned source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, ListsManager::lcl_attribute, CT_LevelText_val branch. After soft-hyphen normalization and UTF8 conversion, the expression `(%\\d)` replaces each match with `$1%`.
 - Observation: literal level text `%10` becomes `%1%0`, not `%10%`. This is relevant to evaluating the represented tenth-level format, but the observation alone does not establish that ordinary RTF input produces this exact unescaped placeholder.
 - Resolution: preserve the original single-digit regex and strict OUString UTF8 conversions. A real ListLevel/DomainMapper and native resource container verify the literal receiver outcome together with soft hyphen and non-BMP text. Full tenth-level parser/export production and compiled native behavior remain separate audit obligations; no broader failure is asserted.
+
+### WRITER259 — Numbering start visitation persists across list managers
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListsManager::lcl_sprm` (pinned baseline).
+- Observation: the function-static `bIsStartVisited` starts false once per process. A start modifier sets it true; a numbering-format modifier sets start zero only while it remains false. It is not reset for the next definition or document.
+- Impact: whether an otherwise absent start becomes explicitly present can depend on an earlier list/import, particularly for overrides generated without defaults.
+- Local behavior: retain the module-lifetime flag and original assignments. Do not make it per-level or reset it to improve apparent consistency. Full override consumers remain under audit.
+
+### WRITER260 — Explicit levellegal zero still enables legal numbering
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, `RTFDocumentImpl::dispatchTableSprmValue`; `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::SetValue`.
+- Observation: the reader stores the supplied numeric `levellegal` value, but `ListLevel::SetValue` sets `m_bIsLegal = true` based only on the modifier identity.
+- Impact: `\levellegal0` produces `LevelIsLegal=true`, just like the bare control.
+- Local behavior: retain presence semantics through native rule assignment and Worker transport. Covered by `rtf-numbering.test.ts`.
+
+### WRITER261 — Bullet materialization truncates supplementary symbols to one UTF16 unit
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties`; `sw/source/core/unocore/unosett.cxx`, `SwXNumberingRules::SetPropertiesToNumFormat`.
+- Observation: a nonempty bullet text is copied with `copy(0, 1)`, independently of Unicode scalar boundaries. A supplementary symbol therefore reaches the numbering setter as a lone high surrogate; the setter consumes that one-unit string.
+- Impact: the stored bullet value can differ from the intact supplementary symbol retained in `ListFormat`; strict re-export conversion may encounter invalid UTF16.
+- Local behavior: retain the one-unit copy and native code-point admission. Do not silently repair or preserve the complete scalar in BulletChar. Covered by `rtf-numbering.test.ts`; no complete malformed-Unicode re-export parity claim is made.
+
+### WRITER262 — Empty bullet producer uses a character Any while its consumer extracts a string
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties`; `sw/source/core/unocore/unosett.cxx`, `SwXNumberingRules::SetPropertiesToNumFormat`.
+- Observation: the empty case emits `Any(sal_Unicode(0))`. The BulletChar setter performs an unchecked extraction into a default-empty `OUString` and then sets a zero bullet when that string is empty.
+- Impact: the producer/consumer type mismatch achieves the zero bullet through failed extraction rather than a matching string type; other non-string values also reach the same empty-string fallback.
+- Local behavior: keep the original character Any and unchecked string extraction/default behavior, rather than converting characters into strings or rejecting the consumed empty case.
+
+### WRITER263 — LEVELNUMBERS ordinary text stores the read-loop terminator
+
+- Source: `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `RTFDocumentImpl::resolveChars`.
+- Observation: LEVELNUMBERS checks `aStr.toChar() != ';'`, then appends `sal_Int32(ch)`. In normal mode `ch` is the delimiter which ended the run and was rewound; in hex mode it is the single decoded signed char. The branch also does not apply the earlier hex fallback skip guard.
+- Impact: literal position bytes and equivalent hex escapes need not produce the same position vector; skipped hex fallback can still contribute a position. Reinterpreting all decoded destination text as positions changes native behavior.
+- Local behavior: preserve resolveChars source events separately from decoded text and keep the signed Unicode control parameter. Tests distinguish source-origin positions, ASCII termination and invalidating Unicode semicolons. The signed-char profile follows the pinned source's default signed-char build; no cross-platform ABI certification is claimed.

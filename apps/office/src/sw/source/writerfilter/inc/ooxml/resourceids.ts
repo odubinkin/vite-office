@@ -716,4 +716,13 @@ export const NS_ooxml = Object.freeze({
   LN_CT_Language_val: 91896,
   LN_CT_Language_eastAsia: 91897,
   LN_CT_Language_bidi: 91898,
+  LN_CT_Lvl_isLgl: 93126,
+  LN_CT_Lvl_legacy: 93130,
+  LN_CT_Lvl_lvlJc: 93131,
+  LN_CT_Lvl_numFmt: 93123,
+  LN_CT_Lvl_start: 93122,
+  LN_CT_Lvl_suff: 93127,
+  LN_CT_NumFmt_format: 92868,
+  LN_CT_NumFmt_val: 92869,
+  LN_CT_NumLvl_startOverride: 93151,
 });

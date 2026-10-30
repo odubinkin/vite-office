@@ -831,3 +831,27 @@ This checkpoint closes the consumed label-character path, not full numbering imp
 Complete level-number placeholder/pattern conversion, positional/legal level items,
 concrete override semantics and special section/HTML producers still require their
 current-model completion audit. No broad module/ABI parity promotion is made.
+
+### Native numeric RTF list checkpoint
+
+The reader now uses the original 49-entry RTF format table and complete native
+OOXML-to-numbering conversion switch. Actual ListLevel properties carry Word's
+zero start/indent/tab defaults, signed-short start narrowing, alignment, follow,
+legal presence and converted geometry through the typed numbering setter. Native
+WWNum concrete styles are created before paragraphs attach; scalar DTO replay no
+longer overwrites those levels per paragraph. Creation uses the existing native
+style getPropertyValue(NumberingRules), typed replaceByIndex and style setter
+path; temporary property vectors and the service rule copy are released there.
+
+LEVELTEXT's declared UTF16 length and LEVELNUMBERS' position equation construct the
+native ListFormat. The lexical stream retains signed U controls and the original
+resolveChars first/final-byte distinction independently of decoded text. Source
+start-visit lifetime, legal-zero presence, supplementary bullet truncation, empty
+bullet Any mismatch and ordinary-run terminator behavior are recorded as
+WRITER259-WRITER263 and retained. Worker transfer now preserves exact native numeric
+type, alignment and legal state, with omitted legacy fields remaining supported.
+
+This closes ordinary abstract numeric levels consumed by current list-table input.
+Concrete LFOLEVEL overrides, malformed-level recovery, old-style paragraph lists,
+special section and HTML producers remain under audit. Compiled full native/ABI
+parity is unverified; browser recovery/open/save deviations are unchanged.

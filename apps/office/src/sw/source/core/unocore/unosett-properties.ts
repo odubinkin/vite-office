@@ -24,6 +24,7 @@ const numericFields: Record<
   [keyof WriterNumberingRuleProperties, "sal_Int16" | "sal_Int32"]
 > = {
   NumberingType: ["numberingType", "sal_Int16"],
+  Adjust: ["adjust", "sal_Int16"],
   StartWith: ["startWith", "sal_Int16"],
   ParentNumbering: ["parentNumbering", "sal_Int16"],
   LeftMargin: ["absLSpace", "sal_Int32"],
@@ -71,6 +72,7 @@ export function numberingToSequence(
       "LabelFollowedBy",
       new Any([["listtab", "space", "nothing"].indexOf(properties.labelFollowedBy)], "sal_Int16"),
     );
+  if (properties.isLegal !== undefined) add("LevelIsLegal", new Any([properties.isLegal], "bool"));
   add("CharStyleName", stringAny(properties.charStyleName ?? ""));
   if (properties.bulletFont) add("BulletFontName", stringAny(properties.bulletFont.name));
   const result = new NumberingPropertySequence(
@@ -125,7 +127,23 @@ function decodeNumberingProperty(property: PropertyValue): Partial<WriterNumberi
     BulletChar: "bulletChar",
     CharStyleName: "charStyleName",
   };
-  if (strings[name]) return { [strings[name] as string]: stringValue(property.Value) };
+  if (strings[name]) {
+    if (name === "BulletChar") {
+      const character = new OUString();
+      try {
+        // Original unchecked extraction leaves a default empty string for a non-string Any.
+        property.Value.extract(character, "OUString");
+        return { bulletChar: text(character) };
+      } finally {
+        character.dispose();
+      }
+    }
+    return { [strings[name] as string]: stringValue(property.Value) };
+  }
+  if (name === "LevelIsLegal") {
+    const legal: [boolean] = [false];
+    return property.Value.extract(legal, "bool") ? { isLegal: legal[0] } : {};
+  }
   if (name === "BulletFontName") return { bulletFont: { name: stringValue(property.Value) } };
   if (name === "PositionAndSpaceMode") {
     const value = scalar(property.Value, "sal_Int16");

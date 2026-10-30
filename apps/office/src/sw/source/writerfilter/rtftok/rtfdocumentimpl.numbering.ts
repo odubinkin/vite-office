@@ -1,4 +1,4 @@
-/** @fileoverview Native list-level character materialization through ListsManager/ListDef, StyleSheetTable and typed SwXNumberingRules. */
+/** @fileoverview Native list-level materialization through ListsManager/ListDef, actual NumberingStyles and typed SwXNumberingRules. */
 import type { RtfDocumentImplContext } from "./rtfdocumentimpl.context";
 import {
   ListLevel,
@@ -7,8 +7,6 @@ import {
 } from "../dmapper/NumberingManager";
 import { RTFReferenceProperties } from "./rtfreferenceproperties";
 import { RTFSprms } from "./rtfsprm";
-import { SwNumRule } from "../../core/doc/number";
-import type { SwDoc } from "../../core/doc/doc";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 import {
   NumberingPropertySequence,
@@ -17,53 +15,94 @@ import {
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 /** Native concrete-list traversal creates level styles once, including levels not yet used by a paragraph. @param this - Actual reader. @returns Nothing. */
-export function PrepareListLevelCharacters(this: RtfDocumentImplContext): void {
+export function PrepareListNumbering(this: RtfDocumentImplContext): void {
   for (const [override, id] of this["listOverrides"]) {
-    const properties: PropertyValue[][] = [];
-    this["m_aListLevelProperties"].set(override, properties);
-    for (const source of this["listFormats"].get(id) ?? []) {
-      const level = new ListLevel(),
-        empty = new RTFSprms(),
-        reference = new RTFReferenceProperties(empty, source.tableSprms);
+    const model = this["Mapper"]().model,
+      familyName = unicode("NumberingStyles"),
+      family = model.getStyleFamilies().getByName(familyName);
+    familyName.dispose();
+    let name = `WWNum${override}`;
+    for (;;) {
+      const candidate = unicode(name);
       try {
-        ResolveListLevelCharacters(this["Mapper"](), level, reference);
-        properties.push(CreateListLevelCharacterProperties(this["Mapper"](), level));
+        if (!family.hasByName(candidate)) break;
       } finally {
-        reference.dispose();
-        empty.dispose();
-        level.dispose();
+        candidate.dispose();
       }
+      name += "a";
+    }
+    const descriptor = model.createNumberingStyle(),
+      nativeName = unicode(name);
+    try {
+      family.insertStyleByName(nativeName, descriptor);
+    } finally {
+      nativeName.dispose();
+    }
+    this["m_aListRuleNames"].set(override, name);
+    const rulesName = unicode("NumberingRules"),
+      rulesAny = descriptor.getPropertyValue(rulesName),
+      reference = new Reference(rulesAny, UNO_QUERY, indexReplaceType),
+      service = reference.get();
+    try {
+      if (!(service instanceof SwXNumberingRules))
+        throw new Error("Expected native numbering rules");
+      try {
+        for (const [index, source] of (this["listFormats"].get(id) ?? []).entries()) {
+          const level = new ListLevel(),
+            empty = new RTFSprms(),
+            properties = new RTFReferenceProperties(empty, source.tableSprms);
+          try {
+            ResolveListLevelCharacters(this["Mapper"](), level, properties);
+            const values = CreateListLevelCharacterProperties(this["Mapper"](), level);
+            try {
+              ApplyListLevelProperties(service, index, values);
+            } finally {
+              for (const value of values) {
+                value.Name.dispose();
+                value.Value.dispose();
+              }
+            }
+          } finally {
+            properties.dispose();
+            empty.dispose();
+            level.dispose();
+          }
+        }
+        descriptor.setPropertyValue(rulesName, rulesAny);
+      } finally {
+        service.GetNumRule().Dispose();
+      }
+    } finally {
+      reference.dispose();
+      rulesAny.dispose();
+      rulesName.dispose();
     }
   }
 }
-/** Actual native rule copy, typed sequence setter and level commit preserve style registration; no flattened browser record substitutes for CharStyleName. @param doc - Destination. @param rule - Actual rule. @param level - Level index. @param properties - Borrowed generated values. @returns Nothing. */
-export function ApplyListLevelCharacters(
-  doc: SwDoc,
-  rule: SwNumRule,
+/** Original typed level replacement operates on the style's actual numbering-service copy; the style setter commits it once after all levels. @param service - Native rule service. @param level - Level index. @param properties - Borrowed generated values. @returns Nothing. */
+export function ApplyListLevelProperties(
+  service: SwXNumberingRules,
   level: number,
   properties: readonly PropertyValue[],
 ): void {
-  const copy = new SwNumRule(rule),
-    service = new SwXNumberingRules(copy, doc),
-    sequence = new NumberingPropertySequence(
-      {
-        get: /** Native vector addresses use generated48-byte element stride. @param offset - Logical address. @returns Borrowed generated value. */ (
-          offset: number,
-        ) => properties[offset / 48],
-      },
-      properties.length,
-    );
+  const sequence = new NumberingPropertySequence(
+    {
+      /** Native generated PropertyValue stride. @param offset - Logical element address. @returns Borrowed property. */
+      get: (offset: number) => properties[offset / 48],
+    },
+    properties.length,
+  );
   try {
     const value = new Any(sequence.getAddress(), numberingSequenceType);
     try {
       service.replaceByIndex(level, value);
-      rule.Set(level, service.GetNumRule().Get(level));
     } finally {
       value.dispose();
     }
   } finally {
     sequence.dispose();
-    service.release();
-    copy.Dispose();
   }
 }
+import { unicode } from "../../core/unocore/unocrsrhelper";
+import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";

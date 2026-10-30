@@ -88,6 +88,8 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly parentNumbering?: number;
   readonly listFormat?: string;
   readonly charStyleName?: string;
+  readonly adjust?: number;
+  readonly isLegal?: boolean;
 }
 
 /** Writer-owned copy, validation and commit boundary corresponding to SwXNumberingRules. */
@@ -226,6 +228,15 @@ export class SwXNumberingRules {
     );
     return {
       kind: type === SvxNumType.SVX_NUM_CHAR_SPECIAL ? "bullet" : "numbered",
+      adjust:
+        format.GetNumAdjust() === SvxAdjust.Right
+          ? Hori.RIGHT
+          : format.GetNumAdjust() === SvxAdjust.Center
+            ? Hori.CENTER
+            : format.GetNumAdjust() === SvxAdjust.Left
+              ? Hori.LEFT
+              : -1,
+      ...(format.GetIsLegal() ? { isLegal: true } : {}),
       numberingType: type,
       prefix: format.GetPrefix(),
       suffix: format.GetSuffix(),
@@ -293,6 +304,20 @@ export class SwXNumberingRules {
             this.m_sNewCharStyleNames[level] = "";
           } else this.m_sNewCharStyleNames[level] = name;
         }
+        if (properties.adjust !== undefined) {
+          const adjust =
+            properties.adjust === Hori.RIGHT
+              ? SvxAdjust.Right
+              : properties.adjust === Hori.CENTER
+                ? SvxAdjust.Center
+                : properties.adjust === Hori.LEFT
+                  ? SvxAdjust.Left
+                  : undefined;
+          if (adjust === undefined)
+            throw new NumberingRulePropertyError("Invalid numbering adjustment.");
+          applied.SetNumAdjust(adjust);
+        }
+        if (properties.isLegal !== undefined) applied.SetIsLegal(properties.isLegal);
         const converted = numberingPositionToTwips(properties);
         const type =
           properties.numberingType ??
@@ -418,3 +443,6 @@ export class SwXLineNumberingProperties {
 
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { HoriOrientation as Hori } from "../../../../offapi/com/sun/star/text/HoriOrientation";

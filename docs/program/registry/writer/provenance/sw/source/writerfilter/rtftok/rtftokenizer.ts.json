@@ -6,13 +6,38 @@
     "status": "mapped",
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtftokenizer.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtftokenizer.cxx",
-    "localSymbols": ["RtfTokenizer"],
-    "upstreamSymbols": ["RTFTokenizer::resolveParse", "RTFTokenizer::resolveKeyword"],
-    "preservedResponsibilities": ["Lexes balanced RTF groups, controls, signed parameters, ANSI hex, Unicode fallback and binary payload lengths before document mapping.", "Streams tokens to the document listener so its selected font and group encoding can preserve Shift-JIS trailing delimiter bytes during lexical scanning."],
-    "omittedResponsibilities": ["The full upstream control-word vocabulary, charset matrix, lookahead, progress reporting and native stream exceptions remain unverified."],
+    "localSymbols": [
+      "RtfTokenizer"
+    ],
+    "upstreamSymbols": [
+      "RTFTokenizer::resolveParse",
+      "RTFTokenizer::resolveKeyword"
+    ],
+    "preservedResponsibilities": [
+      "Lexes balanced RTF groups, controls, signed parameters, ANSI hex, Unicode fallback and binary payload lengths before document mapping.",
+      "Streams tokens to the document listener so its selected font and group encoding can preserve Shift-JIS trailing delimiter bytes during lexical scanning.",
+      "S3HW1E numeric-list checkpoint: original 49-entry RTF getNumberFormat and complete ConversionHelper numbering switch feed typed ListLevel properties. Native zero starts, signed-short narrowing, Word geometry defaults, alignment, follow, tabs, legal-presence semantics, UTF16 LEVELTEXT length and LEVELNUMBERS positions reach document-owned WWNum numbering styles before paragraphs attach. Unicode controls preserve their signed parameter and raw resolveChars origin is retained independently of decoded ANSI text, including the source ordinary-run terminator behavior. Worker graph preserves exact numbering type, alignment and legal flag with legacy omissions supported. Source oddities WRITER259-WRITER263 are documented and retained. Concrete LFOLEVEL overrides, malformed-level recovery, old-style numbering, special sections/HTML and full compiled module/ABI parity remain unverified; no broad confidence promotion is made."
+    ],
+    "omittedResponsibilities": [
+      "The full upstream control-word vocabulary, charset matrix, lookahead, progress reporting and native stream exceptions remain unverified."
+    ],
     "evidence": {
-      "local": [{ "path": "apps/office/src/sw/source/writerfilter/rtftok/rtftokenizer.test.ts", "marker": "nested group boundaries" }],
-      "upstream": [{ "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx", "marker": "RTFTokenizer::resolveParse" }]
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtftokenizer.test.ts",
+          "marker": "nested group boundaries"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts",
+          "marker": "RtfDocumentImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "RTFTokenizer::resolveParse"
+        }
+      ]
     }
   }
 }

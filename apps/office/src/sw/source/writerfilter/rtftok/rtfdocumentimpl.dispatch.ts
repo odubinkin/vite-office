@@ -1,5 +1,4 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
-import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -10,7 +9,6 @@ import {
   CHARACTER_PROPERTY_CONTROLS,
   DEFAULT_CHARACTER,
   DEFAULT_PARAGRAPH,
-  fromRtfNfc,
   parseRtfHyperlinkInstruction,
   RTF_UNDERLINE_STYLES,
   SKIPPED_DESTINATIONS,
@@ -62,6 +60,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         : { characterStyleIndex: previous.characterStyleIndex }),
       bookmarkName: "",
       levelText: "",
+      levelNumbers: [...(previous?.levelNumbers ?? [])],
+      levelNumbersValid: previous?.levelNumbersValid ?? true,
+      listLevelNum: previous?.listLevelNum ?? 0,
       ...(previous?.field === undefined ? {} : { field: previous.field }),
       ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
       ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
@@ -144,37 +145,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
             ),
           });
       }
-      if (previous?.destination === "leveltext") {
-        const glyph = [...previous.levelText].find(
-          /** Computes the value result. @param value - Value. @returns The computed result. */ (
-            value,
-          ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
-        );
-        if (glyph !== undefined) {
-          const level = this["currentListLevels"].at(-1);
-          if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
-        }
-      }
-      if (previous?.destination === "leveltext") {
-        const parent = this["states"].at(-1);
-        if (parent) {
-          const raw = previous.levelText,
-            length = raw.charCodeAt(0);
-          putNestedAttribute(
-            parent.tableSprms,
-            N.LN_CT_Lvl_lvlText,
-            N.LN_CT_LevelText_val,
-            stringValue(length < raw.length ? raw.slice(1, length + 1) : raw, true),
-          );
-        }
-      }
-      if (previous?.destination === "listlevel") {
-        const level = this["currentListLevels"].at(-1);
-        if (level) {
-          level.tableSprms.dispose();
-          level.tableSprms = new RTFSprms(previous.tableSprms);
-        }
-      }
+      if (previous) FinishListLevelGroup.call(this, previous);
       if (previous?.destination === "list")
         this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
       if (previous?.destination === "listoverride")
@@ -192,6 +163,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   }
   const state = this["states"].at(-1);
   if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
+  if (token.kind === "character-source") {
+    if (state.destination === "levelnumbers")
+      ReadLevelNumbers(state, token.firstByte, token.lastByte);
+    return;
+  }
   if (token.kind === "hex-break") {
     // resolveChars converts hex CR and LF into separate PAR controls except
     // in destinations such as LEVELTEXT, where their bytes remain data.
@@ -199,7 +175,18 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else if (state.destination === "leveltext") state.levelText += token.value;
     return;
   }
+  if (token.kind === "control" && token.name === "u") {
+    const value = token.parameter ?? 0;
+    if (state.destination === "levelnumbers") {
+      if (value === 59) state.levelNumbersValid = false;
+      else state.levelNumbers.push(value);
+    } else this["Dispatch"]({ kind: "text", value: String.fromCharCode(value & 0xffff) });
+    return;
+  }
   if (token.kind === "text" || token.kind === "ansi-bytes") {
+    if (state.destination === "levelnumbers") {
+      return;
+    }
     const value = token.kind === "text" ? token.value : this["DecodeBytes"](token.value, state);
     if (state.destination === "fonttbl") this["ReadFontText"](value, state);
     else if (state.destination === "styleentry") state.styleName += value;
@@ -327,17 +314,16 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   }
   if (state.destination === "list" && token.name === "listlevel") {
     state.destination = "listlevel";
-    this["currentListLevels"].push({
-      kind: "numbered",
-      start: 1,
-      numberingType: SvxNumType.SVX_NUM_ARABIC,
-      tableSprms: new RTFSprms(),
-    });
+    this["currentListLevels"].push({ tableSprms: new RTFSprms() });
     return;
   }
   if (state.destination === "listlevel" && token.name === "leveltext") {
     state.destination = "leveltext";
     state.levelText = "";
+    return;
+  }
+  if (state.destination === "listlevel" && token.name === "levelnumbers") {
+    state.destination = "levelnumbers";
     return;
   }
   if (state.destination === "listoverridetable" && token.name === "listoverride") {
@@ -391,20 +377,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     )
       return;
     if (token.name === "listid") this["currentListId"] = token.parameter ?? 0;
-    else if (token.name === "levelnfc") {
-      const level = this["currentListLevels"].at(-1);
-      if (level !== undefined) {
-        level.kind = token.parameter === 23 ? "bullet" : "numbered";
-        level.numberingType = fromRtfNfc(token.parameter ?? 0);
-      }
-    } else if (token.name === "levelstartat") {
-      const level = this["currentListLevels"].at(-1);
-      if (level !== undefined && token.parameter !== undefined)
-        level.start = Math.max(0, token.parameter);
-    }
+    else if (state.destination === "listlevel")
+      dispatchNumberingValue(token.name, token.parameter, state);
     return;
   }
-  if (state.destination === "leveltext") return;
+  if (state.destination === "leveltext" || state.destination === "levelnumbers") return;
   if (state.destination === "listoverride") {
     if (token.name === "listid") this["currentOverrideListId"] = token.parameter ?? 0;
     else if (token.name === "ls") this["currentOverrideIndex"] = token.parameter ?? 0;
@@ -933,3 +910,6 @@ import { dispatchLanguageValue } from "./rtfdispatchvalue.language";
 
 import { dispatchAssociatedCharacter } from "./rtfdispatchvalue.character";
 import { putNestedAttribute } from "./rtfdocumentimpl.properties";
+
+import { FinishListLevelGroup, ReadLevelNumbers } from "./rtfdocumentimpl.numbering-state";
+import { dispatchNumberingValue } from "./rtfdispatchvalue.numbering";

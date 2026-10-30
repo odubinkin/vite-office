@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 192
+revision: 195
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T13:23:40.813Z"
+  updated_at: "2026-10-30T13:52:55.033Z"
   updated_by: "CODER"
-  note: "Native list-label checkpoint verified: 788 related cases passed; two terminal worker-launch failures passed their isolated 52-case recheck. Final ordered setter/lifetime cases23, later numbering/import regressions36 and label cases11 pass; types/lint/format/source/docs/size/tree/dependency/provenance/Writer registry gates pass. Actual ListLabel/BulletFontName/CharStyleName ownership and Worker/native RTF are connected. Numeric list patterns/positions/overrides, sections and HTML/current-model completion audit remain open."
-  attempts: 28
+  note: "Native numeric RTF list checkpoint passes targeted parser, style-service, Worker, TXT/Markdown/RTF and static checks; goal remains active for LFOLEVEL overrides and remaining current-model completeness audit."
+  attempts: 29
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -453,8 +456,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T13:52:55.033Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native numeric RTF list checkpoint passes targeted parser, style-service, Worker, TXT/Markdown/RTF and static checks; goal remains active for LFOLEVEL overrides and remaining current-model completeness audit."
+  -
+    type: "status"
+    at: "2026-10-30T13:52:59.887Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T13:24:08.101Z"
+doc_updated_at: "2026-10-30T13:52:59.887Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1017,6 +1033,36 @@ sections:
     Attempts: 28
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:23:19.679Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T13:52:55.033Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native numeric RTF list checkpoint passes targeted parser, style-service, Worker, TXT/Markdown/RTF and static checks; goal remains active for LFOLEVEL overrides and remaining current-model completeness audit.
+    Attempts: 29
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:52:54.474Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1776,6 +1822,27 @@ sections:
     - Remaining current-model obligations: native numeric level text/placeholder/list-format conversion, positional/legal properties and concrete overrides; special section dummy paragraphs; HTML list/table producers; final per-capability and UI completion audit. This checkpoint closes the consumed label-character ownership path, not full numbering or the full goal.
 
     - Final source detail: LEVELTEXT now forwards RTFValue's original force-string=true selector (including empty strings); all other existing string-factory callers retain false. Command: npm run test:writer -- rtf-list-label; targeted ESLint; npm run typecheck --workspace @vite-office/office; npm run check:docs; npm run check:source-provenance. Result: pass,11label cases. Evidence: html17-force-string-tests.txt, html17-force-string-lint.txt, html17-force-string-types.txt, html17-force-string-gates.txt. No broad parity claim.
+
+    ### 2026-10-30 S3HW1E numeric-list native checkpoint (html18)
+
+    - Implemented the exact original49 RTF getNumberFormat entries and complete ConversionHelper numbering conversion switch, including LETTER_N, text, CJK/Hebrew/Arabic forms and out-of-range none. Added exact original generated resource IDs with unchanged vendor generator evidence html18-native-resourceids.hxx.
+    - ListLevel now owns native numeric properties/defaults: signed start, explicit startOverride state, NFC/custom conversion, follow/tab/legal state, Adjust and Word zero geometry. Original first-UTF16-unit bullet extraction and typed empty character Any are retained. The typed UNO numbering setter/publication now supports Adjust and LevelIsLegal and preserves original BulletChar unchecked string extraction.
+    - LEVELTEXT declared UTF16 length and LEVELNUMBERS before/after-pop use original position numbering and validity. U remains an original signed control event; independent character-source events preserve resolveChars ordinary-run first/final bytes, signed hex bytes and skipped fallback behavior rather than interpreting decoded text as positions. Existing decoded text/codepage ownership is unchanged; a skipped Shift-JIS lead can expose its collected trail as the source first byte.
+    - Native NumberingStyles createNumberingStyle/getPropertyValue(NumberingRules)/typed replaceByIndex/style setter now prepare actual WWNum concrete rules once before paragraph attachment. Removed per-paragraph kind/start/bullet replay and the obsolete retained level-property buffer; temporary vectors and actual service rule copies are released at this boundary.
+    - Worker graph now retains exact native numbering type, native adjustment and legal flag with validated optional legacy fields. Legacy test fixtures omit the new fields explicitly, maintaining the same migration expectations.
+    - Source oddities preserved/documented: WRITER259 function-static start visitation; WRITER260 legal-zero presence; WRITER261 supplementary bullet UTF16 truncation; WRITER262 empty character Any/string consumer mismatch; WRITER263 ordinary-run terminator and hex fallback in LEVELNUMBERS.
+    - Matrix: ordinary abstract numeric levels are connected. Concrete LFOLEVEL merge/override semantics, malformed-level recovery, old-style paragraph lists and special section/HTML producers remain open. No broad native/ABI/module confidence promotion; existing intentional browser save/open/recovery deviations remain unchanged.
+
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/core/unocore/unosett src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/doc/number src/sw/browser/filter/xml/writer-document-codec src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts --maxWorkers 1
+      Result: pass,655tests/38files. Evidence: output/playwright/rtf-properties-native/html18-broad-tests2.txt. Scope: related parser/mapper/numbering/Worker core. Earlier old heuristic CR-bullet and alphabetic round-trip expectations were replaced by direct original-source behavior: declared first UTF16 unit13 and LETTER_N; legacy fixture removes new graph fields. No assertion/configuration was relaxed.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1
+      Result: pass,508tests/16files. Evidence: html18-style-path-tests.txt in the same evidence directory. Scope: final actual NumberingRules style service path, parser, export contracts and lifetimes.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtftokenizer.test.ts src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/core/doc/number-ownership.test.ts --maxWorkers 1
+      Result: pass,162tests/5files. Evidence: html18-final-confirm.txt. Scope: final source-origin/Shift-JIS trail addition,49 numeric formats, native defaults/legal/position equation, raw versus hex and fallback, Worker exact numeric fields and malformed-record rejection, label styles, export canonicalization and legacy migration.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/filter/xml/writer-codec.boundaries.test.ts src/sw/source/filter/ww8/rtfexport --maxWorkers 1
+      Result: pass,219tests/18files. Evidence: html18-other-filters-final.txt. Scope: related TXT/Markdown/RTF output and native document-I/O/graph boundaries.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html18-types-confirm.txt, html18-eslint-confirm.txt, html18-prettier-confirm.txt, html18-docs-final.txt, html18-doc-lint.txt, html18-provenance-confirm.txt, html18-registry-confirm.txt, html18-boundaries-confirm.txt, html18-size.txt, html18-tree.txt, html18-doctor.txt. Scope: changed source/docs,1879 provenance records, Writer registry zero semantic violations,1878 runtime modules/10224 imports/227 allowed edges. Docs checker initially required the local add arrow's documentation to be attached to the function; it is now a documented local function, with no runtime behavior change. Doctor reports zero errors and the pre-existing managed-hook readiness warning; no unrelated hook mutation was attempted. No full all-application test run was needed for this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -2349,6 +2416,36 @@ Note: Native list-label checkpoint verified: 788 related cases passed; two termi
 Attempts: 28
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:23:19.679Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T13:52:55.033Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native numeric RTF list checkpoint passes targeted parser, style-service, Worker, TXT/Markdown/RTF and static checks; goal remains active for LFOLEVEL overrides and remaining current-model completeness audit.
+Attempts: 29
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:52:54.474Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3112,3 +3209,24 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Remaining current-model obligations: native numeric level text/placeholder/list-format conversion, positional/legal properties and concrete overrides; special section dummy paragraphs; HTML list/table producers; final per-capability and UI completion audit. This checkpoint closes the consumed label-character ownership path, not full numbering or the full goal.
 
 - Final source detail: LEVELTEXT now forwards RTFValue's original force-string=true selector (including empty strings); all other existing string-factory callers retain false. Command: npm run test:writer -- rtf-list-label; targeted ESLint; npm run typecheck --workspace @vite-office/office; npm run check:docs; npm run check:source-provenance. Result: pass,11label cases. Evidence: html17-force-string-tests.txt, html17-force-string-lint.txt, html17-force-string-types.txt, html17-force-string-gates.txt. No broad parity claim.
+
+### 2026-10-30 S3HW1E numeric-list native checkpoint (html18)
+
+- Implemented the exact original49 RTF getNumberFormat entries and complete ConversionHelper numbering conversion switch, including LETTER_N, text, CJK/Hebrew/Arabic forms and out-of-range none. Added exact original generated resource IDs with unchanged vendor generator evidence html18-native-resourceids.hxx.
+- ListLevel now owns native numeric properties/defaults: signed start, explicit startOverride state, NFC/custom conversion, follow/tab/legal state, Adjust and Word zero geometry. Original first-UTF16-unit bullet extraction and typed empty character Any are retained. The typed UNO numbering setter/publication now supports Adjust and LevelIsLegal and preserves original BulletChar unchecked string extraction.
+- LEVELTEXT declared UTF16 length and LEVELNUMBERS before/after-pop use original position numbering and validity. U remains an original signed control event; independent character-source events preserve resolveChars ordinary-run first/final bytes, signed hex bytes and skipped fallback behavior rather than interpreting decoded text as positions. Existing decoded text/codepage ownership is unchanged; a skipped Shift-JIS lead can expose its collected trail as the source first byte.
+- Native NumberingStyles createNumberingStyle/getPropertyValue(NumberingRules)/typed replaceByIndex/style setter now prepare actual WWNum concrete rules once before paragraph attachment. Removed per-paragraph kind/start/bullet replay and the obsolete retained level-property buffer; temporary vectors and actual service rule copies are released at this boundary.
+- Worker graph now retains exact native numbering type, native adjustment and legal flag with validated optional legacy fields. Legacy test fixtures omit the new fields explicitly, maintaining the same migration expectations.
+- Source oddities preserved/documented: WRITER259 function-static start visitation; WRITER260 legal-zero presence; WRITER261 supplementary bullet UTF16 truncation; WRITER262 empty character Any/string consumer mismatch; WRITER263 ordinary-run terminator and hex fallback in LEVELNUMBERS.
+- Matrix: ordinary abstract numeric levels are connected. Concrete LFOLEVEL merge/override semantics, malformed-level recovery, old-style paragraph lists and special section/HTML producers remain open. No broad native/ABI/module confidence promotion; existing intentional browser save/open/recovery deviations remain unchanged.
+
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/core/unocore/unosett src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/doc/number src/sw/browser/filter/xml/writer-document-codec src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts --maxWorkers 1
+  Result: pass,655tests/38files. Evidence: output/playwright/rtf-properties-native/html18-broad-tests2.txt. Scope: related parser/mapper/numbering/Worker core. Earlier old heuristic CR-bullet and alphabetic round-trip expectations were replaced by direct original-source behavior: declared first UTF16 unit13 and LETTER_N; legacy fixture removes new graph fields. No assertion/configuration was relaxed.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1
+  Result: pass,508tests/16files. Evidence: html18-style-path-tests.txt in the same evidence directory. Scope: final actual NumberingRules style service path, parser, export contracts and lifetimes.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtftokenizer.test.ts src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/core/doc/number-ownership.test.ts --maxWorkers 1
+  Result: pass,162tests/5files. Evidence: html18-final-confirm.txt. Scope: final source-origin/Shift-JIS trail addition,49 numeric formats, native defaults/legal/position equation, raw versus hex and fallback, Worker exact numeric fields and malformed-record rejection, label styles, export canonicalization and legacy migration.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/filter/xml/writer-codec.boundaries.test.ts src/sw/source/filter/ww8/rtfexport --maxWorkers 1
+  Result: pass,219tests/18files. Evidence: html18-other-filters-final.txt. Scope: related TXT/Markdown/RTF output and native document-I/O/graph boundaries.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html18-types-confirm.txt, html18-eslint-confirm.txt, html18-prettier-confirm.txt, html18-docs-final.txt, html18-doc-lint.txt, html18-provenance-confirm.txt, html18-registry-confirm.txt, html18-boundaries-confirm.txt, html18-size.txt, html18-tree.txt, html18-doctor.txt. Scope: changed source/docs,1879 provenance records, Writer registry zero semantic violations,1878 runtime modules/10224 imports/227 allowed edges. Docs checker initially required the local add arrow's documentation to be attached to the function; it is now a documented local function, with no runtime behavior change. Doctor reports zero errors and the pre-existing managed-hook readiness warning; no unrelated hook mutation was attempted. No full all-application test run was needed for this checkpoint.

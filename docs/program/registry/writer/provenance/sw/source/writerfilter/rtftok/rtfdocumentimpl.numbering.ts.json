@@ -7,14 +7,15 @@
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.numbering.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
     "localSymbols": [
-      "PrepareListLevelCharacters",
-      "ApplyListLevelCharacters"
+      "PrepareListNumbering",
+      "ApplyListLevelProperties"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::afterPopState"
     ],
     "preservedResponsibilities": [
-      "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged."
+      "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged.",
+      "S3HW1E numeric-list checkpoint: original 49-entry RTF getNumberFormat and complete ConversionHelper numbering switch feed typed ListLevel properties. Native zero starts, signed-short narrowing, Word geometry defaults, alignment, follow, tabs, legal-presence semantics, UTF16 LEVELTEXT length and LEVELNUMBERS positions reach document-owned WWNum numbering styles before paragraphs attach. Unicode controls preserve their signed parameter and raw resolveChars origin is retained independently of decoded ANSI text, including the source ordinary-run terminator behavior. Worker graph preserves exact numbering type, alignment and legal flag with legacy omissions supported. Source oddities WRITER259-WRITER263 are documented and retained. Concrete LFOLEVEL overrides, malformed-level recovery, old-style numbering, special sections/HTML and full compiled module/ABI parity remain unverified; no broad confidence promotion is made."
     ],
     "omittedResponsibilities": [
       "Only the consumed character-map and numbering-label responsibilities are implemented here; complete numerical definitions, overrides, outline/bitmap services and compiled native/ABI/module parity remain unverified."
@@ -23,10 +24,14 @@
       "local": [
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.numbering.ts",
-          "marker": "PrepareListLevelCharacters"
+          "marker": "PrepareListNumbering"
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts",
+          "marker": "RtfDocumentImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-numbering.test.ts",
           "marker": "RtfDocumentImpl"
         }
       ],
