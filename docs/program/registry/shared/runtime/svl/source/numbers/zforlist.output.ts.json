@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/svl/source/numbers/zforlist.output.ts",
         "apps/office/src/svl/source/numbers/zforlist.test.ts",
-        "apps/office/src/svl/source/numbers/zformat.test.ts"
+        "apps/office/src/svl/source/numbers/zformat.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.output.test.ts"
       ],
-      "justification": "AQF9AG now ports original GetInputLineString substitution/real-key tracking, ALL first-section type, numeric-category precision, filtering/edit-format selection, forced-system-locale argument, fractional TIME precision and #FMT fallback to actual General. Public forwarding supplies the real NativeNumberWrapper and Accessor. The source output formatter remains the owner; unported display families are not approximated. Real-owner tests cover integer/currency/scientific/fraction input precision, mixed-section type and CSV export. Complete formatted output and full native wrapper differential verification remain pending.",
+      "justification": "AQF9AG now ports original GetInputLineString substitution/real-key tracking, ALL first-section type, numeric-category precision, filtering/edit-format selection, forced-system-locale argument, fractional TIME precision and #FMT fallback to actual General. Public forwarding supplies the real NativeNumberWrapper and Accessor. The source output formatter remains the owner; unported display families are not approximated. Real-owner tests cover integer/currency/scientific/fraction input precision, mixed-section type and CSV export. Complete formatted output and full native wrapper differential verification remain pending. AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "GetOutputString",

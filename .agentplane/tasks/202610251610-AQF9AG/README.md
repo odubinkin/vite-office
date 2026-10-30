@@ -1,10 +1,10 @@
 ---
 id: "202610251610-AQF9AG"
 title: "Implement Calc CSV import export and existing file UI integration"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 54
+revision: 59
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T08:17:21.875Z"
+  updated_at: "2026-10-30T08:34:59.755Z"
   updated_by: "CODER"
-  note: "Input-line export checkpoint passes 803 unique related module scenarios, two browser tests, typecheck, full ESLint, build, source provenance, resource, dependency and Calc inventory checks. Entire CSV delivery remains incomplete: native display output/date-time families, EditEngine multiline path, full option/UI audit and native differential closure still require implementation. Keep this approved task DOING; no whole-task finish."
-  attempts: 5
+  note: "Source output-section/text/literal/style-language checkpoint passes 673 shared cases, 106 unique related Calc scenarios, two browser tests and scoped static/build/resource/inventory checks. Overall task still requires full numeric/date/time display producers, real multiline EditEngine, option/UI audit and native differential closure; this is an implementation checkpoint, not complete CSV verification."
+  attempts: 6
 commit: null
 comments:
   -
@@ -166,6 +166,12 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
 events:
   -
     type: "status"
@@ -398,8 +404,28 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Input-line export checkpoint passes 803 unique related module scenarios, two browser tests, typecheck, full ESLint, build, source provenance, resource, dependency and Calc inventory checks. Entire CSV delivery remains incomplete: native display output/date-time families, EditEngine multiline path, full option/UI audit and native differential closure still require implementation. Keep this approved task DOING; no whole-task finish."
+  -
+    type: "status"
+    at: "2026-10-30T08:18:20.782Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T08:34:59.755Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Source output-section/text/literal/style-language checkpoint passes 673 shared cases, 106 unique related Calc scenarios, two browser tests and scoped static/build/resource/inventory checks. Overall task still requires full numeric/date/time display producers, real multiline EditEngine, option/UI audit and native differential closure; this is an implementation checkpoint, not complete CSV verification."
+  -
+    type: "status"
+    at: "2026-10-30T08:35:14.426Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T08:17:21.952Z"
+doc_updated_at: "2026-10-30T08:35:14.426Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -547,6 +573,36 @@ sections:
     Attempts: 5
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:17:11.330Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T08:34:59.755Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Source output-section/text/literal/style-language checkpoint passes 673 shared cases, 106 unique related Calc scenarios, two browser tests and scoped static/build/resource/inventory checks. Overall task still requires full numeric/date/time display producers, real multiline EditEngine, option/UI audit and native differential closure; this is an implementation checkpoint, not complete CSV verification.
+    Attempts: 6
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:34:51.607Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -908,6 +964,22 @@ sections:
     - Verification limits: dedicated full native engine-wrapper/format-output differential closure remains pending. The source #FMT/date/time branches are connected but their complete date/time/display producers remain unported; narrow green tests do not establish those families. Multiline import still needs the real missing ScFieldEditEngine, not a relabeled SetTextCell shortcut. Reachable display output, complete CSV option/UI audit and full native integration remain required. No broad parity promotion or whole-task finish. Full-suite cadence unchanged: same open task, not a tenth new Agentplane task.
 
     - Final commands: npm run typecheck; npm run lint. Result: pass (complete repository ESLint, no warnings); final targeted ESLint for the added system-locale case also passes. npm run test:shared -- src/svl/source/numbers/zforlist.test.ts passes31 cases after the public tuple forwarding and one additional real-system-locale/filtering interaction test. This adds one unique scenario to the earlier648 shared cases; together with154 Calc cases this block covers803 unique module scenarios, plus2 browser tests. Evidence: input-line-{typecheck,lint,final-lint,final-tests}.log. The initial local test used time-format keys while intending scientific/fraction keys; corrected the fixture to source ZF_STANDARD_SCIENTIFIC80/ZF_STANDARD_FRACTION85 after inspecting indexTable, without changing implementation or weakening assertions. An initial buffer call used a nonexistent appendChar method; corrected to the existing actual UTF16-view append API. Final checks pass.
+
+    ### Shared output sections, text tokens and actual style-language dispatch, 2026-10-30
+
+    - Continued from19c1177fc23c. The previous explicit rework verification correctly left the overall task requiring further implementation; the route oracle returned start_direct. Ran the exact CODER/start-ready route and recomputed continue_direct before implementation. This is the same approved task; full-suite cadence is unchanged.
+    - Ported original GetSubformatIndex/ImpCheckCondition and IsFirstSubformatRealNegative, preserving absent-condition tri-state, both bounds, IEEE comparisons and exact numeric-section sign rules. Actual existing integer output now consumes the selected section and native section-index sign decision. Source numeric TEXT/DEFINED literals, empty sections and empty-count standard fallback are connected without approximating the remaining numeric families.
+    - Ported complete original text-overload output, returning the selected section color and expanding actual compiled @/General, star and blank tokens. InsertBlanks retains the exact96-entry ASCII width table and original non-ASCII width2. Star expansion emits ESC and the original following UTF16 unit only when requested; public formatter/engine no longer discard the original flag. Original translation-unit-private star/condition helpers remain module-private, rather than creating new exported APIs or inventory exceptions. The source bRes assignment is preserved literally.
+    - Styled CSV tests exposed the former ScPatternAttr::GetNumberFormat custom-key exception. Replaced it with the original formatter/context builtin-language remapping. Added actual nonthreaded ScInterpreterContext::NFGetFormatForLanguageIfBuiltIn forwarding. Custom keys remain unchanged through the real source policy; builtin language attributes generate/query actual locale blocks. Threaded preparation remains unported and is not faked.
+    - CALC-394 documents source conditional-second-section sign suppression for[>2]0;0 with negative4. Keep output4 and the original predicates; evidence is exact source control flow plus real local public compilation/output, not a newly compiled complete native output/UNO witness.
+    - Command: npm run test:shared -- src/svl/source/numbers. Result: pass,42 files673 tests. Scope: related complete formatter suites with24 new output cases covering selected numeric/literal/empty sections, both negative-section predicates, NaN/infinity literal selection, actual text colors, fixed blank widths, star flags, custom numeric Text and real #FMT fallback. Evidence: output/native/AQF9AG-icu-grego/section-number-tests.log; dedicated section-output-tests.log also passes24 cases.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/core/tool/cellform.input.test.ts src/sc/source/core/data/patattr.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts. Result: pass,5 files105 cases. Subsequent focused patattr.test.ts passes9 cases including one newly added real builtin language/null/formatter/context case, so106 unique Calc scenarios are covered. Four new actual CSV shown-format cases exercise literal section selection, text prefix, original leading spaces and disabled star fill. Evidence: section-csv-tests.log, section-pattern-tests.log.
+    - Initial CSV tests correctly exposed the unconnected pattern/context branch; the fix uses existing native formatter policy rather than bypassing attributes. One initial expected quoted-leading-space result was corrected after inspecting pinned docsh.cxx getTextSepPos1995ff and the bString branch2278ff: spaces alone do not force quoting for text. Actual output remains unchanged; no CSV quoting heuristic was introduced.
+    - Dedicated full native section/output differential closure remains pending. Current outputs are source-backed real-owner module/application tests, not broad formatter/native parity certification. Decimal/grouping/currency/scientific/fraction/date/time/native-digit display producers, true multiline EditEngine integration and complete CSV option/UI acceptance remain required. Do not finish the task or goal based on this checkpoint.
+
+    - Final commands: focused ESLint on all9 changed/new implementation/test paths, npm run typecheck, npm run check:source-provenance, npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:calc-resources, npm run inventory:parity:calc, npm run build and git diff --check. Result: pass. Evidence: section-{final-lint,typecheck,provenance,dependencies,docs,size,resources,parity,build}.log. Docs4213 authored sources, provenance1863 runtime modules; boundaries1862 runtime sources10048 imports225 allowed edges. Public runtime facades remain below1000 lines. A docs check first exposed the missing index parameter annotation after extending the exact integer helper; corrected the annotation. Inventory first identified an unnecessarily exported star helper; restored the original translation-unit-private boundary instead of adding a public operation or weakening inventory enforcement.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,2 files35 tests after the final source star-result assignment. Evidence: section-final-tests.log; this repeats related cases and does not add35 to the unique count.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests after connecting pattern/context dispatch. Evidence: section-browser.log. Scope remains basic real browser import/save/export and sparse owner/Worker integration, not every styled-format option.
 id_source: "generated"
 ---
 ## Summary
@@ -1064,6 +1136,36 @@ Note: Input-line export checkpoint passes 803 unique related module scenarios, t
 Attempts: 5
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:17:11.330Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T08:34:59.755Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Source output-section/text/literal/style-language checkpoint passes 673 shared cases, 106 unique related Calc scenarios, two browser tests and scoped static/build/resource/inventory checks. Overall task still requires full numeric/date/time display producers, real multiline EditEngine, option/UI audit and native differential closure; this is an implementation checkpoint, not complete CSV verification.
+Attempts: 6
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:34:51.607Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1429,3 +1531,19 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Verification limits: dedicated full native engine-wrapper/format-output differential closure remains pending. The source #FMT/date/time branches are connected but their complete date/time/display producers remain unported; narrow green tests do not establish those families. Multiline import still needs the real missing ScFieldEditEngine, not a relabeled SetTextCell shortcut. Reachable display output, complete CSV option/UI audit and full native integration remain required. No broad parity promotion or whole-task finish. Full-suite cadence unchanged: same open task, not a tenth new Agentplane task.
 
 - Final commands: npm run typecheck; npm run lint. Result: pass (complete repository ESLint, no warnings); final targeted ESLint for the added system-locale case also passes. npm run test:shared -- src/svl/source/numbers/zforlist.test.ts passes31 cases after the public tuple forwarding and one additional real-system-locale/filtering interaction test. This adds one unique scenario to the earlier648 shared cases; together with154 Calc cases this block covers803 unique module scenarios, plus2 browser tests. Evidence: input-line-{typecheck,lint,final-lint,final-tests}.log. The initial local test used time-format keys while intending scientific/fraction keys; corrected the fixture to source ZF_STANDARD_SCIENTIFIC80/ZF_STANDARD_FRACTION85 after inspecting indexTable, without changing implementation or weakening assertions. An initial buffer call used a nonexistent appendChar method; corrected to the existing actual UTF16-view append API. Final checks pass.
+
+### Shared output sections, text tokens and actual style-language dispatch, 2026-10-30
+
+- Continued from19c1177fc23c. The previous explicit rework verification correctly left the overall task requiring further implementation; the route oracle returned start_direct. Ran the exact CODER/start-ready route and recomputed continue_direct before implementation. This is the same approved task; full-suite cadence is unchanged.
+- Ported original GetSubformatIndex/ImpCheckCondition and IsFirstSubformatRealNegative, preserving absent-condition tri-state, both bounds, IEEE comparisons and exact numeric-section sign rules. Actual existing integer output now consumes the selected section and native section-index sign decision. Source numeric TEXT/DEFINED literals, empty sections and empty-count standard fallback are connected without approximating the remaining numeric families.
+- Ported complete original text-overload output, returning the selected section color and expanding actual compiled @/General, star and blank tokens. InsertBlanks retains the exact96-entry ASCII width table and original non-ASCII width2. Star expansion emits ESC and the original following UTF16 unit only when requested; public formatter/engine no longer discard the original flag. Original translation-unit-private star/condition helpers remain module-private, rather than creating new exported APIs or inventory exceptions. The source bRes assignment is preserved literally.
+- Styled CSV tests exposed the former ScPatternAttr::GetNumberFormat custom-key exception. Replaced it with the original formatter/context builtin-language remapping. Added actual nonthreaded ScInterpreterContext::NFGetFormatForLanguageIfBuiltIn forwarding. Custom keys remain unchanged through the real source policy; builtin language attributes generate/query actual locale blocks. Threaded preparation remains unported and is not faked.
+- CALC-394 documents source conditional-second-section sign suppression for[>2]0;0 with negative4. Keep output4 and the original predicates; evidence is exact source control flow plus real local public compilation/output, not a newly compiled complete native output/UNO witness.
+- Command: npm run test:shared -- src/svl/source/numbers. Result: pass,42 files673 tests. Scope: related complete formatter suites with24 new output cases covering selected numeric/literal/empty sections, both negative-section predicates, NaN/infinity literal selection, actual text colors, fixed blank widths, star flags, custom numeric Text and real #FMT fallback. Evidence: output/native/AQF9AG-icu-grego/section-number-tests.log; dedicated section-output-tests.log also passes24 cases.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/core/tool/cellform.input.test.ts src/sc/source/core/data/patattr.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts. Result: pass,5 files105 cases. Subsequent focused patattr.test.ts passes9 cases including one newly added real builtin language/null/formatter/context case, so106 unique Calc scenarios are covered. Four new actual CSV shown-format cases exercise literal section selection, text prefix, original leading spaces and disabled star fill. Evidence: section-csv-tests.log, section-pattern-tests.log.
+- Initial CSV tests correctly exposed the unconnected pattern/context branch; the fix uses existing native formatter policy rather than bypassing attributes. One initial expected quoted-leading-space result was corrected after inspecting pinned docsh.cxx getTextSepPos1995ff and the bString branch2278ff: spaces alone do not force quoting for text. Actual output remains unchanged; no CSV quoting heuristic was introduced.
+- Dedicated full native section/output differential closure remains pending. Current outputs are source-backed real-owner module/application tests, not broad formatter/native parity certification. Decimal/grouping/currency/scientific/fraction/date/time/native-digit display producers, true multiline EditEngine integration and complete CSV option/UI acceptance remain required. Do not finish the task or goal based on this checkpoint.
+
+- Final commands: focused ESLint on all9 changed/new implementation/test paths, npm run typecheck, npm run check:source-provenance, npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:calc-resources, npm run inventory:parity:calc, npm run build and git diff --check. Result: pass. Evidence: section-{final-lint,typecheck,provenance,dependencies,docs,size,resources,parity,build}.log. Docs4213 authored sources, provenance1863 runtime modules; boundaries1862 runtime sources10048 imports225 allowed edges. Public runtime facades remain below1000 lines. A docs check first exposed the missing index parameter annotation after extending the exact integer helper; corrected the annotation. Inventory first identified an unnecessarily exported star helper; restored the original translation-unit-private boundary instead of adding a public operation or weakening inventory enforcement.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,2 files35 tests after the final source star-result assignment. Evidence: section-final-tests.log; this repeats related cases and does not add35 to the unique count.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests after connecting pattern/context dispatch. Evidence: section-browser.log. Scope remains basic real browser import/save/export and sparse owner/Worker integration, not every styled-format option.

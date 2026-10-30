@@ -39,6 +39,10 @@ export class ScInterpreterContext {
   ): OUString {
     return this.GetFormatTable().GetInputLineString(value, key, filtering, forceSystemLocale);
   }
+  /** Original nonthreaded builtin-language remapping through the document's real formatter. Threaded preparation remains outside this context slice. @param key - Display key. @param language - Actual attribute language. @returns Remapped builtin or unchanged custom key. */
+  NFGetFormatForLanguageIfBuiltIn(key: number, language: number): number {
+    return this.GetFormatTable().GetFormatForLanguageIfBuiltIn(key, language);
+  }
   /** Forwards the source text-format predicate through the actual formatter. @param key - Native format key. @returns Text format. */
   NFIsTextFormat(key: number): boolean {
     return this.GetFormatTable().IsTextFormat(key);

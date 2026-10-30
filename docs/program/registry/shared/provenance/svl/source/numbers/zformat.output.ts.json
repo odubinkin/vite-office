@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.output.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "InsertBlanks",
+      "appendStarFillChar",
+      "ImpCheckCondition",
+      "GetSubformatIndex",
+      "IsFirstSubformatRealNegative",
+      "GetStringOutput",
+      "GetLiteralOutput"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::InsertBlanks",
+      "lcl_appendStarFillChar",
+      "SvNumberformat::ImpCheckCondition",
+      "SvNumberformat::GetSubformatIndex",
+      "SvNumberformat::GetOutputString"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full display families/native ABI and full native output differential remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.ts",
+          "marker": "GetSubformatIndex"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetSubformatIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "IsFirstSubformatRealNegative"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.output.ts",
+      "rationale": "Split original format output by shared token/section responsibility while keeping the original compiled-entry owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

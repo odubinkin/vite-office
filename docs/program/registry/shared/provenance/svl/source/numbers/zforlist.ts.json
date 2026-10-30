@@ -86,7 +86,8 @@
       "AQF9AG restores public standard/builtin selection and IsNumberFormat through the complete original accessor/policy, actual locale-block generation, actual currency-default insertion and existing input scanner. Currency values are declared in zforlist.currency-entry.ts and reexported here. Text and English CSV branches now consume these public document-formatter contracts; original explicit-date and auto-input callers remain pending.",
       "AQF9AG exposes original GetEditFormat, GetFormatForLanguageIfBuiltIn and GetEvalDateFormat consumed by ParseString, forwarding to actual engine/policy owners.",
       "B8TCAE adds source-contract evidence: A real generated table lazily selects/inserts the system currency format using actual currency strings, scanner and constructor. Repeated lookup retains the same nonempty currency entry identity and key. Existing native comparisons remain; these added assertions do not establish full native ABI or complete application parity.",
-      "AQF9AG public GetInputLineString now forwards the actual native-number owner and writable Accessor along with the original filtering and force-system-locale flags to the complete engine selection responsibility. Full output-family/native closure remains pending."
+      "AQF9AG public GetInputLineString now forwards the actual native-number owner and writable Accessor along with the original filtering and force-system-locale flags to the complete engine selection responsibility. Full output-family/native closure remains pending.",
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending."
     ],
     "omittedResponsibilities": [
       "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."
@@ -120,6 +121,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforlist.ts",
           "marker": "IsDecimalSep"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

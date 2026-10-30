@@ -11,7 +11,7 @@ import { SvNumFormatType } from "../../inc/zforlist";
 import { ZF_STANDARD_TEXT } from "./zforlist.index";
 import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
 import type { SvNFLanguageData, SvNFFormatData } from "./zforlist";
-/** Original numeric/string engine dispatch: missing numeric keys use General and missing string keys use Text; entries with text sections receive string input. @param current - Actual language/cache/scanner owner. @param table - Actual owned format table. @param value - Native numeric/string overload. @param key - Native unsigned32 format key. @param output - Actual mutable output. @param color - Actual color pointer output. @returns Nothing. */
+/** Original numeric/string engine dispatch: missing numeric keys use General and missing string keys use Text; entries with text sections receive string input. @param current - Actual language/cache/scanner owner. @param table - Actual owned format table. @param value - Native numeric/string overload. @param key - Native unsigned32 format key. @param output - Actual mutable output. @param color - Actual color pointer output. @param star - Original fill flag. @returns Nothing. */
 export function GetOutputString(
   current: SvNFLanguageData,
   table: SvNFFormatData,
@@ -19,6 +19,7 @@ export function GetOutputString(
   key: number,
   output: OUString,
   color: [Color | null],
+  star = false,
 ): void {
   if (typeof value === "number" && table.GetNoZero() && value === 0) {
     output.clear();
@@ -35,6 +36,7 @@ export function GetOutputString(
       current.GetStandardPrec(),
       current.GetNumDecimalSep().getStr()[0] as number,
       current.GetFormatScanner(),
+      star,
     );
   } else {
     const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(ZF_STANDARD_TEXT);
@@ -44,7 +46,7 @@ export function GetOutputString(
       output.assign(value);
     } else {
       current.ChangeIntl(format.GetLanguage());
-      format.GetOutputString(value, output, color);
+      format.GetOutputString(value, output, color, star);
     }
   }
 }

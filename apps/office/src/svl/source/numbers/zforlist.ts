@@ -954,16 +954,14 @@ export class SvNumberFormatter {
   GetNoZero(): boolean {
     return this.m_aFormatData.GetNoZero();
   }
-  /** Original numeric/string output forwarding for admitted standard entries. Star formatting is unconsumed because these entries contain no STAR token. @param value - Actual numeric/string overload. @param key - Native format key. @param output - Actual mutable string. @param color - Actual output pointer. @param _useStarFormat - Original defaultfalse flag. @returns Nothing. */
+  /** Original numeric/string output forwarding for admitted standard entries. @param value - Actual numeric/string overload. @param key - Native format key. @param output - Actual mutable string. @param color - Actual output pointer. @param useStarFormat - Original defaultfalse flag. @returns Nothing. */
   GetOutputString(
     value: number | OUStringConstReference,
     key: number,
     output: OUString,
     color: [Color | null],
-    _useStarFormat = false,
+    useStarFormat = false,
   ): void {
-    // The admitted standard streams have no STAR token; explicitly erase this unconsumed source flag.
-    void _useStarFormat;
     SvNFEngine.GetOutputString(
       this.m_aCurrentLanguage,
       this.m_aFormatData,
@@ -971,6 +969,7 @@ export class SvNumberFormatter {
       key,
       output,
       color,
+      useStarFormat,
     );
   }
   /** Original public input-line forwarding with the actual native-number owner and writable accessor. @param args - Value, display format key and original filtering/system-locale flags. @returns Owned input string. */

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.output.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.output.ts",
+        "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+        "apps/office/src/sc/source/ui/docshell/docsh.test.ts"
+      ],
+      "justification": "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InsertBlanks",
+        "appendStarFillChar",
+        "ImpCheckCondition",
+        "GetSubformatIndex",
+        "IsFirstSubformatRealNegative",
+        "GetStringOutput",
+        "GetLiteralOutput"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "SvNumberformat::InsertBlanks",
+        "lcl_appendStarFillChar",
+        "SvNumberformat::ImpCheckCondition",
+        "SvNumberformat::GetSubformatIndex",
+        "SvNumberformat::GetOutputString"
+      ]
+    }
+  }
+}

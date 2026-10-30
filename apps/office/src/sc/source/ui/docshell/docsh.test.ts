@@ -520,3 +520,54 @@ it("exports native percent input text with its sign and full precision", /** Act
     shell.Close();
   }
 });
+
+it.each([
+  ['0;"negative";"zero"', -4, "negative\n"],
+  ['[RED]"prefix:"@', "value", "prefix:value\n"],
+  ["_M@", "value", "   value\n"],
+  ["*x@", "value", "value\n"],
+])(
+  "exports the original shown section for format %s",
+  /** Actual document attributes and shell display dispatch preserve literals, text tokens, spacing and the CSV fill flag. @param pattern - Format code. @param value - Actual numeric/string cell content. @param expected - Exported CSV. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      pos = new ScAddress(),
+      code = unicode(pattern),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0];
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      if (typeof value === "number") document.SetValue(pos, value);
+      else {
+        const input = unicode(value);
+        try {
+          document.SetTextCell(pos, input);
+        } finally {
+          input.dispose();
+        }
+      }
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);

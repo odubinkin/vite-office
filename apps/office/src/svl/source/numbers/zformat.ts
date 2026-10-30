@@ -1,4 +1,5 @@
 /** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
+import * as Output from "./zformat.output";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
@@ -347,6 +348,16 @@ export class SvNumberformat {
   GetType(): number {
     return this.eType;
   }
+  /** Original public numeric-section selector. @param value - Cell value. @returns Numeric section index. */
+  GetSubformatIndex(value: number): number {
+    return Output.GetSubformatIndex.call(this, value);
+  }
+  /** Original first-section negative-condition predicate. @returns Whether section zero is negative. */
+  IsFirstSubformatRealNegative(): boolean {
+    return Output.IsFirstSubformatRealNegative.call(this);
+  }
+  /** Original fixed blank-width insertion. */
+  static readonly InsertBlanks = Output.InsertBlanks;
   /** Source condition test for whether the second subformat denotes negative values. @returns Real-negative status. */
   IsSecondSubformatRealNegative(): boolean {
     return (
@@ -664,7 +675,7 @@ export class SvNumberformat {
     color: [Color | null],
     star?: boolean,
   ): void;
-  /** Original standard NUMBER, LOGICAL and TEXT numeric output. @param value - Binary64 input. @param output - Actual mutable output. @param color - Original output color pointer. @param precision - Native current standard precision. @param decimal - Original first decimal unit. @param scanner - Current language's format scanner for Boolean keywords. @returns Whether star-fill occurred. */
+  /** Original standard NUMBER, LOGICAL and TEXT numeric output. @param value - Binary64 input. @param output - Actual mutable output. @param color - Original output color pointer. @param precision - Native current standard precision. @param decimal - Original first decimal unit. @param scanner - Current language's format scanner for Boolean keywords. @param star - Original fill flag. @returns Whether star-fill occurred. */
   GetOutputString(
     value: number,
     output: OUString,
@@ -672,54 +683,26 @@ export class SvNumberformat {
     precision: number,
     decimal: number,
     scanner?: ImpSvNumberformatScan,
+    star?: boolean,
   ): boolean;
-  /** Implements Get Output String. @param value - Value. @param output - Output. @param color - Color. @param precisionOrStar - Precision Or Star. @param decimal - Decimal. @param scanner - Scanner. @returns The boolean | void result. */ GetOutputString(
+  /** Implements Get Output String. @param value - Value. @param output - Output. @param color - Color. @param precisionOrStar - Precision Or Star. @param decimal - Decimal. @param scanner - Scanner. @param star - Original numeric star-fill flag. @returns The boolean | void result. */ GetOutputString(
     value: number | OUStringConstReference,
     output: OUString,
     color: [Color | null],
     precisionOrStar: number | boolean = false,
     decimal = 0,
     scanner?: ImpSvNumberformatScan,
+    star = false,
   ): boolean | void {
     if (typeof value !== "number") {
-      const index = this.IsTextFormat()
-        ? 0
-        : (this.NumFor[3] as ImpSvNumFor).GetCount() > 0
-          ? 3
-          : -1;
-      if (index < 0) {
-        color[0] = null;
-        return;
-      }
-      color[0] = null;
-      const section = this.NumFor[index] as ImpSvNumFor;
-      const info = section.Info();
-      const buffer = new OUStringBuffer();
-      try {
-        if (info.eScannedType === SvNumFormatType.TEXT)
-          for (let token = 0; token < section.GetCount(); token++) {
-            const kind = info.nTypeArray[token];
-            if (kind === NfKeywordIndex.GENERAL || kind === NfSymbolType.DEL) buffer.append(value);
-            else if (kind !== NfSymbolType.STAR && kind !== NfSymbolType.BLANK)
-              buffer.append(info.sStrArray[token] as OUString);
-          }
-        const result = buffer.makeStringAndClear();
-        try {
-          output.assign(result);
-        } finally {
-          result.dispose();
-        }
-      } finally {
-        buffer.dispose();
-      }
-      void precisionOrStar;
+      Output.GetStringOutput.call(this, value, output, color, Boolean(precisionOrStar));
       return;
     }
     const precision = precisionOrStar as number;
     output.clear();
     color[0] = null;
     if (
-      this.eType === SvNumFormatType.LOGICAL &&
+      this.eType & SvNumFormatType.LOGICAL &&
       scanner &&
       this.sFormatstring.equals(scanner.GetBooleanString())
     ) {
@@ -734,13 +717,48 @@ export class SvNumberformat {
       this.ImpGetOutputInputLine(value, output, decimal);
       return false;
     }
-    const section = this.NumFor[0] as ImpSvNumFor,
+    const hadStandard =
+      this.bStandard &&
+      (this.eType === SvNumFormatType.NUMBER ||
+        this.eType === SvNumFormatType.DATE ||
+        this.eType === SvNumFormatType.TIME ||
+        this.eType === SvNumFormatType.DATETIME);
+    const index =
+      hadStandard || this.eType & SvNumFormatType.TEXT ? 0 : this.GetSubformatIndex(value);
+    if (
+      !hadStandard &&
+      !(this.eType & SvNumFormatType.TEXT) &&
+      value < 0 &&
+      ((index === 0 && this.IsFirstSubformatRealNegative()) ||
+        (index === 1 && this.IsSecondSubformatRealNegative()))
+    )
+      value = -value;
+    const section = this.NumFor[index] as ImpSvNumFor,
       info = section.Info();
+    if (!(this.eType & SvNumFormatType.TEXT) && !hadStandard) {
+      color[0] = section.GetColor();
+      if (section.GetCount() === 0 && info.eScannedType === SvNumFormatType.EMPTY) return false;
+      if (section.GetCount() === 0) {
+        const standard = formatStandardNumber(value, Math.min(precision & 65535, 300), decimal);
+        try {
+          output.assign(standard);
+        } finally {
+          standard.dispose();
+        }
+        return false;
+      }
+
+      if (
+        section.GetCount() !== 0 &&
+        (info.eScannedType === SvNumFormatType.TEXT ||
+          info.eScannedType === SvNumFormatType.DEFINED)
+      )
+        return Output.GetLiteralOutput(section, output, star);
+    }
     // Original nonstandard NUMBER dispatch, restricted to the represented ungrouped integer digit production.
     if (
-      this.GetMaskedType() === SvNumFormatType.NUMBER &&
-      this.eOp1 === 0 &&
-      this.eOp2 === 0 &&
+      !hadStandard &&
+      info.eScannedType === SvNumFormatType.NUMBER &&
       section.GetCount() === 1 &&
       info.nTypeArray[0] === NfSymbolType.DIGIT &&
       info.nCntPost === 0 &&
@@ -750,17 +768,17 @@ export class SvNumberformat {
       Number.isFinite(value)
     ) {
       color[0] = section.GetColor();
-      this.ImpGetNumberOutput(value, section, output);
+      this.ImpGetNumberOutput(value, section, output, index);
       return false;
     }
     if (
-      this.eType !== SvNumFormatType.TEXT &&
+      !(this.eType & SvNumFormatType.TEXT) &&
       (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
     )
       throw new Error("SvNumberformat nonstandard output is not implemented");
     const result = formatStandardNumber(
       value,
-      this.eType === SvNumFormatType.TEXT ? Math.min(precision & 65535, 300) : precision,
+      this.eType & SvNumFormatType.TEXT ? Math.min(precision & 65535, 300) : precision,
       decimal,
     );
     try {
@@ -814,9 +832,14 @@ export class SvNumberformat {
       result.dispose();
     }
   }
-  /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one ungrouped digit token, no conditions, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @returns Nothing. */
-  private ImpGetNumberOutput(value: number, section: ImpSvNumFor, outputString: OUString): void {
-    let sign = value < 0;
+  /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one selected ungrouped digit token, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @param index - Source-selected numeric section. @returns Nothing. */
+  private ImpGetNumberOutput(
+    value: number,
+    section: ImpSvNumFor,
+    outputString: OUString,
+    index: number,
+  ): void {
+    let sign = value < 0 && index === 0;
     value = round(Math.abs(value), 0);
     const buffer = new OUStringBuffer();
     try {
@@ -881,4 +904,6 @@ export type SvNumberformatConstReference = Pick<
   | "IsNumForStringElementCountEqual"
   | "GetNumForInfoScannedType"
   | "GetFormatPrecision"
+  | "GetSubformatIndex"
+  | "IsFirstSubformatRealNegative"
 >;
