@@ -113,17 +113,9 @@ it("retains original blank-character widths and numeric literal star return", /*
     const key = insert(formatter, '"x"*y'),
       entry = formatter.GetEntry(key) as SvNumberformat,
       current = formatter["m_aCurrentLanguage"];
-    expect(
-      entry.GetOutputString(
-        1,
-        output,
-        color,
-        current.GetStandardPrec(),
-        46,
-        current.GetFormatScanner(),
-        true,
-      ),
-    ).toBe(true);
+    expect(entry.GetOutputString(1, output, color, formatter.GetNatNum(), current, true)).toBe(
+      true,
+    );
     expect(text(output)).toBe("x\u001by");
     formatter.GetOutputString(1, key, output, color, false);
     expect(text(output)).toBe("x");
@@ -155,6 +147,34 @@ it("keeps the original numeric Text branch and actual #FMT input-line fallback",
     expect(formatter.GetStandardPrec()).toBe(2);
   } finally {
     output.dispose();
+    formatter.dispose();
+  }
+});
+
+it("reads current output language state rather than the entry's construction scanner", /** Original numeric overload receives its current language independently of the scanner retained by the entry. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x409),
+    german = new SvNumberFormatter(0x407),
+    current = german["m_aCurrentLanguage"],
+    entry = formatter.GetEntry(0) as SvNumberformat,
+    output = new OUString(),
+    color: [Color | null] = [null];
+  try {
+    current.ChangeStandardPrec(4);
+    entry.GetOutputString(1.23456789, output, color, formatter.GetNatNum(), current);
+    expect(text(output)).toBe("1,2346");
+    current.ChangeStandardPrec(6);
+    entry.GetOutputString(1.23456789, output, color, formatter.GetNatNum(), current);
+    expect(text(output)).toBe("1,234568");
+    current.ChangeIntl(0x409);
+    entry.GetOutputString(1.23456789, output, color, formatter.GetNatNum(), current);
+    expect(text(output)).toBe("1.234568");
+    expect(current.GetKeywords()).toBe(current.GetFormatScanner().GetKeywords());
+    expect(current.GetTrueString()).toBe(current.GetFormatScanner().GetTrueString());
+    expect(current.GetFalseString()).toBe(current.GetFormatScanner().GetFalseString());
+    expect(formatter.GetStandardPrec()).toBe(2);
+  } finally {
+    output.dispose();
+    german.dispose();
     formatter.dispose();
   }
 });

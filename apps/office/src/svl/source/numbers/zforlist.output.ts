@@ -10,35 +10,79 @@ import type { Color } from "../../../tools/inc/color";
 import { SvNumFormatType } from "../../inc/zforlist";
 import { ZF_STANDARD_TEXT } from "./zforlist.index";
 import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
-import type { SvNFLanguageData, SvNFFormatData } from "./zforlist";
-/** Original numeric/string engine dispatch: missing numeric keys use General and missing string keys use Text; entries with text sections receive string input. @param current - Actual language/cache/scanner owner. @param table - Actual owned format table. @param value - Native numeric/string overload. @param key - Native unsigned32 format key. @param output - Actual mutable output. @param color - Actual color pointer output. @param star - Original fill flag. @returns Nothing. */
+import type { SvNFLanguageData, SvNFFormatData, SvNumberFormatter } from "./zforlist";
+/** Original text engine overload does not substitute numeric system formats. @param current - Language owner. @param table - Format table. @param value - Text input. @param key - Format key. @param output - Mutable output. @param color - Color pointer. @param star - Fill flag. @returns Nothing. */
 export function GetOutputString(
   current: SvNFLanguageData,
   table: SvNFFormatData,
-  value: number | OUStringConstReference,
+  value: OUStringConstReference,
   key: number,
   output: OUString,
   color: [Color | null],
-  star = false,
+  star?: boolean | undefined,
+): void;
+/** Original numeric engine overload applies the supplied format-table policy for substitution. @param current - Language owner. @param table - Format table. @param native - Native-number owner. @param policy - Source accessor. @param value - Number. @param key - Format key. @param output - Mutable output. @param color - Color pointer. @param star - Fill flag. @returns Nothing. */
+export function GetOutputString(
+  current: SvNFLanguageData,
+  table: SvNFFormatData,
+  native: NativeNumberWrapper,
+  policy: Accessor,
+  value: number,
+  key: number,
+  output: OUString,
+  color: [Color | null],
+  star?: boolean | undefined,
+): void;
+/** Binds the source overloads by their distinct argument counts: text has four/five payload arguments, numeric has six/seven. @param current - Language owner. @param table - Format table. @param args - Original overload payload. @returns Nothing. */
+export function GetOutputString(
+  current: SvNFLanguageData,
+  table: SvNFFormatData,
+  ...args:
+    | [
+        value: OUStringConstReference,
+        key: number,
+        output: OUString,
+        color: [Color | null],
+        star?: boolean | undefined,
+      ]
+    | [
+        native: NativeNumberWrapper,
+        policy: Accessor,
+        value: number,
+        key: number,
+        output: OUString,
+        color: [Color | null],
+        star?: boolean | undefined,
+      ]
 ): void {
-  if (typeof value === "number" && table.GetNoZero() && value === 0) {
-    output.clear();
-    return;
-  }
-  if (typeof value === "number") {
-    const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(0);
+  if (args.length >= 6) {
+    const [native, policy, value, key, output, color, star = false] = args as [
+      NativeNumberWrapper,
+      Accessor,
+      number,
+      number,
+      OUString,
+      [Color | null],
+      boolean?,
+    ];
+    if (table.GetNoZero() && value === 0) {
+      output.clear();
+      return;
+    }
+    const format =
+      ImpSubstituteEntry(current, table, native, policy, table.GetFormatEntry(key), null) ??
+      table.GetFormatEntry(0);
     if (!format) throw new Error("Required native standard format0 is absent");
     current.ChangeIntl(format.GetLanguage());
-    format.GetOutputString(
-      value,
-      output,
-      color,
-      current.GetStandardPrec(),
-      current.GetNumDecimalSep().getStr()[0] as number,
-      current.GetFormatScanner(),
-      star,
-    );
+    format.GetOutputString(value, output, color, native, current, star);
   } else {
+    const [value, key, output, color, star = false] = args as [
+      OUStringConstReference,
+      number,
+      OUString,
+      [Color | null],
+      boolean?,
+    ];
     const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(ZF_STANDARD_TEXT);
     if (!format) throw new Error("Required native standard text format is absent");
     if (!format.IsTextFormat() && !format.HasTextFormat()) {
@@ -111,27 +155,13 @@ export function GetInputLineString(
       current.ChangeStandardPrec(INPUTSTRING_PRECISION);
       precisionChanged = true;
     }
-    format.GetOutputString(
-      value,
-      result,
-      color,
-      current.GetStandardPrec(),
-      current.GetNumDecimalSep().getStr()[0] as number,
-      current.GetFormatScanner(),
-    );
+    format.GetOutputString(value, result, color, native, current);
     if (originalType !== SvNumFormatType.NUMBER && result.equals(ImpSvNumberformatScan.sErrStr)) {
       format = table.GetFormatEntry(0);
       if (!format) throw new Error("assert(pFormat)");
       current.ChangeStandardPrec(INPUTSTRING_PRECISION);
       precisionChanged = true;
-      format.GetOutputString(
-        value,
-        result,
-        color,
-        current.GetStandardPrec(),
-        current.GetNumDecimalSep().getStr()[0] as number,
-        current.GetFormatScanner(),
-      );
+      format.GetOutputString(value, result, color, native, current);
     }
     if (result.equals(ImpSvNumberformatScan.sErrStr))
       throw new Error("assert(sOutString != ImpSvNumberformatScan::sErrStr)");
@@ -142,4 +172,37 @@ export function GetInputLineString(
   } finally {
     if (precisionChanged) current.ChangeStandardPrec(oldPrecision);
   }
+}
+
+/** Original public formatter overloads forward their actual owners and writable policy to the engine. @param this - Actual formatter. @param value - Numeric or text input. @param key - Format key. @param output - Mutable output. @param color - Color pointer. @param star - Fill flag. @returns Nothing. */
+export function GetFormatterOutputString(
+  this: SvNumberFormatter,
+  value: number | OUStringConstReference,
+  key: number,
+  output: OUString,
+  color: [Color | null],
+  star = false,
+): void {
+  if (typeof value === "number")
+    GetOutputString(
+      this["m_aCurrentLanguage"],
+      this["m_aFormatData"],
+      this.GetNatNum(),
+      this["m_aRWPolicy"],
+      value,
+      key,
+      output,
+      color,
+      star,
+    );
+  else
+    GetOutputString(
+      this["m_aCurrentLanguage"],
+      this["m_aFormatData"],
+      value,
+      key,
+      output,
+      color,
+      star,
+    );
 }

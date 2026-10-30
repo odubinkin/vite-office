@@ -71,7 +71,7 @@ import {
   SvNumFormatType,
 } from "../../inc/zforlist";
 import { ImpSvNumberInputScan } from "./zforfind";
-import { GetOutputString, GetInputLineString } from "./zforlist.output";
+import { GetOutputString, GetInputLineString, GetFormatterOutputString } from "./zforlist.output";
 import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
 import { ImpSvNumberformatScan } from "./zforscan";
 
@@ -239,6 +239,18 @@ export class SvNFLanguageData {
       symbol.assign(data.getCurrSymbol());
       abbreviation.assign(data.getCurrBankSymbol());
     }
+  }
+  /** Original current scanner TRUE keyword. @returns Borrowed keyword. */
+  GetTrueString(): OUStringConstReference {
+    return this.GetFormatScanner().GetTrueString();
+  }
+  /** Original current scanner FALSE keyword. @returns Borrowed keyword. */
+  GetFalseString(): OUStringConstReference {
+    return this.GetFormatScanner().GetFalseString();
+  }
+  /** Original current scanner keyword table. @returns Borrowed keyword table. */
+  GetKeywords(): readonly OUStringConstReference[] {
+    return this.GetFormatScanner().GetKeywords();
   }
   /** Original current scanner compatibility abbreviation. @returns Borrowed abbreviation. */
   GetCurAbbrev(): OUStringConstReference {
@@ -958,23 +970,9 @@ export class SvNumberFormatter {
   GetNoZero(): boolean {
     return this.m_aFormatData.GetNoZero();
   }
-  /** Original numeric/string output forwarding for admitted standard entries. @param value - Actual numeric/string overload. @param key - Native format key. @param output - Actual mutable string. @param color - Actual output pointer. @param useStarFormat - Original defaultfalse flag. @returns Nothing. */
-  GetOutputString(
-    value: number | OUStringConstReference,
-    key: number,
-    output: OUString,
-    color: [Color | null],
-    useStarFormat = false,
-  ): void {
-    SvNFEngine.GetOutputString(
-      this.m_aCurrentLanguage,
-      this.m_aFormatData,
-      value,
-      key,
-      output,
-      color,
-      useStarFormat,
-    );
+  /** Original numeric/string output forwarding with actual language/native owners and writable policy. @param args - Original value, key, output, color and default-false fill flag. @returns Nothing. */
+  GetOutputString(...args: Parameters<typeof GetFormatterOutputString>): void {
+    GetFormatterOutputString.call(this, ...args);
   }
   /** Original public input-line forwarding with the actual native-number owner and writable accessor. @param args - Value, display format key and original filtering/system-locale flags. @returns Owned input string. */
   GetInputLineString(

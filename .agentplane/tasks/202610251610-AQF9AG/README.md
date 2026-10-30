@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 69
+revision: 72
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T10:26:59.309Z"
+  updated_at: "2026-10-30T10:37:27.190Z"
   updated_by: "CODER"
-  note: "Fraction checkpoint passes focused formatter/Calc/browser tests, native scalar differential and structural checks. Whole CSV task remains incomplete: date/time/native-number output, public output contracts, multiline EditEngine and full option/UI acceptance remain. Continue approved work; do not close the goal."
-  attempts: 9
+  note: "Numeric output owner/policy contracts and source system substitution are restored; focused formatter/Calc/browser tests, typecheck/build and structural gates pass. CSV remains incomplete: date/time/native-number producers, real multiline EditEngine import and full option/UI/native acceptance. Continue approved work without closing the goal."
+  attempts: 10
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -472,8 +475,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T10:37:27.190Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Numeric output owner/policy contracts and source system substitution are restored; focused formatter/Calc/browser tests, typecheck/build and structural gates pass. CSV remains incomplete: date/time/native-number producers, real multiline EditEngine import and full option/UI/native acceptance. Continue approved work without closing the goal."
+  -
+    type: "status"
+    at: "2026-10-30T10:37:34.592Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T10:27:04.550Z"
+doc_updated_at: "2026-10-30T10:37:34.592Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -741,6 +757,36 @@ sections:
     Attempts: 9
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:26:58.122Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T10:37:27.190Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Numeric output owner/policy contracts and source system substitution are restored; focused formatter/Calc/browser tests, typecheck/build and structural gates pass. CSV remains incomplete: date/time/native-number producers, real multiline EditEngine import and full option/UI/native acceptance. Continue approved work without closing the goal.
+    Attempts: 10
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:37:26.569Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1156,6 +1202,18 @@ sections:
     - Commands: npm run typecheck; focused ESLint for all10 changed implementation/test/script paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: fraction-{typecheck,lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10071 imports225 allowed edges; docs4222 authored sources. No dependency checker exemptions: initial SAL import in the generic saturation binding created an o3tl/SAL cycle and was replaced with the source std::numeric_limits intrinsic signed64 bounds. Native driver quote escapes and provenance local-evidence paths were corrected to the existing checker contracts.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 tests. Evidence: fraction-browser.log after fresh build. Scope: basic real CSV import/ODS save/active export and sparse owner/Worker integration, not every styled output option.
     - Remaining: date/time and completed native-number output, original public output contracts, true multiline EditEngine import and complete CSV option/UI/native acceptance. Task/goal remain active and incomplete. This is the same open Agentplane task; no tenth-task full-suite run is due. Reviewed output/native artifacts are local evidence, excluded from commit.
+
+    ### Original numeric public output owners and system substitution, 2026-10-30
+
+    - Continued the same approved task from f5fab22f8c19. Removed the scalar precision/decimal/scanner projection from numeric SvNumberformat::GetOutputString. It now receives the actual NativeNumberWrapper and SvNFLanguageData, reads the supplied current language and retains the source default-false star flag. Text keeps its source overload. ImpGetOutputInputLine also receives the original language owner. Native-number/date/time producers remain unfinished; receiving the real native owner does not certify their implementation.
+    - Restored SvNFEngine numeric output's NativeNumberWrapper/Accessor contract and original ImpSubstituteEntry call before missing-key General fallback. Source zero suppression still returns before substitution and preserves the color pointer. Text output retains its separate non-substituting overload. Public SvNumberFormatter forwards its actual native owner and writable accessor; input-line output forwards its actual native/current-language owners. The forwarding body is an existing translation-unit responsibility fragment; the facade remains995 lines without a guard exemption.
+    - Added original language GetKeywords/GetTrueString/GetFalseString scanner forwards. Real-owner tests vary current precision/language independently of the entry construction scanner and observe immediate output changes. A real sparse table with compiled F400 system-time entry and original readonly policy proves absent substitution-target General fallback and text bypass. No service, compiled token stream, callback or policy is mocked for either new case.
+    - Command: npm run test:shared -- src/svl/source/numbers. Result: pass,44 files734 tests before adding the final substitution case. Final focused command: npm run test:shared -- src/svl/source/numbers/zforlist.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,4 files77 tests including both new contracts and the last private input-line signature update. Repeated cases are not added to the unique aggregate. Evidence: output-contract-all-tests.log/output-contract-final-tests.log.
+    - Initial type/test migration exposed independently created construction scanners: their precision did not belong to the passed current-language owner. Updated fixtures to set actual current state rather than carry the old scalar precision through the API. The old test expecting an unmarked General entry to throw solely because the scanner argument was omitted now verifies source output1. TypeScript exactOptionalPropertyTypes required optional undefined in the implementation's overload tuples. The browser/Worker test's four remaining old numeric signatures were migrated to actual owners; no compatibility overload accepting old scalar arguments was added.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files110 tests. Evidence: output-contract-csv-tests.log. Scope: actual CSV and cell-format input/display callers after source overload migration.
+    - Commands: npm run typecheck; focused ESLint for all8 implementation/test/browser paths plus final2 edited paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: output-contract-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10072 imports225 allowed edges; docs4222 authored sources. No enforcement exemptions or semantic parity promotion.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the fresh build. Evidence: output-contract-browser.log. Scope: basic CSV import/ODS save/active export and real native owner/Worker integration; not all format/option combinations or native ABI equivalence.
+    - Remaining: date/time/native-number producers and their consumed contracts, actual multiline EditEngine import, complete CSV option/UI/native differential acceptance. Goal/task remain active. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run. Final tracked diff is task-scoped; reviewed output/native evidence stays untracked and excluded from commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1432,6 +1490,36 @@ Note: Fraction checkpoint passes focused formatter/Calc/browser tests, native sc
 Attempts: 9
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:26:58.122Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T10:37:27.190Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Numeric output owner/policy contracts and source system substitution are restored; focused formatter/Calc/browser tests, typecheck/build and structural gates pass. CSV remains incomplete: date/time/native-number producers, real multiline EditEngine import and full option/UI/native acceptance. Continue approved work without closing the goal.
+Attempts: 10
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:37:26.569Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1851,3 +1939,15 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint for all10 changed implementation/test/script paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: fraction-{typecheck,lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10071 imports225 allowed edges; docs4222 authored sources. No dependency checker exemptions: initial SAL import in the generic saturation binding created an o3tl/SAL cycle and was replaced with the source std::numeric_limits intrinsic signed64 bounds. Native driver quote escapes and provenance local-evidence paths were corrected to the existing checker contracts.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 tests. Evidence: fraction-browser.log after fresh build. Scope: basic real CSV import/ODS save/active export and sparse owner/Worker integration, not every styled output option.
 - Remaining: date/time and completed native-number output, original public output contracts, true multiline EditEngine import and complete CSV option/UI/native acceptance. Task/goal remain active and incomplete. This is the same open Agentplane task; no tenth-task full-suite run is due. Reviewed output/native artifacts are local evidence, excluded from commit.
+
+### Original numeric public output owners and system substitution, 2026-10-30
+
+- Continued the same approved task from f5fab22f8c19. Removed the scalar precision/decimal/scanner projection from numeric SvNumberformat::GetOutputString. It now receives the actual NativeNumberWrapper and SvNFLanguageData, reads the supplied current language and retains the source default-false star flag. Text keeps its source overload. ImpGetOutputInputLine also receives the original language owner. Native-number/date/time producers remain unfinished; receiving the real native owner does not certify their implementation.
+- Restored SvNFEngine numeric output's NativeNumberWrapper/Accessor contract and original ImpSubstituteEntry call before missing-key General fallback. Source zero suppression still returns before substitution and preserves the color pointer. Text output retains its separate non-substituting overload. Public SvNumberFormatter forwards its actual native owner and writable accessor; input-line output forwards its actual native/current-language owners. The forwarding body is an existing translation-unit responsibility fragment; the facade remains995 lines without a guard exemption.
+- Added original language GetKeywords/GetTrueString/GetFalseString scanner forwards. Real-owner tests vary current precision/language independently of the entry construction scanner and observe immediate output changes. A real sparse table with compiled F400 system-time entry and original readonly policy proves absent substitution-target General fallback and text bypass. No service, compiled token stream, callback or policy is mocked for either new case.
+- Command: npm run test:shared -- src/svl/source/numbers. Result: pass,44 files734 tests before adding the final substitution case. Final focused command: npm run test:shared -- src/svl/source/numbers/zforlist.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,4 files77 tests including both new contracts and the last private input-line signature update. Repeated cases are not added to the unique aggregate. Evidence: output-contract-all-tests.log/output-contract-final-tests.log.
+- Initial type/test migration exposed independently created construction scanners: their precision did not belong to the passed current-language owner. Updated fixtures to set actual current state rather than carry the old scalar precision through the API. The old test expecting an unmarked General entry to throw solely because the scanner argument was omitted now verifies source output1. TypeScript exactOptionalPropertyTypes required optional undefined in the implementation's overload tuples. The browser/Worker test's four remaining old numeric signatures were migrated to actual owners; no compatibility overload accepting old scalar arguments was added.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files110 tests. Evidence: output-contract-csv-tests.log. Scope: actual CSV and cell-format input/display callers after source overload migration.
+- Commands: npm run typecheck; focused ESLint for all8 implementation/test/browser paths plus final2 edited paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: output-contract-{typecheck,lint,final-lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10072 imports225 allowed edges; docs4222 authored sources. No enforcement exemptions or semantic parity promotion.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser cases against the fresh build. Evidence: output-contract-browser.log. Scope: basic CSV import/ODS save/active export and real native owner/Worker integration; not all format/option combinations or native ABI equivalence.
+- Remaining: date/time/native-number producers and their consumed contracts, actual multiline EditEngine import, complete CSV option/UI/native differential acceptance. Goal/task remain active. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run. Final tracked diff is task-scoped; reviewed output/native evidence stays untracked and excluded from commit.

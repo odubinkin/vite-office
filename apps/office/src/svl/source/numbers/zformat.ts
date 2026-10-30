@@ -1,9 +1,10 @@
-/** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
+/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; date/time and complete native-number producers remain unported. */
 import * as Output from "./zformat.output";
 import { GetFractionOutput } from "./zformat.fraction";
 import { GetNumberOutput, GetScientificOutput } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
+import type { SvNFLanguageData } from "./zforlist";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { approxEqual, round } from "../../../sal/inc/rtl/math";
 import {
@@ -677,38 +678,40 @@ export class SvNumberformat {
     color: [Color | null],
     star?: boolean,
   ): void;
-  /** Original standard NUMBER, LOGICAL and TEXT numeric output. @param value - Binary64 input. @param output - Actual mutable output. @param color - Original output color pointer. @param precision - Native current standard precision. @param decimal - Original first decimal unit. @param scanner - Current language's format scanner for Boolean keywords. @param star - Original fill flag. @returns Whether star-fill occurred. */
+  /** Original numeric entry output receives the actual native-number and current-language owners. @param value - Binary64 input. @param output - Mutable output. @param color - Color pointer. @param native - Native-number owner. @param current - Current language state. @param star - Original fill flag. @returns Whether star-fill occurred. */
   GetOutputString(
     value: number,
     output: OUString,
     color: [Color | null],
-    precision: number,
-    decimal: number,
-    scanner?: ImpSvNumberformatScan,
+    native: NativeNumberWrapper,
+    current: SvNFLanguageData,
     star?: boolean,
   ): boolean;
-  /** Implements Get Output String. @param value - Value. @param output - Output. @param color - Color. @param precisionOrStar - Precision Or Star. @param decimal - Decimal. @param scanner - Scanner. @param star - Original numeric star-fill flag. @returns The boolean | void result. */ GetOutputString(
+  /** Binds original text/numeric overloads without projecting language state into scalar arguments. Native modifiers remain with their unfinished producers. @param value - Numeric or text input. @param output - Mutable output. @param color - Color pointer. @param nativeOrStar - Native owner or text fill flag. @param current - Numeric current-language owner. @param star - Numeric fill flag. @returns Numeric fill result or nothing. */
+  GetOutputString(
     value: number | OUStringConstReference,
     output: OUString,
     color: [Color | null],
-    precisionOrStar: number | boolean = false,
-    decimal = 0,
-    scanner?: ImpSvNumberformatScan,
+    nativeOrStar: NativeNumberWrapper | boolean = false,
+    current?: SvNFLanguageData,
     star = false,
   ): boolean | void {
     if (typeof value !== "number") {
-      Output.GetStringOutput.call(this, value, output, color, Boolean(precisionOrStar));
+      Output.GetStringOutput.call(this, value, output, color, nativeOrStar as boolean);
       return;
     }
-    const precision = precisionOrStar as number;
+    const language = current as SvNFLanguageData,
+      precision = language.GetStandardPrec(),
+      decimal = language.GetNumDecimalSep().getStr()[0] as number;
     output.clear();
     color[0] = null;
     if (
       this.eType & SvNumFormatType.LOGICAL &&
-      scanner &&
-      this.sFormatstring.equals(scanner.GetBooleanString())
+      this.sFormatstring.equals(
+        language.GetKeywords()[NfKeywordIndex.BOOLEAN] as OUStringConstReference,
+      )
     ) {
-      output.assign(value ? scanner.GetTrueString() : scanner.GetFalseString());
+      output.assign(value ? language.GetTrueString() : language.GetFalseString());
       return false;
     }
     if (
@@ -716,7 +719,7 @@ export class SvNumberformat {
       this.bStandard &&
       (precision & 65535) === INPUTSTRING_PRECISION
     ) {
-      this.ImpGetOutputInputLine(value, output, decimal);
+      this.ImpGetOutputInputLine(value, output, language);
       return false;
     }
     const hadStandard =
@@ -759,7 +762,6 @@ export class SvNumberformat {
     }
     if (
       !hadStandard &&
-      scanner &&
       Number.isFinite(value) &&
       (info.eScannedType === SvNumFormatType.NUMBER ||
         info.eScannedType === SvNumFormatType.PERCENT ||
@@ -771,17 +773,10 @@ export class SvNumberformat {
     ) {
       color[0] = section.GetColor();
       if (info.eScannedType === SvNumFormatType.FRACTION)
-        return GetFractionOutput(
-          value,
-          index,
-          section,
-          scanner.GetCurrentLanguageData(),
-          output,
-          star,
-        );
+        return GetFractionOutput(value, index, section, language, output, star);
       return info.eScannedType === SvNumFormatType.SCIENTIFIC
-        ? GetScientificOutput(value, index, section, scanner.GetCurrentLanguageData(), output, star)
-        : GetNumberOutput(value, index, section, scanner.GetCurrentLanguageData(), output, star);
+        ? GetScientificOutput(value, index, section, language, output, star)
+        : GetNumberOutput(value, index, section, language, output, star);
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
@@ -800,8 +795,13 @@ export class SvNumberformat {
     }
     return false;
   }
-  /** Original ImpGetOutputInputLine uses automatic precision and percent scaling below the native overflow threshold. @param value - Binary64 input. @param outputString - Actual output. @param decimal - Current locale decimal unit. @returns Nothing. */
-  private ImpGetOutputInputLine(value: number, outputString: OUString, decimal: number): void {
+  /** Original ImpGetOutputInputLine uses automatic precision and percent scaling below the native overflow threshold. @param value - Binary64 input. @param outputString - Actual output. @param current - Actual current-language owner. @returns Nothing. */
+  private ImpGetOutputInputLine(
+    value: number,
+    outputString: OUString,
+    current: SvNFLanguageData,
+  ): void {
+    const decimal = current.GetNumDecimalSep().getStr()[0] as number;
     let modified = false;
     if (this.eType & SvNumFormatType.PERCENT && Math.abs(value) < 1.7e306) {
       if (value === 0) {

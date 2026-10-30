@@ -357,7 +357,16 @@ it("generates actual standard NUMBER entry through the mapper,scanner and owning
     expect(entry.GetLastInsertKey()).toBe(100);
     expect(values.table.ImpGetCLOffset(0x10407)).toBe(0);
     expect(values.table.ImpGetCLOffset(0x0409)).toBe(10000);
-    expect(entry.GetOutputString(12.5, out, [null], 65535, 44)).toBe(false);
+    values.scanner.GetCurrentLanguageData().ChangeStandardPrec(65535);
+    expect(
+      entry.GetOutputString(
+        12.5,
+        out,
+        [null],
+        values.scanner.getColorCallback().GetNatNum(),
+        values.scanner.GetCurrentLanguageData(),
+      ),
+    ).toBe(false);
     expect(text(out)).toBe("12,5");
     entry.SetComment(comment);
     const copy = new SvNumberformat(entry);
@@ -550,8 +559,8 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
         1.25,
         out,
         [null],
-        current.GetStandardPrec(),
-        current.GetNumDecimalSep().getStr()[0] as number,
+        current.GetFormatScanner().getColorCallback().GetNatNum(),
+        current,
       );
       expect(text(out)).toBe("1.25");
     } finally {
@@ -708,7 +717,16 @@ it("keeps real engine fallback and separately represented input/format null-date
   try {
     expect(
       /** An absent required format0 is an invalid source state. @returns Nothing. */ () =>
-        SvNFEngine.GetOutputString(current, values.table, 1, 0, out, color),
+        SvNFEngine.GetOutputString(
+          current,
+          values.table,
+          current.GetFormatScanner().getColorCallback().GetNatNum(),
+          SvNFEngine.GetRWPolicy(values.table),
+          1,
+          0,
+          out,
+          color,
+        ),
     ).toThrow(/absent/);
     expect(
       /** Rejects missing text-format fallback before producing output. @returns Nothing. */ () =>
@@ -734,7 +752,16 @@ it("keeps real engine fallback and separately represented input/format null-date
       values.decimal,
       0,
     );
-    SvNFEngine.GetOutputString(current, values.table, 1.2345, 404, out, color);
+    SvNFEngine.GetOutputString(
+      current,
+      values.table,
+      current.GetFormatScanner().getColorCallback().GetNatNum(),
+      SvNFEngine.GetRWPolicy(values.table),
+      1.2345,
+      404,
+      out,
+      color,
+    );
     expect(text(out)).toBe("1,23");
     const entry = values.table.GetEntry(0) as SvNumberformat;
     entry.SetType(2);
@@ -904,5 +931,43 @@ it("uses the system edit locale only when filtering does not retain the original
     expect(formatter.GetStandardPrec()).toBe(2);
   } finally {
     formatter.dispose();
+  }
+});
+
+it("uses General when readonly system substitution has no target and leaves text unsubstituted", /** A real sparse table has General/Boolean/Text and a compiled system-time entry, but no system time target. All entries, scanners and policies are actual source owners. @returns Nothing. */ () => {
+  const values = tableValues(),
+    current = values.scanner.GetCurrentLanguageData(),
+    native = current.GetFormatScanner().getColorCallback().GetNatNum(),
+    code = unicode("[$-F400]HH:MM"),
+    input = unicode("literal"),
+    output = unicode("previous"),
+    check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0],
+    color: [Color | null] = [null];
+  try {
+    generateStandardNumberFormat(
+      values.table,
+      values.mapper,
+      values.locale,
+      values.scanner,
+      [0],
+      values.decimal,
+      0,
+    );
+    values.table.PutEntry(current, native, code, check, type, key, 0);
+    expect(check[0]).toBe(0);
+    expect(values.table.GetEntry(key[0])?.IsSystemTimeFormat()).toBe(true);
+    const policy = SvNFEngine.GetROPolicy(values.table, new Map());
+    SvNFEngine.GetOutputString(current, values.table, native, policy, 1.25, key[0], output, color);
+    expect(text(output)).toBe("1.25");
+    SvNFEngine.GetOutputString(current, values.table, input, key[0], output, color);
+    expect(text(output)).toBe("literal");
+    expect(color[0]).toBeNull();
+  } finally {
+    output.dispose();
+    input.dispose();
+    code.dispose();
+    values.dispose();
   }
 });

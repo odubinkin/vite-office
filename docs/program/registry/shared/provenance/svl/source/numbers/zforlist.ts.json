@@ -23,7 +23,10 @@
       "GetTransliteration",
       "IsDecimalSep",
       "GetCompatibilityCurrency",
-      "GetCurAbbrev"
+      "GetCurAbbrev",
+      "GetKeywords",
+      "GetTrueString",
+      "GetFalseString"
     ],
     "upstreamSymbols": [
       "SvNFFormatData::ImpGetFormatCodeIndex",
@@ -62,7 +65,10 @@
       "SvNumberFormatter::GetNatNum",
       "SvNumberFormatter::IsLocaleInstalled",
       "SvNFLanguageData::GetLangDecimalSep",
-      "SvNFLanguageData::GetCurAbbrev"
+      "SvNFLanguageData::GetCurAbbrev",
+      "SvNFLanguageData::GetKeywords",
+      "SvNFLanguageData::GetTrueString",
+      "SvNFLanguageData::GetFalseString"
     ],
     "preservedResponsibilities": [
       "Task AQF9AG ports static SvNumberFormatter::ExpandTwoDigitYear and its language/formatter instance forwarding for input-scanner year fragments; complete input classification remains unported.",
@@ -90,7 +96,8 @@
       "B8TCAE adds source-contract evidence: A real generated table lazily selects/inserts the system currency format using actual currency strings, scanner and constructor. Repeated lookup retains the same nonempty currency entry identity and key. Existing native comparisons remain; these added assertions do not establish full native ABI or complete application parity.",
       "AQF9AG public GetInputLineString now forwards the actual native-number owner and writable Accessor along with the original filtering and force-system-locale flags to the complete engine selection responsibility. Full output-family/native closure remains pending.",
       "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
-      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced."
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced.",
+      "AQF9AG restores numeric output forwarding of the actual NativeNumberWrapper and writable Accessor, retains the text overload without those arguments, and adds the original SvNFLanguageData GetKeywords/GetTrueString/GetFalseString scanner forwards. The output method body remains a source responsibility fragment to keep the owning facade below its size budget. Native-number producers, date/time display and complete native output ABI verification remain unfinished."
     ],
     "omittedResponsibilities": [
       "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."
@@ -190,6 +197,18 @@
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
           "marker": "SvNFLanguageData::GetCurAbbrev"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetKeywords"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetTrueString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetFalseString"
         }
       ]
     }

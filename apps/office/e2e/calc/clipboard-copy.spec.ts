@@ -460,13 +460,26 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           ),
           compiledOut = n.unicode("");
         compiled.SetStandard();
-        compiled.GetOutputString(0.125, compiledOut, [null], 65535, 44);
+        scannerLanguage.ChangeStandardPrec(65535);
+        compiled.GetOutputString(
+          0.125,
+          compiledOut,
+          [null],
+          colorCallback.GetNatNum(),
+          scannerLanguage,
+        );
         const compiledCopy = new n.SvNumberformat(compiled),
           formatTable = new n.SvNFFormatData();
         n.generateStandardNumberFormat(formatTable, mapper, locale, scanner, [0x0407], decimal, 0);
         const tableEntry = formatTable.GetEntry(0);
         if (!tableEntry) throw Error("Missing actual generated General entry");
-        tableEntry.GetOutputString(12.5, compiledOut, [null], 65535, 44);
+        tableEntry.GetOutputString(
+          12.5,
+          compiledOut,
+          [null],
+          colorCallback.GetNatNum(),
+          scannerLanguage,
+        );
         const tableOutput = n.text(compiledOut);
         const languageData = new n.SvNFLanguageData(mapper, 0x0407, colorCallback),
           originalScanner = languageData.GetFormatScanner(),
@@ -488,8 +501,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           12.5,
           compiledOut,
           [null],
-          languageData.GetStandardPrec(),
-          languageData.GetNumDecimalSep().getStr()[0] as number,
+          colorCallback.GetNatNum(),
+          languageData,
         );
         const languageState = {
           initial: languageData.GetIniLanguage(),
@@ -515,7 +528,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         };
         formatter.dispose();
 
-        compiledCopy.GetOutputString(0.125, compiledOut, [null], 65535, 44);
+        compiledCopy.GetOutputString(
+          0.125,
+          compiledOut,
+          [null],
+          colorCallback.GetNatNum(),
+          scannerLanguage,
+        );
         const compiledOutput = n.text(compiledOut);
         const pooledFormatter = doc.GetFormatTable();
         pooledFormatter.ChangeStandardPrec(65535);
