@@ -22,7 +22,8 @@
     "preservedResponsibilities": [
       "Original finite DATE/DATETIME mode0 producers use actual calendar, compiled token and Date/Time owners. Source Gregorian range/epoch mutation, original calendar switching/Dummy-era fallback/restoration, implicit other-calendar detection, grammatical month case, years/eras/week/quarter, literals/star/blanks and separate datetime date/clock rounding are connected. Dormant nonzero native-number/spellout branches remain unported and are not admitted. Complete native display/parser/service ABI closure remains unverified.",
       "Original saved-calendar, fractional-second and final-output owners are now covered when a later buffer constructor throws. Calendar switching/restoration and date/time rounding results are unchanged. Native aborting raw C-buffer growth remains outside exception-unwinding certification.",
-      "Original DATE/DATETIME native-number forwarding now passes compiled NatNum to each calendar field and the actual wrapper to integer week/time fields. Year zero padding is transliterated separately before appending the calendar year; signed years/names/literals/fractions retain original order. Supersedes the former mode0-only limitation for modes0..11. NatNum12 selected-field spellout and full native display wrapper remain unported."
+      "Original DATE/DATETIME native-number forwarding now passes compiled NatNum to each calendar field and the actual wrapper to integer week/time fields. Year zero padding is transliterated separately before appending the calendar year; signed years/names/literals/fractions retain original order. Supersedes the former mode0-only limitation for modes0..11. NatNum12 selected-field spellout and full native display wrapper remain unported.",
+      "DATETIME now forwards actual selected metadata/native wrapper to the original fractional-second conversion helper. Its original fraction digit counter/length bound and separate calendar/clock rounding remain unchanged. This corrects the prior omitted conversion and supersedes the earlier ASCII-fraction description."
     ],
     "omittedResponsibilities": [
       "Complete native-number conversion, service/native ABI and full CSV acceptance remain unproven."
@@ -39,6 +40,14 @@
         },
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
           "marker": "@fileoverview"
         }
       ],

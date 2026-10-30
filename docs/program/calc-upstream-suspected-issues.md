@@ -4756,3 +4756,34 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput` YYYY branches and original `impTransliterate`/`ImpGetNatNumString`; `i18npool/source/calendar/calendar_gregorian.cxx`, `NatNumForCalendar`.
 - Observation: YYYY decides to prepend4-minus-calendar-year-length ASCII zeros, transliterates only that padding buffer, then appends the already-rendered year. It does not recheck width after transliteration. For Japanese calendar mode4, NatNumForCalendar returns0 for calendar fields, while the separate zero-prefix conversion uses the actual mode4 metadata and collapses `000` to `〇`. An early year1 therefore displays `〇1` under `[NatNum4]YYYY`, with fewer than4 characters and mixed zero/ASCII digits.
 - Preserve the original width decision, separate conversion and append order. Do not pad again, blanket-convert the final date or reinterpret calendar mode4 as general-number mode4. Real formatter tests retain this source-derived result; prior unchanged native-number scalar comparisons cover the zero-collapse kernel, not a complete native date formatter-wrapper ABI.
+
+
+### CALC-411 — Scientific display has no final native-number conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetScientificOutput`, `ImpDecimalFill`, `ImpNumberFill`.
+- Observation: scientific mantissa/exponent start with original RTL ASCII digits, pass through token filling and are appended without a final impTransliterate. Native metadata only reaches nested General token handling. Consequently `[NatNum3]0.00E+00` for12345 retains `1.23E+04` in Japanese, unlike ordinary `[NatNum3]0.00`.
+- Preserve that absent conversion; do not apply a generic output transliteration wrapper. Actual compiled-entry tests retain the source-derived result. A complete unchanged native scientific formatter-wrapper comparison is not claimed.
+
+### CALC-412 — General exponent threshold bypasses its native conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetOutputStandard`, `ImpGetOutputStdToPrecision`, standard NUMBER branch in `GetOutputString`.
+- Observation: ImpGetOutputStandard returns original E2 output directly above absolute1e15. Its fixed-point branch instead invokes ImpGetOutputStdToPrecision, which converts using NumFor0 metadata. A genuine standard NUMBER entry with Japanese NatNum3 and precision2 therefore emits ASCII `1.23E+16` for1.234e16. A nonstandard numeric format containing Standard subsequently applies its separate final selected-section conversion and emits `１．２３E+１６`.
+- Preserve both source branches and the later ordinary-number conversion. Do not insert conversion in the exponent shortcut, or reinterpret the precision's UNLIMITED/INPUTSTRING sentinels as General's clamped fixed precision. Actual builtin/table/metadata tests cover these source-derived outcomes; full native formatter-wrapper equivalence remains unverified.
+
+### CALC-413 — Normal fractional-second output keeps a pre-conversion digit counter
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetFractionOfSecondString`, DIGIT loops in `ImpGetTimeOutput`/`ImpGetDateTimeOutput`.
+- Observation: both helper branches convert the fractional buffer, but only the minimum-input-line branch then resets nFractionDecimals to the converted length. Normal display retains requested decimal count, and its caller stops at that count as well as buffer length. Hebrew NatNum2 converts125 to the four-unit `קכ״ה`; normal SS.000 displays `00.קכ״`, while the input-line-minimum branch displays `00.קכ״ה`.
+- Preserve the distinct counter update and original bounds. Do not extend normal display to the full native string or leave the fraction unconverted. The prior local ASCII-fraction behavior was a missing call and has been corrected. Source-derived real formatter tests retain both results; full unchanged native date/time wrapper comparison is not claimed.
+
+### CALC-414 — Fraction fill can add ASCII zeroes after native-number conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetFractionOutput`, `ImpIntToString`/`ImpGetNatNumString`, `ImpNumberFill`.
+- Observation: numerator/denominator and integral text are converted before token filling, which can insert ASCII0 for mandatory zero placeholders. There is no final whole-fraction conversion. Japanese `[NatNum3]0 00/00` for1.5 therefore emits `１ 0１/0２`, with mixed-width zeroes; its separate sign is also inserted after native conversion.
+- Preserve the source order and literal code units; do not normalize the late zeroes or the sign. Actual compiled-entry and CSV shown-output cases retain this behavior. Full native fraction display-wrapper ABI is not claimed by these source-derived cases.
+
+### CALC-415 — NatNum12 casing uses the supplier's cached locale
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, NATNUM12 capitalization branch and later non12 locale-refresh branch.
+- Observation: NumberText conversion receives rLocale, but subsequent CharacterClassification toTitle/toUpper/toLower calls receive the member aLocale. The NATNUM12 branch executes before the non12 branch that refreshes aLocale, so a fresh supplier retains its default locale, and a reused supplier may retain an earlier different locale.
+- Preserve that original receiver/locale distinction when mode12 is connected. Do not silently replace aLocale with rLocale as a correction. This is source-derived; NumberText/casing remains unported and no complete native mode12 witness is claimed.

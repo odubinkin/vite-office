@@ -1,9 +1,9 @@
-/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; Finite DATE/TIME/DATETIME native-mode0 output is connected; complete native-number producers remain unported. */
+/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; Source native-number modes0..11 are connected to numeric and date/time producers; mode12 remains unported. */
 import * as Output from "./zformat.output";
 import { GetDateOutput, GetDateTimeOutput } from "./zformat.date";
 import { GetTimeOutput } from "./zformat.time";
 import { GetFractionOutput } from "./zformat.fraction";
-import { GetNumberOutput, GetScientificOutput } from "./zformat.number";
+import { GetNumberOutput, GetScientificOutput, ImpGetOutputStandard } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
 import type { SvNFLanguageData } from "./zforlist";
@@ -52,7 +52,7 @@ function output(value: number, format: Format, precision: number, decimal: numbe
   return result;
 }
 
-/** Original standard NUMBER branches of GetOutputString,ImpGetOutputInputLine,ImpGetOutputStandard and ImpGetOutputStdToPrecision. Precision and decimal are the actual scanner/language fields;this does not fabricate a SvNumberFormatter service or parsed format entry. The admitted native NatNum0 requires no transliteration. @param value - Binary64 input. @param precision - Native uint16 standard precision. @param decimal - Original locale decimal sal_Unicode. @returns Owned native formatted string. */
+/** Original standard NUMBER branches of GetOutputString,ImpGetOutputInputLine,ImpGetOutputStandard and ImpGetOutputStdToPrecision. Precision and decimal are the actual scanner/language fields;this does not fabricate a SvNumberFormatter service or parsed format entry. This raw conversion helper does not apply native-number conversion; actual General output uses the original member-owner helpers. @param value - Binary64 input. @param precision - Native uint16 standard precision. @param decimal - Original locale decimal sal_Unicode. @returns Owned native formatted string. */
 export function formatStandardNumber(value: number, precision: number, decimal: number): OUString {
   precision &= 65535;
   if (precision === INPUTSTRING_PRECISION) {
@@ -747,12 +747,7 @@ export class SvNumberformat {
       color[0] = section.GetColor();
       if (section.GetCount() === 0 && info.eScannedType === SvNumFormatType.EMPTY) return false;
       if (section.GetCount() === 0) {
-        const standard = formatStandardNumber(value, Math.min(precision & 65535, 300), decimal);
-        try {
-          output.assign(standard);
-        } finally {
-          standard.dispose();
-        }
+        ImpGetOutputStandard.call(this, value, output, native, language);
         return false;
       }
 
@@ -790,30 +785,30 @@ export class SvNumberformat {
         info.eScannedType === SvNumFormatType.CURRENCY ||
         info.eScannedType === SvNumFormatType.SCIENTIFIC ||
         info.eScannedType === SvNumFormatType.FRACTION) &&
-      !section.GetNatNum().IsComplete() &&
-      !(this.NumFor[0] as ImpSvNumFor).GetNatNum().IsComplete()
+      section.GetNatNum().GetNatNum() !== 12 &&
+      (this.NumFor[0] as ImpSvNumFor).GetNatNum().GetNatNum() !== 12
     ) {
       color[0] = section.GetColor();
       if (info.eScannedType === SvNumFormatType.FRACTION)
-        return GetFractionOutput(value, index, section, language, output, star);
+        return GetFractionOutput.call(this, value, index, star, native, language, output);
       return info.eScannedType === SvNumFormatType.SCIENTIFIC
-        ? GetScientificOutput(value, index, section, language, output, star)
-        : GetNumberOutput(value, index, section, language, output, star);
+        ? GetScientificOutput.call(this, value, index, star, native, language, output)
+        : GetNumberOutput.call(this, value, index, star, native, language, output);
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
       (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
     )
       throw new Error("SvNumberformat nonstandard output is not implemented");
-    const result = formatStandardNumber(
-      value,
-      this.eType & SvNumFormatType.TEXT ? Math.min(precision & 65535, 300) : precision,
-      decimal,
-    );
-    try {
-      output.assign(result);
-    } finally {
-      result.dispose();
+    if (this.eType & SvNumFormatType.TEXT || precision !== UNLIMITED_PRECISION) {
+      ImpGetOutputStandard.call(this, value, output, native, language);
+    } else {
+      const result = formatStandardNumber(value, precision, decimal);
+      try {
+        output.assign(result);
+      } finally {
+        result.dispose();
+      }
     }
     return false;
   }

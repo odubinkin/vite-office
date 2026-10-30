@@ -20,7 +20,7 @@ it.each([
   [
     "[NatNum1]YYYY-MM-DD HH:MM:SS.00",
     serial(1, 1, 2024) + 0.5,
-    "二〇二四-一-一 一二:〇〇:〇〇.00",
+    "二〇二四-一-一 一二:〇〇:〇〇.〇〇",
     0x411,
   ],
   ["[NatNum1][~gengou]G EE-MM-DD", serial(1, 5, 2019), "R 元-五-一", 0x411],

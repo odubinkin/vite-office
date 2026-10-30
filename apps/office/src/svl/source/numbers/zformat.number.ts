@@ -8,8 +8,10 @@ import { NfSymbolType as S } from "../../inc/nfsymbol";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { SvNumFormatType as T } from "../../inc/zforlist";
 import { ImpSvNumberformatScan, FLAG_STANDARD_IN_FORMAT } from "./zforscan";
-import { formatStandardNumber, type ImpSvNumFor } from "./zformat";
+import type { SvNumberformat, ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import { impTransliterate } from "./zformat.transliterate";
 import { InsertBlanks } from "./zformat.output";
 /** Original GetPrecExp, including its iterative 1e-7..1e7 interval. @param value - Positive magnitude. @returns Decimal exponent plus one. */
 function GetPrecExp(value: number): number {
@@ -55,15 +57,86 @@ function insertStarFillChar(buffer: OUStringBuffer, position: number, token: OUS
   }
   return false;
 }
-/** Source General production uses the actual current precision/decimal and removes its sign at the caller. This admitted path has no complete native-number modifier. @param value - Number. @param current - Actual language owner. @returns Owned standard output. */
-function standard(value: number, current: SvNFLanguageData): OUString {
-  return formatStandardNumber(
+/** Original ImpGetOutputStdToPrecision clamps precision, strips rounded negative zero, then uses first-subformat NatNum metadata. @param this - Actual original format owner. @param value - Source double. @param output - Actual output owner. @param precision - Source uint16 precision. @param native - Actual wrapper. @param current - Actual current-language owner. @returns Nothing. */
+export function ImpGetOutputStdToPrecision(
+  this: SvNumberformat,
+  value: number,
+  output: OUString,
+  precision: number,
+  native: NativeNumberWrapper,
+  current: SvNFLanguageData,
+): void {
+  precision = Math.min(300, precision & 65535);
+  rtl_math_doubleToUString(
+    output.getDataAddress(),
+    null,
+    0,
     value,
-    Math.min(current.GetStandardPrec(), 300),
+    F.rtl_math_StringFormat_F,
+    precision,
     current.GetNumDecimalSep().getStr()[0] as number,
+    null,
+    0,
+    true,
   );
+  if (output.getLength() > 0 && output.getStr()[0] === 45) {
+    let allZeros = true;
+    for (let i = 1; i < output.getLength(); i++)
+      if (output.getStr()[i] !== 48) {
+        allZeros = false;
+        break;
+      }
+    if (allZeros) {
+      const positive = output.copy(1);
+      try {
+        output.assign(positive);
+      } finally {
+        positive.dispose();
+      }
+    }
+  }
+  const result = impTransliterate(output, (this["NumFor"][0] as ImpSvNumFor).GetNatNum(), native);
+  try {
+    output.assign(result);
+  } finally {
+    result.dispose();
+  }
 }
-/** Original remaining-integer digit grouping, updating the source cursor/count references. @param current - Locale owner. @param buffer - Number. @param start - First digit. @param position - Mutable cursor. @param section - Compiled section. @param count - Mutable count. @param grouping - Actual sequence iterator. @returns Nothing. */
+/** Original ImpGetOutputStandard string/buffer overloads preserve the >1e15 exponent branch's absence of transliteration. @param this - Actual original format owner. @param value - Source double. @param output - Original output overload. @param native - Actual native-number owner. @param current - Actual language owner. @returns Nothing. */
+export function ImpGetOutputStandard(
+  this: SvNumberformat,
+  value: number,
+  output: OUString | OUStringBuffer,
+  native: NativeNumberWrapper,
+  current: SvNFLanguageData,
+): void {
+  if (output instanceof OUStringBuffer) {
+    const temporary = new OUString();
+    try {
+      ImpGetOutputStandard.call(this, value, temporary, native, current);
+      output.assign(temporary);
+    } finally {
+      temporary.dispose();
+    }
+    return;
+  }
+  const precision = current.GetStandardPrec();
+  if (Math.abs(value) > 1e15)
+    rtl_math_doubleToUString(
+      output.getDataAddress(),
+      null,
+      0,
+      value,
+      F.rtl_math_StringFormat_E2,
+      Math.min(precision, 14),
+      current.GetNumDecimalSep().getStr()[0] as number,
+      null,
+      0,
+      true,
+    );
+  else ImpGetOutputStdToPrecision.call(this, value, output, precision, native, current);
+}
+/** Original remaining-integer digit grouping, updating the source cursor/count references. @param current - Locale owner. @param buffer - Number. @param start - First digit. @param position - Mutable cursor. @param index - Original selected subformat index. @param count - Mutable count. @param grouping - Actual sequence iterator. @returns Nothing. */
 function ImpDigitFill(
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
@@ -84,14 +157,16 @@ function ImpDigitFill(
     }
   } else position[0] = start;
 }
-/** Original backwards integer/literal fill and locale grouping sequence. @param current - Language owner. @param buffer - Number buffer. @param value - Rounded/scaled magnitude. @param position - Initial digit cursor. @param symbol - Initial token. @param section - Compiled section. @param digitLimit - Integer digits in pattern. @param star - Fill flag. @param addDecimal - Retain decimal separator. @returns Star-fill result. */
+/** Original backwards integer/literal fill and locale grouping sequence. @param this - Actual original format owner. @param native - Original native-number wrapper. @param current - Language owner. @param buffer - Number buffer. @param value - Rounded/scaled magnitude. @param position - Initial digit cursor. @param symbol - Initial token. @param index - Original selected subformat index. @param digitLimit - Integer digits in pattern. @param star - Fill flag. @param addDecimal - Retain decimal separator. @returns Star-fill result. */
 export function ImpNumberFillWithThousands(
+  this: SvNumberformat,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
   value: number,
   position: number,
   symbol: number,
-  section: ImpSvNumFor,
+  index: number,
   digitLimit: number,
   star: boolean,
   addDecimal = true,
@@ -99,7 +174,8 @@ export function ImpNumberFillWithThousands(
   let result = false,
     leading = 0,
     stop = false;
-  const info = section.Info(),
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info(),
     cursor: [number] = [position],
     count: [number] = [0],
     grouping = new DigitGroupingIterator(current.GetLocaleData().getDigitGrouping());
@@ -161,10 +237,9 @@ export function ImpNumberFillWithThousands(
           buffer.insert(cursor[0], current.GetCurAbbrev());
           break;
         case K.GENERAL: {
-          const number = standard(value, current),
-            temp = new OUStringBuffer();
+          const temp = new OUStringBuffer();
           try {
-            temp.append(number);
+            ImpGetOutputStandard.call(this, value, temp, native, current);
             temp.stripStart(45);
             const text = temp.makeStringAndClear();
             try {
@@ -174,7 +249,6 @@ export function ImpNumberFillWithThousands(
             }
           } finally {
             temp.dispose();
-            number.dispose();
           }
           break;
         }
@@ -189,21 +263,24 @@ export function ImpNumberFillWithThousands(
     grouping.dispose();
   }
 }
-/** Original decimal placeholder fill before integer/grouping fill. @param current - Actual language. @param buffer - Digits without decimal point. @param value - Rounded magnitude. @param decimalPosition - Original decimal position or -1. @param symbol - Last token. @param section - Compiled section. @param integer - Decimal portion is all zeroes. @param star - Fill flag. @returns Star-fill result. */
+/** Original decimal placeholder fill before integer/grouping fill. @param this - Actual original format owner. @param native - Original native-number wrapper. @param current - Actual language. @param buffer - Digits without decimal point. @param value - Rounded magnitude. @param decimalPosition - Original decimal position or -1. @param symbol - Last token. @param index - Original selected subformat index. @param integer - Decimal portion is all zeroes. @param star - Fill flag. @returns Star-fill result. */
 function ImpDecimalFill(
+  this: SvNumberformat,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
   value: number,
   decimalPosition: number,
   symbol: number,
-  section: ImpSvNumFor,
+  index: number,
   integer: boolean,
   star: boolean,
 ): boolean {
   let result = false,
     filled = false,
     position = buffer.getLength();
-  const info = section.Info();
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info();
   if (info.nCntPost > 0) {
     let trailing = true;
     while (symbol > 0 && info.nTypeArray[symbol] !== S.DECSEP) {
@@ -252,10 +329,9 @@ function ImpDecimalFill(
           buffer.insert(position, current.GetCurAbbrev());
           break;
         case K.GENERAL: {
-          const number = standard(value, current),
-            temp = new OUStringBuffer();
+          const temp = new OUStringBuffer();
           try {
-            temp.append(number);
+            ImpGetOutputStandard.call(this, value, temp, native, current);
             temp.stripStart(45);
             const text = temp.makeStringAndClear();
             try {
@@ -265,7 +341,6 @@ function ImpDecimalFill(
             }
           } finally {
             temp.dispose();
-            number.dispose();
           }
           break;
         }
@@ -274,31 +349,35 @@ function ImpDecimalFill(
     }
   }
   return (
-    ImpNumberFillWithThousands(
+    ImpNumberFillWithThousands.call(
+      this,
+      native,
       current,
       buffer,
       value,
       position,
       symbol,
-      section,
+      index,
       info.nCntPre,
       star,
       filled,
     ) || result
   );
 }
-/** Original ImpGetNumberOutput arithmetic and fill sequence for the admitted no-complete-NatNum path; no alternate locale, parser or rounding is supplied. @param value - Native value after section sign normalization. @param index - Selected section. @param section - Actual compiled section. @param current - Actual language owner. @param output - Owned mutable output. @param star - Fill flag. @returns Star-fill result. */
+/** Original ImpGetNumberOutput arithmetic and fill sequence with original native-number call placements; no alternate locale, parser or rounding is supplied. @param this - Actual original format owner. @param value - Native value after section sign normalization. @param index - Selected section. @param native - Original native-number wrapper. @param current - Actual language owner. @param output - Owned mutable output. @param star - Fill flag. @returns Star-fill result. */
 export function GetNumberOutput(
+  this: SvNumberformat,
   value: number,
   index: number,
-  section: ImpSvNumFor,
+  star: boolean,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
-  star: boolean,
 ): boolean {
   let sign = value < 0 && index === 0;
   value = Math.abs(value);
-  const info = section.Info(),
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info(),
     buffer = new OUStringBuffer();
   try {
     if (info.eScannedType === T.PERCENT) {
@@ -359,17 +438,20 @@ export function GetNumberOutput(
         if (allZero) sign = false;
       }
     }
-    const result = ImpDecimalFill(
+    const result = ImpDecimalFill.call(
+      this,
+      native,
       current,
       buffer,
       value,
       decimalPosition,
       section.GetCount() - 1,
-      section,
+      index,
       integer,
       star,
     );
     if (sign) buffer.insertChar(0, 45);
+    impTransliterate(buffer, section.GetNatNum(), native);
     const text = buffer.makeStringAndClear();
     try {
       output.assign(text);
@@ -382,14 +464,16 @@ export function GetNumberOutput(
   }
 }
 
-/** Original ImpNumberFill for exponent/denominator/numerator token runs, with source mutable token and digit positions. @param current - Actual language owner. @param buffer - Digits and inserted literals. @param value - Magnitude for General tokens. @param position - Mutable character cursor. @param symbol - Mutable token cursor. @param section - Compiled section. @param stopType - Original token stop condition. @param star - Fill flag. @param insertRightBlank - Original denominator alignment flag. @returns Star-fill result. */
+/** Original ImpNumberFill for exponent/denominator/numerator token runs, with source mutable token and digit positions. @param this - Actual original format owner. @param native - Original native-number wrapper. @param current - Actual language owner. @param buffer - Digits and inserted literals. @param value - Magnitude for General tokens. @param position - Mutable character cursor. @param symbol - Mutable token cursor. @param index - Original selected subformat index. @param stopType - Original token stop condition. @param star - Fill flag. @param insertRightBlank - Original denominator alignment flag. @returns Star-fill result. */
 export function ImpNumberFill(
+  this: SvNumberformat,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
   value: number,
   position: [number],
   symbol: [number],
-  section: ImpSvNumFor,
+  index: number,
   stopType: number,
   star: boolean,
   insertRightBlank = false,
@@ -397,7 +481,8 @@ export function ImpNumberFill(
   let result = false,
     stop = false,
     foundNumber = false;
-  const info = section.Info();
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info();
   let doThousands = info.nThousand === 0;
   position[0] = buffer.getLength();
   while (!stop && info.nTypeArray[symbol[0]] !== stopType) {
@@ -439,11 +524,10 @@ export function ImpNumberFill(
         buffer.insert(position[0], current.GetCurAbbrev());
         break;
       case K.GENERAL: {
-        const number = standard(value, current),
-          temporary = new OUStringBuffer();
+        const temporary = new OUStringBuffer();
         foundNumber = true;
         try {
-          temporary.append(number);
+          ImpGetOutputStandard.call(this, value, temporary, native, current);
           temporary.stripStart(45);
           const text = temporary.makeStringAndClear();
           try {
@@ -453,7 +537,6 @@ export function ImpNumberFill(
           }
         } finally {
           temporary.dispose();
-          number.dispose();
         }
         break;
       }
@@ -470,18 +553,20 @@ export function ImpNumberFill(
   return result;
 }
 
-/** Original ImpGetScientificOutput, including engineering exponent rescaling and rounded-up mantissa compensation. Actual RTL conversion and compiled digit-fill owners are reused. @param value - Finite normalized cell value. @param index - Selected numeric section. @param section - Compiled section. @param current - Actual language owner. @param output - Mutable output. @param star - Fill flag. @returns Star-fill result. */
+/** Original ImpGetScientificOutput, including engineering exponent rescaling and rounded-up mantissa compensation. Actual RTL conversion and compiled digit-fill owners are reused. @param this - Actual original format owner. @param value - Finite normalized cell value. @param index - Selected numeric section. @param native - Original native-number wrapper. @param current - Actual language owner. @param output - Mutable output. @param star - Fill flag. @returns Star-fill result. */
 export function GetScientificOutput(
+  this: SvNumberformat,
   value: number,
   index: number,
-  section: ImpSvNumFor,
+  star: boolean,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
-  star: boolean,
 ): boolean {
-  const info = section.Info(),
-    mantissa = new OUStringBuffer(),
-    exponent = new OUStringBuffer();
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info(),
+    mantissa = new OUStringBuffer();
+  let exponent: OUStringBuffer | undefined;
   let result = false,
     sign = false;
   if (value < 0) {
@@ -489,6 +574,7 @@ export function GetScientificOutput(
     value = -value;
   }
   try {
+    exponent = new OUStringBuffer();
     const initial = convertNumber(
       value,
       info.nCntPre + info.nCntPost - 1,
@@ -550,7 +636,18 @@ export function GetScientificOutput(
     while (zeros < position[0] && exponent.charAt(zeros) === 48) ++zeros;
     if (zeros) exponent.remove(0, zeros);
     result =
-      ImpNumberFill(current, exponent, value, position, symbol, section, S.EXP, star) || result;
+      ImpNumberFill.call(
+        this,
+        native,
+        current,
+        exponent,
+        value,
+        position,
+        symbol,
+        index,
+        S.EXP,
+        star,
+      ) || result;
     let continueMantissa = true;
     if (info.nTypeArray[symbol[0]] === S.EXP) {
       const token = info.sStrArray[symbol[0]] as OUString;
@@ -563,13 +660,15 @@ export function GetScientificOutput(
     if (!continueMantissa) mantissa.truncate();
     else
       result =
-        ImpDecimalFill(
+        ImpDecimalFill.call(
+          this,
+          native,
           current,
           mantissa,
           value,
           decimalPosition,
           symbol[0],
-          section,
+          index,
           false,
           star,
         ) || result;
@@ -583,7 +682,7 @@ export function GetScientificOutput(
     }
     return result;
   } finally {
-    exponent.dispose();
+    exponent?.dispose();
     mantissa.dispose();
   }
 }

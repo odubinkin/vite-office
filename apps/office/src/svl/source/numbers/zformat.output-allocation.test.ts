@@ -14,6 +14,7 @@ import { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberw
 import { ImpGetNatNumString } from "./zformat.time";
 /** A real owner fixture stays outside the controlled allocator lifetime. */
 interface Fixture {
+  constructorSlots?: number;
   reset(): void;
   invoke(): void;
   clear(): void;
@@ -87,6 +88,7 @@ function formatFixture(pattern: string): Fixture {
   expect(check[0]).toBe(0);
   code.dispose();
   return {
+    constructorSlots: pattern === "0.00E+00" ? 2 : 3,
     /** Resets only source calendar state outside allocation control. @returns Nothing. */ reset() {
       output.clear();
       current.GetCalendar().loadDefaultCalendar(current.GetLocaleData().getMyLocale());
@@ -147,7 +149,7 @@ const cases: [string, () => Fixture][] = [
       };
     },
   ],
-  ...["HH:MM:SS.00", "YYYY-MM-DD", "YYYY-MM-DD HH:MM:SS.00", "YYYY G"].map(
+  ...["HH:MM:SS.00", "YYYY-MM-DD", "YYYY-MM-DD HH:MM:SS.00", "YYYY G", "0.00E+00", "# ?/?"].map(
     /** Creates actual formatter rows. @param pattern - Source pattern. @returns Named factory. */ (
       pattern,
     ): [string, () => Fixture] => [
@@ -169,7 +171,7 @@ it.each(cases)(
       fixture.reset();
       fixture.invoke();
       fixture.clear();
-      for (const failAt of [0, 1, 2, 3]) {
+      for (let failAt = 0; failAt <= (fixture.constructorSlots ?? 3); failAt++) {
         fixture.reset();
         const live = new Set<rtl_uString>();
         let attempts = 0,

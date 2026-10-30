@@ -4,9 +4,12 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 import { saturating_castInt64 } from "../../../o3tl/inc/float_int_conversion";
 import { sprintfIntegral } from "../../../o3tl/inc/sprintf";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
-import { type ImpSvNumFor } from "./zformat";
+import type { SvNumberformat, ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
 import { ImpSvNumberformatScan } from "./zforscan";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import { impTransliterate } from "./zformat.transliterate";
+import { ImpGetNatNumString } from "./zformat.time";
 import { ImpNumberFill, ImpNumberFillWithThousands } from "./zformat.number";
 /** Native signed64 machine-value projection for the original signed integer arithmetic; undefined overflow domains require separate native evidence. @param value - Integer operation result. @returns Signed64 value. */
 function int64(value: bigint): bigint {
@@ -73,7 +76,7 @@ function GetFractionIntegerString(section: ImpSvNumFor): OUString {
     buffer.dispose();
   }
 }
-/** Original ImpGetFractionElements with actual section metadata and the original mutable double/integer output references. @param value - In/out magnitude/fraction. @param section - Actual compiled section. @param whole - Whole-part double. @param numerator - Signed64 numerator. @param denominator - Signed64 denominator. @returns Nothing. */
+/** Original ImpGetFractionElements with actual section metadata and the original mutable double/integer output references. @param value - In/out magnitude/fraction. @param native - Actual original native-number wrapper. @param whole - Whole-part double. @param numerator - Signed64 numerator. @param denominator - Signed64 denominator. @returns Nothing. */
 export function ImpGetFractionElements(
   value: [number],
   section: ImpSvNumFor,
@@ -141,29 +144,36 @@ export function ImpGetFractionElements(
     denominator[0] = forced > 0n ? forced : 1n;
   }
 }
-/** Original finite ImpGetFractionOutput for the admitted dormant-native-modifier path. @param input - Value after source section normalization. @param index - Selected numeric section. @param section - Actual compiled section. @param current - Real language owner. @param output - Mutable output. @param star - Fill flag. @returns Star-fill result. */
+/** Original finite ImpGetFractionOutput with its original pre-fill native-number conversions. @param this - Actual original format owner. @param input - Value after source section normalization. @param index - Selected numeric section. @param native - Actual original native-number wrapper. @param current - Real language owner. @param output - Mutable output. @param star - Fill flag. @returns Star-fill result. */
 export function GetFractionOutput(
+  this: SvNumberformat,
   input: number,
   index: number,
-  section: ImpSvNumFor,
+  star: boolean,
+  native: NativeNumberWrapper,
   current: SvNFLanguageData,
   output: OUString,
-  star: boolean,
 ): boolean {
-  const info = section.Info(),
+  const section = this["NumFor"][index] as ImpSvNumFor,
+    info = section.Info(),
     whole = new OUStringBuffer(),
-    numerator = new OUStringBuffer(),
-    denominator = new OUStringBuffer(),
-    integerFormat = GetFractionIntegerString(section),
-    numeratorFormat = GetNumeratorString(section),
-    denominatorFormat = GetDenominatorString(section),
     value: [number] = [input],
     integer: [number] = [Math.floor(input)],
     fraction: [bigint] = [0n],
     divisor: [bigint] = [1n];
+  let numerator: OUStringBuffer | undefined,
+    denominator: OUStringBuffer | undefined,
+    integerFormat: OUString | undefined,
+    numeratorFormat: OUString | undefined,
+    denominatorFormat: OUString | undefined;
   let result = false;
   const sign = input < 0 && index === 0;
   try {
+    numerator = new OUStringBuffer();
+    denominator = new OUStringBuffer();
+    integerFormat = GetFractionIntegerString(section);
+    numeratorFormat = GetNumeratorString(section);
+    denominatorFormat = GetDenominatorString(section);
     if (integer[0] > 0xffffffff || info.nCntExp > 9) {
       output.assign(ImpSvNumberformatScan.sErrStr);
       return false;
@@ -184,6 +194,7 @@ export function GetFractionOutput(
       const buffer = new Uint8Array(100),
         length = sprintfIntegral(buffer, integer[0]);
       whole.appendAscii(buffer, length);
+      impTransliterate(whole, section.GetNatNum(), native);
     }
     const hide =
       info.nCntPre > 0 &&
@@ -191,19 +202,31 @@ export function GetFractionOutput(
       numeratorFormat.indexOf(48) < 0 &&
       (denominatorFormat.indexOf(48) < 0 || denominatorFormat.toInt32() > 0);
     if (!hide) {
-      numerator.append(OUString.number(fraction[0]));
-      denominator.append(OUString.number(divisor[0]));
+      const fractionText = ImpGetNatNumString(section.GetNatNum(), Number(fraction[0]), 0, native);
+      try {
+        numerator.assign(fractionText);
+      } finally {
+        fractionText.dispose();
+      }
+      const divisorText = ImpGetNatNumString(section.GetNatNum(), Number(divisor[0]), 0, native);
+      try {
+        denominator.assign(divisorText);
+      } finally {
+        divisorText.dispose();
+      }
     }
     const symbol: [number] = [(section.GetCount() - 1) & 65535],
       position: [number] = [0];
     result =
-      ImpNumberFill(
+      ImpNumberFill.call(
+        this,
+        native,
         current,
         denominator,
         value[0],
         position,
         symbol,
-        section,
+        index,
         S.FRAC,
         star,
         true,
@@ -221,8 +244,18 @@ export function GetFractionOutput(
     if (!continuing) numerator.truncate();
     else {
       result =
-        ImpNumberFill(current, numerator, value[0], position, symbol, section, S.FRACBLANK, star) ||
-        result;
+        ImpNumberFill.call(
+          this,
+          native,
+          current,
+          numerator,
+          value[0],
+          position,
+          symbol,
+          index,
+          S.FRACBLANK,
+          star,
+        ) || result;
       continuing = false;
       if (info.nTypeArray[symbol[0]] === S.FRACBLANK) {
         const token = info.sStrArray[symbol[0]] as OUString;
@@ -247,13 +280,15 @@ export function GetFractionOutput(
     if (!continuing) whole.truncate();
     else
       result =
-        ImpNumberFillWithThousands(
+        ImpNumberFillWithThousands.call(
+          this,
+          native,
           current,
           whole,
           value[0],
           whole.getLength(),
           symbol[0],
-          section,
+          index,
           info.nCntPre,
           star,
         ) || result;
@@ -275,11 +310,11 @@ export function GetFractionOutput(
     }
     return result;
   } finally {
-    denominatorFormat.dispose();
-    numeratorFormat.dispose();
-    integerFormat.dispose();
-    denominator.dispose();
-    numerator.dispose();
+    denominatorFormat?.dispose();
+    numeratorFormat?.dispose();
+    integerFormat?.dispose();
+    denominator?.dispose();
+    numerator?.dispose();
     whole.dispose();
   }
 }

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 87
+revision: 90
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:52:39.336Z"
+  updated_at: "2026-10-30T13:39:35.441Z"
   updated_by: "CODER"
-  note: "Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related tests, 125 Calc tests, final type/static/build gates and two fresh-build browser cases. Whole CSV remains incomplete: native numeric producers, NumberText, multiline import and full acceptance remain."
-  attempts: 15
+  note: "Numeric native output and fractional-second source-call correction passed 1048 related tests, final 28-case native output file, 129 Calc tests, two fresh-build browser cases and static/build gates. Whole CSV remains incomplete: mode12/NumberText, multiline import and full acceptance remain."
+  attempts: 16
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -568,8 +571,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T13:39:35.441Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Numeric native output and fractional-second source-call correction passed 1048 related tests, final 28-case native output file, 129 Calc tests, two fresh-build browser cases and static/build gates. Whole CSV remains incomplete: mode12/NumberText, multiline import and full acceptance remain."
+  -
+    type: "status"
+    at: "2026-10-30T13:41:44.370Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:52:57.459Z"
+doc_updated_at: "2026-10-30T13:41:44.370Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1017,6 +1033,36 @@ sections:
     Attempts: 15
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:52:38.722Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T13:39:35.441Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Numeric native output and fractional-second source-call correction passed 1048 related tests, final 28-case native output file, 129 Calc tests, two fresh-build browser cases and static/build gates. Whole CSV remains incomplete: mode12/NumberText, multiline import and full acceptance remain.
+    Attempts: 16
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:39:34.591Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1518,6 +1564,22 @@ sections:
     - Required follow-ups remain original ordinary-number/scientific/fraction native conversion placements, mode12 selected-field/NumberText dependency and case handling, true multiline EditEngine import and complete CSV option/UI/native acceptance. libnumbertext download permission remains pending; no network was accessed. Task/goal remain active/incomplete, the same open Agentplane task means no tenth-task full suite is due. Reviewed output/native scratch remains untracked and excluded from commits.
 
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the verified fresh build. Evidence: calendar-native-browser-final.log. Scope remains actual basic CSV import/ODS save/active export and real owner/DOM-free Worker flow, not every native-number/date UI or complete CSV options. Final focused ESLint on the corrected two test files passes (calendar-native-final-test-lint.log).
+
+    ### Original native number/percent/currency/fraction/General forwarding, 2026-10-30
+
+    - Continued from fe2ae7f30. Numeric/scientific/fraction producers and their common fill helpers now bind actual SvNumberformat this owners and original selected indices, star/native/current/output argument roles. General callbacks can therefore read original NumFor0 metadata while the selected producer retains its own metadata. No projected formatter packet, replacement format key or current-locale heuristic is introduced.
+    - Added original ImpGetOutputStandard string/buffer and ImpGetOutputStdToPrecision fragments: native uint16 precision clamp300, original F conversion with trailing zero erasure, negative rounded-zero suppression, first-section conversion and >absolute1e15 E2 shortcut without conversion. Public numeric TEXT output and count-zero fallback use those original helpers. Genuine standard NUMBER UNLIMITED/INPUTSTRING paths retain their original raw-output bypasses; a defined custom entry is not treated as the builtin merely because SetStandard was called.
+    - Original ordinary number/percent/currency applies selected-section conversion after sign/token fill. Original fraction converts whole text and actual numerator/denominator before filling, so later placeholder ASCII0/sign/slash/blank units remain as upstream. Scientific deliberately has no invented final converter; General inside its fill helpers still uses the original first-section helper. Modes0..11 are connected; mode12 and nonfinite/native cast-domain closure remain unverified.
+    - Full source review of ImpGetFractionOfSecondString found a missed call in the previous block. The prior claim that fractional-second digits stay ASCII was a local port error, not upstream behavior. Corrected both normal and minimum-input-line branches to convert actual fractional buffers, with the minimum branch updating its counter only after conversion. Updated the erroneous prior Japanese TIME/DATETIME/CSV expected fractions from ASCII to original native digits. No blanket conversion or compensating counter heuristic was added. Real Hebrew125 cases preserve normal requested-count truncation versus converted-length input-line output.
+    - C++ constructor unwinding is now retained when scientific's second buffer or fraction's later buffer/format-string construction fails. Existing real RTL allocation/free-slot fixtures cover scientific's two initial constructors and fraction's first three constructors plus normal output. Raw C fatal growth/abort and full OOM/allocator ABI remain outside those bounded constructor tests. No backend assertion/rollback changes are introduced.
+    - CALC-411 records absent final scientific conversion; CALC-412 records General's exponent conversion bypass and the separate later ordinary-number pass; CALC-413 records fractional-second pre/post-conversion counter differences; CALC-414 records ASCII fraction padding after native conversion. Preserve all source outcomes. CALC-415 additionally records source NatNum12 casing using cached aLocale instead of the NumberText-request rLocale; implementation/native witness remain pending.
+    - Initial new fixtures mistakenly used English General with ja_JP, whose pinned formatindex0 defines Standard. The scanner correctly interpreted those letters according to original Japanese date keywords; corrected test format text to the source Standard keyword, without adding a parser alias. Source mandatory leading0 and actual figure-space placement also corrected two expected strings. Initial standard-flag tests used defined custom entries; original builtin generation explicitly sets NUMBER type as well as its standard flag. Replaced that setup with genuine GetStandardIndex entries and existing mutable metadata setters; production type equality/flags were not weakened.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.native-number.test.ts. Result: pass,28 tests. Evidence: output/native/AQF9AG-icu-grego/number-native-native-tests-builtin.log. Scope includes actual ordinary/scientific/fraction/Text numeric producers, genuine builtin standard versus custom precision paths, first-section Thai metadata versus selected Japanese metadata, text-overload bypass and Hebrew fractional-length policy. The final additional case uses genuine my_MM formatindex0 NatNum1 metadata unchanged, proving native output၁၂.၅ and source unlimited bypass12.5. This closes the named initializer-to-display evidence gap without claiming complete native initializer/formatter ABI.
+    - Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/nativenumber src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,60 files1048 tests in288.20s. Evidence: number-native-related-tests.log. The subsequent addition was one test-only genuine Myanmar builtin case; its whole native-output test file was rerun to28-case pass, plus final lint/typecheck, without production changes. Counts overlap and are not summed. Prior focused six-file run had156 passes and12 failures confined to new malformed-locale/incorrect-flag/spacing fixture expectations; all earlier number/fraction/date/time/allocation files passed. Failure logs remain preserved.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests. Evidence: number-native-csv-tests.log. Four new real shell cases import numeric values, compile/apply original Japanese formats and verify shown versus input-line CSV output, including mixed-width fraction zeros and unchanged scientific digits. Stored numeric values are unchanged. A prior focused docsh run passes64 tests (number-native-csv-focused-tests.log).
+    - Commands: npm run typecheck; focused ESLint across all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-native-{typecheck-final,lint,provenance,dependencies,docs,size,parity,resources,build}.log; final test-only lint/typecheck also pass in number-native-final-test-{lint,typecheck}.log. Provenance1876 modules; dependencies1875 sources10143 imports225 allowed edges; docs4240 authored sources; semantic violations0. No checker exemptions or broad semantic parity promotion. All implementation was frozen before the related test/build/browser runs; subsequent edits are test/documentation only.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the successful fresh build. Evidence: number-native-browser.log. Scope remains actual basic CSV/ODS file UI and owner/DOM-free Worker integration, not all native-number format/CSV option combinations or full native wrapper ABI.
+    - Required follow-ups remain actual mode12 NumberText/selected-field/case handling and dependency data, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining admitted-domain audit. libnumbertext1.0.11 source download permission is still pending; no network access occurred. Goal/task remain active/incomplete. This is the same open Agentplane task, so this checkpoint creates no tenth-task full-suite trigger. Reviewed output/native evidence remains untracked/excluded from commits.
 id_source: "generated"
 ---
 ## Summary
@@ -1974,6 +2036,36 @@ Note: Calendar/date/time/logical NatNum0..11 forwarding passed 1037 related test
 Attempts: 15
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:52:38.722Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T13:39:35.441Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Numeric native output and fractional-second source-call correction passed 1048 related tests, final 28-case native output file, 129 Calc tests, two fresh-build browser cases and static/build gates. Whole CSV remains incomplete: mode12/NumberText, multiline import and full acceptance remain.
+Attempts: 16
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T13:39:34.591Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -2479,3 +2571,19 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Required follow-ups remain original ordinary-number/scientific/fraction native conversion placements, mode12 selected-field/NumberText dependency and case handling, true multiline EditEngine import and complete CSV option/UI/native acceptance. libnumbertext download permission remains pending; no network was accessed. Task/goal remain active/incomplete, the same open Agentplane task means no tenth-task full suite is due. Reviewed output/native scratch remains untracked and excluded from commits.
 
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the verified fresh build. Evidence: calendar-native-browser-final.log. Scope remains actual basic CSV import/ODS save/active export and real owner/DOM-free Worker flow, not every native-number/date UI or complete CSV options. Final focused ESLint on the corrected two test files passes (calendar-native-final-test-lint.log).
+
+### Original native number/percent/currency/fraction/General forwarding, 2026-10-30
+
+- Continued from fe2ae7f30. Numeric/scientific/fraction producers and their common fill helpers now bind actual SvNumberformat this owners and original selected indices, star/native/current/output argument roles. General callbacks can therefore read original NumFor0 metadata while the selected producer retains its own metadata. No projected formatter packet, replacement format key or current-locale heuristic is introduced.
+- Added original ImpGetOutputStandard string/buffer and ImpGetOutputStdToPrecision fragments: native uint16 precision clamp300, original F conversion with trailing zero erasure, negative rounded-zero suppression, first-section conversion and >absolute1e15 E2 shortcut without conversion. Public numeric TEXT output and count-zero fallback use those original helpers. Genuine standard NUMBER UNLIMITED/INPUTSTRING paths retain their original raw-output bypasses; a defined custom entry is not treated as the builtin merely because SetStandard was called.
+- Original ordinary number/percent/currency applies selected-section conversion after sign/token fill. Original fraction converts whole text and actual numerator/denominator before filling, so later placeholder ASCII0/sign/slash/blank units remain as upstream. Scientific deliberately has no invented final converter; General inside its fill helpers still uses the original first-section helper. Modes0..11 are connected; mode12 and nonfinite/native cast-domain closure remain unverified.
+- Full source review of ImpGetFractionOfSecondString found a missed call in the previous block. The prior claim that fractional-second digits stay ASCII was a local port error, not upstream behavior. Corrected both normal and minimum-input-line branches to convert actual fractional buffers, with the minimum branch updating its counter only after conversion. Updated the erroneous prior Japanese TIME/DATETIME/CSV expected fractions from ASCII to original native digits. No blanket conversion or compensating counter heuristic was added. Real Hebrew125 cases preserve normal requested-count truncation versus converted-length input-line output.
+- C++ constructor unwinding is now retained when scientific's second buffer or fraction's later buffer/format-string construction fails. Existing real RTL allocation/free-slot fixtures cover scientific's two initial constructors and fraction's first three constructors plus normal output. Raw C fatal growth/abort and full OOM/allocator ABI remain outside those bounded constructor tests. No backend assertion/rollback changes are introduced.
+- CALC-411 records absent final scientific conversion; CALC-412 records General's exponent conversion bypass and the separate later ordinary-number pass; CALC-413 records fractional-second pre/post-conversion counter differences; CALC-414 records ASCII fraction padding after native conversion. Preserve all source outcomes. CALC-415 additionally records source NatNum12 casing using cached aLocale instead of the NumberText-request rLocale; implementation/native witness remain pending.
+- Initial new fixtures mistakenly used English General with ja_JP, whose pinned formatindex0 defines Standard. The scanner correctly interpreted those letters according to original Japanese date keywords; corrected test format text to the source Standard keyword, without adding a parser alias. Source mandatory leading0 and actual figure-space placement also corrected two expected strings. Initial standard-flag tests used defined custom entries; original builtin generation explicitly sets NUMBER type as well as its standard flag. Replaced that setup with genuine GetStandardIndex entries and existing mutable metadata setters; production type equality/flags were not weakened.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.native-number.test.ts. Result: pass,28 tests. Evidence: output/native/AQF9AG-icu-grego/number-native-native-tests-builtin.log. Scope includes actual ordinary/scientific/fraction/Text numeric producers, genuine builtin standard versus custom precision paths, first-section Thai metadata versus selected Japanese metadata, text-overload bypass and Hebrew fractional-length policy. The final additional case uses genuine my_MM formatindex0 NatNum1 metadata unchanged, proving native output၁၂.၅ and source unlimited bypass12.5. This closes the named initializer-to-display evidence gap without claiming complete native initializer/formatter ABI.
+- Command: npm run test:shared -- src/svl/source/numbers src/i18npool/source/nativenumber src/i18npool/source/calendar src/unotools/source/i18n/calendarwrapper src/unotools/source/i18n/native-wrapper-failures.test.ts. Result: pass,60 files1048 tests in288.20s. Evidence: number-native-related-tests.log. The subsequent addition was one test-only genuine Myanmar builtin case; its whole native-output test file was rerun to28-case pass, plus final lint/typecheck, without production changes. Counts overlap and are not summed. Prior focused six-file run had156 passes and12 failures confined to new malformed-locale/incorrect-flag/spacing fixture expectations; all earlier number/fraction/date/time/allocation files passed. Failure logs remain preserved.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files129 tests. Evidence: number-native-csv-tests.log. Four new real shell cases import numeric values, compile/apply original Japanese formats and verify shown versus input-line CSV output, including mixed-width fraction zeros and unchanged scientific digits. Stored numeric values are unchanged. A prior focused docsh run passes64 tests (number-native-csv-focused-tests.log).
+- Commands: npm run typecheck; focused ESLint across all changed implementation/tests; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-native-{typecheck-final,lint,provenance,dependencies,docs,size,parity,resources,build}.log; final test-only lint/typecheck also pass in number-native-final-test-{lint,typecheck}.log. Provenance1876 modules; dependencies1875 sources10143 imports225 allowed edges; docs4240 authored sources; semantic violations0. No checker exemptions or broad semantic parity promotion. All implementation was frozen before the related test/build/browser runs; subsequent edits are test/documentation only.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after the successful fresh build. Evidence: number-native-browser.log. Scope remains actual basic CSV/ODS file UI and owner/DOM-free Worker integration, not all native-number format/CSV option combinations or full native wrapper ABI.
+- Required follow-ups remain actual mode12 NumberText/selected-field/case handling and dependency data, true multiline EditEngine import, complete CSV option/UI/native acceptance and remaining admitted-domain audit. libnumbertext1.0.11 source download permission is still pending; no network access occurred. Goal/task remain active/incomplete. This is the same open Agentplane task, so this checkpoint creates no tenth-task full-suite trigger. Reviewed output/native evidence remains untracked/excluded from commits.

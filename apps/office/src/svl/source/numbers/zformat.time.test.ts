@@ -5,8 +5,9 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { Color } from "../../../tools/inc/color";
 it.each([
-  ["[NatNum1]HH:MM:SS.00", 0.5, "一二:〇〇:〇〇.00", 0x411],
-  ["[NatNum3]HH:MM:SS.00", 0.5, "１２:００:００.00", 0x411],
+  ["[NatNum4]HH:MM:SS.00", 0.5, "十二:〇:〇.〇", 0x411],
+  ["[NatNum1]HH:MM:SS.00", 0.5, "一二:〇〇:〇〇.〇〇", 0x411],
+  ["[NatNum3]HH:MM:SS.00", 0.5, "１２:００:００.００", 0x411],
   ["[NatNum4]HH:MM", 0.5, "十二:〇", 0x411],
   ["[NatNum3][HH]:MM", -1.5, "-３６:００", 0x411],
   ["HH:MM:SS", 1.5, "12:00:00"],

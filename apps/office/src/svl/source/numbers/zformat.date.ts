@@ -495,6 +495,8 @@ export function GetDateTimeOutput(
         decimals,
         true,
         inputLine ? info.nCntPost : 0,
+        section.GetNatNum(),
+        native,
       );
     } else {
       const seconds = Math.floor(time) >>> 0;
@@ -504,6 +506,8 @@ export function GetDateTimeOutput(
         decimals,
         false,
         inputLine ? info.nCntPost : 0,
+        section.GetNatNum(),
+        native,
       );
       if (info.nThousand === 3) second = seconds;
       else if (info.nThousand === 2) {

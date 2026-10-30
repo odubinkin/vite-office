@@ -21,7 +21,8 @@
       "lcl_GetFractionIntegerString"
     ],
     "preservedResponsibilities": [
-      "Original finite fraction output consumes actual compiled token strings and existing shared numeric fill. Continued/forced denominators retain strict tie comparisons, collateral fractions, original signed64 operation widths, binary64 whole/fraction outputs, carry, improper-fraction limit, hide/mandatory fields and left-aligned denominator blanks. Selected and first native modifiers remain subject to the existing dormant-transliteration admission. CALC-397/CALC-398 source limit/sign behavior is retained. The unchanged native fraction-element body matches5362 scalar cases in three clang modes with no UBSan errors in those cases; this is not full parser/display/UNO or undefined-overflow certification."
+      "Original finite fraction output consumes actual compiled token strings and existing shared numeric fill. Continued/forced denominators retain strict tie comparisons, collateral fractions, original signed64 operation widths, binary64 whole/fraction outputs, carry, improper-fraction limit, hide/mandatory fields and left-aligned denominator blanks. Selected and first native modifiers remain subject to the existing dormant-transliteration admission. CALC-397/CALC-398 source limit/sign behavior is retained. The unchanged native fraction-element body matches5362 scalar cases in three clang modes with no UBSan errors in those cases; this is not full parser/display/UNO or undefined-overflow certification.",
+      "Original fraction output now binds the actual format owner/index and converts integral text, numerator and denominator before the original token fill stages, using actual native metadata/wrapper. Later ASCII placeholder zeros, blanks, slash and leading minus retain source placement; no final blanket conversion is added. Construction unwinds previously created buffer/format owners if a subsequent constructor throws. Modes0..11 supersede the prior dormant-native-only limitation; full native formatter/UNO ABI and mode12 remain pending."
     ],
     "omittedResponsibilities": [
       "Full native parser/display/ABI and broad template/C printf equivalence are unverified."
@@ -34,6 +35,18 @@
         },
         {
           "path": "apps/office/src/svl/source/numbers/zformat.fraction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
           "marker": "@fileoverview"
         }
       ],

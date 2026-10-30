@@ -1,4 +1,4 @@
-/** @fileoverview Original finite time output and fractional-second production over actual compiled sections, tools::Time and calendar owners; native-number integer fields use the original metadata and service owner; fractional-second digits and literals remain unconverted as upstream. */
+/** @fileoverview Original finite time output and fractional-second production over actual compiled sections, tools::Time and calendar owners; native-number integer fields use the original metadata and service owner; fractional-second buffers also use the original native conversion, while literals retain their original placement. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { rtl_math_doubleToUString, rtl_math_StringFormat as F } from "../../../sal/inc/rtl/math.h";
@@ -52,13 +52,15 @@ export function ImpGetNatNumString(
     result.dispose();
   }
 }
-/** Original ImpGetFractionOfSecondString keeps one extra decimal only for GetClock's truncated fraction. @param buffer - Fraction output. @param fraction - Fractional seconds. @param decimals - Requested digits. @param extra - Add one rounding decimal. @param minimum - Original minimum input-line digits. @returns Actual emitted digit count. */
+/** Original ImpGetFractionOfSecondString keeps one extra decimal only for GetClock's truncated fraction. @param buffer - Fraction output. @param fraction - Fractional seconds. @param decimals - Requested digits. @param extra - Add one rounding decimal. @param minimum - Original minimum input-line digits. @param number - Actual selected metadata. @param native - Original wrapper. @returns Actual emitted digit count. */
 export function ImpGetFractionOfSecondString(
   buffer: OUStringBuffer,
   fraction: number,
   decimals: number,
   extra: boolean,
   minimum: number,
+  number: SvNumberNatNumConstReference,
+  native: NativeNumberWrapper,
 ): number {
   if (!decimals) return 0;
   const converted = new OUString();
@@ -86,8 +88,9 @@ export function ImpGetFractionOfSecondString(
     buffer.stripEnd(48);
     for (let index = buffer.getLength(); index < minimum; ++index)
       buffer.append(Uint16Array.of(48));
+    impTransliterate(buffer, number, native);
     decimals = buffer.getLength();
-  }
+  } else impTransliterate(buffer, number, native);
   return decimals & 65535;
 }
 /** Original time output, with wall-clock modulo-day extraction versus bracketed elapsed fields. Caller admits finite values; native integer fields retain their original conversion order. @param input - Original serial value after selected-section sign handling. @param index - Selected native subformat. @param section - Actual compiled section. @param native - Original native-number wrapper. @param current - Current language/calendar owner. @param output - Mutable result. @param star - Source fill flag. @returns Whether the latest enabled star token emitted a fill. */
@@ -135,6 +138,8 @@ export function GetTimeOutput(
         decimals,
         true,
         inputLine ? info.nCntPost : 0,
+        section.GetNatNum(),
+        native,
       );
     } else {
       const time = round(value * 86400, decimals);
@@ -150,6 +155,8 @@ export function GetTimeOutput(
         decimals,
         false,
         inputLine ? info.nCntPost : 0,
+        section.GetNatNum(),
+        native,
       );
       if (info.nThousand === 3) second = seconds;
       else if (info.nThousand === 2) {
