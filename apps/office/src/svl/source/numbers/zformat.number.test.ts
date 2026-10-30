@@ -103,3 +103,56 @@ it("inserts numeric star controls and source fixed-width blanks only at their co
     formatter.dispose();
   }
 });
+
+it.each([
+  [0x409, "0.00E+00", 1234.56, "1.23E+03"],
+  [0x409, "0.00E+00", -1234.56, "-1.23E+03"],
+  [0x409, "0.00E+00", 0, "0.00E+00"],
+  [0x409, ".00E+00", 0.00012, "1.20E-03"],
+  [0x409, "0.00E+00", -0, "-0.00E+00"],
+  [0x409, "0.00E-00", 1234.56, "1.23E03"],
+  [0x409, "0.00E-00", 0.0123456, "1.23E-02"],
+  [0x409, "0.00E+000", 1234.56, "1.23E+003"],
+  [0x409, "0.00E+???", 1234.56, "1.23E+\u2007\u20073"],
+  [0x409, "0.00E+###", 1234.56, "1.23E+3"],
+  [0x409, "##0.00E+00", 12345, "12.35E+03"],
+  [0x409, "##0.00E+00", 0.012345, "12.35E-03"],
+  [0x409, "##0.00E+00", 99.995, "100.00E+00"],
+  [0x409, '"v="0.00E+00', 1234.56, "v=1.23E+03"],
+  [0x409, "0.00E+00;(0.00E+00)", -1234.56, "(1.23E+03)"],
+  [0x407, "0,00E+00", 1234.56, "1,23E+03"],
+])(
+  "formats original scientific locale %i code %s and value %s",
+  /** Native RTL E conversion, original rescaling and actual compiled exponent placeholders supply all output. @param language - Language. @param pattern - Code. @param value - Finite input. @param expected - Source-derived output. @returns Nothing. */ (
+    language,
+    pattern,
+    value,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(language),
+      code = unicode(pattern),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0],
+      output = new OUString(),
+      color: [Color | null] = [null];
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        language,
+      );
+      expect(check[0]).toBe(0);
+      formatter.GetOutputString(value, key[0], output, color);
+      expect(text(output)).toBe(expected);
+    } finally {
+      output.dispose();
+      code.dispose();
+      formatter.dispose();
+    }
+  },
+);

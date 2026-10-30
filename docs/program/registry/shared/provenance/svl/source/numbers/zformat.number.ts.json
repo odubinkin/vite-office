@@ -7,17 +7,22 @@
     "status": "mapped",
     "upstreamPath": "svl/source/numbers/zformat.cxx",
     "localSymbols": [
-      "GetNumberOutput"
+      "GetNumberOutput",
+      "GetScientificOutput",
+      "ImpNumberFill"
     ],
     "upstreamSymbols": [
       "SvNumberformat::ImpGetNumberOutput",
       "SvNumberformat::ImpDecimalFill",
       "SvNumberformat::ImpNumberFillWithThousands",
       "SvNumberformat::ImpDigitFill",
-      "GetPrecExp"
+      "GetPrecExp",
+      "SvNumberformat::ImpGetScientificOutput",
+      "SvNumberformat::ImpNumberFill"
     ],
     "preservedResponsibilities": [
-      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced."
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced.",
+      "AQF9AG adds original finite scientific/engineering ImpGetScientificOutput and shared ImpNumberFill. RTL E conversion, exponent zero removal and 0/?/# padding, sign tokens, mutable token/digit cursors, engineering remainder normalization and rounded-up mantissa compensation follow the source. Existing decimal/integer fill is reused. Real-owner tests preserve CALC-395 signed-zero output and CALC-396 zero-integer-placeholder magnitude behavior. This remains the admitted path without complete native-number modifiers; dedicated full native wrapper differential and other display families remain pending."
     ],
     "omittedResponsibilities": [
       "Complete native output/ABI and full CSV integration closure remain unverified."

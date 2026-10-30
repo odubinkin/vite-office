@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 63
+revision: 66
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T09:28:21.053Z"
+  updated_at: "2026-10-30T09:41:46.576Z"
   updated_by: "CODER"
-  note: "Original finite number/percentage/currency fill checkpoint passes 705 related shared tests, 102 Calc tests and two browser tests after restoring and reusing the existing header iterator. Typecheck, focused lint, provenance, dependencies, resources, inventory, docs, size and build pass. Full CSV remains incomplete: complete NatNum/nonfinite output, scientific/fraction/date-time producers, original public output contracts, multiline EditEngine and option/UI/native differential closure still require work."
-  attempts: 7
+  note: "Scientific/engineering display checkpoint passes 716 related formatter tests, 106 Calc tests and two browser scenarios, with typecheck, focused lint, provenance/dependency/resource/inventory/docs/size/build checks. CALC-395/CALC-396 source behavior is preserved. Full CSV remains incomplete: fraction/date-time/native-number output, original public output contracts, multiline EditEngine, complete option/UI acceptance and native differential closure still require work."
+  attempts: 8
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -440,8 +443,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T09:41:46.576Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Scientific/engineering display checkpoint passes 716 related formatter tests, 106 Calc tests and two browser scenarios, with typecheck, focused lint, provenance/dependency/resource/inventory/docs/size/build checks. CALC-395/CALC-396 source behavior is preserved. Full CSV remains incomplete: fraction/date-time/native-number output, original public output contracts, multiline EditEngine, complete option/UI acceptance and native differential closure still require work."
+  -
+    type: "status"
+    at: "2026-10-30T09:42:49.848Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T09:28:32.503Z"
+doc_updated_at: "2026-10-30T09:42:49.848Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -649,6 +665,36 @@ sections:
     Attempts: 7
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:28:19.391Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T09:41:46.576Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Scientific/engineering display checkpoint passes 716 related formatter tests, 106 Calc tests and two browser scenarios, with typecheck, focused lint, provenance/dependency/resource/inventory/docs/size/build checks. CALC-395/CALC-396 source behavior is preserved. Full CSV remains incomplete: fraction/date-time/native-number output, original public output contracts, multiline EditEngine, complete option/UI acceptance and native differential closure still require work.
+    Attempts: 8
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:41:45.767Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1041,6 +1087,18 @@ sections:
 
     - Final restored-state command: npm run test:shared -- src/svl/source/numbers src/unotools/inc/digitgroupingiterator.test.ts. Result: pass,44 files705 tests. Scope: actual original header iterator plus the complete related formatter suites. Final Calc command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files102 tests. Evidence: number-fill-all-tests.log and number-fill-csv-tests.log; these supersede earlier temporary-state aggregate and obsolete currency-failure expectation results.
     - Final restored-state browser command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after a fresh build with the original iterator restored. Evidence: number-fill-browser.log. A byte comparison confirms the original iterator, its tests and both old registry records exactly match HEAD; none is included in the checkpoint diff.
+
+    ### Original scientific and engineering display output, 2026-10-30
+
+    - Continued the same approved task from64e6539e2aa8. Pinned reference HEAD remains9bc445578031fecf56086729d8e4940c77e14d65. Ported original ImpGetScientificOutput and its shared ImpNumberFill token-run helper into the existing numeric output fragment. Actual RTL E conversion and compiled subformat/current-language owners are reused; no alternate formatter, text-number cell or inferred scientific pattern is introduced.
+    - Preserve original exponent leading-zero removal, mandatory/optional/figure-space placeholders, sign token behavior, uint16 denominator alignment cursor, star/blank/literal/CCC/General token cases, mutable exponent token/digit cursors, engineering signed remainder adjustment, zero-integer-placeholder rescale=-1 and rounded-up mantissa extra-zero compensation. Existing actual decimal/grouping fill processes the mantissa. The unchanged native-modifier admission boundary and nonfinite ordinary/scientific cast-domain gap remain explicit; native output contracts/full NativeNumber service closure remain pending.
+    - CALC-395 records original scientific negative-zero preservation. CALC-396 records the admitted .00E+00 rescaling path that displays0.00012 as1.20E-03. Both derive from source control flow and actual public local compilation/output; no newly compiled complete scientific/UNO wrapper comparison is claimed. Preserve both results; do not apply ordinary-number zero normalization or invent a leading integer placeholder.
+    - Command: npm run test:shared -- src/svl/source/numbers. Result: pass,43 files716 tests, including16 new scientific/engineering cases. Source-derived expectations cover sign, zero/negative zero, positive/negative exponent marker, exponent0/?/# width, engineering positive/negative exponent rescaling,99.995 rounded-up compensation, literal/parenthesized sections, German decimal separator and original no-integer-placeholder behavior. Evidence: output/native/AQF9AG-icu-grego/scientific-all-tests.log.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files106 tests. Four new actual shown-format CSV cases use real attributes/ScCellFormat/scientific output for normal, engineering compensation, negative parentheses and the preserved CALC-396 result. Evidence: scientific-csv-tests.log.
+    - Final focused command: npm run test:shared -- src/svl/source/numbers/zformat.number.test.ts. Result: pass,43 cases after renaming the shared private RTL F/E converter to reflect its actual modes. This repeats related tests and is not added to the unique count. Evidence: scientific-final-tests.log.
+    - Commands: npm run typecheck; focused ESLint for all4 changed implementation/test paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: scientific-{typecheck,lint,provenance,dependencies,docs,size,parity,resources,build}.log. Provenance1864 modules; dependencies1863 runtime sources10061 imports225 allowed edges; docs4215 authored sources. The prior numeric checkpoint note's10062 import count reflected the temporary iterator SAL import; its final restored-state dependency log and the current check have10061 imports. Original iterator and old metadata remain unchanged.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests. Evidence: scientific-browser.log. Scope: real basic CSV import/ODS save/active export and sparse native owner/Worker integration, not complete scientific format UI acceptance or full CSV certification.
+    - Remaining: fraction/date/time and completed native-number output, original public output contracts, true multiline EditEngine import, complete CSV option/UI audit and dedicated full native differential closure. Goal/task are not complete. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run.
 id_source: "generated"
 ---
 ## Summary
@@ -1257,6 +1315,36 @@ Note: Original finite number/percentage/currency fill checkpoint passes 705 rela
 Attempts: 7
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:28:19.391Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T09:41:46.576Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Scientific/engineering display checkpoint passes 716 related formatter tests, 106 Calc tests and two browser scenarios, with typecheck, focused lint, provenance/dependency/resource/inventory/docs/size/build checks. CALC-395/CALC-396 source behavior is preserved. Full CSV remains incomplete: fraction/date-time/native-number output, original public output contracts, multiline EditEngine, complete option/UI acceptance and native differential closure still require work.
+Attempts: 8
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:41:45.767Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1653,3 +1741,15 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 
 - Final restored-state command: npm run test:shared -- src/svl/source/numbers src/unotools/inc/digitgroupingiterator.test.ts. Result: pass,44 files705 tests. Scope: actual original header iterator plus the complete related formatter suites. Final Calc command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files102 tests. Evidence: number-fill-all-tests.log and number-fill-csv-tests.log; these supersede earlier temporary-state aggregate and obsolete currency-failure expectation results.
 - Final restored-state browser command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after a fresh build with the original iterator restored. Evidence: number-fill-browser.log. A byte comparison confirms the original iterator, its tests and both old registry records exactly match HEAD; none is included in the checkpoint diff.
+
+### Original scientific and engineering display output, 2026-10-30
+
+- Continued the same approved task from64e6539e2aa8. Pinned reference HEAD remains9bc445578031fecf56086729d8e4940c77e14d65. Ported original ImpGetScientificOutput and its shared ImpNumberFill token-run helper into the existing numeric output fragment. Actual RTL E conversion and compiled subformat/current-language owners are reused; no alternate formatter, text-number cell or inferred scientific pattern is introduced.
+- Preserve original exponent leading-zero removal, mandatory/optional/figure-space placeholders, sign token behavior, uint16 denominator alignment cursor, star/blank/literal/CCC/General token cases, mutable exponent token/digit cursors, engineering signed remainder adjustment, zero-integer-placeholder rescale=-1 and rounded-up mantissa extra-zero compensation. Existing actual decimal/grouping fill processes the mantissa. The unchanged native-modifier admission boundary and nonfinite ordinary/scientific cast-domain gap remain explicit; native output contracts/full NativeNumber service closure remain pending.
+- CALC-395 records original scientific negative-zero preservation. CALC-396 records the admitted .00E+00 rescaling path that displays0.00012 as1.20E-03. Both derive from source control flow and actual public local compilation/output; no newly compiled complete scientific/UNO wrapper comparison is claimed. Preserve both results; do not apply ordinary-number zero normalization or invent a leading integer placeholder.
+- Command: npm run test:shared -- src/svl/source/numbers. Result: pass,43 files716 tests, including16 new scientific/engineering cases. Source-derived expectations cover sign, zero/negative zero, positive/negative exponent marker, exponent0/?/# width, engineering positive/negative exponent rescaling,99.995 rounded-up compensation, literal/parenthesized sections, German decimal separator and original no-integer-placeholder behavior. Evidence: output/native/AQF9AG-icu-grego/scientific-all-tests.log.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files106 tests. Four new actual shown-format CSV cases use real attributes/ScCellFormat/scientific output for normal, engineering compensation, negative parentheses and the preserved CALC-396 result. Evidence: scientific-csv-tests.log.
+- Final focused command: npm run test:shared -- src/svl/source/numbers/zformat.number.test.ts. Result: pass,43 cases after renaming the shared private RTL F/E converter to reflect its actual modes. This repeats related tests and is not added to the unique count. Evidence: scientific-final-tests.log.
+- Commands: npm run typecheck; focused ESLint for all4 changed implementation/test paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: scientific-{typecheck,lint,provenance,dependencies,docs,size,parity,resources,build}.log. Provenance1864 modules; dependencies1863 runtime sources10061 imports225 allowed edges; docs4215 authored sources. The prior numeric checkpoint note's10062 import count reflected the temporary iterator SAL import; its final restored-state dependency log and the current check have10061 imports. Original iterator and old metadata remain unchanged.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests. Evidence: scientific-browser.log. Scope: real basic CSV import/ODS save/active export and sparse native owner/Worker integration, not complete scientific format UI acceptance or full CSV certification.
+- Remaining: fraction/date/time and completed native-number output, original public output contracts, true multiline EditEngine import, complete CSV option/UI audit and dedicated full native differential closure. Goal/task are not complete. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run.

@@ -615,3 +615,46 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["0.00E+00", 1234.56, "1.23E+03\n"],
+  ["##0.00E+00", 99.995, "100.00E+00\n"],
+  ["0.00E+00;(0.00E+00)", -1234.56, "(1.23E+03)\n"],
+  [".00E+00", 0.00012, "1.20E-03\n"],
+])(
+  "exports original scientific display pattern %s",
+  /** Existing document attributes and ScCellFormat display dispatch drive the CSV export without a scientific-string substitute. @param pattern - Source format. @param value - Numeric cell. @param expected - Native-behavior CSV. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
