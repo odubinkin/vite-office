@@ -15,7 +15,6 @@ import {
   STYLE_PROPERTY_CONTROLS,
   type RtfCellBorder,
   type RtfDocumentImplContext,
-  type RtfSectionPage,
   type RtfState,
 } from "./rtfdocumentimpl.context";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
@@ -40,6 +39,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       paragraphSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
+      sectionSprms: new RTFSprms(previous?.sectionSprms),
       tableSprms: new RTFSprms(previous?.tableSprms),
       tableAttributes: new RTFSprms(previous?.tableAttributes),
       listLevelEntries: new RTFSprms(previous?.listLevelEntries),
@@ -95,10 +95,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (token.kind === "group-end") {
     if (
       this["states"].length === 1 &&
+      !this["firstRun"] &&
       (this["runs"].length > 0 ||
+        this["m_bNeedPar"] ||
         (!this["terminatedParagraph"] && !(this["states"][0] as RtfState).paragraphSprms.empty()))
     )
       this["CommitParagraph"](this["states"][0], true);
+    if (this["states"].length === 1 && !this["firstRun"])
+      CaptureSection.call(this, this["states"][0] as RtfState);
     const previous = this["states"].pop();
     try {
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
@@ -176,6 +180,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       previous?.characterSprms.dispose();
       previous?.destinationText.dispose();
       previous?.paragraphSprms.dispose();
+      previous?.sectionSprms.dispose();
       previous?.tableSprms.dispose();
       previous?.tableAttributes.dispose();
       previous?.listLevelEntries.dispose();
@@ -505,75 +510,7 @@ export function DispatchBodyControl(
     return;
   }
   if (["ltrpar", "rtlpar", "ltrrow", "rtlrow"].includes(name)) state.runType = RunType.NONE;
-  if (name === "sect") {
-    if (this["runs"].length > 0) this["CommitParagraph"](state);
-    this["FlushTable"]();
-    this["currentSection"]++;
-    this["sectionPages"].push({ ...this["defaultSectionPage"] });
-    this["terminatedParagraph"] = true;
-    return;
-  }
-  if (name === "sectd") {
-    this["sectionPages"][this["currentSection"]] = { ...this["defaultSectionPage"] };
-    this["sectionPageRestarts"].delete(this["currentSection"]);
-    return;
-  }
-  if (name === "pgnrestart") {
-    this["sectionPageRestarts"].add(this["currentSection"]);
-    return;
-  }
-  {
-    const page = this["sectionPages"][this["currentSection"]] as RtfSectionPage;
-    if (name === "landscape" || name === "lndscpsxn") {
-      page.landscape = true;
-      if (name === "landscape") this["defaultSectionPage"].landscape = true;
-    } else if (parameter !== undefined) {
-      switch (name) {
-        case "paperw":
-          this["defaultSectionPage"].width = parameter;
-          page.width = parameter;
-          break;
-        case "pgwsxn":
-          page.width = parameter;
-          break;
-        case "paperh":
-          this["defaultSectionPage"].height = parameter;
-          page.height = parameter;
-          break;
-        case "pghsxn":
-          page.height = parameter;
-          break;
-        case "margl":
-          this["defaultSectionPage"].leftMargin = parameter;
-          page.leftMargin = parameter;
-          break;
-        case "marglsxn":
-          page.leftMargin = parameter;
-          break;
-        case "margr":
-          this["defaultSectionPage"].rightMargin = parameter;
-          page.rightMargin = parameter;
-          break;
-        case "margrsxn":
-          page.rightMargin = parameter;
-          break;
-        case "margt":
-          this["defaultSectionPage"].topMargin = parameter;
-          page.topMargin = parameter;
-          break;
-        case "margtsxn":
-          page.topMargin = parameter;
-          break;
-        case "margb":
-          this["defaultSectionPage"].bottomMargin = parameter;
-          page.bottomMargin = parameter;
-          break;
-        case "margbsxn":
-          page.bottomMargin = parameter;
-          break;
-      }
-    }
-  }
+  if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
     return;
@@ -991,3 +928,5 @@ import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { unicode } from "../../core/unocore/unocrsrhelper";
 
 import { DispatchTextSymbol } from "./rtfdispatchsymbol";
+
+import { CaptureSection, DispatchSectionControl } from "./rtfdocumentimpl.section";

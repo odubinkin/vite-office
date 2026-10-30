@@ -31,8 +31,8 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
 import { getEnumAsINT32 } from "../../../../comphelper/source/misc/types";
-import { PropertyMap } from "./PropertyMap";
-import { DomainMapper_Impl, ContextType as C } from "./DomainMapper_Impl";
+import { PropertyMap, SectionPropertyMap } from "./PropertyMap";
+import { DomainMapper_Impl, ContextType as C, PageMarElement as M } from "./DomainMapper_Impl";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import {
@@ -71,6 +71,7 @@ const highlights = [
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
 export class DomainMapper implements Properties {
   readonly impl: DomainMapper_Impl;
+  private readonly CT_PageSz = { w: 0, h: 0, orient: false };
   /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @param documentType - Original explicit source format. @returns Mapper. */
   constructor(
     readonly model: SwXTextDocument,
@@ -184,6 +185,41 @@ export class DomainMapper implements Properties {
     if (!context) return;
     const n = value.getInt();
     switch (id) {
+      case N.LN_CT_PageSz_w:
+        this.CT_PageSz.w = PaperInfo.sloppyFitPageDimension(Number(convertTwipToMm100(BigInt(n))));
+        break;
+      case N.LN_CT_PageSz_h:
+        this.CT_PageSz.h = PaperInfo.sloppyFitPageDimension(Number(convertTwipToMm100(BigInt(n))));
+        break;
+      case N.LN_CT_PageSz_orient:
+        this.CT_PageSz.orient = n !== N.LN_Value_ST_PageOrientation_portrait;
+        break;
+      case N.LN_CT_PageMar_top:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_TOP, n);
+        break;
+      case N.LN_CT_PageMar_right:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_RIGHT, n);
+        break;
+      case N.LN_CT_PageMar_bottom:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_BOTTOM, n);
+        break;
+      case N.LN_CT_PageMar_left:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_LEFT, n);
+        break;
+      case N.LN_CT_PageMar_header:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_HEADER, n);
+        break;
+      case N.LN_CT_PageMar_footer:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_FOOTER, n);
+        break;
+      case N.LN_CT_PageMar_gutter:
+        this.impl.SetPageMarginTwip(M.PAGE_MAR_GUTTER, n);
+        break;
+      case N.LN_CT_PageNumber_start: {
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        if (section instanceof SectionPropertyMap) section.SetPageNumber(n);
+        break;
+      }
       case N.LN_CT_Language_val:
       case N.LN_CT_Language_eastAsia:
       case N.LN_CT_Language_bidi: {
@@ -366,6 +402,36 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_EG_SectPrContents_pgSz: {
+        const letter = new PaperInfo(Paper.PAPER_LETTER);
+        this.CT_PageSz.w = letter.getWidth();
+        this.CT_PageSz.h = letter.getHeight();
+        this.CT_PageSz.orient = false;
+        resolveReturnedReference(modifier.getProps(), this);
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        if (section instanceof SectionPropertyMap) {
+          this.insert(section, P.PROP_HEIGHT, new Any([this.CT_PageSz.h], "sal_Int32"));
+          this.insert(section, P.PROP_IS_LANDSCAPE, new Any([this.CT_PageSz.orient], "bool"));
+          this.insert(section, P.PROP_WIDTH, new Any([this.CT_PageSz.w], "sal_Int32"));
+        }
+        break;
+      }
+      case N.LN_EG_SectPrContents_pgMar: {
+        this.impl.InitPageMargins();
+        resolveReturnedReference(modifier.getProps(), this);
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        if (section instanceof SectionPropertyMap) {
+          const margins = this.impl.GetPageMargins();
+          section.SetTopMargin(margins.top);
+          section.SetRightMargin(margins.right);
+          section.SetBottomMargin(margins.bottom);
+          section.SetLeftMargin(margins.left);
+        }
+        break;
+      }
+      case N.LN_EG_SectPrContents_pgNumType:
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
       case N.LN_CT_PPrBase_outlineLvl:
         if (n >= 0 && n <= 9) {
           if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)
@@ -653,3 +719,6 @@ import { StyleSheetPropertyMap } from "./PropertyMap";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 
 import { ParagraphPropertyMap } from "./PropertyMap";
+
+import { PaperInfo, Paper } from "../../../../i18nutil/inc/paper";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";

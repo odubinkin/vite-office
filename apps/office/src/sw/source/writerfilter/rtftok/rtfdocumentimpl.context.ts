@@ -6,7 +6,6 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
-import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -58,6 +57,7 @@ export enum RunType {
 export interface RtfState {
   characterSprms: RTFSprms;
   paragraphSprms: RTFSprms;
+  sectionSprms: RTFSprms;
   tableSprms: RTFSprms;
   tableAttributes: RTFSprms;
   listLevelEntries: RTFSprms;
@@ -144,10 +144,6 @@ export type RtfBlock =
       section: number;
       pageBreakBefore: boolean;
     }>;
-/** The represented physical subset of a tokenizer section-property group. */
-export type RtfSectionPage = Partial<{
-  -readonly [K in Exclude<keyof WriterPageDescriptorValue, "name">]: WriterPageDescriptorValue[K];
-}>;
 /** One RTF table row with physical cell boundaries in twips. */
 export interface RtfTableRow {
   readonly cells: readonly (readonly RtfParagraph[])[];

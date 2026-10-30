@@ -93,8 +93,10 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
     nativeStyles = deduplicateRtfStyleTable(this["m_pStyleTableEntries"]);
-    const defaultPage = { ...document.GetPageDesc().GetValue(), ...this["defaultSectionPage"] };
-    document.ChgPageDesc({ ...defaultPage, ...this["sectionPages"][0] });
+    const sectionStyles = new Map<number, { name: string; numOffset?: number }>();
+    for (const [id, section] of this["m_aSectionSprms"]) {
+      sectionStyles.set(id, ApplyRtfSectionProperties(mapper, section));
+    }
     // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
     document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
     const defaultTabs = (
@@ -239,47 +241,36 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     }
     PrepareListNumbering.call(this);
     let firstParagraph = true;
-    const sectionStyles = new Map<number, string>();
+    const startedSections = new Set<number>();
     for (const block of this["blocks"]) {
-      let sectionStyle = sectionStyles.get(block.section);
-      const startsSection = block.section > 0 && sectionStyle === undefined;
-      if (block.section > 0 && sectionStyle === undefined) {
-        // This fresh document receives one generated page descriptor per unique parsed section ID.
-        sectionStyle = `Converted${block.section}`;
-        const page = document.MakePageDesc(sectionStyle);
-        document.ChgPageDesc(
-          { ...defaultPage, ...this["sectionPages"][block.section], name: sectionStyle },
-          sectionStyle,
-        );
-        sectionStyles.set(block.section, page.GetName());
-      }
+      const sectionStyle = sectionStyles.get(block.section);
+      const startsSection = !startedSections.has(block.section);
+      startedSections.add(block.section);
       if (block.kind === "paragraph") {
         // A fresh SwDoc owns its initial text node; later nodes are returned by the native constructor.
         const node = firstParagraph
           ? (document.paragraphs[0] as SwTextNode)
           : document.nodes.MakeTextNode();
         this["ApplyParagraph"](node, block.paragraph);
-        if (startsSection && sectionStyle !== undefined)
-          node.SetAttr(
-            new SwFormatPageDesc(
-              sectionStyle,
-              this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
-            ),
-          );
+        if (
+          startsSection &&
+          sectionStyle !== undefined &&
+          (block.section > 0 || sectionStyle.numOffset !== undefined)
+        )
+          node.SetAttr(new SwFormatPageDesc(sectionStyle.name, sectionStyle.numOffset));
         firstParagraph = false;
       } else {
         const table = firstParagraph
           ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
           : document.nodes.MakeTableNode("RTF Table");
-        if (startsSection && sectionStyle !== undefined)
+        if (
+          startsSection &&
+          sectionStyle !== undefined &&
+          (block.section > 0 || sectionStyle.numOffset !== undefined)
+        )
           table
             .GetFrameFormat()
-            .SetFormatAttr(
-              new SwFormatPageDesc(
-                sectionStyle,
-                this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
-              ),
-            );
+            .SetFormatAttr(new SwFormatPageDesc(sectionStyle.name, sectionStyle.numOffset));
         if (block.pageBreakBefore)
           table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
         const firstRow = block.rows[0];
@@ -583,3 +574,5 @@ import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 
 import { PrepareListNumbering } from "./rtfdocumentimpl.numbering";
+
+import { ApplyRtfSectionProperties } from "./rtfdocumentimpl.section";

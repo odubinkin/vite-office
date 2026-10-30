@@ -28,6 +28,26 @@ export enum ContextType {
   CONTEXT_STYLESHEET = 3,
   CONTEXT_LIST = 4,
 }
+/** Original page-margin element order. */
+export enum PageMarElement {
+  PAGE_MAR_TOP,
+  PAGE_MAR_RIGHT,
+  PAGE_MAR_BOTTOM,
+  PAGE_MAR_LEFT,
+  PAGE_MAR_HEADER,
+  PAGE_MAR_FOOTER,
+  PAGE_MAR_GUTTER,
+}
+/** Original mapper page-margin defaults in mm100. */
+export class PageMar {
+  top = Number(convertTwipToMm100(1440n));
+  right = Number(convertTwipToMm100(1440n));
+  bottom = this.top;
+  left = this.right;
+  header = Number(convertTwipToMm100(720n));
+  footer = this.header;
+  gutter = 0;
+}
 /** A native context entry borrows supplied style maps and owns maps created by PushProperties. */
 interface Context {
   readonly type: ContextType;
@@ -37,6 +57,22 @@ interface Context {
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
 export class DomainMapper_Impl {
+  private m_aPageMargins = new PageMar();
+  /** Original pgMar reset, independent of previous section or document geometry. @returns Nothing. */
+  InitPageMargins(): void {
+    this.m_aPageMargins = new PageMar();
+  }
+  /** Original borrowed margin values. @returns Actual current fields. */
+  GetPageMargins(): Readonly<PageMar> {
+    return this.m_aPageMargins;
+  }
+  /** Original limited twip conversion and selected margin assignment. @param element - Native field selector. @param value - Twips. @returns Nothing. */
+  SetPageMarginTwip(element: PageMarElement, value: number): void {
+    const name = (["top", "right", "bottom", "left", "header", "footer", "gutter"] as const)[
+      element
+    ];
+    if (name !== undefined) this.m_aPageMargins[name] = convertTwipToMm100_Limited(value);
+  }
   private m_bIsFirstSection = true;
   private m_xPageStyles: SwXStyleFamily | undefined;
   private m_xNextUnusedPageStyleNo: number | undefined;
@@ -505,3 +541,7 @@ import {
   getCurrentNumberingProperty,
   type ParagraphNumbering,
 } from "./DomainMapper_Impl.paragraph-numbering";
+
+import { convertTwipToMm100_Limited } from "./ConversionHelper";
+
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 213
+revision: 216
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T16:32:37.318Z"
+  updated_at: "2026-10-30T16:48:03.763Z"
   updated_by: "CODER"
-  note: "Atomic marker context checkpoint: 958 related tests/56 files pass, final marker 23/1 and all required static gates pass; full filter goal remains incomplete pending section and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html24-tests.txt and html24 static logs."
-  attempts: 35
+  note: "Section ownership/geometry checkpoint passes 976 related cases and final affected135/5 including21 new cases, plus all required static checks. Full goal remains incomplete: section types/follow chains/PAGE interactions and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html25-* logs and Findings."
+  attempts: 36
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -565,8 +568,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T16:48:03.763Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Section ownership/geometry checkpoint passes 976 related cases and final affected135/5 including21 new cases, plus all required static checks. Full goal remains incomplete: section types/follow chains/PAGE interactions and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html25-* logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-30T16:48:13.874Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T16:32:50.047Z"
+doc_updated_at: "2026-10-30T16:48:13.874Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1339,6 +1355,36 @@ sections:
     Attempts: 35
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:32:36.265Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T16:48:03.763Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Section ownership/geometry checkpoint passes 976 related cases and final affected135/5 including21 new cases, plus all required static checks. Full goal remains incomplete: section types/follow chains/PAGE interactions and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html25-* logs and Findings.
+    Attempts: 36
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:48:02.665Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2216,6 +2262,22 @@ sections:
     - Command: npm run typecheck; npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.character.ts --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: output/playwright/rtf-properties-native/html24-{typecheck-final,lint-final,format,docs,provenance-final,registry,boundaries,size,tree,doctor}.txt. Scope: changed code/docs,4254 authored files,1885 provenance modules,1884 runtime sources/10305 imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks or policy modified.
     - Initial evidence retained: html24-marker-before.txt proves the two baseline offset failures; html24-marker-after.txt caught the new test's guessed GetProp accessor, corrected after reading native GetProportionalHeight. html24-typecheck.txt caught nullable GetTopContext; added the same real ParagraphPropertyMap assertion as the neighboring atomic paragraph binding, then final typecheck and marker checks passed. Empty optional searches produced no repo mutation; route recomputed before dependent work. No acceptance or enforcement was weakened.
+
+    ### Native section ownership and geometry checkpoint (html25)
+
+    - Removed the global scalar RtfSectionPage/defaultSectionPage/sectionPages/restart-set path. Actual parser state now owns native section RTFSprms, copies them through group COW, disposes them on pop/cleanup and captures preceding section references at SECT/root-pop. Global geometry controls update default+current; section controls update only current; SECT does not reset properties and SECTD alone copies defaults. Late global changes no longer retroactively alter already captured sections.
+    - Connected original pgSz/pgMar/pgNumType resources to actual DomainMapper and SectionPropertyMap page-style owners. Added source PageMar/element defaults and limited conversions; pgSz resets Letter/orientation then uses actual PaperInfo dimension snapping. Actual typed UNO page-style application replaces direct document geometry projection. The represented no-header/no-footer margin phase retains native absolute top/bottom values. Initial and later page restarts now come from raw scoped section properties; pgnstarts remains ignored per WRITER103. Six generated resource IDs were obtained from unchanged pinned resourceids.py/model.xml, and actual generator comparison passes.
+    - Native needPar retains empty initial/consecutive/final sections. Root-pop finalization preserves !m_bFirstRun, including control-only streams. Documented WRITER280: LINE/singleChar/runProps does not initialize first run, so a LINE-only stream retains initial geometry until ordinary text follows. This source oddity is preserved and tested; no synthetic section initialization was added.
+    - Added21 fresh actual RTF cases covering current/default distinction, group restoration/capture, inherited geometry without SECTD, global defaults selected later, Letter/compound defaults, original size snap, negative/wide margins, first/later/scoped restart, empty/final sections, control-only input and LINE first-run behavior. The authored width13000 export assertion remains unchanged; its old scalar import expectation was corrected to native12983 after tracing pgSz conversion22931mm100 -> first matching standard22900 -> native UNO twips12983. This is intended normalization, not a new suspected upstream issue.
+    - This closes the identified raw section geometry/default/scope/empty-section gaps. Remaining current-slice work includes section break types, follow-style chains and PAGE-to-section interactions, then HTML/current-model producer/export audits. Header/footer content, columns and floating objects have no represented current-model owners. Full goal remains active/incomplete; no broad module/ABI/semantic confidence promotion and no intentional file UI/autosave/recovery changes.
+
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,976tests/57files at the first-run guard checkpoint. Evidence: output/playwright/rtf-properties-native/html25-all-final.txt; prior973/57 in html25-all-tests.txt. Scope: related TXT/RTF/Markdown, mapper/native UNO/numbering, generated IDs and document-I/O. Final root guard was tightened to all pre-first-run input and three further cases added after the976-case run; final affected135/5 pass below. No all-application full test run.
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-text-symbol.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtf-position.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts --maxWorkers 1
+      Result: pass,135tests/5files on final code, including all21 new cases. Evidence: output/playwright/rtf-properties-native/html25-root-final.txt. Scope: final root-pop/LINE/section paths plus actual body, table, marker, styles, parse admission and symbol regressions.
+    - Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html25-types-final2.txt, html25-lint-final.txt, html25-format-final.txt, html25-docs-final.txt, html25-provenance-final.txt, html25-registry-final.txt, html25-boundaries.txt, html25-size.txt, html25-tree.txt and html25-doctor.txt under output/playwright/rtf-properties-native. Scope:4256 authored source files,1886 provenance modules,1885 runtime sources/10320 imports/227 allowed edges, Writer semantic violations0. Doctor errors0 with unchanged pre-existing managed-shim warning. No hooks, policy, network, vendor source or unrelated tooling changed.
+    - Initial failures retained: html25-first-tests.txt shows the old scalar13000 expectation failing against real native12983 conversion; source-backed expectation migrated while authored export acceptance remains intact. html25-types.txt caught an unread private field accessed by atomic fragment; changed to protected source-owned boundary access. html25-types2.txt caught direct private numOffset access in the new test; replaced with original GetNumOffset after source inspection. Initial provenance/registry correctly rejected removed RtfSectionPage evidence; removed stale symbol/marker metadata without recreating the DTO. ESLint caught unused native mapper parameter; explicit void preserves the method signature for the current no-header branch. A formatter wrapper misplaced heredoc redirection and failed before mutation; route was recomputed and corrected command passed. Empty optional searches changed no code. No acceptance or enforcement was weakened to mask a local implementation defect.
 id_source: "generated"
 ---
 ## Summary
@@ -2999,6 +3061,36 @@ Note: Atomic marker context checkpoint: 958 related tests/56 files pass, final m
 Attempts: 35
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:32:36.265Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T16:48:03.763Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Section ownership/geometry checkpoint passes 976 related cases and final affected135/5 including21 new cases, plus all required static checks. Full goal remains incomplete: section types/follow chains/PAGE interactions and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html25-* logs and Findings.
+Attempts: 36
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:48:02.665Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3880,3 +3972,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck; npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.character.ts --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: output/playwright/rtf-properties-native/html24-{typecheck-final,lint-final,format,docs,provenance-final,registry,boundaries,size,tree,doctor}.txt. Scope: changed code/docs,4254 authored files,1885 provenance modules,1884 runtime sources/10305 imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks or policy modified.
 - Initial evidence retained: html24-marker-before.txt proves the two baseline offset failures; html24-marker-after.txt caught the new test's guessed GetProp accessor, corrected after reading native GetProportionalHeight. html24-typecheck.txt caught nullable GetTopContext; added the same real ParagraphPropertyMap assertion as the neighboring atomic paragraph binding, then final typecheck and marker checks passed. Empty optional searches produced no repo mutation; route recomputed before dependent work. No acceptance or enforcement was weakened.
+
+### Native section ownership and geometry checkpoint (html25)
+
+- Removed the global scalar RtfSectionPage/defaultSectionPage/sectionPages/restart-set path. Actual parser state now owns native section RTFSprms, copies them through group COW, disposes them on pop/cleanup and captures preceding section references at SECT/root-pop. Global geometry controls update default+current; section controls update only current; SECT does not reset properties and SECTD alone copies defaults. Late global changes no longer retroactively alter already captured sections.
+- Connected original pgSz/pgMar/pgNumType resources to actual DomainMapper and SectionPropertyMap page-style owners. Added source PageMar/element defaults and limited conversions; pgSz resets Letter/orientation then uses actual PaperInfo dimension snapping. Actual typed UNO page-style application replaces direct document geometry projection. The represented no-header/no-footer margin phase retains native absolute top/bottom values. Initial and later page restarts now come from raw scoped section properties; pgnstarts remains ignored per WRITER103. Six generated resource IDs were obtained from unchanged pinned resourceids.py/model.xml, and actual generator comparison passes.
+- Native needPar retains empty initial/consecutive/final sections. Root-pop finalization preserves !m_bFirstRun, including control-only streams. Documented WRITER280: LINE/singleChar/runProps does not initialize first run, so a LINE-only stream retains initial geometry until ordinary text follows. This source oddity is preserved and tested; no synthetic section initialization was added.
+- Added21 fresh actual RTF cases covering current/default distinction, group restoration/capture, inherited geometry without SECTD, global defaults selected later, Letter/compound defaults, original size snap, negative/wide margins, first/later/scoped restart, empty/final sections, control-only input and LINE first-run behavior. The authored width13000 export assertion remains unchanged; its old scalar import expectation was corrected to native12983 after tracing pgSz conversion22931mm100 -> first matching standard22900 -> native UNO twips12983. This is intended normalization, not a new suspected upstream issue.
+- This closes the identified raw section geometry/default/scope/empty-section gaps. Remaining current-slice work includes section break types, follow-style chains and PAGE-to-section interactions, then HTML/current-model producer/export audits. Header/footer content, columns and floating objects have no represented current-model owners. Full goal remains active/incomplete; no broad module/ABI/semantic confidence promotion and no intentional file UI/autosave/recovery changes.
+
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,976tests/57files at the first-run guard checkpoint. Evidence: output/playwright/rtf-properties-native/html25-all-final.txt; prior973/57 in html25-all-tests.txt. Scope: related TXT/RTF/Markdown, mapper/native UNO/numbering, generated IDs and document-I/O. Final root guard was tightened to all pre-first-run input and three further cases added after the976-case run; final affected135/5 pass below. No all-application full test run.
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-text-symbol.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtf-position.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts --maxWorkers 1
+  Result: pass,135tests/5files on final code, including all21 new cases. Evidence: output/playwright/rtf-properties-native/html25-root-final.txt. Scope: final root-pop/LINE/section paths plus actual body, table, marker, styles, parse admission and symbol regressions.
+- Command: npm run typecheck; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html25-types-final2.txt, html25-lint-final.txt, html25-format-final.txt, html25-docs-final.txt, html25-provenance-final.txt, html25-registry-final.txt, html25-boundaries.txt, html25-size.txt, html25-tree.txt and html25-doctor.txt under output/playwright/rtf-properties-native. Scope:4256 authored source files,1886 provenance modules,1885 runtime sources/10320 imports/227 allowed edges, Writer semantic violations0. Doctor errors0 with unchanged pre-existing managed-shim warning. No hooks, policy, network, vendor source or unrelated tooling changed.
+- Initial failures retained: html25-first-tests.txt shows the old scalar13000 expectation failing against real native12983 conversion; source-backed expectation migrated while authored export acceptance remains intact. html25-types.txt caught an unread private field accessed by atomic fragment; changed to protected source-owned boundary access. html25-types2.txt caught direct private numOffset access in the new test; replaced with original GetNumOffset after source inspection. Initial provenance/registry correctly rejected removed RtfSectionPage evidence; removed stale symbol/marker metadata without recreating the DTO. ESLint caught unused native mapper parameter; explicit void preserves the method signature for the current no-header branch. A formatter wrapper misplaced heredoc redirection and failed before mutation; route was recomputed and corrected command passed. Empty optional searches changed no code. No acceptance or enforcement was weakened to mask a local implementation defect.

@@ -369,7 +369,8 @@ it("materializes a later RTF page section before its first table", /** Checks ma
     expect(table?.GetTable().GetFrameFormat().GetAttrSet().Get(RES_PAGEDESC)).toMatchObject({
       name: "Converted1",
     });
-    expect(document.FindPageDesc("Converted1")?.GetValue().width).toBe(13000);
+    // Native pgSz snaps 22931mm100 to the first standard dimension22900 before UNO insertion.
+    expect(document.FindPageDesc("Converted1")?.GetValue().width).toBe(12983);
   } finally {
     document.Dispose();
   }

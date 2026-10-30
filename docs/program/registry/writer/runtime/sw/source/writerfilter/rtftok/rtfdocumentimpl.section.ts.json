@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.section.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.section.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/PropertyMap.cxx"
+      ],
+      "justification": "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged. Original root-pop section finalization is gated by !m_bFirstRun. Empty/control-only inputs retain initial document geometry, and a direct LINE does not initialize the first run until ordinary text follows (WRITER280). Literal section tests cover both native branches without altering LINE or mapper initialization.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CaptureSection",
+        "DispatchSectionControl",
+        "ApplyRtfSectionProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::sectBreak"
+      ]
+    }
+  }
+}

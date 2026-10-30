@@ -1076,3 +1076,54 @@ This closes marker style-context verification and this section-marker case only;
 other section transitions and HTML/current-model producer/export audits remain
 required before declaring the goal complete. No whole-module/ABI confidence is
 promoted and intentional browser file UI/autosave/recovery behavior is unchanged.
+
+
+### Native section property ownership and geometry checkpoint
+
+The former global scalar page DTO path has been removed. The parser now owns
+section RTFSprms in each native group, copies them through original COW state,
+and captures the preceding section at SECT before its group can pop. Global
+paper/margin controls update default and current sprms; SECT alone retains the
+current properties and only SECTD copies defaults back. A global control inside
+a nested group still updates defaults, while its current section value rolls
+back on group pop. Captured raw references are released with other reader owners.
+
+The actual DomainMapper now consumes pgSz, pgMar and pgNumType resource trees.
+SectionPropertyMap retains its original Letter defaults independently of document
+locale. pgSz resets unspecified dimensions to Letter and orientation to portrait,
+then performs original twip-to-mm100 conversion and PaperInfo dimension snapping;
+pgMar initializes original one-inch margins before limited conversion. The
+represented no-header/no-footer phase preserves absolute negative top/bottom body
+margins. Actual native page-style wrappers receive typed UNO properties, and the
+atomic importer attaches the resulting page-style identity to the first paragraph
+or table. Original page restart is now scoped in section sprms, including the
+first section; pgnstarts is still source-ignored and pgnrestart supplies1 (WRITER103).
+
+Required needPar paragraphs now survive an empty initial section, consecutive
+SECTs and a final SECT. This is distinct from ordinary paragraph-marker properties:
+a section's dummy PAR suppresses runProps; the explicit final paragraph required
+after a terminal SECT follows normal PAR handling. Existing explicit PAR marker
+and table/page cases remain regression checks.
+
+Literal RTF tests cover current/default distinction, nested restoration and
+capture, inheritance without SECTD, late default selection, Letter/compound
+defaults, negative and wide margins, dimension snap, first/later/scoped restarts
+and empty/final sections. A former scalar expectation of width13000 was corrected
+to native12983: mapper converts to22931mm100, sloppyFitPageDimension selects the
+first standard dimension22900, and the page-style UNO setter converts back. The
+export assertion for the authored width remains unchanged. This is intentional
+native normalization, not a new suspected upstream issue.
+
+This supersedes the earlier scalar geometry/section-reset description. Section
+break types, follow-style chains and PAGE-to-section interactions still require
+source comparison for the current model, together with remaining HTML/current-core
+producer/export audits. Header/footer content, columns and floating objects are
+not represented by the current model. No full format goal or broad module/ABI
+confidence promotion is made; browser file UI/autosave/recovery behavior is unchanged.
+
+Root-pop section finalization also preserves the original !m_bFirstRun gate.
+Empty/control-only streams retain the initial document geometry rather than
+applying pending section properties. The LINE-only stream is a source quirk:
+singleChar/runProps does not initialize the first run, so pending paper geometry
+is ignored until ordinary text follows LINE (WRITER280). Both sides are covered
+on actual text nodes and page descriptors; LINE is not rerouted to text().

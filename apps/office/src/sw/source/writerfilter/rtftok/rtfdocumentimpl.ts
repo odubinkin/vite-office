@@ -17,7 +17,6 @@ import {
   type RtfParagraph,
   type RtfParagraphState,
   type RtfRun,
-  type RtfSectionPage,
   type RtfState,
   type RtfTableRow,
 } from "./rtfdocumentimpl.context";
@@ -125,10 +124,14 @@ export class RtfDocumentImpl {
       state.destinationText.dispose();
       lists.add(state.characterSprms);
       lists.add(state.paragraphSprms);
+      lists.add(state.sectionSprms);
       lists.add(state.tableSprms);
       lists.add(state.tableAttributes);
       lists.add(state.listLevelEntries);
     }
+    lists.add(this.m_aDefaultSectionSprms);
+    for (const section of this.m_aSectionSprms.values()) lists.add(section);
+    this.m_aSectionSprms.clear();
     lists.add(this.m_aParagraphSprms);
     lists.add(this.m_aDefaultCharacterSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
@@ -183,9 +186,9 @@ export class RtfDocumentImpl {
   protected defaultTabStop = 720;
   protected firstRun = true;
   protected pendingPageBreak = false;
-  protected readonly defaultSectionPage: RtfSectionPage = {};
-  protected readonly sectionPages: RtfSectionPage[] = [{}];
-  protected readonly sectionPageRestarts = new Set<number>();
+  protected readonly m_aDefaultSectionSprms = new RTFSprms();
+  protected readonly m_aSectionSprms = new Map<number, RTFSprms>();
+  protected m_bNeedPar = true;
   protected currentSection = 0;
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
@@ -323,6 +326,7 @@ export class RtfDocumentImpl {
       this.pendingPageBreak = false;
     }
     this.terminatedParagraph = true;
+    this.m_bNeedPar = false;
     this.m_bNeedPap = true;
   }
 

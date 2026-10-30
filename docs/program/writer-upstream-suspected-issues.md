@@ -2443,3 +2443,10 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: ordinary text symbols call destination-aware text(), but LINE calls singleChar with runProps=true. That operation emits directly to the mapper/current buffer and does not call checkNeedPap.
 - Impact: a LINE inside a PN prefix can become visible body text while surrounding prefix characters remain in the numbering pattern. Paragraph properties emitted after PN must still apply to that run.
 - Local behavior: preserve separate text() versus singleChar paths. The atomic adapter snapshots the direct LINE run without prematurely capturing paragraph properties. `rtf-text-symbol.test.ts` verifies a body LF, an AB prefix pattern and the final PN numbering rule. Do not redirect LINE into the PN text buffer for consistency with TAB.
+
+### WRITER280 — LINE alone does not initialize the RTF first-run section
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, early LINE dispatch; `rtfdocumentimpl.cxx`, singleChar, runProps, setNeedSect and root-pop finalization.
+- Observation: LINE calls singleChar with runProps=true; neither singleChar nor runProps calls checkFirstRun. setNeedSect ignores pre-first-run requests in the ordinary one-column/non-table profile, and root-pop section finalization is guarded by !m_bFirstRun.
+- Impact: a stream containing paper geometry and a lone LINE can insert a body LF without applying its pending section geometry. Adding ordinary text after LINE invokes checkFirstRun and causes that geometry to be applied. This follows the inspected source control flow; it is not a compiled desktop ABI claim.
+- Local behavior: preserve the direct LINE run and native first-run guard; do not initialize the section from LINE for consistency with ordinary text. `rtf-section-properties.test.ts` compares a LINE-only stream with the same stream followed by ordinary text and verifies actual page geometry and body text.

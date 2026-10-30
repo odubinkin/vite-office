@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.section.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": [
+      "CaptureSection",
+      "DispatchSectionControl",
+      "ApplyRtfSectionProperties"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::sectBreak"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged.",
+      "Original root-pop section finalization is gated by !m_bFirstRun. Empty/control-only inputs retain initial document geometry, and a direct LINE does not initialize the first run until ordinary text follows (WRITER280). Literal section tests cover both native branches without altering LINE or mapper initialization."
+    ],
+    "omittedResponsibilities": [
+      "Section type/follow-style transitions and PAGE-to-section interactions remain required current-slice work. Header/footer content, columns, floating objects and complete rtftok/dmapper/Writer ABI are unrepresented or unverified; no substitute owners are added."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.section.ts",
+          "marker": "CaptureSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "void RTFDocumentImpl::sectBreak(bool bFinal)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::PAPERW:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::SECTD:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_EG_SectPrContents_pgSz:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/PropertyMap.cxx",
+          "marker": "void SectionPropertyMap::HandleMarginsHeaderFooter"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.section.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original reader retains actual native group/section sprms. This cohesive fragment owns original section control dispatch/capture and its atomic page-style binding, replacing the former scalar page DTO path without another document model or page-style service."
+    }
+  }
+}

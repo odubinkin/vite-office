@@ -324,6 +324,48 @@ export class PropertyMap extends SvRefBase {
 export class SectionPropertyMap extends PropertyMap {
   private readonly m_sPageStyleName = new OUString();
   private m_aPageStyle: SwXPageStyle | null = null;
+  private m_nLeftMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nRightMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nTopMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nBottomMargin = Number(convert(1n, Length.in, Length.mm100));
+  protected m_nPageNumber = -1;
+  /** Original deferred page restart. @param value - Native number. @returns Nothing. */
+  SetPageNumber(value: number): void {
+    this.m_nPageNumber = value;
+  }
+  /** Original left margin storage. @param value - mm100. @returns Nothing. */
+  SetLeftMargin(value: number): void {
+    this.m_nLeftMargin = value;
+  }
+  /** Original right margin storage. @param value - mm100. @returns Nothing. */
+  SetRightMargin(value: number): void {
+    this.m_nRightMargin = value;
+  }
+  /** Original no-header body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
+  SetTopMargin(value: number): void {
+    this.m_nTopMargin = Math.abs(value);
+  }
+  /** Original no-footer body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
+  SetBottomMargin(value: number): void {
+    this.m_nBottomMargin = Math.abs(value);
+  }
+  /** Original consumed no-header/no-footer margin phase. This model has no header/footer content owners. @param mapper - Original mapper parameter. @returns Nothing. */
+  HandleMarginsHeaderFooter(mapper: DomainMapper_Impl): void {
+    void mapper;
+    for (const [id, value] of [
+      [P.PROP_LEFT_MARGIN, this.m_nLeftMargin],
+      [P.PROP_RIGHT_MARGIN, this.m_nRightMargin],
+      [P.PROP_TOP_MARGIN, Math.max(this.m_nTopMargin, 0)],
+      [P.PROP_BOTTOM_MARGIN, Math.max(this.m_nBottomMargin, 0)],
+    ] as const) {
+      const any = new Any([value], "sal_Int32");
+      try {
+        this.Insert(id, any);
+      } finally {
+        any.dispose();
+      }
+    }
+  }
   /** Original consumed constructor defaults use Letter independently of the browser document locale. @param m_bIsFirstSection - Original first-section flag. @returns Section map. */
   constructor(private readonly m_bIsFirstSection: boolean) {
     super();

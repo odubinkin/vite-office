@@ -737,4 +737,10 @@ export const NS_ooxml = Object.freeze({
   LN_CT_NumFmt_format: 92868,
   LN_CT_NumFmt_val: 92869,
   LN_CT_NumLvl_startOverride: 93151,
+  LN_EG_SectPrContents_pgSz: 92453,
+  LN_EG_SectPrContents_pgMar: 92451,
+  LN_EG_SectPrContents_pgNumType: 92452,
+  LN_CT_PageNumber_start: 92408,
+  LN_Value_ST_PageOrientation_landscape: 92367,
+  LN_Value_ST_PageOrientation_portrait: 92366,
 });
