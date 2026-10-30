@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 59
+revision: 63
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T08:34:59.755Z"
+  updated_at: "2026-10-30T09:28:21.053Z"
   updated_by: "CODER"
-  note: "Source output-section/text/literal/style-language checkpoint passes 673 shared cases, 106 unique related Calc scenarios, two browser tests and scoped static/build/resource/inventory checks. Overall task still requires full numeric/date/time display producers, real multiline EditEngine, option/UI audit and native differential closure; this is an implementation checkpoint, not complete CSV verification."
-  attempts: 6
+  note: "Original finite number/percentage/currency fill checkpoint passes 705 related shared tests, 102 Calc tests and two browser tests after restoring and reusing the existing header iterator. Typecheck, focused lint, provenance, dependencies, resources, inventory, docs, size and build pass. Full CSV remains incomplete: complete NatNum/nonfinite output, scientific/fraction/date-time producers, original public output contracts, multiline EditEngine and option/UI/native differential closure still require work."
+  attempts: 7
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -424,8 +427,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T09:28:21.053Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original finite number/percentage/currency fill checkpoint passes 705 related shared tests, 102 Calc tests and two browser tests after restoring and reusing the existing header iterator. Typecheck, focused lint, provenance, dependencies, resources, inventory, docs, size and build pass. Full CSV remains incomplete: complete NatNum/nonfinite output, scientific/fraction/date-time producers, original public output contracts, multiline EditEngine and option/UI/native differential closure still require work."
+  -
+    type: "status"
+    at: "2026-10-30T09:28:32.503Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T08:35:14.426Z"
+doc_updated_at: "2026-10-30T09:28:32.503Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -603,6 +619,36 @@ sections:
     Attempts: 6
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:34:51.607Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T09:28:21.053Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original finite number/percentage/currency fill checkpoint passes 705 related shared tests, 102 Calc tests and two browser tests after restoring and reusing the existing header iterator. Typecheck, focused lint, provenance, dependencies, resources, inventory, docs, size and build pass. Full CSV remains incomplete: complete NatNum/nonfinite output, scientific/fraction/date-time producers, original public output contracts, multiline EditEngine and option/UI/native differential closure still require work.
+    Attempts: 7
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:28:19.391Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -980,6 +1026,21 @@ sections:
     - Final commands: focused ESLint on all9 changed/new implementation/test paths, npm run typecheck, npm run check:source-provenance, npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:calc-resources, npm run inventory:parity:calc, npm run build and git diff --check. Result: pass. Evidence: section-{final-lint,typecheck,provenance,dependencies,docs,size,resources,parity,build}.log. Docs4213 authored sources, provenance1863 runtime modules; boundaries1862 runtime sources10048 imports225 allowed edges. Public runtime facades remain below1000 lines. A docs check first exposed the missing index parameter annotation after extending the exact integer helper; corrected the annotation. Inventory first identified an unnecessarily exported star helper; restored the original translation-unit-private boundary instead of adding a public operation or weakening inventory enforcement.
     - Command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,2 files35 tests after the final source star-result assignment. Evidence: section-final-tests.log; this repeats related cases and does not add35 to the unique count.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests after connecting pattern/context dispatch. Evidence: section-browser.log. Scope remains basic real browser import/save/export and sparse owner/Worker integration, not every styled-format option.
+
+    ### Original finite decimal, percentage and currency display fill, 2026-10-30
+
+    - Continued the same approved task from7b950ae8a03d. Added a source responsibility fragment for ImpGetNumberOutput, ImpDecimalFill, ImpNumberFillWithThousands, ImpDigitFill, GetPrecExp and the consumed original star insertion. Existing digit-only integer shortcut is removed. Actual compiled tokens, current locale/grouping sequence and real RTL conversion/rounding owners supply all data.
+    - Preserve source percent threshold1.7E306, thousands underflow threshold2.3E-305, magnitude-dependent precision handling, source ROUND-before-F conversion, trailing optional/mandatory/blank/dash digits, source whole-number separator rules, fixed and repeated locale grouping, General and compatibility-bank CCC tokens, literal placement, color/section selection, star controls and rounded-zero sign suppression. Original SvNFLanguageData::GetCurAbbrev forwards its real scanner owner.
+    - This block admits finite NUMBER/PERCENT/CURRENCY subformats only when the selected and first-section native modifiers are incomplete, so their original transliteration calls are dormant. Complete NatNum output and nonfinite ordinary-number integer-cast domains remain pending; no ASCII substitute, fake service, inferred currency/default key or CSV unsupported-option validation is introduced. Full native display closure is not claimed.
+    - Original DigitGroupingIterator already existed under unotools/inc. I initially missed it, implemented a duplicate in source/i18n and overwrote the existing header projection when relocating it. Review against HEAD identified the mistake. Restored the original module, its existing tests and both registry records byte-for-byte from the clean block baseline, removed the duplicate, and linked the new numeric producer directly to the existing original iterator. The iterator and registry have no final diff; original createForwardSequence and all prior contracts are preserved. Restored-owner focused checks pass67 cases across4 files. This was an internal discovery mistake, not an upstream issue or an external incident to promote.
+    - Added27 actual public compiled-pattern cases: required/optional decimal digits, figure-space placeholders, corrected ties and zero-sign suppression, explicit/extra grouping, English/German and original Indian3/2 grouping, millions scaling, percentages, source percent overflow, currency symbols and compatibility bank names, literals/General and numeric star/blank output. Actual styled ScDocShell CSV tests add5 cases for grouped decimals, percentages, currency, scaling and negative parentheses. All5 pass through real number-format attributes and CSV quoting.
+    - Replaced the obsolete ScCellFormat test that mutated General's type to CURRENCY solely to expect the prior incomplete-output exception. It now compiles a genuine currency code through real formatter/table owners and verifies actual $1.00 output with the original color reset. No production fallback was added to satisfy a synthetic test.
+    - Command: npm run test:shared -- src/unotools/inc/digitgroupingiterator.test.ts src/svl/source/numbers/zformat.number.test.ts src/svl/source/numbers/zformat.integer-output.test.ts src/svl/source/numbers/zformat.output.test.ts. Result: pass,4 files67 tests after restoring the existing iterator. Evidence: output/native/AQF9AG-icu-grego/number-fill-final-tests.log. Earlier707-case aggregate used the temporary duplicate iterator and is superseded by the final restored-owner aggregate rather than promoted into final-state evidence.
+    - Commands: npm run typecheck; focused ESLint over all8 changed/new implementation/test paths; npm run check:source-provenance; npm run inventory:parity:calc; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-fill-{typecheck,lint,provenance,parity,dependencies,docs,size,resources,build}.log. Source provenance1864 modules; dependencies1863 runtime sources10062 imports225 allowed edges; docs4215 authored sources. Dedicated full native number-fill/constructor/locale-service differential closure remains pending; source-backed real-owner tests are not promoted into complete native ABI or CSV certification.
+    - Remaining required work includes completed native-number display, scientific/fraction and date/time output, original public output contracts, actual multiline EditEngine import and complete CSV option/UI/native differential acceptance. No task/goal completion or new full-suite run is recorded; this is the same open Agentplane task, so the one-per-ten-task cadence is unchanged.
+
+    - Final restored-state command: npm run test:shared -- src/svl/source/numbers src/unotools/inc/digitgroupingiterator.test.ts. Result: pass,44 files705 tests. Scope: actual original header iterator plus the complete related formatter suites. Final Calc command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files102 tests. Evidence: number-fill-all-tests.log and number-fill-csv-tests.log; these supersede earlier temporary-state aggregate and obsolete currency-failure expectation results.
+    - Final restored-state browser command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after a fresh build with the original iterator restored. Evidence: number-fill-browser.log. A byte comparison confirms the original iterator, its tests and both old registry records exactly match HEAD; none is included in the checkpoint diff.
 id_source: "generated"
 ---
 ## Summary
@@ -1166,6 +1227,36 @@ Note: Source output-section/text/literal/style-language checkpoint passes 673 sh
 Attempts: 6
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T08:34:51.607Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T09:28:21.053Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original finite number/percentage/currency fill checkpoint passes 705 related shared tests, 102 Calc tests and two browser tests after restoring and reusing the existing header iterator. Typecheck, focused lint, provenance, dependencies, resources, inventory, docs, size and build pass. Full CSV remains incomplete: complete NatNum/nonfinite output, scientific/fraction/date-time producers, original public output contracts, multiline EditEngine and option/UI/native differential closure still require work.
+Attempts: 7
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:28:19.391Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1547,3 +1638,18 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Final commands: focused ESLint on all9 changed/new implementation/test paths, npm run typecheck, npm run check:source-provenance, npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:calc-resources, npm run inventory:parity:calc, npm run build and git diff --check. Result: pass. Evidence: section-{final-lint,typecheck,provenance,dependencies,docs,size,resources,parity,build}.log. Docs4213 authored sources, provenance1863 runtime modules; boundaries1862 runtime sources10048 imports225 allowed edges. Public runtime facades remain below1000 lines. A docs check first exposed the missing index parameter annotation after extending the exact integer helper; corrected the annotation. Inventory first identified an unnecessarily exported star helper; restored the original translation-unit-private boundary instead of adding a public operation or weakening inventory enforcement.
 - Command: npm run test:shared -- src/svl/source/numbers/zformat.output.test.ts src/svl/source/numbers/zformat.integer-output.test.ts. Result: pass,2 files35 tests after the final source star-result assignment. Evidence: section-final-tests.log; this repeats related cases and does not add35 to the unique count.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests after connecting pattern/context dispatch. Evidence: section-browser.log. Scope remains basic real browser import/save/export and sparse owner/Worker integration, not every styled-format option.
+
+### Original finite decimal, percentage and currency display fill, 2026-10-30
+
+- Continued the same approved task from7b950ae8a03d. Added a source responsibility fragment for ImpGetNumberOutput, ImpDecimalFill, ImpNumberFillWithThousands, ImpDigitFill, GetPrecExp and the consumed original star insertion. Existing digit-only integer shortcut is removed. Actual compiled tokens, current locale/grouping sequence and real RTL conversion/rounding owners supply all data.
+- Preserve source percent threshold1.7E306, thousands underflow threshold2.3E-305, magnitude-dependent precision handling, source ROUND-before-F conversion, trailing optional/mandatory/blank/dash digits, source whole-number separator rules, fixed and repeated locale grouping, General and compatibility-bank CCC tokens, literal placement, color/section selection, star controls and rounded-zero sign suppression. Original SvNFLanguageData::GetCurAbbrev forwards its real scanner owner.
+- This block admits finite NUMBER/PERCENT/CURRENCY subformats only when the selected and first-section native modifiers are incomplete, so their original transliteration calls are dormant. Complete NatNum output and nonfinite ordinary-number integer-cast domains remain pending; no ASCII substitute, fake service, inferred currency/default key or CSV unsupported-option validation is introduced. Full native display closure is not claimed.
+- Original DigitGroupingIterator already existed under unotools/inc. I initially missed it, implemented a duplicate in source/i18n and overwrote the existing header projection when relocating it. Review against HEAD identified the mistake. Restored the original module, its existing tests and both registry records byte-for-byte from the clean block baseline, removed the duplicate, and linked the new numeric producer directly to the existing original iterator. The iterator and registry have no final diff; original createForwardSequence and all prior contracts are preserved. Restored-owner focused checks pass67 cases across4 files. This was an internal discovery mistake, not an upstream issue or an external incident to promote.
+- Added27 actual public compiled-pattern cases: required/optional decimal digits, figure-space placeholders, corrected ties and zero-sign suppression, explicit/extra grouping, English/German and original Indian3/2 grouping, millions scaling, percentages, source percent overflow, currency symbols and compatibility bank names, literals/General and numeric star/blank output. Actual styled ScDocShell CSV tests add5 cases for grouped decimals, percentages, currency, scaling and negative parentheses. All5 pass through real number-format attributes and CSV quoting.
+- Replaced the obsolete ScCellFormat test that mutated General's type to CURRENCY solely to expect the prior incomplete-output exception. It now compiles a genuine currency code through real formatter/table owners and verifies actual $1.00 output with the original color reset. No production fallback was added to satisfy a synthetic test.
+- Command: npm run test:shared -- src/unotools/inc/digitgroupingiterator.test.ts src/svl/source/numbers/zformat.number.test.ts src/svl/source/numbers/zformat.integer-output.test.ts src/svl/source/numbers/zformat.output.test.ts. Result: pass,4 files67 tests after restoring the existing iterator. Evidence: output/native/AQF9AG-icu-grego/number-fill-final-tests.log. Earlier707-case aggregate used the temporary duplicate iterator and is superseded by the final restored-owner aggregate rather than promoted into final-state evidence.
+- Commands: npm run typecheck; focused ESLint over all8 changed/new implementation/test paths; npm run check:source-provenance; npm run inventory:parity:calc; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run build; git diff --check. Results: pass. Evidence: number-fill-{typecheck,lint,provenance,parity,dependencies,docs,size,resources,build}.log. Source provenance1864 modules; dependencies1863 runtime sources10062 imports225 allowed edges; docs4215 authored sources. Dedicated full native number-fill/constructor/locale-service differential closure remains pending; source-backed real-owner tests are not promoted into complete native ABI or CSV certification.
+- Remaining required work includes completed native-number display, scientific/fraction and date/time output, original public output contracts, actual multiline EditEngine import and complete CSV option/UI/native differential acceptance. No task/goal completion or new full-suite run is recorded; this is the same open Agentplane task, so the one-per-ten-task cadence is unchanged.
+
+- Final restored-state command: npm run test:shared -- src/svl/source/numbers src/unotools/inc/digitgroupingiterator.test.ts. Result: pass,44 files705 tests. Scope: actual original header iterator plus the complete related formatter suites. Final Calc command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files102 tests. Evidence: number-fill-all-tests.log and number-fill-csv-tests.log; these supersede earlier temporary-state aggregate and obsolete currency-failure expectation results.
+- Final restored-state browser command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 cases after a fresh build with the original iterator restored. Evidence: number-fill-browser.log. A byte comparison confirms the original iterator, its tests and both old registry records exactly match HEAD; none is included in the checkpoint diff.

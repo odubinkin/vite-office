@@ -25,7 +25,6 @@
       "GetNumForInfoScannedType",
       "IsInQuote",
       "GetQuoteEnd",
-      "ImpGetNumberOutput",
       "GetFormatPrecision",
       "ImpGetOutputInputLine"
     ],
@@ -73,7 +72,8 @@
       "AQF9AG adds original IsIso8601 section/token query for edit-format selection over actual compiled subformats.",
       "581KM2 integration repair: original GetOutputString NUMBER dispatch and ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer production now use actual compiled subformat tokens, SAL corrected rounding and F conversion, backwards 0/#/? fill, color selection and rounded-zero sign suppression. Admission requires one DIGIT token, no conditions/grouping/scaling/decimals, NatNum0 and finite input; other output productions remain explicitly unimplemented. Real public formatter tests cover the compiled builtin0 pattern, padding, optional/blank digits, excess digits, half rounding and negative zero. This fixes the existing Calc borrowed-cell format1 test without changing its expected output. No independent compiled-native differential, full numeric/date/currency/scientific output or native ABI/parity claim is made.",
       "AQF9AG adds original inline GetFormatPrecision and the complete ImpGetOutputInputLine percent/zero/automatic conversion over real SAL output. The original bStandard input-precision fast path precedes nonstandard dispatch; percent scaling retains the strict 1.7E306 source threshold and ASCII percent suffix. Full display families and full native format-output differential verification remain pending.",
-      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending."
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced."
     ],
     "omittedResponsibilities": [
       "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
@@ -106,6 +106,10 @@
         },
         {
           "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.number.test.ts",
           "marker": "@fileoverview"
         }
       ],

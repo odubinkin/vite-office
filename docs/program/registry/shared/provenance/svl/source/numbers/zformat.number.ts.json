@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.number.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "GetNumberOutput"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpGetNumberOutput",
+      "SvNumberformat::ImpDecimalFill",
+      "SvNumberformat::ImpNumberFillWithThousands",
+      "SvNumberformat::ImpDigitFill",
+      "GetPrecExp"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Complete native output/ABI and full CSV integration closure remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.number.ts",
+          "marker": "GetNumberOutput"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.number.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetNumberOutput"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.number.ts",
+      "rationale": "Split original numeric output/fill definitions by responsibility while retaining real compiled subformat and current-language owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -240,6 +240,10 @@ export class SvNFLanguageData {
       abbreviation.assign(data.getCurrBankSymbol());
     }
   }
+  /** Original current scanner compatibility abbreviation. @returns Borrowed abbreviation. */
+  GetCurAbbrev(): OUStringConstReference {
+    return this.GetFormatScanner().GetCurAbbrev();
+  }
   /** Original initial language remains unchanged after ChangeIntl. @returns Original uint16 language. */
   GetIniLanguage(): number {
     return this.fields.IniLnge;

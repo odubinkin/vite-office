@@ -1,5 +1,6 @@
 /** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
 import * as Output from "./zformat.output";
+import { GetNumberOutput } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
@@ -755,21 +756,18 @@ export class SvNumberformat {
       )
         return Output.GetLiteralOutput(section, output, star);
     }
-    // Original nonstandard NUMBER dispatch, restricted to the represented ungrouped integer digit production.
     if (
       !hadStandard &&
-      info.eScannedType === SvNumFormatType.NUMBER &&
-      section.GetCount() === 1 &&
-      info.nTypeArray[0] === NfSymbolType.DIGIT &&
-      info.nCntPost === 0 &&
-      info.nThousand === 0 &&
-      !info.bThousand &&
-      section.GetNatNum().GetNatNum() === 0 &&
-      Number.isFinite(value)
+      scanner &&
+      Number.isFinite(value) &&
+      (info.eScannedType === SvNumFormatType.NUMBER ||
+        info.eScannedType === SvNumFormatType.PERCENT ||
+        info.eScannedType === SvNumFormatType.CURRENCY) &&
+      !section.GetNatNum().IsComplete() &&
+      !(this.NumFor[0] as ImpSvNumFor).GetNatNum().IsComplete()
     ) {
       color[0] = section.GetColor();
-      this.ImpGetNumberOutput(value, section, output, index);
-      return false;
+      return GetNumberOutput(value, index, section, scanner.GetCurrentLanguageData(), output, star);
     }
     if (
       !(this.eType & SvNumFormatType.TEXT) &&
@@ -830,45 +828,6 @@ export class SvNumberformat {
       } else outputString.assign(result);
     } finally {
       result.dispose();
-    }
-  }
-  /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one selected ungrouped digit token, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @param index - Source-selected numeric section. @returns Nothing. */
-  private ImpGetNumberOutput(
-    value: number,
-    section: ImpSvNumFor,
-    outputString: OUString,
-    index: number,
-  ): void {
-    let sign = value < 0 && index === 0;
-    value = round(Math.abs(value), 0);
-    const buffer = new OUStringBuffer();
-    try {
-      if (value !== 0) {
-        const digits = output(value, Format.rtl_math_StringFormat_F, 0, 46);
-        try {
-          buffer.append(digits);
-        } finally {
-          digits.dispose();
-        }
-        buffer.stripStart(48);
-      }
-      if (buffer.isEmpty()) sign = false;
-      let position = buffer.getLength();
-      const pattern = section.Info().sStrArray[0] as OUString;
-      for (let index = pattern.getLength() - 1; index >= 0; --index) {
-        if (position > 0) --position;
-        else if (pattern.getStr()[index] === 48) buffer.insertChar(0, 48);
-        else if (pattern.getStr()[index] === 63) buffer.insertChar(0, 0x2007);
-      }
-      if (sign) buffer.insertChar(0, 45);
-      const result = buffer.makeStringAndClear();
-      try {
-        outputString.assign(result);
-      } finally {
-        result.dispose();
-      }
-    } finally {
-      buffer.dispose();
     }
   }
   /** Original compiled entry member destruction. @returns Nothing. */
