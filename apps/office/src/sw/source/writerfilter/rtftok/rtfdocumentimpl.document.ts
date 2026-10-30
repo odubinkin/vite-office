@@ -3,12 +3,7 @@ import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import {
-  SvxFirstLineIndentItem,
-  SvxIndentValue,
-  SvxRightMarginItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/inc/lrspitem";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
@@ -23,9 +18,6 @@ import {
   RES_BOX,
   RES_PARATR_CONNECT_BORDER,
   RES_KEEP,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_RIGHT,
-  RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
@@ -428,20 +420,6 @@ export function ApplyStyleDefinition(
     if (paragraph.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
     collection.SetFormatAttr(adjust);
   }
-  // createStyleProperties removes zero indents only when no basedOn exists.
-  const hasBase = definition.basedOnStyleIndex !== undefined;
-  if ((controls.has("li") || controls.has("lin")) && (hasBase || paragraph.left !== 0))
-    collection.SetFormatAttr(
-      new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
-    );
-  if ((controls.has("ri") || controls.has("rin")) && (hasBase || paragraph.right !== 0))
-    collection.SetFormatAttr(
-      new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
-    );
-  if ((controls.has("fi") || controls.has("li")) && (hasBase || paragraph.firstLine !== 0))
-    collection.SetFormatAttr(
-      new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
-    );
   if (controls.has("sb") || controls.has("sa") || controls.has("contextualspace")) {
     const spacing = (collection.GetAttrSet().Get(RES_UL_SPACE) as SvxULSpaceItem).Clone();
     if (controls.has("sb")) spacing.SetUpper(paragraph.before);

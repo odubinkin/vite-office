@@ -94,6 +94,10 @@ export class DomainMapper implements Properties {
   IsOOXMLImport(): boolean {
     return this.impl.IsOOXMLImport();
   }
+  /** Original stylesheet phase query delegates to the actual mapper state. @returns Whether importing a style. */
+  IsStyleSheetImport(): boolean {
+    return this.impl.IsStyleSheetImport();
+  }
   /** Original paragraph context starts with its document's default paragraph style. @returns Nothing. */
   startParagraphGroup(): void {
     this.insert(
@@ -353,6 +357,29 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_CT_PPrBase_outlineLvl:
+        if (n >= 0 && n <= 9) {
+          if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)
+            context.SetOutlineLevel(n);
+          else
+            this.insert(context, P.PROP_OUTLINE_LEVEL, new Any([n === 9 ? 0 : n + 1], "sal_Int16"));
+        }
+        break;
+      case N.LN_CT_NumPr_ilvl:
+        if (n >= 0 && n < 10) {
+          if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)
+            context.SetListLevel(n);
+          if (!this.IsStyleSheetImport() || n !== 9)
+            this.insert(context, P.PROP_NUMBERING_LEVEL, new Any([n], "sal_Int16"));
+        }
+        break;
+      case N.LN_CT_NumPr_numId:
+        if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)
+          context.props().SetListId(n);
+        break;
+      case N.LN_CT_PPrBase_numPr:
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
       case N.LN_EG_RPrBase_b:
       case N.LN_EG_RPrBase_bCs:
         if (n === 128) break;
@@ -575,3 +602,5 @@ import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
 
 import { StyleType } from "./StyleSheetTable";
+
+import { StyleSheetPropertyMap } from "./PropertyMap";

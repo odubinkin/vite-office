@@ -2,6 +2,7 @@
 
 /** Exact original generated resource IDs for the represented Writer DOCX slice. */
 export const NS_ooxml = Object.freeze({
+  LN_CT_Lvl_pStyle: 93125,
   LN_NUMBERING: 93157,
   LN_CT_Numbering_abstractNum: 93159,
   LN_CT_Numbering_num: 93160,

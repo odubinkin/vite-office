@@ -238,6 +238,9 @@ export const SKIPPED_DESTINATIONS = new Set([
   "xmlnstbl",
 ]);
 export const STYLE_PROPERTY_CONTROLS = new Set([
+  "outlinelevel",
+  "ls",
+  "ilvl",
   "lang",
   "alang",
   "langfe",

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 198
+revision: 201
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T14:21:10.752Z"
+  updated_at: "2026-10-30T14:41:41.058Z"
   updated_by: "CODER"
-  note: "LFOLEVEL/native definition/reference-table checkpoint passes855 related tests and static gates. Goal remains active for required pStyle-linked numbering, NumPr edges, malformed and old-style producers plus remaining slice audit."
-  attempts: 30
+  note: "pStyle/native stylesheet metadata and source AddParaProperties checkpoint passes857 related tests/static gates; goal remains active for chapter selection/service, style-numbering postprocessing and remaining producers."
+  attempts: 31
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -485,8 +488,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T14:41:41.058Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "pStyle/native stylesheet metadata and source AddParaProperties checkpoint passes857 related tests/static gates; goal remains active for chapter selection/service, style-numbering postprocessing and remaining producers."
+  -
+    type: "status"
+    at: "2026-10-30T14:42:10.827Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T14:21:28.451Z"
+doc_updated_at: "2026-10-30T14:42:10.827Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1109,6 +1125,36 @@ sections:
     Attempts: 30
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:21:10.158Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T14:41:41.058Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: pStyle/native stylesheet metadata and source AddParaProperties checkpoint passes857 related tests/static gates; goal remains active for chapter selection/service, style-numbering postprocessing and remaining producers.
+    Attempts: 31
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:41:40.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1910,6 +1956,24 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html19-types-confirmed.txt, html19-eslint-confirmed.txt, html19-prettier-confirmed.txt, html19-docs-confirmed.txt, html19-provenance-confirmed.txt, html19-registry-confirmed.txt, html19-boundaries-confirmed.txt, html19-size-confirmed.txt, html19-tree.txt, html19-doctor.txt, html19-audit-lint.txt. Scope: changed source/docs,1880 provenance modules; Writer registry zero semantic violations;1879 runtime sources/10233 relative imports/227 allowed edges. Doctor has zero errors and the unchanged managed-shim readiness warning, with no unrelated hook edit. Final audit-only comment/doc corrections preserve code and tests. No full all-application run was needed.
     - Initial local verification failure: html19-types.txt and html19-base-tests.txt reported a missing unicode import in the new mapper accessor. Added the existing native helper import within approved scope; rerun html19-base-tests2.txt passed80tests. A bounded editing script also stopped on a stale comment anchor before writing NumberingManager; inspected actual state and recomputed the route before applying the targeted patch. No evidence was fabricated and no enforcement was bypassed.
+
+    ### 2026-10-30 S3HW1E pStyle producers and native stylesheet metadata checkpoint (html20)
+
+    - Previous goal turn classified as progress: clean native concrete-list checkpoint1fb5339d374b was revalidated with ORCHESTRATOR preflight and the task route before CODER execution. No network, outside-repository mutation, delegation or publication.
+    - LISTLEVEL S now emits exact generated CT_Lvl_pStyle with the currently known Word style name. ListsManager resolves and binds the real StyleSheetEntry. SetParaStyle preserves its original null/no-clear behavior; no synthetic name-only entry is created.
+    - ListLevel.GetProperties now invokes native AddParaProperties. Source index-to-bool logic is retained and documented as WRITER269: minus-one absence is true, index-zero is false, absent geometry may be skipped and an index-zero property may receive a duplicate appended paragraph value. Original property names, order and temporary ownership are preserved.
+    - Raw style references now carry pPr with outlineLvl, style numPr ID/level and native signed indentation alongside rPr. StyleSheetPropertyMap retains original list/outline metadata; style application performs Word9/body-to-native0 and otherwise-plus1 OutlineLevel conversion. Actual style outline items survive Worker transfer. Native zero-indents-without-basedOn removal is retained through the existing eraseNestedAttribute helper.
+    - Migrated stylesheet indentation is applied through the native paragraph property vector and actual UNO style setter. Removed the old clamped scalar margin replay from ApplyStyleDefinition; document-body margin/list producers keep their existing distinct owner and remain under the full-slice completion audit.
+    - Implemented original ListDef.GetChapterNumberingWeight: signed level/count narrowing, first mismatching outline/list level returning0, NUMBER_NONE caller fallback, ID1 eight-point bonus and case-sensitive Heading prefix bonus. Tests cover exact positive/missing/mismatch/lowercase behavior on actual native definitions.
+    - Required next work is explicit, not silently skipped: ListsManager must consume these weights through original threshold/selection, native SwXChapterNumbering/SetOutlineNumRule, heading assignment and stylesheet postprocessing. Style-only paragraph-numbering inheritance and direct NumPr, malformed-level, old-style, section/HTML and re-export audit requirements remain open. Full goal and broad module/ABI/semantic confidence remain unverified; intentional browser open/save/recovery deviations are unchanged.
+
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,857tests/46files. Evidence: output/playwright/rtf-properties-native/html20-broad-tests.txt. Scope: final pStyle/parser/mapper,19 new native style/list metadata and geometry/weight cases, related TXT/Markdown/RTF filters, native generated IDs and existing document-I/O workflows. Earlier related623-case run also passed (html20-first-tests.txt), before the new style tests were added. No test configuration or unrelated acceptance was changed.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-list-style.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts --maxWorkers 1
+      Result: pass. Evidence: html20-style-confirm.txt. Scope: fresh producer/consumer linkage, source geometry ownership, existing native style dedup/default/character cases. Final broad857-case run includes later accepted/rejected outline values.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: html20-types-final.txt, html20-eslint.txt, html20-prettier-final.txt, html20-docs-final.txt, html20-provenance.txt, html20-registry.txt, html20-boundaries.txt, html20-size.txt, html20-tree.txt, html20-doctor.txt. Scope: changed source/docs,1880 provenance modules, Writer registry zero semantic violations,1879 runtime sources/10241 imports/227 allowed edges. Doctor has zero errors and the unchanged pre-existing managed-shim readiness warning. No unrelated hook or policy changes; no all-application full test run.
+    - Initial local failures retained: html20-types2.txt/html20-style-tests.txt reported a missing original IsStyleSheetImport forwarding method and unused imports after removal of legacy style margins; added the actual mapper-state delegate and removed only obsolete imports. html20-style-tests2.txt then passed13 new cases. Docs initially reported the new paragraphSprms argument missing its param tag (html20-docs.txt); fixed the function documentation and final docs gate passed4242 authored files. An initial editing script had a syntax error before any mutation; its old-source checks are not used as final evidence. Route was revalidated before dependent retries; no assertion/enforcement was weakened.
 id_source: "generated"
 ---
 ## Summary
@@ -2543,6 +2607,36 @@ Note: LFOLEVEL/native definition/reference-table checkpoint passes855 related te
 Attempts: 30
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:21:10.158Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T14:41:41.058Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: pStyle/native stylesheet metadata and source AddParaProperties checkpoint passes857 related tests/static gates; goal remains active for chapter selection/service, style-numbering postprocessing and remaining producers.
+Attempts: 31
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T14:41:40.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3348,3 +3442,21 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html19-types-confirmed.txt, html19-eslint-confirmed.txt, html19-prettier-confirmed.txt, html19-docs-confirmed.txt, html19-provenance-confirmed.txt, html19-registry-confirmed.txt, html19-boundaries-confirmed.txt, html19-size-confirmed.txt, html19-tree.txt, html19-doctor.txt, html19-audit-lint.txt. Scope: changed source/docs,1880 provenance modules; Writer registry zero semantic violations;1879 runtime sources/10233 relative imports/227 allowed edges. Doctor has zero errors and the unchanged managed-shim readiness warning, with no unrelated hook edit. Final audit-only comment/doc corrections preserve code and tests. No full all-application run was needed.
 - Initial local verification failure: html19-types.txt and html19-base-tests.txt reported a missing unicode import in the new mapper accessor. Added the existing native helper import within approved scope; rerun html19-base-tests2.txt passed80tests. A bounded editing script also stopped on a stale comment anchor before writing NumberingManager; inspected actual state and recomputed the route before applying the targeted patch. No evidence was fabricated and no enforcement was bypassed.
+
+### 2026-10-30 S3HW1E pStyle producers and native stylesheet metadata checkpoint (html20)
+
+- Previous goal turn classified as progress: clean native concrete-list checkpoint1fb5339d374b was revalidated with ORCHESTRATOR preflight and the task route before CODER execution. No network, outside-repository mutation, delegation or publication.
+- LISTLEVEL S now emits exact generated CT_Lvl_pStyle with the currently known Word style name. ListsManager resolves and binds the real StyleSheetEntry. SetParaStyle preserves its original null/no-clear behavior; no synthetic name-only entry is created.
+- ListLevel.GetProperties now invokes native AddParaProperties. Source index-to-bool logic is retained and documented as WRITER269: minus-one absence is true, index-zero is false, absent geometry may be skipped and an index-zero property may receive a duplicate appended paragraph value. Original property names, order and temporary ownership are preserved.
+- Raw style references now carry pPr with outlineLvl, style numPr ID/level and native signed indentation alongside rPr. StyleSheetPropertyMap retains original list/outline metadata; style application performs Word9/body-to-native0 and otherwise-plus1 OutlineLevel conversion. Actual style outline items survive Worker transfer. Native zero-indents-without-basedOn removal is retained through the existing eraseNestedAttribute helper.
+- Migrated stylesheet indentation is applied through the native paragraph property vector and actual UNO style setter. Removed the old clamped scalar margin replay from ApplyStyleDefinition; document-body margin/list producers keep their existing distinct owner and remain under the full-slice completion audit.
+- Implemented original ListDef.GetChapterNumberingWeight: signed level/count narrowing, first mismatching outline/list level returning0, NUMBER_NONE caller fallback, ID1 eight-point bonus and case-sensitive Heading prefix bonus. Tests cover exact positive/missing/mismatch/lowercase behavior on actual native definitions.
+- Required next work is explicit, not silently skipped: ListsManager must consume these weights through original threshold/selection, native SwXChapterNumbering/SetOutlineNumRule, heading assignment and stylesheet postprocessing. Style-only paragraph-numbering inheritance and direct NumPr, malformed-level, old-style, section/HTML and re-export audit requirements remain open. Full goal and broad module/ABI/semantic confidence remain unverified; intentional browser open/save/recovery deviations are unchanged.
+
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,857tests/46files. Evidence: output/playwright/rtf-properties-native/html20-broad-tests.txt. Scope: final pStyle/parser/mapper,19 new native style/list metadata and geometry/weight cases, related TXT/Markdown/RTF filters, native generated IDs and existing document-I/O workflows. Earlier related623-case run also passed (html20-first-tests.txt), before the new style tests were added. No test configuration or unrelated acceptance was changed.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-list-style.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts --maxWorkers 1
+  Result: pass. Evidence: html20-style-confirm.txt. Scope: fresh producer/consumer linkage, source geometry ownership, existing native style dedup/default/character cases. Final broad857-case run includes later accepted/rejected outline values.
+- Command: npm run typecheck --workspace @vite-office/office; targeted npm exec eslint -- --max-warnings 0; targeted npm exec prettier -- --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: html20-types-final.txt, html20-eslint.txt, html20-prettier-final.txt, html20-docs-final.txt, html20-provenance.txt, html20-registry.txt, html20-boundaries.txt, html20-size.txt, html20-tree.txt, html20-doctor.txt. Scope: changed source/docs,1880 provenance modules, Writer registry zero semantic violations,1879 runtime sources/10241 imports/227 allowed edges. Doctor has zero errors and the unchanged pre-existing managed-shim readiness warning. No unrelated hook or policy changes; no all-application full test run.
+- Initial local failures retained: html20-types2.txt/html20-style-tests.txt reported a missing original IsStyleSheetImport forwarding method and unused imports after removal of legacy style margins; added the actual mapper-state delegate and removed only obsolete imports. html20-style-tests2.txt then passed13 new cases. Docs initially reported the new paragraphSprms argument missing its param tag (html20-docs.txt); fixed the function documentation and final docs gate passed4242 authored files. An initial editing script had a syntax error before any mutation; its old-source checks are not used as final evidence. Route was revalidated before dependent retries; no assertion/enforcement was weakened.

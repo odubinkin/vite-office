@@ -902,3 +902,28 @@ producer, AddParaProperties, chapter-numbering selection or related stylesheet
 postprocessing. These are required completion work within the current style/core
 slice, alongside paragraph NumPr edge cases and malformed/old-style numbering.
 No completion claim for all RTF numbering is made by the LFOLEVEL checkpoint.
+
+### Native list paragraph-style reference and metadata checkpoint
+
+LISTLEVEL S now emits the original CT_Lvl_pStyle using the currently resolved
+Word style name. ListsManager binds the actual imported StyleSheetEntry; a missing
+lookup does not clear a previously assigned style. ListLevel.GetProperties applies
+the original paragraph-property contribution, preserving the index-to-bool defect
+recorded as WRITER269.
+
+Style references now contain native pPr resources as well as rPr. Stylesheet list
+ID/level and outline metadata reach the actual StyleSheetPropertyMap. Accepted
+Word outline values are converted to native style values at application; the
+resulting document-owned items survive Worker transport. Native signed stylesheet
+margins and original no-basedOn zero removal replace the migrated margins' former
+clamped scalar replay. Document-body margin/list producers retain their current
+separate path and still require their completion audit.
+
+The original chapter suitability weight is implemented with ID1 and Heading
+bonuses, signed narrowing, missing-numbering fallback and mismatch rejection.
+This is a prerequisite, not completed chapter selection: ListsManager still needs
+to consume those weights through the original threshold/selection loop, native
+SwXChapterNumbering/SetOutlineNumRule, heading assignment and stylesheet
+postprocessing. Those components and style-only paragraph numbering inheritance
+are required work in the current represented core slice. No all-RTF-numbering,
+full module or ABI completion claim is made.

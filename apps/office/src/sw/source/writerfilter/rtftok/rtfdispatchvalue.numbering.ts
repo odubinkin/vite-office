@@ -131,3 +131,40 @@ export function dispatchNumberingValue(
   }
   return false;
 }
+
+/** Original paragraph numbering/indent producers consumed by style entries; document-body producers retain their current owner. @param name - Keyword. @param parameter - Native parameter/default. @param state - Actual group. @returns Nothing. */
+export function dispatchStyleParagraphNumbering(
+  name: string,
+  parameter: number | undefined,
+  state: RtfState,
+): void {
+  if (name === "ls" || name === "ilvl")
+    putNestedSprm(
+      state.paragraphSprms,
+      N.LN_CT_PPrBase_numPr,
+      name === "ls" ? N.LN_CT_NumPr_numId : N.LN_CT_NumPr_ilvl,
+      new RTFValue(parameter ?? 0),
+    );
+  else if (["li", "lin", "ri", "rin", "fi"].includes(name)) {
+    const id =
+      name === "li"
+        ? N.LN_CT_Ind_left
+        : name === "lin"
+          ? N.LN_CT_Ind_start
+          : name === "ri"
+            ? N.LN_CT_Ind_right
+            : name === "rin"
+              ? N.LN_CT_Ind_end
+              : N.LN_CT_Ind_firstLine;
+    putNestedAttribute(state.paragraphSprms, N.LN_CT_PPrBase_ind, id, new RTFValue(parameter ?? 0));
+    if (name === "li")
+      putNestedAttribute(
+        state.paragraphSprms,
+        N.LN_CT_PPrBase_ind,
+        N.LN_CT_Ind_firstLine,
+        new RTFValue(0),
+        RTFConflictPolicy.Ignore,
+      );
+  }
+}
+import { RTFConflictPolicy } from "./rtfsprm";

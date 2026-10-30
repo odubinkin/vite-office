@@ -133,7 +133,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
               : { nextStyleIndex: previous.nextStyleIndex }),
           };
           this["m_aStyleNames"].set(previous.styleIndex, name);
-          const properties = createRtfStyleProperties(definition, previous.characterSprms);
+          const properties = createRtfStyleProperties(
+            definition,
+            previous.characterSprms,
+            previous.paragraphSprms,
+          );
           if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
             this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
             this["styles"].set(previous.styleIndex, definition);
@@ -393,6 +397,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       dispatchAssociatedCharacter.call(this, token.name, token.parameter, state)
     )
       return;
+    if (state.destination === "listlevel" && token.name === "s") {
+      const name = this["m_aStyleNames"].get(token.parameter ?? 0);
+      if (name) state.tableSprms.set(N.LN_CT_Lvl_pStyle, stringValue(name));
+      return;
+    }
     if (token.name === "listid")
       state.tableAttributes.set(
         N.LN_CT_AbstractNum_abstractNumId,
@@ -432,6 +441,11 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
+  if (state.destination === "styleentry") dispatchStyleParagraphNumbering(name, parameter, state);
+  if (name === "outlinelevel") {
+    state.paragraphSprms.set(N.LN_CT_PPrBase_outlineLvl, new RTFValue(parameter ?? 0));
+    return;
+  }
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (dispatchLanguageValue.call(this, name, parameter ?? 0, state)) return;
   if (dispatchAssociatedCharacter.call(this, name, parameter, state)) return;
@@ -946,3 +960,5 @@ import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 
 import { FinishListLevelGroup, ReadLevelNumbers } from "./rtfdocumentimpl.numbering-state";
 import { dispatchNumberingValue } from "./rtfdispatchvalue.numbering";
+
+import { dispatchStyleParagraphNumbering } from "./rtfdispatchvalue.numbering";

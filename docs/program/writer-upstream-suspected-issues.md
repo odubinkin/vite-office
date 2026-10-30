@@ -2363,3 +2363,10 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: a plain nested group copies LISTLEVEL as its destination. Closing it takes the LISTLEVEL after-pop branch and increments the parent's listLevelNum even though no new listlevel keyword occurred. Later LEVELNUMBERS uses that modified counter when generating placeholders.
 - Impact: a nested formatting group before level text can change a first-level placeholder from percent1 to percent2; the child level entry remains separate from the enclosing level's table modifiers.
 - Local behavior: retain copied destinations, original counter mutation and placeholder equation. Covered by `rtf-list-overrides.test.ts`; do not normalize nesting into a flat level descriptor.
+
+### WRITER269 — AddParaProperties treats property indices as booleans
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `lcl_findProperty` and `ListLevel::AddParaProperties`.
+- Observation: lcl_findProperty returns an index or minus one. AddParaProperties assigns that integer directly to bool instead of comparing it with minus one. A property at index zero becomes false, while an absent property becomes true.
+- Impact: when both geometry properties are absent, the method returns without adding paragraph margins. A geometry property at index zero can instead receive a duplicate property copied from the paragraph style; later sequential setters/merging can give the appended value priority.
+- Local behavior: preserve index-zero and minus-one conversion, the early return, names and append order. Tests query actual owned PropertyValue vectors for absent/default and duplicate cases. Do not repair the checks to conventional presence tests.

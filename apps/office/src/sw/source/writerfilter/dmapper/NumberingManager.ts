@@ -18,6 +18,7 @@ import {
 /** Native ListLevel uses the same actual PropertyMap as DomainMapper's borrowed list context. Unconsumed numeric level fields remain with their existing importer owner. */
 export class ListLevel extends PropertyMap {
   private m_sBulletChar: string | undefined;
+  private m_pParaStyle: StyleSheetEntry | undefined;
   private m_nIStartAt = -1;
   private m_nStartOverride = -1;
   private m_nNFC = -1;
@@ -52,6 +53,14 @@ export class ListLevel extends PropertyMap {
     }
     this.m_bHasValues = true;
   }
+  /** Original null assignment does not clear an existing paragraph-style binding. @param style - Imported entry. @returns Nothing. */
+  SetParaStyle(style: StyleSheetEntry | null | undefined): void {
+    if (style) this.m_pParaStyle = style;
+  }
+  /** Original borrowed paragraph-style identity. @returns Actual entry or undefined. */
+  GetParaStyle(): StyleSheetEntry | undefined {
+    return this.m_pParaStyle;
+  }
   /** Native stub override admission records only SetValue calls. @returns Whether a numeric value was assigned. */
   HasValues(): boolean {
     return this.m_bHasValues;
@@ -72,9 +81,47 @@ export class ListLevel extends PropertyMap {
   GetStartOverride(): number {
     return this.m_nStartOverride;
   }
-  /** Original public level-property boundary for ordinary levels; native pStyle contribution remains to be connected. @param defaults - Original default selector. @returns Owned native property vector. */
+  /** Original public level-property boundary appends paragraph-style properties only when a style is bound. @param defaults - Original default selector. @returns Owned native property vector. */
   GetProperties(defaults: boolean): PropertyValue[] {
-    return this.GetLevelProperties(defaults);
+    const properties = this.GetLevelProperties(defaults);
+    try {
+      if (this.m_pParaStyle) this.AddParaProperties(properties);
+      return properties;
+    } catch (error) {
+      releaseProperties(properties);
+      throw error;
+    }
+  }
+  /** Original property indices convert directly to bool: index0 is false and minus1 is true (WRITER269). @param properties - Owned output. @returns Nothing. */
+  private AddParaProperties(properties: PropertyValue[]): void {
+    const hasFirst =
+        properties.findIndex(
+          /** Native name search. @param property - Value. @returns Equality. */ (property) =>
+            text(property.Name) === "FirstLineIndent",
+        ) !== 0,
+      hasIndent =
+        properties.findIndex(
+          /** Native name search. @param property - Value. @returns Equality. */ (property) =>
+            text(property.Name) === "IndentAt",
+        ) !== 0;
+    if (hasFirst && hasIndent) return;
+    for (const property of this.m_pParaStyle?.m_pProperties.GetPropertyValues() ?? []) {
+      const name = text(property.Name),
+        target =
+          !hasFirst && name === "ParaFirstLineIndent"
+            ? "FirstLineIndent"
+            : !hasIndent && name === "ParaLeftMargin"
+              ? "IndentAt"
+              : undefined;
+      if (target) {
+        const key = unicode(target);
+        try {
+          properties.push(new PropertyValue(key, property.Handle, property.Value, property.State));
+        } finally {
+          key.dispose();
+        }
+      }
+    }
   }
   /** Original current-model GetLevelProperties, preserving UNO types, omissions and Word zero defaults. @param defaults - Include abstract-level defaults. @returns Owned generated values. */
   private GetLevelProperties(defaults: boolean): PropertyValue[] {
@@ -252,6 +299,16 @@ function createListLevelHandler(
         level = current();
       if (!level) {
         if (id === N.LN_CT_Lvl_start) bIsStartVisited = true;
+        return;
+      }
+      if (id === N.LN_CT_Lvl_pStyle) {
+        const name = modifier.getValue()?.getString();
+        try {
+          if (name)
+            level.SetParaStyle(mapper.impl.GetStyleSheetTable().FindStyleSheetByISTD(text(name)));
+        } finally {
+          name?.dispose();
+        }
         return;
       }
       if (id === N.LN_CT_Lvl_start) {
@@ -555,6 +612,27 @@ export class ListDef extends AbstractListDef {
   GetStyleName(): string {
     return this.m_StyleName;
   }
+  /** Original chapter suitability weight with signed narrowing, mismatch rejection and numId1/Heading bonuses. @returns Unsigned16 weight. */
+  GetChapterNumberingWeight(): number {
+    let weight = 0;
+    const count = ((this.m_pAbstractDef?.Size() ?? 0) << 24) >> 24;
+    for (let level = 0; level < count; ++level) {
+      const abstract = this.m_pAbstractDef?.GetLevel(level),
+        style = abstract?.GetParaStyle();
+      if (!abstract || !style) continue;
+      const properties = style.m_pProperties,
+        index = Math.max(0, Math.min(9, (properties.GetListLevel() << 24) >> 24));
+      if (index !== level || properties.GetOutlineLevel() !== level) return 0;
+      if (abstract.GetNumberingType(NumberingType.NUMBER_NONE) !== NumberingType.NUMBER_NONE)
+        weight =
+          ((weight +
+            (this.GetId() === 1 ? 8 : 1) +
+            Number(style.m_sStyleIdentifierD.startsWith("Heading"))) <<
+            16) >>
+          16;
+    }
+    return weight & 65535;
+  }
   /** Native numeric merge starts from abstract defaults and excludes stub overrides. @returns Owned merged vectors. */
   GetMergedPropertyValues(): PropertyValue[][] {
     if (!this.m_pAbstractDef) return [];
@@ -787,3 +865,5 @@ import {
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 
 import { toUInt32 } from "../../../../o3tl/inc/string_view";
+
+import type { StyleSheetEntry } from "./StyleSheetTable";

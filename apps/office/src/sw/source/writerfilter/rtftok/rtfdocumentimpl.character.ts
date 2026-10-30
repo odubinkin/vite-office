@@ -168,15 +168,17 @@ function writeRtfCharacterProperties(
   if (autoKerning !== undefined)
     target.set(N.LN_EG_RPrBase_kern, new RTFValue(Number(autoKerning)));
 }
-/** Native admitted character-reference part of createStyleProperties. Remaining paragraph property families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @param characterSprms - Original group-scoped native character modifiers. @returns Owned source table entry. */
+/** Native character and migrated paragraph-reference parts of createStyleProperties. Other paragraph families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @param characterSprms - Original group-scoped native character modifiers. @param paragraphSprms - Optional original group paragraph modifiers. @returns Owned source table entry. */
 export function createRtfStyleProperties(
   definition: RtfStyleDefinition,
   characterSprms: RTFSprms,
+  paragraphSprms?: RTFSprms,
 ): ReferencePointer<Properties> {
   const attrs = new RTFSprms(),
     sprms = new RTFSprms(),
     characters = new RTFSprms(),
-    empty = new RTFSprms();
+    empty = new RTFSprms(),
+    paragraphs = new RTFSprms(paragraphSprms);
   try {
     attrs.set(
       N.LN_CT_Style_type,
@@ -200,11 +202,30 @@ export function createRtfStyleProperties(
     );
     for (const [id, value] of characterSprms) characters.set(id, value);
     sprms.set(N.LN_CT_Style_rPr, new RTFValue(empty, characters));
+    if (definition.basedOnStyleName === undefined) {
+      for (const id of [
+        N.LN_CT_Ind_firstLine,
+        N.LN_CT_Ind_left,
+        N.LN_CT_Ind_right,
+        N.LN_CT_Ind_start,
+        N.LN_CT_Ind_end,
+      ]) {
+        const value = getNestedAttribute(paragraphs, N.LN_CT_PPrBase_ind, id);
+        try {
+          if (value.is() && value.operatorDereference().getInt() === 0)
+            eraseNestedAttribute(paragraphs, N.LN_CT_PPrBase_ind, id);
+        } finally {
+          value.clear();
+        }
+      }
+    }
+    sprms.set(N.LN_CT_Style_pPr, new RTFValue(empty, paragraphs));
     return new ReferencePointer(new RTFReferenceProperties(attrs, sprms));
   } finally {
     attrs.dispose();
     sprms.dispose();
     characters.dispose();
+    paragraphs.dispose();
     empty.dispose();
   }
 }
@@ -435,6 +456,20 @@ export function ApplyRtfCharacterStyleProperties(
       const name = textValue(value.Name);
       if (name !== "ParaStyleName" && name !== "CharStyleName") sorted.Insert(value);
     }
+    const outline = entry.m_pProperties.GetOutlineLevel();
+    if (entry.m_nStyleTypeCode === StyleType.Paragraph && outline !== -1) {
+      const name = unicode("OutlineLevel"),
+        value = new Any([outline === 9 ? 0 : outline + 1], "sal_Int16"),
+        property = new PropertyValue(name, 0, value, 0);
+      try {
+        sorted.Insert(property);
+      } finally {
+        property.Name.dispose();
+        property.Value.dispose();
+        name.dispose();
+        value.dispose();
+      }
+    }
     const names = sorted.getNames(),
       values = sorted.getValues();
     try {
@@ -557,3 +592,8 @@ export function ApplyRtfParagraphMarker(
     properties.clear();
   }
 }
+
+import { getNestedAttribute, eraseNestedAttribute } from "./rtfdocumentimpl.properties";
+import { unicode } from "../../core/unocore/unocrsrhelper";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
