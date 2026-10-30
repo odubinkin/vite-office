@@ -434,6 +434,10 @@ export class SvNumberformat {
     }
     return false;
   }
+  /** Original inline decimal precision query on the compiled subformat. @param index - Native uint16 subformat, zero by default. @returns Decimal digit count. */
+  GetFormatPrecision(index = 0): number {
+    return (this.NumFor[index & 65535] as ImpSvNumFor).Info().nCntPost;
+  }
   /** Source scanned type of one compiled subformat. @param subformat - Native section. @returns Scanned type or UNDEFINED. */
   GetNumForInfoScannedType(subformat: number): number {
     return subformat < 4
@@ -722,6 +726,14 @@ export class SvNumberformat {
       output.assign(value ? scanner.GetTrueString() : scanner.GetFalseString());
       return false;
     }
+    if (
+      !(this.eType & SvNumFormatType.TEXT) &&
+      this.bStandard &&
+      (precision & 65535) === INPUTSTRING_PRECISION
+    ) {
+      this.ImpGetOutputInputLine(value, output, decimal);
+      return false;
+    }
     const section = this.NumFor[0] as ImpSvNumFor,
       info = section.Info();
     // Original nonstandard NUMBER dispatch, restricted to the represented ungrouped integer digit production.
@@ -757,6 +769,50 @@ export class SvNumberformat {
       result.dispose();
     }
     return false;
+  }
+  /** Original ImpGetOutputInputLine uses automatic precision and percent scaling below the native overflow threshold. @param value - Binary64 input. @param outputString - Actual output. @param decimal - Current locale decimal unit. @returns Nothing. */
+  private ImpGetOutputInputLine(value: number, outputString: OUString, decimal: number): void {
+    let modified = false;
+    if (this.eType & SvNumFormatType.PERCENT && Math.abs(value) < 1.7e306) {
+      if (value === 0) {
+        const zeroPercent = new OUString(Uint16Array.of(48, 37), 2);
+        try {
+          outputString.assign(zeroPercent);
+        } finally {
+          zeroPercent.dispose();
+        }
+        return;
+      }
+      value *= 100;
+      modified = true;
+    }
+    const result =
+      value === 0
+        ? zero()
+        : output(
+            value,
+            Format.rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces.rtl_math_DecimalPlaces_Max,
+            decimal,
+          );
+    try {
+      if (this.eType & SvNumFormatType.PERCENT && modified) {
+        const buffer = new OUStringBuffer();
+        try {
+          buffer.append(result).append(Uint16Array.of(37));
+          const percent = buffer.makeStringAndClear();
+          try {
+            outputString.assign(percent);
+          } finally {
+            percent.dispose();
+          }
+        } finally {
+          buffer.dispose();
+        }
+      } else outputString.assign(result);
+    } finally {
+      result.dispose();
+    }
   }
   /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one ungrouped digit token, no conditions, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @returns Nothing. */
   private ImpGetNumberOutput(value: number, section: ImpSvNumFor, outputString: OUString): void {
@@ -824,4 +880,5 @@ export type SvNumberformatConstReference = Pick<
   | "IsNegativeWithoutSign"
   | "IsNumForStringElementCountEqual"
   | "GetNumForInfoScannedType"
+  | "GetFormatPrecision"
 >;

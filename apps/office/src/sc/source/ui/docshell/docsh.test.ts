@@ -15,6 +15,7 @@ import { ScDocument } from "../../../inc/document";
 import { ScXMLImportWrapper } from "../../filter/xml/xmlwrap";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocShell } from "./docsh";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 /** Builds valid replacement state. @param title - Title. @returns State. */
 function state(title = "Opened") {
   return createDocument({ id: crypto.randomUUID(), suiteId: "calc", title });
@@ -480,4 +481,42 @@ it("loads candidates atomically,discards stale/cancelled imports and resets mode
   const closeOpen = s.Open(bytes, state());
   c.Close();
   await expect(closeOpen).rejects.toThrow(/cancelled|Closed/);
+});
+
+it.each([1, 20, 80, 85])(
+  "exports native input-line precision from actual display-format key %i",
+  /** CSV uses the existing ScCellFormat/context/formatter path rather than serializing a display-format approximation. @param key - Source integer, currency, scientific or fraction display key. @returns Nothing. */ (
+    key,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      pos = new ScAddress();
+    try {
+      document.SetValue(pos, 1.23456789);
+      document.SetNumberFormat(pos, key);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = false;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe("1.23456789\n");
+    } finally {
+      shell.Close();
+    }
+  },
+);
+
+it("exports native percent input text with its sign and full precision", /** Actual CSV path retains percent semantics through ScCellFormat and the real standard entry. @returns Nothing. */ () => {
+  const shell = new ScDocShell(),
+    document = shell.GetDocument(),
+    pos = new ScAddress();
+  try {
+    document.SetValue(pos, -0.123456789);
+    document.SetNumberFormat(
+      pos,
+      document.GetFormatTable().GetStandardFormat(SvNumFormatType.PERCENT),
+    );
+    const options = new ScImportOptions();
+    options.bSaveAsShown = false;
+    expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe("-12.3456789%\n");
+  } finally {
+    shell.Close();
+  }
 });

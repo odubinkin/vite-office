@@ -25,7 +25,9 @@
       "GetNumForInfoScannedType",
       "IsInQuote",
       "GetQuoteEnd",
-      "ImpGetNumberOutput"
+      "ImpGetNumberOutput",
+      "GetFormatPrecision",
+      "ImpGetOutputInputLine"
     ],
     "upstreamSymbols": [
       "SvNumberformat::GetOutputString",
@@ -69,7 +71,8 @@
       "AQF9AG connects original automatic-currency delimiter stripping during ImpInsertFormat, preserving NF_CURRENCY_1000DEC2_CCC exclusion and compiling through the actual normal constructor. The prior local unsupported-currency exception is removed; complete builtin initialization remains pending.",
       "AQF9AG now invokes the complete original builtin-generation sequence from the formatter constructor, including both additional-format passes. SvNumberformat stores/copies the source additional-builtin flag; General last-insert metadata advances according to real successful locale insertions. The earlier General-only helper remains an isolated source initialization fragment used by existing focused tests, not the production initializer. Full native initializer differential closure and CSV recognition/output remain pending.",
       "AQF9AG adds original IsIso8601 section/token query for edit-format selection over actual compiled subformats.",
-      "581KM2 integration repair: original GetOutputString NUMBER dispatch and ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer production now use actual compiled subformat tokens, SAL corrected rounding and F conversion, backwards 0/#/? fill, color selection and rounded-zero sign suppression. Admission requires one DIGIT token, no conditions/grouping/scaling/decimals, NatNum0 and finite input; other output productions remain explicitly unimplemented. Real public formatter tests cover the compiled builtin0 pattern, padding, optional/blank digits, excess digits, half rounding and negative zero. This fixes the existing Calc borrowed-cell format1 test without changing its expected output. No independent compiled-native differential, full numeric/date/currency/scientific output or native ABI/parity claim is made."
+      "581KM2 integration repair: original GetOutputString NUMBER dispatch and ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer production now use actual compiled subformat tokens, SAL corrected rounding and F conversion, backwards 0/#/? fill, color selection and rounded-zero sign suppression. Admission requires one DIGIT token, no conditions/grouping/scaling/decimals, NatNum0 and finite input; other output productions remain explicitly unimplemented. Real public formatter tests cover the compiled builtin0 pattern, padding, optional/blank digits, excess digits, half rounding and negative zero. This fixes the existing Calc borrowed-cell format1 test without changing its expected output. No independent compiled-native differential, full numeric/date/currency/scientific output or native ABI/parity claim is made.",
+      "AQF9AG adds original inline GetFormatPrecision and the complete ImpGetOutputInputLine percent/zero/automatic conversion over real SAL output. The original bStandard input-precision fast path precedes nonstandard dispatch; percent scaling retains the strict 1.7E306 source threshold and ASCII percent suffix. Full display families and full native format-output differential verification remain pending."
     ],
     "omittedResponsibilities": [
       "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
@@ -141,6 +144,10 @@
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
           "marker": "ImpNumberFillWithThousands"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "GetFormatPrecision"
         }
       ]
     }

@@ -973,20 +973,16 @@ export class SvNumberFormatter {
       color,
     );
   }
-  /** Original GetInputLineString for the admitted General format: temporarily select input-line precision, format through the actual entry, then restore scanner precision. The source's edit-format and locale-switch branches are identity operations for this entry. @param value - Numeric cell value. @param key - Actual format key. @param _filtering - Source filtering flag. @param _forceSystemLocale - Source locale flag. @returns Owned input string. */
+  /** Original public input-line forwarding with the actual native-number owner and writable accessor. @param args - Value, display format key and original filtering/system-locale flags. @returns Owned input string. */
   GetInputLineString(
-    value: number,
-    key: number,
-    _filtering = false,
-    _forceSystemLocale = false,
+    ...args: [value: number, key: number, filtering?: boolean, forceSystemLocale?: boolean]
   ): OUString {
     return SvNFEngine.GetInputLineString(
       this.m_aCurrentLanguage,
       this.m_aFormatData,
-      value,
-      key,
-      _filtering,
-      _forceSystemLocale,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      ...args,
     );
   }
   /** Original owned table entries are destroyed before language/scanner/provider owners. Unrepresented global registry/mutex services have no fake lifetime hooks. @returns Nothing. */

@@ -716,7 +716,14 @@ it("keeps real engine fallback and separately represented input/format null-date
     ).toThrow("Required native standard text format is absent");
     expect(
       /** Rejects missing numeric fallback in input-line conversion. @returns No owned output. */ () =>
-        SvNFEngine.GetInputLineString(current, values.table, 1, 404),
+        SvNFEngine.GetInputLineString(
+          current,
+          values.table,
+          current.GetFormatScanner().getColorCallback().GetNatNum(),
+          SvNFEngine.GetRWPolicy(values.table),
+          1,
+          404,
+        ),
     ).toThrow("Required native standard format0 is absent");
     generateStandardNumberFormat(
       values.table,
@@ -736,7 +743,15 @@ it("keeps real engine fallback and separately represented input/format null-date
     const precision = current.GetStandardPrec();
     expect(
       /** Exercises temporary output cleanup on an unrepresented numeric type. @returns No owned output. */ () =>
-        SvNFEngine.GetInputLineString(current, values.table, 1.2345, 0),
+        SvNFEngine.GetInputLineString(
+          current,
+          values.table,
+          current.GetFormatScanner().getColorCallback().GetNatNum(),
+          SvNFEngine.GetRWPolicy(values.table),
+          1.2345,
+          0,
+          true,
+        ),
     ).toThrow("SvNumberformat nonstandard output is not implemented");
     expect(current.GetStandardPrec()).toBe(precision);
     entry.SetType(16);
@@ -771,5 +786,123 @@ it("compiles actual locale automatic currency codes and retains the bank-symbol 
     }
   } finally {
     values.dispose();
+  }
+});
+
+it.each([
+  [1, 1.23456789, false, "1,23456789"],
+  [1, 1.5, true, "2"],
+  [20, 12.3456789, false, "12,3456789"],
+  [80, 0.0000123456789, false, "0,0000123456789"],
+  [85, 1.23456789, false, "1,23456789"],
+  [99, 1, false, "WAHR"],
+  [100, 1.23456789, false, "1,23"],
+  [9999, 1.23456789, false, "1,23456789"],
+])(
+  "uses source input-line selection for key %i, value %s and filtering %s",
+  /** Observes actual German compiled entries and precision restoration through the public formatter. @param key - Source display key. @param value - Cell value. @param filtering - Original keep-format flag. @param expected - Source-derived input text. @returns Nothing. */ (
+    key,
+    value,
+    filtering,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x407);
+    try {
+      const input = formatter.GetInputLineString(value, key, filtering);
+      try {
+        expect(text(input)).toBe(expected);
+      } finally {
+        input.dispose();
+      }
+      expect(formatter.GetStandardPrec()).toBe(2);
+    } finally {
+      formatter.dispose();
+    }
+  },
+);
+
+it("retains mixed-section first-type selection and original fractional precision queries", /** Actual constructor produces mixed format sections; editing selects the first type rather than evaluating sign conditions. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x409),
+    current = formatter["m_aCurrentLanguage"],
+    table = formatter["m_aFormatData"],
+    code = unicode("0;YYYY-MM-DD"),
+    check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0];
+  try {
+    expect(table.PutEntry(current, formatter.GetNatNum(), code, check, type, key, 0x409)).toBe(
+      true,
+    );
+    expect(check[0]).toBe(0);
+    expect(table.GetEntry(key[0])?.GetMaskedType()).toBe(SvNumFormatType.ALL);
+    expect(table.GetEntry(key[0])?.GetNumForInfoScannedType(0)).toBe(SvNumFormatType.NUMBER);
+    const result = formatter.GetInputLineString(-1.23456789, key[0]);
+    try {
+      expect(text(result)).toBe("-1.23456789");
+    } finally {
+      result.dispose();
+    }
+    expect(table.GetEntry(74)?.GetFormatPrecision()).toBe(3);
+    expect(table.GetEntry(1)?.GetFormatPrecision()).toBe(0);
+    expect(formatter.GetStandardPrec()).toBe(2);
+  } finally {
+    code.dispose();
+    formatter.dispose();
+  }
+});
+
+it.each([
+  [0, "0%"],
+  [-0, "0%"],
+  [0.125, "12,5%"],
+  [-0.125, "-12,5%"],
+  [1.23456789, "123,456789%"],
+  [1.7e306, "1,7E+306"],
+  [-1.7e306, "-1,7E+306"],
+])(
+  "retains source standard-percent input-line scaling for %s",
+  /** Native standard entry bypasses display rounding only at input-line precision, retaining the strict overflow threshold. @param value - Cell value. @param expected - Source-derived output. @returns Nothing. */ (
+    value,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x407);
+    try {
+      const key = formatter.GetStandardFormat(SvNumFormatType.PERCENT),
+        result = formatter.GetInputLineString(value, key);
+      try {
+        expect(text(result)).toBe(expected);
+      } finally {
+        result.dispose();
+      }
+      expect(formatter.GetStandardPrec()).toBe(2);
+    } finally {
+      formatter.dispose();
+    }
+  },
+);
+
+it("uses the system edit locale only when filtering does not retain the original format", /** Real locale blocks and current-language state observe both flags without a formatter or accessor substitute. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x407),
+    current = formatter["m_aCurrentLanguage"];
+  try {
+    const systemKey = formatter.GetStandardIndex(0),
+      systemInput = formatter.GetInputLineString(1.23456789, systemKey),
+      forced = formatter.GetInputLineString(1.23456789, 0, false, true);
+    try {
+      expect(text(forced)).toBe(text(systemInput));
+    } finally {
+      forced.dispose();
+      systemInput.dispose();
+    }
+    const filtered = formatter.GetInputLineString(1.23456789, 0, true, true);
+    try {
+      expect(text(filtered)).toBe("1,23456789");
+      expect(current.fields.ActLnge[0]).toBe(0x407);
+    } finally {
+      filtered.dispose();
+    }
+    expect(formatter.GetStandardPrec()).toBe(2);
+  } finally {
+    formatter.dispose();
   }
 });

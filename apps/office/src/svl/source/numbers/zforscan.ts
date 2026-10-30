@@ -86,6 +86,8 @@ export function extractStandardGeneralName(code: OUStringConstReference): OUStri
 
 /** Original scanner owner, fixed token arrays and current-language reference. The full original lexical/type/final scanning pipeline uses source responsibility fragments. The prepared XNumberFormatCode binding is the actual provider, not a replacement service manager. */
 export class ImpSvNumberformatScan {
+  /** Original static format-output error string from zforscan.hxx. */
+  static readonly sErrStr: OUStringConstReference = unicode("#FMT");
   protected readonly sKeyword = Array.from(
     { length: NfKeywordIndex.KEYWORD_ENTRIES_COUNT },
     /** Original default constructed keyword member. @returns Empty owner. */ () => new OUString(),
