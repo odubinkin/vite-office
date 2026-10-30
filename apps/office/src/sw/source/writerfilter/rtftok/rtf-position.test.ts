@@ -10,7 +10,11 @@ import {
   DFLT_ESC_PROP,
 } from "../../../../editeng/inc/escapementitem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
+import {
+  RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_FONTSIZE,
+  RES_PARATR_LIST_AUTOFMT,
+} from "../../../inc/hintids";
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases actual document/item owners. @returns Nothing. */ () => {
@@ -134,5 +138,61 @@ it.each([
     offset,
   ) => {
     expect(position(read("{\\rtf1\\fs40\\" + control + " A}"))).toEqual({ offset, height: 100 });
+  },
+);
+
+import { SwFormatAutoFormat } from "../../core/txtnode/fmtatr2";
+
+it.each([
+  ["", String.raw`{\s4\fs40 Large;}`, String.raw`\s4\fs40\up6`, 15],
+  ["A", String.raw`{\s4\fs40 Large;}`, String.raw`\s4\fs40\up6`, 15],
+  ["", String.raw`{\s4\fs40 Large;}`, String.raw`\s4\fs40\dn6`, -15],
+  ["A", String.raw`{\s4\fs40 Large;}`, String.raw`\s4\fs40\dn6`, -15],
+  ["A", String.raw`{\s3\fs40 Parent;}{\s4\sbasedon3\fs40 Child;}`, String.raw`\s4\fs40\up6`, 15],
+  ["A", String.raw`{\s4\fs40 Large;}{\*\cs21\fs80 Larger;}`, String.raw`\s4\cs21\fs80\up6`, 8],
+])(
+  "resolves the paragraph marker against its selected style: %s %s %s",
+  /** The identical raw font size deduplicates; deferred position must recover the selected style rather than the default paragraph. @param content - Empty or visible paragraph. @param styles - Native style definitions. @param controls - Paragraph marker controls. @param expected - Final displacement. @returns Nothing. */ (
+    content,
+    styles,
+    controls,
+    expected,
+  ) => {
+    const doc = read(
+      String.raw`{\rtf1{\stylesheet{\s0 Normal;}` +
+        styles +
+        "}" +
+        controls +
+        " " +
+        content +
+        String.raw`\par}`,
+    );
+    const node = doc.paragraphs[0];
+    assert(node);
+    const format = node.GetAttr(RES_PARATR_LIST_AUTOFMT) as SwFormatAutoFormat<number>;
+    const item = format.GetStyleHandle()?.Get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
+    expect(item.GetEsc()).toBe(expected);
+    expect(item.GetProportionalHeight()).toBe(100);
+  },
+);
+
+it.each([
+  [String.raw`\sect`, false],
+  [String.raw`\par\sect`, true],
+])(
+  "keeps explicit PAR marker properties distinct from a section's dummy break: %s",
+  /** Native sectBreak suppresses runProps only for its own dummy PAR. @param ending - Actual explicit or implicit paragraph break. @param hasMarker - Whether an explicit marker was consumed. @returns Nothing. */ (
+    ending,
+    hasMarker,
+  ) => {
+    const doc = read(
+      String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\s4\fs40 Large;}}\s4\fs40 A\up6` + ending + "}",
+    );
+    const node = doc.paragraphs[0];
+    assert(node);
+    const format = node.GetAttr(RES_PARATR_LIST_AUTOFMT) as SwFormatAutoFormat<number>;
+    const handle = format.GetStyleHandle();
+    expect(Boolean(handle)).toBe(hasMarker);
+    if (handle) expect((handle.Get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc()).toBe(15);
   },
 );

@@ -1047,3 +1047,32 @@ hard hyphen and soft hyphen use original SVT constants from their shared owner.
 LINE retains singleChar with runProps and bypasses early paragraph capture,
 rather than following the text-destination path (WRITER279). Tests verify body
 characters under ansicpg932, buffered PN symbols and the distinct direct LINE run.
+
+
+### Atomic paragraph-marker style context checkpoint
+
+The atomic marker boundary now restores the actual selected paragraph style into
+its fresh paragraph PropertyMap before resolving character properties. Setting
+only the mapper's saved current-style fallback was insufficient: original
+GetCurrentParaStyleName gives the paragraph map's ParaStyleName priority, and
+startParagraphGroup inserts the default style there. The native streaming path
+retains the preceding pStyle in that context. This change binds the existing
+atomic importer to that same context without changing native mapper precedence,
+style deduplication or deferred character calculations.
+
+A native RTF fixture with style4/fs40 and up6 previously produced marker offset30
+using the default ten-point style; it now produces offset15 using style4's
+twenty-point size. Empty and nonempty paragraphs, negative position, inherited
+paragraph font size and character-style priority are covered through the actual
+ListAutoFormat item handle. This is a local context-binding defect, not a suspected
+upstream issue. Source evidence: DomainMapper.cxx pStyle handler and
+lcl_startParagraphGroup, and DomainMapper_Impl.cxx GetCurrentParaStyleName.
+
+The same fixtures verify the represented section marker boundary:
+RTFDocumentImpl::sectBreak sets m_bParAtEndOfSection for its dummy PAR and
+rtfdispatchsymbol.cxx suppresses runProps there; an explicit PAR before SECT keeps
+its marker. The existing atomic SECT path already preserves this distinction.
+This closes marker style-context verification and this section-marker case only;
+other section transitions and HTML/current-model producer/export audits remain
+required before declaring the goal complete. No whole-module/ABI confidence is
+promoted and intentional browser file UI/autosave/recovery behavior is unchanged.

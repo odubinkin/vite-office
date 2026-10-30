@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 210
+revision: 213
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T16:24:40.969Z"
+  updated_at: "2026-10-30T16:32:37.318Z"
   updated_by: "CODER"
-  note: "Native legacy PN, malformed-list recovery and text symbols checkpoint verified: 938 targeted tests/55 files,33 fresh cases and required static gates pass. WRITER277-WRITER279 documented and preserved. Goal remains incomplete pending section/HTML/current-model and marker-style-context audits."
-  attempts: 34
+  note: "Atomic marker context checkpoint: 958 related tests/56 files pass, final marker 23/1 and all required static gates pass; full filter goal remains incomplete pending section and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html24-tests.txt and html24 static logs."
+  attempts: 35
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -549,8 +552,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T16:32:37.318Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Atomic marker context checkpoint: 958 related tests/56 files pass, final marker 23/1 and all required static gates pass; full filter goal remains incomplete pending section and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html24-tests.txt and html24 static logs."
+  -
+    type: "status"
+    at: "2026-10-30T16:32:50.047Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T16:24:50.293Z"
+doc_updated_at: "2026-10-30T16:32:50.047Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1293,6 +1309,36 @@ sections:
     Attempts: 34
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:24:39.933Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T16:32:37.318Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Atomic marker context checkpoint: 958 related tests/56 files pass, final marker 23/1 and all required static gates pass; full filter goal remains incomplete pending section and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html24-tests.txt and html24 static logs.
+    Attempts: 35
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:32:36.265Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2159,6 +2205,17 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
       Result: pass. Evidence: html23-types-final3.txt, html23-eslint-final2.txt, html23-prettier-final.txt, html23-docs-final.txt, html23-provenance-final2.txt, html23-registry-final2.txt, html23-boundaries-final.txt, html23-size-final.txt, html23-tree.txt, html23-doctor-final.txt. Scope:4254 authored files for docs,1885 provenance modules,1884 runtime sources/10304 relative imports/227 allowed edges, Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim readiness warning. No unrelated hooks, policy, test configuration, network or vendor source changes.
     - Initial failures and corrections retained: html23-types.txt identified the missing generated suffix resource; obtained exact93116 from the pinned generator. Bounded editing scripts reported substring-not-found after formatting; inspected actual text and recomputed route before dependent retries, without reconstructing repo state or changing acceptance. Native source review caught an accidentally inserted buffer disposal in first-run font initialization; removed it, kept disposal only at pop/cleanup and added a concrete first-run-font/later-PN regression, included in final938. Initial no-op fixtures incorrectly assumed the core default label character format was absent; retained literal Arabic-type assertions and compared actual label height to the identical native PN baseline instead. The source default label style remains intact. Initial symbol fixtures omitted literal spaces after one-character control symbols; corrected test expectations to native lexical behavior without changing the tokenizer. html23-symbol-tests.txt records those three failures; final16-case symbol run and full938 pass. Provenance/registry initially rejected secondary-source dispatchFlag/dispatchValue symbols listed under primary rtfdocumentimpl.cxx; corrected primary symbol mapping to afterPopState and retained exact secondary-source file/marker evidence, then both gates pass. No production acceptance was relaxed to hide an implementation defect.
+
+    ### Atomic paragraph-marker style-context checkpoint (html24)
+
+    - The original streaming pStyle remains in the paragraph context when PAR emits runProps. The atomic marker binding recreated that context with default ParaStyleName and only updated the saved fallback, which GetCurrentParaStyleName deliberately reads with lower priority. Restored the actual node style into the real ParagraphPropertyMap with an owned typed Any before consuming marker properties; original mapper precedence, defaults and style deduplication remain unchanged.
+    - Added eight real-RTF cases: empty/nonempty markers, positive/negative displacement, inherited paragraph font height, character-style priority, implicit SECT dummy-marker suppression and explicit PAR-before-SECT retention. The regression initially produced offset30 instead of source-derived15 and now passes on the actual ListAutoFormat handle. This is our binding defect, not a suspected upstream error; no new WRITER issue is invented.
+    - Current marker-style gap and this section-marker case are closed. Other section transitions and HTML/current-core producer/export audits remain required; full goal remains active/incomplete. No broad module/ABI semantic confidence promotion, no intentional browser file UI/autosave/recovery changes.
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+      Result: pass,958tests/56files. Evidence: output/playwright/rtf-properties-native/html24-tests.txt. Scope: related TXT/RTF/Markdown/parser/mapper/native UNO and document-I/O paths. Final marker confirmation23/1 in html24-marker-final.txt. No all-application full test run.
+    - Command: npm run typecheck; npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.character.ts --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+      Result: pass. Evidence: output/playwright/rtf-properties-native/html24-{typecheck-final,lint-final,format,docs,provenance-final,registry,boundaries,size,tree,doctor}.txt. Scope: changed code/docs,4254 authored files,1885 provenance modules,1884 runtime sources/10305 imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks or policy modified.
+    - Initial evidence retained: html24-marker-before.txt proves the two baseline offset failures; html24-marker-after.txt caught the new test's guessed GetProp accessor, corrected after reading native GetProportionalHeight. html24-typecheck.txt caught nullable GetTopContext; added the same real ParagraphPropertyMap assertion as the neighboring atomic paragraph binding, then final typecheck and marker checks passed. Empty optional searches produced no repo mutation; route recomputed before dependent work. No acceptance or enforcement was weakened.
 id_source: "generated"
 ---
 ## Summary
@@ -2912,6 +2969,36 @@ Note: Native legacy PN, malformed-list recovery and text symbols checkpoint veri
 Attempts: 34
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:24:39.933Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T16:32:37.318Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Atomic marker context checkpoint: 958 related tests/56 files pass, final marker 23/1 and all required static gates pass; full filter goal remains incomplete pending section and HTML/current-core producer audits. Evidence: output/playwright/rtf-properties-native/html24-tests.txt and html24 static logs.
+Attempts: 35
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T16:32:36.265Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -3782,3 +3869,14 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office; targeted npx eslint --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
   Result: pass. Evidence: html23-types-final3.txt, html23-eslint-final2.txt, html23-prettier-final.txt, html23-docs-final.txt, html23-provenance-final2.txt, html23-registry-final2.txt, html23-boundaries-final.txt, html23-size-final.txt, html23-tree.txt, html23-doctor-final.txt. Scope:4254 authored files for docs,1885 provenance modules,1884 runtime sources/10304 relative imports/227 allowed edges, Writer semantic violations0. Doctor errors0 and unchanged pre-existing managed-shim readiness warning. No unrelated hooks, policy, test configuration, network or vendor source changes.
 - Initial failures and corrections retained: html23-types.txt identified the missing generated suffix resource; obtained exact93116 from the pinned generator. Bounded editing scripts reported substring-not-found after formatting; inspected actual text and recomputed route before dependent retries, without reconstructing repo state or changing acceptance. Native source review caught an accidentally inserted buffer disposal in first-run font initialization; removed it, kept disposal only at pop/cleanup and added a concrete first-run-font/later-PN regression, included in final938. Initial no-op fixtures incorrectly assumed the core default label character format was absent; retained literal Arabic-type assertions and compared actual label height to the identical native PN baseline instead. The source default label style remains intact. Initial symbol fixtures omitted literal spaces after one-character control symbols; corrected test expectations to native lexical behavior without changing the tokenizer. html23-symbol-tests.txt records those three failures; final16-case symbol run and full938 pass. Provenance/registry initially rejected secondary-source dispatchFlag/dispatchValue symbols listed under primary rtfdocumentimpl.cxx; corrected primary symbol mapping to afterPopState and retained exact secondary-source file/marker evidence, then both gates pass. No production acceptance was relaxed to hide an implementation defect.
+
+### Atomic paragraph-marker style-context checkpoint (html24)
+
+- The original streaming pStyle remains in the paragraph context when PAR emits runProps. The atomic marker binding recreated that context with default ParaStyleName and only updated the saved fallback, which GetCurrentParaStyleName deliberately reads with lower priority. Restored the actual node style into the real ParagraphPropertyMap with an owned typed Any before consuming marker properties; original mapper precedence, defaults and style deduplication remain unchanged.
+- Added eight real-RTF cases: empty/nonempty markers, positive/negative displacement, inherited paragraph font height, character-style priority, implicit SECT dummy-marker suppression and explicit PAR-before-SECT retention. The regression initially produced offset30 instead of source-derived15 and now passes on the actual ListAutoFormat handle. This is our binding defect, not a suspected upstream error; no new WRITER issue is invented.
+- Current marker-style gap and this section-marker case are closed. Other section transitions and HTML/current-core producer/export audits remain required; full goal remains active/incomplete. No broad module/ABI semantic confidence promotion, no intentional browser file UI/autosave/recovery changes.
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/sw/source/core/unocore/unosett.test.ts src/sw/source/core/unocore/chapter-numbering.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ww8/rtfexport src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/ascii src/sw/source/filter/md src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1
+  Result: pass,958tests/56files. Evidence: output/playwright/rtf-properties-native/html24-tests.txt. Scope: related TXT/RTF/Markdown/parser/mapper/native UNO and document-I/O paths. Final marker confirmation23/1 in html24-marker-final.txt. No all-application full test run.
+- Command: npm run typecheck; npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.character.ts --max-warnings 0; targeted npx prettier --check; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check
+  Result: pass. Evidence: output/playwright/rtf-properties-native/html24-{typecheck-final,lint-final,format,docs,provenance-final,registry,boundaries,size,tree,doctor}.txt. Scope: changed code/docs,4254 authored files,1885 provenance modules,1884 runtime sources/10305 imports/227 allowed edges, Writer semantic violations0. Doctor OK with unchanged pre-existing managed-shim warning; no hooks or policy modified.
+- Initial evidence retained: html24-marker-before.txt proves the two baseline offset failures; html24-marker-after.txt caught the new test's guessed GetProp accessor, corrected after reading native GetProportionalHeight. html24-typecheck.txt caught nullable GetTopContext; added the same real ParagraphPropertyMap assertion as the neighboring atomic paragraph binding, then final typecheck and marker checks passed. Empty optional searches produced no repo mutation; route recomputed before dependent work. No acceptance or enforcement was weakened.

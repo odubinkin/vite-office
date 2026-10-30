@@ -574,13 +574,20 @@ export function ApplyRtfParagraphMarker(
   point.Dispose();
   mapper.startParagraphGroup();
   try {
+    const context = mapper.impl.GetTopContext();
+    if (!(context instanceof ParagraphPropertyMap)) throw new Error("assert(ParagraphPropertyMap)");
     const style = node.GetTextFormatColl();
-    mapper.impl.SetCurrentParaStyleName(
-      SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
-    );
+    const name = SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
+      value = stringAny(name);
+    try {
+      context.Insert(P.PROP_PARA_STYLE_NAME, value);
+    } finally {
+      value.dispose();
+    }
+    mapper.impl.SetCurrentParaStyleName(name);
     mapper.props(properties);
     mapper.impl.processDeferredCharacterProperties(false);
-    const values = mapper.impl.GetParagraphPropertyValues(mapper.impl.GetTopContext());
+    const values = mapper.impl.GetParagraphPropertyValues(context);
     try {
       SetPropertyValues(
         range,
@@ -605,7 +612,8 @@ export function ApplyRtfParagraphMarker(
 }
 
 import { getNestedAttribute, eraseNestedAttribute } from "./rtfdocumentimpl.properties";
-import { unicode } from "../../core/unocore/unocrsrhelper";
+import { unicode, stringAny } from "../../core/unocore/unocrsrhelper";
+import { PropertyIds as P } from "../dmapper/PropertyIds";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 
