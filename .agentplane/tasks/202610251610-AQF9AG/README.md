@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 66
+revision: 69
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T09:41:46.576Z"
+  updated_at: "2026-10-30T10:26:59.309Z"
   updated_by: "CODER"
-  note: "Scientific/engineering display checkpoint passes 716 related formatter tests, 106 Calc tests and two browser scenarios, with typecheck, focused lint, provenance/dependency/resource/inventory/docs/size/build checks. CALC-395/CALC-396 source behavior is preserved. Full CSV remains incomplete: fraction/date-time/native-number output, original public output contracts, multiline EditEngine, complete option/UI acceptance and native differential closure still require work."
-  attempts: 8
+  note: "Fraction checkpoint passes focused formatter/Calc/browser tests, native scalar differential and structural checks. Whole CSV task remains incomplete: date/time/native-number output, public output contracts, multiline EditEngine and full option/UI acceptance remain. Continue approved work; do not close the goal."
+  attempts: 9
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -456,8 +459,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T10:26:59.309Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Fraction checkpoint passes focused formatter/Calc/browser tests, native scalar differential and structural checks. Whole CSV task remains incomplete: date/time/native-number output, public output contracts, multiline EditEngine and full option/UI acceptance remain. Continue approved work; do not close the goal."
+  -
+    type: "status"
+    at: "2026-10-30T10:27:04.550Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T09:42:49.848Z"
+doc_updated_at: "2026-10-30T10:27:04.550Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -695,6 +711,36 @@ sections:
     Attempts: 8
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:41:45.767Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T10:26:59.309Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Fraction checkpoint passes focused formatter/Calc/browser tests, native scalar differential and structural checks. Whole CSV task remains incomplete: date/time/native-number output, public output contracts, multiline EditEngine and full option/UI acceptance remain. Continue approved work; do not close the goal.
+    Attempts: 9
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:26:58.122Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -1099,6 +1145,17 @@ sections:
     - Commands: npm run typecheck; focused ESLint for all4 changed implementation/test paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: scientific-{typecheck,lint,provenance,dependencies,docs,size,parity,resources,build}.log. Provenance1864 modules; dependencies1863 runtime sources10061 imports225 allowed edges; docs4215 authored sources. The prior numeric checkpoint note's10062 import count reflected the temporary iterator SAL import; its final restored-state dependency log and the current check have10061 imports. Original iterator and old metadata remain unchanged.
     - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests. Evidence: scientific-browser.log. Scope: real basic CSV import/ODS save/active export and sparse native owner/Worker integration, not complete scientific format UI acceptance or full CSV certification.
     - Remaining: fraction/date/time and completed native-number output, original public output contracts, true multiline EditEngine import, complete CSV option/UI audit and dedicated full native differential closure. Goal/task are not complete. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run.
+
+    ### Original finite fraction display and consumed scalar conversions, 2026-10-30
+
+    - Continued the same approved task from de803b2c8029. Ported original GetFractionOutput, ImpGetFractionElements and fraction token helpers into the zformat responsibility fragment, using real compiled sections, locale owners and shared numeric fills. Added consumed o3tl double/signed64 saturation and finite-integral sprintf bindings. No alternate fraction parser, guessed format key or CSV option rejection was introduced.
+    - Preserve forced-denominator strict tie comparison, continued fractions and collateral selection, signed64 arithmetic widths, carry normalization, optional/mandatory/figure-space alignment, improper fractions, original positive whole-part overflow guard before absolute value, signed zero and original shared-fill defaults. Final source-header audit confirmed bAddDecSep=true; the common helper now declares that original default and the fraction call omits it as upstream does. CALC-397/398 document the asymmetric whole guard and preserved negative zero without correcting upstream behavior.
+    - Command: npx tsx scripts/calc-fraction-elements-native-probe.mjs. Result: pass,5362 unique kernel cases in each of clang -O2/-O0/UBSan modes,20 saturation/printf primitive cases,0 mismatches,0 observed undefined cases. Evidence: output/native/AQF9AG-icu-grego/fraction-elements/comparison.json and fraction-native.log, including source hashes/compiler commands. Scope: unchanged extracted native ImpGetFractionElements with scalar section fixture, original o3tl headers and actual C snprintf. Native parser, complete display wrapper, service/UNO/SAL ABI and undefined-overflow domains are not certified by this fixture.
+    - Command: npm run test:shared -- src/svl/source/numbers src/o3tl/inc/float_int_conversion.test.ts src/o3tl/inc/sprintf.test.ts. Result: pass,46 files749 tests. Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files110 tests. Evidence: fraction-all-tests.log/fraction-csv-tests.log. Added17 public compiled fraction cases,16 primitive tests and4 actual styled CSV cases; no test-only formatter substitutes.
+    - Final related rerun after the source default correction: npm run test:shared -- src/svl/source/numbers/zformat.fraction.test.ts src/o3tl/inc/float_int_conversion.test.ts src/o3tl/inc/sprintf.test.ts. Result: pass,3 files33 tests. Evidence: fraction-final-tests.log. Repeated cases are not added to the unique total.
+    - Commands: npm run typecheck; focused ESLint for all10 changed implementation/test/script paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: fraction-{typecheck,lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10071 imports225 allowed edges; docs4222 authored sources. No dependency checker exemptions: initial SAL import in the generic saturation binding created an o3tl/SAL cycle and was replaced with the source std::numeric_limits intrinsic signed64 bounds. Native driver quote escapes and provenance local-evidence paths were corrected to the existing checker contracts.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 tests. Evidence: fraction-browser.log after fresh build. Scope: basic real CSV import/ODS save/active export and sparse owner/Worker integration, not every styled output option.
+    - Remaining: date/time and completed native-number output, original public output contracts, true multiline EditEngine import and complete CSV option/UI/native acceptance. Task/goal remain active and incomplete. This is the same open Agentplane task; no tenth-task full-suite run is due. Reviewed output/native artifacts are local evidence, excluded from commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1345,6 +1402,36 @@ Note: Scientific/engineering display checkpoint passes 716 related formatter tes
 Attempts: 8
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T09:41:45.767Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T10:26:59.309Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Fraction checkpoint passes focused formatter/Calc/browser tests, native scalar differential and structural checks. Whole CSV task remains incomplete: date/time/native-number output, public output contracts, multiline EditEngine and full option/UI acceptance remain. Continue approved work; do not close the goal.
+Attempts: 9
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T10:26:58.122Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 
@@ -1753,3 +1840,14 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck; focused ESLint for all4 changed implementation/test paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:calc; npm run check:calc-resources; npm run build; git diff --check. Result: pass. Evidence: scientific-{typecheck,lint,provenance,dependencies,docs,size,parity,resources,build}.log. Provenance1864 modules; dependencies1863 runtime sources10061 imports225 allowed edges; docs4215 authored sources. The prior numeric checkpoint note's10062 import count reflected the temporary iterator SAL import; its final restored-state dependency log and the current check have10061 imports. Original iterator and old metadata remain unchanged.
 - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 browser tests. Evidence: scientific-browser.log. Scope: real basic CSV import/ODS save/active export and sparse native owner/Worker integration, not complete scientific format UI acceptance or full CSV certification.
 - Remaining: fraction/date/time and completed native-number output, original public output contracts, true multiline EditEngine import, complete CSV option/UI audit and dedicated full native differential closure. Goal/task are not complete. Full-suite cadence unchanged: same open Agentplane task, no tenth-task full run.
+
+### Original finite fraction display and consumed scalar conversions, 2026-10-30
+
+- Continued the same approved task from de803b2c8029. Ported original GetFractionOutput, ImpGetFractionElements and fraction token helpers into the zformat responsibility fragment, using real compiled sections, locale owners and shared numeric fills. Added consumed o3tl double/signed64 saturation and finite-integral sprintf bindings. No alternate fraction parser, guessed format key or CSV option rejection was introduced.
+- Preserve forced-denominator strict tie comparison, continued fractions and collateral selection, signed64 arithmetic widths, carry normalization, optional/mandatory/figure-space alignment, improper fractions, original positive whole-part overflow guard before absolute value, signed zero and original shared-fill defaults. Final source-header audit confirmed bAddDecSep=true; the common helper now declares that original default and the fraction call omits it as upstream does. CALC-397/398 document the asymmetric whole guard and preserved negative zero without correcting upstream behavior.
+- Command: npx tsx scripts/calc-fraction-elements-native-probe.mjs. Result: pass,5362 unique kernel cases in each of clang -O2/-O0/UBSan modes,20 saturation/printf primitive cases,0 mismatches,0 observed undefined cases. Evidence: output/native/AQF9AG-icu-grego/fraction-elements/comparison.json and fraction-native.log, including source hashes/compiler commands. Scope: unchanged extracted native ImpGetFractionElements with scalar section fixture, original o3tl headers and actual C snprintf. Native parser, complete display wrapper, service/UNO/SAL ABI and undefined-overflow domains are not certified by this fixture.
+- Command: npm run test:shared -- src/svl/source/numbers src/o3tl/inc/float_int_conversion.test.ts src/o3tl/inc/sprintf.test.ts. Result: pass,46 files749 tests. Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/core/tool/cellform.input.test.ts. Result: pass,4 files110 tests. Evidence: fraction-all-tests.log/fraction-csv-tests.log. Added17 public compiled fraction cases,16 primitive tests and4 actual styled CSV cases; no test-only formatter substitutes.
+- Final related rerun after the source default correction: npm run test:shared -- src/svl/source/numbers/zformat.fraction.test.ts src/o3tl/inc/float_int_conversion.test.ts src/o3tl/inc/sprintf.test.ts. Result: pass,3 files33 tests. Evidence: fraction-final-tests.log. Repeated cases are not added to the unique total.
+- Commands: npm run typecheck; focused ESLint for all10 changed implementation/test/script paths; npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:parity:calc; npm run build; git diff --check. Results: pass. Evidence: fraction-{typecheck,lint,provenance,dependencies,docs,size,resources,parity,build}.log. Provenance1867 modules; dependencies1866 runtime sources10071 imports225 allowed edges; docs4222 authored sources. No dependency checker exemptions: initial SAL import in the generic saturation binding created an o3tl/SAL cycle and was replaced with the source std::numeric_limits intrinsic signed64 bounds. Native driver quote escapes and provenance local-evidence paths were corrected to the existing checker contracts.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc. Result: pass,2 tests. Evidence: fraction-browser.log after fresh build. Scope: basic real CSV import/ODS save/active export and sparse owner/Worker integration, not every styled output option.
+- Remaining: date/time and completed native-number output, original public output contracts, true multiline EditEngine import and complete CSV option/UI/native acceptance. Task/goal remain active and incomplete. This is the same open Agentplane task; no tenth-task full-suite run is due. Reviewed output/native artifacts are local evidence, excluded from commit.

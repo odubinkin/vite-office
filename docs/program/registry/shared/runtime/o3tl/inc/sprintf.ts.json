@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/o3tl/inc/sprintf.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "scalar-helpers",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/o3tl/inc/sprintf.ts",
+        "apps/office/src/o3tl/inc/sprintf.test.ts",
+        "scripts/calc-fraction-elements-native-probe.mjs"
+      ],
+      "justification": "Consumed %.f binding for finite integral doubles supplied by fraction output preserves exact binary64 integer digits, signed zero, C snprintf buffer-prefix/terminator behavior and the original post-write checked assertion. Native C snprintf fixtures compare the buffer/count/assertion condition. Generic printf formats, nonintegral formatting and native abort/ABI behavior are not represented or claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "sprintfIntegral"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/o3tl/sprintf.hxx",
+      "upstreamSymbols": [
+        "sprintf",
+        "std::snprintf"
+      ]
+    }
+  }
+}

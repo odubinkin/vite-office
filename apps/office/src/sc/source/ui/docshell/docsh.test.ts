@@ -658,3 +658,46 @@ it.each([
     }
   },
 );
+
+it.each([
+  ["# ?/?", 1.5, "1 1/2\n"],
+  ["?/?", 1.5, "3/2\n"],
+  ["# ?/8", 1.1875, "1 1/8\n"],
+  ["# #/#", -4294967296, "-4294967296\n"],
+])(
+  "exports original fraction display pattern %s",
+  /** The actual numeric cell and compiled attribute use the original fraction producer through ScCellFormat and CSV. @param pattern - Source format. @param value - Numeric content. @param expected - CSV output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);

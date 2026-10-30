@@ -85,7 +85,7 @@ function ImpDigitFill(
   } else position[0] = start;
 }
 /** Original backwards integer/literal fill and locale grouping sequence. @param current - Language owner. @param buffer - Number buffer. @param value - Rounded/scaled magnitude. @param position - Initial digit cursor. @param symbol - Initial token. @param section - Compiled section. @param digitLimit - Integer digits in pattern. @param star - Fill flag. @param addDecimal - Retain decimal separator. @returns Star-fill result. */
-function ImpNumberFillWithThousands(
+export function ImpNumberFillWithThousands(
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
   value: number,
@@ -94,7 +94,7 @@ function ImpNumberFillWithThousands(
   section: ImpSvNumFor,
   digitLimit: number,
   star: boolean,
-  addDecimal: boolean,
+  addDecimal = true,
 ): boolean {
   let result = false,
     leading = 0,
@@ -383,7 +383,7 @@ export function GetNumberOutput(
 }
 
 /** Original ImpNumberFill for exponent/denominator/numerator token runs, with source mutable token and digit positions. @param current - Actual language owner. @param buffer - Digits and inserted literals. @param value - Magnitude for General tokens. @param position - Mutable character cursor. @param symbol - Mutable token cursor. @param section - Compiled section. @param stopType - Original token stop condition. @param star - Fill flag. @param insertRightBlank - Original denominator alignment flag. @returns Star-fill result. */
-function ImpNumberFill(
+export function ImpNumberFill(
   current: SvNFLanguageData,
   buffer: OUStringBuffer,
   value: number,

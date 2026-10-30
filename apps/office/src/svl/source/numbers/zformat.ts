@@ -1,5 +1,6 @@
 /** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
 import * as Output from "./zformat.output";
+import { GetFractionOutput } from "./zformat.fraction";
 import { GetNumberOutput, GetScientificOutput } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
@@ -763,11 +764,21 @@ export class SvNumberformat {
       (info.eScannedType === SvNumFormatType.NUMBER ||
         info.eScannedType === SvNumFormatType.PERCENT ||
         info.eScannedType === SvNumFormatType.CURRENCY ||
-        info.eScannedType === SvNumFormatType.SCIENTIFIC) &&
+        info.eScannedType === SvNumFormatType.SCIENTIFIC ||
+        info.eScannedType === SvNumFormatType.FRACTION) &&
       !section.GetNatNum().IsComplete() &&
       !(this.NumFor[0] as ImpSvNumFor).GetNatNum().IsComplete()
     ) {
       color[0] = section.GetColor();
+      if (info.eScannedType === SvNumFormatType.FRACTION)
+        return GetFractionOutput(
+          value,
+          index,
+          section,
+          scanner.GetCurrentLanguageData(),
+          output,
+          star,
+        );
       return info.eScannedType === SvNumFormatType.SCIENTIFIC
         ? GetScientificOutput(value, index, section, scanner.GetCurrentLanguageData(), output, star)
         : GetNumberOutput(value, index, section, scanner.GetCurrentLanguageData(), output, star);

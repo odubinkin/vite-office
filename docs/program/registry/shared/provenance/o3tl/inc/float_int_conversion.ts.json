@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/o3tl/inc/float_int_conversion.ts",
+    "status": "mapped",
+    "upstreamPath": "include/o3tl/float_int_conversion.hxx",
+    "localSymbols": [
+      "convertsToAtLeastInt64",
+      "convertsToAtMostInt64",
+      "saturating_castInt64"
+    ],
+    "upstreamSymbols": [
+      "convertsToAtLeast",
+      "convertsToAtMost",
+      "saturating_cast"
+    ],
+    "preservedResponsibilities": [
+      "Consumed original I=sal_Int64/F=double template bindings preserve strict F(bound)+/-F(1) bucket tests, truncating conversion and original NaN/minimum/maximum saturation order. Actual unchanged native headers and scalar primitive fixtures verify the represented binding; other template specializations remain unconsumed."
+    ],
+    "omittedResponsibilities": [
+      "Full native parser/display/ABI and broad template/C printf equivalence are unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/o3tl/inc/float_int_conversion.ts",
+          "marker": "convertsToAtLeastInt64"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/float_int_conversion.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/float_int_conversion.hxx",
+          "marker": "convertsToAtLeast"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/float_int_conversion.hxx",
+          "marker": "saturating_cast"
+        }
+      ]
+    }
+  }
+}
