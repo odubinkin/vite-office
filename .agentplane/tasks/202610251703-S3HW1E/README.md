@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 185
+revision: 188
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T12:23:13.527Z"
+  updated_at: "2026-10-30T12:30:38.841Z"
   updated_by: "CODER"
-  note: "Associated-character checkpoint verified: 615 filter regressions and final 54 RunType/default/decoding/Worker cases pass; original 60-case parser file also passes. Final typecheck, lint/format, source/provenance/dependency/docs/size/tree gates and Writer/shared registries pass. Font-table metadata, list-level font ingestion, special sections and HTML/current-model audit remain open."
-  attempts: 26
+  note: "Font metadata audit verified: 87 native metadata scenarios and 153 font/associated/encoding regression cases pass; typecheck, lint/format, source/docs/size/tree/provenance/boundary and Writer registry gates pass. Family/pitch/charset/style-name losses match upstream (WRITER256), avoiding unnecessary speculative FontTable work. Native list label formatting and remaining format obligations still need implementation."
+  attempts: 27
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -421,8 +424,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-30T12:30:38.841Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Font metadata audit verified: 87 native metadata scenarios and 153 font/associated/encoding regression cases pass; typecheck, lint/format, source/docs/size/tree/provenance/boundary and Writer registry gates pass. Family/pitch/charset/style-name losses match upstream (WRITER256), avoiding unnecessary speculative FontTable work. Native list label formatting and remaining format obligations still need implementation."
+  -
+    type: "status"
+    at: "2026-10-30T12:30:47.380Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T12:23:23.147Z"
+doc_updated_at: "2026-10-30T12:30:47.380Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -925,6 +941,36 @@ sections:
     Attempts: 26
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:22:40.144Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-30T12:30:38.841Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Font metadata audit verified: 87 native metadata scenarios and 153 font/associated/encoding regression cases pass; typecheck, lint/format, source/docs/size/tree/provenance/boundary and Writer registry gates pass. Family/pitch/charset/style-name losses match upstream (WRITER256), avoiding unnecessary speculative FontTable work. Native list label formatting and remaining format obligations still need implementation.
+    Attempts: 27
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:30:38.075Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1648,6 +1694,18 @@ sections:
       Result: pass. Evidence: html15-types-final.txt, html15-last-typecheck.txt, html15-format-lint-final.txt, html15-last-lint.txt, html15-static.txt, html15-provenance.txt, html15-registry.txt. Source metadata covers1875 modules; broad semantic confidence stays unverified.
     - Corrected during development: removing legacy ordinary-property cases initially also removed underline admission; restored the unrelated underline case and reran all parser/filter tests. Fresh fixtures initially queried insertion-caret left-boundary inheritance rather than visible ranges and supplied raw UTF8 under an ANSI RTF header; changed to actual one-character GetParaAttr queries and original Unicode controls. A final raw-template quoting typo in the two new bare-font fixtures was corrected before passing their complete file. Enforcement and old regression assertions were not weakened.
     - Remaining concrete dependencies: native font-table numeric metadata and list-level font/character ingestion still affect represented font/numbering items; special section dummy paragraphs, HTML list/table producers and the current-model completion audit remain open. No unrelated shared-kernel expansion or full all-app replay; goal remains active.
+
+    ### RTF font-table metadata completion audit (2026-10-30)
+
+    - Resolved an actual completion obligation rather than implementing a speculative dependency: pinned RTF family flags emit no CT_Font_family despite an old TODO, FontTable pitch handlers deliberately do nothing, FCHARSET intentionally affects decoding without forwarding charset to FontTable, and StyleName has no producer in this path. DomainMapper only forwards family/symbol charset if supplied by FontEntry; this RTF producer does not supply them. Current document metadata losses therefore match source. WRITER256 records the suspicious stale family TODO and all related omissions; no attempt is made to improve native round-trip fidelity.
+    - Added the font metadata row to the capability matrix and source-backed evidence to RTFDocumentImpl's existing records without promoting broad semantic confidence. Family/pitch/charset/style-name import is now an audited native loss for the current model, rather than an open requirement to port an otherwise unconsumed FontTable service. Authored metadata export remains intact. No production behavior changed in this audit block.
+    - Command: npm run test:writer -- rtf-font-metadata
+      Result: pass;87 tests. Evidence: output/playwright/rtf-properties-native/html16-metadata-tests.txt. Scope:8 family flags,3 pitches and18 charsets for each of Western/Asian/complex script items. Actual parser, explicit paragraph marker, document, per-character item sets and script pool defaults verify selected font name plus every other represented font metadata field.
+    - Command: npm run test:writer -- rtf-font rtf-associated-character rtfexport.encoding
+      Result: pass;153 tests/4files. Evidence: html16-font-regressions.txt. Scope: native font-table export/registration, associated script consumers, default font/PLAIN, real byte encoding and the new metadata disposition cases.
+    - Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
+      Result: pass. Evidence: html16-types.txt, html16-style.txt, html16-static.txt. Scope: new test, source-evidence records and matrix/issue documentation. Runtime sources1874/imports10172/allowed edges227 unchanged;4233 documented source files; registry semantic violations0. No all-app replay.
+    - Next concrete filter implementation: list-level dispatch currently returns before collecting source font/size/toggle rPr, and ApplyParagraph only installs type/start/bullet character. Native ListsManager resolves rPr through DomainMapper's list context, derives BulletFontName, creates a ListLabel character style through StyleSheetTable and applies it via native numbering rules. Current core has real styles/rules, but the consumed list context, ListLabel allocator/style creation and numbering CharStyleName insertion need connection. This is necessary for represented list label formatting, unlike the metadata losses closed above. Special sections, HTML list/table producers and final capability audit remain open; goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -2161,6 +2219,36 @@ Note: Associated-character checkpoint verified: 615 filter regressions and final
 Attempts: 26
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:22:40.144Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-30T12:30:38.841Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Font metadata audit verified: 87 native metadata scenarios and 153 font/associated/encoding regression cases pass; typecheck, lint/format, source/docs/size/tree/provenance/boundary and Writer registry gates pass. Family/pitch/charset/style-name losses match upstream (WRITER256), avoiding unnecessary speculative FontTable work. Native list label formatting and remaining format obligations still need implementation.
+Attempts: 27
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T12:30:38.075Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2888,3 +2976,15 @@ Native HTML HREF and complete native internet-item transport checkpoint:
   Result: pass. Evidence: html15-types-final.txt, html15-last-typecheck.txt, html15-format-lint-final.txt, html15-last-lint.txt, html15-static.txt, html15-provenance.txt, html15-registry.txt. Source metadata covers1875 modules; broad semantic confidence stays unverified.
 - Corrected during development: removing legacy ordinary-property cases initially also removed underline admission; restored the unrelated underline case and reran all parser/filter tests. Fresh fixtures initially queried insertion-caret left-boundary inheritance rather than visible ranges and supplied raw UTF8 under an ANSI RTF header; changed to actual one-character GetParaAttr queries and original Unicode controls. A final raw-template quoting typo in the two new bare-font fixtures was corrected before passing their complete file. Enforcement and old regression assertions were not weakened.
 - Remaining concrete dependencies: native font-table numeric metadata and list-level font/character ingestion still affect represented font/numbering items; special section dummy paragraphs, HTML list/table producers and the current-model completion audit remain open. No unrelated shared-kernel expansion or full all-app replay; goal remains active.
+
+### RTF font-table metadata completion audit (2026-10-30)
+
+- Resolved an actual completion obligation rather than implementing a speculative dependency: pinned RTF family flags emit no CT_Font_family despite an old TODO, FontTable pitch handlers deliberately do nothing, FCHARSET intentionally affects decoding without forwarding charset to FontTable, and StyleName has no producer in this path. DomainMapper only forwards family/symbol charset if supplied by FontEntry; this RTF producer does not supply them. Current document metadata losses therefore match source. WRITER256 records the suspicious stale family TODO and all related omissions; no attempt is made to improve native round-trip fidelity.
+- Added the font metadata row to the capability matrix and source-backed evidence to RTFDocumentImpl's existing records without promoting broad semantic confidence. Family/pitch/charset/style-name import is now an audited native loss for the current model, rather than an open requirement to port an otherwise unconsumed FontTable service. Authored metadata export remains intact. No production behavior changed in this audit block.
+- Command: npm run test:writer -- rtf-font-metadata
+  Result: pass;87 tests. Evidence: output/playwright/rtf-properties-native/html16-metadata-tests.txt. Scope:8 family flags,3 pitches and18 charsets for each of Western/Asian/complex script items. Actual parser, explicit paragraph marker, document, per-character item sets and script pool defaults verify selected font name plus every other represented font metadata field.
+- Command: npm run test:writer -- rtf-font rtf-associated-character rtfexport.encoding
+  Result: pass;153 tests/4files. Evidence: html16-font-regressions.txt. Scope: native font-table export/registration, associated script consumers, default font/PLAIN, real byte encoding and the new metadata disposition cases.
+- Command: npm run typecheck --workspace @vite-office/office; targeted ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:writer; node .agentplane/policy/check-routing.mjs; git diff --check
+  Result: pass. Evidence: html16-types.txt, html16-style.txt, html16-static.txt. Scope: new test, source-evidence records and matrix/issue documentation. Runtime sources1874/imports10172/allowed edges227 unchanged;4233 documented source files; registry semantic violations0. No all-app replay.
+- Next concrete filter implementation: list-level dispatch currently returns before collecting source font/size/toggle rPr, and ApplyParagraph only installs type/start/bullet character. Native ListsManager resolves rPr through DomainMapper's list context, derives BulletFontName, creates a ListLabel character style through StyleSheetTable and applies it via native numbering rules. Current core has real styles/rules, but the consumed list context, ListLabel allocator/style creation and numbering CharStyleName insertion need connection. This is necessary for represented list label formatting, unlike the metadata losses closed above. Special sections, HTML list/table producers and final capability audit remain open; goal stays active.
