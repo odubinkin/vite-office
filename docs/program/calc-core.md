@@ -4058,3 +4058,18 @@ no-op behavior. Tests use actual stores, formats, formulas and listeners.
 The existing formula-group compute cache remains unrepresented; no replacement
 cache callback is supplied. Original multiline EditEngine construction and
 full native module/cache/allocator/thread QA remain incomplete or unverified.
+
+## Date-field native-number parameters
+
+The original SvNumberformat date-keyword transliteration overloads now select
+arguments from the actual current-language keyword table. Matching retains
+source case, comma/space boundaries, first accepted assignment and untrimmed
+UTF16 arguments. Modifier language still controls the native-number Locale.
+The original free buffer implementation also retains the buffer until a
+conversion result returns successfully. Focused tests execute actual formatter
+and NativeNumberWrapper owners; argument observation copies borrowed values
+before their source temporaries are released.
+
+This supplies the original field-conversion boundary. It does not enable
+NatNum12 date output: original NumberText/casing/word service installation and
+spellout call placement remain pending. No complete native module claim.

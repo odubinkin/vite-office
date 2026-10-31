@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 162
+revision: 165
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T16:20:04.385Z"
+  updated_at: "2026-10-31T16:28:03.614Z"
   updated_by: "CODER"
-  note: "SetString/cell ownership checkpoint passes 43 related core tests,197 CSV tests,50 boundary tests,1 browser scenario and declared static/build checks. Overall CSV goal remains incomplete: full multiline EditEngine, original service installation/NatNum12 dispatch and final audit remain. Keep goal active."
-  attempts: 39
+  note: "Original date-keyword transliteration boundary checkpoint passes133 related formatter tests,197CSV tests,1browser scenario and declared type/lint/build/resource/provenance/parity checks. Final direct-module tests22pass. Full NatNum12 services/output callers, multiline EditEngine and CSV audit remain incomplete; keep goal active."
+  attempts: 40
 commit: null
 comments:
   -
@@ -271,6 +271,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue approved CSV implementation after verified parsed-string and exact cell ownership checkpoint; overall goal remains active."
+  -
+    author: "CODER"
+    body: "Start: Continue active CSV goal after original date-field conversion boundary checkpoint; source NatNum12 services/callers and multiline EditEngine remain pending."
 events:
   -
     type: "status"
@@ -952,8 +955,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue approved CSV implementation after verified parsed-string and exact cell ownership checkpoint; overall goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-31T16:28:03.614Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original date-keyword transliteration boundary checkpoint passes133 related formatter tests,197CSV tests,1browser scenario and declared type/lint/build/resource/provenance/parity checks. Final direct-module tests22pass. Full NatNum12 services/output callers, multiline EditEngine and CSV audit remain incomplete; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T16:28:10.728Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue active CSV goal after original date-field conversion boundary checkpoint; source NatNum12 services/callers and multiline EditEngine remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-31T16:20:07.896Z"
+doc_updated_at: "2026-10-31T16:28:10.728Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2143,6 +2159,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:28:03.614Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original date-keyword transliteration boundary checkpoint passes133 related formatter tests,197CSV tests,1browser scenario and declared type/lint/build/resource/provenance/parity checks. Final direct-module tests22pass. Full NatNum12 services/output callers, multiline EditEngine and CSV audit remain incomplete; keep goal active.
+    Attempts: 40
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:28:03.043Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3248,6 +3294,23 @@ sections:
     - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass. Evidence: csv-setstring-build.log, csv-setstring-browser.log; production bundle and 1 browser CSV import/primary ODS save/active-sheet export scenario, 3.8s.
     - Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task; related suites only. No network/vendor/policy/unrelated tracked changes. Scratch evidence excluded from the commit. Overall goal remains active and incomplete; no task finish or full CSV readiness claim. Next work remains original multiline EditEngine/DocImport, source service installation and NatNum12 casing/word-service/formatter dispatch, followed by the complete CSV audit.
+
+    ### Original date-keyword native-number conversion boundary
+
+    - Previous goal turn is progress: a3fd042cf restored actual parsed string input and exact cell-value ownership. Preflight revalidated calc/direct/approved DOING, clean non-scratch tracked state and active CODER ownership. This block remains within approved CSV formatter/core dependencies.
+    - Ported original SvNumberformat::impTransliterateImpl date-keyword overload and original inline complete-modifier wrapper from pinned zformat.cxx/zformat.hxx. Executable responsibility fragment keeps original static function bodies and local metadata/current language/native wrapper owners. Private declaration-owner installation remains pending with the date-output callers; no unused or fabricated public class API is added. No-equals parameters forward whole; assignments use exact localized keyword plus equals, case-sensitive matching, preceding ASCII comma/space only, first accepted match, first following comma and untrimmed UTF16 arguments including NUL/surrogates. Current formatting language selects keyword; modifier language selects conversion Locale. Added actual free buffer impTransliterateImpl overload without changing assignment-after-return lifetime.
+    - This is the original date-field call boundary, not completed NatNum12 output. Source output call placement and NumberText/casing/word-service/application installation remain pending. No replacement service, heuristic segmentation, native compiler stub or complete native formatter/allocator/UNO claim. Updated provenance/runtime/capability evidence with broad flags unchanged. No suspected upstream issue was found in this source family.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.transliterate-date.test.ts src/svl/source/numbers/zformat.native-number.test.ts src/svl/source/numbers/zformat.date.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.output-allocation.test.ts --maxWorkers=1
+      Result: pass. Evidence: date-field-related-tests.log, 133 cases in5files; final direct-module binding rerun passes22cases (date-field-tests-installed.log). Scope: actual formatter/keywords/modifier/native service results and selected arguments, incomplete bypass, free buffer conversion and unchanged buffer on non-UNO callback failure. Initial Calc-only runner selected zero shared tests and was not accepted as evidence; corrected to the shared runner. An attempted unused private declaration binding failed the existing no-unused gate; deferred declaration installation with the original callers rather than relaxing the gate or exposing a new public API. Initial argument observations read released temporaries; changed test observation to copy arguments during the actual call, then forward to the real service; no production expectation relaxed.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: date-field-csv-tests.log, 197cases in8files. Scope: existing CSV recognition/export/file UI regressions.
+    - Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources
+      Result: pass. Evidence: date-field-typecheck-installed.log, date-field-lint.log plus final scoped date-field-lint-final.log, date-field-dependencies.log, date-field-provenance-final.log, date-field-shared-parity.log, date-field-calc-parity.log, date-field-resources.log;1948runtime modules,1735mapped;464commands. No guard/rule changes.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact changed paths; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass. Evidence: date-field-docs-installed.log, date-field-size.log, date-field-format-check-final.log, date-field-routing.log, date-field-doctor.log. Documented the new test callback reported by the initial JSDoc gate. Doctor zero errors and existing managed-hook readiness warning; no unrelated hook mutation.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: date-field-build.log and date-field-browser.log;1 browser CSV import/primary ODS save/export scenario,3.9s.
+    - Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task. No network/vendor/policy/unrelated tracked changes; scratch stays outside commit. Goal remains active; full multiline EditEngine/DocImport, source service installation/NatNum12 conversion/output dispatch and final CSV audit remain incomplete. No task finish or full CSV claim.
 id_source: "generated"
 ---
 ## Summary
@@ -4446,6 +4509,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:28:03.614Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original date-keyword transliteration boundary checkpoint passes133 related formatter tests,197CSV tests,1browser scenario and declared type/lint/build/resource/provenance/parity checks. Final direct-module tests22pass. Full NatNum12 services/output callers, multiline EditEngine and CSV audit remain incomplete; keep goal active.
+Attempts: 40
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:28:03.043Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5555,3 +5648,20 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass. Evidence: csv-setstring-build.log, csv-setstring-browser.log; production bundle and 1 browser CSV import/primary ODS save/active-sheet export scenario, 3.8s.
 - Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task; related suites only. No network/vendor/policy/unrelated tracked changes. Scratch evidence excluded from the commit. Overall goal remains active and incomplete; no task finish or full CSV readiness claim. Next work remains original multiline EditEngine/DocImport, source service installation and NatNum12 casing/word-service/formatter dispatch, followed by the complete CSV audit.
+
+### Original date-keyword native-number conversion boundary
+
+- Previous goal turn is progress: a3fd042cf restored actual parsed string input and exact cell-value ownership. Preflight revalidated calc/direct/approved DOING, clean non-scratch tracked state and active CODER ownership. This block remains within approved CSV formatter/core dependencies.
+- Ported original SvNumberformat::impTransliterateImpl date-keyword overload and original inline complete-modifier wrapper from pinned zformat.cxx/zformat.hxx. Executable responsibility fragment keeps original static function bodies and local metadata/current language/native wrapper owners. Private declaration-owner installation remains pending with the date-output callers; no unused or fabricated public class API is added. No-equals parameters forward whole; assignments use exact localized keyword plus equals, case-sensitive matching, preceding ASCII comma/space only, first accepted match, first following comma and untrimmed UTF16 arguments including NUL/surrogates. Current formatting language selects keyword; modifier language selects conversion Locale. Added actual free buffer impTransliterateImpl overload without changing assignment-after-return lifetime.
+- This is the original date-field call boundary, not completed NatNum12 output. Source output call placement and NumberText/casing/word-service/application installation remain pending. No replacement service, heuristic segmentation, native compiler stub or complete native formatter/allocator/UNO claim. Updated provenance/runtime/capability evidence with broad flags unchanged. No suspected upstream issue was found in this source family.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.transliterate-date.test.ts src/svl/source/numbers/zformat.native-number.test.ts src/svl/source/numbers/zformat.date.test.ts src/svl/source/numbers/zformat.time.test.ts src/svl/source/numbers/zformat.output-allocation.test.ts --maxWorkers=1
+  Result: pass. Evidence: date-field-related-tests.log, 133 cases in5files; final direct-module binding rerun passes22cases (date-field-tests-installed.log). Scope: actual formatter/keywords/modifier/native service results and selected arguments, incomplete bypass, free buffer conversion and unchanged buffer on non-UNO callback failure. Initial Calc-only runner selected zero shared tests and was not accepted as evidence; corrected to the shared runner. An attempted unused private declaration binding failed the existing no-unused gate; deferred declaration installation with the original callers rather than relaxing the gate or exposing a new public API. Initial argument observations read released temporaries; changed test observation to copy arguments during the actual call, then forward to the real service; no production expectation relaxed.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: date-field-csv-tests.log, 197cases in8files. Scope: existing CSV recognition/export/file UI regressions.
+- Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources
+  Result: pass. Evidence: date-field-typecheck-installed.log, date-field-lint.log plus final scoped date-field-lint-final.log, date-field-dependencies.log, date-field-provenance-final.log, date-field-shared-parity.log, date-field-calc-parity.log, date-field-resources.log;1948runtime modules,1735mapped;464commands. No guard/rule changes.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact changed paths; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass. Evidence: date-field-docs-installed.log, date-field-size.log, date-field-format-check-final.log, date-field-routing.log, date-field-doctor.log. Documented the new test callback reported by the initial JSDoc gate. Doctor zero errors and existing managed-hook readiness warning; no unrelated hook mutation.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: date-field-build.log and date-field-browser.log;1 browser CSV import/primary ODS save/export scenario,3.9s.
+- Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task. No network/vendor/policy/unrelated tracked changes; scratch stays outside commit. Goal remains active; full multiline EditEngine/DocImport, source service installation/NatNum12 conversion/output dispatch and final CSV audit remain incomplete. No task finish or full CSV claim.

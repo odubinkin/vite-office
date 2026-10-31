@@ -4,12 +4,33 @@ import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import type { SvNumberNatNumConstReference } from "./zformat.natnum";
-/** Original string conversion uses the native modifier's locale, independently of current formatting language. The existing source conversion group binds LanguageTag(rNum.GetLang()).getLocale() without a fabricated LanguageTag facade. @param input - Original borrowed string. @param number - Actual metadata. @param native - Actual wrapper. @returns Owned conversion result. */
+/** Original string implementation uses the modifier's locale, independently of current formatting language. @param input - Borrowed string. @param number - Metadata. @param native - Wrapper. @returns Owned conversion. */
 export function impTransliterateImpl(
   input: OUStringConstReference,
   number: SvNumberNatNumConstReference,
   native: NativeNumberWrapper,
-): OUString {
+): OUString;
+/** Original buffer implementation assigns only after the service returns. @param input - Actual buffer. @param number - Metadata. @param native - Wrapper. @returns Nothing. */
+export function impTransliterateImpl(
+  input: OUStringBuffer,
+  number: SvNumberNatNumConstReference,
+  native: NativeNumberWrapper,
+): void;
+/** Original string/buffer overloads share locale resolution and preserve actual buffer storage on service failure. @param input - Actual owner. @param number - Metadata. @param native - Wrapper. @returns Owned string or in-place assignment. */
+export function impTransliterateImpl(
+  input: OUStringConstReference | OUStringBuffer,
+  number: SvNumberNatNumConstReference,
+  native: NativeNumberWrapper,
+): OUString | void {
+  if (input instanceof OUStringBuffer) {
+    const result = impTransliterateImpl(OUString.unacquired(input), number, native);
+    try {
+      input.assign(result);
+    } finally {
+      result.dispose();
+    }
+    return;
+  }
   const locale = convertLanguageToLocale(number.GetLang(), false);
   try {
     return native.getNativeNumberStringParams(
@@ -41,14 +62,7 @@ export function impTransliterate(
   native: NativeNumberWrapper,
 ): OUString | void {
   if (input instanceof OUStringBuffer) {
-    if (number.IsComplete()) {
-      const result = impTransliterateImpl(OUString.unacquired(input), number, native);
-      try {
-        input.assign(result);
-      } finally {
-        result.dispose();
-      }
-    }
+    if (number.IsComplete()) impTransliterateImpl(input, number, native);
   } else
     return number.IsComplete() ? impTransliterateImpl(input, number, native) : new OUString(input);
 }
