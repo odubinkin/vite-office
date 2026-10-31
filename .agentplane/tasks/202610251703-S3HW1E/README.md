@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 250
+revision: 251
 origin:
   system: "manual"
 depends_on: []
@@ -710,7 +710,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:02:37.321Z"
+doc_updated_at: "2026-10-31T10:03:21.225Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2793,6 +2793,8 @@ sections:
     - Evidence scope:115related cases contain34new pagination cases, actual grammar/Which lookup, all5before-after enums, state retention/copy/Merge/Clear, AUTO/AVOID split writes, invalid token retention, uint8 defined-domain fraction/upper bound and original six-hex priority, plus real Markdown/Worker round trip for split/widows/orphans. No pending before/after scalar is misrepresented as a completed document break consumer.
     - Source review: pinned svxcss1.cxx226-235/2993-3083 and svxcss1.hxx65-73; editids.hrc115-117; native InsertAttrs already maps split/count items to actual deferred paragraph heads. WRITER299 documents first-expression-only acceptance and absent count minimum. Existing pool defaults and browser/core scalar representations remain unchanged. This does not certify unrepresented concrete editeng subclasses.
     - Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.
+
+    - Commit trace: efe6258bbf86 contains11implementation/shared-registry/task/audit paths. The AgentPlane allowlist matches path components, not arbitrary filename stems: --allow .../html/svxcss1 did not select8Writer registry records. No validation failed and those already-verified metadata files remain intentional. Record them in a separate narrow metadata commit using all8exact paths; do not amend implementation or discard metadata. Reviewed start-ready INC-20261009-01..03 advice concerns format-parent changes, absent from this block, so no coverage/all-app replay is applicable.
 id_source: "generated"
 ---
 ## Summary
@@ -4890,3 +4892,5 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Evidence scope:115related cases contain34new pagination cases, actual grammar/Which lookup, all5before-after enums, state retention/copy/Merge/Clear, AUTO/AVOID split writes, invalid token retention, uint8 defined-domain fraction/upper bound and original six-hex priority, plus real Markdown/Worker round trip for split/widows/orphans. No pending before/after scalar is misrepresented as a completed document break consumer.
 - Source review: pinned svxcss1.cxx226-235/2993-3083 and svxcss1.hxx65-73; editids.hrc115-117; native InsertAttrs already maps split/count items to actual deferred paragraph heads. WRITER299 documents first-expression-only acceptance and absent count minimum. Existing pool defaults and browser/core scalar representations remain unchanged. This does not certify unrepresented concrete editeng subclasses.
 - Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.
+
+- Commit trace: efe6258bbf86 contains11implementation/shared-registry/task/audit paths. The AgentPlane allowlist matches path components, not arbitrary filename stems: --allow .../html/svxcss1 did not select8Writer registry records. No validation failed and those already-verified metadata files remain intentional. Record them in a separate narrow metadata commit using all8exact paths; do not amend implementation or discard metadata. Reviewed start-ready INC-20261009-01..03 advice concerns format-parent changes, absent from this block, so no coverage/all-app replay is applicable.

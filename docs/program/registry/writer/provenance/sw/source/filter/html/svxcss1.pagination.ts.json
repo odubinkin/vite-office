@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/svxcss1.pagination.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.pagination.ts",
+          "marker": "ParseCSS1PaginationProperty"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.pagination.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_page_break_xxx"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_page_break_before"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_page_break_after"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_page_break_inside"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_widows"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_orphans"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.hxx",
+          "marker": "enum SvxCSS1PageBreak"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/svxcss1.cxx",
+    "localSymbols": [
+      "ParseCSS1PaginationProperty"
+    ],
+    "upstreamSymbols": [
+      "ParseCSS1_page_break_xxx",
+      "ParseCSS1_page_break_before",
+      "ParseCSS1_page_break_after",
+      "ParseCSS1_page_break_inside",
+      "ParseCSS1_widows",
+      "ParseCSS1_orphans"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML33: original CSS1 pagination property table and first-expression admission now produce native pending before/after enums and current-core split/widow/orphan items through actual registered slots10039/10040/10041. AUTO/AVOID split selection, uint8 count upper bound, fractional truncation, invalid-declaration retention and six-hex scanner priority are preserved. Real grammar, pending copy/Merge/Clear and Markdown-to-Worker integration are tested. The existing SfxBoolItem/SfxInt16Item core representation/defaults and unrelated ingress are unchanged; this is not certification of unrepresented editeng subclasses. SetFormatBreak, left/right page-style ownership and raw HTML table parsing remain pending; no full filter or module/ABI completion is claimed."
+    ],
+    "omittedResponsibilities": [
+      "SetFormatBreak and native page-style creation/following, full editeng subclass contracts and remaining HTML table/insertion consumers are not completed by these property producers."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/svxcss1.pagination.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original CSS1 pagination methods form a cohesive property-table responsibility fragment without a second grammar, model or browser CSS cascade."
+    }
+  }
+}
