@@ -1,5 +1,5 @@
 /** @fileoverview Owns native table-cell shell traversal from LibreOffice trvltbl.cxx. */
-import { SwModify } from "../../../inc/calbck";
+import { SwViewShell } from "../view/viewsh";
 import { SwTableBoxStartNode, SwTableNode, type SwNode, type SwStartNode } from "../docnode/node";
 import { SwCursor, SwTableCursor } from "./swcrsr";
 import { SwTable, type SwTableBox } from "../table/swtable";
@@ -21,7 +21,7 @@ export enum PopMode {
 }
 
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
-export abstract class SwCursorShell extends SwModify {
+export abstract class SwCursorShell extends SwViewShell {
   /** Creates a cursor shell using actual view options or standalone defaults. @param viewOptions - Existing view-option identity. @param cursorLayout - Shared native view layout, absent for standalone shells. @returns Nothing. */
   public constructor(
     private readonly viewOptions = new SwViewOption(
@@ -34,7 +34,7 @@ export abstract class SwCursorShell extends SwModify {
   private m_sMarkedListId = "";
   private m_nMarkedListLevel = 0;
   /** Returns the native cursor's persistent layout owner. @returns Current document layout. */
-  public GetLayout(): SwRootFrame {
+  public override GetLayout(): SwRootFrame {
     return (this.cursorLayout ??= new SwRootFrame(
       /** Resolves the actual cursor-shell document. @returns Native document. */ () =>
         this.GetDoc(),
@@ -98,7 +98,7 @@ export abstract class SwCursorShell extends SwModify {
     while (this.stackCursor !== undefined) this.Pop(PopMode.DeleteStack);
   }
   /** Returns the actual saved native cursor head. @returns Registered stack cursor or no saved cursor. */
-  protected GetStackCursor(): SwCursor | undefined {
+  public GetStackCursor(): SwCursor | undefined {
     return this.stackCursor;
   }
   /** Saves actual displayed endpoints on a registered native cursor ring. @returns Nothing. */
@@ -146,7 +146,7 @@ export abstract class SwCursorShell extends SwModify {
   /** Expands actual selected boxes by native row or column search. @param search - Native selection search. @returns Original boxes. */
   public abstract GetTableSel(search?: 0 | 1 | 2): readonly SwTableBox[];
   /** Returns the owning document. @returns Native document. */
-  public abstract GetDoc(): SwDoc;
+  public abstract override GetDoc(): SwDoc;
   /** Captures pending attributes with the actual current cursor. @returns Command boundary. */
   public abstract CaptureCursorState(): SwUndoCursorState;
   /** Reconciles shell input and bindings after native movement or saved-position restoration. @param restored - Preserve caret input after a temporary selection. @returns Nothing. */
@@ -281,6 +281,14 @@ export abstract class SwCursorShell extends SwModify {
       if (this.tableCursor.IsChgd()) this.cursor = this.tableCursor.MakeBoxSels(this.cursor);
     }
     return this.cursor;
+  }
+  /** Original raw current cursor borrow bypasses table-selection materialization. @returns Actual ordinary ring head. */
+  public GetCursor_(): SwCursor {
+    return this.cursor;
+  }
+  /** Original table cursor borrow does not synthesize an ordinary ring. @returns Actual table cursor or null binding. */
+  public GetTableCrs(): SwTableCursor | undefined {
+    return this.tableCursor;
   }
   /** Returns the native cursor used to display point and mark. @returns Table or ordinary display owner. */
   public getShellCursor(): SwCursor {

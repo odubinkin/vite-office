@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 366
+revision: 370
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T16:14:54.987Z"
+  updated_at: "2026-10-31T16:25:38.204Z"
   updated_by: "CODER"
-  note: "HTML52 checkpoint passes127cases/8files and current app/static gates. Native UNO absolute correction branch verified; actual global view-shell traversal and production deletion plus remaining format work still incomplete."
-  attempts: 63
+  note: "HTML53 checkpoint passes248unique cases/27files plus current app/static gates. Actual native view-ring owners and global PaMCorrAbs are wired; DeleteSection composition and remaining format work keep parent incomplete."
+  attempts: 64
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1013,8 +1016,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T16:25:38.204Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML53 checkpoint passes248unique cases/27files plus current app/static gates. Actual native view-ring owners and global PaMCorrAbs are wired; DeleteSection composition and remaining format work keep parent incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T16:25:51.909Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T16:15:01.215Z"
+doc_updated_at: "2026-10-31T16:25:51.909Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2649,6 +2665,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:25:38.204Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML53 checkpoint passes248unique cases/27files plus current app/static gates. Actual native view-ring owners and global PaMCorrAbs are wired; DeleteSection composition and remaining format work keep parent incomplete.
+    Attempts: 64
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:25:37.432Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2740,6 +2786,17 @@ sections:
     - Command (cwd repository): node_modules/.bin/eslint apps/office/src/sw/source/core/doc/doccorr.ts apps/office/src/sw/source/core/doc/native-uno-absolute-correction.test.ts --max-warnings 0; node_modules/.bin/prettier --check same2files ->pass.
     - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-lo-source-tree.mjs; git diff --check ->pass. Evidence: html52-{jsdoc,filesize,provenance,registry,boundaries,source-tree}.txt.
     - No selected test failed or was skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+    ### HTML53 real view ownership and global correction checkpoint
+
+    HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-global-absolute-correction.test.ts src/sw/source/core/doc/native-uno-absolute-correction.test.ts src/sw/inc/ring.test.ts src/sw/source/core/crsr/native-table-cursor-stack.test.ts src/sw/source/uibase/uiview/view.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/core/doc/number-format.test.ts src/sw/source/uibase/wrtsh/native-table-name-history.test.ts src/sw/browser/editor/native-table-cursor-rings.test.tsx ->59pass/9files (html53-closure-tests.txt). Scope: actual native view manager defaults/current selection/teardown, multiple editing views, all saved cursor rings, same-range mutation alias protection, displayed table+ordinary cell rings, headless UNO correction, cross-document isolation, browser New/Close, original standalone ring and moved existing formatter/used-table lookup.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/crsr src/sw/source/core/attr/native-writer-client-list.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.test.ts ->194pass/19files (html53-related-tests.txt). Scope: complete cursor module and affected native client/import/TXT/RTF/Markdown consumers.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html53-types-verified.txt). Initial failing type logs retained separately.
+    - Command (cwd repository): node_modules/.bin/eslint changed10source/test files --max-warnings 0; node_modules/.bin/prettier --check same10files ->pass (html53-eslint-closure.txt, html53-prettier.txt).
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass. Evidence html53-{boundaries,jsdoc,filesize,source-tree,provenance-verified,registry-verified}.txt. Scope: all runtime/source/classification and dependency gates, not whole native behavior certification.
+    - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3984,6 +4041,10 @@ sections:
     HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.
 
     HTML52 checkpoint:127related cases/8files pass (37actual primitive/UNO correction and ownership cases/3files;90TXT/RTF/Markdown/document-I/O cases/5files). App types, changed-source ESLint/Prettier, JSDoc4338files, file-size4342files, provenance1931runtime/1718mapped/182browser/31infra, Writer registry0semantic violations, boundaries1930runtime/10688imports/229edges, source-tree115paths/32retired roots and diff checks pass. CorrectUnoCursorsAbsolute is the extracted native UNO branch using real weak locks, original pre-correction section comparison, all ordinary/table physical bounds and original invalidation hint. WRITER335 is now tested at the actual pointer notification consumer. This is not the whole global PaMCorrAbs entry point: caller value snapshots and native edit/view-shell traversal remain required, then production DeleteSection composition. Transparent SwSectionNode is not represented by the current core; no synthetic section result/provider is supplied. Table grammar/materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending. The parent task and goal stay active and incomplete; whole-module parity/default/contract completion is not claimed.
+
+    HTML53 initial app types reject a generic mixin class and recursive generic base expressions despite22initial runtime cases passing. Keep one original intrusive Ring algorithm on the actual native owner; bind the C++ template/primary-base intersection through an explicit erased constructor interface and preserve standalone Ring constructor semantics. This fixes current app types without allocating wrapper state or changing the SwModify event prototype chain. Subsequent lint flags an empty recursive interface; declare its actual link members and explicit container template argument. Source provenance rejects basename-only evidence for new manager/view modules; add their actual GetCurrentViewShell/SetCurrentViewShell/GetCurrentLayout/HasLayout and GetDoc/GetLayout source symbols. Initial registry update script stopped on its own missing local-path dictionary key before mutating existing records; fix the script and author canonical per-file records, then rerun final gates. No source behavior/provider/result or verification threshold is substituted.
+
+    HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -5629,6 +5690,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:25:38.204Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML53 checkpoint passes248unique cases/27files plus current app/static gates. Actual native view-ring owners and global PaMCorrAbs are wired; DeleteSection composition and remaining format work keep parent incomplete.
+Attempts: 64
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:25:37.432Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5720,6 +5811,17 @@ HTML52 checkpoint:127related cases/8files pass (37actual primitive/UNO correctio
 - Command (cwd repository): node_modules/.bin/eslint apps/office/src/sw/source/core/doc/doccorr.ts apps/office/src/sw/source/core/doc/native-uno-absolute-correction.test.ts --max-warnings 0; node_modules/.bin/prettier --check same2files ->pass.
 - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-lo-source-tree.mjs; git diff --check ->pass. Evidence: html52-{jsdoc,filesize,provenance,registry,boundaries,source-tree}.txt.
 - No selected test failed or was skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+### HTML53 real view ownership and global correction checkpoint
+
+HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-global-absolute-correction.test.ts src/sw/source/core/doc/native-uno-absolute-correction.test.ts src/sw/inc/ring.test.ts src/sw/source/core/crsr/native-table-cursor-stack.test.ts src/sw/source/uibase/uiview/view.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/core/doc/number-format.test.ts src/sw/source/uibase/wrtsh/native-table-name-history.test.ts src/sw/browser/editor/native-table-cursor-rings.test.tsx ->59pass/9files (html53-closure-tests.txt). Scope: actual native view manager defaults/current selection/teardown, multiple editing views, all saved cursor rings, same-range mutation alias protection, displayed table+ordinary cell rings, headless UNO correction, cross-document isolation, browser New/Close, original standalone ring and moved existing formatter/used-table lookup.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/crsr src/sw/source/core/attr/native-writer-client-list.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.test.ts ->194pass/19files (html53-related-tests.txt). Scope: complete cursor module and affected native client/import/TXT/RTF/Markdown consumers.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html53-types-verified.txt). Initial failing type logs retained separately.
+- Command (cwd repository): node_modules/.bin/eslint changed10source/test files --max-warnings 0; node_modules/.bin/prettier --check same10files ->pass (html53-eslint-closure.txt, html53-prettier.txt).
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass. Evidence html53-{boundaries,jsdoc,filesize,source-tree,provenance-verified,registry-verified}.txt. Scope: all runtime/source/classification and dependency gates, not whole native behavior certification.
+- No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
 
 ## Rollback Plan
 
@@ -6968,3 +7070,7 @@ HTML51 initial related API81cases:80pass/1fail. The fresh SetPositions GetPaM re
 HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.
 
 HTML52 checkpoint:127related cases/8files pass (37actual primitive/UNO correction and ownership cases/3files;90TXT/RTF/Markdown/document-I/O cases/5files). App types, changed-source ESLint/Prettier, JSDoc4338files, file-size4342files, provenance1931runtime/1718mapped/182browser/31infra, Writer registry0semantic violations, boundaries1930runtime/10688imports/229edges, source-tree115paths/32retired roots and diff checks pass. CorrectUnoCursorsAbsolute is the extracted native UNO branch using real weak locks, original pre-correction section comparison, all ordinary/table physical bounds and original invalidation hint. WRITER335 is now tested at the actual pointer notification consumer. This is not the whole global PaMCorrAbs entry point: caller value snapshots and native edit/view-shell traversal remain required, then production DeleteSection composition. Transparent SwSectionNode is not represented by the current core; no synthetic section result/provider is supplied. Table grammar/materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending. The parent task and goal stay active and incomplete; whole-module parity/default/contract completion is not claimed.
+
+HTML53 initial app types reject a generic mixin class and recursive generic base expressions despite22initial runtime cases passing. Keep one original intrusive Ring algorithm on the actual native owner; bind the C++ template/primary-base intersection through an explicit erased constructor interface and preserve standalone Ring constructor semantics. This fixes current app types without allocating wrapper state or changing the SwModify event prototype chain. Subsequent lint flags an empty recursive interface; declare its actual link members and explicit container template argument. Source provenance rejects basename-only evidence for new manager/view modules; add their actual GetCurrentViewShell/SetCurrentViewShell/GetCurrentLayout/HasLayout and GetDoc/GetLayout source symbols. Initial registry update script stopped on its own missing local-path dictionary key before mutating existing records; fix the script and author canonical per-file records, then rerun final gates. No source behavior/provider/result or verification threshold is substituted.
+
+HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.

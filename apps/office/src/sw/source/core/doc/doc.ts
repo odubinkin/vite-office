@@ -1,10 +1,10 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { DocumentLayoutManager } from "./DocumentLayoutManager";
+import { GetEditShell } from "./doccorr";
 import * as unoCursor from "./doc.unocursor";
 import type { UnoCursorWeakPtr } from "../../../inc/unocrsr";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
-import { getYear2000Default } from "../../../../svl/source/numbers/zforlist.defaults";
-import { NfEvalDateFormat } from "../../../../svl/inc/zforlist";
-import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { EnsureNumberFormatter } from "./doc.numberformatter";
 import * as DocItems from "./doc.items";
 import { CopyPageDesc } from "./docfmt.page";
 import { ChgPageDescNative } from "./docdesc.native";
@@ -67,7 +67,7 @@ import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
-import { InsertTable as InsertNativeTable } from "../docnode/ndtbl";
+import { InsertTable as InsertNativeTable, FindTableFormatByName } from "../docnode/ndtbl";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
 import { DocumentListItemsManager } from "./DocumentListItemsManager";
@@ -131,6 +131,15 @@ export interface WriterEmbeddedFont {
 }
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  private readonly layoutManager = new DocumentLayoutManager(this);
+  /** Original document-owned layout access. @returns Actual native manager. */
+  getIDocumentLayoutAccess(): DocumentLayoutManager {
+    return this.layoutManager;
+  }
+  /** Original edit-shell search across the actual current-view ring. @returns First edit shell or no edit shell. */
+  GetEditShell() {
+    return GetEditShell(this);
+  }
   readonly mvUnoCursorTable: UnoCursorWeakPtr[] = [];
   /** Original factory retains a weak document entry and returns native shared ownership. @param point - Actual position. @param table - Native cursor-kind flag. @returns Owned shared cursor. */
   CreateUnoCursor(point: SwPosition, table = false) {
@@ -144,11 +153,7 @@ export class SwDoc {
   private mpNumberFormatter: SvNumberFormatter | null = null;
   /** Original lazy formatter initializes SYSTEM locale, Writer date evaluation and configured two-digit-year default. Browser execution has no native thread mutex or fuzzing mode. @returns Nothing. */
   private EnsureNumberFormatter(): void {
-    if (this.mpNumberFormatter === null) {
-      this.mpNumberFormatter = new SvNumberFormatter(LANGUAGE_SYSTEM);
-      this.mpNumberFormatter.SetEvalDateFormat(NfEvalDateFormat.FormatThenInternational);
-      this.mpNumberFormatter.SetYear2000(getYear2000Default());
-    }
+    this.mpNumberFormatter = EnsureNumberFormatter(this.mpNumberFormatter);
   }
   /** Borrows the original per-document formatter, creating it by default. @param create - Native defaulttrue creation. @returns Actual formatter. */
   GetNumberFormatter(create?: true): SvNumberFormatter;
@@ -174,13 +179,7 @@ export class SwDoc {
   }
   /** Finds a used table frame by its current name. @param name - Raw name. @returns Live frame, when present. */
   public FindTableFormatByName(name: string): SwFrameFormat | undefined {
-    return this.GetTables()
-      .find(
-        /** Matches native used table identity. @param table - Live owner. @returns Whether named. */ (
-          table,
-        ) => table.GetName() === name,
-      )
-      ?.GetFrameFormat();
+    return FindTableFormatByName(this, name);
   }
   /** Applies represented border attributes over native point/mark cell endpoints. @param cursor - Original shell cursor. @param value - Supplied border and distance attributes. @param cursorState - Optional original displayed cursor state. @returns Whether admitted. */
   public SetTabBorders(

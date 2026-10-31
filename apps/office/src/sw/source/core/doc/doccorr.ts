@@ -1,5 +1,7 @@
-/** @fileoverview Original absolute position/physical-PaM-bound correction primitives from doccorr.cxx. The UNO branch uses actual document weak owners; global edit-shell traversal requires its actual native view-shell owner and is not simulated here. */
+/** @fileoverview Original absolute position/physical-PaM-bound correction primitives from doccorr.cxx. The UNO branch uses actual document weak owners; global correction traverses actual native view-shell and cursor owners. */
 import type { SwPosition, SwPaM } from "../crsr/pam";
+import { SwEditShell } from "../edit/ednumber";
+import { SwCursorShell } from "../crsr/trvltbl";
 import { SwStartNode, type SwNode } from "../docnode/node";
 import type { SwDoc } from "./doc";
 import { SwUnoTableCursor, UnoCursorHint } from "../../../inc/unocrsr";
@@ -59,5 +61,39 @@ export function CorrectUnoCursorsAbsolute(
     } finally {
       held.reset();
     }
+  }
+}
+
+/** Original SwDoc::GetEditShell searches the actual current-view ring and keeps non-editing views in traversal order. @param doc - Actual document. @returns First actual edit shell or no shell. */
+export function GetEditShell(doc: SwDoc): SwEditShell | undefined {
+  const current = doc.getIDocumentLayoutAccess().GetCurrentViewShell();
+  if (current)
+    for (const shell of current.GetRingContainer()) if (shell instanceof SwEditShell) return shell;
+  return undefined;
+}
+/** Original global absolute correction captures position values before any live shell or UNO bound mutates, then traverses actual source-owned rings. ENABLE_YRS peer-cursor support is not enabled by this application. @param range - Original inclusive correction range. @param newPosition - Original target position. @returns Nothing. */
+export function PaMCorrAbs(range: SwPaM, newPosition: SwPosition): void {
+  const start = range.Start().clone(),
+    end = range.End().clone(),
+    target = newPosition.clone();
+  try {
+    const doc = start.GetNode().GetDoc(),
+      shell = doc.GetEditShell();
+    if (shell)
+      for (const view of shell.GetRingContainer()) {
+        if (!(view instanceof SwCursorShell)) continue;
+        const stack = view.GetStackCursor();
+        if (stack)
+          for (const pam of stack.GetRingContainer()) lcl_PaMCorrAbs(pam, start, end, target);
+        for (const pam of view.GetCursor_().GetRingContainer())
+          lcl_PaMCorrAbs(pam, start, end, target);
+        const table = view.GetTableCrs();
+        if (view.IsTableMode() && table) lcl_PaMCorrAbs(table, start, end, target);
+      }
+    CorrectUnoCursorsAbsolute(doc, start, end, target);
+  } finally {
+    start.Dispose();
+    end.Dispose();
+    target.Dispose();
   }
 }

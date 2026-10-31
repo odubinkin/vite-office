@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.numberformatter.ts",
+          "marker": "EnsureNumberFormatter"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-global-absolute-correction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/docfmt.cxx",
+          "marker": "EnsureNumberFormatter"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/doc.numberformatter.ts",
+    "localSymbols": [
+      "EnsureNumberFormatter"
+    ],
+    "omittedResponsibilities": [
+      "Only represented view-ring ownership/current-view queries or existing formatter initialization responsibilities are admitted; full native layout/window/output/paint/print/ABI and broader document/module semantics are not certified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/docfmt.cxx",
+    "upstreamSymbols": [
+      "EnsureNumberFormatter"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/doc.numberformatter.ts",
+      "rationale": "Original EnsureNumberFormatter allocation and source defaults are split from docfmt.cxx under the mandatory SwDoc size limit. SwDoc retains its exact private member, method, default creation flag and destructor; the helper returns that same actual member value without another owner/provider.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

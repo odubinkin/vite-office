@@ -1,4 +1,5 @@
 /** @fileoverview Owns native Writer row-boundary collection and row-height deltas from ndtbl.cxx. */
+import type { SwFrameFormat } from "../layout/atrfrm";
 import type { SwNodes } from "./nodes";
 import { SwTableBoxStartNode, SwEndNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
@@ -475,4 +476,16 @@ export function InsertTable(
         );
   }
   return table;
+}
+
+/** Existing used-table lookup retains the actual frame owner while its implementation is split from the size-limited SwDoc aggregate. @param doc - Actual document. @param name - Requested table name. @returns Actual used frame or no match. */
+export function FindTableFormatByName(doc: SwDoc, name: string): SwFrameFormat | undefined {
+  return doc
+    .GetTables()
+    .find(
+      /** Matches the actual table name. @param table - Actual used table. @returns Whether named. */ (
+        table,
+      ) => table.GetName() === name,
+    )
+    ?.GetFrameFormat();
 }
