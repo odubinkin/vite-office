@@ -9,7 +9,8 @@ import {
 import type { XInterface } from "../../../../../cppu/inc/com/sun/star/uno/XInterface";
 import type { Any } from "../../../../../cppu/inc/com/sun/star/uno/Any";
 import type { Sequence } from "../../../../../cppu/inc/com/sun/star/uno/Sequence";
-import type { OUString, OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
+import type { OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
+import type { rtl_uStringSlot } from "../../../../../sal/inc/rtl/ustring.h";
 /** Original declared methods and direct base; no component implementation is manufactured. */
 export interface XMultiServiceFactory extends XInterface {
   /** Original named instance creation; actual concrete service can raise UNO Exception. @param service - Unicode classified instance name. @returns Acquired actual interface. */
@@ -20,7 +21,7 @@ export interface XMultiServiceFactory extends XInterface {
     arguments_: Sequence<Any>,
   ): Reference<XInterface>;
   /** Original available classified names. @returns Actual Unicode name sequence. */
-  getAvailableServiceNames(): Sequence<OUString>;
+  getAvailableServiceNames(): Sequence<rtl_uStringSlot>;
 }
 const the_type: [R | null] = [null];
 /** Original normal generated getter retains its implicit root or explicit direct base through the existing CPPU factory. @returns Borrowed cached type. */

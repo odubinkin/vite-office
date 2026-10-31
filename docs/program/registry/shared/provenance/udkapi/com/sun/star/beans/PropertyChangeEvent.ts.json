@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.ts",
+    "upstreamPath": "udkapi/com/sun/star/beans/PropertyChangeEvent.idl",
+    "localSymbols": [
+      "PropertyChangeEvent",
+      "cppu_detail_getUnoType_PropertyChangeEvent"
+    ],
+    "upstreamSymbols": [
+      "PropertyChangeEvent",
+      "PropertyName",
+      "Further",
+      "PropertyHandle",
+      "OldValue",
+      "NewValue"
+    ],
+    "preservedResponsibilities": [
+      "Original EventObject-derived generated event retains actual Source Reference, PropertyName string, Further=false, PropertyHandle=0, OldValue/NewValue Any owners. Default/copy/all-member construction, base-first assignment/equality, stable field addresses and reverse member/base destruction use existing shared ownership. Normal struct metadata includes the actual EventObject base and five declared fields. Inherited Source offset0 remains typed while erased compound dispatch handles remaining declared member types. Real Any transport/copy and weak source lifetime are tested; no parallel value/type/storage provider is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Production ComponentContext/ServiceManager and application process-factory installation, full EditEngine construction/VCL/Sfx resources, BreakIterator/CharacterClassification service admission, NatNum12 supplier/casing/formatter and final CSV integration remain incomplete. No synthetic context/manager is supplied. Native mutex/thread/reentrant-static initialization/destructor behavior, ABI/pointer UB and allocator exhaustion are not certified. Full reflection and unconsumed services remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyChangeEvent.idl",
+          "marker": "PropertyChangeEvent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/PropertyChangeEvent.idl",
+          "marker": "PropertyName"
+        }
+      ]
+    }
+  }
+}

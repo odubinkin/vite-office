@@ -1,98 +1,22 @@
 /** @fileoverview Original generated NumberText constructor over explicit prepared context/manager boundaries, actual WeakImplHelper/Reference/UNO exceptions and the real NumberText component. Production context/manager implementations are not substituted or certified. */
 import { expect, it } from "vitest";
 import { NumberText } from "./NumberText";
+import { Manager, Context, construct } from "../../../../../test/numbertext-service-fixture";
 import { XNumberText } from "./XNumberText";
 import { XComponentContext } from "../../../../../udkapi/com/sun/star/uno/XComponentContext";
 import { XMultiComponentFactory } from "../../../../../udkapi/com/sun/star/lang/XMultiComponentFactory";
 import { WeakImplHelper } from "../../../../../cppuhelper/inc/implbase";
 import { WeakReferenceHelper } from "../../../../../cppuhelper/inc/weakref";
 import { Reference } from "../../../../../cppu/inc/com/sun/star/uno/Reference";
-import type { XInterface } from "../../../../../cppu/inc/com/sun/star/uno/XInterface";
-import { Any } from "../../../../../cppu/inc/com/sun/star/uno/Any";
 import { Exception } from "../../../../../cppu/inc/com/sun/star/uno/Exception";
 import { RuntimeException } from "../../../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import {
   DeploymentException,
   cppu_detail_getUnoType,
 } from "../../../../../cppu/inc/com/sun/star/uno/DeploymentException";
-import { Sequence } from "../../../../../cppu/inc/com/sun/star/uno/Sequence";
-import { SAL_NO_ACQUIRE } from "../../../../../sal/inc/types";
-import type { OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
 import { Locale } from "../../../../../udkapi/com/sun/star/lang/Locale";
 import { unicode, text } from "../../../../../i18nlangtag/source/isolang/isolang.tables";
-import { lingucomponent_NumberText_get_implementation } from "../../../../../lingucomponent/source/numbertext/numbertext";
 
-/** Prepared original context-aware constructor dependency; no production registry is implemented by this fixture. */
-type Constructor = (context: Reference<XComponentContext>) => Reference<XInterface>;
-/** Prepared enclosing manager boundary; only the source default constructor call is expected, and it invokes the actual component factory. */
-class Manager
-  extends WeakImplHelper.specialize(XMultiComponentFactory)
-  implements XMultiComponentFactory
-{
-  readonly calls: Array<[string, XComponentContext | null]> = [];
-  /** Keeps an explicit test constructor outcome. @param create - Prepared source dependency. @returns Fixture owner. */
-  constructor(readonly create: Constructor) {
-    super();
-  }
-  /** Observes the original exact call and invokes its prepared boundary. @param name - Service name. @param context - Actual supplied context. @returns Original acquired result. */
-  createInstanceWithContext(
-    name: OUStringConstReference,
-    context: Reference<XComponentContext>,
-  ): Reference<XInterface> {
-    this.calls.push([text(name), context.get()]);
-    return this.create(context);
-  }
-  /** Detects a departure from the source default-constructor method. @param name - Unused name. @param args - Unused arguments. @param context - Unused context. @returns Never. */
-  createInstanceWithArgumentsAndContext(
-    name: OUStringConstReference,
-    args: Sequence<Any>,
-    context: Reference<XComponentContext>,
-  ): Reference<XInterface> {
-    void name;
-    void args;
-    void context;
-    throw new Error("unexpected argument-constructor call");
-  }
-  /** Detects unrelated registry enumeration. @returns Never. */
-  getAvailableServiceNames(): never {
-    throw new Error("unexpected registry enumeration");
-  }
-}
-/** Prepared enclosing context boundary with real weak/reference lifetime; this is not a replacement production ComponentContext. */
-class Context extends WeakImplHelper.specialize(XComponentContext) implements XComponentContext {
-  private readonly manager: Reference<XMultiComponentFactory>;
-  /** Retains the explicit manager. @param manager - Actual prepared manager reference. @returns Fixture owner. */
-  constructor(manager: Reference<XMultiComponentFactory>) {
-    super();
-    this.manager = new Reference(manager);
-  }
-  /** Returns an owned copy at the original method boundary. @returns Acquired manager. */
-  getServiceManager(): Reference<XMultiComponentFactory> {
-    return new Reference(this.manager);
-  }
-  /** Detects a singleton/value lookup absent from the source default constructor. @param name - Unused name. @returns Never. */
-  getValueByName(name: OUStringConstReference): Any {
-    void name;
-    throw new Error("unexpected context value lookup");
-  }
-  /** Releases only fixture-owned members through the real weak base. @returns Nothing. */
-  protected override destroy(): void {
-    this.manager.dispose();
-    super.destroy();
-  }
-}
-/** Original acquired component constructor call, including its actual raw context and empty Any argument sequence. @param context - Actual source context. @returns Acquired root reference. */
-function construct(context: Reference<XComponentContext>): Reference<XInterface> {
-  const args = new (Sequence.specialize<Any>("Any", 24))();
-  try {
-    return new Reference(
-      lingucomponent_NumberText_get_implementation(context.get(), args),
-      SAL_NO_ACQUIRE,
-    );
-  } finally {
-    args.dispose();
-  }
-}
 const prefix =
   "component context fails to supply service com.sun.star.linguistic2.NumberText of type com.sun.star.linguistic2.XNumberText";
 

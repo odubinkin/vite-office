@@ -1,16 +1,51 @@
 /** @fileoverview Original NatNum12 prefix/separator/cache group integrated with the real NumberText component and installed official interpreter. */
-import { expect, it, vi } from "vitest";
-import { getNumberText, type NumberTextFactory } from "./nativenumbersupplier.numbertext";
+import { afterAll, beforeAll, expect, it, vi } from "vitest";
+import { getNumberText } from "./nativenumbersupplier.numbertext";
+import {
+  Manager,
+  Context,
+  ProcessFactory,
+  construct,
+} from "../../../test/numbertext-service-fixture";
+import { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { XMultiComponentFactory } from "../../../udkapi/com/sun/star/lang/XMultiComponentFactory";
+import type { XMultiServiceFactory } from "../../../udkapi/com/sun/star/lang/XMultiServiceFactory";
+import { setProcessServiceFactory } from "../../../comphelper/inc/processfactory";
 import { NumberText_Impl } from "../../../lingucomponent/source/numbertext/numbertext";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 let created = 0;
-const createNumberText: NumberTextFactory =
-  /** Actual component constructor at the source process-context binding boundary; no fake service or output is supplied. @returns Acquired component. */ () => {
-    created++;
-    return new Reference(new NumberText_Impl());
-  };
+const body = new Manager(
+    /** Invokes the real acquired component constructor through the original generated service path. @param context - Original supplied context. @returns Real acquired component. */ (
+      context,
+    ) => {
+      created++;
+      return construct(context);
+    },
+  ),
+  manager = new Reference<XMultiComponentFactory>(body),
+  context = new Reference<XComponentContext>(new Context(manager)),
+  processBody = new ProcessFactory(context),
+  processFactory = new Reference<XMultiServiceFactory>(processBody);
+beforeAll(
+  /** Installs an explicit enclosing factory for the actual source process getter. @returns Nothing. */ () => {
+    setProcessServiceFactory(processFactory);
+  },
+);
+afterAll(
+  /** Clears only the enclosing fixture; source successful-once context/NumberText caches retain their native process-lifetime ownership. @returns Nothing. */ () => {
+    const empty = new Reference<XMultiServiceFactory>();
+    try {
+      setProcessServiceFactory(empty);
+    } finally {
+      empty.dispose();
+    }
+    processFactory.dispose();
+    context.dispose();
+    manager.dispose();
+  },
+);
 /** Executes the production member group using actual source value owners. @param value - Complete input. @param params - Original modifier view. @param language - Original language. @returns Output text. */
 function convert(value: string, params = "", language = "en"): string {
   const input = unicode(value),
@@ -19,7 +54,7 @@ function convert(value: string, params = "", language = "en"): string {
     locale = new Locale();
   locale.Language.assign(code);
   try {
-    const output = getNumberText(locale, input, modifiers, createNumberText);
+    const output = getNumberText(locale, input, modifiers);
     try {
       return text(output);
     } finally {
@@ -66,6 +101,8 @@ it("shares the original cardinal cache before independently attaching each suffi
     convert("872519third", "ordinal");
     expect(service).toHaveBeenCalledTimes(2);
     expect(created).toBe(1);
+    expect(processBody.names).toEqual(["DefaultContext"]);
+    expect(body.calls).toEqual([["com.sun.star.linguistic2.NumberText", context.get()]]);
   } finally {
     service.mockRestore();
   }

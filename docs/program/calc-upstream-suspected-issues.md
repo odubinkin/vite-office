@@ -4967,3 +4967,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: pinned ICU78.3 `source/common/ubidiln.cpp`, `ubidi_getRuns` and `ubidi_countRuns`; consumed by `ImpEditEngine::InitWritingDirections` in LibreOffice `editeng/source/editeng/impedit2.cxx`.
 - Observation: failure of `getRunsMemory` returns false without assigning the error code. `ubidi_countRuns` ignores that boolean, checks only the unchanged status and returns the still-negative run count. The compiled original reports count=-1/status=0 for the three-run text U+0061 U+05D0 U+0062 with fixed run capacities one or two; capacity three reports count=3/status=0.
 - Preserve the return/status pair. EditEngine keeps its original count>0 check and final LTR fallback; no new exception or error status is invented. Native allocator exhaustion and calling getLogicalRun after failed run materialization are not certified.
+
+### CALC-446 — Replacing the process service factory does not replace the cached process component context
+
+- Source: `comphelper/source/processfactory/processfactory.cxx`, `setProcessServiceFactory` and `getProcessComponentContext`.
+- Observation: the setter replaces LocalProcessFactory.xProcessFactory, while the context getter initializes a separate function-local static const Reference on its first successful call. Later factory replacement or clearing changes getProcessServiceFactory but leaves getProcessComponentContext returning the first context. Failed initialization is retried rather than caching the error or null.
+- Preserve the independent caches and successful-once initialization. Tests observe factory replacement, direct DefaultContext queries and the unchanged cached context; no invalidation heuristic or reset hook is added.
+
+### CALC-447 — getComponentContext's nullable header return comment disagrees with its failure path
+
+- Source: `include/comphelper/processfactory.hxx` return documentation and `comphelper/source/processfactory/processfactory.cxx`, `getComponentContext`.
+- Observation: the public header says the return may be null, but the implementation throws DeploymentException when the XPropertySet query is empty or the exact DefaultContext value does not query to XComponentContext. UnknownPropertyException is translated to a different DeploymentException; other exceptions propagate.
+- Preserve implementation behavior and original exception messages/Context ownership. A missing property/interface/context never becomes a null-return fallback in the port.

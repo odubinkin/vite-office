@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-process-context-contracts",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts",
+        "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+        "udkapi/com/sun/star/beans/PropertyChangeEvent.idl"
+      ],
+      "justification": "Original EventObject-derived generated event retains actual Source Reference, PropertyName string, Further=false, PropertyHandle=0, OldValue/NewValue Any owners. Default/copy/all-member construction, base-first assignment/equality, stable field addresses and reverse member/base destruction use existing shared ownership. Normal struct metadata includes the actual EventObject base and five declared fields. Inherited Source offset0 remains typed while erased compound dispatch handles remaining declared member types. Real Any transport/copy and weak source lifetime are tested; no parallel value/type/storage provider is introduced. Production ComponentContext/ServiceManager and application process-factory installation, full EditEngine construction/VCL/Sfx resources, BreakIterator/CharacterClassification service admission, NatNum12 supplier/casing/formatter and final CSV integration remain incomplete. No synthetic context/manager is supplied. Native mutex/thread/reentrant-static initialization/destructor behavior, ABI/pointer UB and allocator exhaustion are not certified. Full reflection and unconsumed services remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PropertyChangeEvent",
+        "cppu_detail_getUnoType_PropertyChangeEvent"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/beans/PropertyChangeEvent.idl",
+      "upstreamSymbols": [
+        "PropertyChangeEvent",
+        "PropertyName",
+        "Further",
+        "PropertyHandle",
+        "OldValue",
+        "NewValue"
+      ]
+    }
+  }
+}

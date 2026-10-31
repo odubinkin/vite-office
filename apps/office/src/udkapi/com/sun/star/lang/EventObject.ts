@@ -52,8 +52,12 @@ export class EventObject {
   notEquals(value: Readonly<EventObject>): boolean {
     return !this.equals(value);
   }
+  /** Original sole Source member address at byte zero. @param offset - Declared zero offset. @returns Actual interface pointer cell. */
+  get(offset: 0): [XInterface | null];
+  /** Original erased compound address supports inherited member dispatch. @param offset - Actual declared metadata offset. @returns Actual field address. */
+  get(offset: number): unknown;
   /** Original compound reinterpretation of its sole member at byte0; valid declared metadata offsets are the caller precondition. @param offset - Original member offset. @returns Actual member pointer cell. */
-  get(offset: number): [XInterface | null] {
+  get(offset: number): unknown {
     void offset;
     return this.source.getAddress();
   }

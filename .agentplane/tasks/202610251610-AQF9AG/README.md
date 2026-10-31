@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 136
+revision: 139
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T11:07:08.981Z"
+  updated_at: "2026-10-31T12:02:14.427Z"
   updated_by: "CODER"
-  note: "Native ICU paragraph owner and EditEngine writing-direction checkpoint verified: original ICU2731captures/90193UTF16 positions,161related cases,197CSV/UI cases,47boundary cases,current-built browser scenario,typecheck/lint/build and required static/provenance/parity pass. Source fixed-capacity success-status anomaly preserved as CALC-445. Actual constructor/process services,ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
-  attempts: 31
+  note: "Original process factory and real NumberText constructor path checkpoint verified:132related cases, strengthened3-case exception-context rerun,197CSV/UI,47boundary cases,current-built browser,typecheck/lint/build and static/provenance/parity pass. Exact source factory/context caching and exceptions retained (CALC-446/447); temporary NumberTextFactory injection removed. Application context/manager bootstrap,EditEngine resources/DocImport and full NatNum12/formatter remain; keep goal active."
+  attempts: 32
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -824,8 +827,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T12:02:14.427Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original process factory and real NumberText constructor path checkpoint verified:132related cases, strengthened3-case exception-context rerun,197CSV/UI,47boundary cases,current-built browser,typecheck/lint/build and static/provenance/parity pass. Exact source factory/context caching and exceptions retained (CALC-446/447); temporary NumberTextFactory injection removed. Application context/manager bootstrap,EditEngine resources/DocImport and full NatNum12/formatter remain; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T12:02:45.579Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T11:07:18.043Z"
+doc_updated_at: "2026-10-31T12:02:45.579Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1775,6 +1791,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T12:02:14.427Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original process factory and real NumberText constructor path checkpoint verified:132related cases, strengthened3-case exception-context rerun,197CSV/UI,47boundary cases,current-built browser,typecheck/lint/build and static/provenance/parity pass. Exact source factory/context caching and exceptions retained (CALC-446/447); temporary NumberTextFactory injection removed. Application context/manager bootstrap,EditEngine resources/DocImport and full NatNum12/formatter remain; keep goal active.
+    Attempts: 32
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:02:12.101Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2590,6 +2636,56 @@ sections:
     - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;1 current-built browser scenario,10.8s total. Evidence: directions-browser.log. Scope: actual existing CSV import, primary ODS save and active-sheet export; original assertions/timeouts unchanged. This is regression evidence, not full native engine/CSV admission.
     - Final review: git diff --check passes; exact allowlist contains26 intended source/test/native-capture/registry/issue/boundary/task paths. Full final status is retained in directions-final-status.log. All experiment scratch stays excluded. No network/vendor writes, readiness promotion or full-suite replay. Same approved open task remains rework/DOING; goal stays active. Next substantive frontier is actual engine construction/resources/process services and source ScFieldEditEngine/DocImport admission.
+
+    ### Process service factory and original NumberText constructor path checkpoint
+
+    - Previous goal turn was progress: df1581456729 implemented original ICU paragraph/run ownership and EditEngine InitWritingDirections. Revalidated approved CODER/direct task and Calc checkout; no new task/full-suite cadence increment. Constructor inspection confirmed the remaining original VCL shared-device/Sfx application dependencies, plus a missing shared processfactory dependency for BreakIterator/NumberText. This checkpoint implements that real shared dependency rather than manufacturing an engine, context or service manager.
+    - Implemented original LocalProcessFactory and setProcessServiceFactory/getProcessServiceFactory/getComponentContext/getProcessComponentContext, with original acquired versus borrowed const returns. Exact XPropertySet query, DefaultContext property name, Any-to-XComponentContext UNO_QUERY, missing factory/interface/value rejection, Unicode/NUL messages, actual root Context, exception cleanup and UnknownPropertyException-only translation are preserved. Failed static initialization retries; the first successful cached context survives factory replacement/clearing. Native mutex/thread/reentrant-destructor and static-initialization guard behavior are not certified by the synchronous browser-realm binding. No invalidation heuristic, reset hook or default context/manager is supplied.
+    - Added original complete XPropertySet7-method/XPropertySetInfo3-method/listener IDL and normal cached type bindings. Both listeners retain the actual XEventListener base. PropertyChangeEvent retains actual EventObject Source and5 declared fields/defaults, stable member owners, base-first value operations, real compound addresses/Any transport and source member/base destruction. No production listener subscription/provider is fabricated.
+    - Removed the old mandatory NumberTextFactory parameter from getNumberText. The source helper now calls actual NumberText.create(getProcessComponentContext()), preserving its original successful-once service reference and prefix/separator/cardinal/empty-result/suffix/result-cache behavior. The [in] call's cast erases only source const from the existing generated host signature: the same actual borrowed Reference is passed without an extra query/acquire or mutation. Tests explicitly install enclosing weak property factories/contexts/managers, then invoke actual process query/generated constructor/real NumberText component factory/installed official JS library. The shared enclosing fixture was extracted from existing NumberText constructor tests without weakening their assertions. Production application bootstrap and full NatNum12 supplier/casing/formatter remain pending.
+    - CALC-446 records independent factory replacement versus successful-once context caching; CALC-447 records the header's nullable-return comment contradicting getComponentContext's implementation rejection of empty context. Preserve source implementation behavior, not a new null fallback.
+    - Source host-contract correction: XMultiServiceFactory and XMultiComponentFactory both declare sequence<string> upstream. Corrected the former's old incompatible generic spelling to the same actual rtl_uStringSlot sequence representation used by the latter. Existing SDK acceptance now asserts their exact return-type identity. EventObject's actual Source-at0 tuple contract remains unchanged; typed zero/erased compound-address overloads permit PropertyChangeEvent inherited dispatch, without emitted base runtime changes.
+    - Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts --maxWorkers=1
+      Result: pass;2files/5cases,8.49s. Evidence: bootstrap-tests.log. Scope: actual query/reference/Any/weak ownership, source exceptions and static cache, inherited event transport and listener base queries.
+    - Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+      Result: pass;4files/21cases,16.06s. Evidence: bootstrap-integration-tests.log. Scope: actual original NumberText process-context path and retained native prefix/cache/Soros behavior.
+    - Command: npm run typecheck
+      Result: initial fail in2 existing acceptances after host-type corrections. Evidence: bootstrap-typecheck.log. Resolution: retain EventObject.get(0)'s original typed interface-pointer tuple through overloads, keep general derived addresses erased, and assert original common sequence<string> return identity in both factory bindings. No assertion skipping or signature weakening. First corrected and final runs pass (bootstrap-typecheck-fixed.log, bootstrap-typecheck-final.log); final includes the strengthened exception fixture and final formatting.
+    - Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber src/lingucomponent/source/numbertext/numbertext.test.ts --maxWorkers=1
+      Result: pass;11files/132cases,31.12s. Evidence: bootstrap-related-tests.log. Scope: changed process/property/service owners and related native Any, inherited EventObject, SDK factory, NatNum and NumberText contracts.
+    - Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts --maxWorkers=1
+      Result: pass;3cases,14.25s. Evidence: bootstrap-error-context-tests.log. Scope: strengthened UnknownPropertyException fixture supplies an unrelated original Context; the wrapper still must use actual factory root Context. Source runtime unchanged; no passing unrelated cases replayed for this fixture-only change.
+    - Command: npm run check:dependencies
+      Result: pass;1936sources/10549imports/235allowed edges. Evidence: bootstrap-deps.log. Scope: original i18npool->comphelper dependency registered from nativenumbersupplier.cxx include and Library_i18npool.mk link. Reverse/application/browser gates stay enabled.
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+      Result: pass;47cases,62.54s. Evidence: bootstrap-boundary-tests.log. Scope: actual source graph and ownership gates, including reverse comphelper->i18npool rejection.
+    - Command: npm run check:docs
+      Result: pass;4334authored files. Evidence: bootstrap-docs.log. Scope: source/test documentation contracts.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: bootstrap-size.log. Scope: authored file hard limit1000; final formatted boundary checker/test are992/984lines, still below that limit.
+    - Command: npm run check:calc-resources
+      Result: pass;464commands/11menus/17policies. Evidence: bootstrap-resources.log. Scope: unchanged Calc resource behavior.
+    - Commands: npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: initial fail on the same concrete evidence gap: new PropertyChangeEvent record named only its basename. Evidence: bootstrap-provenance.log, bootstrap-parity-calc.log, bootstrap-parity-shared.log. Resolution: add actual IDL fields and methods for all5 new property/event records; retain validators unchanged and foundation/unverified statuses. Rebuild/check results follow below.
+    - Remaining: actual application ComponentContext/ServiceManager/process-factory installation, original EditEngine constructor/VCL shared device/Sfx application resources, process BreakIterator/CharacterClassification admission, other required engine undo/word/deletion/layout/view groups, ScFieldEditEngine/DocImport and multiline-regex removal, full NatNum12 supplier/casing/formatter and final native CSV audit. No complete engine, runtime bootstrap or CSV readiness is promoted. Keep overall verification rework/DOING and goal active; intentional browser save/open/autosave/no-recovery behavior stays intact.
+    - Command: npm run inventory:registry:build
+      Result: pass;4generated views after concrete IDL member evidence update. Evidence: bootstrap-registry-fixed.log. Scope: canonical records and derived inventory, without readiness promotion.
+    - Command: npm run check:source-provenance
+      Result: pass after evidence repair;1937runtime modules (1724mapped/182browser/31infrastructure). Evidence: bootstrap-provenance-fixed.log. Scope: exhaustive actual module provenance, with validators unchanged.
+    - Command: npm run inventory:parity:calc
+      Result: pass after evidence repair. Evidence: bootstrap-parity-calc-fixed.log,exit0. Scope: current Calc registry consistency.
+    - Command: npm run inventory:parity:shared
+      Result: pass after evidence repair. Evidence: bootstrap-parity-shared-fixed.log,exit0. Scope: changed shared source registry consistency.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8files/197cases,73.34s,without retry. Evidence: bootstrap-csv-tests.log. Scope: existing CSV options/recognition/date/import/export/docshell and file/menu/dialog/keyboard/primary ODS behavior. This is regression evidence, not full native engine/CSV admission.
+    - Command: npm run lint -- --ignore-pattern 'output/native/**'
+      Result: pass;0errors/warnings. Evidence: bootstrap-lint.log. Scope: full repository ESLint excluding experiment scratch.
+    - Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+      Result: pass;14.71s with the existing chunk-size advisory. Evidence: bootstrap-vite-build.log. Scope: actual current production bundle. Typecheck and Vite commands are recorded separately, without claiming an unexecuted npm run build.
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 current-built browser scenario,13.2s total. Evidence: bootstrap-browser.log. Scope: existing CSV import, primary ODS save and active-sheet export, with original assertions/timeouts. This does not certify production application-context or full native CSV admission.
+    - Read-only tooling observation for the remaining original ICU break-service work: emcc/em++/wasm-ld are unavailable on current PATH; clang++ resolves to /usr/bin/clang++. No SDK download, new runtime backend or package dependency was installed or authorized by this checkpoint. Offline source work remains available; this is not a goal blocker.
+    - Final review: git diff --check passes. Exact allowlist contains40 intended source/test/fixture/registry/issue/boundary/task paths; native experiment scratch stays excluded. Full final status is retained in bootstrap-final-status.log. No network/vendor writes, source/semantic readiness promotion or full-suite replay. Overall CSV verification remains rework/DOING and goal active; no task finish or goal completion is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -3548,6 +3644,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T12:02:14.427Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original process factory and real NumberText constructor path checkpoint verified:132related cases, strengthened3-case exception-context rerun,197CSV/UI,47boundary cases,current-built browser,typecheck/lint/build and static/provenance/parity pass. Exact source factory/context caching and exceptions retained (CALC-446/447); temporary NumberTextFactory injection removed. Application context/manager bootstrap,EditEngine resources/DocImport and full NatNum12/formatter remain; keep goal active.
+Attempts: 32
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:02:12.101Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4367,3 +4493,53 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;1 current-built browser scenario,10.8s total. Evidence: directions-browser.log. Scope: actual existing CSV import, primary ODS save and active-sheet export; original assertions/timeouts unchanged. This is regression evidence, not full native engine/CSV admission.
 - Final review: git diff --check passes; exact allowlist contains26 intended source/test/native-capture/registry/issue/boundary/task paths. Full final status is retained in directions-final-status.log. All experiment scratch stays excluded. No network/vendor writes, readiness promotion or full-suite replay. Same approved open task remains rework/DOING; goal stays active. Next substantive frontier is actual engine construction/resources/process services and source ScFieldEditEngine/DocImport admission.
+
+### Process service factory and original NumberText constructor path checkpoint
+
+- Previous goal turn was progress: df1581456729 implemented original ICU paragraph/run ownership and EditEngine InitWritingDirections. Revalidated approved CODER/direct task and Calc checkout; no new task/full-suite cadence increment. Constructor inspection confirmed the remaining original VCL shared-device/Sfx application dependencies, plus a missing shared processfactory dependency for BreakIterator/NumberText. This checkpoint implements that real shared dependency rather than manufacturing an engine, context or service manager.
+- Implemented original LocalProcessFactory and setProcessServiceFactory/getProcessServiceFactory/getComponentContext/getProcessComponentContext, with original acquired versus borrowed const returns. Exact XPropertySet query, DefaultContext property name, Any-to-XComponentContext UNO_QUERY, missing factory/interface/value rejection, Unicode/NUL messages, actual root Context, exception cleanup and UnknownPropertyException-only translation are preserved. Failed static initialization retries; the first successful cached context survives factory replacement/clearing. Native mutex/thread/reentrant-destructor and static-initialization guard behavior are not certified by the synchronous browser-realm binding. No invalidation heuristic, reset hook or default context/manager is supplied.
+- Added original complete XPropertySet7-method/XPropertySetInfo3-method/listener IDL and normal cached type bindings. Both listeners retain the actual XEventListener base. PropertyChangeEvent retains actual EventObject Source and5 declared fields/defaults, stable member owners, base-first value operations, real compound addresses/Any transport and source member/base destruction. No production listener subscription/provider is fabricated.
+- Removed the old mandatory NumberTextFactory parameter from getNumberText. The source helper now calls actual NumberText.create(getProcessComponentContext()), preserving its original successful-once service reference and prefix/separator/cardinal/empty-result/suffix/result-cache behavior. The [in] call's cast erases only source const from the existing generated host signature: the same actual borrowed Reference is passed without an extra query/acquire or mutation. Tests explicitly install enclosing weak property factories/contexts/managers, then invoke actual process query/generated constructor/real NumberText component factory/installed official JS library. The shared enclosing fixture was extracted from existing NumberText constructor tests without weakening their assertions. Production application bootstrap and full NatNum12 supplier/casing/formatter remain pending.
+- CALC-446 records independent factory replacement versus successful-once context caching; CALC-447 records the header's nullable-return comment contradicting getComponentContext's implementation rejection of empty context. Preserve source implementation behavior, not a new null fallback.
+- Source host-contract correction: XMultiServiceFactory and XMultiComponentFactory both declare sequence<string> upstream. Corrected the former's old incompatible generic spelling to the same actual rtl_uStringSlot sequence representation used by the latter. Existing SDK acceptance now asserts their exact return-type identity. EventObject's actual Source-at0 tuple contract remains unchanged; typed zero/erased compound-address overloads permit PropertyChangeEvent inherited dispatch, without emitted base runtime changes.
+- Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts --maxWorkers=1
+  Result: pass;2files/5cases,8.49s. Evidence: bootstrap-tests.log. Scope: actual query/reference/Any/weak ownership, source exceptions and static cache, inherited event transport and listener base queries.
+- Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+  Result: pass;4files/21cases,16.06s. Evidence: bootstrap-integration-tests.log. Scope: actual original NumberText process-context path and retained native prefix/cache/Soros behavior.
+- Command: npm run typecheck
+  Result: initial fail in2 existing acceptances after host-type corrections. Evidence: bootstrap-typecheck.log. Resolution: retain EventObject.get(0)'s original typed interface-pointer tuple through overloads, keep general derived addresses erased, and assert original common sequence<string> return identity in both factory bindings. No assertion skipping or signature weakening. First corrected and final runs pass (bootstrap-typecheck-fixed.log, bootstrap-typecheck-final.log); final includes the strengthened exception fixture and final formatting.
+- Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber src/lingucomponent/source/numbertext/numbertext.test.ts --maxWorkers=1
+  Result: pass;11files/132cases,31.12s. Evidence: bootstrap-related-tests.log. Scope: changed process/property/service owners and related native Any, inherited EventObject, SDK factory, NatNum and NumberText contracts.
+- Command: npm run test:shared -- src/comphelper/source/processfactory/processfactory.test.ts --maxWorkers=1
+  Result: pass;3cases,14.25s. Evidence: bootstrap-error-context-tests.log. Scope: strengthened UnknownPropertyException fixture supplies an unrelated original Context; the wrapper still must use actual factory root Context. Source runtime unchanged; no passing unrelated cases replayed for this fixture-only change.
+- Command: npm run check:dependencies
+  Result: pass;1936sources/10549imports/235allowed edges. Evidence: bootstrap-deps.log. Scope: original i18npool->comphelper dependency registered from nativenumbersupplier.cxx include and Library_i18npool.mk link. Reverse/application/browser gates stay enabled.
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+  Result: pass;47cases,62.54s. Evidence: bootstrap-boundary-tests.log. Scope: actual source graph and ownership gates, including reverse comphelper->i18npool rejection.
+- Command: npm run check:docs
+  Result: pass;4334authored files. Evidence: bootstrap-docs.log. Scope: source/test documentation contracts.
+- Command: npm run check:file-size
+  Result: pass. Evidence: bootstrap-size.log. Scope: authored file hard limit1000; final formatted boundary checker/test are992/984lines, still below that limit.
+- Command: npm run check:calc-resources
+  Result: pass;464commands/11menus/17policies. Evidence: bootstrap-resources.log. Scope: unchanged Calc resource behavior.
+- Commands: npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: initial fail on the same concrete evidence gap: new PropertyChangeEvent record named only its basename. Evidence: bootstrap-provenance.log, bootstrap-parity-calc.log, bootstrap-parity-shared.log. Resolution: add actual IDL fields and methods for all5 new property/event records; retain validators unchanged and foundation/unverified statuses. Rebuild/check results follow below.
+- Remaining: actual application ComponentContext/ServiceManager/process-factory installation, original EditEngine constructor/VCL shared device/Sfx application resources, process BreakIterator/CharacterClassification admission, other required engine undo/word/deletion/layout/view groups, ScFieldEditEngine/DocImport and multiline-regex removal, full NatNum12 supplier/casing/formatter and final native CSV audit. No complete engine, runtime bootstrap or CSV readiness is promoted. Keep overall verification rework/DOING and goal active; intentional browser save/open/autosave/no-recovery behavior stays intact.
+- Command: npm run inventory:registry:build
+  Result: pass;4generated views after concrete IDL member evidence update. Evidence: bootstrap-registry-fixed.log. Scope: canonical records and derived inventory, without readiness promotion.
+- Command: npm run check:source-provenance
+  Result: pass after evidence repair;1937runtime modules (1724mapped/182browser/31infrastructure). Evidence: bootstrap-provenance-fixed.log. Scope: exhaustive actual module provenance, with validators unchanged.
+- Command: npm run inventory:parity:calc
+  Result: pass after evidence repair. Evidence: bootstrap-parity-calc-fixed.log,exit0. Scope: current Calc registry consistency.
+- Command: npm run inventory:parity:shared
+  Result: pass after evidence repair. Evidence: bootstrap-parity-shared-fixed.log,exit0. Scope: changed shared source registry consistency.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8files/197cases,73.34s,without retry. Evidence: bootstrap-csv-tests.log. Scope: existing CSV options/recognition/date/import/export/docshell and file/menu/dialog/keyboard/primary ODS behavior. This is regression evidence, not full native engine/CSV admission.
+- Command: npm run lint -- --ignore-pattern 'output/native/**'
+  Result: pass;0errors/warnings. Evidence: bootstrap-lint.log. Scope: full repository ESLint excluding experiment scratch.
+- Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+  Result: pass;14.71s with the existing chunk-size advisory. Evidence: bootstrap-vite-build.log. Scope: actual current production bundle. Typecheck and Vite commands are recorded separately, without claiming an unexecuted npm run build.
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 current-built browser scenario,13.2s total. Evidence: bootstrap-browser.log. Scope: existing CSV import, primary ODS save and active-sheet export, with original assertions/timeouts. This does not certify production application-context or full native CSV admission.
+- Read-only tooling observation for the remaining original ICU break-service work: emcc/em++/wasm-ld are unavailable on current PATH; clang++ resolves to /usr/bin/clang++. No SDK download, new runtime backend or package dependency was installed or authorized by this checkpoint. Offline source work remains available; this is not a goal blocker.
+- Final review: git diff --check passes. Exact allowlist contains40 intended source/test/fixture/registry/issue/boundary/task paths; native experiment scratch stays excluded. Full final status is retained in bootstrap-final-status.log. No network/vendor writes, source/semantic readiness promotion or full-suite replay. Overall CSV verification remains rework/DOING and goal active; no task finish or goal completion is claimed.

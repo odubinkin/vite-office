@@ -774,7 +774,7 @@ it("keeps native numeric locale resources below tab items and application/browse
   for (const owner of ["i18npool", "unotools"])
     for (const app of ["sc", "sw", "framework"])
       expect(isForbiddenModuleEdge(owner, app)).toBe(true);
-  for (const owner of ["i18nlangtag", "udkapi", "cppu", "offapi"]) {
+  for (const owner of ["comphelper", "i18nlangtag", "udkapi", "cppu", "offapi"]) {
     expect(isForbiddenModuleEdge("i18npool", owner)).toBe(false);
     expect(isForbiddenModuleEdge(owner, "i18npool")).toBe(true);
   }

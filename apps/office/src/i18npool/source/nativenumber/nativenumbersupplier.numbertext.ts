@@ -1,15 +1,16 @@
-/** @fileoverview Original NatNum12 number-prefix scan, locale-separator/result caches and NumberText call. The original process-context service creation remains a mandatory enclosing binding. */
+/** @fileoverview Original NatNum12 prefix scan, separator/result caches and real process-context NumberText constructor call. Application context/manager installation remains an enclosing bootstrap responsibility. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { XNumberText } from "../../../offapi/com/sun/star/linguistic2/XNumberText";
 import type { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import { NumberText } from "../../../offapi/com/sun/star/linguistic2/NumberText";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { getLocaleDecimalSeparator, getLocaleThousandSeparator } from "../localedata/localedata";
 import { isNumber } from "./nativenumbersupplier.text";
-/** Exact original service creation dependency, with no missing-service fallback or replacement component. */
-export type NumberTextFactory = () => Reference<XNumberText>;
 /** Original two UTF16 separator fields cached for each exact Locale key. */
 interface Separators {
   DecimalSeparator: number;
@@ -30,12 +31,11 @@ function getLocaleSeparators(locale: LocaleConstReference, loc: string): Separat
   }
   return result;
 }
-/** Original number-text member group, preserving count-zero/full-input selection and suffix reattachment. @param locale - Actual target Locale. @param input - Complete original text. @param params - Original modifier view. @param createNumberText - Actual original service constructor binding, consulted only for the original lazy static. @returns Owned output string. */
+/** Original number-text member group, preserving count-zero/full-input selection and suffix reattachment. @param locale - Actual target Locale. @param input - Complete original text. @param params - Original modifier view. @returns Owned output string. */
 export function getNumberText(
   locale: LocaleConstReference,
   input: OUStringConstReference,
   params: OUStringConstReference,
-  createNumberText: NumberTextFactory,
 ): OUString {
   const aLoc = LanguageTag.convertToBcp47(locale);
   try {
@@ -57,7 +57,11 @@ export function getNumberText(
       }
       const number = count === 0 ? new OUString(input) : buffer.makeStringAndClear();
       try {
-        if (xNumberText === undefined) xNumberText = createNumberText();
+        if (xNumberText === undefined)
+          // The cached object is the actual Reference owner; this cast erases only C++ const at the generated [in] binding, which does not mutate the borrowed context.
+          xNumberText = NumberText.create(
+            getProcessComponentContext() as Reference<XComponentContext>,
+          );
         const modifiers = text(params),
           prefix = modifiers.length !== 0 && modifiers !== "cardinal" ? modifiers + " " : "";
         const key = text(number);

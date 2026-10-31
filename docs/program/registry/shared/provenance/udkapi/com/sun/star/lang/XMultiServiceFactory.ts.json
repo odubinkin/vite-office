@@ -16,7 +16,8 @@
       "createInstance"
     ],
     "preservedResponsibilities": [
-      "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified."
+      "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified.",
+      "Original getAvailableServiceNames sequence<string> now uses the same existing logical rtl_uStringSlot cell representation as XMultiComponentFactory, correcting the old incompatible host generic spelling. Both source IDLs declare the same return; actual Sequence/string owners are unchanged. Compile-time acceptance checks exact return-type identity and existing runtime query/metadata behavior. No service enumeration implementation or new default is manufactured."
     ],
     "omittedResponsibilities": [
       "Concrete model/filter/factory implementations, complete UNO component integration/reflection/ABI and full DOCX/XLSX UI acceptance remain pending."
@@ -30,6 +31,14 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [

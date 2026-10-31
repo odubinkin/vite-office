@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/source/processfactory/processfactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-process-context-contracts",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/source/processfactory/processfactory.ts",
+        "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+        "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts",
+        "comphelper/source/processfactory/processfactory.cxx"
+      ],
+      "justification": "Original LocalProcessFactory copy ownership, process factory setter/by-value acquired getter, exact XPropertySet/DefaultContext/Any/XComponentContext query path and successful-once static context cache are implemented over actual Reference/Any/generated exceptions/weak component queries. Only UnknownPropertyException is translated, with exact Unicode/NUL message suffix and queried root Context; other exceptions propagate unchanged. Empty factory/interface/property/context retains original DeploymentException behavior, without a null substitute or fabricated manager. Failed static initialization retries, successful cached context survives factory replacement/clearing (CALC-446/447). Const context return exposes the same actual owner through a borrowed nonmutating type view. Synchronous realm execution does not claim native mutex/concurrent/reentrant-destructor parity. Production ComponentContext/ServiceManager and application process-factory installation, full EditEngine construction/VCL/Sfx resources, BreakIterator/CharacterClassification service admission, NatNum12 supplier/casing/formatter and final CSV integration remain incomplete. No synthetic context/manager is supplied. Native mutex/thread/reentrant-static initialization/destructor behavior, ABI/pointer UB and allocator exhaustion are not certified. Full reflection and unconsumed services remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LocalProcessFactory",
+        "setProcessServiceFactory",
+        "getProcessServiceFactory",
+        "getComponentContext",
+        "getProcessComponentContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "comphelper/source/processfactory/processfactory.cxx",
+      "upstreamSymbols": [
+        "LocalProcessFactory",
+        "setProcessServiceFactory",
+        "getProcessServiceFactory",
+        "getComponentContext",
+        "getProcessComponentContext"
+      ]
+    }
+  }
+}

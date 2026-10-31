@@ -18,12 +18,13 @@
       "evidence": [
         "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.ts",
         "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts",
-        "i18npool/source/nativenumber/nativenumbersupplier.cxx"
+        "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+        "apps/office/src/offapi/com/sun/star/linguistic2/NumberText.test.ts"
       ],
-      "justification": "Complete original NatNum12 number-prefix scan, locale separator cache keyed by static uncanonicalized Locale-to-BCP47, source lazy service reference and nested numeric-string/prefix-locale result cache. Exact cardinal suppression, empty-result fallback, count-zero full-input selection, nonzero scan-offset suffix append, output shared-string copying and local buffer/string destruction are preserved. The real process-context NumberText constructor remains an explicit mandatory binding; tests bind the actual production component, never a fake result/provider. Full supplier/casing/context integration is not advertised. CALC-422 records the preserved minus/count-zero suffix duplication.",
+      "justification": "Complete original NatNum12 number-prefix scan, locale separator cache keyed by static uncanonicalized Locale-to-BCP47, source lazy service reference and nested numeric-string/prefix-locale result cache. Exact cardinal suppression, empty-result fallback, count-zero full-input selection, nonzero scan-offset suffix append, output shared-string copying and local buffer/string destruction are preserved. The original process-context NumberText constructor is now bound through comphelper; tests exercise the actual production component with explicit enclosing context/manager fixtures. Full supplier/casing/context integration is not advertised. CALC-422 records the preserved minus/count-zero suffix duplication. AQF9AG process-context continuation: Removed the temporary NumberTextFactory parameter/provider. Original source static initialization now invokes the real generated NumberText.create through the actual comphelper getProcessComponentContext path. A boundary-only cast erases the C++ const reference from the current generated [in] TypeScript signature; the actual same borrowed owner is passed, with no additional query/acquire or mutable context operation. Existing prefix/separator/count-zero/suffix/cardinal/empty-result/cache semantics remain unchanged. Tests explicitly install enclosing weak factories/contexts, then execute real process-property query, generated constructor, actual NumberText component factory and installed official JS library. Application context/manager bootstrap, NatNum12 supplier/casing/formatter and CSV admission are still incomplete; no fake/default context is supplied.",
       "knownViolations": [],
       "localSymbols": [
-        "NumberTextFactory",
         "getNumberText",
         "getLocaleSeparators"
       ],
