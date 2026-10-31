@@ -254,6 +254,10 @@ export class SwHTMLParser extends HTMLParser {
     this.m_aSetAttrTab.length = this.m_aParaAttrs.length = this.m_aContexts.length = 0;
     this.m_aBaseFontStack.length = this.m_aFontStack.length = 0;
   }
+  /** Original HTML caption section deletion delegates to the native document operation. Marquee/drawing ownership is not represented by this current importer. @param start - Actual section start. @returns Nothing. */
+  DeleteSection(start: import("../../core/docnode/node").SwStartNode): void {
+    this.m_xDoc.GetDocumentContentOperationsManager().DeleteSection(start);
+  }
   /** Reads the represented original content node. @returns Actual text owner. */
   private GetTextNode(): SwTextNode {
     const node = this.m_pPam.GetPoint().GetNode();

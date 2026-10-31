@@ -15,7 +15,10 @@ import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-hand
 import type { SwTable } from "../table/swtable";
 import type { SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwRootFrame } from "../layout/newfrm";
-import type { SwContentFrame } from "../layout/ssfrm";
+import { SwContentFrame } from "../layout/ssfrm";
+import { SwClient, SwIterator } from "../../../inc/calbck";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import { SwNumRuleItem } from "../para/paratr";
 import { SwFrameType } from "../layout/wsfrm";
 import { GetFrameOfModify } from "../layout/frmtool";
 
@@ -127,6 +130,11 @@ export abstract class SwNode extends SwContentIndexRegistry {
     return this.startOfSection;
   }
 
+  /** Original common matching-end query uses a start node itself or the node's enclosing start. @returns Actual matching end sentinel. */
+  public EndOfSectionNode(): SwEndNode {
+    return this.StartOfSectionNode().EndOfSectionNode();
+  }
+
   /** Reassigns the canonical section during native TextToTable, retaining node and registered index identity. @param start - Connected new section. @returns Nothing. */
   public SetStartOfSection(start: SwStartNode): void {
     if (start.GetNodes() !== this.nodes) throw new Error("Section belongs to another document.");
@@ -173,7 +181,7 @@ export class SwStartNode extends SwNode {
   }
 
   /** Returns the matching section end sentinel. @returns Matching end sentinel. */
-  public EndOfSectionNode(): SwEndNode {
+  public override EndOfSectionNode(): SwEndNode {
     if (this.endOfSection === undefined) throw new Error("SwStartNode has no end sentinel.");
     return this.endOfSection;
   }
@@ -223,6 +231,30 @@ export abstract class SwContentNode extends SwNode {
   /** Borrows a registered content frame through the native no-view-position query. Only text content frames are represented; native geometry/Calc and non-text content remain unported. @param layout - Optional original layout filter. @param position - Optional original model position. @returns Original text content frame or no registered match. */
   public getLayoutFrame(layout?: SwRootFrame, position?: SwPosition): SwContentFrame | undefined {
     return GetFrameOfModify(layout, this, SwFrameType.Txt, position) as SwContentFrame | undefined;
+  }
+
+  /** Original numbering invalidation for represented nonconditional collections and actual document-owned rules. @returns Whether a named native rule was found. */
+  public InvalidateNumRule(): boolean {
+    const item = this.GetAttr(RES_PARATR_NUMRULE),
+      name = item instanceof SwNumRuleItem ? item.GetValue() : "",
+      rule = this.GetNodes().IsDocNodes() && name ? this.GetDoc().FindNumRulePtr(name) : undefined;
+    rule?.Invalidate();
+    return rule !== undefined;
+  }
+  /** Original current text-frame listener teardown and follow unlinking. Current layout owns text frames and sibling chains; merged redline/footnote/accessibility frame families are not represented. @param layout - Optional native root filter. @returns Nothing. */
+  public DelFrames(layout?: SwRootFrame): void {
+    for (const client of new SwIterator(SwClient, this)) {
+      if (!(client instanceof SwContentFrame) || (layout && layout !== client.getRootFrame()))
+        continue;
+      if (client.IsFollow()) {
+        const master = client.FindMaster();
+        if (!master) throw new Error("assert(content follow has a master)");
+        master.SetFollow(client.GetFollow());
+      }
+      client.SetFollow(undefined);
+      client.RemoveFromLayout();
+      client.DestroyImpl();
+    }
   }
 
   /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */

@@ -7,6 +7,10 @@ import { InsertItemSet } from "./DocumentContentOperationsManager.attr";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwUndoReplace } from "../undo/unins";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { PaMCorrAbs } from "./doccorr";
+import { DelBookmarks } from "./docbm";
+import { SwNodeIndex } from "../crsr/pam";
+import type { SwNode } from "../docnode/node";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
@@ -33,6 +37,35 @@ import {
 export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
+
+  /** Original full-section deletion orders native bookmark deletion, global cursor correction and node destruction. Fly/redline objects are not represented by this current document model; no stand-in managers are called. @param node - Any actual node in the designated section. @returns Nothing. */
+  public DeleteSection(node: SwNode): void {
+    const first = node.IsStartNode() ? node : node.StartOfSectionNode(),
+      start = new SwNodeIndex(first),
+      end = new SwNodeIndex(node.EndOfSectionNode());
+    try {
+      DelBookmarks(start.GetNode(), end.GetNode());
+      const begin = new SwPosition(start.GetNode()),
+        finish = new SwPosition(end.GetNode()),
+        range = new SwPaM(finish, begin);
+      try {
+        const target = GetCorrPosition(range);
+        try {
+          PaMCorrAbs(range, target);
+        } finally {
+          target.Dispose();
+        }
+      } finally {
+        range.Dispose();
+        begin.Dispose();
+        finish.Dispose();
+      }
+      this.document.GetNodes().DelNodes(start, end.GetIndex() - start.GetIndex() + 1);
+    } finally {
+      start.Dispose();
+      end.Dispose();
+    }
+  }
 
   /** Native filter InsertItemSet boundary entry; general editing/undo/layout profiles remain separate. @param range - Actual collapsed paragraph boundary. @param set - Native target items. @param mode - Native flags. @returns Nothing. */
   public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {

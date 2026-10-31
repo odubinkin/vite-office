@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { RES_PAGEDESC } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRule } from "../doc/number";
@@ -13,7 +14,7 @@ import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import {
-  type SwContentNode,
+  SwContentNode,
   SwEndNode,
   SwStartNode,
   SwTableBoxStartNode,
@@ -228,23 +229,7 @@ export class SwNodes {
         node.RemoveFromList();
       }
     this.CorrectNodeIndices(index, end - index + 1);
-    writerClients0: for (const client of new SwIterator(
-      SwClient,
-      tableNode.GetTable().GetFrameFormat(),
-    )) {
-      if (client instanceof SwTabFrame && client.GetTable() === tableNode.GetTable())
-        client.DestroyImpl();
-      continue writerClients0;
-    }
-    for (const row of tableNode.GetTable().GetTabLines()) {
-      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
-        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
-        continue writerClients1;
-      }
-      for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
-      row.Dispose();
-    }
-    tableNode.GetTable().Dispose();
+    this.DestroyTableNode(tableNode);
     this.nodeArray.splice(index, end - index + 1);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
@@ -495,6 +480,76 @@ export class SwNodes {
       continue writerClients3;
     }
     box.Dispose();
+  }
+
+  /** Existing complete table destructor responsibility shared by source node deletion and table history deletion. @param node - Actual table start. @returns Nothing. */
+  private DestroyTableNode(node: SwTableNode): void {
+    writerClients0: for (const client of new SwIterator(
+      SwClient,
+      node.GetTable().GetFrameFormat(),
+    )) {
+      if (client instanceof SwTabFrame && client.GetTable() === node.GetTable())
+        client.DestroyImpl();
+      continue writerClients0;
+    }
+    for (const row of node.GetTable().GetTabLines()) {
+      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
+        continue writerClients1;
+      }
+      for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
+      row.Dispose();
+    }
+    node.GetTable().Dispose();
+  }
+  /** Original DelNodes outline/frame phase, including the whole-array destructor branch which retains the five fixed sentinel pairs. @param start - Actual native start index. @param count - Original positive node count. @returns Nothing. */
+  public DelNodes(start: SwNodeIndex, count = 1): void {
+    const index = start.GetIndex();
+    if (index === 0 && count === this.endOfContent.GetIndex() + 1) {
+      for (const end of [
+        this.endOfContent,
+        this.endOfPostIts,
+        this.endOfInserts,
+        this.endOfAutotext,
+        this.endOfRedlines,
+      ]) {
+        const first = end.StartOfSectionNode().GetIndex() + 1;
+        if (first !== end.GetIndex()) this.RemoveNode(first, end.GetIndex() - first, true);
+      }
+      return;
+    }
+    for (const node of this.nodeArray.slice(index, index + count)) {
+      if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+      if (node instanceof SwContentNode) {
+        node.InvalidateNumRule();
+        node.DelFrames();
+      }
+    }
+    this.RemoveNode(index, count, true);
+  }
+  /** Original RemoveNode removes list membership before correcting all borrowed node indices, then destroys actual nodes backwards before the array erase. Fly-as-character/redline/transparent-section families are absent from this current model. @param index - First node offset. @param count - Original positive count. @param destroy - Delete native owners rather than detach them. @returns Nothing. */
+  public RemoveNode(index: number, count: number, destroy: boolean): void {
+    if (!Number.isInteger(count) || count < 1 || index < 0 || index + count >= this.Count())
+      throw new Error("assert(valid RemoveNode range with a surviving successor)");
+    const removed = this.nodeArray.slice(index, index + count);
+    for (const node of removed) if (node instanceof SwTextNode) node.RemoveFromList();
+    this.CorrectNodeIndices(index, count);
+    if (destroy)
+      for (let i = removed.length; i;) {
+        const node = removed[--i];
+        if (!node) continue;
+        if (node instanceof SwTextNode) {
+          node.GetpSwpHints()?.Dispose();
+          node.DelFrames();
+          if (node.IsOutline()) node.UpdateOutlineState();
+          node.ResetAttr(RES_PAGEDESC);
+        }
+        if (node instanceof SwTableNode) this.DestroyTableNode(node);
+        node.DisposeContentIndexRegistry();
+        node.DisposeModify();
+      }
+    this.nodeArray.splice(index, count);
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
   /** Original MakeTextSection inserts start/end first, then creates the initial text node immediately before that new end. Structural tags do not create unrelated frame/header/footnote objects. @param where - Actual insertion boundary. @param type - Original section tag. @param coll - Actual document collection. @returns Connected section start. */

@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/core/docnode/native-node-index-removal.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-section-deletion.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -58,6 +62,10 @@
         {
           "path": "sw/inc/ndindex.hxx",
           "marker": "void RegisterIndex()"
+        },
+        {
+          "path": "sw/inc/node.hxx",
+          "marker": "SwNode::EndOfSectionNode"
         }
       ]
     },
@@ -73,7 +81,10 @@
       "ResetAllAttr",
       "getLayoutFrame",
       "SwTableNode",
-      "SwTableBoxStartNode"
+      "SwTableBoxStartNode",
+      "EndOfSectionNode",
+      "InvalidateNumRule",
+      "DelFrames"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwNodeType, SwNode, SwStartNode, SwEndNode and the bounded SwNodeType, SwNode, SwStartNode contract remain intentionally omitted."
@@ -87,7 +98,8 @@
       "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
       "S3HW1E HTML38: original SwContentNode CanJoinNext/CanJoinPrev admission preserves native node-kind, terminal sentinel, strict GetSpaceLeft capacity and successful output assignment; the current graph has no transparent SwSectionNode owner to skip. Native SwTextNode JoinNext/JoinPrev retain the correct current owner and consume actual previous/next paragraph content via owned Cut fragments and registered index transfers. The established portable AppendTextNode/JoinTextNodes adapter retains its source for existing undo-node storage and remains a distinct copy contract; native consumers explicitly select transfer, without replacing or faking the document/hint graph. SplitNode explicitly assigns its supplied native position to the trailing start even for before affinity, preserving other marker affinity and the established trailing-node return. Clone construction is extracted only into the existing responsibility fragment; private hint/empty-list flags remain copied by their real owner. Native HTML CallParser double-split/final boundary joins and target attribute snapshots, automatic text/table layout, table token reading/insertion and final model/filter/UI reconciliation remain pending. No whole-module, C++ allocation/ABI or unrepresented structural/redline/physical lifetime certificate is claimed; browser file UI/autosave/recovery deviations remain unchanged.",
       "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged.",
-      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged."
+      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML54: original DeleteSection is composed over real section start/end indices, DelBookmarks, GetCorrPosition, global PaMCorrAbs and DelNodes. Current node removal invalidates actual named numbering rules, removes outline membership and current text-frame clients/follow/sibling chains, removes list membership before borrowed-node-index correction, then destroys represented hint/page-description/modify and table/row/box owners backwards before the array erase. Native SwContentIndexReg destructor assertion rejects remaining live content indices instead of guessing a text destination. The HTML caption DeleteSection wrapper delegates to the actual manager; original caption callers restore their raw importer cursor before deleting its saved section. Real UI stacks and UNO cursors receive the original structural successor, contained marks are deleted and table deletion does not impose the older history helper following-text restriction. Original formatter/list/mark/cursor/native ownership remains on actual document nodes. Current text-frame teardown binds native Cut to the already represented sibling unlink and actual frame destruction; unrepresented merged-redline/footnote/accessibility/geometric resize/paint branches, fly/redline/transparent-section objects, recursive fly destruction temporary entries, chapter-field propagation and full native destructor/ABI behavior are not certified. Browser node-removed publication is retained as the existing revision/layout boundary. Full table/caption token orchestration, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required; whole modules/contracts/defaults/behavior remain unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/node.cxx",
@@ -101,7 +113,9 @@
       "SwContentNode::ResetAllAttr",
       "SwContentNode::getLayoutFrame",
       "SwNode::FindTableNode",
-      "SwNode::FindStartNodeByType"
+      "SwNode::FindStartNodeByType",
+      "InvalidateNumRule",
+      "DelFrames"
     ]
   },
   "legacyOrder": 179

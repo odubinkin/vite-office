@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 370
+revision: 374
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T16:25:38.204Z"
+  updated_at: "2026-10-31T16:36:48.944Z"
   updated_by: "CODER"
-  note: "HTML53 checkpoint passes248unique cases/27files plus current app/static gates. Actual native view-ring owners and global PaMCorrAbs are wired; DeleteSection composition and remaining format work keep parent incomplete."
-  attempts: 64
+  note: "HTML54 checkpoint passes205unique cases/16files plus current app/static gates. Native section deletion and caption wrapper are connected over actual owners; remaining caption/table grammar/layout and RTF/export audit keep parent incomplete."
+  attempts: 65
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1029,8 +1032,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T16:36:48.944Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML54 checkpoint passes205unique cases/16files plus current app/static gates. Native section deletion and caption wrapper are connected over actual owners; remaining caption/table grammar/layout and RTF/export audit keep parent incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T16:37:06.686Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T16:25:51.909Z"
+doc_updated_at: "2026-10-31T16:37:06.686Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2695,6 +2711,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:36:48.944Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML54 checkpoint passes205unique cases/16files plus current app/static gates. Native section deletion and caption wrapper are connected over actual owners; remaining caption/table grammar/layout and RTF/export audit keep parent incomplete.
+    Attempts: 65
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:36:48.337Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2796,6 +2842,18 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html53-types-verified.txt). Initial failing type logs retained separately.
     - Command (cwd repository): node_modules/.bin/eslint changed10source/test files --max-warnings 0; node_modules/.bin/prettier --check same10files ->pass (html53-eslint-closure.txt, html53-prettier.txt).
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass. Evidence html53-{boundaries,jsdoc,filesize,source-tree,provenance-verified,registry-verified}.txt. Scope: all runtime/source/classification and dependency gates, not whole native behavior certification.
+    - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+    ### HTML54 native section deletion checkpoint
+
+    HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/core/doc/native-global-absolute-correction.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts ->46pass/4files after fixture correction (html54-closure-tests.txt).
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/uibase/wrtsh/native-table-delete.test.ts src/sw/source/uibase/wrtsh/native-table-name-history.test.ts src/sw/source/core/docnode/native-text-section.test.ts ->61pass/6files (html54-related-tests.txt), including10fresh final source-deletion cases. Scope: actual public document/parser entry points, start/content/end selection, structural successor, UI stacks, native mark and UNO invalidation, root-filtered content frame chains, named rule invalidation, table owner destruction and existing caption/table/history consumers.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/bastyp/index.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts ->106pass/7files (html54-filter-tests.txt). Scope: affected index and real native format/document-I/O consumers.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html54-types-verified.txt).
+    - Command (cwd repository): node_modules/.bin/eslint changed6source/test files --max-warnings 0; node_modules/.bin/prettier --check same6files ->pass (html54-eslint-final.txt, html54-prettier.txt).
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html54-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime source and dependency/ownership evidence gates, not whole native behavior certification.
     - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4045,6 +4103,10 @@ sections:
     HTML53 initial app types reject a generic mixin class and recursive generic base expressions despite22initial runtime cases passing. Keep one original intrusive Ring algorithm on the actual native owner; bind the C++ template/primary-base intersection through an explicit erased constructor interface and preserve standalone Ring constructor semantics. This fixes current app types without allocating wrapper state or changing the SwModify event prototype chain. Subsequent lint flags an empty recursive interface; declare its actual link members and explicit container template argument. Source provenance rejects basename-only evidence for new manager/view modules; add their actual GetCurrentViewShell/SetCurrentViewShell/GetCurrentLayout/HasLayout and GetDoc/GetLayout source symbols. Initial registry update script stopped on its own missing local-path dictionary key before mutating existing records; fix the script and author canonical per-file records, then rerun final gates. No source behavior/provider/result or verification threshold is substituted.
 
     HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.
+
+    HTML54 initial46cases:40pass/6fail; all6new failures are a fixture requesting an unsupported Standard string ID rather than the actual default collection. Use GetDfltTextFormatColl with its real source owner. Initial app types also catch an erased runtime import used in instanceof and the existing document manager accessor spelling; use the real SwContentNode import and GetDocumentContentOperationsManager rather than inventing another manager. Source review additionally confirms original caption callers restore their standalone parser cursor before DeleteSection: correct the fresh wrapper fixture and preserve the native content-index destructor assertion instead of silently moving arbitrary raw positions. Final corrected46cases and extended61cases pass. No new suspected upstream bug is identified; known original structural correction/invalidating behavior is retained.
+
+    HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -5720,6 +5782,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:36:48.944Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML54 checkpoint passes205unique cases/16files plus current app/static gates. Native section deletion and caption wrapper are connected over actual owners; remaining caption/table grammar/layout and RTF/export audit keep parent incomplete.
+Attempts: 65
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:36:48.337Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5821,6 +5913,18 @@ HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html53-types-verified.txt). Initial failing type logs retained separately.
 - Command (cwd repository): node_modules/.bin/eslint changed10source/test files --max-warnings 0; node_modules/.bin/prettier --check same10files ->pass (html53-eslint-closure.txt, html53-prettier.txt).
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass. Evidence html53-{boundaries,jsdoc,filesize,source-tree,provenance-verified,registry-verified}.txt. Scope: all runtime/source/classification and dependency gates, not whole native behavior certification.
+- No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+### HTML54 native section deletion checkpoint
+
+HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/core/doc/native-global-absolute-correction.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts ->46pass/4files after fixture correction (html54-closure-tests.txt).
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/uibase/wrtsh/native-table-delete.test.ts src/sw/source/uibase/wrtsh/native-table-name-history.test.ts src/sw/source/core/docnode/native-text-section.test.ts ->61pass/6files (html54-related-tests.txt), including10fresh final source-deletion cases. Scope: actual public document/parser entry points, start/content/end selection, structural successor, UI stacks, native mark and UNO invalidation, root-filtered content frame chains, named rule invalidation, table owner destruction and existing caption/table/history consumers.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/bastyp/index.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts ->106pass/7files (html54-filter-tests.txt). Scope: affected index and real native format/document-I/O consumers.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html54-types-verified.txt).
+- Command (cwd repository): node_modules/.bin/eslint changed6source/test files --max-warnings 0; node_modules/.bin/prettier --check same6files ->pass (html54-eslint-final.txt, html54-prettier.txt).
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html54-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime source and dependency/ownership evidence gates, not whole native behavior certification.
 - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
 
 ## Rollback Plan
@@ -7074,3 +7178,7 @@ HTML52 checkpoint:127related cases/8files pass (37actual primitive/UNO correctio
 HTML53 initial app types reject a generic mixin class and recursive generic base expressions despite22initial runtime cases passing. Keep one original intrusive Ring algorithm on the actual native owner; bind the C++ template/primary-base intersection through an explicit erased constructor interface and preserve standalone Ring constructor semantics. This fixes current app types without allocating wrapper state or changing the SwModify event prototype chain. Subsequent lint flags an empty recursive interface; declare its actual link members and explicit container template argument. Source provenance rejects basename-only evidence for new manager/view modules; add their actual GetCurrentViewShell/SetCurrentViewShell/GetCurrentLayout/HasLayout and GetDoc/GetLayout source symbols. Initial registry update script stopped on its own missing local-path dictionary key before mutating existing records; fix the script and author canonical per-file records, then rerun final gates. No source behavior/provider/result or verification threshold is substituted.
 
 HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction/UNO/stack/formatter/table-name/mounted-UI cases/9files,194complete-cursor/client/import/TXT/RTF/Markdown cases/19files minus5repeated stack cases). Current app types, changed10source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10702imports/229edges, JSDoc4342files, file-size4346files, source-tree115paths/32retired roots and diff checks pass. Actual document layout manager/current-view ring and persistent editing shells now support source GetEditShell and complete represented global PaMCorrAbs shell/stack/ordinary/table/UNO traversal with original start/end/target value snapshots. Existing persistent browser New/Open and Close behavior transfers/unlinks the same shell identity. Standalone Ring and native view-ring facets share one exact intrusive algorithm through an erased TypeScript constructor/template intersection; no duplicated ring owner, surrogate view, provider result or flat position registry is introduced. Only represented owner/query/traversal behavior is verified; native preview/window/output/paint/print/layouter/ENABLE_YRS/ABI and whole modules remain unverified or unrepresented. Native DeleteSection/DelNodes production composition, table grammar/materialization/layout, RTF direction export and final current-model/filter/UI audit remain pending; parent task and goal stay incomplete.
+
+HTML54 initial46cases:40pass/6fail; all6new failures are a fixture requesting an unsupported Standard string ID rather than the actual default collection. Use GetDfltTextFormatColl with its real source owner. Initial app types also catch an erased runtime import used in instanceof and the existing document manager accessor spelling; use the real SwContentNode import and GetDocumentContentOperationsManager rather than inventing another manager. Source review additionally confirms original caption callers restore their standalone parser cursor before DeleteSection: correct the fresh wrapper fixture and preserve the native content-index destructor assertion instead of silently moving arbitrary raw positions. Final corrected46cases and extended61cases pass. No new suspected upstream bug is identified; known original structural correction/invalidating behavior is retained.
+
+HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
