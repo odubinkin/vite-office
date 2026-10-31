@@ -104,7 +104,9 @@ it("preserves ordered internal mark endpoints and rejects queries or updates aft
   const mark = new UnoMark(range);
   try {
     expect(mark.IsExpanded()).toBe(false);
-    expect(mark.GetOtherMarkPos()).toBe(mark.GetMarkPos());
+    expect(mark.GetMarkStart()).toBe(mark.GetMarkPos());
+    expect(mark.GetMarkEnd()).toBe(mark.GetMarkPos());
+    expect(mark.GetMarkStartEnd()).toEqual([mark.GetMarkPos(), mark.GetMarkPos()]);
     range.Assign(last, first);
     expect(mark.SetPositions(range)).toBe(true);
     expect(mark.IsExpanded()).toBe(true);

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 346
+revision: 352
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T15:23:33.523Z"
+  updated_at: "2026-10-31T15:32:58.718Z"
   updated_by: "CODER"
-  note: "HTML48 verified:242unique related cases/13files, final app types and affected static/provenance/registry gates pass. Parent incomplete: caption section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain."
-  attempts: 59
+  note: "HTML49 verified:184related cases/11files, final13mark-range scenarios, app types and affected static/provenance/registry gates pass. Parent incomplete: caption section/PaM deletion, table grammar/layout, RTF direction export and final filter/UI audit remain."
+  attempts: 60
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -949,8 +952,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T15:32:58.718Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML49 verified:184related cases/11files, final13mark-range scenarios, app types and affected static/provenance/registry gates pass. Parent incomplete: caption section/PaM deletion, table grammar/layout, RTF direction export and final filter/UI audit remain."
+  -
+    type: "status"
+    at: "2026-10-31T15:33:04.546Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T15:23:41.360Z"
+doc_updated_at: "2026-10-31T15:33:04.546Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2465,6 +2481,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T15:32:58.718Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML49 verified:184related cases/11files, final13mark-range scenarios, app types and affected static/provenance/registry gates pass. Parent incomplete: caption section/PaM deletion, table grammar/layout, RTF direction export and final filter/UI audit remain.
+    Attempts: 60
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:32:58.087Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2521,6 +2567,13 @@ sections:
     - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html48-lint-closure.txt/html48-format-closure.txt.
     - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html48-provenance-final.txt (1927modules), html48-boundaries-final.txt (1926sources/10666imports/229edges), html48-registry-final.txt (0semantic violations), html48-jsdoc-final.txt (4330sources), html48-size-final.txt (4334files), html48-tree-final.txt (115paths/32retiredroots).
     - Scope review: HTML48 matrix explicitly records actual borrowed-index substrate and remaining caption DeleteSection/position correction, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit. No full suite, GC timing/ABI certificate or parent completion claim.
+
+    HTML49 checkpoint (parent incomplete):
+    - Command: focused Vitest commands in html49-focused.txt/html49-focused-final.txt/html49-scope-closure.txt. Result: pass. Evidence:184cases/11files on final runtime;13fresh final source-owned mark-range scenarios additionally pass with equality-reference assertions. Scope: real range deletion/UNO endpoint expulsion, original start/end boundary predicates, cross-cell collapse, ordered getters, actual bookmark/history/HTML/native-import/Markdown/TXT/RTF/document-I/O consumers.
+    - Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html49-types-closure.txt exit0. Scope: final application/native mark fixture types.
+    - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html49-lint-final.txt/html49-lint-closure.txt/html49-format.txt/html49-format-closure.txt.
+    - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html49-provenance.txt (1927modules), html49-boundaries.txt (1926sources/10669imports/229edges), html49-registry.txt (0semantic violations), html49-jsdoc.txt (4331sources), html49-size.txt (4335files), html49-tree.txt (115paths/32retiredroots).
+    - Scope review: canonical HTML49 matrix entry and WRITER333/334 retain original selected-paragraph-end inclusion and equal-coordinate expanded behavior; old fabricated collapsed other-endpoint fallback is removed. Native source guarantee, not behavior outside IsExpanded precondition, defines the admitted query contract. Current core lacks other mark/redline/SaveBookmark owners; they are not simulated. Full caption section/PaM deletion, table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation remain required. No full-suite or parent completion claim.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3746,6 +3799,12 @@ sections:
 
     HTML48 closure:242unique related scenarios/13files pass; final19native index cases and fresh app types pass after the final Assign returned-reference edit. Native same-node and cross-document pointer assignments, copied/node/array/default/relative overloads, multiple live borrowers, explicit destruction, body/table/row/box removal, structural-versus-content correction, replacement and actual caption owner independence are covered. WeakRef/FinalizationRegistry are real JS borrowed-reference substrate, not a replacement native result provider; explicit Dispose/Assign remain synchronous and native GC/ABI timing is not claimed.
     Next concrete table dependency: original DocumentContentOperationsManager::DeleteSection (cxx2146) deletes bookmarks, corrects all PaMs via GetCorrPosition/PaMCorrAbs, then DelNodes. For a start/end-only range, GetCorrPosition chooses the actual node immediately after the section end, which may itself be structural; do not replace that with a guessed nearest content cursor. Current node-index correction is now native, but actual structural content-position/UNO invalidation and section deletion remain required alongside full table grammar/materialization/layout, RTF default/physical-direction export and final filter/UI reconciliation. Keep the parent incomplete and the goal active.
+
+    HTML49 initial changed-source lint rejected two non-null assertions in the new range fixture. Replace them with actual assertion-based array admission; runtime/native behavior is unchanged. Initial html49-lint.txt retained; focused tests and app types are still running on their original exact handles, not restarted.
+
+    HTML49 initial focused54cases/5files and app types pass. Header audit additionally exposes an old fabricated GetOtherMarkPos fallback on collapsed UNO marks; pinned IMark.hxx guarantees that getter only when IsExpanded is true. Restore original GetMarkStart/GetMarkEnd/GetMarkStartEnd accessors, preserve exact equality reference ties and use them in the current all-mark comparator. Replace the old collapsed lifetime fixture assertion with native ordered getters instead of certifying undefined source behavior; invalid direct other-endpoint access is outside the admitted precondition. Final current-source tests/types/static gates required after this real fix.
+
+    HTML49 closure:184related cases/11files pass, plus final fresh13mark-range scenarios with exact equal-coordinate endpoint reference checks. Final-source app types and all affected static/provenance/registry gates pass. Core inventory confirms no admitted redline/fieldmark/annotation/navigator/SaveBookmark owners to fabricate. Native ClearOtherMarkPos and ordered MarkBase accessors operate on actual owned positions; collapsed GetOtherMarkPos access is outside the source guarantee and no exception/UB parity is claimed. Current source WRITER333/334 are preserved. No complete class/module/ABI certificate or whole-goal completion; actual caption DeleteSection/PaM correction, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required.
 id_source: "generated"
 ---
 ## Summary
@@ -5271,6 +5330,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T15:32:58.718Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML49 verified:184related cases/11files, final13mark-range scenarios, app types and affected static/provenance/registry gates pass. Parent incomplete: caption section/PaM deletion, table grammar/layout, RTF direction export and final filter/UI audit remain.
+Attempts: 60
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:32:58.087Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5327,6 +5416,13 @@ HTML48 checkpoint (parent incomplete):
 - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html48-lint-closure.txt/html48-format-closure.txt.
 - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html48-provenance-final.txt (1927modules), html48-boundaries-final.txt (1926sources/10666imports/229edges), html48-registry-final.txt (0semantic violations), html48-jsdoc-final.txt (4330sources), html48-size-final.txt (4334files), html48-tree-final.txt (115paths/32retiredroots).
 - Scope review: HTML48 matrix explicitly records actual borrowed-index substrate and remaining caption DeleteSection/position correction, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit. No full suite, GC timing/ABI certificate or parent completion claim.
+
+HTML49 checkpoint (parent incomplete):
+- Command: focused Vitest commands in html49-focused.txt/html49-focused-final.txt/html49-scope-closure.txt. Result: pass. Evidence:184cases/11files on final runtime;13fresh final source-owned mark-range scenarios additionally pass with equality-reference assertions. Scope: real range deletion/UNO endpoint expulsion, original start/end boundary predicates, cross-cell collapse, ordered getters, actual bookmark/history/HTML/native-import/Markdown/TXT/RTF/document-I/O consumers.
+- Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html49-types-closure.txt exit0. Scope: final application/native mark fixture types.
+- Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html49-lint-final.txt/html49-lint-closure.txt/html49-format.txt/html49-format-closure.txt.
+- Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html49-provenance.txt (1927modules), html49-boundaries.txt (1926sources/10669imports/229edges), html49-registry.txt (0semantic violations), html49-jsdoc.txt (4331sources), html49-size.txt (4335files), html49-tree.txt (115paths/32retiredroots).
+- Scope review: canonical HTML49 matrix entry and WRITER333/334 retain original selected-paragraph-end inclusion and equal-coordinate expanded behavior; old fabricated collapsed other-endpoint fallback is removed. Native source guarantee, not behavior outside IsExpanded precondition, defines the admitted query contract. Current core lacks other mark/redline/SaveBookmark owners; they are not simulated. Full caption section/PaM deletion, table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation remain required. No full-suite or parent completion claim.
 
 ## Rollback Plan
 
@@ -6556,3 +6652,9 @@ HTML48 second focused run:129pass/2failed across8files. The run loaded the two n
 
 HTML48 closure:242unique related scenarios/13files pass; final19native index cases and fresh app types pass after the final Assign returned-reference edit. Native same-node and cross-document pointer assignments, copied/node/array/default/relative overloads, multiple live borrowers, explicit destruction, body/table/row/box removal, structural-versus-content correction, replacement and actual caption owner independence are covered. WeakRef/FinalizationRegistry are real JS borrowed-reference substrate, not a replacement native result provider; explicit Dispose/Assign remain synchronous and native GC/ABI timing is not claimed.
 Next concrete table dependency: original DocumentContentOperationsManager::DeleteSection (cxx2146) deletes bookmarks, corrects all PaMs via GetCorrPosition/PaMCorrAbs, then DelNodes. For a start/end-only range, GetCorrPosition chooses the actual node immediately after the section end, which may itself be structural; do not replace that with a guessed nearest content cursor. Current node-index correction is now native, but actual structural content-position/UNO invalidation and section deletion remain required alongside full table grammar/materialization/layout, RTF default/physical-direction export and final filter/UI reconciliation. Keep the parent incomplete and the goal active.
+
+HTML49 initial changed-source lint rejected two non-null assertions in the new range fixture. Replace them with actual assertion-based array admission; runtime/native behavior is unchanged. Initial html49-lint.txt retained; focused tests and app types are still running on their original exact handles, not restarted.
+
+HTML49 initial focused54cases/5files and app types pass. Header audit additionally exposes an old fabricated GetOtherMarkPos fallback on collapsed UNO marks; pinned IMark.hxx guarantees that getter only when IsExpanded is true. Restore original GetMarkStart/GetMarkEnd/GetMarkStartEnd accessors, preserve exact equality reference ties and use them in the current all-mark comparator. Replace the old collapsed lifetime fixture assertion with native ordered getters instead of certifying undefined source behavior; invalid direct other-endpoint access is outside the admitted precondition. Final current-source tests/types/static gates required after this real fix.
+
+HTML49 closure:184related cases/11files pass, plus final fresh13mark-range scenarios with exact equal-coordinate endpoint reference checks. Final-source app types and all affected static/provenance/registry gates pass. Core inventory confirms no admitted redline/fieldmark/annotation/navigator/SaveBookmark owners to fabricate. Native ClearOtherMarkPos and ordered MarkBase accessors operate on actual owned positions; collapsed GetOtherMarkPos access is outside the source guarantee and no exception/UB parity is claimed. Current source WRITER333/334 are preserved. No complete class/module/ABI certificate or whole-goal completion; actual caption DeleteSection/PaM correction, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required.

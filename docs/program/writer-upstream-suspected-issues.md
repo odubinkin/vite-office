@@ -2785,3 +2785,11 @@ Pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::SplitAttrTab(shared_pt
 ### WRITER332 — standalone CutText append leaves preexisting destination-end indices in place
 
 Pinned `sw/source/core/txtnode/ndtxt.cxx`, three-argument `SwTextNode::CutText`, constructs an append boundary and calls `CutImpl(..., false)`. Consequently the destination text grows while registered indices at its former end do not advance; source indices instead receive the original negative update. This may look like stale destination cursor/bookmark positions if the operation is confused with a join or ordinary insertion. Preserve the original distinction: joins perform their own source-position relocation. The HTML47 regression observes destination index6 while text grows from6to10, and source indices0/2/4 remain on their original node at0. This is an observation of a potentially surprising contract, not a confirmed upstream defect.
+
+### WRITER333 — selected paragraph ends include a mark at the nominal upper boundary
+
+Pinned `sw/source/core/doc/docbm.cxx`, `lcl_Lower`, ordinarily uses a strict content upper bound, but explicitly returns true when the requested end content is the end text node's length. A collapsed bookmark exactly at that paragraph end is therefore included, while the same mark at an interior selected end is excluded. This may look like inconsistent half-open range handling; preserve the source exception. Native HTML49 tests compare selected2..4 and2..6 on six-character text, including both regular bookmarks and internal UNO marks. This is not a confirmed upstream defect.
+
+### WRITER334 — expulsion can preserve an expanded UNO mark with equal endpoints
+
+Pinned `docbm.cxx`, `lcl_FindExpelPosition`/`lcl_FixCorrectedMark`, falls back to the other endpoint when no neighboring content is available. The fix clears the other position only for a cross-cell selection; equal positions in the same context are not enough. `sw/inc/IMark.hxx` defines IsExpanded by presence of its second position, so the result can remain expanded with equal coordinates. This may look like a missing empty-range collapse. Preserve it; HTML49 authors actual extra/body endpoints across fixed-section boundaries and retains the equal-position expanded result. This is not a confirmed upstream defect.

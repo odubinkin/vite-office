@@ -5,7 +5,10 @@ import { SwPaM } from "../crsr/pam";
 import { getUniqueBookmarkName } from "./bookmark-name";
 import { SwPosition } from "../crsr/pam";
 import type { SwDoc } from "./doc";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
+import { SwContentNode, type SwNode } from "../docnode/node";
+import { SwNodes } from "../docnode/nodes";
+import { SwNodeIndex } from "../crsr/pam";
 
 /** One live, named Writer position. Its registered content index follows text edits. */
 export class SwBookmark {
@@ -42,10 +45,7 @@ export class DocumentMarkAccess {
   private readonly m_vAllMarks: (SwBookmark | UnoMark)[] = [];
   /** Original start-order comparator for represented collapsed and UNO marks; cross-reference marks are not in this core family. @param mark - Actual borrowed mark. @returns Native start position. */
   private static MarkStart(mark: SwBookmark | UnoMark): SwPosition {
-    const point = mark.GetMarkPos();
-    return mark instanceof UnoMark && mark.GetOtherMarkPos().compare(point) < 0
-      ? mark.GetOtherMarkPos()
-      : point;
+    return mark instanceof UnoMark ? mark.GetMarkStart() : mark.GetMarkPos();
   }
   /** Original lower_bound insertion puts a new equal-start mark before existing ones. @param mark - Actual borrowed native mark. @returns Nothing. */
   private InsertMarkSorted(mark: SwBookmark | UnoMark): void {
@@ -110,6 +110,66 @@ export class DocumentMarkAccess {
       this.RemoveMark(mark);
       mark.Dispose();
     }
+  }
+  /** Original deleteMarks for current collapsed bookmarks and internal UNO marks, without SaveBookmark capture. Other mark/redline/field families have no current owners. Boundary predicates, UNO start-touch exception, endpoint expulsion, cross-cell collapse and deferred reverse deletion retain source behavior. @param start - Original start node. @param end - Original end node. @param startContent - Optional native start content. @param endContent - Optional native end content. @param isReplace - Original replacement boundary policy. @returns Nothing. */
+  public DeleteMarks(
+    start: SwNode,
+    end: SwNode,
+    startContent?: number,
+    endContent?: number,
+    isReplace = false,
+  ): void {
+    const deleted: (SwBookmark | UnoMark)[] = [];
+    for (const mark of this.GetAllMarks()) {
+      const point = mark.GetMarkPos(),
+        expanded = mark instanceof UnoMark && mark.IsExpanded(),
+        other = expanded ? mark.GetOtherMarkPos() : point;
+      let inside = lcl_GreaterThan(point, start, startContent) && lcl_Lower(point, end, endContent),
+        otherInside =
+          expanded &&
+          lcl_GreaterThan(other, start, startContent) &&
+          lcl_Lower(other, end, endContent);
+      if (
+        endContent !== undefined &&
+        !(isReplace && mark instanceof SwBookmark) &&
+        ((otherInside && point.GetNode() === end && point.GetContentIndex() === endContent) ||
+          (inside && expanded && other.GetNode() === end && other.GetContentIndex() === endContent))
+      )
+        inside = otherInside = true;
+      if (inside && (otherInside || !expanded)) {
+        const remove =
+          !(mark instanceof UnoMark) ||
+          expanded ||
+          startContent === undefined ||
+          point.GetNode() !== start ||
+          point.GetContentIndex() !== startContent;
+        if (remove) deleted.push(mark);
+      } else if (inside !== otherInside && mark instanceof UnoMark) {
+        const position =
+          endContent !== undefined
+            ? new SwPosition(end, endContent)
+            : lcl_FindExpelPosition(start, end, inside ? other : point);
+        try {
+          const changed = inside ? point : other;
+          changed.Assign(position.GetNode(), position.GetContentIndex());
+          if (
+            mark.IsExpanded() &&
+            point.GetNode().FindTableBoxStartNode() !== other.GetNode().FindTableBoxStartNode()
+          ) {
+            if (!otherInside) point.Assign(other.GetNode(), other.GetContentIndex());
+            mark.ClearOtherMarkPos();
+          }
+        } finally {
+          position.Dispose();
+        }
+      }
+    }
+    for (let i = deleted.length; i;) {
+      const mark = deleted[--i];
+      if (mark instanceof UnoMark) this.DeleteUnoMark(mark);
+      else if (mark) this.DeleteMark(mark.GetName());
+    }
+    this.GetAllMarks();
   }
   /** Invalidates API/user mark positions when their canonical document is destroyed. @returns Nothing. */
   public Dispose(): void {
@@ -234,4 +294,40 @@ export class DocumentMarkAccess {
     if (name.length === 0 || name.includes("\u0000"))
       throw new Error("Writer bookmark name is invalid.");
   }
+}
+
+/** Original inclusive lower range boundary, including node-only deletion. @param position - Actual mark position. @param node - Actual start node. @param content - Optional content boundary. @returns Native predicate. */
+function lcl_GreaterThan(position: SwPosition, node: SwNode, content?: number): boolean {
+  return content === undefined
+    ? position.GetNodeIndex() >= node.GetIndex()
+    : position.GetNodeIndex() > node.GetIndex() ||
+        (position.GetNode() === node && position.GetContentIndex() >= content);
+}
+/** Original upper range boundary includes an explicitly selected text-paragraph end. @param position - Actual mark position. @param node - Actual end node. @param content - Optional content boundary. @returns Native predicate. */
+function lcl_Lower(position: SwPosition, node: SwNode, content?: number): boolean {
+  if (position.GetNodeIndex() < node.GetIndex()) return true;
+  if (position.GetNode() !== node || content === undefined) return false;
+  return (
+    position.GetContentIndex() < content || (node instanceof SwTextNode && content === node.Len())
+  );
+}
+/** Original endpoint expulsion prefers end content/start of following content, then preceding content end, then the surviving opposite endpoint. @param start - Native deletion start. @param end - Native deletion end. @param other - Actual surviving endpoint. @returns Owned native correction position. */
+function lcl_FindExpelPosition(start: SwNode, end: SwNode, other: SwPosition): SwPosition {
+  if (end instanceof SwContentNode) return new SwPosition(end);
+  const after = new SwNodeIndex(end),
+    before = new SwNodeIndex(start);
+  try {
+    const next = SwNodes.GoNext(after);
+    if (next) return new SwPosition(next);
+    const previous = SwNodes.GoPrevious(before);
+    return previous ? new SwPosition(previous, previous.Len()) : other.clone();
+  } finally {
+    after.Dispose();
+    before.Dispose();
+  }
+}
+/** Original DelBookmarks node-only consumer used by DeleteSection; saved-bookmark/redline capture belongs to other unrepresented consumer profiles. Same-node node-only ranges are ignored, as upstream. @param start - Actual deletion start. @param end - Actual exclusive end node. @returns Nothing. */
+export function DelBookmarks(start: SwNode, end: SwNode): void {
+  if (start.GetIndex() >= end.GetIndex()) return;
+  start.GetNodes().GetDoc().GetIDocumentMarkAccess().DeleteMarks(start, end);
 }
