@@ -71,6 +71,7 @@ export class SwHTMLParser extends HTMLParser {
   private readonly m_pNumRuleInfo = new SwHTMLNumRuleInfo();
   private readonly breakIterator = new BreakIteratorImpl();
   private m_nOpenParaToken = T.NONE;
+  protected m_nDefListDeep = 0;
   private m_bNoParSpace = false;
   private m_bDocInitialized = false;
   private m_bInTitle = false;
@@ -125,6 +126,7 @@ export class SwHTMLParser extends HTMLParser {
   override CallParser(): SvParserState {
     const result = super.CallParser();
     if (result === SvParserState.Accepted) {
+      while (this.GetNumInfo().GetNumRule()) EndNumberBulletList(this);
       while (this.m_aContexts.length) {
         const context = this.PopContext();
         if (context) this.EndContext(context);
@@ -423,8 +425,8 @@ export class SwHTMLParser extends HTMLParser {
     if (count) node.EraseText(end - count, count);
     return count;
   }
-  /** Original append spacing and open-character range splitting over native script services. @param mode - Source spacing mode. @returns Append result. */
-  AppendTextNode(mode = A.AM_NORMAL): boolean {
+  /** Original append spacing and open-character range splitting over native script services. @param mode - Source spacing mode. @param updateNum - Apply native continuation numbering. @returns Append result. */
+  AppendTextNode(mode = A.AM_NORMAL, updateNum = true): boolean {
     const stripped = this.StripTrailingLF();
     if ((mode === A.AM_NOSPACE || mode === A.AM_SOFTNOSPACE) && stripped > 1) mode = A.AM_SPACE;
     this.m_aParaAttrs.length = 0;
@@ -510,7 +512,10 @@ export class SwHTMLParser extends HTMLParser {
           attr = next;
         }
       }
-      if (!this.GetNumInfo().GetDepth()) this.GetTextNode().ResetAttr(H.RES_PARATR_NUMRULE);
+      if (updateNum) {
+        if (this.GetNumInfo().GetDepth()) SetNodeNum(this, this.GetNumInfo().GetLevel());
+        else this.GetTextNode().ResetAttr(H.RES_PARATR_NUMRULE);
+      }
       this.SetAttr();
       return result;
     } finally {
@@ -694,6 +699,7 @@ export class SwHTMLParser extends HTMLParser {
       return;
     }
     if (this.m_bInTitle || this.bReadScript || this.bReadStyle) return;
+    if (DispatchNumberBulletList(this, token)) return;
     switch (token) {
       case T.TEXTTOKEN:
       case T.CDATA: {
@@ -932,3 +938,5 @@ export class SwHTMLParser extends HTMLParser {
     }
   }
 }
+
+import { DispatchNumberBulletList, EndNumberBulletList, SetNodeNum } from "./htmlnumreader";

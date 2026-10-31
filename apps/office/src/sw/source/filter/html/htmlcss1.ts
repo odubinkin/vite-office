@@ -93,7 +93,7 @@ export class SwCSS1Parser extends SvxCSS1Parser {
     this.m_bLinkCharFormatsSet = true;
   }
   /** Consumed native GetCharFormatFromPool wrapper for insertion into an existing document. @param id - Original pool identity. @returns Borrowed document style. */
-  private GetCharFormatFromPool(id: P): SwCharFormat {
+  GetCharFormatFromPool(id: P): SwCharFormat {
     const format = this.doc.GetCharFormatFromPool(id);
     if (!format) throw new Error("assert(character format pool identity)");
     return format;

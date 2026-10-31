@@ -19,13 +19,15 @@
         "apps/office/src/svtools/inc/htmltokn.ts",
         "apps/office/src/svtools/source/svhtml/parhtml.test.ts",
         "apps/office/src/svtools/source/svrtf/svparser.test.ts",
-        "scripts/generate-html-parser-tables.py"
+        "scripts/generate-html-parser-tables.py",
+        "apps/office/src/sw/source/filter/html/swhtml.numbering.integration.test.ts"
       ],
-      "justification": "Native HTML import foundation for Markdown raw HTML: pinned token/option/entity/color tables, mutable option scanners, text/entity/quote/whitespace automaton, raw script/style/comment scanner, paired-token/tag/EOF scanner, PRE/listing/XMP filters, and shared SvParser incremental character conversion, ring replay and saved state. Uses existing SAL converter functions and the native descriptor/context public API; no browser DOM grammar. Source-only tests currently pass; compiled upstream lexer differential and Writer HTMLReader integration remain pending. The memory stream has no asynchronous device, redline/layout or native allocation lifetime. Its BOM-only probe covers the internal UTF-8 HTML data supplied by Markdown; a general external HTML/ICU encoding detector is not claimed.",
+      "justification": "Native HTML import foundation for Markdown raw HTML: pinned token/option/entity/color tables, mutable option scanners, text/entity/quote/whitespace automaton, raw script/style/comment scanner, paired-token/tag/EOF scanner, PRE/listing/XMP filters, and shared SvParser incremental character conversion, ring replay and saved state. Uses existing SAL converter functions and the native descriptor/context public API; no browser DOM grammar. Source-only tests currently pass; compiled upstream lexer differential and Writer HTMLReader integration remain pending. The memory stream has no asynchronous device, redline/layout or native allocation lifetime. Its BOM-only probe covers the internal UTF-8 HTML data supplied by Markdown; a general external HTML/ICU encoding detector is not claimed. Original getOnToken validates NONE/ONOFF range before clearing the close bit; native HTML list dispatch guards unpaired tokens before calling it. No unrestricted token coercion is added.",
       "knownViolations": [],
       "localSymbols": [
         "HtmlTokenId",
-        "HtmlOptionId"
+        "HtmlOptionId",
+        "getOnToken"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/svtools/htmltokn.h",

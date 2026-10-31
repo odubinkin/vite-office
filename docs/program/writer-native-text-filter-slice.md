@@ -1250,3 +1250,35 @@ actual export/import test retains it. This closes the identified current flag an
 frame-comparison export gaps without claiming complete native page-layout ABI.
 Remaining HTML/Markdown paths and current-model/UI audit still prevent full goal
 completion. Work stops after verification of this block at the user's request.
+
+
+### S3HW1E resumed: native HTML list reader for Markdown blocks
+
+Work resumed after the requested merge pause. The missing HTML numbering reader
+now follows htmlnumreader.cxx on the same SwHTMLParser, actual HTMLAttrContext
+stack and borrowed SwHTMLNumRuleInfo. UL/OL/DIR/MENU and LI/LH token cases create
+real document rules and native paragraph numbering items. Source new-level
+geometry, configured bullet font, explicit legacy TYPE glyphs, first-option
+precedence, per-level START and per-item VALUE, uncounted continuations, orphan
+items and EOF closure are retained. Conflicting sibling nested ordered/bullet
+lists allocate a new rule, copy parent formats and restore the saved parent rule
+on close, as in the pinned HTML reader. This differs from the separate native
+Markdown callback reader's first-format reuse behavior.
+
+AppendTextNode now retains original updateNum control and assigns the active rule
+to uncounted continuation paragraphs. Outer close fills unused levels. Temporary
+native format clones are destroyed after copying them into actual rules. CSS
+list-style-type produces the source independent number/bullet flags; list-level
+margin/text-indent adjustment precedes ordinary deferred context attributes.
+The original getOnToken helper validates its paired-token domain; ordinary text
+and other unpaired tokens do not enter it.
+
+Tests exercise actual HTML bytes, Markdown raw-HTML callbacks and Worker document
+transport. Source quirks TYPE=1 cancelling a fresh format, CSS bullet flags on an
+ordered list and folded whitespace after LI are recorded as WRITER289-291 and
+preserved. This block does not implement graphic bullets or positioned/protected
+table contexts without genuine current owners. Existing AddNumRule binds the
+consumed new unique-rule insertion; general reader undo/MakeNumRule copy and
+ChgNumRuleFormats operations are not certified by that binding. Definition-list
+producers, represented raw HTML tables, remaining HTML paths and full current-model
+filter/UI audit still require work; full goal completion remains unproven.

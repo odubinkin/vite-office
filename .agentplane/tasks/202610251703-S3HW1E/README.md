@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 226
+revision: 229
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T18:01:07.525Z"
+  updated_at: "2026-10-31T07:05:08.897Z"
   updated_by: "CODER"
-  note: "Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, format, provenance/registry/boundary/tree/docs checks pass. WRITER288 preserves conditional native sharing loss. Parent goal remains incomplete; user requested pause after this block. Evidence: html28 logs and Findings."
-  attempts: 39
+  note: "HTML list reader checkpoint passes1110 related tests/58files plus final26 actual-model cases; required static checks pass. Original HTML list states/options/CSS, Markdown callbacks/Worker/native export labels are connected; WRITER289-291 retained. Full goal incomplete pending definition lists/raw HTML tables and current-core/UI audit. Evidence: html29 logs and Findings."
+  attempts: 40
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -629,8 +632,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T07:05:08.897Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML list reader checkpoint passes1110 related tests/58files plus final26 actual-model cases; required static checks pass. Original HTML list states/options/CSS, Markdown callbacks/Worker/native export labels are connected; WRITER289-291 retained. Full goal incomplete pending definition lists/raw HTML tables and current-core/UI audit. Evidence: html29 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-31T07:05:22.815Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T18:01:24.880Z"
+doc_updated_at: "2026-10-31T07:05:22.815Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1523,6 +1539,36 @@ sections:
     Attempts: 39
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:46.578Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-31T07:05:08.897Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML list reader checkpoint passes1110 related tests/58files plus final26 actual-model cases; required static checks pass. Original HTML list states/options/CSS, Markdown callbacks/Worker/native export labels are connected; WRITER289-291 retained. Full goal incomplete pending definition lists/raw HTML tables and current-core/UI audit. Evidence: html29 logs and Findings.
+    Attempts: 40
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:04:59.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2459,6 +2505,20 @@ sections:
     - Result: pass. Evidence: html28-types/lint/format-check/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4262authored; provenance1889runtime(1677mapped/182browser/30infra); boundary1888sources/10350imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning. Full all-app suite is not repeated for this module-local block.
     - Process observations: read-only lookup guessed unostyle.test.ts and editeng/inc/boxitem.ts paths which do not exist; recovered via route oracle and actual file inventory, no scope expansion. Preflight and route sessions were awaited to completion before execution. No verification failure occurred in this block.
     - Stop rule: user requested stopping after the current task/block. Commit the verified current block and pause the goal. The parent S3HW1E goal remains incomplete, so it must not be marked finished. Resume with remaining native page producer/layout audit where represented, HTML/Markdown and current-model/UI completion audit after the user resumes. No next block starts before then.
+
+    ### HTML29: resumed native HTML numbering reader for Markdown blocks
+
+    - User resumed implementation after the requested pause; goal is active. Current Writer checkout/branch was clean before this block and contained previous verified checkpoints. Owner CODER and existing approved direct route retained; no network, global/outside-repo reads, publication, new subagents or intentional file UI/autosave/recovery changes.
+    - Scope: new original htmlnumreader.ts owns UL/OL/DIR/MENU and LI/LH transitions on actual SwHTMLParser contexts, borrowed SwHTMLNumRuleInfo, SwNumRule/SwNumFormat and SwNumRuleItem. Original per-level defaults, configured bullet fonts, legacy TYPE glyphs, reverse duplicate options, unsigned starts/restarts, counted/uncounted continuation state, sibling type-conflict saved rule, orphan nodes, depth/level separation, outer completion and EOF closure are connected. All temporary native formats are explicitly destroyed after copied insertion. Original AppendTextNode updateNum flag is restored. CSS list-style-type fills independent native number/bullet flags and list-level geometry phase runs before ordinary context attrs. Native getOnToken validates NONE/ONOFF domain; dispatch guards ordinary tokens first.
+    - Source/API boundary: actual AddNumRule/new SwNumRule binds the consumed native MakeNumRule new unique-name profile, with the existing document-owned list insertion. This does not certify general MakeNumRule copy/undo or ChgNumRuleFormats APIs. Graphic bullets, positioned/protected table contexts, definition-list producers, full table/HTML reader and layout services remain unrepresented or pending. No new fake model/service or broad module/ABI status promotion. WRITER289-291 document and retain fresh TYPE=1 format cancellation, context-dependent CSS bullet behavior and exact LI trailing-space strings.
+    - Initial failures/corrections: first typecheck found missing original shared getOnToken helper and private-member unused checking across a friend-style module; ported original checked helper and used a protected native state field. JSDoc required two inline callback comments. First22-case test run had21pass/1fail because its Markdown fixture expected text without the native folded inter-tag space; inspected pinned swhtml.cxx TEXTTOKEN/AppendTextNode and htmlnumreader.cxx LI close before correcting exact expected strings. Added separate required whitespace and source-quirk cases. Recomputed safe route after failed checks/empty read lookups; no acceptance rule or scope drift.
+    - Command: `npm run test:writer -- src/sw/source/filter/html/swhtml.numbering.integration.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence: final26tests/1file, html29-numbering-tests-final.txt (earlier complete25-case pass retained). Scope: real HTML/model list behavior, Markdown HTML callback path, Worker graph restore and native Markdown writer labels3/4. Tests inspect real rule identity, native formats, starts, counted state, exact text and transported owners, not a substitute block tree.
+    - Command: `npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence:1110tests/58files, duration85.26s; html29-related-tests.txt. Scope: existing native HTML/CSS, Markdown, TXT, RTF reader/export and document IO. The final source adjustment only preserves the original explicit uint8 level cast at unsigned-depth overflow; the final26-case suite and typecheck run after it. No full all-app test replay.
+    - Commands: `npm run typecheck`; targeted `npm exec eslint -- <seven changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+    - Result: pass. Evidence: html29-types-last/lint-last/format-last/docs-last/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4264authored; provenance1890runtime(1678mapped/182browser/30infra); boundaries1889sources/10364imports/227edges; Writer semanticViolationCount0. Doctor0errors and the existing managed-shim warning; hooks unchanged. Authored size review candidates are informational, not gate failures.
+    - Remaining: native definition-list and represented raw HTML table paths, other uncovered HTML/current-core producers and full requirements/UI completion audit. Previous native page-layout admission limitations remain explicit. The parent task and full goal are not finished; continue work without another user approval within the approved scope.
 id_source: "generated"
 ---
 ## Summary
@@ -3362,6 +3422,36 @@ Note: Verified first-page RTF checkpoint:218 tests/12files, typecheck, lint, for
 Attempts: 39
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-30T18:00:46.578Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-31T07:05:08.897Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML list reader checkpoint passes1110 related tests/58files plus final26 actual-model cases; required static checks pass. Original HTML list states/options/CSS, Markdown callbacks/Worker/native export labels are connected; WRITER289-291 retained. Full goal incomplete pending definition lists/raw HTML tables and current-core/UI audit. Evidence: html29 logs and Findings.
+Attempts: 40
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:04:59.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -4302,3 +4392,17 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Result: pass. Evidence: html28-types/lint/format-check/docs/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4262authored; provenance1889runtime(1677mapped/182browser/30infra); boundary1888sources/10350imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning. Full all-app suite is not repeated for this module-local block.
 - Process observations: read-only lookup guessed unostyle.test.ts and editeng/inc/boxitem.ts paths which do not exist; recovered via route oracle and actual file inventory, no scope expansion. Preflight and route sessions were awaited to completion before execution. No verification failure occurred in this block.
 - Stop rule: user requested stopping after the current task/block. Commit the verified current block and pause the goal. The parent S3HW1E goal remains incomplete, so it must not be marked finished. Resume with remaining native page producer/layout audit where represented, HTML/Markdown and current-model/UI completion audit after the user resumes. No next block starts before then.
+
+### HTML29: resumed native HTML numbering reader for Markdown blocks
+
+- User resumed implementation after the requested pause; goal is active. Current Writer checkout/branch was clean before this block and contained previous verified checkpoints. Owner CODER and existing approved direct route retained; no network, global/outside-repo reads, publication, new subagents or intentional file UI/autosave/recovery changes.
+- Scope: new original htmlnumreader.ts owns UL/OL/DIR/MENU and LI/LH transitions on actual SwHTMLParser contexts, borrowed SwHTMLNumRuleInfo, SwNumRule/SwNumFormat and SwNumRuleItem. Original per-level defaults, configured bullet fonts, legacy TYPE glyphs, reverse duplicate options, unsigned starts/restarts, counted/uncounted continuation state, sibling type-conflict saved rule, orphan nodes, depth/level separation, outer completion and EOF closure are connected. All temporary native formats are explicitly destroyed after copied insertion. Original AppendTextNode updateNum flag is restored. CSS list-style-type fills independent native number/bullet flags and list-level geometry phase runs before ordinary context attrs. Native getOnToken validates NONE/ONOFF domain; dispatch guards ordinary tokens first.
+- Source/API boundary: actual AddNumRule/new SwNumRule binds the consumed native MakeNumRule new unique-name profile, with the existing document-owned list insertion. This does not certify general MakeNumRule copy/undo or ChgNumRuleFormats APIs. Graphic bullets, positioned/protected table contexts, definition-list producers, full table/HTML reader and layout services remain unrepresented or pending. No new fake model/service or broad module/ABI status promotion. WRITER289-291 document and retain fresh TYPE=1 format cancellation, context-dependent CSS bullet behavior and exact LI trailing-space strings.
+- Initial failures/corrections: first typecheck found missing original shared getOnToken helper and private-member unused checking across a friend-style module; ported original checked helper and used a protected native state field. JSDoc required two inline callback comments. First22-case test run had21pass/1fail because its Markdown fixture expected text without the native folded inter-tag space; inspected pinned swhtml.cxx TEXTTOKEN/AppendTextNode and htmlnumreader.cxx LI close before correcting exact expected strings. Added separate required whitespace and source-quirk cases. Recomputed safe route after failed checks/empty read lookups; no acceptance rule or scope drift.
+- Command: `npm run test:writer -- src/sw/source/filter/html/swhtml.numbering.integration.test.ts --maxWorkers 1`.
+- Result: pass. Evidence: final26tests/1file, html29-numbering-tests-final.txt (earlier complete25-case pass retained). Scope: real HTML/model list behavior, Markdown HTML callback path, Worker graph restore and native Markdown writer labels3/4. Tests inspect real rule identity, native formats, starts, counted state, exact text and transported owners, not a substitute block tree.
+- Command: `npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts --maxWorkers 1`.
+- Result: pass. Evidence:1110tests/58files, duration85.26s; html29-related-tests.txt. Scope: existing native HTML/CSS, Markdown, TXT, RTF reader/export and document IO. The final source adjustment only preserves the original explicit uint8 level cast at unsigned-depth overflow; the final26-case suite and typecheck run after it. No full all-app test replay.
+- Commands: `npm run typecheck`; targeted `npm exec eslint -- <seven changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+- Result: pass. Evidence: html29-types-last/lint-last/format-last/docs-last/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4264authored; provenance1890runtime(1678mapped/182browser/30infra); boundaries1889sources/10364imports/227edges; Writer semanticViolationCount0. Doctor0errors and the existing managed-shim warning; hooks unchanged. Authored size review candidates are informational, not gate failures.
+- Remaining: native definition-list and represented raw HTML table paths, other uncovered HTML/current-core producers and full requirements/UI completion audit. Previous native page-layout admission limitations remain explicit. The parent task and full goal are not finished; continue work without another user approval within the approved scope.

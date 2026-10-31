@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/htmlnum.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.numbering.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -36,7 +40,8 @@
     ],
     "preservedResponsibilities": [
       "Original default numbering pointer/depth/restart/numbered fields and MAXLEVEL USHRT_MAX start sentinels; copied state retains real SwNumRule identity. The consumed parser uses this actual owner for SetAttr_ numbering admission. Node-based export construction and restart comparison are unconsumed and unported.",
-      "B8TCAE checks default USHRT_MAX start values, guarded decrement, unsigned16 increment wrap, MAXLEVEL clamp, actual borrowed SwNumRule identity, independent copied starts and Clear through public methods. Rule ownership remains with the actual caller. No document-node export constructor, forged private state or full native export parity is claimed."
+      "B8TCAE checks default USHRT_MAX start values, guarded decrement, unsigned16 increment wrap, MAXLEVEL clamp, actual borrowed SwNumRule identity, independent copied starts and Clear through public methods. Rule ownership remains with the actual caller. No document-node export constructor, forged private state or full native export parity is claimed.",
+      "S3HW1E HTML list checkpoint: original htmlnumreader token/context handlers now consume the actual SwHTMLNumRuleInfo and document-owned SwNumRule/SwNumFormat values. New-level defaults, native explicit TYPE glyphs, START/VALUE unsigned-short narrowing, numbered versus LH/continuation state, sibling ordered/bullet conflict with saved parent rule, nested depth clamping, outer unused-level completion, unmatched/orphan and EOF paths are connected. Original AppendTextNode updateNum control is preserved. CSS list-style-type fills the source independent number/bullet flags; new-level margin/text-indent conversion occurs before normal context insertion. Actual Markdown HTML callbacks and Worker transport are covered. All temporary native formats are explicitly disposed. Existing AddNumRule ingress binds the consumed MakeNumRule new/unique-name profile; general undo/ChgNumRuleFormats, graphic bullets, positioned contexts, definition-list producers and full native HTML/table reader remain unverified or pending. Source TYPE cancellation, context-dependent CSS and LI whitespace findings WRITER289-291 are retained. No broad module/ABI confidence promotion, browser file UI/autosave/recovery change or goal completion."
     ],
     "omittedResponsibilities": [
       "This consumed fragment is not full native HTMLReader/Writer parity; the omitted producers above remain explicit task work."

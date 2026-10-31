@@ -2508,3 +2508,25 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: the FirstIsShared setter searches for an existing header or footer set. When neither exists, its shared-first case does not create either set or write the core sharing flag. The getter can likewise return an empty Any. Export independently reads SwPageDesc::IsFirstShared and can emit TITLEPG without a follow chain.
 - Impact: in the represented no-header/footer profile, an authored unshared-first bit can emit TITLEPG and return to the ordinary shared default after import. This is a conditional source-control-flow finding, not a claim about every desktop document with inactive headers.
 - Local behavior: preserve export of the original bit and do not introduce a direct TITLEPG-to-core-bit bypass on import. `rtfexport.first-page.test.ts` verifies this loss alongside initial/later emission, actual frame-item chain admission, side restrictions and independent sharing flags. Full header/footer services remain outside the represented model.
+
+
+### WRITER289 — Ordered TYPE=1 can cancel installation of a fresh HTML level format
+
+- Source: `sw/source/filter/html/htmlnumreader.cxx`, NewNumberBulletList TYPE switch and bChangeNumFormat checks.
+- Observation: new-level defaults first set bChangeNumFormat=true, but ordered TYPE resets it to false for any first character other than A/a/I/i, including the ordinary-looking value1. Without START or CSS setting it again, the new default format is not copied into the rule.
+- Impact: fallback numbering can still look Arabic while the explicit level format and label character style remain absent; outer-close completion also has no reference level to copy.
+- Local behavior: retain the flag overwrite. `swhtml.numbering.integration.test.ts` checks absent explicit level/character style and Arabic fallback for TYPE=1. Do not treat1 as an additional recognized TYPE branch.
+
+### WRITER290 — HTML CSS bullet keywords do not necessarily change an ordered list's numbering type
+
+- Source: `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_list_style_type; `htmlnumreader.cxx`, new-level CSS application.
+- Observation: the CSS parser sets independent numbering and bullet flags. The list reader applies the numbering type only for m_bNumbering and the glyph only for m_bBullet.
+- Impact: an OL with list-style-type:disc can retain Arabic numbering while storing the legacy disc glyph. The glyph is present in the format but does not itself force bullet numbering.
+- Local behavior: retain both independent assignments. Tests inspect the actual native numbering type and glyph; do not reinterpret CSS using browser list rendering.
+
+### WRITER291 — Folded whitespace after LI can remain in the preceding item text
+
+- Source: `sw/source/filter/html/swhtml.cxx`, TEXTTOKEN/CDATA and AppendTextNode; `htmlnumreader.cxx`, EndNumberBulletListItem.
+- Observation: explicit LI close ends attributes without immediately appending a paragraph. A subsequent folded newline-space token is inserted after the item text; the next item then appends. AppendTextNode strips trailing hard line feeds, not ordinary spaces.
+- Impact: the native underlying paragraph string can contain a trailing space even though visual layout may hide it. A Markdown raw-HTML block follows the same reader path.
+- Local behavior: preserve the actual space in HTML and transported Markdown paragraphs. Tests use exact strings instead of trimming input or output to conceal the native state.

@@ -776,3 +776,10 @@ export enum HtmlOptionId {
   /** Native END identity. */
   END = 394,
 }
+
+/** Original paired-token conversion accepts NONE and ONOFF tokens only. @param token - Original token. @returns Opening token, or throws for an unpaired token. */
+export function getOnToken(token: HtmlTokenId): HtmlTokenId {
+  if (token !== HtmlTokenId.NONE && token < HtmlTokenId.ONOFF_START)
+    throw new Error("Assertion failed!");
+  return (token & ~1) as HtmlTokenId;
+}
