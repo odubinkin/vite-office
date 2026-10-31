@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/htmltab.attribute-scope.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.caption-reader.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -25,16 +29,20 @@
     },
     "upstreamPath": "sw/source/filter/html/htmltab.cxx",
     "localSymbols": [
-      "CaptionSaveStruct"
+      "CaptionSaveStruct",
+      "BeginTableCaption",
+      "EndTableCaption"
     ],
     "upstreamSymbols": [
-      "CaptionSaveStruct"
+      "CaptionSaveStruct",
+      "BuildTableCaption"
     ],
     "preservedResponsibilities": [
-      "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition."
+      "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition.",
+      "S3HW1E HTML55: original fresh BuildTable construction block now reads actual lexer options, applies CSS both-auto-margin parent centering, preserves explicit ALIGN and reverse STYLE precedence, inserts the real table-ID bookmark and installs the actual registered HTMLTable on the parser. Original caption begin/end blocks save actual attributes/context/numbering/position, construct the real caption section, open native centered adjustment, preserve source any-bottom duplicate ALIGN behavior, close local contexts, strip trailing linefeeds/paragraphs, append the required empty top-level paragraph, apply deferred attributes, restore stacks/numbering and finally restore the saved point. Native CSS1 length enum values0/1/2/3 replace an unnamed source constant at the new table consumer. Existing body/inline/UTF8 producers and native document nodes are used, without another parser, table model, token provider, layout result or measurement. These are explicit source construction/lifecycle responsibility fragments, not the completed BuildTable/BuildTableCaption token loops: recursive table/cell/row/caption orchestration, native pending-device stack (current streams are synchronous), node-range caption placement, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required. Whole module/default/contract/behavior/ABI parity remains unverified; browser file/autosave/recovery deviations stay unchanged."
     ],
     "omittedResponsibilities": [
-      "Original production BuildTableCaption token orchestration, native pending-device save-stack ownership, table grammar/materialization and automatic layout remain required. This record covers the actual synchronous caption save owner only; whole module/ABI/desktop parity is unverified."
+      "Original BuildTableCaption token loop, nested table producer, native pending-device save-stack ownership, final caption placement, table grammar/materialization and automatic layout remain required. This record verifies source save and begin/end lifecycle components only; whole module/ABI/desktop parity is unverified."
     ],
     "filenameDivergence": {
       "localPath": "apps/office/src/sw/source/filter/html/htmltab.caption.ts",

@@ -71,6 +71,7 @@ export class SwHTMLParser extends HTMLParser {
   declare public eState: SvParserState;
   m_pSttNdIdx: SwNodeIndex | null = null;
   m_pTargetCharAttrs: SfxItemSet | null = null;
+  m_xTable: HTMLTable | null = null;
   readonly m_aTables: HTMLTable[] = [];
   readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
   /** Original parser table registration. @param table - Borrowed native intermediate table. @returns Nothing. */
@@ -228,6 +229,7 @@ export class SwHTMLParser extends HTMLParser {
   }
   /** Releases remaining native node-index/item owners after success or failure, without deleting borrowed document/cursor. @returns Nothing. */
   SourceDispose(): void {
+    this.m_xTable = null;
     this.m_pTargetCharAttrs?.Dispose();
     this.m_pTargetCharAttrs = null;
     this.m_pSttNdIdx?.Dispose();

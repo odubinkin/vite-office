@@ -15,3 +15,11 @@ export enum SvxCSS1PageBreak {
   LEFT = 4,
   RIGHT = 5,
 }
+
+/** Original CSS1 length family, including distinct automatic margins used by native table construction. */
+export enum SvxCSS1LengthType {
+  SVX_CSS1_LTYPE_NONE = 0,
+  SVX_CSS1_LTYPE_AUTO = 1,
+  SVX_CSS1_LTYPE_TWIP = 2,
+  SVX_CSS1_LTYPE_PERCENTAGE = 3,
+}

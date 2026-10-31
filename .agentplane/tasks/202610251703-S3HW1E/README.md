@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 374
+revision: 378
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T16:36:48.944Z"
+  updated_at: "2026-10-31T16:49:46.854Z"
   updated_by: "CODER"
-  note: "HTML54 checkpoint passes205unique cases/16files plus current app/static gates. Native section deletion and caption wrapper are connected over actual owners; remaining caption/table grammar/layout and RTF/export audit keep parent incomplete."
-  attempts: 65
+  note: "HTML55 checkpoint passes239unique cases/14files and app/static gates. Native fresh-table construction and caption lifecycle components are complete at their explicit source boundary; production recursive token loops/materialization and remaining format work keep parent incomplete."
+  attempts: 66
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1045,8 +1048,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T16:49:46.854Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML55 checkpoint passes239unique cases/14files and app/static gates. Native fresh-table construction and caption lifecycle components are complete at their explicit source boundary; production recursive token loops/materialization and remaining format work keep parent incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T16:50:05.047Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T16:37:06.686Z"
+doc_updated_at: "2026-10-31T16:50:05.047Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2741,6 +2757,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:49:46.854Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML55 checkpoint passes239unique cases/14files and app/static gates. Native fresh-table construction and caption lifecycle components are complete at their explicit source boundary; production recursive token loops/materialization and remaining format work keep parent incomplete.
+    Attempts: 66
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:49:45.781Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2855,6 +2901,18 @@ sections:
     - Command (cwd repository): node_modules/.bin/eslint changed6source/test files --max-warnings 0; node_modules/.bin/prettier --check same6files ->pass (html54-eslint-final.txt, html54-prettier.txt).
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html54-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime source and dependency/ownership evidence gates, not whole native behavior certification.
     - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+    ### HTML55 table construction and caption lifecycle checkpoint
+
+    HTML55 checkpoint:239unique related cases/14files pass (42caption/save/CSS cases/4files,121final lifecycle/options/columns/CSS/section-deletion cases/6files minus14repeated caption cases,90TXT/RTF/Markdown/document-I/O cases/5files). Final16fresh real lexer/virtual-consumer cases include CSS auto-margin centering, explicit ALIGN and first-STYLE precedence, real ID bookmark, default/bottom/duplicate caption alignment, actual centered/no-space caption paragraphs, restored inline attributes, trailing linefeed/empty caption and UTF8 text. App types, changed5source/test ESLint/Prettier, provenance1935runtime/1722mapped/182browser/31infra, Writer registry0semantic violations, boundaries1934runtime/10729imports/229edges, JSDoc4345files, file-size4349files, source-tree115paths/32retired roots and diff gates pass. WRITER337 preserves original one-way bottom flag for duplicate caption ALIGN. Fresh table construction and caption begin/end are explicit native source responsibility fragments, not the completed recursive BuildTable/BuildTableCaption token loops. The real memory stream cannot yield pending device input; no fake pending provider or table/layout/measurement result is supplied. Recursive table/cell/row/caption orchestration, native pending-device ownership where represented, caption node-range placement, table materialization/layout, RTF direction export and final format/UI audit remain required; parent task and goal stay incomplete.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/html/htmlcss1.table-styles.test.ts src/sw/source/filter/html/svxcss1.paragraph.test.ts ->42pass/4actual files (html55-closure-tests.txt); the nonexistent fifth selector is superseded by real CSS consumer selections below, not counted as verified.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/core/doc/native-section-deletion.test.ts ->121pass/6files (html55-related-tests.txt), including16fresh final caption/table construction cases. Scope: actual byte/lexer/virtual-consumer and document/context/attribute/numbering/section owners, not production table grammar replacement.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts ->90pass/5files (html55-filter-tests.txt). Scope: existing native formats and document-I/O consumers.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html55-types-verified.txt).
+    - Command (cwd repository): node_modules/.bin/eslint changed5source/test files --max-warnings 0; node_modules/.bin/prettier --check same5files ->pass (html55-eslint-verified.txt, html55-prettier.txt).
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html55-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime/source registrations and dependency gates, not whole native behavior certification.
+    - No final selected actual test is failing or skipped; the absent guessed selector is explicitly replaced above. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4107,6 +4165,10 @@ sections:
     HTML54 initial46cases:40pass/6fail; all6new failures are a fixture requesting an unsupported Standard string ID rather than the actual default collection. Use GetDfltTextFormatColl with its real source owner. Initial app types also catch an erased runtime import used in instanceof and the existing document manager accessor spelling; use the real SwContentNode import and GetDocumentContentOperationsManager rather than inventing another manager. Source review additionally confirms original caption callers restore their standalone parser cursor before DeleteSection: correct the fresh wrapper fixture and preserve the native content-index destructor assertion instead of silently moving arbitrary raw positions. Final corrected46cases and extended61cases pass. No new suspected upstream bug is identified; known original structural correction/invalidating behavior is retained.
 
     HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
+
+    HTML55 initial36cases:32pass/4fail, all new component fixtures. The fresh UTF8 helper incorrectly passed3arguments to the actual2argument OUStringToOString API, accidentally selecting an encoding equal to input length; correct the fixture to actual UTF8 bytes rather than accepting garbage in body text. Correct the duplicate STYLE expectation to native first-attribute precedence and query actual effective bold items because full-paragraph direct formatting need not allocate ranged hints. Final42cases pass; add2real UTF8/outer-attribute restoration cases and121related final cases pass. The nonexistent guessed svxcss1.paragraph.test.ts selector matched no file; inventory the real CSS test paths and run svxcss1.state.test.ts and swhtml.paragraph-classes.integration.test.ts in the final related selection. No missing test/provider, native result or fake token is used to certify behavior. Production reader recursion is still a real dependency, so keep complete loop/UI wiring pending rather than adding an unimplemented BuildTable declaration, placeholder callback or synthetic materializer.
+
+    HTML55 checkpoint:239unique related cases/14files pass (42caption/save/CSS cases/4files,121final lifecycle/options/columns/CSS/section-deletion cases/6files minus14repeated caption cases,90TXT/RTF/Markdown/document-I/O cases/5files). Final16fresh real lexer/virtual-consumer cases include CSS auto-margin centering, explicit ALIGN and first-STYLE precedence, real ID bookmark, default/bottom/duplicate caption alignment, actual centered/no-space caption paragraphs, restored inline attributes, trailing linefeed/empty caption and UTF8 text. App types, changed5source/test ESLint/Prettier, provenance1935runtime/1722mapped/182browser/31infra, Writer registry0semantic violations, boundaries1934runtime/10729imports/229edges, JSDoc4345files, file-size4349files, source-tree115paths/32retired roots and diff gates pass. WRITER337 preserves original one-way bottom flag for duplicate caption ALIGN. Fresh table construction and caption begin/end are explicit native source responsibility fragments, not the completed recursive BuildTable/BuildTableCaption token loops. The real memory stream cannot yield pending device input; no fake pending provider or table/layout/measurement result is supplied. Recursive table/cell/row/caption orchestration, native pending-device ownership where represented, caption node-range placement, table materialization/layout, RTF direction export and final format/UI audit remain required; parent task and goal stay incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -5812,6 +5874,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:49:46.854Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML55 checkpoint passes239unique cases/14files and app/static gates. Native fresh-table construction and caption lifecycle components are complete at their explicit source boundary; production recursive token loops/materialization and remaining format work keep parent incomplete.
+Attempts: 66
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:49:45.781Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5926,6 +6018,18 @@ HTML54 checkpoint:205unique related cases/16files pass (46initial corrected dele
 - Command (cwd repository): node_modules/.bin/eslint changed6source/test files --max-warnings 0; node_modules/.bin/prettier --check same6files ->pass (html54-eslint-final.txt, html54-prettier.txt).
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html54-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime source and dependency/ownership evidence gates, not whole native behavior certification.
 - No selected test is skipped or failing. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+### HTML55 table construction and caption lifecycle checkpoint
+
+HTML55 checkpoint:239unique related cases/14files pass (42caption/save/CSS cases/4files,121final lifecycle/options/columns/CSS/section-deletion cases/6files minus14repeated caption cases,90TXT/RTF/Markdown/document-I/O cases/5files). Final16fresh real lexer/virtual-consumer cases include CSS auto-margin centering, explicit ALIGN and first-STYLE precedence, real ID bookmark, default/bottom/duplicate caption alignment, actual centered/no-space caption paragraphs, restored inline attributes, trailing linefeed/empty caption and UTF8 text. App types, changed5source/test ESLint/Prettier, provenance1935runtime/1722mapped/182browser/31infra, Writer registry0semantic violations, boundaries1934runtime/10729imports/229edges, JSDoc4345files, file-size4349files, source-tree115paths/32retired roots and diff gates pass. WRITER337 preserves original one-way bottom flag for duplicate caption ALIGN. Fresh table construction and caption begin/end are explicit native source responsibility fragments, not the completed recursive BuildTable/BuildTableCaption token loops. The real memory stream cannot yield pending device input; no fake pending provider or table/layout/measurement result is supplied. Recursive table/cell/row/caption orchestration, native pending-device ownership where represented, caption node-range placement, table materialization/layout, RTF direction export and final format/UI audit remain required; parent task and goal stay incomplete.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/html/htmlcss1.table-styles.test.ts src/sw/source/filter/html/svxcss1.paragraph.test.ts ->42pass/4actual files (html55-closure-tests.txt); the nonexistent fifth selector is superseded by real CSS consumer selections below, not counted as verified.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/core/doc/native-section-deletion.test.ts ->121pass/6files (html55-related-tests.txt), including16fresh final caption/table construction cases. Scope: actual byte/lexer/virtual-consumer and document/context/attribute/numbering/section owners, not production table grammar replacement.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts ->90pass/5files (html55-filter-tests.txt). Scope: existing native formats and document-I/O consumers.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html55-types-verified.txt).
+- Command (cwd repository): node_modules/.bin/eslint changed5source/test files --max-warnings 0; node_modules/.bin/prettier --check same5files ->pass (html55-eslint-verified.txt, html55-prettier.txt).
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html55-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Scope: all runtime/source registrations and dependency gates, not whole native behavior certification.
+- No final selected actual test is failing or skipped; the absent guessed selector is explicitly replaced above. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
 
 ## Rollback Plan
 
@@ -7182,3 +7286,7 @@ HTML53 checkpoint:248unique related cases/27files pass (59view/global-correction
 HTML54 initial46cases:40pass/6fail; all6new failures are a fixture requesting an unsupported Standard string ID rather than the actual default collection. Use GetDfltTextFormatColl with its real source owner. Initial app types also catch an erased runtime import used in instanceof and the existing document manager accessor spelling; use the real SwContentNode import and GetDocumentContentOperationsManager rather than inventing another manager. Source review additionally confirms original caption callers restore their standalone parser cursor before DeleteSection: correct the fresh wrapper fixture and preserve the native content-index destructor assertion instead of silently moving arbitrary raw positions. Final corrected46cases and extended61cases pass. No new suspected upstream bug is identified; known original structural correction/invalidating behavior is retained.
 
 HTML54 checkpoint:205unique related cases/16files pass (46initial corrected deletion/global/index/frame cases/4files;61final deletion/caption/table-history/section cases/6files minus8repeated deletion cases;106index/import/TXT/RTF/Markdown/document-I/O cases/7files). App types, changed6source/test ESLint/Prettier, provenance1934runtime/1721mapped/182browser/31infra, Writer registry0semantic violations, boundaries1933runtime/10712imports/229edges, JSDoc4343files, file-size4347files, source-tree115paths/32retired roots and diff gates pass. Native DeleteSection now composes DelBookmarks, original structural GetCorrPosition, global PaMCorrAbs and actual DelNodes/RemoveNode ownership; the HTML caption wrapper reaches this manager. Actual UI stacks and UNO API owners, marks, bare node indices, named numbering rules, filtered text-frame/follow/sibling owners, hints and table/row/box destruction are exercised. Original content-index destructor assertion is preserved; raw importer cursors are restored by their original callers before saved-section deletion. Current model revision publication remains the browser boundary. Wider merged-redline/footnote/accessibility/Cut geometry/paint, fly/redline/transparent-section/recursive destruction, chapter-field propagation, full native destructor/whole-array teardown integration and full ABI behavior are not certified. Full caption/table token orchestration, materialization/layout, RTF direction export and final current-slice filter/UI audit remain pending; parent task and goal stay incomplete.
+
+HTML55 initial36cases:32pass/4fail, all new component fixtures. The fresh UTF8 helper incorrectly passed3arguments to the actual2argument OUStringToOString API, accidentally selecting an encoding equal to input length; correct the fixture to actual UTF8 bytes rather than accepting garbage in body text. Correct the duplicate STYLE expectation to native first-attribute precedence and query actual effective bold items because full-paragraph direct formatting need not allocate ranged hints. Final42cases pass; add2real UTF8/outer-attribute restoration cases and121related final cases pass. The nonexistent guessed svxcss1.paragraph.test.ts selector matched no file; inventory the real CSS test paths and run svxcss1.state.test.ts and swhtml.paragraph-classes.integration.test.ts in the final related selection. No missing test/provider, native result or fake token is used to certify behavior. Production reader recursion is still a real dependency, so keep complete loop/UI wiring pending rather than adding an unimplemented BuildTable declaration, placeholder callback or synthetic materializer.
+
+HTML55 checkpoint:239unique related cases/14files pass (42caption/save/CSS cases/4files,121final lifecycle/options/columns/CSS/section-deletion cases/6files minus14repeated caption cases,90TXT/RTF/Markdown/document-I/O cases/5files). Final16fresh real lexer/virtual-consumer cases include CSS auto-margin centering, explicit ALIGN and first-STYLE precedence, real ID bookmark, default/bottom/duplicate caption alignment, actual centered/no-space caption paragraphs, restored inline attributes, trailing linefeed/empty caption and UTF8 text. App types, changed5source/test ESLint/Prettier, provenance1935runtime/1722mapped/182browser/31infra, Writer registry0semantic violations, boundaries1934runtime/10729imports/229edges, JSDoc4345files, file-size4349files, source-tree115paths/32retired roots and diff gates pass. WRITER337 preserves original one-way bottom flag for duplicate caption ALIGN. Fresh table construction and caption begin/end are explicit native source responsibility fragments, not the completed recursive BuildTable/BuildTableCaption token loops. The real memory stream cannot yield pending device input; no fake pending provider or table/layout/measurement result is supplied. Recursive table/cell/row/caption orchestration, native pending-device ownership where represented, caption node-range placement, table materialization/layout, RTF direction export and final format/UI audit remain required; parent task and goal stay incomplete.

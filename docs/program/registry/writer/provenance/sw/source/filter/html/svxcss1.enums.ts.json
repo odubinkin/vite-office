@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/svxcss1.pagination.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.caption-reader.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -30,14 +34,17 @@
     "upstreamPath": "sw/source/filter/html/svxcss1.hxx",
     "localSymbols": [
       "Css1ScriptFlags",
-      "SvxCSS1PageBreak"
+      "SvxCSS1PageBreak",
+      "SvxCSS1LengthType"
     ],
     "upstreamSymbols": [
       "Css1ScriptFlags",
-      "SvxCSS1PageBreak"
+      "SvxCSS1PageBreak",
+      "SvxCSS1LengthType"
     ],
     "preservedResponsibilities": [
-      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged."
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML55: original fresh BuildTable construction block now reads actual lexer options, applies CSS both-auto-margin parent centering, preserves explicit ALIGN and reverse STYLE precedence, inserts the real table-ID bookmark and installs the actual registered HTMLTable on the parser. Original caption begin/end blocks save actual attributes/context/numbering/position, construct the real caption section, open native centered adjustment, preserve source any-bottom duplicate ALIGN behavior, close local contexts, strip trailing linefeeds/paragraphs, append the required empty top-level paragraph, apply deferred attributes, restore stacks/numbering and finally restore the saved point. Native CSS1 length enum values0/1/2/3 replace an unnamed source constant at the new table consumer. Existing body/inline/UTF8 producers and native document nodes are used, without another parser, table model, token provider, layout result or measurement. These are explicit source construction/lifecycle responsibility fragments, not the completed BuildTable/BuildTableCaption token loops: recursive table/cell/row/caption orchestration, native pending-device stack (current streams are synchronous), node-range caption placement, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required. Whole module/default/contract/behavior/ABI parity remains unverified; browser file/autosave/recovery deviations stay unchanged."
     ],
     "omittedResponsibilities": [
       "Only concrete consuming page-break dependencies in the current core are implemented; broader upstream families and native module certification remain unverified."
