@@ -1,4 +1,4 @@
-/** @fileoverview Original ComponentContext and DisposingForwarder from component_context.cxx, with actual value/reference owners and weak environment registry. Public createComponentContext environment/mapping invocation remains separate; no replacement factory is exported. Native unordered bucket order, locks, physical ABI and noexcept termination remain unverified. */
+/** @fileoverview Original ComponentContext, DisposingForwarder and invoked construction callee from component_context.cxx, with actual value/reference/mapping owners. Public createComponentContext environment/mapping orchestration remains separate; no replacement factory is exported. Native unordered bucket order, locks, physical ABI and noexcept termination remain unverified. */
 import { WeakComponentImplHelper2 } from "../inc/compbase2";
 import { WeakImplHelper } from "../inc/implbase";
 import type { ContextEntry_Init } from "../inc/component_context";
@@ -17,6 +17,8 @@ import { DeploymentException } from "../../cppu/inc/com/sun/star/uno/DeploymentE
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Exception } from "../../cppu/inc/com/sun/star/uno/Exception";
 import { Reference, UNO_QUERY } from "../../cppu/inc/com/sun/star/uno/Reference";
+import { SAL_NO_ACQUIRE } from "../../sal/inc/types";
+import type { Mapping } from "../../cppu/inc/uno/mapping.hxx";
 import type { XInterface } from "../../cppu/inc/com/sun/star/uno/XInterface";
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { Sequence } from "../../cppu/inc/com/sun/star/uno/Sequence";
@@ -533,5 +535,49 @@ export class ComponentContext
   protected override destroy(): void {
     this.destroyMembers();
     super.destroy();
+  }
+}
+
+/** Original invoked construction callee consumes the mapped delegate reference and maps the result through the supplied real public Mapping owner. This is not the public environment/bootstrap factory. @param args - Original advancing va_list cursor: entries, count, delegate, output and target-to-current mapping. @returns Nothing. */
+export function s_createComponentContext_v(args: Iterator<unknown>): void {
+  const entries = args.next().value as readonly ContextEntry_Init[],
+    count = args.next().value as number,
+    delegate = args.next().value as XComponentContext | null,
+    output = args.next().value as [unknown],
+    mapping = args.next().value as Mapping,
+    xDelegate = new Reference<XComponentContext>(delegate, SAL_NO_ACQUIRE),
+    xContext = new Reference<XComponentContext>();
+  try {
+    if (count > 0) {
+      try {
+        const context = new ComponentContext(entries, count, xDelegate);
+        xContext.set(context);
+        const source = new Reference<XComponent>(xDelegate, UNO_QUERY, XComponent.static_type);
+        try {
+          const target = new Reference<XComponent>(context);
+          try {
+            DisposingForwarder.listen(source, target);
+          } finally {
+            target.dispose();
+          }
+        } finally {
+          source.dispose();
+        }
+      } catch (error) {
+        if (!(error instanceof Exception)) throw error;
+        try {
+          xContext.clear();
+        } finally {
+          error.dispose();
+        }
+      }
+    } else xContext.moveAssign(xDelegate);
+    output[0] = mapping.mapInterface(
+      xContext.get(),
+      UnoType.get(["Reference", XComponentContext.static_type]),
+    );
+  } finally {
+    xContext.dispose();
+    xDelegate.dispose();
   }
 }

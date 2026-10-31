@@ -5039,3 +5039,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::~EnvironmentsData` and `defenv_harden`.
 - Observation: the registry destructor first sets `isDisposing = true`, then tries to harden each weak environment before calling its explicit dispose callback. The default environment's harden callback returns immediately when the same registry flag is true, so these entries cannot reach that explicit dispose path. Other environment implementations may use different harden callbacks.
 - Preserve the flag assignment, guard and callback order. The original native lifetime replay verifies shutdown hardening releases/nulls an old output but neither increments the target counts nor returns the target. No extra dispose call is introduced.
+
+### CALC-458 — Public Type mapping skips description release when its callback throws
+
+- Source: `include/uno/mapping.hxx`, `Mapping::mapInterface(void **, void *, Type const &)`.
+- Observation: after `TYPELIB_DANGER_GET`, the wrapper invokes the supplied mapping callback and only then calls `TYPELIB_DANGER_RELEASE`. There is no unwind guard. An exception from that callback bypasses the matching release of a genuinely weak interface description; the inout pointer remains unchanged if the callback did not publish a value.
+- Preserve this order and exception propagation. The complete original native throwing-callback stream confirms the retained description count in both normal and ASan/UBSan builds. The portable wrapper deliberately adds no `finally` release, and the context-construction callee does not suppress exceptions from result mapping.

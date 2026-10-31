@@ -4002,3 +4002,24 @@ All9cold/order/hot original interface streams match and the7interface owners
 reach raw100 coverage. Wrapped payload and final task validation are in progress.
 Concrete property-value container/WeakImplHelper/Sfx model/view-data/settings.xml
 services and full native ABI/thread/resource/consumer QA remain unported.
+
+## Public UNO mapping and invoked context construction
+
+The public `uno::Mapping` wrapper now preserves the original resolved-pointer
+and value ownership operations and interface-description/Type forwarding
+overloads. It remains distinct from the private mapping owner in `lbmap.cxx`.
+The `.hxx.ts` module discriminator preserves the original C header versus C++
+inline wrapper boundary. Complete normal and ASan/UBSan C++ streams cover
+ownership, direct mapping, unresolved Type output retention and callback
+exceptions. The last path preserves the skipped description release recorded
+as CALC-458.
+
+The original `s_createComponentContext_v` callee consumes the mapped delegate,
+creates the actual context for positive entry counts, attaches its actual
+disposal forwarder, catches UNO construction/listener exceptions and maps the
+result through the real public wrapper. Tests verify ownership, count branches,
+delegated disposal, output publication and exception boundaries. Full native
+context-owner differential and the upstream Embind `BridgeTest` consumer remain
+unverified. Environment/name lookup constructors, current/source environment
+orchestration and application ServiceManager installation are still incomplete;
+this is not a public context factory or full CSV readiness claim.
