@@ -47,7 +47,8 @@
       "S3HW1E pStyle producer checkpoint: LISTLEVEL S resolves its currently known Word style name into CT_Lvl_pStyle and the actual StyleSheetEntry. ListLevel preserves null assignment, native paragraph-property contribution and the original index-to-bool AddParaProperties behavior (WRITER269). Style references retain raw pPr alongside rPr, including signed margins, outlineLvl and style numPr metadata. Zero geometry without basedOn uses original eraseNestedAttribute behavior; migrated stylesheet margins no longer replay clamped legacy scalar values. DomainMapper retains source list/outline levels and ListId on StyleSheetPropertyMap; accepted outline values receive the original Word9-to-native0/otherwise-plus1 conversion at style application, and Worker retains resulting actual style items. Original GetChapterNumberingWeight is implemented and independently tested with native defaults, signed narrowing and ID1/case-sensitive Heading bonuses. Weight selection/SwXChapterNumbering/SetOutlineNumRule and stylesheet postprocessing are still REQUIRED unfinished current-slice work, as are style-only paragraph-numbering inheritance, direct NumPr edges and remaining producer audit. No all-numbering or full module/ABI confidence promotion is made; browser open/save/recovery deviations are unchanged.",
       "Removed obsolete scalar body list ID/level and indentation fields; original RTFSprms property containers now retain these values and ordering at the same atomic boundary. S3HW1E paragraph NumPr checkpoint: actual native/RTF cases cover these consumed paths. Malformed-level recovery, old-style numbering and remaining section/HTML/current-core export producer audits remain required. No complete current-slice or full module/ABI confidence claim; intentional browser open/save/autosave/recovery behavior is unchanged.",
       "Original parser-state current list/override indices and actual OUStringBuffer destination owner/borrowed current pointer are retained across group copies, with source copy/reset and explicit destination selection. S3HW1E legacy/malformed checkpoint: bounded actual RTF/Worker tests cover these consumed paths. Remaining section/HTML/current-model producer/export and marker-style-context audits remain required. No full filter-slice, module or ABI completion claim; intentional browser open/save/autosave/recovery deviations are unchanged.",
-      "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged."
+      "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged.",
+      "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -189,6 +190,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-writing-mode.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.direction.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -251,6 +264,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "case RTFKeyword::TQC:"
+        },
+        {
+          "path": "sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::LTRPAR"
         }
       ]
     },

@@ -18,6 +18,18 @@
         {
           "path": "apps/office/src/sw/source/filter/html/htmltab.save.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-writing-mode.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.direction.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -49,7 +61,8 @@
     ],
     "preservedResponsibilities": [
       "S3HW1E HTML list checkpoint: original htmlnumreader token/context handlers now consume the actual SwHTMLNumRuleInfo and document-owned SwNumRule/SwNumFormat values. New-level defaults, native explicit TYPE glyphs, START/VALUE unsigned-short narrowing, numbered versus LH/continuation state, sibling ordered/bullet conflict with saved parent rule, nested depth clamping, outer unused-level completion, unmatched/orphan and EOF paths are connected. Original AppendTextNode updateNum control is preserved. CSS list-style-type fills the source independent number/bullet flags; new-level margin/text-indent conversion occurs before normal context insertion. Actual Markdown HTML callbacks and Worker transport are covered. All temporary native formats are explicitly disposed. Existing AddNumRule ingress binds the consumed MakeNumRule new/unique-name profile; general undo/ChgNumRuleFormats, graphic bullets, positioned contexts, definition-list producers and full native HTML/table reader remain unverified or pending. Source TYPE cancellation, context-dependent CSS and LI whitespace findings WRITER289-291 are retained. No broad module/ABI confidence promotion, browser file UI/autosave/recovery change or goal completion.",
-      "S3HW1E HTML43: native SectionSaveStruct snapshots actual font/context lower bounds, heading-stack start and definition depth, freezes existing stacks, and restores original counters and paragraph flags after callers clean local contexts. PopContext, EndContext PopStack, heading/list/definition searches, margin/spacing lookups and SetTextCollAttrs consume the original distinct context/attribute minima. Terminal cleanup follows the original two-pass recovery without hanging on protected contexts. Same-owner parser fields are exposed to permanent source fragments without replacement state. Native synchronous section values do not claim pending-device ownership; row/cell/caption orchestration, table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain pending. Broad semantic parity stays unverified."
+      "S3HW1E HTML43: native SectionSaveStruct snapshots actual font/context lower bounds, heading-stack start and definition depth, freezes existing stacks, and restores original counters and paragraph flags after callers clean local contexts. PopContext, EndContext PopStack, heading/list/definition searches, margin/spacing lookups and SetTextCollAttrs consume the original distinct context/attribute minima. Terminal cleanup follows the original two-pass recovery without hanging on protected contexts. Same-owner parser fields are exposed to permanent source fragments without replacement state. Native synchronous section values do not claim pending-device ownership; row/cell/caption orchestration, table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain pending. Broad semantic parity stays unverified.",
+      "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Graphic bullets, positioned contexts and protected table contexts are unrepresented; definition-list producers, general reader undo integration and full native HTML module behavior remain unverified or pending."

@@ -6,6 +6,7 @@ import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
@@ -143,7 +144,7 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     );
     return out;
   }
-  if (item instanceof SvxUnderlineItem) {
+  if (item instanceof SvxUnderlineItem || item instanceof SvxFrameDirectionItem) {
     item.QueryValue(out, entry.member);
     return out;
   }

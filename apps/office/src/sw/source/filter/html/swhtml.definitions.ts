@@ -53,7 +53,7 @@ export function NewDefList(parser: SwHTMLParser): void {
     const items = new SfxItemSet(parser.m_xDoc.GetAttrPool(), parser.m_pCSS1Parser.GetWhichMap());
     try {
       const info = new SvxCSS1PropertyInfo();
-      if (parser.ParseStyleOptions(style, id, cls, items, info, language))
+      if (parser.ParseStyleOptions(style, id, cls, items, info, language, dir))
         parser.InsertAttrs(items, info, context);
     } finally {
       items.Dispose();

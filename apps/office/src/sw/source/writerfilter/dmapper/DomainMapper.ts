@@ -448,6 +448,20 @@ export class DomainMapper implements Properties {
       case N.LN_EG_SectPrContents_pgNumType:
         resolveReturnedReference(modifier.getProps(), this);
         break;
+      case N.LN_CT_PPrBase_bidi:
+        // The original RTF path bypasses the OOXML/comment justification rewrite.
+        // Those unrepresented source contexts are not simulated by this RTF handler.
+        if (this.IsRTFImport()) {
+          const parent = this.impl.GetPropertyFromParaStyleSheet(P.PROP_WRITING_MODE),
+            parentBidi: [number] = [-1];
+          try {
+            parent.extract(parentBidi, "sal_Int16");
+          } finally {
+            parent.dispose();
+          }
+          this.insert(context, P.PROP_WRITING_MODE, new Any([n ? 1 : 0], "sal_Int16"));
+        }
+        break;
       case N.LN_CT_PPrBase_outlineLvl:
         if (n >= 0 && n <= 9) {
           if (this.IsStyleSheetImport() && context instanceof StyleSheetPropertyMap)

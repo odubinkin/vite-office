@@ -530,7 +530,12 @@ export function DispatchBodyControl(
     if (this["defaultCodepage"] === 1255) state.currentCodepage = 1255;
     return;
   }
-  if (["ltrpar", "rtlpar", "ltrrow", "rtlrow"].includes(name)) state.runType = RunType.NONE;
+  if (name === "ltrpar" || name === "rtlpar") {
+    state.runType = RunType.NONE;
+    state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));
+    return;
+  }
+  if (["ltrrow", "rtlrow"].includes(name)) state.runType = RunType.NONE;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;

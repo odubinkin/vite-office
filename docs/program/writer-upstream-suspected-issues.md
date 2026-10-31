@@ -2771,3 +2771,9 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, CellSaveStruct width parsing and HTMLTable::InsertCell.
 - Observation: WIDTH is narrowed to uint16 before the percent clamp, but InsertCell only assigns the width and its relative selector when numeric width is nonzero. Thus65536percent narrows to0 and publishes width0 with percent false, whereas65537percent publishes width1 with percent true. The option's percent syntax is lost in the zero case.
 - Preservation: retain the narrowing, percentage clamp and conditional grid assignment. Do not independently publish the percentage flag for zero width or replace the original guard. Focused actual-byte-stream cases observe the original intermediate layout option fields.
+
+### WRITER330 — Ordinary RTF paragraph direction output collapses vertical modes to LTRPAR
+
+- Source: sw/source/filter/ww8/rtfattributeoutput.cxx, RtfAttributeOutput::FormatFrameDirection.
+- Observation: page-description output handles vertical RL_TB through stextflow1 and RTF fly syntax has separate txflTextFlow properties. After those branches, ordinary paragraph output emits RTLPAR only for Horizontal_RL_TB and LTRPAR for every other resolved mode, including vertical modes. This appears lossy for an explicitly vertical paragraph item.
+- Preservation: retain the original context branches and final horizontal token choice when connecting direction export. Do not manufacture a vertical paragraph control or treat all non-LTR modes as RTL. This finding is pinned source-review evidence; HTML45 implements import/typed property flow and does not yet claim the RTF export/default-direction owner or rendered layout profile.

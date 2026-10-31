@@ -306,13 +306,14 @@ export class SwHTMLParser extends HTMLParser {
       const style = this.GetStyleOption(O.STYLE),
         id = this.GetStyleOption(O.ID),
         className = this.GetStyleOption(O.CLASS),
-        language = this.GetStyleOption(O.LANG);
-      if (style || id || className || language) {
+        language = this.GetStyleOption(O.LANG),
+        direction = this.GetStyleOption(O.DIR);
+      if (style || id || className || language || direction) {
         const set = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
         try {
           for (const [, item] of items) set.Put(item);
           const info = new SvxCSS1PropertyInfo();
-          this.ParseStyleOptions(style, id, className, set, info, language);
+          this.ParseStyleOptions(style, id, className, set, info, language, direction);
           this.InsertAttrs(set, info, context, true);
         } finally {
           set.Dispose();
@@ -383,12 +384,13 @@ export class SwHTMLParser extends HTMLParser {
     const format = this.m_pCSS1Parser.GetChrFormat(token, this.GetStyleOption(O.CLASS));
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
-      language = this.GetStyleOption(O.LANG);
-    if (style || id || language) {
+      language = this.GetStyleOption(O.LANG),
+      direction = this.GetStyleOption(O.DIR);
+    if (style || id || language || direction) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info, language);
+        this.ParseStyleOptions(style, id, "", items, info, language, direction);
         this.InsertAttrs(items, info, context, true);
       } finally {
         items.Dispose();
@@ -543,12 +545,13 @@ export class SwHTMLParser extends HTMLParser {
         : new HTMLAttrContext(T.PARABREAK_ON);
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
-      language = this.GetStyleOption(O.LANG);
-    if (style || id || language) {
+      language = this.GetStyleOption(O.LANG),
+      direction = this.GetStyleOption(O.DIR);
+    if (style || id || language || direction) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info, language);
+        this.ParseStyleOptions(style, id, "", items, info, language, direction);
         this.InsertAttrs(items, info, context);
         if (info.m_bPreserveSpace) this.SetPreserveSpaces(true);
       } finally {
@@ -593,12 +596,13 @@ export class SwHTMLParser extends HTMLParser {
     );
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
-      language = this.GetStyleOption(O.LANG);
-    if (style || id || language) {
+      language = this.GetStyleOption(O.LANG),
+      direction = this.GetStyleOption(O.DIR);
+    if (style || id || language || direction) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info, language);
+        this.ParseStyleOptions(style, id, "", items, info, language, direction);
         this.InsertAttrs(items, info, context);
       } finally {
         items.Dispose();
@@ -645,12 +649,13 @@ export class SwHTMLParser extends HTMLParser {
     const context = new HTMLAttrContext(token, pool, className);
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
-      language = this.GetStyleOption(O.LANG);
-    if (style || id || language) {
+      language = this.GetStyleOption(O.LANG),
+      direction = this.GetStyleOption(O.DIR);
+    if (style || id || language || direction) {
       const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
       try {
         const info = new SvxCSS1PropertyInfo();
-        this.ParseStyleOptions(style, id, "", items, info, language);
+        this.ParseStyleOptions(style, id, "", items, info, language, direction);
         this.InsertAttrs(items, info, context);
       } finally {
         items.Dispose();

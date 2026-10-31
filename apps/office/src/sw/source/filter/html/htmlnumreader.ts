@@ -63,7 +63,7 @@ function styles(
   const items = new SfxItemSet(parser.m_xDoc.GetAttrPool(), parser.m_pCSS1Parser.GetWhichMap());
   try {
     const info = new SvxCSS1PropertyInfo();
-    if (parser.ParseStyleOptions(style, id, cls, items, info, lang)) {
+    if (parser.ParseStyleOptions(style, id, cls, items, info, lang, dir)) {
       callback?.(items, info);
       parser.InsertAttrs(items, info, context);
     }

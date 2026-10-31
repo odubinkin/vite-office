@@ -209,6 +209,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["FillTransparence", { which: XATTR_FILLTRANSPARENCE, member: 0, kind: "any" }],
   ["CharColor", { which: H.RES_CHRATR_COLOR, member: 0, kind: "color" }],
   ["CharHighlight", { which: H.RES_CHRATR_HIGHLIGHT, member: 0, kind: "color" }],
+  ["WritingMode", { which: H.RES_FRAMEDIR, member: 0, kind: "short", attributes: 0 }],
   ["ParaAdjust", { which: H.RES_PARATR_ADJUST, member: 0, kind: "any" }],
   ["ParaLastLineAdjust", { which: H.RES_PARATR_ADJUST, member: 1, kind: "any" }],
   ["ParaExpandSingleWord", { which: H.RES_PARATR_ADJUST, member: 2, kind: "any" }],
