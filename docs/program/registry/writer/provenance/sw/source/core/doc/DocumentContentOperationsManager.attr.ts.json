@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.attr.ts",
+          "marker": "InsertItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-filter-itemset.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+          "marker": "DocumentContentOperationsManager::InsertItemSet"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.attr.ts",
+    "localSymbols": [
+      "InsertItemSet"
+    ],
+    "omittedResponsibilities": [
+      "General editing/undo/word-interior profiles, unrepresented sections/flys/redlines and desktop shell/layout services are not implemented by this consumed filter profile. Full filter/module parity remains unverified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+    "upstreamSymbols": [
+      "DocumentContentOperationsManager::InsertItemSet"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.attr.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Same-owner original operation bodies are kept in a responsibility fragment under the source-size limit; actual state and public methods remain on the native owner."
+    }
+  },
+  "legacyOrder": 156
+}

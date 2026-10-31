@@ -124,7 +124,7 @@ it("connects existing semantic, legacy font, anchor and paragraph producers", /*
   const doc = read(
     '<p lang="de-DE">A<strong lang="fr-FR">B</strong><font lang="ja-JP">C</font><a lang="ar-SA" href="#x">D</a></p><h2 lang="fr-FR">E</h2><blockquote lang="ja-JP">F</blockquote><pre lang="ar-SA">G</pre>',
   );
-  expect(languages(doc)).toEqual([[0x407, 0x40c, 0x411, 0x401], [0x40c], [0x411], [0x401]]);
+  expect(languages(doc)).toEqual([[0x407, 0x40c, 0x411, 0x401], [0x40c], [0x411], [0x401], []]);
 });
 it("preserves actual Markdown embedded HTML language items through Worker and native RTF round-trip", /** No browser language parser or portable run metadata substitutes for native hints. @returns Nothing. */ () => {
   // Block HTML enters the actual HTML parser through MarkdownReader::InsertHtmlData.
@@ -132,7 +132,7 @@ it("preserves actual Markdown embedded HTML language items through Worker and na
     OUStringToOString('<p lang="de-DE">A漢ع</p>', RTL_TEXTENCODING_UTF8),
   );
   documents.push(doc);
-  expect(languages(doc)).toEqual([[0x407, 0x407, 0x407]]);
+  expect(languages(doc)).toEqual([[0x407, 0x407, 0x407], []]);
   const restored = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
   documents.push(restored);
   expect(languages(restored)).toEqual(languages(doc));

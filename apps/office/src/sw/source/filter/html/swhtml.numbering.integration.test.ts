@@ -183,7 +183,9 @@ it("closes unterminated nested lists at native parser EOF", /** EOF closes numbe
   expect(format(paragraph(doc, "B")).GetNumberingType()).toBe(N.SVX_NUM_CHAR_SPECIAL);
 });
 it("clamps native levels to ten while retaining deeper context depth", /** Level clamping must not collapse list-close ownership. @returns Nothing. */ () => {
-  const doc = html("<ul><li>".repeat(12) + "deep" + "</li></ul>".repeat(12) + "<p>tail</p>");
+  const doc = html(
+    "<p>before</p>" + "<ul><li>".repeat(12) + "deep" + "</li></ul>".repeat(12) + "<p>tail</p>",
+  );
   expect(paragraph(doc, "deep").GetAttrListLevel()).toBe(9);
   expect(paragraph(doc, "tail").GetNumRule()).toBeUndefined();
 });
@@ -259,4 +261,11 @@ it("exports the imported raw-HTML numbering through the native Markdown writer",
   const result = new TextDecoder().decode(new SwMDWriter().WriteDocument(doc));
   expect(result).toContain("3. one");
   expect(result).toContain("4. two");
+});
+
+it("retains the empty insertion prefix list level when its first imported paragraph joins", /** Original HTML prefix JoinNext uses CutImpl which excludes the source list level from whole-paragraph hard-item copying (WRITER318). @returns Nothing. */ () => {
+  const doc = html("<ul><li>".repeat(12) + "deep" + "</li></ul>".repeat(12) + "<p>tail</p>");
+  expect(paragraph(doc, "deep").GetAttrListLevel()).toBe(0);
+  expect(paragraph(doc, "deep").GetNumRule()).toBeDefined();
+  expect(paragraph(doc, "tail").GetNumRule()).toBeUndefined();
 });

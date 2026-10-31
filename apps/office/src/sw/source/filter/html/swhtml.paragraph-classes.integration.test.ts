@@ -129,6 +129,7 @@ it("keeps the source distinction between a classless P and an explicit unknown-c
   ).toEqual([
     ["quote", "quotations"],
     ["body", "text-body"],
+    ["", "default"],
   ]);
 });
 it("does not apply note-class remapping to a heading", /** The source note remapping is restricted to COLL_TEXT. @returns Nothing. */ () => {

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 282
+revision: 290
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T11:47:07.105Z"
+  updated_at: "2026-10-31T12:18:01.534Z"
   updated_by: "CODER"
-  note: "HTML38 native paragraph join/split prerequisites verified: 1124 unique related cases across 11 files pass, with final194 owner/empty-hint revalidation, final types/lint/format and provenance/Writer registry/boundaries/docs/size/tree. Preserved distinct retained-source undo adapter and native consuming joins; initial regression/size failures corrected without weakening checks. Native HTML insertion boundaries/target snapshots, text/table automatic layout, table token insertion and final matrix remain pending; full goal stays active and incomplete."
-  attempts: 49
+  note: "HTML39 verified checkpoint: 279 unique related cases across 23 files pass; app types, changed-source lint/format, provenance/Writer registry, boundaries, docs, size and source-tree pass. Native insertion split/snapshot/joins, actual target InsertItemSet, all-mark admission and source Cut portion order are connected. Parent remains incomplete: real text/table metrics, automatic table layout, HTML table token materialization and final current-model/filter/UI reconciliation remain required."
+  attempts: 50
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -789,8 +792,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T12:18:01.534Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML39 verified checkpoint: 279 unique related cases across 23 files pass; app types, changed-source lint/format, provenance/Writer registry, boundaries, docs, size and source-tree pass. Native insertion split/snapshot/joins, actual target InsertItemSet, all-mark admission and source Cut portion order are connected. Parent remains incomplete: real text/table metrics, automatic table layout, HTML table token materialization and final current-model/filter/UI reconciliation remain required."
+  -
+    type: "status"
+    at: "2026-10-31T12:18:11.251Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T11:47:31.112Z"
+doc_updated_at: "2026-10-31T12:18:11.251Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2005,7 +2021,43 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T12:18:01.534Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML39 verified checkpoint: 279 unique related cases across 23 files pass; app types, changed-source lint/format, provenance/Writer registry, boundaries, docs, size and source-tree pass. Native insertion split/snapshot/joins, actual target InsertItemSet, all-mark admission and source Cut portion order are connected. Parent remains incomplete: real text/table metrics, automatic table layout, HTML table token materialization and final current-model/filter/UI reconciliation remain required.
+    Attempts: 50
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:17:53.240Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
+
+    ### HTML39 insertion boundary checkpoint
+
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-filter-itemset.test.ts src/sw/source/core/txtnode/secondary-hint-transfer.test.ts --maxWorkers 1. Result: pass,119cases/6files. Evidence: output/playwright/rtf-properties-native/html39-final-focused.txt. Scope: native insertion, target item restoration, Cut ownership/portion boundaries and actual Markdown imports.
+    - Command: remaining swhtml*.test.ts and Markdown filter tests plus markdown-content-operations.test.ts/bookmark-name.test.ts via exact argv in html39-import-regressions-final.txt; npm run test:writer -- src/sw/source/filter/html/swhtml.language.integration.test.ts --maxWorkers 1. Result: pass for all160unique cases/17files after the documented inline-only test correction. Evidence: html39-import-regressions-final.txt and html39-language-final.txt. Scope: all affected HTML producers, callbacks, Markdown tables/list/export/config/locale, actual document marks, Worker and native RTF language transport. Total279unique cases/23files pass.
+    - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: output/playwright/rtf-properties-native/html39-* logs. Scope: current source/type/format, provenance/registry and architecture gates. Whole-filter/native desktop/module parity and parent completion remain unverified.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3128,6 +3180,23 @@ sections:
     - Commands/results: source provenance passes1917runtime/1704mapped/182browser/31infra,html38-provenance.txt exec81009exit0; final updated helper evidence also passes html38-provenance-final.txt exec26407exit0. Writer registry passes semanticViolationCount0,html38-writer.txt exec76540exit0. Boundaries pass1916runtime/10537relative imports/227allowed edges,html38-boundaries.txt exec76190exit0. Source tree passes115required/32retired roots,html38-tree.txt exit0. Corrected size gate passes html38-size-final.txt exec43163exit0; actual class file is998newline-terminated lines,999by gate counting, with no threshold/line-hiding changes. git diff --check passes. No full all-app suite, test-timeout increase, dependency/checker/hook change, fake node/provider/private test injection, network or user configuration change is claimed.
     - Source findings: WRITER314 preserves strict native join-capacity comparison and output timing; its multi-gigabyte limit is source-reviewed without mock lengths. WRITER315 records the native constraint-list OR ordering observed while tracing the pending automatic layout dependency; no lexicographic replacement or completed constraint/pass implementation is claimed.
     - Scope closure: actual native paragraph join/admission and explicit split-position prerequisites are implemented and verified; established retained-source undo adapters remain separate and positive. Public SwTextNode methods and private hint/list flags remain on their actual owner; class-body decomposition uses existing/new same-owner fragments only. Native HTML CallParser double splitting/final boundary joins and target attribute snapshots are still pending connection, as are real font/text/table automatic layout, table token loops/core insertion and final current-model/filter/UI reconciliation. Full objective remains active/incomplete; parent verification stays rework and must not finish or pause.
+
+    ### HTML39 native HTML insertion boundary and target snapshot checkpoint (verified checkpoint; parent incomplete)
+
+    - Previous goal turn is progress: 249de4d3a7b3 implements verified native paragraph join/admission prerequisites. Current tree was clean at turn start; CODER/direct task remains approved and active. Source CallParser/Continue double split, prefix/suffix joins and target GetParaAttr snapshot now replace the old section-EOF-only cleanup. Source SetTextCollAttrs same-value comparison clones target items rather than Differentiate's membership-only behavior. The native no-undo collapsed paragraph-boundary InsertItemSet target profile uses actual core sets/history/style handles; general editing/word/undo/layout profiles are explicitly unrepresented, not simulated.
+    - Dependency source review: actual CutImpl also transfers hard source paragraph attributes before moving hints, selecting character-only versus complete non-drawing current fields according to destination length and real direct-vs-parent differences; list level is excluded from the complete transfer. This concrete join dependency is now connected. Unrepresented frame style-name fields cannot be held by current text-node ranges; no dummy items or alternate graph are introduced.
+    - Command: initial focused HTML/Markdown/native-join tests html39-initial.txt exec14079. Result: 70pass/9fail across3files,92.29s. Eight old assertions assume removal of the original empty suffix after a closing block in existing-document mode; native double-split/Continue instead preserves that suffix paragraph. These must receive source-backed expectation migration, with new dedicated insertion-mode tests, rather than restoring the old EOF-only shortcut. One direct-CSS-versus-semantic assertion exposes a genuine native Cut flag omission: original moved hints use NOTXTATRCHR|DONTREPLACE, recreated hints additionally IS_COPY; the current helper omitted DONTREPLACE and used IS_COPY for both. Preserve old CSS expectations and correct the flags/identity distinction. Route recomputed before mutation.
+    - Read-only inspection encountered a nonexistent guessed IDocumentMarkAccess.ts path; actual mark owner is core/doc/docbm.ts, found through source inventory. No outside-repository reads or network are needed. Existing byte lexer, actual SwDoc/SwPaM/mark/paragraph owners and native format items remain the only inputs.
+
+    - HTML39 follow-up focused check: 91 pass/1 fail (5 files,78.48s), log html39-focused.txt; CSS precedence remains a genuine regression requiring correction. Final typecheck reports TS2532 on test marker style handle; lint has no diagnostics. Read-only guessed vendor/libreoffice and ndtxt-format paths failed; actual vendor/libreoffice-reference is available. Route recomputed before continuing. Earlier helper replacement failed on a multiline substring after docbm succeeded; bounded formatting completed, then route was recomputed and actual helper replacement succeeded. No scope or approval change.
+
+    - HTML39 correction: native source hints were intact, but intermediate Cut fragment normalization merged adjacent automatic-style portions across named-style boundaries before destination insertion. Preserve native portion boundaries in the consumed native join path, retaining legacy fragment normalization by default; source original insertion order and moved/recreated flags now pass all119 cases/6files (111.27s). Logs html39-final-focused.txt and html39-css-debug.txt retain positive evidence and the earlier diagnostic failure. TypeScript correction uses an actual style-handle assertion; final corrected app typecheck passed.
+    - Tooling: one Prettier invocation lacked the explicit Node PATH and failed before changes; rerun with pinned Node succeeded. Provenance rejected HasCurrentParaBookmarks in primary swhtml.cxx; its actual implementation is htmlgrin.cxx, retained as explicit secondary source evidence. Remove that symbol from the primary-file symbol list without changing code or source attribution; route recomputed. Lint, dependency boundary, size and source-tree checks passed; registry/docs/import-consumer checks are still running.
+
+    - Expanded native importer consumer check: 141pass/18fail across17files (68.41s), html39-import-regressions.txt. Sixteen assertions were historical single-paragraph/removed-tail or pre-split identity assumptions, migrated to source existing-document suffix preservation and actual cursor-middle identity on caller interruption; context/disposal expectations are retained. First deeply nested imported list now exposes source prefix-level retention: Continue changes collection then JoinNext; CutImpl explicitly excludes RES_PARATR_LIST_LEVEL. WRITER318 documents the source composition. Keep the original clamping assertion with an actual preceding body paragraph and add a separate first-prefix level-zero regression; no native behavior repaired or simulated. Re-run is pending. Initial Writer registry also captured the same already-corrected primary-source symbol mapping failure; rerun is required.
+
+    - Final HTML39 evidence: 279 unique related cases/23files pass from html39-final-focused.txt (119/6files) plus the150 other consumer cases/16files in html39-import-regressions-final.txt and all10language cases in html39-language-final.txt (48.61s). The expanded160case run had159pass/1fail because the expectation migration accidentally added a tail to an inline-only language case; narrowed the edit back to block cases and reran all10language tests successfully. Production behavior was unchanged by that test correction. Source-backed tail/identity migrations preserve all native attribute, mark, context/disposal, language, Worker and RTF assertions; list clamping remains tested separately from WRITER318.
+    - Final static checks: app native tsc noEmit exit0 (html39-types-consumers.txt); changed-source ESLint exit0 and Prettier check pass (html39-final-lint-consumers.txt/html39-final-format-check.txt). Source provenance passes1919modules (1706mapped/182browser/31infra), Writer registry exit0 with semanticViolationCount0, dependency boundaries1918runtime/10564imports/227allowededges, JSDoc4305sources, file-size4309authoredfiles and source-tree115requiredpaths/32retiredroots all pass. No full all-app test run is needed for this continuing task checkpoint. Native text/table measurement, automatic table layout, table token reading/materialization and final current-model/filter/UI capability reconciliation remain required; parent task and goal stay active. Browser open/save/autosave/recovery deviations are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -4353,7 +4422,43 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T12:18:01.534Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML39 verified checkpoint: 279 unique related cases across 23 files pass; app types, changed-source lint/format, provenance/Writer registry, boundaries, docs, size and source-tree pass. Native insertion split/snapshot/joins, actual target InsertItemSet, all-mark admission and source Cut portion order are connected. Parent remains incomplete: real text/table metrics, automatic table layout, HTML table token materialization and final current-model/filter/UI reconciliation remain required.
+Attempts: 50
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:17:53.240Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
+
+### HTML39 insertion boundary checkpoint
+
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-filter-itemset.test.ts src/sw/source/core/txtnode/secondary-hint-transfer.test.ts --maxWorkers 1. Result: pass,119cases/6files. Evidence: output/playwright/rtf-properties-native/html39-final-focused.txt. Scope: native insertion, target item restoration, Cut ownership/portion boundaries and actual Markdown imports.
+- Command: remaining swhtml*.test.ts and Markdown filter tests plus markdown-content-operations.test.ts/bookmark-name.test.ts via exact argv in html39-import-regressions-final.txt; npm run test:writer -- src/sw/source/filter/html/swhtml.language.integration.test.ts --maxWorkers 1. Result: pass for all160unique cases/17files after the documented inline-only test correction. Evidence: html39-import-regressions-final.txt and html39-language-final.txt. Scope: all affected HTML producers, callbacks, Markdown tables/list/export/config/locale, actual document marks, Worker and native RTF language transport. Total279unique cases/23files pass.
+- Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: output/playwright/rtf-properties-native/html39-* logs. Scope: current source/type/format, provenance/registry and architecture gates. Whole-filter/native desktop/module parity and parent completion remain unverified.
 
 ## Rollback Plan
 
@@ -5480,3 +5585,20 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands/results: source provenance passes1917runtime/1704mapped/182browser/31infra,html38-provenance.txt exec81009exit0; final updated helper evidence also passes html38-provenance-final.txt exec26407exit0. Writer registry passes semanticViolationCount0,html38-writer.txt exec76540exit0. Boundaries pass1916runtime/10537relative imports/227allowed edges,html38-boundaries.txt exec76190exit0. Source tree passes115required/32retired roots,html38-tree.txt exit0. Corrected size gate passes html38-size-final.txt exec43163exit0; actual class file is998newline-terminated lines,999by gate counting, with no threshold/line-hiding changes. git diff --check passes. No full all-app suite, test-timeout increase, dependency/checker/hook change, fake node/provider/private test injection, network or user configuration change is claimed.
 - Source findings: WRITER314 preserves strict native join-capacity comparison and output timing; its multi-gigabyte limit is source-reviewed without mock lengths. WRITER315 records the native constraint-list OR ordering observed while tracing the pending automatic layout dependency; no lexicographic replacement or completed constraint/pass implementation is claimed.
 - Scope closure: actual native paragraph join/admission and explicit split-position prerequisites are implemented and verified; established retained-source undo adapters remain separate and positive. Public SwTextNode methods and private hint/list flags remain on their actual owner; class-body decomposition uses existing/new same-owner fragments only. Native HTML CallParser double splitting/final boundary joins and target attribute snapshots are still pending connection, as are real font/text/table automatic layout, table token loops/core insertion and final current-model/filter/UI reconciliation. Full objective remains active/incomplete; parent verification stays rework and must not finish or pause.
+
+### HTML39 native HTML insertion boundary and target snapshot checkpoint (verified checkpoint; parent incomplete)
+
+- Previous goal turn is progress: 249de4d3a7b3 implements verified native paragraph join/admission prerequisites. Current tree was clean at turn start; CODER/direct task remains approved and active. Source CallParser/Continue double split, prefix/suffix joins and target GetParaAttr snapshot now replace the old section-EOF-only cleanup. Source SetTextCollAttrs same-value comparison clones target items rather than Differentiate's membership-only behavior. The native no-undo collapsed paragraph-boundary InsertItemSet target profile uses actual core sets/history/style handles; general editing/word/undo/layout profiles are explicitly unrepresented, not simulated.
+- Dependency source review: actual CutImpl also transfers hard source paragraph attributes before moving hints, selecting character-only versus complete non-drawing current fields according to destination length and real direct-vs-parent differences; list level is excluded from the complete transfer. This concrete join dependency is now connected. Unrepresented frame style-name fields cannot be held by current text-node ranges; no dummy items or alternate graph are introduced.
+- Command: initial focused HTML/Markdown/native-join tests html39-initial.txt exec14079. Result: 70pass/9fail across3files,92.29s. Eight old assertions assume removal of the original empty suffix after a closing block in existing-document mode; native double-split/Continue instead preserves that suffix paragraph. These must receive source-backed expectation migration, with new dedicated insertion-mode tests, rather than restoring the old EOF-only shortcut. One direct-CSS-versus-semantic assertion exposes a genuine native Cut flag omission: original moved hints use NOTXTATRCHR|DONTREPLACE, recreated hints additionally IS_COPY; the current helper omitted DONTREPLACE and used IS_COPY for both. Preserve old CSS expectations and correct the flags/identity distinction. Route recomputed before mutation.
+- Read-only inspection encountered a nonexistent guessed IDocumentMarkAccess.ts path; actual mark owner is core/doc/docbm.ts, found through source inventory. No outside-repository reads or network are needed. Existing byte lexer, actual SwDoc/SwPaM/mark/paragraph owners and native format items remain the only inputs.
+
+- HTML39 follow-up focused check: 91 pass/1 fail (5 files,78.48s), log html39-focused.txt; CSS precedence remains a genuine regression requiring correction. Final typecheck reports TS2532 on test marker style handle; lint has no diagnostics. Read-only guessed vendor/libreoffice and ndtxt-format paths failed; actual vendor/libreoffice-reference is available. Route recomputed before continuing. Earlier helper replacement failed on a multiline substring after docbm succeeded; bounded formatting completed, then route was recomputed and actual helper replacement succeeded. No scope or approval change.
+
+- HTML39 correction: native source hints were intact, but intermediate Cut fragment normalization merged adjacent automatic-style portions across named-style boundaries before destination insertion. Preserve native portion boundaries in the consumed native join path, retaining legacy fragment normalization by default; source original insertion order and moved/recreated flags now pass all119 cases/6files (111.27s). Logs html39-final-focused.txt and html39-css-debug.txt retain positive evidence and the earlier diagnostic failure. TypeScript correction uses an actual style-handle assertion; final corrected app typecheck passed.
+- Tooling: one Prettier invocation lacked the explicit Node PATH and failed before changes; rerun with pinned Node succeeded. Provenance rejected HasCurrentParaBookmarks in primary swhtml.cxx; its actual implementation is htmlgrin.cxx, retained as explicit secondary source evidence. Remove that symbol from the primary-file symbol list without changing code or source attribution; route recomputed. Lint, dependency boundary, size and source-tree checks passed; registry/docs/import-consumer checks are still running.
+
+- Expanded native importer consumer check: 141pass/18fail across17files (68.41s), html39-import-regressions.txt. Sixteen assertions were historical single-paragraph/removed-tail or pre-split identity assumptions, migrated to source existing-document suffix preservation and actual cursor-middle identity on caller interruption; context/disposal expectations are retained. First deeply nested imported list now exposes source prefix-level retention: Continue changes collection then JoinNext; CutImpl explicitly excludes RES_PARATR_LIST_LEVEL. WRITER318 documents the source composition. Keep the original clamping assertion with an actual preceding body paragraph and add a separate first-prefix level-zero regression; no native behavior repaired or simulated. Re-run is pending. Initial Writer registry also captured the same already-corrected primary-source symbol mapping failure; rerun is required.
+
+- Final HTML39 evidence: 279 unique related cases/23files pass from html39-final-focused.txt (119/6files) plus the150 other consumer cases/16files in html39-import-regressions-final.txt and all10language cases in html39-language-final.txt (48.61s). The expanded160case run had159pass/1fail because the expectation migration accidentally added a tail to an inline-only language case; narrowed the edit back to block cases and reran all10language tests successfully. Production behavior was unchanged by that test correction. Source-backed tail/identity migrations preserve all native attribute, mark, context/disposal, language, Worker and RTF assertions; list clamping remains tested separately from WRITER318.
+- Final static checks: app native tsc noEmit exit0 (html39-types-consumers.txt); changed-source ESLint exit0 and Prettier check pass (html39-final-lint-consumers.txt/html39-final-format-check.txt). Source provenance passes1919modules (1706mapped/182browser/31infra), Writer registry exit0 with semanticViolationCount0, dependency boundaries1918runtime/10564imports/227allowededges, JSDoc4305sources, file-size4309authoredfiles and source-tree115requiredpaths/32retiredroots all pass. No full all-app test run is needed for this continuing task checkpoint. Native text/table measurement, automatic table layout, table token reading/materialization and final current-model/filter/UI capability reconciliation remain required; parent task and goal stay active. Browser open/save/autosave/recovery deviations are unchanged.

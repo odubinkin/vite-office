@@ -3,6 +3,8 @@
  * LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` ownership boundary.
  */
 
+import { InsertItemSet } from "./DocumentContentOperationsManager.attr";
+import { SetAttrMode } from "../../../inc/swtypes";
 import { SwUndoReplace } from "../undo/unins";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -31,6 +33,10 @@ export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
+  /** Native filter InsertItemSet boundary entry; general editing/undo/layout profiles remain separate. @param range - Actual collapsed paragraph boundary. @param set - Native target items. @param mode - Native flags. @returns Nothing. */
+  public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {
+    InsertItemSet(this.document, range, set, mode);
+  }
   /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Native regex/structured replacement remains unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
   public ReplaceRange(range: SwPaM, replacement: string | SwTextFragment, regExp = false): boolean {
     if (typeof replacement !== "string") {

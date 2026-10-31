@@ -2687,3 +2687,21 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayoutConstraints::InsertNext.
 - Observation: traversal stops when either an existing row is greater than the new row or its column is greater than the new column. Thus an existing row0/column5 constraint can be placed after an incoming row1/column2 constraint. This is not ordinary row-then-column lexicographic ordering despite the later pass's line-by-line commentary.
 - Preservation: retain the original OR condition when porting the pending constraint owner and first layout pass. Do not silently substitute a comparator or sorted array with lexicographic semantics. This is a source-state finding; table constraint/pass implementation and desktop reproduction are not claimed here.
+
+### WRITER316 — Existing-document HTML insertion can retain an empty suffix paragraph
+
+- Source: sw/source/filter/html/swhtml.cxx, SwHTMLParser::CallParser and Continue.
+- Observation: existing-document mode splits twice at the target cursor. After a closing block leaves a zero-offset paragraph, Continue joins that paragraph into the original suffix using suffix.JoinPrev; it does not apply the new-document trailing-node removal branch. Inserting a single block into an initially empty target can therefore retain an original empty suffix paragraph.
+- Preservation: retain the separate insertion/new-document paths and original surviving suffix owner. Do not restore the previous section-EOF-only deletion shortcut. Actual graph tests distinguish the two modes; this is a source-state observation, without a compiled desktop defect claim.
+
+### WRITER317 — HTML mark lookup scans primary positions in a vector sorted by range starts
+
+- Source: sw/source/filter/html/htmlgrin.cxx, SwHTMLParser::HasCurrentParaBookmarks; sw/source/core/doc/docbm.cxx, mark ordering; sw/source/core/crsr/bookmark.cxx, MarkBase and UnoMark constructors.
+- Observation: all marks are sorted by GetMarkStart, but the HTML lookup compares GetMarkPos and stops on the first later node. An expanded UNO mark retains the input primary/other orientation. If its range starts before the current paragraph but its primary position is later, early termination can hide a subsequent mark whose primary position is on the current paragraph.
+- Preservation: retain the original primary-position comparison and early break, including UNO marks in the actual all-mark vector. Do not substitute range-start comparisons or the user-visible bookmark catalog. Tests use real oriented UNO ranges and real bookmarks; no compiled desktop reproduction is claimed.
+
+### WRITER318 — Empty HTML insertion prefixes retain their list level during the first join
+
+- Source: sw/source/filter/html/swhtml.cxx, Continue prefix repair; sw/source/core/txtnode/ndtxt.cxx, JoinNext and CutImpl hard-item transfer.
+- Observation: an empty original prefix adopts the first imported paragraph collection and joins its text. CutImpl copies the source hard paragraph items but explicitly excludes RES_PARATR_LIST_LEVEL. Thus a deeply nested first list paragraph can retain the insertion prefix level zero even though the imported source had a clamped deeper level. A preceding imported body paragraph avoids this first-join case.
+- Preservation: retain original collection/join ordering and list-level exclusion. Keep separate real imports testing level clamping after a body paragraph and first-paragraph level retention. Do not silently copy the excluded item or rewrite list nesting. This is a source-state observation, not a compiled desktop defect reproduction.

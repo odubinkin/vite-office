@@ -1,4 +1,5 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { ApplyCutTextNodeAttributes } from "./ndtxt-join";
 import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import { SwTextINetFormat } from "./txtatr2";
@@ -115,14 +116,21 @@ export function AppendTextNodeHints(
       copied?.Dispose();
     }
   }
-  const fragment = source.CutTextFragment(0, length);
+  ApplyCutTextNodeAttributes(node, source, oldLength, offset);
+  const originalHints = new Set(source.GetpSwpHints()?.entries() ?? []);
+  const fragment = source.CutTextFragment(0, length, true);
   try {
     while (fragment.hints.Count()) {
       const hint = fragment.hints.Get(0);
       fragment.hints.DeleteAtPos(0);
       hint.SetStart(hint.GetStart() + offset);
       hint.SetEnd(hint.GetAnyEnd() + offset);
-      node.InsertHint(hint, SetAttrMode.IS_COPY | SetAttrMode.NOTXTATRCHR);
+      node.InsertHint(
+        hint,
+        SetAttrMode.NOTXTATRCHR |
+          SetAttrMode.DONTREPLACE |
+          (originalHints.has(hint) ? 0 : SetAttrMode.IS_COPY),
+      );
     }
   } finally {
     fragment.hints.Dispose();

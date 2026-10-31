@@ -6,9 +6,10 @@ import { SwPosition, SwPaM, SwNodeIndex } from "../crsr/pam";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { FontWeight } from "../../../../tools/inc/fontenum";
-import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { RES_CHRATR_WEIGHT, RES_UL_SPACE } from "../../../inc/hintids";
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases actual native graphs. @returns Nothing. */ () => {
@@ -159,5 +160,37 @@ it("manager joins preserve converted direct character values through the native 
     );
   } finally {
     output.Dispose();
+  }
+});
+
+it("native empty-destination Cut copies hard paragraph state but excludes source list level", /** Source direct properties are copied before actual hint transfer when destination properties equal their parent. @returns Nothing. */ () => {
+  const { first, second } = paragraphs();
+  first.SetText("");
+  first.SetAttrListLevel(0);
+  second.SetAttrListLevel(3);
+  second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  second.SetAttr(new SvxULSpaceItem(10, 55, RES_UL_SPACE));
+  first.JoinNext();
+  expect(first.GetText()).toBe("EFGH");
+  expect((first.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetValue()).toBe(
+    FontWeight.WEIGHT_BOLD,
+  );
+  expect((first.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(55);
+  expect(first.GetAttrListLevel()).toBe(0);
+});
+it("native nonempty-destination Cut keeps source hard character values ranged and retains paragraph state", /** Original nInitSize admission selects only character fields even when the source has paragraph spacing. @returns Nothing. */ () => {
+  const { doc, first, second } = paragraphs();
+  const before = (first.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower();
+  second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  second.SetAttr(new SvxULSpaceItem(10, 77, RES_UL_SPACE));
+  first.JoinNext();
+  expect(doc.paragraphs).toEqual([first]);
+  expect((first.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(before);
+  const set = new SfxItemSet(doc.GetAttrPool(), [[RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT]]);
+  try {
+    first.GetParaAttr(set, 4, 8, true);
+    expect((set.Get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetValue()).toBe(FontWeight.WEIGHT_BOLD);
+  } finally {
+    set.Dispose();
   }
 });

@@ -120,7 +120,7 @@ it("retains an ID-only empty tail paragraph containing a native bookmark", /** E
     doc.paragraphs.map(
       /** Reads actual nodes. @param node - Node. @returns Text. */ (node) => node.GetText(),
     ),
-  ).toEqual(["A", ""]);
+  ).toEqual(["A", "", ""]);
   expect(marks(doc)).toEqual([["tail", 1, 0]]);
 });
 it("preserves actual Markdown HTML bookmarks through the existing Worker codec", /** Uses the production Markdown raw-HTML callback and real mark serialization. @returns Nothing. */ () => {

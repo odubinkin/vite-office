@@ -94,7 +94,7 @@ it("maps implicit DT/DD ends and returns following text to the body style", /** 
       /** Reads original text. @param node - Native node. @returns Text. */ (node) =>
         node.GetText(),
     ),
-  ).toEqual(["term", "definition", "next", "description", "tail"]);
+  ).toEqual(["term", "definition", "next", "description", "tail", ""]);
   expect(paragraph(doc, "tail").GetTextFormatColl().id).toBe("text-body");
   expect(paragraph(doc, "tail").GetNumRule()).toBeUndefined();
 });

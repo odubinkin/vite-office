@@ -39,22 +39,65 @@ export class SwBookmark {
 /** Document-owned subset of LibreOffice's MarkManager plus retained soft pagination hints. */
 export class DocumentMarkAccess {
   private readonly unoMarks = new Set<UnoMark>();
+  private readonly m_vAllMarks: (SwBookmark | UnoMark)[] = [];
+  /** Original start-order comparator for represented collapsed and UNO marks; cross-reference marks are not in this core family. @param mark - Actual borrowed mark. @returns Native start position. */
+  private static MarkStart(mark: SwBookmark | UnoMark): SwPosition {
+    const point = mark.GetMarkPos();
+    return mark instanceof UnoMark && mark.GetOtherMarkPos().compare(point) < 0
+      ? mark.GetOtherMarkPos()
+      : point;
+  }
+  /** Original lower_bound insertion puts a new equal-start mark before existing ones. @param mark - Actual borrowed native mark. @returns Nothing. */
+  private InsertMarkSorted(mark: SwBookmark | UnoMark): void {
+    let first = 0,
+      last = this.m_vAllMarks.length;
+    const start = DocumentMarkAccess.MarkStart(mark);
+    while (first < last) {
+      const middle = (first + last) >>> 1,
+        current = this.m_vAllMarks[middle];
+      if (!current) throw new Error("assert(mark vector)");
+      if (DocumentMarkAccess.MarkStart(current).compare(start) < 0) first = middle + 1;
+      else last = middle;
+    }
+    this.m_vAllMarks.splice(first, 0, mark);
+  }
+  /** Removes a borrowed vector reference before its actual owner is destroyed. @param mark - Actual native mark. @returns Nothing. */
+  private RemoveMark(mark: SwBookmark | UnoMark): void {
+    const index = this.m_vAllMarks.indexOf(mark);
+    if (index >= 0) this.m_vAllMarks.splice(index, 1);
+  }
+  /** Source all-mark view includes internal UNO marks while the UI bookmark catalog remains separate. Registered positions are reconciled in original start order on access. @returns Borrowed native vector. */
+  public GetAllMarks(): readonly (SwBookmark | UnoMark)[] {
+    this.m_vAllMarks.sort(
+      /** Original start ordering for the current native families. @param first - Actual mark. @param second - Actual mark. @returns Source order. */ (
+        first,
+        second,
+      ) => DocumentMarkAccess.MarkStart(first).compare(DocumentMarkAccess.MarkStart(second)),
+    );
+    return this.m_vAllMarks;
+  }
+
   /** Creates a native internal UNO_BOOKMARK, outside user-visible bookmark enumeration. @param range - Original registered range. @returns Document-owned mark. */
   public MakeUnoMark(range: SwPaM): UnoMark {
     this.assertNode(range.Start().GetNode() as SwTextNode);
     this.assertNode(range.End().GetNode() as SwTextNode);
     const mark = new UnoMark(range);
     this.unoMarks.add(mark);
+    this.InsertMarkSorted(mark);
     return mark;
   }
   /** Deletes one internal range mark without recording a document edit. @param mark - Owned mark. @returns Nothing. */
   public DeleteUnoMark(mark: UnoMark): void {
-    if (this.unoMarks.delete(mark)) mark.Dispose();
+    if (this.unoMarks.delete(mark)) {
+      this.RemoveMark(mark);
+      mark.Dispose();
+    }
   }
   /** Invalidates API/user mark positions when their canonical document is destroyed. @returns Nothing. */
   public Dispose(): void {
     for (const mark of this.unoMarks) mark.Dispose();
     this.unoMarks.clear();
+    this.m_vAllMarks.length = 0;
     for (const mark of this.bookmarks.values()) mark.Dispose();
     this.bookmarks.clear();
     for (const position of this.softPageBreaks) position.Dispose();
@@ -81,6 +124,7 @@ export class DocumentMarkAccess {
     );
     const mark = new SwBookmark(uniqueName, new SwPosition(node, offset, "mark", "before"));
     this.bookmarks.set(uniqueName, mark);
+    this.InsertMarkSorted(mark);
     this.document.NotifyModelChange({ kind: "mark-changed" });
     return mark;
   }
@@ -136,6 +180,7 @@ export class DocumentMarkAccess {
     const mark = this.bookmarks.get(name);
     if (mark === undefined) return false;
     this.bookmarks.delete(name);
+    this.RemoveMark(mark);
     mark.Dispose();
     this.document.NotifyModelChange({ kind: "mark-changed" });
     return true;

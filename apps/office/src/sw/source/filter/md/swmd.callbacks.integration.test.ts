@@ -154,7 +154,7 @@ it("imports native HTML blocks and clears the completed HTML buffer", /** Uses t
         /** Reads real native body nodes. @param node - Node. @returns Text. */ (node) =>
           node.GetText(),
       ),
-    ).toEqual(["raw"]);
+    ).toEqual(["raw", ""]);
   } finally {
     doc.Dispose();
   }

@@ -86,6 +86,7 @@ it("maps native paragraphs, whitespace, entities and hard line breaks", /** Orig
   expect(text(html("<p>  A   B&nbsp; &amp; C<br>D</p><p>E</p>"))).toEqual([
     "A B\u00a0 & C\nD",
     "E",
+    "",
   ]);
 });
 it("retains nested inline ownership across paragraph boundaries", /** Deferred heads split real text ranges without leaking after closing tags. @returns Nothing. */ () => {
@@ -167,13 +168,13 @@ it("splits native Western CJK and CTL bold attributes by actual UTF16 script ran
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 it("uses native heading, quotation and preformatted paragraph pools", /** Closing a mismatched heading still finds the last native heading context. @returns Nothing. */ () => {
   const doc = html("<h2>Heading</h6><blockquote>Quote</blockquote><pre>A  B\nC</pre>");
-  expect(text(doc)).toEqual(["Heading", "Quote", "A  B", "C"]);
+  expect(text(doc)).toEqual(["Heading", "Quote", "A  B", "C", ""]);
   expect(
     doc.paragraphs.map(
       /** Reads source pool identity. @param node - Node. @returns Style ID. */ (node) =>
         node.GetTextFormatColl().id,
     ),
-  ).toEqual(["heading-2", "quotations", "preformatted-text", "preformatted-text"]);
+  ).toEqual(["heading-2", "quotations", "preformatted-text", "preformatted-text", "default"]);
 });
 it("imports ordinary Markdown HTML blocks through the native reader and real worker codec", /** This is the production path that previously threw before returning a document. @returns Nothing. */ () => {
   const doc = new MarkdownReader().Read(
@@ -201,7 +202,7 @@ it("ignores native title script style and comment content without a browser DOM"
         "<title>title</title><script>ignored <b>code</b></script><!-- comment --><style>p{color:red}</style><p>body</p>",
       ),
     ),
-  ).toEqual(["body"]);
+  ).toEqual(["body", ""]);
 });
 
 import { unicode } from "../../core/unocore/unocrsrhelper";
@@ -315,7 +316,7 @@ it("preserves the native buffered-inline-HTML effect on a later raw block", /** 
     OUStringToOString("start <b>x\n\n<div>y</div>", RTL_TEXTENCODING_UTF8),
   );
   docs.push(doc);
-  expect(text(doc)).toEqual(["start x", "y"]);
+  expect(text(doc)).toEqual(["start x", "y", ""]);
   expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
   expect(projectWriterTextRuns(doc.paragraphs[1])[0]?.attributes.bold).toBe(true);
 });
@@ -356,13 +357,13 @@ it("retains explicit paragraph alignment, native duplicate-option precedence and
   const doc = html(
     '<p align="LEFT" align="right">left</p><center><p>center</p></center><p align="justify">justified</p>',
   );
-  expect(text(doc)).toEqual(["left", "center", "justified"]);
+  expect(text(doc)).toEqual(["left", "center", "justified", ""]);
   expect(
     doc.paragraphs.map(
       /** Reads actual paragraph adjustment. @param node - Node. @returns Alignment. */ (node) =>
         node.GetParagraphAlignment(),
     ),
-  ).toEqual(["left", "center", "justify"]);
+  ).toEqual(["left", "center", "justify", "left"]);
   const first = doc.paragraphs[0];
   assert(first);
   const item = new SvxAdjustItem(SvxAdjust.Block, RES_PARATR_ADJUST);
@@ -627,11 +628,11 @@ it("applies existing direct font items to headings and block-style contexts", /*
         node,
       ) => node.GetTextFormatColl().id,
     ),
-  ).toEqual(["heading-2", "quotations"]);
+  ).toEqual(["heading-2", "quotations", "default"]);
 });
 it("consumes native white-space flags only at paragraph open", /** NewPara enables preservation and EndPara restores the source default. @returns Nothing. */ () => {
   const doc = html('<p style="white-space: pre">  A   B</p><p>  C   D</p>');
-  expect(text(doc)).toEqual(["  A   B", "C D"]);
+  expect(text(doc)).toEqual(["  A   B", "C D", ""]);
 });
 it("imports native FONT face/color/size and restores inherited text", /** Legacy attributes use existing native option conversion and actual item heads. @returns Nothing. */ () => {
   const doc = html('<font face="  Example Font , , Other Font  " color="red" size="5">A</font>B');
@@ -946,5 +947,5 @@ it("retains source text-indent length clamping versus pixel signed narrowing", /
       ) =>
         (node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
     ),
-  ).toEqual([32767, -20536]);
+  ).toEqual([32767, -20536, 0]);
 });

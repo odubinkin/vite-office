@@ -5,7 +5,7 @@ import { HtmlTokenId as T, HtmlOptionId as O } from "../../../../svtools/inc/htm
 import { SvParserState } from "../../../../svtools/inc/svparser";
 import type { SvStream } from "../../../../tools/source/stream/stream";
 import type { SwDoc } from "../../core/doc/doc";
-import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { SwPaM, SwPosition, type SwNodeIndex } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   HTMLAttr,
@@ -54,9 +54,17 @@ import type { SwTableBox } from "../../core/table/swtable";
 import type { Color } from "../../../../tools/inc/color";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { CreateBrushItem } from "./htmltab.brush";
+import {
+  PrepareHTMLInsertion,
+  JoinHTMLInsertionStart,
+  FinishHTMLInsertion,
+  HasCurrentParaBookmarks,
+} from "./swhtml.insertion";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
 export class SwHTMLParser extends HTMLParser {
+  m_pSttNdIdx: SwNodeIndex | null = null;
+  m_pTargetCharAttrs: SfxItemSet | null = null;
   readonly m_aTables: HTMLTable[] = [];
   readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
   /** Original parser table registration. @param table - Borrowed native intermediate table. @returns Nothing. */
@@ -155,39 +163,40 @@ export class SwHTMLParser extends HTMLParser {
   GetNumInfo(): SwHTMLNumRuleInfo {
     return this.m_pNumRuleInfo;
   }
-  /** Binds synchronous completion to original context/attribute finalization. @returns Original parser result. */
+  /** Original paragraph-bookmark admission. @param ignoreStack - Native deferred-stack bypass. @returns Mark presence. */
+  HasCurrentParaBookmarks(ignoreStack = false): boolean {
+    return HasCurrentParaBookmarks(this, ignoreStack);
+  }
+  /** Binds source split/snapshot preparation and terminal native insertion joins to the synchronous byte parser. @returns Original parser result. */
   override CallParser(): SvParserState {
-    const result = super.CallParser();
-    if (result === SvParserState.Accepted) {
-      while (this.GetNumInfo().GetNumRule()) EndNumberBulletList(this);
-      while (this.m_aContexts.length) {
-        const context = this.PopContext();
-        if (context) this.EndContext(context);
+    PrepareHTMLInsertion(this);
+    const undo = this.m_xDoc.GetUndoManager(),
+      wasUndo = undo.DoesUndo();
+    undo.DoUndo(false);
+    try {
+      const result = super.CallParser();
+      if (result !== SvParserState.Pending) {
+        const stripped = this.IsNewDoc() && this.StripTrailingLF() > 0;
+        while (this.GetNumInfo().GetNumRule()) EndNumberBulletList(this);
+        while (this.m_aContexts.length) {
+          const context = this.PopContext();
+          if (context) this.EndContext(context);
+        }
+        this.m_aParaAttrs.length = 0;
+        this.SetAttr(false);
+        JoinHTMLInsertionStart(this);
+        if (result === SvParserState.Accepted) FinishHTMLInsertion(this, stripped);
       }
-      this.SetAttr(false);
-      // Consumed Markdown insertion ends at a body/cell section's EOF. Preserve the
-      // native empty-tail removal without introducing a standalone HTML file reader.
-      const node = this.GetTextNode();
-      if (
-        !this.bNewDoc &&
-        !node.Len() &&
-        !this.m_xDoc.GetIDocumentMarkAccess().FindMarkAtPosition(this.m_pPam.GetPoint())
-      ) {
-        const nodes = node.GetNodes(),
-          next = nodes.at(node.GetIndex() + 1);
-        const count = nodes.entries().filter(
-          /** Counts real text owners in this same section. @param candidate - Node. @returns Same section text. */
-          (candidate) =>
-            candidate instanceof SwTextNode &&
-            candidate.StartOfSectionNode() === node.StartOfSectionNode(),
-        ).length;
-        if (!(next instanceof SwTextNode) && count > 1) nodes.removeTextNode(node);
-      }
+      return result;
+    } finally {
+      undo.DoUndo(wasUndo);
     }
-    return result;
   }
   /** Releases remaining native node-index/item owners after success or failure, without deleting borrowed document/cursor. @returns Nothing. */
   SourceDispose(): void {
+    this.m_pTargetCharAttrs?.Dispose();
+    this.m_pTargetCharAttrs = null;
+    this.m_pSttNdIdx = null;
     for (const box of this.m_aOrphanedTableBoxes.splice(0)) box.Dispose();
     this.m_pCSS1Parser.SourceDispose();
     this.m_xDoc.GetDocumentSettingManager().set("HTML_MODE", this.m_bOldIsHTMLMode);

@@ -1,4 +1,5 @@
 /** @fileoverview Original SetTextCollAttrs style cascade from swhtml.cxx over actual built-in collections, item sets and deferred paragraph attributes. */
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwHTMLParser } from "./swhtml";
 import type { HTMLAttrContext } from "./htmlctxt";
 import { SwPoolFormatId as P, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -25,7 +26,7 @@ function substitute(pool: number, fallback: number): number {
     ? fallback
     : pool;
 }
-/** Original nested-style hard attribution, PRE admission, definition-list margin arithmetic and deferred application. Target insertion character snapshots and generated CSS classes remain separate consumers. @param parser - Actual reader. @param top - Optional newly opened context. @returns Nothing. */
+/** Original nested-style hard attribution, PRE admission, definition-list margin arithmetic and deferred application. Target insertion snapshots retain source same-value suppression; generated CSS classes remain separate consumers. @param parser - Actual reader. @param top - Optional newly opened context. @returns Nothing. */
 export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): void {
   let selected: SwTextFormatColl | undefined, hard: SfxItemSet | undefined;
   let fallback = P.COLL_TEXT as number,
@@ -109,7 +110,23 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
     }
     for (const attr of parser.m_aParaAttrs) attr.Invalidate();
     parser.m_aParaAttrs.length = 0;
-    setTextFormatCollAtNode(parser["GetTextNode"](), selected, false);
+    const current = parser.m_pPam.GetPoint().GetNode();
+    if (!(current instanceof SwTextNode)) throw new Error("assert(HTML text node)");
+    setTextFormatCollAtNode(current, selected, false);
+    if (parser.m_pTargetCharAttrs) {
+      const target = parser.m_pTargetCharAttrs.Clone();
+      try {
+        const clear: number[] = [];
+        for (const item of target.entries()) {
+          const inherited = selected.GetAttrSet().GetItem(item.Which(), true);
+          if (inherited && item.equals(inherited)) clear.push(item.Which());
+        }
+        for (const which of clear) target.ClearItem(which);
+        parser.m_xDoc.GetDocumentContentOperationsManager().InsertItemSet(parser.m_pPam, target);
+      } finally {
+        target.Dispose();
+      }
+    }
     const set = selected.GetAttrSet(),
       first = set.Get(H.RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem,
       leftItem = set.Get(H.RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem,

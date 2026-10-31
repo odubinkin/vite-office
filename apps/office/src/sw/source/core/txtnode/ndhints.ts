@@ -376,8 +376,8 @@ export class SwpHints {
     return result;
   }
 
-  /** Removes a range, transferring strictly interior owned attributes and reconstructing split attributes. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable same-pool hint fragment. */
-  public Cut(start: number, end: number): SwpHints {
+  /** Removes a range, transferring strictly interior owned attributes and reconstructing split attributes. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @param preservePortions - Retain native source portion boundaries until destination insertion. @returns Consumable same-pool hint fragment. */
+  public Cut(start: number, end: number, preservePortions = false): SwpHints {
     assertHintSlice(start, end);
     const fragment = new SwpHints(this.pool);
     const length = end - start;
@@ -407,7 +407,8 @@ export class SwpHints {
       remaining.push(hint);
     }
     this.assignOwned(remaining);
-    fragment.assignOwned(moved);
+    if (preservePortions) fragment.hintsByStart = moved.sort(compareHints);
+    else fragment.assignOwned(moved);
     return fragment;
   }
 

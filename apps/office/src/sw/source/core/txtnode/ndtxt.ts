@@ -690,13 +690,13 @@ export class SwTextNode extends SwContentNode {
     this.ReplaceRange(start, end, { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) });
   }
 
-  /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable native fragment. */
-  public CutTextFragment(start: number, end: number): SwTextFragment {
+  /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @param preservePortions - Preserve native CutImpl insertion order before the destination resolves portions. @returns Consumable native fragment. */
+  public CutTextFragment(start: number, end: number, preservePortions = false): SwTextFragment {
     AssertTextNodeRange(this, start, end);
     if (start === end) return this.CaptureTextFragment(start, end);
     const text = this.mText.slice(start, end);
     const remaining = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
-    const hints = remaining.Cut(start, end);
+    const hints = remaining.Cut(start, end, preservePortions);
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
     this.pSwpHints = remaining.CanBeDeleted() ? undefined : remaining;
     this.UpdateContentIndices(start, end - start, SwContentIndexUpdateMode.Negative);

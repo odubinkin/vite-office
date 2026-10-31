@@ -93,7 +93,9 @@ it.each([false, true])(
         /** Invokes the actual original stream/token/context pipeline. @returns Native parser completion if the caller fails to interrupt. */ () =>
           parser.CallParser(),
       ).toThrow("caller interrupted HTML import");
-      expect(node.GetText()).toBe("payload");
+      expect(node.GetText()).toBe("");
+      expect(pam.GetPoint().GetNode()).toBe(doc.paragraphs[1]);
+      expect(doc.paragraphs[1]?.GetText()).toBe("payload");
       expect(parser.m_aContexts.length).toBe(3);
     } finally {
       parser.SourceDispose();
@@ -126,7 +128,9 @@ it("releases closed pending inline owners if the consumer interrupts before thei
       /** Uses real source close handlers before the caller aborts. @returns Parser completion if interruption is missed. */ () =>
         parser.CallParser(),
     ).toThrow("caller interrupted HTML import");
-    expect(node.GetText()).toBe("payload");
+    expect(node.GetText()).toBe("");
+    expect(pam.GetPoint().GetNode()).toBe(doc.paragraphs[1]);
+    expect(doc.paragraphs[1]?.GetText()).toBe("payload");
     expect(parser.m_aContexts).toHaveLength(0);
     expect(parser.m_aSetAttrTab.length).toBeGreaterThan(0);
   } finally {
@@ -163,15 +167,15 @@ it.each([
   ["<p>A<address>B</address>C", ["A", "B", "C"]],
   ["<p>A<center>B</center>C", ["A", "B", "C"]],
   ["<p>A<blockquote>B</blockquote>C", ["A", "B", "C"]],
-  ["<pre>A<br>B</pre>", ["A", "B"]],
-  ["<pre>A<br><br>B</pre>", ["A", "B"]],
-  ["<pre>A\tB</pre>", ["A       B"]],
-  ["<p>A&shy;B</p>", ["A\u00adB"]],
-  ["<listing>A\nB</listing>", ["A", "B"]],
-  ["<xmp>A\nB</xmp>", ["A", "B"]],
+  ["<pre>A<br>B</pre>", ["A", "B", ""]],
+  ["<pre>A<br><br>B</pre>", ["A", "B", ""]],
+  ["<pre>A\tB</pre>", ["A       B", ""]],
+  ["<p>A&shy;B</p>", ["A\u00adB", ""]],
+  ["<listing>A\nB</listing>", ["A", "B", ""]],
+  ["<xmp>A\nB</xmp>", ["A", "B", ""]],
   ["<p>A<pre>B\nC</pre>D", ["A", "B", "C", "D"]],
-  ["<h1>A<h2>B</h2>C</h1>", ["A", "B", "C"]],
-  ["<address>A</address><address>B</address>", ["A", "B"]],
+  ["<h1>A<h2>B</h2>C</h1>", ["A", "B", "C", ""]],
+  ["<address>A</address><address>B</address>", ["A", "B", ""]],
 ] as const)(
   "preserves original block boundaries for %s",
   /** Block tags exercise paragraph termination and source append modes rather than browser DOM normalization. @param input - Original HTML. @param expected - Expected Writer paragraphs. @returns Nothing. */ (
