@@ -12,7 +12,7 @@ import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
 import type { SwTable } from "../table/swtable";
-import type { SwPosition } from "../crsr/pam";
+import type { SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwRootFrame } from "../layout/newfrm";
 import type { SwContentFrame } from "../layout/ssfrm";
 import { SwFrameType } from "../layout/wsfrm";
@@ -177,6 +177,35 @@ export abstract class SwContentNode extends SwNode {
       throw new Error("SwContentNode format collection belongs to another document.");
   }
 
+  /** Original adjacent join admission and optional index/position output. Current node graph has fixed/table/cell sections, but no transparent SwSectionNode owner to skip. @param index - Optional borrowed native output. @returns Whether the next content owner fits. */
+  public CanJoinNext(index?: SwNodeIndex | SwPosition): boolean {
+    const nodes = this.GetNodes(),
+      nextIndex = this.GetIndex() + 1;
+    if (nextIndex === nodes.Count() - 1) return false;
+    const next = nodes.at(nextIndex);
+    if (
+      !(next instanceof SwContentNode) ||
+      next.GetNodeType() !== this.GetNodeType() ||
+      this.Len() + next.Len() >= 0x7ffffffd
+    )
+      return false;
+    index?.Assign(next);
+    return true;
+  }
+  /** Original previous-content join admission preserves the caller output on failure and uses the preceding owner's capacity. @param index - Optional borrowed node-index output. @returns Whether the previous content owner fits. */
+  public CanJoinPrev(index?: SwNodeIndex): boolean {
+    const previousIndex = this.GetIndex() - 1;
+    if (previousIndex === 0) return false;
+    const previous = this.GetNodes().at(previousIndex);
+    if (
+      !(previous instanceof SwContentNode) ||
+      previous.GetNodeType() !== this.GetNodeType() ||
+      previous.Len() + this.Len() >= 0x7ffffffd
+    )
+      return false;
+    index?.Assign(previous);
+    return true;
+  }
   /** Returns the current content length. @returns UTF-16 content length. */
   public abstract Len(): number;
 

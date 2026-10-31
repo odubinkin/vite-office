@@ -5,12 +5,13 @@ import { SwTextINetFormat } from "./txtatr2";
 import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import type { SwNodes } from "../docnode/nodes";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type {
+import {
   SwTextNode,
-  SwTextFragment,
-  WriterCharacterFormat,
-  WriterParagraphAlignment,
+  type SwTextFragment,
+  type WriterCharacterFormat,
+  type WriterParagraphAlignment,
 } from "./ndtxt";
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
@@ -73,27 +74,60 @@ export function MoveTextAttrToAttrSet(node: SwTextNode): void {
   }
 }
 
-/** Prepares joined hints, using native CutImpl's CopyAttr branch for an empty source. Full nonempty CutImpl ownership remains unverified. @param node - Surviving node. @param source - Trailing source. @param offset - Destination boundary. @returns Joined native hints. */
+/** Copies the existing browser cross-document graph binding without adding a second node owner. Native paragraph operations remain on SwTextNode. @param source - Actual original node. @param nodes - Destination native array. @returns Detached independent node. */
+export function CloneTextNodeTo(source: SwTextNode, nodes: SwNodes): SwTextNode {
+  const clone = new SwTextNode(
+    nodes,
+    nodes.GetEndOfContent().StartOfSectionNode(),
+    nodes.GetDoc().CopyTextColl(source.GetTextFormatColl()),
+  );
+  const direct = source.GetpSwAttrSet();
+  if (direct) clone.SetAttr(direct);
+  clone.SetText(source.GetText());
+  clone.SetListGeometryWins(source.DoesListGeometryWin());
+  return clone;
+}
+/** Whole-paragraph CutText hint transfer for native JoinNext/JoinPrev: destination coordinates are updated before actual detached source attributes are inserted. @param node - Actual surviving paragraph, already containing the combined text. @param source - Actual removed paragraph. @param offset - Destination insertion offset. @param prepend - Whether existing destination hints move right. @param oldLength - Destination length before insertion. @param consume - Transfer actual source owners for native Cut, or retain source for the established portable copy adapter. @returns Actual destination map. */
 export function AppendTextNodeHints(
   node: SwTextNode,
   source: SwTextNode,
   offset: number,
+  prepend = false,
+  oldLength = node.Len() - source.Len(),
+  consume = false,
 ): SwpHints {
-  const pool = node.GetDoc().GetAttrPool();
-  if (source.Len() === 0) {
+  const result = node.GetOrCreateSwpHints(),
+    length = source.Len();
+  if (prepend) result.Update(oldLength, 0, length);
+  if (!length) {
     for (const hint of source.GetpSwpHints()?.entries() ?? [])
       node.InsertItem(hint.format, offset, offset, SetAttrMode.IS_COPY);
-    return node.GetpSwpHints() ?? new SwpHints(pool);
+    return node.GetpSwpHints() ?? result;
   }
-  const trailing = source.GetpSwpHints()?.shifted(offset);
+  if (!consume) {
+    const copied = source.GetpSwpHints()?.shifted(offset);
+    try {
+      return new SwpHints(node.GetDoc().GetAttrPool(), [
+        ...result.entries(),
+        ...(copied?.entries() ?? []),
+      ]);
+    } finally {
+      copied?.Dispose();
+    }
+  }
+  const fragment = source.CutTextFragment(0, length);
   try {
-    return new SwpHints(pool, [
-      ...(node.GetpSwpHints()?.entries() ?? []),
-      ...(trailing?.entries() ?? []),
-    ]);
+    while (fragment.hints.Count()) {
+      const hint = fragment.hints.Get(0);
+      fragment.hints.DeleteAtPos(0);
+      hint.SetStart(hint.GetStart() + offset);
+      hint.SetEnd(hint.GetAnyEnd() + offset);
+      node.InsertHint(hint, SetAttrMode.IS_COPY | SetAttrMode.NOTXTATRCHR);
+    }
   } finally {
-    trailing?.Dispose();
+    fragment.hints.Dispose();
   }
+  return node.GetpSwpHints() ?? result;
 }
 
 /** Rebinds replacement maps before releasing old node backlinks. @param node - Owner. @param previous - Old map. @param next - New map. @returns New owned map, including allocated empty maps. */

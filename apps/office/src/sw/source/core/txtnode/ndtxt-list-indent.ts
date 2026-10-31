@@ -243,3 +243,10 @@ export function UpdateSwTextNodeOutlineLevel(
   if (level !== 10 && level !== -1 && setListLevel) node.SetAttrListLevel(level);
   node.GetNodes().UpdateOutlineNode(node);
 }
+
+/** Original HasMarkedLabel body remains on the same actual text/list owners at this existing responsibility split. @param node - Actual native paragraph. @returns Whether its actual list level is marked. */
+export function HasSwTextNodeMarkedLabel(node: SwTextNode): boolean {
+  if (!node.IsInList()) return false;
+  const list = node.GetDoc().GetDocumentListsManager().GetListByName(node.GetListId());
+  return list?.IsListLevelMarked(node.GetActualListLevel()) ?? false;
+}

@@ -68,6 +68,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-join-boundaries.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -147,7 +151,8 @@
       "S3HW1E releases the actual composed native INET client base when browser whole-map replacement discards that attribute; retained actual owners are excluded. No native URL-history provider or visit state is synthesized.",
       "Existing fragment-replacement hint preparation is split from text/index mutation without changing ordering or ownership.",
       "S3HW1E releases replaced node-owned hint maps and whole-span attributes moved into node item sets. A copied caller snapshot remains independent; a replaced borrowed old map is destroyed. Complete graph/fragment/undo lifetime closure remains pending.",
-      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion.",
+      "S3HW1E HTML38: original SwContentNode CanJoinNext/CanJoinPrev admission preserves native node-kind, terminal sentinel, strict GetSpaceLeft capacity and successful output assignment; the current graph has no transparent SwSectionNode owner to skip. Native SwTextNode JoinNext/JoinPrev retain the correct current owner and consume actual previous/next paragraph content via owned Cut fragments and registered index transfers. The established portable AppendTextNode/JoinTextNodes adapter retains its source for existing undo-node storage and remains a distinct copy contract; native consumers explicitly select transfer, without replacing or faking the document/hint graph. SplitNode explicitly assigns its supplied native position to the trailing start even for before affinity, preserving other marker affinity and the established trailing-node return. Clone construction is extracted only into the existing responsibility fragment; private hint/empty-list flags remain copied by their real owner. Native HTML CallParser double-split/final boundary joins and target attribute snapshots, automatic text/table layout, table token reading/insertion and final model/filter/UI reconciliation remain pending. No whole-module, C++ allocation/ABI or unrepresented structural/redline/physical lifetime certificate is claimed; browser file UI/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

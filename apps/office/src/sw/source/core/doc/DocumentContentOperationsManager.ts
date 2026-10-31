@@ -198,6 +198,7 @@ export class DocumentContentOperationsManager {
     const source = this.GetTextNode(position, "split");
     const trailing = source.SplitContent(position.GetContentIndex());
     source.GetNodes().insertTextNodeAfter(source, trailing);
+    position.Assign(trailing, 0);
     return trailing;
   }
 

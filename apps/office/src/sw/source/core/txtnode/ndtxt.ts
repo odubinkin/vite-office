@@ -43,6 +43,7 @@ import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import { SwContentIndexUpdateMode, type SwContentIndex } from "../bastyp/index";
 import type { SwPosition } from "../crsr/pam";
+import { JoinNext, JoinPrev } from "./ndtxt-join";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
 import { SwList, WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../doc/list";
@@ -74,6 +75,7 @@ import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwpHints } from "./ndhints";
 import {
   AppendTextNodeHints,
+  CloneTextNodeTo,
   AssertTextNodeRange,
   CopyTextNodeHints,
   CreateTextNodeColorFragment,
@@ -99,6 +101,7 @@ import {
   GetSwTextNodeListLabel,
   GetSwTextNodeNumString,
   HasSwTextNodeVisibleNumbering,
+  HasSwTextNodeMarkedLabel,
   resolveSwLeftMarginForTabCalculation,
   resolveSwLeftMarginWithNum,
   resolveSwListLevelIndents,
@@ -544,9 +547,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Queries marked-label state through the existing list and derived tree depth. @returns Whether this member's label is marked. */
   public HasMarkedLabel(): boolean {
-    if (!this.IsInList()) return false;
-    const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
-    return list?.IsListLevelMarked(this.GetActualListLevel()) ?? false;
+    return HasSwTextNodeMarkedLabel(this);
   }
   /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
   public HasNumber(): boolean {
@@ -883,35 +884,36 @@ export class SwTextNode extends SwContentNode {
     });
     return trailing;
   }
-  /** Appends another text node's content while preserving its direct attributes. @param source - Appended text node. @returns Nothing. */
-  public AppendTextNode(source: SwTextNode): void {
+  /** Original JoinNext retains this owner and removes the admitted following paragraph. @returns Same native content owner. */
+  public JoinNext(): SwTextNode {
+    return JoinNext(this);
+  }
+  /** Original JoinPrev retains this trailing owner and transfers preceding contents and indices. @returns Nothing. */
+  public JoinPrev(): void {
+    JoinPrev(this);
+  }
+  /** Whole-paragraph CutText binding used by the current native join consumers. Source indices move once, after any destination-prefix insertion update. @param source - Consumed source paragraph. @param prepend - Insert at zero instead of appending. @param consume - Native Cut transfer; the established portable copy adapter retains its source. @returns Nothing. */
+  public AppendTextNode(source: SwTextNode, prepend = false, consume = false): void {
     if (source === this) throw new Error("SwTextNode cannot append itself.");
     if (source.GetNodes() !== this.GetNodes())
       throw new Error("Joined SwTextNodes belong to different documents.");
-    const offset = this.Len();
-    const joinedHints = AppendTextNodeHints(this, source, offset);
-    this.mText += source.mText;
-    this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
+    const text = source.mText,
+      oldLength = this.Len(),
+      offset = prepend ? 0 : oldLength;
+    if (prepend) this.UpdateContentIndices(0, text.length);
     source.MoveAllContentIndicesTo(this, offset);
+    this.mText = prepend ? text + this.mText : this.mText + text;
+    const joinedHints = AppendTextNodeHints(this, source, offset, prepend, oldLength, consume);
+    this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
     });
   }
-
   /** Creates an independent text node in another document graph. @param nodes - Destination node array. @returns Detached clone. */
   public CloneTo(nodes: SwNodes): SwTextNode {
-    const clone = new SwTextNode(
-      nodes,
-      nodes.GetEndOfContent().StartOfSectionNode(),
-      nodes.GetDoc().CopyTextColl(this.GetTextFormatColl()),
-    );
-    const direct = this.GetpSwAttrSet();
-    if (direct !== undefined) clone.SetAttr(direct);
-    clone.SetText(this.mText);
-    if (this.pSwpHints !== undefined)
-      clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
-    clone.SetListGeometryWins(this.listGeometryWins);
+    const clone = CloneTextNodeTo(this, nodes);
+    if (this.pSwpHints) clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
     clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
       this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
     return clone;

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 276
+revision: 282
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T11:18:53.147Z"
+  updated_at: "2026-10-31T11:47:07.105Z"
   updated_by: "CODER"
-  note: "HTML37 checkpoint verified: native HTMLTable grid/container/context and SwHTMLTableLayout construction/spacing are implemented; 242 unique related cases across 8 files pass, final types/lint/format and provenance/Writer/shared registry/boundaries/docs/size/tree pass. Initial fixture/import/lint/JSDoc failures are recorded and corrected. Table token loops, automatic text/layout, core insertion, insertion boundaries and final matrix remain pending; full goal stays active and incomplete."
-  attempts: 48
+  note: "HTML38 native paragraph join/split prerequisites verified: 1124 unique related cases across 11 files pass, with final194 owner/empty-hint revalidation, final types/lint/format and provenance/Writer registry/boundaries/docs/size/tree. Preserved distinct retained-source undo adapter and native consuming joins; initial regression/size failures corrected without weakening checks. Native HTML insertion boundaries/target snapshots, text/table automatic layout, table token insertion and final matrix remain pending; full goal stays active and incomplete."
+  attempts: 49
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -773,8 +776,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T11:47:07.105Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML38 native paragraph join/split prerequisites verified: 1124 unique related cases across 11 files pass, with final194 owner/empty-hint revalidation, final types/lint/format and provenance/Writer registry/boundaries/docs/size/tree. Preserved distinct retained-source undo adapter and native consuming joins; initial regression/size failures corrected without weakening checks. Native HTML insertion boundaries/target snapshots, text/table automatic layout, table token insertion and final matrix remain pending; full goal stays active and incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T11:47:31.112Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T11:18:59.144Z"
+doc_updated_at: "2026-10-31T11:47:31.112Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1959,6 +1975,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T11:47:07.105Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML38 native paragraph join/split prerequisites verified: 1124 unique related cases across 11 files pass, with final194 owner/empty-hint revalidation, final types/lint/format and provenance/Writer registry/boundaries/docs/size/tree. Preserved distinct retained-source undo adapter and native consuming joins; initial regression/size failures corrected without weakening checks. Native HTML insertion boundaries/target snapshots, text/table automatic layout, table token insertion and final matrix remain pending; full goal stays active and incomplete.
+    Attempts: 49
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:47:04.711Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3060,6 +3106,28 @@ sections:
     - Commands/results: npm run check:source-provenance passes1916runtime/1703mapped/182browser/31infra,html37-provenance.txt exec17903exit0. npm run inventory:parity:writer passes semanticViolationCount0,html37-writer.txt exec84606exit0. npm run inventory:parity:shared passes semanticViolationCount0,html37-shared-registry.txt exec20701exit0. Reexport-only htmltbl header retains no local class declaration claims; actual new class/functions own their evidence. Broad semantic/API/ABI certification remains unverified.
     - Commands/results: npm run check:dependencies passes1915runtime/10533relative imports/227allowed edges,html37-boundaries.txt exec99168exit0; npm run check:file-size passes,html37-size.txt exec24792exit0; npm run check:source-tree passes115required/32retired roots,html37-tree.txt exec42848exit0. git diff --check passes. No network/global-user configuration, test timeout, dependency, checker, hook or approval scope changes.
     - Scope closure: native intermediate table container/grid and layout-construction prerequisites are implemented and verified. Source token loops, text metrics and AutoLayoutPass1/2, core BuildTable insertion/finalization, existing-document insertion boundary/target snapshots and final model/filter/UI reconciliation remain pending. Actual nested intermediate table/layout references do not claim absent merged/nested core SwTableBox ownership. Graphic-link brush branches explicitly require the unrepresented graphic owner after original CSS precedence, rather than silently pretending to import an image. Intentional browser file UI/autosave/recovery deviations are untouched. Parent verification stays rework; the full objective remains active/incomplete and must not finish or pause.
+
+    ### HTML38 native paragraph join/insertion-boundary prerequisite checkpoint (verified)
+
+    - Previous goal turn is progress: c5254a498d2e implements and verifies the native HTMLTable grid/context/layout-construction block. Tree was clean at this turn's start. Task remains approved CODER/direct/DOING; no new task, network or approval scope is needed.
+    - Dependency inspection confirms AutoLayoutPass1 needs actual SwTextNode::GetMinMaxSize/SwFont device sizing, absent from the current text-size owner. No guessed width, successful fake pass or text-device stub was introduced. The next concrete independent critical-path work is native existing-document insertion boundary admission/joins. Automatic layout and real token-table insertion remain open.
+    - Current source SplitContent already moves default after-affinity registered positions, so a blanket statement that SplitNode never moves its position was too broad. Explicit native split-position assignment is needed for before-affinity callers, while separate before-affinity boundary markers retain their source behavior. Existing trailing-node return and leading-node identity of the portable kernel are retained; no broad C++ node-allocation/API/ABI certificate is claimed.
+    - Source work: original SwContentNode::CanJoinNext/CanJoinPrev type/strict-capacity/sentinel admission and output writes; SwTextNode::JoinNext/JoinPrev survivor choice; whole-paragraph native Cut-style hint transfer and source index movement on actual existing owners; the native reverse-delete path consumes those operations, while the established manager copy adapter retains its source for undo storage. Existing clone construction is split into the established ndtxt-hints responsibility fragment to keep native class source below1000physical lines, with private hint/empty-list flags copied at the same original owner. No second graph or projected run owner is added.
+    - Read-only source inventory encountered missing guessed swfont.hxx, ndcntnt.cxx, ndtxt-content-operations.ts, pam.navigation.ts, markmanager.ts and ndtxt-list-items.ts paths, plus an unmatched text-metrics* glob. Relevant real references were found by rg in core/docnode/node.cxx, core/text/itratr.cxx, existing node/hint owners and current graph files; route was recomputed after inspection failures. No outside-repository source or network access occurred. Further reads use inventories rather than guessed names.
+
+    - Command: html38-core.txt exec89918exit1. Result: 274pass/7fail across6files in152.76s. All7new join/admission/split cases passed. Existing internet-node transition and join-history cases exposed a real ownership-contract distinction: established portable AppendTextNode/JoinTextNodes retains its source node for undo storage; native JoinNext/JoinPrev consumes the removed paragraph through Cut. Applying consuming semantics to the existing retained-source adapter empties undo-owned text and invalidates saved hint endpoints. Preserve the retained-source binding for existing history consumers, while native join methods use an explicit actual-owner transfer path. Do not rewrite positive old assertions to hide the regression or invent a second undo/document graph. Route recomputed. App typecheck html38-types.txt exec25787exit0 and changed-source lint html38-lint.txt exec99046exit0 already pass; later correction requires final verification.
+
+    - Command: file-size gate html38-size.txt exec51345. Result: fail ndtxt.ts1000lines by the gate's newline-inclusive counting (wc reports999). All281corrected core tests now pass81.25s; app types pass. Route recomputed before structural correction. Extract the unchanged public HasMarkedLabel body to its existing native list responsibility fragment, retaining the original SwTextNode method/actual owner and applying the focused marked-label tests; do not modify checker thresholds or hide source lines.
+
+    - Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/txtnode/internet-node-transitions.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/txtnode/native-split-attributes.test.ts src/sw/source/core/bastyp/index.test.ts --maxWorkers 1. Result: pass281cases/6files,81.25s,html38-core-final.txt exec74288exit0 after preserving the actual retained-source adapter contract. The initial274pass/7fail invocation remains recorded as failed; no old positive assertion was weakened.
+    - Command: npm run test:writer -- src/sw/source/core/undo/native-split-history.test.ts src/sw/source/core/doc/writer-model.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1. Result: pass837cases/4files,54.65s,html38-history.txt exec37820exit0. Existing history/storage, graph/mark/table conversion and model consumers retain their established lifetimes.
+    - Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-marked-list-level.test.ts --maxWorkers 1. Result: pass13cases/2files,134.65s,html38-last-focused.txt exec19257exit0. All7new native join/admission/split cases pass strengthened direct table-barrier and unchanged-failure-position assertions;6marked-list cases cover the unchanged helper extraction required by the source-size gate. Total unique related scenarios are1124across11files.
+    - Final owner-return review: source AppendTextNode's original zero-length insertion returns the current actual node map after native item insertion. The new helper likewise borrows node.GetpSwpHints() after native insertion/merging rather than assuming the initially obtained map remains current. Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts --maxWorkers 1. Result: pass194cases/2files,109.19s,html38-ownership-final.txt exec88672exit0, on final source. These repeat previously counted cases; they are not added again to1124.
+    - Command: app native TypeScript compiler --noEmit. Result: pass html38-types.txt exec25787exit0; corrected-state html38-types-final.txt exec93536exit0; helper-extraction html38-types-last.txt exec80499exit0; final after owner-return binding html38-types-current.txt exec14886exit0. No source edits followed.
+    - Commands/results: all8changed source/test files ESLint --max-warnings0 pass html38-lint-final.txt exec50717exit0; final owner-helper source lint passes html38-lint-owner-final.txt exec87047exit0. Explicit changed-artifact Prettier check passes html38-format-check.txt exec45266exit0; final owner helper check passes html38-format-owner-final.txt exec5251exit0. JSDoc passes4301authored sources,html38-docs-final.txt exec85380exit0.
+    - Commands/results: source provenance passes1917runtime/1704mapped/182browser/31infra,html38-provenance.txt exec81009exit0; final updated helper evidence also passes html38-provenance-final.txt exec26407exit0. Writer registry passes semanticViolationCount0,html38-writer.txt exec76540exit0. Boundaries pass1916runtime/10537relative imports/227allowed edges,html38-boundaries.txt exec76190exit0. Source tree passes115required/32retired roots,html38-tree.txt exit0. Corrected size gate passes html38-size-final.txt exec43163exit0; actual class file is998newline-terminated lines,999by gate counting, with no threshold/line-hiding changes. git diff --check passes. No full all-app suite, test-timeout increase, dependency/checker/hook change, fake node/provider/private test injection, network or user configuration change is claimed.
+    - Source findings: WRITER314 preserves strict native join-capacity comparison and output timing; its multi-gigabyte limit is source-reviewed without mock lengths. WRITER315 records the native constraint-list OR ordering observed while tracing the pending automatic layout dependency; no lexicographic replacement or completed constraint/pass implementation is claimed.
+    - Scope closure: actual native paragraph join/admission and explicit split-position prerequisites are implemented and verified; established retained-source undo adapters remain separate and positive. Public SwTextNode methods and private hint/list flags remain on their actual owner; class-body decomposition uses existing/new same-owner fragments only. Native HTML CallParser double splitting/final boundary joins and target attribute snapshots are still pending connection, as are real font/text/table automatic layout, table token loops/core insertion and final current-model/filter/UI reconciliation. Full objective remains active/incomplete; parent verification stays rework and must not finish or pause.
 id_source: "generated"
 ---
 ## Summary
@@ -4255,6 +4323,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T11:47:07.105Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML38 native paragraph join/split prerequisites verified: 1124 unique related cases across 11 files pass, with final194 owner/empty-hint revalidation, final types/lint/format and provenance/Writer registry/boundaries/docs/size/tree. Preserved distinct retained-source undo adapter and native consuming joins; initial regression/size failures corrected without weakening checks. Native HTML insertion boundaries/target snapshots, text/table automatic layout, table token insertion and final matrix remain pending; full goal stays active and incomplete.
+Attempts: 49
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:47:04.711Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5360,3 +5458,25 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands/results: npm run check:source-provenance passes1916runtime/1703mapped/182browser/31infra,html37-provenance.txt exec17903exit0. npm run inventory:parity:writer passes semanticViolationCount0,html37-writer.txt exec84606exit0. npm run inventory:parity:shared passes semanticViolationCount0,html37-shared-registry.txt exec20701exit0. Reexport-only htmltbl header retains no local class declaration claims; actual new class/functions own their evidence. Broad semantic/API/ABI certification remains unverified.
 - Commands/results: npm run check:dependencies passes1915runtime/10533relative imports/227allowed edges,html37-boundaries.txt exec99168exit0; npm run check:file-size passes,html37-size.txt exec24792exit0; npm run check:source-tree passes115required/32retired roots,html37-tree.txt exec42848exit0. git diff --check passes. No network/global-user configuration, test timeout, dependency, checker, hook or approval scope changes.
 - Scope closure: native intermediate table container/grid and layout-construction prerequisites are implemented and verified. Source token loops, text metrics and AutoLayoutPass1/2, core BuildTable insertion/finalization, existing-document insertion boundary/target snapshots and final model/filter/UI reconciliation remain pending. Actual nested intermediate table/layout references do not claim absent merged/nested core SwTableBox ownership. Graphic-link brush branches explicitly require the unrepresented graphic owner after original CSS precedence, rather than silently pretending to import an image. Intentional browser file UI/autosave/recovery deviations are untouched. Parent verification stays rework; the full objective remains active/incomplete and must not finish or pause.
+
+### HTML38 native paragraph join/insertion-boundary prerequisite checkpoint (verified)
+
+- Previous goal turn is progress: c5254a498d2e implements and verifies the native HTMLTable grid/context/layout-construction block. Tree was clean at this turn's start. Task remains approved CODER/direct/DOING; no new task, network or approval scope is needed.
+- Dependency inspection confirms AutoLayoutPass1 needs actual SwTextNode::GetMinMaxSize/SwFont device sizing, absent from the current text-size owner. No guessed width, successful fake pass or text-device stub was introduced. The next concrete independent critical-path work is native existing-document insertion boundary admission/joins. Automatic layout and real token-table insertion remain open.
+- Current source SplitContent already moves default after-affinity registered positions, so a blanket statement that SplitNode never moves its position was too broad. Explicit native split-position assignment is needed for before-affinity callers, while separate before-affinity boundary markers retain their source behavior. Existing trailing-node return and leading-node identity of the portable kernel are retained; no broad C++ node-allocation/API/ABI certificate is claimed.
+- Source work: original SwContentNode::CanJoinNext/CanJoinPrev type/strict-capacity/sentinel admission and output writes; SwTextNode::JoinNext/JoinPrev survivor choice; whole-paragraph native Cut-style hint transfer and source index movement on actual existing owners; the native reverse-delete path consumes those operations, while the established manager copy adapter retains its source for undo storage. Existing clone construction is split into the established ndtxt-hints responsibility fragment to keep native class source below1000physical lines, with private hint/empty-list flags copied at the same original owner. No second graph or projected run owner is added.
+- Read-only source inventory encountered missing guessed swfont.hxx, ndcntnt.cxx, ndtxt-content-operations.ts, pam.navigation.ts, markmanager.ts and ndtxt-list-items.ts paths, plus an unmatched text-metrics* glob. Relevant real references were found by rg in core/docnode/node.cxx, core/text/itratr.cxx, existing node/hint owners and current graph files; route was recomputed after inspection failures. No outside-repository source or network access occurred. Further reads use inventories rather than guessed names.
+
+- Command: html38-core.txt exec89918exit1. Result: 274pass/7fail across6files in152.76s. All7new join/admission/split cases passed. Existing internet-node transition and join-history cases exposed a real ownership-contract distinction: established portable AppendTextNode/JoinTextNodes retains its source node for undo storage; native JoinNext/JoinPrev consumes the removed paragraph through Cut. Applying consuming semantics to the existing retained-source adapter empties undo-owned text and invalidates saved hint endpoints. Preserve the retained-source binding for existing history consumers, while native join methods use an explicit actual-owner transfer path. Do not rewrite positive old assertions to hide the regression or invent a second undo/document graph. Route recomputed. App typecheck html38-types.txt exec25787exit0 and changed-source lint html38-lint.txt exec99046exit0 already pass; later correction requires final verification.
+
+- Command: file-size gate html38-size.txt exec51345. Result: fail ndtxt.ts1000lines by the gate's newline-inclusive counting (wc reports999). All281corrected core tests now pass81.25s; app types pass. Route recomputed before structural correction. Extract the unchanged public HasMarkedLabel body to its existing native list responsibility fragment, retaining the original SwTextNode method/actual owner and applying the focused marked-label tests; do not modify checker thresholds or hide source lines.
+
+- Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/txtnode/internet-node-transitions.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/txtnode/native-split-attributes.test.ts src/sw/source/core/bastyp/index.test.ts --maxWorkers 1. Result: pass281cases/6files,81.25s,html38-core-final.txt exec74288exit0 after preserving the actual retained-source adapter contract. The initial274pass/7fail invocation remains recorded as failed; no old positive assertion was weakened.
+- Command: npm run test:writer -- src/sw/source/core/undo/native-split-history.test.ts src/sw/source/core/doc/writer-model.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts --maxWorkers 1. Result: pass837cases/4files,54.65s,html38-history.txt exec37820exit0. Existing history/storage, graph/mark/table conversion and model consumers retain their established lifetimes.
+- Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-marked-list-level.test.ts --maxWorkers 1. Result: pass13cases/2files,134.65s,html38-last-focused.txt exec19257exit0. All7new native join/admission/split cases pass strengthened direct table-barrier and unchanged-failure-position assertions;6marked-list cases cover the unchanged helper extraction required by the source-size gate. Total unique related scenarios are1124across11files.
+- Final owner-return review: source AppendTextNode's original zero-length insertion returns the current actual node map after native item insertion. The new helper likewise borrows node.GetpSwpHints() after native insertion/merging rather than assuming the initially obtained map remains current. Command: npm run test:writer -- src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts --maxWorkers 1. Result: pass194cases/2files,109.19s,html38-ownership-final.txt exec88672exit0, on final source. These repeat previously counted cases; they are not added again to1124.
+- Command: app native TypeScript compiler --noEmit. Result: pass html38-types.txt exec25787exit0; corrected-state html38-types-final.txt exec93536exit0; helper-extraction html38-types-last.txt exec80499exit0; final after owner-return binding html38-types-current.txt exec14886exit0. No source edits followed.
+- Commands/results: all8changed source/test files ESLint --max-warnings0 pass html38-lint-final.txt exec50717exit0; final owner-helper source lint passes html38-lint-owner-final.txt exec87047exit0. Explicit changed-artifact Prettier check passes html38-format-check.txt exec45266exit0; final owner helper check passes html38-format-owner-final.txt exec5251exit0. JSDoc passes4301authored sources,html38-docs-final.txt exec85380exit0.
+- Commands/results: source provenance passes1917runtime/1704mapped/182browser/31infra,html38-provenance.txt exec81009exit0; final updated helper evidence also passes html38-provenance-final.txt exec26407exit0. Writer registry passes semanticViolationCount0,html38-writer.txt exec76540exit0. Boundaries pass1916runtime/10537relative imports/227allowed edges,html38-boundaries.txt exec76190exit0. Source tree passes115required/32retired roots,html38-tree.txt exit0. Corrected size gate passes html38-size-final.txt exec43163exit0; actual class file is998newline-terminated lines,999by gate counting, with no threshold/line-hiding changes. git diff --check passes. No full all-app suite, test-timeout increase, dependency/checker/hook change, fake node/provider/private test injection, network or user configuration change is claimed.
+- Source findings: WRITER314 preserves strict native join-capacity comparison and output timing; its multi-gigabyte limit is source-reviewed without mock lengths. WRITER315 records the native constraint-list OR ordering observed while tracing the pending automatic layout dependency; no lexicographic replacement or completed constraint/pass implementation is claimed.
+- Scope closure: actual native paragraph join/admission and explicit split-position prerequisites are implemented and verified; established retained-source undo adapters remain separate and positive. Public SwTextNode methods and private hint/list flags remain on their actual owner; class-body decomposition uses existing/new same-owner fragments only. Native HTML CallParser double splitting/final boundary joins and target attribute snapshots are still pending connection, as are real font/text/table automatic layout, table token loops/core insertion and final current-model/filter/UI reconciliation. Full objective remains active/incomplete; parent verification stays rework and must not finish or pause.

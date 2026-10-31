@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-join.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-join.ts",
+          "marker": "JoinNext"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-join-boundaries.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::JoinNext"
+        },
+        {
+          "path": "sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::JoinPrev"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+    "localSymbols": [
+      "JoinNext",
+      "JoinPrev"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::JoinNext",
+      "SwTextNode::JoinPrev"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML38: original SwContentNode CanJoinNext/CanJoinPrev admission preserves native node-kind, terminal sentinel, strict GetSpaceLeft capacity and successful output assignment; the current graph has no transparent SwSectionNode owner to skip. Native SwTextNode JoinNext/JoinPrev retain the correct current owner and consume actual previous/next paragraph content via owned Cut fragments and registered index transfers. The established portable AppendTextNode/JoinTextNodes adapter retains its source for existing undo-node storage and remains a distinct copy contract; native consumers explicitly select transfer, without replacing or faking the document/hint graph. SplitNode explicitly assigns its supplied native position to the trailing start even for before affinity, preserving other marker affinity and the established trailing-node return. Clone construction is extracted only into the existing responsibility fragment; private hint/empty-list flags remain copied by their real owner. Native HTML CallParser double-split/final boundary joins and target attribute snapshots, automatic text/table layout, table token reading/insertion and final model/filter/UI reconciliation remain pending. No whole-module, C++ allocation/ABI or unrepresented structural/redline/physical lifetime certificate is claimed; browser file UI/autosave/recovery deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Broad CutImpl, transparent/non-text section, redline/layout/GC/refcount/native allocation lifetime and module API/ABI certification remain unverified. Native filter insertion boundaries and text/table measurement remain pending."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-join.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original SwTextNode join bodies are a same-owner method fragment under the existing hard source-size limit; the public methods remain on the actual SwTextNode and no second node or state object is created."
+    }
+  }
+}

@@ -2674,3 +2674,16 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayout::GetLeftCellSpace and GetRightCellSpace.
 - Observation: an interior cell's right minimum spacing tests GetColumn(nCol)->HasLeftBorder(), rather than the next column's border. The left calculation can also add MIN_BORDER_DIST for a spanning cell reaching the table's right border even without its own left border. These conditions are asymmetric with simple geometric edge lookup.
 - Preservation: retain current-column/span tests and uint16 assignment narrowing. Do not substitute a next-column lookup or a uniform border/padding rule; source-backed tests cover both border-aware and Netscape-only accounting.
+
+
+### WRITER314 — Paragraph join admission excludes an exact remaining-capacity fit
+
+- Source: sw/source/core/docnode/node.cxx, lcl_CheckMaxLength and SwContentNode::CanJoinNext/CanJoinPrev; SwTextNode::GetSpaceLeft.
+- Observation: text joins require preceding.GetSpaceLeft() > following.Len(), rather than greater-or-equal. GetSpaceLeft already reserves two signed32 positions, so an exact fit in that reported remaining space is still rejected. Both directions use preceding capacity and leave the supplied output unchanged on failure; successful position output is assigned to the other node at offset zero.
+- Preservation: retain the strict comparison and output timing. The current text-only graph has no transparent SwSectionNode family to skip; no synthetic section owner is introduced. The capacity boundary is source-reviewed, without allocating multi-gigabyte test strings or replacing real node lengths with mocks.
+
+### WRITER315 — HTML table constraints use an OR condition rather than lexicographic ordering
+
+- Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayoutConstraints::InsertNext.
+- Observation: traversal stops when either an existing row is greater than the new row or its column is greater than the new column. Thus an existing row0/column5 constraint can be placed after an incoming row1/column2 constraint. This is not ordinary row-then-column lexicographic ordering despite the later pass's line-by-line commentary.
+- Preservation: retain the original OR condition when porting the pending constraint owner and first layout pass. Do not silently substitute a comparator or sorted array with lexicographic semantics. This is a source-state finding; table constraint/pass implementation and desktop reproduction are not claimed here.
