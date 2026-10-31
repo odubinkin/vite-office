@@ -62,32 +62,6 @@ export function InsertAttrs(
       item.Dispose();
     }
   }
-  const heads = new Map<number, HTMLAttrHead>([
-    [H.RES_CHRATR_LANGUAGE, tab.pLanguage],
-    [H.RES_CHRATR_CJK_LANGUAGE, tab.pLanguageCJK],
-    [H.RES_CHRATR_CTL_LANGUAGE, tab.pLanguageCTL],
-    [H.RES_CHRATR_WEIGHT, tab.pBold],
-    [H.RES_CHRATR_CJK_WEIGHT, tab.pBoldCJK],
-    [H.RES_CHRATR_CTL_WEIGHT, tab.pBoldCTL],
-    [H.RES_CHRATR_POSTURE, tab.pItalic],
-    [H.RES_CHRATR_CJK_POSTURE, tab.pItalicCJK],
-    [H.RES_CHRATR_CTL_POSTURE, tab.pItalicCTL],
-    [H.RES_CHRATR_FONTSIZE, tab.pFontHeight],
-    [H.RES_CHRATR_CJK_FONTSIZE, tab.pFontHeightCJK],
-    [H.RES_CHRATR_CTL_FONTSIZE, tab.pFontHeightCTL],
-    [H.RES_CHRATR_FONT, tab.pFont],
-    [H.RES_CHRATR_CJK_FONT, tab.pFontCJK],
-    [H.RES_CHRATR_CTL_FONT, tab.pFontCTL],
-    [H.RES_PARATR_LINESPACING, tab.pLineSpacing],
-    [H.RES_CHRATR_UNDERLINE, tab.pUnderline],
-    [H.RES_CHRATR_COLOR, tab.pFontColor],
-    [H.RES_CHRATR_CROSSEDOUT, tab.pStrike],
-    [H.RES_PARATR_ADJUST, tab.pAdjust],
-    [H.RES_MARGIN_FIRSTLINE, tab.pFirstLineIndent],
-    [H.RES_MARGIN_TEXTLEFT, tab.pTextLeftMargin],
-    [H.RES_MARGIN_RIGHT, tab.pRightMargin],
-    [H.RES_UL_SPACE, tab.pULSpace],
-  ]);
   for (const item of items.entries()) {
     if (item instanceof SvxFontHeightItem && item.GetProp() !== 100) continue;
     if (item instanceof SvxULSpaceItem && (!info.m_bTopMargin || !info.m_bBottomMargin)) {
@@ -111,8 +85,10 @@ export function InsertAttrs(
       if (!charLevel) parser.InsertAttr(tab.pBrush, item, context);
       continue;
     }
-    const head = heads.get(item.Which());
+    const head = GetAttrTabEntry(parser, item.Which());
     if (head) parser.InsertAttr(head, item, context);
   }
   if (info.m_aId) parser.InsertBookmark(info.m_aId);
 }
+
+import { GetAttrTabEntry } from "./htmlcss1.attr";

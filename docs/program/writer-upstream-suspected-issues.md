@@ -2530,3 +2530,18 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: explicit LI close ends attributes without immediately appending a paragraph. A subsequent folded newline-space token is inserted after the item text; the next item then appends. AppendTextNode strips trailing hard line feeds, not ordinary spaces.
 - Impact: the native underlying paragraph string can contain a trailing space even though visual layout may hide it. A Markdown raw-HTML block follows the same reader path.
 - Local behavior: preserve the actual space in HTML and transported Markdown paragraphs. Tests use exact strings instead of trimming input or output to conceal the native state.
+
+
+### WRITER292 — Empty-paragraph script filtering can discard displaced style attributes
+
+- Source: `sw/source/filter/html/swhtml.cxx`, SetTextCollAttrs and EndAttr; `htmlcss1.cxx`, InsertParaAttrs; `i18npool/source/breakiterator/breakiteratorImpl.cxx`, getScriptType.
+- Observation: displaced block-style items are converted to LikePara attributes. EndAttr(false) still performs script-dependent filtering on their current empty range. The break iterator returns WEAK outside an empty string, which matches none of the Western/CJK/CTL posture families; LikePara does not bypass this optimization.
+- Impact: an outer HTML-mode ADDRESS can lose its italic posture when an inner definition style replaces it on an empty paragraph. Non-script items such as underline can still survive the original hard-attribution path. This is a source-control-flow finding, not compiled desktop certification.
+- Local behavior: retain the source filtering and document the loss. Real document tests compare ADDRESS posture loss with retained authored underline on the same nested definition structure; do not force the empty script family to Latin or postpone filtering to make the result look consistent.
+
+### WRITER293 — Definition-list margin subtraction can wrap to a large unsigned indent
+
+- Source: `sw/source/filter/html/swhtml.cxx`, SetTextCollAttrs DD/DT margin phase; `DocumentStylePoolManager.cxx`, HTML_DD/HTML_DT defaults.
+- Observation: DD subtracts the DT style's margin, then explicitly narrows that signed difference to sal_uInt16 before adding it to the unsigned context margin. DT itself contributes zero extra margin even when its source style has been edited.
+- Impact: default DD567twips with an authored DT700twips produces65403twips after narrowing, rather than a negative offset or a zero clamp. This need not establish a visible layout defect in every document.
+- Local behavior: retain source subtraction and narrowing. Tests inspect actual node items for ordinary567/0 defaults, edited600-minus100 and right80-minus30 cases, nested accumulation and the negative wrap. Do not clamp it using browser CSS expectations.

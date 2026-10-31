@@ -124,6 +124,10 @@ export function getWriterParagraphStyleDefaults(
     };
   }
   switch (id) {
+    case "list-contents":
+      return { textLeftTwips: Number(convert(1n, Length.cm, Length.twip)) };
+    case "list-heading":
+      return { textLeftTwips: 0 };
     case "sender":
       return htmlMode
         ? { italic: true, lineNumber: false }
@@ -298,3 +302,5 @@ export function applyScriptFonts(collection: SwFormat, role: "fixed" | "heading"
     );
   }
 }
+
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";

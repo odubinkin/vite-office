@@ -6,7 +6,6 @@ import type { SvStream } from "../../../../tools/source/stream/stream";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { setTextFormatCollAtNode } from "../../core/doc/docfmt";
 import {
   HTMLAttr,
   HTMLAttrTable,
@@ -47,12 +46,6 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { ParseStyleOptions } from "./htmlcss1.options";
 import { InsertBookmark, NewAnchor } from "./htmlgrin";
 import { InsertAttrs } from "./htmlctxt.insert";
-import {
-  SvxFirstLineIndentItem,
-  SvxTextLeftMarginItem,
-  SvxRightMarginItem,
-  SvxIndentValue,
-} from "../../../../editeng/inc/lrspitem";
 import { NewBasefontAttr, EndBasefontAttr, NewFontAttr, EndFontAttr } from "./swhtml.font";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
@@ -342,79 +335,9 @@ export class SwHTMLParser extends HTMLParser {
   }
   /** Original paragraph style selection and consumed context margin contributions. @param topContext - Newly opened explicit style context. @returns Nothing. */
   SetTextCollAttrs(topContext?: HTMLAttrContext): void {
-    let explicit = false;
-    let pool = SwPoolFormatId.COLL_TEXT as number;
-    for (const context of this.m_aContexts)
-      if (context.GetTextFormatColl()) {
-        pool = context.GetTextFormatColl();
-        explicit = true;
-      }
-    const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
-      /** Matches original pool identity. @param value - Native pool metadata. @returns Identity match. */ (
-        value,
-      ) => value.poolId === pool,
-    );
-    if (!entry) throw new Error("HTML paragraph pool identity is not represented.");
-    const style = this.m_xDoc.GetTextFormatColl(entry.id);
-    const left: [number] = [0],
-      right: [number] = [0],
-      indent: [number] = [0];
-    this.GetMarginsFromContext(left, right, indent);
-    const set = style.GetAttrSet(),
-      first = set.Get(H.RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem,
-      leftItem = set.Get(H.RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem,
-      rightItem = set.Get(H.RES_MARGIN_RIGHT) as SvxRightMarginItem;
-    if (topContext?.GetTextFormatColl()) {
-      if (
-        set.GetItemIfSet(H.RES_MARGIN_FIRSTLINE) ||
-        set.GetItemIfSet(H.RES_MARGIN_TEXTLEFT) ||
-        set.GetItemIfSet(H.RES_MARGIN_RIGHT)
-      ) {
-        left[0] = (left[0] + leftItem.ResolveTextLeft()) & 0xffff;
-        right[0] = (right[0] + rightItem.ResolveRight()) & 0xffff;
-        indent[0] = first.ResolveTextFirstLineOffset();
-        topContext.SetMargins(left[0], right[0], indent[0]);
-      }
-      const spacing = set.GetItemIfSet(H.RES_UL_SPACE);
-      if (spacing instanceof SvxULSpaceItem)
-        topContext.SetULSpace(spacing.GetUpper(), spacing.GetLower());
-    }
-    if (!explicit) {
-      if (!left[0]) left[0] = leftItem.ResolveTextLeft() & 0xffff;
-      if (!right[0]) right[0] = rightItem.ResolveRight() & 0xffff;
-      if (!indent[0]) indent[0] = first.ResolveTextFirstLineOffset();
-    }
-    for (const attr of this.m_aParaAttrs) attr.Invalidate();
-    this.m_aParaAttrs.length = 0;
-    setTextFormatCollAtNode(this.GetTextNode(), style, false);
-    if (
-      left[0] !== leftItem.ResolveTextLeft() ||
-      right[0] !== rightItem.ResolveRight() ||
-      indent[0] !== first.ResolveTextFirstLineOffset()
-    ) {
-      const firstLine = first.Clone(),
-        leftMargin = leftItem.Clone(),
-        rightMargin = rightItem.Clone();
-      firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(indent[0]));
-      leftMargin.SetTextLeft(SvxIndentValue.twips(left[0]));
-      rightMargin.SetRight(SvxIndentValue.twips(right[0]));
-      for (const [head, item] of [
-        [this.m_xAttrTab.pFirstLineIndent, firstLine],
-        [this.m_xAttrTab.pTextLeftMargin, leftMargin],
-        [this.m_xAttrTab.pRightMargin, rightMargin],
-      ] as readonly (readonly [HTMLAttrHead, SfxPoolItem])[]) {
-        try {
-          if (NewAttr(this, this.m_xAttrTab, head, item) && head[0]) {
-            head[0].SetLikePara();
-            this.m_aParaAttrs.push(head[0]);
-            EndAttr(this, head[0], false, this.breakIterator);
-          }
-        } finally {
-          item.Dispose();
-        }
-      }
-    }
+    SetTextCollAttrs(this, topContext);
   }
+
   /** Removes at most two trailing hard linefeeds through the real content owner. @returns Removed count. */
   StripTrailingLF(): number {
     const node = this.GetTextNode(),
@@ -565,6 +488,11 @@ export class SwHTMLParser extends HTMLParser {
       if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(A.AM_SPACE);
       else this.AddParSpace();
     }
+    if (
+      (this.m_nOpenParaToken === T.DT_ON || this.m_nOpenParaToken === T.DD_ON) &&
+      this.m_nDefListDeep
+    )
+      --this.m_nDefListDeep;
     const context = this.PopContext(
       this.m_nOpenParaToken !== T.NONE ? this.m_nOpenParaToken : T.PARABREAK_ON,
     );
@@ -625,10 +553,17 @@ export class SwHTMLParser extends HTMLParser {
   }
   /** Original represented block-style transition. @param token - Opening token. @param pool - Native pool ID. @returns Nothing. */
   NewTextFormatColl(token: T, pool: number): void {
-    const mode = token === T.ADDRESS_ON ? A.AM_NOSPACE : A.AM_SPACE;
+    const mode =
+      token === T.ADDRESS_ON
+        ? A.AM_NOSPACE
+        : token === T.DD_ON || token === T.DT_ON
+          ? A.AM_SOFTNOSPACE
+          : A.AM_SPACE;
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(mode);
     else if (mode === A.AM_SPACE) this.AddParSpace();
-    const context = new HTMLAttrContext(token, pool);
+    const className =
+      token === T.LISTING_ON || token === T.XMP_ON ? "" : this.GetStyleOption(O.CLASS);
+    const context = new HTMLAttrContext(token, pool, className);
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
       language = this.GetStyleOption(O.LANG);
@@ -648,7 +583,10 @@ export class SwHTMLParser extends HTMLParser {
   /** Original block close applies its append policy before ending context attributes. @param token - Original opening or closing token. @returns Nothing. */
   EndTextFormatColl(token: T): void {
     const opening = (token & ~1) as T,
-      mode = opening === T.ADDRESS_ON ? A.AM_SOFTNOSPACE : A.AM_SPACE;
+      mode =
+        opening === T.ADDRESS_ON || opening === T.DD_ON || opening === T.DT_ON
+          ? A.AM_SOFTNOSPACE
+          : A.AM_SPACE;
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(mode);
     else if (mode === A.AM_SPACE) this.AddParSpace();
     const context = this.PopContext(opening);
@@ -699,7 +637,7 @@ export class SwHTMLParser extends HTMLParser {
       return;
     }
     if (this.m_bInTitle || this.bReadScript || this.bReadStyle) return;
-    if (DispatchNumberBulletList(this, token)) return;
+    if (DispatchDefList(this, token) || DispatchNumberBulletList(this, token)) return;
     switch (token) {
       case T.TEXTTOKEN:
       case T.CDATA: {
@@ -940,3 +878,7 @@ export class SwHTMLParser extends HTMLParser {
 }
 
 import { DispatchNumberBulletList, EndNumberBulletList, SetNodeNum } from "./htmlnumreader";
+
+import { DispatchDefList } from "./swhtml.definitions";
+
+import { SetTextCollAttrs } from "./swhtml.styles";

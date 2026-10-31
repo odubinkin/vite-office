@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/swhtml.definitions.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.definitions.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.definitions.ts",
+          "marker": "NewDefList"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::NewDefList"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/swhtml.cxx",
+    "localSymbols": [
+      "NewDefList",
+      "EndDefList",
+      "NewDefListItem",
+      "EndDefListItem",
+      "DispatchDefList"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::NewDefList",
+      "SwHTMLParser::EndDefList",
+      "SwHTMLParser::NewDefListItem",
+      "SwHTMLParser::EndDefListItem"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E definition-list and nested-style checkpoint: native DL/DT/DD transitions consume the existing HTML contexts and unsigned definition depth, preserve implicit-list EndPara cleanup, mixed numbered-list spacing, current-DD-sensitive nested margins and explicit close behavior. Original HTML_DD/HTML_DT IDs12291/12292 are materialized as internal List Contents/List Heading collections with direct567/0twip left items, Standard parents and DT-to-DD follow identity; public available-style admission is unchanged. Original SetTextCollAttrs now retains displaced direct styles through owned hard item sets, Differentiate, PRE priority, nearest fallback context and native DD-minus-DT/DT-zero margin arithmetic. Shared GetAttrTabEntry/InsertParaAttrs use real registered Which IDs and original heads; InsertAttrs no longer maintains an incomplete duplicate map. Empty-paragraph script attribute loss and unsigned margin wrap are retained (WRITER292/293). Tests use real HTML/Markdown/documents/Worker and original public parser operations; no private-state or operation-result forging. Generated CSS class derivation, target insertion snapshots, stylesheet composition, raw HTML tables and full native reader ABI remain unverified or pending. No intentional browser file UI/autosave/recovery changes or full-goal promotion."
+    ],
+    "omittedResponsibilities": [
+      "Generated CSS class derivation, target character snapshots and full native/protected/layout services remain unverified or pending."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/swhtml.definitions.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Cohesive original parser methods retain the same native owner and contexts in a source responsibility fragment to satisfy authored TypeScript size limits; no alternate model or service is introduced."
+    }
+  }
+}

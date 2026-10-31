@@ -1282,3 +1282,38 @@ consumed new unique-rule insertion; general reader undo/MakeNumRule copy and
 ChgNumRuleFormats operations are not certified by that binding. Definition-list
 producers, represented raw HTML tables, remaining HTML paths and full current-model
 filter/UI audit still require work; full goal completion remains unproven.
+
+
+### S3HW1E definition lists and original nested-style attribution
+
+DL/DT/DD tokens now use original NewDefList/EndDefList/NewDefListItem/
+EndDefListItem transitions on the existing parser/context stack. The definition
+depth participates with numbering depth in paragraph spacing. Orphan terms and
+descriptions use implicit depth closed by EndPara, without a synthetic DL context.
+Nested DL margins distinguish an existing DD context from another list boundary;
+explicit item ends close attributes without appending by themselves.
+
+Original HTML_DD/HTML_DT pool IDs12291/12292 now materialize the existing internal
+List Contents/List Heading metadata. Direct source defaults are567twips for DD
+and0 for DT, both Standard-derived; DT follows DD and DD follows itself. These
+required parser styles do not expand the unrelated available-style menu.
+
+SetTextCollAttrs replaces the earlier scalar last-style selection with original
+owned hard attribution sets, direct-item Differentiate, PRE priority and fallback
+context selection. DD margins subtract the actual DT style margins; DT contributes
+zero extra left/right margin, and the original unsigned accumulation is preserved.
+Original GetAttrTabEntry and InsertParaAttrs route actual registered Which IDs
+through existing deferred heads, replacing the partial duplicate InsertAttrs map.
+No new item IDs, hint model or alternate attribute insertion path is created.
+
+Source quirks are retained: displaced script attributes can be discarded when
+EndAttr sees an empty paragraph (WRITER292), and a negative DD-minus-DT margin can
+wrap into a wide unsigned indent (WRITER293). Tests separately verify retained
+non-script hard attribution, actual PRE lexer filtering and original public-context
+PRE priority. Markdown HTML insertion and Worker transport preserve definition
+style identities and physical margins; Markdown export uses visible text because
+this pinned writer has no definition-list syntax producer.
+
+Generated CSS class style derivation, stylesheet-token composition, target cursor
+character snapshots, raw HTML tables and the final current-core/UI requirements
+audit remain open. This checkpoint does not establish full goal/module/ABI parity.

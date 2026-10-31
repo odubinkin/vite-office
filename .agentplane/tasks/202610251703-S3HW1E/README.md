@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 229
+revision: 233
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T07:05:08.897Z"
+  updated_at: "2026-10-31T07:55:47.551Z"
   updated_by: "CODER"
-  note: "HTML list reader checkpoint passes1110 related tests/58files plus final26 actual-model cases; required static checks pass. Original HTML list states/options/CSS, Markdown callbacks/Worker/native export labels are connected; WRITER289-291 retained. Full goal incomplete pending definition lists/raw HTML tables and current-core/UI audit. Evidence: html29 logs and Findings."
-  attempts: 40
+  note: "HTML definition-list/cascade checkpoint verified:97focused cases pass;1142broad cases pass with one cold-transform timeout resolved by2passing unchanged-assertion/timeout config tests after collection import. Final typecheck/docs and required static checks pass. Full goal incomplete:CSS stylesheet/class producers,HTML tables,current-core/UI audit. Evidence:html30 logs and Findings."
+  attempts: 41
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -645,8 +648,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T07:55:47.551Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML definition-list/cascade checkpoint verified:97focused cases pass;1142broad cases pass with one cold-transform timeout resolved by2passing unchanged-assertion/timeout config tests after collection import. Final typecheck/docs and required static checks pass. Full goal incomplete:CSS stylesheet/class producers,HTML tables,current-core/UI audit. Evidence:html30 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-31T07:57:32.983Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T07:05:22.815Z"
+doc_updated_at: "2026-10-31T07:57:32.983Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1569,6 +1585,36 @@ sections:
     Attempts: 40
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:04:59.516Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-31T07:55:47.551Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML definition-list/cascade checkpoint verified:97focused cases pass;1142broad cases pass with one cold-transform timeout resolved by2passing unchanged-assertion/timeout config tests after collection import. Final typecheck/docs and required static checks pass. Full goal incomplete:CSS stylesheet/class producers,HTML tables,current-core/UI audit. Evidence:html30 logs and Findings.
+    Attempts: 41
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:55:23.737Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -2519,6 +2565,23 @@ sections:
     - Commands: `npm run typecheck`; targeted `npm exec eslint -- <seven changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
     - Result: pass. Evidence: html29-types-last/lint-last/format-last/docs-last/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4264authored; provenance1890runtime(1678mapped/182browser/30infra); boundaries1889sources/10364imports/227edges; Writer semanticViolationCount0. Doctor0errors and the existing managed-shim warning; hooks unchanged. Authored size review candidates are informational, not gate failures.
     - Remaining: native definition-list and represented raw HTML table paths, other uncovered HTML/current-core producers and full requirements/UI completion audit. Previous native page-layout admission limitations remain explicit. The parent task and full goal are not finished; continue work without another user approval within the approved scope.
+
+    ### HTML30: definition lists and native nested-style attribution
+
+    - Scope: original NewDefList/EndDefList/NewDefListItem/EndDefListItem from swhtml.cxx now operate on the same real parser/HTMLAttrContext owners. Original unsigned16 definition depth, orphan EndPara cleanup, shared numbering-depth spacing, current-DD-sensitive nested margins and explicit item close are retained. Original DD/DT IDs12291/12292 materialize internal List Contents/List Heading with567/0twip defaults, Standard parents and DT-follow-DD; unrelated available-style menu stays unchanged. The original HR12290 identity supports the native style-cascade guard.
+    - Refactor: scalar last-style selection was replaced by original SetTextCollAttrs owned hard sets, Differentiate, PRE priority, default-only contexts, DD-minus-DT/DT-zero margin rules and deferred InsertParaAttrs. Original GetAttrTabEntry uses real current registered Which IDs and original stable heads; removed incomplete duplicate mapping in InsertAttrs. Source responsibility fragments retain the existing parser owner rather than creating another document or attribute service. Generated CSS class derivation, target insertion character snapshots, stylesheet composition, raw HTML tables and full native module/ABI parity remain open.
+    - Source observations: first ADDRESS expectation was wrong. Pinned EndAttr(false) still script-filters LikePara on the empty current paragraph, while BreakIteratorImpl returns WEAK; preserve the resulting posture loss (WRITER292). Retained authored underline proves the actual non-script hard-attribution cascade separately. Actual PRE byte input filters DL/DT/DD to unknown tokens, so it produces termdefinition; the distinct PRE-priority branch is exercised through existing public parser context methods without forging state or results. Original DD-minus-DT sal_uInt16 wrapping, including567minus700=>65403twips, remains WRITER293.
+    - Initial checks: typecheck exposed the previously absent HR enum member and stale moved-method import; added the exact source identity and removed unused import. First focused95cases had93pass and two incorrect fresh fixture expectations (ADDRESS posture and PRE token filtering); source inspection corrected them without changing native EndAttr/lexer behavior. Final focused97cases/3files all pass, including18fresh real-model definition/cascade scenarios. Read-only source lookups with empty/nonexistent exact matches were followed by authoritative bounded source searches/route refreshes; no network or scope/security expansion.
+    - Command: `npm run test:writer -- src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1`.
+    - Result: pass. Evidence:97tests/3files, html30-focused-tests-second.txt. Scope: ordinary/nested/malformed definitions, real style defaults/follow identity, edited left/right and unsigned wrap, mixed lists, soft spacing, actual/public-context PRE paths, retained/lost native hard attributes, Markdown visible export and Worker ownership.
+    - Command: `npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/inc/poolfmt.test.ts --maxWorkers 1`.
+    - Result: fail due only to a30000ms cold dynamic-import test timeout;1142assertion cases pass/1timeout across60files,323.69s, html30-related-tests.txt. Scope: all related HTML/CSS/Markdown/TXT/RTF/IO/pool tests. Preserve this raw failing result; do not relabel the broad invocation green.
+    - Command: `npm run test:writer -- src/sw/source/filter/md/swmd.user-config.integration.test.ts --maxWorkers 1`.
+    - Result: initial unchanged retry also timed out (1pass/1timeout, transform31.50s versus the unchanged30s body limit). The test's resetModules/doMock/dynamic import started cold transformation inside its semantic assertion timer. Added one static side-effect import of the real swmd module so actual graph transformation occurs during collection; runtime reset and resource overlays, both original assertions and30000ms limit remain unchanged. No fake provider, source exclusion or timeout increase. Final same command passes2tests/1file: transform71.09s/import82.47s outside the timer, test bodies3.59s (html30-user-config-warm.txt). Production sources are unchanged between the broad run and this focused resolution; no all-app/full-scope replay.
+    - Commands: targeted ESLint and Prettier for all changed source/tests/registries/docs; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+    - Result: pass. Evidence: html30-lint-second/config-lint/format-check/config-format/docs-final/provenance/registry/boundaries/size/tree/doctor logs. JSDoc4268authored; provenance1893runtime(1681mapped/182browser/30infra); boundaries1892sources/10389imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning; no hooks changed. Original typecheck after production corrections passed (html30-types-third.txt).
+    - Final gate outcome: pass. Final `npm run typecheck` after the collection-only test adjustment completed both tools and app checks; its chained final `npm run check:docs` passed4268authored sources and `git diff --check` passed. Awaited the original exec session60043 to terminal exit0 without restarting it. Evidence: html30-types-final.txt and html30-docs-last.txt. The long-running actual app tsc process was confirmed live with active CPU while waiting; missing output was never treated as termination.
+    - Remaining: stylesheet-token composition and generated CSS paragraph styles, target character snapshots where required by represented input, raw HTML table owners/producers and final current-core/UI completion audit, plus the existing page-layout admission limitations. Parent goal/task remains active and incomplete; user resumed full implementation. Intentional file UI/autosave/recovery deviations remain untouched.
 id_source: "generated"
 ---
 ## Summary
@@ -3474,6 +3537,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T07:55:47.551Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML definition-list/cascade checkpoint verified:97focused cases pass;1142broad cases pass with one cold-transform timeout resolved by2passing unchanged-assertion/timeout config tests after collection import. Final typecheck/docs and required static checks pass. Full goal incomplete:CSS stylesheet/class producers,HTML tables,current-core/UI audit. Evidence:html30 logs and Findings.
+Attempts: 41
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:55:23.737Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4406,3 +4499,20 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands: `npm run typecheck`; targeted `npm exec eslint -- <seven changed TS paths>`; targeted `npm exec prettier -- --check <changed TS/JSON/Markdown paths>`; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
 - Result: pass. Evidence: html29-types-last/lint-last/format-last/docs-last/provenance/registry/boundaries/size/tree/doctor logs under output/playwright/rtf-properties-native. JSDoc4264authored; provenance1890runtime(1678mapped/182browser/30infra); boundaries1889sources/10364imports/227edges; Writer semanticViolationCount0. Doctor0errors and the existing managed-shim warning; hooks unchanged. Authored size review candidates are informational, not gate failures.
 - Remaining: native definition-list and represented raw HTML table paths, other uncovered HTML/current-core producers and full requirements/UI completion audit. Previous native page-layout admission limitations remain explicit. The parent task and full goal are not finished; continue work without another user approval within the approved scope.
+
+### HTML30: definition lists and native nested-style attribution
+
+- Scope: original NewDefList/EndDefList/NewDefListItem/EndDefListItem from swhtml.cxx now operate on the same real parser/HTMLAttrContext owners. Original unsigned16 definition depth, orphan EndPara cleanup, shared numbering-depth spacing, current-DD-sensitive nested margins and explicit item close are retained. Original DD/DT IDs12291/12292 materialize internal List Contents/List Heading with567/0twip defaults, Standard parents and DT-follow-DD; unrelated available-style menu stays unchanged. The original HR12290 identity supports the native style-cascade guard.
+- Refactor: scalar last-style selection was replaced by original SetTextCollAttrs owned hard sets, Differentiate, PRE priority, default-only contexts, DD-minus-DT/DT-zero margin rules and deferred InsertParaAttrs. Original GetAttrTabEntry uses real current registered Which IDs and original stable heads; removed incomplete duplicate mapping in InsertAttrs. Source responsibility fragments retain the existing parser owner rather than creating another document or attribute service. Generated CSS class derivation, target insertion character snapshots, stylesheet composition, raw HTML tables and full native module/ABI parity remain open.
+- Source observations: first ADDRESS expectation was wrong. Pinned EndAttr(false) still script-filters LikePara on the empty current paragraph, while BreakIteratorImpl returns WEAK; preserve the resulting posture loss (WRITER292). Retained authored underline proves the actual non-script hard-attribution cascade separately. Actual PRE byte input filters DL/DT/DD to unknown tokens, so it produces termdefinition; the distinct PRE-priority branch is exercised through existing public parser context methods without forging state or results. Original DD-minus-DT sal_uInt16 wrapping, including567minus700=>65403twips, remains WRITER293.
+- Initial checks: typecheck exposed the previously absent HR enum member and stale moved-method import; added the exact source identity and removed unused import. First focused95cases had93pass and two incorrect fresh fixture expectations (ADDRESS posture and PRE token filtering); source inspection corrected them without changing native EndAttr/lexer behavior. Final focused97cases/3files all pass, including18fresh real-model definition/cascade scenarios. Read-only source lookups with empty/nonexistent exact matches were followed by authoritative bounded source searches/route refreshes; no network or scope/security expansion.
+- Command: `npm run test:writer -- src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1`.
+- Result: pass. Evidence:97tests/3files, html30-focused-tests-second.txt. Scope: ordinary/nested/malformed definitions, real style defaults/follow identity, edited left/right and unsigned wrap, mixed lists, soft spacing, actual/public-context PRE paths, retained/lost native hard attributes, Markdown visible export and Worker ownership.
+- Command: `npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/inc/poolfmt.test.ts --maxWorkers 1`.
+- Result: fail due only to a30000ms cold dynamic-import test timeout;1142assertion cases pass/1timeout across60files,323.69s, html30-related-tests.txt. Scope: all related HTML/CSS/Markdown/TXT/RTF/IO/pool tests. Preserve this raw failing result; do not relabel the broad invocation green.
+- Command: `npm run test:writer -- src/sw/source/filter/md/swmd.user-config.integration.test.ts --maxWorkers 1`.
+- Result: initial unchanged retry also timed out (1pass/1timeout, transform31.50s versus the unchanged30s body limit). The test's resetModules/doMock/dynamic import started cold transformation inside its semantic assertion timer. Added one static side-effect import of the real swmd module so actual graph transformation occurs during collection; runtime reset and resource overlays, both original assertions and30000ms limit remain unchanged. No fake provider, source exclusion or timeout increase. Final same command passes2tests/1file: transform71.09s/import82.47s outside the timer, test bodies3.59s (html30-user-config-warm.txt). Production sources are unchanged between the broad run and this focused resolution; no all-app/full-scope replay.
+- Commands: targeted ESLint and Prettier for all changed source/tests/registries/docs; `npm run check:docs`; `npm run check:source-provenance`; `npm run inventory:parity:writer`; `npm run check:dependencies`; `npm run check:file-size`; `npm run check:source-tree`; `ap doctor`; `git diff --check`.
+- Result: pass. Evidence: html30-lint-second/config-lint/format-check/config-format/docs-final/provenance/registry/boundaries/size/tree/doctor logs. JSDoc4268authored; provenance1893runtime(1681mapped/182browser/30infra); boundaries1892sources/10389imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning; no hooks changed. Original typecheck after production corrections passed (html30-types-third.txt).
+- Final gate outcome: pass. Final `npm run typecheck` after the collection-only test adjustment completed both tools and app checks; its chained final `npm run check:docs` passed4268authored sources and `git diff --check` passed. Awaited the original exec session60043 to terminal exit0 without restarting it. Evidence: html30-types-final.txt and html30-docs-last.txt. The long-running actual app tsc process was confirmed live with active CPU while waiting; missing output was never treated as termination.
+- Remaining: stylesheet-token composition and generated CSS paragraph styles, target character snapshots where required by represented input, raw HTML table owners/producers and final current-core/UI completion audit, plus the existing page-layout admission limitations. Parent goal/task remains active and incomplete; user resumed full implementation. Intentional file UI/autosave/recovery deviations remain untouched.

@@ -55,6 +55,12 @@ export enum SwPoolFormatId {
   COLL_HTML_BLOCKQUOTE = 12288,
   /** Native HTML preformatted paragraph style. */
   COLL_HTML_PRE = 12289,
+  /** Original native horizontal-rule pool identity. */
+  COLL_HTML_HR = 12290,
+  /** Original HTML definition description pool identity. */
+  COLL_HTML_DD = 12291,
+  /** Original HTML definition term pool identity. */
+  COLL_HTML_DT = 12292,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_HEADLINE1 = 10244,
   /** Original paragraph pool identity consumed by Word style mapping. */
@@ -448,7 +454,11 @@ export function getWriterMaterializedParagraphStyleDefinition(
 ): WriterParagraphStyleDefinition | undefined {
   return (
     getWriterAvailableParagraphStyleDefinition(id) ??
-    (id === "table-contents" || id === "table-heading" || id === "sender"
+    (id === "table-contents" ||
+    id === "table-heading" ||
+    id === "sender" ||
+    id === "list-contents" ||
+    id === "list-heading"
       ? getWriterParagraphStyleDefinition(id)
       : undefined)
   );
