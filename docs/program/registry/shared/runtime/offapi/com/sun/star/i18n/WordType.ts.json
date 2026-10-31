@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl"
+      ],
+      "justification": "Original four published short WordType constants retain exact values0..3. No boundary service or word heuristic is supplied. Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ANY_WORD",
+        "ANYWORD_IGNOREWHITESPACES",
+        "DICTIONARY_WORD",
+        "WORD_COUNT"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/i18n/WordType.idl",
+      "upstreamSymbols": [
+        "ANY_WORD",
+        "ANYWORD_IGNOREWHITESPACES",
+        "DICTIONARY_WORD",
+        "WORD_COUNT"
+      ]
+    }
+  }
+}

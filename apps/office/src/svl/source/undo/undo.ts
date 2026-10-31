@@ -17,7 +17,7 @@ export interface SfxUndoSavePosition {
 }
 
 /** Base class for one reversible operation retained by SfxUndoManager. */
-export abstract class SfxUndoAction<Context> {
+export abstract class SfxUndoAction<Context, Comment = string> {
   /** Reverts this action against the supplied document context. @param context - Active undo context. @returns Nothing. */
   public abstract UndoWithContext(context: Context): void;
 
@@ -25,10 +25,10 @@ export abstract class SfxUndoAction<Context> {
   public abstract RedoWithContext(context: Context): void;
 
   /** Returns the human-readable action label. @returns Command label. */
-  public abstract GetComment(): string;
+  public abstract GetComment(): Comment;
 
   /** Tries to absorb an immediately following compatible action. @param nextAction - Newer action candidate. @returns True when this action absorbed the candidate. */
-  public Merge(nextAction: SfxUndoAction<Context>): boolean {
+  public Merge(nextAction: SfxUndoAction<Context, Comment>): boolean {
     void nextAction;
     return false;
   }

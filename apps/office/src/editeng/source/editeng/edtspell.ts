@@ -1,4 +1,5 @@
-/** @fileoverview Original WrongList stored state, value operations and text-range transformations from edtspell.cxx. Actual ContentNode-dependent ClearWrongs and spell/autocorrect services remain separate work. */
+/** @fileoverview Original WrongList stored state, value operations and text-range transformations from edtspell.cxx. Includes source ContentNode-dependent ClearWrongs; spell/autocorrect services remain separate work. */
+import type { ContentNode } from "../../inc/ContentNode";
 import { MisspellRange } from "../../inc/misspellrange";
 /** Const original WrongList view without mutation operations. */
 export type WrongListConstReference = Readonly<
@@ -31,6 +32,29 @@ export class WrongList {
       );
       this.mnInvalidStart = source.mnInvalidStart;
       this.mnInvalidEnd = source.mnInvalidEnd;
+    }
+  }
+  /** Original mutable begin/end range iteration, expressed as the host iterator protocol. @returns Iterator over actual stored values. */
+  [Symbol.iterator](): IterableIterator<MisspellRange> {
+    return this.maRanges[Symbol.iterator]();
+  }
+  /** Original clear/truncate operation skips only literal spaces and actual feature markers after a retained tail. @param start - Source size_t start. @param end - Source size_t end. @param node - Actual source paragraph. @returns Nothing. */
+  ClearWrongs(start: bigint, end: bigint, node: ContentNode): void {
+    start = BigInt.asUintN(64, start);
+    end = BigInt.asUintN(64, end);
+    for (let index = 0; index < this.maRanges.length;) {
+      const range = this.maRanges[index] as MisspellRange;
+      if (range.mnEnd > start && range.mnStart < end) {
+        if (range.mnEnd > end) {
+          range.mnStart = end;
+          while (
+            range.mnStart < BigInt(node.Len()) &&
+            (node.GetChar(Number(range.mnStart)) === 32 || node.IsFeature(Number(range.mnStart)))
+          )
+            range.mnStart++;
+          index++;
+        } else this.maRanges.splice(index, 1);
+      } else index++;
     }
   }
   /** Original const vector access. @returns Borrowed actual ranges. */

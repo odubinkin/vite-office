@@ -68,3 +68,10 @@ export const EE_NOTIFY_PROCESSNOTIFICATIONS = EENotifyType.EE_NOTIFY_PROCESSNOTI
 /** Original unscoped notification enumerator. */
 export const EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA =
   EENotifyType.EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA;
+
+/** Original undo identifier for paragraph splitting. */
+export const EDITUNDO_SPLITPARA = 105;
+/** Original undo identifier for inserted characters. */
+export const EDITUNDO_INSERTCHARS = 106;
+/** Original compound text-insertion undo identifier. */
+export const EDITUNDO_INSERT = 111;

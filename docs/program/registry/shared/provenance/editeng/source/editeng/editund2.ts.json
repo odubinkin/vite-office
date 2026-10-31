@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/editund2.ts",
+    "upstreamPath": "editeng/source/editeng/editundo.cxx",
+    "localSymbols": [
+      "EditUndo",
+      "OutlinerViewShell"
+    ],
+    "upstreamSymbols": [
+      "EditUndo::EditUndo",
+      "EditUndo::GetId",
+      "EditUndo::CanRepeat",
+      "EditUndo::GetComment",
+      "EditUndo::GetViewShellId"
+    ],
+    "preservedResponsibilities": [
+      "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation."
+    ],
+    "omittedResponsibilities": [
+      "Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editund2.ts",
+          "marker": "EditUndo"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/editundo.cxx",
+          "marker": "EditUndo::EditUndo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/editund2.hxx",
+          "marker": "class EDITENG_DLLPUBLIC EditUndo"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/editund2.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original EditUndo base state/value contract is separated from concrete action families under original header ownership. Existing shared SfxUndoAction gains only an erased comment-value type parameter; source OUString return/ownership is retained without a string-label adapter or alternate manager."
+    }
+  }
+}

@@ -1,5 +1,5 @@
-/** @fileoverview Original ImpEditEngine lifecycle, selection conversion and notification member groups. Unported state/constructor/parser/undo/layout members are mandatory abstract dependencies: this is not an instantiable engine or a production fallback. */
-import { SfxListener } from "../../../svl/source/notify/lstner";
+/** @fileoverview Original ImpEditEngine lifecycle, selection conversion and notification member groups. Unported state/constructor/undo/layout members are mandatory abstract dependencies: this is not an instantiable engine or a production fallback. */
+import { DuplicateHandling, SfxListener } from "../../../svl/source/notify/lstner";
 import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import type { SfxHint } from "../../../svl/inc/hint";
 import type { StyleSheetUser } from "../../../svl/inc/stylesheetuser";
@@ -11,16 +11,27 @@ import { EditPaM } from "../../inc/EditPaM";
 import { EditSelection } from "../../inc/EditSelection";
 import { EPaM, EE_PARA_MAX } from "../../inc/EPaM";
 import { ESelection } from "../../inc/ESelection";
-import { EENotify, EENotifyType } from "../../inc/editdata";
+import { EDITUNDO_INSERT, EENotify, EENotifyType } from "../../inc/editdata";
 import { Rectangle, Size } from "../../../tools/inc/gen";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { ContentNode } from "../../inc/ContentNode";
 import type { EditEngine } from "./editeng.lifecycle";
+import { SfxVoidItem } from "../../../svl/inc/voiditem";
+import { EE_FEATURE_TAB } from "../../inc/eeitem";
+import { convertLineEnd, LINEEND_LF } from "../../../tools/inc/lineend";
+import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
+import { PrepareInsertTextLine } from "./impedit2.text";
+import { LINE_SEP } from "./impedit.constants";
+import { EditUndoInsertChars, EditUndoSplitPara } from "./editundo";
+import type { EditUndo, OutlinerViewShell } from "./editund2";
+import type { WrongList } from "../../inc/edtspell";
 
 /** Consumed original ImpEditView declarations; the actual view/window implementation remains mandatory and unported. */
 export interface ImpEditView {
   /** Original borrowed edit selection. @returns Actual view selection. */
   GetEditSelection(): EditSelection;
+  /** Original actual view-shell pointer, without a fabricated shell. @returns Actual shell or null. */
+  GetViewShell(): OutlinerViewShell | null;
   /** Original selection value assignment. @param selection - Source selection. @returns Nothing. */
   SetEditSelection(selection: EditSelection): void;
 }
@@ -33,7 +44,7 @@ export interface EditView {
   /** Original window invalidation call. @param area - Source invalid rectangle. @returns Nothing. */
   InvalidateWindow(area: Rectangle): void;
 }
-/** Original internal owner member groups. Concrete construction, application/device resources, full parsing/undo/layout and view implementations are not admitted by this abstract declaration. */
+/** Original internal owner member groups. Concrete construction, application/device resources, full undo/layout and view implementations are not admitted by this abstract declaration. */
 export abstract class ImpEditEngine extends SfxListener implements StyleSheetUser {
   protected abstract readonly maEditDoc: EditDoc;
   protected abstract readonly maParaPortionList: ParaPortionList;
@@ -41,6 +52,8 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract readonly maEditViews: EditView[];
   protected abstract readonly mpEditEngine: EditEngine;
   protected abstract readonly maPaperSize: Size;
+  protected abstract mbFuzzing: boolean;
+  protected abstract mpActiveView: EditView | null;
   protected abstract mnCurTextHeight: number;
   protected abstract mbFormatted: boolean;
   protected abstract mbUndoEnabled: boolean;
@@ -51,12 +64,163 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract maNotifyHdl: ((notification: EENotify) => void) | null;
   /** Original unported style/application notification override, with no inherited substitute implementation. @param broadcaster - Actual source. @param hint - Actual hint. @returns Nothing. */
   abstract override Notify(broadcaster: SfxBroadcaster, hint: SfxHint): void;
-  /** Original unported parser member, mandatory until its real implementation is bound. @param selection - Actual current selection. @param text - Borrowed text. @returns Actual resulting position. */
-  abstract ImpInsertText(selection: EditSelection, text: OUStringConstReference): EditPaM;
+  /** Original mandatory range-deletion dependency; no alternative deletion provider. @param selection - Source range. @returns Actual resulting position. */
+  abstract ImpDeleteSelection(selection: EditSelection): EditPaM;
+  /** Original mandatory word-boundary service consumer. @param selection - Source caret/range. @param wordType - Original WordType. @returns Actual selected word. */
+  abstract SelectWord(selection: EditSelection, wordType: number): EditSelection;
+  /** Original compound undo entry, mandatory until the real undo owner is bound. @param id - Source action identifier. @returns Nothing. */
+  abstract UndoActionStart(id: number): void;
+  /** Original compound undo exit. @returns Nothing. */
+  abstract UndoActionEnd(): void;
+  /** Original actual undo-action ownership transfer. @param action - Owned source action. @param tryMerge - Source default false. @returns Nothing. */
+  abstract InsertUndo(action: EditUndo, tryMerge?: boolean): void;
   /** Original undo-manager reset, with no default manager/provider. @returns Nothing. */
   abstract ResetUndoManager(): void;
   /** Original paragraph-height calculation dependency. @param portion - Actual next portion. @returns Nothing. */
   abstract CalcHeight(portion: ParaPortion): void;
+  /** Original borrowed active-view pointer. @returns Actual view or null. */
+  GetActiveView(): EditView | null {
+    return this.mpActiveView;
+  }
+  /** Original plain-text public insertion delegation. @param selection - Actual source selection. @param text - Borrowed input. @returns Actual resulting position. */
+  InsertText(selection: EditSelection, text: OUStringConstReference): EditPaM {
+    return this.ImpInsertText(selection, text);
+  }
+  /** Original complete text-insertion orchestration: source line normalization/capacity, tab features, paragraph splits, invalidation, undo and notifications. Unported deletion/word/undo dependencies remain mandatory. @param selection - Actual source selection. @param input - Borrowed original input. @returns Actual inserted end. */
+  ImpInsertText(selection: EditSelection, input: OUStringConstReference): EditPaM {
+    this.UndoActionStart(EDITUNDO_INSERT);
+    let position = selection.HasRange()
+      ? this.ImpDeleteSelection(selection)
+      : new EditPaM(selection.Max());
+    const original = new EditPaM(position);
+    let word = new EditSelection();
+    if (this.GetStatus().DoOnlineSpelling())
+      word = this.SelectWord(new EditSelection(original), DICTIONARY_WORD);
+    let value = convertLineEnd(input, LINEEND_LF);
+    try {
+      if (this.mbFuzzing) {
+        const replaced = value.replaceAll(new Uint16Array([9]), new Uint16Array([45]));
+        value.dispose();
+        value = replaced;
+      }
+      const tab = new SfxVoidItem(EE_FEATURE_TAB);
+      let start = 0;
+      while (start < value.getLength()) {
+        const end: [number] = [!this.maStatus.IsSingleLine() ? value.indexOf(LINE_SEP, start) : -1];
+        if (end[0] === -1) end[0] = value.getLength();
+        if (end[0] > start) {
+          const line = PrepareInsertTextLine(value, start, end, position);
+          try {
+            if (this.IsUndoEnabled() && !this.IsInUndo())
+              this.InsertUndo(
+                new EditUndoInsertChars(this.mpEditEngine, this.CreateEPaM(position), line),
+              );
+            if (line.indexOf(9) === -1) position = this.maEditDoc.InsertText(position, line);
+            else {
+              let fragmentStart = 0;
+              while (fragmentStart < line.getLength()) {
+                let fragmentEnd = line.indexOf(9, fragmentStart);
+                if (fragmentEnd === -1) fragmentEnd = line.getLength();
+                if (fragmentEnd > fragmentStart) {
+                  const fragment = line.copy(fragmentStart, fragmentEnd - fragmentStart);
+                  try {
+                    position = this.maEditDoc.InsertText(position, fragment);
+                  } finally {
+                    fragment.dispose();
+                  }
+                }
+                if (fragmentEnd < line.getLength())
+                  position = this.maEditDoc.InsertFeature(position, tab);
+                fragmentStart = fragmentEnd + 1;
+              }
+            }
+            const portion = this.FindParaPortion(position.GetNode()) as ParaPortion;
+            if (this.GetStatus().DoOnlineSpelling()) {
+              const wrongs = (original.GetNode() as ContentNode).GetWrongList();
+              if (wrongs && !wrongs.empty())
+                wrongs.ClearWrongs(
+                  BigInt(word.Min().GetIndex()),
+                  BigInt(position.GetIndex()),
+                  position.GetNode() as ContentNode,
+                );
+              portion.MarkInvalid(word.Min().GetIndex(), line.getLength());
+            } else portion.MarkInvalid(original.GetIndex(), line.getLength());
+          } finally {
+            line.dispose();
+          }
+        }
+        if (end[0] < value.getLength()) position = this.ImpInsertParaBreak(position);
+        start = end[0] + 1;
+      }
+    } finally {
+      value.dispose();
+    }
+    this.UndoActionEnd();
+    const inserted = new ESelection(this.CreateEPaM(original));
+    inserted.end = this.CreateEPaM(position);
+    this.UpdateSelectionsInsert(inserted);
+    this.TextModified();
+    return position;
+  }
+  /** Original selection-only overload uses the source default ending-attribute policy. @param selection - Actual source selection. @returns Actual split result. */
+  ImpInsertParaBreak(selection: EditSelection): EditPaM;
+  /** Original caret overload exposes the source ending-attribute flag. @param position - Actual source caret. @param keepEnding - Original default true. @returns Actual split result. */
+  ImpInsertParaBreak(position: EditPaM, keepEnding?: boolean): EditPaM;
+  /** Original selection overload and actual paragraph split, including source style listeners, misspell transfer, portion ownership, callback and view update order. @param source - Actual caret or selection. @param keepEnding - Original default true. @returns Actual right-paragraph start, or original caret at the source limit. */
+  ImpInsertParaBreak(source: EditPaM | EditSelection, keepEnding = true): EditPaM {
+    if (source instanceof EditSelection) {
+      const position = source.HasRange()
+        ? this.ImpDeleteSelection(source)
+        : new EditPaM(source.Max());
+      return this.ImpInsertParaBreak(position);
+    }
+    if (this.maEditDoc.Count() >= EE_PARA_MAX) return source;
+    if (this.IsUndoEnabled() && !this.IsInUndo())
+      this.InsertUndo(
+        new EditUndoSplitPara(
+          this.mpEditEngine,
+          this.maEditDoc.GetPos(source.GetNode()),
+          source.GetIndex(),
+        ),
+      );
+    const position = this.maEditDoc.InsertParaBreak(source, keepEnding);
+    const node = position.GetNode() as ContentNode,
+      style = node.GetStyleSheet();
+    if (style) this.StartListening(style, DuplicateHandling.Allow);
+    if (this.GetStatus().DoOnlineSpelling()) {
+      const end = (source.GetNode() as ContentNode).Len();
+      node.CreateWrongList();
+      const left = (source.GetNode() as ContentNode).GetWrongList() as WrongList,
+        right = node.GetWrongList() as WrongList;
+      for (const range of left) {
+        if (range.mnStart > BigInt(end)) {
+          right.push_back(range);
+          const copied = right.back();
+          copied.mnStart = BigInt.asUintN(64, copied.mnStart - BigInt(end));
+          copied.mnEnd = BigInt.asUintN(64, copied.mnEnd - BigInt(end));
+        } else if (range.mnStart < BigInt(end) && range.mnEnd > BigInt(end))
+          range.mnEnd = BigInt(end);
+      }
+      const invalid = end ? end - 1 : end;
+      if (end) left.SetInvalidRange(BigInt(invalid), BigInt(end));
+      else left.SetValid();
+      right.SetValid();
+      right.SetInvalidRange(0n, 1n);
+    }
+    const portion = this.FindParaPortion(source.GetNode()) as ParaPortion;
+    portion.MarkInvalid(source.GetIndex(), 0);
+    const index = this.GetParaPortions().GetPos(portion),
+      newPortion = new ParaPortion(node);
+    this.GetParaPortions().Insert(index + 1, newPortion);
+    this.ParaAttribsChanged(node);
+    if (this.IsCallParaInsertedOrDeleted()) this.GetEditEnginePtr().ParagraphInserted(index + 1);
+    source.GetNode()?.checkAndDeleteEmptyAttribs();
+    const inserted = new ESelection(this.CreateEPaM(source));
+    inserted.end = this.CreateEPaM(position);
+    this.UpdateSelectionsInsert(inserted);
+    this.TextModified();
+    return position;
+  }
   /** Original StyleSheetUser override. @returns True. */
   isUsedByModel(): boolean {
     return true;

@@ -20,7 +20,7 @@
         "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
         "editeng/source/editeng/editeng.cxx"
       ],
-      "justification": "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory. Concrete EditEngine/ImpEditEngine constructor/resources, full parser/undo/layout/view/style-notification implementations and ScFieldEditEngine CSV admission remain unported. Abstract dependencies are mandatory, not default substitutes. Native diagnostic/thread/lifetime/ABI and full QA are uncertified. NatNum12 and final CSV audit remain pending.",
+      "justification": "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory. Concrete EditEngine/ImpEditEngine constructor/resources, full parser/undo/layout/view/style-notification implementations and ScFieldEditEngine CSV admission remain unported. Abstract dependencies are mandatory, not default substitutes. Native diagnostic/thread/lifetime/ABI and full QA are uncertified. NatNum12 and final CSV audit remain pending. AQF9AG continuation: Original GetActiveView, CreateEditPaM, InsertText and DeleteSelection delegation bodies now target the actual source implementation. Localized GetUndoComment, ConnectContents and SplitContent remain mandatory abstract source declarations until their true implementation is bound; no label/deletion/connection/split provider is invented.",
       "knownViolations": [],
       "localSymbols": [
         "EditEngine"
@@ -31,7 +31,11 @@
         "EditEngine::ParagraphInserted",
         "EditEngine::ParagraphDeleted",
         "EditEngine::ParaAttribsChanged",
-        "EditEngine::SetNotifyHdl"
+        "EditEngine::SetNotifyHdl",
+        "EditEngine::GetActiveView",
+        "EditEngine::CreateEditPaM",
+        "EditEngine::InsertText",
+        "EditEngine::DeleteSelection"
       ]
     }
   }

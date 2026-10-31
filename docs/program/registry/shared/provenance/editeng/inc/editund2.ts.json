@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/editund2.ts",
+    "upstreamPath": "include/editeng/editund2.hxx",
+    "localSymbols": [
+      "EditUndo"
+    ],
+    "upstreamSymbols": [
+      "EditUndo"
+    ],
+    "preservedResponsibilities": [
+      "Original public EditUndo declaration reexports the single actual source base implementation. Concrete EditUndoManager and other unported source declarations are not fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/editund2.ts",
+          "marker": "EditUndo"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/editund2.hxx",
+          "marker": "EditUndo"
+        }
+      ]
+    }
+  }
+}

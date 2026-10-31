@@ -4901,3 +4901,27 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::SetText`.
 - Observation: after RemoveText, the source saves IsUndoEnabled, calls EnableUndo(false), invokes ImpInsertText, updates views and finally restores the saved flag. There is no scope guard or catch/finally restoration. An exception from the insertion dependency after undo is disabled leaves that mode disabled and skips final view updates/restoration.
 - Preserve this control flow; do not add a restoration finally as a correctness improvement. A lifecycle caller fixture supplies an explicit failing mandatory callee and verifies propagated identity, empty reset document and disabled undo. This is source-derived caller evidence, not a native full-engine exception/allocator certificate.
+
+### CALC-435 — ClearWrongs can advance a retained start beyond its own end
+
+- Source: `editeng/source/editeng/edtspell.cxx`, `WrongList::ClearWrongs`.
+- Observation: an overlapping range that extends beyond nEnd has its start set to nEnd, then advanced over literal spaces and feature markers while below the paragraph length. The loop never checks that range's mnEnd. A short retained tail followed by spaces/features can therefore become a start-greater-than-end range. DbgIsBuggy only participates in a warning after mutation.
+- Preserve the paragraph-length condition and space/feature predicate without clipping to mnEnd, dropping the resulting range or treating tabs/other whitespace as spaces. An actual ContentNode fixture verifies the inverted retained range and unchanged strict overlap bounds.
+
+### CALC-436 — Paragraph splitting copies misspell ranges without removing their left-hand originals
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertParaBreak`.
+- Observation: ranges whose start is strictly greater than the split index are copied to the new paragraph and rebased. The source does not erase or rebase their original entries in the left paragraph. A range beginning exactly at the split is neither copied nor truncated. Only a range strictly crossing the split is truncated on the left.
+- Preserve these strict comparisons and both stored lists. Do not replace the loop with a partition, erase copied entries or move exact-boundary ranges. Tests execute actual document splitting and range/list owners; they do not certify the complete spelling service.
+
+### CALC-437 — Multiline insertion reuses its initial character index for later paragraph invalidation
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText`.
+- Observation: aCurPaM is copied once before the line loop. The non-spelling path calls the current paragraph portion's MarkInvalid with aCurPaM.GetIndex for every line, including lines after a paragraph break. An insertion beginning at index3 therefore invalidates a later one-character paragraph with start3. The spelling branch similarly retains its initially selected word boundary.
+- Preserve the original position lifetime and call arguments rather than resetting the invalidation index to zero after a break. A fixture observes calls on actual ParaPortion instances while verifying the actual resulting paragraphs. Full layout/spelling consequences remain outside the current constructor/admission proof.
+
+### CALC-438 — Capacity retry cannot advance when the paragraph-count limit prevents a split
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` capacity branch and `ImpEditEngine::ImpInsertParaBreak` paragraph-count guard.
+- Observation: when the current paragraph already has MAXCHARSINPARA units, the capacity branch retains an empty line and changes nEnd to nStart-1 so the caller retries the same input after a split. At EE_PARA_MAX paragraphs, however, ImpInsertParaBreak returns the original position without splitting. The caller then assigns nStart=nEnd+1, leaving both input offset and remaining paragraph capacity unchanged. These conditions compose into a non-progressing insertion loop.
+- Preserve the original retry arithmetic and paragraph-limit return; do not introduce an iteration cap, truncation or alternate error. Existing source-derived fixtures separately exercise zero-capacity retry and the unchanged caret at the paragraph limit. This composition is a static control-flow finding: a full-limit native document and the non-terminating loop are not executed or certified by the tests.
