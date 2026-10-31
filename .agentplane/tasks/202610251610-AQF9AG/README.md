@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 133
+revision: 136
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T10:41:04.645Z"
+  updated_at: "2026-10-31T11:07:08.981Z"
   updated_by: "CODER"
-  note: "Native rich-text object and script initialization checkpoint verified: 154 related shared cases, 191 CSV core cases, 6 UI cases on unchanged isolated rerun, current-built browser CSV, final typecheck/lint/build and required static/provenance/parity checks pass. Initial UI timeouts and lint declaration findings are retained with resolutions. Full CSV admission is incomplete: actual constructor/services, writing directions, ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
-  attempts: 30
+  note: "Native ICU paragraph owner and EditEngine writing-direction checkpoint verified: original ICU2731captures/90193UTF16 positions,161related cases,197CSV/UI cases,47boundary cases,current-built browser scenario,typecheck/lint/build and required static/provenance/parity pass. Source fixed-capacity success-status anomaly preserved as CALC-445. Actual constructor/process services,ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
+  attempts: 31
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -808,8 +811,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T11:07:08.981Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ICU paragraph owner and EditEngine writing-direction checkpoint verified: original ICU2731captures/90193UTF16 positions,161related cases,197CSV/UI cases,47boundary cases,current-built browser scenario,typecheck/lint/build and required static/provenance/parity pass. Source fixed-capacity success-status anomaly preserved as CALC-445. Actual constructor/process services,ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T11:07:18.043Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:41:12.377Z"
+doc_updated_at: "2026-10-31T11:07:18.043Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1729,6 +1745,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T11:07:08.981Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ICU paragraph owner and EditEngine writing-direction checkpoint verified: original ICU2731captures/90193UTF16 positions,161related cases,197CSV/UI cases,47boundary cases,current-built browser scenario,typecheck/lint/build and required static/provenance/parity pass. Source fixed-capacity success-status anomaly preserved as CALC-445. Actual constructor/process services,ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active.
+    Attempts: 31
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:07:06.372Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2502,6 +2548,48 @@ sections:
     - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;1 current-built browser scenario,11.7s total. Evidence: object-browser.log. Scope: actual CSV import, primary ODS save and active-sheet export. Original assertions/timeouts unchanged; this does not certify the abstract engine as production CSV admission.
     - Final review: git diff --check passes. Exact commit allowlist contains39 intended source/test/provenance/runtime/issue/task paths; all native scratch is excluded. Full untracked evidence will be retained in object-final-status.log. No network/vendor writes, no guard/checker relaxations, no full-suite replay or task-cadence advance. Overall CSV task remains rework/DOING and goal active.
+
+    ### Native ICU paragraph owner and EditEngine writing-direction checkpoint
+
+    - Previous goal turn was progress: committed native text-object/script creation as ddb638dc697e. This continuation revalidated the same approved CODER/direct task, authoritative Calc checkout, active goal and tracked-clean baseline. No new task or full-suite cadence increment.
+    - Implemented original consumed UBiDi owner and C API header binding: ubidi_openSized, default/fixed0-or1/null-external-level ubidi_setPara, close, getLevels, countRuns and getLogicalRun. Source marker/status/argument ordering, counted/NUL-terminated UTF16, actual fixed versus dynamic text/run capacity and lazy run materialization are preserved. Actual source Run records store high-bit direction indices; getRuns/reorderLine/getLogicalRun use the actual visual-run vector and original trailing-whitespace/single-run choices. Host array element capacity replaces byte-addressed allocation; immutable string snapshots follow the source unchanged-buffer precondition. Native allocator exhaustion/ABI, line construction, contextual/default paragraph levels, external levels, inverse/other reordering modes and invalid-pointer/use-after-free behavior are not certified or exposed. No invented unsupported-parameter errors, level-partition heuristic or replacement direction algorithm is used.
+    - Existing resolveDefaultBidiLevels now calls the same actual owner/setPara/getLevels path rather than retaining duplicate orchestration. Native explicit/implicit/bracket/whitespace kernels are unchanged. ImpEditEngine::InitWritingDirections is now the original implemented member: actual portion lookup/vector clear, raw node text, source direction query, openSized/setPara/countRuns/getLogicalRun/close order, both source status resets, count-driven traversal, fuzzing skip and final LTR fallback. The fixture observes then calls this real method; it no longer supplies a direction output dependency. Constructor/process BreakIterator and other abstract engine dependencies remain unadmitted.
+    - Native evidence: compiled directions-native.cpp against the existing pinned ICU78.3 libicuuc.a, without vendor mutation/network. Captured2731 retained inputs at all90193UTF16 positions plus20 source-engine cases. Canonical native-bidi-logical-runs.json losslessly encodes original count/status/position-limit/level outputs as intervals; uncompressed native output remains in directions-native-full.json. Runtime test replay needs neither native libraries nor vendor sources. Tests query each position before and after getLevels, not just count matching.
+    - CALC-445 records source getRuns fixed-capacity failure returning false without assigning an error; countRuns ignores that boolean and returns negative runCount with successful status. Independently compiled directions-capacity.cpp reports1/-1/0,2/-1/0,3/3/0 for run capacities1/2/3 with U+0061 U+05D0 U+0062. Preserved source return/status behavior; no exception or invented error.
+    - Command: npm run test:shared -- src/external/icu/source/common/ubidi.test.ts src/external/icu/source/common/ubidiln.test.ts src/editeng/source/editeng/native-engine-directions.test.ts src/editeng/source/editeng/native-engine-object.test.ts
+      Result: pass;4files/32cases. Evidence: directions-tests.log,38.42s. Scope: retained native direction/property corpus, exact logical-run captures, source error/capacity contracts and actual engine/text-object integration.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/i18nutil/source/utility/scriptchangescanner.test.ts src/external/icu/source/common/ubidi.test.ts src/external/icu/source/common/ubidiln.test.ts src/external/icu/source/common/ubidi-static-boundaries.test.ts --maxWorkers=1
+      Result: pass;22files/161cases. Evidence: directions-related-tests.log,179.79s. Scope: related actual EditEngine owners/member groups, direction/script scanner and changed ICU kernels after formatting.
+    - Command: npm run check:dependencies
+      Result: initial fail;2 imports reported absent editeng->external module edge. Evidence: directions-deps.log. Resolution: register the original upstream dependency in the existing module graph, witnessed by impedit2.cxx include unicode/ubidi.h and Library_editeng.mk links icuuc/icu_headers. Extend the existing boundary test to retain reverse external->editeng rejection; no reverse/application/browser ownership exception is added. Final command passes1929sources/10498imports/234allowed edges (directions-deps-fixed.log).
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+      Result: pass;47cases. Evidence: directions-boundary-tests.log,18.37s. Scope: existing graph/ownership gates and source ICU dependency direction.
+    - Command: npm run check:docs
+      Result: pass. Evidence: directions-docs.log,4324authored files. Scope: source/test JSDoc contracts.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: directions-size.log. Scope: all authored files below1000hard lines; final boundary graph/test edits remain979/984lines.
+    - Command: npm run check:calc-resources
+      Result: pass. Evidence: directions-resources.log,464commands/11menus/17policies. Scope: existing Calc resource contracts.
+    - Command: npm run inventory:registry:build
+      Result: pass. Evidence: directions-registry.log,4views. Scope: canonical source/runtime records; foundation/unverified statuses retained.
+    - Command: npm run typecheck
+      Result: pass. Evidence: directions-typecheck.log. Scope: tools and actual office app, including new API owner/header/run functions, native fixtures and integration tests.
+    - Remaining full CSV requirements: actual EditEngine construction/resources and process BreakIterator factory, original word/deletion/undo/layout/view/application dependencies, ScFieldEditEngine/DocImport admission/removal of multiline SetTextCell regex, NatNum12 supplier/casing/formatter and final full-source CSV audit. The raw writing-direction initializer is now implemented, but no complete engine or CSV readiness is promoted. Preserve current intentional browser save/open/autosave/no-recovery behavior. Same open task remains rework/DOING and goal active.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: directions-provenance.log,1930runtime modules (1717mapped/182browser/31infrastructure). Scope: actual source ownership and canonical records, without readiness promotion.
+    - Command: npm run inventory:parity:calc
+      Result: pass. Evidence: directions-parity-calc.log,exit0. Scope: current Calc semantic registry consistency.
+    - Command: npm run inventory:parity:shared
+      Result: pass. Evidence: directions-parity-shared.log,exit0. Scope: changed shared source registry consistency.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8files/197cases,82.03s,without retry. Evidence: directions-csv-tests.log. Scope: actual existing CSV options/recognition/date/import/export/docshell and file/menu/keyboard/dialog/primary ODS workflows. This does not claim the still-unconnected abstract engine as production CSV admission.
+    - Command: npm run lint -- --ignore-pattern 'output/native/**'
+      Result: pass;0errors/warnings. Evidence: directions-lint.log. Scope: full repository ESLint excluding native experiment scratch. Source dependency graph was extended only with the upstream editeng->ICU edge; no checker logic, reverse-dependency rule or browser gate was disabled.
+    - Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+      Result: pass;17.26s with existing chunk-size advisory. Evidence: directions-vite-build.log. Scope: actual current production bundle; separate successful typecheck and Vite commands are recorded without claiming an unexecuted npm run build.
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 current-built browser scenario,10.8s total. Evidence: directions-browser.log. Scope: actual existing CSV import, primary ODS save and active-sheet export; original assertions/timeouts unchanged. This is regression evidence, not full native engine/CSV admission.
+    - Final review: git diff --check passes; exact allowlist contains26 intended source/test/native-capture/registry/issue/boundary/task paths. Full final status is retained in directions-final-status.log. All experiment scratch stays excluded. No network/vendor writes, readiness promotion or full-suite replay. Same approved open task remains rework/DOING; goal stays active. Next substantive frontier is actual engine construction/resources/process services and source ScFieldEditEngine/DocImport admission.
 id_source: "generated"
 ---
 ## Summary
@@ -3430,6 +3518,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T11:07:08.981Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ICU paragraph owner and EditEngine writing-direction checkpoint verified: original ICU2731captures/90193UTF16 positions,161related cases,197CSV/UI cases,47boundary cases,current-built browser scenario,typecheck/lint/build and required static/provenance/parity pass. Source fixed-capacity success-status anomaly preserved as CALC-445. Actual constructor/process services,ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active.
+Attempts: 31
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:07:06.372Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4207,3 +4325,45 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;1 current-built browser scenario,11.7s total. Evidence: object-browser.log. Scope: actual CSV import, primary ODS save and active-sheet export. Original assertions/timeouts unchanged; this does not certify the abstract engine as production CSV admission.
 - Final review: git diff --check passes. Exact commit allowlist contains39 intended source/test/provenance/runtime/issue/task paths; all native scratch is excluded. Full untracked evidence will be retained in object-final-status.log. No network/vendor writes, no guard/checker relaxations, no full-suite replay or task-cadence advance. Overall CSV task remains rework/DOING and goal active.
+
+### Native ICU paragraph owner and EditEngine writing-direction checkpoint
+
+- Previous goal turn was progress: committed native text-object/script creation as ddb638dc697e. This continuation revalidated the same approved CODER/direct task, authoritative Calc checkout, active goal and tracked-clean baseline. No new task or full-suite cadence increment.
+- Implemented original consumed UBiDi owner and C API header binding: ubidi_openSized, default/fixed0-or1/null-external-level ubidi_setPara, close, getLevels, countRuns and getLogicalRun. Source marker/status/argument ordering, counted/NUL-terminated UTF16, actual fixed versus dynamic text/run capacity and lazy run materialization are preserved. Actual source Run records store high-bit direction indices; getRuns/reorderLine/getLogicalRun use the actual visual-run vector and original trailing-whitespace/single-run choices. Host array element capacity replaces byte-addressed allocation; immutable string snapshots follow the source unchanged-buffer precondition. Native allocator exhaustion/ABI, line construction, contextual/default paragraph levels, external levels, inverse/other reordering modes and invalid-pointer/use-after-free behavior are not certified or exposed. No invented unsupported-parameter errors, level-partition heuristic or replacement direction algorithm is used.
+- Existing resolveDefaultBidiLevels now calls the same actual owner/setPara/getLevels path rather than retaining duplicate orchestration. Native explicit/implicit/bracket/whitespace kernels are unchanged. ImpEditEngine::InitWritingDirections is now the original implemented member: actual portion lookup/vector clear, raw node text, source direction query, openSized/setPara/countRuns/getLogicalRun/close order, both source status resets, count-driven traversal, fuzzing skip and final LTR fallback. The fixture observes then calls this real method; it no longer supplies a direction output dependency. Constructor/process BreakIterator and other abstract engine dependencies remain unadmitted.
+- Native evidence: compiled directions-native.cpp against the existing pinned ICU78.3 libicuuc.a, without vendor mutation/network. Captured2731 retained inputs at all90193UTF16 positions plus20 source-engine cases. Canonical native-bidi-logical-runs.json losslessly encodes original count/status/position-limit/level outputs as intervals; uncompressed native output remains in directions-native-full.json. Runtime test replay needs neither native libraries nor vendor sources. Tests query each position before and after getLevels, not just count matching.
+- CALC-445 records source getRuns fixed-capacity failure returning false without assigning an error; countRuns ignores that boolean and returns negative runCount with successful status. Independently compiled directions-capacity.cpp reports1/-1/0,2/-1/0,3/3/0 for run capacities1/2/3 with U+0061 U+05D0 U+0062. Preserved source return/status behavior; no exception or invented error.
+- Command: npm run test:shared -- src/external/icu/source/common/ubidi.test.ts src/external/icu/source/common/ubidiln.test.ts src/editeng/source/editeng/native-engine-directions.test.ts src/editeng/source/editeng/native-engine-object.test.ts
+  Result: pass;4files/32cases. Evidence: directions-tests.log,38.42s. Scope: retained native direction/property corpus, exact logical-run captures, source error/capacity contracts and actual engine/text-object integration.
+- Command: npm run test:shared -- src/editeng/source/editeng src/i18nutil/source/utility/scriptchangescanner.test.ts src/external/icu/source/common/ubidi.test.ts src/external/icu/source/common/ubidiln.test.ts src/external/icu/source/common/ubidi-static-boundaries.test.ts --maxWorkers=1
+  Result: pass;22files/161cases. Evidence: directions-related-tests.log,179.79s. Scope: related actual EditEngine owners/member groups, direction/script scanner and changed ICU kernels after formatting.
+- Command: npm run check:dependencies
+  Result: initial fail;2 imports reported absent editeng->external module edge. Evidence: directions-deps.log. Resolution: register the original upstream dependency in the existing module graph, witnessed by impedit2.cxx include unicode/ubidi.h and Library_editeng.mk links icuuc/icu_headers. Extend the existing boundary test to retain reverse external->editeng rejection; no reverse/application/browser ownership exception is added. Final command passes1929sources/10498imports/234allowed edges (directions-deps-fixed.log).
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+  Result: pass;47cases. Evidence: directions-boundary-tests.log,18.37s. Scope: existing graph/ownership gates and source ICU dependency direction.
+- Command: npm run check:docs
+  Result: pass. Evidence: directions-docs.log,4324authored files. Scope: source/test JSDoc contracts.
+- Command: npm run check:file-size
+  Result: pass. Evidence: directions-size.log. Scope: all authored files below1000hard lines; final boundary graph/test edits remain979/984lines.
+- Command: npm run check:calc-resources
+  Result: pass. Evidence: directions-resources.log,464commands/11menus/17policies. Scope: existing Calc resource contracts.
+- Command: npm run inventory:registry:build
+  Result: pass. Evidence: directions-registry.log,4views. Scope: canonical source/runtime records; foundation/unverified statuses retained.
+- Command: npm run typecheck
+  Result: pass. Evidence: directions-typecheck.log. Scope: tools and actual office app, including new API owner/header/run functions, native fixtures and integration tests.
+- Remaining full CSV requirements: actual EditEngine construction/resources and process BreakIterator factory, original word/deletion/undo/layout/view/application dependencies, ScFieldEditEngine/DocImport admission/removal of multiline SetTextCell regex, NatNum12 supplier/casing/formatter and final full-source CSV audit. The raw writing-direction initializer is now implemented, but no complete engine or CSV readiness is promoted. Preserve current intentional browser save/open/autosave/no-recovery behavior. Same open task remains rework/DOING and goal active.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: directions-provenance.log,1930runtime modules (1717mapped/182browser/31infrastructure). Scope: actual source ownership and canonical records, without readiness promotion.
+- Command: npm run inventory:parity:calc
+  Result: pass. Evidence: directions-parity-calc.log,exit0. Scope: current Calc semantic registry consistency.
+- Command: npm run inventory:parity:shared
+  Result: pass. Evidence: directions-parity-shared.log,exit0. Scope: changed shared source registry consistency.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8files/197cases,82.03s,without retry. Evidence: directions-csv-tests.log. Scope: actual existing CSV options/recognition/date/import/export/docshell and file/menu/keyboard/dialog/primary ODS workflows. This does not claim the still-unconnected abstract engine as production CSV admission.
+- Command: npm run lint -- --ignore-pattern 'output/native/**'
+  Result: pass;0errors/warnings. Evidence: directions-lint.log. Scope: full repository ESLint excluding native experiment scratch. Source dependency graph was extended only with the upstream editeng->ICU edge; no checker logic, reverse-dependency rule or browser gate was disabled.
+- Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+  Result: pass;17.26s with existing chunk-size advisory. Evidence: directions-vite-build.log. Scope: actual current production bundle; separate successful typecheck and Vite commands are recorded without claiming an unexecuted npm run build.
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 current-built browser scenario,10.8s total. Evidence: directions-browser.log. Scope: actual existing CSV import, primary ODS save and active-sheet export; original assertions/timeouts unchanged. This is regression evidence, not full native engine/CSV admission.
+- Final review: git diff --check passes; exact allowlist contains26 intended source/test/native-capture/registry/issue/boundary/task paths. Full final status is retained in directions-final-status.log. All experiment scratch stays excluded. No network/vendor writes, readiness promotion or full-suite replay. Same approved open task remains rework/DOING; goal stays active. Next substantive frontier is actual engine construction/resources/process services and source ScFieldEditEngine/DocImport admission.

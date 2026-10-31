@@ -18,21 +18,24 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/external/icu/source/common/ubidiimp.h.ts#DIRPROP_FLAG",
-        "apps/office/src/external/icu/source/common/ubidi.test.ts#@fileoverview"
+        "apps/office/src/external/icu/source/common/ubidi.test.ts#@fileoverview",
+        "apps/office/src/external/icu/source/common/ubidiln.test.ts"
       ],
-      "justification": "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished.",
+      "justification": "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished. AQF9AG writing-direction continuation: Original Run and UBiDi consumed owner fields now retain actual direction/levels/paragraph validity, text/result lengths, lazy run state, preallocated/dynamic storage and high-bit run directions. Array element capacity replaces native byte addressing without changing fixed-capacity failure results. Source default mode/fixed0-or1/null external-level admission is explicit; no native allocator or full ICU mode facade is supplied.",
       "knownViolations": [],
       "localSymbols": [
         "BidiState",
         "DIRPROP_FLAG",
-        "ISOLATE"
+        "ISOLATE",
+        "UBiDi"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/icu-reference/source/common/ubidiimp.h",
       "upstreamSymbols": [
         "UBiDi",
         "DIRPROP_FLAG",
-        "ISOLATE"
+        "ISOLATE",
+        "Run"
       ]
     }
   }

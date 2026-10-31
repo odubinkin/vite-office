@@ -18,9 +18,11 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/external/icu/source/common/ubidi.ts#resolveDefaultBidiLevels",
-        "apps/office/src/external/icu/source/common/ubidi.test.ts#@fileoverview"
+        "apps/office/src/external/icu/source/common/ubidi.test.ts#@fileoverview",
+        "apps/office/src/external/icu/source/common/ubidiln.test.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-directions.test.ts"
       ],
-      "justification": "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished.",
+      "justification": "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished. AQF9AG writing-direction continuation: Original ubidi_openSized/setPara/close now operate the same actual UBiDi state and existing explicit/implicit/bracket/whitespace resolver. JS owns arrays and immutable UTF16 snapshots under source unchanged-buffer preconditions. Source fixed/dynamic text/run capacity, in/out statuses, empty paragraphs, NUL/count semantics and paragraph-validity markers are preserved. The existing direction-scanner adapter now calls this owner/setPara/getLevels path instead of duplicating orchestration. No unsupported parameter error or alternative direction algorithm is added; host types expose only consumed default/fixed0-or1/null-external-level choices. A compiled pinned ICU78.3 observer captured exact run count and every position limit/level over2731cases/90193UTF16 positions, retained losslessly in native-bidi-logical-runs.json. Native allocator exhaustion/ABI and unexposed modes remain outside the claim.",
       "knownViolations": [],
       "localSymbols": [
         "resolveDefaultBidiLevels",
@@ -28,7 +30,10 @@
         "bracketProcessClosing",
         "BracketData",
         "resolveExplicitLevels",
-        "resolveImplicitRuns"
+        "resolveImplicitRuns",
+        "ubidi_openSized",
+        "ubidi_setPara",
+        "ubidi_close"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/icu-reference/source/common/ubidi.cpp",
@@ -39,7 +44,9 @@
         "resolveImplicitLevels",
         "bracketProcessClosing",
         "fixN0c",
-        "adjustWSLevels"
+        "adjustWSLevels",
+        "ubidi_openSized",
+        "ubidi_close"
       ]
     }
   }

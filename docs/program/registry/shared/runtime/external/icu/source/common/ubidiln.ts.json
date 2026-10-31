@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/ubidiln.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/ubidiln.ts",
+        "apps/office/src/external/icu/source/common/ubidiln.test.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-directions.test.ts",
+        "vendor/icu-reference/source/common/ubidiln.cpp"
+      ],
+      "justification": "Original default-mode getLevels, lazy getRuns/countRuns, L2 visual-run materialization and getLogicalRun lookup preserve original marker/status/output checks, source high-index direction bit, native trailing-whitespace/single-run choices, real levels and source run-vector order. Logical queries use the actual visual-run vector, not a guessed partition. Source getRuns capacity failure leaves status successful and negative runCount unchanged (CALC-445), independently observed in compiled original ICU. Retained native captures cover2731cases/90193positions both before and after level materialization; source fixed-capacity and warning/error cases remain explicit. Only default reordering, fixed initial paragraph level0/1, null external levels and paragraph owners are admitted. Other ICU modes, external levels, contexts, line construction, allocator exhaustion/native allocation/ABI, invalid pointers and concurrent buffer mutation are not certified. Actual EditEngine constructor/process services and ScFieldEditEngine/DocImport CSV admission remain pending; no complete engine or CSV readiness is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ubidi_getLevels",
+        "ubidi_countRuns",
+        "ubidi_getLogicalRun"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/ubidiln.cpp",
+      "upstreamSymbols": [
+        "ubidi_getLevels",
+        "ubidi_countRuns",
+        "ubidi_getLogicalRun",
+        "ubidi_getRuns",
+        "getSingleRun",
+        "reorderLine"
+      ]
+    }
+  }
+}

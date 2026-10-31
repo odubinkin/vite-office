@@ -164,9 +164,10 @@ export class PreparedEngine extends ImpEditEngine {
   ImplGetBreakIterator(): XBreakIterator {
     return this.breakIterator;
   }
-  /** Observes the mandatory original writing-direction call; it does not fabricate direction output or a production service. @param paragraph - Actual source request. @returns Nothing. */
-  InitWritingDirections(paragraph: number): void {
+  /** Observes the actual original writing-direction initializer without replacing its output. @param paragraph - Actual source request. @returns Nothing. */
+  override InitWritingDirections(paragraph: number): void {
     this.writingRequests.push(paragraph);
+    super.InitWritingDirections(paragraph);
   }
   /** Explicit prepared observer dependency; no style notification behavior is claimed. @param broadcaster - Actual registered source. @param hint - Actual source hint. @returns Nothing. */
   override Notify(broadcaster: SfxBroadcaster, hint: SfxHint): void {

@@ -78,6 +78,8 @@ const allowedEdges = new Map([
       "comphelper",
       "docmodel",
       "cppu",
+      // Original impedit2.cxx includes unicode/ubidi.h; Library_editeng links icuuc and icu_headers.
+      "external",
       // Original langitem.hxx uses i18nlangtag/lang.h language values.
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.

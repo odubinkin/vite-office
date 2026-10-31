@@ -472,8 +472,10 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
 });
 
-it("permits the editeng vcl font dependency while retaining reverse and browser gates", /** Verifies the local font dependency contract independently of upstream source availability. @returns Nothing. */ () => {
+it("permits the editeng VCL font and ICU bidi dependencies while retaining reverse and browser gates", /** Verifies original Library_editeng dependency direction independently of upstream source availability. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("editeng", "vcl")).toBe(false);
+  expect(isForbiddenModuleEdge("editeng", "external")).toBe(false);
+  expect(isForbiddenModuleEdge("external", "editeng")).toBe(true);
   expect(isForbiddenModuleEdge("vcl", "editeng")).toBe(true);
   expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
   expect(

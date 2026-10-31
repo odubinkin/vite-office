@@ -1,4 +1,4 @@
-/** @fileoverview Original CreateTextObject/script member groups over actual document, attribute, item, line and cache owners. Constructor, writing-direction initialization and process-service admission remain explicit test dependencies. */
+/** @fileoverview Original CreateTextObject/script member groups over actual document, attribute, item, line, cache and raw ICU direction owners. Constructor and process-service admission remain explicit test dependencies. */
 import { expect, it } from "vitest";
 import { PreparedOuter, paragraphs } from "../../../test/editeng-engine-fixture";
 import { EditSelection } from "../../inc/EditSelection";

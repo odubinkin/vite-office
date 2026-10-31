@@ -4961,3 +4961,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/impedit3.cxx`, `ImpEditEngine::GetColumnWidth`, and source field declarations in `impedit.hxx`.
 - Observation: mnColumnSpacing is sal_Int32 and mnColumns is sal_Int16. The product mnColumnSpacing*(mnColumns-1) is evaluated after integral promotion at signed32 width before subtraction from tools::Long. Extreme spacing/count combinations can overflow that intermediate despite a wider paper-width type.
 - Preserve expression order and signed integral division for the native defined domain. Do not invent wrapping, saturation or an error for native undefined arithmetic. Fixtures cover ordinary positive/negative available widths and integral zero; overflowing native expressions, compiler-specific overflow flags and physical64-bit coordinate extremes are not certified.
+
+### CALC-445 — ICU run-capacity failure can leave a successful error status
+
+- Source: pinned ICU78.3 `source/common/ubidiln.cpp`, `ubidi_getRuns` and `ubidi_countRuns`; consumed by `ImpEditEngine::InitWritingDirections` in LibreOffice `editeng/source/editeng/impedit2.cxx`.
+- Observation: failure of `getRunsMemory` returns false without assigning the error code. `ubidi_countRuns` ignores that boolean, checks only the unchanged status and returns the still-negative run count. The compiled original reports count=-1/status=0 for the three-run text U+0061 U+05D0 U+0062 with fixed run capacities one or two; capacity three reports count=3/status=0.
+- Preserve the return/status pair. EditEngine keeps its original count>0 check and final LTR fallback; no new exception or error status is invented. Native allocator exhaustion and calling getLogicalRun after failed run materialization are not certified.

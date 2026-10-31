@@ -4,7 +4,7 @@ import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import type { SfxHint } from "../../../svl/inc/hint";
 import type { StyleSheetUser } from "../../../svl/inc/stylesheetuser";
 import type { EditDoc } from "../../inc/editdoc";
-import { ParaPortion, ScriptTypePosInfo } from "../../inc/ParagraphPortion";
+import { ParaPortion, ScriptTypePosInfo, WritingDirectionInfo } from "../../inc/ParagraphPortion";
 import type { ParaPortionList } from "../../inc/ParagraphPortionList";
 import type { InternalEditStatus } from "./editstt2";
 import { EditPaM } from "../../inc/EditPaM";
@@ -63,6 +63,15 @@ import { LINE_SEP } from "./impedit.constants";
 import { EditUndoInsertChars, EditUndoSplitPara } from "./editundo";
 import type { EditUndo, OutlinerViewShell } from "./editund2";
 import type { WrongList } from "../../inc/edtspell";
+import {
+  ubidi_openSized,
+  ubidi_setPara,
+  ubidi_countRuns,
+  ubidi_getLogicalRun,
+  ubidi_close,
+  type UBiDi,
+} from "../../../external/icu/source/common/unicode/ubidi";
+import { UErrorCode } from "../../../external/icu/source/common/unicode/utypes";
 
 /** Consumed original ImpEditView declarations; the actual view/window implementation remains mandatory and unported. */
 export interface ImpEditView {
@@ -100,8 +109,46 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract pEmptyItemSet: SfxItemSet | null;
   /** Original mandatory cached BreakIterator service getter; no alternative factory/provider. @returns Actual source service. */
   abstract ImplGetBreakIterator(): XBreakIterator;
-  /** Original mandatory writing-direction initializer; actual ICU service state remains unported by this declaration. @param paragraph - Source index. @returns Nothing. */
-  abstract InitWritingDirections(paragraph: number): void;
+  /** Original raw ICU writing-direction initialization, including source error resets, fuzzing behavior and final LTR fallback. @param paragraph - Source index. @returns Nothing. */
+  InitWritingDirections(paragraph: number): void {
+    const portion = this.GetParaPortions().SafeGetObject(paragraph);
+    if (!portion) return;
+    const infos = portion.getWritingDirectionInfos(),
+      node = portion.GetNode() as ContentNode;
+    infos.length = 0;
+    if (node.Len() && !this.mbFuzzing) {
+      const value = new OUString(node.GetString()),
+        error: [number] = [UErrorCode.U_ZERO_ERROR],
+        bidi = ubidi_openSized(value.getLength(), 0, error);
+      try {
+        error[0] = UErrorCode.U_ZERO_ERROR;
+        ubidi_setPara(
+          bidi,
+          value.subView(0),
+          value.getLength(),
+          this.IsRightToLeft(paragraph) ? 1 : 0,
+          null,
+          error,
+        );
+        error[0] = UErrorCode.U_ZERO_ERROR;
+        const count = ubidi_countRuns(bidi, error);
+        if (count > 0) {
+          let start = 0;
+          const end: [number] = [0],
+            level: [number] = [0];
+          for (let index = 0; index < count; index++) {
+            ubidi_getLogicalRun(bidi as UBiDi, start, end, level);
+            infos.push(new WritingDirectionInfo(level[0], start, end[0]));
+            start = end[0];
+          }
+        }
+      } finally {
+        ubidi_close(bidi);
+        value.dispose();
+      }
+    }
+    if (infos.length === 0) infos.push(new WritingDirectionInfo(0, 0, node.Len()));
+  }
   protected abstract mbFuzzing: boolean;
   protected abstract mpActiveView: EditView | null;
   protected abstract mnCurTextHeight: number;
