@@ -52,6 +52,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-join-boundaries.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-absolute-position-correction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -82,13 +86,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx",
           "marker": "void SwHistory::CopyAttr"
+        },
+        {
+          "path": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+          "marker": "static auto GetCorrPosition"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
     "localSymbols": [
       "DocumentContentOperationsManager",
-      "ReplaceRange"
+      "ReplaceRange",
+      "GetCorrPosition"
     ],
     "omittedResponsibilities": [
       "Tables, redlines, fly frames, sections, non-text nodes, and cross-node copy/move algorithms remain outside the supported Writer slice."
@@ -109,7 +118,8 @@
       "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged.",
       "Native Markdown callback prerequisites: text-only AppendTextNode follows AppendNode/MakeNewTextNode successor semantics (same collection, copied direct items excluding breaks/outline rule, no text hints, reset list restart/counting). DontExpandFormat transfers paragraph character items at EOF and updates eligible unlocked end-boundary flags. RES_BACKGROUND=115 supplies the native solid paragraph/frame brush and existing Worker codec. Three focused model tests cover successors, no format leakage and brush transfer. This does not certify structural nontext append, paragraph-insert undo/redlines/layout history or full native document parity.",
       "S3HW1E HTML38: original SwContentNode CanJoinNext/CanJoinPrev admission preserves native node-kind, terminal sentinel, strict GetSpaceLeft capacity and successful output assignment; the current graph has no transparent SwSectionNode owner to skip. Native SwTextNode JoinNext/JoinPrev retain the correct current owner and consume actual previous/next paragraph content via owned Cut fragments and registered index transfers. The established portable AppendTextNode/JoinTextNodes adapter retains its source for existing undo-node storage and remains a distinct copy contract; native consumers explicitly select transfer, without replacing or faking the document/hint graph. SplitNode explicitly assigns its supplied native position to the trailing start even for before affinity, preserving other marker affinity and the established trailing-node return. Clone construction is extracted only into the existing responsibility fragment; private hint/empty-list flags remain copied by their real owner. Native HTML CallParser double-split/final boundary joins and target attribute snapshots, automatic text/table layout, table token reading/insertion and final model/filter/UI reconciliation remain pending. No whole-module, C++ allocation/ABI or unrepresented structural/redline/physical lifetime certificate is claimed; browser file UI/autosave/recovery deviations remain unchanged.",
-      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified."
+      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
+      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
@@ -119,7 +129,8 @@
       "DocumentContentOperationsManager::InsertString",
       "DocumentContentOperationsManager::MoveRange",
       "DocumentContentOperationsManager::ReplaceRange",
-      "DocumentContentOperationsManager::SplitNode"
+      "DocumentContentOperationsManager::SplitNode",
+      "GetCorrPosition"
     ]
   },
   "legacyOrder": 156

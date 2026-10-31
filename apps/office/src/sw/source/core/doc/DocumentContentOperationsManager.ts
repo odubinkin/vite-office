@@ -8,6 +8,7 @@ import { SetAttrMode } from "../../../inc/swtypes";
 import { SwUndoReplace } from "../undo/unins";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -337,4 +338,19 @@ export function createParagraphStyleResetSet(document: SwDoc): SfxItemSet {
       if (which < RES_PARATR_LIST_ID || which > RES_PARATR_LIST_ISCOUNTED)
         result.Put(pool.GetUserOrPoolDefaultItem(which));
   return result;
+}
+
+/** Original GetCorrPosition keeps content boundaries when present; a structural-only range chooses the actual node immediately following End, even when it too is structural. It does not search for a nearest paragraph. @param range - Original native deletion range. @returns Owned correction position. */
+export function GetCorrPosition(range: SwPaM): SwPosition {
+  return range.GetPoint().GetNode() instanceof SwContentNode
+    ? range.GetPoint().clone()
+    : range.GetMark().GetNode() instanceof SwContentNode
+      ? range.GetMark().clone()
+      : new SwPosition(
+          range
+            .End()
+            .GetNode()
+            .GetNodes()
+            .at(range.End().GetNodeIndex() + 1),
+        );
 }

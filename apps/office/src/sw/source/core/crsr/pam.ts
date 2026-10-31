@@ -176,23 +176,24 @@ export class SwPaM extends Ring<SwPaM> {
   public SetInFrontOfLabel_(value: boolean): void {
     this.inFrontOfLabel = value;
   }
-  private point: SwPosition;
-  private mark: SwPosition | undefined;
-
-  /**
-   * Creates a collapsed position or an explicit mark-to-point selection.
-   * @param point - Moving point endpoint.
-   * @param mark - Optional fixed mark endpoint.
-   * @param ring - Optional existing circular selection owner.
-   * @returns Nothing; initializes this range.
-   */
+  private readonly m_Bound1: SwPosition;
+  private readonly m_Bound2: SwPosition;
+  private m_pPoint: SwPosition;
+  private m_pMark: SwPosition;
+  /** Native physical bounds and pointer aliases; the existing point-first TypeScript binding translates the original two-position argument order without changing callers. The unused single-position bound starts at document node0. @param point - Actual moving endpoint. @param mark - Optional actual fixed endpoint. @param ring - Original selection ring. @returns Native range owner. */
   public constructor(point: SwPosition, mark?: SwPosition, ring?: SwPaM) {
     super(ring);
-    this.point = point.clone();
-    this.mark = undefined;
-    this.Assign(point, mark);
+    if (mark && mark.GetNode().GetNodes() !== point.GetNode().GetNodes())
+      throw new Error("SwPaM endpoints belong to different documents.");
+    this.m_Bound1 = (mark ?? point).clone(mark ? "mark" : "cursor");
+    this.m_Bound2 = mark ? point.clone("cursor") : new SwPosition(point.GetNode().GetNodes().at(0));
+    this.m_pPoint = mark ? this.m_Bound2 : this.m_Bound1;
+    this.m_pMark = mark ? this.m_Bound1 : this.m_pPoint;
   }
-
+  /** Original physical bound query is independent from Point/Mark orientation and active selection. @param one - First physical bound, default true. @returns Same actual owned bound. */
+  public GetBound(one = true): SwPosition {
+    return one ? this.m_Bound1 : this.m_Bound2;
+  }
   /** Returns the next native range in the circular selection. @returns Next owner. */
   public GetNext(): SwPaM {
     return this.GetNextInRing();
@@ -205,79 +206,82 @@ export class SwPaM extends Ring<SwPaM> {
   public IsMultiSelection(): boolean {
     return !this.unique();
   }
-  /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
-  public Assign(point: SwPosition, mark?: SwPosition): void {
-    const nextPoint = point.clone();
-    nextPoint.SetOwnerKind("cursor");
-    const nextMark = mark?.clone("mark");
-    if (nextMark !== undefined && nextMark.GetNode().GetNodes() !== nextPoint.GetNode().GetNodes())
+  /** Existing position-pair binding for native value assignment retains both physical positions. Copies protect aliases supplied by existing atomic replacement callers; no replacement PaM/position owner is installed. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns This native range. */
+  public Assign(point: SwPosition, mark?: SwPosition): this {
+    if (mark && mark.GetNode().GetNodes() !== point.GetNode().GetNodes())
       throw new Error("SwPaM endpoints belong to different documents.");
-    this.point?.Dispose();
-    this.mark?.Dispose();
-    this.point = nextPoint;
-    this.mark = nextMark;
+    const nextPoint = point.clone(),
+      nextMark = mark?.clone();
+    try {
+      this.m_pPoint.Assign(nextPoint.GetNode(), nextPoint.GetContentIndex());
+      this.m_pPoint.SetOwnerKind("cursor");
+      this.m_pPoint.nContent.SetAffinity(nextPoint.nContent.GetAffinity());
+      if (nextMark) {
+        this.SetMark();
+        this.m_pMark.Assign(nextMark.GetNode(), nextMark.GetContentIndex());
+        this.m_pMark.nContent.SetAffinity(nextMark.nContent.GetAffinity());
+      } else this.DeleteMark();
+      return this;
+    } finally {
+      nextPoint.Dispose();
+      nextMark?.Dispose();
+    }
   }
-
-  /** Returns the moving point endpoint. @returns Point position. */
+  /** Returns the original moving pointer alias. @returns Borrowed point. */
   public GetPoint(): SwPosition {
-    return this.point;
+    return this.m_pPoint;
   }
-
-  /** Returns the fixed mark, or point for a collapsed selection. @returns Mark or point position. */
+  /** Returns the original mark alias, equal to point while unmarked. @returns Borrowed mark. */
   public GetMark(): SwPosition {
-    return this.mark ?? this.point;
+    return this.m_pMark;
   }
-
-  /** Reports whether mark is distinct from point. @returns True when the range owns a mark. */
+  /** Original selection presence tests pointer identity, not coordinates. @returns Whether the two pointer aliases differ. */
   public HasMark(): boolean {
-    return this.mark !== undefined;
+    return this.m_pPoint !== this.m_pMark;
   }
-
-  /** Exchanges actual point and mark owners as native SwPaM::Exchange does. @returns Nothing. */
+  /** Original Exchange swaps pointer aliases, never the owned bounds. @returns Nothing. */
   public Exchange(): void {
-    if (this.mark !== undefined) [this.point, this.mark] = [this.mark, this.point];
+    if (this.HasMark()) [this.m_pPoint, this.m_pMark] = [this.m_pMark, this.m_pPoint];
   }
-
-  /** Native Normalize changes endpoint orientation without changing the selection extent. @param bPointFirst - Keep point before mark when true, after mark otherwise. @returns Nothing. */
-  public Normalize(bPointFirst: boolean): void {
+  /** Original Normalize default keeps Point first. @param pointFirst - Native ordering, default true. @returns Nothing. */
+  public Normalize(pointFirst = true): void {
     if (
-      this.HasMark() &&
-      ((bPointFirst && this.point.compare(this.GetMark()) > 0) ||
-        (!bPointFirst && this.point.compare(this.GetMark()) < 0))
+      (pointFirst && this.m_pPoint.compare(this.m_pMark) > 0) ||
+      (!pointFirst && this.m_pPoint.compare(this.m_pMark) < 0)
     )
       this.Exchange();
   }
-
-  /** Sets mark to the current point. @returns Nothing. */
+  /** Original SetMark reuses the opposite physical bound and copies Point every time. @returns Nothing. */
   public SetMark(): void {
-    this.mark?.Dispose();
-    this.mark = this.point.clone("mark");
+    this.m_pMark = this.m_pPoint === this.m_Bound1 ? this.m_Bound2 : this.m_Bound1;
+    this.m_pMark.Assign(this.m_pPoint.GetNode(), this.m_pPoint.GetContentIndex());
+    this.m_pMark.SetOwnerKind("mark");
+    this.m_pMark.nContent.SetAffinity(this.m_pPoint.nContent.GetAffinity());
   }
-
-  /** Removes mark while retaining point. @returns Nothing. */
+  /** Original DeleteMark parks the formerly active mark at document node0, then aliases Point. An already unmarked range leaves its inactive bound untouched. @returns Nothing. */
   public DeleteMark(): void {
-    this.mark?.Dispose();
-    this.mark = undefined;
+    if (this.HasMark()) {
+      this.m_pMark.Assign(this.m_pPoint.GetNode().GetNodes().at(0));
+      this.m_pMark = this.m_pPoint;
+    }
   }
-
-  /** Unregisters both persistent PaM endpoints. @returns Nothing. */
+  /** Original destruction releases both physical bounds independently from pointer aliases. @returns Nothing. */
   public Dispose(): void {
     this.unlink();
-    this.point.Dispose();
-    this.mark?.Dispose();
-    this.mark = undefined;
+    this.m_Bound1.Dispose();
+    this.m_Bound2.Dispose();
   }
-
-  /** Returns the earlier endpoint irrespective of selection direction. @returns Ordered start position. */
+  /** Original start query selects Point on an equal-coordinate tie. @returns Actual selected endpoint. */
   public Start(): SwPosition {
-    const mark = this.GetMark();
-    return mark.compare(this.point) <= 0 ? mark : this.point;
+    return this.m_pPoint.compare(this.m_pMark) <= 0 ? this.m_pPoint : this.m_pMark;
   }
-
-  /** Returns the later endpoint irrespective of selection direction. @returns Ordered end position. */
+  /** Original end query selects Mark on an equal-coordinate tie. @returns Actual selected endpoint. */
   public End(): SwPosition {
-    const mark = this.GetMark();
-    return mark.compare(this.point) <= 0 ? this.point : mark;
+    return this.m_pPoint.compare(this.m_pMark) > 0 ? this.m_pPoint : this.m_pMark;
+  }
+  /** Original ordered pair retains the actual endpoint identities. @returns Borrowed start/end pair. */
+  public StartEnd(): readonly [SwPosition, SwPosition] {
+    return [this.Start(), this.End()];
   }
 }
 

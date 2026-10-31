@@ -137,9 +137,8 @@ export class SwContentIndex {
     this.Assign(node, index);
   }
 
-  /** Returns the owning content node. @returns Registered content node. */
-  public GetContentNode(): SwContentNode {
-    if (this.contentNode === undefined) throw new Error("SwContentIndex is disposed.");
+  /** Original nullable content owner; an unattached index is valid, including structural SwPosition bounds. @returns Registered content node or native-null binding. */
+  public GetContentNode(): SwContentNode | undefined {
     return this.contentNode;
   }
 
