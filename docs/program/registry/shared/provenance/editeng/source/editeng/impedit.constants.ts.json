@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit.constants.ts",
+    "upstreamPath": "editeng/source/editeng/impedit.hxx",
+    "localSymbols": [
+      "MAXCHARSINPARA",
+      "LINE_SEP"
+    ],
+    "upstreamSymbols": [
+      "MAXCHARSINPARA",
+      "LINE_SEP"
+    ],
+    "preservedResponsibilities": [
+      "Original MAXCHARSINPARA arithmetic uses actual source CHARPOSGROW16 and retains bound16367. Original LF unit is unchanged; constants are separated from the unported enclosing engine declaration."
+    ],
+    "omittedResponsibilities": [
+      "Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit.constants.ts",
+          "marker": "MAXCHARSINPARA"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-insert-text-line.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit.hxx",
+          "marker": "MAXCHARSINPARA"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit.constants.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Consumed original line normalization/constants/text-capacity member group is separated from unrelated stream I/O and enclosing engine/layout/undo/view responsibilities under the unchanged source-file budget; no alternate engine or callback protocol is supplied."
+    }
+  }
+}

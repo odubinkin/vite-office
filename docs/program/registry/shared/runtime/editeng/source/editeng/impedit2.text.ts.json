@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit2.text.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit2.text.ts",
+        "apps/office/src/editeng/source/editeng/native-insert-text-line.test.ts",
+        "editeng/source/editeng/impedit2.cxx"
+      ],
+      "justification": "Literal aLine preparation/capacity block extracted from original ImpInsertText using real EditPaM/ContentNode length, SAL copy/iterateCodePoints and original pinned Unicode category owner. Retains mutable nEnd, complete-node capacity, exactly84 prior UTF16 offsets, explicit no-break exclusions, original hyphen/number rule and source zero-capacity retry arithmetic. Supplementary symbol overshoot/letter surrogate splitting and boundary hyphen outcome remain source-identical (CALC-431/432). This is an internal member-group extraction, not a public upstream helper or a completed engine/parser/provider. Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PrepareInsertTextLine"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit2.cxx",
+      "upstreamSymbols": [
+        "ImpEditEngine::ImpInsertText"
+      ]
+    }
+  }
+}

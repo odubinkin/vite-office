@@ -4871,3 +4871,21 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/EditLine.cxx`, `EditLine::Clone`; `editeng/inc/EditLine.hxx`, copy constructor and assignment.
 - Observation: Clone copies positions, endpoints and geometry but leaves kashida positions empty, hanging-punctuation false and invalid true. The copy constructor instead copies endpoints and hanging punctuation while resetting geometry and both vectors. Assignment copies only the four endpoints and leaves recipient flags/geometry/vectors unchanged. A generic fieldwise clone would therefore change source behavior.
 - Preserve all three original member sets; do not fill the omitted Clone fields as a correction. Actual owner tests distinguish the three operations. Whether all callers intentionally depend on these differences needs upstream investigation; full layout/render execution remains unverified.
+
+### CALC-430 — convertLineEnd can leave a trailing bare CR unchanged when CRLF is requested
+
+- Source: `tools/source/stream/stream.cxx`, `tmpl_convertLineEnd` conversion-detection pass.
+- Observation: a CR only triggers CRLF conversion when a following unit exists and is not LF. A final CR therefore does not set bConvert. If all earlier breaks already are CRLF, `A` + CRLF + `B` + CR is returned unchanged, sharing original string data. If another break elsewhere triggers conversion, the second pass does convert that final CR to CRLF.
+- Preserve the complete first-pass predicates and unchanged-value return. Do not normalize the trailing CR independently or replace both passes with a regex. Actual SAL string/buffer fixtures cover both outcomes; unchanged native whole-stream differential execution is not claimed.
+
+### CALC-431 — ImpInsertText capacity preparation can exceed the bound or split a supplementary character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` backward84-offset capacity search and `iterateCodePoints` category switch.
+- Observation: with12 available UTF16 units and11 ASCII letters followed by a supplementary symbol and another unit, the last examined high surrogate decodes the symbol and selects its next UTF16 position13. The retained line then exceeds the available bound by one unit. A supplementary letter at that same position follows the letter branch instead; absent another breakpoint, the original12-unit limit retains only its high surrogate. The loop scans UTF16 offsets backward and does not correct the final limit to a code-point boundary.
+- Preserve source category decisions, next-position selection and raw substring copy. Do not clamp the symbol result or add a surrogate-preserving fallback. Tests use actual document positions, SAL iteration/copy and pinned Unicode classification. Enclosing native engine execution remains unverified.
+
+### CALC-432 — A hyphen in the last available unit is not kept with its following number
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` hyphen-minus capacity branch.
+- Observation: the comment says to keep a hyphen with a number to its right, but that branch additionally requires the position after the hyphen to be strictly below nMaxNewChars. If a hyphen occupies the final available unit, the condition is false and the retained line ends after the hyphen, leaving the number for the following paragraph. One unit earlier, decimal/letter/other-number categories move the break before the hyphen.
+- Preserve the strict inequality and category switch. Do not special-case the final-unit hyphen to satisfy the comment. Source-derived fixtures distinguish all three number categories and the last-unit case; this is not a full native engine certificate.

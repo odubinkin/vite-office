@@ -8,3 +8,5 @@ export {
   CreateFont,
   GetScriptItemId,
 } from "../source/editeng/editdoc";
+/** Original character-position growth increment from editdoc.hxx. */
+export const CHARPOSGROW = 16;
