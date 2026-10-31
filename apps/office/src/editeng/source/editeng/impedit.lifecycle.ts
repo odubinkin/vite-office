@@ -4,20 +4,58 @@ import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import type { SfxHint } from "../../../svl/inc/hint";
 import type { StyleSheetUser } from "../../../svl/inc/stylesheetuser";
 import type { EditDoc } from "../../inc/editdoc";
-import { ParaPortion } from "../../inc/ParagraphPortion";
+import { ParaPortion, ScriptTypePosInfo } from "../../inc/ParagraphPortion";
 import type { ParaPortionList } from "../../inc/ParagraphPortionList";
 import type { InternalEditStatus } from "./editstt2";
 import { EditPaM } from "../../inc/EditPaM";
 import { EditSelection } from "../../inc/EditSelection";
 import { EPaM, EE_PARA_MAX } from "../../inc/EPaM";
 import { ESelection } from "../../inc/ESelection";
-import { EDITUNDO_INSERT, EENotify, EENotifyType } from "../../inc/editdata";
-import { Rectangle, Size } from "../../../tools/inc/gen";
-import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import {
+  EDITUNDO_INSERT,
+  EENotify,
+  EENotifyType,
+  EEHorizontalTextDirection,
+  type ScalingParameters,
+  type ScalingParametersConstReference,
+} from "../../inc/editdata";
+import { Rectangle, Size, type ReadonlySize } from "../../../tools/inc/gen";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { ContentNode } from "../../inc/ContentNode";
 import type { EditEngine } from "./editeng.lifecycle";
 import { SfxVoidItem } from "../../../svl/inc/voiditem";
-import { EE_FEATURE_TAB } from "../../inc/eeitem";
+import {
+  EE_FEATURE_TAB,
+  EE_FEATURE_FIELD,
+  EE_CHAR_SCRIPT_HINT,
+  EE_PARA_WRITINGDIR,
+  EE_ITEMS_START,
+  EE_ITEMS_END,
+  EE_CHAR_END,
+} from "../../inc/eeitem";
+import type { EditCharAttribField } from "../../inc/editattr";
+import { SvxFrameDirectionItem } from "../../inc/frmdiritem";
+import { SvxFrameDirection } from "../../inc/frmdir";
+import type { SvxScriptHintItem } from "../../inc/scripthintitem";
+import type { TextRotation } from "../../inc/editobj";
+import type { EditTextObject } from "./editobj";
+import { CreateTextObject as CreateTextObjectBody } from "./impedit4.textobject";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
+import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import type { XBreakIterator } from "../../../offapi/com/sun/star/i18n/XBreakIterator";
+import * as ScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
+import {
+  SvtScriptType,
+  FromI18NToSvtScriptType,
+  GetScriptTypeOfLanguage,
+  GetI18NScriptTypeOfLanguage,
+} from "../../../svl/inc/languageoptions";
+import {
+  MakeDirectionChangeScanner,
+  MakeScriptChangeScanner,
+  ScriptHintProvider,
+} from "../../../i18nutil/inc/scriptchangescanner";
 import { convertLineEnd, LINEEND_LF } from "../../../tools/inc/lineend";
 import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
 import { PrepareInsertTextLine } from "./impedit2.text";
@@ -52,6 +90,18 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract readonly maEditViews: EditView[];
   protected abstract readonly mpEditEngine: EditEngine;
   protected abstract readonly maPaperSize: Size;
+  protected abstract readonly maScalingParameters: ScalingParameters;
+  protected abstract mnBigTextObjectStart: number;
+  protected abstract mnColumns: number;
+  protected abstract mnColumnSpacing: number;
+  protected abstract meDefLanguage: number;
+  protected abstract meDefaultHorizontalTextDirection: EEHorizontalTextDirection;
+  protected abstract mpRefDev: object | null;
+  protected abstract pEmptyItemSet: SfxItemSet | null;
+  /** Original mandatory cached BreakIterator service getter; no alternative factory/provider. @returns Actual source service. */
+  abstract ImplGetBreakIterator(): XBreakIterator;
+  /** Original mandatory writing-direction initializer; actual ICU service state remains unported by this declaration. @param paragraph - Source index. @returns Nothing. */
+  abstract InitWritingDirections(paragraph: number): void;
   protected abstract mbFuzzing: boolean;
   protected abstract mpActiveView: EditView | null;
   protected abstract mnCurTextHeight: number;
@@ -78,6 +128,223 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   abstract ResetUndoManager(): void;
   /** Original paragraph-height calculation dependency. @param portion - Actual next portion. @returns Nothing. */
   abstract CalcHeight(portion: ParaPortion): void;
+  /** Original raw default language. @returns Source language identity. */
+  GetDefaultLanguage(): number {
+    return this.meDefLanguage;
+  }
+  /** Original raw default horizontal direction. @returns Source selector. */
+  GetDefaultHorizontalTextDirection(): EEHorizontalTextDirection {
+    return this.meDefaultHorizontalTextDirection;
+  }
+  /** Original actual document orientation. @returns Vertical flag. */
+  GetVertical(): boolean {
+    return this.GetEditDoc().GetVertical();
+  }
+  /** Original actual document rotation. @returns Source rotation. */
+  GetRotation(): TextRotation {
+    return this.GetEditDoc().GetRotation();
+  }
+  /** Original effective orientation. @returns Source predicate. */
+  IsEffectivelyVertical(): boolean {
+    return this.GetEditDoc().IsEffectivelyVertical();
+  }
+  /** Original borrowed device identity; device operations are not supplied by this getter. @returns Actual source pointer. */
+  GetRefDevice(): object | null {
+    return this.mpRefDev;
+  }
+  /** Original borrowed paper-size value. @returns Actual const size view. */
+  GetPaperSize(): ReadonlySize {
+    return this.maPaperSize;
+  }
+  /** Original actual scaling reference. @returns Source aggregate. */
+  getScalingParameters(): ScalingParametersConstReference {
+    return this.maScalingParameters;
+  }
+  /** Original cache-size threshold. @returns Source threshold. */
+  GetBigTextObjectStart(): number {
+    return this.mnBigTextObjectStart;
+  }
+  /** Original column geometry with signed integral division, within the source columns>=1 and defined signed-arithmetic preconditions. @param paper - Actual source size. @returns Integral width. */
+  GetColumnWidth(paper: ReadonlySize): number {
+    const width = this.IsEffectivelyVertical() ? paper.Height() : paper.Width(),
+      result = Math.trunc((width - this.mnColumnSpacing * (this.mnColumns - 1)) / this.mnColumns);
+    return result === 0 ? 0 : result;
+  }
+  /** Original lazy fixed-range empty set retains actual pool defaults; feature ranges are not substituted. @returns Actual owned set. */
+  GetEmptyItemSet(): SfxItemSet {
+    if (!this.pEmptyItemSet) {
+      this.pEmptyItemSet = new SfxItemSet(this.maEditDoc.GetItemPool(), [
+        [EE_ITEMS_START, EE_ITEMS_END],
+      ]);
+      for (let which = EE_ITEMS_START; which <= EE_CHAR_END; which++)
+        this.pEmptyItemSet.ClearItem(which);
+    }
+    return this.pEmptyItemSet;
+  }
+  /** Original hard/style/default paragraph lookup. @param paragraph - Source index. @param which - Source item ID. @returns Actual item. */
+  GetParaAttrib(paragraph: number, which: number): SfxPoolItem {
+    return (this.maEditDoc.GetObject(paragraph) as ContentNode).GetContentAttribs().GetItem(which);
+  }
+  /** Original paragraph direction precedence, including Environment fallback to the actual pool and vertical suppression. @param paragraph - Source index. @returns RTL flag. */
+  IsRightToLeft(paragraph: number): boolean {
+    let rtl = false,
+      item: SvxFrameDirectionItem | null = null;
+    if (!this.IsEffectivelyVertical()) {
+      rtl = this.GetDefaultHorizontalTextDirection() === EEHorizontalTextDirection.R2L;
+      item = this.GetParaAttrib(paragraph, EE_PARA_WRITINGDIR) as SvxFrameDirectionItem;
+      if (item.GetValue() === SvxFrameDirection.Environment) {
+        if (this.GetDefaultHorizontalTextDirection() !== EEHorizontalTextDirection.Default)
+          item = null;
+        else item = this.GetEmptyItemSet().Get(EE_PARA_WRITINGDIR) as SvxFrameDirectionItem;
+      }
+    }
+    if (item) rtl = item.GetValue() === SvxFrameDirection.Horizontal_RL_TB;
+    return rtl;
+  }
+  /** Original complete script initialization uses field display units, ordered script hints and the actual direction/script scanners. Service/direction admission remains mandatory. @param paragraph - Source index. @returns Nothing. */
+  InitScriptTypes(paragraph: number): void {
+    const portion = this.GetParaPortions().SafeGetObject(paragraph);
+    if (!portion) return;
+    const types = portion.getScriptTypePosInfos();
+    types.length = 0;
+    const node = portion.GetNode() as ContentNode;
+    if (!node.Len()) return;
+    const iterator = this.ImplGetBreakIterator();
+    let value = new OUString(node.GetString());
+    try {
+      let field = node.GetCharAttribs().FindNextAttrib(EE_FEATURE_FIELD, 0);
+      while (field) {
+        const display = (field as EditCharAttribField).GetFieldValue();
+        if (!display.isEmpty()) {
+          let replaced = value.replaceAt(field.GetStart(), 1, display.subView(0, 1));
+          value.dispose();
+          value = replaced;
+          let fieldScript = iterator.getScriptType(display.subView(0), 0);
+          for (let index = 1; index < display.getLength(); index++) {
+            const script = iterator.getScriptType(display.subView(0), index);
+            if (fieldScript === ScriptType.WEAK) {
+              fieldScript = script;
+              replaced = value.replaceAt(field.GetStart(), 1, display.subView(index, 1));
+              value.dispose();
+              value = replaced;
+            }
+            if (script === ScriptType.ASIAN || script === ScriptType.COMPLEX) {
+              replaced = value.replaceAt(field.GetStart(), 1, display.subView(index, 1));
+              value.dispose();
+              value = replaced;
+              break;
+            }
+          }
+        }
+        field = field.GetEnd()
+          ? node.GetCharAttribs().FindNextAttrib(EE_FEATURE_FIELD, field.GetEnd())
+          : null;
+      }
+      const hints = new ScriptHintProvider();
+      let hint = node.GetCharAttribs().FindNextAttrib(EE_CHAR_SCRIPT_HINT, 0);
+      while (hint) {
+        hints.AddHint(
+          (hint.GetItem() as SvxScriptHintItem).GetValue(),
+          hint.GetStart(),
+          hint.GetEnd(),
+        );
+        hint = hint.GetEnd()
+          ? node.GetCharAttribs().FindAttribRightOpen(EE_CHAR_SCRIPT_HINT, hint.GetEnd())
+          : null;
+      }
+      const direction = MakeDirectionChangeScanner(value, this.IsRightToLeft(paragraph) ? 1 : 0),
+        scanner = MakeScriptChangeScanner(
+          value,
+          GetI18NScriptTypeOfLanguage(this.GetDefaultLanguage()),
+          direction,
+          hints,
+        );
+      while (!scanner.AtEnd() || types.length === 0) {
+        const change = scanner.Peek();
+        types.push(
+          new ScriptTypePosInfo(change.m_nScriptType, change.m_nStartIndex, change.m_nEndIndex),
+        );
+        scanner.Advance();
+      }
+      if (portion.getWritingDirectionInfos().length === 0) this.InitWritingDirections(paragraph);
+    } finally {
+      value.dispose();
+    }
+  }
+  /** Original multiparagraph script query, retaining endpoint-only membership, bare-cursor bias and one final language fallback. @param selection - Actual source selection. @returns Source script mask. */
+  GetItemScriptType(selection: EditSelection): SvtScriptType {
+    const adjusted = new EditSelection(selection);
+    adjusted.Adjust(this.maEditDoc);
+    let script = SvtScriptType.NONE;
+    const first = this.GetEditDoc().GetPos(adjusted.Min().GetNode()),
+      last = this.GetEditDoc().GetPos(adjusted.Max().GetNode());
+    for (let paragraph = first; paragraph <= last; paragraph++) {
+      const portion = this.GetParaPortions().SafeGetObject(paragraph);
+      if (!portion) continue;
+      const types = portion.getScriptTypePosInfos();
+      if (types.length === 0) this.InitScriptTypes(paragraph);
+      let start = paragraph === first ? adjusted.Min().GetIndex() : 0,
+        end =
+          paragraph === last ? adjusted.Max().GetIndex() : (portion.GetNode() as ContentNode).Len();
+      if (first === last && start === end) {
+        if (start !== 0) --start;
+        else ++end;
+      }
+      for (const type of types) {
+        const startInRange = type.nStartPos <= start && start < type.nEndPos,
+          endInRange = type.nStartPos < end && end <= type.nEndPos;
+        if ((startInRange || endInRange) && type.nScriptType !== ScriptType.WEAK)
+          script |= FromI18NToSvtScriptType(type.nScriptType);
+      }
+    }
+    return script !== SvtScriptType.NONE
+      ? script
+      : GetScriptTypeOfLanguage(this.GetDefaultLanguage());
+  }
+  /** Original paragraph-range overload, within native asserted count/range preconditions. @param paragraph - Source start. @param count - Source count. @returns Owned object or original null. */
+  CreateTextObject(paragraph: number, count: number): EditTextObject | null;
+  /** Original whole-document, current-pool/status and private pool/flags overloads, unified only at the host declaration boundary. @param selection - Source by-value selection, or absent for the whole document. @param pool - Actual destination pool or null, or absent for current-pool/status dispatch. @param allowBig - Original default false. @param threshold - Original default zero. @returns Owned source object. */
+  CreateTextObject(
+    selection?: EditSelection,
+    pool?: SfxItemPool | null,
+    allowBig?: boolean,
+    threshold?: number,
+  ): EditTextObject;
+  /** Original object creation copies actual paragraphs/attributes/styles/spelling and eligible formatted payloads with original narrowing/copy semantics. @param source - Original selected overload. @param destination - Original pool or paragraph count. @param allowBig - Original private-overload default false. @param threshold - Original private-overload default zero. @returns Actual source object or paragraph-range null. */
+  CreateTextObject(
+    source?: EditSelection | number,
+    destination?: SfxItemPool | null | number,
+    allowBig = false,
+    threshold = 0,
+  ): EditTextObject | null {
+    if (source === undefined)
+      return this.CreateTextObject(
+        new EditSelection(this.maEditDoc.GetStartPaM(), this.maEditDoc.GetEndPaM()),
+      );
+    if (typeof source === "number") {
+      const start = this.maEditDoc.GetObject(source),
+        end = this.maEditDoc.GetObject(source + (destination as number) - 1);
+      return start && end
+        ? this.CreateTextObject(
+            new EditSelection(new EditPaM(start, 0), new EditPaM(end, end.Len())),
+          )
+        : null;
+    }
+    if (destination === undefined)
+      return this.CreateTextObject(
+        source,
+        this.maEditDoc.GetItemPool(),
+        this.maStatus.AllowBigObjects(),
+        this.mnBigTextObjectStart,
+      );
+    return CreateTextObjectBody(
+      this,
+      source,
+      destination as SfxItemPool | null,
+      allowBig,
+      threshold,
+    );
+  }
   /** Original borrowed active-view pointer. @returns Actual view or null. */
   GetActiveView(): EditView | null {
     return this.mpActiveView;

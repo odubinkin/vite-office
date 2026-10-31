@@ -31,3 +31,6 @@ export {
   EditCharAttribGrabBag,
   EditCharAttribField,
 } from "../source/editeng/editattr";
+
+/** Original GetMetric selector for the pool's default metric. */
+export const DEF_METRIC = 0;

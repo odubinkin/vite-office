@@ -4925,3 +4925,39 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` capacity branch and `ImpEditEngine::ImpInsertParaBreak` paragraph-count guard.
 - Observation: when the current paragraph already has MAXCHARSINPARA units, the capacity branch retains an empty line and changes nEnd to nStart-1 so the caller retries the same input after a split. At EE_PARA_MAX paragraphs, however, ImpInsertParaBreak returns the original position without splitting. The caller then assigns nStart=nEnd+1, leaving both input offset and remaining paragraph capacity unchanged. These conditions compose into a non-progressing insertion loop.
 - Preserve the original retry arithmetic and paragraph-limit return; do not introduce an iteration cap, truncation or alternate error. Existing source-derived fixtures separately exercise zero-capacity retry and the unchanged caret at the paragraph limit. This composition is a static control-flow finding: a full-limit native document and the non-terminating loop are not executed or certified by the tests.
+
+### CALC-439 — Formatted text-object caches narrow paragraph portion and line counts to unsigned16
+
+- Source: `editeng/source/editeng/impedit4.cxx`, `ImpEditEngine::CreateTextObject` formatted-cache branch.
+- Observation: source TextPortionList/EditLineList counts are assigned to sal_uInt16 before copying. At65536 entries the copying count becomes zero even though the source vectors retain all entries. Eligibility previously uses the wider text-portion total, so a cache may be created while omitting those payloads.
+- Preserve each unsigned16 assignment and original eligibility order. Source-owner fixtures with65536 zero-length portions/lines verify the narrowed copying loops; this is prepared value-state evidence, not a full native layout/admission certificate.
+
+### CALC-440 — A zero paragraph count can select a paragraph boundary rather than no text
+
+- Source: `editeng/source/editeng/impedit4.cxx`, `ImpEditEngine::CreateTextObject(sal_Int32,sal_Int32)`.
+- Observation: the function obtains its end node at nPara+nParas-1 without rejecting zero counts. For nPara1/nParas0 both node1 and node0 exist; the constructed reverse selection is adjusted by the downstream creator and copies the boundary between them as two empty paragraphs. At nPara0/nParas0 the end lookup is null and the function returns null instead.
+- Preserve the pointer tests and selection construction. Do not add a nonpositive-count guard or normalize the request to an empty object. Native debug diagnostics are outside the fixture; actual document/object owners reproduce the source return/selection path.
+
+### CALC-441 — Script-hint initialization stops when hints have a gap
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` script-hint loop.
+- Observation: the first hint uses FindNextAttrib, but subsequent hints use FindAttribRightOpen at the previous hint's end. A later hint starting after that position is not found. Adjacent hints are found, while a gap ends traversal even when another hint remains in the source vector.
+- Preserve the different lookup calls. Tests use actual weak spaces: a later Complex hint affects the result when adjacent, and is ignored across a gap. ASCII dots are a source compatibility LATIN class and therefore cannot witness the weak-character hint behavior; no classifier change is appropriate.
+
+### CALC-442 — Field-script replacement retains only one UTF16 unit of a selected supplementary character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` field-value replacement.
+- Observation: script queries inspect field text at UTF16 offsets, but replacement always uses subView(offset,1). A field containing supplementary CJK U+20000 selects its high surrogate as the replacement for the feature marker. The subsequent scanner sees that lone unit and, with an English default, produces LATIN rather than the field's ASIAN class.
+- Preserve the one-unit view and subsequent scanner path. Do not expand replacement to a complete code point or override the resulting script mask. Actual SAL counted-view replacement, field owners, script queries and scanners reproduce this outcome while leaving original field text intact.
+
+### CALC-443 — A later strong field character can override an already non-Latin first character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` field-value loop.
+- Observation: the comment describes preferring a later CJK/CTL character when the first character is LATIN. The actual condition has no initial-LATIN check: any later ASIAN or COMPLEX character replaces the current representative and ends the loop. A CJK-first/Arabic-second field therefore becomes COMPLEX; the reversed order becomes ASIAN.
+- Preserve the condition and first matching later-character break. Tests execute both orders through actual field/SAL/script owners; no extra first-character preference is introduced.
+
+### CALC-444 — Column width has a signed32 multiplication before the wider subtraction
+
+- Source: `editeng/source/editeng/impedit3.cxx`, `ImpEditEngine::GetColumnWidth`, and source field declarations in `impedit.hxx`.
+- Observation: mnColumnSpacing is sal_Int32 and mnColumns is sal_Int16. The product mnColumnSpacing*(mnColumns-1) is evaluated after integral promotion at signed32 width before subtraction from tools::Long. Extreme spacing/count combinations can overflow that intermediate despite a wider paper-width type.
+- Preserve expression order and signed integral division for the native defined domain. Do not invent wrapping, saturation or an error for native undefined arithmetic. Fixtures cover ordinary positive/negative available widths and integral zero; overflowing native expressions, compiler-specific overflow flags and physical64-bit coordinate extremes are not certified.

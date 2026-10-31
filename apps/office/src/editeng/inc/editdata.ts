@@ -75,3 +75,47 @@ export const EDITUNDO_SPLITPARA = 105;
 export const EDITUNDO_INSERTCHARS = 106;
 /** Original compound text-insertion undo identifier. */
 export const EDITUNDO_INSERT = 111;
+
+/** Original default horizontal paragraph direction selector. */
+export enum EEHorizontalTextDirection {
+  Default,
+  L2R,
+  R2L,
+}
+/** Original mutable four-double scaling aggregate. */
+export class ScalingParameters {
+  fFontX = 1.0;
+  fFontY = 1.0;
+  fSpacingX = 1.0;
+  fSpacingY = 1.0;
+  /** Original default/implicit-copy construction. @param source - Optional original value. @returns Aggregate. */
+  constructor(source?: ScalingParametersConstReference) {
+    if (source !== undefined) this.assign(source);
+  }
+  /** Original implicit fieldwise assignment. @param source - Original value. @returns Receiver. */
+  assign(source: ScalingParametersConstReference): this {
+    this.fFontX = source.fFontX;
+    this.fFontY = source.fFontY;
+    this.fSpacingX = source.fSpacingX;
+    this.fSpacingY = source.fSpacingY;
+    return this;
+  }
+  /** Original defaulted double equality, including NaN inequality. @param other - Original aggregate. @returns Equality. */
+  equals(other: ScalingParametersConstReference): boolean {
+    return (
+      this.fFontX === other.fFontX &&
+      this.fFontY === other.fFontY &&
+      this.fSpacingX === other.fSpacingX &&
+      this.fSpacingY === other.fSpacingY
+    );
+  }
+  /** Original exact four-value default test. @returns Default predicate. */
+  areValuesDefault(): boolean {
+    return this.fFontX === 1 && this.fFontY === 1 && this.fSpacingX === 1 && this.fSpacingY === 1;
+  }
+}
+
+/** Original const ScalingParameters reference excludes native nonconst assignment/default-query methods. */
+export type ScalingParametersConstReference = Readonly<
+  Pick<ScalingParameters, "fFontX" | "fFontY" | "fSpacingX" | "fSpacingY" | "equals">
+>;

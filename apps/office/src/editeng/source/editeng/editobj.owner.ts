@@ -1,4 +1,4 @@
-/** @fileoverview Original EditTextObject/Impl value ownership,pool resolution,text/attributes/fields/styles and cache invalidation from editobj.cxx. Layout,formatted cache payloads and diagnostics remain unported. */
+/** @fileoverview Original EditTextObject/Impl value ownership,pool resolution,text/attributes/fields/styles and cache invalidation from editobj.cxx. Layout,physical device operations and diagnostics remain unported. */
 import { EditTextObject, ContentInfo, XEditAttribute, XParaPortionList } from "./editobj";
 import { FieldUpdater } from "../../inc/fieldupdater";
 import { GetAllSections } from "./editobj.sections";

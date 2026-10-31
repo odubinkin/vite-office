@@ -5,6 +5,7 @@ export {
   DEFTAB,
   GetSepStr,
   MakeCharAttrib,
+  GetAttrib,
   CreateFont,
   GetScriptItemId,
 } from "../source/editeng/editdoc";

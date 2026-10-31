@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 130
+revision: 133
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T08:52:55.646Z"
+  updated_at: "2026-10-31T10:41:04.645Z"
   updated_by: "CODER"
-  note: "Verified original ImpInsertText and paragraph-split bodies, source undo actions and WrongList clearing: aggregate140 selected shared cases covered after recovering resource-related worker/time limits,197 CSV cases and current-built browser flow pass. Final typecheck/lint/dependency/docs/size/resources/provenance/registry/Vite checks pass. Concrete engine/resources/undo admission, CreateTextObject/ScFieldEditEngine/DocImport and NatNum12 remain pending. Partial checkpoint only; keep goal active."
-  attempts: 29
+  note: "Native rich-text object and script initialization checkpoint verified: 154 related shared cases, 191 CSV core cases, 6 UI cases on unchanged isolated rerun, current-built browser CSV, final typecheck/lint/build and required static/provenance/parity checks pass. Initial UI timeouts and lint declaration findings are retained with resolutions. Full CSV admission is incomplete: actual constructor/services, writing directions, ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
+  attempts: 30
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -792,8 +795,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T10:41:04.645Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native rich-text object and script initialization checkpoint verified: 154 related shared cases, 191 CSV core cases, 6 UI cases on unchanged isolated rerun, current-built browser CSV, final typecheck/lint/build and required static/provenance/parity checks pass. Initial UI timeouts and lint declaration findings are retained with resolutions. Full CSV admission is incomplete: actual constructor/services, writing directions, ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T10:41:12.377Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T08:53:23.062Z"
+doc_updated_at: "2026-10-31T10:41:12.377Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1683,6 +1699,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T10:41:04.645Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native rich-text object and script initialization checkpoint verified: 154 related shared cases, 191 CSV core cases, 6 UI cases on unchanged isolated rerun, current-built browser CSV, final typecheck/lint/build and required static/provenance/parity checks pass. Initial UI timeouts and lint declaration findings are retained with resolutions. Full CSV admission is incomplete: actual constructor/services, writing directions, ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active.
+    Attempts: 30
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:41:02.230Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2423,6 +2469,39 @@ sections:
     - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;1 current-built browser scenario. Evidence: insert-browser.log,18.6s total. Scope: existing CSV import, primary ODS persistence and active-sheet export with original assertions/timeouts. It does not certify the still-unconnected abstract engine as a production CSV implementation.
     - Final review: only intended source/test/provenance/runtime/issue/task artifacts are included. Full untracked status is retained in insert-final-status.log; all native scratch remains excluded. Goal stays active and full task verification remains rework.
+
+    ### Native rich-text object creation and script initialization checkpoint
+
+    - Implemented original public/internal CreateTextObject overload dispatch, preserving EditTextObject base returns, current pool/status/threshold defaults and source public paragraph-count default one. Original private body is extracted into impedit4.textobject.ts using the same actual engine receiver and existing owners, as in existing editobj.sections member groups. It copies actual text, hard attributes, style name/family, clipped character attributes, eligible spelling and formatted payloads. Selection adjustment is by value; empty-source-paragraph attributes, global full-paragraph eligibility and destination-pool metric/value semantics are preserved. No replacement line-array model, fake engine or default service is introduced.
+    - Added actual XParaPortion payload and XParaPortionList ownership/const-index binding over existing EditLineList/TextPortionList. Source primitive payload fields remain producer-initialized; no measurement is fabricated. Cache creation keeps all source conditions, column geometry, scale metadata, uint16 count narrowing, TextPortion copy and EditLine Clone semantics. Physical device/map access remains unported.
+    - Ported complete InitScriptTypes/GetItemScriptType member groups: actual field display queries and source one-unit representatives, original hint lookup, actual script/direction scanners, cached vector mutation, multiparagraph endpoint membership, caret bias and one final language fallback. Original IsRightToLeft, lazy GetEmptyItemSet, paragraph item lookup, paper/orientation/language/device/scaling getters and column-width arithmetic preserve source pool/default precedence. Actual process BreakIterator factory and raw InitWritingDirections remain mandatory abstract dependencies, not default providers. The direction scanner has its own control/boundary processing and must not be substituted for raw ICU writing-direction initialization without source proof.
+    - Added source DEF_METRIC0, header GetAttrib, EEHorizontalTextDirection and ScalingParameters value/default/equality/const-reference contracts. Native getScalingParameters returns a const view; its original nonconst areValuesDefault is intentionally not exposed through that view.
+    - Initial new tests reported5 field failures and1 hint expectation failure (object-tests.log): the field caller reached the missing OUString.replaceAt std::u16string_view overload. Implemented that exact header overload through existing rtl_uString_newReplaceStrAtUtf16L/SAL_NO_ACQUIRE, preserving original owned-string dispatch. Counted views retain embedded NUL, lone surrogates, aliases and output ownership without an owned temporary or null-terminated conversion. The hint fixture used dots, which upstream's compatibility classifier makes LATIN; replaced the fixture text with actual WEAK spaces rather than changing production classification.
+    - Source findings CALC-439..443 document/preserve uint16 cache count narrowing, zero-count paragraph-boundary selection, gapped-hint traversal, supplementary field-unit loss and later strong field-character override. CALC-444 records the signed32 intermediate in column geometry; overflowing native/compiler-specific arithmetic is not certified and no wrapping/saturation/error is invented.
+    - Shared prepared owner/view fixtures moved to src/test/editeng-engine-fixture.ts, used by both lifecycle and object tests. This is explicitly test-only state/dependency preparation, excluded from production module inventory. Actual input, document, strings, attributes, pools, styles, script implementations, cache values and copy bodies execute; no concrete full-engine constructor, renderer or process-service admission is claimed.
+    - Command: npm run test:shared -- src/editeng/source/editeng/native-engine-object.test.ts src/editeng/source/editeng/native-engine-lifecycle.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-replacement.native.test.ts
+      Result: pass;4 files/47 cases after the source-view fix, then pass again after extraction under the original impedit4 responsibility boundary. Evidence: object-tests-fixed.log and object-extracted-tests.log. Scope: new member-group caller/value contracts, actual field/script handling, clipping/ownership/cache eligibility/copy/narrowing and counted-view SAL behavior, including unchanged native replacement corpus replay. Native physical ABI/layout/constructor QA remains outside this proof.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/i18nutil/source/utility/scriptchangescanner.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-replacement.native.test.ts
+      Result: pass;21 files/154 related cases. Evidence: object-related-tests.log. Scope: actual changed EditEngine groups and direct script/SAL dependencies; unrelated billion-operation SvRef tests are not selected.
+    - Commands: npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; git diff --check.
+      Result: pass. Evidence: object-typecheck.log, object-deps.log, object-docs.log, object-size.log, object-resources.log, object-registry.log, object-provenance.log, object-parity-calc.log, object-parity-shared.log. Source provenance1928 runtime modules; boundaries1927 sources/10489 imports/233 allowed edges;4320 JSDoc files. Source records stay foundation/unverified; no complete-engine or CSV admission/readiness is promoted. Heavy checks are serialized to avoid the prior worker/resource failure pattern.
+    - Remaining: actual source constructor/resources, process BreakIterator factory/raw writing-direction initializer, source undo/general deletion/word/layout/view/application dependencies, ScFieldEditEngine/DocImport admission and removal of current multiline SetTextCell regex construction. NatNum12 supplier/casing/formatter and final full CSV audit remain pending. Preserve intentional browser save/open/autosave/no-recovery behavior. Same approved open Agentplane task; no tenth-task full-suite trigger, network action or vendor mutation. Keep overall verification rework/DOING and goal active; do not finish CSV on this partial checkpoint.
+
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts --maxWorkers=1
+      Result: pass;7 files/191 cases. Evidence: object-csv-core.log,191.25s. Scope: existing CSV options/import/recognition/date/export/document-shell regression.
+    - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: initial fail, then pass on one unchanged isolated rerun;6 cases. Evidence: object-csv-ui.log records2 timeout failures/4 passes,273.44s;object-csv-ui-recheck.log records6 passes,52.16s. Scope: actual existing file/menu/keyboard/dialog import/export and primary ODS behavior. No assertions, limits or production behavior changed to obtain the pass; the initial timeout evidence is retained.
+    - Command: npm run lint -- --ignore-pattern 'output/native/**'
+      Result: initial fail with3 unified-signatures findings. Evidence: object-lint.log. Resolution: combine compatible source overload declarations using optional TypeScript parameters, preserving every existing runtime branch, default and return type; no lint suppression. Final rerun evidence follows below.
+    - Command: npm run lint -- --ignore-pattern 'output/native/**'
+      Result: pass after declaration-only fix;0 errors/warnings. Evidence: object-lint-fixed.log. Scope: full repository ESLint, excluding native experiment scratch.
+    - Command: npm run typecheck
+      Result: pass after final overload declarations. Evidence: object-typecheck-final.log. Scope: tools TypeScript project and actual office app, including new source/tests/fixture. Earlier object-typecheck.log also passed before lint declaration consolidation. Runtime behavior did not change after shared/CSV regression passes.
+    - Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+      Result: pass;22.14s with existing chunk-size advisory. Evidence: object-vite-build.log. Scope: actual current production bundle. Typecheck and Vite commands are recorded separately; no unexecuted npm run build is claimed.
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 current-built browser scenario,11.7s total. Evidence: object-browser.log. Scope: actual CSV import, primary ODS save and active-sheet export. Original assertions/timeouts unchanged; this does not certify the abstract engine as production CSV admission.
+    - Final review: git diff --check passes. Exact commit allowlist contains39 intended source/test/provenance/runtime/issue/task paths; all native scratch is excluded. Full untracked evidence will be retained in object-final-status.log. No network/vendor writes, no guard/checker relaxations, no full-suite replay or task-cadence advance. Overall CSV task remains rework/DOING and goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3321,6 +3400,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T10:41:04.645Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native rich-text object and script initialization checkpoint verified: 154 related shared cases, 191 CSV core cases, 6 UI cases on unchanged isolated rerun, current-built browser CSV, final typecheck/lint/build and required static/provenance/parity checks pass. Initial UI timeouts and lint declaration findings are retained with resolutions. Full CSV admission is incomplete: actual constructor/services, writing directions, ScFieldEditEngine/DocImport and NatNum12/formatter remain; keep goal active.
+Attempts: 30
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:41:02.230Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4065,3 +4174,36 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;1 current-built browser scenario. Evidence: insert-browser.log,18.6s total. Scope: existing CSV import, primary ODS persistence and active-sheet export with original assertions/timeouts. It does not certify the still-unconnected abstract engine as a production CSV implementation.
 - Final review: only intended source/test/provenance/runtime/issue/task artifacts are included. Full untracked status is retained in insert-final-status.log; all native scratch remains excluded. Goal stays active and full task verification remains rework.
+
+### Native rich-text object creation and script initialization checkpoint
+
+- Implemented original public/internal CreateTextObject overload dispatch, preserving EditTextObject base returns, current pool/status/threshold defaults and source public paragraph-count default one. Original private body is extracted into impedit4.textobject.ts using the same actual engine receiver and existing owners, as in existing editobj.sections member groups. It copies actual text, hard attributes, style name/family, clipped character attributes, eligible spelling and formatted payloads. Selection adjustment is by value; empty-source-paragraph attributes, global full-paragraph eligibility and destination-pool metric/value semantics are preserved. No replacement line-array model, fake engine or default service is introduced.
+- Added actual XParaPortion payload and XParaPortionList ownership/const-index binding over existing EditLineList/TextPortionList. Source primitive payload fields remain producer-initialized; no measurement is fabricated. Cache creation keeps all source conditions, column geometry, scale metadata, uint16 count narrowing, TextPortion copy and EditLine Clone semantics. Physical device/map access remains unported.
+- Ported complete InitScriptTypes/GetItemScriptType member groups: actual field display queries and source one-unit representatives, original hint lookup, actual script/direction scanners, cached vector mutation, multiparagraph endpoint membership, caret bias and one final language fallback. Original IsRightToLeft, lazy GetEmptyItemSet, paragraph item lookup, paper/orientation/language/device/scaling getters and column-width arithmetic preserve source pool/default precedence. Actual process BreakIterator factory and raw InitWritingDirections remain mandatory abstract dependencies, not default providers. The direction scanner has its own control/boundary processing and must not be substituted for raw ICU writing-direction initialization without source proof.
+- Added source DEF_METRIC0, header GetAttrib, EEHorizontalTextDirection and ScalingParameters value/default/equality/const-reference contracts. Native getScalingParameters returns a const view; its original nonconst areValuesDefault is intentionally not exposed through that view.
+- Initial new tests reported5 field failures and1 hint expectation failure (object-tests.log): the field caller reached the missing OUString.replaceAt std::u16string_view overload. Implemented that exact header overload through existing rtl_uString_newReplaceStrAtUtf16L/SAL_NO_ACQUIRE, preserving original owned-string dispatch. Counted views retain embedded NUL, lone surrogates, aliases and output ownership without an owned temporary or null-terminated conversion. The hint fixture used dots, which upstream's compatibility classifier makes LATIN; replaced the fixture text with actual WEAK spaces rather than changing production classification.
+- Source findings CALC-439..443 document/preserve uint16 cache count narrowing, zero-count paragraph-boundary selection, gapped-hint traversal, supplementary field-unit loss and later strong field-character override. CALC-444 records the signed32 intermediate in column geometry; overflowing native/compiler-specific arithmetic is not certified and no wrapping/saturation/error is invented.
+- Shared prepared owner/view fixtures moved to src/test/editeng-engine-fixture.ts, used by both lifecycle and object tests. This is explicitly test-only state/dependency preparation, excluded from production module inventory. Actual input, document, strings, attributes, pools, styles, script implementations, cache values and copy bodies execute; no concrete full-engine constructor, renderer or process-service admission is claimed.
+- Command: npm run test:shared -- src/editeng/source/editeng/native-engine-object.test.ts src/editeng/source/editeng/native-engine-lifecycle.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-replacement.native.test.ts
+  Result: pass;4 files/47 cases after the source-view fix, then pass again after extraction under the original impedit4 responsibility boundary. Evidence: object-tests-fixed.log and object-extracted-tests.log. Scope: new member-group caller/value contracts, actual field/script handling, clipping/ownership/cache eligibility/copy/narrowing and counted-view SAL behavior, including unchanged native replacement corpus replay. Native physical ABI/layout/constructor QA remains outside this proof.
+- Command: npm run test:shared -- src/editeng/source/editeng src/i18nutil/source/utility/scriptchangescanner.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-replacement.native.test.ts
+  Result: pass;21 files/154 related cases. Evidence: object-related-tests.log. Scope: actual changed EditEngine groups and direct script/SAL dependencies; unrelated billion-operation SvRef tests are not selected.
+- Commands: npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; git diff --check.
+  Result: pass. Evidence: object-typecheck.log, object-deps.log, object-docs.log, object-size.log, object-resources.log, object-registry.log, object-provenance.log, object-parity-calc.log, object-parity-shared.log. Source provenance1928 runtime modules; boundaries1927 sources/10489 imports/233 allowed edges;4320 JSDoc files. Source records stay foundation/unverified; no complete-engine or CSV admission/readiness is promoted. Heavy checks are serialized to avoid the prior worker/resource failure pattern.
+- Remaining: actual source constructor/resources, process BreakIterator factory/raw writing-direction initializer, source undo/general deletion/word/layout/view/application dependencies, ScFieldEditEngine/DocImport admission and removal of current multiline SetTextCell regex construction. NatNum12 supplier/casing/formatter and final full CSV audit remain pending. Preserve intentional browser save/open/autosave/no-recovery behavior. Same approved open Agentplane task; no tenth-task full-suite trigger, network action or vendor mutation. Keep overall verification rework/DOING and goal active; do not finish CSV on this partial checkpoint.
+
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts --maxWorkers=1
+  Result: pass;7 files/191 cases. Evidence: object-csv-core.log,191.25s. Scope: existing CSV options/import/recognition/date/export/document-shell regression.
+- Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: initial fail, then pass on one unchanged isolated rerun;6 cases. Evidence: object-csv-ui.log records2 timeout failures/4 passes,273.44s;object-csv-ui-recheck.log records6 passes,52.16s. Scope: actual existing file/menu/keyboard/dialog import/export and primary ODS behavior. No assertions, limits or production behavior changed to obtain the pass; the initial timeout evidence is retained.
+- Command: npm run lint -- --ignore-pattern 'output/native/**'
+  Result: initial fail with3 unified-signatures findings. Evidence: object-lint.log. Resolution: combine compatible source overload declarations using optional TypeScript parameters, preserving every existing runtime branch, default and return type; no lint suppression. Final rerun evidence follows below.
+- Command: npm run lint -- --ignore-pattern 'output/native/**'
+  Result: pass after declaration-only fix;0 errors/warnings. Evidence: object-lint-fixed.log. Scope: full repository ESLint, excluding native experiment scratch.
+- Command: npm run typecheck
+  Result: pass after final overload declarations. Evidence: object-typecheck-final.log. Scope: tools TypeScript project and actual office app, including new source/tests/fixture. Earlier object-typecheck.log also passed before lint declaration consolidation. Runtime behavior did not change after shared/CSV regression passes.
+- Command: node ../../node_modules/vite/bin/vite.js build (cwd apps/office)
+  Result: pass;22.14s with existing chunk-size advisory. Evidence: object-vite-build.log. Scope: actual current production bundle. Typecheck and Vite commands are recorded separately; no unexecuted npm run build is claimed.
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 current-built browser scenario,11.7s total. Evidence: object-browser.log. Scope: actual CSV import, primary ODS save and active-sheet export. Original assertions/timeouts unchanged; this does not certify the abstract engine as production CSV admission.
+- Final review: git diff --check passes. Exact commit allowlist contains39 intended source/test/provenance/runtime/issue/task paths; all native scratch is excluded. Full untracked evidence will be retained in object-final-status.log. No network/vendor writes, no guard/checker relaxations, no full-suite replay or task-cadence advance. Overall CSV task remains rework/DOING and goal active.

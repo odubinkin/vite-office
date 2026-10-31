@@ -26,6 +26,7 @@ import {
   rtl_uString_newConcat,
   rtl_uString_newConcatUtf16L,
   rtl_uString_newReplaceStrAt,
+  rtl_uString_newReplaceStrAtUtf16L,
   rtl_uString_newReplaceAllFromIndexUtf16LUtf16L,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
@@ -351,10 +352,24 @@ export class OUString {
     result.slot = slot;
     return result;
   }
-  /** Original replaceAt with an owned-string operand returns a new no-acquire owner from the C replacement operation. @param index - Native signed32 offset. @param count - Native signed32 removal length. @param replacement - Native borrowed operand. @returns Owned result. */
-  replaceAt(index: number, count: number, replacement: OUStringConstReference): OUString {
+  /** Original owned-string and std::u16string_view replaceAt overloads return a no-acquire owner through their respective original C functions. @param index - Native signed32 offset. @param count - Native signed32 removal length. @param replacement - Original counted borrowed string or exact logical UTF16 view. @returns Owned result. */
+  replaceAt(
+    index: number,
+    count: number,
+    replacement: OUStringConstReference | Uint16Array,
+  ): OUString {
     const slot: rtl_uStringSlot = [null];
-    rtl_uString_newReplaceStrAt(slot, this.pData, index, count, replacement.pData as rtl_uString);
+    if (replacement instanceof Uint16Array)
+      rtl_uString_newReplaceStrAtUtf16L(
+        slot,
+        this.pData,
+        index,
+        count,
+        replacement,
+        replacement.length,
+      );
+    else
+      rtl_uString_newReplaceStrAt(slot, this.pData, index, count, replacement.pData as rtl_uString);
     const result = Object.create(OUString.prototype) as OUString;
     result.slot = slot;
     return result;

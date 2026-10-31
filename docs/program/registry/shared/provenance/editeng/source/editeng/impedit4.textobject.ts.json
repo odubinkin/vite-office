@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+    "upstreamPath": "editeng/source/editeng/impedit4.cxx",
+    "localSymbols": [
+      "CreateTextObject"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::CreateTextObject"
+    ],
+    "preservedResponsibilities": [
+      "Original private ImpEditEngine::CreateTextObject member-body extraction operates only the actual receiver and existing EditDoc, selection, pool, content, attributes, styles, WrongList, ParaPortion, TextPortion and EditLine owners. It preserves by-value selection adjustment, global whole-paragraph eligibility, actual DEF_METRIC/orientation/script metadata, destination-pool copies, empty-paragraph attributes, clipping, spell cloning, source cache conjunction and unsigned16 count narrowing, TextPortion copy/EditLine Clone behavior and exception cleanup. No second engine/state object, synthetic line model, default provider or renderer is introduced. CALC-439/440 preserve source narrowing and zero-count range behavior."
+    ],
+    "omittedResponsibilities": [
+      "Concrete engine construction/resources, source undo manager, general deletion/word-boundary/layout/view/application services, actual process BreakIterator factory and raw InitWritingDirections, device/map operations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Fixtures prepare these dependencies explicitly and do not certify a complete engine. Native undefined arithmetic/invalid pointers, physical allocation/ABI/refcount/thread behavior, debug diagnostics and complete QA are unverified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+          "marker": "CreateTextObject"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/test/editeng-engine-fixture.ts",
+          "marker": "class PreparedEngine"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx",
+          "marker": "ImpEditEngine::CreateTextObject"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original member body is extracted under its original impedit4 source group and called by the same source owner. As with existing editobj.sections member groups, the explicit receiver erases only host member/file syntax, without a second owner, provider or state model."
+    }
+  }
+}

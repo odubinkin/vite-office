@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/editeng/inc/editdata.ts",
         "apps/office/src/editeng/source/editeng/native-edit-text-object.test.ts",
-        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts"
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts"
       ],
-      "justification": "TaskNF91KY actual EditEngine package contains all61 original Which/slot/flag entries,shared static defaults and per-pool dynamic zero-level numbering. Actual derived pool registration and CreatePool retain native secondary-chain type resolution. EditTextObjectImpl owns genuine ContentInfo,strings,item sets,attributes,fields and styles;copy retains pool and excludes portion cache. Text,field ordinal/reverse selection,equality and change-only cache rules preserve upstream. FieldUpdater borrows actual holders and visits all field kinds. ESM namespaces bind static operations;GetTextWithLineEnd binds the erased enum overload. XParaPortionList currently represents only original six-input metadata and opaque device identity. No layout engine/device/graphics/UNO facade is introduced. Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. The bounded task has complete Calc100/shared100 and actual Chromium/DOM-freeWorker acceptance;broader layout/graphics and native ABI parity remain unclaimed. Original notification ordinals/unscoped enumerators and actual per-call EENotify value now retain EE_PARA_MAX paragraph default, zero parameters, implicit copy/assignment and field independence. No source observer/view callback implementation is fabricated. AQF9AG continuation: Original insertion/split/inserted-character undo IDs retain values111/105/106 from editdata.hxx.",
+      "justification": "TaskNF91KY actual EditEngine package contains all61 original Which/slot/flag entries,shared static defaults and per-pool dynamic zero-level numbering. Actual derived pool registration and CreatePool retain native secondary-chain type resolution. EditTextObjectImpl owns genuine ContentInfo,strings,item sets,attributes,fields and styles;copy retains pool and excludes portion cache. Text,field ordinal/reverse selection,equality and change-only cache rules preserve upstream. FieldUpdater borrows actual holders and visits all field kinds. ESM namespaces bind static operations;GetTextWithLineEnd binds the erased enum overload. XParaPortionList currently represents only original six-input metadata and opaque device identity. No layout engine/device/graphics/UNO facade is introduced. Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. The bounded task has complete Calc100/shared100 and actual Chromium/DOM-freeWorker acceptance;broader layout/graphics and native ABI parity remain unclaimed. Original notification ordinals/unscoped enumerators and actual per-call EENotify value now retain EE_PARA_MAX paragraph default, zero parameters, implicit copy/assignment and field independence. No source observer/view callback implementation is fabricated. AQF9AG continuation: Original insertion/split/inserted-character undo IDs retain values111/105/106 from editdata.hxx. AQF9AG object-creation continuation: Original EEHorizontalTextDirection ordinals0..2 and ScalingParameters default/copy/assignment/four-double equality/default-value query now retain source values and NaN inequality. Native const scaling references exclude assignment and the original nonconst default-query method. No layout measurement or default engine/provider is supplied.",
       "knownViolations": [],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/editeng/editdata.hxx",
@@ -30,7 +31,9 @@
         "EENotify",
         "EDITUNDO_INSERT",
         "EDITUNDO_SPLITPARA",
-        "EDITUNDO_INSERTCHARS"
+        "EDITUNDO_INSERTCHARS",
+        "EEHorizontalTextDirection",
+        "ScalingParameters"
       ],
       "localSymbols": [
         "EECharAttrib",
@@ -47,7 +50,9 @@
         "EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA",
         "EDITUNDO_INSERT",
         "EDITUNDO_SPLITPARA",
-        "EDITUNDO_INSERTCHARS"
+        "EDITUNDO_INSERTCHARS",
+        "EEHorizontalTextDirection",
+        "ScalingParameters"
       ]
     }
   }

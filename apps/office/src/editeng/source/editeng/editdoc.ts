@@ -27,6 +27,14 @@ import * as EE from "../../inc/eeitem";
 import * as Attr from "../../inc/editattr";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
+/** Original header GetAttrib pointer lookup within the source size_t index domain. @param attributes - Actual source owner vector. @param index - Original nonnegative size_t index. @returns Actual pointer or source null. */
+export function GetAttrib(
+  attributes: readonly Attr.EditCharAttrib[],
+  index: number,
+): Attr.EditCharAttrib | null {
+  return index < attributes.length ? (attributes[index] as Attr.EditCharAttrib) : null;
+}
+
 /** Original complete item-ID dispatch. Invalid IDs reach the original diagnostic/null path; no generic fallback attribute is invented. @param pool - Actual pool. @param item - Actual source item. @param start - Source start. @param end - Source end. @returns Actual concrete owner or original null result. */
 export function MakeCharAttrib(
   pool: SfxItemPool,

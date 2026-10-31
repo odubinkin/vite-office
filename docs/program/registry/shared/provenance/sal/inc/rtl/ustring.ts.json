@@ -81,7 +81,8 @@
       "unacquired",
       "number( double d )",
       "rtl_string2UString",
-      "fromUtf8"
+      "fromUtf8",
+      "replaceAt"
     ],
     "preservedResponsibilities": [
       "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
@@ -104,7 +105,8 @@
       "Original owned-string replaceAt adopts the C result without acquiring or inventing a null-to-empty fallback; normal-build raw-view append uses the direct C overload. The2586-case full pinned OUString/RTL witness compares payload, sharing and initialized counts. No physical OOM/ABI parity is claimed.",
       "AQF9AG restores original internal view replaceAll with real C no-acquire adoption and the checked operator[] binding. No-match returns source-shared data; no empty-format syntax error is fabricated.",
       "Original OUString::unacquired(const OUStringBuffer&) overload now borrows the actual friend buffer pointer field without acquire, copy or snapshot. Positive buffer-overload dispatch preserves existing non-array native compound pointer slots; the borrowed reference follows buffer pointer replacement. Full raw allocator/OOM ABI remains outside this evidence.",
-      "AQF9AG adds the actual OUString::fromUtf8 counted byte-view method consumed by NumberText. It calls the existing checked SAL converter with original UTF8 and UNDEFINED_ERROR|MBUNDEFINED_ERROR|INVALID_ERROR flags, returns its actual partial-output value in debug0, and destroys the local target on conversion exceptions. Embedded zeros, BOM, supplementary scalars and invalid-byte stop behavior have focused source-derived tests; no host decoder or replacement policy substitutes the converter."
+      "AQF9AG adds the actual OUString::fromUtf8 counted byte-view method consumed by NumberText. It calls the existing checked SAL converter with original UTF8 and UNDEFINED_ERROR|MBUNDEFINED_ERROR|INVALID_ERROR flags, returns its actual partial-output value in debug0, and destroys the local target on conversion exceptions. Embedded zeros, BOM, supplementary scalars and invalid-byte stop behavior have focused source-derived tests; no host decoder or replacement policy substitutes the converter.",
+      "Original std::u16string_view OUString.replaceAt overload now dispatches to the already implemented rtl_uString_newReplaceStrAtUtf16L with exact view pointer/length and SAL_NO_ACQUIRE ownership. Existing owned-string replacement still uses its original C function. Embedded NUL, lone surrogates, aliased input storage and output ownership are retained without an owned temporary, null-terminated conversion or normalization."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -166,6 +168,18 @@
         {
           "path": "apps/office/src/sal/rtl/ustring-from-utf8.test.ts",
           "marker": "fromUtf8"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/native-ustring-view.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-replacement.native.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -200,6 +214,10 @@
         {
           "path": "include/rtl/ustrbuf.hxx",
           "marker": "OUString::unacquired(const OUStringBuffer& str)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/ustring.cxx",
+          "marker": "rtl_uString_newReplaceStrAtUtf16L"
         }
       ]
     },

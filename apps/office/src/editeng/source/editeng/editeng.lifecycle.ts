@@ -3,6 +3,8 @@ import type { ImpEditEngine } from "./impedit.lifecycle";
 import { EENotify, EENotifyType } from "../../inc/editdata";
 import { CreatePool } from "./editeng";
 import type { EditPaM } from "../../inc/EditPaM";
+import { ESelection } from "../../inc/ESelection";
+import type { EditTextObject } from "./editobj";
 import type { EditSelection } from "../../inc/EditSelection";
 import type { EPaM } from "../../inc/EPaM";
 import type { OUString, OUStringConstReference } from "../../../sal/inc/rtl/ustring";
@@ -38,6 +40,20 @@ export abstract class EditEngine {
   abstract ConnectContents(left: number, backward: boolean): EditPaM;
   /** Original unported paragraph-split dependency. @param paragraph - Paragraph index. @param position - Source split index. @returns Actual resulting position. */
   abstract SplitContent(paragraph: number, position: number): EditPaM;
+  /** Original actual public selection conversion, without normalization. @param selection - Original public value. @returns Actual node selection. */
+  CreateSelection(selection: ESelection): EditSelection {
+    return this.getImpl().CreateSel(selection);
+  }
+  /** Original paragraph range with public default count one. @param paragraph - Source start. @param count - Original default one. @returns Actual object or source null. */
+  CreateTextObject(paragraph: number, count?: number): EditTextObject | null;
+  /** Original whole-document and public-selection overloads, unified at the host declaration boundary. @param selection - Source public range, or absent for the whole document. @returns Actual owned object. */
+  CreateTextObject(selection?: ESelection): EditTextObject;
+  /** Original outer owner delegation for all three public overloads. @param source - Source overload value. @param count - Original paragraph-count default one. @returns Actual owned object or paragraph-range null. */
+  CreateTextObject(source?: number | ESelection, count = 1): EditTextObject | null {
+    if (source === undefined) return this.getImpl().CreateTextObject();
+    if (typeof source === "number") return this.getImpl().CreateTextObject(source, count);
+    return this.getImpl().CreateTextObject(this.CreateSelection(source));
+  }
   /** Original optional notification Link assignment. @param handler - Actual callback or empty Link. @returns Nothing. */
   SetNotifyHdl(handler: ((notification: EENotify) => void) | null): void {
     this.getImpl().SetNotifyHdl(handler);

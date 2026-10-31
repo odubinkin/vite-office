@@ -1,4 +1,6 @@
-/** @fileoverview Original XEditAttribute,ContentInfo and portion-cache metadata from editobj.cxx. Actual device/layout operations and formatted portion payloads remain unported;no provider facade is supplied. */
+/** @fileoverview Original XEditAttribute,ContentInfo and portion-cache metadata from editobj.cxx. Actual device/layout operations remain unported;no provider facade is supplied. */
+import { EditLineList } from "../../inc/EditLineList";
+import { TextPortionList } from "../../inc/TextPortionList";
 import { SfxItemSet, SfxPoolItemHolder } from "../../../svl/inc/itemset";
 import { SfxPoolItem } from "../../../svl/inc/poolitem";
 import type { SfxItemPool } from "../../../svl/inc/itempool";
@@ -119,8 +121,25 @@ export abstract class EditTextObject {
   abstract GetFieldUpdater(): FieldUpdater;
 }
 
-/** Original cache metadata owner. The device remains an opaque reference,as in RowHeightContext;no unported IsVirtual/MapMode operation or formatted paragraph payload is supplied. */
+/** Original formatted paragraph payload. Scalar fields are initialized by the actual producer, as in the native aggregate; preinitialization reads are outside the source-defined domain. */
+export class XParaPortion {
+  declare nHeight: number;
+  declare nFirstLineOffset: number;
+  readonly aLines = new EditLineList();
+  readonly aTextPortions = new TextPortionList();
+}
+
+/** Original cache metadata owner. The device remains an opaque reference,as in RowHeightContext;no unported IsVirtual/MapMode operation is supplied. Real paragraph payloads use the actual source line/portion owners. */
 export class XParaPortionList {
+  private readonly maList: XParaPortion[] = [];
+  /** Original unique-owner transfer into the source cache vector. @param portion - Actual transferred payload. @returns Nothing. */
+  push_back(portion: XParaPortion): void {
+    this.maList.push(portion);
+  }
+  /** Original const operator[] within the valid source index precondition. @param index - Actual existing index. @returns Borrowed source payload. */
+  at(index: number): Readonly<XParaPortion> {
+    return this.maList[index] as XParaPortion;
+  }
   private readonly nPaperWidth: number;
   /** Original six-input metadata constructor;the source permits a null device until device access is requested. @param pRefDevPtr - Opaque actual device or null. @param paperWidth - Unsigned32 paper width. @param mfFontScaleX - Font scale X. @param mfFontScaleY - Font scale Y. @param mfSpacingScaleX - Spacing scale X. @param mfSpacingScaleY - Spacing scale Y. @returns Cache metadata. */
   constructor(
