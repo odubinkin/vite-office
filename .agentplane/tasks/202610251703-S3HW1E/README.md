@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 233
+revision: 239
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T07:55:47.551Z"
+  updated_at: "2026-10-31T08:46:38.549Z"
   updated_by: "CODER"
-  note: "HTML definition-list/cascade checkpoint verified:97focused cases pass;1142broad cases pass with one cold-transform timeout resolved by2passing unchanged-assertion/timeout config tests after collection import. Final typecheck/docs and required static checks pass. Full goal incomplete:CSS stylesheet/class producers,HTML tables,current-core/UI audit. Evidence:html30 logs and Findings."
-  attempts: 41
+  note: "HTML31 checkpoint verified: all1160related cases have passing evidence (1035in55files; six terminal worker-start errors resolved by125passing cases in6files without assertion/timeout changes). Final tools/app typecheck, source lint/format, provenance, Writer registry, boundaries/docs/size/tree/doctor pass. Native NewPara/NewHeading classes and direct-font encoding connected. Parent goal incomplete: current-core CSS border/page-break producers, HTML tables, insertion snapshots and final filter/UI audit. Evidence: html31 logs and Findings."
+  attempts: 42
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -661,8 +664,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T08:46:38.549Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML31 checkpoint verified: all1160related cases have passing evidence (1035in55files; six terminal worker-start errors resolved by125passing cases in6files without assertion/timeout changes). Final tools/app typecheck, source lint/format, provenance, Writer registry, boundaries/docs/size/tree/doctor pass. Native NewPara/NewHeading classes and direct-font encoding connected. Parent goal incomplete: current-core CSS border/page-break producers, HTML tables, insertion snapshots and final filter/UI audit. Evidence: html31 logs and Findings."
+  -
+    type: "status"
+    at: "2026-10-31T08:47:50.898Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T07:57:32.983Z"
+doc_updated_at: "2026-10-31T08:47:50.898Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1637,6 +1653,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T08:46:38.549Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML31 checkpoint verified: all1160related cases have passing evidence (1035in55files; six terminal worker-start errors resolved by125passing cases in6files without assertion/timeout changes). Final tools/app typecheck, source lint/format, provenance, Writer registry, boundaries/docs/size/tree/doctor pass. Native NewPara/NewHeading classes and direct-font encoding connected. Parent goal incomplete: current-core CSS border/page-break producers, HTML tables, insertion snapshots and final filter/UI audit. Evidence: html31 logs and Findings.
+    Attempts: 42
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T08:46:25.877Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2582,6 +2628,33 @@ sections:
     - Result: pass. Evidence: html30-lint-second/config-lint/format-check/config-format/docs-final/provenance/registry/boundaries/size/tree/doctor logs. JSDoc4268authored; provenance1893runtime(1681mapped/182browser/30infra); boundaries1892sources/10389imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning; no hooks changed. Original typecheck after production corrections passed (html30-types-third.txt).
     - Final gate outcome: pass. Final `npm run typecheck` after the collection-only test adjustment completed both tools and app checks; its chained final `npm run check:docs` passed4268authored sources and `git diff --check` passed. Awaited the original exec session60043 to terminal exit0 without restarting it. Evidence: html30-types-final.txt and html30-docs-last.txt. The long-running actual app tsc process was confirmed live with active CPU while waiting; missing output was never treated as termination.
     - Remaining: stylesheet-token composition and generated CSS paragraph styles, target character snapshots where required by represented input, raw HTML table owners/producers and final current-core/UI completion audit, plus the existing page-layout admission limitations. Parent goal/task remains active and incomplete; user resumed full implementation. Intentional file UI/autosave/recovery deviations remain untouched.
+
+    ### HTML31: existing-document paragraph classes (verified checkpoint)
+
+    - Previous goal turns: progress. HTML30 committed as5d939b811f3d with clean state; HTML31 now implements NewPara/NewHeading CLASS contexts, actual SwCSS1Parser.GetTextFormatColl/GetTextCollFromPool ownership and original module-local lcl_swcss1_setEncoding. No generated CSS maps or extra public encoding API. Parent goal remains active.
+    - Scope/evidence: exact context class text and script suffixes; COLL_TEXT-only sdfootnote/sdendnote pool remapping; USER_FMT fallback; existing named descendants and table-to-TextBody name fallback; direct non-symbol font encoding preserves family/name/style/pitch and inherited items. Source: pinned swhtml.cxx3980-4055/4113-4170/4659-4925; htmlcss1.cxx685-691/1198-1312/2281-2305. Actual HTML/Markdown/Worker/native Markdown writer tests use real document owners.
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/htmlcss1.public-views.test.ts --maxWorkers 1
+    - Result: fail,54pass/3fresh failures in3files,611.16s. Evidence: html31-focused.txt. Native NewHeading CLASS context was missing locally and is now connected exactly as source. Two fresh expectations were wrong: map absence is native null, and native Markdown EndPara appends the final empty paragraph. Corrected only those expectations; heading ID and actual pointer identity remain required, with a small-ID assertion before owner identity to avoid whole-document graph serialization on failure. No timeout raised, provider mocked, private state forged or expected operation substituted. Incidental read named a nonexistent swmd.integration.test.ts; bounded lookup found swmd.callbacks.integration.test.ts, and route was refreshed before remediation.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/inc/poolfmt.test.ts --maxWorkers 1
+    - Result: fail,1035passed/55files,6worker-start errors,1146.33s. Evidence: html31-related.txt. All completed assertions pass; six suites never started because vitest-pool timed out waiting for forks workers. Affected files: swhtml.paragraph-classes.integration.test.ts,htmlcss1.public-views.test.ts,swhtml.definitions.integration.test.ts,rtfexport.controls.test.ts,rtfexport.table-list.test.ts,swmd.user-config.integration.test.ts. The broad invocation is retained as failed, not relabeled green. Original exec92209 terminal exit1. Retry only those six with unchanged assertions and timeouts; do not rerun the1035passing cases.
+    - Command: npm run typecheck
+    - Result: pass. Original session80994 was awaited to terminal exit0; tools and app checks passed. Because source changed while it ran, final app typecheck used the identical native compiler executable/argv from the declared npm script: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit from apps/office. Session12544 also terminal exit0. Evidence: html31-types.txt and html31-types-final-app.txt. No live compiler was restarted or inferred dead from missing output.
+    - Commands/results: final changed-source ESLint pass (session85484,html31-lint-last.txt); Prettier all changed TS/JSON/Markdown pass (html31-format-check.txt), final added audit paragraph pass (html31-audit-format-last.txt); final source provenance pass1893runtime/1681mapped/182browser/30infra (session21366,html31-provenance-final.txt); Writer registry pass with semanticViolationCount0 (html31-registry.txt); boundaries pass1892sources/10392relative imports/227allowed edges (html31-boundaries.txt); JSDoc pass4269authored (html31-docs.txt); file size and source tree pass115required/32retired (html31-size.txt/html31-tree.txt). Original sequential static-chain session65540 terminal exit0. Doctor pass0errors with the known managed-shim warning (html31-doctor.txt). git diff --check passes. No all-app suite replay.
+    - Dependency audit: native StyleParsed exits for existing-document mode before registering stylesheet class/ID/tag rules. Standalone CSS rule-map production is not a critical Markdown prerequisite. Native bRegardLanguage=false affects only the Korean Standard SCRIPTSPACE default in DocumentStylePoolManager.cxx685-693; no such declaration/item owner exists in the current core. Do not add an unrelated language subsystem or fabricated Which ID for this caller. Recorded in writer-native-text-filter-slice.md.
+    - Process note: non-login shell does not automatically locate Node/ap (one read-only diagnostic exited127); retained the same known Node24.13.1/ap executables with an explicit per-command runtime PATH, without modifying shell/global configuration or reading global user files. Runtime and verification semantics are unchanged. Previously completed tool sessions must not be polled again; unknown65540handle was confirmed already terminal by its prior exit0 and completed chain logs, not restarted.
+    - Residual work: current-core inline CSS border/page-break producers, raw HTML tables, cursor insertion snapshots and final requirement-by-requirement filter/UI audit remain open. General CSS new-document factory and full module/compiled ABI parity are not claimed; historical broad unverified badges are not automatic additional filter gates.
+
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/htmlcss1.public-views.test.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.user-config.integration.test.ts --maxWorkers 1
+    - Result: pass,125tests/6files,53.39s; exec45691 terminal exit0. Evidence: output/playwright/rtf-properties-native/html31-six-retry.txt. Scope: exactly the six suites missing from the broad invocation, including all17new paragraph-class cases and the original57-case focused group. Together with the1035completed cases, all1160related cases across61files have passing current-source evidence. The raw broad invocation remains a failed worker-start run; no result is reclassified or time limit increased. Do not replay the1035passing cases.
+    - Command: npx --no-install eslint apps/office/src/sw/source/filter/html/htmlcss1.ts apps/office/src/sw/source/filter/html/swhtml.styles.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts --max-warnings 0
+    - Result: pass. Evidence: html31-lint-last.txt,terminal session85484exit0. Scope: all changed source and new test.
+    - Command: npx --no-install prettier --check apps/office/src/sw/source/filter/html/htmlcss1.ts apps/office/src/sw/source/filter/html/swhtml.styles.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts docs/program/registry/writer/provenance/sw/source/filter/html/htmlcss1.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.styles.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/htmlcss1.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.styles.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.ts.json docs/program/writer-native-text-filter-slice.md
+    - Result: pass. Evidence: html31-format-check.txt. Final added audit paragraph separately passed the same installed Prettier CLI (node node_modules/.bin/prettier --check docs/program/writer-native-text-filter-slice.md), html31-audit-format-last.txt. Scope: final changed TS/JSON/Markdown.
+    - Command: node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts (same installed Node24.13.1 and checker as npm run check:source-provenance)
+    - Result: pass. Evidence: html31-provenance-final.txt,1893runtime/1681mapped/182browser/30infra,terminal session21366exit0. Scope: final provenance including NewHeading/GetTextFormatColl/native encoding markers.
+    - Commands: npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check.
+    - Result: pass. Evidence: corresponding html31-registry/boundaries/docs/size/tree/doctor logs and exit0static chain. Scope: unchanged strict global registry/static contracts, with semanticViolationCount0,1892runtime source boundaries/10392imports/227allowed edges,4269authored sources,115required paths/32retired roots. Known managed-shim warning only; no hooks/config changes.
+    - Current checkpoint: verified and ready for an implementation commit. Full parent goal remains incomplete for the residual native CSS/table/insertion/current-model/UI requirements above; record parent verification as rework, not full completion.
 id_source: "generated"
 ---
 ## Summary
@@ -3567,6 +3640,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T08:46:38.549Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML31 checkpoint verified: all1160related cases have passing evidence (1035in55files; six terminal worker-start errors resolved by125passing cases in6files without assertion/timeout changes). Final tools/app typecheck, source lint/format, provenance, Writer registry, boundaries/docs/size/tree/doctor pass. Native NewPara/NewHeading classes and direct-font encoding connected. Parent goal incomplete: current-core CSS border/page-break producers, HTML tables, insertion snapshots and final filter/UI audit. Evidence: html31 logs and Findings.
+Attempts: 42
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T08:46:25.877Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4516,3 +4619,30 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Result: pass. Evidence: html30-lint-second/config-lint/format-check/config-format/docs-final/provenance/registry/boundaries/size/tree/doctor logs. JSDoc4268authored; provenance1893runtime(1681mapped/182browser/30infra); boundaries1892sources/10389imports/227edges; Writer semanticViolationCount0. Doctor0errors and existing managed-shim warning; no hooks changed. Original typecheck after production corrections passed (html30-types-third.txt).
 - Final gate outcome: pass. Final `npm run typecheck` after the collection-only test adjustment completed both tools and app checks; its chained final `npm run check:docs` passed4268authored sources and `git diff --check` passed. Awaited the original exec session60043 to terminal exit0 without restarting it. Evidence: html30-types-final.txt and html30-docs-last.txt. The long-running actual app tsc process was confirmed live with active CPU while waiting; missing output was never treated as termination.
 - Remaining: stylesheet-token composition and generated CSS paragraph styles, target character snapshots where required by represented input, raw HTML table owners/producers and final current-core/UI completion audit, plus the existing page-layout admission limitations. Parent goal/task remains active and incomplete; user resumed full implementation. Intentional file UI/autosave/recovery deviations remain untouched.
+
+### HTML31: existing-document paragraph classes (verified checkpoint)
+
+- Previous goal turns: progress. HTML30 committed as5d939b811f3d with clean state; HTML31 now implements NewPara/NewHeading CLASS contexts, actual SwCSS1Parser.GetTextFormatColl/GetTextCollFromPool ownership and original module-local lcl_swcss1_setEncoding. No generated CSS maps or extra public encoding API. Parent goal remains active.
+- Scope/evidence: exact context class text and script suffixes; COLL_TEXT-only sdfootnote/sdendnote pool remapping; USER_FMT fallback; existing named descendants and table-to-TextBody name fallback; direct non-symbol font encoding preserves family/name/style/pitch and inherited items. Source: pinned swhtml.cxx3980-4055/4113-4170/4659-4925; htmlcss1.cxx685-691/1198-1312/2281-2305. Actual HTML/Markdown/Worker/native Markdown writer tests use real document owners.
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/htmlcss1.public-views.test.ts --maxWorkers 1
+- Result: fail,54pass/3fresh failures in3files,611.16s. Evidence: html31-focused.txt. Native NewHeading CLASS context was missing locally and is now connected exactly as source. Two fresh expectations were wrong: map absence is native null, and native Markdown EndPara appends the final empty paragraph. Corrected only those expectations; heading ID and actual pointer identity remain required, with a small-ID assertion before owner identity to avoid whole-document graph serialization on failure. No timeout raised, provider mocked, private state forged or expected operation substituted. Incidental read named a nonexistent swmd.integration.test.ts; bounded lookup found swmd.callbacks.integration.test.ts, and route was refreshed before remediation.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/ww8/rtfexport src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/inc/poolfmt.test.ts --maxWorkers 1
+- Result: fail,1035passed/55files,6worker-start errors,1146.33s. Evidence: html31-related.txt. All completed assertions pass; six suites never started because vitest-pool timed out waiting for forks workers. Affected files: swhtml.paragraph-classes.integration.test.ts,htmlcss1.public-views.test.ts,swhtml.definitions.integration.test.ts,rtfexport.controls.test.ts,rtfexport.table-list.test.ts,swmd.user-config.integration.test.ts. The broad invocation is retained as failed, not relabeled green. Original exec92209 terminal exit1. Retry only those six with unchanged assertions and timeouts; do not rerun the1035passing cases.
+- Command: npm run typecheck
+- Result: pass. Original session80994 was awaited to terminal exit0; tools and app checks passed. Because source changed while it ran, final app typecheck used the identical native compiler executable/argv from the declared npm script: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit from apps/office. Session12544 also terminal exit0. Evidence: html31-types.txt and html31-types-final-app.txt. No live compiler was restarted or inferred dead from missing output.
+- Commands/results: final changed-source ESLint pass (session85484,html31-lint-last.txt); Prettier all changed TS/JSON/Markdown pass (html31-format-check.txt), final added audit paragraph pass (html31-audit-format-last.txt); final source provenance pass1893runtime/1681mapped/182browser/30infra (session21366,html31-provenance-final.txt); Writer registry pass with semanticViolationCount0 (html31-registry.txt); boundaries pass1892sources/10392relative imports/227allowed edges (html31-boundaries.txt); JSDoc pass4269authored (html31-docs.txt); file size and source tree pass115required/32retired (html31-size.txt/html31-tree.txt). Original sequential static-chain session65540 terminal exit0. Doctor pass0errors with the known managed-shim warning (html31-doctor.txt). git diff --check passes. No all-app suite replay.
+- Dependency audit: native StyleParsed exits for existing-document mode before registering stylesheet class/ID/tag rules. Standalone CSS rule-map production is not a critical Markdown prerequisite. Native bRegardLanguage=false affects only the Korean Standard SCRIPTSPACE default in DocumentStylePoolManager.cxx685-693; no such declaration/item owner exists in the current core. Do not add an unrelated language subsystem or fabricated Which ID for this caller. Recorded in writer-native-text-filter-slice.md.
+- Process note: non-login shell does not automatically locate Node/ap (one read-only diagnostic exited127); retained the same known Node24.13.1/ap executables with an explicit per-command runtime PATH, without modifying shell/global configuration or reading global user files. Runtime and verification semantics are unchanged. Previously completed tool sessions must not be polled again; unknown65540handle was confirmed already terminal by its prior exit0 and completed chain logs, not restarted.
+- Residual work: current-core inline CSS border/page-break producers, raw HTML tables, cursor insertion snapshots and final requirement-by-requirement filter/UI audit remain open. General CSS new-document factory and full module/compiled ABI parity are not claimed; historical broad unverified badges are not automatic additional filter gates.
+
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/htmlcss1.public-views.test.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/ww8/rtfexport.controls.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.user-config.integration.test.ts --maxWorkers 1
+- Result: pass,125tests/6files,53.39s; exec45691 terminal exit0. Evidence: output/playwright/rtf-properties-native/html31-six-retry.txt. Scope: exactly the six suites missing from the broad invocation, including all17new paragraph-class cases and the original57-case focused group. Together with the1035completed cases, all1160related cases across61files have passing current-source evidence. The raw broad invocation remains a failed worker-start run; no result is reclassified or time limit increased. Do not replay the1035passing cases.
+- Command: npx --no-install eslint apps/office/src/sw/source/filter/html/htmlcss1.ts apps/office/src/sw/source/filter/html/swhtml.styles.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts --max-warnings 0
+- Result: pass. Evidence: html31-lint-last.txt,terminal session85484exit0. Scope: all changed source and new test.
+- Command: npx --no-install prettier --check apps/office/src/sw/source/filter/html/htmlcss1.ts apps/office/src/sw/source/filter/html/swhtml.styles.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts docs/program/registry/writer/provenance/sw/source/filter/html/htmlcss1.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.styles.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/htmlcss1.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.styles.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.ts.json docs/program/writer-native-text-filter-slice.md
+- Result: pass. Evidence: html31-format-check.txt. Final added audit paragraph separately passed the same installed Prettier CLI (node node_modules/.bin/prettier --check docs/program/writer-native-text-filter-slice.md), html31-audit-format-last.txt. Scope: final changed TS/JSON/Markdown.
+- Command: node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts (same installed Node24.13.1 and checker as npm run check:source-provenance)
+- Result: pass. Evidence: html31-provenance-final.txt,1893runtime/1681mapped/182browser/30infra,terminal session21366exit0. Scope: final provenance including NewHeading/GetTextFormatColl/native encoding markers.
+- Commands: npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check.
+- Result: pass. Evidence: corresponding html31-registry/boundaries/docs/size/tree/doctor logs and exit0static chain. Scope: unchanged strict global registry/static contracts, with semanticViolationCount0,1892runtime source boundaries/10392imports/227allowed edges,4269authored sources,115required paths/32retired roots. Known managed-shim warning only; no hooks/config changes.
+- Current checkpoint: verified and ready for an implementation commit. Full parent goal remains incomplete for the residual native CSS/table/insertion/current-model/UI requirements above; record parent verification as rework, not full completion.

@@ -3,12 +3,19 @@ import { SvxCSS1Parser } from "./svxcss1";
 import { cssAsciiLower } from "./svxcss1.properties";
 import { Css1ScriptFlags } from "./svxcss1.types";
 import { HtmlTokenId as T } from "../../../../svtools/inc/htmltokn";
-import { SwPoolFormatId as P } from "../../../inc/poolfmt";
+import { SwPoolFormatId as P, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwHTMLParser } from "./swhtml";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import type { SwFormat } from "../../core/attr/format";
+import {
+  RTL_TEXTENCODING_DONTKNOW,
+  RTL_TEXTENCODING_SYMBOL,
+  type rtl_TextEncoding,
+} from "../../../../sal/inc/rtl/textenc";
 import * as H from "../../../inc/hintids";
 const poolStyles = new Map<T, number>([
   [T.EMPHASIS_ON, P.CHR_HTML_EMPHASIS],
@@ -42,6 +49,32 @@ function SetCharFormatAttrs(format: SwCharFormat, items: SfxItemSet): void {
     if (height instanceof SvxFontHeightItem && height.GetProp() !== 100) items.ClearItem(which);
   }
   format.SetFormatAttrSet(items);
+}
+/** Original module-local helper changes only direct non-symbol fonts and preserves family/style/pitch and inherited items. @param format - Actual selected format. @param encoding - Native parser encoding. @returns Nothing. */
+function lcl_swcss1_setEncoding(format: SwFormat, encoding: rtl_TextEncoding): void {
+  if (encoding === RTL_TEXTENCODING_DONTKNOW) return;
+  for (const which of [H.RES_CHRATR_FONT, H.RES_CHRATR_CJK_FONT, H.RES_CHRATR_CTL_FONT]) {
+    const font = format.GetAttrSet().GetItemIfSet(which, false);
+    if (
+      !(font instanceof SvxFontItem) ||
+      font.GetCharSet() === RTL_TEXTENCODING_SYMBOL ||
+      font.GetCharSet() === encoding
+    )
+      continue;
+    const copy = new SvxFontItem(
+      font.GetFamily(),
+      font.GetFamilyName(),
+      font.GetStyleName(),
+      font.GetPitch(),
+      encoding,
+      which,
+    );
+    try {
+      format.SetFormatAttr(copy);
+    } finally {
+      copy.Dispose();
+    }
+  }
 }
 /** Native Writer specialization over the actual CSS1 grammar/property receiver. */
 export class SwCSS1Parser extends SvxCSS1Parser {
@@ -98,17 +131,60 @@ export class SwCSS1Parser extends SvxCSS1Parser {
     if (!format) throw new Error("assert(character format pool identity)");
     return format;
   }
-  /** Borrows original document/parser and copies the supplied seven native configured heights. @param doc - Actual document. @param parser - Actual HTML parser. @param heights - HTML font configuration in twips. @param baseURL - Original base. @param newDoc - Native creation selector. @returns Parser. */
+  /** Consumed original GetTextCollFromPool ownership for existing-document insertion; new-document setup corrects newly materialized formats only. @param id - Original pool ID. @returns Borrowed document collection. */
+  GetTextCollFromPool(id: number) {
+    const oldLength = this.doc.GetTextFormatColls().length;
+    const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+      /** Matches native pool metadata. @param candidate - Definition. @returns Match. */ (
+        candidate,
+      ) => candidate.poolId === id,
+    );
+    if (!entry) throw new Error("assert(paragraph format pool identity)");
+    const format = this.doc.GetTextFormatColl(entry.id);
+    if (this.m_bIsNewDoc)
+      for (const created of this.doc.GetTextFormatColls().slice(oldLength))
+        lcl_swcss1_setEncoding(created, this.GetDfltEncoding());
+    return format;
+  }
+  /** Original GetTextFormatColl lookup for Markdown's existing-document profile. StyleParsed admits no stylesheet maps in this mode; note pools, script suffixes and existing named descendants still participate. @param pool - Original pool ID. @param className - Original context class. @returns Borrowed document collection. */
+  GetTextFormatColl(pool: number, className: string) {
+    let [name] = SwCSS1Parser.GetScriptFromClass(className, false);
+    if (pool === P.COLL_TEXT) {
+      const lower = cssAsciiLower(name);
+      if (lower === "sdendnote" || lower === "sdfootnote") {
+        pool = lower === "sdendnote" ? P.COLL_ENDNOTE : P.COLL_FOOTNOTE;
+        name = "";
+      }
+    }
+    // Original USER_FMT substitutes Standard, without treating a user ID as a pool ID.
+    if (pool & (1 << 15)) pool = P.COLL_STANDARD;
+    let style = this.GetTextCollFromPool(pool);
+    if (name) {
+      let descendant = this.doc.FindTextFormatCollByName(style.GetName() + "." + name);
+      const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+        /** Matches the original pool identity. @param candidate - Definition. @returns Match. */ (
+          candidate,
+        ) => candidate.poolId === pool,
+      );
+      if (!descendant && (entry?.id === "table-contents" || entry?.id === "table-heading")) {
+        const text = this.GetTextCollFromPool(P.COLL_TEXT);
+        descendant = this.doc.FindTextFormatCollByName(text.GetName() + "." + name);
+      }
+      if (descendant) style = descendant;
+    }
+    lcl_swcss1_setEncoding(style, this.GetDfltEncoding());
+    return style;
+  }
+  /** Borrows original document/parser and copies the supplied seven native configured heights. @param doc - Actual document. @param parser - Actual HTML parser. @param heights - HTML font configuration in twips. @param baseURL - Original base. @param m_bIsNewDoc - Native creation selector. @returns Parser. */
   constructor(
     private readonly doc: SwDoc,
     parser: SwHTMLParser,
     private readonly heights: readonly number[],
     baseURL: string,
-    newDoc: boolean,
+    private readonly m_bIsNewDoc: boolean,
   ) {
     super(doc.GetAttrPool(), baseURL);
     void parser;
-    void newDoc;
     this.heights = [...heights];
   }
   /** Native indexed HTML font-height lookup. @param size - Zero-based index. @returns Configured twips. */

@@ -15,15 +15,6 @@ import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import * as H from "../../../inc/hintids";
 import { NewAttr, type HTMLAttrHead } from "./swhtml.attr";
 import { InsertParaAttrs } from "./htmlcss1.attr";
-/** Resolves genuine pool metadata on the existing document owner. Class-specific style derivation is a separate CSS consumer, not an alternate style table here. @param parser - Actual reader. @param pool - Native ID. @returns Actual document collection. */
-function collection(parser: SwHTMLParser, pool: number): SwTextFormatColl {
-  const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
-    /** Finds the original pool identity. @param value - Metadata. @returns Match. */ (value) =>
-      value.poolId === pool,
-  );
-  if (!entry) throw new Error("HTML paragraph pool identity is not represented.");
-  return parser.m_xDoc.GetTextFormatColl(entry.id);
-}
 /** Original table-default substitution for an ordinary P context. @param pool - Requested collection. @param fallback - Nearest default collection. @returns Selected collection. */
 function substitute(pool: number, fallback: number): number {
   const id = WRITER_PARAGRAPH_STYLE_POOL.find(
@@ -66,7 +57,7 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
         if (pool === P.COLL_HTML_PRE) inPRE = true;
         else if (pool === P.COLL_TEXT) pool = substitute(pool, fallback);
         else if (pool !== P.COLL_HTML_HR && inPRE) apply = false;
-        const next = collection(parser, pool);
+        const next = parser.m_pCSS1Parser.GetTextFormatColl(pool, context.GetClass());
         if (apply) {
           if (selected) {
             merge(selected);
@@ -80,7 +71,7 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
     }
     if (top?.GetTextFormatColl()) {
       const pool = substitute(top.GetTextFormatColl(), fallback),
-        set = collection(parser, pool).GetAttrSet();
+        set = parser.m_pCSS1Parser.GetTextFormatColl(pool, top.GetClass()).GetAttrSet();
       if (
         set.GetItemIfSet(H.RES_MARGIN_FIRSTLINE) ||
         set.GetItemIfSet(H.RES_MARGIN_TEXTLEFT) ||
@@ -92,7 +83,7 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
           set.Get(H.RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
         ).ResolveTextFirstLineOffset();
         if (pool === P.COLL_HTML_DD) {
-          const term = collection(parser, P.COLL_HTML_DT).GetAttrSet();
+          const term = parser.m_pCSS1Parser.GetTextFormatColl(P.COLL_HTML_DT, "").GetAttrSet();
           extraLeft -= (term.Get(H.RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
           extraRight -= (term.Get(H.RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight();
         } else if (pool === P.COLL_HTML_DT) extraLeft = extraRight = 0;
@@ -104,7 +95,7 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
       if (spacing instanceof SvxULSpaceItem) top.SetULSpace(spacing.GetUpper(), spacing.GetLower());
     }
     if (!selected) {
-      selected = collection(parser, fallback);
+      selected = parser.m_pCSS1Parser.GetTextCollFromPool(fallback);
       const set = selected.GetAttrSet();
       if (!left[0])
         left[0] =

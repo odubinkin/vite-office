@@ -1317,3 +1317,44 @@ this pinned writer has no definition-list syntax producer.
 Generated CSS class style derivation, stylesheet-token composition, target cursor
 character snapshots, raw HTML tables and the final current-core/UI requirements
 audit remain open. This checkpoint does not establish full goal/module/ABI parity.
+
+
+### S3HW1E existing-document paragraph classes and CSS dependency reconciliation
+
+The production Markdown HTML insertion path uses an existing-document reader
+(`swmd.cxx`, InsertHtmlData; local `swmd.ts` passes `false` to SwHTMLParser).
+Pinned `SwCSS1Parser::StyleParsed` (`htmlcss1.cxx:685`) immediately returns when
+`m_bIsNewDoc` is false. Consequently, standalone new-document stylesheet
+composition and generation of class/ID/tag style maps are not prerequisites for
+this Markdown caller. Historical open-work lists above do not override this
+source admission condition. A real CSS grammar test retains the empty-map result;
+existing actual Markdown stylesheet tests also retain inert rules.
+
+Classes themselves still matter. Original NewHeading retains CLASS in its heading
+context; the former local heading producer dropped it. Original NewPara creates a COLL_TEXT context
+only for nonempty CLASS and keeps its exact text. The context cascade now calls
+SwCSS1Parser.GetTextFormatColl rather than bypassing that owner with pool metadata.
+Its consumed existing-document lookup strips native script suffixes, recognizes
+sdfootnote/sdendnote only for COLL_TEXT, preserves USER_FMT fallback, and looks up
+existing named style descendants without DOM class tokenization, whitespace
+trimming or case-folding their names. Table-to-TextBody named fallback is retained;
+table context production remains a separate unfinished reader obligation.
+
+Pool access uses the actual document-owned collections. Pinned GetTextCollFromPool
+passes bRegardLanguage=false. In DocumentStylePoolManager.cxx:685-693 that flag
+controls only the Korean COLL_STANDARD RES_PARATR_SCRIPTSPACE default; the current
+core has no SCRIPTSPACE declaration or item owner. No fabricated attribute or
+unconsumed application-language subsystem is added for this filter profile.
+The original font-encoding helper changes only direct non-symbol font items of selected collections, retains
+family/name/style/pitch, and leaves inherited fonts unmaterialized. Native explicit
+unknown-class P selects TextBody even inside a quotation; classless P keeps the
+surrounding collection. Note classes select paragraph pools, without synthesizing
+note anchors or note bodies. Actual Markdown input, Worker transport and Markdown
+visible-text export exercise the note paragraph styles.
+
+This is source-derived evidence for the existing-document filter profile, not a
+claim that the complete CSS style factory or standalone HTML new-document reader
+is implemented. Direct registration of CSS maps by a test or a future caller does
+not establish a production Markdown stylesheet path. Remaining current-core HTML
+property/table producers, cursor insertion snapshots and the requirement-by-
+requirement RTF/Markdown/UI audit continue to prevent full goal completion.

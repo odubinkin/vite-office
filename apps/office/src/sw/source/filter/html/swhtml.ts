@@ -462,7 +462,10 @@ export class SwHTMLParser extends HTMLParser {
   NewPara(): void {
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(A.AM_SPACE);
     else this.AddParSpace();
-    const context = new HTMLAttrContext(T.PARABREAK_ON);
+    const className = this.GetStyleOption(O.CLASS),
+      context = className
+        ? new HTMLAttrContext(T.PARABREAK_ON, SwPoolFormatId.COLL_TEXT, className)
+        : new HTMLAttrContext(T.PARABREAK_ON);
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
       language = this.GetStyleOption(O.LANG);
@@ -479,7 +482,7 @@ export class SwHTMLParser extends HTMLParser {
     }
     this.InsertAlignment(context);
     this.PushContext(context);
-    this.SetTextCollAttrs();
+    this.SetTextCollAttrs(className ? context : undefined);
     this.m_nOpenParaToken = T.PARABREAK_ON;
   }
   /** Original paragraph close skips empty HTML paragraphs. @param real - Explicit closing tag selector. @returns Nothing. */
@@ -511,6 +514,7 @@ export class SwHTMLParser extends HTMLParser {
     const context = new HTMLAttrContext(
       token,
       SwPoolFormatId.COLL_HEADLINE1 + (token - T.HEAD1_ON) / 2,
+      this.GetStyleOption(O.CLASS),
     );
     const style = this.GetStyleOption(O.STYLE),
       id = this.GetStyleOption(O.ID),
