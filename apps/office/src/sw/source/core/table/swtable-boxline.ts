@@ -104,9 +104,13 @@ export class SwTableBox extends SwClient {
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
   }
-  /** Reads original native section start. @returns Section start. */
-  public GetStartNode(): SwTableBoxStartNode {
+  /** Original GetSttNd borrows the cell's actual section owner. @returns Native section start. */
+  public GetSttNd(): SwTableBoxStartNode {
     return this.startNode;
+  }
+  /** Existing section-name binding delegates to the original native getter. @returns Section start. */
+  public GetStartNode(): SwTableBoxStartNode {
+    return this.GetSttNd();
   }
   /** Copies direct items only for construction/transport. @returns Independent boundary values. */
   public GetFormat(): SwTableBoxFormat {

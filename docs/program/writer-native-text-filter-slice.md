@@ -1412,3 +1412,12 @@ HTMLTableOptions now retains every original constructor field/default and option
 The existing paragraph ALIGN path now uses original aHTMLPAlignTable instead of its reduced local switch. Native middle/char aliases and ASCII matching are therefore connected to real Markdown raw-HTML paragraph items. Options tests use the real byte/HTML lexer and original option owners; they do not simulate a table document.
 
 Table option construction is a consuming prerequisite, not table import completion. Native HTMLTable row/cell/context/layout ownership, BuildTable insertion and finalization still need connection to the current SwTable slice. Existing-document insertion boundary/target snapshots and final current-model/filter/UI reconciliation also remain pending. No full TXT/RTF/Markdown objective or broad module/ABI parity is claimed at this checkpoint.
+
+
+### HTML36 — Native table cell/row/column and layout value ownership
+
+Original HTMLTableCnts paragraph-section chains, HTMLTableCell/Row/Column and SwHTMLTableLayoutCnts/Cell/Column values now preserve native field/default, brush/box sharing, protected-cell selective copying, width-family merging, row span maintenance, six borrowed frame-format cache slots and lazy content-layout semantics. Core layout values own option/pass state only; no text width or auto-layout result is synthesized. Real SwTable cell sections and document-pooled frame formats exercise these relationships.
+
+The native GetSttNd accessor now lives on the existing SwTableBox section owner; the established GetStartNode binding delegates to it. Current SwTableBox owns a paragraph section, with no nested-line or merged-cell owner. Paragraph-content constructor families are implemented; nested-table constructor variants are not silently replaced by flat data or fake providers. Full unsigned64 metric, pointer/vector-invalid-borrow, compiled/native module ABI and unrepresented nested ownership are not certified. WRITER308-310 retain the corresponding source-state behaviors.
+
+The table grid/container, BuildTable/row/cell token loops, actual document insertion/finalization and text/layout passes remain on the critical path. Existing-document insertion boundary/target-attribute snapshots and final current-model/filter/UI reconciliation remain open. These native value families are prerequisites, not a claim that HTML table import is now complete; the full format objective remains active.

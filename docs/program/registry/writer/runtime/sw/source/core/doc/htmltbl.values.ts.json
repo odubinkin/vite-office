@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/htmltbl.values.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/htmltbl.values.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.values.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/htmltbl.cxx"
+      ],
+      "justification": "S3HW1E HTML36: native HTMLTableCnts paragraph-section chains, HTMLTableCell/Row/Column value owners and original SwHTMLTableLayoutCnts/Cell/Column value families now retain real SwStartNode/SwTableBox/SwFrameFormat and shared brush/box identities. Original protection selective resets, row expand/shrink span updates, width-family merge differences, six borrowed format slots, output-reference writes, lazy cached content layout and uint8 pass references are preserved. Actual current core cell sections and pooled formats are used in tests, with no fake table/document/layout or computed width substitution. Native SwTableBox.GetSttNd is exposed on its existing section owner; the established GetStartNode binding delegates to it. Paragraph-content constructor variants are represented; nested table and merged core box ownership are absent from the current SwTableBox slice, and nested-table constructor variants are not silently substituted. Main HTMLTable grid/token reader/BuildTable, automatic text/layout passes, insertion boundary snapshots and final model/UI audit remain pending. Broader native module/API/ABI/64-bit metric-domain certification is not claimed; file UI/autosave/recovery deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwHTMLTableLayoutCnts",
+        "SwHTMLTableLayoutCell"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/htmltbl.cxx",
+      "upstreamSymbols": [
+        "SwHTMLTableLayoutCnts",
+        "SwHTMLTableLayoutCell"
+      ]
+    }
+  }
+}

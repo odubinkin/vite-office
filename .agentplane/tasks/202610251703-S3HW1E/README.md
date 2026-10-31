@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 263
+revision: 269
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T10:36:45.956Z"
+  updated_at: "2026-10-31T10:55:45.597Z"
   updated_by: "CODER"
-  note: "HTML35 checkpoint verified: 186 unique related Writer/shared scenarios across 5 files, app types, changed-source lint/format and provenance/registries/boundaries/docs/size/tree pass. Original complete HTMLTableOptions fields/defaults and shared table enums/GetEnum output contract are ready for BuildTable; original ALIGN aliases are connected to Markdown paragraph items. Table node/context/geometry insertion, insertion boundaries/snapshots and final matrix remain pending; full goal stays incomplete."
-  attempts: 46
+  note: "HTML36 checkpoint verified: 81 unique related cases across 5 files have positive current evidence, final app types, changed-source lint/format and provenance/Writer registry/boundaries/docs/size/tree pass. Native paragraph-content, cell/row/column and core layout-value prerequisites retain actual section/format owners. Recorded alias lint and header metadata failures corrected without weakening gates. HTMLTable grid, auto-layout/token reading/document insertion, insertion boundaries and final matrix remain pending; full goal stays incomplete."
+  attempts: 47
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -741,8 +744,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T10:55:45.597Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML36 checkpoint verified: 81 unique related cases across 5 files have positive current evidence, final app types, changed-source lint/format and provenance/Writer registry/boundaries/docs/size/tree pass. Native paragraph-content, cell/row/column and core layout-value prerequisites retain actual section/format owners. Recorded alias lint and header metadata failures corrected without weakening gates. HTMLTable grid, auto-layout/token reading/document insertion, insertion boundaries and final matrix remain pending; full goal stays incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T10:56:13.064Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:36:58.593Z"
+doc_updated_at: "2026-10-31T10:56:13.064Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1867,6 +1883,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T10:55:45.597Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML36 checkpoint verified: 81 unique related cases across 5 files have positive current evidence, final app types, changed-source lint/format and provenance/Writer registry/boundaries/docs/size/tree pass. Native paragraph-content, cell/row/column and core layout-value prerequisites retain actual section/format owners. Recorded alias lint and header metadata failures corrected without weakening gates. HTMLTable grid, auto-layout/token reading/document insertion, insertion boundaries and final matrix remain pending; full goal stays incomplete.
+    Attempts: 47
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:55:42.928Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2929,6 +2975,26 @@ sections:
     - Commands/results: source provenance passes1905runtime/1692mapped/182browser/31infra (html35-provenance.txt,exec63727exit0); Writer/shared registries both pass semanticViolationCount0 (html35-writer/shared.txt,exec52434/7440exit0); module boundaries pass1904sources/10469relative imports/227allowed edges (html35-boundaries.txt,exec46287exit0). Existing status/classification/history preserved, with new native fragments unverified for complete API/module/ABI certification.
     - Commands/results: JSDoc passes4286authored sources (html35-docs.txt,exec35763exit0), size passes (html35-size.txt,exec89851exit0), source tree passes115required/32retired roots (html35-tree.txt,exec89849exit0). No policy/gate thresholds changed; no all-app suite was run for this focused parent-task checkpoint.
     - Scope closure: complete original table-options/default conversion and shared enum methods are ready for the native table consumer, and native ALIGN aliases are connected through the existing Markdown HTML paragraph path. No HTML table node/model construction or layout is falsely claimed as complete. Native BuildTable/row/cell/context/node insertion, target insertion boundaries/snapshots and final current-model/filter/UI audit remain pending. Parent goal remains active/incomplete and verification rework.
+
+    ### HTML36 native cell/row/column values checkpoint (verified)
+
+    - Concrete consuming scope: original HTMLTableCnts paragraph-section chain, HTMLTableCell/Row/Column, actual core SwHTMLTableLayoutCnts/Cell/Column value families and native SwTableBox.GetSttNd on its existing section owner. Established GetStartNode delegates to the native getter; no section/format owner is duplicated. Native source: htmltab.cxx643-920, sw/inc/htmltbl.hxx and sw/source/core/doc/htmltbl.cxx paragraph/cell/column value branches.
+    - Current-model evidence: SwTableBox owns one SwTableBoxStartNode and paragraphs with no nested GetTabLines/row-span/merged-box owner. Therefore only paragraph-content constructor families are implemented; nested-table pointer/constructor variants are not provided or silently mapped to flat data. The source table argument is retained as null for this actual constructor profile. Main HTMLTable/auto-layout and token-reader/document-insertion work is still pending, not replaced by an alternate model/provider.
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts --maxWorkers1. Result: pass62cases/2files,79.81s,html36-focused.txt,exec85782exit0. Real SwDoc/SwTable sections and pooled frame formats exercise defaults, shared contents/brush/box identity, protected-cell copying/selective reset, output-reference writes, actual layout links/box rebinding, counters, row spans/brush transfer, different width merges and six borrowed native cache slots. No private-field writes, fake document/table/layout, computed-width replacement or timeout increase.
+    - Command: app native tsc --noEmit. Result: pass,html36-types.txt,exec10540exit0,final implementation and tests before formatting-only changes.
+    - Source findings WRITER308-310 preserve width/metadata retention, cached layout build order and protected-but-contentless row span maintenance. These are source-state findings, not desktop reproductions or broad native/API/ABI certificates.
+
+    - Command: changed-source ESLint --max-warnings0. Result: fail one no-this-alias in HTMLTableCnts::Add's original local tail pointer (html36-lint.txt,exec37902exit1). No test/value failures. Route recomputed before correction. Apply the already reviewed analogous INC-20261009-02 principle: initialize traversal from the first next link ?? this instead of disabling lint or adding a new owner; this is the same native tail traversal after its first conditional step. Revalidate the affected content-chain case and source lint; preserve the failed invocation.
+
+    - Command: Writer registry gate. Result: fail metadata assertion for sw/inc/htmltbl.ts,html36-writer.txt,exec47484exit1. The canonical header reexports actual core-fragment classes, but its runtime localSymbols incorrectly claimed those class declarations lived in the reexport file. The verifier correctly reported all3missing-local-symbol declarations. Route recomputed; correct the header record to its actual reexport-only role with no locally declared class symbols, retaining the3real class declarations/evidence on their core owners and all broad unverified statuses. Do not weaken the checker or invent duplicate class declarations. Only metadata/registry rerun is needed for this correction.
+
+    - Command: affected real content-chain case after the no-this-alias binding correction (-t uses real core sections). Result: pass1case/11previous cases intentionally unselected,20.76s,html36-tail-final.txt,exec71688exit0. Both empty and nonempty tail append paths and cached-layout/native box references are exercised. Earlier61unchanged scenarios plus the repeated corrected case remain positive.
+    - Command: targeted native-box-frame-format, native-row-frame-format and native-numeric-row-insertion tests --maxWorkers1. Result: pass19cases/3files,29.19s,html36-core-related.txt,exec66315exit0. GetStartNode delegates to actual original GetSttNd without changing existing section/format consumers. Total81unique related current cases/5files have successful evidence; no full all-app suite is claimed.
+    - Command: final app native tsc --noEmit after the traversal initializer correction. Result: pass,html36-types-final.txt,exec24361exit0. No implementation changes followed; subsequent correction is registry metadata only.
+    - Commands/results: full changed-source/test lint initially passed every other file and failed only the recorded alias; affected source lint now passes (html36-lint-final.txt,exec39475exit0). Full explicit Prettier check passes (html36-format-check.txt,exec48827exit0); final traversal/header-metadata formatting check passes85518. git diff --check passes.
+    - Commands/results: source provenance passes1912runtime/1699mapped/182browser/31infra (html36-provenance.txt,exec98927exit0); corrected Writer registry passes with semanticViolationCount0 (html36-writer-final.txt,exec67745exit0). The original failed writer registry invocation remains failed; header record now accurately declares its reexport-only role, actual source class owners retain their declared symbols and all broad unverified statuses remain. No shared implementation was changed, so no unrelated shared-registry/full-suite replay was added.
+    - Commands/results: module boundaries pass1911sources/10490relative imports/227allowed edges (html36-boundaries.txt,exec99958exit0); JSDoc passes4294authored sources (html36-docs.txt,exec9016exit0); size passes (html36-size.txt,exec7054exit0); source tree passes115required/32retired roots (html36-tree.txt). No checker, threshold, hook or global configuration changes.
+    - Scope closure: original current-model cell/row/column/layout value prerequisites are source-backed and verified, with actual document-owned sections/formats and original output/identity/caching semantics. Main table grid, token reader, automatic text/layout passes, actual BuildTable document insertion/finalization, insertion boundary/target snapshots and final model/filter/UI audit remain pending. No computed geometry or table-import success was substituted. Parent objective stays active/incomplete; verification remains rework and the parent must not finish or pause.
 id_source: "generated"
 ---
 ## Summary
@@ -4064,6 +4130,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T10:55:45.597Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML36 checkpoint verified: 81 unique related cases across 5 files have positive current evidence, final app types, changed-source lint/format and provenance/Writer registry/boundaries/docs/size/tree pass. Native paragraph-content, cell/row/column and core layout-value prerequisites retain actual section/format owners. Recorded alias lint and header metadata failures corrected without weakening gates. HTMLTable grid, auto-layout/token reading/document insertion, insertion boundaries and final matrix remain pending; full goal stays incomplete.
+Attempts: 47
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:55:42.928Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5130,3 +5226,23 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands/results: source provenance passes1905runtime/1692mapped/182browser/31infra (html35-provenance.txt,exec63727exit0); Writer/shared registries both pass semanticViolationCount0 (html35-writer/shared.txt,exec52434/7440exit0); module boundaries pass1904sources/10469relative imports/227allowed edges (html35-boundaries.txt,exec46287exit0). Existing status/classification/history preserved, with new native fragments unverified for complete API/module/ABI certification.
 - Commands/results: JSDoc passes4286authored sources (html35-docs.txt,exec35763exit0), size passes (html35-size.txt,exec89851exit0), source tree passes115required/32retired roots (html35-tree.txt,exec89849exit0). No policy/gate thresholds changed; no all-app suite was run for this focused parent-task checkpoint.
 - Scope closure: complete original table-options/default conversion and shared enum methods are ready for the native table consumer, and native ALIGN aliases are connected through the existing Markdown HTML paragraph path. No HTML table node/model construction or layout is falsely claimed as complete. Native BuildTable/row/cell/context/node insertion, target insertion boundaries/snapshots and final current-model/filter/UI audit remain pending. Parent goal remains active/incomplete and verification rework.
+
+### HTML36 native cell/row/column values checkpoint (verified)
+
+- Concrete consuming scope: original HTMLTableCnts paragraph-section chain, HTMLTableCell/Row/Column, actual core SwHTMLTableLayoutCnts/Cell/Column value families and native SwTableBox.GetSttNd on its existing section owner. Established GetStartNode delegates to the native getter; no section/format owner is duplicated. Native source: htmltab.cxx643-920, sw/inc/htmltbl.hxx and sw/source/core/doc/htmltbl.cxx paragraph/cell/column value branches.
+- Current-model evidence: SwTableBox owns one SwTableBoxStartNode and paragraphs with no nested GetTabLines/row-span/merged-box owner. Therefore only paragraph-content constructor families are implemented; nested-table pointer/constructor variants are not provided or silently mapped to flat data. The source table argument is retained as null for this actual constructor profile. Main HTMLTable/auto-layout and token-reader/document-insertion work is still pending, not replaced by an alternate model/provider.
+- Command: npm run test:writer -- src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts --maxWorkers1. Result: pass62cases/2files,79.81s,html36-focused.txt,exec85782exit0. Real SwDoc/SwTable sections and pooled frame formats exercise defaults, shared contents/brush/box identity, protected-cell copying/selective reset, output-reference writes, actual layout links/box rebinding, counters, row spans/brush transfer, different width merges and six borrowed native cache slots. No private-field writes, fake document/table/layout, computed-width replacement or timeout increase.
+- Command: app native tsc --noEmit. Result: pass,html36-types.txt,exec10540exit0,final implementation and tests before formatting-only changes.
+- Source findings WRITER308-310 preserve width/metadata retention, cached layout build order and protected-but-contentless row span maintenance. These are source-state findings, not desktop reproductions or broad native/API/ABI certificates.
+
+- Command: changed-source ESLint --max-warnings0. Result: fail one no-this-alias in HTMLTableCnts::Add's original local tail pointer (html36-lint.txt,exec37902exit1). No test/value failures. Route recomputed before correction. Apply the already reviewed analogous INC-20261009-02 principle: initialize traversal from the first next link ?? this instead of disabling lint or adding a new owner; this is the same native tail traversal after its first conditional step. Revalidate the affected content-chain case and source lint; preserve the failed invocation.
+
+- Command: Writer registry gate. Result: fail metadata assertion for sw/inc/htmltbl.ts,html36-writer.txt,exec47484exit1. The canonical header reexports actual core-fragment classes, but its runtime localSymbols incorrectly claimed those class declarations lived in the reexport file. The verifier correctly reported all3missing-local-symbol declarations. Route recomputed; correct the header record to its actual reexport-only role with no locally declared class symbols, retaining the3real class declarations/evidence on their core owners and all broad unverified statuses. Do not weaken the checker or invent duplicate class declarations. Only metadata/registry rerun is needed for this correction.
+
+- Command: affected real content-chain case after the no-this-alias binding correction (-t uses real core sections). Result: pass1case/11previous cases intentionally unselected,20.76s,html36-tail-final.txt,exec71688exit0. Both empty and nonempty tail append paths and cached-layout/native box references are exercised. Earlier61unchanged scenarios plus the repeated corrected case remain positive.
+- Command: targeted native-box-frame-format, native-row-frame-format and native-numeric-row-insertion tests --maxWorkers1. Result: pass19cases/3files,29.19s,html36-core-related.txt,exec66315exit0. GetStartNode delegates to actual original GetSttNd without changing existing section/format consumers. Total81unique related current cases/5files have successful evidence; no full all-app suite is claimed.
+- Command: final app native tsc --noEmit after the traversal initializer correction. Result: pass,html36-types-final.txt,exec24361exit0. No implementation changes followed; subsequent correction is registry metadata only.
+- Commands/results: full changed-source/test lint initially passed every other file and failed only the recorded alias; affected source lint now passes (html36-lint-final.txt,exec39475exit0). Full explicit Prettier check passes (html36-format-check.txt,exec48827exit0); final traversal/header-metadata formatting check passes85518. git diff --check passes.
+- Commands/results: source provenance passes1912runtime/1699mapped/182browser/31infra (html36-provenance.txt,exec98927exit0); corrected Writer registry passes with semanticViolationCount0 (html36-writer-final.txt,exec67745exit0). The original failed writer registry invocation remains failed; header record now accurately declares its reexport-only role, actual source class owners retain their declared symbols and all broad unverified statuses remain. No shared implementation was changed, so no unrelated shared-registry/full-suite replay was added.
+- Commands/results: module boundaries pass1911sources/10490relative imports/227allowed edges (html36-boundaries.txt,exec99958exit0); JSDoc passes4294authored sources (html36-docs.txt,exec9016exit0); size passes (html36-size.txt,exec7054exit0); source tree passes115required/32retired roots (html36-tree.txt). No checker, threshold, hook or global configuration changes.
+- Scope closure: original current-model cell/row/column/layout value prerequisites are source-backed and verified, with actual document-owned sections/formats and original output/identity/caching semantics. Main table grid, token reader, automatic text/layout passes, actual BuildTable document insertion/finalization, insertion boundary/target snapshots and final model/filter/UI audit remain pending. No computed geometry or table-import success was substituted. Parent objective stays active/incomplete; verification remains rework and the parent must not finish or pause.

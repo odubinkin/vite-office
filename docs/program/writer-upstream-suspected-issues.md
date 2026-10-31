@@ -2636,3 +2636,22 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, HTMLTableOptions::HTMLTableOptions.
 - Observation: numeric WIDTH is first narrowed to uint16, then the presence of any percent sign in its source string sets the percent flag and only values above100 are clamped. WIDTH=65536% thus becomes0%, while65537% becomes1%. If COLS is nonzero and the narrowed width is0, the final constructor branch substitutes100% even for an explicit zero width.
 - Preservation: retain GetNumber conversion, narrowing, percent detection and final COLS fallback in their source order; do not clamp the original number before narrowing or distinguish absent width from explicit zero.
+
+
+### WRITER308 — HTML cell replacement/protection retains prior width and metadata
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableCell::Set and SetProtected; sw/inc/htmltbl.hxx, SwHTMLTableLayoutCell::SetProtected.
+- Observation: Set assigns content/span/format/value/wrapping flags but does not reset m_nWidth or m_bRelWidth. SetProtected clears contents and resets spans, clones only the shared background brush, and keeps box/numeric/width/orientation/no-wrap/covered fields. The corresponding layout-cell protection also keeps width/percent/no-wrap options. A reused or protected cell can therefore expose earlier width metadata despite losing its content.
+- Preservation: retain these selective writes and original shared/independent identities. Do not replace protection or Set with a fresh default cell. This is a source-state finding, not a confirmed desktop defect.
+
+### WRITER309 — HTML content layout caching does not follow late source-chain mutations
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableCnts::Add, SetNoBreak, SetTableBox and CreateLayoutInfo.
+- Observation: CreateLayoutInfo recursively constructs the next content first, then caches its own layout reference once. Later Add or SetNoBreak do not invalidate those cached next links/no-break flags. SetTableBox checks that layout already exists; before construction it has no effect in release control flow, with a diagnostic in the source.
+- Preservation: keep the original build-order behavior and borrowed actual section/box references. Tests distinguish cached layout links from later source chain links without private state writes. Late mutations are outside the normal build order; no desktop reproduction or debug assertion certificate is claimed.
+
+### WRITER310 — HTML row span maintenance treats protected cells as contentless
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableRow::Expand and Shrink; HTMLTable::CloseRow uses the same content-presence condition.
+- Observation: a protected cell reports IsUsed=true but has no contents. Shrink walks trailing cells while GetContents is null, so it can change a protected cell's column span away from the1 assigned by SetProtected. Expand(oneCell=true) assigns decreasing spans only to newly appended cells; earlier cells retain their values.
+- Preservation: retain the original GetContents condition and span update order. Do not substitute IsUsed or normalize the whole row on resize; actual cell/section tests preserve the source state transitions.
