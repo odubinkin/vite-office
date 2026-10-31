@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/core/doc/native-absolute-position-correction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-uno-absolute-correction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -22,25 +26,38 @@
         {
           "path": "sw/source/core/doc/doccorr.cxx",
           "marker": "lcl_PaMCorrAbs"
+        },
+        {
+          "path": "sw/source/core/doc/doccorr.cxx",
+          "marker": "lcl_FindUnoCursorSection"
+        },
+        {
+          "path": "sw/source/core/doc/doccorr.cxx",
+          "marker": "PaMCorrAbs"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/doc/doccorr.ts",
     "localSymbols": [
       "lcl_PosCorrAbs",
-      "lcl_PaMCorrAbs"
+      "lcl_PaMCorrAbs",
+      "lcl_FindUnoCursorSection",
+      "CorrectUnoCursorsAbsolute"
     ],
     "omittedResponsibilities": [
-      "Global native PaMCorrAbs traversal requires actual edit-shell/UNO-cursor owners and their original notification/section contracts; these services are not simulated by primitive correction helpers. Whole doccorr/module/ABI/native lifetime behavior remains unverified."
+      "Global PaMCorrAbs still requires original caller value snapshots and actual edit-shell/view-shell owner traversal, then composition in native DeleteSection. Transparent SwSectionNode skip has no represented operand in the current fixed/table/cell/normal start-node model. These services are not simulated by the extracted UNO branch; whole doccorr/module/ABI/native lifetime behavior remains unverified."
     ],
     "preservedResponsibilities": [
-      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged."
+      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML52: the native PaMCorrAbs UNO branch now uses the actual SwDoc weak cursor table, cleanup and temporary strong locks. It compares original point and target section owners before mutation, corrects both physical bounds of every ordinary ring member and every independent table selection-ring member, and emits the original UnoCursorHint only when a bound changed and RemainInSection requires invalidation. Real text API cursors become invalid when moved out of their cells. Fixed/table/cell/normal source sections use their actual start owners; transparent SwSectionNode is not represented by the current model and its skip is not certified. CorrectUnoCursorsAbsolute is an explicitly extracted source branch, not the whole global PaMCorrAbs API: original caller value snapshots, native view-shell roots/traversal and DeleteSection production composition remain pending. No fabricated view-shell or flattened node-position registry is introduced; full module/contract/default/behavior parity stays unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doccorr.cxx",
     "upstreamSymbols": [
       "lcl_PosCorrAbs",
-      "lcl_PaMCorrAbs"
+      "lcl_PaMCorrAbs",
+      "lcl_FindUnoCursorSection",
+      "PaMCorrAbs"
     ]
   },
   "legacyOrder": 167
