@@ -20,6 +20,7 @@ import type { SwStartNode } from "../../core/docnode/node";
 import type { SwTable, SwTableBox } from "../../core/table/swtable";
 import type { SwTableBoxFormat, SwTableLineFormat } from "../../../inc/swtblfmt";
 import { MIN_BORDER_DIST } from "../../../inc/swtypes";
+import { HTMLTableFrame as F, HTMLTableRules as R } from "../../../../svtools/inc/parhtml";
 /** Native table owns its intermediate grid and original options; protected fields keep future source method fragments on this same owner rather than a parallel DTO. */
 export class HTMLTable {
   protected readonly m_aRows: HTMLTableRow[] = [];
@@ -259,6 +260,163 @@ export class HTMLTable {
   /** Original brush value copy. @param value - Actual brush. @returns Nothing. */
   SetBGBrush(value: SvxBrushItem): void {
     this.m_xBackgroundBrush = new SvxBrushItem(value);
+  }
+  /** Original borrowed table background. @returns Actual brush or null. */
+  protected GetBGBrush(): SvxBrushItem | null {
+    return this.m_xBackgroundBrush;
+  }
+  /** Original borrowed inherited cell background. @returns Actual brush or null. */
+  protected GetInhBGBrush(): SvxBrushItem | null {
+    return this.m_xInheritedBackgroundBrush;
+  }
+  /** Original recursive border completion flag, published after visiting all nested contents. @returns Flag. */
+  protected BordersSet(): boolean {
+    return this.m_bBordersSet;
+  }
+  /** Original Netscape top spacing does not inspect actual border admission. @param row - Row. @returns Native uint16 twips. */
+  protected GetTopCellSpace(row: number): number {
+    return (this.m_nCellPadding + (row === 0 ? this.m_nBorder + this.m_nCellSpacing : 0)) & 65535;
+  }
+  /** Original Netscape bottom spacing includes one row gap and the outer border only at the final span. @param row - Start row. @param span - Row span. @returns Native uint16 twips. */
+  protected GetBottomCellSpace(row: number, span: number): number {
+    return (
+      (this.m_nCellSpacing +
+        this.m_nCellPadding +
+        (row + span === this.m_nRows ? this.m_nBorder : 0)) &
+      65535
+    );
+  }
+  /** Original nested-table horizontal inheritance and background fallback preserve first/last content boundaries. @param parent - Actual parent grid, including the native self domain. @param row - Parent start row. @param column - Parent start column. @param span - Parent row span. @param first - First content in cell. @param last - Last content in cell. @returns Nothing. */
+  protected InheritBorders(
+    parent: HTMLTable,
+    row: number,
+    column: number,
+    span: number,
+    first: boolean,
+    last: boolean,
+  ): void {
+    if (!this.m_nRows || !this.m_nCols || this.m_nCurrentRow !== this.m_nRows)
+      throw new Error("assert(closed HTML table grid)");
+    const end = parent.m_aRows[row + span - 1],
+      bottom = this.m_aRows[this.m_nRows - 1];
+    if (!end || !bottom) throw new Error("assert(HTML table border row)");
+    if (row === 0 && parent.m_bTopBorder && first) {
+      this.m_bTopBorder = true;
+      this.m_bFillerTopBorder = true;
+      this.m_aTopBorderLine = parent.m_aTopBorderLine.Clone();
+    }
+    if (end.GetBottomBorder() && last) {
+      bottom.SetBottomBorder(true);
+      this.m_bFillerBottomBorder = true;
+      this.m_aBottomBorderLine = (
+        row + span === parent.m_nRows ? parent.m_aBottomBorderLine : parent.m_aBorderLine
+      ).Clone();
+    }
+    const preceding = row ? parent.m_aRows[row - 1] : null;
+    if (row && !preceding) throw new Error("assert(HTML preceding border row)");
+    this.m_bTopAllowed =
+      !first || (parent.m_bTopAllowed && (row === 0 || !preceding?.GetBottomBorder()));
+    let brush = parent.GetCell(row, column).GetBGBrush();
+    if (!brush && parent !== this && parent.GetCell(row, column).GetRowSpan() === parent.m_nRows) {
+      const sourceRow = parent.m_aRows[row];
+      if (!sourceRow) throw new Error("assert(HTML background row)");
+      brush = sourceRow.GetBGBrush() ?? parent.GetBGBrush() ?? parent.GetInhBGBrush();
+    }
+    if (brush) this.m_xInheritedBackgroundBrush = new SvxBrushItem(brush);
+  }
+  /** Original vertical inheritance records actual line values before the width pass decides whether filler cells are needed. @param parent - Actual parent grid. @param column - Parent start column. @param span - Parent column span. @returns Nothing. */
+  protected InheritVertBorders(parent: HTMLTable, column: number, span: number): void {
+    let left = 0,
+      right = 0;
+    if (column + span === parent.m_nCols && parent.m_bRightBorder) {
+      this.m_bInheritedRightBorder = true;
+      this.m_aInheritedRightBorderLine = parent.m_aRightBorderLine.Clone();
+      right =
+        (this.GetBorderWidth(this.m_aInheritedRightBorderLine, true) + MIN_BORDER_DIST) & 65535;
+    }
+    const first = parent.m_aColumns[column];
+    if (!first) throw new Error("assert(HTML border column)");
+    if (first.m_bLeftBorder) {
+      this.m_bInheritedLeftBorder = true;
+      this.m_aInheritedLeftBorderLine = (
+        column === 0 ? parent.m_aLeftBorderLine : parent.m_aBorderLine
+      ).Clone();
+      left = (this.GetBorderWidth(this.m_aInheritedLeftBorderLine, true) + MIN_BORDER_DIST) & 65535;
+    }
+    if (!this.m_bInheritedLeftBorder && (this.m_bFillerTopBorder || this.m_bFillerBottomBorder))
+      left = 2 * MIN_BORDER_DIST;
+    if (!this.m_bInheritedRightBorder && (this.m_bFillerTopBorder || this.m_bFillerBottomBorder))
+      right = 2 * MIN_BORDER_DIST;
+    if (!this.m_xLayoutInfo) throw new Error("assert(HTML border layout)");
+    this.m_xLayoutInfo.SetInhBorderWidths(left, right);
+    const following = parent.m_aColumns[column + span];
+    if (column + span !== parent.m_nCols && !following)
+      throw new Error("assert(HTML following border column)");
+    this.m_bRightAllowed =
+      parent.m_bRightAllowed && (column + span === parent.m_nCols || !following?.m_bLeftBorder);
+  }
+  /** Original FRAME/RULES/group boundary assignment followed by same-owner recursive nested-content inheritance. Repeated calls retain source flags and the nested BordersSet admission. @returns Nothing. */
+  protected SetBorders(): void {
+    for (let i = 1; i < this.m_nCols; ++i) {
+      const previous = this.m_aColumns[i - 1],
+        current = this.m_aColumns[i];
+      if (!previous || !current) throw new Error("assert(HTML rule column)");
+      if (
+        this.m_eRules === R.All ||
+        this.m_eRules === R.Cols ||
+        ((this.m_eRules === R.Rows || this.m_eRules === R.Groups) && previous.IsEndOfGroup())
+      )
+        current.m_bLeftBorder = true;
+    }
+    for (let i = 0; i < this.m_nRows - 1; ++i) {
+      const row = this.m_aRows[i];
+      if (!row) throw new Error("assert(HTML rule row)");
+      if (
+        this.m_eRules === R.All ||
+        this.m_eRules === R.Rows ||
+        ((this.m_eRules === R.Cols || this.m_eRules === R.Groups) && row.IsEndOfGroup())
+      )
+        row.SetBottomBorder(true);
+    }
+    if (
+      this.m_bTopAllowed &&
+      (this.m_eFrame === F.Above || this.m_eFrame === F.HSides || this.m_eFrame === F.Box)
+    )
+      this.m_bTopBorder = true;
+    if (this.m_eFrame === F.Below || this.m_eFrame === F.HSides || this.m_eFrame === F.Box) {
+      const row = this.m_aRows[this.m_nRows - 1];
+      if (!row) throw new Error("assert(HTML final border row)");
+      row.SetBottomBorder(true);
+    }
+    if (this.m_eFrame === F.RHS || this.m_eFrame === F.VSides || this.m_eFrame === F.Box)
+      this.m_bRightBorder = true;
+    if (this.m_eFrame === F.LHS || this.m_eFrame === F.VSides || this.m_eFrame === F.Box) {
+      const column = this.m_aColumns[0];
+      if (!column) throw new Error("assert(HTML first border column)");
+      column.m_bLeftBorder = true;
+    }
+    for (let i = 0; i < this.m_nRows; ++i)
+      for (let j = 0; j < this.m_nCols; ++j) {
+        let content = this.GetCell(i, j).GetContents(),
+          first = true;
+        while (content) {
+          const table = content.GetTable();
+          if (table && !table.BordersSet()) {
+            table.InheritBorders(
+              this,
+              i,
+              j,
+              this.GetCell(i, j).GetRowSpan(),
+              first,
+              content.Next() === null,
+            );
+            table.SetBorders();
+          }
+          first = false;
+          content = content.Next();
+        }
+      }
+    this.m_bBordersSet = true;
   }
   /** Original ID. @returns String. */
   GetId(): string {

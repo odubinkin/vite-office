@@ -4,6 +4,8 @@ import type { SwHTMLTableLayoutCell } from "./htmltbl.values";
 import type { SwHTMLTableLayoutColumn } from "./htmltbl.column";
 import type { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { MIN_BORDER_DIST } from "../../../inc/swtypes";
+import type { SwTableBox } from "../table/swtable";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 
 /** Native layout owns its original grid/options. Protected visibility binds original private fields across forthcoming responsibility fragments without a second state object. */
 export class SwHTMLTableLayout {
@@ -184,6 +186,37 @@ export class SwHTMLTableLayout {
       if (!value) throw new Error("assert(layout column)");
       absolute[0] = (absolute[0] + value.GetAbsColWidth()) & 65535;
       relative[0] = (relative[0] + value.GetRelColWidth()) & 65535;
+    }
+  }
+  /** Original border contribution uses a wide sum after each side has applied its native uint16 accounting. @param min - Native minimum reference. @param max - Native maximum reference. @param absolute - Native absolute minimum reference. @param column - Start column. @param span - Column span. @param swBorders - Respect actual border minima. @returns Nothing. */
+  protected AddBorderWidth(
+    min: [number],
+    max: [number],
+    absolute: [number],
+    column: number,
+    span: number,
+    swBorders = true,
+  ): void {
+    const add =
+      this.GetLeftCellSpace(column, span, swBorders) +
+      this.GetRightCellSpace(column, span, swBorders);
+    min[0] += add;
+    max[0] += add;
+    absolute[0] += add;
+  }
+  /** Original box-width publication sums relative columns in the wider SwTwips domain and sets the actual box frame format. @param box - Actual core box. @param column - Start column. @param span - Column span. @returns Nothing. */
+  protected SetBoxWidth(box: SwTableBox, column: number, span: number): void {
+    let width = 0;
+    while (span--) {
+      const value = this.GetColumn(column++);
+      if (!value) throw new Error("assert(layout box column)");
+      width += value.GetRelColWidth();
+    }
+    const size = new SwFormatFrameSize(SwFrameSize.Variable, width, 0);
+    try {
+      box.GetFrameFormat().SetFormatAttr(size);
+    } finally {
+      size.Dispose();
     }
   }
   /** Original left spacing combines Netscape accounting and actual line minima. @param column - Start column. @param span - Native span. @param swBorders - Respect actual lines. @returns Native uint16. */

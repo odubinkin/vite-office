@@ -2705,3 +2705,15 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/swhtml.cxx, Continue prefix repair; sw/source/core/txtnode/ndtxt.cxx, JoinNext and CutImpl hard-item transfer.
 - Observation: an empty original prefix adopts the first imported paragraph collection and joins its text. CutImpl copies the source hard paragraph items but explicitly excludes RES_PARATR_LIST_LEVEL. Thus a deeply nested first list paragraph can retain the insertion prefix level zero even though the imported source had a clamped deeper level. A preceding imported body paragraph avoids this first-join case.
 - Preservation: retain original collection/join ordering and list-level exclusion. Keep separate real imports testing level clamping after a body paragraph and first-paragraph level retention. Do not silently copy the excluded item or rewrite list nesting. This is a source-state observation, not a compiled desktop defect reproduction.
+
+### WRITER319 — Nested-table background inheritance does not clear an earlier inherited brush
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::InheritBorders and SetBorders.
+- Observation: InheritBorders replaces its inherited background only if a parent source brush is found. A later call with no qualifying brush leaves the previous clone intact. SetBorders also skips a nested table whose BordersSet flag is already true, so repeating the outer operation after changing an outer background does not refresh that nested inheritance.
+- Preservation: retain conditional cloning and the source completion guard. Do not clear or refresh nested inherited brushes on repeated calls. Real parent/child grid tests distinguish own and inherited brushes and retain actual object identity; no desktop defect reproduction is claimed.
+
+### WRITER320 — RULES rows and columns also admit group separators on the opposite axis
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::SetBorders.
+- Observation: RULES=rows still creates a vertical border after a column group, and RULES=cols still creates a horizontal border after a row group. RULES=groups uses both group conditions. The source tests the opposite-axis group boundary in addition to the ordinary rows/columns rule.
+- Preservation: retain the exact OR conditions and end-of-group ownership. Do not interpret rows/cols as excluding all opposite-axis separators. Actual column-group tests cover rows/cols/groups distinctions; row-side source ordering is retained for the pending box-format consumer. This is a source-state observation without a compiled desktop defect claim.

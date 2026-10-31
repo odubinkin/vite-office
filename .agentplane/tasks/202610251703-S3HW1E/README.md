@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 290
+revision: 295
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T12:18:01.534Z"
+  updated_at: "2026-10-31T12:29:07.879Z"
   updated_by: "CODER"
-  note: "HTML39 verified checkpoint: 279 unique related cases across 23 files pass; app types, changed-source lint/format, provenance/Writer registry, boundaries, docs, size and source-tree pass. Native insertion split/snapshot/joins, actual target InsertItemSet, all-mark admission and source Cut portion order are connected. Parent remains incomplete: real text/table metrics, automatic table layout, HTML table token materialization and final current-model/filter/UI reconciliation remain required."
-  attempts: 50
+  note: "HTML40 checkpoint verified: 110 unique related cases across 5 files pass, including 22 new native table border/inheritance/frame-width cases. App types, changed-source lint/format, provenance/Writer registry, dependencies, docs, size and source-tree pass. Original FRAME/RULES/group, inherited brush/line/filler semantics and actual box frame-width publication are preserved; WRITER319-320 documented. Parent remains incomplete: native text/table metrics, automatic layout, table tokens/box materialization and final current-model/filter/UI reconciliation remain required."
+  attempts: 51
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -805,8 +808,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T12:29:07.879Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML40 checkpoint verified: 110 unique related cases across 5 files pass, including 22 new native table border/inheritance/frame-width cases. App types, changed-source lint/format, provenance/Writer registry, dependencies, docs, size and source-tree pass. Original FRAME/RULES/group, inherited brush/line/filler semantics and actual box frame-width publication are preserved; WRITER319-320 documented. Parent remains incomplete: native text/table metrics, automatic layout, table tokens/box materialization and final current-model/filter/UI reconciliation remain required."
+  -
+    type: "status"
+    at: "2026-10-31T12:29:15.332Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T12:18:11.251Z"
+doc_updated_at: "2026-10-31T12:29:15.332Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2051,6 +2067,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T12:29:07.879Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML40 checkpoint verified: 110 unique related cases across 5 files pass, including 22 new native table border/inheritance/frame-width cases. App types, changed-source lint/format, provenance/Writer registry, dependencies, docs, size and source-tree pass. Original FRAME/RULES/group, inherited brush/line/filler semantics and actual box frame-width publication are preserved; WRITER319-320 documented. Parent remains incomplete: native text/table metrics, automatic layout, table tokens/box materialization and final current-model/filter/UI reconciliation remain required.
+    Attempts: 51
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:28:47.900Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2058,6 +2104,11 @@ sections:
     - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-filter-itemset.test.ts src/sw/source/core/txtnode/secondary-hint-transfer.test.ts --maxWorkers 1. Result: pass,119cases/6files. Evidence: output/playwright/rtf-properties-native/html39-final-focused.txt. Scope: native insertion, target item restoration, Cut ownership/portion boundaries and actual Markdown imports.
     - Command: remaining swhtml*.test.ts and Markdown filter tests plus markdown-content-operations.test.ts/bookmark-name.test.ts via exact argv in html39-import-regressions-final.txt; npm run test:writer -- src/sw/source/filter/html/swhtml.language.integration.test.ts --maxWorkers 1. Result: pass for all160unique cases/17files after the documented inline-only test correction. Evidence: html39-import-regressions-final.txt and html39-language-final.txt. Scope: all affected HTML producers, callbacks, Markdown tables/list/export/config/locale, actual document marks, Worker and native RTF language transport. Total279unique cases/23files pass.
     - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: output/playwright/rtf-properties-native/html39-* logs. Scope: current source/type/format, provenance/registry and architecture gates. Whole-filter/native desktop/module parity and parent completion remain unverified.
+
+    ### HTML40 table border/inheritance checkpoint
+
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/md/mdtab.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.borders.test.ts --maxWorkers 1. Result:110unique related cases/5files pass across the documented focused run and corrected22case run. Evidence: output/playwright/rtf-properties-native/html40-focused.txt and html40-borders-final.txt. Scope: native FRAME/RULES/group assignment, real nested background/brush owners, lifecycle/repetition, actual layout column spacing and box frame-width publication; no private state or fake device metrics.
+    - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings 0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html40-* logs. Scope: type/style, source/provenance/registry and architecture gates. Parent task remains incomplete; no whole-filter or native desktop certification.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3197,6 +3248,15 @@ sections:
 
     - Final HTML39 evidence: 279 unique related cases/23files pass from html39-final-focused.txt (119/6files) plus the150 other consumer cases/16files in html39-import-regressions-final.txt and all10language cases in html39-language-final.txt (48.61s). The expanded160case run had159pass/1fail because the expectation migration accidentally added a tail to an inline-only language case; narrowed the edit back to block cases and reran all10language tests successfully. Production behavior was unchanged by that test correction. Source-backed tail/identity migrations preserve all native attribute, mark, context/disposal, language, Worker and RTF assertions; list clamping remains tested separately from WRITER318.
     - Final static checks: app native tsc noEmit exit0 (html39-types-consumers.txt); changed-source ESLint exit0 and Prettier check pass (html39-final-lint-consumers.txt/html39-final-format-check.txt). Source provenance passes1919modules (1706mapped/182browser/31infra), Writer registry exit0 with semanticViolationCount0, dependency boundaries1918runtime/10564imports/227allowededges, JSDoc4305sources, file-size4309authoredfiles and source-tree115requiredpaths/32retiredroots all pass. No full all-app test run is needed for this continuing task checkpoint. Native text/table measurement, automatic table layout, table token reading/materialization and final current-model/filter/UI capability reconciliation remain required; parent task and goal stay active. Browser open/save/autosave/recovery deviations are unchanged.
+
+    ### HTML40 native table border/inheritance checkpoint (verified checkpoint; parent incomplete)
+
+    - Previous turn is progress:5a60ab5484de committed verified native HTML insertion boundaries and target restoration. Current branch writer was clean; CODER/direct approved parent task remains active. Original htmltab.cxx SetBorders/InheritBorders/InheritVertBorders and vertical spacing now operate over actual intermediate grids and content chains. Core htmltbl.cxx AddBorderWidth and SetBoxWidth consume actual native columns and publish real box frame items. No fake text metrics, layout-pass result or HTML table materialization is introduced.
+    - Initial focused command (exact argv in html40-focused.txt):106pass/4fail across5files,52.93s. All4failures are fresh inherited-background fixtures calling InheritVertBorders before real layout construction. Native MakeTable creates that layout before vertical inheritance; fix fixture order with actual outer.CreateLayoutInfo, keeping production preconditions. Earlier read-only guesses used nonexistent frmats.ts/swtable.box.ts and a zsh glob with no matches; actual file inventory identifies swtable-boxline.ts and sw/inc/fmtfsize.ts. Route recomputed; no network or outside-repository access is required.
+    - Source private border/width routines should stay nonpublic in production. Protected responsibility access follows existing private-source field/method fragments; test-derived forwarders may expose actual operations without replacing any source result, owner or field. The final token reader/box materialization and real text/table automatic layout remain required before parent completion.
+
+    - Final HTML40 verification:22new native border/inheritance/layout-frame cases pass (html40-borders-final.txt,22.01s), plus88unchanged table options/grid/values/Markdown table cases passed in html40-focused.txt, total110unique cases/5files. Fresh fixtures now create the actual outer/nested layouts before InheritVertBorders, matching MakeTable source order; native layout precondition and original results are preserved. Test-only subclasses expose protected source operations solely by forwarding to super; they do not set private fields, substitute native operations, synthesize measurements or add graph owners.
+    - Static evidence: app native tsc noEmit exit0 (html40-types-final.txt), changed-source ESLint exit0 and Prettier check pass (html40-lint.txt/html40-format.txt); source provenance1919modules/1706mapped/182browser/31infra pass; Writer registry exit0; module boundaries1918runtime/10567imports/227allowededges pass; JSDoc4306sources pass; size4310authoredfiles and source-tree115requiredpaths/32retiredroots pass; git diff --check pass. Source-source-state findings319conditional inherited-background retention and320cross-axis RULES group edges are documented and preserved. Horizontal row/edge state retains source code order; its actual box-format consumer, real text/table measurement and automatic table passes, table tokens/materialization and final current-model/filter/UI reconciliation remain pending. No broad module, private/public C++ API, ABI, desktop or parent completion is claimed. Browser file UI/autosave/recovery deviations remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -4452,6 +4512,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T12:29:07.879Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML40 checkpoint verified: 110 unique related cases across 5 files pass, including 22 new native table border/inheritance/frame-width cases. App types, changed-source lint/format, provenance/Writer registry, dependencies, docs, size and source-tree pass. Original FRAME/RULES/group, inherited brush/line/filler semantics and actual box frame-width publication are preserved; WRITER319-320 documented. Parent remains incomplete: native text/table metrics, automatic layout, table tokens/box materialization and final current-model/filter/UI reconciliation remain required.
+Attempts: 51
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:28:47.900Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -4459,6 +4549,11 @@ DecisionContextRef:
 - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/txtnode/native-join-boundaries.test.ts src/sw/source/core/doc/native-filter-itemset.test.ts src/sw/source/core/txtnode/secondary-hint-transfer.test.ts --maxWorkers 1. Result: pass,119cases/6files. Evidence: output/playwright/rtf-properties-native/html39-final-focused.txt. Scope: native insertion, target item restoration, Cut ownership/portion boundaries and actual Markdown imports.
 - Command: remaining swhtml*.test.ts and Markdown filter tests plus markdown-content-operations.test.ts/bookmark-name.test.ts via exact argv in html39-import-regressions-final.txt; npm run test:writer -- src/sw/source/filter/html/swhtml.language.integration.test.ts --maxWorkers 1. Result: pass for all160unique cases/17files after the documented inline-only test correction. Evidence: html39-import-regressions-final.txt and html39-language-final.txt. Scope: all affected HTML producers, callbacks, Markdown tables/list/export/config/locale, actual document marks, Worker and native RTF language transport. Total279unique cases/23files pass.
 - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: output/playwright/rtf-properties-native/html39-* logs. Scope: current source/type/format, provenance/registry and architecture gates. Whole-filter/native desktop/module parity and parent completion remain unverified.
+
+### HTML40 table border/inheritance checkpoint
+
+- Command: npm run test:writer -- src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/md/mdtab.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.borders.test.ts --maxWorkers 1. Result:110unique related cases/5files pass across the documented focused run and corrected22case run. Evidence: output/playwright/rtf-properties-native/html40-focused.txt and html40-borders-final.txt. Scope: native FRAME/RULES/group assignment, real nested background/brush owners, lifecycle/repetition, actual layout column spacing and box frame-width publication; no private state or fake device metrics.
+- Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source eslint --max-warnings 0 and prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html40-* logs. Scope: type/style, source/provenance/registry and architecture gates. Parent task remains incomplete; no whole-filter or native desktop certification.
 
 ## Rollback Plan
 
@@ -5602,3 +5697,12 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 
 - Final HTML39 evidence: 279 unique related cases/23files pass from html39-final-focused.txt (119/6files) plus the150 other consumer cases/16files in html39-import-regressions-final.txt and all10language cases in html39-language-final.txt (48.61s). The expanded160case run had159pass/1fail because the expectation migration accidentally added a tail to an inline-only language case; narrowed the edit back to block cases and reran all10language tests successfully. Production behavior was unchanged by that test correction. Source-backed tail/identity migrations preserve all native attribute, mark, context/disposal, language, Worker and RTF assertions; list clamping remains tested separately from WRITER318.
 - Final static checks: app native tsc noEmit exit0 (html39-types-consumers.txt); changed-source ESLint exit0 and Prettier check pass (html39-final-lint-consumers.txt/html39-final-format-check.txt). Source provenance passes1919modules (1706mapped/182browser/31infra), Writer registry exit0 with semanticViolationCount0, dependency boundaries1918runtime/10564imports/227allowededges, JSDoc4305sources, file-size4309authoredfiles and source-tree115requiredpaths/32retiredroots all pass. No full all-app test run is needed for this continuing task checkpoint. Native text/table measurement, automatic table layout, table token reading/materialization and final current-model/filter/UI capability reconciliation remain required; parent task and goal stay active. Browser open/save/autosave/recovery deviations are unchanged.
+
+### HTML40 native table border/inheritance checkpoint (verified checkpoint; parent incomplete)
+
+- Previous turn is progress:5a60ab5484de committed verified native HTML insertion boundaries and target restoration. Current branch writer was clean; CODER/direct approved parent task remains active. Original htmltab.cxx SetBorders/InheritBorders/InheritVertBorders and vertical spacing now operate over actual intermediate grids and content chains. Core htmltbl.cxx AddBorderWidth and SetBoxWidth consume actual native columns and publish real box frame items. No fake text metrics, layout-pass result or HTML table materialization is introduced.
+- Initial focused command (exact argv in html40-focused.txt):106pass/4fail across5files,52.93s. All4failures are fresh inherited-background fixtures calling InheritVertBorders before real layout construction. Native MakeTable creates that layout before vertical inheritance; fix fixture order with actual outer.CreateLayoutInfo, keeping production preconditions. Earlier read-only guesses used nonexistent frmats.ts/swtable.box.ts and a zsh glob with no matches; actual file inventory identifies swtable-boxline.ts and sw/inc/fmtfsize.ts. Route recomputed; no network or outside-repository access is required.
+- Source private border/width routines should stay nonpublic in production. Protected responsibility access follows existing private-source field/method fragments; test-derived forwarders may expose actual operations without replacing any source result, owner or field. The final token reader/box materialization and real text/table automatic layout remain required before parent completion.
+
+- Final HTML40 verification:22new native border/inheritance/layout-frame cases pass (html40-borders-final.txt,22.01s), plus88unchanged table options/grid/values/Markdown table cases passed in html40-focused.txt, total110unique cases/5files. Fresh fixtures now create the actual outer/nested layouts before InheritVertBorders, matching MakeTable source order; native layout precondition and original results are preserved. Test-only subclasses expose protected source operations solely by forwarding to super; they do not set private fields, substitute native operations, synthesize measurements or add graph owners.
+- Static evidence: app native tsc noEmit exit0 (html40-types-final.txt), changed-source ESLint exit0 and Prettier check pass (html40-lint.txt/html40-format.txt); source provenance1919modules/1706mapped/182browser/31infra pass; Writer registry exit0; module boundaries1918runtime/10567imports/227allowededges pass; JSDoc4306sources pass; size4310authoredfiles and source-tree115requiredpaths/32retiredroots pass; git diff --check pass. Source-source-state findings319conditional inherited-background retention and320cross-axis RULES group edges are documented and preserved. Horizontal row/edge state retains source code order; its actual box-format consumer, real text/table measurement and automatic table passes, table tokens/materialization and final current-model/filter/UI reconciliation remain pending. No broad module, private/public C++ API, ABI, desktop or parent completion is claimed. Browser file UI/autosave/recovery deviations remain unchanged.
