@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 150
+revision: 153
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T14:57:54.284Z"
+  updated_at: "2026-10-31T15:11:16.665Z"
   updated_by: "CODER"
-  note: "Registration checkpoint passes full native normal/sanitized streams, 18 owner tests, 197 CSV cases, browser/build/type/lint and contracts. Full CSV bootstrap, EditEngine/DocImport and NatNum12 dispatch remain incomplete."
-  attempts: 35
+  note: "Original environment lifetime checkpoint passes four full native normal-ASan/UBSan streams, 22 owner/197 CSV/50 boundary cases, browser/build/type/lint/contracts. Public environment/mapping/bootstrap, multiline EditEngine/DocImport and NatNum12 consumers remain incomplete."
+  attempts: 36
 commit: null
 comments:
   -
@@ -259,6 +259,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue the approved native CSV goal after verified original environment registration checkpoint; real application bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
+  -
+    author: "CODER"
+    body: "Start: Continue approved CSV goal after source-verified DefaultEnvironment strong/weak lifetime and weak-registry checkpoint; public environment/mapping/bootstrap and remaining document/NatNum12 consumers are pending."
 events:
   -
     type: "status"
@@ -888,8 +891,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue the approved native CSV goal after verified original environment registration checkpoint; real application bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
+  -
+    type: "verify"
+    at: "2026-10-31T15:11:16.665Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original environment lifetime checkpoint passes four full native normal-ASan/UBSan streams, 22 owner/197 CSV/50 boundary cases, browser/build/type/lint/contracts. Public environment/mapping/bootstrap, multiline EditEngine/DocImport and NatNum12 consumers remain incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T15:11:24.213Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue approved CSV goal after source-verified DefaultEnvironment strong/weak lifetime and weak-registry checkpoint; public environment/mapping/bootstrap and remaining document/NatNum12 consumers are pending."
 doc_version: 3
-doc_updated_at: "2026-10-31T14:58:00.554Z"
+doc_updated_at: "2026-10-31T15:11:24.213Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1959,6 +1975,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T15:11:16.665Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original environment lifetime checkpoint passes four full native normal-ASan/UBSan streams, 22 owner/197 CSV/50 boundary cases, browser/build/type/lint/contracts. Public environment/mapping/bootstrap, multiline EditEngine/DocImport and NatNum12 consumers remain incomplete.
+    Attempts: 36
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:11:03.502Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2982,6 +3028,28 @@ sections:
       Result: pass;production build and1 real browser CSV scenario,4.4s. Evidence: environment-build-final.log and environment-browser.log. Initial Vite invocation incorrectly used --root; corrected to the existing app directory with no config changes.
     - Repeated verifyMddsSources twice: pass, identical original archive/header hashes and patched scratch source results. Vendor references remain untouched. The five downloaded archives and all research/build evidence stay inside owned output directories and outside the commit.
     - Overall CSV task remains rework/DOING and goal stays active. Remaining: real public current/source environment/mapping orchestration and source process/application ServiceManager installation, native multiline EditEngine/DocImport integration, NatNum12 casing/word-service/formatter dispatch, and final CSV feature audit. Existing basic CSV UI is already wired; core completion is not claimed. Full-suite cadence unchanged: no tenth completed AgentPlane task reached, so only related tests run.
+
+    ### Original DefaultEnvironment lifetime and actual weak-registry integration
+
+    - Previous goal turn classified as progress: commit 30d941cc7 closed original registration kernels and restored the real native compiler/dependency reference path. Current authoritative checkout remains calc, task AQF9AG approved/DOING; no unrelated tracked changes at startup.
+    - Implemented original defenv_acquire, defenv_release, defenv_acquireWeak, defenv_releaseWeak, defenv_harden and complete no-op defenv_dispose in lbenv.ts. Actual OSL atomic operations use addressed signed32 count storage. Preserve weak-before-strong acquire, last-strong environmentDisposing before weak decrement/destruction, release/null of old harden output before the shutdown guard, rejected dead-record tentative count reset and successful weak increment before publication. No default environment constructor, invocation/purpose engine or production provider is synthesized.
+    - Native destructor binding follows the original destructor body releasing pTypeName, then reverse member destruction: owned OID keys before the trivial pointer map. Pointer-map destruction does not implicitly delete ObjectEntry pointees. Final source review corrected this member order before the final focused replay. CALC-457 records and preserves the upstream registry-shutdown flag/harden interaction; no source-absent dispose is added.
+    - Native reuse checker now derives terminal command count from all committed witness modes: 211 actual build/link commands plus two original executions per mode. Four-mode bases retain the previous exact219 requirement; the current three-mode full reference base requires exact217. All202 full-source compilations,101 per instrumentation variant, original hashes, positive command exits, generated headers, loader/feature probes, all artifacts and every full normal/ASan witness remain mandatory. No validation or instrumentation gate disabled.
+    - Command: node scripts/uno-environment-lifetime-native-probe.mjs --write
+      Result: pass. Evidence: environment-lifetime-native-final.log and ignored output/playwright/uno-environment-lifetime-native/manifest.json. Scope: unchanged lbenv.cxx TU,443 complete source blobs, verified genuine desktop dependencies, diagnostic-free identical normal/ASan-UBSan streams live=836,replace=744,reentrant=608,registry=816 bytes. Fourth mode integrates the actual weak registry with actual default strong/weak callbacks: live lookup, dead harden rejection and replacement releasing the old final weak ownership. Leak detection remains disabled. Full environment constructor/invocation/application bootstrap, physical memory/threads/noexcept termination and whole-module QA remain uncertified.
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-lifetime.test.ts src/cppu/source/uno/lbenv-registration-native.test.ts src/cppu/source/uno/lbenv-registration.test.ts src/cppu/source/uno/lbenv.test.ts src/cppu/source/uno/lbenv-registry.test.ts --maxWorkers=1
+      Result: pass;5files/22cases. Evidence: environment-lifetime-tests-final.log and final source-reviewed environment-lifetime-tests-reviewed.log. Scope: full byte-for-byte native lifetime/registration/value streams and source ownership/Unicode/NUL registry tests. Prepared enclosing records are test inputs only, not production context/environment providers.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8files/197cases,37.29s. Evidence: environment-lifetime-csv.log. Scope: existing CSV options, native-slice parsing/recognition/date/export and existing document/file UI regression.
+    - Command: npm run typecheck; npm run lint; focused eslint of exact changed source/test/native scripts
+      Result: pass. Evidence: environment-lifetime-typecheck-fixed.log, environment-lifetime-lint-final.log, environment-lifetime-focused-lint-final.log, environment-lifetime-source-lint-reviewed.log. Initial focused lint rejected an unused no-op parameter, corrected with the original unconsumed argument binding. TypeScript conservatively kept an out-pointer null after getEnvironment; erased caller-precondition cast now reflects the original successful native lookup. No runtime branch/assertion, test expectation or lint rule changed.
+    - Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources
+      Result: pass. Evidence: environment-lifetime-dependencies.log, environment-lifetime-provenance.log, environment-lifetime-parity.log, environment-lifetime-shared-parity.log, environment-lifetime-resources.log.1944 runtime modules,464 commands/11menus/17dispositions. Existing semantic readiness flags remain unverified.
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/native-inline-sequence-boundary.test.ts --maxWorkers=1; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; prettier --check exact authored paths; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass;50 boundary cases in2files,4351 authored JSDoc files; size/format/routing/doctor OK. Evidence: environment-lifetime-boundary-tests.log, environment-lifetime-docs.log, environment-lifetime-size.log, environment-lifetime-format-check.log, environment-lifetime-routing.log, environment-lifetime-doctor.log. No boundary or size exceptions added.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;production bundle and1 real browser CSV import/primary ODS save/active-sheet export scenario,6.3s. Evidence: environment-lifetime-build.log and environment-lifetime-browser.log.
+    - No network or vendor changes. Native experiments remain outside the intentional commit. Full-suite cadence unchanged: same open executable CSV task, not the tenth completed AgentPlane task; only related tests run. Whole goal remains active and task verification remains rework/DOING: public Environment/Mapping/stack and ServiceManager/application bootstrap, original multiline EditEngine/DocImport and full NatNum12 casing/word-service/formatter dispatch remain required. No full native CSV or UI-only readiness claim.
 id_source: "generated"
 ---
 ## Summary
@@ -4060,6 +4128,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T15:11:16.665Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original environment lifetime checkpoint passes four full native normal-ASan/UBSan streams, 22 owner/197 CSV/50 boundary cases, browser/build/type/lint/contracts. Public environment/mapping/bootstrap, multiline EditEngine/DocImport and NatNum12 consumers remain incomplete.
+Attempts: 36
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:11:03.502Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5087,3 +5185,25 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass;production build and1 real browser CSV scenario,4.4s. Evidence: environment-build-final.log and environment-browser.log. Initial Vite invocation incorrectly used --root; corrected to the existing app directory with no config changes.
 - Repeated verifyMddsSources twice: pass, identical original archive/header hashes and patched scratch source results. Vendor references remain untouched. The five downloaded archives and all research/build evidence stay inside owned output directories and outside the commit.
 - Overall CSV task remains rework/DOING and goal stays active. Remaining: real public current/source environment/mapping orchestration and source process/application ServiceManager installation, native multiline EditEngine/DocImport integration, NatNum12 casing/word-service/formatter dispatch, and final CSV feature audit. Existing basic CSV UI is already wired; core completion is not claimed. Full-suite cadence unchanged: no tenth completed AgentPlane task reached, so only related tests run.
+
+### Original DefaultEnvironment lifetime and actual weak-registry integration
+
+- Previous goal turn classified as progress: commit 30d941cc7 closed original registration kernels and restored the real native compiler/dependency reference path. Current authoritative checkout remains calc, task AQF9AG approved/DOING; no unrelated tracked changes at startup.
+- Implemented original defenv_acquire, defenv_release, defenv_acquireWeak, defenv_releaseWeak, defenv_harden and complete no-op defenv_dispose in lbenv.ts. Actual OSL atomic operations use addressed signed32 count storage. Preserve weak-before-strong acquire, last-strong environmentDisposing before weak decrement/destruction, release/null of old harden output before the shutdown guard, rejected dead-record tentative count reset and successful weak increment before publication. No default environment constructor, invocation/purpose engine or production provider is synthesized.
+- Native destructor binding follows the original destructor body releasing pTypeName, then reverse member destruction: owned OID keys before the trivial pointer map. Pointer-map destruction does not implicitly delete ObjectEntry pointees. Final source review corrected this member order before the final focused replay. CALC-457 records and preserves the upstream registry-shutdown flag/harden interaction; no source-absent dispose is added.
+- Native reuse checker now derives terminal command count from all committed witness modes: 211 actual build/link commands plus two original executions per mode. Four-mode bases retain the previous exact219 requirement; the current three-mode full reference base requires exact217. All202 full-source compilations,101 per instrumentation variant, original hashes, positive command exits, generated headers, loader/feature probes, all artifacts and every full normal/ASan witness remain mandatory. No validation or instrumentation gate disabled.
+- Command: node scripts/uno-environment-lifetime-native-probe.mjs --write
+  Result: pass. Evidence: environment-lifetime-native-final.log and ignored output/playwright/uno-environment-lifetime-native/manifest.json. Scope: unchanged lbenv.cxx TU,443 complete source blobs, verified genuine desktop dependencies, diagnostic-free identical normal/ASan-UBSan streams live=836,replace=744,reentrant=608,registry=816 bytes. Fourth mode integrates the actual weak registry with actual default strong/weak callbacks: live lookup, dead harden rejection and replacement releasing the old final weak ownership. Leak detection remains disabled. Full environment constructor/invocation/application bootstrap, physical memory/threads/noexcept termination and whole-module QA remain uncertified.
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-lifetime.test.ts src/cppu/source/uno/lbenv-registration-native.test.ts src/cppu/source/uno/lbenv-registration.test.ts src/cppu/source/uno/lbenv.test.ts src/cppu/source/uno/lbenv-registry.test.ts --maxWorkers=1
+  Result: pass;5files/22cases. Evidence: environment-lifetime-tests-final.log and final source-reviewed environment-lifetime-tests-reviewed.log. Scope: full byte-for-byte native lifetime/registration/value streams and source ownership/Unicode/NUL registry tests. Prepared enclosing records are test inputs only, not production context/environment providers.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8files/197cases,37.29s. Evidence: environment-lifetime-csv.log. Scope: existing CSV options, native-slice parsing/recognition/date/export and existing document/file UI regression.
+- Command: npm run typecheck; npm run lint; focused eslint of exact changed source/test/native scripts
+  Result: pass. Evidence: environment-lifetime-typecheck-fixed.log, environment-lifetime-lint-final.log, environment-lifetime-focused-lint-final.log, environment-lifetime-source-lint-reviewed.log. Initial focused lint rejected an unused no-op parameter, corrected with the original unconsumed argument binding. TypeScript conservatively kept an out-pointer null after getEnvironment; erased caller-precondition cast now reflects the original successful native lookup. No runtime branch/assertion, test expectation or lint rule changed.
+- Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources
+  Result: pass. Evidence: environment-lifetime-dependencies.log, environment-lifetime-provenance.log, environment-lifetime-parity.log, environment-lifetime-shared-parity.log, environment-lifetime-resources.log.1944 runtime modules,464 commands/11menus/17dispositions. Existing semantic readiness flags remain unverified.
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/native-inline-sequence-boundary.test.ts --maxWorkers=1; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; prettier --check exact authored paths; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass;50 boundary cases in2files,4351 authored JSDoc files; size/format/routing/doctor OK. Evidence: environment-lifetime-boundary-tests.log, environment-lifetime-docs.log, environment-lifetime-size.log, environment-lifetime-format-check.log, environment-lifetime-routing.log, environment-lifetime-doctor.log. No boundary or size exceptions added.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;production bundle and1 real browser CSV import/primary ODS save/active-sheet export scenario,6.3s. Evidence: environment-lifetime-build.log and environment-lifetime-browser.log.
+- No network or vendor changes. Native experiments remain outside the intentional commit. Full-suite cadence unchanged: same open executable CSV task, not the tenth completed AgentPlane task; only related tests run. Whole goal remains active and task verification remains rework/DOING: public Environment/Mapping/stack and ServiceManager/application bootstrap, original multiline EditEngine/DocImport and full NatNum12 casing/word-service/formatter dispatch remain required. No full native CSV or UI-only readiness claim.

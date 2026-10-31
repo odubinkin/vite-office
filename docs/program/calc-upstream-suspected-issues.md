@@ -5033,3 +5033,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::disposing`.
 - Observation: when m_xSMgr exists, the per-entry disposal loop skips names that start with the manager singleton, including longer unrelated names, rather than only the exact manager key.
 - Preserve the prefix predicate and later map destruction. Tests verify that a component under a longer matching key is released without an added explicit dispose call.
+
+### CALC-457 — Registry shutdown prevents default-environment hardening before explicit disposal
+
+- Source: `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::~EnvironmentsData` and `defenv_harden`.
+- Observation: the registry destructor first sets `isDisposing = true`, then tries to harden each weak environment before calling its explicit dispose callback. The default environment's harden callback returns immediately when the same registry flag is true, so these entries cannot reach that explicit dispose path. Other environment implementations may use different harden callbacks.
+- Preserve the flag assignment, guard and callback order. The original native lifetime replay verifies shutdown hardening releases/nulls an old output but neither increments the target counts nor returns the target. No extra dispose call is introduced.

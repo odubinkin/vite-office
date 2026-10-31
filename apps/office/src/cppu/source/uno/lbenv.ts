@@ -20,6 +20,7 @@ import {
   type rtl_uStringSlot,
 } from "../../../sal/inc/rtl/ustring.h";
 import { StringConcat } from "../../../sal/inc/rtl/stringconcat";
+import { osl_atomic_increment, osl_atomic_decrement } from "../../../sal/inc/osl/interlck";
 /** Original pointer-or-length-and-terminated-name equality. @param first - Borrowed description. @param second - Borrowed description. @returns Original equality. */
 export function td_equals(first: I, second: I): boolean {
   return (
@@ -193,6 +194,64 @@ export class ObjectEntry {
 export type DefaultEnvironmentRegistration = ObjectEntryEnvironment & {
   aOId2ObjectMap: Map<OUString, ObjectEntry | null>;
 };
+/** Borrowed original DefaultEnvironment count fields use actual addressed signed32 storage. No constructor or binding initialization is supplied by this projection. */
+export type DefaultEnvironmentLifetime = DefaultEnvironmentRegistration & {
+  /** Original strong-reference count address. */ nRef: Int32Array;
+  /** Original weak-reference count address. */ nWeakRef: Int32Array;
+};
+/** Original native derived-to-embedded-base cast, without adding a second ownership record. @param env - Original embedded base. @returns Containing record. */
+function defaultEnvironment(env: uno_Environment): DefaultEnvironmentLifetime {
+  return env.pExtEnv as DefaultEnvironmentLifetime;
+}
+/** Original destructor body followed by reverse trivial-map member destruction; pointed-to ObjectEntry objects are not deleted by native pointer-map destruction. @param env - Original environment at its last weak release. @returns Nothing. */
+function deleteDefaultEnvironment(env: uno_Environment): void {
+  rtl_uString_release(env.pTypeName as rtl_uString);
+  const that = defaultEnvironment(env);
+  for (const name of that.aOId2ObjectMap.keys()) name.dispose();
+  that.aOId2ObjectMap.clear();
+  that.aPtr2ObjectMap.clear();
+}
+/** Original strong acquisition increments weak ownership before strong ownership. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_acquire(env: uno_Environment): void {
+  const that = defaultEnvironment(env);
+  osl_atomic_increment(that.nWeakRef);
+  osl_atomic_increment(that.nRef);
+}
+/** Original last-strong callback runs before weak decrement and possible native destruction; debug-only leftover-entry diagnostics do not change the source release behavior. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_release(env: uno_Environment): void {
+  const that = defaultEnvironment(env);
+  if (!osl_atomic_decrement(that.nRef)) {
+    if (env.environmentDisposing) env.environmentDisposing(env);
+  }
+  if (!osl_atomic_decrement(that.nWeakRef)) deleteDefaultEnvironment(env);
+}
+/** Original weak acquisition does not affect the strong count. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_acquireWeak(env: uno_Environment): void {
+  osl_atomic_increment(defaultEnvironment(env).nWeakRef);
+}
+/** Original final weak release invokes the real destructor body and native member destruction. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_releaseWeak(env: uno_Environment): void {
+  if (!osl_atomic_decrement(defaultEnvironment(env).nWeakRef)) deleteDefaultEnvironment(env);
+}
+/** Original hardening releases/nulls the old output before the shutdown guard and rejects dead environments by resetting the tentative strong increment. @param output - Actual inout strong pointer. @param env - Borrowed weak environment. @returns Nothing. */
+export function defenv_harden(output: [uno_Environment | null], env: uno_Environment): void {
+  if (output[0]) {
+    (output[0].release as NonNullable<uno_Environment["release"]>)(output[0]);
+    output[0] = null;
+  }
+  if (theEnvironmentsData().isDisposing) return;
+  const that = defaultEnvironment(env);
+  if (osl_atomic_increment(that.nRef) === 1) {
+    that.nRef[0] = 0;
+    return;
+  }
+  osl_atomic_increment(that.nWeakRef);
+  output[0] = env;
+}
+/** Complete original no-op dispose body; environmentDisposing belongs only to the last strong release. @param env - Unconsumed original argument. @returns Nothing. */
+export function defenv_dispose(env: uno_Environment): void {
+  void env;
+}
 /** Original unordered-map lookup over the actual owned Unicode keys. Native bucket order/capacity are not represented. @param map - Actual source OID map. @param oid - Borrowed exact identifier. @returns Matching owned key or undefined. */
 function objectKey(
   map: ReadonlyMap<OUString, ObjectEntry | null>,
