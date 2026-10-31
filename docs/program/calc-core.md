@@ -4073,3 +4073,19 @@ before their source temporaries are released.
 This supplies the original field-conversion boundary. It does not enable
 NatNum12 date output: original NumberText/casing/word service installation and
 spellout call placement remain pending. No complete native module claim.
+
+## Original ICU binary trie loading for word rules
+
+The consumed ICU UCPTrie module now includes original binary construction. It
+borrows the actual aligned serialized storage, validates the original signature,
+options, requested type/width and sizes, and preserves status/output precedence.
+The native witness uses ICU's mutable trie builder and serializer, with both
+trie types and all value widths. It directly compares 6,684,684 scalar values
+and records original descriptor/error observations; browser unit tests retain
+those fixtures and shared-storage checks.
+
+This prepares the original RBBI data dependency required by LibreOffice's custom
+word rules. Rule-data wrappers, boundary caches, dictionary engines and title
+service/bootstrap remain pending. Managed descriptor allocation does not claim
+native OOM/free ABI parity. No segmentation heuristic or substitute service is
+introduced.

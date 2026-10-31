@@ -14,10 +14,12 @@
     "upstreamSymbols": [
       "UCPTrie",
       "UCPTrieType",
-      "UCPTrieValueWidth"
+      "UCPTrieValueWidth",
+      "ucptrie_openFromBinary"
     ],
     "preservedResponsibilities": [
-      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted."
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "Original ICU78.3 ucptrie_openFromBinary preserves incoming failure/warning precedence, aligned borrowed binary storage, signature/options/type/width validation, computed data/index offsets and lengths, null-value fallback, zero descriptor reserved fields and untouched actual-length output on failure. Native mutable trie builder/serializer and original common library provide six frozen fixtures for both types/all widths. Native probe directly compares 6684684 scalar results and descriptor fields; twelve focused cases also replay72 original status/rejection observations and verify shared backing storage. Descriptor allocation is managed by JavaScript; native OOM/free ABI and complete RBBI/break/title services remain unverified."
     ],
     "omittedResponsibilities": [
       "Full native formatted-cell script cache,UNO/service factory graph,device metrics and rich/wrapped/rotated/merged layout remain unported.",
@@ -31,12 +33,20 @@
         {
           "path": "apps/office/src/external/icu/source/common/unicode/ucptrie.ts",
           "marker": "UCPTrie"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucptrie.binary.test.ts",
+          "marker": "opens actual type"
         }
       ],
       "upstream": [
         {
           "path": "vendor/icu-reference/source/common/unicode/ucptrie.h",
           "marker": "UCPTrie"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/ucptrie.h",
+          "marker": "ucptrie_openFromBinary"
         }
       ]
     }
