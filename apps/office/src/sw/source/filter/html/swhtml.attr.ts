@@ -269,6 +269,8 @@ export class HTMLAttr {
   /** Original destructor releases this cloned item, never borrowed chain links; node indices use existing identity wrappers. @returns Nothing. */
   public SourceDispose(): void {
     this.m_pItem.Dispose();
+    this.m_nStartPara.Dispose();
+    this.m_nEndPara.Dispose();
   }
   /** Clears the pending chain without touching its owners. @returns Nothing. */
   public ClearPrev(): void {

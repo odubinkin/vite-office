@@ -230,6 +230,7 @@ export class SwHTMLParser extends HTMLParser {
   SourceDispose(): void {
     this.m_pTargetCharAttrs?.Dispose();
     this.m_pTargetCharAttrs = null;
+    this.m_pSttNdIdx?.Dispose();
     this.m_pSttNdIdx = null;
     for (const box of this.m_aOrphanedTableBoxes.splice(0)) box.Dispose();
     this.m_pCSS1Parser.SourceDispose();

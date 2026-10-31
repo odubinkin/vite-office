@@ -4,7 +4,7 @@
 
 import { goNext, goPrevious } from "../docnode/nodes.navigation";
 import { Ring } from "../../../inc/ring";
-import { SwContentNode, type SwNode } from "../docnode/node";
+import { SwContentNode, SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
@@ -13,18 +13,32 @@ import {
   type SwContentIndexOwnerKind,
 } from "../bastyp/index";
 
-/** Tracks a node through structural array changes by retaining its object identity. */
+/** Native node index registers with its actual node and follows original RemoveNode correction as well as insertion/movement identity. */
 export class SwNodeIndex {
   private node: SwNode;
+  private readonly reference = new WeakRef(this);
 
   /**
    * Creates an index for an existing node or one current array offset.
-   * @param nodeOrNodes - Existing node or owning node array.
-   * @param index - Optional current offset in nodeOrNodes.
+   * @param nodeOrNodes - Existing node, copied native index or owning node array.
+   * @param index - Native relative node/index offset or absolute array offset, default0.
    * @returns Nothing; initializes this index.
    */
-  public constructor(nodeOrNodes: SwNode | SwNodes, index?: number) {
-    this.node = index === undefined ? (nodeOrNodes as SwNode) : (nodeOrNodes as SwNodes).at(index);
+  public constructor(nodeOrNodes: SwNode | SwNodes | SwNodeIndex, index = 0) {
+    this.node = SwNodeIndex.ResolveNode(nodeOrNodes, index);
+    this.node.RegisterNodeIndex(this.reference);
+  }
+  /** Original node/array/copy overloads resolve the same actual node before registration. @param origin - Native node, node array or copied index. @param offset - Original relative offset for node/index, absolute for array. @returns Actual node. */
+  private static ResolveNode(origin: SwNode | SwNodes | SwNodeIndex, offset: number): SwNode {
+    if (origin instanceof SwNodeIndex)
+      return offset ? origin.GetNodes().at(origin.GetIndex() + offset) : origin.GetNode();
+    if (origin instanceof SwNode)
+      return offset ? origin.GetNodes().at(origin.GetIndex() + offset) : origin;
+    return origin.at(offset);
+  }
+  /** Original owning array is resolved from the current actual node. @returns Borrowed node array. */
+  public GetNodes(): SwNodes {
+    return this.node.GetNodes();
   }
 
   /** Returns the current node array offset. @returns Current array offset. */
@@ -37,9 +51,18 @@ export class SwNodeIndex {
     return this.node;
   }
 
-  /** Reassigns this registered-style index to another node. @param node - New indexed node. @returns Nothing. */
-  public Assign(node: SwNode): void {
+  /** Original node/index/array assignment unlinks before registering the resolved target. @param origin - New native node, copied index or node array. @param offset - Relative node/index or absolute array offset. @returns This original index by reference. */
+  public Assign(origin: SwNode | SwNodes | SwNodeIndex, offset = 0): this {
+    const node = SwNodeIndex.ResolveNode(origin, offset);
+    if (node === this.node) return this;
+    this.node.DeRegisterNodeIndex(this.reference);
     this.node = node;
+    this.node.RegisterNodeIndex(this.reference);
+    return this;
+  }
+  /** Original index destructor unlinks only this borrowed index, never its node. @returns Nothing. */
+  public Dispose(): void {
+    this.node.DeRegisterNodeIndex(this.reference);
   }
 }
 
@@ -128,6 +151,7 @@ export class SwPosition {
   /** Explicitly unregisters the content position. @returns Nothing. */
   public Dispose(): void {
     this.nContent.Dispose();
+    this.nNode.Dispose();
   }
 
   /** Creates an independent registered position on the same node. @param ownerKind - Optional owner override. @returns Cloned position. */

@@ -25,6 +25,36 @@ export type SwNodeType = "end" | "start" | "text";
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
   private m_bIgnoreDontExpand = false;
+  // Original m_vIndices is a borrowed ring. Weak references retain that lifetime
+  // boundary in JavaScript without making every temporary index a node-owned object.
+  private readonly m_vIndices = new Set<WeakRef<SwNodeIndex>>();
+  private readonly nodeIndexFinalizers = new FinalizationRegistry<WeakRef<SwNodeIndex>>(
+    /** Releases only a borrowed reference when its JavaScript index is collected. Explicit native Dispose/Assign already unlink synchronously. @param reference - Collected index reference. @returns Nothing. */ (
+      reference,
+    ) => {
+      this.m_vIndices.delete(reference);
+    },
+  );
+  /** Original node-index registration across the TypeScript owner split. @param reference - Borrowed native index reference. @returns Nothing. */
+  RegisterNodeIndex(reference: WeakRef<SwNodeIndex>): void {
+    this.m_vIndices.add(reference);
+    const index = reference.deref();
+    if (index) this.nodeIndexFinalizers.register(index, reference, reference);
+  }
+  /** Original node-index unlink on reassignment/destruction. @param reference - Registered borrowed reference. @returns Nothing. */
+  DeRegisterNodeIndex(reference: WeakRef<SwNodeIndex>): void {
+    this.m_vIndices.delete(reference);
+    this.nodeIndexFinalizers.unregister(reference);
+  }
+  /** Original RemoveNode index correction assigns each live index to the first following node before removal. Assignment unlinks it from this owner. @param target - Actual first surviving node. @returns Nothing. */
+  MoveNodeIndicesTo(target: SwNode): void {
+    if (target === this) return;
+    for (const reference of this.m_vIndices) {
+      const index = reference.deref();
+      if (index) index.Assign(target);
+      else this.m_vIndices.delete(reference);
+    }
+  }
 
   /**
    * Creates a node owned by one SwNodes array.

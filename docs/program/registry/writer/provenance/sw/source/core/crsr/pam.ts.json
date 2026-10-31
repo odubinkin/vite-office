@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/pam-selection.test.ts",
           "marker": "global section"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-node-index-removal.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -82,6 +86,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
           "marker": "startOfGlobalSection"
+        },
+        {
+          "path": "sw/inc/ndindex.hxx",
+          "marker": "void RegisterIndex()"
         }
       ]
     },
@@ -113,7 +121,9 @@
       "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections.",
       "Leaf4586BY adds the actual consumed bChk=false content-node movement of GoNextPos/GoPreviousPos, both assigning content offset zero. These are real node moves across represented content sections; checked movement and full native range validation are not claimed.",
       "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion.",
-      "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch."
+      "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch.",
+      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
+      "The same native index owner also consumes original array/node/copy constructor overloads, relative positive/negative offsets, array absolute offsets, default0, GetNodes and node/index/array Assign overloads. Same-node assignment preserves the existing registration; cross-document native pointer assignment binds only the supplied new node. Source evidence is original ndindex.hxx, with independent real-array removal tests; unsupported arithmetic/comparison/Ring API families are not claimed."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",

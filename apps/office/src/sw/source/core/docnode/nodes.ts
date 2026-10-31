@@ -227,6 +227,7 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    this.CorrectNodeIndices(index, end - index + 1);
     writerClients0: for (const client of new SwIterator(
       SwClient,
       tableNode.GetTable().GetFrameFormat(),
@@ -404,6 +405,7 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    this.CorrectNodeIndices(index, section.nodes.length);
     this.nodeArray.splice(index, section.nodes.length);
     line.RemoveBox(section.box);
     this.DestroyTableBox(section.box);
@@ -470,6 +472,7 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    this.CorrectNodeIndices(index, section.nodes.length);
     this.nodeArray.splice(index, section.nodes.length);
     table.RemoveLine(section.line);
     writerClients2: for (const client of new SwIterator(SwClient, section.line.GetFrameFormat())) {
@@ -550,6 +553,11 @@ export class SwNodes {
     });
   }
 
+  /** Original RemoveNode borrowed-index phase for represented complete removals. Content cursors are corrected separately by the existing source operation before node-only indices are assigned to the first following structural/content node. @param start - First removed array offset. @param count - Actual removed node count. @returns Nothing. */
+  private CorrectNodeIndices(start: number, count: number): void {
+    const target = this.at(start + count);
+    for (const node of this.nodeArray.slice(start, start + count)) node.MoveNodeIndicesTo(target);
+  }
   /** Removes one connected text node while retaining its section's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
   public removeTextNode(node: SwTextNode): void {
     if (node.GetNodes() !== this) throw new Error("SwTextNode belongs to another SwNodes array.");
@@ -568,6 +576,7 @@ export class SwNodes {
     const nodeIndex = node.GetIndex();
     this.m_aOutlineNodes.erase(node);
     node.RemoveFromList();
+    this.CorrectNodeIndices(nodeIndex, 1);
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
@@ -582,6 +591,7 @@ export class SwNodes {
     this.m_aOutlineNodes.erase(node);
     node.MoveAllContentIndicesTo(replacement);
     node.RemoveFromList();
+    node.MoveNodeIndicesTo(replacement);
     this.nodeArray[index] = replacement;
     replacement.AddToList();
     this.InsertOutlineNode(replacement);
