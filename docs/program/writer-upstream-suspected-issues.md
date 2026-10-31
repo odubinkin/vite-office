@@ -2753,3 +2753,21 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/swhtml.hxx, m_nBaseFontStMin/m_nFontStMin/m_nFontStHeadStart; htmltab.cxx, SectionSaveStruct constructor/Restore; swhtml.cxx, NewHeading/EndFontAttr.
 - Observation: font-stack sizes are assigned to uint16 lower bounds, whereas context-stack bounds are size_t. At65536 open font entries a section freezes the font bound at0 but protects all65536 contexts. A font closer cannot pop its protected context yet still pops a font entry; Restore truncates the font stack at the wrapped bound. This appears capable of losing outer font-stack state for extremely deep input.
 - Preservation: retain uint16 narrowing and independent font/context bounds, including the heading font-stack start width. Do not clamp or widen the original counters. The focused regression builds the actual deep stack through65536 native NewFontAttr calls, then observes original save/close/restore operations. It does not certify complete table token orchestration or pending-device behavior.
+
+### WRITER327 — A cell SDVAL without SDNUM publishes a present numeric value of zero
+
+- Source: sw/source/filter/html/htmltab.cxx, CellSaveStruct constructor and InsertCell.
+- Observation: SDVAL sets the independent has-value flag and retains its text, but conversion runs only when SDNUM was also present. With SDVAL42 alone the initialized numeric value0 is published with has-value true and has-number-format false. This appears capable of discarding a supplied value while marking a different value as present.
+- Preservation: retain independent flags, zero initialization and the SDNUM-only conversion gate. Do not infer a format, parse SDVAL independently or clear its presence flag. The focused real-byte-stream cell case observes the original grid flags/value and confirms no document formatter was constructed.
+
+### WRITER328 — HTML table numeric options ignore recognition and format-insertion failure
+
+- Source: sfx2/source/bastyp/sfxhtml.cxx, SfxHTMLParser::GetTableDataOptionsValNum; svl/source/numbers/zforfind.cxx, ImpSvNumberInputScan::IsNumberFormat.
+- Observation: the helper ignores numeric recognition success and both format insertion results/error positions. Failed normal numeric recognition yields0; an explicitly empty format suffix reaches PutEntry's early failure and key reset0, while the supplied format-language output is retained. The helper still returns the numeric value and does not reject the cell.
+- Preservation: retain source status erasure and output assignment order. Do not add validation failure, a replacement format key or a separate number parser. Focused helper cases consume the actual formatter/scanner/table, including invalid numeric input, empty suffix and independent parse/display locales. This does not certify unrepresented input-device/desktop profiles.
+
+### WRITER329 — Zero cell width discards the percentage-width selector
+
+- Source: sw/source/filter/html/htmltab.cxx, CellSaveStruct width parsing and HTMLTable::InsertCell.
+- Observation: WIDTH is narrowed to uint16 before the percent clamp, but InsertCell only assigns the width and its relative selector when numeric width is nonzero. Thus65536percent narrows to0 and publishes width0 with percent false, whereas65537percent publishes width1 with percent true. The option's percent syntax is lost in the zero case.
+- Preservation: retain the narrowing, percentage clamp and conditional grid assignment. Do not independently publish the percentage flag for zero width or replace the original guard. Focused actual-byte-stream cases observe the original intermediate layout option fields.

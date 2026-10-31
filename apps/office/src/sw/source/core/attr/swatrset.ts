@@ -1,6 +1,9 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LanguageType } from "../../../../i18nlangtag/inc/lang";
 
@@ -220,6 +223,19 @@ export class SwAttrPool extends SfxItemPool {
       /** Applies register to value. @param value - value value. @returns Callback result. */ (
         value,
       ) => new SwTableBoxValue(Number(value)),
+    );
+    register(
+      RES_FRAMEDIR,
+      /** Restores the existing browser snapshot through the original signed16 WritingMode conversion. @param value - Stored native item value. @returns Native item. */ (
+        value,
+      ) => {
+        const item = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
+        if (!item.PutValue(value)) {
+          item.Dispose();
+          throw new Error("Writer frame-direction snapshot is invalid.");
+        }
+        return item;
+      },
     );
     register(RES_LR_SPACE, undefined);
     register(WriterWhich.RES_FRM_SIZE);

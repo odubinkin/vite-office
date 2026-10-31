@@ -500,6 +500,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.cell-save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -834,6 +842,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
           "marker": "void DocumentListsManager::createListForListStyle"
+        },
+        {
+          "path": "sw/inc/doc.hxx",
+          "marker": "GetNumberFormatter"
+        },
+        {
+          "path": "sw/source/core/doc/docfmt.cxx",
+          "marker": "SwDoc::EnsureNumberFormatter"
+        },
+        {
+          "path": "sw/source/core/doc/docnew.cxx",
+          "marker": "mpNumberFormatter"
         }
       ]
     },
@@ -919,7 +939,8 @@
       "S3HW1E temporary numbering ownership: SwNumFormat logical destruction releases actual SwClient registration; reference replacement and null-pointer Set now dispose the old owner. SwNumRule binds the document name index, disposes owned levels/current-name map entry/client containers, and retains original unsigned16 first/last-rule ownership of four lazily initialized base families. Effective base formats use the same protected const reference and shipped GetBulletChar resolver. Document teardown releases its actual rule table through the existing aggregate/list-manager binding. MSWordExportBase destroys only its temporary tail after dropping borrowed document entries. Source DuplicateNumRuleImpl builds a fresh legacy-mode NUM_RULE with source defaults, copies all ten effective formats, keeps it outside the document and uses the original unsigned16 post-increment prefix; DuplicateNumRule changes one unsigned16 start and releases its temporary format. The native default automatic-name overload now consumes a preferred name and source prefix-parse/flag logic rather than ignoring the argument. Browser RNG replaces platform RNG; mail-merge/environment-stable and nonautomatic naming branches have no admitted caller. Full-document RTF and test bridges release actual exporter ownership before ranges/documents. WRITER200 records retained counter widths. Tests check shared-base lifetimes, replacement/reset/client teardown, map erase semantics, default metadata, all ten levels, preferred-name collisions, and document-vs-export ownership. This prepares original paragraph restart dispatch; it is not yet wired into ParaNumRule and does not certify full Writer lifetime/ABI, paragraph/style-cache/importer completeness or source ownership location equivalence of the existing browser aggregate.",
       "B8TCAE adds bounded source-contract/native evidence: A real public SetInXMLImport phase enables the original overlapping character-style preservation, then clearing that phase restores ordinary replacement. Actual ranges, pooled Strong/Emphasis owners, retained sort numbers and effective italic/weight items are checked without private state writes.",
       "SwDoc delegates SetNumRule and native outline operations to its original docnum responsibility; public numbering application flags and persistent outline ownership remain unchanged. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
-      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged."
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",

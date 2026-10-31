@@ -184,9 +184,21 @@ const allowedEdges = new Map([
   // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
   // Library_sfx links cppu/cppuhelper and uses the SDK API.
   // Original SfxBaseModel listener containers use comphelper and published document/util SDK listeners.
+  // Native sfxhtml.cxx includes o3tl/string_view.hxx; sfxhtml.hxx includes i18nlangtag/lang.h.
   [
     "sfx2",
-    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "svl", "tools", "udkapi"]),
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "i18nlangtag",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "tools",
+      "udkapi",
+    ]),
   ],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.

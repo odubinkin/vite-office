@@ -148,7 +148,7 @@ export class SwHTMLParser extends HTMLParser {
   GetCurrFormatColl() {
     return this.GetTextNode().GetTextFormatColl();
   }
-  /** Original style-option entry over actual CSS maps and property state. @param style - Inline declarations. @param id - ID. @param className - Class. @param items - Actual set. @param info - Actual flags. @param language - Original LANG option. @returns Whether applied. */
+  /** Original style-option entry over actual CSS maps and property state. @param style - Inline declarations. @param id - ID. @param className - Class. @param items - Actual set. @param info - Actual flags. @param language - Original LANG option. @param direction - Original DIR option. @returns Whether applied. */
   ParseStyleOptions(
     style: string,
     id: string,
@@ -156,8 +156,9 @@ export class SwHTMLParser extends HTMLParser {
     items: SfxItemSet,
     info: SvxCSS1PropertyInfo,
     language?: string,
+    direction?: string,
   ): boolean {
-    return ParseStyleOptions(this, style, id, className, items, info, language);
+    return ParseStyleOptions(this, style, id, className, items, info, language, direction);
   }
   /** Original deferred bookmark producer. @param name - Exact source name. @returns Nothing. */
   InsertBookmark(name: string): void {
@@ -280,6 +281,18 @@ export class SwHTMLParser extends HTMLParser {
     this.EndContextAttrs(context);
     if (context.GetAppendMode() !== A.AM_NONE && this.m_pPam.GetPoint().GetContentIndex())
       this.AppendTextNode(context.GetAppendMode());
+    if (context.IsFinishPREListingXMP()) this.FinishPREListingXMP();
+    if (context.IsRestartPRE()) this.StartPRE();
+    if (context.IsRestartXMP()) this.StartXMP();
+    if (context.IsRestartListing()) this.StartListing();
+  }
+  /** Original section context suspends and later restarts actual lexer PRE/XMP/LISTING environments. @param context - Actual new context. @returns Nothing. */
+  SplitPREListingXMP(context: HTMLAttrContext): void {
+    context.SetFinishPREListingXMP(true);
+    if (this.IsReadPRE()) context.SetRestartPRE(true);
+    if (this.IsReadXMP()) context.SetRestartXMP(true);
+    if (this.IsReadListing()) context.SetRestartListing(true);
+    this.FinishPREListingXMP();
   }
   /** Original end-token normalization. @param token - Closing token. @returns Nothing. */
   EndTag(token: T): void {

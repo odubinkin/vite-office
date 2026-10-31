@@ -1,4 +1,7 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
@@ -139,6 +142,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatHoriOrient());
     add(new SwFormatLayoutSplit());
     add(new SwFormatRowSplit());
+    add(new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR));
     add(new SvxBoxItem(RES_BOX));
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));

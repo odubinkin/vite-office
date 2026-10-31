@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.formatter.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "SvNumberFormatter"
+    ],
+    "upstreamSymbols": [
+      "SvNumberFormatter"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Whole-module/ABI/native thread scheduling and async device profiles are unverified. Writer table token orchestration, materialization/automatic layout and final filter/UI reconciliation remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.formatter.ts",
+          "marker": "SvNumberFormatter"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/numbers/zforlist.cxx",
+          "marker": "SvNumberFormatter"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.formatter.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original same-owner source responsibilities are split under authored module-size limits. Actual owners are retained; the canonical formatter reexport preserves its original class identity, and the static SfxHTMLParser member is a standalone source responsibility without a fake constructor."
+    }
+  }
+}

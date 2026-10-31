@@ -1,4 +1,8 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import { getYear2000Default } from "../../../../svl/source/numbers/zforlist.defaults";
+import { NfEvalDateFormat } from "../../../../svl/inc/zforlist";
+import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import * as DocItems from "./doc.items";
 import { CopyPageDesc } from "./docfmt.page";
 import { ChgPageDescNative } from "./docdesc.native";
@@ -125,6 +129,25 @@ export interface WriterEmbeddedFont {
 }
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  private mpNumberFormatter: SvNumberFormatter | null = null;
+  /** Original lazy formatter initializes SYSTEM locale, Writer date evaluation and configured two-digit-year default. Browser execution has no native thread mutex or fuzzing mode. @returns Nothing. */
+  private EnsureNumberFormatter(): void {
+    if (this.mpNumberFormatter === null) {
+      this.mpNumberFormatter = new SvNumberFormatter(LANGUAGE_SYSTEM);
+      this.mpNumberFormatter.SetEvalDateFormat(NfEvalDateFormat.FormatThenInternational);
+      this.mpNumberFormatter.SetYear2000(getYear2000Default());
+    }
+  }
+  /** Borrows the original per-document formatter, creating it by default. @param create - Native defaulttrue creation. @returns Actual formatter. */
+  GetNumberFormatter(create?: true): SvNumberFormatter;
+  /** Queries without necessarily creating the original formatter. @param create - Source creation flag. @returns Formatter or null. */
+  GetNumberFormatter(create: boolean): SvNumberFormatter | null;
+  /** Original same-owner lazy query. @param create - Source creation flag. @returns Borrowed formatter or null. */
+  GetNumberFormatter(create = true): SvNumberFormatter | null {
+    if (create) this.EnsureNumberFormatter();
+    return this.mpNumberFormatter;
+  }
+
   /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing.  @param mode - Native operation input. */
   public InsertPoolItem(
     range: SwPaM,
@@ -943,6 +966,8 @@ export class SwDoc {
     for (const node of this.nodes.entries())
       if (node instanceof SwTextNode) node.GetpSwpHints()?.Dispose();
     this.styleAccess.Dispose();
+    this.mpNumberFormatter?.dispose();
+    this.mpNumberFormatter = null;
     this.GetDocumentListsManager().Dispose();
     this.stateManager.Dispose();
   }

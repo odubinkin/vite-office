@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 314
+revision: 322
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T13:28:57.260Z"
+  updated_at: "2026-10-31T14:15:01.081Z"
   updated_by: "CODER"
-  note: "HTML43 checkpoint passes205unique cases/12files and all static gates; native section stack save/restore and consumers complete. Parent remains incomplete: table orchestration, core materialization/layout and final filter/UI reconciliation still required."
-  attempts: 54
+  note: "HTML44 native cell save and document number formatting checkpoint passes275unique cases/16files and all declared static gates. Parent remains incomplete: production table grammar/materialization/layout and final filter/UI/DIR reconciliation are still required."
+  attempts: 55
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -869,8 +872,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T14:15:01.081Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML44 native cell save and document number formatting checkpoint passes275unique cases/16files and all declared static gates. Parent remains incomplete: production table grammar/materialization/layout and final filter/UI/DIR reconciliation are still required."
+  -
+    type: "status"
+    at: "2026-10-31T14:15:37.630Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T13:29:05.369Z"
+doc_updated_at: "2026-10-31T14:16:01.350Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2235,6 +2251,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T14:15:01.081Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML44 native cell save and document number formatting checkpoint passes275unique cases/16files and all declared static gates. Parent remains incomplete: production table grammar/materialization/layout and final filter/UI/DIR reconciliation are still required.
+    Attempts: 55
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:15:00.493Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2261,6 +2307,8 @@ sections:
     - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source/final affected eslint --max-warnings 0; prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html42-* logs. Scope: current type/style/provenance/registry and architecture gates. Native full table orchestration/materialization/automatic layout and final filter/UI reconciliation remain open; no parent/module/API/ABI/desktop completion is claimed.
 
     HTML43 checkpoint:205unique cases/12files pass after correcting the test-only inherited saved-field collision and the initial office-command cwd. Final fresh native tsc exits0; changed-source ESLint/Prettier, provenance, Writer registry, boundaries, JSDoc, size, source-tree and diff checks pass. Original SectionSaveStruct and distinct font/context/attribute lower-bound consumers are implemented; WRITER326 preserves and tests original uint16 font-stack overflow through real native producers. Evidence: output/playwright/rtf-properties-native/html43-*.txt; detailed commands/results are in Findings. Full row/cell/caption/table orchestration, core materialization/layout and final current-model/filter/UI reconciliation remain pending. Parent task must remain incomplete/DOING and the goal active; browser open/save/autosave/recovery deviations are unchanged.
+
+    HTML44 checkpoint:275unique related scenarios/16files pass. Shared numeric/helper/owner coverage98cases; Writer cell/number/DIR/pool/TXT/RTF/Markdown consumers129cases; module-boundary constraints48cases. Final affected36-case cell run and fresh app/tooling native TypeScript pass after source-backed fixture/API/provenance corrections. Changed-source ESLint/Prettier, provenance, Writer/shared registries, boundaries, JSDoc, size, tree, WhichIds and diff checks pass. Original CellSaveStruct, lazy Writer formatter policy, Sfx table-number parsing, public native entry/conversion and concrete DIR/lexer owners are implemented with real state/services. WRITER327/328/329 retain the source's numeric-presence/failure/zero-percent behavior. Evidence: output/playwright/rtf-properties-native/html44-*.txt and Findings. Full native table grammar/materialization/layout and final filter/UI audit, including newly admitted DIR propagation, remain incomplete. Keep parent DOING and goal active; this checkpoint is not whole-goal completion.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3443,6 +3491,23 @@ sections:
     - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts. Result: pass,53cases/4files,129.52s; Evidence: html43-final-filters.txt. Deduct10repeated initial section-save cases:205unique cases/12files pass, including the final12section-save regressions. Scope: final actual-byte-stream save/restore and uint16 font overflow, TXT range, RTF table/list and Markdown callback paths.
 
     - HTML43 static closure: Command (cwd apps/office) ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit. Result: pass,exit0; Evidence: html43-types-closure.txt,exec23638. Scope: final complete app types after fixture rename. Changed-source ESLint --max-warnings0 and Prettier --check pass (html43-lint.txt/html43-lint-final.txt/html43-lint-closure.txt/html43-format.txt/html43-format-closure.txt). npm run check:source-provenance passes1923runtime/1710mapped/182browser/31infra (html43-provenance.txt); npm run inventory:parity:writer passes semanticViolationCount0 (html43-writer.txt); npm run check:dependencies passes1922runtime/10596relativeimports/227allowededges (html43-boundaries.txt); npm run check:docs passes4316sources (html43-jsdoc.txt); npm run check:file-size passes4320authoredfiles (html43-size.txt); npm run check:source-tree passes115requiredpaths/32retiredroots (html43-tree.txt); git diff --check passes. Broad source semantic statuses remain unverified. These are checkpoint checks, not full table/UI or parent-goal certification.
+
+    - HTML44 local discovery/command corrections: SwDoc EnsureNumberFormatter is implemented in docfmt.cxx1788, declared in doc.hxx and disposed in docnew.cxx; directory rg needed --no-ignore for the vendored reference. The public formatter declaration is include/svl/numformat.hxx, not zforlist.hxx. Existing SwNodeIndex is in core/crsr/pam.ts, box items in editeng/source/items/frmitems.ts. Initial root-shell node lookup and one root-cwd office-tsc redirect failed before executing their intended command; explicit task PATH and authoritative apps/office cwd restore the installed tools. No outside-repo access, network or scope drift.
+    - HTML44 first lint found one AST-split import retained solely by a same-named enum property (CURRENCY); remove the unused import without changing class currency state/behavior. Subsequent focused lint reports4 forbidden non-null assertions in fresh tests; use actual assert-based type narrowing. First shared test job currently reports4 formatter-entry failures; retain that live handle until completion and inspect the full diagnostics before source-backed corrections. No failed/empty run is completion evidence. Source review separately corrected the Sfx helper to slice OUString backing storage by its logical length, matching the original std::u16string_view contract; the raw NUL/capacity tail must not enter a format code.
+
+    - HTML44 initial shared run completed79pass/4fail across4files (html44-shared-focused.txt,632.55s); three pre-existing/helper files passed. All4 fresh formatter failures were fixture expectations: public GetType masks DEFINED; a German source format uses comma decimal and normalizes period grouping; target German Boolean keyword is LOGISCH and an existing standard Boolean entry has raw LOGICAL rather than LOGICAL|DEFINED. Correct expectations from pinned GetType/scanner/entry contracts; do not alter native formatter behavior. One additional public language-width case now covers uint16 argument narrowing.
+    - HTML44 initial Writer run completed73pass/2fail across4files (html44-writer-focused.txt,739.92s). The wrapped zero-width cell must retain source percent false because original InsertCell only calls SetWidth when nCellWidth is nonzero (WRITER329); correct that expectation. DIR failure exposed a real missing Writer RES_FRAMEDIR owner, not a defective SvxFrameDirectionItem constructor: H.RES_FRAMEDIR was absent and yielded an undefined Which. Implement original130/defaultEnvironment/slot10944/ranges/restoration using init.cxx metadata and the actual item class. Keep runtime mode changes through real section flags and actual pools. Add8 live-owner direction-mode/default/slot/node-admission cases; full filter propagation of the newly admitted internal DIR item remains part of the final pending audit.
+    - HTML44 initial typecheck failed TS2367 at the Boolean target retry because TypeScript retained the pre-call literal narrowing of the mutable [number] out-reference. Read the same actual slot through type.at(0) after PutEntry to avoid false narrowing; do not replace the source output with a computed formatter result. Initial provenance failed because three currency-method local-symbol claims still pointed at the old class file after the split; move responsibility to the new same-identity class record and remove those obsolete old-local claims, leaving broad statuses unverified. One unused trailing command accidentally remained after successful Prettier and failed lookup; it executed no program and is removed from subsequent validation commands. No criteria are skipped or weakened.
+
+    - HTML44 final shared rerun passes36cases/3files,107.28s (html44-shared-final.txt):11 public-entry cases,11 native table-number helper cases and14 existing formatter-owner cases. Canonical class identity, real entries/locale conversion/Boolean policy and subsequent scanner-mode behavior pass. Native source behavior is retained; no provider or output substitution was used.
+    - HTML44 second Writer run passes73/fails9 across6files (html44-writer-final.txt,118.22s). All9 fresh cell/pool cases fail only because the fixture called GetAttrSet instead of the original SwTextNode.GetSwAttrSet API. The same3 fixture references produce the matching TS2551 diagnostics in html44-types-final.txt. Correct the fixture to the real getter and effective Get for a default-valued item; do not add a fake model alias or edit native setter results. All5 other selected TXT/RTF/Markdown/pool files pass and should not be replayed for this getter-only correction. Rerun the affected36-case cell suite and fresh full types.
+    - HTML44 static closure corrections: the canonical-basename sfxhtml.ts file must not carry a filenameDivergence record (only the genuine formatter/cell responsibility splits do). Boundary checking identifies new original sfx2->o3tl and sfx2->i18nlangtag dependencies: pinned sfxhtml.cxx explicitly includes o3tl/string_view.hxx; include/sfx2/sfxhtml.hxx explicitly includes i18nlangtag/lang.h. Extend only those original owner edges, add a focused negative/reverse/application/browser restriction regression, and keep validation semantics and all other forbidden edges unchanged. This is the approved native-module dependency graph implementation for the new source path, not a boundary bypass. JSDoc4322sources, file-size4327files, source-tree115paths/32retiredroots and81Which identities passed the preceding static sequence; failed provenance/boundary commands are preserved separately and are not completion evidence. Newly admitted internal DIR format propagation is still explicitly pending in the full goal audit.
+
+    - HTML44 final verification:36affected cell cases pass/1file,15.37s (html44-cell-closure.txt,exec74603exit0). The native GetSwAttrSet fixture correction requires no production alias/change. All real numeric, CSS-border/DIR, original zero-width, span, NOBR, lexer-mode, per-document formatter/default/lifetime and direction pool/slot/snapshot/node-admission cases pass. The readonly live-owner fixtures do not read destroyed formatter/document objects.
+    - Commands (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.shared.config.ts src/svl/source/numbers/zforlist.formatter-entry.test.ts src/sfx2/source/bastyp/sfxhtml.test.ts src/svl/source/numbers/zforlist.test.ts ->36pass/3files (html44-shared-final.txt). Earlier original recognition/conversion files contribute62non-overlapping passing cases (html44-shared-focused.txt; its4fixture failures are superseded). Shared total98unique cases/5files. ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.cell-save.test.ts src/sw/source/core/attr/native-pool-input-boundaries.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts ->5consumer files46pass, affected cell failure superseded by final36-case run (html44-writer-final.txt). Earlier save/grid/language consumers add47non-overlapping passing cases (html44-writer-focused.txt); Writer total129unique cases/9files.
+    - Command (cwd repository): node_modules/.bin/vitest run --maxWorkers 2 scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-html-table.test.ts ->48pass/2files,5.06s (html44-boundary-tests.txt). Native source imports are admitted while reverse/application/browser restrictions remain enforced. Total275unique related cases/16files pass; no final selected test is failing or skipped. Full suite is not replayed for this one ongoing AgentPlane task, per user instruction.
+    - Static commands/results: native apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit exits0 (html44-types-closure.txt,exec67853). Native root node_modules/@typescript/typescript-darwin-arm64/lib/tsc --project tsconfig.tools.json exits0 (html44-tools-types.txt). Changed runtime/test/tooling ESLint --max-warnings 0 and Prettier --check pass (html44-lint-final.txt/html44-lint-closure.txt/html44-lint-last.txt/html44-format.txt/html44-format-last.txt); old failing logs remain recorded separately. npm run check:source-provenance passes1926runtime/1713mapped/182browser/31infra (html44-provenance-closure.txt); npm run check:dependencies passes1925runtime/10650relativeimports/229source-backed allowededges (html44-boundaries-closure.txt); npm run inventory:parity:writer and npm run inventory:parity:shared pass semanticViolationCount0 (html44-writer-registry.txt/html44-shared-registry.txt). npm run check:docs passes4323sources; npm run check:file-size passes4327authoredfiles; npm run check:source-tree passes115requiredpaths/32retiredroots; npm run check:writer-hintids passes81nativeidentities (html44-jsdoc-closure.txt/html44-size-closure.txt/html44-tree-closure.txt/html44-hintids-closure.txt). git diff --check passes. Source-status classifications remain unverified; no broad module/ABI certification is promoted.
+    - HTML44 remaining scope: original synchronous CellSaveStruct/numeric services and their concrete direction/lexer owners are now implemented and tested, but production BuildTable/row/section/cell/caption token orchestration, actual table materialization, automatic text/table layout and final current-model TXT/RTF/Markdown/UI capability reconciliation remain required. Explicitly audit newly admitted internal DIR propagation, rather than treating its pool tests as filter completion evidence. Preserve browser save/open/autosave/recovery differences and keep parent task/goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -4818,6 +4883,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T14:15:01.081Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML44 native cell save and document number formatting checkpoint passes275unique cases/16files and all declared static gates. Parent remains incomplete: production table grammar/materialization/layout and final filter/UI/DIR reconciliation are still required.
+Attempts: 55
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:15:00.493Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -4844,6 +4939,8 @@ DecisionContextRef:
 - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source/final affected eslint --max-warnings 0; prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html42-* logs. Scope: current type/style/provenance/registry and architecture gates. Native full table orchestration/materialization/automatic layout and final filter/UI reconciliation remain open; no parent/module/API/ABI/desktop completion is claimed.
 
 HTML43 checkpoint:205unique cases/12files pass after correcting the test-only inherited saved-field collision and the initial office-command cwd. Final fresh native tsc exits0; changed-source ESLint/Prettier, provenance, Writer registry, boundaries, JSDoc, size, source-tree and diff checks pass. Original SectionSaveStruct and distinct font/context/attribute lower-bound consumers are implemented; WRITER326 preserves and tests original uint16 font-stack overflow through real native producers. Evidence: output/playwright/rtf-properties-native/html43-*.txt; detailed commands/results are in Findings. Full row/cell/caption/table orchestration, core materialization/layout and final current-model/filter/UI reconciliation remain pending. Parent task must remain incomplete/DOING and the goal active; browser open/save/autosave/recovery deviations are unchanged.
+
+HTML44 checkpoint:275unique related scenarios/16files pass. Shared numeric/helper/owner coverage98cases; Writer cell/number/DIR/pool/TXT/RTF/Markdown consumers129cases; module-boundary constraints48cases. Final affected36-case cell run and fresh app/tooling native TypeScript pass after source-backed fixture/API/provenance corrections. Changed-source ESLint/Prettier, provenance, Writer/shared registries, boundaries, JSDoc, size, tree, WhichIds and diff checks pass. Original CellSaveStruct, lazy Writer formatter policy, Sfx table-number parsing, public native entry/conversion and concrete DIR/lexer owners are implemented with real state/services. WRITER327/328/329 retain the source's numeric-presence/failure/zero-percent behavior. Evidence: output/playwright/rtf-properties-native/html44-*.txt and Findings. Full native table grammar/materialization/layout and final filter/UI audit, including newly admitted DIR propagation, remain incomplete. Keep parent DOING and goal active; this checkpoint is not whole-goal completion.
 
 ## Rollback Plan
 
@@ -6030,3 +6127,20 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts. Result: pass,53cases/4files,129.52s; Evidence: html43-final-filters.txt. Deduct10repeated initial section-save cases:205unique cases/12files pass, including the final12section-save regressions. Scope: final actual-byte-stream save/restore and uint16 font overflow, TXT range, RTF table/list and Markdown callback paths.
 
 - HTML43 static closure: Command (cwd apps/office) ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit. Result: pass,exit0; Evidence: html43-types-closure.txt,exec23638. Scope: final complete app types after fixture rename. Changed-source ESLint --max-warnings0 and Prettier --check pass (html43-lint.txt/html43-lint-final.txt/html43-lint-closure.txt/html43-format.txt/html43-format-closure.txt). npm run check:source-provenance passes1923runtime/1710mapped/182browser/31infra (html43-provenance.txt); npm run inventory:parity:writer passes semanticViolationCount0 (html43-writer.txt); npm run check:dependencies passes1922runtime/10596relativeimports/227allowededges (html43-boundaries.txt); npm run check:docs passes4316sources (html43-jsdoc.txt); npm run check:file-size passes4320authoredfiles (html43-size.txt); npm run check:source-tree passes115requiredpaths/32retiredroots (html43-tree.txt); git diff --check passes. Broad source semantic statuses remain unverified. These are checkpoint checks, not full table/UI or parent-goal certification.
+
+- HTML44 local discovery/command corrections: SwDoc EnsureNumberFormatter is implemented in docfmt.cxx1788, declared in doc.hxx and disposed in docnew.cxx; directory rg needed --no-ignore for the vendored reference. The public formatter declaration is include/svl/numformat.hxx, not zforlist.hxx. Existing SwNodeIndex is in core/crsr/pam.ts, box items in editeng/source/items/frmitems.ts. Initial root-shell node lookup and one root-cwd office-tsc redirect failed before executing their intended command; explicit task PATH and authoritative apps/office cwd restore the installed tools. No outside-repo access, network or scope drift.
+- HTML44 first lint found one AST-split import retained solely by a same-named enum property (CURRENCY); remove the unused import without changing class currency state/behavior. Subsequent focused lint reports4 forbidden non-null assertions in fresh tests; use actual assert-based type narrowing. First shared test job currently reports4 formatter-entry failures; retain that live handle until completion and inspect the full diagnostics before source-backed corrections. No failed/empty run is completion evidence. Source review separately corrected the Sfx helper to slice OUString backing storage by its logical length, matching the original std::u16string_view contract; the raw NUL/capacity tail must not enter a format code.
+
+- HTML44 initial shared run completed79pass/4fail across4files (html44-shared-focused.txt,632.55s); three pre-existing/helper files passed. All4 fresh formatter failures were fixture expectations: public GetType masks DEFINED; a German source format uses comma decimal and normalizes period grouping; target German Boolean keyword is LOGISCH and an existing standard Boolean entry has raw LOGICAL rather than LOGICAL|DEFINED. Correct expectations from pinned GetType/scanner/entry contracts; do not alter native formatter behavior. One additional public language-width case now covers uint16 argument narrowing.
+- HTML44 initial Writer run completed73pass/2fail across4files (html44-writer-focused.txt,739.92s). The wrapped zero-width cell must retain source percent false because original InsertCell only calls SetWidth when nCellWidth is nonzero (WRITER329); correct that expectation. DIR failure exposed a real missing Writer RES_FRAMEDIR owner, not a defective SvxFrameDirectionItem constructor: H.RES_FRAMEDIR was absent and yielded an undefined Which. Implement original130/defaultEnvironment/slot10944/ranges/restoration using init.cxx metadata and the actual item class. Keep runtime mode changes through real section flags and actual pools. Add8 live-owner direction-mode/default/slot/node-admission cases; full filter propagation of the newly admitted internal DIR item remains part of the final pending audit.
+- HTML44 initial typecheck failed TS2367 at the Boolean target retry because TypeScript retained the pre-call literal narrowing of the mutable [number] out-reference. Read the same actual slot through type.at(0) after PutEntry to avoid false narrowing; do not replace the source output with a computed formatter result. Initial provenance failed because three currency-method local-symbol claims still pointed at the old class file after the split; move responsibility to the new same-identity class record and remove those obsolete old-local claims, leaving broad statuses unverified. One unused trailing command accidentally remained after successful Prettier and failed lookup; it executed no program and is removed from subsequent validation commands. No criteria are skipped or weakened.
+
+- HTML44 final shared rerun passes36cases/3files,107.28s (html44-shared-final.txt):11 public-entry cases,11 native table-number helper cases and14 existing formatter-owner cases. Canonical class identity, real entries/locale conversion/Boolean policy and subsequent scanner-mode behavior pass. Native source behavior is retained; no provider or output substitution was used.
+- HTML44 second Writer run passes73/fails9 across6files (html44-writer-final.txt,118.22s). All9 fresh cell/pool cases fail only because the fixture called GetAttrSet instead of the original SwTextNode.GetSwAttrSet API. The same3 fixture references produce the matching TS2551 diagnostics in html44-types-final.txt. Correct the fixture to the real getter and effective Get for a default-valued item; do not add a fake model alias or edit native setter results. All5 other selected TXT/RTF/Markdown/pool files pass and should not be replayed for this getter-only correction. Rerun the affected36-case cell suite and fresh full types.
+- HTML44 static closure corrections: the canonical-basename sfxhtml.ts file must not carry a filenameDivergence record (only the genuine formatter/cell responsibility splits do). Boundary checking identifies new original sfx2->o3tl and sfx2->i18nlangtag dependencies: pinned sfxhtml.cxx explicitly includes o3tl/string_view.hxx; include/sfx2/sfxhtml.hxx explicitly includes i18nlangtag/lang.h. Extend only those original owner edges, add a focused negative/reverse/application/browser restriction regression, and keep validation semantics and all other forbidden edges unchanged. This is the approved native-module dependency graph implementation for the new source path, not a boundary bypass. JSDoc4322sources, file-size4327files, source-tree115paths/32retiredroots and81Which identities passed the preceding static sequence; failed provenance/boundary commands are preserved separately and are not completion evidence. Newly admitted internal DIR format propagation is still explicitly pending in the full goal audit.
+
+- HTML44 final verification:36affected cell cases pass/1file,15.37s (html44-cell-closure.txt,exec74603exit0). The native GetSwAttrSet fixture correction requires no production alias/change. All real numeric, CSS-border/DIR, original zero-width, span, NOBR, lexer-mode, per-document formatter/default/lifetime and direction pool/slot/snapshot/node-admission cases pass. The readonly live-owner fixtures do not read destroyed formatter/document objects.
+- Commands (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.shared.config.ts src/svl/source/numbers/zforlist.formatter-entry.test.ts src/sfx2/source/bastyp/sfxhtml.test.ts src/svl/source/numbers/zforlist.test.ts ->36pass/3files (html44-shared-final.txt). Earlier original recognition/conversion files contribute62non-overlapping passing cases (html44-shared-focused.txt; its4fixture failures are superseded). Shared total98unique cases/5files. ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.cell-save.test.ts src/sw/source/core/attr/native-pool-input-boundaries.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts ->5consumer files46pass, affected cell failure superseded by final36-case run (html44-writer-final.txt). Earlier save/grid/language consumers add47non-overlapping passing cases (html44-writer-focused.txt); Writer total129unique cases/9files.
+- Command (cwd repository): node_modules/.bin/vitest run --maxWorkers 2 scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-html-table.test.ts ->48pass/2files,5.06s (html44-boundary-tests.txt). Native source imports are admitted while reverse/application/browser restrictions remain enforced. Total275unique related cases/16files pass; no final selected test is failing or skipped. Full suite is not replayed for this one ongoing AgentPlane task, per user instruction.
+- Static commands/results: native apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit exits0 (html44-types-closure.txt,exec67853). Native root node_modules/@typescript/typescript-darwin-arm64/lib/tsc --project tsconfig.tools.json exits0 (html44-tools-types.txt). Changed runtime/test/tooling ESLint --max-warnings 0 and Prettier --check pass (html44-lint-final.txt/html44-lint-closure.txt/html44-lint-last.txt/html44-format.txt/html44-format-last.txt); old failing logs remain recorded separately. npm run check:source-provenance passes1926runtime/1713mapped/182browser/31infra (html44-provenance-closure.txt); npm run check:dependencies passes1925runtime/10650relativeimports/229source-backed allowededges (html44-boundaries-closure.txt); npm run inventory:parity:writer and npm run inventory:parity:shared pass semanticViolationCount0 (html44-writer-registry.txt/html44-shared-registry.txt). npm run check:docs passes4323sources; npm run check:file-size passes4327authoredfiles; npm run check:source-tree passes115requiredpaths/32retiredroots; npm run check:writer-hintids passes81nativeidentities (html44-jsdoc-closure.txt/html44-size-closure.txt/html44-tree-closure.txt/html44-hintids-closure.txt). git diff --check passes. Source-status classifications remain unverified; no broad module/ABI certification is promoted.
+- HTML44 remaining scope: original synchronous CellSaveStruct/numeric services and their concrete direction/lexer owners are now implemented and tested, but production BuildTable/row/section/cell/caption token orchestration, actual table materialization, automatic text/table layout and final current-model TXT/RTF/Markdown/UI capability reconciliation remain required. Explicitly audit newly admitted internal DIR propagation, rather than treating its pool tests as filter completion evidence. Preserve browser save/open/autosave/recovery differences and keep parent task/goal active.
