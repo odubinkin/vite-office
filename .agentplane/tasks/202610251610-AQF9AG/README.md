@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 139
+revision: 142
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T12:02:14.427Z"
+  updated_at: "2026-10-31T12:56:32.865Z"
   updated_by: "CODER"
-  note: "Original process factory and real NumberText constructor path checkpoint verified:132related cases, strengthened3-case exception-context rerun,197CSV/UI,47boundary cases,current-built browser,typecheck/lint/build and static/provenance/parity pass. Exact source factory/context caching and exceptions retained (CALC-446/447); temporary NumberTextFactory injection removed. Application context/manager bootstrap,EditEngine resources/DocImport and full NatNum12/formatter remain; keep goal active."
-  attempts: 32
+  note: "Component lifecycle prerequisite checkpoint verified: original container4, WeakComponentImplHelperBase2/template/query and ContextEntry_Init; 58 related tests, final 13-case construction rerun, 197 CSV/UI, 47 boundary tests, current-built browser, final typecheck/lint/build and static/provenance/parity pass. CALC-448/449 source behavior retained; native noexcept limitation explicit and uncertified (CALC-450). Concrete context/manager/environment bootstrap, EditEngine/DocImport and full NatNum12/formatter remain. Goal stays active; checkpoint is not full CSV acceptance."
+  attempts: 33
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -840,8 +843,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T12:56:32.865Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Component lifecycle prerequisite checkpoint verified: original container4, WeakComponentImplHelperBase2/template/query and ContextEntry_Init; 58 related tests, final 13-case construction rerun, 197 CSV/UI, 47 boundary tests, current-built browser, final typecheck/lint/build and static/provenance/parity pass. CALC-448/449 source behavior retained; native noexcept limitation explicit and uncertified (CALC-450). Concrete context/manager/environment bootstrap, EditEngine/DocImport and full NatNum12/formatter remain. Goal stays active; checkpoint is not full CSV acceptance."
+  -
+    type: "status"
+    at: "2026-10-31T12:56:45.375Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T12:02:45.579Z"
+doc_updated_at: "2026-10-31T12:56:45.375Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1821,6 +1837,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T12:56:32.865Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Component lifecycle prerequisite checkpoint verified: original container4, WeakComponentImplHelperBase2/template/query and ContextEntry_Init; 58 related tests, final 13-case construction rerun, 197 CSV/UI, 47 boundary tests, current-built browser, final typecheck/lint/build and static/provenance/parity pass. CALC-448/449 source behavior retained; native noexcept limitation explicit and uncertified (CALC-450). Concrete context/manager/environment bootstrap, EditEngine/DocImport and full NatNum12/formatter remain. Goal stays active; checkpoint is not full CSV acceptance.
+    Attempts: 33
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:56:24.652Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2686,6 +2732,62 @@ sections:
       Result: pass;1 current-built browser scenario,13.2s total. Evidence: bootstrap-browser.log. Scope: existing CSV import, primary ODS save and active-sheet export, with original assertions/timeouts. This does not certify production application-context or full native CSV admission.
     - Read-only tooling observation for the remaining original ICU break-service work: emcc/em++/wasm-ld are unavailable on current PATH; clang++ resolves to /usr/bin/clang++. No SDK download, new runtime backend or package dependency was installed or authorized by this checkpoint. Offline source work remains available; this is not a goal blocker.
     - Final review: git diff --check passes. Exact allowlist contains40 intended source/test/fixture/registry/issue/boundary/task paths; native experiment scratch stays excluded. Full final status is retained in bootstrap-final-status.log. No network/vendor writes, source/semantic readiness promotion or full-suite replay. Overall CSV verification remains rework/DOING and goal active; no task finish or goal completion is claimed.
+
+    ### Original component-base lifecycle and context-entry prerequisite checkpoint
+
+    - Previous turn was progress:09827d025d61 ported processfactory and replaced NumberTextFactory injection with actual process-context/generated service creation. This continuation revalidated approved CODER/direct/Calc checkout and tracked-clean baseline. Concrete ComponentContext depends on the missing original WeakComponentImplHelper2 and internal source4 listener container; this checkpoint implements those real prerequisites, not a substitute context/manager/engine. Same task remains open; no tenth-task full-suite trigger.
+    - Original internal OInterfaceContainerHelper4/OInterfaceIteratorHelper4 now use real Reference/cow_wrapper and their source-specific algorithm. They do not call the existing comphelper3 helper. Preserve duplicate references, owned getElements copies, pointer-first/root-identity single removal, shallow reverse iterator snapshots, make_unique before forEach snapshot, per-callback copied reference, DisposedException Context rules and swallowed foreign Contexts. disposeAndClear resets live storage to DEFAULT without the source3 clear/allocation path; reverse callbacks swallow only RuntimeException and snapshot destruction precedes native lock reacquisition. Native mutex-token parameters are erased in synchronous calls; no fake guard is supplied. Unconsumed explicit native move operations are not exposed/certified.
+    - Implemented actual WeakComponentImplHelperBase2 and template/source query groups over one actual OWeakObject receiver and original UnoImplBase m_bDisposed=false virtual-base field. Base copy is unavailable, like the source mutex base. Flag-before-hook, empty original default hook, true event Source ownership, listener lifecycle, silent late registration, disposed-check Context, qualified weak/component/root fallback and destructor-without-implicit-dispose remain source-aligned. Protected disposing(unique_lock&) is explicitly named disposingComponent in the host to keep it distinct from public UNO disposing(EventObject); no runtime overload heuristic is used. Template class_data has original Ifc... plus XTypeProvider getter entries, while getTypes has an independent successful-once static COW sequence in exact XWeak/XComponent/XTypeProvider/Ifc... order. Different derived classes of one specialization share that original static. Actual Type initializer-list copies/reverse destruction and existing Sequence storage retain ownership; no type/query/service provider is invented.
+    - Original compbase query helpers retain literal root shortcut, non-interface rejection, direct-before-deep lookup, original type equality/traversal/danger-get/release/messages and qualified component-base fallback. Existing getTypeEntries is the same original type_entries.hxx responsibility. Numeric compiler offsets erase to the actual logical receiver; physical ABI/layout is unverified.
+    - ContextEntry_Init now owns original false late-init default, exact Unicode/NUL name and Any fields, direct default/copy/member construction (without extra default-Any assignment in copy construction), partial-construction cleanup, stable mutable member identity, bool/name/value assignment and reverse value/name destruction. Real Any interface references survive until all copied entries are destroyed. Public createComponentContext/environment/mapping orchestration is still absent; no placeholder factory is exported.
+    - CALC-448 preserves disposed flag/no retry after a failing base hook;CALC-449 preserves the source late-listener implementation despite XComponent's promised callback;CALC-450 records the template noexcept/native termination boundary. Fatal template paths are not executed or claimed as ordinary recoverable native exceptions. Browser noexcept process termination is explicitly uncertified and retained in the runtime justification; no success fallback or swallowed hook error was added. Physical locks/thread/destructor interleavings, allocator failure/static shutdown and whole-module reflection remain unverified.
+    - Local implementation failure: context-core.py initially found no guessed comment substring while extracting the original helper group, after only the new container file had been written. Recomputed route, removed the unused marker lookup, inspected actual source and regenerated correctly. No vendor mutation or widened source behavior.
+    - Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts --maxWorkers=1
+      Result: pass;3files/13cases,41.12s. Evidence: context-tests.log. Scope: actual helper/entry/query/listener contracts including the two source4-specific vector-identity paths.
+    - Command: npm run typecheck
+      Result: initial fail in the old optional tuple branch of ContextEntry_Init (context-typecheck.log). Corrected to exact default/copy/member branches and direct member construction; final tools/app typecheck passes(context-typecheck-final.log). Existing component disposal event-overload tests and final actual derived callers compile.
+    - Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts src/comphelper/inc/interfacecontainer3.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/comphelper/source/processfactory/processfactory.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+      Result: pass;10files/58cases,21.24s. Evidence: context-related-tests.log. Scope: final new members and adjacent real weak/query/reference/container/process/NumberText owners. Derived test callers implement all source interface methods through Receiver rather than instantiating an incomplete interface class.
+    - Command: npm run check:dependencies
+      Result: initial fail for missing cppuhelper->o3tl edge(context-deps.log); source interfacecontainer4.hxx includes o3tl/cow_wrapper.hxx. Registering that exact original dependency yields pass1940sources/10588imports/236edges(context-deps-fixed.log). Checker logic/reverse/application/browser gates stay enabled.
+    - Command: npm run check:docs
+      Result: initial fail for2 missing local-derived-class JSDoc comments(context-docs.log); added comments without runtime changes. Final pass4341authored files(context-docs-fixed.log).
+    - Command: npm run check:file-size
+      Result: pass. Evidence: context-size.log. Scope: all authored source hard limits; boundary checker/test final counts remain below1000.
+    - Command: npm run check:calc-resources
+      Result: pass;464commands/11menus/17policies. Evidence: context-resources.log. Scope: existing Calc resource contracts.
+    - Command: npm run inventory:registry:build
+      Result: pass;4views. Evidence: context-registry.log. Scope: canonical provenance/runtime records, retaining foundation/unverified status and explicit native-noexcept limitation.
+    - Command: npm run check:source-provenance
+      Result: pass;1941modules(1728mapped/182browser/31infrastructure). Evidence: context-provenance.log. Scope: exhaustive source ownership, without readiness promotion.
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+      Result: pass;47cases,92.02s. Evidence: context-boundary-tests.log. Scope: source graph and ownership restrictions including reverse o3tl->cppuhelper rejection.
+    - Remaining real goal requirements: concrete ComponentContext/ServiceManager, original public context environment/mapping bootstrap and application factory installation; EditEngine/VCL shared device/Sfx construction, actual BreakIterator/CharacterClassification services and required undo/word/deletion/layout/view groups; ScFieldEditEngine/DocImport and removal of multiline regex construction; NatNum12 supplier/casing/formatter and final native CSV audit. No complete context, engine or CSV admission is claimed. Preserve intentional browser save/open/autosave/no-recovery behavior. Keep verification rework/DOING and goal active.
+
+    - Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: initial fail; knownViolations is an exhaustive list of machine-detected violations, not free-form caveats. Resolution: retain native noexcept limitation explicitly in justification and CALC-450, with foundation/unverified status; leave machine-detected knownViolations empty as required by the existing analyzer. No validator changes. Route recomputed before correction.
+
+    - Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: pass after metadata correction. Evidence: context-parity-calc-fixed.log and context-parity-shared-fixed.log (both exit0). Scope: exhaustive canonical registry parity, with unchanged foundation/unverified status and documented noexcept limitation.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8files/197cases,78.76s. Evidence: context-csv-tests.log. Scope: existing CSV options, core import/recognition/date conversion, doc-shell export and browser file workflows.
+
+    - Command: npm run lint -- --ignore-pattern output/native/**
+      Result: initial fail; no-useless-constructor rejected the explicit zero-argument base constructor needed to keep native noncopyability in the host signature. Resolution: keep that signature and move the existing flag/container member initializers into its body, preserving order/defaults and actual owners without disabling lint. Route recomputed before correction. Evidence: context-lint.log.
+
+    - Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts --maxWorkers=1
+      Result: pass;3files/13cases,8.70s after constructor-initializer lint correction. Evidence: context-final-construction-tests.log. Scope: unchanged actual base initialization, lifecycle, queries and entry/container ownership.
+    - Command: npm run typecheck
+      Result: pass after the final initializer relocation; tools and app compile. Evidence: context-typecheck-post-lint.log. Scope: final source and actual derived interface callers.
+
+    - Command: npm run lint -- --ignore-pattern output/native/**
+      Result: pass after initializer correction. Evidence: context-lint-fixed.log (exit0). Scope: full authored repository ESLint, excluding only native experiment scratch.
+    - Command: node ../../node_modules/vite/bin/vite.js build (apps/office)
+      Result: pass;14.99s. Evidence: context-vite-build.log. Scope: actual production build after the separately successful final tools/app typecheck. Existing large-chunk warning remains; no build command or output is misreported as npm run build.
+
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 real Chromium CSV import/export scenario on the current production build. Evidence: context-browser.log (exit0). Scope: existing file UI, multiline cell display and byte-exact CSV download with no page errors.
+    - Final review: git diff --check passes; exact allowlist contains19 intentional source/test/registry/boundary/issue/task paths. All non-scratch changes are in that allowlist; output/native experiments are excluded. No vendor/network writes, no readiness promotion, no full-suite run because this is the same open task rather than the tenth completed task. Final full status is retained in context-final-status.log. Overall verification remains rework, task resumes DOING and the original goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -3674,6 +3776,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T12:56:32.865Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Component lifecycle prerequisite checkpoint verified: original container4, WeakComponentImplHelperBase2/template/query and ContextEntry_Init; 58 related tests, final 13-case construction rerun, 197 CSV/UI, 47 boundary tests, current-built browser, final typecheck/lint/build and static/provenance/parity pass. CALC-448/449 source behavior retained; native noexcept limitation explicit and uncertified (CALC-450). Concrete context/manager/environment bootstrap, EditEngine/DocImport and full NatNum12/formatter remain. Goal stays active; checkpoint is not full CSV acceptance.
+Attempts: 33
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T12:56:24.652Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4543,3 +4675,59 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass;1 current-built browser scenario,13.2s total. Evidence: bootstrap-browser.log. Scope: existing CSV import, primary ODS save and active-sheet export, with original assertions/timeouts. This does not certify production application-context or full native CSV admission.
 - Read-only tooling observation for the remaining original ICU break-service work: emcc/em++/wasm-ld are unavailable on current PATH; clang++ resolves to /usr/bin/clang++. No SDK download, new runtime backend or package dependency was installed or authorized by this checkpoint. Offline source work remains available; this is not a goal blocker.
 - Final review: git diff --check passes. Exact allowlist contains40 intended source/test/fixture/registry/issue/boundary/task paths; native experiment scratch stays excluded. Full final status is retained in bootstrap-final-status.log. No network/vendor writes, source/semantic readiness promotion or full-suite replay. Overall CSV verification remains rework/DOING and goal active; no task finish or goal completion is claimed.
+
+### Original component-base lifecycle and context-entry prerequisite checkpoint
+
+- Previous turn was progress:09827d025d61 ported processfactory and replaced NumberTextFactory injection with actual process-context/generated service creation. This continuation revalidated approved CODER/direct/Calc checkout and tracked-clean baseline. Concrete ComponentContext depends on the missing original WeakComponentImplHelper2 and internal source4 listener container; this checkpoint implements those real prerequisites, not a substitute context/manager/engine. Same task remains open; no tenth-task full-suite trigger.
+- Original internal OInterfaceContainerHelper4/OInterfaceIteratorHelper4 now use real Reference/cow_wrapper and their source-specific algorithm. They do not call the existing comphelper3 helper. Preserve duplicate references, owned getElements copies, pointer-first/root-identity single removal, shallow reverse iterator snapshots, make_unique before forEach snapshot, per-callback copied reference, DisposedException Context rules and swallowed foreign Contexts. disposeAndClear resets live storage to DEFAULT without the source3 clear/allocation path; reverse callbacks swallow only RuntimeException and snapshot destruction precedes native lock reacquisition. Native mutex-token parameters are erased in synchronous calls; no fake guard is supplied. Unconsumed explicit native move operations are not exposed/certified.
+- Implemented actual WeakComponentImplHelperBase2 and template/source query groups over one actual OWeakObject receiver and original UnoImplBase m_bDisposed=false virtual-base field. Base copy is unavailable, like the source mutex base. Flag-before-hook, empty original default hook, true event Source ownership, listener lifecycle, silent late registration, disposed-check Context, qualified weak/component/root fallback and destructor-without-implicit-dispose remain source-aligned. Protected disposing(unique_lock&) is explicitly named disposingComponent in the host to keep it distinct from public UNO disposing(EventObject); no runtime overload heuristic is used. Template class_data has original Ifc... plus XTypeProvider getter entries, while getTypes has an independent successful-once static COW sequence in exact XWeak/XComponent/XTypeProvider/Ifc... order. Different derived classes of one specialization share that original static. Actual Type initializer-list copies/reverse destruction and existing Sequence storage retain ownership; no type/query/service provider is invented.
+- Original compbase query helpers retain literal root shortcut, non-interface rejection, direct-before-deep lookup, original type equality/traversal/danger-get/release/messages and qualified component-base fallback. Existing getTypeEntries is the same original type_entries.hxx responsibility. Numeric compiler offsets erase to the actual logical receiver; physical ABI/layout is unverified.
+- ContextEntry_Init now owns original false late-init default, exact Unicode/NUL name and Any fields, direct default/copy/member construction (without extra default-Any assignment in copy construction), partial-construction cleanup, stable mutable member identity, bool/name/value assignment and reverse value/name destruction. Real Any interface references survive until all copied entries are destroyed. Public createComponentContext/environment/mapping orchestration is still absent; no placeholder factory is exported.
+- CALC-448 preserves disposed flag/no retry after a failing base hook;CALC-449 preserves the source late-listener implementation despite XComponent's promised callback;CALC-450 records the template noexcept/native termination boundary. Fatal template paths are not executed or claimed as ordinary recoverable native exceptions. Browser noexcept process termination is explicitly uncertified and retained in the runtime justification; no success fallback or swallowed hook error was added. Physical locks/thread/destructor interleavings, allocator failure/static shutdown and whole-module reflection remain unverified.
+- Local implementation failure: context-core.py initially found no guessed comment substring while extracting the original helper group, after only the new container file had been written. Recomputed route, removed the unused marker lookup, inspected actual source and regenerated correctly. No vendor mutation or widened source behavior.
+- Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts --maxWorkers=1
+  Result: pass;3files/13cases,41.12s. Evidence: context-tests.log. Scope: actual helper/entry/query/listener contracts including the two source4-specific vector-identity paths.
+- Command: npm run typecheck
+  Result: initial fail in the old optional tuple branch of ContextEntry_Init (context-typecheck.log). Corrected to exact default/copy/member branches and direct member construction; final tools/app typecheck passes(context-typecheck-final.log). Existing component disposal event-overload tests and final actual derived callers compile.
+- Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts src/comphelper/inc/interfacecontainer3.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/comphelper/source/processfactory/processfactory.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+  Result: pass;10files/58cases,21.24s. Evidence: context-related-tests.log. Scope: final new members and adjacent real weak/query/reference/container/process/NumberText owners. Derived test callers implement all source interface methods through Receiver rather than instantiating an incomplete interface class.
+- Command: npm run check:dependencies
+  Result: initial fail for missing cppuhelper->o3tl edge(context-deps.log); source interfacecontainer4.hxx includes o3tl/cow_wrapper.hxx. Registering that exact original dependency yields pass1940sources/10588imports/236edges(context-deps-fixed.log). Checker logic/reverse/application/browser gates stay enabled.
+- Command: npm run check:docs
+  Result: initial fail for2 missing local-derived-class JSDoc comments(context-docs.log); added comments without runtime changes. Final pass4341authored files(context-docs-fixed.log).
+- Command: npm run check:file-size
+  Result: pass. Evidence: context-size.log. Scope: all authored source hard limits; boundary checker/test final counts remain below1000.
+- Command: npm run check:calc-resources
+  Result: pass;464commands/11menus/17policies. Evidence: context-resources.log. Scope: existing Calc resource contracts.
+- Command: npm run inventory:registry:build
+  Result: pass;4views. Evidence: context-registry.log. Scope: canonical provenance/runtime records, retaining foundation/unverified status and explicit native-noexcept limitation.
+- Command: npm run check:source-provenance
+  Result: pass;1941modules(1728mapped/182browser/31infrastructure). Evidence: context-provenance.log. Scope: exhaustive source ownership, without readiness promotion.
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts
+  Result: pass;47cases,92.02s. Evidence: context-boundary-tests.log. Scope: source graph and ownership restrictions including reverse o3tl->cppuhelper rejection.
+- Remaining real goal requirements: concrete ComponentContext/ServiceManager, original public context environment/mapping bootstrap and application factory installation; EditEngine/VCL shared device/Sfx construction, actual BreakIterator/CharacterClassification services and required undo/word/deletion/layout/view groups; ScFieldEditEngine/DocImport and removal of multiline regex construction; NatNum12 supplier/casing/formatter and final native CSV audit. No complete context, engine or CSV admission is claimed. Preserve intentional browser save/open/autosave/no-recovery behavior. Keep verification rework/DOING and goal active.
+
+- Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: initial fail; knownViolations is an exhaustive list of machine-detected violations, not free-form caveats. Resolution: retain native noexcept limitation explicitly in justification and CALC-450, with foundation/unverified status; leave machine-detected knownViolations empty as required by the existing analyzer. No validator changes. Route recomputed before correction.
+
+- Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: pass after metadata correction. Evidence: context-parity-calc-fixed.log and context-parity-shared-fixed.log (both exit0). Scope: exhaustive canonical registry parity, with unchanged foundation/unverified status and documented noexcept limitation.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8files/197cases,78.76s. Evidence: context-csv-tests.log. Scope: existing CSV options, core import/recognition/date conversion, doc-shell export and browser file workflows.
+
+- Command: npm run lint -- --ignore-pattern output/native/**
+  Result: initial fail; no-useless-constructor rejected the explicit zero-argument base constructor needed to keep native noncopyability in the host signature. Resolution: keep that signature and move the existing flag/container member initializers into its body, preserving order/defaults and actual owners without disabling lint. Route recomputed before correction. Evidence: context-lint.log.
+
+- Command: npm run test:shared -- src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts --maxWorkers=1
+  Result: pass;3files/13cases,8.70s after constructor-initializer lint correction. Evidence: context-final-construction-tests.log. Scope: unchanged actual base initialization, lifecycle, queries and entry/container ownership.
+- Command: npm run typecheck
+  Result: pass after the final initializer relocation; tools and app compile. Evidence: context-typecheck-post-lint.log. Scope: final source and actual derived interface callers.
+
+- Command: npm run lint -- --ignore-pattern output/native/**
+  Result: pass after initializer correction. Evidence: context-lint-fixed.log (exit0). Scope: full authored repository ESLint, excluding only native experiment scratch.
+- Command: node ../../node_modules/vite/bin/vite.js build (apps/office)
+  Result: pass;14.99s. Evidence: context-vite-build.log. Scope: actual production build after the separately successful final tools/app typecheck. Existing large-chunk warning remains; no build command or output is misreported as npm run build.
+
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 real Chromium CSV import/export scenario on the current production build. Evidence: context-browser.log (exit0). Scope: existing file UI, multiline cell display and byte-exact CSV download with no page errors.
+- Final review: git diff --check passes; exact allowlist contains19 intentional source/test/registry/boundary/issue/task paths. All non-scratch changes are in that allowlist; output/native experiments are excluded. No vendor/network writes, no readiness promotion, no full-suite run because this is the same open task rather than the tenth completed task. Final full status is retained in context-final-status.log. Overall verification remains rework, task resumes DOING and the original goal stays active.

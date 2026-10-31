@@ -63,7 +63,8 @@ const allowedEdges = new Map([
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
-  ["cppuhelper", new Set(["cppu", "sal", "udkapi"])],
+  // Original internal interfacecontainer4.hxx includes o3tl/cow_wrapper.hxx.
+  ["cppuhelper", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.

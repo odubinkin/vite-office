@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/source/compbase.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-component-context-lifecycle",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/source/compbase.ts",
+        "apps/office/src/cppuhelper/inc/compbase2.test.ts",
+        "cppuhelper/source/compbase.cxx"
+      ],
+      "justification": "Original compbase-specific direct/deep interface lookup retains non-interface rejection, literal root shortcut, pointer-or-name type equality, source multiple-base traversal/offset arithmetic and actual danger-get/release/error messages. It reuses the original shared type_entries.hxx implementation through existing getTypeEntries, while the final qualified fallback is the actual WeakComponentImplHelperBase2, retaining XComponent as well as weak/root interfaces. Original compbase static helpers are implemented in their original source group, not replaced with the weak-only helper. Physical compiler casts map to the same logical receiver, with no inferred interface/default/query provider. Concrete ComponentContext/ServiceManager, public createComponentContext environment/mapping orchestration, production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WeakComponentImplHelper_query"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cppuhelper/source/compbase.cxx",
+      "upstreamSymbols": [
+        "WeakComponentImplHelper_query",
+        "checkInterface",
+        "queryDeepNoXInterface",
+        "recursivelyFindType"
+      ]
+    }
+  }
+}

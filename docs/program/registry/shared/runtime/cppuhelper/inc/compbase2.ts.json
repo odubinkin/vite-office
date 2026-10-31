@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/inc/compbase2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-component-context-lifecycle",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/inc/compbase2.ts",
+        "apps/office/src/cppuhelper/inc/compbase2.test.ts",
+        "apps/office/src/cppuhelper/inc/interfacecontainer4.test.ts",
+        "cppuhelper/inc/compbase2.hxx"
+      ],
+      "justification": "Original weak/component base and template share one actual OWeakObject receiver and the original UnoImplBase m_bDisposed=false virtual-base field. Base copy is not exposed, matching the native mutex base. Preserves flag-before-hook, exact empty default hook, real event Source ownership, reverse listener notification, silent late registration, disposed check Context, no implicit notification at destruction and qualified root/component/weak queries. The protected disposing(unique_lock&) overload is explicitly named disposingComponent in the host so public UNO disposing(EventObject) remains a distinct virtual method; no callback provider or overload heuristic is introduced. Template class_data includes original Ifc.../XTypeProvider getters without eager evaluation. getTypes uses its independent successful-once static COW sequence in XWeak/XComponent/XTypeProvider/Ifc... order, shared across derived classes of the same specialization; actual initializer-list Type copies/destruction use existing Type/Sequence owners. Empty implementation ID and qualified forwarding bodies retain source defaults. CALC-448/449 preserve failure/late-listener behavior. Native final noexcept disposal termination is outside certified browser behavior (CALC-450), without a swallowed error/success replacement. Concrete ComponentContext/ServiceManager, public createComponentContext environment/mapping orchestration, production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WeakComponentImplHelperBase2",
+        "WeakComponentImplHelper2"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cppuhelper/inc/compbase2.hxx",
+      "upstreamSymbols": [
+        "WeakComponentImplHelperBase2",
+        "WeakComponentImplHelper2",
+        "dispose",
+        "getTypes",
+        "getImplementationId"
+      ]
+    }
+  }
+}

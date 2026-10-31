@@ -4979,3 +4979,21 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `include/comphelper/processfactory.hxx` return documentation and `comphelper/source/processfactory/processfactory.cxx`, `getComponentContext`.
 - Observation: the public header says the return may be null, but the implementation throws DeploymentException when the XPropertySet query is empty or the exact DefaultContext value does not query to XComponentContext. UnknownPropertyException is translated to a different DeploymentException; other exceptions propagate.
 - Preserve implementation behavior and original exception messages/Context ownership. A missing property/interface/context never becomes a null-return fallback in the port.
+
+### CALC-448 — Component base disposal can remain marked complete after its hook fails
+
+- Source: `cppuhelper/source/compbase.cxx`, `WeakComponentImplHelperBase2::dispose`.
+- Observation: m_bDisposed is set before the virtual disposing hook. If that non-noexcept base hook throws, the flag stays true and listener disposal is skipped; a later base dispose call returns without retrying either step.
+- Preserve the flag/hook/event order and lack of rollback. Tests use the original non-noexcept base path and observe the same failure object, one hook call and no later notifications. The template's separate noexcept boundary is documented in CALC-450.
+
+### CALC-449 — Component helper ignores a late listener despite XComponent's documented callback
+
+- Source: `cppuhelper/source/compbase.cxx`, `WeakComponentImplHelperBase2::addEventListener`, versus `udkapi/com/sun/star/lang/XComponent.idl`.
+- Observation: XComponent documents a disposing callback when a listener registers after disposal. This helper instead returns immediately when m_bDisposed is true, without retaining or notifying that listener.
+- Preserve the implementation return. Tests cover both late registration and reentrant registration while reverse snapshot notifications are in progress; no immediate callback is added.
+
+### CALC-450 — The component template's noexcept disposal can turn hook failures into native termination
+
+- Source: `cppuhelper/inc/compbase2.hxx`, `WeakComponentImplHelper2::dispose`, and its base call in `cppuhelper/source/compbase.cxx`.
+- Observation: the final template override is noexcept but forwards to a base method that can propagate a derived hook failure. On the native C++ boundary such escape terminates the process, unlike the direct non-noexcept base call in CALC-448.
+- Keep the original forwarding body and do not add a success fallback or exception-swallowing guard. Native process termination/noexcept ABI behavior is not represented or certified by the browser member binding; tests do not execute a fatal template path or claim it is an ordinary recoverable native exception.

@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/inc/component_context.ts",
+    "upstreamPath": "include/cppuhelper/component_context.hxx",
+    "localSymbols": [
+      "ContextEntry_Init"
+    ],
+    "upstreamSymbols": [
+      "ContextEntry_Init",
+      "m_bLateInitService",
+      "m_sName",
+      "m_aValue"
+    ],
+    "preservedResponsibilities": [
+      "Original context-entry input struct owns real OUString/Any fields. Default late-init is false, omitted member late-init is false, copy construction directly copies source members, and partial construction releases the completed name if Any construction fails. Original mutable member assignment retains actual name/Any owner identity; implicit assignment follows bool/name/value order and destruction follows reverse value/name order. Names retain all Unicode/NUL units and contained interface lifetimes use actual shared Any/Reference transport. No public createComponentContext placeholder, environment/mapping provider or replacement context is exported."
+    ],
+    "omittedResponsibilities": [
+      "Concrete ComponentContext/ServiceManager, public createComponentContext environment/mapping orchestration, production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/component_context.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/component_context.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/cppuhelper/component_context.hxx",
+          "marker": "ContextEntry_Init"
+        }
+      ]
+    }
+  }
+}
