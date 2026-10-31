@@ -13,6 +13,16 @@ export const POOLGRP_CHARFMT = POOLGRP_NOCOLLID;
 
 /** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
+  /** Original page group start, POOLGRP_NOCOLLID + (2 << 11). */
+  PAGE_STANDARD = 5120,
+  /** Original first page pool identity. */
+  PAGE_FIRST = 5121,
+  /** Original left page pool identity. */
+  PAGE_LEFT = 5122,
+  /** Original right page pool identity. */
+  PAGE_RIGHT = 5123,
+  /** Original HTML page pool identity. */
+  PAGE_HTML = 5126,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_BULLET_LEVEL1 = 4118,
   /** Original paragraph pool identity consumed by Word style mapping. */

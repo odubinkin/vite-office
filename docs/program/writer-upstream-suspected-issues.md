@@ -2585,3 +2585,41 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_page_break_xxx, ParseCSS1_widows and ParseCSS1_orphans.
 - Observation: the handlers inspect only the first expression. For example, page-break-inside:avoid trailing writes split=false and widows:3 trailing writes3. Widow/orphan NUMBER values accept zero, truncate fractional values, and clamp only values above255; a CSS-spec minimum or whole-expression validity check is absent. The existing scanner's six-hex priority still precedes numeric admission (WRITER160).
 - Preservation: retain first-expression admission, zero/fractional values and upper-bound handling. Tests exercise defined source conversion cases, including -0.5, whose truncated value is0. Negative floating values whose truncated value is outside uint8 are not treated as a portable upstream result or a desktop certificate; no claim of defined C++ behavior is made for them.
+
+
+### WRITER300 — CSS after:auto does not erase a before result already computed
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::SetFormatBreak.
+- Observation: before:always assigns PageBefore; after:auto sets write flags but does not reset that enum, so the resulting break remains PageBefore. Before:left followed by after:auto still writes the left page pointer, plus break=NONE and keep=false. The source's return value is bSetBreak: a left/right page reference alone returns false despite an item write.
+- Preservation: retain both switch order and field/write-flag distinctions; do not replace them with independent normalized before/after properties.
+
+### WRITER301 — HTML page copy changes requested left/right usage to All
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::GetPageDesc; sw/source/core/doc/DocumentStylePoolManager.cxx, GetPageDescFromPool; sw/source/core/doc/docfmt.cxx, SwDoc::CopyPageDesc.
+- Observation: pool creation makes the mutually following Left/Right pair with native side flags. The HTML parser then copies the HTML page's complete use flags onto only the requested page. A requested left becomes All while its right companion remains Right; requested right behaves symmetrically. CopyPageDesc(false) preserves the requested pool ID but still copies use flags.
+- Preservation: keep the original order of pool materialization, HTML frame copy and subsequent follow rewiring, without correcting the side flag to match the CSS keyword.
+
+### WRITER302 — CopyPageDesc skips follow mutation for a self-following source
+
+- Source: sw/source/core/doc/docfmt.cxx, SwDoc::CopyPageDesc.
+- Observation: only a non-self source follow enters the copy/lookup branch. Copying a self-following source into a target already following another page leaves that target follow unchanged. Other source fields and four independent frame item sets are still copied.
+- Preservation: do not make self-follow an unconditional target reset. Cross-document non-self follow graphs use destination names and retain native recursive materialization.
+
+### WRITER303 — Native page copies retain the original source follow pointer
+
+- Source: sw/source/core/layout/pagedesc.cxx, SwPageDesc copy constructor; sw/source/core/doc/docdesc.cxx, SwDoc::MakePageDesc.
+- Observation: native copy construction copies m_pFollow directly, including a source's self-pointer. MakePageDesc then changes the name and resets pool identity for a new name, without rebasing that pointer to the new owner. The prior local MakePageDesc incorrectly used a browser Clone helper that rebased self-follow.
+- Preservation: native MakePageDesc now uses the original constructor; the explicit browser value-copy Clone helper remains separate. Do not normalize a copied native source follow.
+
+### WRITER304 — ChgPageDesc mutates supplied frames and copies a selective page table
+
+- Source: sw/source/core/doc/docdesc.cxx, SwDoc::ChgPageDesc and lcl_DescSetAttr.
+- Observation: despite the const source reference, ChgPageDesc changes its left/first frame attributes before transferring them into the registered target. The page table excludes RES_BACKGROUND and RES_HEADER_FOOTER_EAT_SPACING and does not copy arbitrary paragraph attributes; drawing fill attributes participate separately. Mirroring constructs a fresh LR item, swaps margin measures and writes the original gutter into the right gutter.
+- Preservation: retain source-frame mutations, selective copy/reset behavior, pool ID propagation and original margin operations. Do not flatten this native change into the existing browser geometry setter or a blanket item-set copy.
+
+
+### WRITER305 — An empty first inline declaration prevents later declarations
+
+- Source: sw/source/filter/html/parcss1.cxx, CSS1Parser::ParseStyleOption.
+- Observation: after the initial ParseDeclaration, a missing expression returns from ParseStyleOption immediately. For page-break-before:;page-break-after:always the after declaration is never processed. This first-declaration branch differs from the later declaration loop's recovery behavior.
+- Preservation: retain the original early return. Tests for an absent before/after property omit that declaration; a separate regression checks the actual empty-first-declaration behavior rather than normalizing it.

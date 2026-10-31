@@ -69,6 +69,11 @@ export class SwHTMLParser extends HTMLParser {
   private m_bDocInitialized = false;
   private m_bInTitle = false;
   private readonly m_bOldIsHTMLMode: boolean;
+  private readonly m_bReadingHeaderOrFooter = false;
+  /** Original header/footer admission query; this body-only reader has no header/footer section producer. @returns Native flag. */
+  IsReadingHeaderOrFooter(): boolean {
+    return this.m_bReadingHeaderOrFooter;
+  }
   /** Borrows the original existing document/cursor, clearing its mark as the native constructor does. @param m_xDoc - Actual document. @param m_pPam - Actual cursor. @param input - Native stream. @param m_aPathToFile - Source path. @param m_sBaseURL - Source base URL. @param newDoc - Native new-document flag. @returns Parser. */
   constructor(
     readonly m_xDoc: SwDoc,

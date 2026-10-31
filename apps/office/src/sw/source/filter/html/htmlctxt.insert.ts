@@ -22,6 +22,7 @@ export function InsertAttrs(
   context: HTMLAttrContext,
   charLevel: boolean,
 ): void {
+  if (!charLevel) parser.m_pCSS1Parser.SetFormatBreak(items, info);
   const oldLeft: [number] = [0],
     oldRight: [number] = [0],
     oldIndent: [number] = [0];

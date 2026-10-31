@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-page.ts",
+          "marker": "GetPageDescFromPool"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.page.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "DocumentStylePoolManager::GetPageDescFromPool"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt-page.ts",
+    "localSymbols": [
+      "GetPageDescFromPool"
+    ],
+    "omittedResponsibilities": [
+      "Only concrete consuming page-break dependencies in the current core are implemented; broader upstream families and native module certification remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "upstreamSymbols": [
+      "DocumentStylePoolManager::GetPageDescFromPool"
+    ],
+    "rationale": " TaskDVQ9ES extends the consumed paragraph style path with editable raw-name acceptance, full pool-name lookup beyond displayed rows, actual document-shell UpdateStyle/MakeByExample, point-node FillByEx filtering, first selected text collection lookup, native grouped update and separate attribute/create/apply histories, Sfx ignored asynchronous naming and existing collection deletion/follow correction. Source quirks WRITER067/068 are preserved. Named-style references are XML-escaped during paragraph/list body export. The Style panel retains native command order; FormatPaintbrush and standalone Writer ResetAttributes remain disabled because their original execute paths are not implemented. This corrects the initial task assumption that ResetAttributes was already registered; the private style-application reset is a distinct owner. Wider style families/masks/hidden default table, complete style-box popup/completion/preview/clear/more/platform services and complete UI/core parity remain unverified. Existing save/open/autosave/no-recovery deviations and classification/default statuses are unchanged.",
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/poolfmt-page.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Cohesive original page/header responsibilities are split under authored source-size limits and ESM declaration initialization boundaries, without a second model, DTO service or synthetic native owner."
+    }
+  },
+  "legacyOrder": 161
+}

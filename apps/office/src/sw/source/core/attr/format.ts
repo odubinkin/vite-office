@@ -176,6 +176,19 @@ export class SwFormat extends BroadcastingModify {
     }
     return newSet.Count();
   }
+  /** Original DelDiffs intersects direct identities before a following SetFormatAttrSet, retaining source lock and broadcast behavior. @param set - Source identity set. @returns Nothing. */
+  public DelDiffs(set: SfxItemSet): void {
+    if (this.attributeSet.Count() === 0) return;
+    if (this.IsModifyLocked()) {
+      this.attributeSet.Intersect(set);
+      return;
+    }
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    if (this.attributeSet.Intersect_BC(set, oldSet, newSet) !== 0)
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+  }
+
   /** Filters inherited native deltas by every locally-present WhichId. @param source - Original notifying parent. @param hint - Native change. @returns Nothing. */
   public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
     if (hint.kind === "object-dying") {

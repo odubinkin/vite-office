@@ -1,4 +1,6 @@
 /** @fileoverview Consumed native SwCSS1Parser character-style and configured font-height owners from htmlcss1.cxx. */
+import { GetPageDesc, SetFormatBreak } from "./htmlcss1.page";
+import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SvxCSS1Parser } from "./svxcss1";
 import { cssAsciiLower } from "./svxcss1.properties";
 import { Css1ScriptFlags } from "./svxcss1.types";
@@ -178,14 +180,33 @@ export class SwCSS1Parser extends SvxCSS1Parser {
   /** Borrows original document/parser and copies the supplied seven native configured heights. @param doc - Actual document. @param parser - Actual HTML parser. @param heights - HTML font configuration in twips. @param baseURL - Original base. @param m_bIsNewDoc - Native creation selector. @returns Parser. */
   constructor(
     private readonly doc: SwDoc,
-    parser: SwHTMLParser,
+    private readonly parser: SwHTMLParser,
     private readonly heights: readonly number[],
     baseURL: string,
     private readonly m_bIsNewDoc: boolean,
   ) {
-    super(doc.GetAttrPool(), baseURL);
-    void parser;
+    super(doc.GetAttrPool(), baseURL, [H.RES_BREAK, H.RES_PAGEDESC, H.RES_KEEP]);
     this.heights = [...heights];
+  }
+  /** Native master HTML page owner. @returns Borrowed master page. */
+  GetMasterPageDesc() {
+    return this.doc.getIDocumentStylePoolAccess().GetPageDescFromPool(P.PAGE_HTML, false);
+  }
+  /** Native first page lookup/creation. @param create - Original flag. @returns Borrowed page or null. */
+  GetFirstPageDesc(create = false) {
+    return GetPageDesc(this.doc, this.parser, P.PAGE_FIRST, create);
+  }
+  /** Native left page lookup/creation. @param create - Original flag. @returns Borrowed page or null. */
+  GetLeftPageDesc(create = false) {
+    return GetPageDesc(this.doc, this.parser, P.PAGE_LEFT, create);
+  }
+  /** Native right page lookup/creation. @param create - Original flag. @returns Borrowed page or null. */
+  GetRightPageDesc(create = false) {
+    return GetPageDesc(this.doc, this.parser, P.PAGE_RIGHT, create);
+  }
+  /** Original paragraph break consumer, preserving the source boolean result. @param items - Actual set. @param info - Parsed state. @returns Source bSetBreak. */
+  SetFormatBreak(items: SfxItemSet, info: SvxCSS1PropertyInfo): boolean {
+    return SetFormatBreak(this, items, info);
   }
   /** Native indexed HTML font-height lookup. @param size - Zero-based index. @returns Configured twips. */
   override GetFontHeight(size: number): number {

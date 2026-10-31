@@ -36,6 +36,8 @@ it("writes initial native page geometry to RTF global and first-section controls
   if (first === undefined) throw new Error("Missing paragraph.");
   first.SetText("Page");
   const alternate = source.MakePageDesc("Landscape", source.GetPageDesc());
+  // Native copying keeps Standard as follow; this case tests a standalone page.
+  alternate.SetFollow(null);
   source.ChgPageDesc(
     {
       ...alternate.GetValue(),
@@ -185,6 +187,8 @@ it("combines matching first/follow pages and advances the current section page",
     source.paragraphs[0]?.SetText("Before");
     const first = source.MakePageDesc("New First", source.GetPageDesc());
     const follow = source.MakePageDesc("New Follow", source.GetPageDesc());
+    // Explicit terminal self-follow is required by native section admission.
+    follow.SetFollow(null);
     first.SetFollow(follow);
     source.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("New First"));
     source.nodes.MakeTextNode("Follow").SetAttr(new SwFormatPageDesc("New Follow"));

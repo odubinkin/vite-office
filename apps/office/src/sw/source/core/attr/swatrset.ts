@@ -734,6 +734,15 @@ export class SwAttrSet extends SfxItemSet {
     return count;
   }
 
+  /** Original intersection installs the native old/new receivers only during mutation and returns the preferred receiver's count. At least one receiver is a source precondition. @param set - Identity source. @param oldSet - Old delta receiver. @param newSet - New delta receiver. @returns Receiver count. */
+  public Intersect_BC(set: SfxItemSet, oldSet?: SwAttrSet, newSet?: SwAttrSet): number {
+    this.m_pOldSet = oldSet;
+    this.m_pNewSet = newSet;
+    super.Intersect(set);
+    this.m_pOldSet = this.m_pNewSet = undefined;
+    return (newSet ?? (oldSet as SwAttrSet)).Count();
+  }
+
   /** Creates a Writer attribute set. @param pool - Owning Writer pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited set. @returns Nothing. */
   public constructor(pool: SwAttrPool, ranges: WhichRangesContainer, parent?: SfxItemSet) {
     super(pool, ranges, parent);

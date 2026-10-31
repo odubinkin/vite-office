@@ -3,6 +3,7 @@
 import { getWriterMaterializedParagraphStyleDefinition } from "../../../inc/poolfmt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { createWriterTextFormatColl, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
+import { GetPageDescFromPool } from "./poolfmt-page";
 import { applyWriterParagraphStyleDefaults } from "./poolfmt-defaults";
 
 import { SwCharFormat } from "../../../inc/charfmt";
@@ -23,6 +24,11 @@ export class DocumentStylePoolManager {
   /** Creates the manager and materializes Writer's default collection. @param attrPool - Document pool. @returns Nothing. */
   public constructor(private readonly attrPool: SwAttrPool) {
     this.GetTextFormatColl("default");
+  }
+
+  /** Native consumed page-pool entry using the actual document page collection. @param id - Native pool ID. @param regardLanguage - Original creation flag. @returns Borrowed page owner. */
+  public GetPageDescFromPool(id: number, regardLanguage = true) {
+    return GetPageDescFromPool(this.attrPool.GetDoc(), id, regardLanguage);
   }
 
   /** Returns the original stable character table, including its default format. @returns Native character owners. */

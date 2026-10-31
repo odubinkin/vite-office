@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 251
+revision: 259
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T10:02:21.564Z"
+  updated_at: "2026-10-31T10:25:07.246Z"
   updated_by: "CODER"
-  note: "HTML33 checkpoint verified: 115 related cases (34 new pagination cases), app types/lint/format, source provenance, Writer/shared registry and boundaries/docs/size/tree gates pass. Split/widow/orphan HTML-to-Markdown-to-Worker delivery and before/after pending state follow pinned handlers. SetFormatBreak/page ownership, HTML tables, insertion snapshot and final matrix still pending; full goal remains incomplete."
-  attempts: 44
+  note: "HTML34 checkpoint verified: 284 unique related scenarios across 18 files have positive current evidence; app types, changed-source lint/format, provenance, Writer/shared registries and boundaries/docs/size/tree/doctor pass. Native paragraph SetFormatBreak and page-pool/copy/follow ownership, source-correct MakePageDesc and Worker pool IDs are connected. Initial failed enum/fixture/helper invocations remain recorded. Raw HTML tables, insertion boundary/snapshots and final matrix are pending; full parent goal remains incomplete."
+  attempts: 45
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -709,8 +712,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T10:25:07.246Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML34 checkpoint verified: 284 unique related scenarios across 18 files have positive current evidence; app types, changed-source lint/format, provenance, Writer/shared registries and boundaries/docs/size/tree/doctor pass. Native paragraph SetFormatBreak and page-pool/copy/follow ownership, source-correct MakePageDesc and Worker pool IDs are connected. Initial failed enum/fixture/helper invocations remain recorded. Raw HTML tables, insertion boundary/snapshots and final matrix are pending; full parent goal remains incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T10:25:24.842Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:03:21.225Z"
+doc_updated_at: "2026-10-31T10:25:38.519Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1775,6 +1791,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T10:25:07.246Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML34 checkpoint verified: 284 unique related scenarios across 18 files have positive current evidence; app types, changed-source lint/format, provenance, Writer/shared registries and boundaries/docs/size/tree/doctor pass. Native paragraph SetFormatBreak and page-pool/copy/follow ownership, source-correct MakePageDesc and Worker pool IDs are connected. Initial failed enum/fixture/helper invocations remain recorded. Raw HTML tables, insertion boundary/snapshots and final matrix are pending; full parent goal remains incomplete.
+    Attempts: 45
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:25:04.737Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2795,6 +2841,33 @@ sections:
     - Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.
 
     - Commit trace: efe6258bbf86 contains11implementation/shared-registry/task/audit paths. The AgentPlane allowlist matches path components, not arbitrary filename stems: --allow .../html/svxcss1 did not select8Writer registry records. No validation failed and those already-verified metadata files remain intentional. Record them in a separate narrow metadata commit using all8exact paths; do not amend implementation or discard metadata. Reviewed start-ready INC-20261009-01..03 advice concerns format-parent changes, absent from this block, so no coverage/all-app replay is applicable.
+
+    ### HTML34 native CSS page ownership checkpoint (verified)
+
+    - Consumed dependency scope: native SetFormatBreak and HTML page-pool creation/copy/following, core identity-only Intersect/Intersect_BC/DelDiffs required by CopyPageDesc, native current-model ChgPageDesc, and page pool identity copy/Worker preservation. Existing browser geometry ingress remains an explicit overload. General header/footer, footnote, desktop layout and unrepresented page-pool branches are not claimed implemented.
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmlcss1.page.integration.test.ts src/sw/source/core/doc/native-page-copy.test.ts src/sw/source/filter/html/svxcss1.pagination.integration.test.ts src/sw/source/core/doc/writer-boundaries.test.ts --maxWorkers 1. Result: fail1suite during module initialization,49cases/3other files passed,48.01s,html34-focused-first.txt,exec24117exit1. New htmlcss1.page import order exposed an existing CSS enum initialization cycle: svxcss1.types -> svxcss1 -> properties -> pagination top-level enum map saw an undefined enum. Preserve the failed run; route recomputed before fixing the original header enum module boundary. No private state/results/timeout substitution is permitted.
+    - Command: first app tsc --noEmit before new tests/final copy changes. Result: pass,html34-types-first.txt,exec32065exit0. Current full source compiler is still running (exec32016); the earlier compiler is not proof for later source changes.
+
+    - Registry update helper failed with KeyError preservedResponsibilities on a record using another schema variant after writing the first shared record updates. Result: fail (no registry gate executed), raw exec output retained. Route recomputed; remediate with an idempotent schema-aware append preserving existing classifications, histories and semantic statuses, then run real provenance/registry gates. No hand edits to AgentPlane task state.
+
+    - Command: focused HTML page test after isolating original header enums in svxcss1.enums.ts. Result: fail3cases/17pass,html34-page-second.txt,exec63049exit1,94.95s. All3fresh fixtures accidentally generated an empty first declaration (page-break-before:;...), so original ParseStyleOption returned before parsing the following after-property (parcss1.cxx1144-1188). Correct the test producer to omit absent properties and add a separate actual empty-first-declaration regression; do not modify original grammar recovery or expected native break results. Route recomputed before correction.
+    - Command: app tsc current intermediate source (exec32016). Result: pass,html34-types-current.txt; enum module move and final tests still require the final app typecheck.
+
+    - Command: targeted ten-file native page-copy consumer run (RTF first-page/controls/layout, ODT roundtrip, text-grid/page owner/default/grid properties, Writer attrs and Worker boundaries). Result: fail4cases/130pass across10files,253.46s,html34-copy-consumers.txt,exec67196exit1. All four failures are source-backed fixture graph drift from the corrected MakePageDesc copy constructor: standalone Landscape and terminal follow pages now retain Standard follow instead of the old helper's self-follow. Native rtfexport.cxx1497-1498 advances to a non-self follow for initial output; wrtw8sty.cxx1801-1804 requires a self-following terminal style to combine a later first/follow section. Fix only those fixtures by explicit SetFollow(null), preserving all export expectations and production exporter code. Route recomputed before migration; retain failed output.
+    - Command: final production/new-notification app compiler. Result: pass,html34-types-notify-final.txt,exec97563exit0. Subsequent correction only adds already-typed SetFollow(null) to existing RTF fixtures and their source explanation; no implementation/signature/type contract changes.
+
+    - Command: related eight-file Writer run after enum ownership and fixture admission correction (htmlcss1.page.integration, native-page-copy, svxcss1.pagination.integration, svxcss1.state, swhtml.native.integration, pagedesc, writer-boundaries and native-format-attribute-notify) --maxWorkers1. Result: pass149cases/8files,89.21s,html34-related-final.txt,exec64619exit0. This proves actual SetFormatBreak item values/write flags/return, first/left/right pool copy/following, Markdown insertion/Worker identity, original empty-first grammar, frame copying, intersection and native attribute ownership.
+    - Command: npm run test:writer -- src/sw/source/core/doc/native-page-copy.test.ts --maxWorkers1 after adding the final real-client notification witness. Result: pass14cases,160.56s,html34-copy-notify-final.txt,exec47534exit0. This replaces the prior13cases for that unchanged production owner and adds1unique notification/modify-lock case. No fake provider, private-field writes, timeout increases or coverage counter edits.
+    - Command: npm run test:writer -- src/sw/source/filter/ww8/rtfexport.first-page.test.ts src/sw/source/filter/ww8/rtfexport.layout.test.ts --maxWorkers1 after explicit native fixture follows. Result: pass35cases/2files,24.75s,html34-rtf-fixtures-final.txt,exec35845exit0. All original assertions remain unchanged; only3fixture construction points explicitly select self-follow (one shared fixture covers2failed cases). Together with99unchanged cases passing in the other8files from the prior consumer run, all134current consumer scenarios have positive evidence. The failed combined run remains failed.
+    - Final related evidence:284unique current scenarios/18files =149related +1new notification case +134copy consumers. This is targeted Writer/filter/UI-boundary validation, not a full all-app run or compiled upstream differential certificate. All native implementation source was unchanged between these final related runs; only fixture/API type reuse and formatting/comments changed after the final compiler.
+    - Commands/results: app native tsc --noEmit passes final production/new-test source (html34-types-final.txt,exec88007exit0) and the final notification test (html34-types-notify-final.txt,exec97563exit0). All changed source/test ESLint --max-warnings0 passes (html34-lint.txt,exec17021exit0); final notification test lint passes66780; source-backed RTF fixtures lint passes7940. Explicit Prettier --check passes57597 for full changed TS/JSON/Markdown and final RTF fixture formatting also passes. git diff --check passes.
+    - Commands/results: npm run check:source-provenance passes1902runtime/1689mapped/182browser/31infra (html34-provenance.txt,exec89792exit0); Writer and shared registry gates pass with semanticViolationCount0 (html34-writer/shared.txt,exec46871/1416exit0). Existing semantic classifications/status/history remain preserved; new bounded native fragments remain unverified for full-module semantics/ABI. Existing browser codec remains local infrastructure.
+    - Commands/results: module boundaries pass1901runtime sources/10458relative imports/227allowed edges (html34-boundaries.txt,exec66726exit0); JSDoc passes4282authored files (html34-docs.txt,exec31944exit0); size passes4286authored files (html34-size.txt,exec14289exit0); source-tree passes115required/32retired roots (html34-tree.txt,exec55190exit0). Source files above500remain review candidates below1000hard limit; no gate thresholds were relaxed. ap doctor passes with only the known managed-shim readiness warning (html34-doctor.txt,exec63588exit0), no hooks/global configuration changes.
+    - Original source findings WRITER300-305 document AUTO's no-reset switch behavior, requested left/right usage overwritten toAll, source-self-follow copy omission, source pointer retained by native MakePageDesc, ChgPageDesc selective/const-source frame mutation and initial empty-declaration return. Logic is preserved, not repaired to CSS expectations.
+    - Scope: only concrete current-core page-break dependencies are connected. Native generic class/ABI/desktop/header-footer/page-undo certification and valid unrepresented page-pool branches are not inferred prerequisites or claimed complete. Browser geometry entry remains separate; browser initial locale geometry, file save/open/autosave/recovery flows remain unchanged. Native current-core copy now preserves frame pool IDs and Auto flags; Worker retains original per-frame pool IDs without promoting UI metadata into a core owner.
+    - Remaining critical path: raw HTML tables admitted by the actual Markdown existing-document caller; original insertion boundary/target-attribute snapshot handling; final current-model/filter/UI matrix reconciliation and concrete deficiencies it exposes. Native TXT/RTF/Markdown parent objective remains active and incomplete. No completion/finish or pause is requested.
+
+    - Reviewed start-ready advice INC-20261009-01..03. This checkpoint adds native DelDiffs to the same format.ts owner but does not change the recorded format-parent correction or its strict Istanbul profile. Applicable principles were followed: preserve original owners/same-pool checks/metadata history and failed outputs, fix only source-backed failed fixtures, add a real notification witness, rerun only affected cases, and avoid cache/hint/tooling/full-suite expansion. No counter aggregation or unrelated coverage certificate is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -3870,6 +3943,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T10:25:07.246Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML34 checkpoint verified: 284 unique related scenarios across 18 files have positive current evidence; app types, changed-source lint/format, provenance, Writer/shared registries and boundaries/docs/size/tree/doctor pass. Native paragraph SetFormatBreak and page-pool/copy/follow ownership, source-correct MakePageDesc and Worker pool IDs are connected. Initial failed enum/fixture/helper invocations remain recorded. Raw HTML tables, insertion boundary/snapshots and final matrix are pending; full parent goal remains incomplete.
+Attempts: 45
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:25:04.737Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4894,3 +4997,30 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.
 
 - Commit trace: efe6258bbf86 contains11implementation/shared-registry/task/audit paths. The AgentPlane allowlist matches path components, not arbitrary filename stems: --allow .../html/svxcss1 did not select8Writer registry records. No validation failed and those already-verified metadata files remain intentional. Record them in a separate narrow metadata commit using all8exact paths; do not amend implementation or discard metadata. Reviewed start-ready INC-20261009-01..03 advice concerns format-parent changes, absent from this block, so no coverage/all-app replay is applicable.
+
+### HTML34 native CSS page ownership checkpoint (verified)
+
+- Consumed dependency scope: native SetFormatBreak and HTML page-pool creation/copy/following, core identity-only Intersect/Intersect_BC/DelDiffs required by CopyPageDesc, native current-model ChgPageDesc, and page pool identity copy/Worker preservation. Existing browser geometry ingress remains an explicit overload. General header/footer, footnote, desktop layout and unrepresented page-pool branches are not claimed implemented.
+- Command: npm run test:writer -- src/sw/source/filter/html/htmlcss1.page.integration.test.ts src/sw/source/core/doc/native-page-copy.test.ts src/sw/source/filter/html/svxcss1.pagination.integration.test.ts src/sw/source/core/doc/writer-boundaries.test.ts --maxWorkers 1. Result: fail1suite during module initialization,49cases/3other files passed,48.01s,html34-focused-first.txt,exec24117exit1. New htmlcss1.page import order exposed an existing CSS enum initialization cycle: svxcss1.types -> svxcss1 -> properties -> pagination top-level enum map saw an undefined enum. Preserve the failed run; route recomputed before fixing the original header enum module boundary. No private state/results/timeout substitution is permitted.
+- Command: first app tsc --noEmit before new tests/final copy changes. Result: pass,html34-types-first.txt,exec32065exit0. Current full source compiler is still running (exec32016); the earlier compiler is not proof for later source changes.
+
+- Registry update helper failed with KeyError preservedResponsibilities on a record using another schema variant after writing the first shared record updates. Result: fail (no registry gate executed), raw exec output retained. Route recomputed; remediate with an idempotent schema-aware append preserving existing classifications, histories and semantic statuses, then run real provenance/registry gates. No hand edits to AgentPlane task state.
+
+- Command: focused HTML page test after isolating original header enums in svxcss1.enums.ts. Result: fail3cases/17pass,html34-page-second.txt,exec63049exit1,94.95s. All3fresh fixtures accidentally generated an empty first declaration (page-break-before:;...), so original ParseStyleOption returned before parsing the following after-property (parcss1.cxx1144-1188). Correct the test producer to omit absent properties and add a separate actual empty-first-declaration regression; do not modify original grammar recovery or expected native break results. Route recomputed before correction.
+- Command: app tsc current intermediate source (exec32016). Result: pass,html34-types-current.txt; enum module move and final tests still require the final app typecheck.
+
+- Command: targeted ten-file native page-copy consumer run (RTF first-page/controls/layout, ODT roundtrip, text-grid/page owner/default/grid properties, Writer attrs and Worker boundaries). Result: fail4cases/130pass across10files,253.46s,html34-copy-consumers.txt,exec67196exit1. All four failures are source-backed fixture graph drift from the corrected MakePageDesc copy constructor: standalone Landscape and terminal follow pages now retain Standard follow instead of the old helper's self-follow. Native rtfexport.cxx1497-1498 advances to a non-self follow for initial output; wrtw8sty.cxx1801-1804 requires a self-following terminal style to combine a later first/follow section. Fix only those fixtures by explicit SetFollow(null), preserving all export expectations and production exporter code. Route recomputed before migration; retain failed output.
+- Command: final production/new-notification app compiler. Result: pass,html34-types-notify-final.txt,exec97563exit0. Subsequent correction only adds already-typed SetFollow(null) to existing RTF fixtures and their source explanation; no implementation/signature/type contract changes.
+
+- Command: related eight-file Writer run after enum ownership and fixture admission correction (htmlcss1.page.integration, native-page-copy, svxcss1.pagination.integration, svxcss1.state, swhtml.native.integration, pagedesc, writer-boundaries and native-format-attribute-notify) --maxWorkers1. Result: pass149cases/8files,89.21s,html34-related-final.txt,exec64619exit0. This proves actual SetFormatBreak item values/write flags/return, first/left/right pool copy/following, Markdown insertion/Worker identity, original empty-first grammar, frame copying, intersection and native attribute ownership.
+- Command: npm run test:writer -- src/sw/source/core/doc/native-page-copy.test.ts --maxWorkers1 after adding the final real-client notification witness. Result: pass14cases,160.56s,html34-copy-notify-final.txt,exec47534exit0. This replaces the prior13cases for that unchanged production owner and adds1unique notification/modify-lock case. No fake provider, private-field writes, timeout increases or coverage counter edits.
+- Command: npm run test:writer -- src/sw/source/filter/ww8/rtfexport.first-page.test.ts src/sw/source/filter/ww8/rtfexport.layout.test.ts --maxWorkers1 after explicit native fixture follows. Result: pass35cases/2files,24.75s,html34-rtf-fixtures-final.txt,exec35845exit0. All original assertions remain unchanged; only3fixture construction points explicitly select self-follow (one shared fixture covers2failed cases). Together with99unchanged cases passing in the other8files from the prior consumer run, all134current consumer scenarios have positive evidence. The failed combined run remains failed.
+- Final related evidence:284unique current scenarios/18files =149related +1new notification case +134copy consumers. This is targeted Writer/filter/UI-boundary validation, not a full all-app run or compiled upstream differential certificate. All native implementation source was unchanged between these final related runs; only fixture/API type reuse and formatting/comments changed after the final compiler.
+- Commands/results: app native tsc --noEmit passes final production/new-test source (html34-types-final.txt,exec88007exit0) and the final notification test (html34-types-notify-final.txt,exec97563exit0). All changed source/test ESLint --max-warnings0 passes (html34-lint.txt,exec17021exit0); final notification test lint passes66780; source-backed RTF fixtures lint passes7940. Explicit Prettier --check passes57597 for full changed TS/JSON/Markdown and final RTF fixture formatting also passes. git diff --check passes.
+- Commands/results: npm run check:source-provenance passes1902runtime/1689mapped/182browser/31infra (html34-provenance.txt,exec89792exit0); Writer and shared registry gates pass with semanticViolationCount0 (html34-writer/shared.txt,exec46871/1416exit0). Existing semantic classifications/status/history remain preserved; new bounded native fragments remain unverified for full-module semantics/ABI. Existing browser codec remains local infrastructure.
+- Commands/results: module boundaries pass1901runtime sources/10458relative imports/227allowed edges (html34-boundaries.txt,exec66726exit0); JSDoc passes4282authored files (html34-docs.txt,exec31944exit0); size passes4286authored files (html34-size.txt,exec14289exit0); source-tree passes115required/32retired roots (html34-tree.txt,exec55190exit0). Source files above500remain review candidates below1000hard limit; no gate thresholds were relaxed. ap doctor passes with only the known managed-shim readiness warning (html34-doctor.txt,exec63588exit0), no hooks/global configuration changes.
+- Original source findings WRITER300-305 document AUTO's no-reset switch behavior, requested left/right usage overwritten toAll, source-self-follow copy omission, source pointer retained by native MakePageDesc, ChgPageDesc selective/const-source frame mutation and initial empty-declaration return. Logic is preserved, not repaired to CSS expectations.
+- Scope: only concrete current-core page-break dependencies are connected. Native generic class/ABI/desktop/header-footer/page-undo certification and valid unrepresented page-pool branches are not inferred prerequisites or claimed complete. Browser geometry entry remains separate; browser initial locale geometry, file save/open/autosave/recovery flows remain unchanged. Native current-core copy now preserves frame pool IDs and Auto flags; Worker retains original per-frame pool IDs without promoting UI metadata into a core owner.
+- Remaining critical path: raw HTML tables admitted by the actual Markdown existing-document caller; original insertion boundary/target-attribute snapshot handling; final current-model/filter/UI matrix reconciliation and concrete deficiencies it exposes. Native TXT/RTF/Markdown parent objective remains active and incomplete. No completion/finish or pause is requested.
+
+- Reviewed start-ready advice INC-20261009-01..03. This checkpoint adds native DelDiffs to the same format.ts owner but does not change the recorded format-parent correction or its strict Istanbul profile. Applicable principles were followed: preserve original owners/same-pool checks/metadata history and failed outputs, fix only source-backed failed fixtures, add a real notification witness, rerun only affected cases, and avoid cache/hint/tooling/full-suite expansion. No counter aggregation or unrelated coverage certificate is claimed.

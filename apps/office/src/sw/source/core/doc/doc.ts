@@ -1,5 +1,8 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 import * as DocItems from "./doc.items";
+import { CopyPageDesc } from "./docfmt.page";
+import { ChgPageDescNative } from "./docdesc.native";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   MakePageDesc,
@@ -258,6 +261,7 @@ export class SwDoc {
     this.defaultGrfFormatColl = new SwGrfFormatColl(this.attrPool, "Graphikformatvorlage");
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale, this)];
+    this.pageDescs[0]?.SetPoolFormatId(SwPoolFormatId.PAGE_STANDARD);
     this.styleAccess = createStyleManager(
       new SfxItemSet(this.attrPool, [[RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1]]),
     );
@@ -353,9 +357,12 @@ export class SwDoc {
       ) => descriptor.GetName() === name,
     );
   }
-  /** Reports whether a descriptor belongs to this document. @param descriptor - Candidate identity. @returns Membership. */
-  public ContainsPageDesc(descriptor: SwPageDesc | undefined): boolean {
-    return descriptor !== undefined && this.pageDescs.includes(descriptor);
+  /** Original membership lookup optionally writes a stable collection position only on success. @param descriptor - Candidate identity. @param position - Optional source index output. @returns Membership. */
+  public ContainsPageDesc(descriptor: SwPageDesc | undefined, position?: [number]): boolean {
+    const index = descriptor === undefined ? -1 : this.pageDescs.indexOf(descriptor);
+    if (index < 0) return false;
+    if (position) position[0] = index;
+    return true;
   }
   /** Creates a native document-owned page descriptor. @param name - Unique style name. @param source - Optional native copy. @returns Descriptor. */
   public MakePageDesc(name: string, source?: SwPageDesc): SwPageDesc {
@@ -365,8 +372,24 @@ export class SwDoc {
   public DelPageDesc(descriptor: number | string): boolean {
     return DelPageDesc(this, this.pageDescs, descriptor);
   }
-  /** Applies the existing browser geometry ingress to a native descriptor. @param value - Geometry. @param target - Name or index. @returns Whether changed. */
-  public ChgPageDesc(value: WriterPageDescriptorValue, target: number | string = 0): boolean {
+  /** Original native page copy into an existing owner. @param source - Source descriptor. @param target - Destination descriptor. @param copyPoolIds - Native optional identity copy. @returns Nothing. */
+  public CopyPageDesc(source: SwPageDesc, target: SwPageDesc, copyPoolIds = true): void {
+    CopyPageDesc(this, source, target, copyPoolIds);
+  }
+  /** Native index-based descriptor change. @param index - Stable collection index. @param source - Changed native descriptor. @returns Nothing. */
+  public ChgPageDesc(index: number, source: SwPageDesc): void;
+  /** Existing browser geometry ingress. @param value - Geometry. @param target - Name or index. @returns Whether changed. */
+  public ChgPageDesc(value: WriterPageDescriptorValue, target?: number | string): boolean;
+  /** Selects the native or existing browser overload without flattening native frame items. @param value - Native index or browser geometry. @param target - Native descriptor or browser target. @returns Native void or browser change result. */
+  public ChgPageDesc(
+    value: WriterPageDescriptorValue | number,
+    target: number | string | SwPageDesc = 0,
+  ): boolean | void {
+    if (typeof value === "number") {
+      if (!(target instanceof SwPageDesc)) throw new Error("assert(native ChgPageDesc descriptor)");
+      return ChgPageDescNative(this, value, target);
+    }
+    if (target instanceof SwPageDesc) throw new Error("assert(browser page target)");
     return ChgPageDesc(this, value, target);
   }
   /** Native effective document default. @param which - Attribute identity. @returns Pool-owned item. */

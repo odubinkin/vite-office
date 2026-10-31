@@ -21,6 +21,9 @@ function chain(): { doc: SwDoc; first: SwPageDesc; follow: SwPageDesc } {
   doc.paragraphs[0]?.SetText("Before");
   const first = doc.MakePageDesc("First", doc.GetPageDesc());
   const follow = doc.MakePageDesc("Follow", doc.GetPageDesc());
+  // Native MakePageDesc preserves the copied source follow; this fixture needs
+  // the terminal self-follow required by wrtw8sty.cxx single-section admission.
+  follow.SetFollow(null);
   first.SetFollow(follow);
   doc.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("First"));
   return { doc, first, follow };

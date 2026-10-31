@@ -9,22 +9,8 @@ import {
   SVX_CSS1_BORDERINFO_STYLE,
 } from "./svxcss1.border-info";
 import { aItemIds } from "./svxcss1";
-/** Original CSS script flags. */
-export enum Css1ScriptFlags {
-  Western = 1,
-  CJK = 2,
-  CTL = 4,
-  AllMask = 7,
-}
-/** Original SvxCSS1PageBreak values, independent of the eventual Writer break item. */
-export enum SvxCSS1PageBreak {
-  NONE = 0,
-  AUTO = 1,
-  ALWAYS = 2,
-  AVOID = 3,
-  LEFT = 4,
-  RIGHT = 5,
-}
+import { SvxCSS1PageBreak } from "./svxcss1.enums";
+export { Css1ScriptFlags, SvxCSS1PageBreak } from "./svxcss1.enums";
 /** Native scalar property state; the source copy/Clear/Merge omissions for preserve-space and visible are deliberate. */
 export class SvxCSS1PropertyInfo {
   private readonly m_aBorderInfos: (SvxCSS1BorderInfo | null)[] = [null, null, null, null];

@@ -1,4 +1,5 @@
 /** @fileoverview Native document page-collection operations from docdesc.cxx; existing browser geometry ingress remains an explicit boundary. */
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwTextGridItem } from "../../../inc/tgrditem";
 import { RES_TEXTGRID } from "../../../inc/hintids";
 import type { SwDoc } from "./doc";
@@ -17,9 +18,11 @@ export function MakePageDesc(
 ): SwPageDesc {
   if (document.FindPageDesc(name) !== undefined)
     throw new Error(`Writer page descriptor exists: ${name}`);
-  const descriptor =
-    source?.Clone() ?? createDefaultWriterPageDescriptor(document.GetLocale(), document, name);
+  const descriptor = source
+    ? new SwPageDesc(source)
+    : createDefaultWriterPageDescriptor(document.GetLocale(), document, name);
   descriptor.SetName(name);
+  if (source && name !== source.GetName()) descriptor.SetPoolFormatId(SwPoolFormatId.UNKNOWN);
   pageDescs.push(descriptor);
   document.NotifyModelChange({ kind: "page-descriptor-changed" });
   return descriptor;

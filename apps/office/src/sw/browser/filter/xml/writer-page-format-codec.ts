@@ -18,10 +18,15 @@ export interface WriterPageFormatRecord {
   readonly useOn: number;
   readonly formats: readonly (readonly SfxPoolItemSnapshot[])[];
   readonly names?: readonly string[];
+  readonly poolIds?: readonly number[];
 }
 /** Serializes the four actual frame item sets without flattening inherited/default attributes. @param page - Native descriptor. @returns Record. */
 export function encodePageFormats(page: SwPageDesc): WriterPageFormatRecord {
   return {
+    poolIds: [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()].map(
+      /** Copies original per-frame pool identities, including UNKNOWN. @param frame - Actual frame. @returns Native unsigned16 ID. */
+      (frame) => frame.GetPoolFormatId(),
+    ),
     names: [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()].map(
       /** Copies independent original frame-format names. @param frame - Frame. @returns Name. */ (
         frame,
@@ -62,10 +67,22 @@ export function restorePageFormats(page: SwPageDesc, candidate: unknown): void {
       ))
   )
     throw new Error("Writer page frame names are invalid.");
+  if (
+    "poolIds" in candidate &&
+    (!Array.isArray(candidate.poolIds) ||
+      candidate.poolIds.length !== 4 ||
+      candidate.poolIds.some(
+        /** Validates untrusted native pool identities before mutating owners. @param id - Candidate ID. @returns Invalid. */
+        (id) => typeof id !== "number" || !Number.isInteger(id) || id < 0 || id > 65535,
+      ))
+  )
+    throw new Error("Writer page frame pool identities are invalid.");
   for (let index = 0; index < 4; ++index) {
     const frame = frames[index] as (typeof frames)[number],
       row: unknown = candidate.formats[index];
     if ("names" in candidate) frame.SetFormatName((candidate.names as string[])[index] as string);
+    if ("poolIds" in candidate)
+      frame.SetPoolFormatId((candidate.poolIds as number[])[index] as number);
     if (!Array.isArray(row)) throw new Error("Writer page frame items are invalid.");
     const seen = new Set<number>();
     for (const item of row) {

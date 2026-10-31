@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/docdesc.native.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/docdesc.native.ts",
+          "marker": "ChgPageDescNative"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-page-copy.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/docdesc.cxx",
+          "marker": "SwDoc::ChgPageDesc"
+        },
+        {
+          "path": "sw/source/core/doc/docdesc.cxx",
+          "marker": "lcl_DescSetAttr"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/docdesc.cxx",
+    "localSymbols": [
+      "ChgPageDescNative"
+    ],
+    "upstreamSymbols": [
+      "SwDoc::ChgPageDesc",
+      "lcl_DescSetAttr"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Only concrete consuming page-break dependencies in the current core are implemented; broader upstream families and native module certification remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/docdesc.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Cohesive original page/header responsibilities are split under authored source-size limits and ESM declaration initialization boundaries, without a second model, DTO service or synthetic native owner."
+    }
+  }
+}
