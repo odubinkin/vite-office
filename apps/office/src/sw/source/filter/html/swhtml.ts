@@ -184,6 +184,7 @@ export class SwHTMLParser extends HTMLParser {
         }
         this.m_aParaAttrs.length = 0;
         this.SetAttr(false);
+        this.m_pCSS1Parser.SetDelayedStyles();
         JoinHTMLInsertionStart(this);
         if (result === SvParserState.Accepted) FinishHTMLInsertion(this, stripped);
       }

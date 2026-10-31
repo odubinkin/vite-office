@@ -97,6 +97,10 @@ export enum SwPoolFormatId {
   COLL_SIGNATURE = 2054,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_STANDARD = 2048,
+  /** Original table-body paragraph pool identity. */
+  COLL_TABLE = 6151,
+  /** Original table-heading paragraph pool identity. */
+  COLL_TABLE_HDLN = 6152,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_TEXT = 2049,
   /** Original paragraph pool identity consumed by Word style mapping. */

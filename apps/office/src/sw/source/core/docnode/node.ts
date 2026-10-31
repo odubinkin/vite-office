@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.
  */
 
+import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { AttrSetChangeHint, SwAttrSetChg } from "../../../inc/hints";
@@ -50,6 +51,25 @@ export abstract class SwNode extends SwContentIndexRegistry {
     this.m_bIgnoreDontExpand = value;
   }
 
+  /** Original enclosing-table lookup includes a table node itself, then follows actual section owners up to the root sentinel. @returns Actual enclosing table or null. */
+  public FindTableNode(): SwTableNode | null {
+    if (this instanceof SwTableNode) return this;
+    let current = this.StartOfSectionNode();
+    while (!(current instanceof SwTableNode) && current.GetIndex())
+      current = current.StartOfSectionNode();
+    return current instanceof SwTableNode ? current : null;
+  }
+  /** Original typed-start lookup includes a start node itself and preserves the root-index termination condition. @param type - Native section tag. @returns Actual matching start or null. */
+  public FindStartNodeByType(type: SwStartNodeType): SwStartNode | null {
+    let current = this instanceof SwStartNode ? this : this.StartOfSectionNode();
+    while (current.GetStartNodeType() !== type && current.GetIndex())
+      current = current.StartOfSectionNode();
+    return current.GetStartNodeType() === type ? current : null;
+  }
+  /** Original table-box section lookup delegates to the generic tag search. @returns Actual start or null. */
+  public FindTableBoxStartNode(): SwStartNode | null {
+    return this.FindStartNodeByType(SwStartNodeType.SwTableBoxStartNode);
+  }
   /** Returns the owning node array. @returns Owning SwNodes. */
   public GetNodes(): SwNodes {
     return this.nodes;
@@ -103,9 +123,18 @@ export abstract class SwNode extends SwContentIndexRegistry {
 export class SwStartNode extends SwNode {
   private endOfSection?: SwEndNode;
 
-  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @returns Nothing. */
-  public constructor(nodes: SwNodes, parent?: SwStartNode) {
+  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @param startNodeType - Original structural section tag. @returns Nothing. */
+  public constructor(
+    nodes: SwNodes,
+    parent?: SwStartNode,
+    private readonly startNodeType = SwStartNodeType.SwNormalStartNode,
+  ) {
     super(nodes, "start", parent);
+  }
+
+  /** Original section-kind value is independent of the ordinary node category. @returns Native section tag. */
+  public GetStartNodeType(): SwStartNodeType {
+    return this.startNodeType;
   }
 
   /** Links the matching end sentinel during SwNodes construction. @param end - Matching end sentinel. @returns Nothing. */
@@ -143,9 +172,9 @@ export class SwTableNode extends SwStartNode {
 
 /** Begins one table cell section inside its table node. */
 export class SwTableBoxStartNode extends SwStartNode {
-  /** Creates a cell section. @param nodes - Owning array. @param table - Containing table section. @returns Nothing. */
-  public constructor(nodes: SwNodes, table: SwTableNode) {
-    super(nodes, table);
+  /** Creates a cell section. @param nodes - Owning array. @param parent - Containing native section; HTML can allocate a real cell section before assigning a core box. @returns Nothing. */
+  public constructor(nodes: SwNodes, parent?: SwStartNode) {
+    super(nodes, parent, SwStartNodeType.SwTableBoxStartNode);
   }
 }
 

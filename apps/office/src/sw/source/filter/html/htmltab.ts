@@ -488,6 +488,41 @@ export class HTMLTable {
       layout.SetColumn((this.m_aColumns[i] as HTMLTableColumn).CreateLayoutInfo(), i);
     return layout;
   }
+  /** Original predecessor selection consults previous-row spans, then the preceding content chain and deepest trailing nested table. The all-uint16-max pair requests the last cell. @param row - Native row or sentinel. @param column - Native column or sentinel. @returns Actual previous section or null. */
+  protected GetPrevBoxStartNode(row: number, column: number): SwStartNode | null {
+    let previous: HTMLTableCnts | null = null;
+    if (row === 0) {
+      if (column) previous = this.GetCell(0, column - 1).GetContents();
+      else return this.m_pPrevStartNode;
+    } else if (row === 65535 && column === 65535)
+      previous = this.GetCell(this.m_nRows - 1, this.m_nCols - 1).GetContents();
+    else {
+      const preceding = this.m_aRows[row - 1];
+      if (!preceding) throw new Error("assert(HTML previous row)");
+      let i = column;
+      while (i) {
+        if (preceding.GetCell(--i).GetRowSpan() === 1) {
+          previous = this.GetCell(row, i).GetContents();
+          break;
+        }
+      }
+      if (!previous) {
+        i = this.m_nCols;
+        while (!previous && i) previous = preceding.GetCell(--i).GetContents();
+      }
+    }
+    if (!previous) {
+      previous = this.GetCell(0, 0).GetContents();
+      if (!previous) return this.m_pPrevStartNode;
+    }
+    while (previous.Next()) {
+      const next = previous.Next();
+      if (!next) throw new Error("assert(HTML next content)");
+      previous = next;
+    }
+    const start = previous.GetStartNode();
+    return start ?? previous.GetTable()?.GetPrevBoxStartNode(65535, 65535) ?? null;
+  }
   /** Original upward identity-based rowspan repair updates an existing layout in parallel. @param row - Last matching row. @param column - Column. @param contents - Native content identity. @returns Nothing. */
   protected FixRowSpan(row: number, column: number, contents: HTMLTableCnts | null): void {
     let span = 1;

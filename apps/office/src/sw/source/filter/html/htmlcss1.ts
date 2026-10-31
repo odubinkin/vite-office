@@ -8,6 +8,8 @@ import { HtmlTokenId as T } from "../../../../svtools/inc/htmltokn";
 import { SwPoolFormatId as P, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwHTMLParser } from "./swhtml";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -78,8 +80,74 @@ function lcl_swcss1_setEncoding(format: SwFormat, encoding: rtl_TextEncoding): v
     }
   }
 }
+/** Original table-style item consumption merges one-sided spacing from the selected collection, drops proportional font heights, then maps page breaks before publishing real style items. @param coll - Actual collection. @param items - Mutable native CSS entry. @param info - Source declaration flags. @param css - Actual receiver. @returns Nothing. */
+function SetTextCollAttrs(
+  coll: SwTextFormatColl,
+  items: SfxItemSet,
+  info: SvxCSS1PropertyInfo,
+  css: SwCSS1Parser,
+): void {
+  const existing = coll.GetAttrSet().GetItemIfSet(H.RES_UL_SPACE),
+    incoming = items.GetItemIfSet(H.RES_UL_SPACE, false);
+  if (
+    (info.m_bTopMargin || info.m_bBottomMargin) &&
+    (!info.m_bTopMargin || !info.m_bBottomMargin) &&
+    existing instanceof SvxULSpaceItem &&
+    incoming instanceof SvxULSpaceItem
+  ) {
+    const spacing = existing.Clone();
+    try {
+      if (info.m_bTopMargin) spacing.SetUpper(incoming.GetUpper());
+      if (info.m_bBottomMargin) spacing.SetLower(incoming.GetLower());
+      items.Put(spacing);
+    } finally {
+      spacing.Dispose();
+    }
+  }
+  for (const which of [
+    H.RES_CHRATR_FONTSIZE,
+    H.RES_CHRATR_CJK_FONTSIZE,
+    H.RES_CHRATR_CTL_FONTSIZE,
+  ]) {
+    const height = items.GetItemIfSet(which, false);
+    if (height instanceof SvxFontHeightItem && height.GetProp() !== 100) items.ClearItem(which);
+  }
+  css.SetFormatBreak(items, info);
+  coll.SetFormatAttrSet(items);
+}
 /** Native Writer specialization over the actual CSS1 grammar/property receiver. */
 export class SwCSS1Parser extends SvxCSS1Parser {
+  private m_bTableHeaderTextCollSet = false;
+  private m_bTableTextCollSet = false;
+  /** Original one-time TH then TH P cascade over actual tag map entries. @returns Nothing. */
+  SetTHTagStyles(): void {
+    if (!this.m_bTableHeaderTextCollSet) this.SetTableTextColl(true);
+  }
+  /** Original one-time TD then TD P cascade over actual tag map entries. @returns Nothing. */
+  SetTDTagStyles(): void {
+    if (!this.m_bTableTextCollSet) this.SetTableTextColl(false);
+  }
+  /** Original terminal delayed-style order. @returns Nothing. */
+  SetDelayedStyles(): void {
+    this.SetTHTagStyles();
+    this.SetTDTagStyles();
+    this.SetATagStyles();
+  }
+  /** Original two-entry cascade mutates consumed sets and creates the collection only for a matching tag. Completion is recorded even with no entry. @param header - Select TH rather than TD. @returns Nothing. */
+  private SetTableTextColl(header: boolean): void {
+    const pool = header ? P.COLL_TABLE_HDLN : P.COLL_TABLE,
+      tag = header ? "th" : "td";
+    let coll: SwTextFormatColl | undefined;
+    for (const key of [tag, tag + " p"]) {
+      const entry = this.GetTag(key);
+      if (entry) {
+        coll ??= this.GetTextFormatColl(pool, "");
+        SetTextCollAttrs(coll, entry.GetItemSet(), entry.GetPropertyInfo(), this);
+      }
+    }
+    if (header) this.m_bTableHeaderTextCollSet = true;
+    else this.m_bTableTextCollSet = true;
+  }
   private m_bLinkCharFormatsSet = false;
   private m_bBodyLinkSet = false;
   private m_bBodyVLinkSet = false;

@@ -2717,3 +2717,15 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, HTMLTable::SetBorders.
 - Observation: RULES=rows still creates a vertical border after a column group, and RULES=cols still creates a horizontal border after a row group. RULES=groups uses both group conditions. The source tests the opposite-axis group boundary in addition to the ordinary rows/columns rule.
 - Preservation: retain the exact OR conditions and end-of-group ownership. Do not interpret rows/cols as excluding all opposite-axis separators. Actual column-group tests cover rows/cols/groups distinctions; row-side source ordering is retained for the pending box-format consumer. This is a source-state observation without a compiled desktop defect claim.
+
+### WRITER321 — Table-tag style completion can precede the existence of any matching CSS entry
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::SetTableTextColl; swcss1.hxx, SetTDTagStyles/SetTHTagStyles/SetDelayedStyles.
+- Observation: the TD/TH completion flag is set even when neither the tag nor tag-P map entry exists. A matching entry added later is therefore ignored by subsequent one-shot calls, including terminal SetDelayedStyles. Existing entries also remain one-shot after later map changes.
+- Preservation: retain lazy collection materialization, unconditional completion and original TH/TD/A terminal order. Do not invalidate the completion flag on map insertion or replay the cascade. Tests use real parsed declaration sets, original InsertTag/GetTag operations and actual pooled paragraph styles; no private flags or stylesheet producer are fabricated. This is a source-state observation, not a compiled desktop defect reproduction.
+
+### WRITER322 — Empty-cell section construction assigns two-point fonts through only one overload
+
+- Source: sw/source/filter/html/htmltab.cxx, the two SwHTMLParser::InsertTableSection overloads.
+- Observation: the predecessor-start overload selects the table-body collection and explicitly applies font height40twips (2pt) at100percent to Western, CJK and CTL on the first paragraph. The pool-ID overload changes the requested collection without these direct height items. MakeTableLine uses the predecessor overload when creating missing or covered cell contents, so the small height may be intentional for empty cells, despite resembling a missing zero or a default-font inconsistency.
+- Preservation: retain the overload distinction and exact40twip values when connecting the pending section consumers. Do not normalize them to ordinary table font height or400twips. This is source review evidence; the parser section consumers and a compiled desktop comparison are not claimed in this checkpoint.

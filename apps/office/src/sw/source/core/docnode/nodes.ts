@@ -1,6 +1,8 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { SwStartNodeType } from "../../../inc/ndtyp";
+import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
 import type { SwNodeIndex, SwPosition } from "../crsr/pam";
@@ -492,15 +494,44 @@ export class SwNodes {
     box.Dispose();
   }
 
+  /** Original MakeTextSection inserts start/end first, then creates the initial text node immediately before that new end. Structural tags do not create unrelated frame/header/footnote objects. @param where - Actual insertion boundary. @param type - Original section tag. @param coll - Actual document collection. @returns Connected section start. */
+  public MakeTextSection(
+    where: SwNode,
+    type: SwStartNodeType,
+    coll: SwTextFormatColl,
+  ): SwStartNode {
+    if (where.GetNodes() !== this || coll.GetDoc() !== this.document)
+      throw new Error("Text section owners belong to another document");
+    const index = where.GetIndex();
+    const previous = index ? this.at(index - 1) : null;
+    let parent = previous instanceof SwStartNode ? previous : previous?.StartOfSectionNode();
+    if (previous instanceof SwEndNode) parent = parent?.StartOfSectionNode();
+    const start =
+      type === SwStartNodeType.SwTableBoxStartNode
+        ? new SwTableBoxStartNode(this, parent)
+        : new SwStartNode(this, parent, type);
+    const end = new SwEndNode(this, start);
+    start.setEndOfSection(end);
+    this.nodeArray.splice(index, 0, start, end);
+    this.MakeTextNode(this.at(where.GetIndex() - 1), coll);
+    return start;
+  }
   /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */
-  public MakeTextNode(text = ""): SwTextNode {
+  public MakeTextNode(text?: string): SwTextNode;
+  /** Original positioned native text construction. @param where - Insertion boundary. @param coll - Actual document style. @returns Connected text owner. */
+  public MakeTextNode(where: SwNode, coll: SwTextFormatColl): SwTextNode;
+  /** Shares original native text ownership between the existing body-text boundary and positioned construction. @param textOrWhere - Body text or native boundary. @param coll - Original native collection. @returns Actual connected paragraph. */
+  public MakeTextNode(textOrWhere: string | SwNode = "", coll?: SwTextFormatColl): SwTextNode {
+    const where = typeof textOrWhere === "string" ? this.endOfContent : textOrWhere;
+    if (where.GetNodes() !== this || (coll && coll.GetDoc() !== this.document))
+      throw new Error("Text node owners belong to another document");
     const node = new SwTextNode(
       this,
-      this.endOfContent.StartOfSectionNode(),
-      this.document.GetDfltTextFormatColl(),
-      text,
+      where.StartOfSectionNode(),
+      coll ?? this.document.GetDfltTextFormatColl(),
+      typeof textOrWhere === "string" ? textOrWhere : "",
     );
-    this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
+    this.nodeArray.splice(where.GetIndex(), 0, node);
     this.InsertOutlineNode(node);
     this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
     return node;
