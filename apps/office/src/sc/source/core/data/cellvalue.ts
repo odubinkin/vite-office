@@ -1,5 +1,8 @@
 /** @fileoverview Owning scalar, rich-text and formula ScCellValue snapshots and borrowed ScRefCellValue views. */
 import type { ScDocument } from "../../../inc/document";
+import type { ScColumn } from "../../../inc/column";
+import { ScSetStringParam } from "../../../inc/stringutil";
+import { SingleCellListening, type StartListeningType } from "../../../inc/types";
 import type { ScAddress } from "../../../inc/address";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { EditTextObject } from "../../../../editeng/inc/editobj";
@@ -136,7 +139,11 @@ export class ScCellValue {
   commit(rDoc: ScDocument, rPos: ScAddress): void {
     switch (this.getType()) {
       case CellType.CELLTYPE_STRING:
-        rDoc.SetTextCell(rPos, this.getSharedString().getString());
+        {
+          const parameter = new ScSetStringParam();
+          parameter.setTextInput();
+          rDoc.SetString(rPos, this.getSharedString().getString(), parameter);
+        }
         break;
       case CellType.CELLTYPE_EDIT:
         rDoc.SetEditText(rPos, (this.getEditText() as EditTextObject).Clone());
@@ -151,26 +158,59 @@ export class ScCellValue {
         rDoc.SetEmptyCell(rPos);
     }
   }
-  /** Original document release transfers formula ownership and empties this value;strings still copy through literal text input. @param rDoc - Destination document. @param rPos - Cell. @returns Nothing. */
-  release(rDoc: ScDocument, rPos: ScAddress): void {
-    switch (this.getType()) {
-      case CellType.CELLTYPE_STRING:
-        rDoc.SetTextCell(rPos, this.getSharedString().getString());
-        break;
-      case CellType.CELLTYPE_EDIT:
-        rDoc.SetEditText(rPos, (this.getEditText() as EditTextObject).Clone());
-        break;
-      case CellType.CELLTYPE_VALUE:
-        rDoc.SetValue(rPos, this.getDouble());
-        break;
-      case CellType.CELLTYPE_FORMULA:
-        rDoc.SetFormulaCell(rPos, this.getFormula() as ScFormulaCell);
-        break;
-      default:
-        rDoc.SetEmptyCell(rPos);
+  /** Original document release transfers edit/formula ownership and copies strings through SetString with text policy before emptying this value. @param rDoc - Destination document. @param rPos - Cell. @returns Nothing. */
+  release(rDoc: ScDocument, rPos: ScAddress): void;
+  /** Original column overload transfers edit/formula pointers and forwards the formula listening mode. @param column - Actual destination. @param row - Source-valid row. @param listening - Original default SingleCellListening. @returns Nothing. */
+  release(column: ScColumn, row: number, listening?: StartListeningType): void;
+  /** Original document/column overload selection uses the declared address versus scalar row. @param destination - Actual owner. @param position - Source cell address or row. @param listening - Original column listening mode. @returns Nothing. */
+  release(
+    destination: ScDocument | ScColumn,
+    position: ScAddress | number,
+    listening: StartListeningType = SingleCellListening,
+  ): void {
+    if (typeof position === "number") {
+      const column = destination as ScColumn;
+      switch (this.getType()) {
+        case CellType.CELLTYPE_STRING:
+          column.SetRawString(position, this.getSharedString());
+          break;
+        case CellType.CELLTYPE_EDIT:
+          column.SetEditText(position, this.getEditText());
+          break;
+        case CellType.CELLTYPE_VALUE:
+          column.SetValue(position, this.getDouble());
+          break;
+        case CellType.CELLTYPE_FORMULA:
+          column.SetFormulaCell(position, this.getFormula() as ScFormulaCell, listening);
+          break;
+        default:
+          column.DeleteContent(position);
+      }
+    } else {
+      const rDoc = destination as ScDocument,
+        rPos = position;
+      switch (this.getType()) {
+        case CellType.CELLTYPE_STRING:
+          {
+            const parameter = new ScSetStringParam();
+            parameter.setTextInput();
+            rDoc.SetString(rPos, this.getSharedString().getString(), parameter);
+          }
+          break;
+        case CellType.CELLTYPE_EDIT:
+          rDoc.SetEditText(rPos, this.getEditText());
+          break;
+        case CellType.CELLTYPE_VALUE:
+          rDoc.SetValue(rPos, this.getDouble());
+          break;
+        case CellType.CELLTYPE_FORMULA:
+          rDoc.SetFormulaCell(rPos, this.getFormula() as ScFormulaCell);
+          break;
+        default:
+          rDoc.SetEmptyCell(rPos);
+      }
     }
     if (this.maData.index === 2) this.maData.value.dispose();
-    if (this.maData.index === 3) this.maData.value?.dispose();
     this.reset_to_empty();
   }
   /** Original emptiness depends on the variant tag, not string content or numeric value. @returns Empty-cell predicate. */

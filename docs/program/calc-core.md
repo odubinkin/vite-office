@@ -4040,3 +4040,21 @@ module boundary. Descriptor/current lookup, invocation/purpose-stack methods,
 actual environment factory/binding installation and the public application
 bootstrap remain incomplete. No full CSV readiness is inferred from these
 value-owner checks.
+
+## Parsed string input and cell-value transfer
+
+`ScDocument::SetString` now follows the original table/column path: tear down an
+intersected shared formula group's listeners, parse once, then release the
+actual cell value with its selected listening mode. Single-line `SetTextCell`
+uses the supplied policy or original `setTextInput` defaults, including the
+Text-format rule for numeric-looking literals. Content-only empty input keeps
+the original text attributes.
+
+Cell-value string commit/release uses `SetString` with text policy, preserving
+newline-bearing string variants instead of promoting them through `SetTextCell`.
+Edit release transfers the exact object. Rejected document/table edit arguments
+are destroyed, and null edit arguments retain the source valid-coordinate
+no-op behavior. Tests use actual stores, formats, formulas and listeners.
+The existing formula-group compute cache remains unrepresented; no replacement
+cache callback is supplied. Original multiline EditEngine construction and
+full native module/cache/allocator/thread QA remain incomplete or unverified.

@@ -39,6 +39,7 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScStringUtil, ScSetStringParam } from "../../../inc/stringutil";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -903,16 +904,17 @@ export function AddCondFormatData(
   this.FetchTable(tab)?.AddCondFormatData(ranges, index);
 }
 
-/** Original literal SetTextCell routes multiline content into an EditEngine object. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
+/** Original SetTextCell uses explicit/default text-input policy for single-line content. Multiline engine construction remains a separate incomplete path. @param this - Actual document. @param position - Cell. @param value - Literal text. @param parameter - Optional original input policy. @returns Nothing. */
 export function SetTextCell(
   this: ScDocument,
   position: ScAddress,
   value: OUStringConstReference,
+  parameter: ScSetStringParam | null = null,
 ): void {
   const table = this.FetchTable(position.Tab());
-  if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
-  const literal = text(value);
-  if (/[\r\n]/.test(literal)) {
+  if (!table) return;
+  if (ScStringUtil.isMultiline(value)) {
+    const literal = text(value);
     const edit = new EditTextObjectImpl(
       null,
       MapUnit.Map100thMM,
@@ -931,15 +933,11 @@ export function SetTextCell(
     table.SetEditText(position.Col(), position.Row(), edit);
     return;
   }
-  if (!value.getLength()) {
-    table.SetEmptyCell(position.Col(), position.Row());
-    return;
-  }
-  const shared = this["mpCellStringPool"].intern(value);
-  try {
-    table.SetRawString(position.Col(), position.Row(), shared);
-  } finally {
-    shared.dispose();
+  if (parameter) table.SetString(position.Col(), position.Row(), position.Tab(), value, parameter);
+  else {
+    const textInput = new ScSetStringParam();
+    textInput.setTextInput();
+    table.SetString(position.Col(), position.Row(), position.Tab(), value, textInput);
   }
 }
 

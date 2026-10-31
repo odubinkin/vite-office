@@ -40,7 +40,9 @@
       "ScColumn::GetCellType",
       "ScColumn::Delete",
       "ScColumn::DeleteCells",
-      "ScColumn::StartListeners"
+      "ScColumn::StartListeners",
+      "ScColumn::SetString",
+      "ScColumn::DeleteContent"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -62,7 +64,8 @@
       "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
       "AQF9AG exposes the existing source column3 StartListeners all/needed traversal through the ScColumn method used by sheet and document import completion.",
       "AQF9AG ports original single-cell SetNumberFormat document/table/column dispatch and pooled ATTR_VALUE_FORMAT application for CSV date and text recognition. Table validation, absent-sheet behavior and temporary SfxUInt32Item lifetime are retained. Native threaded-group calculation is not represented in this single-threaded owner; no substitute state is introduced.",
-      "AQF9AG connects original ParseString through its column3 input fragment. Existing neighboring join body moves unchanged to column3.formula to retain file budget."
+      "AQF9AG connects original ParseString through its column3 input fragment. Existing neighboring join body moves unchanged to column3.formula to retain file budget.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -204,6 +207,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/column.ts",
           "marker": "SetNumberFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -322,6 +329,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
           "marker": "ScColumn::SetNumberFormat"
+        },
+        {
+          "path": "sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::SetString"
         }
       ]
     },

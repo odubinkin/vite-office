@@ -60,7 +60,8 @@ import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import { edittext_element_callbacks, element_type_edittext } from "../../../inc/mtvelements";
 
 /** Inserts the actual owned edit object into the native edit-text block. @param this - Column. @param row - Row. @param value - Transferred owner. @returns Nothing. */
-export function SetEditText(this: ScColumn, row: number, value: EditTextObject): void {
+export function SetEditText(this: ScColumn, row: number, value: EditTextObject | null): void {
+  if (value === null) return;
   if (!this.GetDoc().ValidRow(row)) return;
   const rows = this["DetachFormulaCell"](row);
   value.NormalizeString(this.GetDoc().GetSharedStringPool());

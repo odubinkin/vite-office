@@ -404,6 +404,27 @@ export function UpdateScriptTypes(this: ScColumn, first: number, last: number): 
   );
 }
 
+/** Original single-cell group teardown always ends the intersected group's listeners and records surviving boundary positions. @param this - Column. @param context - Actual end context. @param row - Target row. @param groups - Optional source position vector. @returns Nothing. */
+export function EndListeningIntersectedGroup(
+  this: ScColumn,
+  context: EndListeningContext,
+  row: number,
+  groups: ScAddress[] | null,
+): void {
+  if (!this.GetDoc().ValidRow(row)) return;
+  const position = this.GetCellStore().position(row),
+    node = position.first.get();
+  if (node.type !== element_type_formula) return;
+  const cell = formula_block.at(node.data as base_element_block, position.second) as ScFormulaCell,
+    group = cell.GetCellGroup();
+  if (!group) return;
+  cell.EndListeningTo(context);
+  if (groups) {
+    if (!cell.IsSharedTop()) groups.push(new ScAddress((group.mpTopCell as ScFormulaCell).aPos));
+    const last = cell.GetSharedTopRow() + cell.GetSharedLength() - 1;
+    if (row < last) groups.push(new ScAddress(this.GetCol(), last, this.GetTab()));
+  }
+}
 /** Original column4 boundary-group teardown records real top/bottom addresses before deletion splits the groups. @param this - Actual column. @param context - Shared end context. @param first - First row. @param last - Last row. @param groups - Optional native output vector. @returns Nothing. */
 export function EndListeningIntersectedGroups(
   this: ScColumn,

@@ -27,7 +27,9 @@
     ],
     "upstreamSymbols": [
       "ScCellValue",
-      "ScRefCellValue"
+      "ScRefCellValue",
+      "ScCellValue::release",
+      "ScCellValue::commit"
     ],
     "preservedResponsibilities": [
       "Original scalar cell variant tags, constructors/setters/queries/clear/swap and move source emptiness reuse actual SharedString values.",
@@ -37,7 +39,8 @@
       "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced.",
       "Block72 ports ordinary SUM/SUMSQ/PRODUCT/AVERAGE variable arguments,English/ODFF symbols,quoted string/missing tokens and byte arity255 through the actual shared compiler and Calc token/document/interpreter owners. Numeric and single-reference parameters use original portable non-SSE2 KahanSum operations;native argument order,empty/text/error behavior and final average/product defaults are preserved. Real input/history/dependency/ODS/primary storage paths consume these owners. Range/area broadcasts and array accumulation are planned in dependent73;other functions,localized conversion,external/named/matrix references and nondefault subtotal/format services remain unsupported. This bounded slice does not certify broad native parity.",
       "AQF9AG restores releaseEditText/releaseFormula pointer transfers while retaining native EDIT/FORMULA variant tags with null pointers after release. Destruction accepts null pointers; nullable return types and existing nonnull copy/adoption preconditions are explicit.",
-      "B8TCAE verifies the actual inline sc/inc/cellvalue.hxx releaseEditText contract: transfer the identical owned object, retain a null EDIT variant on repeated release, preserve returned text across clearing the source cell, and reject wrong variants before mutation. Real EditTextObjectImpl clones and paragraph owners are used without private-state injection. Existing native scalar and owning-formula witnesses retain their separate scope; no full native rich-text ABI parity is claimed."
+      "B8TCAE verifies the actual inline sc/inc/cellvalue.hxx releaseEditText contract: transfer the identical owned object, retain a null EDIT variant on repeated release, preserve returned text across clearing the source cell, and reject wrong variants before mutation. Real EditTextObjectImpl clones and paragraph owners are used without private-state injection. Existing native scalar and owning-formula witnesses retain their separate scope; no full native rich-text ABI parity is claimed.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "omittedResponsibilities": [
       "Iteration86 implements actual ScCellValue empty/double/SharedString constructors, scalar set/clear/getType/type-specific get/isEmpty/swap and original logical move construction/assignment for variant alternatives0/1/2. Native JS tagged values and GC refs replace physical std::variant/pointer allocation; genuine SharedString scalar value copies and existing cleanup boundary are reused. Source emptied after moves, self move assignment clears the value (CALC-074), and empty SharedString remains a STRING cell. Wrong variant access maps std::bad_variant_access to native JS TypeError with observed message. Complete3747-byte ordinary production-mode stream uses unchanged original constructor/move/reset/clear/set/getType/isEmpty/swap definitions and header getters over real dependencies. Genuine forward-declared peer pointer types permit compiling original clear but no EditTextObject/ScFormulaCell pointee is constructed, dereferenced or certified; compiler incomplete-delete warnings remain contextual. Scalar contents/string retention and finite/IEEE/encoded errors are compared, no native memory-management/ABI/lifetime timing claim. Rich-text/formula alternatives, copy/ref constructors requiring real peers, document commit/release/assign/string formatting, actual storage/ScColumn/Table/Document/UI/ODS remain pending. User UI/ODS prerequisite priority remains, broad parity flags false, next full91.",
@@ -68,12 +71,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/cellvalue-edit.test.ts",
           "marker": "releaseEditText"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/cellvalue.cxx",
           "marker": "ScCellValue"
+        },
+        {
+          "path": "sc/source/core/data/cellvalue.cxx",
+          "marker": "ScCellValue::release"
         }
       ]
     }

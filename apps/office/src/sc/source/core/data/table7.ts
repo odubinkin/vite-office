@@ -7,6 +7,17 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScTable } from "../../../inc/table";
 import { CRFlags } from "../../../inc/global";
 import type { ScColumn } from "../../../inc/column";
+/** Original single-cell group teardown does not allocate a missing column. @param this - Sheet. @param context - End context. @param col - Column. @param row - Row. @param groups - Optional source positions. @returns Nothing. */
+export function EndListeningIntersectedGroup(
+  this: ScTable,
+  context: EndListeningContext,
+  col: number,
+  row: number,
+  groups: ScAddress[] | null,
+): void {
+  if (!this.IsColValid(col)) return;
+  (this.FetchColumn(col) as ScColumn).EndListeningIntersectedGroup(context, row, groups);
+}
 /** Original allocated-column merge query does not allocate a column for a read. @param this - Actual sheet. @param col - Queried column. @param row - Queried row. @returns Whether the cell is a merged anchor. */
 export function IsMerged(this: ScTable, col: number, row: number): boolean {
   if (!this.GetDoc().ValidCol(col) || col >= this.GetAllocatedColumnsCount()) return false;

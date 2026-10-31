@@ -1,5 +1,7 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { HardRecalcState, ScDocumentMode } from "./document.modes";
+import { ScSetStringParam } from "../../../inc/stringutil";
+import { EndListeningContext } from "../../../inc/listenercontext";
 
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -912,13 +914,68 @@ export class ScDocument {
   GetSharedString(position: ScAddress): SharedString {
     return documen7.GetSharedString.call(this, position);
   }
-  /** Stores a string as shared or edit text according to its content. @param position - Cell address. @param value - Text. @returns Nothing. */
-  SetTextCell(position: ScAddress, value: OUStringConstReference): void {
-    documen7.SetTextCell.call(this, position, value);
+  /** Stores a string as shared or edit text according to its content. @param position - Cell address. @param value - Text. @param parameter - Optional input policy. @returns Nothing. */
+  SetTextCell(
+    position: ScAddress,
+    value: OUStringConstReference,
+    parameter: ScSetStringParam | null = null,
+  ): void {
+    documen7.SetTextCell.call(this, position, value, parameter);
   }
-  /** Native edit-cell setter transfers an EditEngine text object into the real table. @param position - Cell. @param value - Owned edit text. @returns Nothing. */
-  SetEditText(position: ScAddress, value: EditTextObject): void {
-    this.FetchTable(position.Tab())?.SetEditText(position.Col(), position.Row(), value);
+  /** Original edit-cell setter transfers a nullable object or destroys it when no destination exists. @param position - Cell. @param value - Owned edit text. @returns Whether an existing table accepts the coordinates. */
+  SetEditText(position: ScAddress, value: EditTextObject | null): boolean {
+    const table = this.FetchTable(position.Tab());
+    if (table) return table.SetEditText(position.Col(), position.Row(), value);
+    value?.dispose();
+    return false;
+  }
+  /** Original address overload forwards to scalar coordinates. @param position - Cell. @param value - Input. @param parameter - Optional policy. @returns Format overwrite flag. */
+  SetString(
+    position: ScAddress,
+    value: OUStringConstReference,
+    parameter?: ScSetStringParam | null,
+  ): boolean;
+  /** Original scalar overload tears down intersected formula-group listeners before parsing/adoption. @param col - Column. @param row - Row. @param tab - Sheet. @param value - Input. @param parameter - Optional policy. @returns Format overwrite flag. */
+  SetString(
+    col: number,
+    row: number,
+    tab: number,
+    value: OUStringConstReference,
+    parameter?: ScSetStringParam | null,
+  ): boolean;
+  /** Original overload selection uses scalar coordinates versus a declared ScAddress. @param first - Address or column. @param second - Text or row. @param third - Policy or sheet. @param fourth - Scalar text. @param fifth - Scalar policy. @returns Original format overwrite flag. */
+  SetString(
+    first: ScAddress | number,
+    second: OUStringConstReference | number,
+    third: ScSetStringParam | number | null = null,
+    fourth?: OUStringConstReference,
+    fifth: ScSetStringParam | null = null,
+  ): boolean {
+    if (typeof first !== "number")
+      return this.SetString(
+        first.Col(),
+        first.Row(),
+        first.Tab(),
+        second as OUStringConstReference,
+        third as ScSetStringParam | null,
+      );
+    const table = this.FetchTable(third as number);
+    if (!table) return false;
+    const row = second as number,
+      current = table.GetFormulaCell(first, row);
+    if (current?.IsShared()) {
+      const context = new EndListeningContext(this),
+        position = new ScAddress(first, row, third as number);
+      this.EndListeningIntersectedGroup(context, position, null);
+      context.purgeEmptyBroadcasters();
+    }
+    return table.SetString(first, row, third as number, fourth as OUStringConstReference, fifth);
+  }
+  /** Original single-cell formula-group listener teardown. @param args - Context, target and optional source positions. @returns Nothing. */
+  EndListeningIntersectedGroup(
+    ...args: Parameters<typeof document10.EndListeningIntersectedGroup>
+  ): void {
+    document10.EndListeningIntersectedGroup.apply(this, args);
   }
   /** Clears an existing scalar cell without allocating a missing column or sheet. @param position - Cell address. @returns Nothing. */
   SetEmptyCell(position: ScAddress): void {

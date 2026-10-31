@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 159
+revision: 162
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T15:51:06.477Z"
+  updated_at: "2026-10-31T16:20:04.385Z"
   updated_by: "CODER"
-  note: "Original public Environment ownership checkpoint passes whole native streams, 24 related cases, 197 CSV cases, 50 boundary cases and browser/build/type/lint/contracts. Environment/bootstrap, EditEngine/DocImport and NatNum12 integration remain incomplete."
-  attempts: 38
+  note: "SetString/cell ownership checkpoint passes 43 related core tests,197 CSV tests,50 boundary tests,1 browser scenario and declared static/build checks. Overall CSV goal remains incomplete: full multiline EditEngine, original service installation/NatNum12 dispatch and final audit remain. Keep goal active."
+  attempts: 39
 commit: null
 comments:
   -
@@ -268,6 +268,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue approved native CSV goal after original public Environment resolved-value ownership checkpoint; complete public environment/mapping/bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
+  -
+    author: "CODER"
+    body: "Start: Continue approved CSV implementation after verified parsed-string and exact cell ownership checkpoint; overall goal remains active."
 events:
   -
     type: "status"
@@ -936,8 +939,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue approved native CSV goal after original public Environment resolved-value ownership checkpoint; complete public environment/mapping/bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
+  -
+    type: "verify"
+    at: "2026-10-31T16:20:04.385Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "SetString/cell ownership checkpoint passes 43 related core tests,197 CSV tests,50 boundary tests,1 browser scenario and declared static/build checks. Overall CSV goal remains incomplete: full multiline EditEngine, original service installation/NatNum12 dispatch and final audit remain. Keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T16:20:07.896Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue approved CSV implementation after verified parsed-string and exact cell ownership checkpoint; overall goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-31T15:51:29.423Z"
+doc_updated_at: "2026-10-31T16:20:07.896Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2097,6 +2113,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:20:04.385Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: SetString/cell ownership checkpoint passes 43 related core tests,197 CSV tests,50 boundary tests,1 browser scenario and declared static/build checks. Overall CSV goal remains incomplete: full multiline EditEngine, original service installation/NatNum12 dispatch and final audit remain. Keep goal active.
+    Attempts: 39
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:20:03.540Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3186,6 +3232,22 @@ sections:
     - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;production bundle and1 real browser CSV import/primary ODS save/active-sheet export scenario,4.4s. Evidence: env-wrapper-build.log and env-wrapper-browser.log.
     - No network/vendor/policy/unrelated implementation changes. Full-suite cadence unchanged: same open CSV task, not the tenth completed AgentPlane task; related suites only. Native scratch remains outside the intentional commit. Overall goal remains active and verification remains rework/DOING: public environment creation/current lookup, mapping/purpose invocation and application ServiceManager installation, original multiline EditEngine/DocImport and NatNum12 casing/word-service/formatter dispatch remain incomplete before the final CSV feature audit. No task finish, public bootstrap or full CSV readiness claim.
+
+    ### Parsed string input and exact cell-value ownership checkpoint
+
+    - Source: pinned LibreOffice 9bc445578031fecf56086729d8e4940c77e14d65, document.cxx SetString/SetTextCell/SetEditText, table2.cxx SetString/SetEditText, column3.cxx SetString/DeleteContent, column4.cxx EndListeningIntersectedGroup, cellvalue.cxx commit/release. Restored real document/table/column parsing and cell adoption, original input policy and formula-listening mode, shared-group teardown and content-only empty deletion. Cell-value STRING commit/release keeps newline-bearing strings as STRING. EDIT release transfers the exact owner without clone/destruction. Rejected owned edit arguments are destroyed; valid nullable edit arguments preserve the original no-op. Moved the existing dirty-span functor unchanged into its column.cxx responsibility fragment to respect the existing size gate.
+    - Scope limits: existing formula-group compute-cache owner is absent, so CellStorageModified cache invalidation is not represented and no placeholder callback was added. Full multiline EditEngine construction remains incomplete. No native complete ScDocument/ScColumn module differential or complete allocator/thread/cache parity is claimed. Updated Calc provenance/runtime/capability evidence without promoting broad readiness flags. These are corrected port deviations, not suspected upstream defects.
+    - Command: npm run test:calc -- src/sc/source/core/data/document-string-input.test.ts src/sc/source/core/data/cellvalue src/sc/source/core/data/column3.input.test.ts src/sc/source/core/data/document.references.test.ts src/sc/source/core/data/listener-context.test.ts src/sc/source/core/data/clipboard-deletion.test.ts src/sc/source/core/data/clipboard-formula-clone.test.ts --maxWorkers=1
+      Result: pass. Evidence: csv-setstring-related-tests.log, 43 tests in 9 files. Scope: real stored types/formats, literal policy, listeners/shared groups, retained text attributes, copy/transfer ownership and rejected destinations.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: csv-setstring-csv-tests.log, 197 tests in 8 files. Scope: CSV parsing/recognition/export and existing file UI regressions.
+    - Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: pass. Evidence: csv-setstring-typecheck-final.log, csv-setstring-lint.log, csv-setstring-dependencies-final.log, csv-setstring-resources.log, csv-setstring-provenance.log, csv-setstring-parity.log, csv-setstring-shared-parity.log under output/native/AQF9AG-libnumbertext. Scope: production types/lint/module boundaries, 464 commands and 1947 runtime provenance records. No rules or readiness assertions relaxed.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact changed paths; npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries.date.test.ts scripts/numbertext-module-boundaries.test.ts --maxWorkers=1; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass. Evidence: csv-setstring-docs-final.log, csv-setstring-size.log, csv-setstring-format-check.log, csv-setstring-boundaries.log, csv-setstring-routing.log, csv-setstring-doctor.log; 50 boundary tests. The first JSDoc check found the new optional SetTextCell parameter missing from its comment; documented it and reran successfully. Doctor has zero errors, with the existing managed-hook readiness warning; no unrelated hook mutation.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: csv-setstring-build.log, csv-setstring-browser.log; production bundle and 1 browser CSV import/primary ODS save/active-sheet export scenario, 3.8s.
+    - Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task; related suites only. No network/vendor/policy/unrelated tracked changes. Scratch evidence excluded from the commit. Overall goal remains active and incomplete; no task finish or full CSV readiness claim. Next work remains original multiline EditEngine/DocImport, source service installation and NatNum12 casing/word-service/formatter dispatch, followed by the complete CSV audit.
 id_source: "generated"
 ---
 ## Summary
@@ -4354,6 +4416,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:20:04.385Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: SetString/cell ownership checkpoint passes 43 related core tests,197 CSV tests,50 boundary tests,1 browser scenario and declared static/build checks. Overall CSV goal remains incomplete: full multiline EditEngine, original service installation/NatNum12 dispatch and final audit remain. Keep goal active.
+Attempts: 39
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:20:03.540Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5447,3 +5539,19 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;production bundle and1 real browser CSV import/primary ODS save/active-sheet export scenario,4.4s. Evidence: env-wrapper-build.log and env-wrapper-browser.log.
 - No network/vendor/policy/unrelated implementation changes. Full-suite cadence unchanged: same open CSV task, not the tenth completed AgentPlane task; related suites only. Native scratch remains outside the intentional commit. Overall goal remains active and verification remains rework/DOING: public environment creation/current lookup, mapping/purpose invocation and application ServiceManager installation, original multiline EditEngine/DocImport and NatNum12 casing/word-service/formatter dispatch remain incomplete before the final CSV feature audit. No task finish, public bootstrap or full CSV readiness claim.
+
+### Parsed string input and exact cell-value ownership checkpoint
+
+- Source: pinned LibreOffice 9bc445578031fecf56086729d8e4940c77e14d65, document.cxx SetString/SetTextCell/SetEditText, table2.cxx SetString/SetEditText, column3.cxx SetString/DeleteContent, column4.cxx EndListeningIntersectedGroup, cellvalue.cxx commit/release. Restored real document/table/column parsing and cell adoption, original input policy and formula-listening mode, shared-group teardown and content-only empty deletion. Cell-value STRING commit/release keeps newline-bearing strings as STRING. EDIT release transfers the exact owner without clone/destruction. Rejected owned edit arguments are destroyed; valid nullable edit arguments preserve the original no-op. Moved the existing dirty-span functor unchanged into its column.cxx responsibility fragment to respect the existing size gate.
+- Scope limits: existing formula-group compute-cache owner is absent, so CellStorageModified cache invalidation is not represented and no placeholder callback was added. Full multiline EditEngine construction remains incomplete. No native complete ScDocument/ScColumn module differential or complete allocator/thread/cache parity is claimed. Updated Calc provenance/runtime/capability evidence without promoting broad readiness flags. These are corrected port deviations, not suspected upstream defects.
+- Command: npm run test:calc -- src/sc/source/core/data/document-string-input.test.ts src/sc/source/core/data/cellvalue src/sc/source/core/data/column3.input.test.ts src/sc/source/core/data/document.references.test.ts src/sc/source/core/data/listener-context.test.ts src/sc/source/core/data/clipboard-deletion.test.ts src/sc/source/core/data/clipboard-formula-clone.test.ts --maxWorkers=1
+  Result: pass. Evidence: csv-setstring-related-tests.log, 43 tests in 9 files. Scope: real stored types/formats, literal policy, listeners/shared groups, retained text attributes, copy/transfer ownership and rejected destinations.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: csv-setstring-csv-tests.log, 197 tests in 8 files. Scope: CSV parsing/recognition/export and existing file UI regressions.
+- Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: pass. Evidence: csv-setstring-typecheck-final.log, csv-setstring-lint.log, csv-setstring-dependencies-final.log, csv-setstring-resources.log, csv-setstring-provenance.log, csv-setstring-parity.log, csv-setstring-shared-parity.log under output/native/AQF9AG-libnumbertext. Scope: production types/lint/module boundaries, 464 commands and 1947 runtime provenance records. No rules or readiness assertions relaxed.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact changed paths; npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries.date.test.ts scripts/numbertext-module-boundaries.test.ts --maxWorkers=1; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass. Evidence: csv-setstring-docs-final.log, csv-setstring-size.log, csv-setstring-format-check.log, csv-setstring-boundaries.log, csv-setstring-routing.log, csv-setstring-doctor.log; 50 boundary tests. The first JSDoc check found the new optional SetTextCell parameter missing from its comment; documented it and reran successfully. Doctor has zero errors, with the existing managed-hook readiness warning; no unrelated hook mutation.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: csv-setstring-build.log, csv-setstring-browser.log; production bundle and 1 browser CSV import/primary ODS save/active-sheet export scenario, 3.8s.
+- Full-suite cadence unchanged: same open AgentPlane task, not the tenth completed task; related suites only. No network/vendor/policy/unrelated tracked changes. Scratch evidence excluded from the commit. Overall goal remains active and incomplete; no task finish or full CSV readiness claim. Next work remains original multiline EditEngine/DocImport, source service installation and NatNum12 casing/word-service/formatter dispatch, followed by the complete CSV audit.

@@ -18,6 +18,20 @@ import { UpdateScriptTypes } from "./column4";
 import { BroadcastAction } from "./documen7";
 import { ExtendMerge as extendTableMerge } from "./table2";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
+/** Original single-cell teardown forwards only to an existing sheet. @param this - Document. @param context - Actual end context. @param position - Target cell. @param groups - Optional source positions. @returns Nothing. */
+export function EndListeningIntersectedGroup(
+  this: ScDocument,
+  context: EndListeningContext,
+  position: ScAddress,
+  groups: ScAddress[] | null,
+): void {
+  this.FetchTable(position.Tab())?.EndListeningIntersectedGroup(
+    context,
+    position.Col(),
+    position.Row(),
+    groups,
+  );
+}
 
 import { uppercase } from "../../../../unotools/inc/charclass";
 import { ScAddress, ScRange } from "../../../inc/address";

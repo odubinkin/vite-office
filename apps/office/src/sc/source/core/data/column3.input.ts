@@ -6,13 +6,53 @@ import { SvNumFormatType as T, NfEvalDateFormat } from "../../../../svl/inc/zfor
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { SvNumberformatConstReference } from "../../../../svl/source/numbers/zformat";
 import type { ScColumn } from "../../../inc/column";
-import type { ScCellValue } from "../../../inc/cellvalue";
+import { ScCellValue } from "../../../inc/cellvalue";
+import { SharedFormulaUtil } from "../../../inc/sharedformula";
+import { formula_block, element_type_formula } from "../../../inc/mtvelements";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScMatrixMode } from "../../../inc/formulacell";
 import { CellType } from "../../../inc/global";
 import { ScAddress } from "../../../inc/address";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
 import { ScSetStringParam, ScStringUtil } from "../../../inc/stringutil";
+/** Original SetString parses once and releases the actual result to this column with the selected listening mode. @param this - Actual column. @param row - Target row. @param tab - Source sheet number. @param value - Input text. @param convention - Formula convention. @param parameter - Optional source input policy. @returns Whether parsing overwrote the number format. */
+export function SetString(
+  this: ScColumn,
+  row: number,
+  tab: number,
+  value: OUStringConstReference,
+  convention: AddressConvention,
+  parameter: ScSetStringParam | null = null,
+): boolean {
+  if (!this.GetDoc().ValidRow(row)) return false;
+  const cell = new ScCellValue();
+  try {
+    const formatSet = this.ParseString(cell, row, tab, value, convention, parameter);
+    if (parameter) cell.release(this, row, parameter.meStartListening);
+    else cell.release(this, row);
+    return formatSet;
+  } finally {
+    cell.clear();
+  }
+}
+/** Original content-only deletion keeps text attributes, unshares the exact formula position and conditionally broadcasts. Formula-group compute caches remain outside the represented column state, as with existing setters. @param this - Actual column. @param row - Source-valid row. @param broadcast - Original default true. @returns Nothing. */
+export function DeleteContent(this: ScColumn, row: number, broadcast = true): void {
+  const position = this.GetCellStore().position(row),
+    iterator = position.first;
+  if (iterator.equals(this.GetCellStore().end())) return;
+  const node = iterator.get();
+  if (node.type === element_type_formula) {
+    const cell = formula_block.at(
+      node.data as base_element_block,
+      position.second,
+    ) as ScFormulaCell;
+    cell.EndListeningTo(this.GetDoc());
+    SharedFormulaUtil.unshareFormulaCell(position, cell);
+  }
+  this.GetCellStore().set_empty(row, row);
+  if (broadcast) this["Broadcast"](row);
+}
 /** Original applyTextNumFormat helper. @param column - Actual column. @param row - Cell row. @param formatter - Actual supplied formatter. @returns Nothing. */
 function applyTextNumFormat(column: ScColumn, row: number, formatter: SvNumberFormatter): void {
   const key = formatter.GetStandardFormat(T.TEXT),

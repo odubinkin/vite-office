@@ -23,6 +23,7 @@ import {
 } from "../../../inc/compressedarray";
 import { ScConditionalFormatList } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
+import type { ScSetStringParam } from "../../../inc/stringutil";
 import { FilterData } from "../../../inc/FilterData";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import {
@@ -896,9 +897,25 @@ export class ScTable {
   SetRawString(col: number, row: number, value: SharedStringConstReference): void {
     table2.SetRawString.call(this, col, row, value);
   }
-  /** Stores an owned EditEngine object. @param col - Column. @param row - Row. @param value - Object. @returns Nothing. */
-  SetEditText(col: number, row: number, value: EditTextObject): void {
-    table2.SetEditText.call(this, col, row, value);
+  /** Stores an owned EditEngine object or destroys a rejected argument. @param col - Column. @param row - Row. @param value - Nullable transferred object. @returns Whether coordinates are valid. */
+  SetEditText(col: number, row: number, value: EditTextObject | null): boolean {
+    return table2.SetEditText.call(this, col, row, value);
+  }
+  /** Original parsed string setter with explicit source sheet and policy. @param col - Column. @param row - Row. @param tab - Source sheet argument. @param value - Input. @param parameter - Optional source policy. @returns Format overwrite flag. */
+  SetString(
+    col: number,
+    row: number,
+    tab: number,
+    value: OUStringConstReference,
+    parameter: ScSetStringParam | null = null,
+  ): boolean {
+    return table2.SetString.call(this, col, row, tab, value, parameter);
+  }
+  /** Original single-cell group teardown dispatch. @param args - Context, column, row and optional positions. @returns Nothing. */
+  EndListeningIntersectedGroup(
+    ...args: Parameters<typeof table7.EndListeningIntersectedGroup>
+  ): void {
+    table7.EndListeningIntersectedGroup.apply(this, args);
   }
   /** Clears only an existing column;clearing an empty region does not allocate it. @param col - Column. @param row - Row. @returns Nothing. */
   SetEmptyCell(col: number, row: number): void {
