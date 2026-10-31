@@ -2623,3 +2623,16 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/parcss1.cxx, CSS1Parser::ParseStyleOption.
 - Observation: after the initial ParseDeclaration, a missing expression returns from ParseStyleOption immediately. For page-break-before:;page-break-after:always the after declaration is never processed. This first-declaration branch differs from the later declaration loop's recovery behavior.
 - Preservation: retain the original early return. Tests for an absent before/after property omit that declaration; a separate regression checks the actual empty-first-declaration behavior rather than normalizing it.
+
+
+### WRITER306 — Table FRAME/RULES are discarded without a nonzero BORDER option
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableOptions::HTMLTableOptions.
+- Observation: explicit FRAME/RULES normally take precedence over border-derived defaults, regardless of their order. The final constructor branch nevertheless replaces both with Void/NONE when nBorder is0 or65535, including the initial unset sentinel. A table with FRAME=box RULES=all but no BORDER therefore retains no visible frame/rules in these options; explicit BORDER=65535 has the same effect.
+- Preservation: keep the final source branch and sentinel distinction. Do not infer an implied BORDER from FRAME/RULES or normalize explicit65535 into a different width.
+
+### WRITER307 — Table width is narrowed before percent clamping and COLS fallback
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableOptions::HTMLTableOptions.
+- Observation: numeric WIDTH is first narrowed to uint16, then the presence of any percent sign in its source string sets the percent flag and only values above100 are clamped. WIDTH=65536% thus becomes0%, while65537% becomes1%. If COLS is nonzero and the narrowed width is0, the final constructor branch substitutes100% even for an explicit zero width.
+- Preservation: retain GetNumber conversion, narrowing, percent detection and final COLS fallback in their source order; do not clamp the original number before narrowing or distinguish absent width from explicit zero.

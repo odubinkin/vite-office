@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svtools/inc/parhtml.ts",
+    "upstreamPath": "include/svtools/parhtml.hxx",
+    "localSymbols": [
+      "HTMLTableFrame",
+      "HTMLTableRules"
+    ],
+    "upstreamSymbols": [
+      "HTMLTableFrame",
+      "HTMLTableRules"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML35: complete original HTMLTableOptions default fields, reverse option iteration, uint16-before-percent conversion, final zero/unset-border suppression, explicit frame/rules precedence, color priority and raw option strings are implemented against actual HTMLOption/HTMLParser owners. Original public table enums and HTMLOption bool/output GetEnum plus GetTableFrame/GetTableRules reuse module-owned native alias tables. The connected Writer ALIGN helper now consumes original aHTMLPAlignTable, replacing its reduced switch and preserving native middle/char aliases and ASCII-only matching. Actual lexer/option and Markdown paragraph tests provide bounded evidence. This is a concrete table-reader prerequisite; HTML table construction/context/geometry/node insertion is not yet connected or claimed complete, and broader native API/module/ABI status is unchanged. File UI/autosave/recovery deviations remain preserved."
+    ],
+    "omittedResponsibilities": [
+      "Native BuildTable/table rows/cells/context/layout and complete HTML import remain pending; no full module/ABI certificate is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/inc/parhtml.ts",
+          "marker": "HTMLTableFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.options.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svtools/parhtml.hxx",
+          "marker": "HTMLTableFrame"
+        },
+        {
+          "path": "include/svtools/parhtml.hxx",
+          "marker": "HTMLTableRules"
+        }
+      ]
+    }
+  }
+}

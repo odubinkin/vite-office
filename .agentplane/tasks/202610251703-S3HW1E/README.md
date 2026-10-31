@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 259
+revision: 263
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T10:25:07.246Z"
+  updated_at: "2026-10-31T10:36:45.956Z"
   updated_by: "CODER"
-  note: "HTML34 checkpoint verified: 284 unique related scenarios across 18 files have positive current evidence; app types, changed-source lint/format, provenance, Writer/shared registries and boundaries/docs/size/tree/doctor pass. Native paragraph SetFormatBreak and page-pool/copy/follow ownership, source-correct MakePageDesc and Worker pool IDs are connected. Initial failed enum/fixture/helper invocations remain recorded. Raw HTML tables, insertion boundary/snapshots and final matrix are pending; full parent goal remains incomplete."
-  attempts: 45
+  note: "HTML35 checkpoint verified: 186 unique related Writer/shared scenarios across 5 files, app types, changed-source lint/format and provenance/registries/boundaries/docs/size/tree pass. Original complete HTMLTableOptions fields/defaults and shared table enums/GetEnum output contract are ready for BuildTable; original ALIGN aliases are connected to Markdown paragraph items. Table node/context/geometry insertion, insertion boundaries/snapshots and final matrix remain pending; full goal stays incomplete."
+  attempts: 46
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -725,8 +728,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T10:36:45.956Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML35 checkpoint verified: 186 unique related Writer/shared scenarios across 5 files, app types, changed-source lint/format and provenance/registries/boundaries/docs/size/tree pass. Original complete HTMLTableOptions fields/defaults and shared table enums/GetEnum output contract are ready for BuildTable; original ALIGN aliases are connected to Markdown paragraph items. Table node/context/geometry insertion, insertion boundaries/snapshots and final matrix remain pending; full goal stays incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T10:36:58.593Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:25:38.519Z"
+doc_updated_at: "2026-10-31T10:36:58.593Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1821,6 +1837,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T10:36:45.956Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML35 checkpoint verified: 186 unique related Writer/shared scenarios across 5 files, app types, changed-source lint/format and provenance/registries/boundaries/docs/size/tree pass. Original complete HTMLTableOptions fields/defaults and shared table enums/GetEnum output contract are ready for BuildTable; original ALIGN aliases are connected to Markdown paragraph items. Table node/context/geometry insertion, insertion boundaries/snapshots and final matrix remain pending; full goal stays incomplete.
+    Attempts: 46
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:36:43.243Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2868,6 +2914,21 @@ sections:
     - Remaining critical path: raw HTML tables admitted by the actual Markdown existing-document caller; original insertion boundary/target-attribute snapshot handling; final current-model/filter/UI matrix reconciliation and concrete deficiencies it exposes. Native TXT/RTF/Markdown parent objective remains active and incomplete. No completion/finish or pause is requested.
 
     - Reviewed start-ready advice INC-20261009-01..03. This checkpoint adds native DelDiffs to the same format.ts owner but does not change the recorded format-parent correction or its strict Istanbul profile. Applicable principles were followed: preserve original owners/same-pool checks/metadata history and failed outputs, fix only source-backed failed fixtures, add a real notification witness, rerun only affected cases, and avoid cache/hint/tooling/full-suite expansion. No counter aggregation or unrelated coverage certificate is claimed.
+
+    ### HTML35 original table options and shared enum prerequisite (verified)
+
+    - Concrete consuming scope: original HTMLTableOptions constructor/fields/defaults; native parhtml.hxx table frame/rules enums; actual HTMLOption GetTableFrame/GetTableRules and bool/output GetEnum; original aHTMLPAlignTable replacing the reduced existing Writer ALIGN helper. No HTMLTable document/geometry is fabricated, and BuildTable remains pending. Native table declarations are embedded in htmltab.cxx rather than a separate htmltab.hxx; source evidence points to the actual cxx/header owners.
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers1. Result: pass102cases/2files,134.29s,html35-focused.txt,exec92514exit0. New cases parse actual table bytes through HTMLParser/HTMLOption and inspect native option fields; all6alignment aliases also use real Markdown-to-SwDoc items. Not a fake table model/reader certificate.
+    - Command: npm run test:shared -- src/svtools/source/svhtml/parhtml.test.ts src/svtools/source/svhtml/parhtml.options.integration.test.ts src/svtools/source/svhtml/parhtml.edge-cases.test.ts --maxWorkers1. Result: pass83cases/3files,69.56s,html35-shared-tests.txt,exec23600exit0. Actual original lexer/enum/numeral/color options remain compatible after adding the bool/output overload and module-owned table aliases. Total185related scenarios/5files have successful results.
+    - Command: app native tsc --noEmit before static alias-table placement alignment. Result: pass,html35-types.txt,exec5546exit0. Original alias values were then moved unchanged from method literals to source module-owned tables; shared cases after that move pass, and final compiler is separately running (html35-types-final.txt). No expected output, private state, provider or timeout substitutions.
+    - Command: changed-source/test ESLint --max-warnings0. Result: pass,html35-lint.txt,exec27016exit0. Prettier write finished84604exit0; final explicit formatting check is separately running.
+    - Source findings WRITER306-307 preserve final zero/unset-border suppression even for explicit frame/rules, and uint16 width narrowing before percent clamping/COLS fallback. Raw option strings, reverse duplicates, empty bgcolor rule, border-color priority and native top-to-NONE vertical mapping remain unchanged.
+
+    - Command: fresh-only Writer native char-alignment context witness (-t applies native char alignment), after adding the final real outer-right/inner-char case. Result: pass1fresh case; prior49table/enum cases deliberately unselected,html35-char-context.txt,exec99155exit0. This distinguishes applying the actual source char alias from a vacuous default-left result. Production source is unchanged; final related evidence is186unique cases/5files.
+    - Command: final app native tsc --noEmit. Result: pass,html35-types-final.txt,exec16915exit0,including the final module-owned table placement and complete implementation/original tests. The later isolated context case reuses existing typed Markdown/read/item APIs; no production/signature/type changes followed. Full changed-source lint passes27016; final context-test lint passes1276. Full explicit Prettier --check passes35069, and final context test is formatted (html35-char-format.txt); git diff --check passes.
+    - Commands/results: source provenance passes1905runtime/1692mapped/182browser/31infra (html35-provenance.txt,exec63727exit0); Writer/shared registries both pass semanticViolationCount0 (html35-writer/shared.txt,exec52434/7440exit0); module boundaries pass1904sources/10469relative imports/227allowed edges (html35-boundaries.txt,exec46287exit0). Existing status/classification/history preserved, with new native fragments unverified for complete API/module/ABI certification.
+    - Commands/results: JSDoc passes4286authored sources (html35-docs.txt,exec35763exit0), size passes (html35-size.txt,exec89851exit0), source tree passes115required/32retired roots (html35-tree.txt,exec89849exit0). No policy/gate thresholds changed; no all-app suite was run for this focused parent-task checkpoint.
+    - Scope closure: complete original table-options/default conversion and shared enum methods are ready for the native table consumer, and native ALIGN aliases are connected through the existing Markdown HTML paragraph path. No HTML table node/model construction or layout is falsely claimed as complete. Native BuildTable/row/cell/context/node insertion, target insertion boundaries/snapshots and final current-model/filter/UI audit remain pending. Parent goal remains active/incomplete and verification rework.
 id_source: "generated"
 ---
 ## Summary
@@ -3973,6 +4034,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T10:36:45.956Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML35 checkpoint verified: 186 unique related Writer/shared scenarios across 5 files, app types, changed-source lint/format and provenance/registries/boundaries/docs/size/tree pass. Original complete HTMLTableOptions fields/defaults and shared table enums/GetEnum output contract are ready for BuildTable; original ALIGN aliases are connected to Markdown paragraph items. Table node/context/geometry insertion, insertion boundaries/snapshots and final matrix remain pending; full goal stays incomplete.
+Attempts: 46
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:36:43.243Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5024,3 +5115,18 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Remaining critical path: raw HTML tables admitted by the actual Markdown existing-document caller; original insertion boundary/target-attribute snapshot handling; final current-model/filter/UI matrix reconciliation and concrete deficiencies it exposes. Native TXT/RTF/Markdown parent objective remains active and incomplete. No completion/finish or pause is requested.
 
 - Reviewed start-ready advice INC-20261009-01..03. This checkpoint adds native DelDiffs to the same format.ts owner but does not change the recorded format-parent correction or its strict Istanbul profile. Applicable principles were followed: preserve original owners/same-pool checks/metadata history and failed outputs, fix only source-backed failed fixtures, add a real notification witness, rerun only affected cases, and avoid cache/hint/tooling/full-suite expansion. No counter aggregation or unrelated coverage certificate is claimed.
+
+### HTML35 original table options and shared enum prerequisite (verified)
+
+- Concrete consuming scope: original HTMLTableOptions constructor/fields/defaults; native parhtml.hxx table frame/rules enums; actual HTMLOption GetTableFrame/GetTableRules and bool/output GetEnum; original aHTMLPAlignTable replacing the reduced existing Writer ALIGN helper. No HTMLTable document/geometry is fabricated, and BuildTable remains pending. Native table declarations are embedded in htmltab.cxx rather than a separate htmltab.hxx; source evidence points to the actual cxx/header owners.
+- Command: npm run test:writer -- src/sw/source/filter/html/htmltab.options.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers1. Result: pass102cases/2files,134.29s,html35-focused.txt,exec92514exit0. New cases parse actual table bytes through HTMLParser/HTMLOption and inspect native option fields; all6alignment aliases also use real Markdown-to-SwDoc items. Not a fake table model/reader certificate.
+- Command: npm run test:shared -- src/svtools/source/svhtml/parhtml.test.ts src/svtools/source/svhtml/parhtml.options.integration.test.ts src/svtools/source/svhtml/parhtml.edge-cases.test.ts --maxWorkers1. Result: pass83cases/3files,69.56s,html35-shared-tests.txt,exec23600exit0. Actual original lexer/enum/numeral/color options remain compatible after adding the bool/output overload and module-owned table aliases. Total185related scenarios/5files have successful results.
+- Command: app native tsc --noEmit before static alias-table placement alignment. Result: pass,html35-types.txt,exec5546exit0. Original alias values were then moved unchanged from method literals to source module-owned tables; shared cases after that move pass, and final compiler is separately running (html35-types-final.txt). No expected output, private state, provider or timeout substitutions.
+- Command: changed-source/test ESLint --max-warnings0. Result: pass,html35-lint.txt,exec27016exit0. Prettier write finished84604exit0; final explicit formatting check is separately running.
+- Source findings WRITER306-307 preserve final zero/unset-border suppression even for explicit frame/rules, and uint16 width narrowing before percent clamping/COLS fallback. Raw option strings, reverse duplicates, empty bgcolor rule, border-color priority and native top-to-NONE vertical mapping remain unchanged.
+
+- Command: fresh-only Writer native char-alignment context witness (-t applies native char alignment), after adding the final real outer-right/inner-char case. Result: pass1fresh case; prior49table/enum cases deliberately unselected,html35-char-context.txt,exec99155exit0. This distinguishes applying the actual source char alias from a vacuous default-left result. Production source is unchanged; final related evidence is186unique cases/5files.
+- Command: final app native tsc --noEmit. Result: pass,html35-types-final.txt,exec16915exit0,including the final module-owned table placement and complete implementation/original tests. The later isolated context case reuses existing typed Markdown/read/item APIs; no production/signature/type changes followed. Full changed-source lint passes27016; final context-test lint passes1276. Full explicit Prettier --check passes35069, and final context test is formatted (html35-char-format.txt); git diff --check passes.
+- Commands/results: source provenance passes1905runtime/1692mapped/182browser/31infra (html35-provenance.txt,exec63727exit0); Writer/shared registries both pass semanticViolationCount0 (html35-writer/shared.txt,exec52434/7440exit0); module boundaries pass1904sources/10469relative imports/227allowed edges (html35-boundaries.txt,exec46287exit0). Existing status/classification/history preserved, with new native fragments unverified for complete API/module/ABI certification.
+- Commands/results: JSDoc passes4286authored sources (html35-docs.txt,exec35763exit0), size passes (html35-size.txt,exec89851exit0), source tree passes115required/32retired roots (html35-tree.txt,exec89849exit0). No policy/gate thresholds changed; no all-app suite was run for this focused parent-task checkpoint.
+- Scope closure: complete original table-options/default conversion and shared enum methods are ready for the native table consumer, and native ALIGN aliases are connected through the existing Markdown HTML paragraph path. No HTML table node/model construction or layout is falsely claimed as complete. Native BuildTable/row/cell/context/node insertion, target insertion boundaries/snapshots and final current-model/filter/UI audit remain pending. Parent goal remains active/incomplete and verification rework.

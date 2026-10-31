@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native SwHTMLParser body, paragraph and inline-attribute paths over HTMLParser, actual SwPaM and deferred HTMLAttr owners. */
+import { aHTMLPAlignTable } from "./swhtml.options";
 import { HTMLParser } from "../../../../svtools/source/svhtml/parhtml";
 import { HtmlTokenId as T, HtmlOptionId as O } from "../../../../svtools/inc/htmltokn";
 import { SvParserState } from "../../../../svtools/inc/svparser";
@@ -610,17 +611,7 @@ export class SwHTMLParser extends HTMLParser {
     let alignment = initial;
     for (const option of [...this.GetOptions()].reverse()) {
       if (option.GetToken() === O.ALIGN) {
-        const value = option.GetString().toLowerCase();
-        alignment =
-          value === "left"
-            ? SvxAdjust.Left
-            : value === "right"
-              ? SvxAdjust.Right
-              : value === "center"
-                ? SvxAdjust.Center
-                : value === "justify"
-                  ? SvxAdjust.Block
-                  : alignment;
+        alignment = option.GetEnum(aHTMLPAlignTable, alignment);
       }
       if (option.GetToken() === O.XML_SPACE && option.GetString() === "preserve")
         this.SetPreserveSpaces(true);
