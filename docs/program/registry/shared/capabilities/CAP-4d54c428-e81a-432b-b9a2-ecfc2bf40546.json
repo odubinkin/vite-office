@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4d54c428-e81a-432b-b9a2-ecfc2bf40546",
+    "capabilityId": "CAP-4d54c428-e81a-432b-b9a2-ecfc2bf40546",
+    "suite": "shared",
+    "subsystem": "uno-environment",
+    "type": "model",
+    "maturity": "implemented",
+    "capability": "Original public UNO environment resolved-pointer value ownership",
+    "assertions": [
+      "Preserve original Environment resolved-pointer/copy/move acquisition, release, publication and equality-skipping assignment through actual C callbacks.",
+      "Preserve acquired exact type-name values and borrowed context identity without pointer/address inference.",
+      "Compare every initialized ownership/accessor stream byte against normal and ASan/UBSan originals using actual DefaultEnvironment strong/weak callbacks."
+    ],
+    "gaps": [
+      "Descriptor/current lookup and invocation/purpose stack methods are not implemented by this value-owner slice.",
+      "Upstream Embind BridgeTest is contextual consuming environment/mapping QA, not a direct portable QA port; full environment/bridge/application bootstrap and physical ABI/allocator/concurrency/noexcept/leak/full consumer QA remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/uno/environment.hxx",
+          "marker": "class Environment"
+        },
+        {
+          "path": "cppu/source/uno/lbenv.cxx",
+          "marker": "defenv_acquire"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unotest/source/embindtest/embindtest.cxx",
+          "marker": "class BridgeTest"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/uno/environment.hxx",
+          "marker": "C++ wrapper for binary C uno_Environment."
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+          "marker": "Environment"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/environment.hxx.test.ts",
+          "marker": "matches complete original public Environment"
+        },
+        {
+          "path": "scripts/uno-public-environment-native-probe.mjs",
+          "marker": "Original public environment observations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Public UNO environment value ownership"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original public uno::Environment resolved-pointer/default/copy/move ownership, pointer/copy/move assignment, destruction, clear/get/is and owned getTypeName/borrowed getContext accessors. Actual C environment callbacks and OUString owners are reused. Pointer/copy assignment skips identical pointers; differing pointers acquire new before releasing old and publishing. Clear releases before null publication; self-move releases and clears. Type-name returns own exact Unicode/NUL descriptor references, while context is passed through without address synthesis or identity conversion. Whole original environment.hxx plus unchanged lbenv.cxx and real DefaultEnvironment callbacks supply complete normal-ASan/UBSan identical ownership/accessor streams. Enclosing input records are not production environment constructors/providers. Descriptor/current lookup, invoke/enter/isValid purpose-stack APIs, public bootstrap/application installation, physical ABI/allocator/concurrency/noexcept termination/leaks and full upstream consumer QA remain incomplete or unverified."
+    },
+    "scopeLimitations": [
+      "Original public uno::Environment resolved-pointer/default/copy/move ownership, pointer/copy/move assignment, destruction, clear/get/is and owned getTypeName/borrowed getContext accessors. Actual C environment callbacks and OUString owners are reused. Pointer/copy assignment skips identical pointers; differing pointers acquire new before releasing old and publishing. Clear releases before null publication; self-move releases and clears. Type-name returns own exact Unicode/NUL descriptor references, while context is passed through without address synthesis or identity conversion. Whole original environment.hxx plus unchanged lbenv.cxx and real DefaultEnvironment callbacks supply complete normal-ASan/UBSan identical ownership/accessor streams. Enclosing input records are not production environment constructors/providers. Descriptor/current lookup, invoke/enter/isValid purpose-stack APIs, public bootstrap/application installation, physical ABI/allocator/concurrency/noexcept termination/leaks and full upstream consumer QA remain incomplete or unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "public-uno-environment-resolved-pointer-value-ownership"
+  }
+}

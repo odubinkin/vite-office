@@ -4023,3 +4023,20 @@ context-owner differential and the upstream Embind `BridgeTest` consumer remain
 unverified. Environment/name lookup constructors, current/source environment
 orchestration and application ServiceManager installation are still incomplete;
 this is not a public context factory or full CSV readiness claim.
+
+## Public UNO environment value ownership
+
+The public `uno::Environment` resolved-pointer/default/copy/move ownership
+family now uses the existing real C environment callbacks. Unlike Mapping,
+pointer and copy assignment skip identical pointers. Clear releases before
+publishing null, and self-move releases and clears. `getTypeName` returns an
+owned exact Unicode/NUL descriptor; `getContext` returns the original borrowed
+pointer without assigning an address or converting its identity.
+
+Complete normal and ASan/UBSan native ownership/accessor streams use the
+original default environment's strong/weak callbacks and descriptor destruction.
+The `.hxx.ts` discriminator preserves the C record versus C++ inline wrapper
+module boundary. Descriptor/current lookup, invocation/purpose-stack methods,
+actual environment factory/binding installation and the public application
+bootstrap remain incomplete. No full CSV readiness is inferred from these
+value-owner checks.
