@@ -1,4 +1,5 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
+import type { SwHTMLTableLayout } from "../doc/htmltbl";
 import { Color } from "../../../../tools/inc/color";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
@@ -67,6 +68,16 @@ export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
 
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable extends SwClient {
+  private m_xHTMLLayout: SwHTMLTableLayout | null = null;
+  /** Original shared HTML layout borrow; null until assigned by native construction. @returns Actual layout or null. */
+  public GetHTMLTableLayout(): SwHTMLTableLayout | null {
+    return this.m_xHTMLLayout;
+  }
+  /** Original shared layout assignment publishes no synthetic resize or model result. @param layout - Original layout reference or null. @returns Nothing. */
+  public SetHTMLTableLayout(layout: SwHTMLTableLayout | null): void {
+    this.m_xHTMLLayout = layout;
+  }
+
   private m_bModifyLocked = false;
   private format: Omit<
     SwTableFormat,
@@ -141,6 +152,7 @@ export class SwTable extends SwClient {
   }
   /** Releases the original table client and only a final-client frame owner. @returns Nothing. */
   public override Dispose(): void {
+    this.SetHTMLTableLayout(null);
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
@@ -450,6 +462,7 @@ export class SwTable extends SwClient {
     start: SwTableBox,
     currentRowOnly: boolean,
   ): boolean {
+    this.SetHTMLTableLayout(null);
     if (
       !this.lines.some(
         /** Checks actual box ownership. @param line - Native row. @returns Whether connected. */ (

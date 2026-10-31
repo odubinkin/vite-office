@@ -2729,3 +2729,21 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, the two SwHTMLParser::InsertTableSection overloads.
 - Observation: the predecessor-start overload selects the table-body collection and explicitly applies font height40twips (2pt) at100percent to Western, CJK and CTL on the first paragraph. The pool-ID overload changes the requested collection without these direct height items. MakeTableLine uses the predecessor overload when creating missing or covered cell contents, so the small height may be intentional for empty cells, despite resembling a missing zero or a default-font inconsistency.
 - Preservation: retain the overload distinction and exact40twip values when connecting the pending section consumers. Do not normalize them to ordinary table font height or400twips. This is source review evidence; the parser section consumers and a compiled desktop comparison are not claimed in this checkpoint.
+
+### WRITER323 — A completed table with no enclosing table remains the section-insertion target
+
+- Source: sw/source/filter/html/htmltab.cxx, the pool-ID SwHTMLParser::InsertTableSection overload.
+- Observation: when the current table already has an HTML layout, the do/while searches enclosing tables. If no outer table exists, the last table variable still refers to that completed current table; a new section is inserted before its end. The finished-layout marker alone does not cause failure or require a different insertion target.
+- Preservation: retain the do/while assignments and same-table fallback. Do not reject the table solely because its layout exists or manufacture an outer table. Tests assign a real layout reference and inspect actual new section ownership; no desktop defect reproduction is claimed.
+
+### WRITER324 — Column percentage syntax is treated as absolute width while only an asterisk selects relative width
+
+- Source: sw/source/filter/html/htmltab.cxx, SwHTMLParser::BuildTableColGroup group/COL width options and HTMLTable::InsertCol.
+- Observation: WIDTH reads a uint16 numeric prefix and selects relative width only when the original string contains an asterisk. Thus50percent becomes an absolute50pixel column option, converted to750twips;3asterisk remains relative3. The table WIDTH option has a separate percent path, so the two option owners differ.
+- Preservation: retain numeric narrowing, asterisk detection and the native column conversion. Do not route a percent sign through the relative-column flag or table percent-width parser. Actual byte-stream column tests cover these families; no compiled desktop defect claim is made.
+
+### WRITER325 — Zero SPAN differs between an empty COLGROUP and a COL
+
+- Source: sw/source/filter/html/htmltab.cxx, BuildTableColGroup, TableColGrpSaveStruct::CloseColGroup, HTMLTable::CloseColGroup and InsertCol.
+- Observation: SPAN is narrowed to uint16 before values above256 are replaced by1. A zero empty-group span bypasses column insertion, whereas a zero COL span reaches InsertCol and becomes1. Consequently65536 also becomes zero before these different downstream rules. Any child COL sets the saved group span to zero to suppress extra group columns.
+- Preservation: retain the narrowing/limit order and separate close/insert rules. Do not globally clamp every span to at least1. Tests use actual lexer options and native column owners, including the source zero-column layout admission boundary; full table materialization remains pending.

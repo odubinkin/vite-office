@@ -63,6 +63,8 @@ import {
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
 export class SwHTMLParser extends HTMLParser {
+  /** Same original parser-state slot, exposed only to source responsibility fragments in TypeScript; no second state is allocated. */
+  declare public eState: SvParserState;
   m_pSttNdIdx: SwNodeIndex | null = null;
   m_pTargetCharAttrs: SfxItemSet | null = null;
   readonly m_aTables: HTMLTable[] = [];

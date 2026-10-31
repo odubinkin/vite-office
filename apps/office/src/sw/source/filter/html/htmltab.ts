@@ -20,6 +20,7 @@ import type { SwStartNode } from "../../core/docnode/node";
 import type { SwTable, SwTableBox } from "../../core/table/swtable";
 import type { SwTableBoxFormat, SwTableLineFormat } from "../../../inc/swtblfmt";
 import { MIN_BORDER_DIST } from "../../../inc/swtypes";
+import { InsertTableContents } from "./htmltab.sections";
 import { HTMLTableFrame as F, HTMLTableRules as R } from "../../../../svtools/inc/parhtml";
 /** Native table owns its intermediate grid and original options; protected fields keep future source method fragments on this same owner rather than a parallel DTO. */
 export class HTMLTable {
@@ -227,6 +228,13 @@ export class HTMLTable {
   /** Original parent chain borrow. @returns Actual contents. */
   GetParentContents(): HTMLTableCnts | null {
     return this.m_xParentContents;
+  }
+  /** Original parent-content admission; the explicit outer table borrows the parser current-table reference across the source responsibility split. @param current - Actual outer table. @returns Nothing. */
+  MakeParentContents(current: HTMLTable): void {
+    if (!this.GetContext() && !this.HasParentSection()) {
+      this.SetParentContents(InsertTableContents(this.m_pParser, current, this.m_bIsParentHead));
+      this.SetHasParentSection(true);
+    }
   }
   /** Original frame admission. @returns Flag. */
   HasToFly(): boolean {
