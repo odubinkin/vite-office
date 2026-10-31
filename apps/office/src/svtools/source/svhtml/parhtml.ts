@@ -133,6 +133,26 @@ export abstract class HTMLParser extends SvParser<T> {
   public UnescapeToken(): void {
     UnescapeToken(this);
   }
+  /** Original document-import mode query. @returns New-document flag. */
+  public IsNewDoc(): boolean {
+    return this.bNewDoc;
+  }
+  /** Original PRE flag borrow. @returns Flag. */
+  public IsReadPRE(): boolean {
+    return this.bReadPRE;
+  }
+  /** Original XMP flag borrow. @returns Flag. */
+  public IsReadXMP(): boolean {
+    return this.bReadXMP;
+  }
+  /** Original Listing flag borrow. @returns Flag. */
+  public IsReadListing(): boolean {
+    return this.bReadListing;
+  }
+  /** Original mode suspension clears only the three mode flags. @returns Nothing. */
+  public FinishPREListingXMP(): void {
+    this.bReadPRE = this.bReadXMP = this.bReadListing = false;
+  }
   /** Source PRE start state is independent from the other legacy mode flags. @returns Nothing. */
   public StartPRE(): void {
     this.bReadPRE = true;

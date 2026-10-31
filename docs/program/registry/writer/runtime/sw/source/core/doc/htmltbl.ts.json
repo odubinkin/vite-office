@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/htmltbl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/htmltbl.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.grid.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/htmltbl.cxx"
+      ],
+      "justification": "S3HW1E HTML37: original HTMLTable constructor, actual parser registration, row/column grid growth, identity-based overlap repair/protection, empty-row reuse, trimming, adjustment inheritance, context/PRE/Listing/XMP suspension, class/ID/inline brush precedence and real nested intermediate-layout references are implemented. SwHTMLTableLayout owns the native grid/options and source spacing/availability utilities. No automatic text measurement, layout-pass success, table token reading or core BuildTable materialization is synthesized. Source source-state findings WRITER311-313 are retained. Protected visibility permits same-owner responsibility fragments under TypeScript/source-size constraints, without a second state object. Existing-document insertion boundaries and final current-model/filter/UI reconciliation remain pending. Graphic-link brushes, merged/nested core box ownership and broad native module/API/ABI completeness remain unrepresented; intentional browser file UI/autosave/recovery deviations are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwHTMLTableLayout"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/htmltbl.cxx",
+      "upstreamSymbols": [
+        "SwHTMLTableLayout"
+      ]
+    }
+  }
+}

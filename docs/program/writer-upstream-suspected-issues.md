@@ -2655,3 +2655,22 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, HTMLTableRow::Expand and Shrink; HTMLTable::CloseRow uses the same content-presence condition.
 - Observation: a protected cell reports IsUsed=true but has no contents. Shrink walks trailing cells while GetContents is null, so it can change a protected cell's column span away from the1 assigned by SetProtected. Expand(oneCell=true) assigns decreasing spans only to newly appended cells; earlier cells retain their values.
 - Preservation: retain the original GetContents condition and span update order. Do not substitute IsUsed or normalize the whole row on resize; actual cell/section tests preserve the source state transitions.
+
+
+### WRITER311 — Table layout reconstruction and content layout caching have different lifetimes
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::CreateLayoutInfo and HTMLTableCnts::CreateLayoutInfo.
+- Observation: the table method replaces m_xLayoutInfo on every call, whereas the content method constructs its next content first, then its nested table, and caches the resulting layout exactly once. A repeated outer-table layout creation therefore reuses cell-content layouts, including their originally captured nested layout, even when the nested table's latest layout pointer has changed.
+- Preservation: retain the two different cache contracts and next-first construction order. Do not globally memoize tables or invalidate source content caches; normal construction order controls these references. This is a source-state observation, not a desktop defect reproduction.
+
+### WRITER312 — Empty fixed-column tables can finish with zero columns
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::CloseTable and CreateLayoutInfo; BuildTable context admission.
+- Observation: CloseTable first adds missing rows/columns, then trims columns to m_nFilledColumns. For an empty table with a nonzero initial COLS, filled columns remain zero, so the final trim removes all columns after the fallback row was created. CreateLayoutInfo assumes column zero exists; normal BuildTable does not materialize a table without its context.
+- Preservation: keep the original fallback/trim order and caller admission. Do not synthesize a populated cell to repair this source edge case or treat invalid native vector access as a defined result; the TypeScript binding asserts the nonempty-layout precondition.
+
+### WRITER313 — Opposite-side spacing tests the current column's left border
+
+- Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayout::GetLeftCellSpace and GetRightCellSpace.
+- Observation: an interior cell's right minimum spacing tests GetColumn(nCol)->HasLeftBorder(), rather than the next column's border. The left calculation can also add MIN_BORDER_DIST for a spanning cell reaching the table's right border even without its own left border. These conditions are asymmetric with simple geometric edge lookup.
+- Preservation: retain current-column/span tests and uint16 assignment narrowing. Do not substitute a next-column lookup or a uniform border/padding rule; source-backed tests cover both border-aware and Netscape-only accounting.

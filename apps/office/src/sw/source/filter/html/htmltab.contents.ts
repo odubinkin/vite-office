@@ -1,4 +1,5 @@
-/** @fileoverview Original paragraph-section HTMLTableCnts chain and lazy layout ownership from htmltab.cxx. The nested-table constructor requires a nested core table owner outside the current slice. */
+/** @fileoverview Original paragraph-section HTMLTableCnts chain and lazy layout ownership from htmltab.cxx. Both original section and intermediate nested-table constructors retain native owners. */
+import { HTMLTable } from "./htmltab";
 import type { SwStartNode } from "../../core/docnode/node";
 import type { SwTableBox } from "../../core/table/swtable";
 import { SwHTMLTableLayoutCnts } from "../../../inc/htmltbl";
@@ -7,15 +8,19 @@ export class HTMLTableCnts {
   private m_pNext: HTMLTableCnts | null = null;
   private m_xLayoutInfo: SwHTMLTableLayoutCnts | null = null;
   private m_bNoBreak = false;
-  private readonly m_xTable = null;
-  /** Original paragraph-section constructor, including the native null pointer domain. @param m_pStartNode - Actual borrowed section. @returns Native contents. */
-  constructor(private readonly m_pStartNode: SwStartNode | null) {}
+  private readonly m_xTable: HTMLTable | null;
+  private readonly m_pStartNode: SwStartNode | null;
+  /** Original paragraph-section constructor, including the native null pointer domain. @param value - Actual borrowed section or shared intermediate table. @returns Native contents. */
+  constructor(value: SwStartNode | HTMLTable | null) {
+    this.m_xTable = value instanceof HTMLTable ? value : null;
+    this.m_pStartNode = value instanceof HTMLTable ? null : value;
+  }
   /** Original section borrow. @returns Native section or null. */
   GetStartNode(): SwStartNode | null {
     return this.m_pStartNode;
   }
-  /** Original empty nested-table reference for the paragraph constructor. @returns Stored null reference. */
-  GetTable(): null {
+  /** Original shared intermediate table borrow. @returns Native table or null. */
+  GetTable(): HTMLTable | null {
     return this.m_xTable;
   }
   /** Original tail append transfers the next node without rebuilding existing layout objects. @param next - Owned content chain. @returns Nothing. */
@@ -38,13 +43,16 @@ export class HTMLTableCnts {
   }
   /** Original next-first recursive lazy layout construction; cached owners retain their original links/flags. @returns Shared actual layout content. */
   CreateLayoutInfo(): SwHTMLTableLayoutCnts {
-    if (!this.m_xLayoutInfo)
+    if (!this.m_xLayoutInfo) {
+      const next = this.m_pNext?.CreateLayoutInfo() ?? null;
+      const table = this.m_xTable?.CreateLayoutInfo() ?? null;
       this.m_xLayoutInfo = new SwHTMLTableLayoutCnts(
         this.m_pStartNode,
-        this.m_xTable,
+        table,
         this.m_bNoBreak,
-        this.m_pNext?.CreateLayoutInfo() ?? null,
+        next,
       );
+    }
     return this.m_xLayoutInfo;
   }
 }

@@ -1,16 +1,17 @@
 /** @fileoverview Native paragraph-content and cell HTML layout values from htmltbl.cxx/htmltbl.hxx; nested table and auto-layout engine owners remain separate. */
+import type { SwHTMLTableLayout } from "./htmltbl";
 import type { SwStartNode } from "../docnode/node";
 import type { SwTableBox } from "../table/swtable";
 
-/** Original paragraph-content constructor family, with the original table argument restricted to null because nested cell-table owners are outside the current core. */
+/** Original content constructor retains either an actual section or an actual nested layout owner. */
 export class SwHTMLTableLayoutCnts {
   private m_pBox: SwTableBox | null = null;
   private m_nPass1Done = 0;
   private m_nWidthSet = 0;
-  /** Original borrowed section, null nested-table pointer, no-break and next-content fields. @param m_pStartNode - Actual source section. @param m_xTable - Native null table argument for this constructor profile. @param m_bNoBreakTag - Original tag flag. @param m_xNext - Shared native next layout content. @returns Native layout content. */
+  /** Original borrowed section, null nested-table pointer, no-break and next-content fields. @param m_pStartNode - Actual source section. @param m_xTable - Actual nested layout or null. @param m_bNoBreakTag - Original tag flag. @param m_xNext - Shared native next layout content. @returns Native layout content. */
   constructor(
     private readonly m_pStartNode: SwStartNode | null,
-    private readonly m_xTable: null,
+    private readonly m_xTable: SwHTMLTableLayout | null,
     private readonly m_bNoBreakTag: boolean,
     private readonly m_xNext: SwHTMLTableLayoutCnts | null,
   ) {}
@@ -22,8 +23,8 @@ export class SwHTMLTableLayoutCnts {
   GetTableBox(): SwTableBox | null {
     return this.m_pBox;
   }
-  /** Original null table state of paragraph-content instances. @returns Stored null pointer. */
-  GetTable(): null {
+  /** Original borrowed nested layout pointer. @returns Actual layout or null. */
+  GetTable(): SwHTMLTableLayout | null {
     return this.m_xTable;
   }
   /** Original table-box section takes precedence over the initial source section. @returns Borrowed native section or null. */

@@ -49,9 +49,43 @@ import { InsertBookmark, NewAnchor } from "./htmlgrin";
 import { InsertAttrs } from "./htmlctxt.insert";
 import { NewBasefontAttr, EndBasefontAttr, NewFontAttr, EndFontAttr } from "./swhtml.font";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import type { HTMLTable } from "./htmltab";
+import type { SwTableBox } from "../../core/table/swtable";
+import type { Color } from "../../../../tools/inc/color";
+import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { CreateBrushItem } from "./htmltab.brush";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
 export class SwHTMLParser extends HTMLParser {
+  readonly m_aTables: HTMLTable[] = [];
+  readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
+  /** Original parser table registration. @param table - Borrowed native intermediate table. @returns Nothing. */
+  RegisterHTMLTable(table: HTMLTable): void {
+    this.m_aTables.push(table);
+  }
+  /** Original deregistration transfers an unconsumed first box into parser cleanup ownership. @param table - Native table being destroyed. @returns Nothing. */
+  DeregisterHTMLTable(table: HTMLTable): void {
+    if (table.m_xBox1) {
+      this.m_aOrphanedTableBoxes.push(table.m_xBox1);
+      table.m_xBox1 = null;
+    }
+    for (let i = this.m_aTables.length; i--;)
+      if (this.m_aTables[i] === table) this.m_aTables.splice(i, 1);
+  }
+  /** Original saturated pixel-to-twip helper under the browser's established 96-DPI device profile. @param pixels - Native uint16 pixels. @returns Saturated uint16 twips. */
+  static ToTwips(pixels: number): number {
+    return Math.min((pixels & 65535) * 15, 65535);
+  }
+  /** Original background producer. @param color - Legacy color. @param imageURL - Legacy image. @param style - Inline CSS. @param id - ID. @param className - Class. @returns New native brush or null. */
+  CreateBrushItem(
+    color: Color | null,
+    imageURL: string,
+    style: string,
+    id: string,
+    className: string,
+  ): SvxBrushItem | null {
+    return CreateBrushItem(this, color, imageURL, style, id, className);
+  }
   readonly m_xAttrTab = new HTMLAttrTable();
   readonly m_aParaAttrs: HTMLAttr[] = [];
   readonly m_aSetAttrTab: HTMLAttr[] = [];
@@ -154,6 +188,7 @@ export class SwHTMLParser extends HTMLParser {
   }
   /** Releases remaining native node-index/item owners after success or failure, without deleting borrowed document/cursor. @returns Nothing. */
   SourceDispose(): void {
+    for (const box of this.m_aOrphanedTableBoxes.splice(0)) box.Dispose();
     this.m_pCSS1Parser.SourceDispose();
     this.m_xDoc.GetDocumentSettingManager().set("HTML_MODE", this.m_bOldIsHTMLMode);
     const seen = new Set<HTMLAttr>();

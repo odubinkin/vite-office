@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 269
+revision: 276
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T10:55:45.597Z"
+  updated_at: "2026-10-31T11:18:53.147Z"
   updated_by: "CODER"
-  note: "HTML36 checkpoint verified: 81 unique related cases across 5 files have positive current evidence, final app types, changed-source lint/format and provenance/Writer registry/boundaries/docs/size/tree pass. Native paragraph-content, cell/row/column and core layout-value prerequisites retain actual section/format owners. Recorded alias lint and header metadata failures corrected without weakening gates. HTMLTable grid, auto-layout/token reading/document insertion, insertion boundaries and final matrix remain pending; full goal stays incomplete."
-  attempts: 47
+  note: "HTML37 checkpoint verified: native HTMLTable grid/container/context and SwHTMLTableLayout construction/spacing are implemented; 242 unique related cases across 8 files pass, final types/lint/format and provenance/Writer/shared registry/boundaries/docs/size/tree pass. Initial fixture/import/lint/JSDoc failures are recorded and corrected. Table token loops, automatic text/layout, core insertion, insertion boundaries and final matrix remain pending; full goal stays active and incomplete."
+  attempts: 48
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -757,8 +760,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T11:18:53.147Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML37 checkpoint verified: native HTMLTable grid/container/context and SwHTMLTableLayout construction/spacing are implemented; 242 unique related cases across 8 files pass, final types/lint/format and provenance/Writer/shared registry/boundaries/docs/size/tree pass. Initial fixture/import/lint/JSDoc failures are recorded and corrected. Table token loops, automatic text/layout, core insertion, insertion boundaries and final matrix remain pending; full goal stays active and incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T11:18:59.144Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T10:56:13.064Z"
+doc_updated_at: "2026-10-31T11:18:59.144Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1913,6 +1929,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T11:18:53.147Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML37 checkpoint verified: native HTMLTable grid/container/context and SwHTMLTableLayout construction/spacing are implemented; 242 unique related cases across 8 files pass, final types/lint/format and provenance/Writer/shared registry/boundaries/docs/size/tree pass. Initial fixture/import/lint/JSDoc failures are recorded and corrected. Table token loops, automatic text/layout, core insertion, insertion boundaries and final matrix remain pending; full goal stays active and incomplete.
+    Attempts: 48
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:18:50.729Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2995,6 +3041,25 @@ sections:
     - Commands/results: source provenance passes1912runtime/1699mapped/182browser/31infra (html36-provenance.txt,exec98927exit0); corrected Writer registry passes with semanticViolationCount0 (html36-writer-final.txt,exec67745exit0). The original failed writer registry invocation remains failed; header record now accurately declares its reexport-only role, actual source class owners retain their declared symbols and all broad unverified statuses remain. No shared implementation was changed, so no unrelated shared-registry/full-suite replay was added.
     - Commands/results: module boundaries pass1911sources/10490relative imports/227allowed edges (html36-boundaries.txt,exec99958exit0); JSDoc passes4294authored sources (html36-docs.txt,exec9016exit0); size passes (html36-size.txt,exec7054exit0); source tree passes115required/32retired roots (html36-tree.txt). No checker, threshold, hook or global configuration changes.
     - Scope closure: original current-model cell/row/column/layout value prerequisites are source-backed and verified, with actual document-owned sections/formats and original output/identity/caching semantics. Main table grid, token reader, automatic text/layout passes, actual BuildTable document insertion/finalization, insertion boundary/target snapshots and final model/filter/UI audit remain pending. No computed geometry or table-import success was substituted. Parent objective stays active/incomplete; verification remains rework and the parent must not finish or pause.
+
+    ### HTML37 native table container/grid checkpoint (verified)
+
+    - Initial app typecheck html37-types-initial.txt failed TS2724 for SwTableNode and SwTableLineFormat imports from swtable.ts. These actual owners are declared in docnode/node.ts and sw/inc/swtblfmt.ts; corrected imports without alternate interfaces. Route recomputed before continuing; final typecheck is required.
+    - Read-only inspection commands encountered nonexistent guessed swhtml.css1.ts and writer-native-filter-completeness-audit.md paths, and a zsh unmatched source-provenance* glob. The real source is htmlcss1.ts and the existing audit is writer-native-text-filter-slice.md. Route recomputed; no external reads or implementation scope change.
+    - Concrete implementation uses native HTMLTable grid constructor/InsertCell/OpenRow/CloseRow/InsertCol/CloseTable and SwHTMLTableLayout constructor/spacing/availability, native context and brush precedence. Token loops, automatic text/layout passes, core BuildTable insertion, insertion boundaries and final audit remain pending; parent goal stays active.
+    - Command: changed-source ESLint --max-warnings0, html37-lint.txt, exec60814exit1. Result: fail18 forbidden non-null assertions in new HTMLTable source, no other changed-source violations. Route recomputed. Replace assertions with explicit typed native vector-precondition borrows, and actual layout-cell guards for span repair; do not disable lint or add a second grid owner.
+    - Command: initial focused Writer table tests html37-focused.txt, exec86113exit1. Result: 80pass/3fail across3files in82.13s. Two new fixtures confused actual MakeTableNode's SwTable return with SwTableNode and retained an accidentally renamed _doc callback parameter. One expected Netscape-only right spacing was18 but source arithmetic is padding5+border3+spacing7=15. Correct fixtures via actual SwTable.GetTableNode and the source sum; do not alter production algorithm to match incorrect assertions. App typecheck html37-types.txt exec34706exit1 confirmed those fixture errors; all prior production import errors are gone. Route recomputed; rerun corrected tests and final types.
+    - Command: JSDoc gate html37-docs.txt exec71478exit1. Result: fail2 assertion callbacks missing JSDoc at new grid-test lines164/431. Route recomputed; add explicit comments to those callbacks and rerun the gate without changing thresholds. Corrected focused table tests now pass83/3files (154.60s), shared lexer/options tests pass83/3files (67.15s), app types and changed-source lint pass. The last small IsNewDoc/uint16 binding/test extension will receive final targeted verification; previous invocations are not claimed to cover later edits.
+
+    - Concrete scope: original HTMLTable construction/registration, native row/column growth and finalization, decreasing covered spans, overlap repair/protection and source layout mirroring; actual HTMLTableContext cursor/numbering ownership and mode suspension; CreateBrushItem class/ID/inline precedence before legacy color; actual nested intermediate-table constructor/layout references. SwHTMLTableLayout retains original grid/options/defaults and GetLeft/RightCellSpace/GetAvail utilities. Native ToTwips saturation remains distinct from source narrowing for cell/column dimensions. Protected TypeScript fields keep future source fragments on the same owner without duplicate state, fake text metrics or table materialization. WRITER311-313 document source-state cache/empty-grid/spacing behavior and preserve it.
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts --maxWorkers 1. Result: pass83cases/3files,154.60s,html37-focused-final.txt,exec48747exit0. Covers21initial new grid cases plus62existing values/options. Subsequent final25grid cases include4additional sentinel/zero/minimum/saturation branches and the real IsNewDoc/orphan-transfer owner checks.
+    - Command: npm run test:shared -- src/svtools/source/svhtml/parhtml.test.ts src/svtools/source/svhtml/parhtml.edge-cases.test.ts src/svtools/source/svhtml/parhtml.options.integration.test.ts --maxWorkers 1. Result: pass83cases/3files,67.15s,html37-shared.txt,exec8888exit0. Shared native lexer/mode/option consumers remain intact.
+    - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/md/swmd.test.ts --maxWorkers 1. Result: pass97cases/3files,72.57s,html37-consumers.txt,exec82084exit0. This final source/test state covers all25new grid/layout/context/brush cases and72real HTML/Markdown importer cases. Combining unchanged62value/options scenarios with these97 and83shared scenarios yields242unique related cases/8files with positive evidence; no full all-app suite is claimed.
+    - Command: env PATH="/Users/odubinkin/.nvm/versions/node/v24.13.1/bin:$PATH" ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit in apps/office. Result: pass,html37-types-final.txt exec81781exit0; final after the last source/test changes also passes html37-types-last.txt exec43817exit0. No implementation changes followed.
+    - Commands/results: all10changed source/test files ESLint --max-warnings0 pass,html37-lint-final.txt exec61242exit0; final3files changed after that pass also pass,html37-lint-last.txt exec27502exit0. Explicit changed-artifact Prettier check passes html37-format-check.txt exec21779exit0. JSDoc corrected callbacks and final new tests pass4299authored sources,html37-docs-final.txt exec10858exit0. All initial failed commands retain their original failure evidence; no gates were disabled or thresholds changed.
+    - Commands/results: npm run check:source-provenance passes1916runtime/1703mapped/182browser/31infra,html37-provenance.txt exec17903exit0. npm run inventory:parity:writer passes semanticViolationCount0,html37-writer.txt exec84606exit0. npm run inventory:parity:shared passes semanticViolationCount0,html37-shared-registry.txt exec20701exit0. Reexport-only htmltbl header retains no local class declaration claims; actual new class/functions own their evidence. Broad semantic/API/ABI certification remains unverified.
+    - Commands/results: npm run check:dependencies passes1915runtime/10533relative imports/227allowed edges,html37-boundaries.txt exec99168exit0; npm run check:file-size passes,html37-size.txt exec24792exit0; npm run check:source-tree passes115required/32retired roots,html37-tree.txt exec42848exit0. git diff --check passes. No network/global-user configuration, test timeout, dependency, checker, hook or approval scope changes.
+    - Scope closure: native intermediate table container/grid and layout-construction prerequisites are implemented and verified. Source token loops, text metrics and AutoLayoutPass1/2, core BuildTable insertion/finalization, existing-document insertion boundary/target snapshots and final model/filter/UI reconciliation remain pending. Actual nested intermediate table/layout references do not claim absent merged/nested core SwTableBox ownership. Graphic-link brush branches explicitly require the unrepresented graphic owner after original CSS precedence, rather than silently pretending to import an image. Intentional browser file UI/autosave/recovery deviations are untouched. Parent verification stays rework; the full objective remains active/incomplete and must not finish or pause.
 id_source: "generated"
 ---
 ## Summary
@@ -4160,6 +4225,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T11:18:53.147Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML37 checkpoint verified: native HTMLTable grid/container/context and SwHTMLTableLayout construction/spacing are implemented; 242 unique related cases across 8 files pass, final types/lint/format and provenance/Writer/shared registry/boundaries/docs/size/tree pass. Initial fixture/import/lint/JSDoc failures are recorded and corrected. Table token loops, automatic text/layout, core insertion, insertion boundaries and final matrix remain pending; full goal stays active and incomplete.
+Attempts: 48
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T11:18:50.729Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5246,3 +5341,22 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands/results: source provenance passes1912runtime/1699mapped/182browser/31infra (html36-provenance.txt,exec98927exit0); corrected Writer registry passes with semanticViolationCount0 (html36-writer-final.txt,exec67745exit0). The original failed writer registry invocation remains failed; header record now accurately declares its reexport-only role, actual source class owners retain their declared symbols and all broad unverified statuses remain. No shared implementation was changed, so no unrelated shared-registry/full-suite replay was added.
 - Commands/results: module boundaries pass1911sources/10490relative imports/227allowed edges (html36-boundaries.txt,exec99958exit0); JSDoc passes4294authored sources (html36-docs.txt,exec9016exit0); size passes (html36-size.txt,exec7054exit0); source tree passes115required/32retired roots (html36-tree.txt). No checker, threshold, hook or global configuration changes.
 - Scope closure: original current-model cell/row/column/layout value prerequisites are source-backed and verified, with actual document-owned sections/formats and original output/identity/caching semantics. Main table grid, token reader, automatic text/layout passes, actual BuildTable document insertion/finalization, insertion boundary/target snapshots and final model/filter/UI audit remain pending. No computed geometry or table-import success was substituted. Parent objective stays active/incomplete; verification remains rework and the parent must not finish or pause.
+
+### HTML37 native table container/grid checkpoint (verified)
+
+- Initial app typecheck html37-types-initial.txt failed TS2724 for SwTableNode and SwTableLineFormat imports from swtable.ts. These actual owners are declared in docnode/node.ts and sw/inc/swtblfmt.ts; corrected imports without alternate interfaces. Route recomputed before continuing; final typecheck is required.
+- Read-only inspection commands encountered nonexistent guessed swhtml.css1.ts and writer-native-filter-completeness-audit.md paths, and a zsh unmatched source-provenance* glob. The real source is htmlcss1.ts and the existing audit is writer-native-text-filter-slice.md. Route recomputed; no external reads or implementation scope change.
+- Concrete implementation uses native HTMLTable grid constructor/InsertCell/OpenRow/CloseRow/InsertCol/CloseTable and SwHTMLTableLayout constructor/spacing/availability, native context and brush precedence. Token loops, automatic text/layout passes, core BuildTable insertion, insertion boundaries and final audit remain pending; parent goal stays active.
+- Command: changed-source ESLint --max-warnings0, html37-lint.txt, exec60814exit1. Result: fail18 forbidden non-null assertions in new HTMLTable source, no other changed-source violations. Route recomputed. Replace assertions with explicit typed native vector-precondition borrows, and actual layout-cell guards for span repair; do not disable lint or add a second grid owner.
+- Command: initial focused Writer table tests html37-focused.txt, exec86113exit1. Result: 80pass/3fail across3files in82.13s. Two new fixtures confused actual MakeTableNode's SwTable return with SwTableNode and retained an accidentally renamed _doc callback parameter. One expected Netscape-only right spacing was18 but source arithmetic is padding5+border3+spacing7=15. Correct fixtures via actual SwTable.GetTableNode and the source sum; do not alter production algorithm to match incorrect assertions. App typecheck html37-types.txt exec34706exit1 confirmed those fixture errors; all prior production import errors are gone. Route recomputed; rerun corrected tests and final types.
+- Command: JSDoc gate html37-docs.txt exec71478exit1. Result: fail2 assertion callbacks missing JSDoc at new grid-test lines164/431. Route recomputed; add explicit comments to those callbacks and rerun the gate without changing thresholds. Corrected focused table tests now pass83/3files (154.60s), shared lexer/options tests pass83/3files (67.15s), app types and changed-source lint pass. The last small IsNewDoc/uint16 binding/test extension will receive final targeted verification; previous invocations are not claimed to cover later edits.
+
+- Concrete scope: original HTMLTable construction/registration, native row/column growth and finalization, decreasing covered spans, overlap repair/protection and source layout mirroring; actual HTMLTableContext cursor/numbering ownership and mode suspension; CreateBrushItem class/ID/inline precedence before legacy color; actual nested intermediate-table constructor/layout references. SwHTMLTableLayout retains original grid/options/defaults and GetLeft/RightCellSpace/GetAvail utilities. Native ToTwips saturation remains distinct from source narrowing for cell/column dimensions. Protected TypeScript fields keep future source fragments on the same owner without duplicate state, fake text metrics or table materialization. WRITER311-313 document source-state cache/empty-grid/spacing behavior and preserve it.
+- Command: npm run test:writer -- src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.options.test.ts --maxWorkers 1. Result: pass83cases/3files,154.60s,html37-focused-final.txt,exec48747exit0. Covers21initial new grid cases plus62existing values/options. Subsequent final25grid cases include4additional sentinel/zero/minimum/saturation branches and the real IsNewDoc/orphan-transfer owner checks.
+- Command: npm run test:shared -- src/svtools/source/svhtml/parhtml.test.ts src/svtools/source/svhtml/parhtml.edge-cases.test.ts src/svtools/source/svhtml/parhtml.options.integration.test.ts --maxWorkers 1. Result: pass83cases/3files,67.15s,html37-shared.txt,exec8888exit0. Shared native lexer/mode/option consumers remain intact.
+- Command: npm run test:writer -- src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/md/swmd.test.ts --maxWorkers 1. Result: pass97cases/3files,72.57s,html37-consumers.txt,exec82084exit0. This final source/test state covers all25new grid/layout/context/brush cases and72real HTML/Markdown importer cases. Combining unchanged62value/options scenarios with these97 and83shared scenarios yields242unique related cases/8files with positive evidence; no full all-app suite is claimed.
+- Command: env PATH="/Users/odubinkin/.nvm/versions/node/v24.13.1/bin:$PATH" ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit in apps/office. Result: pass,html37-types-final.txt exec81781exit0; final after the last source/test changes also passes html37-types-last.txt exec43817exit0. No implementation changes followed.
+- Commands/results: all10changed source/test files ESLint --max-warnings0 pass,html37-lint-final.txt exec61242exit0; final3files changed after that pass also pass,html37-lint-last.txt exec27502exit0. Explicit changed-artifact Prettier check passes html37-format-check.txt exec21779exit0. JSDoc corrected callbacks and final new tests pass4299authored sources,html37-docs-final.txt exec10858exit0. All initial failed commands retain their original failure evidence; no gates were disabled or thresholds changed.
+- Commands/results: npm run check:source-provenance passes1916runtime/1703mapped/182browser/31infra,html37-provenance.txt exec17903exit0. npm run inventory:parity:writer passes semanticViolationCount0,html37-writer.txt exec84606exit0. npm run inventory:parity:shared passes semanticViolationCount0,html37-shared-registry.txt exec20701exit0. Reexport-only htmltbl header retains no local class declaration claims; actual new class/functions own their evidence. Broad semantic/API/ABI certification remains unverified.
+- Commands/results: npm run check:dependencies passes1915runtime/10533relative imports/227allowed edges,html37-boundaries.txt exec99168exit0; npm run check:file-size passes,html37-size.txt exec24792exit0; npm run check:source-tree passes115required/32retired roots,html37-tree.txt exec42848exit0. git diff --check passes. No network/global-user configuration, test timeout, dependency, checker, hook or approval scope changes.
+- Scope closure: native intermediate table container/grid and layout-construction prerequisites are implemented and verified. Source token loops, text metrics and AutoLayoutPass1/2, core BuildTable insertion/finalization, existing-document insertion boundary/target snapshots and final model/filter/UI reconciliation remain pending. Actual nested intermediate table/layout references do not claim absent merged/nested core SwTableBox ownership. Graphic-link brush branches explicitly require the unrepresented graphic owner after original CSS precedence, rather than silently pretending to import an image. Intentional browser file UI/autosave/recovery deviations are untouched. Parent verification stays rework; the full objective remains active/incomplete and must not finish or pause.
