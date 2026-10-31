@@ -9,8 +9,16 @@ import type {
   uno_memAlloc,
 } from "../../inc/uno/environment";
 import type { typelib_InterfaceTypeDescription as I } from "../../inc/typelib/typedescription";
-import { typelib_typedescription_acquire } from "../../inc/typelib/typedescription";
-import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
+import {
+  typelib_typedescription_acquire,
+  typelib_typedescription_release,
+} from "../../inc/typelib/typedescription";
+import {
+  rtl_uString_acquire,
+  rtl_uString_release,
+  type rtl_uString,
+  type rtl_uStringSlot,
+} from "../../../sal/inc/rtl/ustring.h";
 import { StringConcat } from "../../../sal/inc/rtl/stringconcat";
 /** Original pointer-or-length-and-terminated-name equality. @param first - Borrowed description. @param second - Borrowed description. @returns Original equality. */
 export function td_equals(first: I, second: I): boolean {
@@ -179,6 +187,208 @@ export class ObjectEntry {
     }
     return null;
   }
+}
+
+/** Borrowed compiler view of the original DefaultEnvironment registration maps. It supplies no constructor, environment factory, thread stack or language-binding callbacks. */
+export type DefaultEnvironmentRegistration = ObjectEntryEnvironment & {
+  aOId2ObjectMap: Map<OUString, ObjectEntry | null>;
+};
+/** Original unordered-map lookup over the actual owned Unicode keys. Native bucket order/capacity are not represented. @param map - Actual source OID map. @param oid - Borrowed exact identifier. @returns Matching owned key or undefined. */
+function objectKey(
+  map: ReadonlyMap<OUString, ObjectEntry | null>,
+  oid: OUStringConstReference,
+): OUString | undefined {
+  for (const candidate of map.keys()) if (candidate.equals(oid)) return candidate;
+  return undefined;
+}
+/** Original registerInterface body keeps the dummy insertion, object/interface counts and acquire-release-publish replacement order. @param env - Actual borrowed extended environment with original maps. @param output - Original inout pointer. @param oid - Borrowed identifier. @param type - Actual description. @returns Nothing. */
+export function defenv_registerInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  oid: rtl_uString,
+  type: I,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]);
+  const key = objectKey(that.aOId2ObjectMap, name);
+  if (key === undefined) {
+    const owned = new OUString(name);
+    that.aOId2ObjectMap.set(owned, null);
+    const entry = new ObjectEntry(name);
+    that.aOId2ObjectMap.set(owned, entry);
+    ++entry.nRef;
+    entry.append(that, output[0], type, null);
+  } else {
+    const entry = that.aOId2ObjectMap.get(key) as ObjectEntry;
+    ++entry.nRef;
+    const found = entry.find(type);
+    if (found) {
+      found.refCount = (found.refCount + 1) | 0;
+      if (found.pInterface !== output[0]) {
+        const pointer = found.pInterface;
+        (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(env, pointer);
+        (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(
+          env,
+          output[0],
+        );
+        output[0] = pointer;
+      }
+    } else entry.append(that, output[0], type, null);
+  }
+}
+/** Original proxy registration distinguishes re-registration of the same proxy from exchanging a different pointer, and marks mixed objects only from the original first entry. @param env - Actual borrowed environment. @param output - Original inout proxy. @param free - Original proxy destruction callback. @param oid - Borrowed identifier. @param type - Actual description. @returns Nothing. */
+export function defenv_registerProxyInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  free: uno_freeProxyFunc,
+  oid: rtl_uString,
+  type: I,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]);
+  const key = objectKey(that.aOId2ObjectMap, name);
+  if (key === undefined) {
+    const owned = new OUString(name);
+    that.aOId2ObjectMap.set(owned, null);
+    const entry = new ObjectEntry(name);
+    that.aOId2ObjectMap.set(owned, entry);
+    ++entry.nRef;
+    entry.append(that, output[0], type, free);
+  } else {
+    const entry = that.aOId2ObjectMap.get(key) as ObjectEntry;
+    entry.mixedObject = Boolean(
+      Number(entry.mixedObject) |
+      Number(
+        entry.aInterfaces.length !== 0 &&
+          (entry.aInterfaces[0] as InterfaceEntry).fpFreeProxy === null,
+      ),
+    );
+    ++entry.nRef;
+    const found = entry.find(type);
+    if (found) {
+      if (found.pInterface === output[0]) found.refCount = (found.refCount + 1) | 0;
+      else {
+        const pointer = found.pInterface;
+        (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(env, pointer);
+        --entry.nRef;
+        free(env, output[0]);
+        output[0] = pointer;
+      }
+    } else entry.append(that, output[0], type, free);
+  }
+}
+/** Complete original revoke callee. The outer defenv_revokeInterface must still invoke it through the actual environment stack; this function does not substitute direct invocation for that missing public orchestration. @param args - Original valid advancing va_list cursor with environment and interface. @returns Nothing. */
+export function s_stub_defenv_revokeInterface(args: Iterator<unknown>): void {
+  const env = args.next().value as uno_ExtEnvironment,
+    pointer = args.next().value,
+    that = env as DefaultEnvironmentRegistration;
+  const object = that.aPtr2ObjectMap.get(pointer) as ObjectEntry;
+  --object.nRef;
+  if (object.nRef === 0) {
+    const key = objectKey(that.aOId2ObjectMap, object.oid);
+    if (key !== undefined) {
+      that.aOId2ObjectMap.delete(key);
+      key.dispose();
+    }
+    for (let index = object.aInterfaces.length; index--;)
+      that.aPtr2ObjectMap.delete((object.aInterfaces[index] as InterfaceEntry).pInterface);
+    for (let index = object.aInterfaces.length; index--;) {
+      const entry = object.aInterfaces[index] as InterfaceEntry;
+      typelib_typedescription_release(entry.pTypeDescr.aBase);
+      if (entry.fpFreeProxy) entry.fpFreeProxy(env, entry.pInterface);
+      else
+        (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(
+          env,
+          entry.pInterface,
+        );
+    }
+    object.dispose();
+  } else if (object.mixedObject) {
+    const index = object.find(pointer, 1);
+    if (index > 0) {
+      const entry = object.aInterfaces[index] as InterfaceEntry;
+      if (entry.fpFreeProxy !== null) {
+        entry.refCount = (entry.refCount - 1) | 0;
+        if (entry.refCount === 0) {
+          const free = entry.fpFreeProxy,
+            description = entry.pTypeDescr.aBase;
+          object.aInterfaces.splice(index, 1);
+          if (object.find(pointer, index) < 0) that.aPtr2ObjectMap.delete(pointer);
+          typelib_typedescription_release(description);
+          free(env, pointer);
+        }
+      }
+    }
+  }
+}
+/** Original identifier query releases/nulls the output before map lookup and invokes the actual installed computation callback only for an absent pointer. @param env - Actual borrowed environment. @param output - Original string pointer field. @param pointer - Non-null source interface. @returns Nothing. */
+export function defenv_getObjectIdentifier(
+  env: uno_ExtEnvironment,
+  output: rtl_uStringSlot,
+  pointer: unknown,
+): void {
+  if (output[0]) {
+    rtl_uString_release(output[0]);
+    output[0] = null;
+  }
+  const object = (env as DefaultEnvironmentRegistration).aPtr2ObjectMap.get(pointer);
+  if (object === undefined)
+    (env.computeObjectIdentifier as NonNullable<uno_ExtEnvironment["computeObjectIdentifier"]>)(
+      env,
+      output,
+      pointer,
+    );
+  else {
+    rtl_uString_acquire(object.oid.pData);
+    output[0] = object.oid.pData;
+  }
+}
+/** Original registered-interface query releases/nulls its previous result before exact OID and original type/base lookup. @param env - Actual borrowed environment. @param output - Original inout pointer. @param oid - Borrowed exact identifier. @param type - Actual demanded description. @returns Nothing. */
+export function defenv_getRegisteredInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  oid: rtl_uString,
+  type: I,
+): void {
+  if (output[0]) {
+    (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(env, output[0]);
+    output[0] = null;
+  }
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]),
+    key = objectKey(that.aOId2ObjectMap, name);
+  if (key !== undefined) {
+    const entry = (that.aOId2ObjectMap.get(key) as ObjectEntry).find(type);
+    if (entry) {
+      (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(
+        env,
+        entry.pInterface,
+      );
+      output[0] = entry.pInterface;
+    }
+  }
+}
+/** Original complete-vector query allocates even for zero entries, acquires every distinct pointer and publishes array/count only after iteration. @param env - Actual borrowed environment. @param output - Original output array pointer. @param length - Original signed32 count. @param allocate - Actual caller allocation callback. @returns Nothing. */
+export function defenv_getRegisteredInterfaces(
+  env: uno_ExtEnvironment,
+  output: [unknown[] | null],
+  length: [number],
+  allocate: uno_memAlloc,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    count = that.aPtr2ObjectMap.size | 0,
+    pointers = allocate(count * 8) as unknown[];
+  let index = 0;
+  for (const pointer of that.aPtr2ObjectMap.keys()) {
+    pointers[index] = pointer;
+    (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(
+      env,
+      pointers[index],
+    );
+    ++index;
+  }
+  output[0] = pointers;
+  length[0] = count;
 }
 
 /** Original void* context represented by its actual caller-provided address; physical object addresses are not synthesized. */

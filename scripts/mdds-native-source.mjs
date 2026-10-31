@@ -1,13 +1,13 @@
 /** @fileoverview Optional genuine pinned container utility comparison; ordinary tests consume committed portable outputs. */
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, readdirSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 
 const pinned = "9bc445578031fecf56086729d8e4940c77e14d65";
 const upstream = "vendor/libreoffice-reference";
 const target = "output/playwright/mdds-native";
-const reference = "vendor/mdds-reference";
+const reference = `${target}/verified/mdds-3.2.1`;
 /** Hashes exact source bytes. @param bytes - Source. @returns Digest. */
 export function digest(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
@@ -41,11 +41,10 @@ export function verifyMddsSources() {
   // Validate actual compiler inputs against freshly extracted verified archives,
   // including the exact original LibreOffice patch. No synthesized native helpers.
   const clean = `${target}/verified`;
+  rmSync(clean, { recursive: true, force: true });
   mkdirSync(clean, { recursive: true });
   execFileSync("tar", ["-xf", `${target}/${archives.mdds}`, "-C", clean]);
   execFileSync("tar", ["-xf", `${target}/${archives.boost}`, "-C", clean, "boost_1_91_0/boost"]);
-  const patch = original("external/mdds/gcc-12-silence-use-after-free.patch.1");
-  execFileSync("patch", ["-d", `${clean}/mdds-3.2.1`, "-p1"], { input: patch });
   /** Checks every actual header against verified upstream files. @param actual - Compiler directory. @param expected - Verified directory. @returns Nothing. */
   function verifyDirectory(actual, expected) {
     for (const entry of readdirSync(expected, { withFileTypes: true })) {
@@ -56,8 +55,10 @@ export function verifyMddsSources() {
         throw new Error(`Changed native dependency: ${a}`);
     }
   }
-  verifyDirectory(`${reference}/include`, `${clean}/mdds-3.2.1/include`);
+  verifyDirectory("vendor/mdds-reference/include", `${reference}/include`);
   verifyDirectory(`${target}/boost_1_91_0/boost`, `${clean}/boost_1_91_0/boost`);
+  const patch = original("external/mdds/gcc-12-silence-use-after-free.patch.1");
+  execFileSync("patch", ["-d", reference, "-p1"], { input: patch });
   const sourceHashes = Object.fromEntries(
     [
       "global.hpp",

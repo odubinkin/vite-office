@@ -20,9 +20,11 @@
         "apps/office/src/cppu/source/uno/lbenv.ts#ObjectEntry",
         "apps/office/src/cppu/source/uno/lbenv.test.ts#matches complete original ObjectEntry",
         "cppu/source/uno/lbenv.cxx#ObjectEntry",
-        "apps/office/src/cppu/source/uno/lbenv-registry.test.ts"
+        "apps/office/src/cppu/source/uno/lbenv-registry.test.ts",
+        "apps/office/src/cppu/source/uno/lbenv-registration.test.ts",
+        "apps/office/src/cppu/source/uno/lbenv-registration-native.test.ts"
       ],
-      "justification": "Complete original lbenv.cxx ObjectEntry constructor, append and both find overloads reuse actual shared OUString, rtl_ustr_compare, C typelib and full declared ext-environment records. Interface acquisition precedes description acquisition, pointer emplace does not overwrite, and vector append follows. Root lookup returns the first entry; type lookup walks only pBaseTypeDescription. Logical compiler member copy/move/assignment/destruction retain original string ownership, trivial pointer records and valid live aliases. Native arrays and Map represent accessed elements and key identity/insertion, without physical capacity/allocator/hash ordering claims. Whole unchanged native owner and genuine desktop dependencies normal-ASan/UBSan, complete streams and whole related source-absent raw100 are required. No DefaultEnvironment, runtime provider, environment/mapping/exception engine is synthesized; physical ABI/leaks/native threads/shutdown and full consumer QA remain unverified; broad parity flags stay false. Original complete weak EnvironmentsData registry uses owned OUString keys, original context-decimal+descriptor concatenation, actual supplied strong/weak/harden/dispose callbacks, lookup output release/null order, live duplicate substitution, dead weak replacement, exact descriptor filtering and successful-hardening count. Caller malloc is invoked only for nonempty result arrays with original sizeof(pointer)*count. Empty filters select all; embedded NUL descriptors retain exact value equality. Original destructor sets isDisposing, hardens, releases weak ownership, disposes/releases survivors and destroys map keys. Actual function-static singleton/public registry enumeration use that owner, not an empty-list provider. reinterpret_cast<sal_IntPtr> admits explicit caller-provided numerical native context addresses only; addresses are never inferred from JS object identity. Synchronous code erases mutex tokens and native arrays lower the original logical C pointer-array allocation without certifying physical address/hash/thread behavior. Public createComponentContext current/source Environment and Mapping orchestration, default environment engine, bridge/purpose-stack creation, concrete ServiceManager/application installation, EditEngine/VCL/Sfx/DocImport and full NatNum12/formatter CSV admission remain incomplete. Native physical pointer ABI, unordered bucket permutation, allocator exhaustion, threading, mutex scopes, shutdown and noexcept process termination remain uncertified. No complete module or CSV readiness is promoted.",
+      "justification": "Complete original lbenv.cxx ObjectEntry constructor, append and both find overloads reuse actual shared OUString, rtl_ustr_compare, C typelib and full declared ext-environment records. Interface acquisition precedes description acquisition, pointer emplace does not overwrite, and vector append follows. Root lookup returns the first entry; type lookup walks only pBaseTypeDescription. Logical compiler member copy/move/assignment/destruction retain original string ownership, trivial pointer records and valid live aliases. Native arrays and Map represent accessed elements and key identity/insertion, without physical capacity/allocator/hash ordering claims. Whole unchanged native owner and genuine desktop dependencies normal-ASan/UBSan, complete streams and whole related source-absent raw100 are required. No DefaultEnvironment, runtime provider, environment/mapping/exception engine is synthesized; physical ABI/leaks/native threads/shutdown and full consumer QA remain unverified; broad parity flags stay false. Original complete weak EnvironmentsData registry uses owned OUString keys, original context-decimal+descriptor concatenation, actual supplied strong/weak/harden/dispose callbacks, lookup output release/null order, live duplicate substitution, dead weak replacement, exact descriptor filtering and successful-hardening count. Caller malloc is invoked only for nonempty result arrays with original sizeof(pointer)*count. Empty filters select all; embedded NUL descriptors retain exact value equality. Original destructor sets isDisposing, hardens, releases weak ownership, disposes/releases survivors and destroys map keys. Actual function-static singleton/public registry enumeration use that owner, not an empty-list provider. reinterpret_cast<sal_IntPtr> admits explicit caller-provided numerical native context addresses only; addresses are never inferred from JS object identity. Synchronous code erases mutex tokens and native arrays lower the original logical C pointer-array allocation without certifying physical address/hash/thread behavior. Public createComponentContext current/source Environment and Mapping orchestration, default environment engine, bridge/purpose-stack creation, concrete ServiceManager/application installation, EditEngine/VCL/Sfx/DocImport and full NatNum12/formatter CSV admission remain incomplete. Native physical pointer ABI, unordered bucket permutation, allocator exhaustion, threading, mutex scopes, shutdown and noexcept process termination remain uncertified. No complete module or CSV readiness is promoted. Original DefaultEnvironment registration, proxy exchange, raw invoked revoke callee, identifier lookup, registered-interface lookup and enumeration preserve dummy OID insertion, real ObjectEntry/typelib/string ownership, replacement acquire/release/free/publish order, mixed-object counts, reverse final cleanup and zero-size caller allocation. Prepared enclosing C records are borrowed inputs only; no missing constructor, computation provider, invocation stack or public bootstrap is fabricated. Native hash bucket ordering, physical allocation, mutex/thread semantics and whole-module/CSV readiness are not certified.",
       "knownViolations": [],
       "localSymbols": [
         "td_equals",
@@ -31,7 +33,14 @@
         "ObjectEntry",
         "EnvironmentsData",
         "theEnvironmentsData",
-        "uno_getRegisteredEnvironments"
+        "uno_getRegisteredEnvironments",
+        "DefaultEnvironmentRegistration",
+        "defenv_registerInterface",
+        "defenv_registerProxyInterface",
+        "s_stub_defenv_revokeInterface",
+        "defenv_getObjectIdentifier",
+        "defenv_getRegisteredInterface",
+        "defenv_getRegisteredInterfaces"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "cppu/source/uno/lbenv.cxx",
@@ -43,7 +52,13 @@
         "theEnvironmentsData",
         "uno_getRegisteredEnvironments",
         "getRegisteredEnvironments",
-        "registerEnvironment"
+        "registerEnvironment",
+        "defenv_registerInterface",
+        "defenv_registerProxyInterface",
+        "s_stub_defenv_revokeInterface",
+        "defenv_getObjectIdentifier",
+        "defenv_getRegisteredInterface",
+        "defenv_getRegisteredInterfaces"
       ]
     }
   }

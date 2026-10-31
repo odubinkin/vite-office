@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 146
+revision: 150
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T14:13:02.891Z"
+  updated_at: "2026-10-31T14:57:54.284Z"
   updated_by: "CODER"
-  note: "Original internal ComponentContext/DisposingForwarder and weak EnvironmentsData registry checkpoint verified. Complete source new/legacy factory contracts and mapKeysToSequence are present; original lazy/duplicate/delegate/disposal behavior retained (CALC-451..456). 62 related cases plus final 26-case changed-owner run, 197 CSV/UI, 50 boundary cases, final tools/app typecheck, full ESLint, production build, actual browser CSV and provenance/parity/resources/docs/size checks pass. No public environment/mapping bootstrap or concrete ServiceManager/application installation is claimed; EditEngine/DocImport and NatNum12/formatter remain. Keep goal active and task open."
-  attempts: 34
+  note: "Registration checkpoint passes full native normal/sanitized streams, 18 owner tests, 197 CSV cases, browser/build/type/lint and contracts. Full CSV bootstrap, EditEngine/DocImport and NatNum12 dispatch remain incomplete."
+  attempts: 35
 commit: null
 comments:
   -
@@ -256,6 +256,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: Continue the approved native CSV goal after verified original environment registration checkpoint; real application bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
 events:
   -
     type: "status"
@@ -872,8 +875,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T14:57:54.284Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Registration checkpoint passes full native normal/sanitized streams, 18 owner tests, 197 CSV cases, browser/build/type/lint and contracts. Full CSV bootstrap, EditEngine/DocImport and NatNum12 dispatch remain incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T14:58:00.554Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue the approved native CSV goal after verified original environment registration checkpoint; real application bootstrap and remaining EditEngine/NatNum12 consumers are still pending."
 doc_version: 3
-doc_updated_at: "2026-10-31T14:13:10.487Z"
+doc_updated_at: "2026-10-31T14:58:00.554Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1913,6 +1929,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T14:57:54.284Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Registration checkpoint passes full native normal/sanitized streams, 18 owner tests, 197 CSV cases, browser/build/type/lint and contracts. Full CSV bootstrap, EditEngine/DocImport and NatNum12 dispatch remain incomplete.
+    Attempts: 35
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:57:53.678Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2906,6 +2952,36 @@ sections:
     - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;1 Chromium CSV import/export scenario,4.6s(context-owner-browser.log). Scope: current production build, existing file UI, multiline cell display, exact downloaded CSV bytes and no page errors. This does not claim public ComponentContext/ServiceManager bootstrap or full NatNum12/CSV acceptance.
     - Final review: git diff --check passes. Exact35-path allowlist contains only current source/tests/canonical registry/issue journal/header-boundary witnesses/task README; native scratch is excluded. All related failures/resolutions/evidence remain recorded. No source vendor/network/security-policy/implementation-guard changes or readiness promotion. Full final status is retained in context-owner-final-status.log. Original CSV goal remains active; task verification stays rework and resumes DOING because public environment/mapping bootstrap, ServiceManager/application installation, original multiline EditEngine/DocImport and NatNum12/formatter remain incomplete. No task finish or goal completion is claimed.
+
+    ### Native dependency recovery and JS library assessment (2026-10-31)
+
+    - User authorized downloading five pinned source archives after first checking ready JS implementations. Assessed official ICU4X npm icu WordSegmenter API (https://icu4x.unicode.org/2_2/tsdoc/classes/WordSegmenter.html) and ICU4C WASM wrapper (https://github.com/echogarden-project/icu-segmentation-wasm/blob/main/lib/icu-segmentation.cpp). Neither exposes the required LibreOffice OpenOffice RBBI rule-loading entry points: edit_word/dict_word/count_word are loaded by original breakiterator_unicode.cxx before generic ICU fallback. No compatible drop-in JS runtime implementation of Boost, mdds multi_type_vector, Dragonbox policies or fast_float from_chars was found in bounded searches of primary project/package sources. No unsuitable package installed. Native C++ reference-build dependencies remain necessary independently of runtime library choices.
+    - Downloaded MDDS 3.2.1, Boost 1.91.0, Dragonbox 1.1.3, fast_float 8.2.10 and ICU 78.3 from dev-www.libreoffice.org/src inside output only. All five SHA-256 hashes match pinned download.lst. Exact URLs, paths, sizes and hashes retained in environment-native-download-results.json.
+    - Observation: initial native recovery failed because verifyMddsSources compared untouched vendor headers with already-patched archive extraction; retry also exposed stale patch backup files left by repeated extraction. Impact: original cppumaker prerequisite could not run, without any production/runtime failure. Resolution: verify pristine vendor headers against pristine archive, reset only owned scratch extraction directory, apply exact pinned LibreOffice patch in scratch, and return patched scratch source as compiler reference. Vendor remains read-only. Native generator retry in progress; no native parity result claimed yet.
+
+    ### Original default-environment registration checkpoint
+
+    - Ported the full original registerInterface, registerProxyInterface, raw invoked revoke callee, getObjectIdentifier, getRegisteredInterface and getRegisteredInterfaces bodies in their original lbenv owner. Preserves dummy OID emplacement, original versus proxy substitution counts, acquire/release/free-before-output publication, mixed-proxy removal, type-before-interface release, reverse final cleanup, both maps cleared before final callbacks, old output ownership, source type/base lookup and caller allocation even for zero entries. Reuses actual ObjectEntry, OUString and C typelib owners. No public environment constructor, invoke stack or computation provider is synthesized. No readiness flags promoted.
+    - Command: node scripts/casefolding-native-types.mjs --generate
+      Result: pass after the documented pristine/archive/patch preparation correction. Evidence: environment-native-types-clean.log; original cppumaker emits ten genuine required headers; all pinned archive hashes verified.
+    - Command: node scripts/uno-environment-registration-native-probe.mjs --write
+      Result: pass. Evidence: environment-native-registration-build.log and ignored output/playwright/uno-environment-registration-native/manifest.json. Scope: complete unchanged lbenv.cxx TU and genuine dependencies, 443 complete original source blobs, normal and ASan/UBSan identical diagnostic-free streams original=10120, proxy=7424, mixed=9252 bytes. Leak checking remains disabled as documented. Physical ABI, threading, shutdown, unspecified multi-pointer hash enumeration and complete application bootstrap remain uncertified.
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-registration-native.test.ts src/cppu/source/uno/lbenv-registration.test.ts src/cppu/source/uno/lbenv.test.ts src/cppu/source/uno/lbenv-registry.test.ts --maxWorkers=1
+      Result: pass;4 files/18 cases,2.34s. Evidence: environment-final-owner-tests.log. Scope: byte-for-byte full native stream replay plus Unicode/NUL OIDs, callbacks/counts and multi-pointer membership/ownership functional checks.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8 files/197 cases,21.97s. Evidence: environment-csv-tests.log. Scope: existing CSV options/import/recognition/date/export/document/file UI regression.
+    - Command: npm run typecheck; npm run lint
+      Result: pass. Evidence: environment-typecheck.log and environment-full-lint-final.log. Initial full lint scanned five retained untracked research programs; preserved their bytes with .source.txt extensions (environment-scratch-evidence-moves.json), leaving all lint rules unchanged. Initial focused test lint also caught and removed one unused type import.
+    - Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources
+      Result: pass. Evidence: environment-dependencies.log, environment-provenance.log, environment-calc-parity.log, environment-shared-parity.log, environment-resources.log. Scope: 1944 runtime provenance modules and existing dependency/resource/parity contracts.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check <exact changed authored paths>
+      Result: pass. Evidence: environment-docs-final.log, environment-size.log, environment-format-check.log. Source owner remains in original source file; no new file-size guard exceptions.
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts --maxWorkers=1; npx --no-install vitest run scripts/native-inline-sequence-boundary.test.ts --maxWorkers=1
+      Result: pass;47 plus3 related boundary cases. Evidence: environment-boundary-tests.log and environment-inline-boundary-tests.log. The first invocation also supplied an unmatched check-module-boundary-support.test.ts filter, which added no tests; the actual related inline suite was then run explicitly.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;production build and1 real browser CSV scenario,4.4s. Evidence: environment-build-final.log and environment-browser.log. Initial Vite invocation incorrectly used --root; corrected to the existing app directory with no config changes.
+    - Repeated verifyMddsSources twice: pass, identical original archive/header hashes and patched scratch source results. Vendor references remain untouched. The five downloaded archives and all research/build evidence stay inside owned output directories and outside the commit.
+    - Overall CSV task remains rework/DOING and goal stays active. Remaining: real public current/source environment/mapping orchestration and source process/application ServiceManager installation, native multiline EditEngine/DocImport integration, NatNum12 casing/word-service/formatter dispatch, and final CSV feature audit. Existing basic CSV UI is already wired; core completion is not claimed. Full-suite cadence unchanged: no tenth completed AgentPlane task reached, so only related tests run.
 id_source: "generated"
 ---
 ## Summary
@@ -3954,6 +4030,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T14:57:54.284Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Registration checkpoint passes full native normal/sanitized streams, 18 owner tests, 197 CSV cases, browser/build/type/lint and contracts. Full CSV bootstrap, EditEngine/DocImport and NatNum12 dispatch remain incomplete.
+Attempts: 35
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:57:53.678Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4951,3 +5057,33 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;1 Chromium CSV import/export scenario,4.6s(context-owner-browser.log). Scope: current production build, existing file UI, multiline cell display, exact downloaded CSV bytes and no page errors. This does not claim public ComponentContext/ServiceManager bootstrap or full NatNum12/CSV acceptance.
 - Final review: git diff --check passes. Exact35-path allowlist contains only current source/tests/canonical registry/issue journal/header-boundary witnesses/task README; native scratch is excluded. All related failures/resolutions/evidence remain recorded. No source vendor/network/security-policy/implementation-guard changes or readiness promotion. Full final status is retained in context-owner-final-status.log. Original CSV goal remains active; task verification stays rework and resumes DOING because public environment/mapping bootstrap, ServiceManager/application installation, original multiline EditEngine/DocImport and NatNum12/formatter remain incomplete. No task finish or goal completion is claimed.
+
+### Native dependency recovery and JS library assessment (2026-10-31)
+
+- User authorized downloading five pinned source archives after first checking ready JS implementations. Assessed official ICU4X npm icu WordSegmenter API (https://icu4x.unicode.org/2_2/tsdoc/classes/WordSegmenter.html) and ICU4C WASM wrapper (https://github.com/echogarden-project/icu-segmentation-wasm/blob/main/lib/icu-segmentation.cpp). Neither exposes the required LibreOffice OpenOffice RBBI rule-loading entry points: edit_word/dict_word/count_word are loaded by original breakiterator_unicode.cxx before generic ICU fallback. No compatible drop-in JS runtime implementation of Boost, mdds multi_type_vector, Dragonbox policies or fast_float from_chars was found in bounded searches of primary project/package sources. No unsuitable package installed. Native C++ reference-build dependencies remain necessary independently of runtime library choices.
+- Downloaded MDDS 3.2.1, Boost 1.91.0, Dragonbox 1.1.3, fast_float 8.2.10 and ICU 78.3 from dev-www.libreoffice.org/src inside output only. All five SHA-256 hashes match pinned download.lst. Exact URLs, paths, sizes and hashes retained in environment-native-download-results.json.
+- Observation: initial native recovery failed because verifyMddsSources compared untouched vendor headers with already-patched archive extraction; retry also exposed stale patch backup files left by repeated extraction. Impact: original cppumaker prerequisite could not run, without any production/runtime failure. Resolution: verify pristine vendor headers against pristine archive, reset only owned scratch extraction directory, apply exact pinned LibreOffice patch in scratch, and return patched scratch source as compiler reference. Vendor remains read-only. Native generator retry in progress; no native parity result claimed yet.
+
+### Original default-environment registration checkpoint
+
+- Ported the full original registerInterface, registerProxyInterface, raw invoked revoke callee, getObjectIdentifier, getRegisteredInterface and getRegisteredInterfaces bodies in their original lbenv owner. Preserves dummy OID emplacement, original versus proxy substitution counts, acquire/release/free-before-output publication, mixed-proxy removal, type-before-interface release, reverse final cleanup, both maps cleared before final callbacks, old output ownership, source type/base lookup and caller allocation even for zero entries. Reuses actual ObjectEntry, OUString and C typelib owners. No public environment constructor, invoke stack or computation provider is synthesized. No readiness flags promoted.
+- Command: node scripts/casefolding-native-types.mjs --generate
+  Result: pass after the documented pristine/archive/patch preparation correction. Evidence: environment-native-types-clean.log; original cppumaker emits ten genuine required headers; all pinned archive hashes verified.
+- Command: node scripts/uno-environment-registration-native-probe.mjs --write
+  Result: pass. Evidence: environment-native-registration-build.log and ignored output/playwright/uno-environment-registration-native/manifest.json. Scope: complete unchanged lbenv.cxx TU and genuine dependencies, 443 complete original source blobs, normal and ASan/UBSan identical diagnostic-free streams original=10120, proxy=7424, mixed=9252 bytes. Leak checking remains disabled as documented. Physical ABI, threading, shutdown, unspecified multi-pointer hash enumeration and complete application bootstrap remain uncertified.
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-registration-native.test.ts src/cppu/source/uno/lbenv-registration.test.ts src/cppu/source/uno/lbenv.test.ts src/cppu/source/uno/lbenv-registry.test.ts --maxWorkers=1
+  Result: pass;4 files/18 cases,2.34s. Evidence: environment-final-owner-tests.log. Scope: byte-for-byte full native stream replay plus Unicode/NUL OIDs, callbacks/counts and multi-pointer membership/ownership functional checks.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8 files/197 cases,21.97s. Evidence: environment-csv-tests.log. Scope: existing CSV options/import/recognition/date/export/document/file UI regression.
+- Command: npm run typecheck; npm run lint
+  Result: pass. Evidence: environment-typecheck.log and environment-full-lint-final.log. Initial full lint scanned five retained untracked research programs; preserved their bytes with .source.txt extensions (environment-scratch-evidence-moves.json), leaving all lint rules unchanged. Initial focused test lint also caught and removed one unused type import.
+- Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources
+  Result: pass. Evidence: environment-dependencies.log, environment-provenance.log, environment-calc-parity.log, environment-shared-parity.log, environment-resources.log. Scope: 1944 runtime provenance modules and existing dependency/resource/parity contracts.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check <exact changed authored paths>
+  Result: pass. Evidence: environment-docs-final.log, environment-size.log, environment-format-check.log. Source owner remains in original source file; no new file-size guard exceptions.
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts --maxWorkers=1; npx --no-install vitest run scripts/native-inline-sequence-boundary.test.ts --maxWorkers=1
+  Result: pass;47 plus3 related boundary cases. Evidence: environment-boundary-tests.log and environment-inline-boundary-tests.log. The first invocation also supplied an unmatched check-module-boundary-support.test.ts filter, which added no tests; the actual related inline suite was then run explicitly.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;production build and1 real browser CSV scenario,4.4s. Evidence: environment-build-final.log and environment-browser.log. Initial Vite invocation incorrectly used --root; corrected to the existing app directory with no config changes.
+- Repeated verifyMddsSources twice: pass, identical original archive/header hashes and patched scratch source results. Vendor references remain untouched. The five downloaded archives and all research/build evidence stay inside owned output directories and outside the commit.
+- Overall CSV task remains rework/DOING and goal stays active. Remaining: real public current/source environment/mapping orchestration and source process/application ServiceManager installation, native multiline EditEngine/DocImport integration, NatNum12 casing/word-service/formatter dispatch, and final CSV feature audit. Existing basic CSV UI is already wired; core completion is not claimed. Full-suite cadence unchanged: no tenth completed AgentPlane task reached, so only related tests run.
