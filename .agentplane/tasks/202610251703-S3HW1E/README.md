@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 358
+revision: 362
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T15:54:59.687Z"
+  updated_at: "2026-10-31T16:10:03.859Z"
   updated_by: "CODER"
-  note: "HTML50 verified:342unique related cases/28files, complete104-case cursor module, final49affected cases, app types and affected static/provenance/registry gates pass. Parent incomplete: global cursor traversal, section deletion, table grammar/layout and final filters/UI remain."
-  attempts: 61
+  note: "HTML51 checkpoint passes:175unique related cases/15files; app types, lint/format, provenance, registry, boundaries, JSDoc, file size, source tree and diff. Native UNO cursor ownership/defaults/destruction and API invalidation are wired; native-format goal remains incomplete."
+  attempts: 62
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -981,8 +984,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T16:10:03.859Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML51 checkpoint passes:175unique related cases/15files; app types, lint/format, provenance, registry, boundaries, JSDoc, file size, source tree and diff. Native UNO cursor ownership/defaults/destruction and API invalidation are wired; native-format goal remains incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T16:10:11.821Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T15:55:05.338Z"
+doc_updated_at: "2026-10-31T16:10:11.821Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2557,6 +2573,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T16:10:03.859Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML51 checkpoint passes:175unique related cases/15files; app types, lint/format, provenance, registry, boundaries, JSDoc, file size, source tree and diff. Native UNO cursor ownership/defaults/destruction and API invalidation are wired; native-format goal remains incomplete.
+    Attempts: 62
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:10:03.271Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2627,6 +2673,16 @@ sections:
     - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html50-lint-final.txt/html50-lint-closure.txt/html50-format.txt/html50-format-closure.txt.
     - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html50-provenance-final.txt (1928modules), html50-boundaries.txt (1927sources/10671imports/229edges), html50-registry-final.txt (0semantic violations), html50-jsdoc-closure.txt (4333sources), html50-size.txt (4337files), html50-tree.txt (115paths/32retiredroots).
     - Scope review: canonical HTML50 matrix and WRITER335 describe source physical-bound behavior and pending actual global cursor owners/traversal, section deletion, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit. Preserve existing browser open/save/autosave/recovery deviations. No full-app suite, native GC/ABI certificate or parent completion claim.
+
+    ### HTML51 native UNO cursor ownership checkpoint
+
+    HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/unocore/{unocrsr,native-import-core-lifetimes,native-text-import-api}.test.ts ->46pass/3files. Related API/document/RTF selection in html51-related-tests.txt initially80pass/1fail; final corrected src/sw/source/core/unocore/{unocrsr,native-import-failure-contracts}.test.ts ->15pass/2files (html51-closure-tests.txt). The other7unchanged related files pass. TXT/Markdown/mounted UI selection in html51-filter-ui-tests.txt ->57pass/4files. Scope: actual native owners, factory defaults, shared/weak lifetime, both cursor rings, pointer operations, document notification ordering and existing import/export/UI consumers.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html51-types.txt).
+    - Command (cwd repository): node_modules/.bin/eslint changed six source/test files --max-warnings 0; node_modules/.bin/prettier --check same files ->pass.
+    - Command: node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; git diff --check ->pass. Logs html51-{provenance,registry,eslint,jsdoc}.txt and checked terminal output. Scope: all runtime registrations and module/source responsibility constraints.
+    - Full suite is not replayed for this checkpoint of the same ongoing AgentPlane task, per user instruction. No required selected test is skipped or failing.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3865,6 +3921,10 @@ sections:
 
     HTML50 closure:342unique related cases/28files pass (185final related cases,63initial unchanged consumer cases minus10repeated findtxt cases,104complete core/crsr cases). Final49cases/3fresh or migrated fixtures pass and complete cursor-module JSON reports104pass/0fail/0pending in13files. Final app types and affected static gates pass. Permanent physical SwPaM bounds, original reference ties, nullable content ownership and actual structural GetCorrPosition are verified; no global cursor service or measured/native result provider is fabricated.
     Next concrete dependency remains global PaMCorrAbs: pinned doccorr.cxx92/356 traverses real SwDoc.GetEditShell/current view-shell ring and real mvUnoCursorTable, checks original RemainInSection and broadcasts UnoCursorHint. The current SwCursorShell is in core/crsr/trvltbl.ts with actual saved/current/table cursor owners; current SwDoc has no native current-view-shell manager. Current SwXTextCursor extends SwXTextRange, whose ownMark=false path still uses a plain SwPaM rather than native SwUnoCursor. Pinned SwUnoCursor implementation is sw/source/core/unocore/unocrsr.cxx, header sw/inc/unocrsr.hxx, default RemainInSection=true and skip-hidden/protected=false. Do not replace this traversal with a flat node-position registry or a dummy GetEditShell/UNO service. Actual caption DeleteSection/DelNodes, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain required; parent stays incomplete.
+
+    HTML51 initial related API81cases:80pass/1fail. The fresh SetPositions GetPaM read guard accidentally prevents restoring a valid range after temporary foreign positions; retain the original recovery contract, check only actual cursor invalidation before assigning. Initial fixture lint rejects non-null assertions and JSDoc requires a callback comment; replace them with checked actual fixture owners and add the callback documentation. Initial provenance/registry detects the missing source split explanation; add it to the canonical per-file provenance record rather than ignored generated aggregate views. These local changes require no network or scope drift.
+
+    HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -5450,6 +5510,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T16:10:03.859Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML51 checkpoint passes:175unique related cases/15files; app types, lint/format, provenance, registry, boundaries, JSDoc, file size, source tree and diff. Native UNO cursor ownership/defaults/destruction and API invalidation are wired; native-format goal remains incomplete.
+Attempts: 62
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T16:10:03.271Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5520,6 +5610,16 @@ HTML50 checkpoint (parent incomplete):
 - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html50-lint-final.txt/html50-lint-closure.txt/html50-format.txt/html50-format-closure.txt.
 - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html50-provenance-final.txt (1928modules), html50-boundaries.txt (1927sources/10671imports/229edges), html50-registry-final.txt (0semantic violations), html50-jsdoc-closure.txt (4333sources), html50-size.txt (4337files), html50-tree.txt (115paths/32retiredroots).
 - Scope review: canonical HTML50 matrix and WRITER335 describe source physical-bound behavior and pending actual global cursor owners/traversal, section deletion, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit. Preserve existing browser open/save/autosave/recovery deviations. No full-app suite, native GC/ABI certificate or parent completion claim.
+
+### HTML51 native UNO cursor ownership checkpoint
+
+HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/unocore/{unocrsr,native-import-core-lifetimes,native-text-import-api}.test.ts ->46pass/3files. Related API/document/RTF selection in html51-related-tests.txt initially80pass/1fail; final corrected src/sw/source/core/unocore/{unocrsr,native-import-failure-contracts}.test.ts ->15pass/2files (html51-closure-tests.txt). The other7unchanged related files pass. TXT/Markdown/mounted UI selection in html51-filter-ui-tests.txt ->57pass/4files. Scope: actual native owners, factory defaults, shared/weak lifetime, both cursor rings, pointer operations, document notification ordering and existing import/export/UI consumers.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html51-types.txt).
+- Command (cwd repository): node_modules/.bin/eslint changed six source/test files --max-warnings 0; node_modules/.bin/prettier --check same files ->pass.
+- Command: node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; git diff --check ->pass. Logs html51-{provenance,registry,eslint,jsdoc}.txt and checked terminal output. Scope: all runtime registrations and module/source responsibility constraints.
+- Full suite is not replayed for this checkpoint of the same ongoing AgentPlane task, per user instruction. No required selected test is skipped or failing.
 
 ## Rollback Plan
 
@@ -6762,3 +6862,7 @@ HTML50 second focused185cases/11files:183pass/2fail, both old valid-unattached/s
 
 HTML50 closure:342unique related cases/28files pass (185final related cases,63initial unchanged consumer cases minus10repeated findtxt cases,104complete core/crsr cases). Final49cases/3fresh or migrated fixtures pass and complete cursor-module JSON reports104pass/0fail/0pending in13files. Final app types and affected static gates pass. Permanent physical SwPaM bounds, original reference ties, nullable content ownership and actual structural GetCorrPosition are verified; no global cursor service or measured/native result provider is fabricated.
 Next concrete dependency remains global PaMCorrAbs: pinned doccorr.cxx92/356 traverses real SwDoc.GetEditShell/current view-shell ring and real mvUnoCursorTable, checks original RemainInSection and broadcasts UnoCursorHint. The current SwCursorShell is in core/crsr/trvltbl.ts with actual saved/current/table cursor owners; current SwDoc has no native current-view-shell manager. Current SwXTextCursor extends SwXTextRange, whose ownMark=false path still uses a plain SwPaM rather than native SwUnoCursor. Pinned SwUnoCursor implementation is sw/source/core/unocore/unocrsr.cxx, header sw/inc/unocrsr.hxx, default RemainInSection=true and skip-hidden/protected=false. Do not replace this traversal with a flat node-position registry or a dummy GetEditShell/UNO service. Actual caption DeleteSection/DelNodes, table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain required; parent stays incomplete.
+
+HTML51 initial related API81cases:80pass/1fail. The fresh SetPositions GetPaM read guard accidentally prevents restoring a valid range after temporary foreign positions; retain the original recovery contract, check only actual cursor invalidation before assigning. Initial fixture lint rejects non-null assertions and JSDoc requires a callback comment; replace them with checked actual fixture owners and add the callback documentation. Initial provenance/registry detects the missing source split explanation; add it to the canonical per-file provenance record rather than ignored generated aggregate views. These local changes require no network or scope drift.
+
+HTML51 closure:175unique related cases/15files pass:46initial ownership/import API cases,81related API/document/RTF cases with9ownership duplicates,57TXT/Markdown/mounted table-cursor UI cases. The final15cases/2affected files pass after preserving SetPositions recovery from a temporarily foreign range while checking actual invalidation before raw cursor access. App types, changed-source ESLint/Prettier, provenance (1931runtime/1718mapped/182browser/31infra), Writer registry (0semantic violations), boundaries (1930runtime/10685imports/229edges), JSDoc (4337files), file size (4341files), source tree (115paths/32retired roots) and diff checks pass. WRITER336 preserves same-owner reset duplicate-listener precondition. Parent task and native-format goal remain incomplete: actual global correction roots/traversal, native section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit are still required. No whole-module/default/contract/behavior or full-goal completion is claimed.

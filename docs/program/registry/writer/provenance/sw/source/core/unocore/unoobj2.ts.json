@@ -14,7 +14,8 @@
       "SwXTextRange"
     ],
     "preservedResponsibilities": [
-      "Internal document UNO mark ownership, canonical text ranges, properties and disposal checks."
+      "Internal document UNO mark ownership, canonical text ranges, properties and disposal checks.",
+      "S3HW1E HTML51: SwDoc creates actual ordinary/table UNO cursors, retains only weak control blocks and locks a real strong value across each destruction hint broadcast. UnoCursorPointer uses the existing native SfxListener/SfxBroadcaster identities and source subscription order; the native text cursor API owns this pointer and rejects access after invalidation. Original flags, readonly availability, separate table selection ring and whole-ring destruction are preserved. Concrete cursor-specific shared/weak value carriers reify deterministic C++ ownership; no alternate document/selection model or generic standard-library ABI is claimed. Global PaMCorrAbs edit-shell traversal, section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required. Whole-module contracts/defaults/behavior remain unverified."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -28,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unocrsr.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

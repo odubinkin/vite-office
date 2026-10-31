@@ -1,4 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import * as unoCursor from "./doc.unocursor";
+import type { UnoCursorWeakPtr } from "../../../inc/unocrsr";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { getYear2000Default } from "../../../../svl/source/numbers/zforlist.defaults";
 import { NfEvalDateFormat } from "../../../../svl/inc/zforlist";
@@ -129,6 +131,16 @@ export interface WriterEmbeddedFont {
 }
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  readonly mvUnoCursorTable: UnoCursorWeakPtr[] = [];
+  /** Original factory retains a weak document entry and returns native shared ownership. @param point - Actual position. @param table - Native cursor-kind flag. @returns Owned shared cursor. */
+  CreateUnoCursor(point: SwPosition, table = false) {
+    return unoCursor.CreateUnoCursor(this, point, table);
+  }
+  /** Original weak cursor table cleanup. @returns Nothing. */
+  cleanupUnoCursorTable(): void {
+    unoCursor.cleanupUnoCursorTable(this);
+  }
+
   private mpNumberFormatter: SvNumberFormatter | null = null;
   /** Original lazy formatter initializes SYSTEM locale, Writer date evaluation and configured two-digit-year default. Browser execution has no native thread mutex or fuzzing mode. @returns Nothing. */
   private EnsureNumberFormatter(): void {
@@ -956,6 +968,7 @@ export class SwDoc {
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
     this.mbDtor = true;
+    unoCursor.NotifyUnoCursorsOnDocDestruction(this);
     for (const page of this.pageDescs) page.DisposeModify();
     this.pageDescs.length = 0;
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
