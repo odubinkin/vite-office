@@ -1,2 +1,3 @@
-/** @fileoverview Original EditEngine static pool-factory declaration;ESM namespace qualification exposes no fabricated engine instance. The actual stateful engine remains unported. */
+/** @fileoverview Original EditEngine pool factory and abstract notification declaration boundary. Concrete engine construction and full stateful admission remain unported. */
 export { CreatePool } from "../source/editeng/editeng";
+export { EditEngine } from "../source/editeng/editeng.lifecycle";

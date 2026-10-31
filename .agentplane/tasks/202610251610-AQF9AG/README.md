@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 124
+revision: 127
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T07:02:08.215Z"
+  updated_at: "2026-10-31T07:55:27.209Z"
   updated_by: "CODER"
-  note: "Verified source edit-status flags, Unicode convertLineEnd and literal ImpInsertText capacity preparation: 110 related shared cases plus final status rerun, 197 CSV cases, current-built browser flow and required type/lint/dependency/docs/size/resource/provenance/parity/build gates pass. Actual enclosing ImpEditEngine/ScFieldEditEngine admission and NatNum12 remain pending; this partial checkpoint does not complete CSV. Keep goal active."
-  attempts: 27
+  note: "Verified source EditEngine lifecycle, selection conversions/updates and notifications over actual document/portion/listener owners: 116 related tests, all197 CSV cases covered after unchanged6-case UI rerun, current-built browser flow and required checks pass. Concrete engine/parser/undo/layout admission, ScFieldEditEngine/DocImport and NatNum12 remain pending. This partial checkpoint does not complete CSV; keep goal active."
+  attempts: 28
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -760,8 +763,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T07:55:27.209Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified source EditEngine lifecycle, selection conversions/updates and notifications over actual document/portion/listener owners: 116 related tests, all197 CSV cases covered after unchanged6-case UI rerun, current-built browser flow and required checks pass. Concrete engine/parser/undo/layout admission, ScFieldEditEngine/DocImport and NatNum12 remain pending. This partial checkpoint does not complete CSV; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-31T07:55:36.587Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T07:02:22.372Z"
+doc_updated_at: "2026-10-31T07:55:36.587Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1591,6 +1607,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T07:55:27.209Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified source EditEngine lifecycle, selection conversions/updates and notifications over actual document/portion/listener owners: 116 related tests, all197 CSV cases covered after unchanged6-case UI rerun, current-built browser flow and required checks pass. Concrete engine/parser/undo/layout admission, ScFieldEditEngine/DocImport and NatNum12 remain pending. This partial checkpoint does not complete CSV; keep goal active.
+    Attempts: 28
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:55:18.630Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2281,6 +2327,25 @@ sections:
       Result: pass;1 browser flow. Evidence: insert-line-browser.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, with unchanged timeouts/assertions.
     - Cadence: continuation of approved Agentplane task AQF9AG, not a tenth new task. Relevant focused suites used; no full all-application run triggered.
     - Remaining: entire ImpInsertText orchestration (tab features, source owner invalidation, paragraph breaks, selection updates and text notifications), SetText/InitDoc/RemoveText, actual enclosing engine state and ScFieldEditEngine/DocImport admission remain required before removing current multiline SetTextCell regex construction. Reuse the real status, convertLineEnd and capacity blocks, not a replacement parser/line-array engine. Preserve source calls/flags and current browser I/O deviations. NatNum12 supplier/casing/formatter and exhaustive final CSV audit remain pending. Keep overall verification --rework and goal active; do not finish or mark CSV complete.
+
+    ### EditEngine lifecycle, selections and notification member groups checkpoint
+
+    - Ported original ImpEditEngine InitDoc, RemoveText, SetText, EnableUndo, DocModified, TextModified, ParaAttribsChanged, public/internal selection conversions, UpdateSelectionsInsert and the source-disabled non-YRS UpdateSelectionsDelete. Bodies operate actual EditDoc, ParaPortionList, InternalEditStatus, SfxListener and outer owner declarations. Added actual EENotify values/ordinals, outer EditEngine notification bodies/static pool factory and Rectangle Normalize/Intersection required by empty-text view invalidation.
+    - Concrete engine construction, parsing, undo manager, layout, views and application/device/style dependencies remain mandatory abstract declarations. Prepared test dependencies are explicitly fixtures; they are not production fallback services or a certified native full engine. Source normal-return-only undo restoration and disabled regular deletion-selection repair are preserved and documented as CALC-433/434. Metadata remains foundation/unverified.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/tools/inc
+      Result: pass;20 files/116 tests, including9 lifecycle/selection/notification tests. Evidence: lifecycle-owner-tests.log. Scope: actual shared document/portion/listener owners and source member-group caller behavior, not concrete engine construction or native allocator/ABI equivalence.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+      Result: initial run196 passed/1 failed; UI onClose wait expired during concurrent heavy checks. Evidence: lifecycle-csv-tests.log. Scope:8 related CSV suites; no CSV value assertion failed.
+    - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;6/6 tests without source/assertion/timeout changes. Evidence: lifecycle-csv-ui-rerun.log. Scope: full affected file-dialog suite including the initial failed scenario. Together with the initial196 successes all197 cases are covered.
+    - Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc; git diff --check.
+      Result: pass. Evidence: lifecycle-typecheck-final.log, lifecycle-lint.log, lifecycle-deps.log, lifecycle-docs.log, lifecycle-size.log, lifecycle-resources.log, lifecycle-registry.log, lifecycle-provenance.log, lifecycle-parity.log. Source provenance1923 modules; boundaries1922 runtime sources/10433 imports/233 allowed edges;4312 JSDoc files; registry has0 semantic violations. Scope: current module contracts and metadata, no promotion to full source parity.
+    - Commands: npm run build (interrupted duplicate TypeScript phase); npm run typecheck (completed successfully); node ../../node_modules/vite/bin/vite.js build (from apps/office).
+      Result: separate typecheck and Vite production build pass. Evidence: lifecycle-build.log records the intentionally terminated redundant build; lifecycle-typecheck-final.log and lifecycle-vite-build.log record completed checks. The duplicate compiler was stopped to reduce concurrent resource contention, not reported as a successful npm run build. Vite retains its existing chunk-size advisory.
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 browser flow on current completed build. Evidence: lifecycle-browser.log. Scope: CSV import, primary ODS persistence and active-sheet CSV download with unchanged timeouts/assertions.
+    - Cadence: same approved open Agentplane task; no tenth-task full-suite trigger. No network or vendor-source mutation. Intentional scratch remains untracked under output/native and is excluded from the checkpoint.
+    - Remaining: full ImpInsertText and ImpInsertParaBreak orchestration, mandatory actual enclosing constructor/admission, CreateTextObject and ScFieldEditEngine/DocImport wiring before replacement of existing multiline SetTextCell regex path. NatNum12 supplier/casing/formatter integration and final CSV audit also remain pending. Keep task verification rework and goal active; do not finish or mark CSV complete.
 id_source: "generated"
 ---
 ## Summary
@@ -3119,6 +3184,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T07:55:27.209Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified source EditEngine lifecycle, selection conversions/updates and notifications over actual document/portion/listener owners: 116 related tests, all197 CSV cases covered after unchanged6-case UI rerun, current-built browser flow and required checks pass. Concrete engine/parser/undo/layout admission, ScFieldEditEngine/DocImport and NatNum12 remain pending. This partial checkpoint does not complete CSV; keep goal active.
+Attempts: 28
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T07:55:18.630Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3813,3 +3908,22 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass;1 browser flow. Evidence: insert-line-browser.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, with unchanged timeouts/assertions.
 - Cadence: continuation of approved Agentplane task AQF9AG, not a tenth new task. Relevant focused suites used; no full all-application run triggered.
 - Remaining: entire ImpInsertText orchestration (tab features, source owner invalidation, paragraph breaks, selection updates and text notifications), SetText/InitDoc/RemoveText, actual enclosing engine state and ScFieldEditEngine/DocImport admission remain required before removing current multiline SetTextCell regex construction. Reuse the real status, convertLineEnd and capacity blocks, not a replacement parser/line-array engine. Preserve source calls/flags and current browser I/O deviations. NatNum12 supplier/casing/formatter and exhaustive final CSV audit remain pending. Keep overall verification --rework and goal active; do not finish or mark CSV complete.
+
+### EditEngine lifecycle, selections and notification member groups checkpoint
+
+- Ported original ImpEditEngine InitDoc, RemoveText, SetText, EnableUndo, DocModified, TextModified, ParaAttribsChanged, public/internal selection conversions, UpdateSelectionsInsert and the source-disabled non-YRS UpdateSelectionsDelete. Bodies operate actual EditDoc, ParaPortionList, InternalEditStatus, SfxListener and outer owner declarations. Added actual EENotify values/ordinals, outer EditEngine notification bodies/static pool factory and Rectangle Normalize/Intersection required by empty-text view invalidation.
+- Concrete engine construction, parsing, undo manager, layout, views and application/device/style dependencies remain mandatory abstract declarations. Prepared test dependencies are explicitly fixtures; they are not production fallback services or a certified native full engine. Source normal-return-only undo restoration and disabled regular deletion-selection repair are preserved and documented as CALC-433/434. Metadata remains foundation/unverified.
+- Command: npm run test:shared -- src/editeng/source/editeng src/tools/inc
+  Result: pass;20 files/116 tests, including9 lifecycle/selection/notification tests. Evidence: lifecycle-owner-tests.log. Scope: actual shared document/portion/listener owners and source member-group caller behavior, not concrete engine construction or native allocator/ABI equivalence.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+  Result: initial run196 passed/1 failed; UI onClose wait expired during concurrent heavy checks. Evidence: lifecycle-csv-tests.log. Scope:8 related CSV suites; no CSV value assertion failed.
+- Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;6/6 tests without source/assertion/timeout changes. Evidence: lifecycle-csv-ui-rerun.log. Scope: full affected file-dialog suite including the initial failed scenario. Together with the initial196 successes all197 cases are covered.
+- Commands: npm run typecheck; npm run lint -- --ignore-pattern 'output/native/**'; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc; git diff --check.
+  Result: pass. Evidence: lifecycle-typecheck-final.log, lifecycle-lint.log, lifecycle-deps.log, lifecycle-docs.log, lifecycle-size.log, lifecycle-resources.log, lifecycle-registry.log, lifecycle-provenance.log, lifecycle-parity.log. Source provenance1923 modules; boundaries1922 runtime sources/10433 imports/233 allowed edges;4312 JSDoc files; registry has0 semantic violations. Scope: current module contracts and metadata, no promotion to full source parity.
+- Commands: npm run build (interrupted duplicate TypeScript phase); npm run typecheck (completed successfully); node ../../node_modules/vite/bin/vite.js build (from apps/office).
+  Result: separate typecheck and Vite production build pass. Evidence: lifecycle-build.log records the intentionally terminated redundant build; lifecycle-typecheck-final.log and lifecycle-vite-build.log record completed checks. The duplicate compiler was stopped to reduce concurrent resource contention, not reported as a successful npm run build. Vite retains its existing chunk-size advisory.
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 browser flow on current completed build. Evidence: lifecycle-browser.log. Scope: CSV import, primary ODS persistence and active-sheet CSV download with unchanged timeouts/assertions.
+- Cadence: same approved open Agentplane task; no tenth-task full-suite trigger. No network or vendor-source mutation. Intentional scratch remains untracked under output/native and is excluded from the checkpoint.
+- Remaining: full ImpInsertText and ImpInsertParaBreak orchestration, mandatory actual enclosing constructor/admission, CreateTextObject and ScFieldEditEngine/DocImport wiring before replacement of existing multiline SetTextCell regex path. NatNum12 supplier/casing/formatter integration and final CSV audit also remain pending. Keep task verification rework and goal active; do not finish or mark CSV complete.

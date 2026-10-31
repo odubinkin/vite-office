@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts",
+    "upstreamPath": "editeng/source/editeng/editeng.cxx",
+    "localSymbols": [
+      "EditEngine"
+    ],
+    "upstreamSymbols": [
+      "EditEngine::ParagraphInserted",
+      "EditEngine::ParagraphDeleted",
+      "EditEngine::ParaAttribsChanged",
+      "EditEngine::SetNotifyHdl"
+    ],
+    "preservedResponsibilities": [
+      "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory."
+    ],
+    "omittedResponsibilities": [
+      "Concrete EditEngine/ImpEditEngine constructor/resources, full parser/undo/layout/view/style-notification implementations and ScFieldEditEngine CSV admission remain unported. Abstract dependencies are mandatory, not default substitutes. Native diagnostic/thread/lifetime/ABI and full QA are uncertified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts",
+          "marker": "EditEngine"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/editeng.cxx",
+          "marker": "EditEngine::ParagraphInserted"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original lifecycle, position and notification member group is separated from unported constructor, input parsing, undo, layout, device, view and application responsibilities under unchanged source-file budgets. Source state/callee declarations remain mandatory and no alternate engine is admitted."
+    }
+  }
+}

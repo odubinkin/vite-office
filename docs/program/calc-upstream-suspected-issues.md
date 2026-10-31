@@ -4889,3 +4889,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` hyphen-minus capacity branch.
 - Observation: the comment says to keep a hyphen with a number to its right, but that branch additionally requires the position after the hyphen to be strictly below nMaxNewChars. If a hyphen occupies the final available unit, the condition is false and the retained line ends after the hyphen, leaving the number for the following paragraph. One unit earlier, decimal/letter/other-number categories move the break before the hyphen.
 - Preserve the strict inequality and category switch. Do not special-case the final-unit hyphen to satisfy the comment. Source-derived fixtures distinguish all three number categories and the last-unit case; this is not a full native engine certificate.
+
+### CALC-433 — Normal EditView selections are not updated by UpdateSelectionsDelete
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::UpdateSelectionsDelete`.
+- Observation: the regular-view conversion/update block is disabled by `#if 0`. The source FIXME explains that CreateESel needs already-deleted nodes, while calling it before deletion would assign wrong nodes. The active non-YRS loop merely marks its view/deleted values unused; only the separate YRS peer-cursor branch, when enabled, calls UpdatePosDelete.
+- Preserve this disabled regular-view path for the current non-YRS member group. Do not silently repair cursors, reinterpret pointer positions or enable the FIXME code. Tests retain unchanged prepared view selections and unchanged caller deletion values; actual full view/peer-cursor implementations remain unported.
+
+### CALC-434 — SetText restores the undo-enable flag only on normal completion
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::SetText`.
+- Observation: after RemoveText, the source saves IsUndoEnabled, calls EnableUndo(false), invokes ImpInsertText, updates views and finally restores the saved flag. There is no scope guard or catch/finally restoration. An exception from the insertion dependency after undo is disabled leaves that mode disabled and skips final view updates/restoration.
+- Preserve this control flow; do not add a restoration finally as a correctness improvement. A lifecycle caller fixture supplies an explicit failing mandatory callee and verifies propagated identity, empty reset document and disabled undo. This is source-derived caller evidence, not a native full-engine exception/allocator certificate.
