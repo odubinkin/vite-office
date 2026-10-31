@@ -16,6 +16,15 @@ export enum Css1ScriptFlags {
   CTL = 4,
   AllMask = 7,
 }
+/** Original SvxCSS1PageBreak values, independent of the eventual Writer break item. */
+export enum SvxCSS1PageBreak {
+  NONE = 0,
+  AUTO = 1,
+  ALWAYS = 2,
+  AVOID = 3,
+  LEFT = 4,
+  RIGHT = 5,
+}
 /** Native scalar property state; the source copy/Clear/Merge omissions for preserve-space and visible are deliberate. */
 export class SvxCSS1PropertyInfo {
   private readonly m_aBorderInfos: (SvxCSS1BorderInfo | null)[] = [null, null, null, null];
@@ -52,8 +61,8 @@ export class SvxCSS1PropertyInfo {
   m_eLeftMarginType = 0;
   m_eRightMarginType = 0;
   m_eSizeType = 0;
-  m_ePageBreakBefore = 0;
-  m_ePageBreakAfter = 0;
+  m_ePageBreakBefore = SvxCSS1PageBreak.NONE;
+  m_ePageBreakAfter = SvxCSS1PageBreak.NONE;
   /** Original default or scalar copy construction; flags omitted by the native initializer list keep their member defaults. @param source - Optional native source. @returns Owner. */
   constructor(source?: SvxCSS1PropertyInfo) {
     if (source) {

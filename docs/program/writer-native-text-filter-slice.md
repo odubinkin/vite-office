@@ -1387,3 +1387,10 @@ upstream C++ ABI or new CSS style factory completeness.
 
 Page-break CSS producers, native raw HTML tables, insertion snapshots and final
 current-model/filter/UI requirements review remain open; the full goal is active.
+
+
+### HTML33 — Native CSS pagination property producers
+
+The pinned svxcss1.cxx page-break-before/after/inside and widows/orphans entries now run through the actual CSS1 grammar and existing paragraph item heads. The original SvxCSS1PageBreak numeric values are declared, and before/after state retains native copy/Merge/Clear behavior. Split AUTO/AVOID and widow/orphan counts use the existing current-core SfxBoolItem/SfxInt16Item bindings at real slot-derived Which IDs; this block does not introduce a parallel model, change pool defaults, or claim full editeng subclass implementation. Source uint8 count conversion and first-expression admission are preserved; WRITER299 records the non-spec-looking behavior.
+
+Real Markdown raw HTML now passes page-break-inside and widow/orphan items through deferred HTML context insertion and the existing Worker codec. Before/after property state is implemented at the producer boundary only: SetFormatBreak and its native left/right page-descriptor creation/follow ownership remain a consuming dependency for the next block. Raw HTML tables, insertion boundary/target snapshots and final current-model/UI reconciliation also remain open. This checkpoint does not establish complete RTF/Markdown support.

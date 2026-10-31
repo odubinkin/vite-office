@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 246
+revision: 250
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T09:51:52.339Z"
+  updated_at: "2026-10-31T10:02:21.564Z"
   updated_by: "CODER"
-  note: "HTML32 checkpoint verified:165related cases have passing evidence (87final border/codec/RTF;60fresh CSS/native HTML;18unchanged ASCII). Native CSS border/padding owners and exact Worker box fields are connected. App typecheck, lint/format, source provenance, Writer/shared registries, boundaries/docs/size/tree/doctor pass. Preserve WRITER160/294-298; core UNO behavior and legacy table/array ingress remain unchanged. Parent goal incomplete:page-break CSS,raw HTML tables,insertion boundaries/snapshots and final filter/UI audit."
-  attempts: 43
+  note: "HTML33 checkpoint verified: 115 related cases (34 new pagination cases), app types/lint/format, source provenance, Writer/shared registry and boundaries/docs/size/tree gates pass. Split/widow/orphan HTML-to-Markdown-to-Worker delivery and before/after pending state follow pinned handlers. SetFormatBreak/page ownership, HTML tables, insertion snapshot and final matrix still pending; full goal remains incomplete."
+  attempts: 44
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -693,8 +696,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T10:02:21.564Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML33 checkpoint verified: 115 related cases (34 new pagination cases), app types/lint/format, source provenance, Writer/shared registry and boundaries/docs/size/tree gates pass. Split/widow/orphan HTML-to-Markdown-to-Worker delivery and before/after pending state follow pinned handlers. SetFormatBreak/page ownership, HTML tables, insertion snapshot and final matrix still pending; full goal remains incomplete."
+  -
+    type: "status"
+    at: "2026-10-31T10:02:37.321Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T09:52:29.237Z"
+doc_updated_at: "2026-10-31T10:02:37.321Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1729,6 +1745,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T10:02:21.564Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML33 checkpoint verified: 115 related cases (34 new pagination cases), app types/lint/format, source provenance, Writer/shared registry and boundaries/docs/size/tree gates pass. Split/widow/orphan HTML-to-Markdown-to-Worker delivery and before/after pending state follow pinned handlers. SetFormatBreak/page ownership, HTML tables, insertion snapshot and final matrix still pending; full goal remains incomplete.
+    Attempts: 44
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:02:19.005Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2731,6 +2777,22 @@ sections:
     - Commands/results: npm run check:docs pass4273authored sources (html32-docs-final.txt); npm run check:file-size pass (html32-size-final.txt); npm run check:source-tree pass115required/32retired roots (html32-tree-final.txt); ap doctor pass0errors with only the already-known managed-shim warning (html32-doctor.txt,exec66756exit0). Hooks and global configuration remain unchanged.
     - Source quirks: WRITER160 retains numeric six-hex priority; WRITER294-297 retain pixel shorthand hairlines, signed padding narrowing, conditional shorthand color and unitless-zero admission. WRITER298 documents the defined65535absolute-width/unset-sentinel collision as a source-only trace, not a claimed desktop reproduction or newly passing testcase. No suspicious upstream behavior is corrected locally.
     - Scope closure: this cohesive block completes the connected native border/padding handlers and lossless native box state at the existing UI boundary. It does not complete native CSS page breaks, raw HTML table parsing, insertion snapshot/boundary handling or the final current-model/filter/UI audit. Parent goal remains active/incomplete and its verification must remain rework.
+
+    ### HTML33 pagination property checkpoint (verified)
+
+    - Approved scope: original CSS1 page-break-before/after pending enums, page-break-inside and widow/orphan producers, actual slot lookup and real HTML/Markdown/Worker tests; native page-style consuming ownership remains pending. Existing core scalar bindings/defaults remain unchanged rather than introducing unneeded general class migration.
+    - Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.pagination.integration.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/svxcss1.border.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1. Result: pass115cases/4files,100.54s,html33-focused.txt,exec41265exit0.
+    - Command: changed-source ESLint --max-warnings0. Result: pass,html33-lint.txt,exec27988exit0.
+    - Command: env PATH=<known Node bin> npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree. Result: fail at shell dispatch after the first successful boundary check: environment assignment applied only to the first process, so subsequent npm was not found (exec5343exit127). No code test failed; later gates did not run. Route recomputed before remediation; rerun each independent check with its own explicit known Node PATH. Do not label the failed combined invocation as passing.
+
+    - Command: env PATH=<known Node bin> npm run inventory:parity:writer && npm run inventory:parity:shared. Result: writer gate passed with semanticViolationCount0 (the && admitted the second command), then the same shell-dispatch defect prevented the shared command (exec72415exit127). The failure is retained as an invocation failure; shared was rerun independently with explicit PATH, not inferred green. Route recomputed after the terminal failure.
+    - Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass,html33-types.txt,exec72141exit0. Source was complete before invocation; later Prettier changes only formatting.
+    - Command: npm run check:source-provenance with explicit Node PATH. Result: pass1897runtime/1684mapped/182browser/31infra,html33-provenance.txt,exec49854exit0. New producer module remains unverified for full semantic/module certification; no fake complete status was introduced.
+    - Commands: npm run check:docs, npm run check:file-size, npm run check:source-tree, npm run inventory:parity:shared, each with explicit known Node PATH. Result: pass,html33-gate-0..3.txt,exec7429/95868/51696/97227exit0. Shared semanticViolationCount0, source-tree115required/32retired. Module-boundary gate in the initial combined invocation passed1896runtime sources/10419relative imports/227allowed edges.
+    - Command: explicit Prettier --check for changed/new TS/JSON/Markdown. Result: pass,html33-format-check.txt,exec5973exit0; git diff --check also passes. No full all-app suite was run for this parent-task checkpoint, following the approved focused-verification cadence.
+    - Evidence scope:115related cases contain34new pagination cases, actual grammar/Which lookup, all5before-after enums, state retention/copy/Merge/Clear, AUTO/AVOID split writes, invalid token retention, uint8 defined-domain fraction/upper bound and original six-hex priority, plus real Markdown/Worker round trip for split/widows/orphans. No pending before/after scalar is misrepresented as a completed document break consumer.
+    - Source review: pinned svxcss1.cxx226-235/2993-3083 and svxcss1.hxx65-73; editids.hrc115-117; native InsertAttrs already maps split/count items to actual deferred paragraph heads. WRITER299 documents first-expression-only acceptance and absent count minimum. Existing pool defaults and browser/core scalar representations remain unchanged. This does not certify unrepresented concrete editeng subclasses.
+    - Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.
 id_source: "generated"
 ---
 ## Summary
@@ -3776,6 +3838,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T10:02:21.564Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML33 checkpoint verified: 115 related cases (34 new pagination cases), app types/lint/format, source provenance, Writer/shared registry and boundaries/docs/size/tree gates pass. Split/widow/orphan HTML-to-Markdown-to-Worker delivery and before/after pending state follow pinned handlers. SetFormatBreak/page ownership, HTML tables, insertion snapshot and final matrix still pending; full goal remains incomplete.
+Attempts: 44
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T10:02:19.005Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4782,3 +4874,19 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands/results: npm run check:docs pass4273authored sources (html32-docs-final.txt); npm run check:file-size pass (html32-size-final.txt); npm run check:source-tree pass115required/32retired roots (html32-tree-final.txt); ap doctor pass0errors with only the already-known managed-shim warning (html32-doctor.txt,exec66756exit0). Hooks and global configuration remain unchanged.
 - Source quirks: WRITER160 retains numeric six-hex priority; WRITER294-297 retain pixel shorthand hairlines, signed padding narrowing, conditional shorthand color and unitless-zero admission. WRITER298 documents the defined65535absolute-width/unset-sentinel collision as a source-only trace, not a claimed desktop reproduction or newly passing testcase. No suspicious upstream behavior is corrected locally.
 - Scope closure: this cohesive block completes the connected native border/padding handlers and lossless native box state at the existing UI boundary. It does not complete native CSS page breaks, raw HTML table parsing, insertion snapshot/boundary handling or the final current-model/filter/UI audit. Parent goal remains active/incomplete and its verification must remain rework.
+
+### HTML33 pagination property checkpoint (verified)
+
+- Approved scope: original CSS1 page-break-before/after pending enums, page-break-inside and widow/orphan producers, actual slot lookup and real HTML/Markdown/Worker tests; native page-style consuming ownership remains pending. Existing core scalar bindings/defaults remain unchanged rather than introducing unneeded general class migration.
+- Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.pagination.integration.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/svxcss1.border.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1. Result: pass115cases/4files,100.54s,html33-focused.txt,exec41265exit0.
+- Command: changed-source ESLint --max-warnings0. Result: pass,html33-lint.txt,exec27988exit0.
+- Command: env PATH=<known Node bin> npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree. Result: fail at shell dispatch after the first successful boundary check: environment assignment applied only to the first process, so subsequent npm was not found (exec5343exit127). No code test failed; later gates did not run. Route recomputed before remediation; rerun each independent check with its own explicit known Node PATH. Do not label the failed combined invocation as passing.
+
+- Command: env PATH=<known Node bin> npm run inventory:parity:writer && npm run inventory:parity:shared. Result: writer gate passed with semanticViolationCount0 (the && admitted the second command), then the same shell-dispatch defect prevented the shared command (exec72415exit127). The failure is retained as an invocation failure; shared was rerun independently with explicit PATH, not inferred green. Route recomputed after the terminal failure.
+- Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass,html33-types.txt,exec72141exit0. Source was complete before invocation; later Prettier changes only formatting.
+- Command: npm run check:source-provenance with explicit Node PATH. Result: pass1897runtime/1684mapped/182browser/31infra,html33-provenance.txt,exec49854exit0. New producer module remains unverified for full semantic/module certification; no fake complete status was introduced.
+- Commands: npm run check:docs, npm run check:file-size, npm run check:source-tree, npm run inventory:parity:shared, each with explicit known Node PATH. Result: pass,html33-gate-0..3.txt,exec7429/95868/51696/97227exit0. Shared semanticViolationCount0, source-tree115required/32retired. Module-boundary gate in the initial combined invocation passed1896runtime sources/10419relative imports/227allowed edges.
+- Command: explicit Prettier --check for changed/new TS/JSON/Markdown. Result: pass,html33-format-check.txt,exec5973exit0; git diff --check also passes. No full all-app suite was run for this parent-task checkpoint, following the approved focused-verification cadence.
+- Evidence scope:115related cases contain34new pagination cases, actual grammar/Which lookup, all5before-after enums, state retention/copy/Merge/Clear, AUTO/AVOID split writes, invalid token retention, uint8 defined-domain fraction/upper bound and original six-hex priority, plus real Markdown/Worker round trip for split/widows/orphans. No pending before/after scalar is misrepresented as a completed document break consumer.
+- Source review: pinned svxcss1.cxx226-235/2993-3083 and svxcss1.hxx65-73; editids.hrc115-117; native InsertAttrs already maps split/count items to actual deferred paragraph heads. WRITER299 documents first-expression-only acceptance and absent count minimum. Existing pool defaults and browser/core scalar representations remain unchanged. This does not certify unrepresented concrete editeng subclasses.
+- Next concrete consuming block: native SwCSS1Parser::SetFormatBreak, real page-pool identities and GetPageDesc creation/following (HTML/left/right/first), preserving source CopyPageDesc and frame attributes. Existing native page-frame pool IDs are already owned by SwFormat, but SwPageDesc accessors, pool-ID retention across copy/Worker and consumed pool creation are not yet connected. Raw HTML tables, target insertion boundary/snapshot and final current-model/UI matrix reconciliation remain pending. Parent task remains active/incomplete, verification rework.

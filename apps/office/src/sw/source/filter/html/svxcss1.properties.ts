@@ -27,6 +27,7 @@ import {
 import { SvxCaseMap as C, SvxAdjust as A, SvxNumType as N } from "../../../../editeng/inc/svxenum";
 import { ParseCSS1ParagraphProperty } from "./svxcss1.paragraph";
 import { ParseCSS1BorderProperty } from "./svxcss1.border";
+import { ParseCSS1PaginationProperty } from "./svxcss1.pagination";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -172,6 +173,7 @@ export function ParseCSS1Property(
 ): void {
   const type = expression.GetType(),
     value = cssAsciiLower(expression.GetString());
+  if (ParseCSS1PaginationProperty(cssAsciiLower(property), expression, set, info)) return;
   if (ParseCSS1BorderProperty(cssAsciiLower(property), expression, info)) return;
   if (ParseCSS1ParagraphProperty(cssAsciiLower(property), expression, set, info)) return;
   switch (cssAsciiLower(property)) {

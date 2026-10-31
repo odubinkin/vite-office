@@ -2578,3 +2578,10 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx/ParseCSS1_border_xxx_width and SvxCSS1BorderInfo::SetBorderLine.
 - Observation: GetULength is narrowed to unsigned16, whose65535value also denotes an unset absolute width. A source-level trace of border:3276.75pt solid gives65535twips, then selects the medium named fallback (10twips) instead of that absolute value. This is a defined scalar/source-control-flow finding, not a compiled desktop observation.
 - Preservation: retain the original sentinel and named fallback. Do not replace it with an optional value or clamp the parsed width to a different maximum to force a CSS-spec result.
+
+
+### WRITER299 — CSS pagination accepts only the first expression, with no positive count minimum
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_page_break_xxx, ParseCSS1_widows and ParseCSS1_orphans.
+- Observation: the handlers inspect only the first expression. For example, page-break-inside:avoid trailing writes split=false and widows:3 trailing writes3. Widow/orphan NUMBER values accept zero, truncate fractional values, and clamp only values above255; a CSS-spec minimum or whole-expression validity check is absent. The existing scanner's six-hex priority still precedes numeric admission (WRITER160).
+- Preservation: retain first-expression admission, zero/fractional values and upper-bound handling. Tests exercise defined source conversion cases, including -0.5, whose truncated value is0. Negative floating values whose truncated value is outside uint8 are not treated as a portable upstream result or a desktop certificate; no claim of defined C++ behavior is made for them.
