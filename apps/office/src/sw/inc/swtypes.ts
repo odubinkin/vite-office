@@ -34,6 +34,8 @@ export enum PrepareHint {
 
 /** Native minimum ordinary frame size in twips. */
 export const MINLAY = 23;
+/** Original minimum ordinary border distance, approximately0.5mm. */
+export const MIN_BORDER_DIST = 28;
 
 /** Native implicit jump-target separator from swtypes.hxx. */
 export const cMarkSeparator = "|";

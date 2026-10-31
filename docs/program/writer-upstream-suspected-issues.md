@@ -1677,7 +1677,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Parser::GetNextToken`, numeric and identifier branches.
 - Observation: six hexadecimal characters become `CSS1_HEXCOLOR` even when the grammar expects an identifier. A selector such as `.abcdef` cannot take the normal class branch; subsequent tokens can be interpreted as a new selector during recovery. This is a source-level trace, not compiled Writer evidence.
-- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order.
+- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order. Numeric evidence added in HTML32: padding:999999pt starts with a HEXCOLOR token and does not set padding;70000pt enters the actual LENGTH path. Keep both behaviors, rather than normalizing six-digit numeric input.
 
 ### WRITER161 — Empty CSS strings enter the scanner's unconditional first append
 
@@ -2545,3 +2545,36 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Observation: DD subtracts the DT style's margin, then explicitly narrows that signed difference to sal_uInt16 before adding it to the unsigned context margin. DT itself contributes zero extra margin even when its source style has been edited.
 - Impact: default DD567twips with an authored DT700twips produces65403twips after narrowing, rather than a negative offset or a zero clamp. This need not establish a visible layout defect in every document.
 - Local behavior: retain source subtraction and narrowing. Tests inspect actual node items for ordinary567/0 defaults, edited600-minus100 and right80-minus30 cases, nested accumulation and the negative wrap. Do not clamp it using browser CSS expectations.
+
+
+### WRITER294 — CSS border shorthand gives zero and one pixel a hairline
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx versus ParseCSS1_border_xxx_width.
+- Observation: shorthand uses the literal1twip branch whenever pixel width is not greater than1, including0 and negative values. The separate width handler converts integer pixels normally. Thus border:0px solid and border:1px solid produce1twip, whereas border:solid;border-width:0px clears the line and explicit1px width gives15twips in the consumed96DPI profile.
+- Preservation: retain the distinct source handlers and their admission/narrowing. Actual HTML tests inspect original box lines; no browser CSS normalization is applied. This is source-derived evidence, not compiled upstream certification.
+
+### WRITER295 — CSS padding saturation feeds a signed box distance
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_padding_xxx/SetBoxItem; include/editeng/boxitem.hxx, signed sal_Int16 SetDistance.
+- Observation: CSS pending padding saturates at65534 and is compared against minimum28 before calling the signed16box setter. A valid LENGTH70000pt saturates to65534, becomes-2 in the real box, and ordinary GetDistance suppresses that negative value to0. Six-digit999999pt is a different scanner case (WRITER160).
+- Preservation: retain both unsigned CSS admission and signed native storage/read policy. Tests inspect raw and ordinary values; Worker transport must preserve the raw native value rather than repair or re-quantize it.
+
+### WRITER296 — Border shorthand without color retains a preceding border color
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx bColor branch.
+- Observation: width/style are assigned for every selected side, while aColor is replaced only if an accepted color expression occurred. A preceding border-color:red followed by border:solid retains red instead of resetting the side's color through the shorthand.
+- Preservation: keep that conditional assignment and source pending-value copies. Real HTML tests verify the retained red native line. Do not substitute browser shorthand reset semantics.
+
+
+### WRITER297 — Unitless zero is not admitted as CSS padding or border width
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_padding_xxx and ParseCSS1_border_xxx_width.
+- Observation: NUMBER has no admitted length branch. After padding:3pt, padding:0 leaves60twips pending, whereas padding:0px sets zero and the eventual border minimum produces28. In the width-only handler, an unrecognized NUMBER still assigns the default medium named width, so border:3pt solid;border-width:0 produces10twips rather than no line.
+- Preservation: retain original token admission and nontransactional width defaults. Do not add a CSS-spec unitless-zero normalization; tests inspect actual HTML paragraph items.
+
+
+### WRITER298 — An absolute border width can collide with the unset sentinel
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx/ParseCSS1_border_xxx_width and SvxCSS1BorderInfo::SetBorderLine.
+- Observation: GetULength is narrowed to unsigned16, whose65535value also denotes an unset absolute width. A source-level trace of border:3276.75pt solid gives65535twips, then selects the medium named fallback (10twips) instead of that absolute value. This is a defined scalar/source-control-flow finding, not a compiled desktop observation.
+- Preservation: retain the original sentinel and named fallback. Do not replace it with an optional value or clamp the parsed width to a different maximum to force a CSS-spec result.

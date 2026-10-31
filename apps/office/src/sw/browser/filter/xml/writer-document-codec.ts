@@ -23,7 +23,8 @@ import {
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
+import { encodeNativeBoxItem, decodeNativeBoxItem } from "./writer-box-item-codec";
+import type { BorderLineRecord } from "../../../../editeng/source/items/borderline";
 import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
 
 import { createWriterNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
@@ -156,23 +157,7 @@ function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
   const { vertOrient, box, frameSize } = value;
   return {
     frameSize: encodeFrameSize(frameSize),
-    box:
-      box === undefined
-        ? undefined
-        : {
-            which: box.Which(),
-            lines: [0, 1, 2, 3].map(
-              /** Encodes complete native line state. @param edge - Side. @returns Primitive line or null. */ (
-                edge,
-              ) => box.GetLine(edge)?.toJSON() ?? null,
-            ),
-            distances: [0, 1, 2, 3].map(
-              /** Preserves authored signed distance. @param edge - Side. @returns Signed twips. */ (
-                edge,
-              ) => box.GetDistance(edge, true),
-            ),
-            removeAdjacent: box.IsRemoveAdjacentCellBorder(),
-          },
+    box: box === undefined ? undefined : encodeNativeBoxItem(box),
     vertOrient:
       vertOrient === undefined
         ? undefined
@@ -242,63 +227,7 @@ function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
       throw new Error("Stored Writer legacy box is invalid.");
     return importBoxProperties({ padding: value.padding, border: value.border }, RES_BOX);
   }
-  if (
-    !isRecord(record) ||
-    !Number.isInteger(record.which) ||
-    record.which < 0 ||
-    record.which > 32767 ||
-    !Array.isArray(record.lines) ||
-    record.lines.length !== 4 ||
-    !Array.isArray(record.distances) ||
-    record.distances.length !== 4 ||
-    typeof record.removeAdjacent !== "boolean"
-  )
-    throw new Error("Stored Writer native box is invalid.");
-  const item = new SvxBoxItem(record.which);
-  for (const edge of [0, 1, 2, 3]) {
-    const distance = record.distances[edge];
-    if (
-      typeof distance !== "number" ||
-      !Number.isInteger(distance) ||
-      distance < -32768 ||
-      distance > 32767
-    )
-      throw new Error("Stored Writer box distance is invalid.");
-    item.SetDistance(distance, edge);
-    const line = record.lines[edge];
-    if (line === null) continue;
-    if (
-      !isRecord(line) ||
-      typeof line.color !== "number" ||
-      !Number.isInteger(line.color) ||
-      line.color < 0 ||
-      line.color > 0xffffffff ||
-      !Number.isSafeInteger(line.width) ||
-      typeof line.style !== "number" ||
-      !Number.isInteger(line.style) ||
-      (line.style !== 32767 && (line.style < 0 || line.style > 17)) ||
-      typeof line.scale !== "number" ||
-      !Number.isFinite(line.scale) ||
-      typeof line.mirror !== "boolean" ||
-      typeof line.useLeftTop !== "boolean" ||
-      !Array.isArray(line.implementation) ||
-      line.implementation.length !== 4 ||
-      !Number.isInteger(line.implementation[0]) ||
-      line.implementation[0] < 0 ||
-      line.implementation[0] > 7 ||
-      line.implementation
-        .slice(1)
-        .some(
-          /** Rejects invalid native rate fields. @param rate - Stored rate. @returns Whether malformed. */ (
-            rate: unknown,
-          ) => typeof rate !== "number" || !Number.isFinite(rate),
-        )
-    )
-      throw new Error("Stored Writer native border line is invalid.");
-    item.SetLine(SvxBorderLine.FromRecord(line as unknown as BorderLineRecord), edge);
-  }
-  item.SetRemoveAdjacentCellBorder(record.removeAdjacent);
-  return item;
+  return decodeNativeBoxItem(record);
 }
 
 /** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */

@@ -1358,3 +1358,32 @@ is implemented. Direct registration of CSS maps by a test or a future caller doe
 not establish a production Markdown stylesheet path. Remaining current-core HTML
 property/table producers, cursor insertion snapshots and the requirement-by-
 requirement RTF/Markdown/UI audit continue to prevent full goal completion.
+
+
+### S3HW1E native inline CSS borders and padding
+
+The consumed raw HTML path in Markdown previously ignored border/padding
+properties despite current native paragraph boxes. Original SvxCSS1BorderInfo,
+property copy/Clear/Merge/CopyBorderInfo/SetBoxItem and source declaration handlers
+now use actual editeng boxes and border-line metrics. The existing native package
+already maps SID_ATTR_BORDER_OUTER10024 to RES_BOX; no replacement pool or invented
+item identity is needed. Source inline ParseStyleOptions produces the box before
+ordinary context insertion. Character-level conversion still requires an actual
+RES_CHRATR_BOX owner, absent in this core; a paragraph border is never substituted.
+
+Source widths, styles, partial shorthand copying, padding admission/saturation,
+minimum28twips and zero distance on unbordered sides are retained. Source six-hex
+priority remains WRITER160; zero-pixel shorthand hairlines, signed distance wrapping
+and retained shorthand color are recorded as WRITER294-296, with actual item tests.
+
+A concrete UI transport dependency was exposed by a40twip DOUBLE line becoming39
+through the prior generic UNO snapshot/reconstruction path. Native core UNO methods
+remain unchanged. The existing complete native field representation for table
+boxes is now shared with paragraph/page item records at the browser codec boundary.
+It preserves authored width, component implementation, scale/mirror, signed
+spacing and adjacency policy; existing table record shape and old UNO-array ingress
+remain available. This host protocol is local infrastructure and does not claim
+upstream C++ ABI or new CSS style factory completeness.
+
+Page-break CSS producers, native raw HTML tables, insertion snapshots and final
+current-model/filter/UI requirements review remain open; the full goal is active.

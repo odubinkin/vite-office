@@ -85,6 +85,12 @@ export function InsertAttrs(
       if (!charLevel) parser.InsertAttr(tab.pBrush, item, context);
       continue;
     }
+    if (item.Which() === H.RES_BOX) {
+      // Native character-level conversion requires RES_CHRATR_BOX, which this core
+      // does not own. A paragraph box is not a substitute for that character item.
+      if (!charLevel) parser.InsertAttr(tab.pBox, item, context);
+      continue;
+    }
     const head = GetAttrTabEntry(parser, item.Which());
     if (head) parser.InsertAttr(head, item, context);
   }

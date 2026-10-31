@@ -1,4 +1,6 @@
 /** @fileoverview Declares consumed character and paragraph slots from native editids.hrc. */
+/** Original outer border item slot, SID_SVX_START +24. */
+export const SID_ATTR_BORDER_OUTER = 10024 as const;
 /** Native paragraph upper/lower spacing slot, SID_SVX_START +42. */
 export const SID_ATTR_PARA_ULSPACE = 10042 as const;
 /** Native combined paragraph indent slot, SID_SVX_START +43. */

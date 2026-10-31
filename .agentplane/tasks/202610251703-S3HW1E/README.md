@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 239
+revision: 246
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T08:46:38.549Z"
+  updated_at: "2026-10-31T09:51:52.339Z"
   updated_by: "CODER"
-  note: "HTML31 checkpoint verified: all1160related cases have passing evidence (1035in55files; six terminal worker-start errors resolved by125passing cases in6files without assertion/timeout changes). Final tools/app typecheck, source lint/format, provenance, Writer registry, boundaries/docs/size/tree/doctor pass. Native NewPara/NewHeading classes and direct-font encoding connected. Parent goal incomplete: current-core CSS border/page-break producers, HTML tables, insertion snapshots and final filter/UI audit. Evidence: html31 logs and Findings."
-  attempts: 42
+  note: "HTML32 checkpoint verified:165related cases have passing evidence (87final border/codec/RTF;60fresh CSS/native HTML;18unchanged ASCII). Native CSS border/padding owners and exact Worker box fields are connected. App typecheck, lint/format, source provenance, Writer/shared registries, boundaries/docs/size/tree/doctor pass. Preserve WRITER160/294-298; core UNO behavior and legacy table/array ingress remain unchanged. Parent goal incomplete:page-break CSS,raw HTML tables,insertion boundaries/snapshots and final filter/UI audit."
+  attempts: 43
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -677,8 +680,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T09:51:52.339Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML32 checkpoint verified:165related cases have passing evidence (87final border/codec/RTF;60fresh CSS/native HTML;18unchanged ASCII). Native CSS border/padding owners and exact Worker box fields are connected. App typecheck, lint/format, source provenance, Writer/shared registries, boundaries/docs/size/tree/doctor pass. Preserve WRITER160/294-298; core UNO behavior and legacy table/array ingress remain unchanged. Parent goal incomplete:page-break CSS,raw HTML tables,insertion boundaries/snapshots and final filter/UI audit."
+  -
+    type: "status"
+    at: "2026-10-31T09:52:29.237Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T08:47:50.898Z"
+doc_updated_at: "2026-10-31T09:52:29.237Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -1683,6 +1699,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T09:51:52.339Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML32 checkpoint verified:165related cases have passing evidence (87final border/codec/RTF;60fresh CSS/native HTML;18unchanged ASCII). Native CSS border/padding owners and exact Worker box fields are connected. App typecheck, lint/format, source provenance, Writer/shared registries, boundaries/docs/size/tree/doctor pass. Preserve WRITER160/294-298; core UNO behavior and legacy table/array ingress remain unchanged. Parent goal incomplete:page-break CSS,raw HTML tables,insertion boundaries/snapshots and final filter/UI audit.
+    Attempts: 43
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T09:50:39.380Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2655,6 +2701,36 @@ sections:
     - Commands: npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check.
     - Result: pass. Evidence: corresponding html31-registry/boundaries/docs/size/tree/doctor logs and exit0static chain. Scope: unchanged strict global registry/static contracts, with semanticViolationCount0,1892runtime source boundaries/10392imports/227allowed edges,4269authored sources,115required paths/32retired roots. Known managed-shim warning only; no hooks/config changes.
     - Current checkpoint: verified and ready for an implementation commit. Full parent goal remains incomplete for the residual native CSS/table/insertion/current-model/UI requirements above; record parent verification as rework, not full completion.
+
+    ### HTML32: CSS border/padding reader (verified checkpoint)
+
+    - Previous goal turn: progress, committed HTML31 asd6e70a6ef7f1 with1160related passing cases and clean state.
+    - Scope: native border info, property copy/Clear/Merge/CopyBorderInfo/SetBoxItem, source border/padding handlers and actual registered box slot10024. Existing default-metadata.json already provides that slot, so no new pool owner is required. Real border-line width constants and MIN_BORDER_DIST28 are admitted from the pinned headers. CSS is consumed by existing ParseStyleOptions on actual context owners. Page-break producers, tables and final full-goal audit remain open.
+    - Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.border.integration.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1
+    - Result: fail,76pass/2fresh failures in3files,44.60s. Evidence: html32-focused.txt. Source pending tests: huge LENGTH padding yielded28/28 rather than expected signed wrap; Worker path DOUBLE width40 yielded39. Do not normalize expectations or change production before identifying parser/attribute/codec boundaries against source. Source SetDistance takes signed16, while CSS pending distances are unsigned16.
+    - Command: node node_modules/.bin/eslint (all10changed/new TS paths) --max-warnings0. Result: fail,9non-null assertions; html32-lint-first.txt. Replace non-null assertions with original creation-return overloads and bounded native side/name lookup guards, without weakening checks or adding invented successful defaults.
+    - Incidental reads used absent parcss1.types.ts,sw/inc/init.ts,frmitems.box.ts and an unmatched file glob. Bounded rg --files lookup identified parcss1.h.ts,core/bastyp/init.ts/default-metadata.json and frmitems.ts. Route refreshed before edits. No network, external user files, hooks/config changes, blanket suite replay or confidence promotion.
+
+    - Boundary diagnosis/resolution: six-digit999999 follows pinned parcss1.cxx numeric hex-probe priority (WRITER160), so it is not a LENGTH padding value. Keep that source behavior, retain a separate28twip regression, and use70000pt for the actual unsigned saturation/signed-box narrowing test. No scanner normalization. The initial40-to39 failure was the local Worker item codec routing native boxes through the lossy UNO default-sequence path; core QueryValue/PutValue behavior remains unchanged. Native raw box fields already existed for tables, so factor that validator/codec into shared browser infrastructure and use it for paragraph/page item snapshots too, preserving exact line widths, component implementations, scale/mirror and signed distances. Old UNO-array ingress remains explicit and unchanged. No native core workaround or forged item result.
+    - Source fixes: InsertAttrs now distinguishes paragraph RES_BOX from the unrepresented RES_CHRATR_BOX on char-level contexts, just as its existing brush admission does; do not substitute a paragraph border for character decoration. Non-null assertions replaced by original creation-return overloads and bounded side/name lookup admission.
+    - Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.border.integration.test.ts --maxWorkers1. Result: pass18/18,72.12s,exec72720exit0; html32-border-second.txt. This includes the new pre-Worker actual width40 assertion and post-Worker exact width40. Two additional six-hex/char-level regressions are added but not yet run.
+    - Command: native app tsc --noEmit. Result: fail, single missing BorderLineRecord type import after factoring the table native-box decoder; exec40233exit1,html32-types-first.txt. Restore that still-used field type import before final typecheck. No live job is restarted. Incidental item-codec.test.ts lookup was absent; bounded symbol search located frmitems.test.ts and concrete native codec/transport suites. Registry/evidence/docs and final related verification remain pending.
+
+    - Command: related8-file HTML/current codec/table/page/RTF-border/ASCII suite, html32-related.txt. Result: fail104pass/1failure in105cases,101.94s,exec24252exit1. Single failure: RTF one-sided box raw field representation contains null absent edges, rejected by the existing strict SfxPoolItem value domain. Keep that domain strict; encode present edges as a sparse numeric-key object only for the new tagged svx-box item packet, translate it back to the existing native table-box field record at decode. Do not relax generic null validation, change native UNO contracts or alter existing table format. All21new border cases passed in the related run.
+    - Current gates: changed-source ESLint second pass (exec72613exit0); native app typecheck second pass (exec69807exit0). Production packet adjustment requires final current-source app type/lint and affected border/codec rechecks. No jobs remain live at this point; completed handles must not be restarted on a missing-handle observation.
+
+    - Final semantic checks:87pass/7files in137.87s (html32-related-final.txt,exec36328exit0) and app typecheck pass (html32-types-final.txt,exec69521exit0). The prior ASCII18cases have unchanged passing evidence; the earlier CSS state/HTML native60cases will receive a freshness recheck after the final codec production change.
+    - Static chain: source provenance1896runtime/1683mapped/182browser/31infra pass; Writer/shared registries both semanticViolationCount0; boundaries1895sources/10411imports/227edges pass. JSDoc then failed for the second GetBorderInfo overload and implementation, html32-docs.txt,exec67918exit1. Add only missing overload documentation, then rerun docs/size/tree; source semantics/type results remain current because comments do not change code. The first lint in that shell sequence had no retained independent status, so explicitly rerun changed packet/overload files against the prior passing all-source lint rather than infer a gate from an empty log. Preserve the failed chain evidence; do not replay already-passing87cases.
+    - A patch context used a guard before Prettier expanded it; apply_patch verified no matching lines and made no change. Read the current guard, recomputed route and applied the exact current-context patch. Strict Sfx values still reject null; new tagged box packets use present-edge maps, while table records keep their prior null-array representation and shared validation.
+
+    - Final checkpoint evidence:87passed/7files in137.87s (html32-related-final.txt,exec36328exit0),60passed/2freshness CSS/native HTML files in35.15s (html32-css-freshness.txt,exec15370exit0), plus18unchanged ASCII range cases from the prior related run. All165related cases across10files have passing source-current evidence; no all-app suite replay. All21new border cases pass, including exact40twip DOUBLE width before/after Worker, signed-2padding preservation, absent-edge boxes, six-hex scanning and unrepresented char-box admission. Retain all initial failures above as failed runs, not green summaries.
+    - Command: native app compiler ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit from apps/office. Result: pass, final semantic source (html32-types-final.txt,exec69521exit0) and final source/header visibility alignment (html32-types-private-final.txt,exec77976exit0). DestroyBorderInfos is private as in pinned svxcss1.hxx before its public section. No code/expected value was changed for formatting/docs-only gates.
+    - Commands: changed-source ESLint --max-warnings0 (html32-lint-second.txt,exec72613exit0); final packet/overload ESLint --max-warnings0 followed by docs/size/tree through && (html32-lint-docfix.txt,exec22502exit0); final private-member ESLint separately recorded in html32-lint-private-exit.txt. Result: pass. The initially masked empty lint log is not relied on as an independent exit-code proof.
+    - Command: Prettier --check all changed/new TS/JSON/Markdown, excluding AgentPlane-owned artifacts. Result: pass,html32-format-check.txt. Source/query/API behavior unchanged by final JSDoc/formatting edits. git diff --check passes.
+    - Commands/results: npm run check:source-provenance pass1896runtime/1683mapped/182browser/31infra (html32-provenance.txt); npm run inventory:parity:writer and npm run inventory:parity:shared both pass,semanticViolationCount0; npm run check:dependencies pass1895runtime sources/10411relative imports/227allowed edges. Logs: html32-registry-writer/shared.txt and html32-boundaries.txt. Native semantic statuses remain unverified for broad modules/ABI; the shared box host codec is local infrastructure, not fabricated upstream code.
+    - Commands/results: npm run check:docs pass4273authored sources (html32-docs-final.txt); npm run check:file-size pass (html32-size-final.txt); npm run check:source-tree pass115required/32retired roots (html32-tree-final.txt); ap doctor pass0errors with only the already-known managed-shim warning (html32-doctor.txt,exec66756exit0). Hooks and global configuration remain unchanged.
+    - Source quirks: WRITER160 retains numeric six-hex priority; WRITER294-297 retain pixel shorthand hairlines, signed padding narrowing, conditional shorthand color and unitless-zero admission. WRITER298 documents the defined65535absolute-width/unset-sentinel collision as a source-only trace, not a claimed desktop reproduction or newly passing testcase. No suspicious upstream behavior is corrected locally.
+    - Scope closure: this cohesive block completes the connected native border/padding handlers and lossless native box state at the existing UI boundary. It does not complete native CSS page breaks, raw HTML table parsing, insertion snapshot/boundary handling or the final current-model/filter/UI audit. Parent goal remains active/incomplete and its verification must remain rework.
 id_source: "generated"
 ---
 ## Summary
@@ -3670,6 +3746,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T09:51:52.339Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML32 checkpoint verified:165related cases have passing evidence (87final border/codec/RTF;60fresh CSS/native HTML;18unchanged ASCII). Native CSS border/padding owners and exact Worker box fields are connected. App typecheck, lint/format, source provenance, Writer/shared registries, boundaries/docs/size/tree/doctor pass. Preserve WRITER160/294-298; core UNO behavior and legacy table/array ingress remain unchanged. Parent goal incomplete:page-break CSS,raw HTML tables,insertion boundaries/snapshots and final filter/UI audit.
+Attempts: 43
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T09:50:39.380Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4646,3 +4752,33 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - Commands: npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; ap doctor; git diff --check.
 - Result: pass. Evidence: corresponding html31-registry/boundaries/docs/size/tree/doctor logs and exit0static chain. Scope: unchanged strict global registry/static contracts, with semanticViolationCount0,1892runtime source boundaries/10392imports/227allowed edges,4269authored sources,115required paths/32retired roots. Known managed-shim warning only; no hooks/config changes.
 - Current checkpoint: verified and ready for an implementation commit. Full parent goal remains incomplete for the residual native CSS/table/insertion/current-model/UI requirements above; record parent verification as rework, not full completion.
+
+### HTML32: CSS border/padding reader (verified checkpoint)
+
+- Previous goal turn: progress, committed HTML31 asd6e70a6ef7f1 with1160related passing cases and clean state.
+- Scope: native border info, property copy/Clear/Merge/CopyBorderInfo/SetBoxItem, source border/padding handlers and actual registered box slot10024. Existing default-metadata.json already provides that slot, so no new pool owner is required. Real border-line width constants and MIN_BORDER_DIST28 are admitted from the pinned headers. CSS is consumed by existing ParseStyleOptions on actual context owners. Page-break producers, tables and final full-goal audit remain open.
+- Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.border.integration.test.ts src/sw/source/filter/html/svxcss1.state.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts --maxWorkers 1
+- Result: fail,76pass/2fresh failures in3files,44.60s. Evidence: html32-focused.txt. Source pending tests: huge LENGTH padding yielded28/28 rather than expected signed wrap; Worker path DOUBLE width40 yielded39. Do not normalize expectations or change production before identifying parser/attribute/codec boundaries against source. Source SetDistance takes signed16, while CSS pending distances are unsigned16.
+- Command: node node_modules/.bin/eslint (all10changed/new TS paths) --max-warnings0. Result: fail,9non-null assertions; html32-lint-first.txt. Replace non-null assertions with original creation-return overloads and bounded native side/name lookup guards, without weakening checks or adding invented successful defaults.
+- Incidental reads used absent parcss1.types.ts,sw/inc/init.ts,frmitems.box.ts and an unmatched file glob. Bounded rg --files lookup identified parcss1.h.ts,core/bastyp/init.ts/default-metadata.json and frmitems.ts. Route refreshed before edits. No network, external user files, hooks/config changes, blanket suite replay or confidence promotion.
+
+- Boundary diagnosis/resolution: six-digit999999 follows pinned parcss1.cxx numeric hex-probe priority (WRITER160), so it is not a LENGTH padding value. Keep that source behavior, retain a separate28twip regression, and use70000pt for the actual unsigned saturation/signed-box narrowing test. No scanner normalization. The initial40-to39 failure was the local Worker item codec routing native boxes through the lossy UNO default-sequence path; core QueryValue/PutValue behavior remains unchanged. Native raw box fields already existed for tables, so factor that validator/codec into shared browser infrastructure and use it for paragraph/page item snapshots too, preserving exact line widths, component implementations, scale/mirror and signed distances. Old UNO-array ingress remains explicit and unchanged. No native core workaround or forged item result.
+- Source fixes: InsertAttrs now distinguishes paragraph RES_BOX from the unrepresented RES_CHRATR_BOX on char-level contexts, just as its existing brush admission does; do not substitute a paragraph border for character decoration. Non-null assertions replaced by original creation-return overloads and bounded side/name lookup admission.
+- Command: npm run test:writer -- src/sw/source/filter/html/svxcss1.border.integration.test.ts --maxWorkers1. Result: pass18/18,72.12s,exec72720exit0; html32-border-second.txt. This includes the new pre-Worker actual width40 assertion and post-Worker exact width40. Two additional six-hex/char-level regressions are added but not yet run.
+- Command: native app tsc --noEmit. Result: fail, single missing BorderLineRecord type import after factoring the table native-box decoder; exec40233exit1,html32-types-first.txt. Restore that still-used field type import before final typecheck. No live job is restarted. Incidental item-codec.test.ts lookup was absent; bounded symbol search located frmitems.test.ts and concrete native codec/transport suites. Registry/evidence/docs and final related verification remain pending.
+
+- Command: related8-file HTML/current codec/table/page/RTF-border/ASCII suite, html32-related.txt. Result: fail104pass/1failure in105cases,101.94s,exec24252exit1. Single failure: RTF one-sided box raw field representation contains null absent edges, rejected by the existing strict SfxPoolItem value domain. Keep that domain strict; encode present edges as a sparse numeric-key object only for the new tagged svx-box item packet, translate it back to the existing native table-box field record at decode. Do not relax generic null validation, change native UNO contracts or alter existing table format. All21new border cases passed in the related run.
+- Current gates: changed-source ESLint second pass (exec72613exit0); native app typecheck second pass (exec69807exit0). Production packet adjustment requires final current-source app type/lint and affected border/codec rechecks. No jobs remain live at this point; completed handles must not be restarted on a missing-handle observation.
+
+- Final semantic checks:87pass/7files in137.87s (html32-related-final.txt,exec36328exit0) and app typecheck pass (html32-types-final.txt,exec69521exit0). The prior ASCII18cases have unchanged passing evidence; the earlier CSS state/HTML native60cases will receive a freshness recheck after the final codec production change.
+- Static chain: source provenance1896runtime/1683mapped/182browser/31infra pass; Writer/shared registries both semanticViolationCount0; boundaries1895sources/10411imports/227edges pass. JSDoc then failed for the second GetBorderInfo overload and implementation, html32-docs.txt,exec67918exit1. Add only missing overload documentation, then rerun docs/size/tree; source semantics/type results remain current because comments do not change code. The first lint in that shell sequence had no retained independent status, so explicitly rerun changed packet/overload files against the prior passing all-source lint rather than infer a gate from an empty log. Preserve the failed chain evidence; do not replay already-passing87cases.
+- A patch context used a guard before Prettier expanded it; apply_patch verified no matching lines and made no change. Read the current guard, recomputed route and applied the exact current-context patch. Strict Sfx values still reject null; new tagged box packets use present-edge maps, while table records keep their prior null-array representation and shared validation.
+
+- Final checkpoint evidence:87passed/7files in137.87s (html32-related-final.txt,exec36328exit0),60passed/2freshness CSS/native HTML files in35.15s (html32-css-freshness.txt,exec15370exit0), plus18unchanged ASCII range cases from the prior related run. All165related cases across10files have passing source-current evidence; no all-app suite replay. All21new border cases pass, including exact40twip DOUBLE width before/after Worker, signed-2padding preservation, absent-edge boxes, six-hex scanning and unrepresented char-box admission. Retain all initial failures above as failed runs, not green summaries.
+- Command: native app compiler ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit from apps/office. Result: pass, final semantic source (html32-types-final.txt,exec69521exit0) and final source/header visibility alignment (html32-types-private-final.txt,exec77976exit0). DestroyBorderInfos is private as in pinned svxcss1.hxx before its public section. No code/expected value was changed for formatting/docs-only gates.
+- Commands: changed-source ESLint --max-warnings0 (html32-lint-second.txt,exec72613exit0); final packet/overload ESLint --max-warnings0 followed by docs/size/tree through && (html32-lint-docfix.txt,exec22502exit0); final private-member ESLint separately recorded in html32-lint-private-exit.txt. Result: pass. The initially masked empty lint log is not relied on as an independent exit-code proof.
+- Command: Prettier --check all changed/new TS/JSON/Markdown, excluding AgentPlane-owned artifacts. Result: pass,html32-format-check.txt. Source/query/API behavior unchanged by final JSDoc/formatting edits. git diff --check passes.
+- Commands/results: npm run check:source-provenance pass1896runtime/1683mapped/182browser/31infra (html32-provenance.txt); npm run inventory:parity:writer and npm run inventory:parity:shared both pass,semanticViolationCount0; npm run check:dependencies pass1895runtime sources/10411relative imports/227allowed edges. Logs: html32-registry-writer/shared.txt and html32-boundaries.txt. Native semantic statuses remain unverified for broad modules/ABI; the shared box host codec is local infrastructure, not fabricated upstream code.
+- Commands/results: npm run check:docs pass4273authored sources (html32-docs-final.txt); npm run check:file-size pass (html32-size-final.txt); npm run check:source-tree pass115required/32retired roots (html32-tree-final.txt); ap doctor pass0errors with only the already-known managed-shim warning (html32-doctor.txt,exec66756exit0). Hooks and global configuration remain unchanged.
+- Source quirks: WRITER160 retains numeric six-hex priority; WRITER294-297 retain pixel shorthand hairlines, signed padding narrowing, conditional shorthand color and unitless-zero admission. WRITER298 documents the defined65535absolute-width/unset-sentinel collision as a source-only trace, not a claimed desktop reproduction or newly passing testcase. No suspicious upstream behavior is corrected locally.
+- Scope closure: this cohesive block completes the connected native border/padding handlers and lossless native box state at the existing UI boundary. It does not complete native CSS page breaks, raw HTML table parsing, insertion snapshot/boundary handling or the final current-model/filter/UI audit. Parent goal remains active/incomplete and its verification must remain rework.

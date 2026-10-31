@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/svxcss1.border.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.border.ts",
+          "marker": "ParseCSS1BorderProperty"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.border.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_border_xxx"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_border_xxx_width"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_padding_xxx"
+        },
+        {
+          "path": "sw/source/filter/html/svxcss1.hxx",
+          "marker": "SVX_CSS1_BORDERINFO_WIDTH"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/svxcss1.cxx",
+    "localSymbols": [
+      "ParseCSS1BorderProperty"
+    ],
+    "upstreamSymbols": [
+      "ParseCSS1_border_xxx",
+      "ParseCSS1_border_xxx_width",
+      "ParseCSS1_padding_xxx"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Unrepresented native classes and remaining CSS/page/table producers are not claimed complete."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/svxcss1.border.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Cohesive original CSS1 border methods remain on their native parser/property owners in a source responsibility fragment, respecting authored TypeScript size limits without a second model or DOM cascade."
+    }
+  }
+}

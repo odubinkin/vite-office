@@ -8,6 +8,7 @@ import type { SwHTMLParser } from "./swhtml";
 import { SwCSS1Parser } from "./htmlcss1";
 import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { MIN_BORDER_DIST } from "../../../inc/swtypes";
 /** Original class/ID merge followed by inline CSS and LANG. Border and frame-direction producers remain outside the represented caller. @param parser - Actual parser. @param style - Inline declarations. @param id - ID. @param className - Class. @param items - Actual set. @param info - Native info. @param language - Optional original LANG value. @returns Whether any source option applied. */
 export function ParseStyleOptions(
   parser: SwHTMLParser,
@@ -44,6 +45,7 @@ export function ParseStyleOptions(
     parser.m_pCSS1Parser.ParseStyleOption(style, items, info);
     result = true;
   }
+  if (result) info.SetBoxItem(items, MIN_BORDER_DIST);
   if (language) {
     const value = LanguageTag.convertToLanguageTypeWithFallback(unicode(language));
     if (value !== LANGUAGE_DONTKNOW) {
