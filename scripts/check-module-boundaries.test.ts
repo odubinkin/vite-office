@@ -503,7 +503,7 @@ it("retains actual mutual SAL and o3tl string-header owners without application 
 });
 
 it("permits original cppuhelper UNO and SAL owners while retaining application and browser gates", /** Protects original helper ownership, without reverse or application-layer permission. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "o3tl", "sal", "udkapi"])
+  for (const dependency of ["comphelper", "cppu", "o3tl", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(false);
   for (const dependency of ["sc", "sw", "framework", "vcl", "svl"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(true);

@@ -4997,3 +4997,39 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `cppuhelper/inc/compbase2.hxx`, `WeakComponentImplHelper2::dispose`, and its base call in `cppuhelper/source/compbase.cxx`.
 - Observation: the final template override is noexcept but forwards to a base method that can propagate a derived hook failure. On the native C++ boundary such escape terminates the process, unlike the direct non-noexcept base call in CALC-448.
 - Keep the original forwarding body and do not add a success fallback or exception-swallowing guard. Native process termination/noexcept ABI behavior is not represented or certified by the browser member binding; tests do not execute a fatal template path or claim it is an ordinary recoverable native exception.
+
+### CALC-451 — Environment registry keys concatenate pointer decimals and descriptors without a separator
+
+- Source: `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::getEnvironment` and `registerEnvironment`.
+- Observation: the key is the decimal signed pointer address followed directly by the descriptor. Distinct pairs such as address 1/descriptor `23` and address 12/descriptor `3` collide. No delimiter or structured pair is used.
+- Preserve concatenation and duplicate substitution. The host binding accepts explicit native pointer addresses and never guesses addresses from object identities; tests preserve the collision and signed pointer-width conversion.
+
+### CALC-452 — Context disposal does not release hardened Java environment references
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::disposing`, and `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::getRegisteredEnvironments`.
+- Observation: registry enumeration hardens each matching environment. Context disposal calls each Java environment's dispose callback and frees the pointer-array storage, without calling release on those hardened references.
+- Preserve the missing release. Tests populate the actual weak registry and observe harden/dispose with no added release; an empty Java-environment provider is not used.
+
+### CALC-453 — Duplicate manager inputs can disagree with the stored context value
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::ComponentContext`.
+- Observation: every exact service-manager input is extracted into m_xSMgr, while m_map.emplace retains the first value for duplicate keys. getServiceManager can therefore return the later manager while getValueByName of the manager singleton returns the first.
+- Preserve extraction-before-emplace and first-key retention. Tests verify both actual manager identities.
+
+### CALC-454 — Context getByName returns a void value for a missing name
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::getByName`, versus `udkapi/com/sun/star/container/XNameAccess.idl`.
+- Observation: the context delegates directly to getValueByName, whose absent local/delegate result can be a void Any, instead of throwing the IDL-documented NoSuchElementException.
+- Preserve this return and exact delegate behavior. Missing remove/replace still throw the original NoSuchElementException with the actual context.
+
+### CALC-455 — Context value APIs remain usable after component disposal
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext` named-value methods.
+- Observation: named insertion/removal/replacement/lookup do not check the inherited disposed flag. After disposal clears the map, insertion can populate it again; another component dispose returns immediately because the flag is already set.
+- Preserve the absence of a guard. Tests insert and query after actual disposal; no implicit second disposal or source-absent error is introduced.
+
+### CALC-456 — Context disposal skips every key beginning with the manager singleton name
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::disposing`.
+- Observation: when m_xSMgr exists, the per-entry disposal loop skips names that start with the manager singleton, including longer unrelated names, rather than only the exact manager key.
+- Preserve the prefix predicate and later map destruction. Tests verify that a component under a longer matching key is released without an added explicit dispose call.

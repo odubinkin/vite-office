@@ -2,13 +2,14 @@
 import type { XElementAccess } from "./XElementAccess";
 import type { Any } from "../uno/Any";
 import type { Sequence } from "../uno/Sequence";
+import type { rtl_uStringSlot } from "../../../../../../sal/inc/rtl/ustring.h";
 import type { OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 /** Original name access over actual native values;no map/order policy is introduced here. */
 export interface XNameAccess extends XElementAccess {
   /** Original named lookup. @param aName - Borrowed exact UTF16 name. @returns Owned Any. @throws Native NoSuchElementException or WrappedTargetException. */
   getByName(aName: OUStringConstReference): Any;
   /** Original owned sequence of names. @returns Actual native string sequence. */
-  getElementNames(): Sequence<OUString>;
+  getElementNames(): Sequence<rtl_uStringSlot>;
   /** Original exact-name membership. @param aName - Borrowed name. @returns Present. */
   hasByName(aName: OUStringConstReference): boolean;
 }

@@ -64,7 +64,8 @@ const allowedEdges = new Map([
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
   // Original internal interfacecontainer4.hxx includes o3tl/cow_wrapper.hxx.
-  ["cppuhelper", new Set(["cppu", "o3tl", "sal", "udkapi"])],
+  // Original component_context.cxx includes comphelper/sequence.hxx.
+  ["cppuhelper", new Set(["comphelper", "cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
@@ -922,7 +923,9 @@ for (const sourceFile of runtimeSources) {
       relativeSource.split(path.sep).join("/"),
       relativeTarget.split(path.sep).join("/"),
       sourceText,
-      relativeSource.split(path.sep).join("/") === "sax/source/expatwrap/xml2utf.ts" &&
+      ["sax/source/expatwrap/xml2utf.ts", "cppuhelper/source/component_context.ts"].includes(
+        relativeSource.split(path.sep).join("/"),
+      ) &&
         relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") === "comphelper/inc/sequence"
         ? fs.readFileSync(path.resolve(sourceRoot, "comphelper/inc/sequence.ts"), "utf8")
         : "",

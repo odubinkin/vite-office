@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 142
+revision: 146
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T12:56:32.865Z"
+  updated_at: "2026-10-31T14:13:02.891Z"
   updated_by: "CODER"
-  note: "Component lifecycle prerequisite checkpoint verified: original container4, WeakComponentImplHelperBase2/template/query and ContextEntry_Init; 58 related tests, final 13-case construction rerun, 197 CSV/UI, 47 boundary tests, current-built browser, final typecheck/lint/build and static/provenance/parity pass. CALC-448/449 source behavior retained; native noexcept limitation explicit and uncertified (CALC-450). Concrete context/manager/environment bootstrap, EditEngine/DocImport and full NatNum12/formatter remain. Goal stays active; checkpoint is not full CSV acceptance."
-  attempts: 33
+  note: "Original internal ComponentContext/DisposingForwarder and weak EnvironmentsData registry checkpoint verified. Complete source new/legacy factory contracts and mapKeysToSequence are present; original lazy/duplicate/delegate/disposal behavior retained (CALC-451..456). 62 related cases plus final 26-case changed-owner run, 197 CSV/UI, 50 boundary cases, final tools/app typecheck, full ESLint, production build, actual browser CSV and provenance/parity/resources/docs/size checks pass. No public environment/mapping bootstrap or concrete ServiceManager/application installation is claimed; EditEngine/DocImport and NatNum12/formatter remain. Keep goal active and task open."
+  attempts: 34
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -856,8 +859,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T14:13:02.891Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original internal ComponentContext/DisposingForwarder and weak EnvironmentsData registry checkpoint verified. Complete source new/legacy factory contracts and mapKeysToSequence are present; original lazy/duplicate/delegate/disposal behavior retained (CALC-451..456). 62 related cases plus final 26-case changed-owner run, 197 CSV/UI, 50 boundary cases, final tools/app typecheck, full ESLint, production build, actual browser CSV and provenance/parity/resources/docs/size checks pass. No public environment/mapping bootstrap or concrete ServiceManager/application installation is claimed; EditEngine/DocImport and NatNum12/formatter remain. Keep goal active and task open."
+  -
+    type: "status"
+    at: "2026-10-31T14:13:10.487Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T12:56:45.375Z"
+doc_updated_at: "2026-10-31T14:13:10.487Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1867,6 +1883,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T14:13:02.891Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original internal ComponentContext/DisposingForwarder and weak EnvironmentsData registry checkpoint verified. Complete source new/legacy factory contracts and mapKeysToSequence are present; original lazy/duplicate/delegate/disposal behavior retained (CALC-451..456). 62 related cases plus final 26-case changed-owner run, 197 CSV/UI, 50 boundary cases, final tools/app typecheck, full ESLint, production build, actual browser CSV and provenance/parity/resources/docs/size checks pass. No public environment/mapping bootstrap or concrete ServiceManager/application installation is claimed; EditEngine/DocImport and NatNum12/formatter remain. Keep goal active and task open.
+    Attempts: 34
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:12:55.763Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2788,6 +2834,78 @@ sections:
     - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass;1 real Chromium CSV import/export scenario on the current production build. Evidence: context-browser.log (exit0). Scope: existing file UI, multiline cell display and byte-exact CSV download with no page errors.
     - Final review: git diff --check passes; exact allowlist contains19 intentional source/test/registry/boundary/issue/task paths. All non-scratch changes are in that allowlist; output/native experiments are excluded. No vendor/network writes, no readiness promotion, no full-suite run because this is the same open task rather than the tenth completed task. Final full status is retained in context-final-status.log. Overall verification remains rework, task resumes DOING and the original goal stays active.
+
+    ### Original internal ComponentContext and weak environment registry checkpoint
+
+    - Previous goal turn was progress:101ab08970ef committed original weak/component lifecycle/query/container4 and ContextEntry_Init prerequisites, with focused evidence. This continuation revalidated CODER/direct, branch calc, approved AQF9AG, tracked-clean state and no unrelated non-scratch files. Original goal stays active and full CSV acceptance remains unproven. No native source/vendor/network writes. Same task remains open, so no tenth-completed-task full-suite trigger.
+    - Original internal ComponentContext and DisposingForwarder are now real source owners. All declared context/named-container methods, duplicate first-value retention, _root/delegate semantics, actual new/legacy factory queries, exact argument forms, runtime/checked UNO catch rules, typed-null singleton caching, post-callback relookup and losing-instance disposal are implemented over actual shared Any/Reference/Sequence/Type/OUString. No context/factory callbacks are injected into production. Every lookup constructs and destroys its temporary source name before evaluating the next source expression. Original getElementType returns an owned VOID Type copy. The actual const OUString map keys are owned addressed fields, with explicit native value-equality lookup binding rather than an inferred host hash; unspecified physical bucket order is not certified.
+    - Constructor consumes exactly nEntries, extracts every manager input before first-key emplace, uses the exact delegate wrapper service, real DefaultContext XPropertySet patch and original temporary refcount protection. All source disposal/lifetime methods are present: ordinary components before manager/access/type manager, manager-name prefix skip, lazy-entry release, real weak-registry Java enumeration/disposal and implicit reverse member destruction without an implicit component dispose. Native process termination from noexcept, mutex/thread/allocator/physical ABI and shutdown remain unverified.
+    - Original EnvironmentsData now owns the actual weak registry: numerical context-address decimal concatenation and real OUString keys, output release/null before lookup, acquireWeak on insert, hardened live duplicate substitution, dead weak replacement, exact descriptor matching, successful hardening count, nonempty-only caller allocation, and shutdown flag/weak/hard callback/destruction order. Original function-static registry/public uno_getRegisteredEnvironments use this owner. Environment C callbacks come from registered actual records; no empty environment provider or default environment is fabricated. Physical pointer addresses are explicit caller inputs; arbitrary JS object identities are never converted to guessed addresses.
+    - Added complete original XSingleComponentFactory/XSingleServiceFactory IDL contracts with normal cppumaker type bindings. Added original comphelper mapKeysToSequence with signed32 size conversion and real Sequence/element assignment; corrected XNameAccess host generic to addressed OUString slots and its compile-time contract test. Actual Context getElementNames exercises owned key fields through this helper. Existing source ownership/provenance records were extended without readiness promotion, and old context/registry omission wording was corrected where touched.
+    - CALC-451 preserves separator-free registry pointer/descriptor collisions;452 retains the absent release of hardened Java environments in context disposal;453 retains convenience-manager/map disagreement from duplicate inputs;454 retains void missing getByName;455 retains post-dispose value API mutation;456 retains broad manager-prefix skipping. Source behavior is not corrected.
+    - Command: npm run typecheck
+      Result: initial fail (context-owner-typecheck.log) from guessed atomic import, nullable key-destructor pointer assertion and old addressed-string generic expectation. Corrected to actual sal/inc/osl/interlck owner, valid non-null key lifetime precondition and real Sequence<rtl_uStringSlot> contract. First rerun found only an unused test import (context-owner-typecheck-fixed.log), which was removed. Route recomputed before corrections. Final tools/app typecheck passes(context-owner-typecheck-final.log).
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppuhelper/source/component_context.test.ts src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts src/comphelper/inc/sequence.test.ts --maxWorkers=1
+      Result: pass;4files/23cases,12.16s. Evidence: context-owner-tests.log. Scope: initial actual context/registry/access/sequence contracts.
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts src/comphelper/inc/sequence.test.ts src/comphelper/source/processfactory/processfactory.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+      Result: pass;11files/62cases,23.90s. Evidence: context-owner-related-tests.log. Scope: final production context/registry owners, scalar/sequence/empty arguments, factory/manager paths, reentrant replace/remove/same-instance behavior, source exceptions/cache/retry, exact wrapper patch, duplicates, post-dispose mutation, explicit entry count, re-arming singleton, Java harden/dispose without release, shared value/query/weak/container/process/NumberText regression and real key sequence ownership. Later edits only add required test JSDoc and exact source inline-dependency tooling.
+    - Command: npm run check:dependencies
+      Result: initial fail; Cppuhelper/Comphelper module projection formed a cycle when the original pure inline sequence.hxx template was counted as a service edge. Evidence: context-owner-dependencies.log. Resolution: extend the existing exact inline-header checker for only original ComponentContext mapKeysToSequence plus existing SAX concatSequences callers. Target remains pure functions over exact CPPU imports, with no initialization, aliases, dynamic imports, reexports, extra functions or service dependencies. No general SCC/cycle rejection is disabled. The source include witness is component_context.cxx's comphelper/sequence.hxx include. Final pass1944runtime sources/10637relative imports/236cross-module edges(context-owner-dependencies-fixed.log).
+    - Command: npm run check:docs
+      Result: initial fail for29 prepared test callback JSDoc comments(context-owner-docs.log); added specific callback documentation without runtime changes. Final rerun pending.
+    - Command: npm run check:file-size
+      Result: pass(context-owner-size.log). Final source/checker/test counts remain below1000; boundary main996 and test985 after inline-rule extension.
+    - Remaining full goal: public createComponentContext current/source Environment/Mapping orchestration and default environment/purpose/bridge bindings, concrete ServiceManager/application process-factory installation, EditEngine/VCL shared-device/Sfx construction and undo/word/deletion/layout/view groups, original BreakIterator/CharacterClassification services, ScFieldEditEngine/DocImport removal of multiline regex construction, NatNum12 supplier/casing/formatter and final native CSV/UI audit. Internal context construction in tests is not substituted for the public application bootstrap. Overall task must remain rework/DOING and goal active.
+
+    - Command: npm run check:source-provenance
+      Result: initial fail for an unnecessary new lbenv-registry.ts filename divergence(context-owner-provenance.log). Resolution: merge actual EnvironmentsData/public enumeration back into the existing original lbenv.ts owner, which remains319lines and fits the hard limit. No filename exception/validator change was added. Registry/runtime records now extend the existing lbenv owner. Final provenance passes1944modules(1731mapped/182browser/31infrastructure), context-owner-provenance-fixed.log.
+    - Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/native-inline-sequence-boundary.test.ts
+      Result: initial49pass/1fail(context-owner-boundary-tests.log). A broad edit accidentally changed the configmgr expected-dependency list as well as the intended cppuhelper list. Restored configmgr unchanged; no production permission was added there. Final50cases pass in2files,39.89s(context-owner-boundary-tests-fixed.log), including all3 exact pure-inline owner/caller tests and rejection of initialization, aliases, unrelated functions/imports and service dependencies. No wider service SCC is allowed.
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+      Result: pass;3files/25cases,45.54s after combining the source registry owner. Evidence: context-owner-registry-merge-tests.log. Scope: final actual lbenv owner with unchanged ObjectEntry native streams plus weak registry and concrete context behavior.
+    - Command: npm run test:shared -- src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+      Result: pass;1file/19cases,9.07s. Evidence: context-owner-final-context-tests.log. Scope: final context suite adds real delegate-wrapper constructor failure and proves the pre-existing delegate survives. A scratch attempt to locate an optional argument-payload assertion marker failed before editing; no production/test assertion was altered by that failed lookup; route recomputed.
+    - Command: npm run check:docs
+      Result: pass;4347files after specific prepared-callback comments(context-owner-docs-fixed.log); final merged-owner/new-constructor-test documentation rerun pending.
+    - Command: npm run inventory:registry:build
+      Result: pass;4 generated views after final merged-owner canonical records(context-owner-registry-combined.log). Scope: original source ownership, unchanged foundation/unverified semantic status; no CSV readiness promotion.
+
+    - Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: initial fail; header runtime localSymbols incorrectly included reexported uno_getRegisteredEnvironments instead of only locally declared symbols. The actual function owner is lbenv.ts and remains listed there. Removed only the header-local declaration claim, retaining reexport/source evidence and upstream declaration. Existing processfactory header follows the same empty-local-reexport rule. No validator, violation list or source implementation was changed. Route recomputed before correction. Evidence: context-owner-parity-calc.log/context-owner-parity-shared.log.
+
+    - Command: npm run typecheck
+      Result: pass after combining the original lbenv owner and final constructor-failure test(context-owner-typecheck-combined.log). Scope: final tools/app source and contracts. The native checker was observed live and polled to terminal; no timeout-driven restart.
+    - Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+      Result: pass after header reexport declaration metadata correction. Evidence: context-owner-parity-calc-fixed.log/context-owner-parity-shared-fixed.log (both exit0); regenerated4canonical views(context-owner-registry-parity-fixed.log). Scope: exhaustive final registry records, unchanged foundation/unverified semantic/readiness statuses.
+    - Command: npm run check:docs
+      Result: pass;4346authored files after original lbenv merge and final test(context-owner-docs-final.log).
+    - Command: npm run check:file-size
+      Result: pass(context-owner-size-final.log); no filename divergence exception; lbenv319lines, mainboundary996, boundarytest985, contexttest834.
+    - Command: npm run check:calc-resources
+      Result: pass;464commands/11menus/17policies(context-owner-resources.log). Scope: existing Calc resource integration; intentional browser save/open/autosave/no-recovery behavior is unchanged.
+
+    - Command: npm run lint -- --ignore-pattern output/native/**
+      Result: initial fail;91 non-null assertion syntax uses and1 test prefer-const warning(context-owner-lint.log). Resolution: explicit erased interface/callback/native-field type bindings follow existing source-owner style, retaining the same upstream pointer preconditions/call bodies without added null checks, optional chaining, fallback values or disabled ESLint rules. One test closure now captures a const initialized before factory invocation. Exact affected-file ESLint passes(context-owner-casts-lint.log). No production branch/default/exception policy was changed. Final whole lint and post-binding compilation/tests pending.
+
+    - Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+      Result: pass;3files/26cases,9.18s after final erased native-precondition bindings. Evidence: context-owner-casts-tests.log. Scope: actual final registry/ObjectEntry/context behavior including final constructor-failure case. Source owners now322/537lines and context tests832lines, below hard limits.
+
+    - Continuation classification: previous goal turn made concrete source/test/registry/task-document progress and left final native typecheck live while answering user status. This turn revalidated the same approved task/checkout/role and polled session49513 to terminal without restarting.
+    - Command: npm run typecheck
+      Result: pass after all final native-precondition type bindings(context-owner-typecheck-casts.log, exit0). Scope: final tools/app source, interface callers and tooling. CPU/process observations proved the long-running native checker was live; no timeout was treated as failure or a reason to restart.
+    - Read-only next-frontier evidence: original defaultbootstrap.cxx creates ServiceManager/TypeManager, calls createComponentContext and sets manager context. The public context factory still requires actual current/source Environment/Mapping invocation. Original lbenv.cxx object identifiers call rtl_getGlobalProcessId; no production owner was found by bounded name/content searches in the current source tree. No provider or synthetic identifier was added. These observations do not admit the unimplemented public bootstrap.
+
+    - Command: npm run lint -- --ignore-pattern output/native/**
+      Result: pass for the final entire authored repository(context-owner-lint-final.log, exit0). Native experiment scratch, vendor, dependencies and build/test products are excluded by the existing configuration/command; no configuration changes or disabled lint rules. The long-lived actual process was polled to terminal and its increasing CPU time was observed, with no timeout restart.
+
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass;8files/197cases,38.09s(context-owner-csv-tests.log). Scope: final CSV options/import/recognition/date/doc-shell export and existing browser file workflows. No full test suite; repeated checks of changed owners were justified by the documented constructor, source-owner merge and erased type-binding corrections.
+
+    - Command: node ../../node_modules/vite/bin/vite.js build (apps/office)
+      Result: pass;4.99s(context-owner-vite-build.log). Scope: final production application after successful full tools/app typecheck. Existing large-chunk warning remains; no claim that a different npm build command was executed.
+    - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 Chromium CSV import/export scenario,4.6s(context-owner-browser.log). Scope: current production build, existing file UI, multiline cell display, exact downloaded CSV bytes and no page errors. This does not claim public ComponentContext/ServiceManager bootstrap or full NatNum12/CSV acceptance.
+    - Final review: git diff --check passes. Exact35-path allowlist contains only current source/tests/canonical registry/issue journal/header-boundary witnesses/task README; native scratch is excluded. All related failures/resolutions/evidence remain recorded. No source vendor/network/security-policy/implementation-guard changes or readiness promotion. Full final status is retained in context-owner-final-status.log. Original CSV goal remains active; task verification stays rework and resumes DOING because public environment/mapping bootstrap, ServiceManager/application installation, original multiline EditEngine/DocImport and NatNum12/formatter remain incomplete. No task finish or goal completion is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -3806,6 +3924,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T14:13:02.891Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original internal ComponentContext/DisposingForwarder and weak EnvironmentsData registry checkpoint verified. Complete source new/legacy factory contracts and mapKeysToSequence are present; original lazy/duplicate/delegate/disposal behavior retained (CALC-451..456). 62 related cases plus final 26-case changed-owner run, 197 CSV/UI, 50 boundary cases, final tools/app typecheck, full ESLint, production build, actual browser CSV and provenance/parity/resources/docs/size checks pass. No public environment/mapping bootstrap or concrete ServiceManager/application installation is claimed; EditEngine/DocImport and NatNum12/formatter remain. Keep goal active and task open.
+Attempts: 34
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T14:12:55.763Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4731,3 +4879,75 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass;1 real Chromium CSV import/export scenario on the current production build. Evidence: context-browser.log (exit0). Scope: existing file UI, multiline cell display and byte-exact CSV download with no page errors.
 - Final review: git diff --check passes; exact allowlist contains19 intentional source/test/registry/boundary/issue/task paths. All non-scratch changes are in that allowlist; output/native experiments are excluded. No vendor/network writes, no readiness promotion, no full-suite run because this is the same open task rather than the tenth completed task. Final full status is retained in context-final-status.log. Overall verification remains rework, task resumes DOING and the original goal stays active.
+
+### Original internal ComponentContext and weak environment registry checkpoint
+
+- Previous goal turn was progress:101ab08970ef committed original weak/component lifecycle/query/container4 and ContextEntry_Init prerequisites, with focused evidence. This continuation revalidated CODER/direct, branch calc, approved AQF9AG, tracked-clean state and no unrelated non-scratch files. Original goal stays active and full CSV acceptance remains unproven. No native source/vendor/network writes. Same task remains open, so no tenth-completed-task full-suite trigger.
+- Original internal ComponentContext and DisposingForwarder are now real source owners. All declared context/named-container methods, duplicate first-value retention, _root/delegate semantics, actual new/legacy factory queries, exact argument forms, runtime/checked UNO catch rules, typed-null singleton caching, post-callback relookup and losing-instance disposal are implemented over actual shared Any/Reference/Sequence/Type/OUString. No context/factory callbacks are injected into production. Every lookup constructs and destroys its temporary source name before evaluating the next source expression. Original getElementType returns an owned VOID Type copy. The actual const OUString map keys are owned addressed fields, with explicit native value-equality lookup binding rather than an inferred host hash; unspecified physical bucket order is not certified.
+- Constructor consumes exactly nEntries, extracts every manager input before first-key emplace, uses the exact delegate wrapper service, real DefaultContext XPropertySet patch and original temporary refcount protection. All source disposal/lifetime methods are present: ordinary components before manager/access/type manager, manager-name prefix skip, lazy-entry release, real weak-registry Java enumeration/disposal and implicit reverse member destruction without an implicit component dispose. Native process termination from noexcept, mutex/thread/allocator/physical ABI and shutdown remain unverified.
+- Original EnvironmentsData now owns the actual weak registry: numerical context-address decimal concatenation and real OUString keys, output release/null before lookup, acquireWeak on insert, hardened live duplicate substitution, dead weak replacement, exact descriptor matching, successful hardening count, nonempty-only caller allocation, and shutdown flag/weak/hard callback/destruction order. Original function-static registry/public uno_getRegisteredEnvironments use this owner. Environment C callbacks come from registered actual records; no empty environment provider or default environment is fabricated. Physical pointer addresses are explicit caller inputs; arbitrary JS object identities are never converted to guessed addresses.
+- Added complete original XSingleComponentFactory/XSingleServiceFactory IDL contracts with normal cppumaker type bindings. Added original comphelper mapKeysToSequence with signed32 size conversion and real Sequence/element assignment; corrected XNameAccess host generic to addressed OUString slots and its compile-time contract test. Actual Context getElementNames exercises owned key fields through this helper. Existing source ownership/provenance records were extended without readiness promotion, and old context/registry omission wording was corrected where touched.
+- CALC-451 preserves separator-free registry pointer/descriptor collisions;452 retains the absent release of hardened Java environments in context disposal;453 retains convenience-manager/map disagreement from duplicate inputs;454 retains void missing getByName;455 retains post-dispose value API mutation;456 retains broad manager-prefix skipping. Source behavior is not corrected.
+- Command: npm run typecheck
+  Result: initial fail (context-owner-typecheck.log) from guessed atomic import, nullable key-destructor pointer assertion and old addressed-string generic expectation. Corrected to actual sal/inc/osl/interlck owner, valid non-null key lifetime precondition and real Sequence<rtl_uStringSlot> contract. First rerun found only an unused test import (context-owner-typecheck-fixed.log), which was removed. Route recomputed before corrections. Final tools/app typecheck passes(context-owner-typecheck-final.log).
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppuhelper/source/component_context.test.ts src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts src/comphelper/inc/sequence.test.ts --maxWorkers=1
+  Result: pass;4files/23cases,12.16s. Evidence: context-owner-tests.log. Scope: initial actual context/registry/access/sequence contracts.
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts src/cppuhelper/inc/component_context.test.ts src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts src/comphelper/inc/sequence.test.ts src/comphelper/source/processfactory/processfactory.test.ts src/offapi/com/sun/star/linguistic2/NumberText.test.ts src/i18npool/source/nativenumber/nativenumbersupplier.numbertext.test.ts --maxWorkers=1
+  Result: pass;11files/62cases,23.90s. Evidence: context-owner-related-tests.log. Scope: final production context/registry owners, scalar/sequence/empty arguments, factory/manager paths, reentrant replace/remove/same-instance behavior, source exceptions/cache/retry, exact wrapper patch, duplicates, post-dispose mutation, explicit entry count, re-arming singleton, Java harden/dispose without release, shared value/query/weak/container/process/NumberText regression and real key sequence ownership. Later edits only add required test JSDoc and exact source inline-dependency tooling.
+- Command: npm run check:dependencies
+  Result: initial fail; Cppuhelper/Comphelper module projection formed a cycle when the original pure inline sequence.hxx template was counted as a service edge. Evidence: context-owner-dependencies.log. Resolution: extend the existing exact inline-header checker for only original ComponentContext mapKeysToSequence plus existing SAX concatSequences callers. Target remains pure functions over exact CPPU imports, with no initialization, aliases, dynamic imports, reexports, extra functions or service dependencies. No general SCC/cycle rejection is disabled. The source include witness is component_context.cxx's comphelper/sequence.hxx include. Final pass1944runtime sources/10637relative imports/236cross-module edges(context-owner-dependencies-fixed.log).
+- Command: npm run check:docs
+  Result: initial fail for29 prepared test callback JSDoc comments(context-owner-docs.log); added specific callback documentation without runtime changes. Final rerun pending.
+- Command: npm run check:file-size
+  Result: pass(context-owner-size.log). Final source/checker/test counts remain below1000; boundary main996 and test985 after inline-rule extension.
+- Remaining full goal: public createComponentContext current/source Environment/Mapping orchestration and default environment/purpose/bridge bindings, concrete ServiceManager/application process-factory installation, EditEngine/VCL shared-device/Sfx construction and undo/word/deletion/layout/view groups, original BreakIterator/CharacterClassification services, ScFieldEditEngine/DocImport removal of multiline regex construction, NatNum12 supplier/casing/formatter and final native CSV/UI audit. Internal context construction in tests is not substituted for the public application bootstrap. Overall task must remain rework/DOING and goal active.
+
+- Command: npm run check:source-provenance
+  Result: initial fail for an unnecessary new lbenv-registry.ts filename divergence(context-owner-provenance.log). Resolution: merge actual EnvironmentsData/public enumeration back into the existing original lbenv.ts owner, which remains319lines and fits the hard limit. No filename exception/validator change was added. Registry/runtime records now extend the existing lbenv owner. Final provenance passes1944modules(1731mapped/182browser/31infrastructure), context-owner-provenance-fixed.log.
+- Command: npx --no-install vitest run scripts/check-module-boundaries.test.ts scripts/native-inline-sequence-boundary.test.ts
+  Result: initial49pass/1fail(context-owner-boundary-tests.log). A broad edit accidentally changed the configmgr expected-dependency list as well as the intended cppuhelper list. Restored configmgr unchanged; no production permission was added there. Final50cases pass in2files,39.89s(context-owner-boundary-tests-fixed.log), including all3 exact pure-inline owner/caller tests and rejection of initialization, aliases, unrelated functions/imports and service dependencies. No wider service SCC is allowed.
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+  Result: pass;3files/25cases,45.54s after combining the source registry owner. Evidence: context-owner-registry-merge-tests.log. Scope: final actual lbenv owner with unchanged ObjectEntry native streams plus weak registry and concrete context behavior.
+- Command: npm run test:shared -- src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+  Result: pass;1file/19cases,9.07s. Evidence: context-owner-final-context-tests.log. Scope: final context suite adds real delegate-wrapper constructor failure and proves the pre-existing delegate survives. A scratch attempt to locate an optional argument-payload assertion marker failed before editing; no production/test assertion was altered by that failed lookup; route recomputed.
+- Command: npm run check:docs
+  Result: pass;4347files after specific prepared-callback comments(context-owner-docs-fixed.log); final merged-owner/new-constructor-test documentation rerun pending.
+- Command: npm run inventory:registry:build
+  Result: pass;4 generated views after final merged-owner canonical records(context-owner-registry-combined.log). Scope: original source ownership, unchanged foundation/unverified semantic status; no CSV readiness promotion.
+
+- Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: initial fail; header runtime localSymbols incorrectly included reexported uno_getRegisteredEnvironments instead of only locally declared symbols. The actual function owner is lbenv.ts and remains listed there. Removed only the header-local declaration claim, retaining reexport/source evidence and upstream declaration. Existing processfactory header follows the same empty-local-reexport rule. No validator, violation list or source implementation was changed. Route recomputed before correction. Evidence: context-owner-parity-calc.log/context-owner-parity-shared.log.
+
+- Command: npm run typecheck
+  Result: pass after combining the original lbenv owner and final constructor-failure test(context-owner-typecheck-combined.log). Scope: final tools/app source and contracts. The native checker was observed live and polled to terminal; no timeout-driven restart.
+- Command: npm run inventory:parity:calc; npm run inventory:parity:shared
+  Result: pass after header reexport declaration metadata correction. Evidence: context-owner-parity-calc-fixed.log/context-owner-parity-shared-fixed.log (both exit0); regenerated4canonical views(context-owner-registry-parity-fixed.log). Scope: exhaustive final registry records, unchanged foundation/unverified semantic/readiness statuses.
+- Command: npm run check:docs
+  Result: pass;4346authored files after original lbenv merge and final test(context-owner-docs-final.log).
+- Command: npm run check:file-size
+  Result: pass(context-owner-size-final.log); no filename divergence exception; lbenv319lines, mainboundary996, boundarytest985, contexttest834.
+- Command: npm run check:calc-resources
+  Result: pass;464commands/11menus/17policies(context-owner-resources.log). Scope: existing Calc resource integration; intentional browser save/open/autosave/no-recovery behavior is unchanged.
+
+- Command: npm run lint -- --ignore-pattern output/native/**
+  Result: initial fail;91 non-null assertion syntax uses and1 test prefer-const warning(context-owner-lint.log). Resolution: explicit erased interface/callback/native-field type bindings follow existing source-owner style, retaining the same upstream pointer preconditions/call bodies without added null checks, optional chaining, fallback values or disabled ESLint rules. One test closure now captures a const initialized before factory invocation. Exact affected-file ESLint passes(context-owner-casts-lint.log). No production branch/default/exception policy was changed. Final whole lint and post-binding compilation/tests pending.
+
+- Command: npm run test:shared -- src/cppu/source/uno/lbenv-registry.test.ts src/cppu/source/uno/lbenv.test.ts src/cppuhelper/source/component_context.test.ts --maxWorkers=1
+  Result: pass;3files/26cases,9.18s after final erased native-precondition bindings. Evidence: context-owner-casts-tests.log. Scope: actual final registry/ObjectEntry/context behavior including final constructor-failure case. Source owners now322/537lines and context tests832lines, below hard limits.
+
+- Continuation classification: previous goal turn made concrete source/test/registry/task-document progress and left final native typecheck live while answering user status. This turn revalidated the same approved task/checkout/role and polled session49513 to terminal without restarting.
+- Command: npm run typecheck
+  Result: pass after all final native-precondition type bindings(context-owner-typecheck-casts.log, exit0). Scope: final tools/app source, interface callers and tooling. CPU/process observations proved the long-running native checker was live; no timeout was treated as failure or a reason to restart.
+- Read-only next-frontier evidence: original defaultbootstrap.cxx creates ServiceManager/TypeManager, calls createComponentContext and sets manager context. The public context factory still requires actual current/source Environment/Mapping invocation. Original lbenv.cxx object identifiers call rtl_getGlobalProcessId; no production owner was found by bounded name/content searches in the current source tree. No provider or synthetic identifier was added. These observations do not admit the unimplemented public bootstrap.
+
+- Command: npm run lint -- --ignore-pattern output/native/**
+  Result: pass for the final entire authored repository(context-owner-lint-final.log, exit0). Native experiment scratch, vendor, dependencies and build/test products are excluded by the existing configuration/command; no configuration changes or disabled lint rules. The long-lived actual process was polled to terminal and its increasing CPU time was observed, with no timeout restart.
+
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass;8files/197cases,38.09s(context-owner-csv-tests.log). Scope: final CSV options/import/recognition/date/doc-shell export and existing browser file workflows. No full test suite; repeated checks of changed owners were justified by the documented constructor, source-owner merge and erased type-binding corrections.
+
+- Command: node ../../node_modules/vite/bin/vite.js build (apps/office)
+  Result: pass;4.99s(context-owner-vite-build.log). Scope: final production application after successful full tools/app typecheck. Existing large-chunk warning remains; no claim that a different npm build command was executed.
+- Command: npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 Chromium CSV import/export scenario,4.6s(context-owner-browser.log). Scope: current production build, existing file UI, multiline cell display, exact downloaded CSV bytes and no page errors. This does not claim public ComponentContext/ServiceManager bootstrap or full NatNum12/CSV acceptance.
+- Final review: git diff --check passes. Exact35-path allowlist contains only current source/tests/canonical registry/issue journal/header-boundary witnesses/task README; native scratch is excluded. All related failures/resolutions/evidence remain recorded. No source vendor/network/security-policy/implementation-guard changes or readiness promotion. Full final status is retained in context-owner-final-status.log. Original CSV goal remains active; task verification stays rework and resumes DOING because public environment/mapping bootstrap, ServiceManager/application installation, original multiline EditEngine/DocImport and NatNum12/formatter remain incomplete. No task finish or goal completion is claimed.

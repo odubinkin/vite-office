@@ -74,3 +74,6 @@ export interface _uno_ExtEnvironment {
 }
 /** Original public extended environment typedef. */
 export type uno_ExtEnvironment = _uno_ExtEnvironment;
+
+/** Original public registry enumeration; concrete registration ownership lives in lbenv.cxx. */
+export { uno_getRegisteredEnvironments } from "../../source/uno/lbenv";

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/lang/XSingleComponentFactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-component-context",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/lang/XSingleComponentFactory.ts",
+        "apps/office/src/cppuhelper/source/component_context.test.ts",
+        "udkapi/com/sun/star/lang/XSingleComponentFactory.idl"
+      ],
+      "justification": "Complete original XSingleComponentFactory IDL method signatures retain actual context/Any/Sequence/Reference owners and cppumaker normal static/getCppuType/UnoType interface registration with implicit XInterface root. The declaration supplies no service/factory implementation or synthesized optional method. It is consumed by original ComponentContext query dispatch; broad comprehensive method reflection and physical ABI are not promoted. Public createComponentContext current/source Environment and Mapping orchestration, default environment engine, bridge/purpose-stack creation, concrete ServiceManager/application installation, EditEngine/VCL/Sfx/DocImport and full NatNum12/formatter CSV admission remain incomplete. Native physical pointer ABI, unordered bucket permutation, allocator exhaustion, threading, mutex scopes, shutdown and noexcept process termination remain uncertified. No complete module or CSV readiness is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XSingleComponentFactory",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/lang/XSingleComponentFactory.idl",
+      "upstreamSymbols": [
+        "XSingleComponentFactory",
+        "createInstanceWithContext",
+        "createInstanceWithArgumentsAndContext"
+      ]
+    }
+  }
+}

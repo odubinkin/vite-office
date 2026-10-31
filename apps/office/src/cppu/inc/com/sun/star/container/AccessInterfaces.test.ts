@@ -10,8 +10,9 @@ import type { XNameContainer } from "./XNameContainer";
 import type { XInterface } from "../uno/XInterface";
 import type { Any } from "../uno/Any";
 import type { Type } from "../uno/Type";
+import type { rtl_uStringSlot } from "../../../../../../sal/inc/rtl/ustring.h";
 import type { Sequence } from "../uno/Sequence";
-import type { OUString, OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
+import type { OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 it("retains native indexed inheritance, values and declared input/output directions", /** Checks all indexed declaration contracts. @returns Nothing. */ () => {
   expectTypeOf<XElementAccess>().toExtend<XInterface>();
   expectTypeOf<XIndexAccess>().toExtend<XElementAccess>();
@@ -34,7 +35,7 @@ it("retains native named inheritance and owned Any/Sequence with borrowed Unicod
   expectTypeOf<XNameReplace>().toExtend<XNameAccess>();
   expectTypeOf<XNameContainer>().toExtend<XNameReplace>();
   expectTypeOf<XNameAccess["getByName"]>().toEqualTypeOf<(aName: OUStringConstReference) => Any>();
-  expectTypeOf<XNameAccess["getElementNames"]>().toEqualTypeOf<() => Sequence<OUString>>();
+  expectTypeOf<XNameAccess["getElementNames"]>().toEqualTypeOf<() => Sequence<rtl_uStringSlot>>();
   expectTypeOf<XNameAccess["hasByName"]>().toEqualTypeOf<
     (aName: OUStringConstReference) => boolean
   >();

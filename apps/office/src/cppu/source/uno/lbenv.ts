@@ -1,10 +1,17 @@
-/** @fileoverview Original lbenv.cxx ObjectEntry registration owner and type equality; actual shared strings/typelib/environment records are reused. Full environment engine and physical vector/hash/ABI/thread behavior remain separate. */
+/** @fileoverview Original lbenv.cxx ObjectEntry and EnvironmentsData registration owners, type equality and public environment enumeration. Actual shared strings/typelib/C callback records are reused. Default environment creation, purpose/bridge engines and physical vector/hash/ABI/thread behavior remain separate. */
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { rtl_ustr_compare } from "../../../sal/rtl/ustring";
-import type { uno_ExtEnvironment, uno_freeProxyFunc } from "../../inc/uno/environment";
+import type {
+  uno_ExtEnvironment,
+  uno_freeProxyFunc,
+  uno_Environment,
+  uno_memAlloc,
+} from "../../inc/uno/environment";
 import type { typelib_InterfaceTypeDescription as I } from "../../inc/typelib/typedescription";
 import { typelib_typedescription_acquire } from "../../inc/typelib/typedescription";
+import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
+import { StringConcat } from "../../../sal/inc/rtl/stringconcat";
 /** Original pointer-or-length-and-terminated-name equality. @param first - Borrowed description. @param second - Borrowed description. @returns Original equality. */
 export function td_equals(first: I, second: I): boolean {
   return (
@@ -171,5 +178,145 @@ export class ObjectEntry {
         if (td_equals(current, type)) return entry;
     }
     return null;
+  }
+}
+
+/** Original void* context represented by its actual caller-provided address; physical object addresses are not synthesized. */
+export type EnvironmentContextAddress = number | bigint | null;
+/** Original context-decimal-plus-descriptor key, including its lack of a separator. @param descriptor - Borrowed exact descriptor. @param context - Actual native pointer address. @returns Owned key. */
+function key(descriptor: OUStringConstReference, context: EnvironmentContextAddress): OUString {
+  const number = new OUString(
+    OUString.number(BigInt.asIntN(64, context === null ? 0n : BigInt(context))),
+  );
+  try {
+    return new OUString(new StringConcat(number, descriptor));
+  } finally {
+    number.dispose();
+  }
+}
+/** Original unordered-map find binding uses value equality of actual owned OUString keys; native bucket allocation/iteration order are not represented. @param map - Original map. @param name - Borrowed key. @returns Actual matching key or undefined. */
+function find(
+  map: ReadonlyMap<OUString, uno_Environment>,
+  name: OUStringConstReference,
+): OUString | undefined {
+  for (const candidate of map.keys()) if (candidate.equals(name)) return candidate;
+  return undefined;
+}
+/** Complete original weak environment registry owner. It does not manufacture environments or callbacks. */
+export class EnvironmentsData {
+  readonly aName2EnvMap = new Map<OUString, uno_Environment>();
+  isDisposing = false;
+  /** Original destructor marks shutdown, hardens before releasing the registry weak ref and disposes/releases each surviving environment. @returns Nothing. */
+  dispose(): void {
+    this.isDisposing = true;
+    try {
+      for (const weak of this.aName2EnvMap.values()) {
+        const hard: [uno_Environment | null] = [null];
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(hard, weak);
+        (weak.releaseWeak as NonNullable<uno_Environment["releaseWeak"]>)(weak);
+        if (hard[0]) {
+          (hard[0].dispose as NonNullable<uno_Environment["dispose"]>)(hard[0]);
+          (hard[0].release as NonNullable<uno_Environment["release"]>)(hard[0]);
+        }
+      }
+    } finally {
+      for (const name of this.aName2EnvMap.keys()) name.dispose();
+      this.aName2EnvMap.clear();
+    }
+  }
+  /** Original releases and nulls the output before lookup/hardening. @param output - Actual inout environment. @param descriptor - Exact environment descriptor. @param context - Native pointer address. @returns Nothing. */
+  getEnvironment(
+    output: [uno_Environment | null],
+    descriptor: OUStringConstReference,
+    context: EnvironmentContextAddress,
+  ): void {
+    if (output[0]) {
+      (output[0].release as NonNullable<uno_Environment["release"]>)(output[0]);
+      output[0] = null;
+    }
+    const name = key(descriptor, context);
+    try {
+      const found = find(this.aName2EnvMap, name);
+      if (found !== undefined) {
+        const weak = this.aName2EnvMap.get(found) as uno_Environment;
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(output, weak);
+      }
+    } finally {
+      name.dispose();
+    }
+  }
+  /** Original insert/acquireWeak, live duplicate substitution or dead duplicate replacement order. @param output - Actual non-null inout environment. @returns Nothing. */
+  registerEnvironment(output: [uno_Environment | null]): void {
+    const env = output[0] as uno_Environment,
+      name = key(
+        OUString.unacquired([env.pTypeName as rtl_uString]),
+        env.pContext as EnvironmentContextAddress,
+      );
+    try {
+      const found = find(this.aName2EnvMap, name);
+      if (found === undefined) {
+        (env.acquireWeak as NonNullable<uno_Environment["acquireWeak"]>)(env);
+        this.aName2EnvMap.set(new OUString(name), env);
+      } else {
+        const hard: [uno_Environment | null] = [null],
+          weak = this.aName2EnvMap.get(found) as uno_Environment;
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(hard, weak);
+        if (hard[0]) {
+          (env.release as NonNullable<uno_Environment["release"]>)(env);
+          output[0] = hard[0];
+        } else {
+          (weak.releaseWeak as NonNullable<uno_Environment["releaseWeak"]>)(weak);
+          (env.acquireWeak as NonNullable<uno_Environment["acquireWeak"]>)(env);
+          this.aName2EnvMap.set(found, env);
+        }
+      }
+    } finally {
+      name.dispose();
+    }
+  }
+  /** Original exact descriptor filter, successful hardening count and caller allocation only for nonempty results. @param output - Actual output array. @param length - Original signed32 count. @param allocate - Original caller allocation function. @param descriptor - Exact descriptor;empty selects all. @returns Nothing. */
+  getRegisteredEnvironments(
+    output: [uno_Environment[] | null],
+    length: [number],
+    allocate: uno_memAlloc,
+    descriptor: OUStringConstReference,
+  ): void {
+    const found = new Array<uno_Environment | null>(this.aName2EnvMap.size);
+    let count = 0;
+    for (const weak of this.aName2EnvMap.values()) {
+      if (
+        descriptor.getLength() === 0 ||
+        descriptor.equals(OUString.unacquired([weak.pTypeName as rtl_uString]))
+      ) {
+        const slot: [uno_Environment | null] = [null];
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(slot, weak);
+        found[count] = slot[0];
+        if (found[count]) ++count;
+      }
+    }
+    length[0] = count;
+    if (count) {
+      output[0] = allocate(8 * count) as uno_Environment[];
+      while (count--) output[0][count] = found[count] as uno_Environment;
+    } else output[0] = null;
+  }
+}
+let singleton: EnvironmentsData | undefined;
+/** Original function-static weak registry, initialized on first use. @returns Same actual registry. */
+export function theEnvironmentsData(): EnvironmentsData {
+  return (singleton ??= new EnvironmentsData());
+}
+/** Original public registry enumeration body; native mutex/noexcept ABI are erased, not replaced by an empty provider. @param output - Output array pointer. @param length - Output count. @param allocate - Actual caller allocator. @param descriptor - Optional exact descriptor;null selects all. @returns Nothing. */
+export function uno_getRegisteredEnvironments(
+  output: [uno_Environment[] | null],
+  length: [number],
+  allocate: uno_memAlloc,
+  descriptor: rtl_uString | null,
+): void {
+  const name = descriptor === null ? new OUString() : new OUString(descriptor);
+  try {
+    theEnvironmentsData().getRegisteredEnvironments(output, length, allocate, name);
+  } finally {
+    name.dispose();
   }
 }
