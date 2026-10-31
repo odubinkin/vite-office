@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native SwHTMLParser body, paragraph and inline-attribute paths over HTMLParser, actual SwPaM and deferred HTMLAttr owners. */
+import { CanRemoveNode, StripTrailingPara } from "./htmlgrin";
 import { aHTMLPAlignTable } from "./swhtml.options";
 import { HTMLParser } from "../../../../svtools/source/svhtml/parhtml";
 import { HtmlTokenId as T, HtmlOptionId as O } from "../../../../svtools/inc/htmltokn";
@@ -182,6 +183,14 @@ export class SwHTMLParser extends HTMLParser {
   /** Original open-head restoration after native table/caption cleanup. @param saved - Actual saved heads. @returns Nothing. */
   RestoreAttrTab(saved: HTMLAttrTable): void {
     RestoreAttrTab(this, saved);
+  }
+  /** Original represented node-removal admission. @param index - Actual node index. @returns Native admission. */
+  CanRemoveNode(index: number): boolean {
+    return CanRemoveNode(this, index);
+  }
+  /** Original table/caption trailing-paragraph cleanup. @param current - Borrowed original current table across the responsibility split. @returns Nothing. */
+  StripTrailingPara(current: HTMLTable | null): void {
+    StripTrailingPara(this, current);
   }
   /** Original paragraph-bookmark admission. @param ignoreStack - Native deferred-stack bypass. @returns Mark presence. */
   HasCurrentParaBookmarks(ignoreStack = false): boolean {

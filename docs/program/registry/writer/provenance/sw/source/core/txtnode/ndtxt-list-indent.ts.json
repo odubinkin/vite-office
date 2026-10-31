@@ -52,6 +52,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -114,7 +118,8 @@
       "HasSwTextNodeVisibleNumbering",
       "CaptureSwTextNodeListItems",
       "GetSwTextNodeListLabel",
-      "UpdateSwTextNodeOutlineLevel"
+      "UpdateSwTextNodeOutlineLevel",
+      "FindTextNodeList"
     ],
     "omittedResponsibilities": [
       "Complete imported custom-style/sideband/legacy/tab/device/RTL/table/redline/frame layout and native const/out-parameter lifetime remain separately unverified."
@@ -127,7 +132,8 @@
       "Physical-line decomposition also moves existing CaptureListItems and GetListLabel bodies without behavioral changes; new numbering text/visibility bodies use the same actual SwTextNode owner via type-only imports.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "Native collection outline reconciliation and existing ordered list-item reset/set are delegated from ndtxt to this responsibility split.",
-      " HTML38 source-size decomposition moves the unchanged HasMarkedLabel body into this existing native list responsibility fragment; the public SwTextNode method still delegates on the same actual node/list owners. No new state, native list semantics or standalone provider is introduced."
+      " HTML38 source-size decomposition moves the unchanged HasMarkedLabel body into this existing native list responsibility fragment; the public SwTextNode method still delegates on the same actual node/list owners. No new state, native list semantics or standalone provider is introduced.",
+      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

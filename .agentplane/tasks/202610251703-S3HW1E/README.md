@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 333
+revision: 340
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T15:02:08.520Z"
+  updated_at: "2026-10-31T15:12:14.227Z"
   updated_by: "CODER"
-  note: "HTML46 verified:236unique related cases/11files, app types and all affected static/provenance/registry gates pass. Parent remains incomplete: native table grammar/materialization/layout, RTF direction export and final filter/UI audit remain."
-  attempts: 57
+  note: "HTML47 verified:221unique related cases/10files, app types and affected static/provenance/registry gates pass. Parent remains incomplete: table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain."
+  attempts: 58
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -917,8 +920,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T15:12:14.227Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML47 verified:221unique related cases/10files, app types and affected static/provenance/registry gates pass. Parent remains incomplete: table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain."
+  -
+    type: "status"
+    at: "2026-10-31T15:12:19.872Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T15:02:14.085Z"
+doc_updated_at: "2026-10-31T15:12:19.872Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2373,6 +2389,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T15:12:14.227Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML47 verified:221unique related cases/10files, app types and affected static/provenance/registry gates pass. Parent remains incomplete: table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain.
+    Attempts: 58
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:12:13.543Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2415,6 +2461,13 @@ sections:
     - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html46-lint-final.txt/html46-lint-closure.txt/html46-format-final.txt.
     - Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html46-provenance-final.txt (1927runtime modules), html46-registry-final.txt (0semantic violations), html46-boundaries.txt (1926sources/10657imports/229edges), html46-jsdoc-final.txt (4328sources), html46-size.txt (4332files), html46-tree.txt (115paths/32retiredroots).
     - Scope review: canonical HTML46 capability-matrix entry documents actual prerequisites and remaining production table/RTF/final UI work. WRITER331 records original unequal-offset split behavior and the native inverted-range regression. No full-suite or whole-goal completion claim.
+
+    HTML47 checkpoint (parent incomplete):
+    - Command: focused Vitest commands recorded in html47-focused.txt, html47-focused-final.txt, html47-scope-final.txt and html47-scope-closure.txt. Result: pass after correction. Evidence:221unique cases/10files (88unchanged core cases,55unchanged importer/I-O cases,10final fresh scope cases,68TXT/RTF cases). Scope: native Cut versus join indices/hint ownership, CanRemoveNode/StripTrailingPara, actual document bookmarks/UNO marks, caption sections, real insertion/HTML/Markdown and document-I/O consumers.
+    - Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html47-types-closure.txt exit0. Scope: final production and corrected fixture types.
+    - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html47-lint-final.txt/html47-lint-closure.txt/html47-format.txt/html47-format-closure.txt and final corrected-fixture Prettier check.
+    - Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html47-provenance-final.txt (1927runtime modules), html47-boundaries-final.txt (1926sources/10666imports/229edges), html47-registry-final.txt (0semantic violations), html47-jsdoc-closure.txt (4329sources), html47-size-final.txt (4333files), html47-tree-final.txt (115paths/32retiredroots).
+    - Scope review: canonical HTML47 matrix entry records represented text/table/mark profile and absent frame/graphic/transparent-section owners without invented providers. WRITER332 records pinned standalone Cut destination-index behavior. Required actual table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain pending. No full-suite or parent completion claim.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3625,6 +3678,14 @@ sections:
     HTML46 JSDoc gate initially rejected9undocumented nested observation callbacks in the new fixture. Added their actual parameter/return documentation without changing production or test behavior; rerun only the affected documentation/format checks and remaining gates. Initial html46-jsdoc.txt retained.
 
     HTML46 closure:236unique related cases/11files pass, final native scope10cases pass after strengthening actual front/back queue ordering. Original parent task remains incomplete: production native table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation are required. New caption source ownership is registered without upgrading broad semantic statuses. Browser save/open/autosave/recovery deviations remain unchanged.
+
+    HTML47 initial verification:88cases pass in2core join/hint suites;2HTML suites fail before test collection because the first edit mistakenly replaced existing htmlgrin.ts instead of extending it. App types confirm lost InsertBookmark/NewAnchor exports and a duplicate existing HTMLTable type import. Restore original htmlgrin.ts/paired metadata from HEAD and append only the intended new operations; retain all original exports, provenance/history and broad statuses. Remove duplicate import. No semantic test failure or native contract workaround is used. Recompute route before correction; rerun affected HTML suites and types/static checks. Initial html47-focused.txt/html47-types.txt retained.
+
+    HTML47 second focused run:63pass/1failed across6files. The remaining fresh fixture passed a character item to InsertItem, whose original public contract requires a text-attribute item. Replace that fixture with actual SwFormatINetFormat, preserving the owned-hint identity/range assertions. No production relaxation or synthesized result is introduced. App types and affected lint pass; rerun the corrected/new scope file and current required gates.
+
+    HTML47 final scope+TXT/RTF run:77pass/1failed. The fresh hint fixture ended exactly at the Cut range end, where original CutImpl uses strict end<nEnd for identity transfer and recreates end==nEnd hints. Correct the intended identity-transfer fixture to original end3 within source length4 (destination6..9); retain source-native behavior and existing equal-end boundary regressions. No production weakening. All actual source/destination registered-position assertions and new deferred-bookmark cleanup already passed. Rerun only the10-case affected scope suite; retain68passing TXT/RTF cases.
+
+    HTML47 closure:221unique related scenarios/10files pass. The native10-case scope suite includes actual deferred-bookmark publication before deletion, all-source-position collapse without join relocation, destination-end index preservation, original moved-hint identity for strict interior end, three40twip font defaults and caption state composition. Original anchor exports and provenance/history were restored before final source checks; native contracts were not weakened. Whole parent remains incomplete: actual table grammar/materialization/layout, RTF default/physical-direction export and final model/filter/UI audit remain required. No full suite or whole-module/ABI/desktop claim.
 id_source: "generated"
 ---
 ## Summary
@@ -5090,6 +5151,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T15:12:14.227Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML47 verified:221unique related cases/10files, app types and affected static/provenance/registry gates pass. Parent remains incomplete: table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain.
+Attempts: 58
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:12:13.543Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5132,6 +5223,13 @@ HTML46 checkpoint (parent incomplete):
 - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html46-lint-final.txt/html46-lint-closure.txt/html46-format-final.txt.
 - Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html46-provenance-final.txt (1927runtime modules), html46-registry-final.txt (0semantic violations), html46-boundaries.txt (1926sources/10657imports/229edges), html46-jsdoc-final.txt (4328sources), html46-size.txt (4332files), html46-tree.txt (115paths/32retiredroots).
 - Scope review: canonical HTML46 capability-matrix entry documents actual prerequisites and remaining production table/RTF/final UI work. WRITER331 records original unequal-offset split behavior and the native inverted-range regression. No full-suite or whole-goal completion claim.
+
+HTML47 checkpoint (parent incomplete):
+- Command: focused Vitest commands recorded in html47-focused.txt, html47-focused-final.txt, html47-scope-final.txt and html47-scope-closure.txt. Result: pass after correction. Evidence:221unique cases/10files (88unchanged core cases,55unchanged importer/I-O cases,10final fresh scope cases,68TXT/RTF cases). Scope: native Cut versus join indices/hint ownership, CanRemoveNode/StripTrailingPara, actual document bookmarks/UNO marks, caption sections, real insertion/HTML/Markdown and document-I/O consumers.
+- Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html47-types-closure.txt exit0. Scope: final production and corrected fixture types.
+- Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html47-lint-final.txt/html47-lint-closure.txt/html47-format.txt/html47-format-closure.txt and final corrected-fixture Prettier check.
+- Command: npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:writer; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html47-provenance-final.txt (1927runtime modules), html47-boundaries-final.txt (1926sources/10666imports/229edges), html47-registry-final.txt (0semantic violations), html47-jsdoc-closure.txt (4329sources), html47-size-final.txt (4333files), html47-tree-final.txt (115paths/32retiredroots).
+- Scope review: canonical HTML47 matrix entry records represented text/table/mark profile and absent frame/graphic/transparent-section owners without invented providers. WRITER332 records pinned standalone Cut destination-index behavior. Required actual table grammar/materialization/layout, RTF direction export and final model/filter/UI audit remain pending. No full-suite or parent completion claim.
 
 ## Rollback Plan
 
@@ -6346,3 +6444,11 @@ HTML46 initial verification: focused45cases across4files yielded44pass/1failed. 
 HTML46 JSDoc gate initially rejected9undocumented nested observation callbacks in the new fixture. Added their actual parameter/return documentation without changing production or test behavior; rerun only the affected documentation/format checks and remaining gates. Initial html46-jsdoc.txt retained.
 
 HTML46 closure:236unique related cases/11files pass, final native scope10cases pass after strengthening actual front/back queue ordering. Original parent task remains incomplete: production native table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation are required. New caption source ownership is registered without upgrading broad semantic statuses. Browser save/open/autosave/recovery deviations remain unchanged.
+
+HTML47 initial verification:88cases pass in2core join/hint suites;2HTML suites fail before test collection because the first edit mistakenly replaced existing htmlgrin.ts instead of extending it. App types confirm lost InsertBookmark/NewAnchor exports and a duplicate existing HTMLTable type import. Restore original htmlgrin.ts/paired metadata from HEAD and append only the intended new operations; retain all original exports, provenance/history and broad statuses. Remove duplicate import. No semantic test failure or native contract workaround is used. Recompute route before correction; rerun affected HTML suites and types/static checks. Initial html47-focused.txt/html47-types.txt retained.
+
+HTML47 second focused run:63pass/1failed across6files. The remaining fresh fixture passed a character item to InsertItem, whose original public contract requires a text-attribute item. Replace that fixture with actual SwFormatINetFormat, preserving the owned-hint identity/range assertions. No production relaxation or synthesized result is introduced. App types and affected lint pass; rerun the corrected/new scope file and current required gates.
+
+HTML47 final scope+TXT/RTF run:77pass/1failed. The fresh hint fixture ended exactly at the Cut range end, where original CutImpl uses strict end<nEnd for identity transfer and recreates end==nEnd hints. Correct the intended identity-transfer fixture to original end3 within source length4 (destination6..9); retain source-native behavior and existing equal-end boundary regressions. No production weakening. All actual source/destination registered-position assertions and new deferred-bookmark cleanup already passed. Rerun only the10-case affected scope suite; retain68passing TXT/RTF cases.
+
+HTML47 closure:221unique related scenarios/10files pass. The native10-case scope suite includes actual deferred-bookmark publication before deletion, all-source-position collapse without join relocation, destination-end index preservation, original moved-hint identity for strict interior end, three40twip font defaults and caption state composition. Original anchor exports and provenance/history were restored before final source checks; native contracts were not weakened. Whole parent remains incomplete: actual table grammar/materialization/layout, RTF default/physical-direction export and final model/filter/UI audit remain required. No full suite or whole-module/ABI/desktop claim.

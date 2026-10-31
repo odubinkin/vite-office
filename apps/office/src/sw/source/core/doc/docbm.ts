@@ -1,7 +1,7 @@
 /** @fileoverview Owns collapsed Writer bookmarks and imported soft-page positions at the pinned `sw/source/core/doc/docbm.cxx` boundary. */
 
 import { UnoMark } from "../crsr/bookmark";
-import type { SwPaM } from "../crsr/pam";
+import { SwPaM } from "../crsr/pam";
 import { getUniqueBookmarkName } from "./bookmark-name";
 import { SwPosition } from "../crsr/pam";
 import type { SwDoc } from "./doc";
@@ -85,6 +85,24 @@ export class DocumentMarkAccess {
     this.unoMarks.add(mark);
     this.InsertMarkSorted(mark);
     return mark;
+  }
+  /** Original repositionMark for current collapsed bookmarks and internal UNO ranges. Frame invalidation and other mark families have no represented owners here. Unlike editing, reposition does not publish modified/undo state. @param mark - Actual document-managed mark or native null. @param range - Original new positions. @returns Nothing. */
+  public RepositionMark(mark: SwBookmark | UnoMark | null, range: SwPaM): void {
+    if (!mark) return;
+    if (mark.GetMarkPos().GetNode().GetNodes() !== this.document.GetNodes())
+      throw new Error("assert(mark belongs to document)");
+    if (mark instanceof UnoMark) {
+      const ordered = new SwPaM(range.Start(), range.HasMark() ? range.End() : undefined);
+      try {
+        mark.SetPositions(ordered);
+      } finally {
+        ordered.Dispose();
+      }
+    } else {
+      if (range.HasMark()) throw new Error("Expanded user bookmarks are not represented");
+      mark.GetMarkPos().Assign(range.GetPoint().GetNode(), range.GetPoint().GetContentIndex());
+    }
+    this.GetAllMarks();
   }
   /** Deletes one internal range mark without recording a document edit. @param mark - Owned mark. @returns Nothing. */
   public DeleteUnoMark(mark: UnoMark): void {

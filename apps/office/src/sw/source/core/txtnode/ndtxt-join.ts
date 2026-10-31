@@ -72,3 +72,8 @@ export function ApplyCutTextNodeAttributes(
     set.Dispose();
   }
 }
+
+/** Original three-argument CutText whole-paragraph append profile, used by HTML trailing-paragraph cleanup. The source retains its registered positions, which CutImpl collapses by negative Update; joins relocate those indices separately. General partial/interior CutImpl is outside this admitted consumer. @param source - Actual source paragraph. @param target - Actual destination paragraph. @returns Nothing. */
+export function CutTextToEnd(source: SwTextNode, target: SwTextNode): void {
+  target.AppendTextNode(source, false, true, false);
+}

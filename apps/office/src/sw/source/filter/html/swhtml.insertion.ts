@@ -78,7 +78,7 @@ export function FinishHTMLInsertion(parser: SwHTMLParser, strippedLF: boolean): 
     if (parser.IsNewDoc()) {
       if (
         current instanceof SwTextNode &&
-        nodes.at(current.GetIndex() - 1) instanceof SwTextNode &&
+        parser.CanRemoveNode(current.GetIndex()) &&
         current.StartOfSectionNode().GetIndex() + 2 <
           current.StartOfSectionNode().EndOfSectionNode().GetIndex()
       ) {

@@ -94,6 +94,7 @@ import {
   SplitTextNodeEndHints,
 } from "./ndtxt-hints";
 import {
+  FindTextNodeList,
   CaptureSwTextNodeListItems,
   UpdateSwTextNodeOutlineLevel,
   SetSwTextNodeListItems,
@@ -584,13 +585,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Finds or creates the effective document list. @returns List when a rule and identity exist. */
   private FindList(): SwList | undefined {
-    const id = this.GetListId();
-    if (id.length === 0) return undefined;
-    const lists = this.GetDoc().GetDocumentListsManager();
-    const existing = lists.GetListByName(id);
-    if (existing !== undefined) return existing;
-    const rule = this.GetNumRule();
-    return rule === undefined ? undefined : lists.CreateList(rule.GetName(), id);
+    return FindTextNodeList(this);
   }
   /** Allocates and inserts the shown record for a connected document node. @returns Nothing. */
   public AddToList(): void {
@@ -892,8 +887,13 @@ export class SwTextNode extends SwContentNode {
   public JoinPrev(): void {
     JoinPrev(this);
   }
-  /** Whole-paragraph CutText binding used by the current native join consumers. Source indices move once, after any destination-prefix insertion update. @param source - Consumed source paragraph. @param prepend - Insert at zero instead of appending. @param consume - Native Cut transfer; the established portable copy adapter retains its source. @returns Nothing. */
-  public AppendTextNode(source: SwTextNode, prepend = false, consume = false): void {
+  /** Whole-paragraph CutText binding used by the current native join consumers. Source indices move once, after any destination-prefix insertion update. @param source - Consumed source paragraph. @param prepend - Insert at zero instead of appending. @param consume - Native Cut transfer; the established portable copy adapter retains its source. @param moveSourceIndices - Join relocates indices; standalone Cut retains source indices for native negative update. @returns Nothing. */
+  public AppendTextNode(
+    source: SwTextNode,
+    prepend = false,
+    consume = false,
+    moveSourceIndices = true,
+  ): void {
     if (source === this) throw new Error("SwTextNode cannot append itself.");
     if (source.GetNodes() !== this.GetNodes())
       throw new Error("Joined SwTextNodes belong to different documents.");
@@ -901,7 +901,7 @@ export class SwTextNode extends SwContentNode {
       oldLength = this.Len(),
       offset = prepend ? 0 : oldLength;
     if (prepend) this.UpdateContentIndices(0, text.length);
-    source.MoveAllContentIndicesTo(this, offset);
+    if (moveSourceIndices) source.MoveAllContentIndicesTo(this, offset);
     this.mText = prepend ? text + this.mText : this.mText + text;
     const joinedHints = AppendTextNodeHints(this, source, offset, prepend, oldLength, consume);
     this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;

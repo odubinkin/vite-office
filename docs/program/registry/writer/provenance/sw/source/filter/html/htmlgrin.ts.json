@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -32,21 +36,33 @@
         {
           "path": "sw/source/filter/html/htmlgrin.cxx",
           "marker": "SwHTMLParser::NewAnchor"
+        },
+        {
+          "path": "sw/source/filter/html/htmlgrin.cxx",
+          "marker": "SwHTMLParser::StripTrailingPara"
+        },
+        {
+          "path": "sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::CanRemoveNode"
         }
       ]
     },
     "upstreamPath": "sw/source/filter/html/htmlgrin.cxx",
     "localSymbols": [
       "InsertBookmark",
-      "NewAnchor"
+      "NewAnchor",
+      "CanRemoveNode",
+      "StripTrailingPara"
     ],
     "upstreamSymbols": [
-      "SwHTMLParser::InsertBookmark"
+      "SwHTMLParser::InsertBookmark",
+      "SwHTMLParser::StripTrailingPara"
     ],
     "preservedResponsibilities": [
       "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion.",
       "Native represented HREF branch now resolves nonempty destinations with original URIHelper::SmartRel2Abs(INetURLObject(base),href,null,false), uses original medium parent for an empty HREF, calls SetATagStyles, creates actual SwFormatINetFormat URL/target/name values and inserts through the pINetFormat head/context. HREF presence is distinct from URL validity, retaining empty native items rather than creating name bookmarks. Source first-option precedence, reserved-name filtering, script-class admission and prior-anchor closure remain intact. Macro events, foot/endnotes and positioned fields are outside the represented model; native LANG/direction option producers remain pending and no full raw-HTML/filter parity is claimed.",
-      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion."
+      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion.",
+      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified."
     ],
     "omittedResponsibilities": [
       "Full URL-bearing anchor, section, language/direction and unrepresented macro/footnote producer paths are not certified."
