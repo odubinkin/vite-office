@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 117
+revision: 120
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-30T18:00:17.145Z"
+  updated_at: "2026-10-31T06:36:45.436Z"
   updated_by: "CODER"
-  note: "EditDoc/default-font block verified: 110 shared cases plus final 10-case owner/position rerun, 197 CSV cases, current-built browser CSV flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete. User requested stop after this block: commit verified changes and pause goal; do not start next block."
-  attempts: 25
+  note: "Verified actual ParaPortion/line/text owners and shared source FastGetPos: 118 shared cases, final 16-case lookup rerun, 197 CSV cases, current-built browser flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete: ImpEditEngine/ScFieldEditEngine admission and NatNum12 integration still pending. User resumed goal; keep it active after this partial checkpoint."
+  attempts: 26
 commit: null
 comments:
   -
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -728,8 +731,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T06:36:45.436Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified actual ParaPortion/line/text owners and shared source FastGetPos: 118 shared cases, final 16-case lookup rerun, 197 CSV cases, current-built browser flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete: ImpEditEngine/ScFieldEditEngine admission and NatNum12 integration still pending. User resumed goal; keep it active after this partial checkpoint."
+  -
+    type: "status"
+    at: "2026-10-31T06:36:56.605Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-30T18:00:31.563Z"
+doc_updated_at: "2026-10-31T06:36:56.605Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -1499,6 +1515,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T06:36:45.436Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified actual ParaPortion/line/text owners and shared source FastGetPos: 118 shared cases, final 16-case lookup rerun, 197 CSV cases, current-built browser flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete: ImpEditEngine/ScFieldEditEngine admission and NatNum12 integration still pending. User resumed goal; keep it active after this partial checkpoint.
+    Attempts: 26
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T06:36:19.484Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2136,6 +2182,34 @@ sections:
       Result: pass;1 browser flow. Evidence: editdoc-browser-final.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, unchanged timeouts and assertions.
     - Cadence: same approved Agentplane task AQF9AG; no tenth new-task trigger. Focused suites used instead of a full all-application run, as requested.
     - Remaining after pause: ImpEditEngine text scanning, paragraph capacity/feature handling, layout/undo/view state ownership and ScFieldEditEngine/DocImport callers still need to replace current SetTextCell multiline regex construction. NatNum12 supplier/casing/formatter and final exhaustive CSV audit also remain. Preserve intentional browser save/open/autosave/no-recovery deviations. Reusable user-facing native CSV completion is not claimed by this owner checkpoint.
+
+    ### Paragraph-portion / line / text owners checkpoint after goal resume (2026-10-31)
+
+    - User resumed the goal after the requested verified EditDoc pause. get_goal confirmed active. Prior stop-after-block instruction is revoked by this resume; do not pause or mark complete at this checkpoint. Previous turn was verified progress (EditDoc commit1880a4d1ed67), not a repeated blocker.
+    - Approved source scope: original state owners required by ImpEditEngine::InitDoc/ImpInsertText/ImpInsertParaBreak and their invalidation path, pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65. Sources ParagraphPortion.hxx, ParagraphPortionList.hxx, EditLine.hxx/cxx, EditLineList.hxx, TextPortion.hxx, TextPortionList.hxx/cxx and editdoc.cxx. No network, external checkout writes, source guards, storage/recovery changes or invented layout/device service.
+    - Actual TextPortion owns original size/kind/length/bidi/extra scalar state and optional compression/ruby values. ExtraPortionInfo SaveOrgDXArray copies original double-array input independently; TextPortion copy preserves scalar/Size values and deliberately omits both optional owners. Original size member identity, unsigned8 bidi level and unsigned16 extra unit are retained.
+    - Actual TextPortionList and EditLineList own their vectors, preserve raw boundary preferences, source suffix erases, pointer identity lookup and failed-search fallback/output behavior. One zero-length text portion is empty by source definition; a zero-element list is not. Original iterable vectors bind managed arrays, without simulating native memory/iterator ABI.
+    - Actual EditLine retains four stable endpoint lvalues, geometry, character-double/kashida vectors, flags and three distinct source copy operations. Copy construction retains endpoints/punctuation but default geometry/vectors/invalid flag; assignment copies only endpoints; Clone retains source metrics/character positions but omits punctuation/kashida/validity. Negative start X is preserved; unsigned16 total/text height behavior and CalcTextSize accumulation over explicitly measured portions match source, without supplying a renderer.
+    - Actual ParaPortion owns original line/text lists and script/bidi vectors, retains nonowning actual ContentNode plus default invalid/simple/visible/repaint/height/offset state. MarkInvalid, MarkSelectionInvalid, GetLineNumber and suffix endpoint correction preserve source branch order, stable vector clearing, adjacent insertion/deletion accumulation, positive-difference fallback, short GetInvalidDiff narrowing and conditional SetValid behavior. Source private friend-engine nonzero height writes and formatted layout remain unported; no public fabricated height setter or node-length-based measurement is introduced.
+    - Actual ParaPortionList retains source owning sequence, bounds, safe/reference queries, release versus removal, all-selection invalidation and cumulative visible-height queries with strict greater-than paragraph search. Original ScriptTypePosInfo remains; WritingDirectionInfo/vector and actual paragraph declaration now share the source header boundary.
+    - Refactor: original anonymous FastGetPos template now serves both real EditDoc and ParaPortionList via mutable cache lvalues. Removed duplicated ported loops; retained original near-cache window, full fallback and EE_PARA_MAX. Helper export stays internal to groups split from the original translation unit and is not added to public editdoc header API.
+    - CALC-428 documents the nonadjacent positive MarkInvalid fallback using difference rather than start. CALC-429 documents Clone/copy/assignment omissions that may require upstream investigation. Both source behaviors remain unchanged. Source-derived tests are not presented as a native full-layout differential certificate.
+    - Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font
+      Result: pass;19 files /118 cases. Evidence: output/native/AQF9AG-libnumbertext/portions-owner-tests.log. Scope: actual source owners, new line/portion algorithms and existing script/font/document regressions.
+    - Command: npm run test:shared -- src/editeng/source/editeng/native-edit-document.test.ts src/editeng/source/editeng/native-paragraph-portions.test.ts
+      Result: pass;2 files /16 cases after shared FastGetPos refactor. Evidence: portions-lookup-tests.log. Scope: both actual callers and owned/cache/geometry/copy/range contracts. Initial focused new-owner plus script kernel run also passed2 files /16 cases (portions-tests.log).
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+      Result: pass;8 files /197 cases. Evidence: portions-csv-tests.log. Scope: actual existing CSV/options/date/recognition/export/shell/browser-file UI regressions.
+    - Command: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'
+      Result: pass. Evidence: portions-typecheck-2.log, portions-build-2.log, portions-lint-final.log. Initial type/build/lint failed only because the new test retained unused EditLineList import; removed that unused import and reran the failed gates. Production behavior was not altered to satisfy a test. Only intentional native scratch excluded from lint.
+    - Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources
+      Result: pass. Evidence: portions-deps.log (1914 runtime sources /10396 imports /233 allowed edges), portions-docs.log (4300 authored files), portions-size.log, portions-resources.log. Scope: required repository gates, unchanged budgets/guards.
+    - Command: npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc
+      Result: pass. Evidence: portions-registry-final.log, portions-provenance.log (1915 runtime modules), portions-parity.log (zero semantic violations). Registry build completed before dependent checks. New owners remain foundation/unverified with explicit pending engine/layout/CSV integration; no whole-module parity promotion.
+    - Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass;1 browser flow. Evidence: portions-browser.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download; unchanged assertions/timeouts.
+    - Cadence: same executable Agentplane task AQF9AG; this checkpoint is not a tenth new task. Focused suites used as requested; no full all-application suite triggered.
+    - Remaining: original ImpEditEngine text normalization/scanning, paragraph-capacity handling, real status/undo/view/listener/notification ownership and ScFieldEditEngine/DocImport callers are still needed before replacing SetTextCell regex multiline construction. Actual source dependencies iterateCodePoints and unicode::getUnicodeType already exist; reuse them rather than inventing boundary heuristics. NatNum12 supplier/casing/formatter and final exhaustive CSV audit remain pending. This block adds required owners, not a fake engine nor complete CSV admission. Record --rework for overall acceptance and keep goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -2914,6 +2988,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T06:36:45.436Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified actual ParaPortion/line/text owners and shared source FastGetPos: 118 shared cases, final 16-case lookup rerun, 197 CSV cases, current-built browser flow, typecheck/lint/dependency/resource/docs/size/provenance/parity/build pass. Overall CSV remains incomplete: ImpEditEngine/ScFieldEditEngine admission and NatNum12 integration still pending. User resumed goal; keep it active after this partial checkpoint.
+Attempts: 26
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T06:36:19.484Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3555,3 +3659,31 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass;1 browser flow. Evidence: editdoc-browser-final.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download, unchanged timeouts and assertions.
 - Cadence: same approved Agentplane task AQF9AG; no tenth new-task trigger. Focused suites used instead of a full all-application run, as requested.
 - Remaining after pause: ImpEditEngine text scanning, paragraph capacity/feature handling, layout/undo/view state ownership and ScFieldEditEngine/DocImport callers still need to replace current SetTextCell multiline regex construction. NatNum12 supplier/casing/formatter and final exhaustive CSV audit also remain. Preserve intentional browser save/open/autosave/no-recovery deviations. Reusable user-facing native CSV completion is not claimed by this owner checkpoint.
+
+### Paragraph-portion / line / text owners checkpoint after goal resume (2026-10-31)
+
+- User resumed the goal after the requested verified EditDoc pause. get_goal confirmed active. Prior stop-after-block instruction is revoked by this resume; do not pause or mark complete at this checkpoint. Previous turn was verified progress (EditDoc commit1880a4d1ed67), not a repeated blocker.
+- Approved source scope: original state owners required by ImpEditEngine::InitDoc/ImpInsertText/ImpInsertParaBreak and their invalidation path, pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65. Sources ParagraphPortion.hxx, ParagraphPortionList.hxx, EditLine.hxx/cxx, EditLineList.hxx, TextPortion.hxx, TextPortionList.hxx/cxx and editdoc.cxx. No network, external checkout writes, source guards, storage/recovery changes or invented layout/device service.
+- Actual TextPortion owns original size/kind/length/bidi/extra scalar state and optional compression/ruby values. ExtraPortionInfo SaveOrgDXArray copies original double-array input independently; TextPortion copy preserves scalar/Size values and deliberately omits both optional owners. Original size member identity, unsigned8 bidi level and unsigned16 extra unit are retained.
+- Actual TextPortionList and EditLineList own their vectors, preserve raw boundary preferences, source suffix erases, pointer identity lookup and failed-search fallback/output behavior. One zero-length text portion is empty by source definition; a zero-element list is not. Original iterable vectors bind managed arrays, without simulating native memory/iterator ABI.
+- Actual EditLine retains four stable endpoint lvalues, geometry, character-double/kashida vectors, flags and three distinct source copy operations. Copy construction retains endpoints/punctuation but default geometry/vectors/invalid flag; assignment copies only endpoints; Clone retains source metrics/character positions but omits punctuation/kashida/validity. Negative start X is preserved; unsigned16 total/text height behavior and CalcTextSize accumulation over explicitly measured portions match source, without supplying a renderer.
+- Actual ParaPortion owns original line/text lists and script/bidi vectors, retains nonowning actual ContentNode plus default invalid/simple/visible/repaint/height/offset state. MarkInvalid, MarkSelectionInvalid, GetLineNumber and suffix endpoint correction preserve source branch order, stable vector clearing, adjacent insertion/deletion accumulation, positive-difference fallback, short GetInvalidDiff narrowing and conditional SetValid behavior. Source private friend-engine nonzero height writes and formatted layout remain unported; no public fabricated height setter or node-length-based measurement is introduced.
+- Actual ParaPortionList retains source owning sequence, bounds, safe/reference queries, release versus removal, all-selection invalidation and cumulative visible-height queries with strict greater-than paragraph search. Original ScriptTypePosInfo remains; WritingDirectionInfo/vector and actual paragraph declaration now share the source header boundary.
+- Refactor: original anonymous FastGetPos template now serves both real EditDoc and ParaPortionList via mutable cache lvalues. Removed duplicated ported loops; retained original near-cache window, full fallback and EE_PARA_MAX. Helper export stays internal to groups split from the original translation unit and is not added to public editdoc header API.
+- CALC-428 documents the nonadjacent positive MarkInvalid fallback using difference rather than start. CALC-429 documents Clone/copy/assignment omissions that may require upstream investigation. Both source behaviors remain unchanged. Source-derived tests are not presented as a native full-layout differential certificate.
+- Command: npm run test:shared -- src/editeng/source/editeng src/editeng/source/items/native-svx-font-value.test.ts src/vcl/source/font
+  Result: pass;19 files /118 cases. Evidence: output/native/AQF9AG-libnumbertext/portions-owner-tests.log. Scope: actual source owners, new line/portion algorithms and existing script/font/document regressions.
+- Command: npm run test:shared -- src/editeng/source/editeng/native-edit-document.test.ts src/editeng/source/editeng/native-paragraph-portions.test.ts
+  Result: pass;2 files /16 cases after shared FastGetPos refactor. Evidence: portions-lookup-tests.log. Scope: both actual callers and owned/cache/geometry/copy/range contracts. Initial focused new-owner plus script kernel run also passed2 files /16 cases (portions-tests.log).
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx
+  Result: pass;8 files /197 cases. Evidence: portions-csv-tests.log. Scope: actual existing CSV/options/date/recognition/export/shell/browser-file UI regressions.
+- Command: npm run typecheck; npm run build; npm run lint -- --ignore-pattern 'output/native/**'
+  Result: pass. Evidence: portions-typecheck-2.log, portions-build-2.log, portions-lint-final.log. Initial type/build/lint failed only because the new test retained unused EditLineList import; removed that unused import and reran the failed gates. Production behavior was not altered to satisfy a test. Only intentional native scratch excluded from lint.
+- Command: npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources
+  Result: pass. Evidence: portions-deps.log (1914 runtime sources /10396 imports /233 allowed edges), portions-docs.log (4300 authored files), portions-size.log, portions-resources.log. Scope: required repository gates, unchanged budgets/guards.
+- Command: npm run inventory:registry:build; npm run check:source-provenance; npm run inventory:parity:calc
+  Result: pass. Evidence: portions-registry-final.log, portions-provenance.log (1915 runtime modules), portions-parity.log (zero semantic violations). Registry build completed before dependent checks. New owners remain foundation/unverified with explicit pending engine/layout/CSV integration; no whole-module parity promotion.
+- Command: npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass;1 browser flow. Evidence: portions-browser.log. Scope: current built app CSV open, primary ODS save and active-sheet CSV download; unchanged assertions/timeouts.
+- Cadence: same executable Agentplane task AQF9AG; this checkpoint is not a tenth new task. Focused suites used as requested; no full all-application suite triggered.
+- Remaining: original ImpEditEngine text normalization/scanning, paragraph-capacity handling, real status/undo/view/listener/notification ownership and ScFieldEditEngine/DocImport callers are still needed before replacing SetTextCell regex multiline construction. Actual source dependencies iterateCodePoints and unicode::getUnicodeType already exist; reuse them rather than inventing boundary heuristics. NatNum12 supplier/casing/formatter and final exhaustive CSV audit remain pending. This block adds required owners, not a fake engine nor complete CSV admission. Record --rework for overall acceptance and keep goal active.

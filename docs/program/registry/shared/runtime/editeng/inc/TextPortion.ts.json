@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/TextPortion.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/TextPortion.ts",
+        "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+        "editeng/inc/TextPortion.hxx"
+      ],
+      "justification": "Original portion kind/compression flags, optional extra/ruby owners, source array copying, length/size/kind/bidi/extra scalar values, independent copied Size and original partial-copy omission of optional owners. No measurement provider or layout output is fabricated. ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PortionKind",
+        "AsianCompressionFlags",
+        "ExtraPortionInfo",
+        "RubyPortionInfo",
+        "TextPortion"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/inc/TextPortion.hxx",
+      "upstreamSymbols": [
+        "PortionKind",
+        "ExtraPortionInfo",
+        "TextPortion"
+      ]
+    }
+  }
+}

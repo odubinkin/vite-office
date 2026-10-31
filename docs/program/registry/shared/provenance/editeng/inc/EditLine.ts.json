@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/EditLine.ts",
+    "upstreamPath": "editeng/inc/EditLine.hxx",
+    "localSymbols": [
+      "EditLine"
+    ],
+    "upstreamSymbols": [
+      "EditLine",
+      "Clone",
+      "CalcTextSize"
+    ],
+    "preservedResponsibilities": [
+      "Original line endpoint lvalues, double/kashida vectors, geometry/flags and distinct copy constructor, assignment and Clone member sets. Original signed negative X offset, uint16 height/ascent behavior and measured portion accumulation are retained. Device measurement is not replaced by prepared fixture geometry. Out-of-line bodies follow EditLine.cxx; native stream diagnostics remain unported."
+    ],
+    "omittedResponsibilities": [
+      "ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/EditLine.ts",
+          "marker": "EditLine"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/EditLine.hxx",
+          "marker": "EditLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/EditLine.cxx",
+          "marker": "EditLine::Clone"
+        }
+      ]
+    }
+  }
+}

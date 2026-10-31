@@ -252,7 +252,7 @@ import type { SfxStyleSheet } from "../../../svl/inc/style";
 export const DEFTAB = 720;
 /** Actual original paragraph owner and text-editing member group. Rendering, views, undo and collaboration are separate owners. */
 export class EditDoc {
-  private mnLastCache = 0;
+  private readonly mnLastCache: [number] = [0];
   private readonly maContents: ContentNode[] = [];
   private mpItemPool: SfxItemPool;
   private maModifyHdl: ((argument: null) => void) | null = null;
@@ -295,15 +295,7 @@ export class EditDoc {
   }
   /** Original cached reverse lookup, with its exact near-cache window then complete scan. @param node - Source nonowning pointer. @returns Index or EE_PARA_MAX. */
   GetPos(node: ContentNode | null): number {
-    const length = this.maContents.length;
-    if (this.mnLastCache > 16 && length > 16) {
-      const end = this.mnLastCache > length - 2 ? length : this.mnLastCache + 2;
-      for (let index = this.mnLastCache - 2; index < end; index++)
-        if (this.maContents[index] === node) return (this.mnLastCache = index);
-    }
-    for (let index = 0; index < length; index++)
-      if (this.maContents[index] === node) return (this.mnLastCache = index);
-    return EE_PARA_MAX;
+    return FastGetPos(this.maContents, node, this.mnLastCache);
   }
   /** Original unique-owner insertion; source overflow rejection destroys the transferred node. @param position - Defined insertion position. @param node - Transferred owner. @returns Nothing. */
   Insert(position: number, node: ContentNode): void {
@@ -569,4 +561,21 @@ export class EditDoc {
       separator.dispose();
     }
   }
+}
+
+/** Original shared anonymous-namespace FastGetPos template; exported only between source-file responsibility groups after splitting the original translation unit. @param values - Actual owner vector. @param value - Borrowed pointer. @param last - Original mutable lookup cache. @returns Source index or not-found marker. */
+export function FastGetPos<Value>(
+  values: readonly Value[],
+  value: Value | null,
+  last: [number],
+): number {
+  const length = values.length;
+  if (last[0] > 16 && length > 16) {
+    const end = last[0] > length - 2 ? length : last[0] + 2;
+    for (let index = last[0] - 2; index < end; index++)
+      if (values[index] === value) return (last[0] = index);
+  }
+  for (let index = 0; index < length; index++)
+    if (values[index] === value) return (last[0] = index);
+  return EE_PARA_MAX;
 }

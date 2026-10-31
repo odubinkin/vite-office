@@ -4859,3 +4859,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `editeng/source/editeng/editattr.cxx`, the two `EditCharAttribField` constructors.
 - Observation: the pool/item/position constructor calls `SetFeature(true)`. The field-copy constructor constructs the base range directly and copies expanded text and optional colors/line style, but never sets the feature flag. The copy consequently reports `IsFeature() == false` and `IsExpandable() == true`, even though its item Which remains EE_FEATURE_FIELD. Derived equality compares only text and optionals and can still report equality with the source field.
 - Preserve both constructors and equality. Do not copy all base flags or set the feature flag as a correction. Actual pooled field-owner tests cover this difference; rendering and complete native EditEngine execution remain unverified.
+
+### CALC-428 — Repeated positive paragraph invalidation can use the inserted length as a position
+
+- Source: `editeng/source/editeng/editdoc.cxx`, `ParaPortion::MarkInvalid` fallback after its adjacent insertion/deletion branches.
+- Observation: for a nonnegative difference, the fallback computes the minimum of the previous invalid start and `nDiff`, rather than `nStart`. After valid state, `MarkInvalid(100,2)`, `MarkInvalid(102,3)`, `MarkInvalid(200,1)` leaves the invalid start at1 and clears simple invalidation. This differs from taking the earliest affected position100.
+- Preserve branch order and the difference operand exactly; do not replace it with the start or add a positional heuristic. Tests exercise actual paragraph owners and retained analysis vectors. This is source-derived evidence, not a complete native engine differential certificate.
+
+### CALC-429 — EditLine Clone omits punctuation and kashida state that other copy paths handle differently
+
+- Source: `editeng/source/editeng/EditLine.cxx`, `EditLine::Clone`; `editeng/inc/EditLine.hxx`, copy constructor and assignment.
+- Observation: Clone copies positions, endpoints and geometry but leaves kashida positions empty, hanging-punctuation false and invalid true. The copy constructor instead copies endpoints and hanging punctuation while resetting geometry and both vectors. Assignment copies only the four endpoints and leaves recipient flags/geometry/vectors unchanged. A generic fieldwise clone would therefore change source behavior.
+- Preserve all three original member sets; do not fill the omitted Clone fields as a correction. Actual owner tests distinguish the three operations. Whether all callers intentionally depend on these differences needs upstream investigation; full layout/render execution remains unverified.

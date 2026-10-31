@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/TextPortionList.ts",
+    "upstreamPath": "editeng/inc/TextPortionList.hxx",
+    "localSymbols": [
+      "TextPortionList"
+    ],
+    "upstreamSymbols": [
+      "TextPortionList",
+      "FindPortion",
+      "GetStartPos"
+    ],
+    "preservedResponsibilities": [
+      "Original unique-owner vector, one-zero-length-portion isEmpty definition, exact boundary preference, cumulative starts, pointer identity/sentinel lookup, ordered iteration and source failed-search last-index/output-preservation behavior. Out-of-line bodies follow TextPortionList.cxx."
+    ],
+    "omittedResponsibilities": [
+      "ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/TextPortionList.ts",
+          "marker": "TextPortionList"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/TextPortionList.hxx",
+          "marker": "TextPortionList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/TextPortionList.cxx",
+          "marker": "TextPortionList::FindPortion"
+        }
+      ]
+    }
+  }
+}
