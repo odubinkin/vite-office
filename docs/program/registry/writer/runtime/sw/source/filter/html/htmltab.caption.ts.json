@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmltab.caption.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmltab.caption.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.attribute-scope.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx"
+      ],
+      "justification": "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CaptionSaveStruct"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmltab.cxx",
+      "upstreamSymbols": [
+        "CaptionSaveStruct"
+      ]
+    }
+  }
+}

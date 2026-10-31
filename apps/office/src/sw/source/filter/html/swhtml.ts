@@ -12,6 +12,9 @@ import {
   HTMLAttrTable,
   NewAttr,
   EndAttr,
+  SaveAttrTab,
+  RestoreAttrTab,
+  SplitAttrTab,
   lcl_swhtml_getItemInfo,
   type HTMLAttrHead,
 } from "./swhtml.attr";
@@ -167,6 +170,18 @@ export class SwHTMLParser extends HTMLParser {
   /** Native current numbering state. @returns Actual owner. */
   GetNumInfo(): SwHTMLNumRuleInfo {
     return this.m_pNumRuleInfo;
+  }
+  /** Original open-attribute suspension for native table/caption scopes. @param saved - Actual saved heads. @returns Nothing. */
+  SaveAttrTab(saved: HTMLAttrTable): void {
+    SaveAttrTab(this, saved);
+  }
+  /** Original table-boundary range split with retained open identities. @param saved - Actual saved heads. @param moveEndBack - Native previous-content boundary. @returns Nothing. */
+  SplitAttrTab(saved: HTMLAttrTable, moveEndBack: boolean): void {
+    SplitAttrTab(this, saved, moveEndBack);
+  }
+  /** Original open-head restoration after native table/caption cleanup. @param saved - Actual saved heads. @returns Nothing. */
+  RestoreAttrTab(saved: HTMLAttrTable): void {
+    RestoreAttrTab(this, saved);
   }
   /** Original paragraph-bookmark admission. @param ignoreStack - Native deferred-stack bypass. @returns Mark presence. */
   HasCurrentParaBookmarks(ignoreStack = false): boolean {

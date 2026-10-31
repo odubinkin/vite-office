@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 327
+revision: 333
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T14:55:33.584Z"
+  updated_at: "2026-10-31T15:02:08.520Z"
   updated_by: "CODER"
-  note: "HTML45 verified:297unique targeted cases/13files, final app types and affected static/provenance/registry gates pass. Parent remains incomplete: native table orchestration/materialization/layout, RTF direction export and final filter/UI audit remain."
-  attempts: 56
+  note: "HTML46 verified:236unique related cases/11files, app types and all affected static/provenance/registry gates pass. Parent remains incomplete: native table grammar/materialization/layout, RTF direction export and final filter/UI audit remain."
+  attempts: 57
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -901,8 +904,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T15:02:08.520Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML46 verified:236unique related cases/11files, app types and all affected static/provenance/registry gates pass. Parent remains incomplete: native table grammar/materialization/layout, RTF direction export and final filter/UI audit remain."
+  -
+    type: "status"
+    at: "2026-10-31T15:02:14.085Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T14:55:39.615Z"
+doc_updated_at: "2026-10-31T15:02:14.085Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2327,6 +2343,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T15:02:08.520Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML46 verified:236unique related cases/11files, app types and all affected static/provenance/registry gates pass. Parent remains incomplete: native table grammar/materialization/layout, RTF direction export and final filter/UI audit remain.
+    Attempts: 57
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:02:07.915Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2362,6 +2408,13 @@ sections:
     - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html45-lint-final.txt, html45-lint-closure.txt, html45-format.txt.
     - Command: npm run check:source-provenance; npm run check:dependencies; Writer registry check; npm run check:docs; source size and source-tree checks; git diff --check. Result: pass. Evidence: html45-provenance-final.txt (1926modules), html45-boundaries.txt (1925sources/10651imports), html45-registry.txt (0semantic violations), html45-jsdoc.txt (4326sources), html45-size.txt and html45-tree.txt (115paths/32retiredroots). Scope: changed runtime records, import boundaries, source ownership and repository gates.
     - Scope review: HTML45 capability-matrix entry and WRITER330 explicitly retain remaining RTF default/physical-direction export and native table work; broad module parity remains unverified. No full suite at this checkpoint.
+
+    HTML46 checkpoint (parent incomplete):
+    - Command: focused Vitest files listed in html46-focused.txt/html46-focused-final.txt/html46-scope-final.txt/html46-other-filters.txt/html46-document-io.txt. Result: pass after fixture correction. Evidence:236unique cases/11files;114final related importer,36nonoverlapping initial passing consumers,68TXT/RTF,18document-I/O. Final10scope cases separately pass. Scope: native attribute split/save/restore, actual caption section/snapshot, HTML/Markdown/table/insert consumers and existing format/UI I/O.
+    - Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html46-types-final.txt exit0. Scope: application/test types after native changes and fixture API correction.
+    - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html46-lint-final.txt/html46-lint-closure.txt/html46-format-final.txt.
+    - Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html46-provenance-final.txt (1927runtime modules), html46-registry-final.txt (0semantic violations), html46-boundaries.txt (1926sources/10657imports/229edges), html46-jsdoc-final.txt (4328sources), html46-size.txt (4332files), html46-tree.txt (115paths/32retiredroots).
+    - Scope review: canonical HTML46 capability-matrix entry documents actual prerequisites and remaining production table/RTF/final UI work. WRITER331 records original unequal-offset split behavior and the native inverted-range regression. No full-suite or whole-goal completion claim.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3566,6 +3619,12 @@ sections:
     - HTML45 source audit: upstream RTF DomainMapper BiDi excludes the OOXML/comment justification rewrite when IsRTFImport is true. Implement only this actual admitted RTF branch without inventing an IsInComments provider or altering the other format's unsupported branch. Native RTF FormatFrameDirection/GetDefaultFrameDirection export and physical/no-layout paragraph direction resolution remain pending; do not replace physical frame direction with the authored paragraph item or infer it from text/UI language. GetAppLanguage in pinned bastyp/init.cxx reads GetLanguageTag (data-language), not GetUILanguageTag. TXT/Markdown omission of paragraph direction is retained from their original writers; those omission tests are not RTF export certification.
 
     HTML45 closure:297unique cases/13files pass: focused-final101 plus37nonoverlapping language cases from initial run plus consumers169 minus10repeated RTF cases. Final RTF suite includes13cases after preserving original parent-style WritingMode lookup/short extraction and adding actual derived-style inheritance/direct override scenarios. No whole-goal completion; RTF direction export, table grammar/materialization/layout and final model/filter/UI audit remain required.
+
+    HTML46 initial verification: focused45cases across4files yielded44pass/1failed. The only failing runtime assertion called nonexistent SwTextNode.GetTextColl; app typecheck additionally caught the fixture SvStream constructor missing its actual data/encoding arguments. Corrected to original GetTextFormatColl and real empty UTF8 stream. No production behavior changed for these fixture corrections. ESLint passed. Initial logs html46-focused.txt/html46-types.txt retained. Final checks pending.
+
+    HTML46 JSDoc gate initially rejected9undocumented nested observation callbacks in the new fixture. Added their actual parameter/return documentation without changing production or test behavior; rerun only the affected documentation/format checks and remaining gates. Initial html46-jsdoc.txt retained.
+
+    HTML46 closure:236unique related cases/11files pass, final native scope10cases pass after strengthening actual front/back queue ordering. Original parent task remains incomplete: production native table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation are required. New caption source ownership is registered without upgrading broad semantic statuses. Browser save/open/autosave/recovery deviations remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -5001,6 +5060,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T15:02:08.520Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML46 verified:236unique related cases/11files, app types and all affected static/provenance/registry gates pass. Parent remains incomplete: native table grammar/materialization/layout, RTF direction export and final filter/UI audit remain.
+Attempts: 57
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T15:02:07.915Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -5036,6 +5125,13 @@ HTML45 checkpoint (parent remains incomplete):
 - Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html45-lint-final.txt, html45-lint-closure.txt, html45-format.txt.
 - Command: npm run check:source-provenance; npm run check:dependencies; Writer registry check; npm run check:docs; source size and source-tree checks; git diff --check. Result: pass. Evidence: html45-provenance-final.txt (1926modules), html45-boundaries.txt (1925sources/10651imports), html45-registry.txt (0semantic violations), html45-jsdoc.txt (4326sources), html45-size.txt and html45-tree.txt (115paths/32retiredroots). Scope: changed runtime records, import boundaries, source ownership and repository gates.
 - Scope review: HTML45 capability-matrix entry and WRITER330 explicitly retain remaining RTF default/physical-direction export and native table work; broad module parity remains unverified. No full suite at this checkpoint.
+
+HTML46 checkpoint (parent incomplete):
+- Command: focused Vitest files listed in html46-focused.txt/html46-focused-final.txt/html46-scope-final.txt/html46-other-filters.txt/html46-document-io.txt. Result: pass after fixture correction. Evidence:236unique cases/11files;114final related importer,36nonoverlapping initial passing consumers,68TXT/RTF,18document-I/O. Final10scope cases separately pass. Scope: native attribute split/save/restore, actual caption section/snapshot, HTML/Markdown/table/insert consumers and existing format/UI I/O.
+- Command: ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit (apps/office). Result: pass. Evidence: html46-types-final.txt exit0. Scope: application/test types after native changes and fixture API correction.
+- Command: changed-source ESLint --max-warnings 0 and Prettier --check. Result: pass. Evidence: html46-lint-final.txt/html46-lint-closure.txt/html46-format-final.txt.
+- Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result: pass. Evidence: html46-provenance-final.txt (1927runtime modules), html46-registry-final.txt (0semantic violations), html46-boundaries.txt (1926sources/10657imports/229edges), html46-jsdoc-final.txt (4328sources), html46-size.txt (4332files), html46-tree.txt (115paths/32retiredroots).
+- Scope review: canonical HTML46 capability-matrix entry documents actual prerequisites and remaining production table/RTF/final UI work. WRITER331 records original unequal-offset split behavior and the native inverted-range regression. No full-suite or whole-goal completion claim.
 
 ## Rollback Plan
 
@@ -6244,3 +6340,9 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 - HTML45 source audit: upstream RTF DomainMapper BiDi excludes the OOXML/comment justification rewrite when IsRTFImport is true. Implement only this actual admitted RTF branch without inventing an IsInComments provider or altering the other format's unsupported branch. Native RTF FormatFrameDirection/GetDefaultFrameDirection export and physical/no-layout paragraph direction resolution remain pending; do not replace physical frame direction with the authored paragraph item or infer it from text/UI language. GetAppLanguage in pinned bastyp/init.cxx reads GetLanguageTag (data-language), not GetUILanguageTag. TXT/Markdown omission of paragraph direction is retained from their original writers; those omission tests are not RTF export certification.
 
 HTML45 closure:297unique cases/13files pass: focused-final101 plus37nonoverlapping language cases from initial run plus consumers169 minus10repeated RTF cases. Final RTF suite includes13cases after preserving original parent-style WritingMode lookup/short extraction and adding actual derived-style inheritance/direct override scenarios. No whole-goal completion; RTF direction export, table grammar/materialization/layout and final model/filter/UI audit remain required.
+
+HTML46 initial verification: focused45cases across4files yielded44pass/1failed. The only failing runtime assertion called nonexistent SwTextNode.GetTextColl; app typecheck additionally caught the fixture SvStream constructor missing its actual data/encoding arguments. Corrected to original GetTextFormatColl and real empty UTF8 stream. No production behavior changed for these fixture corrections. ESLint passed. Initial logs html46-focused.txt/html46-types.txt retained. Final checks pending.
+
+HTML46 JSDoc gate initially rejected9undocumented nested observation callbacks in the new fixture. Added their actual parameter/return documentation without changing production or test behavior; rerun only the affected documentation/format checks and remaining gates. Initial html46-jsdoc.txt retained.
+
+HTML46 closure:236unique related cases/11files pass, final native scope10cases pass after strengthening actual front/back queue ordering. Original parent task remains incomplete: production native table grammar/materialization/layout, RTF direction export and final model/filter/UI reconciliation are required. New caption source ownership is registered without upgrading broad semantic statuses. Browser save/open/autosave/recovery deviations remain unchanged.

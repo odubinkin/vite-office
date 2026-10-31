@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.caption.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.caption.ts",
+          "marker": "CaptionSaveStruct"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.attribute-scope.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/html/htmltab.cxx",
+          "marker": "class CaptionSaveStruct"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "CaptionSaveStruct"
+    ],
+    "upstreamSymbols": [
+      "CaptionSaveStruct"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition."
+    ],
+    "omittedResponsibilities": [
+      "Original production BuildTableCaption token orchestration, native pending-device save-stack ownership, table grammar/materialization and automatic layout remain required. This record covers the actual synchronous caption save owner only; whole module/ABI/desktop parity is unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.caption.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original same-owner caption state and subsequent caption consumer are split from htmltab.cxx under the authored source-size limit, retaining actual parser/document/attribute/numbering owners."
+    }
+  }
+}

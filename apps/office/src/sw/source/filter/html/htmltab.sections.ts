@@ -102,3 +102,12 @@ export function InsertTableContents(
   }
   return new HTMLTableCnts(start);
 }
+
+/** Original caption container is a normal section under EndOfExtras, independent of body/table contents. Its initial text collection is COLL_TEXT and the actual cursor enters its first paragraph. @param parser - Actual importer/document owner. @returns Native temporary caption section. */
+export function InsertTempTableCaptionSection(parser: SwHTMLParser): SwStartNode {
+  const nodes = parser.m_xDoc.GetNodes(),
+    coll = parser.m_pCSS1Parser.GetTextCollFromPool(P.COLL_TEXT),
+    start = nodes.MakeTextSection(nodes.GetEndOfExtras(), K.SwNormalStartNode, coll);
+  parser.m_pPam.GetPoint().Assign(nodes.at(start.GetIndex() + 1));
+  return start;
+}

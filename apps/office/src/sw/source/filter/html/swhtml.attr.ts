@@ -12,6 +12,7 @@ import { LATIN, ASIAN, COMPLEX } from "../../../../offapi/com/sun/star/i18n/Scri
 import * as H from "../../../inc/hintids";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwNode } from "../../core/docnode/node";
+import { SwNodes } from "../../core/docnode/nodes";
 
 /** A stable borrowed HTMLAttr** slot; the tuple owns no attribute copy. */
 export type HTMLAttrHead = [HTMLAttr | null];
@@ -359,6 +360,81 @@ export function SaveAttrTab(parser: SwHTMLAttributeState, saved: HTMLAttrTable):
       attr = attr.GetNext();
     }
     current[0] = null;
+  }
+}
+
+/** Original table-boundary split retains each context's open owner, queues a clone of its pre-table range and transfers the original into the saved table. Diagnostic-only assertions do not change source assignments. @param parser - Actual parser fields. @param saved - Native saved table. @param moveEndBack - Close ranges at the preceding content end. @returns Nothing. */
+export function SplitAttrTab(
+  parser: SwHTMLAttributeState,
+  saved: HTMLAttrTable,
+  moveEndBack: boolean,
+): void {
+  parser.m_aParaAttrs.length = 0;
+  const point = parser.m_pPam.GetPoint(),
+    end = new SwNodeIndex(point.GetNode()),
+    nodes = point.GetNode().GetNodes(),
+    startContent = point.GetContentIndex();
+  let endContent = startContent,
+    setAttr = true;
+  if (moveEndBack) {
+    const oldEnd = end.GetIndex();
+    let boundary = nodes.GetEndOfExtras().GetIndex();
+    if (boundary >= oldEnd || (boundary = nodes.GetEndOfAutotext().GetIndex()) >= oldEnd)
+      boundary = nodes.GetEndOfInserts().GetIndex();
+    const content = SwNodes.GoPrevious(end);
+    setAttr = content !== undefined && boundary < end.GetIndex();
+    endContent = setAttr && content ? content.Len() : 0;
+  }
+  const currentHeads = Object.values(parser.m_xAttrTab),
+    savedHeads = Object.values(saved);
+  for (let i = 0; i < currentHeads.length; ++i) {
+    const current = currentHeads[i] as HTMLAttrHead,
+      target = savedHeads[i] as HTMLAttrHead;
+    let attr = current[0];
+    target[0] = null;
+    while (attr) {
+      const next = attr.GetNext(),
+        previous = attr.GetPrev();
+      if (
+        setAttr &&
+        (attr.GetStartParagraphIdx() < end.GetIndex() ||
+          (attr.GetStartParagraphIdx() === end.GetIndex() && attr.GetStartContent() !== endContent))
+      ) {
+        const closed = attr.Clone(end.GetNode(), endContent);
+        if (next) next.InsertPrev(closed);
+        else if (closed.m_bInsAtStart) parser.m_aSetAttrTab.unshift(closed);
+        else parser.m_aSetAttrTab.push(closed);
+      } else if (previous) {
+        if (next) next.InsertPrev(previous);
+        else if (previous.m_bInsAtStart) parser.m_aSetAttrTab.unshift(previous);
+        else parser.m_aSetAttrTab.push(previous);
+      }
+      attr.Reset(point.GetNode(), startContent, target, saved);
+      if (target[0]) {
+        let tail = target[0];
+        while (tail.GetNext()) tail = tail.GetNext() as HTMLAttr;
+        tail.InsertNext(attr);
+      } else target[0] = attr;
+      attr = next;
+    }
+    current[0] = null;
+  }
+}
+/** Original restoration transfers open owners back and rebinds only the open next lists. The source's nonempty-current-table check is diagnostic, not an early return. @param parser - Actual parser fields. @param saved - Original saved table, emptied after transfer. @returns Nothing. */
+export function RestoreAttrTab(parser: SwHTMLAttributeState, saved: HTMLAttrTable): void {
+  parser.m_aParaAttrs.length = 0;
+  const currentHeads = Object.values(parser.m_xAttrTab),
+    savedHeads = Object.values(saved);
+  for (let i = 0; i < currentHeads.length; ++i) {
+    const current = currentHeads[i] as HTMLAttrHead,
+      source = savedHeads[i] as HTMLAttrHead;
+    current[0] = source[0];
+    let attr = current[0];
+    while (attr) {
+      attr.SetHead(current, parser.m_xAttrTab);
+      attr = attr.GetNext();
+    }
+    source[0] = null;
   }
 }
 
