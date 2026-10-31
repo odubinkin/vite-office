@@ -22,7 +22,7 @@ export function NewDefList(parser: SwHTMLParser): void {
   else if (space) parser.AddParSpace();
   parser["m_nDefListDeep"] = (parser["m_nDefListDeep"] + 1) & 0xffff;
   let inDD = false;
-  for (let index = parser.m_aContexts.length; index;) {
+  for (let index = parser.m_aContexts.length; index > parser.m_nContextStMin;) {
     const token = parser.m_aContexts[--index]?.GetToken();
     if (token === T.DD_ON) {
       inDD = true;
@@ -79,7 +79,7 @@ export function EndDefList(parser: SwHTMLParser): void {
 /** Original DT/DD open scans only the current list scope and creates implicit depth without a synthetic DL context. @param parser - Actual parser. @param token - Opening item. @returns Nothing. */
 export function NewDefListItem(parser: SwHTMLParser, token: T): void {
   let inside = false;
-  for (let index = parser.m_aContexts.length; index;) {
+  for (let index = parser.m_aContexts.length; index > parser.m_nContextStMin;) {
     const type = parser.m_aContexts[--index]?.GetToken();
     if (type === T.DEFLIST_ON) {
       inside = true;
@@ -98,7 +98,7 @@ export function EndDefListItem(parser: SwHTMLParser, token = T.NONE): void {
   if (token === T.NONE && parser.m_pPam.GetPoint().GetContentIndex())
     parser.AppendTextNode(A.AM_SOFTNOSPACE);
   const opening = getOnToken(token);
-  for (let index = parser.m_aContexts.length; index;) {
+  for (let index = parser.m_aContexts.length; index > parser.m_nContextStMin;) {
     const candidate = parser.m_aContexts[--index] as HTMLAttrContext,
       type = candidate.GetToken();
     if (lists.has(type)) break;

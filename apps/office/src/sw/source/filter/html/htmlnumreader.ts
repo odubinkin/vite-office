@@ -300,7 +300,7 @@ export function EndNumberBulletListItem(
     parser.AppendTextNode(A.AM_NOSPACE);
   const opening = getOnToken(token);
   let context: HTMLAttrContext | undefined;
-  for (let index = parser.m_aContexts.length; index;) {
+  for (let index = parser.m_aContexts.length; index > parser.m_nContextStMin;) {
     const candidate = parser.m_aContexts[--index] as HTMLAttrContext,
       type = candidate.GetToken();
     if (listTokens.has(type)) break;

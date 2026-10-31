@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.save.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.save.ts",
+          "marker": "SectionSaveStruct"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.save.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/html/htmltab.cxx",
+          "marker": "SectionSaveStruct"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "SectionSaveStruct"
+    ],
+    "upstreamSymbols": [
+      "SectionSaveStruct"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML43: native SectionSaveStruct snapshots actual font/context lower bounds, heading-stack start and definition depth, freezes existing stacks, and restores original counters and paragraph flags after callers clean local contexts. PopContext, EndContext PopStack, heading/list/definition searches, margin/spacing lookups and SetTextCollAttrs consume the original distinct context/attribute minima. Terminal cleanup follows the original two-pass recovery without hanging on protected contexts. Same-owner parser fields are exposed to permanent source fragments without replacement state. Native synchronous section values do not claim pending-device ownership; row/cell/caption orchestration, table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain pending. Broad semantic parity stays unverified.",
+      "Font bounds and heading-stack start preserve original uint16 narrowing independently of size_t context bounds (WRITER326); the regression uses65536 actual native font producers, not injected minima or synthetic operation results."
+    ],
+    "omittedResponsibilities": [
+      "Native pending-device save-stack ownership and table row/cell/caption production remain pending; this is the synchronous SectionSaveStruct value used by those source consumers. Broad module/ABI/desktop parity is unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.save.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original htmltab.cxx section-save value is split under the authored module-size limit. It borrows the same actual parser and table owners without replacement stack, parser or stream."
+    }
+  }
+}

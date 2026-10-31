@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 308
+revision: 314
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-31T13:11:03.289Z"
+  updated_at: "2026-10-31T13:28:57.260Z"
   updated_by: "CODER"
-  note: "HTML42 verified checkpoint: 148 unique related cases across 10 files pass; native section overloads, raw attribute/numbering rebase, real COL/COLGROUP lexer/filter/ring/body/bookmark consumers and actual shared HTML-layout invalidation are implemented. Final app types, lint/format, provenance/Writer registry, boundaries, docs, size and tree pass; WRITER323-325 documented. Parent remains incomplete: current-table/row/cell/caption token orchestration, final table materialization, actual text/table automatic layout and final current-model/filter/UI reconciliation remain required."
-  attempts: 53
+  note: "HTML43 checkpoint passes205unique cases/12files and all static gates; native section stack save/restore and consumers complete. Parent remains incomplete: table orchestration, core materialization/layout and final filter/UI reconciliation still required."
+  attempts: 54
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -853,8 +856,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-31T13:28:57.260Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML43 checkpoint passes205unique cases/12files and all static gates; native section stack save/restore and consumers complete. Parent remains incomplete: table orchestration, core materialization/layout and final filter/UI reconciliation still required."
+  -
+    type: "status"
+    at: "2026-10-31T13:29:05.369Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-31T13:11:20.563Z"
+doc_updated_at: "2026-10-31T13:29:05.369Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2189,6 +2205,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-31T13:28:57.260Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML43 checkpoint passes205unique cases/12files and all static gates; native section stack save/restore and consumers complete. Parent remains incomplete: table orchestration, core materialization/layout and final filter/UI reconciliation still required.
+    Attempts: 54
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T13:28:54.876Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2213,6 +2259,8 @@ sections:
     - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/core/table/native-tabcols.test.ts src/sw/source/core/docnode/native-text-section.test.ts --maxWorkers 1. Result:pass93cases/5files. Evidence: output/playwright/rtf-properties-native/html42-focused.txt. Scope: actual native section overloads/cursor/fonts/errors, live attribute/numbering rebase, shared core layout/invalidation, real byte/lexer/ring/options/body/mark consumers and existing grid/separator/section owners.
     - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/filter/html/htmlctxt.flags.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/core/table/native-column-insertion.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.sections.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.colgroup.test.ts -t "uses real parent contents" --maxWorkers 1. Result:pass74cases/6files,14affected section cases and1strengthened whitespace case;148unique cases/10files after overlaps. Evidence: html42-consumers.txt/html42-sections-final.txt/html42-whitespace.txt. Scope: affected context/list/Markdown/RTF/core-column owners, native predecessor-array retention and exact whitespace output; no fake private state, token provider or BuildTable result.
     - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source/final affected eslint --max-warnings 0; prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html42-* logs. Scope: current type/style/provenance/registry and architecture gates. Native full table orchestration/materialization/automatic layout and final filter/UI reconciliation remain open; no parent/module/API/ABI/desktop completion is claimed.
+
+    HTML43 checkpoint:205unique cases/12files pass after correcting the test-only inherited saved-field collision and the initial office-command cwd. Final fresh native tsc exits0; changed-source ESLint/Prettier, provenance, Writer registry, boundaries, JSDoc, size, source-tree and diff checks pass. Original SectionSaveStruct and distinct font/context/attribute lower-bound consumers are implemented; WRITER326 preserves and tests original uint16 font-stack overflow through real native producers. Evidence: output/playwright/rtf-properties-native/html43-*.txt; detailed commands/results are in Findings. Full row/cell/caption/table orchestration, core materialization/layout and final current-model/filter/UI reconciliation remain pending. Parent task must remain incomplete/DOING and the goal active; browser open/save/autosave/recovery deviations are unchanged.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -3383,6 +3431,18 @@ sections:
 
     - Final HTML42 verification:93focused cases/5files pass (65.73s),74consumer cases/6files pass (61.43s), then14affected section cases pass (24.29s) including one new genuine foreign-owner regression. Deduct20overlapping column cases and13repeated section cases:148unique cases/10files pass. The strengthened exact-text whitespace case independently passes (19.43s); its20other cases were intentionally not replayed for an assertion-only change. Logs html42-focused.txt/html42-consumers.txt/html42-sections-final.txt/html42-whitespace.txt retain exact commands and results. No production test failure occurred; diff review corrected the insertion location and predecessor ownership before checkpoint closure.
     - Static closure: native app tsc noEmit exit0 (html42-types-final.txt); changed-source ESLint and final affected-source lint pass (html42-lint.txt/html42-lint-final.txt); Prettier checks pass; provenance1922runtime/1709mapped/182browser/31infra; Writer registry exit0; module boundaries1921runtime/10593imports/227allowededges; JSDoc4314sources; size4318authoredfiles; source-tree115requiredpaths/32retiredroots; git diff --check pass. Original source-state findings323completed-table fallback,324asterisk-relative column widths and325zero/narrowed spans are documented and preserved;322exact40twip initialization is now exercised by real section consumers. Full current-table/row/cell/caption orchestration, final table materialization, actual text/table automatic layout and final current-model/filter/UI reconciliation remain required. The component tests/explicit actual-table arguments do not certify full HTML-table UI import or replace the pending native BuildTable producer. Parent task and goal stay active; browser open/save/autosave/recovery deviations are unchanged.
+
+    - HTML43 validation command correction: final section-save test was initially invoked from repository root with the office config; its src/sw include found no tests (exit1, html43-save-final.txt). This was a command working-directory error, not a production failure. Recompute route, retain approved scope/criteria, and rerun from apps/office; do not claim this empty run as test evidence. No network, destructive action or scope expansion.
+
+    - HTML43 fresh real-stream regression initially failed with TypeError saved.Restore is not a function (html43-save-final-office.txt:10pass/1fail). The test subclass named its section save field saved, colliding with the actual inherited lexer SaveState storage. This is a fixture ownership-name defect, not a production SectionSaveStruct failure. Rename that test-only field to sectionSave, retain actual inherited SaveState operations and rerun the final section suite; do not alter production results or lexer behavior. Route recomputed before correction.
+
+    - HTML43 implementation checkpoint: original SectionSaveStruct freezes/restores actual font/context stacks and section counters; original PopContext, PopStack cleanup, heading/list/definition searches, margin/spacing lookup and SetTextCollAttrs now respect distinct native context/attribute minima. Native terminal context cleanup retains the original two-pass recovery. Same-owner fields expose original state to source fragments, not a second parser. Native uint16 font bounds/heading-start narrowing is preserved and documented as WRITER326;65536 original NewFontAttr calls reproduce the overflow without injected fields/providers/results. Full production row/cell/caption/table orchestration, actual table materialization/layout and final filter/UI capability reconciliation remain pending. Parent task/goal remain active.
+    - HTML43 fixture correction also produced the expected TS2416/TS4114/TS2345 diagnostics for the inherited saved field in html43-types-final.txt. The field is renamed sectionSave in the test subclass, preserving the actual inherited lexer SaveState slot; final closure uses a fresh tsc job after that correction. A correction script initially used a root-relative path from apps/office and performed no edit; rerunning from the authoritative repository root applied the intended test-only rename before the successful final filter run. Initial preflight PATH assignment scoped only one command; explicit export restored subsequent ap calls. These are local command/fixture corrections, with no scope/security/verification drift.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/html/swhtml.context-owners.test.ts src/sw/source/filter/html/swhtml.block-boundaries.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts. Result: pass,63cases/4files,111.03s; Evidence: output/playwright/rtf-properties-native/html43-focused.txt. Scope: native section/context/font/paragraph/list consumers.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/swhtml.language.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/md/mdtab.test.ts. Result: pass,99cases/5files,81.32s; Evidence: html43-consumers.txt under the same output directory. Scope: affected style, definition, language, HTML and Markdown consumers.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts. Result: pass,53cases/4files,129.52s; Evidence: html43-final-filters.txt. Deduct10repeated initial section-save cases:205unique cases/12files pass, including the final12section-save regressions. Scope: final actual-byte-stream save/restore and uint16 font overflow, TXT range, RTF table/list and Markdown callback paths.
+
+    - HTML43 static closure: Command (cwd apps/office) ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit. Result: pass,exit0; Evidence: html43-types-closure.txt,exec23638. Scope: final complete app types after fixture rename. Changed-source ESLint --max-warnings0 and Prettier --check pass (html43-lint.txt/html43-lint-final.txt/html43-lint-closure.txt/html43-format.txt/html43-format-closure.txt). npm run check:source-provenance passes1923runtime/1710mapped/182browser/31infra (html43-provenance.txt); npm run inventory:parity:writer passes semanticViolationCount0 (html43-writer.txt); npm run check:dependencies passes1922runtime/10596relativeimports/227allowededges (html43-boundaries.txt); npm run check:docs passes4316sources (html43-jsdoc.txt); npm run check:file-size passes4320authoredfiles (html43-size.txt); npm run check:source-tree passes115requiredpaths/32retiredroots (html43-tree.txt); git diff --check passes. Broad source semantic statuses remain unverified. These are checkpoint checks, not full table/UI or parent-goal certification.
 id_source: "generated"
 ---
 ## Summary
@@ -4728,6 +4788,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-31T13:28:57.260Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML43 checkpoint passes205unique cases/12files and all static gates; native section stack save/restore and consumers complete. Parent remains incomplete: table orchestration, core materialization/layout and final filter/UI reconciliation still required.
+Attempts: 54
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-31T13:28:54.876Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -4752,6 +4842,8 @@ DecisionContextRef:
 - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/core/table/native-tabcols.test.ts src/sw/source/core/docnode/native-text-section.test.ts --maxWorkers 1. Result:pass93cases/5files. Evidence: output/playwright/rtf-properties-native/html42-focused.txt. Scope: actual native section overloads/cursor/fonts/errors, live attribute/numbering rebase, shared core layout/invalidation, real byte/lexer/ring/options/body/mark consumers and existing grid/separator/section owners.
 - Command: npm run test:writer -- src/sw/source/filter/html/htmltab.colgroup.test.ts src/sw/source/filter/html/htmlctxt.flags.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/core/table/native-column-insertion.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.sections.test.ts --maxWorkers 1; npm run test:writer -- src/sw/source/filter/html/htmltab.colgroup.test.ts -t "uses real parent contents" --maxWorkers 1. Result:pass74cases/6files,14affected section cases and1strengthened whitespace case;148unique cases/10files after overlaps. Evidence: html42-consumers.txt/html42-sections-final.txt/html42-whitespace.txt. Scope: affected context/list/Markdown/RTF/core-column owners, native predecessor-array retention and exact whitespace output; no fake private state, token provider or BuildTable result.
 - Command: apps/office ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit; changed-source/final affected eslint --max-warnings 0; prettier --check; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; git diff --check. Result:pass. Evidence: output/playwright/rtf-properties-native/html42-* logs. Scope: current type/style/provenance/registry and architecture gates. Native full table orchestration/materialization/automatic layout and final filter/UI reconciliation remain open; no parent/module/API/ABI/desktop completion is claimed.
+
+HTML43 checkpoint:205unique cases/12files pass after correcting the test-only inherited saved-field collision and the initial office-command cwd. Final fresh native tsc exits0; changed-source ESLint/Prettier, provenance, Writer registry, boundaries, JSDoc, size, source-tree and diff checks pass. Original SectionSaveStruct and distinct font/context/attribute lower-bound consumers are implemented; WRITER326 preserves and tests original uint16 font-stack overflow through real native producers. Evidence: output/playwright/rtf-properties-native/html43-*.txt; detailed commands/results are in Findings. Full row/cell/caption/table orchestration, core materialization/layout and final current-model/filter/UI reconciliation remain pending. Parent task must remain incomplete/DOING and the goal active; browser open/save/autosave/recovery deviations are unchanged.
 
 ## Rollback Plan
 
@@ -5926,3 +6018,15 @@ Native HTML HREF and complete native internet-item transport checkpoint:
 
 - Final HTML42 verification:93focused cases/5files pass (65.73s),74consumer cases/6files pass (61.43s), then14affected section cases pass (24.29s) including one new genuine foreign-owner regression. Deduct20overlapping column cases and13repeated section cases:148unique cases/10files pass. The strengthened exact-text whitespace case independently passes (19.43s); its20other cases were intentionally not replayed for an assertion-only change. Logs html42-focused.txt/html42-consumers.txt/html42-sections-final.txt/html42-whitespace.txt retain exact commands and results. No production test failure occurred; diff review corrected the insertion location and predecessor ownership before checkpoint closure.
 - Static closure: native app tsc noEmit exit0 (html42-types-final.txt); changed-source ESLint and final affected-source lint pass (html42-lint.txt/html42-lint-final.txt); Prettier checks pass; provenance1922runtime/1709mapped/182browser/31infra; Writer registry exit0; module boundaries1921runtime/10593imports/227allowededges; JSDoc4314sources; size4318authoredfiles; source-tree115requiredpaths/32retiredroots; git diff --check pass. Original source-state findings323completed-table fallback,324asterisk-relative column widths and325zero/narrowed spans are documented and preserved;322exact40twip initialization is now exercised by real section consumers. Full current-table/row/cell/caption orchestration, final table materialization, actual text/table automatic layout and final current-model/filter/UI reconciliation remain required. The component tests/explicit actual-table arguments do not certify full HTML-table UI import or replace the pending native BuildTable producer. Parent task and goal stay active; browser open/save/autosave/recovery deviations are unchanged.
+
+- HTML43 validation command correction: final section-save test was initially invoked from repository root with the office config; its src/sw include found no tests (exit1, html43-save-final.txt). This was a command working-directory error, not a production failure. Recompute route, retain approved scope/criteria, and rerun from apps/office; do not claim this empty run as test evidence. No network, destructive action or scope expansion.
+
+- HTML43 fresh real-stream regression initially failed with TypeError saved.Restore is not a function (html43-save-final-office.txt:10pass/1fail). The test subclass named its section save field saved, colliding with the actual inherited lexer SaveState storage. This is a fixture ownership-name defect, not a production SectionSaveStruct failure. Rename that test-only field to sectionSave, retain actual inherited SaveState operations and rerun the final section suite; do not alter production results or lexer behavior. Route recomputed before correction.
+
+- HTML43 implementation checkpoint: original SectionSaveStruct freezes/restores actual font/context stacks and section counters; original PopContext, PopStack cleanup, heading/list/definition searches, margin/spacing lookup and SetTextCollAttrs now respect distinct native context/attribute minima. Native terminal context cleanup retains the original two-pass recovery. Same-owner fields expose original state to source fragments, not a second parser. Native uint16 font bounds/heading-start narrowing is preserved and documented as WRITER326;65536 original NewFontAttr calls reproduce the overflow without injected fields/providers/results. Full production row/cell/caption/table orchestration, actual table materialization/layout and final filter/UI capability reconciliation remain pending. Parent task/goal remain active.
+- HTML43 fixture correction also produced the expected TS2416/TS4114/TS2345 diagnostics for the inherited saved field in html43-types-final.txt. The field is renamed sectionSave in the test subclass, preserving the actual inherited lexer SaveState slot; final closure uses a fresh tsc job after that correction. A correction script initially used a root-relative path from apps/office and performed no edit; rerunning from the authoritative repository root applied the intended test-only rename before the successful final filter run. Initial preflight PATH assignment scoped only one command; explicit export restored subsequent ap calls. These are local command/fixture corrections, with no scope/security/verification drift.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/html/swhtml.context-owners.test.ts src/sw/source/filter/html/swhtml.block-boundaries.integration.test.ts src/sw/source/filter/html/swhtml.numbering.integration.test.ts. Result: pass,63cases/4files,111.03s; Evidence: output/playwright/rtf-properties-native/html43-focused.txt. Scope: native section/context/font/paragraph/list consumers.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/swhtml.definitions.integration.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts src/sw/source/filter/html/swhtml.language.integration.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/md/mdtab.test.ts. Result: pass,99cases/5files,81.32s; Evidence: html43-consumers.txt under the same output directory. Scope: affected style, definition, language, HTML and Markdown consumers.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmltab.save.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts. Result: pass,53cases/4files,129.52s; Evidence: html43-final-filters.txt. Deduct10repeated initial section-save cases:205unique cases/12files pass, including the final12section-save regressions. Scope: final actual-byte-stream save/restore and uint16 font overflow, TXT range, RTF table/list and Markdown callback paths.
+
+- HTML43 static closure: Command (cwd apps/office) ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit. Result: pass,exit0; Evidence: html43-types-closure.txt,exec23638. Scope: final complete app types after fixture rename. Changed-source ESLint --max-warnings0 and Prettier --check pass (html43-lint.txt/html43-lint-final.txt/html43-lint-closure.txt/html43-format.txt/html43-format-closure.txt). npm run check:source-provenance passes1923runtime/1710mapped/182browser/31infra (html43-provenance.txt); npm run inventory:parity:writer passes semanticViolationCount0 (html43-writer.txt); npm run check:dependencies passes1922runtime/10596relativeimports/227allowededges (html43-boundaries.txt); npm run check:docs passes4316sources (html43-jsdoc.txt); npm run check:file-size passes4320authoredfiles (html43-size.txt); npm run check:source-tree passes115requiredpaths/32retiredroots (html43-tree.txt); git diff --check passes. Broad source semantic statuses remain unverified. These are checkpoint checks, not full table/UI or parent-goal certification.

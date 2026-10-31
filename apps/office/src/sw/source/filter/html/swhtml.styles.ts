@@ -51,7 +51,9 @@ export function SetTextCollAttrs(parser: SwHTMLParser, top?: HTMLAttrContext): v
       }
     };
   try {
-    for (const context of parser.m_aContexts) {
+    for (let index = parser.m_nContextStAttrMin; index < parser.m_aContexts.length; ++index) {
+      const context = parser.m_aContexts[index];
+      if (!context) throw new Error("assert(HTML context)");
       let pool = context.GetTextFormatColl();
       if (pool !== P.ZERO) {
         let apply = true;

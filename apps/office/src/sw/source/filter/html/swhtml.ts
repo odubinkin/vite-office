@@ -106,11 +106,13 @@ export class SwHTMLParser extends HTMLParser {
   m_nBaseFontStMin = 0;
   m_nFontStMin = 0;
   m_nFontStHeadStart = 0;
+  m_nContextStMin = 0;
+  m_nContextStAttrMin = 0;
   private readonly m_pNumRuleInfo = new SwHTMLNumRuleInfo();
   private readonly breakIterator = new BreakIteratorImpl();
-  private m_nOpenParaToken = T.NONE;
-  protected m_nDefListDeep = 0;
-  private m_bNoParSpace = false;
+  m_nOpenParaToken = T.NONE;
+  m_nDefListDeep = 0;
+  m_bNoParSpace = false;
   private m_bDocInitialized = false;
   private m_bInTitle = false;
   private readonly m_bOldIsHTMLMode: boolean;
@@ -180,9 +182,13 @@ export class SwHTMLParser extends HTMLParser {
       if (result !== SvParserState.Pending) {
         const stripped = this.IsNewDoc() && this.StripTrailingLF() > 0;
         while (this.GetNumInfo().GetNumRule()) EndNumberBulletList(this);
-        while (this.m_aContexts.length) {
-          const context = this.PopContext();
-          if (context) this.EndContext(context);
+        for (let pass = 0; pass < 2; ++pass) {
+          while (this.m_aContexts.length > this.m_nContextStMin) {
+            const context = this.PopContext();
+            if (context) this.EndContext(context);
+          }
+          if (!this.m_nContextStMin) break;
+          this.m_nContextStMin = 0;
         }
         this.m_aParaAttrs.length = 0;
         this.SetAttr(false);
@@ -235,11 +241,11 @@ export class SwHTMLParser extends HTMLParser {
   /** Original token search removes only the matching context, leaving intervening inline contexts open. @param token - Opening token or NONE for top. @returns Removed context or null. */
   PopContext(token = T.NONE): HTMLAttrContext | null {
     let position = this.m_aContexts.length;
-    if (!position) return null;
+    if (position <= this.m_nContextStMin) return null;
     if (token === T.NONE) --position;
     else {
       let found = false;
-      while (position) {
+      while (position > this.m_nContextStMin) {
         const current = this.m_aContexts[--position];
         if (current?.GetToken() === token) {
           found = true;
@@ -267,7 +273,7 @@ export class SwHTMLParser extends HTMLParser {
   /** Ends represented context attributes and its source append mode. @param context - Removed native owner. @returns Nothing. */
   EndContext(context: HTMLAttrContext): void {
     if (context.GetPopStack())
-      while (this.m_aContexts.length) {
+      while (this.m_aContexts.length > this.m_nContextStMin) {
         const inner = this.PopContext();
         if (inner) this.EndContext(inner);
       }
@@ -327,7 +333,10 @@ export class SwHTMLParser extends HTMLParser {
     indent: [number],
     ignoreTop = false,
   ): void {
-    for (let index = this.m_aContexts.length - (ignoreTop ? 1 : 0); index;) {
+    for (
+      let index = this.m_aContexts.length - (ignoreTop ? 1 : 0);
+      index > this.m_nContextStAttrMin;
+    ) {
       const context = this.m_aContexts[--index];
       if (context?.IsLRSpaceChanged()) {
         context.GetMargins(left, right, indent);
@@ -338,7 +347,7 @@ export class SwHTMLParser extends HTMLParser {
   /** Native spacing lookup takes the nearest changed context or the default body paragraph style. @param upper - Output. @param lower - Output. @returns Nothing. */
   GetULSpaceFromContext(upper: [number], lower: [number]): void {
     let pool = SwPoolFormatId.ZERO as number;
-    for (let index = this.m_aContexts.length; index;) {
+    for (let index = this.m_aContexts.length; index > this.m_nContextStAttrMin;) {
       const context = this.m_aContexts[--index];
       if (context?.IsULSpaceChanged()) {
         context.GetULSpace(upper, lower);
@@ -585,13 +594,13 @@ export class SwHTMLParser extends HTMLParser {
     this.InsertAlignment(context);
     this.PushContext(context);
     this.SetTextCollAttrs(context);
-    this.m_nFontStHeadStart = this.m_aFontStack.length;
+    this.m_nFontStHeadStart = this.m_aFontStack.length & 0xffff;
   }
   /** Original heading close finds the last heading regardless of the closing level. @returns Nothing. */
   EndHeading(): void {
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(A.AM_SPACE);
     else this.AddParSpace();
-    for (let index = this.m_aContexts.length; index;) {
+    for (let index = this.m_aContexts.length; index > this.m_nContextStMin;) {
       const context = this.m_aContexts[--index];
       if (
         context &&

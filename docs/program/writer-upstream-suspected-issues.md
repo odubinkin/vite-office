@@ -2747,3 +2747,9 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Source: sw/source/filter/html/htmltab.cxx, BuildTableColGroup, TableColGrpSaveStruct::CloseColGroup, HTMLTable::CloseColGroup and InsertCol.
 - Observation: SPAN is narrowed to uint16 before values above256 are replaced by1. A zero empty-group span bypasses column insertion, whereas a zero COL span reaches InsertCol and becomes1. Consequently65536 also becomes zero before these different downstream rules. Any child COL sets the saved group span to zero to suppress extra group columns.
 - Preservation: retain the narrowing/limit order and separate close/insert rules. Do not globally clamp every span to at least1. Tests use actual lexer options and native column owners, including the source zero-column layout admission boundary; full table materialization remains pending.
+
+### WRITER326 — Table-section font protection wraps at uint16 depth while context protection does not
+
+- Source: sw/source/filter/html/swhtml.hxx, m_nBaseFontStMin/m_nFontStMin/m_nFontStHeadStart; htmltab.cxx, SectionSaveStruct constructor/Restore; swhtml.cxx, NewHeading/EndFontAttr.
+- Observation: font-stack sizes are assigned to uint16 lower bounds, whereas context-stack bounds are size_t. At65536 open font entries a section freezes the font bound at0 but protects all65536 contexts. A font closer cannot pop its protected context yet still pops a font entry; Restore truncates the font stack at the wrapped bound. This appears capable of losing outer font-stack state for extremely deep input.
+- Preservation: retain uint16 narrowing and independent font/context bounds, including the heading font-stack start width. Do not clamp or widen the original counters. The focused regression builds the actual deep stack through65536 native NewFontAttr calls, then observes original save/close/restore operations. It does not certify complete table token orchestration or pending-device behavior.
