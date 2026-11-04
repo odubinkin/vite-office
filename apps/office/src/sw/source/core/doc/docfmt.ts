@@ -1,5 +1,6 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import { SwUndoTextFormatCollDelete } from "../undo/SwUndoFmt";
 import { SwFlyFrameFormat, type SwFrameFormat } from "../layout/atrfrm";
 import type { SwFormat } from "../attr/format";
 import type { SwCharFormat } from "../../../inc/charfmt";
@@ -461,4 +462,19 @@ export function MakeFlyFrameFormat(
 /** Original SwDoc frame-name lookup deliberately uses positional SwFormatsBase::FindFormatByName rather than the collection's composite type/name index. @param document - Actual document. @param name - Requested native name. @returns First ordinary frame by insertion order or absent. */
 export function FindFrameFormatByName(document: SwDoc, name: string): SwFrameFormat | undefined {
   return document.GetFrameFormats().FindFormatByName(name) as SwFrameFormat | undefined;
+}
+
+/** Original represented paragraph deletion: never delete default, append real delete history before removal, correct nondefault next links and destroy before existing host notification. Native conditional-collection and stylesheet-pool broadcasting remain unported. @param document - Actual document. @param collection - Actual owned style. @returns Nothing. */
+export function DelTextFormatColl(document: SwDoc, collection: SwTextFormatColl): void {
+  if (collection === document.GetDfltTextFormatColl()) return;
+  if (!document.GetTextFormatColls().includes(collection))
+    throw new Error("assert(document-owned paragraph collection)");
+  if (document.GetUndoManager().DoesUndo())
+    document.GetUndoManager().AddUndoAction(new SwUndoTextFormatCollDelete(collection, document));
+  document.getIDocumentStylePoolAccess().RemoveTextFormatColl(collection);
+  for (const owner of document.GetTextFormatColls().slice(1))
+    if (owner.GetNextTextFormatColl() === collection) owner.SetNextTextFormatColl(owner);
+  const name = collection.GetName();
+  collection.DisposeModify();
+  document.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
 }

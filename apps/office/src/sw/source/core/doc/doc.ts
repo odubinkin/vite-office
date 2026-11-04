@@ -24,6 +24,7 @@ import {
 import {
   CopyTextColl,
   ChgFormat,
+  DelTextFormatColl,
   SetDefault,
   ForEachParaAtrTabStopItem,
   MakeFlyFrameFormat,
@@ -625,12 +626,7 @@ export class SwDoc {
   }
   /** Removes a named collection and corrects follow links before original format death. Used by creation undo with recording suppressed. @param collection - Owned non-default collection. @returns Nothing. */
   public DelTextFormatColl(collection: SwTextFormatColl): void {
-    if (collection === this.GetDfltTextFormatColl()) return;
-    this.stylePoolManager.RemoveTextFormatColl(collection);
-    for (const owner of this.GetTextFormatColls())
-      if (owner.GetNextTextFormatColl() === collection) owner.SetNextTextFormatColl(owner);
-    collection.DisposeModify();
-    this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: collection.GetName() });
+    DelTextFormatColl(this, collection);
   }
   /** Copies a paragraph style through the original docfmt owner. @param source - Source collection. @returns Destination collection. */
   public CopyTextColl(source: SwTextFormatColl): SwTextFormatColl {

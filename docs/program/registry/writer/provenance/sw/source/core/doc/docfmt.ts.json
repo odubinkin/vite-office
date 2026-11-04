@@ -190,7 +190,8 @@
       "ForEachParaAtrTabStopItem",
       "lcl_SetNewDefTabStops",
       "CopyCharFormat",
-      "FindFrameFormatByName"
+      "FindFrameFormatByName",
+      "DelTextFormatColl"
     ],
     "omittedResponsibilities": [
       "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."
@@ -215,14 +216,16 @@
       "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
       "S3HW1E HTML65: original SwDoc::MakeFlyFrameFormat body lives in the native docfmt responsibility, with a thin SwDoc declaration forwarder. Actual construction, owning special-registry insertion and SetModified retain source order; no fly section, contact or layout result is supplied. Full factory/layout services and whole-module parity remain unverified.",
       "S3HW1E HTML70 implements original SwDoc::FindFrameFormatByName through the actual ordinary collection SwFormatsBase positional name search, not composite type/name ordering or the special table. Original MakeFrameFormat/generic format undo/delete/broadcast and broad factory/default/contract parity remain unported or unverified.",
-      "S3HW1E HTML71 restores the source SwFormat ChgFormat argument contract, using the actual existing delta/history helper and format SetFormatAttrSet. Original create redo calls this owner under the real history manager recording guard. Native frame factories/create-delete undo/broadcast/modified restoration and complete generic/volatile/anchor history contracts remain unported/unverified."
+      "S3HW1E HTML71 restores the source SwFormat ChgFormat argument contract, using the actual existing delta/history helper and format SetFormatAttrSet. Original create redo calls this owner under the real history manager recording guard. Native frame factories/create-delete undo/broadcast/modified restoration and complete generic/volatile/anchor history contracts remain unported/unverified.",
+      "S3HW1E HTML72 moves existing paragraph deletion to its original docfmt responsibility and adds real delete history under actual DoesUndo before removal/destruction. Default remains protected; source nondefault collection loop starts at index1 and changes matching next links to their owner. Existing browser notification name is read while the format is still alive, avoiding the old post-destruction name read; intentional save/open/autosave/recovery behavior is unchanged. Actual manager guards prevent recursive history during create/delete undo. Native conditional collections/style-pool broadcasting, complete factory/deletion/helper contracts and module parity remain unported/unverified; no dummy pool/broadcast or parent/provider is introduced."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/docfmt.cxx",
     "upstreamSymbols": [
       "SwDoc::MoveLeftMargin",
       "SwDoc::CopyCharFormat",
-      "SwDoc::FindFrameFormatByName"
+      "SwDoc::FindFrameFormatByName",
+      "SwDoc::DelTextFormatColl"
     ]
   },
   "legacyOrder": 168

@@ -96,3 +96,85 @@ export class SwUndoTextFormatCollCreate extends SwUndoFormatCreate {
     this.m_rDoc.DelTextFormatColl(this.m_pNew as SwTextFormatColl);
   }
 }
+
+/** Original abstract delete history owns an eager value snapshot and native name/range/auto state. */
+export abstract class SwUndoFormatDelete extends SwUndo {
+  protected readonly m_rDoc: SwDoc;
+  protected readonly m_sOldName: string;
+  protected readonly m_sDerivedFrom: string;
+  private readonly m_aOldSet: SfxItemSet;
+  private readonly m_nId: number;
+  private readonly m_bAuto: boolean;
+  /** Original delete constructor requires the deleted format's actual derived parent and copies direct items immediately. @param comment - Bound native English resource. @param previous - Actual still-live format. @param document - Actual document. @returns History owner. */
+  protected constructor(comment: string, previous: SwFormat, document: SwDoc) {
+    super(comment);
+    this.m_rDoc = document;
+    this.m_sOldName = previous.GetName();
+    this.m_aOldSet = new SfxItemSet(previous.GetAttrSet());
+    const parent = previous.DerivedFrom();
+    // Native constructor dereferences DerivedFrom without a null check. This
+    // precondition does not admit an invented empty/default parent or a claim
+    // about native undefined behavior. Release the partial host value on error.
+    if (!parent) {
+      this.m_aOldSet.Dispose();
+      throw new Error("SwUndoFormatDelete requires the native derived-parent precondition.");
+    }
+    this.m_sDerivedFrom = parent.GetName();
+    this.m_nId = previous.GetPoolFormatId() & COLL_GET_RANGE_BITS;
+    this.m_bAuto = previous.IsAuto();
+  }
+  /** Original family-specific name query. @param name - Native name. @returns Actual live format or absence. */
+  protected abstract Find(name: string): SwFormat | undefined;
+  /** Original family-specific recreation. @param parent - Actual name lookup result. @returns Actual new owner or absence. */
+  protected abstract Create(parent: SwFormat | undefined): SwFormat | undefined;
+  /** Original family-specific deletion. @param previous - Actual name lookup result. @returns Nothing. */
+  protected abstract Delete(previous: SwFormat): void;
+  /** Source restores direct items before the auto flag, then combines saved range bits with the new owner's other bits. @param context - Original unused context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    void context;
+    const parent = this.Find(this.m_sDerivedFrom),
+      format = this.Create(parent);
+    if (format) {
+      this.m_rDoc.ChgFormat(format, this.m_aOldSet);
+      format.SetAuto(this.m_bAuto);
+      format.SetPoolFormatId((format.GetPoolFormatId() & ~COLL_GET_RANGE_BITS) | this.m_nId);
+    }
+  }
+  /** Source re-finds the current owner by original name before deleting; no dead format pointer is retained. @param context - Original unused context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    void context;
+    const previous = this.Find(this.m_sOldName);
+    if (previous) this.Delete(previous);
+  }
+  /** Original constant old-name argument rule remains usable after format death. @returns Actual rule owner. */
+  protected override GetRewriter(): SwRewriter {
+    const rewriter = new SwRewriter();
+    rewriter.AddRule(SwUndoArg.UndoArg1, this.m_sOldName);
+    return rewriter;
+  }
+  /** Original owned value-set member is released before base action cursor adjuncts. @returns Nothing. */
+  override Dispose(): void {
+    this.m_aOldSet.Dispose();
+    super.Dispose();
+  }
+}
+
+/** Original paragraph deletion subtype uses actual document name/create/delete owners. */
+export class SwUndoTextFormatCollDelete extends SwUndoFormatDelete {
+  /** Binds native English label and real parent-owned style snapshot. @param previous - Actual style before deletion. @param document - Actual document. @returns Action. */
+  constructor(previous: SwTextFormatColl, document: SwDoc) {
+    super("Delete paragraph style: $1", previous, document);
+  }
+  /** Original native paragraph name lookup. @param name - Name. @returns Actual style or absence. */
+  protected override Find(name: string): SwTextFormatColl | undefined {
+    return this.m_rDoc.FindTextFormatCollByName(name);
+  }
+  /** Original paragraph recreation supplies no browser-id or follow-link snapshot. @param parent - Source found parent or absence. @returns Actual style. */
+  protected override Create(parent: SwFormat | undefined): SwTextFormatColl {
+    return this.m_rDoc.MakeTextFormatColl(this.m_sOldName, parent as SwTextFormatColl | undefined);
+  }
+  /** Original paragraph deletion; full native style-pool broadcast remains unported in the existing document owner. @param previous - Actual still-live style. @returns Nothing. */
+  protected override Delete(previous: SwFormat): void {
+    this.m_rDoc.DelTextFormatColl(previous as SwTextFormatColl);
+  }
+}

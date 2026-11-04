@@ -25,16 +25,24 @@
       "SwUndoTextFormatCollCreate",
       "SwUndoFormatCreate::UndoImpl",
       "SwUndoFormatCreate::RedoImpl",
-      "SwUndoFormatCreate::GetRewriter"
+      "SwUndoFormatCreate::GetRewriter",
+      "SwUndoFormatDelete::SwUndoFormatDelete",
+      "SwUndoFormatDelete::UndoImpl",
+      "SwUndoFormatDelete::RedoImpl",
+      "SwUndoTextFormatCollDelete::Create",
+      "SwUndoTextFormatCollDelete::Delete"
     ],
     "localSymbols": [
       "SwUndoTextFormatCollCreate",
-      "SwUndoFormatCreate"
+      "SwUndoFormatCreate",
+      "SwUndoFormatDelete",
+      "SwUndoTextFormatCollDelete"
     ],
     "preservedResponsibilities": [
       "Name-based original collection creation undo and direct-item/parent restoration.",
       "S3HW1E HTML71 replaces the old eager paragraph creation snapshot/browser-id helper with actual SwUndoFormatCreate source state and the original paragraph subtype. Construction retains real borrowed new format and original parent name; Undo captures the name lazily, re-finds the actual format, owns a copied SfxItemSet and retains auto plus COLL_GET_RANGE_BITS. Redo always invokes real family construction and, only when both format and saved set exist, restores auto/items via actual document ChgFormat and combines original range bits with newly created non-range bits. Replaced/final saved sets are disposed as native unique ownership requires. No serialized browser identity or second style model/factory/modified-state provider remains. SwUndo owns native protected rewriter/comment-cache state; paragraph creation uses the pinned English Create paragraph style: $1 template. Generic frame-create/delete/rename subtypes, native create/delete broadcast/resource-id/localization/full SwUndo metadata, volatile/anchor history and broader contracts remain unported/unverified. WRITER351 borrowed-pointer source shape is preserved by the generic base; no stale-pointer repair or compiled outcome is asserted.",
-      "WRITER352 preserves the original create-history omission of the independent auto-update-on-direct-format flag: only IsAuto is captured/restored, while regular recreation retains false auto-update default. Actual local paragraph history tests verify this source behavior without a compiled-native/all-UI claim or extra saved flag."
+      "WRITER352 preserves the original create-history omission of the independent auto-update-on-direct-format flag: only IsAuto is captured/restored, while regular recreation retains false auto-update default. Actual local paragraph history tests verify this source behavior without a compiled-native/all-UI claim or extra saved flag.",
+      "S3HW1E HTML72 adds actual SwUndoFormatDelete plus paragraph subtype. Its source constructor eagerly owns the real old direct-item set/name/parent name/range bits/auto flag. Undo does actual parent-name lookup and recreation, applies the saved set through ChgFormat before restoring IsAuto, then combines saved range bits with the new non-range bits. Redo finds/deletes the real current owner by original name. Actual value-set disposal and native English Delete paragraph style: $1 rewriting are retained. The native derived-parent precondition is explicit without inventing a default/empty parent or claiming a native undefined-input outcome; partial host set ownership is released if that precondition fails. WRITER352 independent auto-update omission applies to delete too; WRITER353 preserves original paragraph follow-pointer omission in generic create/delete. Conditional/generic frame/rename subtypes and full style-pool broadcast, factories/modified restoration, volatile/anchor history and complete native module/ABI remain unported/unverified."
     ],
     "omittedResponsibilities": [
       "Other style families, native hidden-default table, conditional styles and pool category restoration remain outside this bounded consumed paragraph path."

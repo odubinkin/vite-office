@@ -1742,3 +1742,18 @@ WRITER352 records and preserves the generic create-history omission of the
 independent auto-update-on-direct-format bit: IsAuto is restored, while the
 recreated format keeps the original regular-constructor false auto-update default.
 No additional captured flag or repair is introduced.
+
+HTML72 adds actual generic format-delete ownership and paragraph deletion subtype,
+connected to the existing document operation at its original docfmt boundary.
+Native DoesUndo/default protection, eager item/name/parent/range/auto snapshot,
+real recreation and source attributes-before-auto order, repeated manager-guarded
+cycles and value disposal are covered. Nondefault next links retain source self
+correction and default slot zero is skipped. The existing browser notification
+uses the name captured before format death. Native conditional/style-pool
+broadcast, concrete frame create/delete/rename factories and undo, modified
+restoration, MakeFlySection, production recursive HTML tables, RTF direction and
+final original-slice format/UI closure remain unimplemented/unverified. No empty
+style-pool/Find/broadcast, format, parent or modified-state provider is introduced.
+WRITER352 independent auto-update omission is retained for delete, and WRITER353
+records the source paragraph follow-pointer omission in both generic histories.
+These tests do not certify complete style deletion, module/native ABI or formats.
