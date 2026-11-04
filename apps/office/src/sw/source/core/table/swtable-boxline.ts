@@ -1,4 +1,5 @@
 /** @fileoverview Owns original SwTableBox and SwTableLine classes from swtable.cxx, physically separated for the authored-file size limit. */
+import { FindPreviousBoxInLine, FindPreviousBoxInBox } from "../doc/tblrwcl";
 import type { SwTableBoxStartNode } from "../docnode/node";
 import { SwRowFrame, SwCellFrame } from "../layout/tabfrm";
 import { TableLineFormatChanged, TableBoxFormatChanged } from "../../../inc/hints";
@@ -21,7 +22,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import type { SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
+import type { SwTable, SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
 
 /** Owns one cell section and its ordered paragraphs. */
 export class SwTableBox extends SwClient {
@@ -104,6 +105,11 @@ export class SwTableBox extends SwClient {
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
   }
+  /** Original tblrwcl.cxx predecessor lookup for the current leaf-box model. The native upper line is resolved through its actual owning graph, not copied into an alternate owner list. @param table - Actual owning table. @param search - Original optional search pointer, null returns this leaf. @returns Actual predecessor or null. */
+  public FindPreviousBox(table: SwTable, search: SwTableBox | null): SwTableBox | null {
+    return FindPreviousBoxInBox(this, table, search);
+  }
+
   /** Original GetSttNd borrows the cell's actual section owner. @returns Native section start. */
   public GetSttNd(): SwTableBoxStartNode {
     return this.startNode;
@@ -171,6 +177,15 @@ export class SwTableLine extends SwClient {
     super();
     this.RegisterToModify(format);
   }
+  /** Original tblrwcl.cxx predecessor algorithm for current base lines and leaf boxes; anonymous nested-line boxes are not admitted by this model. @param table - Actual table. @param search - Optional box search pointer. @param overTableLines - Original true default. @returns Previous actual leaf box or null. */
+  public FindPreviousBox(
+    table: SwTable,
+    search: SwTableBox | null = null,
+    overTableLines = true,
+  ): SwTableBox | null {
+    return FindPreviousBoxInLine(this, table, search, overTableLines);
+  }
+
   /** Reads the original shared native format. @returns Registered format. */
   public GetFrameFormat(): SwTableLineFormat {
     return this.GetRegisteredIn() as SwTableLineFormat;

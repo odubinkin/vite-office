@@ -14,6 +14,11 @@ import { SvxBreak as B } from "../../../../editeng/inc/svxenum";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+/** Requires an actually admitted non-footnote fixture result. @param value - Actual nullable table result. @returns Actual owner. */
+function present<T>(value: T | null): T {
+  assert(value !== null);
+  return value;
+}
 const options = { mnInsMode: 0, mnRowsToRepeat: 0 };
 it.each([H.LEFT, H.RIGHT, H.CENTER, H.FULL, H.NONE])(
   "honors the original required fifth orientation argument %s",
@@ -24,7 +29,9 @@ it.each([H.LEFT, H.RIGHT, H.CENTER, H.FULL, H.NONE])(
       node = doc.paragraphs[0];
     assert(node);
     const p = new SwPosition(node);
-    const table = doc.InsertTable(options, p, 1, 2, orient, null, null, false, true, "NativeName");
+    const table = present(
+      doc.InsertTable(options, p, 1, 2, orient, null, null, false, true, "NativeName"),
+    );
     expect(table.GetFrameFormat().GetHoriOrient().GetHoriOrient()).toBe(orient);
     expect(table.GetName()).toBe("NativeName");
     expect(table.IsNewModel()).toBe(true);
@@ -52,7 +59,7 @@ it.each([
       node = doc.paragraphs[0];
     assert(node);
     const p = new SwPosition(node),
-      table = doc.InsertTable(options, p, 2, 2, orient, null, positions);
+      table = present(doc.InsertTable(options, p, 2, 2, orient, null, positions));
     expect(table.GetFrameFormat().GetFrameSize().GetWidth()).toBe(width);
     expect(table.GetColumnWidths()).toEqual(widths);
     expect(table.GetFrameFormat().GetLRSpace().ResolveLeft()).toBe(left);
@@ -80,7 +87,7 @@ it.each([false, true])(
     assert(node);
     node.SetAttr(new SvxAdjustItem(A.Right, RES_PARATR_ADJUST));
     const p = new SwPosition(node),
-      table = doc.InsertTable(options, p, 1, 1, H.LEFT, null, null, fromShell);
+      table = present(doc.InsertTable(options, p, 1, 1, H.LEFT, null, null, fromShell));
     const first = table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
     assert(first);
     expect((first.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
@@ -105,17 +112,8 @@ it("copies frame direction and transfers direct page attributes through native u
   node.SetAttr(new SwFormatPageDesc("Standard", 3));
   node.SetAttr(new SfxInt16Item(RES_BREAK, B.PageBefore));
   const p = new SwPosition(node),
-    table = doc.InsertTable(
-      options,
-      p,
-      1,
-      2,
-      H.CENTER,
-      null,
-      [100, 300, 600],
-      false,
-      false,
-      "Native",
+    table = present(
+      doc.InsertTable(options, p, 1, 2, H.CENTER, null, [100, 300, 600], false, false, "Native"),
     );
   expect(table.IsNewModel()).toBe(false);
   expect(table.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_FRAMEDIR, false)).toEqual(

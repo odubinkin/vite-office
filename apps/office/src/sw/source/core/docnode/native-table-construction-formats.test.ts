@@ -9,8 +9,8 @@ import { RES_FILL_ORDER, RES_BOX, RES_FRM_SIZE } from "../../../inc/hintids";
 import { SvxBoxItemLine as E } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLineStyle as S } from "../../../../editeng/source/items/borderline";
 /** Requires a connected fixture owner without constructing a substitute. @param value - Actual optional fixture value. @returns Original value. */
-function present<T>(value: T | undefined): T {
-  assert(value !== undefined);
+function present<T>(value: T | undefined | null): T {
+  assert(value !== undefined && value !== null);
   return value;
 }
 it.each([false, true])(
@@ -23,12 +23,14 @@ it.each([false, true])(
     assert(node);
     doc.GetDocumentSettingManager().set("HTML_MODE", html);
     const p = new SwPosition(node),
-      table = doc.InsertTable(
-        { mnInsMode: F.DefaultBorder, mnRowsToRepeat: 0 },
-        p,
-        3,
-        3,
-        HoriOrientation.FULL,
+      table = present(
+        doc.InsertTable(
+          { mnInsMode: F.DefaultBorder, mnRowsToRepeat: 0 },
+          p,
+          3,
+          3,
+          HoriOrientation.FULL,
+        ),
       ),
       lines = table.GetTabLines();
     for (let row = 0; row < 3; row++)
@@ -77,14 +79,16 @@ it.each([[[0, 100, 200, 300]], [[0, 100, 300, 400]]])(
       node = doc.paragraphs[0];
     assert(node);
     const p = new SwPosition(node),
-      table = doc.InsertTable(
-        { mnInsMode: 0, mnRowsToRepeat: 0 },
-        p,
-        2,
-        3,
-        HoriOrientation.LEFT,
-        null,
-        positions,
+      table = present(
+        doc.InsertTable(
+          { mnInsMode: 0, mnRowsToRepeat: 0 },
+          p,
+          2,
+          3,
+          HoriOrientation.LEFT,
+          null,
+          positions,
+        ),
       ),
       lines = table.GetTabLines(),
       first = present(lines[0]).GetTabBoxes(),

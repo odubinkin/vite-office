@@ -160,15 +160,17 @@ it("preserves heading style adjustment over shell source adjustment while compos
   where.SetAttr(right);
   right.Dispose();
   const p = new SwPosition(where),
-    table = doc.InsertTable(
-      { mnInsMode: SwInsertTableFlags.Headline, mnRowsToRepeat: 1 },
-      p,
-      2,
-      1,
-      HoriOrientation.FULL,
-      null,
-      null,
-      true,
+    table = present(
+      doc.InsertTable(
+        { mnInsMode: SwInsertTableFlags.Headline, mnRowsToRepeat: 1 },
+        p,
+        2,
+        1,
+        HoriOrientation.FULL,
+        null,
+        null,
+        true,
+      ),
     ),
     text = present(present(present(table.GetTabLines()[0]).GetTabBoxes()[0]).GetParagraphs()[0]);
   expect((text.GetAttr(H.RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);

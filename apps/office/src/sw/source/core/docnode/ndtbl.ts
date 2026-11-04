@@ -44,6 +44,7 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_BOX } from "../../../inc/hintids";
+import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
@@ -525,6 +526,23 @@ export function InsertTableNodes(
   return node;
 }
 
+/** Original first-paragraph/first-cell transfer keeps the parent's direct attributes, including the source TODO-not-reset behavior. @param parent - Actual containing box. @param target - Actual nested table node. @param format - New table frame. @returns Nothing. */
+function lcl_transferTableBreaks(
+  parent: SwTableBox,
+  target: SwTableNode,
+  format: SwFrameFormat,
+): void {
+  if (target.StartOfSectionNode().GetIndex() + 1 !== target.GetIndex()) return;
+  const tableNode = parent.GetSttNd().FindTableNode();
+  if (!tableNode) throw new Error("assert(parent box has a native table)");
+  const table = tableNode.GetTable();
+  if (parent.FindPreviousBox(table, parent)) return;
+  for (const which of [RES_PAGEDESC, RES_BREAK]) {
+    const item = table.GetFrameFormat().GetAttrSet().GetItemIfSet(which, false);
+    if (item) format.SetFormatAttr(item);
+  }
+}
+
 /** Original represented InsertTable argument order. The current model has no SwTableAutoFormat owner, so only the original null autoformat argument is admitted; browser cell styling is applied by its existing shell/history owner after construction. */
 export type SwInsertTableArgs = [
   options: SwInsertTableOptions,
@@ -551,12 +569,13 @@ export function InsertTable(
   calledFromShell = false,
   newModel = true,
   name = "",
-): SwTable {
+): SwTable | null {
   void autoFormat;
   const node = position.GetNode();
   if (
     !(node instanceof SwTextNode) ||
-    !doc.paragraphs.includes(node) ||
+    node.GetNodes() !== doc.GetNodes() ||
+    doc.GetNodes().indexOf(node) < 0 ||
     !Number.isInteger(rows) ||
     rows < 1 ||
     rows > 65535 ||
@@ -564,7 +583,15 @@ export function InsertTable(
     columns < 1 ||
     columns > 65535
   )
-    throw new Error("Writer insertion requires body text and positive unsigned table dimensions.");
+    throw new Error(
+      "Writer insertion requires connected text and positive unsigned table dimensions.",
+    );
+  const endOfInserts = doc.GetNodes().GetEndOfInserts();
+  if (
+    node.GetIndex() < endOfInserts.GetIndex() &&
+    node.GetIndex() >= endOfInserts.StartOfSectionNode().GetIndex()
+  )
+    return null;
   const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
     borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
     repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
@@ -576,17 +603,7 @@ export function InsertTable(
     first = positions?.[0] ?? 0,
     last = positions?.[positions.length - (adjust === HoriOrientation.NONE ? 2 : 1)] ?? 0,
     width = positions ? last - first : Math.floor(65535 / columns) * columns;
-  if (
-    name === "" ||
-    doc
-      .GetTables()
-      .some(
-        /** Checks the actual native name set. @param table - Existing owner. @returns Collision. */ (
-          table,
-        ) => table.GetName() === name,
-      )
-  )
-    name = doc.GetUniqueTableName();
+  if (name === "" || doc.FindTableFormatByName(name)) name = doc.GetUniqueTableName();
   if (doc.GetUndoManager().DoesUndo()) {
     const items = node.GetCharacterItemsAt(position.GetContentIndex()),
       cursor = createWriterCollapsedCursorState(node, 0, items);
@@ -628,13 +645,16 @@ export function InsertTable(
   const frame = table.GetFrameFormat(),
     direction = node.GetSwAttrSet().GetItemIfSet(RES_FRAMEDIR, true);
   if (direction) frame.SetFormatAttr(direction);
-  for (const which of [RES_PAGEDESC, RES_BREAK]) {
-    const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
-    if (item) {
-      frame.SetFormatAttr(item);
-      node.ResetAttr(which);
+  const parent = tableNode.GetTableBox();
+  if (parent) lcl_transferTableBreaks(parent, tableNode, frame);
+  else
+    for (const which of [RES_PAGEDESC, RES_BREAK]) {
+      const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
+      if (item) {
+        frame.SetFormatAttr(item);
+        node.ResetAttr(which);
+      }
     }
-  }
   const lineFormat = doc.MakeTableLineFormat(),
     fillOrder = new SwFormatFillOrder(SwFillOrder.ATT_LEFT_TO_RIGHT);
   try {
@@ -690,14 +710,51 @@ export function InsertTable(
   return table;
 }
 
-/** Existing used-table lookup retains the actual frame owner while its implementation is split from the size-limited SwDoc aggregate. @param doc - Actual document. @param name - Requested table name. @returns Actual used frame or no match. */
+/** Existing used-format profile now includes actual tables in every document section. Unused/default native format-registry owners and mail merge are not represented by this profile. @param doc - Actual document. @returns Actual used frame references. */
+function GetUsedTableFormats(doc: SwDoc): SwFrameFormat[] {
+  return [
+    ...new Set(
+      doc
+        .GetNodes()
+        .entries()
+        .flatMap(
+          /** Retains actual table-owned frame identities in all sections. @param node - Actual node. @returns Actual used format. */
+          (node) => (node instanceof SwTableNode ? [node.GetTable().GetFrameFormat()] : []),
+        ),
+    ),
+  ];
+}
+/** Original ndtbl.cxx bitmap/name-number algorithm for the current English default-name and used-format profile. Native integer suffix conversion is deliberately not a strict digit check. @param doc - Actual document. @returns First free source name. */
+export function GetUniqueTableName(doc: SwDoc): string {
+  const formats = GetUsedTableFormats(doc),
+    flags = new Uint8Array(Math.floor(formats.length / 8) + 2),
+    prefix = "Table";
+  for (const format of formats)
+    if (format.GetName().startsWith(prefix)) {
+      const value = toInt32(format.GetName().slice(prefix.length));
+      if (value > 0 && value <= formats.length) {
+        const pos = value - 1;
+        flags[Math.floor(pos / 8)] = (flags[Math.floor(pos / 8)] as number) | (1 << (pos & 7));
+      }
+    }
+  let number = formats.length;
+  for (let i = 0; i < flags.length; i++) {
+    let value = flags[i] as number;
+    if (value !== 255) {
+      number = i * 8;
+      while (value & 1) {
+        number++;
+        value >>= 1;
+      }
+      break;
+    }
+  }
+  return prefix + String(number + 1);
+}
+/** Existing used-table lookup retains actual frames in every represented section. @param doc - Actual document. @param name - Requested name. @returns Used frame or no match. */
 export function FindTableFormatByName(doc: SwDoc, name: string): SwFrameFormat | undefined {
-  return doc
-    .GetTables()
-    .find(
-      /** Matches the actual table name. @param table - Actual used table. @returns Whether named. */ (
-        table,
-      ) => table.GetName() === name,
-    )
-    ?.GetFrameFormat();
+  return GetUsedTableFormats(doc).find(
+    /** Matches the original exact native name. @param format - Actual used frame. @returns Name match. */
+    (format) => format.GetName() === name,
+  );
 }

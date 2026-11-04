@@ -417,7 +417,9 @@ export class SwMarkdownParser {
     const state = this.table;
     if (state === undefined) return;
     state.IncCurCol();
-    const row = state.GetTable().GetTabLines()[state.GetCurRow()];
+    const table = state.GetTable();
+    if (!table) throw new Error("assert(Markdown cell requires an inserted table)");
+    const row = table.GetTabLines()[state.GetCurRow()];
     const box = row?.GetTabBoxes()[state.GetCurCol()];
     const node = box?.GetParagraphs()[0];
     if (node === undefined) return;
@@ -435,7 +437,7 @@ export class SwMarkdownParser {
   }
   /** Moves after the completed table using the existing body paragraph. @returns Nothing. */
   public EndTable(): void {
-    const table = this.table?.GetTable().GetTableNode();
+    const table = this.table?.GetTable()?.GetTableNode();
     if (table !== undefined) {
       const after = this.m_xDoc.GetNodes().at(table.EndOfSectionNode().GetIndex() + 1);
       if (!(after instanceof SwTextNode))

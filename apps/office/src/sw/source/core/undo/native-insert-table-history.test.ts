@@ -173,12 +173,14 @@ it.each([
   ) => {
     const doc = new SwDoc(),
       position = new SwPosition(required(doc.paragraphs[0]), 0);
-    const table = doc.InsertTable(
-      { mnInsMode: mode, mnRowsToRepeat: repeat },
-      position,
-      1,
-      2,
-      HoriOrientation.FULL,
+    const table = required(
+      doc.InsertTable(
+        { mnInsMode: mode, mnRowsToRepeat: repeat },
+        position,
+        1,
+        2,
+        HoriOrientation.FULL,
+      ),
     );
     expect(table.GetFormat()).toMatchObject({
       width: 65534,
@@ -283,10 +285,11 @@ it("keeps current shell/document admission separate from native node-matrix cons
     expect(required(o.shell.InsertTable(options, 1, 1, "Explicit")).GetName()).toBe("Explicit");
     expect(o.shell.InsertTable(options, 2, 2)).toBeUndefined();
     const position = new SwPosition(o.shell.GetActiveParagraph(), 0);
-    expect(
-      /** Checks rejected native input before mutation. @returns Nothing. */ () =>
-        o.doc.InsertTable(options, position, 2, 2, HoriOrientation.FULL),
-    ).toThrow("positive unsigned table dimensions");
+    const nested = required(o.doc.InsertTable(options, position, 2, 2, HoriOrientation.FULL));
+    expect(nested.GetTableNode().StartOfSectionNode()).toBe(
+      position.GetNode().StartOfSectionNode(),
+    );
+    expect(o.shell.Undo()).toBe(true);
     position.Dispose();
     cursor.GetPoint().Assign(required(o.doc.GetTables()[0]).GetTableNode(), 0);
     expect(o.shell.InsertTable(options, 2, 2)).toBeUndefined();
@@ -307,7 +310,7 @@ it("keeps current shell/document admission separate from native node-matrix cons
 });
 
 /** Requires an actual native owner. @param value - Optional owner. @returns Connected owner. */
-function required<T>(value: T | undefined): T {
-  if (value === undefined) throw new Error("Missing native table owner");
+function required<T>(value: T | undefined | null): T {
+  if (value === undefined || value === null) throw new Error("Missing native table owner");
   return value;
 }

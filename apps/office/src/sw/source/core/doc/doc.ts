@@ -65,6 +65,7 @@ import type { SwUndoCursorState } from "../undo/undobj";
 import {
   InsertTable as InsertNativeTable,
   FindTableFormatByName,
+  GetUniqueTableName,
   type SwInsertTableArgs,
 } from "../docnode/ndtbl";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
@@ -939,14 +940,9 @@ export class SwDoc {
 
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */
   public GetUniqueTableName(): string {
-    const names = this.GetTables().map(
-      /** Reads an actual frame name. @param table - Native table. @returns Name. */ (table) =>
-        table.GetName(),
-    );
-    let number = 1;
-    while (names.includes("Table" + number)) number++;
-    return "Table" + number;
+    return GetUniqueTableName(this);
   }
+
   /** Original static node-index absolute correction overload. @param start - Inclusive first node. @param end - Inclusive final node. @param target - Correction position. @param moveCursor - Original false default. @returns Nothing. */
   public static CorrAbs(
     start: SwNodeIndex,
@@ -957,7 +953,7 @@ export class SwDoc {
     CorrAbsNodes(start, end, target, moveCursor);
   }
   /** Forwards the original InsertTable argument order and source defaults to its ndtbl responsibility. @param args - Original native construction arguments. @returns Actual table. */
-  public InsertTable(...args: SwInsertTableArgs): SwTable {
+  public InsertTable(...args: SwInsertTableArgs): SwTable | null {
     return InsertNativeTable(this, ...args);
   }
 

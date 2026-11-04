@@ -170,6 +170,8 @@ export class SwUndoInsTable extends SwUndo {
         true,
         initial ? this.name : "",
       );
+      if (!table)
+        throw new Error("assert(table history insertion is outside the footnote section)");
       if (this.boxFormat)
         for (const row of table.GetTabLines())
           for (const box of row.GetTabBoxes()) box.SetFormat(this.boxFormat);

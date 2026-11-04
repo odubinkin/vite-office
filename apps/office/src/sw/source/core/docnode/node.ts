@@ -12,6 +12,7 @@ import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
+import type { SwTableBox } from "../table/swtable";
 import type { SwTable } from "../table/swtable";
 import type { SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwRootFrame } from "../layout/newfrm";
@@ -91,6 +92,14 @@ export abstract class SwNode extends SwContentIndexRegistry {
     while (!(current instanceof SwTableNode) && current.GetIndex())
       current = current.StartOfSectionNode();
     return current instanceof SwTableNode ? current : null;
+  }
+  /** Original node.cxx lookup resolves the actual containing cell and its table-owned box. @returns Actual box or null outside a cell. */
+  public GetTableBox(): SwTableBox | null {
+    const start = this.FindTableBoxStartNode();
+    if (!start) return null;
+    const table = start.FindTableNode();
+    if (!table) throw new Error("assert(native cell has a containing table)");
+    return table.GetTable().GetTableBox(start.GetIndex()) ?? null;
   }
   /** Original typed-start lookup includes a start node itself and preserves the root-index termination condition. @param type - Native section tag. @returns Actual matching start or null. */
   public FindStartNodeByType(type: SwStartNodeType): SwStartNode | null {
