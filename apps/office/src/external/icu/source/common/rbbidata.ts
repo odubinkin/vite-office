@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 RBBIDataWrapper raw-data constructors and operational bodies. Actual UDataMemory construction is not substituted by these overloads. Native descriptor/backing deallocation is managed by JS GC; allocator/thread/ABI and use after final release remain outside this binding. */
+/** @fileoverview Original ICU78.3 raw-data and actual UDataMemory RBBIDataWrapper constructors. The real loader remains separate. Native descriptor/backing deallocation is managed by JS GC; allocator/thread/ABI and use after final release remain outside this binding. */
 import { RBBIDataHeader, RBBIStateTable, RBBI_DATA_FORMAT_VERSION } from "./rbbidata.h";
 import type { UCPTrie } from "./unicode/ucptrie";
 import { ucptrie_getValueWidth, ucptrie_openFromBinary } from "./unicode/ucptrie";
@@ -6,6 +6,10 @@ import { UCPTrieType, UCPTrieValueWidth } from "./unicode/ucptrie";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 import { UnicodeString } from "./unistr";
 import { StringPiece } from "./unicode/stringpiece";
+import { UDataMemory } from "./udatamem.h";
+import { udata_close } from "./unicode/udata";
+import type { DataHeader } from "./ucmndata.h";
+import { U_IS_BIG_ENDIAN, U_CHARSET_FAMILY } from "./unicode/platform";
 /** Original owning/borrowed raw rule-data owner; no alternate file/rule/iterator factory. */
 export class RBBIDataWrapper {
   static readonly kDontAdopt = 0;
@@ -17,18 +21,46 @@ export class RBBIDataWrapper {
   fStatusMaxIdx!: number;
   fTrie: UCPTrie | null = null;
   private fRefCount = 0;
-  private fUDataMem: null = null;
+  private fUDataMem: UDataMemory | null = null;
   private readonly fRuleString = new UnicodeString();
   private fDontFreeData = true;
-  /** Original raw-data constructor. @param data - Actual header/allocation. @param status - Source status. @returns Owner. */
-  constructor(data: RBBIDataHeader, status: [number]);
+  /** Original raw-data or data-handle constructors share this ESM signature. Null is readable only with pre-existing failure, as source. @param data - Actual header/allocation or initialized handle. @param status - Source status. @returns Owner. */
+  constructor(data: RBBIDataHeader | UDataMemory | null, status: [number]);
   /** Original nonadopting raw-data constructor. @param data - Actual header/allocation. @param dontAdopt - Original kDontAdopt tag. @param status - Source status. @returns Owner. */
   constructor(data: RBBIDataHeader, dontAdopt: number, status: [number]);
   /** Original init0/init and post-init dont-adopt assignment order. @param data - Actual header. @param second - Status or tag. @param third - Status for the tagged overload. @returns Owner. */
-  constructor(data: RBBIDataHeader, second: [number] | number, third?: [number]) {
+  constructor(
+    data: RBBIDataHeader | UDataMemory | null,
+    second: [number] | number,
+    third?: [number],
+  ) {
     this.init0();
-    this.init(data, typeof second === "number" ? (third as [number]) : second);
-    if (typeof second === "number") this.fDontFreeData = true;
+    const status = typeof second === "number" ? (third as [number]) : second;
+    if (data instanceof RBBIDataHeader) {
+      this.init(data, status);
+      if (typeof second === "number") this.fDontFreeData = true;
+    } else {
+      if (U_FAILURE(status[0])) return;
+      const memory = data as UDataMemory,
+        header = memory.pHeader as DataHeader,
+        headerSize = header.dataHeader.headerSize;
+      if (!(
+        headerSize >= 20 &&
+        header.info.isBigEndian === U_IS_BIG_ENDIAN &&
+        header.info.charsetFamily === U_CHARSET_FAMILY &&
+        header.info.dataFormat[0] === 0x42 &&
+        header.info.dataFormat[1] === 0x72 &&
+        header.info.dataFormat[2] === 0x6b &&
+        header.info.dataFormat[3] === 0x20 &&
+        RBBIDataWrapper.isDataVersionAcceptable(header.info.formatVersion)
+      )) {
+        status[0] = E.U_INVALID_FORMAT_ERROR;
+        return;
+      }
+      this.init(new RBBIDataHeader(header.data.subarray(headerSize)), status);
+      // Original adoption is after init(), even if that call sets an error.
+      this.fUDataMem = memory;
+    }
   }
   /** Original version check examines only the major byte. @param version - Actual version bytes. @returns Acceptable. */
   static isDataVersionAcceptable(version: ArrayLike<number>): boolean {
@@ -113,10 +145,15 @@ export class RBBIDataWrapper {
     this.fRefCount = (this.fRefCount - 1) | 0;
     if (this.fRefCount === 0) this.destroy();
   }
-  /** Raw-data destructor branch. No UDataMemory constructor or fake close provider is supplied; that member stays null in the represented overloads. GC releases adopted backing storage after owner references are dropped. @returns Nothing. */
+  /** Original handle/raw destructor branches, with native free projected by managed ownership. GC releases adopted backing after references are dropped; heap-descriptor access after close is outside source contract. @returns Nothing. */
   private destroy(): void {
     this.fTrie = null;
-    if (this.fUDataMem === null && !this.fDontFreeData) {
+    const dataOwned = this.fUDataMem !== null || !this.fDontFreeData;
+    if (this.fUDataMem !== null) {
+      udata_close(this.fUDataMem);
+      this.fUDataMem = null;
+    }
+    if (dataOwned) {
       this.fHeader = null;
       this.fForwardTable = null;
       this.fReverseTable = null;

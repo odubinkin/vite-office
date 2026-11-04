@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/udata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/udata.h",
+    "localSymbols": [
+      "UDataInfo"
+    ],
+    "upstreamSymbols": [
+      "UDataInfo",
+      "udata_close",
+      "udata_getMemory"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified."
+    ],
+    "omittedResponsibilities": [
+      "Actual application-data/TOC loader, OS file mapping, public iterators/engines and word/title/service installation are incomplete. Native physical allocation/failure/munmap/thread/ABI and heap access after close are unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/udata.ts",
+          "marker": "UDataInfo"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+          "marker": "retains complete native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/udata.h",
+          "marker": "UDataInfo"
+        }
+      ]
+    }
+  }
+}

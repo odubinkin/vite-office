@@ -4212,3 +4212,38 @@ concrete engines and service installation remain pending. Managed raw-data
 release drops owned references without claiming native allocator/COW/thread/
 physical ABI or defined access after final release. No CSV completion or broad
 module parity is promoted by this prerequisite block.
+
+
+### Actual UDataMemory descriptor and data-handle rule construction
+
+Original `udatamem.cpp` now owns descriptor initialization, assignment preserving
+its destination heap flag, status-guarded creation, normalization, setters,
+raw/payload/known-length queries and close. Original binary `DataHeader` and
+`UDataInfo` views remain separate header owners. Size queries retain the source
+raw endian-byte comparison and swap rule; normalization checks only the first
+magic and otherwise advances one double, without a signature search.
+
+`RBBIDataWrapper(UDataMemory*, ...)` now consumes that actual descriptor. It uses
+the original unswapped header-size field and selective endian/charset/format/
+major-version checks. It does not introduce checks for the generic magic,
+info size, UChar size or data version. Adoption follows raw initialization even
+when it reports an error. Final release closes the adopted descriptor; existing
+failed-init reference behavior (CALC-466) remains unchanged.
+
+The genuine ICU78.3 comparison matches 196608 complete header rows and 743 full
+initialized descriptor/constructor traces, including native POSIX file mapping
+and close, borrowed/heap descriptors, alignment prefixes, swapped and invalid
+endian markers, negative/unknown lengths, warnings/errors and malformed rules.
+Full rows compare live; replay stores full-row fingerprints. The native mapper
+clears its output descriptor before mapping, including its heap flag; the test
+projection retains this original preparation. No local file mapper is supplied.
+Managed close drops owned byte references and follows native pointer clearing;
+physical OS munmap, allocation failure, thread/physical ABI and access after
+heap close are outside this binding.
+
+This completes the descriptor and rule-owner constructor prerequisite, not
+`udata_open` or application-data/container lookup. Original TOC formats and
+lookup, public iterator/provider construction, concrete dictionary engines,
+word/title and production service installation, NatNum12 output wiring,
+multiline EditEngine import and final CSV acceptance remain required. No broad
+parity or complete CSV readiness is inferred from the helper observations.

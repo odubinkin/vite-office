@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/ucmndata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/ucmndata.ts",
+        "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+        "apps/office/src/external/icu/source/common/udatamem.native-observations.json",
+        "vendor/icu-reference/source/common/ucmndata.cpp"
+      ],
+      "justification": "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "udata_getHeaderSize",
+        "udata_getInfoSize"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/icu-reference/source/common/ucmndata.cpp",
+      "upstreamSymbols": [
+        "udata_getHeaderSize",
+        "udata_getInfoSize"
+      ]
+    }
+  }
+}

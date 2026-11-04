@@ -13,7 +13,8 @@
       "Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. Public iterator/cache/dictionary/word/title/service construction and native allocator/ABI remain incomplete; a raw safe point is not exposed as a public word boundary.",
       "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
       "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified.",
-      "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified."
+      "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified.",
+      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -60,6 +61,38 @@
         {
           "path": "vendor/icu-reference/source/common/rbbidata.cpp",
           "marker": "RBBIDataWrapper::init"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/platform.h",
+          "marker": "U_IS_BIG_ENDIAN"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/udata.h",
+          "marker": "UDataInfo"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucmndata.h",
+          "marker": "MappedData"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucmndata.cpp",
+          "marker": "udata_getHeaderSize"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/udatamem.h",
+          "marker": "UDataMemory"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/udatamem.cpp",
+          "marker": "UDataMemory_init"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/umapfile.h",
+          "marker": "uprv_unmapFile"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/umapfile.cpp",
+          "marker": "uprv_unmapFile"
         }
       ],
       "tests": [
@@ -153,6 +186,38 @@
         {
           "path": "apps/office/src/external/icu/source/common/unistr.ts",
           "marker": "fromUTF8"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/platform.ts",
+          "marker": "U_IS_BIG_ENDIAN"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/udata.ts",
+          "marker": "UDataInfo"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+          "marker": "MappedData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucmndata.ts",
+          "marker": "udata_getHeaderSize"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.h.ts",
+          "marker": "UDataMemory"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.ts",
+          "marker": "UDataMemory_init"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/umapfile.h.ts",
+          "marker": "uprv_unmapFile"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/umapfile.ts",
+          "marker": "uprv_unmapFile"
         }
       ],
       "tests": [
@@ -174,6 +239,10 @@
         },
         {
           "path": "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+          "marker": "retains complete native"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
           "marker": "retains complete native"
         }
       ],
