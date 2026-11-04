@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import type { SwFormat } from "../attr/format";
 import { GetUniqueFrameName } from "./doclay";
 import { ClearFrameFormatIndices, DestroyFrameFormatTables } from "./docnew";
 import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
@@ -619,7 +620,7 @@ export class SwDoc {
     return collection;
   }
   /** Changes represented paragraph-format attributes with original ChgFormat history ownership. @param collection - Actual named format. @param set - Incoming direct items. @returns Nothing. */
-  public ChgFormat(collection: SwTextFormatColl, set: SfxItemSet): void {
+  public ChgFormat(collection: SwFormat, set: SfxItemSet): void {
     ChgFormat(this, collection, set);
   }
   /** Removes a named collection and corrects follow links before original format death. Used by creation undo with recording suppressed. @param collection - Owned non-default collection. @returns Nothing. */

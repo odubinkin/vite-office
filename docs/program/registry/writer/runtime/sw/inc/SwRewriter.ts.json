@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/SwRewriter.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/SwRewriter.ts",
+        "apps/office/src/sw/source/core/undo/SwRewriter.native.test.ts",
+        "vendor/libreoffice-reference/sw/inc/SwRewriter.hxx"
+      ],
+      "justification": "S3HW1E HTML71 implements original UndoArg1/2/3 scalar identities0/1/2 at their native SwRewriter.hxx header boundary. Full native name wrapper/OUString/ABI and class header surface remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoArg"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/SwRewriter.hxx",
+      "upstreamSymbols": [
+        "SwUndoArg"
+      ]
+    }
+  }
+}

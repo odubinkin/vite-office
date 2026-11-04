@@ -1,6 +1,7 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
 import { SwFlyFrameFormat, type SwFrameFormat } from "../layout/atrfrm";
+import type { SwFormat } from "../attr/format";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { BroadcastingModify } from "../../../inc/calbck";
@@ -290,7 +291,7 @@ export function CopyTextColl(document: SwDoc, source: SwTextFormatColl): SwTextF
 }
 
 /** Original ChgFormat stores explicit INVALID markers for newly introduced identities before the format mutation. @param document - Owning document. @param format - Represented paragraph collection. @param set - Incoming set. @returns Nothing. */
-export function ChgFormat(document: SwDoc, format: SwTextFormatColl, set: SfxItemSet): void {
+export function ChgFormat(document: SwDoc, format: SwFormat, set: SfxItemSet): void {
   if (document.GetUndoManager().DoesUndo()) {
     const added = new SfxItemSet(set);
     added.Differentiate(format.GetAttrSet());

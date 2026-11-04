@@ -111,6 +111,12 @@ export class FrameFormats<T extends SwFrameFormat> extends SwFormatsBase impleme
     );
     return index < 0 ? this.typeAndNameEnd() : index;
   }
+  /** Dereferences an original composite-index iterator represented by its ordered position in this host binding. @param position - Native type/name iterator position. @returns Actual borrowed format. */
+  GetFormatByTypeAndName(position: number): T {
+    const format = this.GetByTypeAndName()[position];
+    if (!format) throw new Error("assert(valid type/name iterator dereference)");
+    return format;
+  }
   /** Original same-name half-open range in composite order. @param name - Name. @returns Lower/upper ordered positions. */
   findRangeByName(name: string): readonly [number, number] {
     const ordered = this.GetByTypeAndName();

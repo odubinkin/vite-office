@@ -301,24 +301,19 @@ it("pins synthetic-only no-text and lookup-limit branches without claiming real 
   }
 });
 
-it("pins synthetic-only creation redo before undo and repeated deletion without real history reachability claims", /** Exercises preserved defensive history branches outside normal manager ordering. @returns Nothing. */ () => {
+it("executes source paragraph creation through real history without reading a destroyed style", /** Native action comment and repeated manager ordering use genuine owners. @returns Nothing. */ () => {
   const f = fixture(),
-    collection = f.doc.MakeTextFormatColl("Synthetic", f.doc.GetDfltTextFormatColl());
-  const action = new SwUndoTextFormatCollCreate(collection, undefined, f.doc);
-  expect(action.GetComment()).toBe("Create Paragraph Style");
-  const context = {
-    GetDoc:
-      /** Supplies the actual graph. @returns Document. */
-      () => f.doc,
-    RestoreCursor:
-      /** Source format history does not alter the cursor. @returns Nothing. */
-      () => {},
-  };
-  action.UndoWithContext(context);
-  action.UndoWithContext(context);
-  const premature = new SwUndoTextFormatCollCreate(collection, undefined, f.doc);
-  premature.RedoWithContext(context);
-  expect(f.doc.FindTextFormatCollByName("Synthetic")).toBeDefined();
+    collection = f.doc.MakeTextFormatColl("Created", f.doc.GetDfltTextFormatColl()),
+    action = new SwUndoTextFormatCollCreate(collection, f.doc.GetDfltTextFormatColl(), f.doc);
+  expect(action.GetComment()).toBe("Create paragraph style: Created");
+  f.doc.GetUndoManager().Clear();
+  f.doc.GetUndoManager().AddUndoAction(action);
+  for (let cycle = 0; cycle < 2; cycle++) {
+    expect(f.shell.Undo()).toBe(true);
+    expect(f.doc.FindTextFormatCollByName("Created")).toBeUndefined();
+    expect(f.shell.Redo()).toBe(true);
+    expect(f.doc.FindTextFormatCollByName("Created")).toBeDefined();
+  }
 });
 
 it("keeps absent table-operation defaults and document modified-false notifications read-only", /** Covers original defaults used by the modified aggregate without changing unrelated semantics. @returns Nothing. */ () => {

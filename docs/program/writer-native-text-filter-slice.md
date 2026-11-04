@@ -1720,3 +1720,25 @@ format undo/delete/style broadcast and modified restoration, MakeFlySection,
 production recursive HTML tables, RTF direction and final format/UI closure
 remain unimplemented/unverified. WRITER351 records the source create-undo stale
 format-pointer concern without inventing a safer upstream contract.
+
+HTML71 removes the eager paragraph-create undo/browser-id snapshot helper and
+introduces the original generic SwUndoFormatCreate with its actual paragraph
+subtype: lazy name lookup, owned current direct-item snapshot, original auto and
+pool-range state, real family recreation/ChgFormat and exact replaced/final set
+disposal. Original protected rewriter/cache belongs to SwUndo; actual SwRewriter
+retains native ordered/cascading/literal replacement and value-copy semantics.
+Paragraph-create comments use the pinned English resource template. Generic
+ChgFormat and the existing attribute helper now accept actual SwFormat and use
+real represented family lookups/composite iterator dereference; non-anchor
+ordinary-frame scalar undo is covered. This does not supply volatile table/box/
+section node-index capture, fly-anchor save/restore, selection/style broadcasting
+or native resource-id/localization/full base metadata. Concrete frame-create/
+delete factories and undo, frame-style pool modified restoration, MakeFlySection,
+production recursive HTML tables, RTF direction and final original-slice filter/UI
+closure remain open. WRITER351 source borrowing shape is preserved; no native
+stale-pointer outcome or broad native/module/ABI completion is claimed.
+
+WRITER352 records and preserves the generic create-history omission of the
+independent auto-update-on-direct-format bit: IsAuto is restored, while the
+recreated format keeps the original regular-constructor false auto-update default.
+No additional captured flag or repair is introduced.

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 439
+revision: 443
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T15:40:30.565Z"
+  updated_at: "2026-11-04T16:14:46.411Z"
   updated_by: "CODER"
-  note: "HTML70 verified checkpoint:177unique cases/14files,whole-app types and source/style/Writer registry gates pass. Actual ordinary frame table/default membership, positional name lookup, early effective index clearing and owning table teardown implemented. WRITER351 records source stale-pointer concern; mandatory Adjust fixture corrected after identical HEAD replay. Frame factory/generic undo/modified restoration, MakeFlySection, production HTML tables, RTF direction and final native format/UI audit remain incomplete."
-  attempts: 81
+  note: "HTML71 verified checkpoint:181unique cases/14files,whole-app types and source/style/Writer registry gates pass. Native generic format-create owner replaces eager paragraph/browser-id helper; real SwRewriter and protected SwUndo cache, source auto/range state/item ownership and represented scalar format lookups are implemented. WRITER352 flag omission preserved. Concrete frame factories/delete/broadcast, modified restoration, MakeFlySection, production HTML tables, RTF direction and final native filter/UI audit remain incomplete."
+  attempts: 82
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1301,8 +1304,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T16:14:46.411Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML71 verified checkpoint:181unique cases/14files,whole-app types and source/style/Writer registry gates pass. Native generic format-create owner replaces eager paragraph/browser-id helper; real SwRewriter and protected SwUndo cache, source auto/range state/item ownership and represented scalar format lookups are implemented. WRITER352 flag omission preserved. Concrete frame factories/delete/broadcast, modified restoration, MakeFlySection, production HTML tables, RTF direction and final native filter/UI audit remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T16:15:56.465Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T15:41:44.186Z"
+doc_updated_at: "2026-11-04T16:15:56.465Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3447,6 +3463,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T16:14:46.411Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML71 verified checkpoint:181unique cases/14files,whole-app types and source/style/Writer registry gates pass. Native generic format-create owner replaces eager paragraph/browser-id helper; real SwRewriter and protected SwUndo cache, source auto/range state/item ownership and represented scalar format lookups are implemented. WRITER352 flag omission preserved. Concrete frame factories/delete/broadcast, modified restoration, MakeFlySection, production HTML tables, RTF direction and final native filter/UI audit remain incomplete.
+    Attempts: 82
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T16:14:45.446Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3726,6 +3772,16 @@ sections:
     - Command: exact ESLint/Prettier path lists are recorded in html70-style-commands.txt; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check.
     - Result: pass. Evidence: ignored html70-* logs/registry JSON. Scope:1954runtime/1741mapped/182browser/31infra provenance,1953sources/10885imports/229module edges,4385JSDoc source files,4389authored file-size scan,115required/32retired source-tree paths,85native WhichIDs and0Writer semantic violations. Changed-source style and final tracked/untracked allowlist checks pass. No module-wide native parity status is promoted.
     - Full application replay is not scheduled in this continuing parent AgentPlane task; approved focused-test cadence remains unchanged. Compiled native differential/undefined stale-pointer outcomes, full document/default/layout teardown, production HTML-table materialization/RTF direction and complete original-slice filter/UI closure are not proven by this checkpoint.
+
+    HTML71 verified checkpoint; parent goal incomplete.
+
+    - Command: from apps/office, exact Writer Vitest commands are recorded in output/playwright/rtf-properties-native/html71-test-commands.txt. The14-file related run selects source generic create/rewriter, old by-example UI dispatcher, scalar format delta/root/collection, cursor/native format notification/parent/change history, TXT/RTF/Markdown and document I/O. The two changed new native suites are rerun after the final source-domain/WRITER352 test-only additions.
+    - Result: pass. Evidence: html71-tests-verified.log terminal0 proves180cases/14files; html71-last-native-tests.log terminal0 proves20cases/2changed native files (11Rewriter+9format-create). Final unique composition is12unchanged related files161cases plus final2files20cases =181unique cases/14files, including21fresh cases. Earlier failed and repeated runs are not added. No complete native/platform/ABI or full filter/UI completion claim is inferred from these tests.
+    - Command: from apps/office, ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit.
+    - Result: pass. Evidence: html71-types-last.log terminal0 (with earlier final-type logs retained). Scope: whole application/test tree, original protected rewriter override contract and generic SwFormat argument/helper paths.
+    - Command: exact changed-source ESLint/Prettier path lists are in html71-style-commands.txt; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check.
+    - Result: pass. Evidence: ignored html71-* source/style/gate logs and html71-writer-registry-final.json. Scope:1956runtime/1743mapped/182browser/31infra provenance,1955sources/10893imports/229module edges,4389JSDoc source files,4393authored size scan,115required/32retired tree paths,85native WhichIDs and0Writer semantic violations. Every changed module's broad behavior/default/contract/sourceResponsibility status remains unverified. Initial lint/type/legacy fixture corrections are documented in Findings.
+    - Full application tests remain outside the approved cadence for this continuing parent AgentPlane task. Source native compiled differential, complete volatile/anchor/broadcast/base metadata and concrete frame factories, production HTML-table/RTF direction and final original-slice native filter/UI closure remain unproven.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -5121,6 +5177,15 @@ sections:
     - Initial focused run83cases/7files:81pass,two expectation failures. One prior HTML65 test expected only one special DeleteAndDestroyAll; source docnew.cxx explicitly clears special formats and then destroys the table, whose original destructor clears it again. Updated that expectation to two calls, with the second still before state teardown and the actual owned anchor position still destroyed exactly once. One fresh relocation expectation wrongly assumed moving the default back would undo the previous move; actual source newDefault preserves [default,second,first], now checked literally with positional lookup. Production ordering was not changed to satisfy these assertions. Initial lint rejected two test non-null assertions; replaced with actual assertions/numeric call-order preconditions, no lint relaxation.
     - The first final command included a nonmatching guessed numbering filename; Vitest ran12 actual selected files/169cases. A bounded rg inventory resolved the real two numbering suites, subsequently run separately. Additional numbering run8cases:7pass,one old fixture omitted mandatory Adjust. Isolated HEAD-source replay temporarily loaded original doc.ts/docfmt.ts bytes, ran only that failing case and reproduced the identical adjust3 mismatch; both working source files were restored byte-for-byte in finally before further work (html70-numbering-baseline.log). Native unosett.cxx GetPropertiesForNumFormat unconditionally publishes Adjust, with aSvxToUnoAdjust mapping Left to UNO LEFT3. Added this independent literal to the existing expectation; no production numbering/service/geometry/serialization code changed. Final actual two suites8cases pass.
     - Previous goal turn is progress: commit96439f0b2 introduced actual native frame naming/state/date-time owners with verified tests and a clean checkpoint. This turn advances required real registry/lifecycle ownership; it does not claim full TXT/RTF/Markdown completion. Existing save/open/autosave/recovery deviations remain unchanged.
+
+    S3HW1E HTML71 — Source generic format-create history, actual undo rewriter/cache and represented scalar format deltas.
+
+    - Replaced the old eager paragraph-create name/browser-id snapshot helper with original SwUndoFormatCreate and actual paragraph subtype. Constructor retains the real borrowed new format/parent name; Undo lazily captures the name, finds the actual owner, value-copies current direct items and captures only native auto/range bits before family deletion. Redo always invokes actual family Create, conditionally restores auto/items through actual document ChgFormat, combines original range bits with newly created non-range bits, and preserves original borrowed-pointer shape. Replaced/final saved sets are disposed exactly once; no serialized browser ID, alternate style model or fake factory/result/modified-state provider remains.
+    - Added original SwUndoArg identities and actual SwRewriter vector/default/value-copy/add/apply/placeholder mechanisms. Duplicate updates retain vector position, ordered replacements may cascade, replacement text remains literal including JS-special dollar/backtick sequences and embedded UTF16/NUL. Fallback uses unnamed representable native enum3, avoiding an out-of-range native enum outcome claim. Protected GetRewriter and original cache flags/optional comment belong to SwUndo, rather than the family subtype. Current English paragraph-create label uses the pinned strings.hrc resource Create paragraph style: $1. Full native SwUndoId/localization/view-shell/redline metadata and OUString/wrapper/refcount/ABI remain unported or unverified.
+    - Generalized ChgFormat/action/helper arguments to actual SwFormat and captured native Which identity for represented name-based families. Actual special type/name lookup dereferences its original composite iterator instead of positional storage, then uses native ordinary fallback. Optional helper old-set transfer retains absent-versus-empty state. Non-anchor ordinary-frame scalar undo/redo runs through the real manager/session. Volatile table/section/box index capture, fly-anchor save/restore, drawing selection/context and style broadcasting remain unported/unverified; these scalar tests do not certify full generic/frame attribute history.
+    - WRITER352 records/preserves source omission of the independent auto-update-on-direct-format bit: IsAuto is captured/restored while a recreated owner retains its constructor false auto-update default. Added actual local history proof with no extra captured flag or repair. WRITER351 borrowed-pointer shape is retained by the generic base; concrete frame create/delete/rename factories/history and their stale-pointer path are not implemented or tested as native-defined outcomes here.
+    - Initial routine diagnostics caught a now-unused old text-format type import, an obsolete old English label expectation and four new test calls to an unported GetULSpace convenience getter. Removed the unused type; tests read actual native RES_UL_SPACE items rather than inventing a getter/provider. Source-backed old synthetic-only case created a new action from an already destroyed collection and invoked redo before a valid undo. Replaced that case with the real manager/shell's repeatable valid create Undo/Redo ordering and original English label; no destroyed style is read. New tests bind actual composition/writer-module session ownership and close through its real Close method. Initial production source metadata/helper scope and comment-cache placement were reviewed against upstream and corrected before final verification: protected cache belongs to SwUndo, source family only overrides GetRewriter. No consumer casts, fake cursor/result/format providers, weakened global checks or skipped mandatory gates were added.
+    - Previous goal turn is progress: committed30b41693c actual frame-table/default ownership/index teardown with verified tests. This turn closes a required shared history prerequisite and an old helper mismatch. Concrete frame factory/delete/broadcast/generic delete/rename history, frame-style pool UndoGuard/modified restoration, MakeFlySection, production recursive HTML-table materialization/layout, RTF layout/page/fly direction and final fixed-original-slice native filter/UI audit remain open. Broad semantic/default/contract/sourceResponsibility statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -7276,6 +7341,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T16:14:46.411Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML71 verified checkpoint:181unique cases/14files,whole-app types and source/style/Writer registry gates pass. Native generic format-create owner replaces eager paragraph/browser-id helper; real SwRewriter and protected SwUndo cache, source auto/range state/item ownership and represented scalar format lookups are implemented. WRITER352 flag omission preserved. Concrete frame factories/delete/broadcast, modified restoration, MakeFlySection, production HTML tables, RTF direction and final native filter/UI audit remain incomplete.
+Attempts: 82
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T16:14:45.446Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -7555,6 +7650,16 @@ HTML70 verified checkpoint; parent goal remains incomplete.
 - Command: exact ESLint/Prettier path lists are recorded in html70-style-commands.txt; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check.
 - Result: pass. Evidence: ignored html70-* logs/registry JSON. Scope:1954runtime/1741mapped/182browser/31infra provenance,1953sources/10885imports/229module edges,4385JSDoc source files,4389authored file-size scan,115required/32retired source-tree paths,85native WhichIDs and0Writer semantic violations. Changed-source style and final tracked/untracked allowlist checks pass. No module-wide native parity status is promoted.
 - Full application replay is not scheduled in this continuing parent AgentPlane task; approved focused-test cadence remains unchanged. Compiled native differential/undefined stale-pointer outcomes, full document/default/layout teardown, production HTML-table materialization/RTF direction and complete original-slice filter/UI closure are not proven by this checkpoint.
+
+HTML71 verified checkpoint; parent goal incomplete.
+
+- Command: from apps/office, exact Writer Vitest commands are recorded in output/playwright/rtf-properties-native/html71-test-commands.txt. The14-file related run selects source generic create/rewriter, old by-example UI dispatcher, scalar format delta/root/collection, cursor/native format notification/parent/change history, TXT/RTF/Markdown and document I/O. The two changed new native suites are rerun after the final source-domain/WRITER352 test-only additions.
+- Result: pass. Evidence: html71-tests-verified.log terminal0 proves180cases/14files; html71-last-native-tests.log terminal0 proves20cases/2changed native files (11Rewriter+9format-create). Final unique composition is12unchanged related files161cases plus final2files20cases =181unique cases/14files, including21fresh cases. Earlier failed and repeated runs are not added. No complete native/platform/ABI or full filter/UI completion claim is inferred from these tests.
+- Command: from apps/office, ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit.
+- Result: pass. Evidence: html71-types-last.log terminal0 (with earlier final-type logs retained). Scope: whole application/test tree, original protected rewriter override contract and generic SwFormat argument/helper paths.
+- Command: exact changed-source ESLint/Prettier path lists are in html71-style-commands.txt; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check.
+- Result: pass. Evidence: ignored html71-* source/style/gate logs and html71-writer-registry-final.json. Scope:1956runtime/1743mapped/182browser/31infra provenance,1955sources/10893imports/229module edges,4389JSDoc source files,4393authored size scan,115required/32retired tree paths,85native WhichIDs and0Writer semantic violations. Every changed module's broad behavior/default/contract/sourceResponsibility status remains unverified. Initial lint/type/legacy fixture corrections are documented in Findings.
+- Full application tests remain outside the approved cadence for this continuing parent AgentPlane task. Source native compiled differential, complete volatile/anchor/broadcast/base metadata and concrete frame factories, production HTML-table/RTF direction and final original-slice native filter/UI closure remain unproven.
 
 ## Rollback Plan
 
@@ -8954,3 +9059,12 @@ S3HW1E HTML70 — Actual ordinary frame table, default membership, name lookup a
 - Initial focused run83cases/7files:81pass,two expectation failures. One prior HTML65 test expected only one special DeleteAndDestroyAll; source docnew.cxx explicitly clears special formats and then destroys the table, whose original destructor clears it again. Updated that expectation to two calls, with the second still before state teardown and the actual owned anchor position still destroyed exactly once. One fresh relocation expectation wrongly assumed moving the default back would undo the previous move; actual source newDefault preserves [default,second,first], now checked literally with positional lookup. Production ordering was not changed to satisfy these assertions. Initial lint rejected two test non-null assertions; replaced with actual assertions/numeric call-order preconditions, no lint relaxation.
 - The first final command included a nonmatching guessed numbering filename; Vitest ran12 actual selected files/169cases. A bounded rg inventory resolved the real two numbering suites, subsequently run separately. Additional numbering run8cases:7pass,one old fixture omitted mandatory Adjust. Isolated HEAD-source replay temporarily loaded original doc.ts/docfmt.ts bytes, ran only that failing case and reproduced the identical adjust3 mismatch; both working source files were restored byte-for-byte in finally before further work (html70-numbering-baseline.log). Native unosett.cxx GetPropertiesForNumFormat unconditionally publishes Adjust, with aSvxToUnoAdjust mapping Left to UNO LEFT3. Added this independent literal to the existing expectation; no production numbering/service/geometry/serialization code changed. Final actual two suites8cases pass.
 - Previous goal turn is progress: commit96439f0b2 introduced actual native frame naming/state/date-time owners with verified tests and a clean checkpoint. This turn advances required real registry/lifecycle ownership; it does not claim full TXT/RTF/Markdown completion. Existing save/open/autosave/recovery deviations remain unchanged.
+
+S3HW1E HTML71 — Source generic format-create history, actual undo rewriter/cache and represented scalar format deltas.
+
+- Replaced the old eager paragraph-create name/browser-id snapshot helper with original SwUndoFormatCreate and actual paragraph subtype. Constructor retains the real borrowed new format/parent name; Undo lazily captures the name, finds the actual owner, value-copies current direct items and captures only native auto/range bits before family deletion. Redo always invokes actual family Create, conditionally restores auto/items through actual document ChgFormat, combines original range bits with newly created non-range bits, and preserves original borrowed-pointer shape. Replaced/final saved sets are disposed exactly once; no serialized browser ID, alternate style model or fake factory/result/modified-state provider remains.
+- Added original SwUndoArg identities and actual SwRewriter vector/default/value-copy/add/apply/placeholder mechanisms. Duplicate updates retain vector position, ordered replacements may cascade, replacement text remains literal including JS-special dollar/backtick sequences and embedded UTF16/NUL. Fallback uses unnamed representable native enum3, avoiding an out-of-range native enum outcome claim. Protected GetRewriter and original cache flags/optional comment belong to SwUndo, rather than the family subtype. Current English paragraph-create label uses the pinned strings.hrc resource Create paragraph style: $1. Full native SwUndoId/localization/view-shell/redline metadata and OUString/wrapper/refcount/ABI remain unported or unverified.
+- Generalized ChgFormat/action/helper arguments to actual SwFormat and captured native Which identity for represented name-based families. Actual special type/name lookup dereferences its original composite iterator instead of positional storage, then uses native ordinary fallback. Optional helper old-set transfer retains absent-versus-empty state. Non-anchor ordinary-frame scalar undo/redo runs through the real manager/session. Volatile table/section/box index capture, fly-anchor save/restore, drawing selection/context and style broadcasting remain unported/unverified; these scalar tests do not certify full generic/frame attribute history.
+- WRITER352 records/preserves source omission of the independent auto-update-on-direct-format bit: IsAuto is captured/restored while a recreated owner retains its constructor false auto-update default. Added actual local history proof with no extra captured flag or repair. WRITER351 borrowed-pointer shape is retained by the generic base; concrete frame create/delete/rename factories/history and their stale-pointer path are not implemented or tested as native-defined outcomes here.
+- Initial routine diagnostics caught a now-unused old text-format type import, an obsolete old English label expectation and four new test calls to an unported GetULSpace convenience getter. Removed the unused type; tests read actual native RES_UL_SPACE items rather than inventing a getter/provider. Source-backed old synthetic-only case created a new action from an already destroyed collection and invoked redo before a valid undo. Replaced that case with the real manager/shell's repeatable valid create Undo/Redo ordering and original English label; no destroyed style is read. New tests bind actual composition/writer-module session ownership and close through its real Close method. Initial production source metadata/helper scope and comment-cache placement were reviewed against upstream and corrected before final verification: protected cache belongs to SwUndo, source family only overrides GetRewriter. No consumer casts, fake cursor/result/format providers, weakened global checks or skipped mandatory gates were added.
+- Previous goal turn is progress: committed30b41693c actual frame-table/default ownership/index teardown with verified tests. This turn closes a required shared history prerequisite and an old helper mismatch. Concrete frame factory/delete/broadcast/generic delete/rename history, frame-style pool UndoGuard/modified restoration, MakeFlySection, production recursive HTML-table materialization/layout, RTF layout/page/fly direction and final fixed-original-slice native filter/UI audit remain open. Broad semantic/default/contract/sourceResponsibility statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.

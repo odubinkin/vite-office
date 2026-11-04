@@ -341,3 +341,18 @@ it.each([
     }
   },
 );
+
+it("dereferences the actual type/name iterator instead of positional storage", /** Source composite iterator refers to an actual registered format even when its order differs from insertion order. @returns Nothing. */ () => {
+  const x = fixture(),
+    first = x.doc.MakeFlyFrameFormat("Z first", x.doc.GetDfltFrameFormat()),
+    second = x.doc.MakeFlyFrameFormat("A second", x.doc.GetDfltFrameFormat()),
+    formats = x.doc.GetSpzFrameFormats();
+  try {
+    expect(formats.GetFormat(0)).toBe(first);
+    const position = formats.findByTypeAndName(second.Which(), "A second");
+    expect(position).not.toBe(formats.typeAndNameEnd());
+    expect(formats.GetFormatByTypeAndName(position)).toBe(second);
+  } finally {
+    x.close();
+  }
+});

@@ -22,13 +22,19 @@
     "status": "mapped",
     "upstreamPath": "sw/source/core/undo/SwUndoFmt.cxx",
     "upstreamSymbols": [
-      "SwUndoTextFormatCollCreate"
+      "SwUndoTextFormatCollCreate",
+      "SwUndoFormatCreate::UndoImpl",
+      "SwUndoFormatCreate::RedoImpl",
+      "SwUndoFormatCreate::GetRewriter"
     ],
     "localSymbols": [
-      "SwUndoTextFormatCollCreate"
+      "SwUndoTextFormatCollCreate",
+      "SwUndoFormatCreate"
     ],
     "preservedResponsibilities": [
-      "Name-based original collection creation undo and direct-item/parent restoration."
+      "Name-based original collection creation undo and direct-item/parent restoration.",
+      "S3HW1E HTML71 replaces the old eager paragraph creation snapshot/browser-id helper with actual SwUndoFormatCreate source state and the original paragraph subtype. Construction retains real borrowed new format and original parent name; Undo captures the name lazily, re-finds the actual format, owns a copied SfxItemSet and retains auto plus COLL_GET_RANGE_BITS. Redo always invokes real family construction and, only when both format and saved set exist, restores auto/items via actual document ChgFormat and combines original range bits with newly created non-range bits. Replaced/final saved sets are disposed as native unique ownership requires. No serialized browser identity or second style model/factory/modified-state provider remains. SwUndo owns native protected rewriter/comment-cache state; paragraph creation uses the pinned English Create paragraph style: $1 template. Generic frame-create/delete/rename subtypes, native create/delete broadcast/resource-id/localization/full SwUndo metadata, volatile/anchor history and broader contracts remain unported/unverified. WRITER351 borrowed-pointer source shape is preserved by the generic base; no stale-pointer repair or compiled outcome is asserted.",
+      "WRITER352 preserves the original create-history omission of the independent auto-update-on-direct-format flag: only IsAuto is captured/restored, while regular recreation retains false auto-update default. Actual local paragraph history tests verify this source behavior without a compiled-native/all-UI claim or extra saved flag."
     ],
     "omittedResponsibilities": [
       "Other style families, native hidden-default table, conditional styles and pool category restoration remain outside this bounded consumed paragraph path."
