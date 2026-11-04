@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-content-boxes.ts",
+          "marker": "GetTableBoxByStartIndex"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-content-box-registry.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTable::GetTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/swtable.hxx",
+          "marker": "class SwTableSortBoxes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::RemoveFromTable"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/table/swtable-content-boxes.ts",
+    "localSymbols": [
+      "SwTableSortBoxes",
+      "DelBoxNode",
+      "GetTableBoxByStartIndex"
+    ],
+    "omittedResponsibilities": [
+      "Other name/box selection, native pointer addresses/ABI, unbound constructor/format bootstrap and whole table module parity are not certified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML62: content-box construction registers the actual pointer in SwTableSortBoxes before row publication; anonymous boxes stay out of the registry. The native o3tl pointer-vector specialization is represented by the existing SortedVector and stable opaque JS object-pointer order, not node-offset sorting or a native-address claim. Actual section indices are read at lookup time. RemoveFromTable erases only this pointer and nulls the start; GetSttIdx returns zero without a content start. Table destruction clears all registered starts and the non-owning pointer vector before model-owned rows/boxes are destroyed. GetTableBox now executes the original next-content/nested-table scan, first SwFrame registration and upward cell climb, then reverse pointer-registry lookup; the HTML61 recursive graph fallback is removed. IsTableComplex uses actual content-box upper-row/anonymous-box identities. SwIterator class-type admission no longer requires a public constructor: the real protected SwFrame class selector is accepted through prototype/hasInstance, with unchanged runtime dynamic filtering. Native default unbound-table/format bootstrap, exact C++ address/ABI, document teardown, full HTML recursive production/materialization/layout, RTF direction and final format/UI completeness remain unverified. Browser save/open/autosave/recovery exceptions are unchanged. WRITER344 records and preserves the original layout-dependent foreign-table index result; actual same-document native tables/frames prove the translated branch asymmetry without asserting compiled Writer caller reachability."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/table/swtable.cxx",
+    "upstreamSymbols": [
+      "SwTable::GetTableBox",
+      "DelBoxNode"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/table/swtable-content-boxes.ts",
+      "rationale": "The original SwTableSortBoxes specialization, DelBoxNode and layout-first GetTableBox responsibility are physically separated from the already split swtable.cxx owners under the unchanged authored-file size limit. SwTable retains its actual registry and public entry point; no alternate graph/provider replaces the native lookup. Whole table module and native address/ABI parity remain unverified.",
+      "stackNecessity": "responsibility-split"
+    }
+  },
+  "legacyOrder": 195
+}

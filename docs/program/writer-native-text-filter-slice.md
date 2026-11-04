@@ -1605,3 +1605,14 @@ assumed complete SwDoc.Dispose implementation. Native sorted-content registry
 and layout-first box lookup, document teardown, recursive HTML table production
 and materialization/layout remain unverified; this is a core ownership step,
 not completed HTML-table import or a complete native format claim.
+
+HTML62 replaces the HTML61 descendant-graph query with native content-pointer
+registration and layout-first lookup. Actual content constructors register even
+before row publication; anonymous boxes do not. Lookup scans the next actual
+content/nested-table node, uses its first native frame and ascends to a cell,
+then falls back to the reverse pointer registry. Pointer ordering is opaque JS
+reference ordering, not node-index sorting or a native C++ address/ABI claim.
+Real removal and table destruction clear registry membership/content starts;
+owned row/box vectors retain model destruction. Full table default/bootstrap,
+document teardown and production HTML table grammar/materialization/layout
+remain unverified; format completion is not established by this checkpoint.

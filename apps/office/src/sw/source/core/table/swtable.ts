@@ -1,4 +1,6 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
+import { SwTableSortBoxes, DelBoxNode, GetTableBoxByStartIndex } from "./swtable-content-boxes";
+export { SwTableSortBoxes } from "./swtable-content-boxes";
 import type { SwHTMLTableLayout } from "../doc/htmltbl";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
@@ -95,6 +97,20 @@ export class SwTable extends SwClient {
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
   private readonly lines: SwTableLine[] = [];
+  private readonly m_TabSortContentBoxes = new SwTableSortBoxes();
+  /** Original borrowed content-box pointer registry, independent of row-vector placement. @returns Actual native container. */
+  public GetTabSortBoxes(): SwTableSortBoxes {
+    return this.m_TabSortContentBoxes;
+  }
+  /** Original complexity predicate detects actual nested upper rows, not nested document table nodes. @returns Whether a content box belongs to an anonymous parent box. */
+  public IsTableComplex(): boolean {
+    for (const box of this.m_TabSortContentBoxes) {
+      const upper = box.GetUpper();
+      if (!upper) throw new Error("assert(content box has an upper line)");
+      if (upper.GetUpper()) return true;
+    }
+    return false;
+  }
   private readonly declaredColumnWidths: number[] = [];
   private readonly softPageBreakRows: number[] = [];
 
@@ -153,6 +169,8 @@ export class SwTable extends SwClient {
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
+    DelBoxNode(this.m_TabSortContentBoxes);
+    this.m_TabSortContentBoxes.clear();
     for (const line of this.lines.splice(0)) line.Dispose();
   }
 
@@ -815,19 +833,9 @@ export class SwTable extends SwClient {
     return this.lines;
   }
 
-  /** Resolves a connected native box by its section start index. @param startIndex - Native node coordinate. @returns Actual box or undefined. */
+  /** Original layout-first content-box lookup with reverse sorted-pointer fallback. @param startIndex - Actual section index. @returns Original box or absent. */
   public GetTableBox(startIndex: number): SwTableBox | undefined {
-    /** Current graph fallback visits actual owned descendants; complete native sorted-content registry and layout-first query remain separate responsibilities. @param lines - Actual lines. @returns Matching real content box. */
-    function find(lines: readonly SwTableLine[]): SwTableBox | undefined {
-      for (const line of lines)
-        for (const box of line.GetTabBoxes()) {
-          if (box.GetSttNd()?.GetIndex() === startIndex) return box;
-          const found = find(box.GetTabLines());
-          if (found) return found;
-        }
-      return undefined;
-    }
-    return find(this.lines);
+    return GetTableBoxByStartIndex(this, startIndex);
   }
 
   /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */

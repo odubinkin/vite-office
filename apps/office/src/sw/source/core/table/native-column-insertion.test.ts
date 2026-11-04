@@ -292,13 +292,12 @@ it("rejects invalid native column selections and counts without graph or history
       ),
     ).toBe(false);
     expect(
-      f.doc.InsertCol([
+      /** Rejects the original constructor's absent-table precondition before producing a fabricated content box. @returns Nothing. */ () =>
         new SwTableBox(
           f.doc.MakeTableBoxFormat(),
           required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode,
         ),
-      ]),
-    ).toBe(false);
+    ).toThrow("content box belongs to a table");
     expect(f.doc.InsertCol([required(boxes[0])])).toBe(false);
     expect(
       f.doc.InsertCol([required(boxes[0]), required(required(f.rows[1]).GetTabBoxes()[1])]),

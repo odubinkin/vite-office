@@ -41,6 +41,29 @@ export class SwTableBox extends SwClient {
     if (this.startNode && format.GetDoc() !== this.startNode.GetDoc())
       throw new Error("Writer cell format belongs to another document.");
     this.RegisterToModify(this.CheckBoxFormat(format));
+    if (this.startNode) {
+      const table = this.startNode.FindTableNode();
+      if (!table) throw new Error("assert(content box belongs to a table)");
+      table.GetTable().GetTabSortBoxes().insert(this);
+    }
+  }
+  /** Original RemoveFromTable erases only this actual pointer and clears its content start once. @returns Nothing. */
+  public RemoveFromTable(): void {
+    if (!this.startNode) return;
+    const table = this.startNode.FindTableNode();
+    if (!table) throw new Error("assert(content box belongs to a table)");
+    const boxes = table.GetTable().GetTabSortBoxes(),
+      index = boxes.find(this);
+    if (index >= 0) boxes.erase_at(index);
+    this.startNode = null;
+  }
+  /** Original DelBoxNode friend access used only by table destruction. @returns Nothing. */
+  public SourceClearStartNode(): void {
+    this.startNode = null;
+  }
+  /** Original content-start index returns zero for anonymous/removed boxes. @returns Native node offset. */
+  public GetSttIdx(): number {
+    return this.startNode ? this.startNode.GetIndex() : 0;
   }
   /** Original borrowed upper row. @returns Actual row or null. */
   public GetUpper(): SwTableLine | null {
@@ -131,6 +154,7 @@ export class SwTableBox extends SwClient {
   /** Releases owned nested lines and the original box client, deleting only a final-client format. @returns Nothing. */
   public override Dispose(): void {
     const format = this.GetRegisteredIn();
+    if (format && !this.GetFrameFormat().GetDoc().IsInDtor()) this.RemoveFromTable();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
     for (const line of this.lines.splice(0)) line.Dispose();

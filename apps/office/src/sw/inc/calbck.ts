@@ -409,7 +409,10 @@ export class WriterListenerIterator extends ClientIteratorBase {
 export class SwIterator<Element extends SwClient> extends ClientIteratorBase {
   /** Binds original template type and source constructor. @param elementType - Actual native class binding. @param root - Actual modify. @returns Cursor. */
   constructor(
-    private readonly elementType: abstract new (...args: never[]) => Element,
+    private readonly elementType: {
+      readonly prototype: Element;
+      [Symbol.hasInstance](value: unknown): boolean;
+    },
     root: SwModify,
   ) {
     super(root);
