@@ -200,7 +200,7 @@ export function leave_span_callback(
   parser: SwMarkdownParser,
 ): number {
   void detail;
-  if (parser.m_aAttrStack.length !== 0) parser.m_aAttrStack.pop();
+  if (parser.m_aAttrStack.length !== 0) parser.m_aAttrStack.pop()?.Dispose();
   if (type === M.MD_SPANTYPE.MD_SPAN_IMG) {
     parser.InsertCurImage();
     parser.m_bInsideImage = false;

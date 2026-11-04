@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { goNext, goPrevious } from "../docnode/nodes.navigation";
 import { Ring } from "../../../inc/ring";
 import { SwContentNode, SwNode } from "../docnode/node";
@@ -428,4 +429,26 @@ function GoAdjacentPos(
     position.Assign(node, 0);
   }
   return node;
+}
+
+/** Original default forward-character Move/GoInContent/GoInNode responsibility for current text content, using the original Unicode non-SKIPCELL nextCharacters code-point primitive. That source branch ignores locale. This is not the complete SwMoveFnCollection, hidden/grapheme/word service. @param range - Actual point/mark owner. @returns Original move result, retaining mark and clearing label affinity even on failure. */
+export function MoveForwardInContent(range: SwPaM): boolean {
+  const point = range.GetPoint(),
+    node = point.GetNode();
+  let moved: boolean;
+  if (node instanceof SwContentNode && point.GetContentIndex() < node.Len()) {
+    if (node.GetNodeType() === "text") {
+      const text = unicode((node as SwTextNode).GetText()),
+        pos: [number] = [point.GetContentIndex()];
+      try {
+        text.iterateCodePoints(pos);
+        point.SetContent(pos[0]);
+      } finally {
+        text.dispose();
+      }
+    } else point.SetContent(point.GetContentIndex() + 1);
+    moved = true;
+  } else moved = GoNextPos(point, true) !== undefined;
+  range.SetInFrontOfLabel_(false);
+  return moved;
 }

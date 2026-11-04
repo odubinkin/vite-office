@@ -52,6 +52,14 @@
         {
           "path": "apps/office/src/sw/source/core/doc/native-absolute-position-correction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/mdtab.lifecycle.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-forward-content-move.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -102,6 +110,18 @@
         {
           "path": "sw/source/core/crsr/pam.cxx",
           "marker": "void SwPaM::SetMark()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "bool SwPaM::Move"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx",
+          "marker": "SwContentNode::GoNext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "BreakIterator_Unicode::nextCharacters"
         }
       ]
     },
@@ -136,7 +156,8 @@
       "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch.",
       "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
       "The same native index owner also consumes original array/node/copy constructor overloads, relative positive/negative offsets, array absolute offsets, default0, GetNodes and node/index/array Assign overloads. Same-node assignment preserves the existing registration; cross-document native pointer assignment binds only the supplied new node. Source evidence is original ndindex.hxx, with independent real-array removal tests; unsupported arithmetic/comparison/Ring API families are not claimed.",
-      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged."
+      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML60: real Markdown table cursors register a borrowed parser pointer and deregister on explicit source destruction; replacing the active cursor registers the new owner before releasing the old one. EndTable executes the original forward default-character PaM movement, AM_SPACE append and cursor release order, retaining the extra body paragraph (WRITER343). The extracted forward Chars path uses the real SAL OUString code-point primitive from the original non-SKIPCELL Unicode branch, then actual GoNextPos/CheckNodesRange at node boundaries, retaining mark and clearing label affinity even on failure. This does not implement or certify the complete movement function-table, locale/grapheme/word/hidden-content service. Original parser defaults are blockQuoteDepth=-1 and noParSpace=true; outer quote exit restores body style. Popped unique-owned span items and remaining parser items are explicitly disposed before borrowed caller document/cursor owners. Real md4c rejection in a footnote section preserves the nullable table precondition (WRITER342), without claiming native crash reachability. Whole parser reference counting, paste reader, native table/HTML materialization/layout/grammar, RTF direction and final format/UI audit remain unverified; intentional save/open/autosave/recovery behavior is unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",

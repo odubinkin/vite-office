@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Native table state retains the actual SwTable and -1 row/column counters. Grammar is owned by the external md4c parser; source insertion defaults and cell selection belong to SwMarkdownParser. End-table position/append differential remains unverified.",
-      "S3HW1E HTML59: native InsertTable now admits connected text in actual sections/cells, returns original null for the inserts/footnote node interval before any undo or mutation, and exposes that nullable result through SwDoc and current MDTable pointer contracts. New SwNode.GetTableBox resolves actual enclosing cell ownership. Original tblrwcl.cxx base-line/leaf predecessor algorithms live in their source responsibility, including null-search leaf identity, row-local mode and empty previous rows; actual owning lines are resolved from the real current flat graph, with no alternate owner list. Anonymous nested-line boxes and their original upper hierarchy are not represented or certified. Nested break transfer now copies parent direct page/break items only at the source first-paragraph/first-cell boundary, retains parent items (WRITER340), and does not move following paragraph items for a nested insertion. Existing used-format lookup includes actual table owners in every section instead of only direct body UI blocks. GetUniqueTableName uses the native bitmap and actual o3tl integer suffix conversion (WRITER341), retaining the current English used-format profile; mail merge, localization and unused/default native format-registry owners are not represented or certified. Production history/Markdown consumers retain nullable inputs without inventing a fallback table; native admitted valid pointers remain actual owners. Whole native module/API/ABI/default/lifetime parity is unverified. Structural nontext admission, default SwTable/early-frame bootstrap, full anonymous/nested table rendering/materialization/layout, first-cell HTML orchestration/grammar, RTF direction export, MDTable parser registration/lifetime and final format/UI audit remain required. Browser file/autosave/recovery deviations stay unchanged."
+      "S3HW1E HTML59: native InsertTable now admits connected text in actual sections/cells, returns original null for the inserts/footnote node interval before any undo or mutation, and exposes that nullable result through SwDoc and current MDTable pointer contracts. New SwNode.GetTableBox resolves actual enclosing cell ownership. Original tblrwcl.cxx base-line/leaf predecessor algorithms live in their source responsibility, including null-search leaf identity, row-local mode and empty previous rows; actual owning lines are resolved from the real current flat graph, with no alternate owner list. Anonymous nested-line boxes and their original upper hierarchy are not represented or certified. Nested break transfer now copies parent direct page/break items only at the source first-paragraph/first-cell boundary, retains parent items (WRITER340), and does not move following paragraph items for a nested insertion. Existing used-format lookup includes actual table owners in every section instead of only direct body UI blocks. GetUniqueTableName uses the native bitmap and actual o3tl integer suffix conversion (WRITER341), retaining the current English used-format profile; mail merge, localization and unused/default native format-registry owners are not represented or certified. Production history/Markdown consumers retain nullable inputs without inventing a fallback table; native admitted valid pointers remain actual owners. Whole native module/API/ABI/default/lifetime parity is unverified. Structural nontext admission, default SwTable/early-frame bootstrap, full anonymous/nested table rendering/materialization/layout, first-cell HTML orchestration/grammar, RTF direction export, MDTable parser registration/lifetime and final format/UI audit remain required. Browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML60: real Markdown table cursors register a borrowed parser pointer and deregister on explicit source destruction; replacing the active cursor registers the new owner before releasing the old one. EndTable executes the original forward default-character PaM movement, AM_SPACE append and cursor release order, retaining the extra body paragraph (WRITER343). The extracted forward Chars path uses the real SAL OUString code-point primitive from the original non-SKIPCELL Unicode branch, then actual GoNextPos/CheckNodesRange at node boundaries, retaining mark and clearing label affinity even on failure. This does not implement or certify the complete movement function-table, locale/grapheme/word/hidden-content service. Original parser defaults are blockQuoteDepth=-1 and noParSpace=true; outer quote exit restores body style. Popped unique-owned span items and remaining parser items are explicitly disposed before borrowed caller document/cursor owners. Real md4c rejection in a footnote section preserves the nullable table precondition (WRITER342), without claiming native crash reachability. Whole parser reference counting, paste reader, native table/HTML materialization/layout/grammar, RTF direction and final format/UI audit remain unverified; intentional save/open/autosave/recovery behavior is unchanged."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -28,12 +29,28 @@
         {
           "path": "apps/office/src/sw/source/core/docnode/native-table-section-insertion.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/mdtab.lifecycle.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/mdtab.cxx",
           "marker": "SwMarkdownParser::StartTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdtab.cxx",
+          "marker": "SwMarkdownParser::EndTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/swmd.hxx",
+          "marker": "m_nBlockQuoteDepth"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/swmd.cxx",
+          "marker": "SwMarkdownParser::RegisterTable"
         }
       ]
     }

@@ -69,6 +69,7 @@ it("retains configured non-default starts on reused depth and normalizes bitmap 
     parser.EndNumberedBulletList();
     expect(last.Get(1).GetNumberingType()).toBe(SvxNumType.SVX_NUM_CHAR_SPECIAL);
   } finally {
+    parser.SourceDispose();
     pam.Dispose();
     doc.Dispose();
   }

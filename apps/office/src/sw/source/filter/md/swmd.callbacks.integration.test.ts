@@ -17,9 +17,11 @@ function withParser(run: (parser: SwMarkdownParser, doc: SwDoc) => void): void {
   const position = new SwPosition(first),
     pam = new SwPaM(position);
   position.Dispose();
+  const parser = new SwMarkdownParser(doc, pam);
   try {
-    run(new SwMarkdownParser(doc, pam), doc);
+    run(parser, doc);
   } finally {
+    parser.SourceDispose();
     pam.Dispose();
     doc.Dispose();
   }
@@ -37,9 +39,13 @@ it("rejects empty parser input and list items without a preceding list", /** Ver
       ).toThrow("Markdown item callback has no list rule.");
       parser.SetNodeNum(0);
       parser.EndNumberedBulletList();
-      parser.StartCell(MD_ALIGN.MD_ALIGN_CENTER);
-      parser.StartRow();
-      parser.EndTable();
+      expect(
+        /** Checks actual cell pointer preconditions. @returns Nothing. */ () =>
+          parser.StartCell(MD_ALIGN.MD_ALIGN_CENTER),
+      ).toThrow("active table cursor");
+      expect(
+        /** Checks actual row pointer preconditions. @returns Nothing. */ () => parser.StartRow(),
+      ).toThrow("active table cursor");
       parser.SetAttrs(parser.m_pPam);
     },
   );
@@ -70,6 +76,7 @@ it("preserves explicit and soft paragraph spacing and strips at most two trailin
       parser.AddParSpace();
       parser.AppendTextNode(A.AM_NORMAL, false);
       parser.AppendTextNode(A.AM_NONE, false);
+      parser.AddBlockQuote();
       parser.EndBlockQuote();
       expect(parser.GetTextNode().GetParagraphStyle()).toBe("text-body");
     },
@@ -120,7 +127,7 @@ it("accepts task callbacks and keeps image links and itemless nested spans balan
   doc.Dispose();
 });
 
-it("selects all native table alignments and ignores cells beyond represented rows", /** Verifies source table bounds. @returns Nothing. */ () => {
+it("selects all native table alignments on the represented row", /** Verifies source table bounds. @returns Nothing. */ () => {
   withParser(
     /** Exercises source table cursor movement. @param parser - Parser. @returns Nothing. */ (
       parser,
@@ -138,9 +145,6 @@ it("selects all native table alignments and ignores cells beyond represented row
           value,
         );
       }
-      parser.StartCell(MD_ALIGN.MD_ALIGN_CENTER);
-      parser.StartRow();
-      parser.StartCell(MD_ALIGN.MD_ALIGN_CENTER);
       parser.EndTable();
     },
   );

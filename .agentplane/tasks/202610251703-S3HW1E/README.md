@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 394
+revision: 398
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T11:26:10.653Z"
+  updated_at: "2026-11-04T11:53:14.262Z"
   updated_by: "CODER"
-  note: "HTML59 passes226 unique cases/17actual files, app types and static/source gates. Native text-section admission/null footnote result, actual cell predecessors, nested break-copy guards and all-section used-name bitmap implemented; WRITER340-342 recorded and behavior preserved. Native constructor/registry/HTML layout/grammar, RTF direction, MD ownership and final audit remain."
-  attempts: 70
+  note: "HTML60 checkpoint verified: 122 unique cases in 13 related files, application types and source/static gates pass. Actual Markdown table registration/destruction, native move-append-release, original defaults and span cleanup implemented; cell selection uses native node/checked alignment contracts. WRITER343 preserved; WRITER153 withdrawn as a local-default false positive. Parent native HTML table path, RTF direction and final format/UI audit remain incomplete."
+  attempts: 71
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1125,8 +1128,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T11:53:14.262Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML60 checkpoint verified: 122 unique cases in 13 related files, application types and source/static gates pass. Actual Markdown table registration/destruction, native move-append-release, original defaults and span cleanup implemented; cell selection uses native node/checked alignment contracts. WRITER343 preserved; WRITER153 withdrawn as a local-default false positive. Parent native HTML table path, RTF direction and final format/UI audit remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T11:53:22.139Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T11:27:28.292Z"
+doc_updated_at: "2026-11-04T11:53:22.139Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2971,6 +2987,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T11:53:14.262Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML60 checkpoint verified: 122 unique cases in 13 related files, application types and source/static gates pass. Actual Markdown table registration/destruction, native move-append-release, original defaults and span cleanup implemented; cell selection uses native node/checked alignment contracts. WRITER343 preserved; WRITER153 withdrawn as a local-default false positive. Parent native HTML table path, RTF direction and final format/UI audit remain incomplete.
+    Attempts: 71
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:53:04.251Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3137,6 +3183,15 @@ sections:
     - Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html59-eslint.txt, html59-prettier.txt and final suspected-issues formatting stdout). Scope: actual changes, no reduced rules or fabricated result fixtures.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html59-{boundaries,jsdoc,filesize,source-tree,provenance-final,registry}.txt). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10755imports/229edges,4352JSDoc files,4356size-scanned files and Writer registry0semantic violations. Secondary original tblrwcl source evidence added to the box/line record is revalidated by final provenance. These gates do not prove whole native behavior/API/ABI/filter completion; broader semantic statuses remain unverified.
     - Full application suite is not repeated for a checkpoint of the same ongoing AgentPlane task, per user instruction. No final selected actual check is skipped.
+
+    S3HW1E HTML60 checkpoint —122 unique actual cases across13files in the combined final relevant runs. Parent remains incomplete; this is a verified local source-contract checkpoint, not format/module completion. Logs: output/playwright/rtf-properties-native/html60-*.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/core/crsr/native-forward-content-move.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/swmd.user-config.integration.test.ts src/sw/source/filter/md/swmd.locale.integration.test.ts src/sw/source/filter/md/mdnum.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/core/doc/native-integration-boundaries.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts ->120pass/13files (html60-related.log). Scope: actual Markdown callbacks/document, numeric/list/locale/user options, TXT, RTF and document I/O. The initial41case run had four obsolete golden expectations; they were migrated against actual pinned EndTable and -1 quote-depth declarations, not hidden.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/doc/native-integration-boundaries.test.ts ->39pass/1obsolete callback fixture expectation (html60-cell-final.log). All10lifecycle/default/ownership cases, all19Markdown document cases and all4core boundary cases pass after real start+1 cell selection and checked alignment map. The old callback fixture silently invoked cell/row with no active cursor; it now asserts actual pointer preconditions rather than accepting a nonexistent native owner.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/swmd.callbacks.integration.test.ts ->7pass/1file (html60-callback-final.log). Scope: final corrected callback fixtures and actual represented table/spacing/list/span producers. Together with unchanged related successes and the final cell run, all122selected unique cases pass; no final relevant case is skipped.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html60-types-cell-final.log). Scope: complete application type contracts including real MDTable parser constructor and actual box start/node selection. Earlier initial and pre-cell type runs also pass; no nullable cast hides a rejected table.
+    - Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html60-eslint-cell-final.log, html60-eslint-callback-final.log, html60-prettier-final.log). Initial no-useless-assignment finding in the new movement result declaration was fixed; no rule suppression. Callback final expectation formatting passed in write output.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html60-boundaries.log, html60-jsdoc-callback-final.log, html60-filesize.log, html60-source-tree.log, html60-provenance-final.log, html60-registry-final.log). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10757imports/229edges,4354JSDoc files and0Writer registry semantic violations. Paired existing metadata histories retain broad unverified statuses. These gates do not certify complete native movement/parser reference counting/paste, recursive HTML grammar/table construction/layout, RTF direction or final format/UI completeness. Full-suite replay was not due under the user's once-per-ten-AgentPlane-tasks rule; this remains the same approved parent task.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4431,6 +4486,12 @@ sections:
     The first type check correctly exposed callers that still assumed non-null insertion. Valid fixtures now assert actual non-footnote results, and the old document rejection of nested text is replaced by actual nested insertion/undo coverage while current shell/nontext admission remains separate. A converter edit initially left the old OUString construction in a compiler snapshot; actual source now invokes the native o3tl helper directly, and final type checking passes. Source snapshots and failure logs remain as iteration evidence, not final certification. Processes were slow but confirmed live using their exact tool handles and read-only process metadata limited to this checkout's app cwd; they were not restarted merely for quiet output. All final selected tests and required gates pass.
 
     Remaining requirements: structural nontext insertion admission; native default SwTable/early-frame bootstrap and full table-format registry/lifetime; anonymous/nested table rendering, materialization and layout with real text measurement; first-cell/floating/section HTML orchestration and complete table grammar/caption placement; RTF direction export; MDTable parser ownership/registration; final current-model/filter/UI audit. Whole native module/API/ABI/default/lifetime parity remains unverified. Browser save/open/autosave/recovery deviations remain unchanged. Parent task and goal remain incomplete.
+
+    S3HW1E HTML60 — Markdown table lifecycle and source callback contracts. MDTable now registers the actual borrowed parser pointer and deregisters explicitly at native destruction boundaries; active replacement registers/assigns the new cursor before releasing the previous cursor. The model table remains document-owned. EndTable uses real forward default-character PaM movement, AM_SPACE append and release order instead of directly consuming a convenient post-table paragraph. It preserves the original extra paragraph (WRITER343). The extracted movement uses the existing native SAL OUString code-point primitive for the original non-SKIPCELL branch, then actual GoNextPos/CheckNodesRange; marks survive and label affinity clears even on terminal failure. It does not fabricate the unrepresented complete movement family, locale/grapheme/word/hidden-content service.
+
+    The original parser constructor starts quote depth at -1 and noParSpace true. The prior local zero/false defaults were porting errors. In particular, WRITER153 was a false upstream suspicion based on an incorrect initial depth; the issue entry now explicitly withdraws it and preserves the exact source default and test-before-decrement order. Actual nested/direct md4c quotes now restore body style. Owned span pop and parser teardown call actual item Dispose; the reader releases parser-owned table/items before its caller-owned PaM/document on success and failure. Table cell selection uses the actual box start+1 node and original checked four-entry adjustMap. Invalid active-cursor/box preconditions are exposed rather than silently accepted; translated assertions do not certify native undefined behavior. The direct real footnote/md4c failure test preserves WRITER342's null contract without claiming reachable upstream reader crashes.
+
+    Fifteen new actual model/callback tests cover ten lifecycle/default/ownership and five forward-content cases. Existing golden outputs were corrected only after the pinned constructor/EndTable source audit and observed four obsolete expectations. No fake model tables, mocked return providers, measurement substitutes or private parser trees were introduced. Whole parser/doc reference counting, insertion/paste reader, native recursive HTML table context/materialization/layout, RTF direction and final format/UI audit remain open. Whole module behavior/contract/default statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -6286,6 +6347,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T11:53:14.262Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML60 checkpoint verified: 122 unique cases in 13 related files, application types and source/static gates pass. Actual Markdown table registration/destruction, native move-append-release, original defaults and span cleanup implemented; cell selection uses native node/checked alignment contracts. WRITER343 preserved; WRITER153 withdrawn as a local-default false positive. Parent native HTML table path, RTF direction and final format/UI audit remain incomplete.
+Attempts: 71
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:53:04.251Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6452,6 +6543,15 @@ S3HW1E HTML59 checkpoint —226 unique passing cases/17actual files. No final se
 - Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html59-eslint.txt, html59-prettier.txt and final suspected-issues formatting stdout). Scope: actual changes, no reduced rules or fabricated result fixtures.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html59-{boundaries,jsdoc,filesize,source-tree,provenance-final,registry}.txt). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10755imports/229edges,4352JSDoc files,4356size-scanned files and Writer registry0semantic violations. Secondary original tblrwcl source evidence added to the box/line record is revalidated by final provenance. These gates do not prove whole native behavior/API/ABI/filter completion; broader semantic statuses remain unverified.
 - Full application suite is not repeated for a checkpoint of the same ongoing AgentPlane task, per user instruction. No final selected actual check is skipped.
+
+S3HW1E HTML60 checkpoint —122 unique actual cases across13files in the combined final relevant runs. Parent remains incomplete; this is a verified local source-contract checkpoint, not format/module completion. Logs: output/playwright/rtf-properties-native/html60-*.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/core/crsr/native-forward-content-move.test.ts src/sw/source/filter/md/mdtab.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/swmd.user-config.integration.test.ts src/sw/source/filter/md/swmd.locale.integration.test.ts src/sw/source/filter/md/mdnum.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/core/doc/native-integration-boundaries.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts ->120pass/13files (html60-related.log). Scope: actual Markdown callbacks/document, numeric/list/locale/user options, TXT, RTF and document I/O. The initial41case run had four obsolete golden expectations; they were migrated against actual pinned EndTable and -1 quote-depth declarations, not hidden.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/doc/native-integration-boundaries.test.ts ->39pass/1obsolete callback fixture expectation (html60-cell-final.log). All10lifecycle/default/ownership cases, all19Markdown document cases and all4core boundary cases pass after real start+1 cell selection and checked alignment map. The old callback fixture silently invoked cell/row with no active cursor; it now asserts actual pointer preconditions rather than accepting a nonexistent native owner.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/swmd.callbacks.integration.test.ts ->7pass/1file (html60-callback-final.log). Scope: final corrected callback fixtures and actual represented table/spacing/list/span producers. Together with unchanged related successes and the final cell run, all122selected unique cases pass; no final relevant case is skipped.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html60-types-cell-final.log). Scope: complete application type contracts including real MDTable parser constructor and actual box start/node selection. Earlier initial and pre-cell type runs also pass; no nullable cast hides a rejected table.
+- Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html60-eslint-cell-final.log, html60-eslint-callback-final.log, html60-prettier-final.log). Initial no-useless-assignment finding in the new movement result declaration was fixed; no rule suppression. Callback final expectation formatting passed in write output.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html60-boundaries.log, html60-jsdoc-callback-final.log, html60-filesize.log, html60-source-tree.log, html60-provenance-final.log, html60-registry-final.log). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10757imports/229edges,4354JSDoc files and0Writer registry semantic violations. Paired existing metadata histories retain broad unverified statuses. These gates do not certify complete native movement/parser reference counting/paste, recursive HTML grammar/table construction/layout, RTF direction or final format/UI completeness. Full-suite replay was not due under the user's once-per-ten-AgentPlane-tasks rule; this remains the same approved parent task.
 
 ## Rollback Plan
 
@@ -7750,3 +7850,9 @@ WRITER342 records the source-based nullable Markdown callback mismatch: StartTab
 The first type check correctly exposed callers that still assumed non-null insertion. Valid fixtures now assert actual non-footnote results, and the old document rejection of nested text is replaced by actual nested insertion/undo coverage while current shell/nontext admission remains separate. A converter edit initially left the old OUString construction in a compiler snapshot; actual source now invokes the native o3tl helper directly, and final type checking passes. Source snapshots and failure logs remain as iteration evidence, not final certification. Processes were slow but confirmed live using their exact tool handles and read-only process metadata limited to this checkout's app cwd; they were not restarted merely for quiet output. All final selected tests and required gates pass.
 
 Remaining requirements: structural nontext insertion admission; native default SwTable/early-frame bootstrap and full table-format registry/lifetime; anonymous/nested table rendering, materialization and layout with real text measurement; first-cell/floating/section HTML orchestration and complete table grammar/caption placement; RTF direction export; MDTable parser ownership/registration; final current-model/filter/UI audit. Whole native module/API/ABI/default/lifetime parity remains unverified. Browser save/open/autosave/recovery deviations remain unchanged. Parent task and goal remain incomplete.
+
+S3HW1E HTML60 — Markdown table lifecycle and source callback contracts. MDTable now registers the actual borrowed parser pointer and deregisters explicitly at native destruction boundaries; active replacement registers/assigns the new cursor before releasing the previous cursor. The model table remains document-owned. EndTable uses real forward default-character PaM movement, AM_SPACE append and release order instead of directly consuming a convenient post-table paragraph. It preserves the original extra paragraph (WRITER343). The extracted movement uses the existing native SAL OUString code-point primitive for the original non-SKIPCELL branch, then actual GoNextPos/CheckNodesRange; marks survive and label affinity clears even on terminal failure. It does not fabricate the unrepresented complete movement family, locale/grapheme/word/hidden-content service.
+
+The original parser constructor starts quote depth at -1 and noParSpace true. The prior local zero/false defaults were porting errors. In particular, WRITER153 was a false upstream suspicion based on an incorrect initial depth; the issue entry now explicitly withdraws it and preserves the exact source default and test-before-decrement order. Actual nested/direct md4c quotes now restore body style. Owned span pop and parser teardown call actual item Dispose; the reader releases parser-owned table/items before its caller-owned PaM/document on success and failure. Table cell selection uses the actual box start+1 node and original checked four-entry adjustMap. Invalid active-cursor/box preconditions are exposed rather than silently accepted; translated assertions do not certify native undefined behavior. The direct real footnote/md4c failure test preserves WRITER342's null contract without claiming reachable upstream reader crashes.
+
+Fifteen new actual model/callback tests cover ten lifecycle/default/ownership and five forward-content cases. Existing golden outputs were corrected only after the pinned constructor/EndTable source audit and observed four obsolete expectations. No fake model tables, mocked return providers, measurement substitutes or private parser trees were introduced. Whole parser/doc reference counting, insertion/paste reader, native recursive HTML table context/materialization/layout, RTF direction and final format/UI audit remain open. Whole module behavior/contract/default statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.

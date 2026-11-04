@@ -234,7 +234,7 @@ it("imports a leading table and column alignment into actual Writer cells", /** 
           node,
         ) => node.GetText(),
       ),
-    ).toEqual(["After", ""]);
+    ).toEqual(["", "After", ""]);
   } finally {
     document.Dispose();
   }
@@ -252,7 +252,7 @@ it("keeps fenced code text and quote styles without interpreting inline markup",
     ).toEqual([
       ["preformatted-text", "*literal*"],
       ["quotations", "Quoted"],
-      ["quotations", ""],
+      ["text-body", ""],
     ]);
   } finally {
     document.Dispose();
@@ -272,7 +272,7 @@ it("maps setext headings, indented code and one multi-line quote into native par
       ["heading-1", "Title"],
       ["preformatted-text", "*literal*\nsecond"],
       ["quotations", "first\u00a0second"],
-      ["quotations", ""],
+      ["text-body", ""],
     ]);
   } finally {
     document.Dispose();
@@ -382,7 +382,7 @@ it("resolves full reference callbacks and suppresses image-description text in t
   }
 });
 
-it("keeps inline HTML buffered and preserves source quotation-style inheritance after exit", /** Pins block-only HTML flush and the source depth test. @returns Nothing. */ () => {
+it("keeps inline HTML buffered and restores source body style after quote exit", /** Pins block-only HTML flush and the source depth test. @returns Nothing. */ () => {
   const document = read("> quote\n\nplain <b>text</b>");
   try {
     expect(
@@ -394,8 +394,8 @@ it("keeps inline HTML buffered and preserves source quotation-style inheritance 
       ),
     ).toEqual([
       ["quotations", "quote"],
-      ["quotations", "plain text"],
-      ["quotations", ""],
+      ["text-body", "plain text"],
+      ["text-body", ""],
     ]);
   } finally {
     document.Dispose();

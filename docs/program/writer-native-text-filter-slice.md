@@ -1583,3 +1583,14 @@ S3HW1E HTML55: original fresh BuildTable construction block now reads actual lex
 The real protected virtual-consumer fixture invokes these entry/exit fragments on original lexer tokens and delegates ordinary text, paragraph and inline work to the existing native importer. It does not stand in for production table grammar. Original current-table ownership is stored on SwHTMLParser and released at its existing source-disposal boundary. WRITER337 records the source duplicate caption ALIGN flag behavior.
 
 HTML55 checkpoint:239unique related cases/14files pass (42caption/save/CSS cases/4files,121final lifecycle/options/columns/CSS/section-deletion cases/6files minus14repeated caption cases,90TXT/RTF/Markdown/document-I/O cases/5files). Final16fresh real lexer/virtual-consumer cases include CSS auto-margin centering, explicit ALIGN and first-STYLE precedence, real ID bookmark, default/bottom/duplicate caption alignment, actual centered/no-space caption paragraphs, restored inline attributes, trailing linefeed/empty caption and UTF8 text. App types, changed5source/test ESLint/Prettier, provenance1935runtime/1722mapped/182browser/31infra, Writer registry0semantic violations, boundaries1934runtime/10729imports/229edges, JSDoc4345files, file-size4349files, source-tree115paths/32retired roots and diff gates pass. WRITER337 preserves original one-way bottom flag for duplicate caption ALIGN. Fresh table construction and caption begin/end are explicit native source responsibility fragments, not the completed recursive BuildTable/BuildTableCaption token loops. The real memory stream cannot yield pending device input; no fake pending provider or table/layout/measurement result is supplied. Recursive table/cell/row/caption orchestration, native pending-device ownership where represented, caption node-range placement, table materialization/layout, RTF direction export and final format/UI audit remain required; parent task and goal stay incomplete.
+
+HTML60 restores the original Markdown table cursor registration/destruction and
+`EndTable` movement, `AM_SPACE` append and release order. Actual md4c import
+retains the original post-table paragraph (WRITER343); it must not be normalized
+away. The original quote depth starts at -1 and restores body style after the
+outer quote; the original no-paragraph-space flag starts true. Popped owned
+span items and active table cursors are released before caller-owned objects.
+Forward default-character movement uses the original SAL code-point operation
+and actual node-range checks; complete movement services and reader reference
+counting/paste behavior remain unverified. This checkpoint does not close the
+native recursive HTML table path, RTF direction or final format/UI audit.

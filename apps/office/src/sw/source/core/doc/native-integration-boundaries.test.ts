@@ -6,8 +6,9 @@ import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
 import { createItemInfoPackageSwAttributes } from "../bastyp/init";
 import { SwUndoNodes } from "../undo/docundo";
-import { SwNodeIndex, SwPosition } from "../crsr/pam";
+import { SwNodeIndex, SwPosition, SwPaM } from "../crsr/pam";
 import { SwNodes } from "../docnode/nodes";
+import { SwMarkdownParser } from "../../filter/md/swmd";
 import { MDTable } from "../../filter/md/mdtab";
 import { AttrSetToLineHeight } from "../txtnode/swfont";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -42,7 +43,7 @@ it("resolves native character names and custom suffix disambiguation", /** Check
     strong.uiName,
   );
 });
-it("rejects unavailable metadata indices and uninstalled table owners", /** Checks actual public lifecycle preconditions. @returns Nothing. */ () => {
+it("rejects unavailable metadata indices and preserves native nullable table owners", /** Checks actual public lifecycle preconditions. @returns Nothing. */ () => {
   const packageOwner = createItemInfoPackageSwAttributes();
   try {
     for (const index of [-1, packageOwner.size()])
@@ -53,10 +54,19 @@ it("rejects unavailable metadata indices and uninstalled table owners", /** Chec
   } finally {
     packageOwner.Dispose();
   }
-  expect(
-    /** Requests an absent table before installation. @returns Table. */ () =>
-      new MDTable().GetTable(),
-  ).toThrow("Markdown table has not been installed.");
+  const doc = new SwDoc(),
+    first = doc.paragraphs[0];
+  assert(first);
+  const point = new SwPosition(first),
+    pam = new SwPaM(point),
+    parser = new SwMarkdownParser(doc, pam),
+    table = new MDTable(parser);
+  point.Dispose();
+  expect(table.GetTable()).toBeNull();
+  table.SourceDispose();
+  parser.SourceDispose();
+  pam.Dispose();
+  doc.Dispose();
   const undo = new SwUndoNodes();
   undo.Release(99);
   expect(undo.Count()).toBe(0);

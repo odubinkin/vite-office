@@ -1473,12 +1473,11 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: the helper creates a local ComplexColor, assigns the last retained theme type, and appends tint/shade transformations, but never inserts or returns that value. Only the six first border-line values are inserted into the supplied map. The interop grab bag can preserve the theme lexeme separately. Later import stages may compensate, so native document/rendering impact remains unverified.
 - Preservation: retain the local construction and its lack of output; do not silently add complex-color properties. Tests keep six actual BorderLine2 map properties with theme/tint/shade input and verify the separate interop data. The standalone BorderHandler::getComplexColor continues returning its actual native value through its distinct contract.
 
-### WRITER153 — table-border parameters carry over across sibling edges
+### WRITER153 — Resolved false positive: Markdown quotation depth starts at minus one
 
-- Source: pinned `sw/source/writerfilter/dmapper/BorderHandler.cxx`, `BorderHandler::lcl_sprm`, compared with `TDefTableHandler::localResolve`.
-- Observation: the table-border handler neither resets current width/type/color before resolving a new side nor requires nested properties before materializing a supported side. A later side missing attributes can inherit the preceding side's parameters; a null-property side is still marked filled. The cell-border handler instead resets width/type/color and ignores null-property children. Whether valid producers exercise missing/default attributes in a way that causes visible differences remains unverified.
-- Preservation: retain the distinct table and cell algorithms. Actual native resource tests keep table width/color carryover and null-reference materialization, cell per-child resets and first-vector-element precedence. Strict/Transitional ZIP tests retain independently specified table/cell borders. Do not unify the two handlers or insert local per-side defaults into BorderHandler.
-
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::EndBlockQuote`, restores Text Body only when `m_nBlockQuoteDepth == 0`, then decrements the depth. The declaration in `swmd.hxx` initializes the depth to -1.
+- Correction (HTML60): the original observation assumed an initial depth of zero and incorrectly attributed quotation-style leakage to upstream. Entering the usual outer quote increments -1 to zero, so its exit restores Text Body before decrementing back to -1. The previous local default of zero was a porting error, not an upstream defect. Actual nested quote and md4c document regressions now cover the corrected constructor state and style restoration.
+- Preservation: retain the exact -1 default and test/decrement order. This entry records the withdrawn suspicion; no workaround for upstream is justified.
 
 ### WRITER154 — track-change dates retain local clock fields and an unknown timezone
 
@@ -2825,3 +2824,7 @@ Pinned `sw/source/core/docnode/ndtbl.cxx`, SwDoc::GetUniqueTableName, tests only
 ### WRITER342 — Markdown table callbacks retain an unchecked nullable table result
 
 Pinned `sw/source/filter/md/mdtab.cxx`, SwMarkdownParser::StartTable, stores the pointer returned by SwDoc::InsertTable without a null check. StartCell subsequently dereferences MDTable::GetTable. The document constructor explicitly returns null for positions in the inserts/footnote interval (`sw/source/core/docnode/ndtbl.cxx`). If a parser is supplied such a position and reaches a table callback, these contracts appear to permit a null dereference. This is a source-based suspected issue, not a confirmed reachable upstream crash: reader/caller constraints may exclude the state. Preserve the nullable stored pointer and the requirement for an actual table at StartCell; do not fabricate an empty table or silently accept a rejected insertion. The current pointer regression proves null initialization/assignment, not whole reader reachability or native crash behavior.
+
+### WRITER343 — Markdown table end retains the existing trailing paragraph and appends another
+
+Pinned `sw/source/filter/md/mdtab.cxx`, SwMarkdownParser::EndTable, first moves the actual PaM forward from the final cell and then unconditionally calls AppendTextNode(AM_SPACE) before resetting its table owner. SwDoc::InsertTable leaves the original insertion paragraph after the table, so the ordinary new-document path retains that paragraph and appends a further paragraph for following content. The new-document Markdown reader has no EndPaste cleanup. This may produce an extra empty paragraph around a table; it is not a confirmed upstream defect. Preserve actual movement, append, spacing and release order, rather than consuming the original paragraph to normalize the output. Regression evidence uses real md4c/document callbacks; whole insertion-mode reader/paste behavior is not certified.
