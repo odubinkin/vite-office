@@ -5117,3 +5117,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/icu-reference/source/common/udata.cpp`, `udata_initHashTable`, `DataCacheElement_deleter` and `udata_cacheDataItem`; `common/uhash.cpp`, `_uhash_put` error branch and `HASH_DELETE_KEY_VALUE`.
 - Observation: the data cache installs DataCacheElement_deleter as its hash value deleter. On a hash insertion failure, _uhash_put adopts and deletes the supplied value even on failure; that deleter closes/frees the item, name and record. The caller's subsequent failure branch then dereferences/frees newElement->name/newElement->item/newElement again. This suggests use-after-free/double-free in the native allocation-failure path. Evidence is source inspection only; allocation failure was not injected, and no general runtime/allocator defect certificate is claimed.
 - Preserve source adoption/deleter, status and branch order; do not disable the deleter, hide insertion errors or install a guessed success/recovery path. Managed storage erases physical free; native allocator-failure/free ABI remains outside the current port evidence.
+
+### CALC-470 — Empty StringPiece copy can leave CharString without a terminating NUL at its logical end
+
+- Source: `vendor/icu-reference/source/common/charstr.cpp`, `CharString::copyFrom(StringPiece)`, `append` and `cloneData`; `charstr.h` documents a stored terminating NUL.
+- Observation: piece-copy sets len to zero and calls append. Appending zero bytes does not write buffer[0]. Starting with abc, copying an empty piece leaves length zero and first byte a; cloneData copies that one stale byte. Owner-copy copies len+1 bytes and preserves it, while the explicit copy constructor initializes its own NUL and appends zero bytes. The unchanged native library confirms these distinct paths in charstr.native-observations.json. This is a bounded string-contract concern, not evidence of a CSV failure.
+- Preserve the source writes, copy-overload distinction and clone bytes. Do not substitute clear() or force a terminator as a cleanup.
+
+### CALC-471 — Owning MaybeStackArray orphan reports the requested length as actual capacity
+
+- Source: `vendor/icu-reference/source/common/cmemory.h`, `MaybeStackArray::orphanOrClone` and its resultCapacity documentation.
+- Observation: the owning branch transfers ptr without modifying length; the common tail assigns resultCapacity=length. Thus a real allocation of capacity64 orphaned with length5 reports5; a negative length is also returned on the owning branch. The non-owning branch instead returns null for nonpositive length and clamps positive length to capacity before cloning. The original native template confirms the fields and pointer transfer, including length greater than capacity; the witness reads only the initialized in-bounds prefix. This may reflect a logical length convention despite the documented actual-capacity output; no caller memory violation is established.
+- Preserve both branches and the exact output assignment. Do not report allocation capacity or add an owning-branch clamp/argument error.

@@ -4341,3 +4341,28 @@ The pinned public udata.h sets UDATA_DEFAULT_ACCESS to UDATA_FILES_FIRST.
 Registration does not change that default. The forthcoming open path must
 retain its individual-file attempt before common-data fallback; a cached-data
 shortcut or a switch to packages-only access is not the original algorithm.
+
+### CSV loader byte-string ownership prerequisite
+
+The original ICU78.3 CharString now has its single header-owned byte buffer and
+CPP-defined methods, with the consumed MaybeStackArray byte specialization.
+Counted/NUL constructors, signed-char queries, copy/move/alias transitions,
+original growth hints, writable append-buffer commit, self-append reallocation,
+int64 decimal output, invariant conversion, extraction/termination and POSIX
+separator operations retain source contracts. StringPiece keeps its borrowed
+header fields; its NUL length computation belongs to stringpiece.cpp. Nullable
+zero-count invariant conversion performs no read, as the original does.
+
+The unchanged native library/template comparison matches819 sequences and2416
+complete initialized snapshots. No production allocator/provider is replaced;
+private visibility is opened only to observe fields. CALC-470 records stale
+first-byte behavior after empty piece-copy; CALC-471 records owning orphan's
+length-based capacity output. Both remain unchanged. Native allocation failure,
+physical free/stack/thread ABI, uninitialized tails, moved-from payloads,
+undefined spans and invalidated borrows are outside this managed byte evidence.
+
+This is the actual byte owner needed by udata_open's path iterator, not a
+replacement loader. The original default remains UDATA_FILES_FIRST. Data
+directory initialization and actual path/file/common-data orchestration,
+production package/iterator/engine/service construction, NatNum12 output,
+multiline EditEngine import and final CSV acceptance remain required.
