@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/stringpiece.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/stringpiece.h",
+    "localSymbols": [
+      "StringPiece"
+    ],
+    "upstreamSymbols": [
+      "StringPiece",
+      "ptr_",
+      "length_"
+    ],
+    "preservedResponsibilities": [
+      "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "UDataMemory constructor/loader and complete native lifecycle, public iterator/engine/service installation, StringPiece unconsumed overloads and native allocation/COW/thread/physical ABI are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/stringpiece.ts",
+          "marker": "StringPiece"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+          "marker": "retains complete native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/stringpiece.h",
+          "marker": "StringPiece"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/stringpiece.h",
+          "marker": "StringPiece(const char* offset, int32_t len) : ptr_(offset), length_(len)"
+        }
+      ]
+    }
+  }
+}

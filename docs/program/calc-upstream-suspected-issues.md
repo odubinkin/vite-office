@@ -5088,3 +5088,11 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/icu-reference/source/common/rbbi_cache.h`, inline `BreakCache::next`; `rbbi_cache.cpp`, `BreakCache::following`.
 - Observation: the cached next path updates position/status without clearing `fDone`. The source following implementation clears it explicitly and comments on the interaction. Native private-cache traces retain the flag behavior.
 - Preserve the private next path and following compensation. Do not infer a public iterator defect from direct private-cache calls.
+
+
+### CALC-466 — Failed rule-data initialization can miss the normal reference-release deletion path
+
+- Source: `vendor/icu-reference/source/common/rbbidata.cpp`, `init0`, `init`, `removeReference`; `common/rbbi.cpp`, constructors and `RuleBasedBreakIterator::~RuleBasedBreakIterator`.
+- Observation: the wrapper counter starts at zero and becomes one only at the end of successful initialization. Bad magic/version/trie or rejected trie width can return with zero. The normal removeReference then decrements to minus one and does not enter its zero/deletion branch. The enclosing iterator assigns the new wrapper before checking status and its destructor calls removeReference for nonnull fData. This suggests a failure-cleanup leak; it is not a measured general allocator/thread/ABI leak certificate.
+- Native raw-wrapper traces observe zero after failure and minus one after the unchanged release body, including partial initialized fields. Test-only scratch cleanup resets the failed counter after all observations solely to run the genuine native destructor safely; this is not a production repair or alternate provider.
+- Preserve the late counter assignment, unconditional decrement and deletion test. Do not initialize the production counter early, clamp it or replace the error path with a guessed recovery.

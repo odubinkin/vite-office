@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/rbbidata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/rbbidata.ts",
+        "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbidata.native-observations.json",
+        "vendor/icu-reference/source/common/rbbidata.cpp"
+      ],
+      "justification": "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RBBIDataWrapper"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/icu-reference/source/common/rbbidata.cpp",
+      "upstreamSymbols": [
+        "RBBIDataWrapper"
+      ]
+    }
+  }
+}

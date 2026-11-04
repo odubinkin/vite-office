@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 185
+revision: 188
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T12:00:42.408Z"
+  updated_at: "2026-11-04T13:12:05.631Z"
   updated_by: "CODER"
-  note: "UTF8 prerequisite checkpoint passes 402855 original native calls, 43 related tests, all 197 CSV/UI cases, typecheck/full lint/source/parity/resource/doc checks, build and Chromium CSV. Actual writable UnicodeString/RBBIDataWrapper/UText/iterator ownership, dictionary engines and word/title/UNO/NatNum12 wiring, multiline owner path and final audit remain unfinished. Goal stays active; no full CSV readiness claim."
-  attempts: 46
+  note: "Raw rule owner checkpoint passes 65536 original fresh UTF8 byte-pair values, 213 value cases and 189 complete native owner traces; related ICU/timezone tests, all 197 CSV/UI cases, final types/full lint/source/parity/static checks, build and Chromium pass. Source-root audit corrects an overbroad public-buffer prerequisite and records mandatory real UDataMemory/loader/iterator/engines/services and multiline/formatter closure. Overall CSV goal remains active/incomplete; no full readiness claim."
+  attempts: 47
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1064,8 +1067,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T13:12:05.631Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Raw rule owner checkpoint passes 65536 original fresh UTF8 byte-pair values, 213 value cases and 189 complete native owner traces; related ICU/timezone tests, all 197 CSV/UI cases, final types/full lint/source/parity/static checks, build and Chromium pass. Source-root audit corrects an overbroad public-buffer prerequisite and records mandatory real UDataMemory/loader/iterator/engines/services and multiline/formatter closure. Overall CSV goal remains active/incomplete; no full readiness claim."
+  -
+    type: "status"
+    at: "2026-11-04T13:13:04.039Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T12:01:53.784Z"
+doc_updated_at: "2026-11-04T13:13:04.039Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2465,6 +2481,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T13:12:05.631Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Raw rule owner checkpoint passes 65536 original fresh UTF8 byte-pair values, 213 value cases and 189 complete native owner traces; related ICU/timezone tests, all 197 CSV/UI cases, final types/full lint/source/parity/static checks, build and Chromium pass. Source-root audit corrects an overbroad public-buffer prerequisite and records mandatory real UDataMemory/loader/iterator/engines/services and multiline/formatter closure. Overall CSV goal remains active/incomplete; no full readiness claim.
+    Attempts: 47
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:09:13.686Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3692,6 +3738,29 @@ sections:
     - Final scope: 24 exact intentional paths including task README; source/evidence review finds no unrelated changes and git diff --check passes. No network, vendor, security/policy, unrelated Writer changes or external publication. Native output remains reviewed scratch and is excluded from the commit. Same open AgentPlane task, not the tenth completed task; only related suites run. Goal remains active/incomplete, verification stays rework for unfinished full scope, and no task finish or goal pause/completion is claimed. User status answer explicitly distinguishes the five remaining work directions from an unsupported fixed task count or delivery-time promise.
 
     - Source-contract wording review removes an unproven nonoverlap precondition from the local file overview. Overlapping storage is explicitly unverified, with no rejection or fallback added; native comparison and runtime behavior are unchanged.
+
+    ### Actual raw rule-data owner and source-root closure audit
+
+    - Previous goal turn is progress: a9224a14d0c4 added original UTF8 conversion. Current ORCHESTRATOR preflight and CODER route confirm approved calc/direct/DOING and clean non-scratch state. A fresh source-root audit is appended to calc-core.md: shown CSV goes through the formatter whose mode12 exclusions/nonstandard-output error remain; supplier mode12 still ignores params; title invokes real BreakIteratorImpl word services; production context/manager installation is absent; multiline SetTextCell still creates manual LATIN paragraphs. The actual SetTextCell source owner is document.cxx and its engine construction is in documen2.cxx, found by the bounded -uuu fallback after normal source search omitted that ignored reference file. These are pending corrections, not native-readiness evidence from old doc paragraphs.
+    - Important dependency correction: source fromUTF8 creates a fresh owned UnicodeString value. The existing managed UTF16 value representation can bind that operation through the real ICU converter and source working capacity without exporting a replacement public writable-buffer/alias/allocator API. That entire public API is not a prerequisite for this raw rule-string path. Native value comparison below verifies the represented operation. This corrects an earlier overbroad prerequisite assumption; full CSV behavior, actual service construction and the real UDataMemory loader requirement are unchanged.
+    - Added original inline counted/default/null StringPiece and queries, UnicodeString::fromUTF8/private fresh-value conversion, actual RBBIDataHeader views, raw owning/borrowed RBBIDataWrapper construction/init/query/reference bodies and ucptrie_getValueWidth. Retains status/header/version/trie-width order, source-major-only acceptance, typed shared backing, counted UTF8 including embedded NUL/malformed bytes, late refcount 1, pointer/byte equality and signed hash. Reference arithmetic projects original signed32 width. Managed value/array ownership remains the existing language binding; native COW/allocator/thread/physical ABI and access after final release are not certified.
+    - Source breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from udata_open UDataMemory after udata_setAppData. Raw wrappers are not installed as a replacement. The actual UDataMemory overload/loader/lifecycle, UText/public iterator, concrete language/locale engines and word/title/UNO/NatNum12 services remain pending. Public buffer/alias APIs remain absent rather than being faked. CALC-466 documents failed wrapper counter 0 and normal release to minus one, with the enclosing iterator's source error-cleanup call; production preserves it. Native scratch counter reset happens only after all observations to invoke the original destructor safely, and is not a production repair or a measured leak/ABI certificate.
+    - Command: npx --no-install tsx scripts/icu-rbbidata-owner-native-probe.mjs
+      Result: pass. Evidence: csv-closure-native-final.log and rbbidata.native-observations.json. Scope: 65536 complete original fresh byte-pair values, 213 retained counted/null/long values and 189 complete initialized owner/table/trie/status/rule-string/reference/equality traces. Includes adopted/borrowed/embedded allocation, warnings/errors, bad header/trie, accepted minor version, accepted 8/16-bit trie/rejected 32-bit width, signed hash and failed-init release. All initialized fields and full actual table/index/data/status/value arrays compare live before full-row SHA256 replay. Real original headers and static libraries/native functions are unchanged; test visibility only exposes wrapper private fields. Source/artifact hashes and native profile 8/64/27 are recorded. No fake provider, alternate decoder or native method replacement.
+    - Observation: initial witness compilation declared its observer const although the original hashCode is nonconst. Resolution: make only the observer mutable, preserving the source signature/body. A later helper attempted a full Uint32Array overlay on a binary allocation with a non-multiple-of-four length. Resolution: bound the helper to the actual 20-word header as runtime already does. Both failures and successful reruns remain in csv-closure-native-owner*.log. No native/source/runtime guard changes to force the oracle.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/external/icu/source/common/ustrtrns.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts --maxWorkers=1
+      Result: pass. Evidence: csv-closure-related-tests.log;72 cases across 7 files, 8.62 seconds, before adding the separate accepted 16-bit fixture.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/i18n/timezone.custom.test.ts src/external/icu/source/i18n/timezone.default.test.ts --maxWorkers=1
+      Result: pass. Evidence: csv-closure-owner-timezone-tests.log;37 cases across 3 files including the new 16-bit case and existing managed UnicodeString consumers. After final signed32 reference projection, npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts --maxWorkers=1 passes 23 cases (csv-closure-owner-final-tests.log). No test assertions/timeouts are weakened or retried to force green.
+    - Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+      Result: pass. Evidence: csv-closure-typecheck-final.log, csv-closure-lint.log, csv-closure-dependencies.log, csv-closure-provenance-final.log, csv-closure-parity-shared.log and csv-closure-parity-calc.log. Scope: 1964 runtime modules / 1751 mapped ; 1963 boundary sources / 10707 relative imports / 236 allowed edges ; zero semantic violations. Initial provenance rejected the new StringPiece mapping for relying only on its basename. Corrected metadata to its actual ptr_/length_ fields and exact counted-constructor evidence; no guard relaxation or fabricated alias.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass. Evidence: csv-closure-jsdoc.log, csv-closure-file-size.log, csv-closure-resources.log, csv-closure-routing.log and csv-closure-doctor.log. 4389 authored files; 464 commands. Doctor zero errors with the existing managed-hook warning; hook/policy files remain unchanged.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: csv-closure-csv-tests.log;all 197 cases across 8 files, 17.26 seconds. Started after heavy checks finished. Scope: represented CSV recognition/import/export and real file UI, not pending mode12/engine/service admission.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: csv-closure-build.log and csv-closure-browser.log; 4.66 second production build and one Chromium CSV import/primary ODS persistence/active-sheet export, 2.9 second test. Original exact byte and no-page-error assertions remain intact.
+    - Final scope: 25 intentional paths including task README. Source/evidence review and git diff --check pass; final status is captured after the allowlisted commit. No network, vendor, policy, unrelated Writer changes or external publication. Native output is reviewed scratch and excluded. Same open AgentPlane task, not the tenth completed task; related suites only. Actual service/data-loader/iterator/engine/multiline/formatter closure and final audit remain required. Overall verification stays rework and task resumes DOING; goal remains active, with no finish/pause/completion or broad parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -5100,6 +5169,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T13:12:05.631Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Raw rule owner checkpoint passes 65536 original fresh UTF8 byte-pair values, 213 value cases and 189 complete native owner traces; related ICU/timezone tests, all 197 CSV/UI cases, final types/full lint/source/parity/static checks, build and Chromium pass. Source-root audit corrects an overbroad public-buffer prerequisite and records mandatory real UDataMemory/loader/iterator/engines/services and multiline/formatter closure. Overall CSV goal remains active/incomplete; no full readiness claim.
+Attempts: 47
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:09:13.686Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6331,3 +6430,26 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Final scope: 24 exact intentional paths including task README; source/evidence review finds no unrelated changes and git diff --check passes. No network, vendor, security/policy, unrelated Writer changes or external publication. Native output remains reviewed scratch and is excluded from the commit. Same open AgentPlane task, not the tenth completed task; only related suites run. Goal remains active/incomplete, verification stays rework for unfinished full scope, and no task finish or goal pause/completion is claimed. User status answer explicitly distinguishes the five remaining work directions from an unsupported fixed task count or delivery-time promise.
 
 - Source-contract wording review removes an unproven nonoverlap precondition from the local file overview. Overlapping storage is explicitly unverified, with no rejection or fallback added; native comparison and runtime behavior are unchanged.
+
+### Actual raw rule-data owner and source-root closure audit
+
+- Previous goal turn is progress: a9224a14d0c4 added original UTF8 conversion. Current ORCHESTRATOR preflight and CODER route confirm approved calc/direct/DOING and clean non-scratch state. A fresh source-root audit is appended to calc-core.md: shown CSV goes through the formatter whose mode12 exclusions/nonstandard-output error remain; supplier mode12 still ignores params; title invokes real BreakIteratorImpl word services; production context/manager installation is absent; multiline SetTextCell still creates manual LATIN paragraphs. The actual SetTextCell source owner is document.cxx and its engine construction is in documen2.cxx, found by the bounded -uuu fallback after normal source search omitted that ignored reference file. These are pending corrections, not native-readiness evidence from old doc paragraphs.
+- Important dependency correction: source fromUTF8 creates a fresh owned UnicodeString value. The existing managed UTF16 value representation can bind that operation through the real ICU converter and source working capacity without exporting a replacement public writable-buffer/alias/allocator API. That entire public API is not a prerequisite for this raw rule-string path. Native value comparison below verifies the represented operation. This corrects an earlier overbroad prerequisite assumption; full CSV behavior, actual service construction and the real UDataMemory loader requirement are unchanged.
+- Added original inline counted/default/null StringPiece and queries, UnicodeString::fromUTF8/private fresh-value conversion, actual RBBIDataHeader views, raw owning/borrowed RBBIDataWrapper construction/init/query/reference bodies and ucptrie_getValueWidth. Retains status/header/version/trie-width order, source-major-only acceptance, typed shared backing, counted UTF8 including embedded NUL/malformed bytes, late refcount 1, pointer/byte equality and signed hash. Reference arithmetic projects original signed32 width. Managed value/array ownership remains the existing language binding; native COW/allocator/thread/physical ABI and access after final release are not certified.
+- Source breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from udata_open UDataMemory after udata_setAppData. Raw wrappers are not installed as a replacement. The actual UDataMemory overload/loader/lifecycle, UText/public iterator, concrete language/locale engines and word/title/UNO/NatNum12 services remain pending. Public buffer/alias APIs remain absent rather than being faked. CALC-466 documents failed wrapper counter 0 and normal release to minus one, with the enclosing iterator's source error-cleanup call; production preserves it. Native scratch counter reset happens only after all observations to invoke the original destructor safely, and is not a production repair or a measured leak/ABI certificate.
+- Command: npx --no-install tsx scripts/icu-rbbidata-owner-native-probe.mjs
+  Result: pass. Evidence: csv-closure-native-final.log and rbbidata.native-observations.json. Scope: 65536 complete original fresh byte-pair values, 213 retained counted/null/long values and 189 complete initialized owner/table/trie/status/rule-string/reference/equality traces. Includes adopted/borrowed/embedded allocation, warnings/errors, bad header/trie, accepted minor version, accepted 8/16-bit trie/rejected 32-bit width, signed hash and failed-init release. All initialized fields and full actual table/index/data/status/value arrays compare live before full-row SHA256 replay. Real original headers and static libraries/native functions are unchanged; test visibility only exposes wrapper private fields. Source/artifact hashes and native profile 8/64/27 are recorded. No fake provider, alternate decoder or native method replacement.
+- Observation: initial witness compilation declared its observer const although the original hashCode is nonconst. Resolution: make only the observer mutable, preserving the source signature/body. A later helper attempted a full Uint32Array overlay on a binary allocation with a non-multiple-of-four length. Resolution: bound the helper to the actual 20-word header as runtime already does. Both failures and successful reruns remain in csv-closure-native-owner*.log. No native/source/runtime guard changes to force the oracle.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/external/icu/source/common/ustrtrns.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts --maxWorkers=1
+  Result: pass. Evidence: csv-closure-related-tests.log;72 cases across 7 files, 8.62 seconds, before adding the separate accepted 16-bit fixture.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/i18n/timezone.custom.test.ts src/external/icu/source/i18n/timezone.default.test.ts --maxWorkers=1
+  Result: pass. Evidence: csv-closure-owner-timezone-tests.log;37 cases across 3 files including the new 16-bit case and existing managed UnicodeString consumers. After final signed32 reference projection, npm run test:shared -- src/external/icu/source/common/rbbidata.native.test.ts --maxWorkers=1 passes 23 cases (csv-closure-owner-final-tests.log). No test assertions/timeouts are weakened or retried to force green.
+- Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+  Result: pass. Evidence: csv-closure-typecheck-final.log, csv-closure-lint.log, csv-closure-dependencies.log, csv-closure-provenance-final.log, csv-closure-parity-shared.log and csv-closure-parity-calc.log. Scope: 1964 runtime modules / 1751 mapped ; 1963 boundary sources / 10707 relative imports / 236 allowed edges ; zero semantic violations. Initial provenance rejected the new StringPiece mapping for relying only on its basename. Corrected metadata to its actual ptr_/length_ fields and exact counted-constructor evidence; no guard relaxation or fabricated alias.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass. Evidence: csv-closure-jsdoc.log, csv-closure-file-size.log, csv-closure-resources.log, csv-closure-routing.log and csv-closure-doctor.log. 4389 authored files; 464 commands. Doctor zero errors with the existing managed-hook warning; hook/policy files remain unchanged.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: csv-closure-csv-tests.log;all 197 cases across 8 files, 17.26 seconds. Started after heavy checks finished. Scope: represented CSV recognition/import/export and real file UI, not pending mode12/engine/service admission.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: csv-closure-build.log and csv-closure-browser.log; 4.66 second production build and one Chromium CSV import/primary ODS persistence/active-sheet export, 2.9 second test. Original exact byte and no-page-error assertions remain intact.
+- Final scope: 25 intentional paths including task README. Source/evidence review and git diff --check pass; final status is captured after the allowlisted commit. No network, vendor, policy, unrelated Writer changes or external publication. Native output is reviewed scratch and excluded. Same open AgentPlane task, not the tenth completed task; related suites only. Actual service/data-loader/iterator/engine/multiline/formatter closure and final audit remain required. Overall verification stays rework and task resumes DOING; goal remains active, with no finish/pause/completion or broad parity promotion.

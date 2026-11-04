@@ -1,4 +1,7 @@
-/** @fileoverview Consumed ICU78.3 UnicodeString UTF-16 value constructors, copying, equality and scalar queries for timezone identity. Host string allocation rejection maps to the consumed native bogus-state contract; native allocation/buffer/alias/ABI APIs remain unported. */
+/** @fileoverview Consumed ICU78.3 UnicodeString UTF16/UTF8 owned value operations. Managed readable strings remain the existing storage binding; writable-buffer/alias/allocator ABI APIs are not exposed as substitute implementations. */
+import type { StringPiece } from "./unicode/stringpiece";
+import { u_strFromUTF8WithSub } from "./unicode/ustring";
+import { U_FAILURE } from "./unicode/utypes";
 /** Internal storage admission preserves the native signed32 addition boundary independently of any host allocation limit. @param requestedLength - Nonnegative requested UTF16 capacity, before allocating storage. @returns Nothing on admission; throws on signed32 overflow for the owning operation to convert to bogus state. */
 export function checkUnicodeStringLength(requestedLength: number): void {
   if (requestedLength > 2147483647)
@@ -9,6 +12,38 @@ export function checkUnicodeStringLength(requestedLength: number): void {
 export class UnicodeString {
   private value = "";
   private bogus = false;
+  /** Original fresh-result factory. @param utf8 - Original counted span. @returns Actual owned UTF16 value or bogus. */
+  static fromUTF8(utf8: StringPiece): UnicodeString {
+    const result = new UnicodeString();
+    result.setToUTF8(utf8);
+    return result;
+  }
+  /** Original private conversion for the fresh-result factory, binding the native working buffer to real UTF16 storage and releaseBuffer's counted payload to the existing managed value. No public writable-buffer API is fabricated. @param utf8 - Borrowed counted bytes. @returns This owner. */
+  private setToUTF8(utf8: StringPiece): this {
+    if (this.bogus) this.remove();
+    const length = utf8.length();
+    // Pinned ICU default UNISTR_OBJECT_SIZE=64, 8-byte pointer, 2-byte UChar:27.
+    // allocate() rounds heap storage (reference counter, NUL, payload) to16bytes.
+    const requested = length <= 27 ? 27 : length + 1;
+    const capacity = requested <= 27 ? 27 : Math.ceil((4 + (requested + 1) * 2) / 16) * 8 - 2;
+    try {
+      const buffer = new Uint16Array(capacity),
+        length16: [number] = [0],
+        status: [number] = [0];
+      u_strFromUTF8WithSub(buffer, capacity, length16, utf8.data(), length, 0xfffd, null, status);
+      // Native releaseBuffer precedes the error check; this is its owned value
+      // projection only. Buffer-capacity/alias/allocator APIs remain unverified.
+      let value = "";
+      for (let i = 0; i < length16[0] && i < capacity; ++i)
+        value += String.fromCharCode(buffer[i] as number);
+      this.value = value;
+      if (U_FAILURE(status[0])) this.setToBogus();
+    } catch (error) {
+      if (!(error instanceof RangeError)) throw error;
+      this.setToBogus();
+    }
+    return this;
+  }
   /** Original default/copy and const-char16 pointer constructors. JS strings project the supplied UTF-16 input; negative lengths use NUL termination. @param source - Copied value or UTF-16 source/null pointer. @param textLength - Explicit length or negative for NUL termination. @returns Constructed value. */
   constructor(source: UnicodeString | string | null = "", textLength = -1) {
     if (source instanceof UnicodeString) {

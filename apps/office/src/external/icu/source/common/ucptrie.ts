@@ -1,6 +1,10 @@
 /** @fileoverview Original ICU78.3 frozen UCPTrie binary construction, scalar reads and small-index algorithm; range/UTF iterators remain unported. */
 import type { UCPTrie } from "./unicode/ucptrie";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
+/** Original frozen-trie width query. @param trie - Actual descriptor. @returns Original width enum. */
+export function ucptrie_getValueWidth(trie: UCPTrie): number {
+  return trie.valueWidth;
+}
 /** Original binary loader borrows its aligned serialized backing storage. Physical allocation of the small trie descriptor is managed by JavaScript. @param type - Requested trie type or ANY. @param valueWidth - Requested width or ANY. @param data - Actual readable binary allocation. @param length - Source byte length. @param actualLength - Optional output, untouched on failure. @param status - Original in/out error code. @returns Frozen trie or null. */
 export function ucptrie_openFromBinary(
   type: number,

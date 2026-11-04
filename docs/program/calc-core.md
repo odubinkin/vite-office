@@ -4171,3 +4171,44 @@ RBBIDataWrapper/iterator construction, concrete engines and word/title/UNO
 installation are still pending. This prerequisite does not substitute for a
 binary-rule owner or complete native CSV support. Native allocator/ABI and
 unreadable spans, overlapping storage are outside the witness.
+
+
+### CSV closure audit and actual raw binary-rule owner
+
+The remaining work is traced from actual CSV callers, not historical readiness
+paragraphs or test counts:
+
+| CSV/root path | Source requirement and current boundary | Completion evidence still required |
+| --- | --- | --- |
+| Export displayed numbers | `ScDocShell` shown callback calls `ScCellFormat::GetString`; `SvNumberformat` currently excludes mode12 and retains a nonstandard-output error. NativeNumberSupplierService still ignores mode12 parameters. | Connect original NatNum12 supplier and all numeric/logical/date/time output call sites, then test shown CSV bytes against original values. Remove local exclusions only with the real path installed. |
+| Capitalize/title modifiers | Original cclass_Unicode::toTitle constructs BreakIteratorImpl and invokes getWordBoundary/nextWord; local class currently supplies script operations only. | Original locale dispatch/caches, Unicode and registered locale-specific iterators, word boundaries, character classification and original service construction, including non-ASCII cases. |
+| Custom word-rule loading | Original breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from UDataMemory returned by udata_open, after udata_setAppData. Raw binary constructors are not a replacement. | Original application-data/container lookup, real UDataMemory handle/constructor/lifecycle, UText/public iterator and engine wiring, native full-path witnesses. |
+| Process services | NumberText component/default constructor and process getter exist; production ComponentContext/ServiceManager installation is absent. Test fixture managers are explicitly not production. | Original context/environment/mapping entry orchestration, actual manager/constructor registry and browser application bootstrap; no fixture providers in production. |
+| Quoted/multiline import | Local SetTextCell still splits lines manually and assigns LATIN. Original implementation is in document.cxx, not documen7.cxx, and calls GetEditEngine/SetTextCurrentDefaults/CreateTextObject. | Replace the manual path and correct responsibility ownership with the actual document engine/ScFieldEditEngine/ImpEditEngine/defaults/script and import transfer path. Source GetEditEngine is in documen2.cxx (found by bounded -uuu fallback); preserve layout=false, undo=false, Map100thMM and Asian settings. |
+| Final acceptance | Existing parser/CSV/UI cases cover represented behavior, not all above service paths. | Original defaults/options/conversion audit and native-backed cases for the completed roots, real UI import/export roundtrips and exact bytes. Preserve intentional browser document workflow deviations. |
+
+Fresh UnicodeString::fromUTF8 needs an owned converted value in the existing
+managed UTF16 storage binding. It does not require exporting a replacement
+public writable-buffer/alias/allocator API. The real counted/default/null
+StringPiece, original ICU converter and source working capacity now produce
+that value. Native comparison covers all 65536 byte pairs and 213 retained
+counted/null/long value cases. This narrows an incorrectly assumed prerequisite,
+not the required CSV behavior or the original service/data-loading path.
+
+The actual RBBIDataHeader and raw owning/borrowed RBBIDataWrapper constructors
+now bind original header/table/trie/status views and owned source strings.
+Initialization/error/version/width order, pointer/full-byte equality, signed
+hash and reference transitions remain source-defined. 189 complete native
+traces compare all represented initialized fields and arrays, including an
+embedded allocation, malformed header/trie, accepted minor version, 32-bit trie
+rejection and failed-init counter behavior (CALC-466). Full rows compare live;
+replay retains SHA256 rather than duplicating large immutable table rows.
+Native visibility is exposed only to observe private fields. Native scratch
+cleanup occurs after all observations and is not a source-method replacement.
+
+The UDataMemory constructor/loader is still required and unimplemented here;
+no raw-data substitute is installed in its production path. Public iterator,
+concrete engines and service installation remain pending. Managed raw-data
+release drops owned references without claiming native allocator/COW/thread/
+physical ABI or defined access after final release. No CSV completion or broad
+module parity is promoted by this prerequisite block.
