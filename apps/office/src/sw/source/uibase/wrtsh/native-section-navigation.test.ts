@@ -308,8 +308,45 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     f.shell.StartOfSection(true);
     f.shell.StartOfSection(true);
     const table = f.shell.getShellCursor();
-    f.shell.Close();
-    expect(ordinary.HasMark()).toBe(false);
-    expect(table.HasMark()).toBe(false);
+    expect(table).toBeInstanceOf(SwTableCursor);
+    expect(table).not.toBe(ordinary);
+    expect(table.HasMark()).toBe(true);
+    const positions = new Set([
+      ordinary.GetPoint(),
+      ordinary.GetMark(),
+      table.GetPoint(),
+      table.GetMark(),
+    ]);
+    const ordinaryDeath = vi.spyOn(ordinary, "Dispose"),
+      tableDeath = vi.spyOn(table, "Dispose");
+    const endpoints = [...positions].map(
+      /** Observes actual live endpoint/member destruction, without reading a dead PaM. @param position - Actual owned bound. @returns Call-through lifetime spies. */
+      (position) => ({
+        position: vi.spyOn(position, "Dispose"),
+        content: vi.spyOn(position.nContent, "Dispose"),
+        node: vi.spyOn(position.nNode, "Dispose"),
+      }),
+    );
+    try {
+      f.shell.Close();
+      expect(tableDeath).toHaveBeenCalledTimes(1);
+      expect(ordinaryDeath).toHaveBeenCalledTimes(1);
+      expect(tableDeath.mock.invocationCallOrder[0]).toBeLessThan(
+        ordinaryDeath.mock.invocationCallOrder[0] as number,
+      );
+      for (const endpoint of endpoints) {
+        expect(endpoint.position).toHaveBeenCalledTimes(1);
+        expect(endpoint.content).toHaveBeenCalledTimes(1);
+        expect(endpoint.node).toHaveBeenCalledTimes(1);
+      }
+    } finally {
+      for (const endpoint of endpoints) {
+        endpoint.position.mockRestore();
+        endpoint.content.mockRestore();
+        endpoint.node.mockRestore();
+      }
+      ordinaryDeath.mockRestore();
+      tableDeath.mockRestore();
+    }
   });
 });

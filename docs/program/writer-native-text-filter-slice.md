@@ -1666,3 +1666,16 @@ alignment, MakeFlySection/content/contact/layout, complete first-cell/table
 context and recursive HTML production/materialization/layout remain unported
 or unverified, as do RTF direction and final current-slice format/UI closure.
 These prerequisites do not establish full native format or module parity.
+
+HTML67 implements original SwNodeRange constructors/member value ownership and
+SwNodes::SectionDown/SectionUpDown over actual registered node indices. Existing
+paragraphs, nested sections and complete tables retain identity while parents
+and matching ends are repaired. Source opposing-boundary deletion and ancestor
+stack continuation are preserved; WRITER348 documents that output range
+endpoints can remain before the final end or reverse after both deletions. No
+normalization, replacement text section or fake fly-format provider is used.
+The actual MakeFlySection source wrap can now consume this native operation,
+but its style-pool/naming/inline-fly/contact/layout/undo and complete factory
+lifecycle are not yet implemented. Recursive HTML first-cell/table production,
+materialization/layout, RTF direction and final current-slice format/UI closure
+remain required; this checkpoint does not establish full native format parity.

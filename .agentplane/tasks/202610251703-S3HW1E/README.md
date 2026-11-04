@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 422
+revision: 427
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T14:07:21.309Z"
+  updated_at: "2026-11-04T14:32:35.928Z"
   updated_by: "CODER"
-  note: "HTML66 checkpoint:332 cases/20 files, whole-app types and all source/style/registry/static gates pass. Native content-index item/default/pool/getters, original legacy HTML anchor/orientation/wrap and point attributes/spacing, Reader frame resets implemented over real owners. First-cell/recursive HTML production, MakeFlySection/contact/layout, RTF direction and final format/UI audit remain incomplete."
-  attempts: 77
+  note: "HTML67 checkpoint verified:322 unique related cases/22files by consolidated run plus final47/3 source-backed lifetime/fresh rerun;29 new cases pass. Whole-app types and final source/style/registry/static gates pass. Native range/index ownership and SectionDown stack wrapping implemented; WRITER348 preserved. MakeFlySection and production HTML first-cell/recursive materialization/layout, RTF direction and final format/UI closure remain incomplete."
+  attempts: 78
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1237,8 +1240,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T14:32:35.928Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML67 checkpoint verified:322 unique related cases/22files by consolidated run plus final47/3 source-backed lifetime/fresh rerun;29 new cases pass. Whole-app types and final source/style/registry/static gates pass. Native range/index ownership and SectionDown stack wrapping implemented; WRITER348 preserved. MakeFlySection and production HTML first-cell/recursive materialization/layout, RTF direction and final format/UI closure remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T14:33:45.923Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T14:07:49.501Z"
+doc_updated_at: "2026-11-04T14:33:45.923Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3524,6 +3540,19 @@ sections:
     Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
     Result: pass, terminal0. Evidence:html66-gates-final.log,html66-registry-final.json,html66-size-final.log. Scope:1947runtime provenance/1734mapped,0Writer semantic violations,1946source boundaries,4371JSDoc files,4375authored size scan,115required source paths/32retired roots and84guarded Which identities.
     Remaining: production first-cell/recursive HTML import/materialization/layout, actual fly-section/content/contact lifecycle, RTF direction and final format/UI audit. Full-format and whole-module/native ABI completeness is not certified; no full-project replay.
+
+    HTML67 source checkpoint; parent goal incomplete.
+    Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/ndindex.native.test.ts src/sw/source/core/docnode/native-section-down.test.ts src/sw/source/core/docnode/native-text-section.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/docnode/native-table-section-insertion.test.ts src/sw/source/core/crsr/pam.fixed-sections.test.ts src/sw/source/core/crsr/pam.nested-sections.test.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/core/undo/native-insert-node-index.test.ts src/sw/source/core/undo/native-format-node-index.test.ts src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts src/sw/inc/fmtcntnt.native.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-section-navigation.test.tsx src/sw/source/uibase/wrtsh/native-section-navigation.test.ts)
+    Result: fail initially. Evidence:322cases/22files,321pass and one existing post-destruction HasMark assertion failure; html67-tests-final.log. Scope: related node/index/section/table/HTML/undo, TXT/RTF/Markdown/document-I/O and section UI. Resolution: source-backed lifetime test migration; production cursor/shell owners unchanged, no artificial reset.
+    Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/ndindex.native.test.ts src/sw/source/core/docnode/native-section-down.test.ts src/sw/source/uibase/wrtsh/native-section-navigation.test.ts)
+    Result: pass, terminal0. Evidence:47cases/3files including29fresh cases/2files; html67-fresh-lifetime-final.log. Scope: final changed/new range/wrapping/native lifetime tests. Unique verified union is19unchanged passing files/275cases plus the final3files/47cases, totaling322cases/22files; repeated cases are counted once. The InsertNode private modifier is a TypeScript boundary change; all affected fresh cases pass under the final code.
+    Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+    Result: pass, terminal0. Evidence:html67-types-verified.log. Scope: whole application after final test/visibility changes.
+    Command: node_modules/.bin/eslint apps/office/src/sw/inc/ndindex.ts apps/office/src/sw/inc/ndindex.native.test.ts apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/docnode/native-section-down.test.ts apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts; node_modules/.bin/prettier --check <same five files>.
+    Result: pass. Evidence:html67-gates-verified.log. Scope: all intentional changed/new TypeScript.
+    Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+    Result: pass, terminal0. Evidence:html67-gates-verified.log,html67-registry-verified.json,html67-size-verified.log. Scope:1948runtime/1735mapped provenance,0registry semantic violations,1947source boundaries,4374JSDoc files,4378authored size scan,115required source paths/32retired roots and84guarded Which identities. WRITER348 preserves source range output behavior without claiming a compiled upstream defect.
+    Remaining work is recorded in Findings and the capability matrix. Full native format/current-slice completion is not claimed; no full-project replay.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4872,6 +4901,21 @@ sections:
     Retained diagnostic failures and remediation: initial content equals attempted the host abstract base method; replaced with original Which identity precondition plus native optional-node comparison. The new point-attribute fragment now uses the existing borrowed SwHTMLAttributeState contract instead of an unimported concrete name. Initial parser size1004 was corrected by source-owner decomposition, not a gate exception. Fresh spacing fixtures originally used nonexistent SwTextNode.GetULSpace and assumed a null box line; changed to actual native GetAttr and the existing target undefined-pointer representation. Initial type/fresh logs remain retained; final332/20 and whole-app types pass. No test/guard/acceptance/provider was weakened. No network or outside-repository mutation occurred.
 
     The current first-cell/table token loop is still not wired to these prerequisites. CSS/container positioning overloads, MakeFlySection/format-content section/contact/layout lifecycle, recursive HTML first-cell/table production/materialization/layout, RTF direction resolution and final fixed-current-slice filter/UI audit remain unported or unverified. WRITER347 general style-rename migration remains open. Intentional save/open/autosave/recovery behavior is unchanged; parent task and active goal are incomplete.
+
+    S3HW1E HTML67 — Original node-range wrapping required by MakeFlySection_.
+    SwNodeRange in the native ndindex header owner now implements all represented original node/index/array/relative/copy constructors, original end-index default0, independent registered member ownership, implicit contained value assignment and reverse member destruction. Endpoints are never reordered. SwNodeIndex is reexported as the same existing class, not another executable index or registry. Only SwNodeRange is declared as a newly implemented local symbol.
+
+    SwNodes SectionDown now uses native private InsertNode and private static SectionUpDown ownership boundaries. It wraps existing actual text nodes instead of making a replacement text section, deletes original opposing EndNode/StartNode boundaries, follows native registered-index correction and repairs parents/matching ends with the original stack walk. The walk continues beyond a non-end completion boundary, resumes with the actual ancestor when the stack empties too early and preserves source output endpoints. Actual nested sections, complete table/box/frame-format/content-registry and cursor identities survive the operation. Raw insertion has no fabricated modified/undo events; original host removal notifications remain unchanged. Constructor/array preconditions stay within the represented same-array detached-node model; full native move/cross-document/node-array ABI is not certified.
+
+    WRITER348 documents source-derived SectionDown output endpoint ambiguity: trailing StartNode deletion leaves aEnd before the actual matching end, and both opposing deletions can leave aStart after aEnd while the actual graph is valid. Source DelNodes corrections, final decrement and continuing stack walk are retained without normalization. This is not a compiled-native defect/reachability claim. Fresh tests use actual nodes/indices/sections/tables, including the exact MakeFlySection_ autotext-end/-1/autotext-end range followed by SwFormatContent on the existing paragraph's new parent. A structural fly tag is explicitly not a fake format/frame/layout provider.
+
+    Verification is composed, not a falsely relabeled clean consolidated run: initial22file/322case regression command passed304cases in21files and17/18 in the remaining navigation file; its one failed existing assertion read HasMark after cursor destruction. Pinned pam.cxx has an empty SwPaM destructor with physical bound member destruction; crsrsh.cxx deletes the table cursor before the ordinary cursor. Those production owner files were unchanged in this block. The test now observes actual call-through cursor/point/content-index/node-index destruction and native owner order, without reading a dead PaM or adding a production mark-reset workaround. Final failed/new rerun47cases/3files passes, including all29fresh range/wrap cases; the unique verified scope is322cases/22files. Logs html67-tests-final.log retains the initial failure; html67-fresh-lifetime-final.log is the final47/3 pass.
+
+    Whole-app types and final source/static/style gates pass: provenance1948runtime/1735mapped/182browser/31infra; Writer registry0semantic violations; boundaries1947runtime/10839imports/229edges; JSDoc4374source files; size4378authored files; source-tree115required/32retired; WhichId84identities. Logs html67-types-verified.log, html67-gates-verified.log, html67-registry-verified.json and html67-size-verified.log. No full-project replay or broad semantic/default/contract/sourceResponsibility promotion.
+
+    Other retained diagnostics: first fresh run28/29 failed only in fixture cleanup, because the existing DeleteTable helper requires following text while this wrapped table is followed by a real structural end. Cleanup now uses the actual original DelNodes full-section path, preserving all graph assertions and avoiding a synthetic following paragraph. Final29/2 passes. Initial runtime registry evidence incorrectly listed the reexported SwNodeIndex as a new local executable declaration; corrected to SwNodeRange while keeping the same actual index class. No verifier was weakened or fake class introduced. InsertNode visibility was aligned with the pinned private friend boundary; guard tests retain actual array/endpoint assertions and public DelNodes observations rather than spying on a private implementation hook. Initial and final types/style evidence is retained.
+
+    Remaining: actual MakeFlySection style-pool/name/content/inline-fly/contact/layout/undo lifecycle, production first-cell and recursive HTML table grammar/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit. Full SectionUp/general Delete, node-array/document teardown and whole-module/C++ ABI remain unported or unverified. WRITER347 style-rename migration and intentional save/open/autosave/recovery deviations unchanged. Parent task and active goal remain incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -7169,6 +7213,19 @@ Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/
 Result: pass, terminal0. Evidence:html66-gates-final.log,html66-registry-final.json,html66-size-final.log. Scope:1947runtime provenance/1734mapped,0Writer semantic violations,1946source boundaries,4371JSDoc files,4375authored size scan,115required source paths/32retired roots and84guarded Which identities.
 Remaining: production first-cell/recursive HTML import/materialization/layout, actual fly-section/content/contact lifecycle, RTF direction and final format/UI audit. Full-format and whole-module/native ABI completeness is not certified; no full-project replay.
 
+HTML67 source checkpoint; parent goal incomplete.
+Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/ndindex.native.test.ts src/sw/source/core/docnode/native-section-down.test.ts src/sw/source/core/docnode/native-text-section.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/docnode/native-table-section-insertion.test.ts src/sw/source/core/crsr/pam.fixed-sections.test.ts src/sw/source/core/crsr/pam.nested-sections.test.ts src/sw/source/core/doc/native-section-deletion.test.ts src/sw/source/core/undo/native-insert-node-index.test.ts src/sw/source/core/undo/native-format-node-index.test.ts src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts src/sw/source/filter/html/htmltab.attribute-scope.test.ts src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts src/sw/inc/fmtcntnt.native.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-section-navigation.test.tsx src/sw/source/uibase/wrtsh/native-section-navigation.test.ts)
+Result: fail initially. Evidence:322cases/22files,321pass and one existing post-destruction HasMark assertion failure; html67-tests-final.log. Scope: related node/index/section/table/HTML/undo, TXT/RTF/Markdown/document-I/O and section UI. Resolution: source-backed lifetime test migration; production cursor/shell owners unchanged, no artificial reset.
+Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/ndindex.native.test.ts src/sw/source/core/docnode/native-section-down.test.ts src/sw/source/uibase/wrtsh/native-section-navigation.test.ts)
+Result: pass, terminal0. Evidence:47cases/3files including29fresh cases/2files; html67-fresh-lifetime-final.log. Scope: final changed/new range/wrapping/native lifetime tests. Unique verified union is19unchanged passing files/275cases plus the final3files/47cases, totaling322cases/22files; repeated cases are counted once. The InsertNode private modifier is a TypeScript boundary change; all affected fresh cases pass under the final code.
+Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+Result: pass, terminal0. Evidence:html67-types-verified.log. Scope: whole application after final test/visibility changes.
+Command: node_modules/.bin/eslint apps/office/src/sw/inc/ndindex.ts apps/office/src/sw/inc/ndindex.native.test.ts apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/docnode/native-section-down.test.ts apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts; node_modules/.bin/prettier --check <same five files>.
+Result: pass. Evidence:html67-gates-verified.log. Scope: all intentional changed/new TypeScript.
+Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+Result: pass, terminal0. Evidence:html67-gates-verified.log,html67-registry-verified.json,html67-size-verified.log. Scope:1948runtime/1735mapped provenance,0registry semantic violations,1947source boundaries,4374JSDoc files,4378authored size scan,115required source paths/32retired roots and84guarded Which identities. WRITER348 preserves source range output behavior without claiming a compiled upstream defect.
+Remaining work is recorded in Findings and the capability matrix. Full native format/current-slice completion is not claimed; no full-project replay.
+
 ## Rollback Plan
 
 - Revert task-related commit(s).
@@ -8520,3 +8577,18 @@ Final332unique tests/20files pass, including32fresh cases in2files and actual TX
 Retained diagnostic failures and remediation: initial content equals attempted the host abstract base method; replaced with original Which identity precondition plus native optional-node comparison. The new point-attribute fragment now uses the existing borrowed SwHTMLAttributeState contract instead of an unimported concrete name. Initial parser size1004 was corrected by source-owner decomposition, not a gate exception. Fresh spacing fixtures originally used nonexistent SwTextNode.GetULSpace and assumed a null box line; changed to actual native GetAttr and the existing target undefined-pointer representation. Initial type/fresh logs remain retained; final332/20 and whole-app types pass. No test/guard/acceptance/provider was weakened. No network or outside-repository mutation occurred.
 
 The current first-cell/table token loop is still not wired to these prerequisites. CSS/container positioning overloads, MakeFlySection/format-content section/contact/layout lifecycle, recursive HTML first-cell/table production/materialization/layout, RTF direction resolution and final fixed-current-slice filter/UI audit remain unported or unverified. WRITER347 general style-rename migration remains open. Intentional save/open/autosave/recovery behavior is unchanged; parent task and active goal are incomplete.
+
+S3HW1E HTML67 — Original node-range wrapping required by MakeFlySection_.
+SwNodeRange in the native ndindex header owner now implements all represented original node/index/array/relative/copy constructors, original end-index default0, independent registered member ownership, implicit contained value assignment and reverse member destruction. Endpoints are never reordered. SwNodeIndex is reexported as the same existing class, not another executable index or registry. Only SwNodeRange is declared as a newly implemented local symbol.
+
+SwNodes SectionDown now uses native private InsertNode and private static SectionUpDown ownership boundaries. It wraps existing actual text nodes instead of making a replacement text section, deletes original opposing EndNode/StartNode boundaries, follows native registered-index correction and repairs parents/matching ends with the original stack walk. The walk continues beyond a non-end completion boundary, resumes with the actual ancestor when the stack empties too early and preserves source output endpoints. Actual nested sections, complete table/box/frame-format/content-registry and cursor identities survive the operation. Raw insertion has no fabricated modified/undo events; original host removal notifications remain unchanged. Constructor/array preconditions stay within the represented same-array detached-node model; full native move/cross-document/node-array ABI is not certified.
+
+WRITER348 documents source-derived SectionDown output endpoint ambiguity: trailing StartNode deletion leaves aEnd before the actual matching end, and both opposing deletions can leave aStart after aEnd while the actual graph is valid. Source DelNodes corrections, final decrement and continuing stack walk are retained without normalization. This is not a compiled-native defect/reachability claim. Fresh tests use actual nodes/indices/sections/tables, including the exact MakeFlySection_ autotext-end/-1/autotext-end range followed by SwFormatContent on the existing paragraph's new parent. A structural fly tag is explicitly not a fake format/frame/layout provider.
+
+Verification is composed, not a falsely relabeled clean consolidated run: initial22file/322case regression command passed304cases in21files and17/18 in the remaining navigation file; its one failed existing assertion read HasMark after cursor destruction. Pinned pam.cxx has an empty SwPaM destructor with physical bound member destruction; crsrsh.cxx deletes the table cursor before the ordinary cursor. Those production owner files were unchanged in this block. The test now observes actual call-through cursor/point/content-index/node-index destruction and native owner order, without reading a dead PaM or adding a production mark-reset workaround. Final failed/new rerun47cases/3files passes, including all29fresh range/wrap cases; the unique verified scope is322cases/22files. Logs html67-tests-final.log retains the initial failure; html67-fresh-lifetime-final.log is the final47/3 pass.
+
+Whole-app types and final source/static/style gates pass: provenance1948runtime/1735mapped/182browser/31infra; Writer registry0semantic violations; boundaries1947runtime/10839imports/229edges; JSDoc4374source files; size4378authored files; source-tree115required/32retired; WhichId84identities. Logs html67-types-verified.log, html67-gates-verified.log, html67-registry-verified.json and html67-size-verified.log. No full-project replay or broad semantic/default/contract/sourceResponsibility promotion.
+
+Other retained diagnostics: first fresh run28/29 failed only in fixture cleanup, because the existing DeleteTable helper requires following text while this wrapped table is followed by a real structural end. Cleanup now uses the actual original DelNodes full-section path, preserving all graph assertions and avoiding a synthetic following paragraph. Final29/2 passes. Initial runtime registry evidence incorrectly listed the reexported SwNodeIndex as a new local executable declaration; corrected to SwNodeRange while keeping the same actual index class. No verifier was weakened or fake class introduced. InsertNode visibility was aligned with the pinned private friend boundary; guard tests retain actual array/endpoint assertions and public DelNodes observations rather than spying on a private implementation hook. Initial and final types/style evidence is retained.
+
+Remaining: actual MakeFlySection style-pool/name/content/inline-fly/contact/layout/undo lifecycle, production first-cell and recursive HTML table grammar/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit. Full SectionUp/general Delete, node-array/document teardown and whole-module/C++ ABI remain unported or unverified. WRITER347 style-rename migration and intentional save/open/autosave/recovery deviations unchanged. Parent task and active goal remain incomplete.

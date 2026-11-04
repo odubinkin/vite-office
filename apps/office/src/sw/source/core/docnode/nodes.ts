@@ -8,7 +8,8 @@ import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
-import type { SwNodeIndex, SwPosition } from "../crsr/pam";
+import { SwNodeIndex, CheckNodesRange, type SwPosition } from "../crsr/pam";
+import type { SwNodeRange } from "../../../inc/ndindex";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
@@ -575,6 +576,86 @@ export class SwNodes {
       }
     this.nodeArray.splice(index, count);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
+  }
+
+  /** Original BigPtrArray InsertNode overloads insert an actual detached entry without substituting a section operation. @param node - Actual node owned by this array. @param position - Native index or absolute offset. @returns Nothing. */
+  private InsertNode(node: SwNode, position: SwNodeIndex | number): void {
+    const index = typeof position === "number" ? position : position.GetIndex();
+    if (
+      node.GetNodes() !== this ||
+      this.indexOfOrUndefined(node) !== undefined ||
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index > this.Count()
+    )
+      throw new Error("assert(valid detached InsertNode entry and position)");
+    this.nodeArray.splice(index, 0, node);
+  }
+  /** Original SectionDown wraps the existing range, deletes opposing boundary sentinels when required and preserves source endpoint updates. @param range - Actual in/out node range. @param type - Original structural start tag. @returns Nothing. */
+  public SectionDown(range: SwNodeRange, type = SwStartNodeType.SwNormalStartNode): void {
+    if (
+      range.aStart.GetIndex() >= range.aEnd.GetIndex() ||
+      range.aEnd.GetIndex() >= this.Count() ||
+      !CheckNodesRange(range.aStart.GetNode(), range.aEnd.GetNode(), false)
+    )
+      return;
+    const current = range.aStart.GetNode();
+    const temporary = new SwNodeIndex(current.StartOfSectionNode());
+    try {
+      if (current instanceof SwEndNode) this.DelNodes(range.aStart);
+      else {
+        const previous = this.at(range.aStart.GetIndex() - 1);
+        let parent = previous instanceof SwStartNode ? previous : previous.StartOfSectionNode();
+        if (previous instanceof SwEndNode) parent = parent.StartOfSectionNode();
+        const start = new SwStartNode(this, parent, type);
+        this.InsertNode(start, range.aStart);
+        range.aStart.Assign(start);
+        temporary.Assign(range.aStart);
+      }
+      range.aEnd.Assign(range.aEnd, -1);
+      if (range.aEnd.GetNode() instanceof SwStartNode) this.DelNodes(range.aEnd);
+      else {
+        range.aEnd.Assign(range.aEnd, 1);
+        const start = range.aStart.GetNode();
+        if (!(start instanceof SwStartNode)) throw new Error("assert(SectionDown start boundary)");
+        const end = new SwEndNode(this, start);
+        this.InsertNode(end, range.aEnd);
+        start.setEndOfSection(end);
+      }
+      range.aEnd.Assign(range.aEnd, -1);
+      SwNodes.SectionUpDown(temporary, range.aEnd);
+    } finally {
+      temporary.Dispose();
+    }
+  }
+  /** Original shared forward stack walk repairs parents and matching ends until the stack empties at/beyond the supplied boundary, not merely until that index. @param start - Actual starting section index. @param end - Actual lower completion boundary. @returns Nothing. */
+  private static SectionUpDown(start: SwNodeIndex, end: SwNodeIndex): void {
+    const first = start.GetNode();
+    if (!(first instanceof SwStartNode)) throw new Error("assert(SectionUpDown section start)");
+    const stack: SwStartNode[] = [first],
+      current = new SwNodeIndex(start, 1);
+    try {
+      for (;;) {
+        const node = current.GetNode(),
+          parent = stack.at(-1);
+        if (!parent) throw new Error("assert(SectionUpDown nonempty start stack)");
+        node.SetStartOfSection(parent);
+        if (node instanceof SwStartNode) stack.push(node);
+        else if (node instanceof SwEndNode) {
+          parent.setEndOfSection(node);
+          stack.pop();
+          if (stack.length !== 0) {
+            current.Assign(current, 1);
+            continue;
+          } else if (current.GetIndex() < end.GetIndex())
+            stack.unshift(parent.StartOfSectionNode());
+          else break;
+        }
+        current.Assign(current, 1);
+      }
+    } finally {
+      current.Dispose();
+    }
   }
 
   /** Original MakeTextSection inserts start/end first, then creates the initial text node immediately before that new end. Structural tags do not create unrelated frame/header/footnote objects. @param where - Actual insertion boundary. @param type - Original section tag. @param coll - Actual document collection. @returns Connected section start. */
