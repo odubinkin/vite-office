@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/utext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/utext.ts",
+        "apps/office/src/external/icu/source/common/rbbi.forward.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.forward.native-observations.json",
+        "vendor/icu-reference/source/common/utext.cpp"
+      ],
+      "justification": "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "utext_getNativeIndex",
+        "utext_setNativeIndex",
+        "utext_next32",
+        "ucstrTextAccess"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/icu-reference/source/common/utext.cpp",
+      "upstreamSymbols": [
+        "utext_getNativeIndex",
+        "utext_setNativeIndex",
+        "utext_next32",
+        "ucstrTextAccess"
+      ]
+    }
+  }
+}

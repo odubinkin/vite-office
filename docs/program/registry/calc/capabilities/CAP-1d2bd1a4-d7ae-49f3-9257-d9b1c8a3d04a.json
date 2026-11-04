@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
+    "capabilityId": "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
+    "suite": "calc",
+    "subsystem": "number-formatting",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Borrowed typed-array struct/row views and original prepared field projections replace native pointer arithmetic; actual original rule/compiler/provider behavior is retained. No public factory replacement."
+    },
+    "capability": "Original RBBI forward rule boundaries and consumed UText operations",
+    "gaps": [
+      "Full iterator/data/provider construction and lifecycle, backward/public caches, dictionary engines and original word/title/service installation remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbi.cpp",
+          "marker": "RuleBasedBreakIterator::handleNext"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/utext.cpp",
+          "marker": "ucstrTextAccess"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/data/edit_word.txt",
+          "marker": "BEGIN CUSTOMIZATION"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/data/README",
+          "marker": "edit_word is for cursor"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.ts",
+          "marker": "handleNext"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbidata.h.ts",
+          "marker": "RBBIStateTable"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/utext.ts",
+          "marker": "utext_getNativeIndex"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/utext.ts",
+          "marker": "UText"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.forward.test.ts",
+          "marker": "matches original forward mutations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original forward rule boundaries"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "rbbi-forward-rule-boundaries",
+    "scopeLimitations": [
+      "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported."
+    ]
+  }
+}

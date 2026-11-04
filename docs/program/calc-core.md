@@ -4089,3 +4089,20 @@ word rules. Rule-data wrappers, boundary caches, dictionary engines and title
 service/bootstrap remain pending. Managed descriptor allocation does not claim
 native OOM/free ABI parity. No segmentation heuristic or substitute service is
 introduced.
+
+## Original forward rule boundaries
+
+The ICU forward RBBI method now consumes original compiled state tables and
+frozen tries. It retains source acceptance/lookahead ordering, dictionary counts,
+status/position/end fields and forced progress. Original UText native-index and
+forward codepoint operations, plus UChars access, retain explicit/NUL lengths,
+deferred 32-unit scanning and surrogate boundaries. No public iterator/provider
+factory is substituted: full construction, backward/public caches, dictionaries
+and the LibreOffice word/title/service callers remain pending.
+
+A native witness uses actual ICU libraries and compiles eight original
+LibreOffice rule files, plus lookahead and 16-bit-table cases. A visibility-only
+header token permits calling the original private method; native bodies and
+providers are unchanged. It matches 2,450 forward states and 1,220 UText states.
+Fixtures encode UTF16 as code-unit arrays, preserving lone surrogates through
+the JSON import path. No complete allocator/ABI or CSV readiness claim.

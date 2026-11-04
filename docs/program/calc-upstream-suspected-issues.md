@@ -5045,3 +5045,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `include/uno/mapping.hxx`, `Mapping::mapInterface(void **, void *, Type const &)`.
 - Observation: after `TYPELIB_DANGER_GET`, the wrapper invokes the supplied mapping callback and only then calls `TYPELIB_DANGER_RELEASE`. There is no unwind guard. An exception from that callback bypasses the matching release of a genuinely weak interface description; the inout pointer remains unchanged if the callback did not publish a value.
 - Preserve this order and exception propagation. The complete original native throwing-callback stream confirms the retained description count in both normal and ASan/UBSan builds. The portable wrapper deliberately adds no `finally` release, and the context-construction callee does not suppress exceptions from result mapping.
+
+### CALC-459 — ICU forward rules accept lookahead before recording the current slash position
+
+- Source: `vendor/icu-reference/source/common/rbbi.cpp`, templated `RuleBasedBreakIterator::handleNext`, comment referencing ICU-20837.
+- Observation: the accepting-state check reads `fLookAheadMatches` before the same row's `fLookAhead` position is recorded. Upstream explicitly notes that reversing these checks would support hard-break rules without following context, but also causes line-break test failures. This is an upstream-documented suspected defect; the port does not independently assert a repair or a complete reproducer.
+- Preserve the check order and original state mutations. Native tests compare the original private method on compiled LibreOffice rules and a lookahead rule. No eager recording or guessed hard-break behavior is added.
