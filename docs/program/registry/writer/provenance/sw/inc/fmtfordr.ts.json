@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/inc/fmtfordr.ts",
+    "upstreamPath": "sw/inc/fmtfordr.hxx",
+    "localSymbols": [
+      "SwFillOrder",
+      "SwFormatFillOrder",
+      "Clone"
+    ],
+    "upstreamSymbols": [
+      "SwFillOrder",
+      "SwFormatFillOrder",
+      "Clone"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "preservedResponsibilities": [
+      "S3HW1E HTML57: native InsertTable now constructs actual shared row formats, the original four default-border variants and shared borderless box formats; per-column position widths clone only an already registered owner. Source HTML_MODE selects actual gray double borders, ordinary documents black solid borders, each with55twip distances. Original SwFormatFillOrder and92 WhichId are registered in the actual static item package/pool; default TOP_DOWN differs from explicit insertion LEFT_TO_RIGHT, and inline native SwAttrSet/SwFormat getters use the real item. Obsolete uniform all-edge insertion helper is removed. GetMarginsFromContext is moved to its existing htmlcss1 responsibility and numbering-aware resolution uses actual source contexts/rules with the original uint16/short narrowing and depth clamp (WRITER339). Actual parser/core/filter/UI owners remain; no fabricated frame, layout, font metric or whole reader result is introduced. Whole module/native API/ABI/lifetime behavior remains unverified. First-cell context orchestration, recursive HTML table grammar/materialization/layout, RTF direction export and final format/UI audit remain required; browser file/autosave/recovery deviations stay unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Whole enum-item presentation, UNO/ABI/lifetime behavior and full native Writer API parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtfordr.ts",
+          "marker": "SwFormatFillOrder"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-construction-formats.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/inc/fmtfordr.hxx",
+          "marker": "SwFormatFillOrder"
+        },
+        {
+          "path": "sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFillOrder::Clone"
+        }
+      ]
+    }
+  }
+}

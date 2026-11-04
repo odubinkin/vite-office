@@ -134,6 +134,9 @@ export const RES_PARATR_LIST_ISCOUNTED = 90 as const;
 /** Native paragraph-marker/list automatic style handle. */
 export const RES_PARATR_LIST_AUTOFMT = 91 as const;
 
+/** Original frame fill order, RES_FRMATR_BEGIN +0. */
+export const RES_FILL_ORDER = 92 as const;
+
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
 export const RES_FRM_SIZE = 93 as const;
 

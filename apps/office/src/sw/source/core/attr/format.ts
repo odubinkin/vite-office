@@ -2,6 +2,7 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -20,6 +21,10 @@ import { RES_LR_SPACE, RES_HORI_ORIENT, RES_UL_SPACE, RES_PAGEDESC } from "../..
 
 /** Base class for identity-bearing Writer styles and formats. */
 export class SwFormat extends BroadcastingModify {
+  /** Original inline fmtfordr.hxx effective item query. @param searchInParent - Native inheritance flag. @returns Borrowed fill-order item. */
+  public GetFillOrder(searchInParent = true): SwFormatFillOrder {
+    return this.attributeSet.GetFillOrder(searchInParent);
+  }
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
   private poolFormatId = SwPoolFormatId.UNKNOWN;

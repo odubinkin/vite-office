@@ -1,4 +1,5 @@
 /** @fileoverview Native GetAttrTabEntry and InsertParaAttrs from htmlcss1.cxx using registered current-model Which IDs and original deferred heads. */
+import type { HTMLAttrContext } from "./htmlctxt";
 import type { SwHTMLParser } from "./swhtml";
 import { NewAttr, type HTMLAttrHead, type HTMLAttrTable } from "./swhtml.attr";
 import * as H from "../../../inc/hintids";
@@ -62,5 +63,45 @@ export function InsertParaAttrs(parser: SwHTMLParser, items: SfxItemSet): void {
       parser.m_aParaAttrs.push(head[0]);
       if (!parser.EndAttr(head[0], false)) parser.m_aParaAttrs.pop();
     }
+  }
+}
+
+/** Original nearest reverse margin-context lookup, including unchanged outputs when the top context is absent. @param parser - Actual importer. @param left - Native uint16 output. @param right - Native uint16 output. @param indent - Native short output. @param ignoreTop - Original false default. @returns Nothing. */
+export function GetMarginsFromContext(
+  parser: SwHTMLParser,
+  left: [number],
+  right: [number],
+  indent: [number],
+  ignoreTop = false,
+): void {
+  let pos = parser.m_aContexts.length;
+  if (ignoreTop) {
+    if (!pos) return;
+    pos--;
+  }
+  while (pos > parser.m_nContextStAttrMin) {
+    const context = parser.m_aContexts[--pos] as HTMLAttrContext;
+    if (context.IsLRSpaceChanged()) {
+      context.GetMargins(left, right, indent);
+      return;
+    }
+  }
+}
+/** Original table/image margin consumer adds the actual native numbering format with source narrowing and no overflow clamp. @param parser - Actual importer. @param left - Native uint16 output. @param right - Native uint16 output. @param indent - Native short output. @returns Nothing. */
+export function GetMarginsFromContextWithNumberBullet(
+  parser: SwHTMLParser,
+  left: [number],
+  right: [number],
+  indent: [number],
+): void {
+  GetMarginsFromContext(parser, left, right, indent);
+  const info = parser.GetNumInfo();
+  if (info.GetDepth()) {
+    const level = Math.min(info.GetDepth(), 10) - 1,
+      rule = info.GetNumRule();
+    if (!rule) throw new Error("assert(HTML numbering depth has a rule)");
+    const format = rule.Get(level);
+    left[0] = (left[0] + format.GetAbsLSpace()) & 0xffff;
+    indent[0] = (format.GetFirstLineOffset() << 16) >> 16;
   }
 }

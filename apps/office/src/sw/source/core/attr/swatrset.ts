@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SwFormatFillOrder } from "../../../inc/fmtfordr";
+import { RES_FILL_ORDER } from "../../../inc/hintids";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
@@ -233,6 +235,18 @@ export class SwAttrPool extends SfxItemPool {
         if (!item.PutValue(value)) {
           item.Dispose();
           throw new Error("Writer frame-direction snapshot is invalid.");
+        }
+        return item;
+      },
+    );
+    register(
+      RES_FILL_ORDER,
+      /** Restores the existing browser scalar snapshot to the original concrete enum item. @param value - Stored enum value. @returns Native item. */
+      (value) => {
+        const item = new SwFormatFillOrder();
+        if (!item.PutValue(value, 0)) {
+          item.Dispose();
+          throw new Error("Writer fill-order snapshot is invalid.");
         }
         return item;
       },
@@ -686,6 +700,10 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original inline fmtfordr.hxx effective item query. @param searchInParent - Native inheritance flag. @returns Borrowed fill-order item. */
+  public GetFillOrder(searchInParent = true): SwFormatFillOrder {
+    return this.Get(RES_FILL_ORDER, searchInParent) as SwFormatFillOrder;
+  }
   private m_pOldSet: SwAttrSet | undefined;
   private m_pNewSet: SwAttrSet | undefined;
 

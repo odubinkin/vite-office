@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/fmtfordr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/fmtfordr.ts#SwFormatFillOrder",
+        "vendor/libreoffice-reference/sw/inc/fmtfordr.hxx#SwFormatFillOrder",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatFillOrder::Clone",
+        "apps/office/src/sw/source/core/docnode/native-table-construction-formats.test.ts#@fileoverview"
+      ],
+      "justification": "S3HW1E HTML57: native InsertTable now constructs actual shared row formats, the original four default-border variants and shared borderless box formats; per-column position widths clone only an already registered owner. Source HTML_MODE selects actual gray double borders, ordinary documents black solid borders, each with55twip distances. Original SwFormatFillOrder and92 WhichId are registered in the actual static item package/pool; default TOP_DOWN differs from explicit insertion LEFT_TO_RIGHT, and inline native SwAttrSet/SwFormat getters use the real item. Obsolete uniform all-edge insertion helper is removed. GetMarginsFromContext is moved to its existing htmlcss1 responsibility and numbering-aware resolution uses actual source contexts/rules with the original uint16/short narrowing and depth clamp (WRITER339). Actual parser/core/filter/UI owners remain; no fabricated frame, layout, font metric or whole reader result is introduced. Whole module/native API/ABI/lifetime behavior remains unverified. First-cell context orchestration, recursive HTML table grammar/materialization/layout, RTF direction export and final format/UI audit remain required; browser file/autosave/recovery deviations stay unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFillOrder",
+        "SwFormatFillOrder",
+        "Clone"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/fmtfordr.hxx",
+      "upstreamSymbols": [
+        "SwFillOrder",
+        "SwFormatFillOrder",
+        "Clone"
+      ]
+    }
+  }
+}

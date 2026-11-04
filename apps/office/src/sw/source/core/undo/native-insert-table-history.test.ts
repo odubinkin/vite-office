@@ -193,10 +193,9 @@ it.each([
       ).GetTextFormatColl().id,
     ).toBe(style);
     expect(required(required(table.GetTabLines()[0]).GetTabBoxes()[0]).GetFormat()).toEqual({
-      ...nativeBoxFormat({
-        padding: mode === SwInsertTableFlags.All ? 55 : 0,
-        border: mode === SwInsertTableFlags.All ? "0.5pt solid #000000" : "none",
-      }),
+      ...(mode === SwInsertTableFlags.All
+        ? nativeBoxFormat({ padding: 55, border: "0.5pt solid #000000" }, [3])
+        : {}),
       frameSize: new SwFormatFrameSize(undefined, 32767, 0),
     });
     position.Dispose();

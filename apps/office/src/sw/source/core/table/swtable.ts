@@ -1,6 +1,5 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
 import type { SwHTMLTableLayout } from "../doc/htmltbl";
-import { Color } from "../../../../tools/inc/color";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { SwTableBox, SwTableLine } from "./swtable-boxline";
@@ -23,8 +22,6 @@ import {
   SvxLRSpaceItem,
   SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
-import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import { RES_BOX } from "../../../inc/hintids";
 import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -55,15 +52,6 @@ export interface SwTableBoxFormat {
   readonly box?: SvxBoxItem | undefined;
   readonly vertOrient?: SwFormatVertOrient | undefined;
   readonly frameSize?: SwFormatFrameSize | undefined;
-}
-
-/** Creates Writer insertion border defaults without a CSS intermediary. @param borders - Default borders enabled. @returns Owned box item. */
-export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
-  const item = new SvxBoxItem(RES_BOX);
-  item.SetAllDistances(borders ? 55 : 0);
-  if (borders)
-    for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(new Color(0), 10), edge);
-  return item;
 }
 
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */

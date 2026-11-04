@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native SwHTMLParser body, paragraph and inline-attribute paths over HTMLParser, actual SwPaM and deferred HTMLAttr owners. */
+import { GetMarginsFromContext, GetMarginsFromContextWithNumberBullet } from "./htmlcss1.attr";
 import { CanRemoveNode, StripTrailingPara } from "./htmlgrin";
 import { aHTMLPAlignTable } from "./swhtml.options";
 import { HTMLParser } from "../../../../svtools/source/svhtml/parhtml";
@@ -378,17 +379,13 @@ export class SwHTMLParser extends HTMLParser {
     indent: [number],
     ignoreTop = false,
   ): void {
-    for (
-      let index = this.m_aContexts.length - (ignoreTop ? 1 : 0);
-      index > this.m_nContextStAttrMin;
-    ) {
-      const context = this.m_aContexts[--index];
-      if (context?.IsLRSpaceChanged()) {
-        context.GetMargins(left, right, indent);
-        return;
-      }
-    }
+    GetMarginsFromContext(this, left, right, indent, ignoreTop);
   }
+  /** Original numbering-aware margin lookup preserves unsigned16/signed16 conversion. @param left - Output. @param right - Output. @param indent - Output. @returns Nothing. */
+  GetMarginsFromContextWithNumberBullet(left: [number], right: [number], indent: [number]): void {
+    GetMarginsFromContextWithNumberBullet(this, left, right, indent);
+  }
+
   /** Native spacing lookup takes the nearest changed context or the default body paragraph style. @param upper - Output. @param lower - Output. @returns Nothing. */
   GetULSpaceFromContext(upper: [number], lower: [number]): void {
     let pool = SwPoolFormatId.ZERO as number;

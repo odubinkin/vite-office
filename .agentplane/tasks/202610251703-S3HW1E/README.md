@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 382
+revision: 386
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T10:20:27.358Z"
+  updated_at: "2026-11-04T10:34:23.215Z"
   updated_by: "CODER"
-  note: "HTML56 checkpoint passes155 unique tests/13files, app types, style, source/provenance/registry gates. Native InsertTable contracts, actual section undo and original redo defaults verified; WRITER338 preserved. Recursive HTML tables/materialization/layout, RTF direction and final capability/UI audit remain; parent stays incomplete."
-  attempts: 67
+  note: "HTML57 checkpoint passes184 unique tests/15actual files, app types, style and native source/registry gates. Original four default-border variants, shared row/box construction, width copies, fill-order item/pool and numbering-aware margins implemented; WRITER339 preserved. Native HTML table orchestration/layout, RTF direction and final audit remain."
+  attempts: 68
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1077,8 +1080,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T10:34:23.215Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML57 checkpoint passes184 unique tests/15actual files, app types, style and native source/registry gates. Original four default-border variants, shared row/box construction, width copies, fill-order item/pool and numbering-aware margins implemented; WRITER339 preserved. Native HTML table orchestration/layout, RTF direction and final audit remain."
+  -
+    type: "status"
+    at: "2026-11-04T10:34:42.399Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T10:20:36.386Z"
+doc_updated_at: "2026-11-04T10:34:42.399Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2833,6 +2849,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T10:34:23.215Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML57 checkpoint passes184 unique tests/15actual files, app types, style and native source/registry gates. Original four default-border variants, shared row/box construction, width copies, fill-order item/pool and numbering-aware margins implemented; WRITER339 preserved. Native HTML table orchestration/layout, RTF direction and final audit remain.
+    Attempts: 68
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:34:21.309Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -2969,6 +3015,16 @@ sections:
     - Command (cwd repository): node_modules/.bin/eslint changed15source/test files --max-warnings 0; node_modules/.bin/prettier --check changed source/test/metadata/documentation ->pass (html56-eslint-verified.txt, html56-prettier-final.txt). Scope: intentional changed files only.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html56-{boundaries-final,jsdoc-final,filesize-verified,source-tree,provenance-final,registry-final}.txt). Scope: repository source/dependency/registration gates, not whole native behavior certification. Broader semantic statuses remain unverified.
     - No final selected actual test is failing or skipped. Full application suite is not repeated at a checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+    S3HW1E HTML57 checkpoint —184 unique passing tests/15actual files; parent scope remains incomplete. Final evidence under output/playwright/rtf-properties-native/html57-*; initial failures retained as iteration evidence and superseded by exact final runs below.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/filter/html/htmlcss1.margin-context.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/docnode/native-table-insertion-contract.test.ts ->41pass/4files (html57-native-final.txt). Scope: actual format sharing/width copy/default-border owners, native fill-order default and clone/pool registration, actual parser/context/numbering margin consumers, original insertion arguments and repeated shell history. Final5format cases are reverified after fixture guard/lint cleanup in html57-formats-verified.txt; they are not counted twice.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/browser/presentation/native-insert-table-dialog.test.tsx src/sw/source/filter/html/htmlctxt.insert.integration.test.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts ->115pass/8actual files (html57-filter-ui.txt). The nonexistent htmlctxt.insert.integration selector is not counted or claimed verified; its intended consumers are covered by the next actual-file command. Scope: existing native formats, I/O, command/dialog and caption/table-construction consumers.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmlctxt.flags.integration.test.ts src/sw/source/filter/html/htmlctxt.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts ->28pass/3actual files (html57-context-consumers.txt). Scope: real CSS/context/paragraph-class consumers of the relocated margin responsibility.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html57-types-final.txt). Final lint-only non-null/enum-expression cleanup preserves these source types and original values.
+    - Command (cwd repository): node_modules/.bin/eslint all12changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html57-eslint-verified.txt, html57-prettier.txt and final three-file formatting check). Scope: actual changed files, no disabled validation or retained stale import.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html57-{boundaries,jsdoc,filesize,source-tree,hintids,provenance-final,registry-final}.txt). Evidence:1936runtime provenance modules/1723mapped,1935runtime boundary sources/10745imports/229edges,4349JSDoc files,4353size-scanned files,82actual pinned WhichIds, Writer registry0semantic violations. Broader semantic statuses remain unverified; these gates do not prove whole filter/native completion.
+    - No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4231,6 +4287,16 @@ sections:
     The first validation exposed a real ES-module cycle from a new runtime SwDoc import and the absent original inline EndOfSectionIndex; the import is type-only and calls the actual document constructor's static CorrAbs, while SwNode now implements the original inline section-end query. A second pass exposed FocusNode's leaked temporary content position previously masked by blanket DeleteTable content-index relocation. FocusNode now releases the actual position after SetPaM; native destruction assertions stay enabled. The old fixture retained an unowned raw content position across destruction, which is not a valid native lifetime contract. It now tests an actual SwNodeIndex: deletion follows the original structural successor, including a split tail's later successor when split undo rejoins the body. Actual editing/stack/UNO cursor correction is tested independently through their real owners. Final selected tests pass; no failure is hidden by weakening destruction or reintroducing a global external-position fallback. Initial JSDoc argument/overview errors and primary-file vs inline-header provenance evidence were corrected and rechecked.
 
     Evidence is limited to represented flat-table construction and real core/UI/filter consumers. Non-null SwTableAutoFormat, DDE/redline insertion, wider old-model algorithms, native shared default-border construction/format sharing, nested table insertion and whole native module/ABI/default behavior are not certified by this checkpoint. Production recursive HTML table/cell/row/caption orchestration and context initialization, caption node-range placement, native materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser save/open/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is a verified implementation checkpoint, not task completion.
+
+    S3HW1E HTML57 — Native insertion formats and table-context margin prerequisites. The first-cell source audit exposed an existing constructor mismatch: uniform all-edge border items and independently allocated row/box formats differed from the actual ndtbl.cxx construction used by HTML tables. InsertTable now uses original lcl_SetDfltBoxAttr and lcl_CreateDfltBoxFormat responsibilities: four positional border variants,55twip distances, actual document HTML_MODE gray/double vs ordinary black/solid strokes, one shared native row format, a shared borderless format with no fabricated explicit empty box item, and source per-column width copying only when the selected owner already has listeners. Actual text sections are created with their table/body-header collections and actual box/line registrations, rather than constructing throwaway independent formats through the browser row builder. The obsolete uniform insertion helper is removed. The shared Color capability's old swtable Color-import marker is relocated to its actual ndtbl COL_BLACK consumer; no import or comment is retained merely to satisfy a stale verifier.
+
+    Original SwFillOrder/SwFormatFillOrder are added at the native header path with the real SfxEnumItem base, source ordinal aliases, TOP_DOWN static default and original Clone constructor semantics. The actual module-owned item package and document pool register RES_FILL_ORDER92 and the concrete existing-browser scalar restoration; SwAttrSet/SwFormat inline queries return the actual borrowed item. Table insertion explicitly assigns LEFT_TO_RIGHT to the shared row format. Tests cover all four real positional border owners, both HTML modes, uniform and differing real column-width sharing, pool default/restoration and original Clone Which reset. The existing borderless insertion fixture now requires absence of direct RES_BOX, not a fabricated explicit empty item.
+
+    GetMarginsFromContext is moved without behavioral changes into its existing htmlcss1 responsibility. The original numbering-aware function and parser entry point use the real contexts, attribute lower bound, actual numbering rule formats, source depth clamp and unsigned16/signed16 narrowing. WRITER339 documents the original TODO-overflow behavior and preserves it; actual parser/rule/context tests cover unchanged outputs, skipped contexts, frozen lower bounds, excessive depths and numeric wrap/narrowing. Full first-cell context orchestration still requires the remaining real source owners; this checkpoint does not simulate it or certify a full BuildTableCell implementation.
+
+    Initial validation exposed two fixture errors (Vitest spread-vector inputs and a missing real stream encoding), three historical explicit-empty-RES_BOX expectations, and lint restrictions on native enum alias syntax/non-null assertions. These were corrected without changing native construction/defaults or loosening checks. Registry validation found the stale removed Color-import marker described above; exact relocated evidence now passes. One guessed htmlctxt.insert.integration selector did not exist and is not counted: the real htmlctxt/flags/paragraph-class consumers are selected separately. No final selected actual test fails or is skipped.
+
+    Whole native module/API/ABI/lifetime parity remains unverified. Non-null SwTableAutoFormat, DDE/redline and wider old-model algorithms, floating/nested first-table context creation, full recursive table/cell/row/caption token orchestration, caption placement, materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser open/save/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is an implementation checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -5996,6 +6062,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T10:34:23.215Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML57 checkpoint passes184 unique tests/15actual files, app types, style and native source/registry gates. Original four default-border variants, shared row/box construction, width copies, fill-order item/pool and numbering-aware margins implemented; WRITER339 preserved. Native HTML table orchestration/layout, RTF direction and final audit remain.
+Attempts: 68
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:34:21.309Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6132,6 +6228,16 @@ S3HW1E HTML56 checkpoint — pass for this block, parent still requires rework f
 - Command (cwd repository): node_modules/.bin/eslint changed15source/test files --max-warnings 0; node_modules/.bin/prettier --check changed source/test/metadata/documentation ->pass (html56-eslint-verified.txt, html56-prettier-final.txt). Scope: intentional changed files only.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html56-{boundaries-final,jsdoc-final,filesize-verified,source-tree,provenance-final,registry-final}.txt). Scope: repository source/dependency/registration gates, not whole native behavior certification. Broader semantic statuses remain unverified.
 - No final selected actual test is failing or skipped. Full application suite is not repeated at a checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+S3HW1E HTML57 checkpoint —184 unique passing tests/15actual files; parent scope remains incomplete. Final evidence under output/playwright/rtf-properties-native/html57-*; initial failures retained as iteration evidence and superseded by exact final runs below.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/filter/html/htmlcss1.margin-context.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/docnode/native-table-insertion-contract.test.ts ->41pass/4files (html57-native-final.txt). Scope: actual format sharing/width copy/default-border owners, native fill-order default and clone/pool registration, actual parser/context/numbering margin consumers, original insertion arguments and repeated shell history. Final5format cases are reverified after fixture guard/lint cleanup in html57-formats-verified.txt; they are not counted twice.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/browser/presentation/native-insert-table-dialog.test.tsx src/sw/source/filter/html/htmlctxt.insert.integration.test.ts src/sw/source/filter/html/htmltab.caption-reader.test.ts ->115pass/8actual files (html57-filter-ui.txt). The nonexistent htmlctxt.insert.integration selector is not counted or claimed verified; its intended consumers are covered by the next actual-file command. Scope: existing native formats, I/O, command/dialog and caption/table-construction consumers.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/html/htmlctxt.flags.integration.test.ts src/sw/source/filter/html/htmlctxt.test.ts src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts ->28pass/3actual files (html57-context-consumers.txt). Scope: real CSS/context/paragraph-class consumers of the relocated margin responsibility.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html57-types-final.txt). Final lint-only non-null/enum-expression cleanup preserves these source types and original values.
+- Command (cwd repository): node_modules/.bin/eslint all12changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html57-eslint-verified.txt, html57-prettier.txt and final three-file formatting check). Scope: actual changed files, no disabled validation or retained stale import.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html57-{boundaries,jsdoc,filesize,source-tree,hintids,provenance-final,registry-final}.txt). Evidence:1936runtime provenance modules/1723mapped,1935runtime boundary sources/10745imports/229edges,4349JSDoc files,4353size-scanned files,82actual pinned WhichIds, Writer registry0semantic violations. Broader semantic statuses remain unverified; these gates do not prove whole filter/native completion.
+- No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
 
 ## Rollback Plan
 
@@ -7398,3 +7504,13 @@ S3HW1E HTML56 — Native table insertion argument and history boundary. Source a
 The first validation exposed a real ES-module cycle from a new runtime SwDoc import and the absent original inline EndOfSectionIndex; the import is type-only and calls the actual document constructor's static CorrAbs, while SwNode now implements the original inline section-end query. A second pass exposed FocusNode's leaked temporary content position previously masked by blanket DeleteTable content-index relocation. FocusNode now releases the actual position after SetPaM; native destruction assertions stay enabled. The old fixture retained an unowned raw content position across destruction, which is not a valid native lifetime contract. It now tests an actual SwNodeIndex: deletion follows the original structural successor, including a split tail's later successor when split undo rejoins the body. Actual editing/stack/UNO cursor correction is tested independently through their real owners. Final selected tests pass; no failure is hidden by weakening destruction or reintroducing a global external-position fallback. Initial JSDoc argument/overview errors and primary-file vs inline-header provenance evidence were corrected and rechecked.
 
 Evidence is limited to represented flat-table construction and real core/UI/filter consumers. Non-null SwTableAutoFormat, DDE/redline insertion, wider old-model algorithms, native shared default-border construction/format sharing, nested table insertion and whole native module/ABI/default behavior are not certified by this checkpoint. Production recursive HTML table/cell/row/caption orchestration and context initialization, caption node-range placement, native materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser save/open/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is a verified implementation checkpoint, not task completion.
+
+S3HW1E HTML57 — Native insertion formats and table-context margin prerequisites. The first-cell source audit exposed an existing constructor mismatch: uniform all-edge border items and independently allocated row/box formats differed from the actual ndtbl.cxx construction used by HTML tables. InsertTable now uses original lcl_SetDfltBoxAttr and lcl_CreateDfltBoxFormat responsibilities: four positional border variants,55twip distances, actual document HTML_MODE gray/double vs ordinary black/solid strokes, one shared native row format, a shared borderless format with no fabricated explicit empty box item, and source per-column width copying only when the selected owner already has listeners. Actual text sections are created with their table/body-header collections and actual box/line registrations, rather than constructing throwaway independent formats through the browser row builder. The obsolete uniform insertion helper is removed. The shared Color capability's old swtable Color-import marker is relocated to its actual ndtbl COL_BLACK consumer; no import or comment is retained merely to satisfy a stale verifier.
+
+Original SwFillOrder/SwFormatFillOrder are added at the native header path with the real SfxEnumItem base, source ordinal aliases, TOP_DOWN static default and original Clone constructor semantics. The actual module-owned item package and document pool register RES_FILL_ORDER92 and the concrete existing-browser scalar restoration; SwAttrSet/SwFormat inline queries return the actual borrowed item. Table insertion explicitly assigns LEFT_TO_RIGHT to the shared row format. Tests cover all four real positional border owners, both HTML modes, uniform and differing real column-width sharing, pool default/restoration and original Clone Which reset. The existing borderless insertion fixture now requires absence of direct RES_BOX, not a fabricated explicit empty item.
+
+GetMarginsFromContext is moved without behavioral changes into its existing htmlcss1 responsibility. The original numbering-aware function and parser entry point use the real contexts, attribute lower bound, actual numbering rule formats, source depth clamp and unsigned16/signed16 narrowing. WRITER339 documents the original TODO-overflow behavior and preserves it; actual parser/rule/context tests cover unchanged outputs, skipped contexts, frozen lower bounds, excessive depths and numeric wrap/narrowing. Full first-cell context orchestration still requires the remaining real source owners; this checkpoint does not simulate it or certify a full BuildTableCell implementation.
+
+Initial validation exposed two fixture errors (Vitest spread-vector inputs and a missing real stream encoding), three historical explicit-empty-RES_BOX expectations, and lint restrictions on native enum alias syntax/non-null assertions. These were corrected without changing native construction/defaults or loosening checks. Registry validation found the stale removed Color-import marker described above; exact relocated evidence now passes. One guessed htmlctxt.insert.integration selector did not exist and is not counted: the real htmlctxt/flags/paragraph-class consumers are selected separately. No final selected actual test fails or is skipped.
+
+Whole native module/API/ABI/lifetime parity remains unverified. Non-null SwTableAutoFormat, DDE/redline and wider old-model algorithms, floating/nested first-table context creation, full recursive table/cell/row/caption token orchestration, caption placement, materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser open/save/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is an implementation checkpoint.

@@ -3,12 +3,22 @@ import type { SwFrameFormat } from "../layout/atrfrm";
 import type { SwNodes } from "./nodes";
 import { SwTableBoxStartNode, SwEndNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
+import { SwFormatFillOrder, SwFillOrder } from "../../../inc/fmtfordr";
+import { SwStartNodeType } from "../../../inc/ndtyp";
+import { SwTableBoxFormat } from "../../../inc/swtblfmt";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import {
+  SvxBorderLine,
+  SvxBorderLineStyle,
+  SvxBorderLineWidth,
+} from "../../../../editeng/source/items/borderline";
+import { COL_BLACK, COL_GRAY } from "../../../../tools/inc/color";
 import type { SwDoc } from "../doc/doc";
 import { TableHeadingChange } from "../../../inc/hints";
-import { SwTable, createWriterTableBoxItem } from "../table/swtable";
+import { SwTable } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
-import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFrameSize, SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
@@ -21,7 +31,13 @@ import {
 import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
-import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_PARATR_ADJUST } from "../../../inc/hintids";
+import {
+  RES_FRAMEDIR,
+  RES_PAGEDESC,
+  RES_BREAK,
+  RES_PARATR_ADJUST,
+  RES_BOX,
+} from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
@@ -418,6 +434,46 @@ export function TextToTableNodes(
   );
 }
 
+/** Original default border construction has four position-dependent variants and the actual HTML document-mode color/style. @param format - Actual new native box format. @param id - Original0..3 position variant. @returns Nothing. */
+function lcl_SetDfltBoxAttr(format: SwTableBoxFormat, id: number): void {
+  const html = format.GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
+    line = new SvxBorderLine(html ? COL_GRAY : COL_BLACK, SvxBorderLineWidth.VeryThin),
+    box = new SvxBoxItem(RES_BOX);
+  if (html) line.SetBorderLineStyle(SvxBorderLineStyle.DOUBLE);
+  box.SetAllDistances(55);
+  if (id < 2) box.SetLine(line, SvxBoxItemLine.TOP);
+  box.SetLine(line, SvxBoxItemLine.BOTTOM);
+  box.SetLine(line, SvxBoxItemLine.LEFT);
+  if (id === 1 || id === 3) box.SetLine(line, SvxBoxItemLine.RIGHT);
+  try {
+    format.SetFormatAttr(box);
+  } finally {
+    box.Dispose();
+  }
+}
+/** Original four-slot format cache shares owners until a different actual column width requires a clone. @param doc - Actual document. @param formats - Native four-slot cache. @param columns - Original column count. @param id - Border variant. @returns Actual native owner. */
+function lcl_CreateDfltBoxFormat(
+  doc: SwDoc,
+  formats: (SwTableBoxFormat | null)[],
+  columns: number,
+  id: number,
+): SwTableBoxFormat {
+  if (!formats[id]) {
+    const format = doc.MakeTableBoxFormat();
+    if (columns !== 65535) {
+      const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
+      try {
+        format.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
+    }
+    lcl_SetDfltBoxAttr(format, id);
+    formats[id] = format;
+  }
+  return formats[id] as SwTableBoxFormat;
+}
+
 /** Original represented InsertTable argument order. The current model has no SwTableAutoFormat owner, so only the original null autoformat argument is admitted; browser cell styling is applied by its existing shell/history owner after construction. */
 export type SwInsertTableArgs = [
   options: SwInsertTableOptions,
@@ -522,32 +578,65 @@ export function InsertTable(
         node.ResetAttr(which);
       }
     }
-    for (let column = 0; column < columns; column++)
-      table.AddColumnWidth(
-        positions ? (positions[column + 1] ?? 0) - (positions[column] ?? 0) : width / columns,
-      );
+    const lineFormat = doc.MakeTableLineFormat(),
+      fillOrder = new SwFormatFillOrder(SwFillOrder.ATT_LEFT_TO_RIGHT);
+    try {
+      lineFormat.SetFormatAttr(fillOrder);
+    } finally {
+      fillOrder.Dispose();
+    }
+    const formats: (SwTableBoxFormat | null)[] = [null, null, null, null],
+      common = borders ? null : doc.MakeTableBoxFormat();
+    if (common) {
+      const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
+      try {
+        common.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
+    }
     const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
     for (let row = 0; row < rows; row++) {
-      const line = doc.nodes.AppendTableRow(
-        table,
-        columns,
-        {},
-        Array.from(
-          { length: columns },
-          /** Creates independent represented box attributes. @returns Box format. */ () => ({
-            box: createWriterTableBoxItem(borders),
-          }),
-        ),
-      );
-      for (const box of line.GetTabBoxes())
-        for (const paragraph of box.GetParagraphs()) {
-          paragraph.ChgFormatColl(
-            doc.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
+      const line = new SwTableLine(lineFormat),
+        collection = doc.GetTextFormatColl(
+          row === 0 || row < repeat ? headStyle : "table-contents",
+        );
+      for (let column = 0; column < columns; column++) {
+        let format =
+          common ??
+          lcl_CreateDfltBoxFormat(
+            doc,
+            formats,
+            columns,
+            (column < columns - 1 ? 0 : 1) + (row ? 2 : 0),
           );
-          if (calledFromShell) {
-            if (adjustment) paragraph.SetAttr(adjustment);
+        if (positions) {
+          const cellWidth = (positions[column + 1] as number) - (positions[column] as number);
+          if (format.GetFrameSize().GetWidth() !== cellWidth) {
+            if (format.HasWriterListeners()) {
+              const copy = doc.MakeTableBoxFormat();
+              copy.CopyFormatFrom(format);
+              format = copy;
+            }
+            const size = new SwFormatFrameSize(SwFrameSize.Variable, cellWidth);
+            try {
+              format.SetFormatAttr(size);
+            } finally {
+              size.Dispose();
+            }
           }
         }
+        const start = doc.nodes.MakeTextSection(
+            table.GetTableNode().EndOfSectionNode(),
+            SwStartNodeType.SwTableBoxStartNode,
+            collection,
+          ) as SwTableBoxStartNode,
+          box = new SwTableBox(format, start),
+          paragraph = doc.nodes.at(start.GetIndex() + 1) as SwTextNode;
+        if (adjustment) paragraph.SetAttr(adjustment);
+        line.AddBox(box);
+      }
+      table.AddLine(line);
     }
   } finally {
     adjustment?.Dispose();

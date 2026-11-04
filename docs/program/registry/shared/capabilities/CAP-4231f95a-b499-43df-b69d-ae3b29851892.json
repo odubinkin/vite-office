@@ -53,8 +53,8 @@
           "marker": "Color"
         },
         {
-          "path": "apps/office/src/sw/source/core/table/swtable.ts",
-          "marker": "Color"
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "COL_BLACK"
         },
         {
           "path": "apps/office/src/xmloff/source/style/bordrhdl.ts",
