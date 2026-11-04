@@ -9,11 +9,31 @@ import {
   type CacheValueType,
 } from "./unifiedcache.key";
 import * as H from "./uhash";
+import { UInitOnce, umtx_initOnce } from "./umutex.h";
+import { ECleanupCommonType, ucln_common_registerCleanup } from "./ucln_cmn.h";
+export let gCache: UnifiedCache | null = null;
+export const gCacheInitOnce = new UInitOnce();
+/** Original singleton cleanup resets its once record before deleting the cache. Native mutex/condition-variable destruction is outside synchronous realm storage. @returns True. */
+function unifiedcache_cleanup(): boolean {
+  gCacheInitOnce.reset();
+  gCache?.dispose();
+  gCache = null;
+  return true;
+}
+/** Original registration-before-allocation and failed-construction cleanup. @param status - Source status. @returns Nothing. */
+function cacheInit(status: [number]): void {
+  ucln_common_registerCleanup(ECleanupCommonType.UCLN_COMMON_UNIFIED_CACHE, unifiedcache_cleanup);
+  gCache = new UnifiedCache(status);
+  if (U_FAILURE(status[0])) {
+    gCache.dispose();
+    gCache = null;
+  }
+}
+
 export { CacheKeyBase, CacheKey, LocaleCacheKey } from "./unifiedcache.key";
 export type { CacheValueType } from "./unifiedcache.key";
 /** Original concrete cache and its one native hash table. */
 export class UnifiedCache extends UnifiedCacheBase {
-  private static gCache: UnifiedCache | null = null;
   private fHashtable: H.UHashtable<CacheKeyBase, SharedObject> | null = null;
   private readonly fEvictPos: [number] = [-1];
   private fNumValuesTotal = 0;
@@ -49,9 +69,9 @@ export class UnifiedCache extends UnifiedCacheBase {
   }
   /** Original singleton lookup. @param status - Sticky status. @returns Shared cache/null. */
   static getInstance(status: [number]): UnifiedCache | null {
+    umtx_initOnce(gCacheInitOnce, cacheInit, status);
     if (U_FAILURE(status[0])) return null;
-    if (this.gCache === null) this.gCache = new UnifiedCache(status);
-    return U_FAILURE(status[0]) ? null : this.gCache;
+    return gCache;
   }
   /** Actual initialized table; source callers likewise require valid construction. @returns Original table. */
   private table(): H.UHashtable<CacheKeyBase, SharedObject> {

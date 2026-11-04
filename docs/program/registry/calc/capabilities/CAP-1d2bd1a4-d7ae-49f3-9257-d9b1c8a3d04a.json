@@ -15,7 +15,8 @@
       "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified.",
       "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified.",
       "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified.",
-      "Original ICU78.3 ucmndata keeps separate offset and pointer prefix binary searches, first/last prefix priming, unsigned byte comparison, original count/length/status behavior and CmnD/ToCP dispatch. udata_checkCommonData retains source header/major checks, early incoming-error return and close on invalid data, without new size/sort/content validation. The actual LibreOffice Makefile generates ToCP with gencmn -S, genccode and genbrk; its C pointer relocations bind direct managed name/data references at exact table addresses. DataHeader carries this platform relocation binding, and normalization preserves it when advancing the original alignment double. No callback/provider table, CmnD-only conversion or fake loader is introduced. Original native generator outputs and unchanged checker/dispatch compare 1938 complete input/output/header traces, including 144-byte copyright-bearing CmnD headers, static pointer alignment prefixes, null/empty/one-entry/unsorted tables, negative entry lengths, incoming errors and ignored lookup statuses. Raw native pointer ABI, unreadable/unbound pointer spans, physical allocation/mapping and full udata application-cache/open, iterator/engine/service installation remain unverified."
+      "Original ICU78.3 ucmndata keeps separate offset and pointer prefix binary searches, first/last prefix priming, unsigned byte comparison, original count/length/status behavior and CmnD/ToCP dispatch. udata_checkCommonData retains source header/major checks, early incoming-error return and close on invalid data, without new size/sort/content validation. The actual LibreOffice Makefile generates ToCP with gencmn -S, genccode and genbrk; its C pointer relocations bind direct managed name/data references at exact table addresses. DataHeader carries this platform relocation binding, and normalization preserves it when advancing the original alignment double. No callback/provider table, CmnD-only conversion or fake loader is introduced. Original native generator outputs and unchanged checker/dispatch compare 1938 complete input/output/header traces, including 144-byte copyright-bearing CmnD headers, static pointer alignment prefixes, null/empty/one-entry/unsorted tables, negative entry lengths, incoming errors and ignored lookup statuses. Raw native pointer ABI, unreadable/unbound pointer spans, physical allocation/mapping and full udata application-cache/open, iterator/engine/service installation remain unverified.",
+      "Original ICU78.3 application-data registration uses actual UHashtable string keys, original basename insertion/normal lookup and full-path duplicate check (CALC-467), copied destination-owned descriptors, original statuses and ordered cleanup. UInitOnce retains source state0/1/2, cached error publication and state-only reset, including mixed-overload stale-error behavior (CALC-468). The existing UnifiedCache singleton now uses original once initialization and registration-before-construction cleanup instead of an ad hoc null check. Original header enums and cleanup library/common order are retained; compile-time array bounds29/8 are folded to avoid ESM header declaration cycles and checked against native declarations. Native comparison includes unchanged udata.cpp/unifiedcache.cpp and observes actual static records plus initialized once fields with private visibility opened only for observation. 92 process-ordered sequences/902 full cache/once/cleanup/hash snapshots match, including all represented live hash slots/keys/descriptor ownership, replacement, rehash, NUL/byte keys, warnings/errors, cleanup callbacks and singleton recreation. ESM exports expose actual internal records/read-only bindings for observation; no source method, allocator, provider or mutex is replaced. Synchronous JS realm storage binds logical mutex/wait boundaries as in the existing UnifiedCache; native concurrency/wait/wakeup/mutex destruction, allocation-failure/free/physical ABI, automatic/full heap/tracing cleanup and a public u_cleanup are not certified or substituted. Source allocation-failure adoption concern CALC-469 is documented without a recovery patch. Real udata_open/path/file orchestration, production package/iterator/engine/service installation and final CSV integration remain pending."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -98,6 +99,42 @@
         {
           "path": "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
           "marker": "-S -d"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ustr_imp.h",
+          "marker": "ustr_hashCharsN"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/umutex.h",
+          "marker": "UInitOnce"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/umutex.cpp",
+          "marker": "umtx_initImplPreInit"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucln.h",
+          "marker": "ECleanupLibraryType"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucln_cmn.h",
+          "marker": "ECleanupCommonType"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucln_cmn.cpp",
+          "marker": "gCommonCleanupFunctions"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/udata.cpp",
+          "marker": "DataCacheElement"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/uhash.cpp",
+          "marker": "uhash_hashChars"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unifiedcache.cpp",
+          "marker": "UnifiedCache::getInstance"
         }
       ],
       "tests": [
@@ -223,6 +260,42 @@
         {
           "path": "apps/office/src/external/icu/source/common/umapfile.ts",
           "marker": "uprv_unmapFile"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ustr_imp.ts",
+          "marker": "ustr_hashCharsN"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/umutex.h.ts",
+          "marker": "UInitOnce"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/umutex.ts",
+          "marker": "umtx_initImplPreInit"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucln.ts",
+          "marker": "ECleanupLibraryType"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucln_cmn.h.ts",
+          "marker": "ECleanupCommonType"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucln_cmn.ts",
+          "marker": "gCommonCleanupFunctions"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.ts",
+          "marker": "DataCacheElement"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uhash.ts",
+          "marker": "uhash_get"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unifiedcache.ts",
+          "marker": "UnifiedCache"
         }
       ],
       "tests": [
@@ -253,6 +326,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/ucmndata.native.test.ts",
           "marker": "retains original common-data"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.native.test.ts",
+          "marker": "retains original app-data process"
         }
       ],
       "docs": [

@@ -4295,3 +4295,49 @@ from raw bytes with no relocation map. Nonempty tables can also be validated
 and counted while their entry pointers remain opaque. Entry relocations are
 required only when the original lookup dereferences an actual entry. The native
 witness includes both cases; no eager binding requirement is imposed.
+
+
+### Original application-data cache, once records and ordered cleanup
+
+`udata_setAppData` now follows the actual descriptor/checker/cache path. The
+cache uses the original UHashtable, string-byte hash/comparison, copied owned
+descriptors and keys, basename lookup/insertion and full-path duplicate lookup.
+It retains the native warning/error and replacement behavior (CALC-467), without
+an extra Map cache, image-validation shortcut or replacement loader.
+
+Consumed `UInitOnce` plain/status inline overloads and pre/post states retain
+zero/one/two publication, cached failures, warning behavior and state-only reset.
+CALC-468 records the original mixed-overload stale error. Cleanup declarations
+keep original enum order; the real registry dispatches libraries before common
+callbacks and clears slots after calls. Native compile-time bounds29/8 are
+folded in ESM to avoid reading a header enum during its declaration cycle.
+No no-op lock API or replacement public u_cleanup is supplied. Synchronous
+realm execution binds logical synchronization, as for existing UnifiedCache;
+native mutex/wait/wakeup/thread/allocator/free/physical ABI and full automatic
+heap/tracing cleanup are outside this evidence.
+
+The prior UnifiedCache singleton null check has been replaced by its original
+module-owned UInitOnce and cleanup registration before construction. Actual
+cache cleanup resets its once record before deleting the cache. Physical native
+mutex/condition-variable construction/destruction remains unclaimed.
+
+The original native witness includes unchanged udata.cpp/unifiedcache.cpp to
+observe their actual static records. Private visibility is opened only for
+initialized once-field observations; no function, allocator, mutex or provider
+is replaced. 92 process-ordered sequences with902 full snapshots match actual
+cache slots/keys/descriptor ownership, replacement/rehash, null/NUL/byte keys,
+statuses, cleanup callback order and singleton recreation. Original reset does
+not clear stored error, so the comparator retains process state across scenario
+cleanup rather than silently resetting that private field. CALC-469 records a
+source-only allocation-failure adoption concern without a recovery change.
+
+Production package installation and udata_open's actual path/file/common-data
+orchestration remain pending. Registration/cache helpers do not replace that
+API. Public iterator/provider/engine construction, word/title/production
+services, NatNum12 output, multiline import and final CSV acceptance remain
+required; no complete native CSV or broad semantic parity is claimed.
+
+The pinned public udata.h sets UDATA_DEFAULT_ACCESS to UDATA_FILES_FIRST.
+Registration does not change that default. The forthcoming open path must
+retain its individual-file attempt before common-data fallback; a cached-data
+shortcut or a switch to packages-only access is not the original algorithm.

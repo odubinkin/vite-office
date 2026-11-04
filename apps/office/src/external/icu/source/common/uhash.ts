@@ -1,4 +1,5 @@
 /** @fileoverview Original ICU78.3 pointer-key/value UHashtable operations consumed by UnifiedCache. Native prime capacities, double hashing, tombstones, reverse rehash and slot-order iteration are retained; allocation/union ABI is projected to owned JS objects. */
+import { ustr_hashCharsN } from "./ustr_imp";
 import { UErrorCode, U_FAILURE } from "./unicode/utypes";
 /** Original pointer-token entry storage. */
 export interface UHashElement<K, V> {
@@ -215,4 +216,39 @@ export function uhash_close<K, V>(hash: UHashtable<K, V> | null): void {
       if (hash.valueDeleter !== null && e.value !== null) hash.valueDeleter(e.value);
     }
   hash.elements = [];
+}
+
+/** Original value deleter setter. @param hash - Actual table. @param deleter - New callback/null. @returns Previous callback. */
+export function uhash_setValueDeleter<K, V>(
+  hash: UHashtable<K, V>,
+  deleter: ((value: V) => void) | null,
+): ((value: V) => void) | null {
+  const old = hash.valueDeleter;
+  hash.valueDeleter = deleter;
+  return old;
+}
+/** Original pointer-key lookup returns the located slot's value, including empty/deleted nulls. @param hash - Actual table. @param key - Key. @returns Actual value/null. */
+export function uhash_get<K, V>(hash: UHashtable<K, V>, key: K): V | null {
+  return find(hash, key, hash.keyHasher(key)).value;
+}
+/** Original C-string key hash. Narrow strings bind bytes and their implicit final NUL; embedded NUL remains the native end. @param key - Narrow byte string/null. @returns Signed hash. */
+export function uhash_hashChars(key: string | null): number {
+  if (key === null) return 0;
+  const nul = key.indexOf("\0");
+  return ustr_hashCharsN(key, nul < 0 ? key.length : nul);
+}
+/** Original pointer/null identity checks and byte equality through first NUL. @param a - Left narrow string/null. @param b - Right narrow string/null. @returns Equal. */
+export function uhash_compareChars(a: string | null, b: string | null): boolean {
+  if (a === b) return true;
+  if (a === null || b === null) return false;
+  let i = 0,
+    c1: number,
+    c2: number;
+  do {
+    c1 = i < a.length ? a.charCodeAt(i) & 255 : 0;
+    c2 = i < b.length ? b.charCodeAt(i) & 255 : 0;
+    ++i;
+    if (c1 !== c2) return false;
+  } while (c1 !== 0);
+  return true;
 }

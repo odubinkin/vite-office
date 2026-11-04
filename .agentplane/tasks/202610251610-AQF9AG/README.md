@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 194
+revision: 197
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T14:39:57.252Z"
+  updated_at: "2026-11-04T15:43:14.069Z"
   updated_by: "CODER"
-  note: "Original CmnD/ToCP checker and dispatch match 1938 complete native traces, including opaque/empty pointer tables; 38 related ICU and all 197 CSV cases, build, Chromium and final static checks pass. CALC-467 records native cache duplicate-key behavior to preserve. Application-data cache/open, iterator/engines/services, NatNum12 output and multiline import remain incomplete; continue the approved CSV goal without pausing."
-  attempts: 49
+  note: "Original application-data cache and UnifiedCache lifecycle match 92 original sequences/902 full states; 44 related tests, all 197 CSV cases, build, Chromium and final static checks pass. Original once reset/stale error and cache adoption concerns are documented, not repaired heuristically. Actual udata_open with FILES_FIRST ordering, package/iterator/engine/service installation, NatNum12 output and multiline import remain pending; continue the approved active goal."
+  attempts: 50
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1112,8 +1115,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T15:43:14.069Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original application-data cache and UnifiedCache lifecycle match 92 original sequences/902 full states; 44 related tests, all 197 CSV cases, build, Chromium and final static checks pass. Original once reset/stale error and cache adoption concerns are documented, not repaired heuristically. Actual udata_open with FILES_FIRST ordering, package/iterator/engine/service installation, NatNum12 output and multiline import remain pending; continue the approved active goal."
+  -
+    type: "status"
+    at: "2026-11-04T15:43:27.792Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T14:40:09.454Z"
+doc_updated_at: "2026-11-04T15:43:27.792Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2603,6 +2619,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T15:43:14.069Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original application-data cache and UnifiedCache lifecycle match 92 original sequences/902 full states; 44 related tests, all 197 CSV cases, build, Chromium and final static checks pass. Original once reset/stale error and cache adoption concerns are documented, not repaired heuristically. Actual udata_open with FILES_FIRST ordering, package/iterator/engine/service installation, NatNum12 output and multiline import remain pending; continue the approved active goal.
+    Attempts: 50
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:43:13.015Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3902,6 +3948,26 @@ sections:
     - Command: node_modules/.bin/vite build (apps/office, binary ../../node_modules/.bin/vite); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass. Evidence: toc-build-final.log,7.51s;toc-browser-final.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and actual browser workflow.
     - Final scope:17 exact intentional paths including task README, reviewed in toc-commit-paths.txt; git diff --check passes and no unexpected non-output changes. Original native scratch is excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual application-data cache/open, production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Verification remains rework and task continues DOING; no finish, goal pause/completion, default file-access change, OS mapper substitute or full CSV/native parity claim.
+
+    ### Original application-data cache, once and shared-cache lifecycle checkpoint
+
+    - Previous goal turn classified as progress: 1f5e1d907 committed actual CmnD/ToCP checker/search/dispatch. Revalidated current calc checkout, approved DOING task, CODER role, route and Verify Steps. Implemented required original application-data registration/cache, string-key operations, consumed UInitOnce overloads and cleanup declaration/registry owners. Refactored existing UnifiedCache ad hoc singleton creation into original module-owned once initialization and cleanup registration before construction. No separate Map cache, fake allocator/lock/provider, public cleanup facade, changed file-access default, vendor mutation, network or external publication.
+    - Source UDATA_DEFAULT_ACCESS is UDATA_FILES_FIRST. Registration/cache does not implement or substitute udata_open and must not bypass its forthcoming individual-file/common-data ordering. Native condition-variable/mutex/wait/wakeup/thread and allocation/free/physical ABI remain unverified under the same synchronous-realm binding used by existing UnifiedCache; no no-op mutex API is exported. Header compile-time cleanup bounds29/8 are folded to avoid ESM enum declaration cycles and checked against native declarations. Actual module-static records have read-only ESM bindings for source-owned observation; source public API remains in unicode/udata. No source method, allocator, service, table or registry is replaced in native comparison.
+    - CALC-467 basename insertion/full-path duplicate check remains unchanged and is now locally compared. CALC-468 documents native state-only UInitOnce.reset plus mixed-overload stale error7; original callback/field/status sequence confirmed by appdata-once-stale.log and retained full traces. CALC-469 documents source-only possible allocation-failure use-after-free/double-free after hash value adoption, with no injected allocation failure or recovery patch. Managed physical free/allocator-failure behavior is outside evidence; original adoption/status/branch ownership remains source-defined.
+    - Command: npx --no-install tsx scripts/icu-appdata-native-probe.mjs
+      Result: pass. Evidence: appdata-native-final.log,92 original process-ordered sequences/902 full initialized cache/once/cleanup/hash snapshots. Actual unchanged udata.cpp/unifiedcache.cpp are included only to observe their original static records; umutex.h private visibility alone is opened for initialized-field observation after pre-including its dependencies. Actual original libraries/methods/allocators/mutexes execute. Source/library/object/executable/common-fixture hashes retained in udata.native-observations.json. Scope: all represented live hash slots/keys/descriptors, rehash/replacement/NUL/byte keys, statuses/guards, original reset/error publication, callback dispatch and singleton recreation; not udata_open, thread/allocator ABI or complete native CSV.
+    - Native observer correction: initial separate native processes versus reused ESM module reset the once state at different lifetimes. Once fields revealed native0 versus retained local warning-124 on the next scenario. Corrected native sequence framing to retain the original process cache record across cleanup, while constructing fresh standalone test once records on each scenario boundary. No production private field is reset or error suppressed. Added source UnifiedCache lifecycle to the witness; corrected four missing local observation fields before comparison. Full final native rows compare before SHA256 replay; no prepared cache/provider/mutex/factory replaces actual owners.
+    - Command: npm run test:shared -- src/external/icu/source/common/udata.native.test.ts src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/common/unifiedcache.native.integration.test.ts src/external/icu/source/common/cache-key-description.native.test.ts src/external/icu/source/common/cache-sdk-constructors.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts --maxWorkers=1
+      Result: pass,44 tests/8 files in12.90s. Evidence: appdata-related-final.log. Scope: process-order native stream replay, existing table/descriptor/raw-owner/UTF8, cache/locale-key/SDK-constructor and narrow-hash consumers. Process-order replay intentionally retains stored once status between cleanup boundaries. Initial types found nullable hash-key inference/unused observed global and an unused observer argument; applied explicit original key/value types, actual readonly observation bindings and unused-argument naming, without runtime guard changes.
+    - Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (35 exact code/JSON paths in appdata-source-paths.txt)
+      Result: pass. Evidence: appdata-lint.log,appdata-typecheck-final.log,appdata-jsdoc-final.log,appdata-dependencies.log,appdata-resources.log,appdata-source-tree.log,appdata-size.log,appdata-routing.log,appdata-doctor.log,appdata-format-check.log. Scope: full lint/types/JSDoc,1978 boundary sources/10749 imports/236 allowed edges,464 commands,4420 authored files and source/routing guards. Doctor zero errors with pre-existing managed-hook warning; no unrelated hook change. Formatting is limited to intentional source/JSON paths; no rules or assertions weakened.
+    - Command: npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+      Result: pass. Evidence: appdata-provenance-final.log,appdata-shared-parity-final.log,appdata-calc-parity-final.log. Scope:1979 runtime records/1766 mapped; seven new source owners plus existing hash/public-data/shared-cache metadata and original capability updated. Broad behavior/contract/default/verified flags remain false; native physical synchronization/allocation and unfinished full application paths remain explicit.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass,197 tests/8 files in30.52s. Evidence: appdata-csv-tests.log. Scope: represented CSV options/import/recognition/export/docshell and current file UI; heavy checks completed first. No timing/assertion/source changes to accommodate a failure.
+    - Command: ../../node_modules/.bin/vite build (apps/office); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: appdata-build.log,7.48s;appdata-browser.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and real browser workflow.
+    - Final scope:38 exact intentional paths including task README; appdata-commit-paths.txt records the allowlist. Source/evidence review finds no unexpected non-output changes; git diff --check passes. Native scratch remains reviewed and excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual udata_open/path/file orchestration and production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Overall verification remains rework and task continues DOING; no goal finish/pause or full CSV claim.
 id_source: "generated"
 ---
 ## Summary
@@ -5400,6 +5466,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T15:43:14.069Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original application-data cache and UnifiedCache lifecycle match 92 original sequences/902 full states; 44 related tests, all 197 CSV cases, build, Chromium and final static checks pass. Original once reset/stale error and cache adoption concerns are documented, not repaired heuristically. Actual udata_open with FILES_FIRST ordering, package/iterator/engine/service installation, NatNum12 output and multiline import remain pending; continue the approved active goal.
+Attempts: 50
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:43:13.015Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6703,3 +6799,23 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: node_modules/.bin/vite build (apps/office, binary ../../node_modules/.bin/vite); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass. Evidence: toc-build-final.log,7.51s;toc-browser-final.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and actual browser workflow.
 - Final scope:17 exact intentional paths including task README, reviewed in toc-commit-paths.txt; git diff --check passes and no unexpected non-output changes. Original native scratch is excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual application-data cache/open, production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Verification remains rework and task continues DOING; no finish, goal pause/completion, default file-access change, OS mapper substitute or full CSV/native parity claim.
+
+### Original application-data cache, once and shared-cache lifecycle checkpoint
+
+- Previous goal turn classified as progress: 1f5e1d907 committed actual CmnD/ToCP checker/search/dispatch. Revalidated current calc checkout, approved DOING task, CODER role, route and Verify Steps. Implemented required original application-data registration/cache, string-key operations, consumed UInitOnce overloads and cleanup declaration/registry owners. Refactored existing UnifiedCache ad hoc singleton creation into original module-owned once initialization and cleanup registration before construction. No separate Map cache, fake allocator/lock/provider, public cleanup facade, changed file-access default, vendor mutation, network or external publication.
+- Source UDATA_DEFAULT_ACCESS is UDATA_FILES_FIRST. Registration/cache does not implement or substitute udata_open and must not bypass its forthcoming individual-file/common-data ordering. Native condition-variable/mutex/wait/wakeup/thread and allocation/free/physical ABI remain unverified under the same synchronous-realm binding used by existing UnifiedCache; no no-op mutex API is exported. Header compile-time cleanup bounds29/8 are folded to avoid ESM enum declaration cycles and checked against native declarations. Actual module-static records have read-only ESM bindings for source-owned observation; source public API remains in unicode/udata. No source method, allocator, service, table or registry is replaced in native comparison.
+- CALC-467 basename insertion/full-path duplicate check remains unchanged and is now locally compared. CALC-468 documents native state-only UInitOnce.reset plus mixed-overload stale error7; original callback/field/status sequence confirmed by appdata-once-stale.log and retained full traces. CALC-469 documents source-only possible allocation-failure use-after-free/double-free after hash value adoption, with no injected allocation failure or recovery patch. Managed physical free/allocator-failure behavior is outside evidence; original adoption/status/branch ownership remains source-defined.
+- Command: npx --no-install tsx scripts/icu-appdata-native-probe.mjs
+  Result: pass. Evidence: appdata-native-final.log,92 original process-ordered sequences/902 full initialized cache/once/cleanup/hash snapshots. Actual unchanged udata.cpp/unifiedcache.cpp are included only to observe their original static records; umutex.h private visibility alone is opened for initialized-field observation after pre-including its dependencies. Actual original libraries/methods/allocators/mutexes execute. Source/library/object/executable/common-fixture hashes retained in udata.native-observations.json. Scope: all represented live hash slots/keys/descriptors, rehash/replacement/NUL/byte keys, statuses/guards, original reset/error publication, callback dispatch and singleton recreation; not udata_open, thread/allocator ABI or complete native CSV.
+- Native observer correction: initial separate native processes versus reused ESM module reset the once state at different lifetimes. Once fields revealed native0 versus retained local warning-124 on the next scenario. Corrected native sequence framing to retain the original process cache record across cleanup, while constructing fresh standalone test once records on each scenario boundary. No production private field is reset or error suppressed. Added source UnifiedCache lifecycle to the witness; corrected four missing local observation fields before comparison. Full final native rows compare before SHA256 replay; no prepared cache/provider/mutex/factory replaces actual owners.
+- Command: npm run test:shared -- src/external/icu/source/common/udata.native.test.ts src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/common/rbbidata.native.test.ts src/external/icu/source/common/unifiedcache.native.integration.test.ts src/external/icu/source/common/cache-key-description.native.test.ts src/external/icu/source/common/cache-sdk-constructors.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts --maxWorkers=1
+  Result: pass,44 tests/8 files in12.90s. Evidence: appdata-related-final.log. Scope: process-order native stream replay, existing table/descriptor/raw-owner/UTF8, cache/locale-key/SDK-constructor and narrow-hash consumers. Process-order replay intentionally retains stored once status between cleanup boundaries. Initial types found nullable hash-key inference/unused observed global and an unused observer argument; applied explicit original key/value types, actual readonly observation bindings and unused-argument naming, without runtime guard changes.
+- Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (35 exact code/JSON paths in appdata-source-paths.txt)
+  Result: pass. Evidence: appdata-lint.log,appdata-typecheck-final.log,appdata-jsdoc-final.log,appdata-dependencies.log,appdata-resources.log,appdata-source-tree.log,appdata-size.log,appdata-routing.log,appdata-doctor.log,appdata-format-check.log. Scope: full lint/types/JSDoc,1978 boundary sources/10749 imports/236 allowed edges,464 commands,4420 authored files and source/routing guards. Doctor zero errors with pre-existing managed-hook warning; no unrelated hook change. Formatting is limited to intentional source/JSON paths; no rules or assertions weakened.
+- Command: npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+  Result: pass. Evidence: appdata-provenance-final.log,appdata-shared-parity-final.log,appdata-calc-parity-final.log. Scope:1979 runtime records/1766 mapped; seven new source owners plus existing hash/public-data/shared-cache metadata and original capability updated. Broad behavior/contract/default/verified flags remain false; native physical synchronization/allocation and unfinished full application paths remain explicit.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass,197 tests/8 files in30.52s. Evidence: appdata-csv-tests.log. Scope: represented CSV options/import/recognition/export/docshell and current file UI; heavy checks completed first. No timing/assertion/source changes to accommodate a failure.
+- Command: ../../node_modules/.bin/vite build (apps/office); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: appdata-build.log,7.48s;appdata-browser.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and real browser workflow.
+- Final scope:38 exact intentional paths including task README; appdata-commit-paths.txt records the allowlist. Source/evidence review finds no unexpected non-output changes; git diff --check passes. Native scratch remains reviewed and excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual udata_open/path/file orchestration and production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Overall verification remains rework and task continues DOING; no goal finish/pause or full CSV claim.

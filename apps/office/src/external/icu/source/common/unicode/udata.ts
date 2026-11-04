@@ -38,3 +38,5 @@ export class UDataInfo {
   }
 }
 export { udata_close, udata_getMemory } from "../udatamem";
+
+export { udata_setAppData } from "../udata";

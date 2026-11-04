@@ -7,15 +7,18 @@
     "localPath": "apps/office/src/external/icu/source/common/unicode/udata.ts",
     "upstreamPath": "vendor/icu-reference/source/common/unicode/udata.h",
     "localSymbols": [
-      "UDataInfo"
+      "UDataInfo",
+      "udata_setAppData"
     ],
     "upstreamSymbols": [
       "UDataInfo",
       "udata_close",
-      "udata_getMemory"
+      "udata_getMemory",
+      "udata_setAppData"
     ],
     "preservedResponsibilities": [
-      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified."
+      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified.",
+      "Original ICU78.3 application-data registration uses actual UHashtable string keys, original basename insertion/normal lookup and full-path duplicate check (CALC-467), copied destination-owned descriptors, original statuses and ordered cleanup. UInitOnce retains source state0/1/2, cached error publication and state-only reset, including mixed-overload stale-error behavior (CALC-468). The existing UnifiedCache singleton now uses original once initialization and registration-before-construction cleanup instead of an ad hoc null check. Original header enums and cleanup library/common order are retained; compile-time array bounds29/8 are folded to avoid ESM header declaration cycles and checked against native declarations. Native comparison includes unchanged udata.cpp/unifiedcache.cpp and observes actual static records plus initialized once fields with private visibility opened only for observation. 92 process-ordered sequences/902 full cache/once/cleanup/hash snapshots match, including all represented live hash slots/keys/descriptor ownership, replacement, rehash, NUL/byte keys, warnings/errors, cleanup callbacks and singleton recreation. ESM exports expose actual internal records/read-only bindings for observation; no source method, allocator, provider or mutex is replaced. Synchronous JS realm storage binds logical mutex/wait boundaries as in the existing UnifiedCache; native concurrency/wait/wakeup/mutex destruction, allocation-failure/free/physical ABI, automatic/full heap/tracing cleanup and a public u_cleanup are not certified or substituted. Source allocation-failure adoption concern CALC-469 is documented without a recovery patch. Real udata_open/path/file orchestration, production package/iterator/engine/service installation and final CSV integration remain pending."
     ],
     "omittedResponsibilities": [
       "Actual application-data/TOC loader, OS file mapping, public iterators/engines and word/title/service installation are incomplete. Native physical allocation/failure/munmap/thread/ABI and heap access after close are unverified."
@@ -29,6 +32,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
           "marker": "retains complete native"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.native.test.ts",
+          "marker": "retains original app-data process"
         }
       ],
       "upstream": [
