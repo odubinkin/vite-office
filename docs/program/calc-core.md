@@ -4366,3 +4366,33 @@ replacement loader. The original default remains UDATA_FILES_FIRST. Data
 directory initialization and actual path/file/common-data orchestration,
 production package/iterator/engine/service construction, NatNum12 output,
 multiline EditEngine import and final CSV acceptance remain required.
+
+### CSV loader directory ownership and original path iteration
+
+Original putil now owns actual data/timezone directory records, copied NUL
+bytes, initialization/cleanup and getter/setter status order. Browser OS
+environment and native installed-archive directory inputs are absent; the
+original absent-input fallback applies. No file-access flag or mapper is
+changed. The original timezone setter still initializes before replacing the
+value. Cleanup resets once state while retaining its stored error as source.
+Unported OS locale/TZ-search caches are not fabricated.
+
+UDataPathIterator is implemented in its original udata.cpp responsibility over
+actual CharString fields and borrowed byte pointers. Item-directory precedence,
+empty path segments, explicit file matching, package-directory removal, dat
+skipping and long suffix separators retain original order. No JS path parser,
+filename normalization, guessed data directory or replacement file search is
+used. CALC-472 records the source-only null-package/uninitialized-scan concern;
+no workaround or undefined-input parity claim is added.
+
+The unchanged original udata.cpp/putil.cpp witness matches752 sequences and5524
+complete initialized snapshots, including real module statics and byte-owner
+capacity/ownership. Native compilation has no installation-directory defines;
+the child has no ICU_DATA/ICU_TIMEZONE_FILES_DIR, reproducing browser inputs.
+Private visibility only permits observation. Native allocator/free/thread ABI,
+uninitialized spans and invalidated borrows are excluded.
+
+Actual udata_open/file-mapper/common-data orchestration, production package and
+iterator/provider/engine/service installation, NatNum12 output, multiline
+EditEngine import and final CSV acceptance remain required. FILES_FIRST stays
+the original default; this block does not select MAP_NONE or skip file attempts.

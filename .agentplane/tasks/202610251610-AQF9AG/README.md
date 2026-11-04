@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 200
+revision: 203
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T16:33:12.889Z"
+  updated_at: "2026-11-04T16:49:25.106Z"
   updated_by: "CODER"
-  note: "Original CharString byte-owner block verified against ICU:819 sequences/2416 snapshots;45 related tests,197 CSV regressions and Chromium scenario pass. Full native CSV loader/services/NatNum12/multiline integration remains incomplete."
-  attempts: 51
+  note: "Directory/path block verified:752 unchanged ICU sequences/5524 snapshots,27 related tests,197 CSV regressions and Chromium scenario pass. Full native CSV remains incomplete; user requests goal pause after this checkpoint."
+  attempts: 52
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1144,8 +1147,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T16:49:25.106Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Directory/path block verified:752 unchanged ICU sequences/5524 snapshots,27 related tests,197 CSV regressions and Chromium scenario pass. Full native CSV remains incomplete; user requests goal pause after this checkpoint."
+  -
+    type: "status"
+    at: "2026-11-04T16:49:42.577Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T16:33:22.965Z"
+doc_updated_at: "2026-11-04T16:49:42.577Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2695,6 +2711,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T16:49:25.106Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Directory/path block verified:752 unchanged ICU sequences/5524 snapshots,27 related tests,197 CSV regressions and Chromium scenario pass. Full native CSV remains incomplete; user requests goal pause after this checkpoint.
+    Attempts: 52
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T16:49:24.502Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4028,6 +4074,19 @@ sections:
     - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1. Result: pass. Evidence:197 tests/8 files in30.03s. Scope: existing CSV defaults/options/admission/recognition/date/export/document/browser UI regressions; run after heavy static checks without changing any assertion/deadline.
     - Command (apps/office): ../../node_modules/.bin/vite build. Result: pass. Evidence:successful static build in7.2s. Command (root): node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts. Result: pass. Evidence:1 Chromium CSV import/primary ODS save/active-sheet export scenario,4.2s test/5.8s total. Scope: existing connected UI acceptance, not completion of pending native formatter/iterator/multiline paths.
     - Final scope:35 exact intentional paths including task README; charstr-commit-paths.txt records the implementation allowlist. Source/evidence review, JSON parsing, original-source/native-artifact SHA256 checks and git diff --check pass. Final status is captured after the allowlisted checkpoint commit; native output remains reviewed scratch and excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Original udata_open/data-directory/path/file/common-data orchestration and actual production package/iterator/provider/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain required. UDATA_DEFAULT_ACCESS remains UDATA_FILES_FIRST. Overall verification remains rework and task continues DOING; no task finish, goal pause/completion or full native CSV claim.
+
+    ### Original ICU data-directory owners and UDataPathIterator
+
+    - Previous goal turn classified as progress:179839d67 committed original loader byte-string ownership with native proof. Revalidated approved DOING task, current calc checkout, CODER role, route and Verify Steps. Continued the existing CSV loader prerequisite scope. The user then explicitly requested pausing the goal after the current task/block; no subsequent implementation block is started. The checkpoint completes and verifies directory/path ownership before pausing, without claiming that the entire CSV task is finished.
+    - Original putil owns actual data/timezone directory records, copied NUL bytes, plain/status once initialization, getter/setter order and cleanup. Browser processes have no OS environment namespace or installed native archive path; original absent-input branches are used. The native witness compiles unchanged original putil.cpp without installation-directory defines and clears only ICU_DATA/ICU_TIMEZONE_FILES_DIR in its child environment. No hardcoded developer-machine install path, environment-variable provider, file-access policy change, MAP_NONE selection or replacement mapper is introduced. OS locale/TZ-search cleanup fields and native allocator/free/thread ABI remain unported or uncertified, explicitly outside this directory evidence.
+    - Original UDataPathIterator is defined in its original udata.cpp responsibility and uses actual CharString fields and borrowed byte pointers. Item-directory precedence, empty-segment iteration, four-byte explicit-file checks, package-stub removal, dat skipping, long suffix separators, returned buffer ownership and sticky statuses follow the source. findBasename adds the actual byte-pointer overload while preserving the existing narrow-string cache binding; actual cache native replay still passes. No JS path normalization, guessed filename/path fallback or arbitrary unsupported-option error.
+    - Command: node_modules/.bin/tsx scripts/icu-data-path-native-probe.mjs. Result: pass. Evidence:752 sequences/5524 complete initialized snapshots from unchanged udata.cpp/putil.cpp methods, actual module statics and original CharString/MaybeStackArray owners. Scope: represented browser-process directory/path inputs and lifecycle, not OS file mapping or complete udata_open/services. The native source include initially required its mandatory U_COMMON_IMPLEMENTATION compiler define; added it rather than editing vendor source. The witness profile initially expected cleanup enum23; the original executable and source enum report PUTIL24, so corrected the witness expectation. No production behavior was changed for either probe correction. Recorded original source/native artifact SHA256 values were independently rechecked.
+    - CALC-472 documents a source-only null-package path that can pass packageStub.data()+1 and length-1 into a NUL scan of uninitialized bytes. Typical original open callers pass nonnull packages. No undefined/uninitialized bytes are read by the witness or claimed as verified, and no clamp/skip/guessed empty-package workaround is added.
+    - Command: npm run test:shared -- src/external/icu/source/common/udata.paths.native.test.ts src/external/icu/source/common/udata.native.test.ts src/external/icu/source/common/charstr.native.test.ts src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/i18n/gregocal.test.ts src/external/icu/source/i18n/olsontz.test.ts --maxWorkers=1. Result: pass. Evidence:27 tests/7 files in8.36s. Scope: actual directory/path/native-cache/byte/common-data/data-handle owners and existing putil calendar/timezone consumers.
+    - Commands: npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence:1984 runtime modules/1771 mapped;1983 boundary sources/10773 relative imports/236 edges;4424 JSDoc sources;4431 authored file-size scan;115 required source paths/32 retired roots;464 Calc commands/11 menus/17 dispositions; routing and doctor OK. Scope: required static/provenance/registry/resource/policy checks. Existing semantic-unverified/foundation classifications are retained. Exact-path prettier check passes; no guard or deadline is relaxed. Existing decomposition/build notices remain informational.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1. Result: pass. Evidence:197 tests/8 files in19.45s. Scope: existing CSV defaults/options/admission/recognition/date/export/document/browser UI regressions, serialized after heavy checks without assertion or deadline changes.
+    - Command (apps/office): ../../node_modules/.bin/vite build. Result: pass. Evidence:successful static build in5.05s. Command (root): node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts. Result: pass. Evidence:one Chromium import/primary ODS save/active-sheet CSV export scenario,3.0s test/3.9s total. Scope: existing connected browser acceptance, not full native CSV completion.
+    - Final scope:16 exact intentional paths including task README; open2-commit-paths.txt records the allowlist. Source/evidence review, changed-JSON parsing, exact-path format check, recorded source/native-artifact hash checks and git diff --check pass. No network, vendor/security/policy modification, unrelated Writer change or external publication. Native output remains reviewed scratch, excluded from the commit. Same open AgentPlane task, not the tenth completed task: related suites only. Actual udata_open/file-mapper/common-data orchestration, production package/iterator/provider/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain pending; UDATA_DEFAULT_ACCESS remains FILES_FIRST. Overall verification stays rework and the task remains open. The explicit user-requested goal pause is performed after saving and checking this block; no completion claim or new block follows.
 id_source: "generated"
 ---
 ## Summary
@@ -5586,6 +5645,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T16:49:25.106Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Directory/path block verified:752 unchanged ICU sequences/5524 snapshots,27 related tests,197 CSV regressions and Chromium scenario pass. Full native CSV remains incomplete; user requests goal pause after this checkpoint.
+Attempts: 52
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T16:49:24.502Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6923,3 +7012,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1. Result: pass. Evidence:197 tests/8 files in30.03s. Scope: existing CSV defaults/options/admission/recognition/date/export/document/browser UI regressions; run after heavy static checks without changing any assertion/deadline.
 - Command (apps/office): ../../node_modules/.bin/vite build. Result: pass. Evidence:successful static build in7.2s. Command (root): node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts. Result: pass. Evidence:1 Chromium CSV import/primary ODS save/active-sheet export scenario,4.2s test/5.8s total. Scope: existing connected UI acceptance, not completion of pending native formatter/iterator/multiline paths.
 - Final scope:35 exact intentional paths including task README; charstr-commit-paths.txt records the implementation allowlist. Source/evidence review, JSON parsing, original-source/native-artifact SHA256 checks and git diff --check pass. Final status is captured after the allowlisted checkpoint commit; native output remains reviewed scratch and excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Original udata_open/data-directory/path/file/common-data orchestration and actual production package/iterator/provider/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain required. UDATA_DEFAULT_ACCESS remains UDATA_FILES_FIRST. Overall verification remains rework and task continues DOING; no task finish, goal pause/completion or full native CSV claim.
+
+### Original ICU data-directory owners and UDataPathIterator
+
+- Previous goal turn classified as progress:179839d67 committed original loader byte-string ownership with native proof. Revalidated approved DOING task, current calc checkout, CODER role, route and Verify Steps. Continued the existing CSV loader prerequisite scope. The user then explicitly requested pausing the goal after the current task/block; no subsequent implementation block is started. The checkpoint completes and verifies directory/path ownership before pausing, without claiming that the entire CSV task is finished.
+- Original putil owns actual data/timezone directory records, copied NUL bytes, plain/status once initialization, getter/setter order and cleanup. Browser processes have no OS environment namespace or installed native archive path; original absent-input branches are used. The native witness compiles unchanged original putil.cpp without installation-directory defines and clears only ICU_DATA/ICU_TIMEZONE_FILES_DIR in its child environment. No hardcoded developer-machine install path, environment-variable provider, file-access policy change, MAP_NONE selection or replacement mapper is introduced. OS locale/TZ-search cleanup fields and native allocator/free/thread ABI remain unported or uncertified, explicitly outside this directory evidence.
+- Original UDataPathIterator is defined in its original udata.cpp responsibility and uses actual CharString fields and borrowed byte pointers. Item-directory precedence, empty-segment iteration, four-byte explicit-file checks, package-stub removal, dat skipping, long suffix separators, returned buffer ownership and sticky statuses follow the source. findBasename adds the actual byte-pointer overload while preserving the existing narrow-string cache binding; actual cache native replay still passes. No JS path normalization, guessed filename/path fallback or arbitrary unsupported-option error.
+- Command: node_modules/.bin/tsx scripts/icu-data-path-native-probe.mjs. Result: pass. Evidence:752 sequences/5524 complete initialized snapshots from unchanged udata.cpp/putil.cpp methods, actual module statics and original CharString/MaybeStackArray owners. Scope: represented browser-process directory/path inputs and lifecycle, not OS file mapping or complete udata_open/services. The native source include initially required its mandatory U_COMMON_IMPLEMENTATION compiler define; added it rather than editing vendor source. The witness profile initially expected cleanup enum23; the original executable and source enum report PUTIL24, so corrected the witness expectation. No production behavior was changed for either probe correction. Recorded original source/native artifact SHA256 values were independently rechecked.
+- CALC-472 documents a source-only null-package path that can pass packageStub.data()+1 and length-1 into a NUL scan of uninitialized bytes. Typical original open callers pass nonnull packages. No undefined/uninitialized bytes are read by the witness or claimed as verified, and no clamp/skip/guessed empty-package workaround is added.
+- Command: npm run test:shared -- src/external/icu/source/common/udata.paths.native.test.ts src/external/icu/source/common/udata.native.test.ts src/external/icu/source/common/charstr.native.test.ts src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/i18n/gregocal.test.ts src/external/icu/source/i18n/olsontz.test.ts --maxWorkers=1. Result: pass. Evidence:27 tests/7 files in8.36s. Scope: actual directory/path/native-cache/byte/common-data/data-handle owners and existing putil calendar/timezone consumers.
+- Commands: npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence:1984 runtime modules/1771 mapped;1983 boundary sources/10773 relative imports/236 edges;4424 JSDoc sources;4431 authored file-size scan;115 required source paths/32 retired roots;464 Calc commands/11 menus/17 dispositions; routing and doctor OK. Scope: required static/provenance/registry/resource/policy checks. Existing semantic-unverified/foundation classifications are retained. Exact-path prettier check passes; no guard or deadline is relaxed. Existing decomposition/build notices remain informational.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1. Result: pass. Evidence:197 tests/8 files in19.45s. Scope: existing CSV defaults/options/admission/recognition/date/export/document/browser UI regressions, serialized after heavy checks without assertion or deadline changes.
+- Command (apps/office): ../../node_modules/.bin/vite build. Result: pass. Evidence:successful static build in5.05s. Command (root): node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts. Result: pass. Evidence:one Chromium import/primary ODS save/active-sheet CSV export scenario,3.0s test/3.9s total. Scope: existing connected browser acceptance, not full native CSV completion.
+- Final scope:16 exact intentional paths including task README; open2-commit-paths.txt records the allowlist. Source/evidence review, changed-JSON parsing, exact-path format check, recorded source/native-artifact hash checks and git diff --check pass. No network, vendor/security/policy modification, unrelated Writer change or external publication. Native output remains reviewed scratch, excluded from the commit. Same open AgentPlane task, not the tenth completed task: related suites only. Actual udata_open/file-mapper/common-data orchestration, production package/iterator/provider/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain pending; UDATA_DEFAULT_ACCESS remains FILES_FIRST. Overall verification stays rework and the task remains open. The explicit user-requested goal pause is performed after saving and checking this block; no completion claim or new block follows.

@@ -21,21 +21,45 @@
         "apps/office/src/external/icu/source/i18n/gregocal.test.ts",
         "scripts/icu-calendar-native-probe.mjs",
         "scripts/icu-olson-native-probe.mjs",
-        "apps/office/src/external/icu/source/i18n/olsontz.test.ts"
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "apps/office/src/external/icu/source/common/udata.paths.native.test.ts",
+        "apps/office/src/external/icu/source/common/udata.paths.native-observations.json"
       ],
-      "justification": "AQF9AG ports the original widened signed32 checked add/multiply with signed32 output stored before overflow comparison. Exact signed64 multiplication uses bigint, preserving low bits beyond binary64 integer precision. Other native platform/time/utility APIs remain unported. Source uprv_getUTCtime now exposes the OS clock boundary through Date.now only. No host Date calendar arithmetic, parsing or host timezone rule data is used. Debug fake-time and native fractional clock precision/ABI remain uncertified.",
+      "justification": "AQF9AG ports the original widened signed32 checked add/multiply with signed32 output stored before overflow comparison. Exact signed64 multiplication uses bigint, preserving low bits beyond binary64 integer precision. Other native platform/time/utility APIs remain unported. Source uprv_getUTCtime now exposes the OS clock boundary through Date.now only. No host Date calendar arithmetic, parsing or host timezone rule data is used. Debug fake-time and native fractional clock precision/ABI remain uncertified. Original ICU78.3 UDataPathIterator now uses actual CharString fields, borrowed byte pointers and original item-directory precedence, separator/empty-segment iteration, explicit four-byte file matching, package-stub truncation, dat skipping and long suffix joining. putil now owns original data/timezone directory once records, copied NUL storage, status overloads, getter/setter order and represented directory cleanup. Browser processes have no OS environment namespace or installed native archive directory; the original absent-input branches apply, without changing UDATA_DEFAULT_ACCESS or selecting MAP_NONE. 752 sequences/5524 complete initialized snapshots match unchanged udata.cpp/putil.cpp methods and actual statics; native source is compiled without installation-directory defines and the two environment variables are absent in the child. Private visibility only exposes fields for observation; no method, mapper, allocator or provider is substituted. Native allocation failure/free/thread/physical ABI, uninitialized spans, invalidated borrows and unported OS locale/TZ-search cleanup fields are not certified. Actual udata_open/path-to-mapper/common-data orchestration, production package/iterator/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "uprv_add32_overflow",
         "uprv_mul32_overflow",
-        "uprv_getUTCtime"
+        "uprv_getUTCtime",
+        "gDataDirInitOnce",
+        "gDataDirectory",
+        "gTimeZoneFilesInitOnce",
+        "gTimeZoneFilesDirectory",
+        "emptyDirectory",
+        "putil_cleanup",
+        "u_setDataDirectory",
+        "dataDirectoryInitFn",
+        "u_getDataDirectory",
+        "uprv_pathIsAbsolute",
+        "setTimeZoneFilesDir",
+        "TimeZoneDataDirInitFn",
+        "u_getTimeZoneFilesDirectory",
+        "u_setTimeZoneFilesDirectory"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/icu-reference/source/common/putil.cpp",
       "upstreamSymbols": [
         "uprv_add32_overflow",
         "uprv_mul32_overflow",
-        "uprv_getUTCtime"
+        "uprv_getUTCtime",
+        "u_getDataDirectory",
+        "u_setDataDirectory",
+        "uprv_pathIsAbsolute",
+        "u_getTimeZoneFilesDirectory",
+        "u_setTimeZoneFilesDirectory",
+        "putil_cleanup",
+        "gDataDirInitOnce",
+        "gTimeZoneFilesInitOnce"
       ]
     }
   }

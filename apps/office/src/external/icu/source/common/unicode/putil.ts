@@ -2,3 +2,9 @@
 export const U_FILE_SEP_CHAR = 0x2f;
 export const U_FILE_ALT_SEP_CHAR = 0x2f;
 export const U_PATH_SEP_CHAR = 0x3a;
+export {
+  u_getDataDirectory,
+  u_setDataDirectory,
+  u_getTimeZoneFilesDirectory,
+  u_setTimeZoneFilesDirectory,
+} from "../putil";
