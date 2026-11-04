@@ -1,6 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
-import { GetEditShell } from "./doccorr";
+import { GetEditShell, CorrAbsNodes } from "./doccorr";
 import * as unoCursor from "./doc.unocursor";
 import type { UnoCursorWeakPtr } from "../../../inc/unocrsr";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
@@ -33,11 +33,7 @@ import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
-import {
-  type SwTable,
-  type SwTableBox,
-  type SwTableBoxFormat as SwTableBoxFormatValue,
-} from "../table/swtable";
+import { type SwTable, type SwTableBox } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
@@ -66,8 +62,11 @@ import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import type { SwUndoCursorState } from "../undo/undobj";
-import type { SwInsertTableOptions } from "../../../inc/itabenum";
-import { InsertTable as InsertNativeTable, FindTableFormatByName } from "../docnode/ndtbl";
+import {
+  InsertTable as InsertNativeTable,
+  FindTableFormatByName,
+  type SwInsertTableArgs,
+} from "../docnode/ndtbl";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
 import { DocumentListItemsManager } from "./DocumentListItemsManager";
@@ -94,7 +93,7 @@ import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
 import { moveLeftMargin, InsertPoolItem, CopyCharFormat } from "./docfmt";
 import { SwUndoMoveLeftMargin } from "../undo/unattr";
-import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition, type SwNodeIndex } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
@@ -948,16 +947,18 @@ export class SwDoc {
     while (names.includes("Table" + number)) number++;
     return "Table" + number;
   }
-  /** Constructs represented flat table geometry and styles before an actual body position from ndtbl.cxx. @param options - Native flags and repetition. @param position - Body insertion position. @param rows - Row count. @param columns - Column count. @param name - Requested frame name. @param boxFormat - Existing browser autoformat attributes. @returns Native table. */
-  public InsertTable(
-    options: SwInsertTableOptions,
-    position: SwPosition,
-    rows: number,
-    columns: number,
-    name = "",
-    boxFormat?: SwTableBoxFormatValue,
-  ): SwTable {
-    return InsertNativeTable(this, options, position, rows, columns, name, boxFormat);
+  /** Original static node-index absolute correction overload. @param start - Inclusive first node. @param end - Inclusive final node. @param target - Correction position. @param moveCursor - Original false default. @returns Nothing. */
+  public static CorrAbs(
+    start: SwNodeIndex,
+    end: SwNodeIndex,
+    target: SwPosition,
+    moveCursor = false,
+  ): void {
+    CorrAbsNodes(start, end, target, moveCursor);
+  }
+  /** Forwards the original InsertTable argument order and source defaults to its ndtbl responsibility. @param args - Original native construction arguments. @returns Actual table. */
+  public InsertTable(...args: SwInsertTableArgs): SwTable {
+    return InsertNativeTable(this, ...args);
   }
 
   /** Runs one semantic model transaction. @param mutation - Mutation callback. @returns Callback result. */

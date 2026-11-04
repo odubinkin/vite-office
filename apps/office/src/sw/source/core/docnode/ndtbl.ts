@@ -5,17 +5,23 @@ import { SwTableBoxStartNode, SwEndNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { TableHeadingChange } from "../../../inc/hints";
-import { SwTable, createWriterTableBoxItem, type SwTableBoxFormat } from "../table/swtable";
+import { SwTable, createWriterTableBoxItem } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
-import { SwUndoAttrTable, SwUndoTableNdsChg, SwUndoTableHeadline } from "../undo/untbl";
+import {
+  SwUndoInsTable,
+  SwUndoAttrTable,
+  SwUndoTableNdsChg,
+  SwUndoTableHeadline,
+} from "../undo/untbl";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
+import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_PARATR_ADJUST } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
@@ -412,16 +418,34 @@ export function TextToTableNodes(
   );
 }
 
-/** Native SwDoc::InsertTable implementation belongs to ndtbl.cxx; constructs represented flat table geometry before the actual body position. @param doc - Document. @param options - Source insertion flags. @param position - Body position. @param rows - Rows. @param columns - Columns. @param name - Requested name. @param boxFormat - Existing browser autoformat attributes. @returns Native table. */
+/** Original represented InsertTable argument order. The current model has no SwTableAutoFormat owner, so only the original null autoformat argument is admitted; browser cell styling is applied by its existing shell/history owner after construction. */
+export type SwInsertTableArgs = [
+  options: SwInsertTableOptions,
+  position: SwPosition,
+  rows: number,
+  columns: number,
+  adjust: number,
+  autoFormat?: null,
+  columnPositions?: readonly number[] | null,
+  calledFromShell?: boolean,
+  newModel?: boolean,
+  name?: string,
+];
+/** Native SwDoc::InsertTable argument/default and flat construction responsibility from ndtbl.cxx. @param doc - Actual document. @param options - Native flags. @param position - Insertion position. @param rows - Native row count. @param columns - Native column count. @param adjust - Required source horizontal orientation. @param autoFormat - Original null default, the admitted current model family. @param columnPositions - Original column positions, not widths. @param calledFromShell - Propagate paragraph adjustment. @param newModel - Original table-model flag. @param name - Original final argument. @returns Actual inserted table. */
 export function InsertTable(
   doc: SwDoc,
   options: SwInsertTableOptions,
   position: SwPosition,
   rows: number,
   columns: number,
+  adjust: number,
+  autoFormat: null = null,
+  columnPositions: readonly number[] | null = null,
+  calledFromShell = false,
+  newModel = true,
   name = "",
-  boxFormat?: SwTableBoxFormat,
 ): SwTable {
+  void autoFormat;
   const node = position.GetNode();
   if (
     !(node instanceof SwTextNode) ||
@@ -437,7 +461,14 @@ export function InsertTable(
   const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
     borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
     repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
-    width = Math.floor(65535 / columns) * columns;
+    positions =
+      columnPositions &&
+      columnPositions.length === columns + (adjust === HoriOrientation.NONE ? 2 : 1)
+        ? columnPositions
+        : null,
+    first = positions?.[0] ?? 0,
+    last = positions?.[positions.length - (adjust === HoriOrientation.NONE ? 2 : 1)] ?? 0,
+    width = positions ? last - first : Math.floor(65535 / columns) * columns;
   if (
     name === "" ||
     doc
@@ -449,31 +480,77 @@ export function InsertTable(
       )
   )
     name = doc.GetUniqueTableName();
+  if (doc.GetUndoManager().DoesUndo()) {
+    const items = node.GetCharacterItemsAt(position.GetContentIndex()),
+      cursor = createWriterCollapsedCursorState(node, 0, items);
+    try {
+      doc
+        .GetUndoManager()
+        .AddUndoAction(
+          new SwUndoInsTable(options, rows, columns, name, cursor, undefined, adjust, positions),
+        );
+    } finally {
+      cursor.pendingCharacterItems.Dispose();
+      items.Dispose();
+    }
+  }
   const table = doc.nodes.InsertTable(node, name, {
     width,
-    horiOrient: HoriOrientation.FULL,
+    horiOrient: adjust,
+    ...(positions && adjust === HoriOrientation.NONE
+      ? { marginLeft: first, marginRight: (positions.at(-1) ?? 0) - last }
+      : {}),
     headerRows: header ? Math.max(1, repeat) : 0,
     repeatHeaderRows: repeat !== 0,
     layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
   });
-  for (let column = 0; column < columns; column++) table.AddColumnWidth(width / columns);
-  const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
-  for (let row = 0; row < rows; row++) {
-    const line = doc.nodes.AppendTableRow(
-      table,
-      columns,
-      {},
-      Array.from(
-        { length: columns },
-        /** Creates independent represented box attributes. @returns Box format. */ () =>
-          boxFormat === undefined ? { box: createWriterTableBoxItem(borders) } : { ...boxFormat },
-      ),
-    );
-    for (const box of line.GetTabBoxes())
-      for (const paragraph of box.GetParagraphs())
-        paragraph.ChgFormatColl(
-          doc.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
-        );
+  table.SetTableModel(newModel);
+  const source = node.GetSwAttrSet(),
+    frame = table.GetFrameFormat(),
+    direction = source.GetItemIfSet(RES_FRAMEDIR, true);
+  if (direction) frame.SetFormatAttr(direction);
+  const sourceAdjustment = calledFromShell
+      ? source.GetItemIfSet(RES_PARATR_ADJUST, true)
+      : undefined,
+    adjustment = sourceAdjustment?.Clone();
+  if (sourceAdjustment && !adjustment) throw new Error("assert(native paragraph adjustment clone)");
+  try {
+    for (const which of [RES_PAGEDESC, RES_BREAK]) {
+      const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
+      if (item) {
+        frame.SetFormatAttr(item);
+        node.ResetAttr(which);
+      }
+    }
+    for (let column = 0; column < columns; column++)
+      table.AddColumnWidth(
+        positions ? (positions[column + 1] ?? 0) - (positions[column] ?? 0) : width / columns,
+      );
+    const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
+    for (let row = 0; row < rows; row++) {
+      const line = doc.nodes.AppendTableRow(
+        table,
+        columns,
+        {},
+        Array.from(
+          { length: columns },
+          /** Creates independent represented box attributes. @returns Box format. */ () => ({
+            box: createWriterTableBoxItem(borders),
+          }),
+        ),
+      );
+      for (const box of line.GetTabBoxes())
+        for (const paragraph of box.GetParagraphs()) {
+          paragraph.ChgFormatColl(
+            doc.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
+          );
+          if (calledFromShell) {
+            if (adjustment) paragraph.SetAttr(adjustment);
+          }
+        }
+    }
+  } finally {
+    adjustment?.Dispose();
   }
   return table;
 }

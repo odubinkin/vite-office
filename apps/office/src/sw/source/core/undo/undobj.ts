@@ -6,7 +6,7 @@
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
-import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
@@ -260,6 +260,19 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
   private readonly before: SwUndoCursorRange | undefined;
   private after: SwUndoCursorRange | undefined;
 
+  /** Original section-index removal sends native cursors to the PostIts sentinel before section deletion. @param doc - Actual document. @param startNode - Original section start. @param endNode - Optional explicit inclusive end. @returns Nothing. */
+  protected static RemoveIdxFromSection(doc: SwDoc, startNode: number, endNode?: number): void {
+    const start = new SwNodeIndex(doc.GetNodes(), startNode),
+      end = new SwNodeIndex(doc.GetNodes(), endNode ?? start.GetNode().EndOfSectionIndex()),
+      target = new SwPosition(doc.GetNodes().GetEndOfPostIts());
+    try {
+      (doc.constructor as typeof SwDoc).CorrAbs(start, end, target, true);
+    } finally {
+      target.Dispose();
+      end.Dispose();
+      start.Dispose();
+    }
+  }
   /** Creates a Writer undo action. @param comment - User-visible label. @param before - Cursor state before execution. @param after - Cursor state after execution. @returns Nothing. */
   protected constructor(
     private readonly comment: string,

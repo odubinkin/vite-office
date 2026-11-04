@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Rejects empty Markdown streams and reads other bytes using the browser UTF-8 default, then maps represented Markdown blocks, including setext headings, thematic lines, indented code, multiline quotations and loose-list blank-line continuation with nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available.",
-      "InsertHtmlData now uses the original SAL UTF16-to-UTF8 conversion and existing SvStream, passing the real Markdown SwDoc and borrowed SwPaM to the consumed native SwHTMLParser. The private document callback begins at a blank paragraph at section EOF; unconsumed SwReader/Sfx media orchestration is not recreated as a generic API prerequisite. Empty path/baseURL and ignored parser result follow the pinned Markdown caller, and EndHtmlBlock clears its buffer after successful insertion. Actual native HTML/model/worker-codec tests replace the unsupported-placeholder fixture. This is initial connected HTML body/inline/block coverage, not full CSS/named-style/font/link/list/table HTML support."
+      "InsertHtmlData now uses the original SAL UTF16-to-UTF8 conversion and existing SvStream, passing the real Markdown SwDoc and borrowed SwPaM to the consumed native SwHTMLParser. The private document callback begins at a blank paragraph at section EOF; unconsumed SwReader/Sfx media orchestration is not recreated as a generic API prerequisite. Empty path/baseURL and ignored parser result follow the pinned Markdown caller, and EndHtmlBlock clears its buffer after successful insertion. Actual native HTML/model/worker-codec tests replace the unsupported-placeholder fixture. This is initial connected HTML body/inline/block coverage, not full CSS/named-style/font/link/list/table HTML support.",
+      "S3HW1E HTML56: SwDoc::InsertTable now forwards the required fifth horizontal orientation and original null-autoformat/column-position/called-from-shell/new-model/final-name argument order. Flat construction preserves source column-count admission (NONE requires one extra endpoint), source direction, direct page attributes and shell-only paragraph adjustment; SwTable stores the source model flag. The actual document records numeric insertion history; undo destroys native table frames, corrects marks and global cursor rings to EndOfPostIts, transfers live table page attributes and deletes the actual section. Redo requires an actual edit shell, uses original false/true flag defaults and restores the saved name separately (WRITER338); the existing browser initial-operation bridge retains first-execution shell semantics and cell-style adjuncts without pretending they are SwTableAutoFormat. Markdown supplies native FULL. Regression evidence is scoped to admitted flat tables and actual document/shell ownership. Non-null native autoformat, redlines, DDE, full old-model algorithms, recursive HTML table construction/layout, RTF direction export and final format/UI audit remain unverified or required. Whole module contract/default/behavior statuses remain unverified; browser file/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Platform-dependent thread encoding, explicit unknown-encoding detection, complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -43,6 +44,10 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-insertion-contract.test.ts",
           "marker": "@fileoverview"
         }
       ],

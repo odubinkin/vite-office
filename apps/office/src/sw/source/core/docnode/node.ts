@@ -130,6 +130,10 @@ export abstract class SwNode extends SwContentIndexRegistry {
     return this.startOfSection;
   }
 
+  /** Original inline node.hxx section-end index resolves the actual shared section owner. @returns Native end-node offset. */
+  public EndOfSectionIndex(): number {
+    return this.EndOfSectionNode().GetIndex();
+  }
   /** Original common matching-end query uses a start node itself or the node's enclosing start. @returns Actual matching end sentinel. */
   public EndOfSectionNode(): SwEndNode {
     return this.StartOfSectionNode().EndOfSectionNode();

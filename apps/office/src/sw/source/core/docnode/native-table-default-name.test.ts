@@ -1,4 +1,5 @@
 /** @fileoverview Native table insertion with the exported default-name argument and real document ownership. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
@@ -11,8 +12,8 @@ it("allocates successive unique native names when the name argument is omitted",
   const position = new SwPosition(node);
   try {
     const options = { mnInsMode: 0, mnRowsToRepeat: 0 },
-      first = InsertTable(doc, options, position, 1, 2),
-      second = InsertTable(doc, options, position, 2, 1);
+      first = InsertTable(doc, options, position, 1, 2, HoriOrientation.FULL),
+      second = InsertTable(doc, options, position, 2, 1, HoriOrientation.FULL);
     expect(first.GetName()).toBe("Table1");
     expect(second.GetName()).toBe("Table2");
     expect(first.GetTabLines()).toHaveLength(1);

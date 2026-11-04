@@ -144,7 +144,7 @@ export abstract class SwEditShell extends SwCursorShell {
   public abstract ApplyAction(
     action: SfxUndoAction<SwUndoRedoContext>,
     tryMerge?: boolean,
-    execute?: () => void,
+    execute?: (context: SwUndoRedoContext) => void,
   ): boolean;
   /** Queries numbering on the actual point node with native outline counted policy. @returns Numbering presence. */
   public HasNumber(): boolean {

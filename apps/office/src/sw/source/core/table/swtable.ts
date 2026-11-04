@@ -93,6 +93,15 @@ export class SwTable extends SwClient {
     | "marginLeft"
     | "marginRight"
   > = {};
+  private m_bNewModel = true;
+  /** Original table-model selector. Wider old/new-model merge/split families remain outside this current flat model. @param value - Source model flag. @returns Nothing. */
+  SetTableModel(value: boolean): void {
+    this.m_bNewModel = value;
+  }
+  /** Original source model query. @returns Stored native flag. */
+  IsNewModel(): boolean {
+    return this.m_bNewModel;
+  }
   private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;

@@ -458,7 +458,12 @@ export class SwWrtShell extends SwFEShell {
     if (this.getShellCursor().GetPoint().GetNode() === paragraph) {
       return;
     }
-    this.SetPaM(new SwPosition(paragraph, paragraph.Len()));
+    const position = new SwPosition(paragraph, paragraph.Len());
+    try {
+      this.SetPaM(position);
+    } finally {
+      position.Dispose();
+    }
   }
   /** Selects the current native cell, then table, then surrounding text from actual range state. @returns Nothing. */
   public SelectAll(): void {

@@ -1,9 +1,10 @@
 /** @fileoverview Original absolute position/physical-PaM-bound correction primitives from doccorr.cxx. The UNO branch uses actual document weak owners; global correction traverses actual native view-shell and cursor owners. */
-import type { SwPosition, SwPaM } from "../crsr/pam";
+import { SwPosition, SwPaM, type SwNodeIndex } from "../crsr/pam";
 import { SwEditShell } from "../edit/ednumber";
 import { SwCursorShell } from "../crsr/trvltbl";
-import { SwStartNode, type SwNode } from "../docnode/node";
+import { SwStartNode, SwContentNode, type SwNode } from "../docnode/node";
 import type { SwDoc } from "./doc";
+import { DelBookmarks } from "./docbm";
 import { SwUnoTableCursor, UnoCursorHint } from "../../../inc/unocrsr";
 /** Original closed range comparison and value assignment. @param position - Actual position to correct. @param start - Original inclusive start. @param end - Original inclusive end. @param target - Actual correction position. @returns Original changed result. */
 export function lcl_PosCorrAbs(
@@ -95,5 +96,27 @@ export function PaMCorrAbs(range: SwPaM, newPosition: SwPosition): void {
     start.Dispose();
     end.Dispose();
     target.Dispose();
+  }
+}
+
+/** Original static SwDoc::CorrAbs node-index overload deletes marks before optional inclusive global cursor correction. @param start - Inclusive native start. @param end - Inclusive native end. @param target - Actual correction position. @param moveCursor - Original false default. @returns Nothing. */
+export function CorrAbsNodes(
+  start: SwNodeIndex,
+  end: SwNodeIndex,
+  target: SwPosition,
+  moveCursor = false,
+): void {
+  DelBookmarks(start.GetNode(), end.GetNode());
+  if (!moveCursor) return;
+  const last = end.GetNode(),
+    begin = new SwPosition(start.GetNode()),
+    finish = new SwPosition(last, last instanceof SwContentNode ? last.Len() : 0),
+    range = new SwPaM(finish, begin);
+  try {
+    PaMCorrAbs(range, target);
+  } finally {
+    range.Dispose();
+    begin.Dispose();
+    finish.Dispose();
   }
 }

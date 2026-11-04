@@ -1,4 +1,5 @@
 /** @fileoverview Writer Markdown parser/document owner from pinned sw/source/filter/md/swmd.cxx. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { md_parse } from "../../../../external/md4c/src/md4c";
 import {
   MD_DIALECT_GITHUB,
@@ -403,6 +404,7 @@ export class SwMarkdownParser {
         this.m_pPam.GetPoint(),
         rows,
         columns,
+        HoriOrientation.FULL,
       ),
     );
   }

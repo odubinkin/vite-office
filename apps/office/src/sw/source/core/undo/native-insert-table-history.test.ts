@@ -7,7 +7,7 @@ import { expect, it } from "vitest";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { SwPosition } from "../crsr/pam";
+import { SwPosition, SwNodeIndex } from "../crsr/pam";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
@@ -118,7 +118,7 @@ it.each([0, 3, 6])(
       ).toBe("table-contents");
       expect(o.shell.GetActiveParagraph()).toBe(first);
       expect(o.shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
-      const live = new SwPosition(first, 0),
+      const live = new SwNodeIndex(first),
         body = o.doc.nodes.getBodyContent();
       expect(
         body.map(
@@ -139,7 +139,8 @@ it.each([0, 3, 6])(
         expect(o.shell.GetActiveParagraph()).toBe(o.node);
         expect(o.shell.GetCursor().GetPoint().GetContentIndex()).toBe(offset);
         expect(o.neighbor.GetText()).toBe("untouched");
-        expect(live.GetNode()).toBe(o.node);
+        // Native node-only indices follow deletion successors; undoing the split deletes its tail.
+        expect(live.GetNode()).toBe(offset === 0 ? o.node : o.neighbor);
         expect(o.shell.Redo()).toBe(true);
         expect(o.doc.GetTables()[0]).not.toBe(inserted);
         expect(required(o.doc.GetTables()[0]).GetName()).toBe("Table1");
@@ -172,7 +173,13 @@ it.each([
   ) => {
     const doc = new SwDoc(),
       position = new SwPosition(required(doc.paragraphs[0]), 0);
-    const table = doc.InsertTable({ mnInsMode: mode, mnRowsToRepeat: repeat }, position, 1, 2);
+    const table = doc.InsertTable(
+      { mnInsMode: mode, mnRowsToRepeat: repeat },
+      position,
+      1,
+      2,
+      HoriOrientation.FULL,
+    );
     expect(table.GetFormat()).toMatchObject({
       width: 65534,
       headerRows: headers,
@@ -256,7 +263,7 @@ it.each([
       expect(o.shell.InsertTable(options, rows, columns)).toBeUndefined();
       expect(
         /** Checks rejected native input before mutation. @returns Nothing. */ () =>
-          o.doc.InsertTable(options, position, rows, columns),
+          o.doc.InsertTable(options, position, rows, columns, HoriOrientation.FULL),
       ).toThrow("positive unsigned table dimensions");
       expect(o.doc.nodes.Count()).toBe(count);
       expect(o.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
@@ -283,7 +290,7 @@ it("does not treat selected text or nested table insertion as implemented", /** 
     ).toThrow("connected body paragraph");
     expect(
       /** Checks rejected native input before mutation. @returns Nothing. */ () =>
-        o.doc.InsertTable(options, position, 2, 2),
+        o.doc.InsertTable(options, position, 2, 2, HoriOrientation.FULL),
     ).toThrow("positive unsigned table dimensions");
     position.Dispose();
     cursor.GetPoint().Assign(required(o.doc.GetTables()[0]).GetTableNode(), 0);
@@ -291,7 +298,7 @@ it("does not treat selected text or nested table insertion as implemented", /** 
     const nontext = new SwPosition(required(o.doc.GetTables()[0]).GetTableNode(), 0);
     expect(
       /** Checks rejected native input before mutation. @returns Nothing. */ () =>
-        o.doc.InsertTable(options, nontext, 2, 2),
+        o.doc.InsertTable(options, nontext, 2, 2, HoriOrientation.FULL),
     ).toThrow("positive unsigned table dimensions");
     nontext.Dispose();
     const tailTable = o.doc.nodes.MakeTableNode("Tail");

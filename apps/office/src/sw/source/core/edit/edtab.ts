@@ -55,7 +55,12 @@ export abstract class SwEditShell extends SwNumberingEditShell {
                 this.CaptureCursorState(),
                 boxFormat,
               );
-              this.ApplyAction(action);
+              this.ApplyAction(
+                action,
+                false,
+                /** Runs the actual first insertion with shell flags before redo owns reconstruction. @param context - Shell-owned undo context. @returns Nothing. */
+                (context) => action.InsertFromShell(context),
+              );
               return action.GetTable(this.GetDoc());
             } finally {
               undo.EndUndo();
