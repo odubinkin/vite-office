@@ -38,6 +38,8 @@ it("publishes only the active native MM100 geometry group with signed start and 
       service = new SwXNumberingRules(rule);
     const expected = {
       kind: "bullet",
+      // unosett.cxx always publishes Adjust: source Left maps to UNO LEFT=3.
+      adjust: 3,
       numberingType: 6,
       prefix: "[",
       suffix: "]",

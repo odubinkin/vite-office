@@ -456,3 +456,8 @@ export function MakeFlyFrameFormat(
   doc.GetDocumentStateManager().SetModified();
   return format;
 }
+
+/** Original SwDoc frame-name lookup deliberately uses positional SwFormatsBase::FindFormatByName rather than the collection's composite type/name index. @param document - Actual document. @param name - Requested native name. @returns First ordinary frame by insertion order or absent. */
+export function FindFrameFormatByName(document: SwDoc, name: string): SwFrameFormat | undefined {
+  return document.GetFrameFormats().FindFormatByName(name) as SwFrameFormat | undefined;
+}

@@ -220,7 +220,12 @@ it("document destroys factory-owned anchor positions before state teardown", /**
   expect(positionDeath.mock.invocationCallOrder[0]).toBeLessThan(
     stateDeath.mock.invocationCallOrder[0] as number,
   );
-  expect(registryDeath).toHaveBeenCalledTimes(1);
+  // docnew.cxx explicitly clears special flys, then the table destructor calls
+  // DeleteAndDestroyAll again on the empty table before document state teardown.
+  expect(registryDeath).toHaveBeenCalledTimes(2);
+  expect(registryDeath.mock.invocationCallOrder[1]).toBeLessThan(
+    stateDeath.mock.invocationCallOrder[0] as number,
+  );
   positionDeath.mockRestore();
   stateDeath.mockRestore();
   registryDeath.mockRestore();

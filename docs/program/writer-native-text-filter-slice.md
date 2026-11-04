@@ -1705,3 +1705,18 @@ names and other graphic/OLE/drawing/copy name families remain unported. These
 prerequisites do not implement MakeFlySection, frame-style lookup/factory/modified
 restoration, production recursive HTML tables, RTF direction or final format/UI
 closure. Original format support remains incomplete.
+
+HTML70 adds the actual ordinary document frame-format table and native default
+registration, separate from special fly/table-row/table-box/page formats. Native
+name lookup uses positional SwFormatsBase order, retaining duplicate-name and
+newDefault relocation semantics. The source destructor fragment now clears
+actual effective content/anchor indices before pages, removes the separately
+owned default, destroys special flys then the actual ordinary/special tables.
+The second empty special DeleteAndDestroyAll is the source table destructor,
+not a second format destruction. Original public numbering enum/type imports
+remain identical through doc.hxx-boundary declarations/re-exports. This is not
+complete document/default/layout/node destruction. Frame factories, generic
+format undo/delete/style broadcast and modified restoration, MakeFlySection,
+production recursive HTML tables, RTF direction and final format/UI closure
+remain unimplemented/unverified. WRITER351 records the source create-undo stale
+format-pointer concern without inventing a safer upstream contract.

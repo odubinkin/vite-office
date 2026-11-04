@@ -1,5 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 import { GetUniqueFrameName } from "./doclay";
+import { ClearFrameFormatIndices, DestroyFrameFormatTables } from "./docnew";
 import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
 import { GetEditShell, CorrAbsNodes } from "./doccorr";
@@ -25,6 +26,7 @@ import {
   SetDefault,
   ForEachParaAtrTabStopItem,
   MakeFlyFrameFormat,
+  FindFrameFormatByName,
 } from "./docfmt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -107,37 +109,14 @@ import { SwPaM, SwPosition, type SwNodeIndex } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
+import { SetNumRuleMode, type SwDocOptions, type WriterEmbeddedFont } from "../../../inc/doc";
+export { SetNumRuleMode, type SwDocOptions, type WriterEmbeddedFont } from "../../../inc/doc";
 import {
   createDefaultWriterPageDescriptor,
   SwPageDesc,
   type WriterPageDescriptorValue,
 } from "../layout/pagedesc";
-/** Construction policy for locale/device-dependent Writer defaults. */
-export interface SwDocOptions {
-  readonly createInitialTextNode?: boolean;
-  readonly defaultFontDevice?: DefaultFontDevice;
-  readonly locale?: string;
-}
 import { SetAttrMode } from "../../../inc/swtypes";
-/** Native SetNumRule operation flags from doc.hxx. */
-export enum SetNumRuleMode {
-  Default = 0,
-  CreateNewList = 1,
-  DontSetItem = 2,
-  ResetIndentAttrs = 4,
-  DontSetIfAlreadyApplied = 8,
-}
-/** One package-backed Writer font face; bytes are attached only after manifest and ZIP validation. */
-export interface WriterEmbeddedFont {
-  readonly faceName: string;
-  readonly familyName: string;
-  readonly path: string;
-  readonly format: string;
-  readonly weight: "normal" | "bold";
-  readonly style: "normal" | "italic";
-  readonly bytes?: Uint8Array;
-  readonly canLoad?: boolean;
-}
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
   private readonly layoutManager = new DocumentLayoutManager(this);
@@ -271,6 +250,15 @@ export class SwDoc {
   public SetInReading(reading: boolean): void {
     this.mbInReading = reading;
   }
+  private readonly mpFrameFormatTable = new FrameFormats<SwFrameFormat>();
+  /** Original document-owned ordinary frame table, with its default at position zero. @returns Actual owning collection. */
+  GetFrameFormats(): FrameFormats<SwFrameFormat> {
+    return this.mpFrameFormatTable;
+  }
+  /** Original ordinary-frame lookup uses the base positional name search. @param name - Native format name. @returns First positional match or absent. */
+  FindFrameFormatByName(name: string): SwFrameFormat | undefined {
+    return FindFrameFormatByName(this, name);
+  }
   private readonly mpSpzFrameFormatTable: SpzFrameFormats = new FrameFormats();
   /** Original document-owned special frame collection. @returns Owning collection. */
   GetSpzFrameFormats(): SpzFrameFormats {
@@ -320,6 +308,7 @@ export class SwDoc {
     // Native docnew.cxx overrides the root formats, preserving SdrItemPool's SOLID default.
     this.GetDfltTextFormatColl().SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
     this.defaultFrameFormat.SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
+    this.mpFrameFormatTable.push_back(this.defaultFrameFormat);
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.mpOutlineRule = this.AddNumRule(
       new SwNumRule(SwNumRule.GetOutlineRuleName(), "label-alignment", SwNumRuleType.OUTLINE_RULE),
@@ -966,12 +955,13 @@ export class SwDoc {
   public Dispose(): void {
     this.mbDtor = true;
     unoCursor.NotifyUnoCursorsOnDocDestruction(this);
+    this.undoManager.Dispose();
+    ClearFrameFormatIndices(this);
     for (const page of this.pageDescs) page.DisposeModify();
     this.pageDescs.length = 0;
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.markAccess.Dispose();
-    this.undoManager.Dispose();
-    this.mpSpzFrameFormatTable.DeleteAndDestroyAll();
+    DestroyFrameFormatTables(this);
     this.defaultGrfFormatColl.DisposeModify();
     for (const format of [...this.GetCharFormats()].reverse()) format.DisposeModify();
     for (const node of this.nodes.entries())
