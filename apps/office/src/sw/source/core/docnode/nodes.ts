@@ -1,13 +1,14 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { InsertTableNodes, TextToTableNodes } from "./ndtbl";
+import type { SwAttrSet } from "../attr/swatrset";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
 import type { SwNodeIndex, SwPosition } from "../crsr/pam";
-import { TextToTableNodes } from "./ndtbl";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
@@ -52,6 +53,19 @@ export class SwNodes {
   private readonly endOfAutotext: SwEndNode;
   private readonly endOfRedlines: SwEndNode;
   private readonly endOfContent: SwEndNode;
+
+  /** Original static ndtbl.cxx node-matrix phase. Existing table/frame bootstrap remains the current model representation; this operation constructs actual sections without substituting a box/line graph. @param where - Actual insertion boundary. @param boxes - Native uint16 cell count. @param content - Body collection. @param lines - Native uint16 row count, zero creates one content row. @param repeat - Native repeat count. @param headline - Optional header collection. @param attrs - Optional source paragraph attributes. @returns Actual table node, or null for zero boxes. */
+  public static InsertTable(
+    where: SwNode,
+    boxes: number,
+    content: SwTextFormatColl,
+    lines: number,
+    repeat: number,
+    headline: SwTextFormatColl | null,
+    attrs: SwAttrSet | null,
+  ): SwTableNode | null {
+    return InsertTableNodes(where, boxes, content, lines, repeat, headline, attrs);
+  }
 
   /** Creates LibreOffice's five fixed node sections in their canonical order. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
@@ -196,16 +210,20 @@ export class SwNodes {
     );
   }
 
-  /** Inserts a table section immediately before a connected body paragraph like ndtbl.cxx. @param position - Actual insertion node. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
-  public InsertTable(position: SwTextNode, name: string, format: SwTableFormat): SwTable {
-    if (!this.getTextNodes().includes(position))
-      throw new Error("Writer insertion requires a connected body paragraph.");
+  /** Existing browser table-builder bootstrap inserts an actual empty graph before a connected node; native SwNodes::InsertTable is the separate static matrix entry point. @param position - Actual insertion boundary. @param name - Table name. @param format - Builder attributes. @returns Connected table. */
+  public MakeTableNodeBefore(position: SwNode, name: string, format: SwTableFormat): SwTable {
+    if (position.GetNodes() !== this || this.indexOf(position) < 0)
+      throw new Error("Writer table builder requires a connected insertion boundary.");
     return this.MakeTableNodeAt(position.GetIndex(), name, format);
   }
 
   /** Constructs actual start/end owners at the requested native array boundary. @param index - Array boundary. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
   private MakeTableNodeAt(index: number, name: string, format: SwTableFormat): SwTable {
-    const node = new SwTableNode(this, this.endOfContent.StartOfSectionNode());
+    const previous = index ? this.at(index - 1) : null;
+    let parent = previous instanceof SwStartNode ? previous : previous?.StartOfSectionNode();
+    if (previous instanceof SwEndNode) parent = parent?.StartOfSectionNode();
+    if (!parent) throw new Error("assert(table insertion has a containing section)");
+    const node = new SwTableNode(this, parent);
     const end = new SwEndNode(this, node);
     node.setEndOfSection(end);
     this.nodeArray.splice(index, 0, node, end);

@@ -144,7 +144,7 @@ describe("native contextual Select All", /** Registers source-owned range transi
       const f = fixture();
       const tables = [];
       if (edge !== "trailing") {
-        const table = f.doc.nodes.InsertTable(f.body, "Leading", {});
+        const table = f.doc.nodes.MakeTableNodeBefore(f.body, "Leading", {});
         table.AddColumnWidth(6000);
         const row = f.doc.nodes.AppendTableRow(table, 1),
           text = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]);
@@ -216,7 +216,7 @@ describe("native contextual Select All", /** Registers source-owned range transi
       variant,
     ) => {
       const f = fixture(),
-        table = f.doc.nodes.InsertTable(f.body, "Leading", {});
+        table = f.doc.nodes.MakeTableNodeBefore(f.body, "Leading", {});
       table.AddColumnWidth(6000);
       const text = required(
         required(f.doc.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]).GetParagraphs()[0],
@@ -256,7 +256,7 @@ describe("native contextual Select All", /** Registers source-owned range transi
   });
   it("leaves toward previous text and falls forward past neighboring tables", /** Checks native direction preference and same-text owner admission. @returns Nothing. */ () => {
     const f = fixture(),
-      leading = f.doc.nodes.InsertTable(f.body, "Leading", {});
+      leading = f.doc.nodes.MakeTableNodeBefore(f.body, "Leading", {});
     leading.AddColumnWidth(6000);
     const text = required(
       required(f.doc.nodes.AppendTableRow(leading, 1).GetTabBoxes()[0]).GetParagraphs()[0],
@@ -325,10 +325,10 @@ it("native table exit skips adjacent tables backward and forward", /** Checks ac
   const adjacent = f.doc.nodes.MakeTableNode("Adjacent", {}, f.body);
   adjacent.AddColumnWidth(6000);
   f.doc.nodes.AppendTableRow(adjacent, 1);
-  const leading = f.doc.nodes.InsertTable(f.body, "Leading", {});
+  const leading = f.doc.nodes.MakeTableNodeBefore(f.body, "Leading", {});
   leading.AddColumnWidth(6000);
   f.doc.nodes.AppendTableRow(leading, 1);
-  const nextLeading = f.doc.nodes.InsertTable(f.body, "NextLeading", {});
+  const nextLeading = f.doc.nodes.MakeTableNodeBefore(f.body, "NextLeading", {});
   nextLeading.AddColumnWidth(6000);
   const text = required(
     required(f.doc.nodes.AppendTableRow(nextLeading, 1).GetTabBoxes()[0]).GetParagraphs()[0],

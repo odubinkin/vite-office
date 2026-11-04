@@ -62,7 +62,7 @@ export class SwXMLTableImport extends SvXMLImport {
     const cursor = this.textImport?.GetCursor() as
       import("../../core/unocore/unoobj").SwXTextCursor | undefined;
     this.activeTable = cursor
-      ? this.document.nodes.InsertTable(
+      ? this.document.nodes.MakeTableNodeBefore(
           cursor.GetPaM().GetPoint().GetNode() as SwTextNode,
           name,
           {},

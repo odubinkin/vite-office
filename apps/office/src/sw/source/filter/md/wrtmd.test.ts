@@ -206,7 +206,7 @@ it("writes a source table separator even at the beginning of the body", /** Chec
   const source = createWriterDocument();
   const initial = source.paragraphs[0];
   if (initial === undefined) throw new Error("Missing body paragraph.");
-  const table = source.nodes.InsertTable(initial, "First table", {});
+  const table = source.nodes.MakeTableNodeBefore(initial, "First table", {});
   const row = source.nodes.AppendTableRow(table, 1);
   row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Value");
   try {

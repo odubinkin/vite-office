@@ -173,7 +173,7 @@ it("corrects all structural/table/cell indices to the actual following paragraph
       doc,
       [first],
     ) => {
-      const table = doc.nodes.InsertTable(first, "indices", {}),
+      const table = doc.nodes.MakeTableNodeBefore(first, "indices", {}),
         tableNode = table.GetTableNode(),
         row = doc.nodes.AppendTableRow(table, 2),
         start = tableNode.GetIndex(),

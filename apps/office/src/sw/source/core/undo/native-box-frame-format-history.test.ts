@@ -169,7 +169,7 @@ it("native table deletion releases all actual cell clients and their final share
   const session = createWriterDocumentSession(),
     doc = session.docShell.GetDoc();
   try {
-    const table = doc.nodes.InsertTable(required(doc.paragraphs[0]), "Delete", {});
+    const table = doc.nodes.MakeTableNodeBefore(required(doc.paragraphs[0]), "Delete", {});
     table.AddColumnWidth(3000);
     const row = doc.nodes.AppendTableRow(table, 2),
       first = required(row.GetTabBoxes()[0]),

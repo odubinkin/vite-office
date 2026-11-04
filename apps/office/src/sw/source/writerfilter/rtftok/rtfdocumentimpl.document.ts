@@ -274,7 +274,11 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         firstParagraph = false;
       } else {
         const table = firstParagraph
-          ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
+          ? document.nodes.MakeTableNodeBefore(
+              document.paragraphs[0] as SwTextNode,
+              "RTF Table",
+              {},
+            )
           : document.nodes.MakeTableNode("RTF Table");
         if (
           startsSection &&

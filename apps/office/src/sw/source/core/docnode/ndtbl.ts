@@ -1,10 +1,22 @@
 /** @fileoverview Owns native Writer row-boundary collection and row-height deltas from ndtbl.cxx. */
+import { SfxItemState } from "../../../../svl/source/items/itemset";
+import type { SwAttrSet } from "../attr/swatrset";
+import type { SwTextFormatColl } from "../doc/fmtcol";
+import { SwStartNodeType } from "../../../inc/ndtyp";
+import {
+  RES_PARATR_ADJUST,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+} from "../../../inc/hintids";
 import type { SwFrameFormat } from "../layout/atrfrm";
-import type { SwNodes } from "./nodes";
-import { SwTableBoxStartNode, SwEndNode } from "./node";
+import { SwTableBoxStartNode, SwEndNode, type SwNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
 import { SwFormatFillOrder, SwFillOrder } from "../../../inc/fmtfordr";
-import { SwStartNodeType } from "../../../inc/ndtyp";
+import { SwNodes } from "./nodes";
 import { SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import {
@@ -31,13 +43,7 @@ import {
 import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
-import {
-  RES_FRAMEDIR,
-  RES_PAGEDESC,
-  RES_BREAK,
-  RES_PARATR_ADJUST,
-  RES_BOX,
-} from "../../../inc/hintids";
+import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_BOX } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
@@ -474,6 +480,51 @@ function lcl_CreateDfltBoxFormat(
   return formats[id] as SwTableBoxFormat;
 }
 
+/** Original SwNodes::InsertTable node-matrix responsibility from ndtbl.cxx. The existing node/table-frame bootstrap is retained and unverified; all returned sections, styles and items are actual document owners. @param where - Actual insertion node. @param boxes - Native column count. @param content - Body collection. @param lines - Row count; zero creates one content row. @param repeat - Headline repetition count. @param headline - Optional headline collection. @param attrs - Optional effective source paragraph set. @returns Actual table node or null for zero boxes. */
+export function InsertTableNodes(
+  where: SwNode,
+  boxes: number,
+  content: SwTextFormatColl,
+  lines: number,
+  repeat: number,
+  headline: SwTextFormatColl | null,
+  attrs: SwAttrSet | null,
+): SwTableNode | null {
+  if (!boxes) return null;
+  if (!headline || !lines) headline = content;
+  const nodes = where.GetNodes(),
+    table = nodes.MakeTableNodeBefore(where, "", {}),
+    node = table.GetTableNode();
+  if (!lines) lines++;
+  let collection = headline;
+  for (let row = 0; row < lines; row++) {
+    for (let column = 0; column < boxes; column++) {
+      const start = nodes.MakeTextSection(
+          node.EndOfSectionNode(),
+          SwStartNodeType.SwTableBoxStartNode,
+          collection,
+        ),
+        paragraph = nodes.at(start.GetIndex() + 1) as SwTextNode;
+      if (attrs)
+        for (const which of [
+          RES_PARATR_ADJUST,
+          RES_CHRATR_FONT,
+          RES_CHRATR_FONTSIZE,
+          RES_CHRATR_CJK_FONT,
+          RES_CHRATR_CJK_FONTSIZE,
+          RES_CHRATR_CTL_FONT,
+          RES_CHRATR_CTL_FONTSIZE,
+        ]) {
+          const item = attrs.GetItemIfSet(which, true);
+          if (paragraph.GetSwAttrSet().GetItemState(which) !== SfxItemState.SET && item)
+            paragraph.SetAttr(item);
+        }
+    }
+    if (row + 1 >= repeat) collection = content;
+  }
+  return node;
+}
+
 /** Original represented InsertTable argument order. The current model has no SwTableAutoFormat owner, so only the original null autoformat argument is admitted; browser cell styling is applied by its existing shell/history owner after construction. */
 export type SwInsertTableArgs = [
   options: SwInsertTableOptions,
@@ -550,7 +601,20 @@ export function InsertTable(
       items.Dispose();
     }
   }
-  const table = doc.nodes.InsertTable(node, name, {
+  const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents",
+    tableNode = SwNodes.InsertTable(
+      node,
+      columns,
+      doc.GetTextFormatColl("table-contents"),
+      rows,
+      repeat,
+      doc.GetTextFormatColl(headStyle),
+      calledFromShell ? node.GetSwAttrSet() : null,
+    );
+  if (!tableNode) throw new Error("assert(nonzero native table cell count)");
+  const table = tableNode.GetTable();
+  table.GetFrameFormat().SetFormatName(name);
+  table.SetFormat({
     width,
     horiOrient: adjust,
     ...(positions && adjust === HoriOrientation.NONE
@@ -561,85 +625,67 @@ export function InsertTable(
     layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
   });
   table.SetTableModel(newModel);
-  const source = node.GetSwAttrSet(),
-    frame = table.GetFrameFormat(),
-    direction = source.GetItemIfSet(RES_FRAMEDIR, true);
+  const frame = table.GetFrameFormat(),
+    direction = node.GetSwAttrSet().GetItemIfSet(RES_FRAMEDIR, true);
   if (direction) frame.SetFormatAttr(direction);
-  const sourceAdjustment = calledFromShell
-      ? source.GetItemIfSet(RES_PARATR_ADJUST, true)
-      : undefined,
-    adjustment = sourceAdjustment?.Clone();
-  if (sourceAdjustment && !adjustment) throw new Error("assert(native paragraph adjustment clone)");
+  for (const which of [RES_PAGEDESC, RES_BREAK]) {
+    const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
+    if (item) {
+      frame.SetFormatAttr(item);
+      node.ResetAttr(which);
+    }
+  }
+  const lineFormat = doc.MakeTableLineFormat(),
+    fillOrder = new SwFormatFillOrder(SwFillOrder.ATT_LEFT_TO_RIGHT);
   try {
-    for (const which of [RES_PAGEDESC, RES_BREAK]) {
-      const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
-      if (item) {
-        frame.SetFormatAttr(item);
-        node.ResetAttr(which);
-      }
-    }
-    const lineFormat = doc.MakeTableLineFormat(),
-      fillOrder = new SwFormatFillOrder(SwFillOrder.ATT_LEFT_TO_RIGHT);
+    lineFormat.SetFormatAttr(fillOrder);
+  } finally {
+    fillOrder.Dispose();
+  }
+  const formats: (SwTableBoxFormat | null)[] = [null, null, null, null],
+    common = borders ? null : doc.MakeTableBoxFormat();
+  if (common) {
+    const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
     try {
-      lineFormat.SetFormatAttr(fillOrder);
+      common.SetFormatAttr(size);
     } finally {
-      fillOrder.Dispose();
+      size.Dispose();
     }
-    const formats: (SwTableBoxFormat | null)[] = [null, null, null, null],
-      common = borders ? null : doc.MakeTableBoxFormat();
-    if (common) {
-      const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
-      try {
-        common.SetFormatAttr(size);
-      } finally {
-        size.Dispose();
-      }
-    }
-    const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
-    for (let row = 0; row < rows; row++) {
-      const line = new SwTableLine(lineFormat),
-        collection = doc.GetTextFormatColl(
-          row === 0 || row < repeat ? headStyle : "table-contents",
+  }
+  for (let row = 0; row < rows; row++) {
+    const line = new SwTableLine(lineFormat);
+    for (let column = 0; column < columns; column++) {
+      let format =
+        common ??
+        lcl_CreateDfltBoxFormat(
+          doc,
+          formats,
+          columns,
+          (column < columns - 1 ? 0 : 1) + (row ? 2 : 0),
         );
-      for (let column = 0; column < columns; column++) {
-        let format =
-          common ??
-          lcl_CreateDfltBoxFormat(
-            doc,
-            formats,
-            columns,
-            (column < columns - 1 ? 0 : 1) + (row ? 2 : 0),
-          );
-        if (positions) {
-          const cellWidth = (positions[column + 1] as number) - (positions[column] as number);
-          if (format.GetFrameSize().GetWidth() !== cellWidth) {
-            if (format.HasWriterListeners()) {
-              const copy = doc.MakeTableBoxFormat();
-              copy.CopyFormatFrom(format);
-              format = copy;
-            }
-            const size = new SwFormatFrameSize(SwFrameSize.Variable, cellWidth);
-            try {
-              format.SetFormatAttr(size);
-            } finally {
-              size.Dispose();
-            }
+      if (positions) {
+        const cellWidth = (positions[column + 1] as number) - (positions[column] as number);
+        if (format.GetFrameSize().GetWidth() !== cellWidth) {
+          if (format.HasWriterListeners()) {
+            const copy = doc.MakeTableBoxFormat();
+            copy.CopyFormatFrom(format);
+            format = copy;
+          }
+          const size = new SwFormatFrameSize(SwFrameSize.Variable, cellWidth);
+          try {
+            format.SetFormatAttr(size);
+          } finally {
+            size.Dispose();
           }
         }
-        const start = doc.nodes.MakeTextSection(
-            table.GetTableNode().EndOfSectionNode(),
-            SwStartNodeType.SwTableBoxStartNode,
-            collection,
-          ) as SwTableBoxStartNode,
-          box = new SwTableBox(format, start),
-          paragraph = doc.nodes.at(start.GetIndex() + 1) as SwTextNode;
-        if (adjustment) paragraph.SetAttr(adjustment);
-        line.AddBox(box);
       }
-      table.AddLine(line);
+      const start = doc.nodes.at(
+          tableNode.GetIndex() + 1 + (row * columns + column) * 3,
+        ) as SwTableBoxStartNode,
+        box = new SwTableBox(format, start);
+      line.AddBox(box);
     }
-  } finally {
-    adjustment?.Dispose();
+    table.AddLine(line);
   }
   return table;
 }

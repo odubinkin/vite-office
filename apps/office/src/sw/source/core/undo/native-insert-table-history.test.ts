@@ -272,7 +272,7 @@ it.each([
     }
   },
 );
-it("does not treat selected text or nested table insertion as implemented", /** Preserves unsupported native contexts without silent partial graph changes. @returns Nothing. */ () => {
+it("keeps current shell/document admission separate from native node-matrix construction", /** Raw matrix section support does not certify the wider document/shell nested-table command. @returns Nothing. */ () => {
   const o = fixture();
   try {
     const cursor = o.shell.GetCursor();
@@ -283,10 +283,6 @@ it("does not treat selected text or nested table insertion as implemented", /** 
     expect(required(o.shell.InsertTable(options, 1, 1, "Explicit")).GetName()).toBe("Explicit");
     expect(o.shell.InsertTable(options, 2, 2)).toBeUndefined();
     const position = new SwPosition(o.shell.GetActiveParagraph(), 0);
-    expect(
-      /** Checks rejected native input before mutation. @returns Nothing. */ () =>
-        o.doc.nodes.InsertTable(o.shell.GetActiveParagraph(), "Nested", {}),
-    ).toThrow("connected body paragraph");
     expect(
       /** Checks rejected native input before mutation. @returns Nothing. */ () =>
         o.doc.InsertTable(options, position, 2, 2, HoriOrientation.FULL),

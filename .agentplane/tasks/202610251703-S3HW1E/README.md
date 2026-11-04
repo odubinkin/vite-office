@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 386
+revision: 390
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T10:34:23.215Z"
+  updated_at: "2026-11-04T10:56:03.395Z"
   updated_by: "CODER"
-  note: "HTML57 checkpoint passes184 unique tests/15actual files, app types, style and native source/registry gates. Original four default-border variants, shared row/box construction, width copies, fill-order item/pool and numbering-aware margins implemented; WRITER339 preserved. Native HTML table orchestration/layout, RTF direction and final audit remain."
-  attempts: 68
+  note: "HTML58 checkpoint passes252 unique cases/18files, app types and static gates. Native static node matrix and seven-item style-priority propagation connected to actual document construction; old browser builder renamed and real XML/RTF consumers migrated. Native table/frame bootstrap, structural document admission, HTML orchestration/layout, RTF direction and final audit remain."
+  attempts: 69
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1093,8 +1096,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T10:56:03.395Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML58 checkpoint passes252 unique cases/18files, app types and static gates. Native static node matrix and seven-item style-priority propagation connected to actual document construction; old browser builder renamed and real XML/RTF consumers migrated. Native table/frame bootstrap, structural document admission, HTML orchestration/layout, RTF direction and final audit remain."
+  -
+    type: "status"
+    at: "2026-11-04T10:56:45.404Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T10:34:42.399Z"
+doc_updated_at: "2026-11-04T10:56:45.404Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2879,6 +2895,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T10:56:03.395Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML58 checkpoint passes252 unique cases/18files, app types and static gates. Native static node matrix and seven-item style-priority propagation connected to actual document construction; old browser builder renamed and real XML/RTF consumers migrated. Native table/frame bootstrap, structural document admission, HTML orchestration/layout, RTF direction and final audit remain.
+    Attempts: 69
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:56:02.434Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3024,6 +3070,16 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html57-types-final.txt). Final lint-only non-null/enum-expression cleanup preserves these source types and original values.
     - Command (cwd repository): node_modules/.bin/eslint all12changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html57-eslint-verified.txt, html57-prettier.txt and final three-file formatting check). Scope: actual changed files, no disabled validation or retained stale import.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html57-{boundaries,jsdoc,filesize,source-tree,hintids,provenance-final,registry-final}.txt). Evidence:1936runtime provenance modules/1723mapped,1935runtime boundary sources/10745imports/229edges,4349JSDoc files,4353size-scanned files,82actual pinned WhichIds, Writer registry0semantic violations. Broader semantic statuses remain unverified; these gates do not prove whole filter/native completion.
+    - No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+    S3HW1E HTML58 checkpoint —252 unique passing cases/18actual files. The nine-file native run passed86cases in8unchanged files and17of18cases in the history file; the final corrected history file passes all18cases, yielding104unique native cases. The nine actual filter/I/O/UI files add148cases. The earlier54-case four-file run is not counted again. Final evidence is under output/playwright/rtf-properties-native/html58-*.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/docnode/native-table-node-matrix.test.ts src/sw/source/core/docnode/native-table-insertion-contract.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-cell-format-client-history.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/source/uibase/wrtsh/native-select-all.test.ts ->86pass/8unchanged files plus17pass/1superseded history failure (html58-native-final.txt). Scope: real node matrix and collection transitions, seven-item propagation/precedence, actual containing sections, formats, registered indices, history and selection; original bound-table/default-frame bootstrap parity is not certified.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/undo/native-insert-table-history.test.ts ->18pass/1file (html58-history-verified.txt). Scope: repeated split/table/row/type history and current shell/document admission; the stale node-only builder rejection is replaced by genuine native matrix section coverage, not silently retained as a supported command restriction.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/browser/presentation/native-insert-table-dialog.test.tsx src/sw/source/filter/xml/xmltbli-default-cell.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts ->148pass/9actual files (html58-filter-ui-final.txt). Scope: existing native formats, real XML/RTF builder migration, document-I/O and actual command/dialog consumers.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html58-types-verified.txt); the previously missing type-only import is corrected, not ignored.
+    - Command (cwd repository): node_modules/.bin/eslint all13intentional changed/new source/test files --max-warnings 0; final ndtbl/history-file ESLint checks; node_modules/.bin/prettier --check intentional changed/new source/test/metadata and final changed files ->pass (html58-eslint.txt, html58-eslint-{ndtbl,history}-final.txt, html58-prettier.txt and final formatting stdout). Scope: actual changed files, no loosened lint or typed-provider substitution.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html58-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Evidence:1936runtime provenance modules/1723mapped,1935boundary sources/10751imports/229edges,4350JSDoc files,4354size-scanned files and Writer registry0semantic violations. Whole native behavior/default/contract statuses remain unverified; these gates do not prove full filter completion.
     - No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4297,6 +4353,16 @@ sections:
     Initial validation exposed two fixture errors (Vitest spread-vector inputs and a missing real stream encoding), three historical explicit-empty-RES_BOX expectations, and lint restrictions on native enum alias syntax/non-null assertions. These were corrected without changing native construction/defaults or loosening checks. Registry validation found the stale removed Color-import marker described above; exact relocated evidence now passes. One guessed htmlctxt.insert.integration selector did not exist and is not counted: the real htmlctxt/flags/paragraph-class consumers are selected separately. No final selected actual test fails or is skipped.
 
     Whole native module/API/ABI/lifetime parity remains unverified. Non-null SwTableAutoFormat, DDE/redline and wider old-model algorithms, floating/nested first-table context creation, full recursive table/cell/row/caption token orchestration, caption placement, materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser open/save/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is an implementation checkpoint.
+
+    S3HW1E HTML58 — Actual SwNodes::InsertTable node matrix and selective propagation. The first-cell source audit exposed that SwDoc construction still created text sections while building boxes and unconditionally copied only paragraph adjustment. The original native static SwNodes entry now forwards to InsertTableNodes in the actual ndtbl.cxx responsibility file. It creates actual table/cell/text/end sections first, returns null without mutation for zero boxes, creates one body row for zero lines, and selects headline/body collections with the original row/repetition transition. The existing node-array bootstrap now determines the real containing section from the insertion boundary, preserving caption/extra and genuine existing cell ownership. SwDoc consumes those actual sections with the original3-node stride while constructing shared formats/lines/boxes; it no longer rebuilds text sections or overwrites the selected collection afterward.
+
+    The source seven-item array is preserved: adjustment and Latin/CJK/CTL font families/heights. Only effective SET source items propagate, and only if the selected cell collection has no effective SET value for that identity. Direct and inherited collection items, including explicitly set default values, override the source. Pool defaults and unrelated attributes do not propagate. Actual matrix/style/item tests cover these rules and a real shell-source/header-style composition. Paragraph attributes are copied before page attributes are reset, so the prior adjustment-only borrowed-set/clone workaround is removed rather than extended to the new items.
+
+    The old empty-table browser-builder operation is now explicitly MakeTableNodeBefore, with connected actual-node admission. Its real XML/RTF consumers and affected tests use that name; it no longer shares the original native static InsertTable name with a contradictory instance signature. This is a migration of the existing builder responsibility, not a second table result provider. The older test requiring the node-only builder to reject a cell was invalid after native node matrix support: that assertion is replaced by the fresh real enclosing-cell matrix test, while current document/shell selected/nested/nontext admission guards remain independently tested. Their broader native completion is not claimed.
+
+    Initial validation found a duplicate type/value SwNodes import; after moving the body into ndtbl, a missing type-only SwNode import was also corrected. An initial fixture used the wrong headline flag and an invalid standalone cell-like section; final cases use the actual native flag and a real existing table/cell owner. Final native tests also exposed the obsolete builder-rejection expectation above. All final selected tests pass; failures are retained as iteration evidence and superseded by the exact final history run. No global destruction assertion, original style precedence, item state or source failure is weakened to pass tests.
+
+    The existing bound SwTable/early frame bootstrap remains a representation difference requiring actual native default-constructor/nullable frame/lifetime audit; this node-matrix checkpoint does not certify those contracts. Native SwDoc structural/footnote/parent-table/page-break admission, first-cell context/floating/section orchestration, full recursive table/cell/row/caption grammar, caption placement, materialization/layout/real text measurement, RTF direction export and the final format/UI capability audit remain required. Whole native module/API/ABI/default/lifetime parity remains unverified. Browser open/save/autosave/recovery deviations stay unchanged. Parent task and goal remain incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -6092,6 +6158,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T10:56:03.395Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML58 checkpoint passes252 unique cases/18files, app types and static gates. Native static node matrix and seven-item style-priority propagation connected to actual document construction; old browser builder renamed and real XML/RTF consumers migrated. Native table/frame bootstrap, structural document admission, HTML orchestration/layout, RTF direction and final audit remain.
+Attempts: 69
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:56:02.434Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6237,6 +6333,16 @@ S3HW1E HTML57 checkpoint —184 unique passing tests/15actual files; parent scop
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html57-types-final.txt). Final lint-only non-null/enum-expression cleanup preserves these source types and original values.
 - Command (cwd repository): node_modules/.bin/eslint all12changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html57-eslint-verified.txt, html57-prettier.txt and final three-file formatting check). Scope: actual changed files, no disabled validation or retained stale import.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html57-{boundaries,jsdoc,filesize,source-tree,hintids,provenance-final,registry-final}.txt). Evidence:1936runtime provenance modules/1723mapped,1935runtime boundary sources/10745imports/229edges,4349JSDoc files,4353size-scanned files,82actual pinned WhichIds, Writer registry0semantic violations. Broader semantic statuses remain unverified; these gates do not prove whole filter/native completion.
+- No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
+
+S3HW1E HTML58 checkpoint —252 unique passing cases/18actual files. The nine-file native run passed86cases in8unchanged files and17of18cases in the history file; the final corrected history file passes all18cases, yielding104unique native cases. The nine actual filter/I/O/UI files add148cases. The earlier54-case four-file run is not counted again. Final evidence is under output/playwright/rtf-properties-native/html58-*.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/docnode/native-table-node-matrix.test.ts src/sw/source/core/docnode/native-table-insertion-contract.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-cell-format-client-history.test.ts src/sw/source/core/undo/native-row-format-client-history.test.ts src/sw/source/uibase/wrtsh/native-select-all.test.ts ->86pass/8unchanged files plus17pass/1superseded history failure (html58-native-final.txt). Scope: real node matrix and collection transitions, seven-item propagation/precedence, actual containing sections, formats, registered indices, history and selection; original bound-table/default-frame bootstrap parity is not certified.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/core/undo/native-insert-table-history.test.ts ->18pass/1file (html58-history-verified.txt). Scope: repeated split/table/row/type history and current shell/document admission; the stale node-only builder rejection is replaced by genuine native matrix section coverage, not silently retained as a supported command restriction.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/browser/presentation/native-insert-table-dialog.test.tsx src/sw/source/filter/xml/xmltbli-default-cell.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts ->148pass/9actual files (html58-filter-ui-final.txt). Scope: existing native formats, real XML/RTF builder migration, document-I/O and actual command/dialog consumers.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html58-types-verified.txt); the previously missing type-only import is corrected, not ignored.
+- Command (cwd repository): node_modules/.bin/eslint all13intentional changed/new source/test files --max-warnings 0; final ndtbl/history-file ESLint checks; node_modules/.bin/prettier --check intentional changed/new source/test/metadata and final changed files ->pass (html58-eslint.txt, html58-eslint-{ndtbl,history}-final.txt, html58-prettier.txt and final formatting stdout). Scope: actual changed files, no loosened lint or typed-provider substitution.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html58-{boundaries,jsdoc,filesize,source-tree,provenance,registry}.txt). Evidence:1936runtime provenance modules/1723mapped,1935boundary sources/10751imports/229edges,4350JSDoc files,4354size-scanned files and Writer registry0semantic violations. Whole native behavior/default/contract statuses remain unverified; these gates do not prove full filter completion.
 - No final selected actual test is failing or skipped. Full application suite is not repeated for this checkpoint of the same ongoing AgentPlane task, per user instruction.
 
 ## Rollback Plan
@@ -7514,3 +7620,13 @@ GetMarginsFromContext is moved without behavioral changes into its existing html
 Initial validation exposed two fixture errors (Vitest spread-vector inputs and a missing real stream encoding), three historical explicit-empty-RES_BOX expectations, and lint restrictions on native enum alias syntax/non-null assertions. These were corrected without changing native construction/defaults or loosening checks. Registry validation found the stale removed Color-import marker described above; exact relocated evidence now passes. One guessed htmlctxt.insert.integration selector did not exist and is not counted: the real htmlctxt/flags/paragraph-class consumers are selected separately. No final selected actual test fails or is skipped.
 
 Whole native module/API/ABI/lifetime parity remains unverified. Non-null SwTableAutoFormat, DDE/redline and wider old-model algorithms, floating/nested first-table context creation, full recursive table/cell/row/caption token orchestration, caption placement, materialization/layout/real text measurement, RTF direction export and final format/UI capability audit remain required. Browser open/save/autosave/recovery deviations are unchanged. Parent task and goal remain incomplete; this is an implementation checkpoint.
+
+S3HW1E HTML58 — Actual SwNodes::InsertTable node matrix and selective propagation. The first-cell source audit exposed that SwDoc construction still created text sections while building boxes and unconditionally copied only paragraph adjustment. The original native static SwNodes entry now forwards to InsertTableNodes in the actual ndtbl.cxx responsibility file. It creates actual table/cell/text/end sections first, returns null without mutation for zero boxes, creates one body row for zero lines, and selects headline/body collections with the original row/repetition transition. The existing node-array bootstrap now determines the real containing section from the insertion boundary, preserving caption/extra and genuine existing cell ownership. SwDoc consumes those actual sections with the original3-node stride while constructing shared formats/lines/boxes; it no longer rebuilds text sections or overwrites the selected collection afterward.
+
+The source seven-item array is preserved: adjustment and Latin/CJK/CTL font families/heights. Only effective SET source items propagate, and only if the selected cell collection has no effective SET value for that identity. Direct and inherited collection items, including explicitly set default values, override the source. Pool defaults and unrelated attributes do not propagate. Actual matrix/style/item tests cover these rules and a real shell-source/header-style composition. Paragraph attributes are copied before page attributes are reset, so the prior adjustment-only borrowed-set/clone workaround is removed rather than extended to the new items.
+
+The old empty-table browser-builder operation is now explicitly MakeTableNodeBefore, with connected actual-node admission. Its real XML/RTF consumers and affected tests use that name; it no longer shares the original native static InsertTable name with a contradictory instance signature. This is a migration of the existing builder responsibility, not a second table result provider. The older test requiring the node-only builder to reject a cell was invalid after native node matrix support: that assertion is replaced by the fresh real enclosing-cell matrix test, while current document/shell selected/nested/nontext admission guards remain independently tested. Their broader native completion is not claimed.
+
+Initial validation found a duplicate type/value SwNodes import; after moving the body into ndtbl, a missing type-only SwNode import was also corrected. An initial fixture used the wrong headline flag and an invalid standalone cell-like section; final cases use the actual native flag and a real existing table/cell owner. Final native tests also exposed the obsolete builder-rejection expectation above. All final selected tests pass; failures are retained as iteration evidence and superseded by the exact final history run. No global destruction assertion, original style precedence, item state or source failure is weakened to pass tests.
+
+The existing bound SwTable/early frame bootstrap remains a representation difference requiring actual native default-constructor/nullable frame/lifetime audit; this node-matrix checkpoint does not certify those contracts. Native SwDoc structural/footnote/parent-table/page-break admission, first-cell context/floating/section orchestration, full recursive table/cell/row/caption grammar, caption placement, materialization/layout/real text measurement, RTF direction export and the final format/UI capability audit remain required. Whole native module/API/ABI/default/lifetime parity remains unverified. Browser open/save/autosave/recovery deviations stay unchanged. Parent task and goal remain incomplete.

@@ -162,7 +162,7 @@ it("complete native table deletion releases original row and physical frame regi
   const session = createWriterDocumentSession(),
     doc = session.docShell.GetDoc();
   try {
-    const table = doc.nodes.InsertTable(required(doc.paragraphs[0]), "Delete", {});
+    const table = doc.nodes.MakeTableNodeBefore(required(doc.paragraphs[0]), "Delete", {});
     table.AddColumnWidth(3000);
     for (let index = 0; index < 2; index++) doc.nodes.AppendTableRow(table, 1);
     const rows = [...table.GetTabLines()],
