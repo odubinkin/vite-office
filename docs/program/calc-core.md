@@ -4121,3 +4121,27 @@ reverse observations and extends all 1,220 text sequences while retaining the
 existing forward observations. No alternate word-boundary algorithm is added.
 Full data/provider/iterator construction, caches, dictionary engines and the
 LibreOffice word/title/service callers remain incomplete.
+
+
+### Original RBBI boundary caches and UVector32
+
+The source-owned `UVector32`, `BreakCache` and `DictionaryCache` operational
+methods now retain the original storage/status/cursor behavior. Cache filling
+uses the source thresholds (15 near, 30 backup, four native units for the
+single-codepoint check, six readahead/eviction entries) and the 128-entry ring.
+Original engine and locale calls remain mandatory iterator-owner contracts;
+no substitute engine or iterator factory is installed.
+
+The original ICU78.3 native witness compares 82 vector states and 1002 logical
+cache/consumed-owner snapshots. It checks full live logical buffers before
+writing compact replay fingerprints. Native engines prepare dictionary inputs;
+local lookup/refill tests consume those observations without fake engine
+callbacks. Local dictionary population also covers non-dictionary input and
+the short-range return. This does not certify concrete local dictionary engines
+or general dictionary population integration.
+
+Concrete engines, public iterator/data/provider construction and lifecycle,
+word/title/UNO installation, debug dumps, native allocator/RTTI/thread ABI and
+the remaining NatNum12 wiring are still pending. These cache results do not
+establish complete native CSV support. Source quirks CALC-461 through CALC-465
+are retained and documented separately.

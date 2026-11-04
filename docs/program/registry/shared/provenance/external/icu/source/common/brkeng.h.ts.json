@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/brkeng.h.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/brkeng.h",
+    "localSymbols": [
+      "LanguageBreakEngine"
+    ],
+    "upstreamSymbols": [
+      "LanguageBreakEngine"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete local dictionary engines, public iterator/data/provider construction and lifecycle, word/title/UNO installation, debug dumps and native allocation/RTTI/thread ABI are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/brkeng.h.ts",
+          "marker": "LanguageBreakEngine"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi_cache.test.ts",
+          "marker": "retains every native vector"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.h",
+          "marker": "LanguageBreakEngine"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/brkeng.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Retains the original .h discriminator so browser ESM distinguishes native header declarations from their .cpp implementation owners."
+    }
+  }
+}

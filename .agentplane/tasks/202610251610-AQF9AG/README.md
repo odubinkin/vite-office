@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 174
+revision: 178
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T10:09:11.102Z"
+  updated_at: "2026-11-04T11:29:05.899Z"
   updated_by: "CODER"
-  note: "Original safe reverse/UText checkpoint passes2450forward+2450reverse native states and1220text sequences,46related tests,196CSV initial passes plus1unchanged failed-scenario recheck,1browser scenario and declared checks. Initial UI wait timeout retained in Findings. Full CSV services/multiline paths remain incomplete;keep goal active."
-  attempts: 43
+  note: "Checkpoint: original ICU vector/cache operations match 82 native vector states and 1002 cache snapshots; 51 related tests, types, full lint, both registries, production build and Chromium CSV pass. Two unchanged Vitest file UI scenarios still fail timing limits in both runs; retained as unresolved. Original iterator/engines/word-title/UNO/NatNum12 and multiline paths remain incomplete; overall CSV goal stays active."
+  attempts: 44
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
 events:
   -
     type: "status"
@@ -1016,8 +1019,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    type: "verify"
+    at: "2026-11-04T11:29:05.899Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Checkpoint: original ICU vector/cache operations match 82 native vector states and 1002 cache snapshots; 51 related tests, types, full lint, both registries, production build and Chromium CSV pass. Two unchanged Vitest file UI scenarios still fail timing limits in both runs; retained as unresolved. Original iterator/engines/word-title/UNO/NatNum12 and multiline paths remain incomplete; overall CSV goal stays active."
+  -
+    type: "status"
+    at: "2026-11-04T11:29:15.836Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T10:09:53.461Z"
+doc_updated_at: "2026-11-04T11:29:15.836Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2327,6 +2343,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T11:29:05.899Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Checkpoint: original ICU vector/cache operations match 82 native vector states and 1002 cache snapshots; 51 related tests, types, full lint, both registries, production build and Chromium CSV pass. Two unchanged Vitest file UI scenarios still fail timing limits in both runs; retained as unresolved. Original iterator/engines/word-title/UNO/NatNum12 and multiline paths remain incomplete; overall CSV goal stays active.
+    Attempts: 44
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:28:46.081Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3504,6 +3550,28 @@ sections:
     - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass. Evidence: rbbi-reverse-build.log, rbbi-reverse-browser.log;1browser CSV import/primary ODS save/active-sheet export,5.9s. No timeout/assertion relaxation.
     - Same open AgentPlane task, not tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title installation, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.
+
+    ### Original UVector32 and boundary-cache source checkpoint
+
+    - Previous goal turn is progress: a76e8ca2437c added safe reverse rules and consumed UText queries. Current block adds the original UVector32 operational API and full BreakCache/DictionaryCache operational bodies in their original source owners, with header-owned enum/owner/engine/locale contracts. Original thresholds 15/30/+4/6/128, status branches, ring eviction/refill, cursor rules and dictionary calls remain unchanged. Source engine and locale methods are mandatory contracts; no production iterator or fake engine factory is installed. CALC-461 through CALC-465 document confirmed source quirks, which are preserved. Native RTTI/debug dumps/allocator/thread ABI, concrete local dictionary engines and public iterator bootstrap remain unverified. Broad parity flags remain false.
+    - Command: npx --no-install tsx scripts/icu-rbbi-cache-native-probe.mjs
+      Result: pass. Evidence: output/native/AQF9AG-libnumbertext/rbbi-cache-native-complete.log;82 native vector states and1002 logical cache/consumed-owner snapshots match. Original ICU libraries/methods/headers/data are used; test access changes visibility only. Full logical buffers are compared live before persisted replay fingerprints. Original native engines prepare dictionary fields; no local fake engine callbacks are supplied. Local population traces cover non-dictionary input and the short-range return; general local engine integration is not certified. Uninitialized slots are excluded. Source/data/native-artifact hashes are retained. Initial compile failed due to missing rbbidata.h include in the witness; adding the genuine header resolved it. No production or native-source substitution.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts --maxWorkers=1
+      Result: pass. Evidence: rbbi-cache-related-tests.log;51 cases across 6 files. Covers 82 vector states, four independently initialized cache trace segments, earlier raw rule/UText/trie/service-consumer assertions. No assertions or timeouts weakened.
+    - Command: npm run typecheck; focused ESLint over the six runtime files, cache test and native probe
+      Result: pass. Evidence: rbbi-cache-typecheck.log and rbbi-cache-lint-focused-final.log. Initial focused lint identified a useless initial current=0 assignment; the source-style uninitialized local assigned by the loop condition resolves it. Source dictStart read remains after the initial UText/trie read.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: fail,195 pass / 2 fail. Evidence: rbbi-cache-csv-tests.log. The CSV dialog waitFor did not observe onClose in its existing limit; the primary ODS save/reopen UI scenario exceeded its existing 30 second test timeout. No semantic parser/export mismatch is reported. No production sc/i18npool imports of the newly added cache/vector owners exist. This does not prove a root cause. An unchanged focused two-scenario recheck is running; do not treat the mixed run as green.
+    - Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass. Evidence: rbbi-cache-dependencies.log, rbbi-cache-provenance.log, rbbi-cache-parity-shared.log, rbbi-cache-jsdoc.log, rbbi-cache-file-size.log, rbbi-cache-resources.log, rbbi-cache-routing.log and rbbi-cache-doctor.log.1958 registered runtime modules/1745 mapped;4379 authored files;464 Calc commands. Doctor has zero errors and the existing managed-hook readiness warning. Calc parity and remaining final checks are still running/pending at this recording.
+
+    - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter|opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS' --maxWorkers=1
+      Result: fail, both selected cases; four previously passed cases intentionally deselected. Evidence: rbbi-cache-ui-recheck.log. The unchanged CSV waitFor again did not observe onClose within its original deadline; the unchanged ODS scenario exceeded its original 30 second test timeout. Transform took 344.87 seconds and import 393.88 seconds; this records substantial slowdown without proving its cause or treating the failures as resolved. No test/timeout/assertion/environment changes or repeated retry loop. These UI checks remain an explicit pending verification gap.
+    - Command: npm run inventory:parity:calc; npm run lint; node_modules/.bin/prettier --check (exact intentional apps/scripts/registry paths selected from git status)
+      Result: pass. Evidence: rbbi-cache-parity-calc.log, rbbi-cache-lint.log and rbbi-cache-format-final.log. Both shared and Calc registry reports have zero semantic violations. Full lint completed without warnings. Source/provenance guards and broad readiness flags remain unchanged.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: rbbi-cache-build.log and rbbi-cache-browser.log. Production build 18.27 seconds; one Chromium CSV import / primary ODS persistence / active-sheet export scenario passes, 9.0 second test time. Original byte assertions and no-page-error assertion remain intact. This production result does not erase the two failing Vitest UI scenarios.
+    - Final review: git diff --check passes. The exact 25-path scope contains the six runtime modules, native fixture/probe/replay test, twelve canonical runtime/provenance records, existing capability, core/issue docs and task README. Native scratch is excluded. No network, vendor, security/policy or unrelated mutations. Same open AgentPlane task, not the tenth completed task: related suites only. Overall goal remains active/incomplete. Original iterator/data/provider construction and lifecycle, concrete dictionary engines and word/title/UNO service installation, NatNum12 caller wiring, full multiline EditEngine/DocImport and final CSV audit remain. Verification stays rework; no task finish or full native CSV completion is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -4822,6 +4890,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T11:29:05.899Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Checkpoint: original ICU vector/cache operations match 82 native vector states and 1002 cache snapshots; 51 related tests, types, full lint, both registries, production build and Chromium CSV pass. Two unchanged Vitest file UI scenarios still fail timing limits in both runs; retained as unresolved. Original iterator/engines/word-title/UNO/NatNum12 and multiline paths remain incomplete; overall CSV goal stays active.
+Attempts: 44
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:28:46.081Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6003,3 +6101,25 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass. Evidence: rbbi-reverse-build.log, rbbi-reverse-browser.log;1browser CSV import/primary ODS save/active-sheet export,5.9s. No timeout/assertion relaxation.
 - Same open AgentPlane task, not tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title installation, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.
+
+### Original UVector32 and boundary-cache source checkpoint
+
+- Previous goal turn is progress: a76e8ca2437c added safe reverse rules and consumed UText queries. Current block adds the original UVector32 operational API and full BreakCache/DictionaryCache operational bodies in their original source owners, with header-owned enum/owner/engine/locale contracts. Original thresholds 15/30/+4/6/128, status branches, ring eviction/refill, cursor rules and dictionary calls remain unchanged. Source engine and locale methods are mandatory contracts; no production iterator or fake engine factory is installed. CALC-461 through CALC-465 document confirmed source quirks, which are preserved. Native RTTI/debug dumps/allocator/thread ABI, concrete local dictionary engines and public iterator bootstrap remain unverified. Broad parity flags remain false.
+- Command: npx --no-install tsx scripts/icu-rbbi-cache-native-probe.mjs
+  Result: pass. Evidence: output/native/AQF9AG-libnumbertext/rbbi-cache-native-complete.log;82 native vector states and1002 logical cache/consumed-owner snapshots match. Original ICU libraries/methods/headers/data are used; test access changes visibility only. Full logical buffers are compared live before persisted replay fingerprints. Original native engines prepare dictionary fields; no local fake engine callbacks are supplied. Local population traces cover non-dictionary input and the short-range return; general local engine integration is not certified. Uninitialized slots are excluded. Source/data/native-artifact hashes are retained. Initial compile failed due to missing rbbidata.h include in the witness; adding the genuine header resolved it. No production or native-source substitution.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts --maxWorkers=1
+  Result: pass. Evidence: rbbi-cache-related-tests.log;51 cases across 6 files. Covers 82 vector states, four independently initialized cache trace segments, earlier raw rule/UText/trie/service-consumer assertions. No assertions or timeouts weakened.
+- Command: npm run typecheck; focused ESLint over the six runtime files, cache test and native probe
+  Result: pass. Evidence: rbbi-cache-typecheck.log and rbbi-cache-lint-focused-final.log. Initial focused lint identified a useless initial current=0 assignment; the source-style uninitialized local assigned by the loop condition resolves it. Source dictStart read remains after the initial UText/trie read.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: fail,195 pass / 2 fail. Evidence: rbbi-cache-csv-tests.log. The CSV dialog waitFor did not observe onClose in its existing limit; the primary ODS save/reopen UI scenario exceeded its existing 30 second test timeout. No semantic parser/export mismatch is reported. No production sc/i18npool imports of the newly added cache/vector owners exist. This does not prove a root cause. An unchanged focused two-scenario recheck is running; do not treat the mixed run as green.
+- Command: npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass. Evidence: rbbi-cache-dependencies.log, rbbi-cache-provenance.log, rbbi-cache-parity-shared.log, rbbi-cache-jsdoc.log, rbbi-cache-file-size.log, rbbi-cache-resources.log, rbbi-cache-routing.log and rbbi-cache-doctor.log.1958 registered runtime modules/1745 mapped;4379 authored files;464 Calc commands. Doctor has zero errors and the existing managed-hook readiness warning. Calc parity and remaining final checks are still running/pending at this recording.
+
+- Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter|opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS' --maxWorkers=1
+  Result: fail, both selected cases; four previously passed cases intentionally deselected. Evidence: rbbi-cache-ui-recheck.log. The unchanged CSV waitFor again did not observe onClose within its original deadline; the unchanged ODS scenario exceeded its original 30 second test timeout. Transform took 344.87 seconds and import 393.88 seconds; this records substantial slowdown without proving its cause or treating the failures as resolved. No test/timeout/assertion/environment changes or repeated retry loop. These UI checks remain an explicit pending verification gap.
+- Command: npm run inventory:parity:calc; npm run lint; node_modules/.bin/prettier --check (exact intentional apps/scripts/registry paths selected from git status)
+  Result: pass. Evidence: rbbi-cache-parity-calc.log, rbbi-cache-lint.log and rbbi-cache-format-final.log. Both shared and Calc registry reports have zero semantic violations. Full lint completed without warnings. Source/provenance guards and broad readiness flags remain unchanged.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: rbbi-cache-build.log and rbbi-cache-browser.log. Production build 18.27 seconds; one Chromium CSV import / primary ODS persistence / active-sheet export scenario passes, 9.0 second test time. Original byte assertions and no-page-error assertion remain intact. This production result does not erase the two failing Vitest UI scenarios.
+- Final review: git diff --check passes. The exact 25-path scope contains the six runtime modules, native fixture/probe/replay test, twelve canonical runtime/provenance records, existing capability, core/issue docs and task README. Native scratch is excluded. No network, vendor, security/policy or unrelated mutations. Same open AgentPlane task, not the tenth completed task: related suites only. Overall goal remains active/incomplete. Original iterator/data/provider construction and lifecycle, concrete dictionary engines and word/title/UNO service installation, NatNum12 caller wiring, full multiline EditEngine/DocImport and final CSV audit remain. Verification stays rework; no task finish or full native CSV completion is claimed.

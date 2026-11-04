@@ -5057,3 +5057,34 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/icu-reference/source/common/rbbi.cpp`, `RuleBasedBreakIterator::handleSafePrevious` dispatcher and templated body.
 - Observation: the method reads `fData->fReverseTable` before its later `fData == nullptr` guard. The guard therefore cannot protect that earlier access. This is a source-order observation, not a claim about a defined result for invalid null iterator data.
 - Preserve the dereference/check order and normal valid-data behavior. Native tests exercise real initialized iterator data; the port adds no earlier guard, fallback boundary or synthetic null-data result.
+
+
+### CALC-461 — UVector32 capacity fast path ignores an existing failure status
+
+- Source: `vendor/icu-reference/source/common/uvectr32.h`, `ensureCapacity` and `addElement`; `uvectr32.cpp`, `_init` and `expandCapacity`.
+- Observation: sufficient existing capacity returns true without examining the incoming error status, so callers can append despite an existing failure. Growth does examine that status. Initialization also allocates with an incoming error. Original native vector traces confirm the capacity/status behavior.
+- Preserve the branch order and mutations; do not introduce an unconditional early failure guard.
+
+### CALC-462 — UVector32 removal lacks an upper index bound
+
+- Source: `vendor/icu-reference/source/common/uvectr32.cpp`, `UVector32::removeElementAt`.
+- Observation: any nonnegative index decrements the count even when it is beyond the used range. Removing from an empty vector can make the count negative. The native witness observes these scalar effects without reading invalid elements.
+- Preserve the source check and count change. Do not add an upper-bound guard or claim defined behavior for subsequent invalid memory access.
+
+### CALC-463 — UVector32 popFrame subtracts the frame size twice for its returned pointer
+
+- Source: `vendor/icu-reference/source/common/uvectr32.h`, `UVector32::popFrame`.
+- Observation: after subtracting size from count, the return expression is `elements + count - size`. With original count seven and size two, the new count is five but the returned offset is three. Native valid-span traces confirm the returned offset.
+- Preserve this offset and count order. The witness does not certify pointer results outside the allocated buffer.
+
+### CALC-464 — DictionaryCache preceding can miss once because of its prior cursor
+
+- Source: `vendor/icu-reference/source/common/rbbi_cache.cpp`, `DictionaryCache::preceding`.
+- Observation: cursor zero causes a false return and resets the cursor to minus one before the general search. For a valid interior request, repeating the same request can then find the preceding entry. Native dictionary traces reproduce this state dependence and unchanged output arguments on the miss.
+- Preserve the cursor branch and lookup order. This is an internal cache miss observation, not evidence of an incorrect public word boundary.
+
+### CALC-465 — Cached BreakCache next retains the iterator done flag
+
+- Source: `vendor/icu-reference/source/common/rbbi_cache.h`, inline `BreakCache::next`; `rbbi_cache.cpp`, `BreakCache::following`.
+- Observation: the cached next path updates position/status without clearing `fDone`. The source following implementation clears it explicitly and comments on the interaction. Native private-cache traces retain the flag behavior.
+- Preserve the private next path and following compensation. Do not infer a public iterator defect from direct private-cache calls.
