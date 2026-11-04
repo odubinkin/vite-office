@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 181
+revision: 185
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T11:32:06.743Z"
+  updated_at: "2026-11-04T12:00:42.408Z"
   updated_by: "CODER"
-  note: "Checkpoint babc13273628 validated: 82 native vector states, 1002 cache snapshots, 51 related tests, 195 CSV cases plus both unchanged selected UI cases after serialized verification, types/full lint/registry/build/Chromium pass. Earlier timing failures remain recorded. Full original iterator/engine/service installation, NatNum12 callers, multiline owner path and final CSV audit remain incomplete; goal stays active."
-  attempts: 45
+  note: "UTF8 prerequisite checkpoint passes 402855 original native calls, 43 related tests, all 197 CSV/UI cases, typecheck/full lint/source/parity/resource/doc checks, build and Chromium CSV. Actual writable UnicodeString/RBBIDataWrapper/UText/iterator ownership, dictionary engines and word/title/UNO/NatNum12 wiring, multiline owner path and final audit remain unfinished. Goal stays active; no full CSV readiness claim."
+  attempts: 46
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1048,8 +1051,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T12:00:42.408Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "UTF8 prerequisite checkpoint passes 402855 original native calls, 43 related tests, all 197 CSV/UI cases, typecheck/full lint/source/parity/resource/doc checks, build and Chromium CSV. Actual writable UnicodeString/RBBIDataWrapper/UText/iterator ownership, dictionary engines and word/title/UNO/NatNum12 wiring, multiline owner path and final audit remain unfinished. Goal stays active; no full CSV readiness claim."
+  -
+    type: "status"
+    at: "2026-11-04T12:01:53.784Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T11:32:27.114Z"
+doc_updated_at: "2026-11-04T12:01:53.784Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2419,6 +2435,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T12:00:42.408Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: UTF8 prerequisite checkpoint passes 402855 original native calls, 43 related tests, all 197 CSV/UI cases, typecheck/full lint/source/parity/resource/doc checks, build and Chromium CSV. Actual writable UnicodeString/RBBIDataWrapper/UText/iterator ownership, dictionary engines and word/title/UNO/NatNum12 wiring, multiline owner path and final audit remain unfinished. Goal stays active; no full CSV readiness claim.
+    Attempts: 46
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:59:34.935Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3625,6 +3671,27 @@ sections:
     - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter|opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS' --maxWorkers=1
       Result: pass. Evidence: output/native/AQF9AG-libnumbertext/rbbi-cache-ui-serialized.log; 2 selected cases pass, 4 previously passed cases intentionally deselected; 28.56 seconds total, 23.71 seconds import, 3.14 seconds test time. Exact original production operations/assertions are unchanged. Together with the 195 earlier passes, this closes selected CSV/UI coverage for the current source checkpoint; it does not label either earlier failed run green or prove the complete cause of timing sensitivity.
     - The earlier failure evidence and notes remain historical observations. The two selected UI scenarios no longer remain an uncovered verification gap for this checkpoint. Overall verification remains rework solely because the full approved CSV goal is still incomplete, including original iterator/engine/service installation, NatNum12 callers, multiline owner path and final audit. No task finish, goal pause or completion. Final tracked state is reviewed after the task-only evidence commit; native scratch remains excluded.
+
+    ### Original ICU UTF8 rule-string prerequisite checkpoint
+
+    - Previous goal turn is progress: babc13273628 added genuine vector/cache methods; b7a82b9f7e56 recorded the successful serialized UI closure. Current preflight confirms approved calc/direct/DOING, CODER and clean non-scratch tracked state. Source inspection finds RBBIDataWrapper::init calls UnicodeString::fromUTF8(StringPiece), which requires its real writable-buffer protocol and ICU conversion. This block implements the complete original consumed scanner/converter prerequisite; it does not construct a fake binary-rule wrapper or substitute a host decoder. Actual UnicodeString writable-buffer allocation, full RBBIDataWrapper/UText/iterator construction, engines, word/title/UNO services and NatNum12 callers remain pending, as do original multiline EditEngine/DocImport and final CSV audit. Broad parity flags remain false.
+    - Added original utf8_nextCharSafeBody, U8 bit-vector validity helpers, u_strFromUTF8WithSub/u_strFromUTF8, u_terminateUChars and U_INVALID_CHAR_FOUND=10 in their source owners. Retains strict/lenient/obsolete scanner modes, noncharacter/surrogate handling, partial-byte consumption, original counted fast/NUL loops, partial supplementary writes, full preflight, substitution defaults, output argument publication and warning/error/termination ordering. Bit vectors retain immutable literal storage. Native readable-span and integer-domain contracts are retained without new heuristics, decoder fallback or generic argument guards. No newly identified suspected upstream defect requires a journal entry; ordinary source-defined private termination and legacy-error behavior is preserved.
+    - Command: npx --no-install tsx scripts/icu-utf8-conversion-native-probe.mjs
+      Result: pass. Evidence: rbbi-owner-native-closure.log and ustrtrns.native-observations.json. Scope: 402855 complete original native calls, including 196608 leading-pair scanner calls, 196608 counted-pair conversions and 9639 retained scanner/converter/UTF16 termination calls. Complete direct comparison checks return identity/nullness, cursor, output length, substitution count, status and every initialized destination cell. Broad matrices compare live and retain result hashes; selected groups retain exact inputs/outputs for replay. Uses real pinned ICU78.3 headers/static libraries and unchanged original exported functions. Original source/native artifacts have SHA256 witnesses. No fake headers/providers/native method replacement. Allocator/physical ABI, unreadable spans, overlapping storage and complete UnicodeString/RBBI ownership remain unverified.
+    - Observation: initial focused ESLint found three missing test tuple JSDoc blocks and four source temporary assignments whose stored values are unused in preflight comparisons. Resolution: added documentation and directly expanded the same uint8 casts in those comparisons; no condition/read order/status or data behavior changed. The final native closure above reran after these fixes and literal-storage alignment. No lint rules, test guards, timeouts or assertions were relaxed.
+    - Command: npm run test:shared -- src/external/icu/source/common/ustrtrns.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts src/external/icu/source/common/bytesinkutil.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts --maxWorkers=1
+      Result: pass. Evidence: rbbi-owner-related-tests.log;43 cases across 6 files, 8.86 seconds. Scope: retained original UTF8/termination calls plus existing narrow termination, bytesink, forward/reverse UText/rules and cache behavior. Test drivers invoke actual APIs without another decoding algorithm.
+    - Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+      Result: pass. Evidence: rbbi-owner-typecheck.log, rbbi-owner-lint.log, rbbi-owner-dependencies.log, rbbi-owner-provenance.log, rbbi-owner-parity-shared.log and rbbi-owner-parity-calc.log. Scope: 1962 registered runtime modules / 1749 mapped; 1961 boundary sources / 10696 relative imports / 236 allowed edges. Registry semantic violations remain zero. No readiness/guard/policy changes.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (exact reviewed intentional source/script/registry paths)
+      Result: pass. Evidence: rbbi-owner-jsdoc.log, rbbi-owner-file-size.log, rbbi-owner-resources.log, rbbi-owner-routing.log, rbbi-owner-doctor.log and rbbi-owner-format-check.log. Scope: 4385 authored files, 464 Calc commands. Doctor reports zero errors and the existing managed-hook warning; hook/policy files remain unchanged.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: rbbi-owner-csv-tests.log;all 197 cases across 8 files, 40.07 seconds. Scope: existing CSV recognition/import/export and real file UI. Started after all other repository checks became terminal; no retries or timeout/assertion changes in this run.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: rbbi-owner-build.log and rbbi-owner-browser.log;production build 11.17 seconds; one Chromium CSV import/primary ODS persistence/active-sheet export passes, 5.1 seconds test time. Original exact downloaded-byte and no-page-error assertions remain intact. Does not certify original iterator/service installation or complete CSV feature parity.
+    - Final scope: 24 exact intentional paths including task README; source/evidence review finds no unrelated changes and git diff --check passes. No network, vendor, security/policy, unrelated Writer changes or external publication. Native output remains reviewed scratch and is excluded from the commit. Same open AgentPlane task, not the tenth completed task; only related suites run. Goal remains active/incomplete, verification stays rework for unfinished full scope, and no task finish or goal pause/completion is claimed. User status answer explicitly distinguishes the five remaining work directions from an unsupported fixed task count or delivery-time promise.
+
+    - Source-contract wording review removes an unproven nonoverlap precondition from the local file overview. Overlapping storage is explicitly unverified, with no rejection or fallback added; native comparison and runtime behavior are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -5003,6 +5070,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T12:00:42.408Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: UTF8 prerequisite checkpoint passes 402855 original native calls, 43 related tests, all 197 CSV/UI cases, typecheck/full lint/source/parity/resource/doc checks, build and Chromium CSV. Actual writable UnicodeString/RBBIDataWrapper/UText/iterator ownership, dictionary engines and word/title/UNO/NatNum12 wiring, multiline owner path and final audit remain unfinished. Goal stays active; no full CSV readiness claim.
+Attempts: 46
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T11:59:34.935Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6213,3 +6310,24 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter|opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS' --maxWorkers=1
   Result: pass. Evidence: output/native/AQF9AG-libnumbertext/rbbi-cache-ui-serialized.log; 2 selected cases pass, 4 previously passed cases intentionally deselected; 28.56 seconds total, 23.71 seconds import, 3.14 seconds test time. Exact original production operations/assertions are unchanged. Together with the 195 earlier passes, this closes selected CSV/UI coverage for the current source checkpoint; it does not label either earlier failed run green or prove the complete cause of timing sensitivity.
 - The earlier failure evidence and notes remain historical observations. The two selected UI scenarios no longer remain an uncovered verification gap for this checkpoint. Overall verification remains rework solely because the full approved CSV goal is still incomplete, including original iterator/engine/service installation, NatNum12 callers, multiline owner path and final audit. No task finish, goal pause or completion. Final tracked state is reviewed after the task-only evidence commit; native scratch remains excluded.
+
+### Original ICU UTF8 rule-string prerequisite checkpoint
+
+- Previous goal turn is progress: babc13273628 added genuine vector/cache methods; b7a82b9f7e56 recorded the successful serialized UI closure. Current preflight confirms approved calc/direct/DOING, CODER and clean non-scratch tracked state. Source inspection finds RBBIDataWrapper::init calls UnicodeString::fromUTF8(StringPiece), which requires its real writable-buffer protocol and ICU conversion. This block implements the complete original consumed scanner/converter prerequisite; it does not construct a fake binary-rule wrapper or substitute a host decoder. Actual UnicodeString writable-buffer allocation, full RBBIDataWrapper/UText/iterator construction, engines, word/title/UNO services and NatNum12 callers remain pending, as do original multiline EditEngine/DocImport and final CSV audit. Broad parity flags remain false.
+- Added original utf8_nextCharSafeBody, U8 bit-vector validity helpers, u_strFromUTF8WithSub/u_strFromUTF8, u_terminateUChars and U_INVALID_CHAR_FOUND=10 in their source owners. Retains strict/lenient/obsolete scanner modes, noncharacter/surrogate handling, partial-byte consumption, original counted fast/NUL loops, partial supplementary writes, full preflight, substitution defaults, output argument publication and warning/error/termination ordering. Bit vectors retain immutable literal storage. Native readable-span and integer-domain contracts are retained without new heuristics, decoder fallback or generic argument guards. No newly identified suspected upstream defect requires a journal entry; ordinary source-defined private termination and legacy-error behavior is preserved.
+- Command: npx --no-install tsx scripts/icu-utf8-conversion-native-probe.mjs
+  Result: pass. Evidence: rbbi-owner-native-closure.log and ustrtrns.native-observations.json. Scope: 402855 complete original native calls, including 196608 leading-pair scanner calls, 196608 counted-pair conversions and 9639 retained scanner/converter/UTF16 termination calls. Complete direct comparison checks return identity/nullness, cursor, output length, substitution count, status and every initialized destination cell. Broad matrices compare live and retain result hashes; selected groups retain exact inputs/outputs for replay. Uses real pinned ICU78.3 headers/static libraries and unchanged original exported functions. Original source/native artifacts have SHA256 witnesses. No fake headers/providers/native method replacement. Allocator/physical ABI, unreadable spans, overlapping storage and complete UnicodeString/RBBI ownership remain unverified.
+- Observation: initial focused ESLint found three missing test tuple JSDoc blocks and four source temporary assignments whose stored values are unused in preflight comparisons. Resolution: added documentation and directly expanded the same uint8 casts in those comparisons; no condition/read order/status or data behavior changed. The final native closure above reran after these fixes and literal-storage alignment. No lint rules, test guards, timeouts or assertions were relaxed.
+- Command: npm run test:shared -- src/external/icu/source/common/ustrtrns.native.test.ts src/external/icu/source/common/ustring.boundaries.test.ts src/external/icu/source/common/bytesinkutil.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts --maxWorkers=1
+  Result: pass. Evidence: rbbi-owner-related-tests.log;43 cases across 6 files, 8.86 seconds. Scope: retained original UTF8/termination calls plus existing narrow termination, bytesink, forward/reverse UText/rules and cache behavior. Test drivers invoke actual APIs without another decoding algorithm.
+- Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+  Result: pass. Evidence: rbbi-owner-typecheck.log, rbbi-owner-lint.log, rbbi-owner-dependencies.log, rbbi-owner-provenance.log, rbbi-owner-parity-shared.log and rbbi-owner-parity-calc.log. Scope: 1962 registered runtime modules / 1749 mapped; 1961 boundary sources / 10696 relative imports / 236 allowed edges. Registry semantic violations remain zero. No readiness/guard/policy changes.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (exact reviewed intentional source/script/registry paths)
+  Result: pass. Evidence: rbbi-owner-jsdoc.log, rbbi-owner-file-size.log, rbbi-owner-resources.log, rbbi-owner-routing.log, rbbi-owner-doctor.log and rbbi-owner-format-check.log. Scope: 4385 authored files, 464 Calc commands. Doctor reports zero errors and the existing managed-hook warning; hook/policy files remain unchanged.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: rbbi-owner-csv-tests.log;all 197 cases across 8 files, 40.07 seconds. Scope: existing CSV recognition/import/export and real file UI. Started after all other repository checks became terminal; no retries or timeout/assertion changes in this run.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: rbbi-owner-build.log and rbbi-owner-browser.log;production build 11.17 seconds; one Chromium CSV import/primary ODS persistence/active-sheet export passes, 5.1 seconds test time. Original exact downloaded-byte and no-page-error assertions remain intact. Does not certify original iterator/service installation or complete CSV feature parity.
+- Final scope: 24 exact intentional paths including task README; source/evidence review finds no unrelated changes and git diff --check passes. No network, vendor, security/policy, unrelated Writer changes or external publication. Native output remains reviewed scratch and is excluded from the commit. Same open AgentPlane task, not the tenth completed task; only related suites run. Goal remains active/incomplete, verification stays rework for unfinished full scope, and no task finish or goal pause/completion is claimed. User status answer explicitly distinguishes the five remaining work directions from an unsupported fixed task count or delivery-time promise.
+
+- Source-contract wording review removes an unproven nonoverlap precondition from the local file overview. Overlapping storage is explicitly unverified, with no rejection or fallback added; native comparison and runtime behavior are unchanged.

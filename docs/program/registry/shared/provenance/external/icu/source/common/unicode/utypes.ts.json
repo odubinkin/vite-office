@@ -21,7 +21,8 @@
       "Adds original U_INDEX_OUTOFBOUNDS_ERROR8 for the actual resource iterator exhaustion contract, independently observed in the native iterator comparison. Other unconsumed status constants remain outside this partial declaration.",
       "Adds original U_STRING_NOT_TERMINATED_WARNING(-124) and U_BUFFER_OVERFLOW_ERROR15 for actual termination/checked-buffer contracts; no invented locale error codes are introduced. Native primitive/keyword facade comparisons verify exact statuses and warning clearing.",
       "Adds original U_MEMORY_ALLOCATION_ERROR7, U_INVARIANT_CONVERSION_ERROR26 and U_NO_WRITE_PERMISSION30 for source constructor/pool guards.",
-      "Adds original U_USING_DEFAULT_WARNING=-127 and U_FILE_ACCESS_ERROR=4 for source resource loading/fallback."
+      "Adds original U_USING_DEFAULT_WARNING=-127 and U_FILE_ACCESS_ERROR=4 for source resource loading/fallback.",
+      "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified."
     ],
     "omittedResponsibilities": [
       "Full ICU calendar/service graph and unconsumed APIs remain unported."
@@ -31,6 +32,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/unicode/utypes.ts",
           "marker": "UErrorCode"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ustrtrns.native.test.ts",
+          "marker": "retains original ICU"
         }
       ],
       "upstream": [

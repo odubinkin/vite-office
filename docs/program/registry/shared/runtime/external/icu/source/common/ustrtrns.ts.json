@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/ustrtrns.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/ustrtrns.ts",
+        "apps/office/src/external/icu/source/common/ustrtrns.native.test.ts",
+        "apps/office/src/external/icu/source/common/ustrtrns.native-observations.json",
+        "vendor/icu-reference/source/common/ustrtrns.cpp"
+      ],
+      "justification": "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "u_strFromUTF8WithSub",
+        "u_strFromUTF8"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/icu-reference/source/common/ustrtrns.cpp",
+      "upstreamSymbols": [
+        "u_strFromUTF8WithSub",
+        "u_strFromUTF8"
+      ]
+    }
+  }
+}

@@ -4145,3 +4145,29 @@ word/title/UNO installation, debug dumps, native allocator/RTTI/thread ABI and
 the remaining NatNum12 wiring are still pending. These cache results do not
 establish complete native CSV support. Source quirks CALC-461 through CALC-465
 are retained and documented separately.
+
+
+### Original ICU UTF8 conversion for binary rule ownership
+
+The binary rule wrapper constructs its rule string with
+`UnicodeString::fromUTF8(StringPiece(...))`. Its required original scanner and
+conversion APIs are now present: `utf8_nextCharSafeBody`,
+`u_strFromUTF8WithSub`, `u_strFromUTF8` and `u_terminateUChars`, together with the
+original lead/trail bit vectors and validity macros. The port retains the
+counted fast loop, NUL loop, partial supplementary write, preflight, source
+substitution/error policy and output/status publication order. It supplies no
+host decoder or alternative malformed-input policy.
+
+The original ICU78.3 native witness compares 402855 complete calls: 393216 live
+pair-matrix calls plus 9639 retained scanner/converter/termination calls. Replay
+compares every initialized destination cell, return pointer identity/nullness,
+output lengths, substitution counts, status and scanner cursor. Inputs cover
+counted and NUL spans, strict/lenient/obsolete scanner modes, noncharacters,
+surrogates, invalid/truncated sequences, supplementary substitutions, incoming
+warnings/errors, optional outputs, argument guards and source termination.
+
+The original writable UnicodeString buffer protocol and allocation, complete
+RBBIDataWrapper/iterator construction, concrete engines and word/title/UNO
+installation are still pending. This prerequisite does not substitute for a
+binary-rule owner or complete native CSV support. Native allocator/ABI and
+unreadable spans, overlapping storage are outside the witness.

@@ -11,7 +11,8 @@
     "assertions": [
       "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported.",
       "Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. Public iterator/cache/dictionary/word/title/service construction and native allocator/ABI remain incomplete; a raw safe point is not exposed as a public word boundary.",
-      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified."
+      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
+      "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -38,6 +39,22 @@
         {
           "path": "vendor/icu-reference/source/common/uvectr32.cpp",
           "marker": "UVector32::removeElementAt"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/utf_impl.cpp",
+          "marker": "utf8_nextCharSafeBody"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ustrtrns.cpp",
+          "marker": "u_strFromUTF8WithSub"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/utf8.h",
+          "marker": "U8_LEAD3_T1_BITS"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/unicode/ustring.h",
+          "marker": "u_strFromUTF8WithSub"
         }
       ],
       "tests": [
@@ -99,6 +116,22 @@
         {
           "path": "apps/office/src/external/icu/source/common/unicode/uloc.ts",
           "marker": "ULocDataLocaleType"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/utf_impl.ts",
+          "marker": "utf8_nextCharSafeBody"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ustrtrns.ts",
+          "marker": "u_strFromUTF8WithSub"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/utf8.ts",
+          "marker": "U8_LEAD3_T1_BITS"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/ustring.ts",
+          "marker": "u_strFromUTF8"
         }
       ],
       "tests": [
@@ -113,6 +146,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/rbbi_cache.test.ts",
           "marker": "retains every native vector"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ustrtrns.native.test.ts",
+          "marker": "retains original ICU"
         }
       ],
       "docs": [
@@ -127,7 +164,8 @@
     "scopeLimitations": [
       "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported.",
       "Private safe reverse and additional UText operations are source-aligned, but full iterator/data/provider construction, public caches/dictionaries/word/title and UNO installation remain pending.",
-      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified."
+      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
+      "UTF8 scanner/converter prerequisite is source-aligned and natively compared; original writable UnicodeString buffer ownership and actual RBBIDataWrapper/iterator/service construction remain pending."
     ]
   }
 }
