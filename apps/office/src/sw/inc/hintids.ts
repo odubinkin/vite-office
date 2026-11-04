@@ -140,6 +140,11 @@ export const RES_FILL_ORDER = 92 as const;
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
 export const RES_FRM_SIZE = 93 as const;
 
+/** Original frame wrap item, RES_FRMATR_BEGIN +19. */
+export const RES_SURROUND = 111 as const;
+/** Original owning anchor item, RES_FRMATR_BEGIN +22. */
+export const RES_ANCHOR = 114 as const;
+
 /** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
 export const RES_VERT_ORIENT = 112 as const;
 

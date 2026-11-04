@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 410
+revision: 414
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T12:33:05.858Z"
+  updated_at: "2026-11-04T13:27:00.775Z"
   updated_by: "CODER"
-  note: "HTML63 verified checkpoint: 280 unique cases/16 files, whole-app types and source/static gates pass. Actual SwPaM.Move, consumed directional Chars and paragraph strategies replace the forward helper; Markdown uses native owner dispatch. Native pamtyp/paminit paths and transient node-index reassignment/scope release restored. Broader collection/Cells/hidden services, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified."
-  attempts: 74
+  note: "HTML64 verified checkpoint: 252 unique cases/19 files, whole-app types, Writer/Shared registries and all source/static/WhichId gates pass. Native anchor/wrap state/default/pool ownership and raw position copy/assignment implemented; format attribute-set member destruction and original optional replacement/assignment ordering preserved. WRITER345 documented. Full UNO conversions/special-frame factory/layout, HTML first-cell/recursive production, RTF direction and final format/UI audit remain unverified."
+  attempts: 75
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1189,8 +1192,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T13:27:00.775Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML64 verified checkpoint: 252 unique cases/19 files, whole-app types, Writer/Shared registries and all source/static/WhichId gates pass. Native anchor/wrap state/default/pool ownership and raw position copy/assignment implemented; format attribute-set member destruction and original optional replacement/assignment ordering preserved. WRITER345 documented. Full UNO conversions/special-frame factory/layout, HTML first-cell/recursive production, RTF direction and final format/UI audit remain unverified."
+  -
+    type: "status"
+    at: "2026-11-04T13:27:11.119Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T12:33:21.225Z"
+doc_updated_at: "2026-11-04T13:27:11.119Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3155,6 +3171,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T13:27:00.775Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML64 verified checkpoint: 252 unique cases/19 files, whole-app types, Writer/Shared registries and all source/static/WhichId gates pass. Native anchor/wrap state/default/pool ownership and raw position copy/assignment implemented; format attribute-set member destruction and original optional replacement/assignment ordering preserved. WRITER345 documented. Full UNO conversions/special-frame factory/layout, HTML first-cell/recursive production, RTF direction and final format/UI audit remain unverified.
+    Attempts: 75
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:26:14.569Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3355,6 +3401,15 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html63-types-source-final.log). Scope: complete application final source/test contracts, native nullable getter and source-separated movement bindings. Initial type/import errors remain in html63-types-initial.log and are superseded by final source compilation; no unknown/dummy owner cast is used to hide a missing object.
     - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html63-eslint-final.log, html63-prettier.log). Initial no-this-alias lint findings were resolved with the original native getter; no rule suppression or mock result provider.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html63-boundaries.log, html63-jsdoc.log, html63-filesize.log, html63-source-tree.log, html63-provenance.log, html63-registry.log). Evidence:1940runtime provenance modules/1727mapped;1939boundary sources/10776imports/229allowed edges;4360JSDoc files;0Writer registry semantic violations. New pamtyp/paminit responsibilities have paired canonical source/runtime records with exact source-native basenames. Broad collection/skip-mode/module/default/ABI/lifetime statuses remain unverified. Same approved AgentPlane task; focused verification follows the user's full-run cadence.
+
+    S3HW1E HTML64 checkpoint —252 unique passing cases/19actual files in final relevant runs; no final selected failure or skip. Evidence: output/playwright/rtf-properties-native/html64-*.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/bastyp/native-defaults.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/crsr/native-directional-content-move.test.ts src/sw/source/core/crsr/pam-selection.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/undo/native-format-parent-history.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts ->62pass/9files (html64-core-source-final.log). Scope:17fresh actual anchor/wrap/type/default/position/optional-copy/order/pool/lifetime cases, original default metadata, native format/parent/history, selections and real cell/table formats. Earlier source-state snapshots also pass40cases/3files and60cases/9files; only final source cases count toward the unique total.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts ->25pass/3files (html64-getters-final.log). Scope: final source-native generic SwAttrSet/SwFormat getter placement, actual frame inheritance and owned member destruction. This supersedes the same cases above; no duplicate count.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/xml/xmltbli-default-cell.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/native-insert-table-command.test.tsx ->190pass/10files (html64-filter-ui.log). Scope: real current native format readers/writers, HTML insertion, document I/O, XML/RTF table consumers and mounted format/table UI. Does not certify the unfinished production HTML-table/fly path.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html64-types-getters-final.log). Scope: whole application final source/test contracts including actual position copy/value-assignment overloads, native item types/defaults and inherited typed getters; prior source compiler snapshots also pass.
+    - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files ->pass (html64-eslint-source-final.log, html64-prettier-source-final.log). Initial prefer-literal-enum-member/unused-import findings remain in html64-eslint-initial.log and were fixed without suppression.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope shared; git diff --check ->pass (html64-boundaries-final.log, html64-jsdoc-source-final.log, html64-filesize-final.log, html64-source-tree.log, html64-hintids.log, html64-provenance-source-final.log, html64-registry-source-final.log, html64-shared-registry-source-final.log). Evidence:1944runtime provenance modules/1731mapped;1943boundary sources/10794imports/229edges;4365JSDoc files;84native WhichIds;0Writer/Shared registry semantic violations. Initial enum-symbol/header-doc gate failures are retained and corrected, not bypassed. Paired new native-header/IDL runtime/provenance records and appended existing histories retain unverified broader statuses. No full-suite replay: same approved AgentPlane task and focused verification under the user's cadence.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4675,6 +4730,12 @@ sections:
     Sixteen fresh actual-model cases cover backward combining/surrogate/NULL movement, unchanged marks/label affinity, real table/adjacent-cell boundaries, transient index lifetime, paragraph direction/edge combinations, empty paragraphs and structural points. The initial fresh transient-index case exposed an older GoAdjacentPos omission: it called the nonmutating nodes.navigation query without the original SwNodes wrapper's temporary-index reassignment. That reassignment is now restored before range checking, and the actual temporary index is disposed on both success and failure. This is a port correction, not an upstream suspected issue. Initial compiler failures from a removed still-used type import and polymorphic-this assertion are fixed by restoring the type binding and using the actual native nullable text-node getter; lint rejects no-this-alias and no rules are suppressed. Initial97case snapshot had96pass/1fresh scope-registration failure; the final source has98pass with the additional structural case.
 
     This remains the explicit consumed fnNd/fnPos, Chars nonhidden/noncell profile. Six other collection slots and the complete Cells/grapheme/hidden/search/document/section/locale/ICU movement family are not represented, fabricated or claimed complete. Full HTML first-cell context/fly owners, recursive production/materialization/layout, RTF direction and final capability/UI audit remain required. Broad module/API/ABI/default/lifetime statuses remain unverified. Save/open/autosave/recovery exceptions are unchanged.
+
+    S3HW1E HTML64 — Native owning anchor/wrap state prerequisites for HTML first-table context. Real SwFormatAnchor and SwFormatSurround now preserve source WhichIds114/111, PAGE/zero/null/nonshareable and PARALLEL/three-false defaults, native anchor IDs and independent wrap bits. Static defaults use actual ItemInfoPackageSwAttributes instances and document-pool registration; typed getters live on original SwAttrSet/SwFormat owners and are inherited by frame formats. No fake empty fly-query, anchor pointer, frame producer or serialized position value is introduced. Full special-frame registry/factory/sections/fly layout remain absent/unverified; these items do not constitute completed first-cell context or production HTML-table import.
+
+    Anchors own actual copied SwPositions, obtain a new uint32 order on construction/copy or changed assignment and exclude order from equality. Paragraph/fly anchors keep nNode while unregistering nContent. Original raw type/page setters do not normalize the position. Native SwPosition copy construction, clone and value assignment now preserve raw node/content bindings and affinity; an engaged optional position is assigned in place instead of destroyed/replaced. SetAnchor preserves source optional emplace destroy-before-copy order for distinct valid input. WRITER345 records its potential self-alias lifetime hazard without claiming a compiled defect, reachable caller or defined native undefined-behavior result. SwFormat now releases its actual attribute-set member after dependent reparenting and before base modify teardown, so frame-owned nonshareable anchor positions are actually destroyed. Seventeen fresh real-object cases validate type/default/pool/copy/order/lease/destruction/inheritance/replacement contracts; no result providers or dummy model objects substitute for source owners.
+
+    All focused tests pass. Initial lint alias/import findings were fixed with pinned literal enum values plus cross-enum assertions and unused-import cleanup; no rule was disabled. Initial JSDoc failures from imports preceding fileoverview and the new generated enum's basename-only provenance failure were corrected in authored files/canonical symbols without weakening gates. Bounded edit-script source-location misses were corrected before final source verification. UNO frame/property conversions, runtime enum type registration, localized presentation, complete anchor-position snapshot restoration, special-frame registry/factory/layout, full document destructor orchestration and whole-module/ABI parity remain unported/unverified. Production recursive HTML orchestration/materialization/layout, RTF direction and final format/UI audit remain open. Intentional save/open/autosave/recovery deviations are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -6650,6 +6711,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T13:27:00.775Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML64 verified checkpoint: 252 unique cases/19 files, whole-app types, Writer/Shared registries and all source/static/WhichId gates pass. Native anchor/wrap state/default/pool ownership and raw position copy/assignment implemented; format attribute-set member destruction and original optional replacement/assignment ordering preserved. WRITER345 documented. Full UNO conversions/special-frame factory/layout, HTML first-cell/recursive production, RTF direction and final format/UI audit remain unverified.
+Attempts: 75
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:26:14.569Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6850,6 +6941,15 @@ S3HW1E HTML63 checkpoint —280 unique passing cases/16actual files; no final re
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html63-types-source-final.log). Scope: complete application final source/test contracts, native nullable getter and source-separated movement bindings. Initial type/import errors remain in html63-types-initial.log and are superseded by final source compilation; no unknown/dummy owner cast is used to hide a missing object.
 - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html63-eslint-final.log, html63-prettier.log). Initial no-this-alias lint findings were resolved with the original native getter; no rule suppression or mock result provider.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html63-boundaries.log, html63-jsdoc.log, html63-filesize.log, html63-source-tree.log, html63-provenance.log, html63-registry.log). Evidence:1940runtime provenance modules/1727mapped;1939boundary sources/10776imports/229allowed edges;4360JSDoc files;0Writer registry semantic violations. New pamtyp/paminit responsibilities have paired canonical source/runtime records with exact source-native basenames. Broad collection/skip-mode/module/default/ABI/lifetime statuses remain unverified. Same approved AgentPlane task; focused verification follows the user's full-run cadence.
+
+S3HW1E HTML64 checkpoint —252 unique passing cases/19actual files in final relevant runs; no final selected failure or skip. Evidence: output/playwright/rtf-properties-native/html64-*.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/bastyp/native-defaults.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/crsr/native-directional-content-move.test.ts src/sw/source/core/crsr/pam-selection.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/undo/native-format-parent-history.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts ->62pass/9files (html64-core-source-final.log). Scope:17fresh actual anchor/wrap/type/default/position/optional-copy/order/pool/lifetime cases, original default metadata, native format/parent/history, selections and real cell/table formats. Earlier source-state snapshots also pass40cases/3files and60cases/9files; only final source cases count toward the unique total.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts ->25pass/3files (html64-getters-final.log). Scope: final source-native generic SwAttrSet/SwFormat getter placement, actual frame inheritance and owned member destruction. This supersedes the same cases above; no duplicate count.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/xml/xmltbli-default-cell.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/native-insert-table-command.test.tsx ->190pass/10files (html64-filter-ui.log). Scope: real current native format readers/writers, HTML insertion, document I/O, XML/RTF table consumers and mounted format/table UI. Does not certify the unfinished production HTML-table/fly path.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html64-types-getters-final.log). Scope: whole application final source/test contracts including actual position copy/value-assignment overloads, native item types/defaults and inherited typed getters; prior source compiler snapshots also pass.
+- Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files ->pass (html64-eslint-source-final.log, html64-prettier-source-final.log). Initial prefer-literal-enum-member/unused-import findings remain in html64-eslint-initial.log and were fixed without suppression.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope shared; git diff --check ->pass (html64-boundaries-final.log, html64-jsdoc-source-final.log, html64-filesize-final.log, html64-source-tree.log, html64-hintids.log, html64-provenance-source-final.log, html64-registry-source-final.log, html64-shared-registry-source-final.log). Evidence:1944runtime provenance modules/1731mapped;1943boundary sources/10794imports/229edges;4365JSDoc files;84native WhichIds;0Writer/Shared registry semantic violations. Initial enum-symbol/header-doc gate failures are retained and corrected, not bypassed. Paired new native-header/IDL runtime/provenance records and appended existing histories retain unverified broader statuses. No full-suite replay: same approved AgentPlane task and focused verification under the user's cadence.
 
 ## Rollback Plan
 
@@ -8174,3 +8274,9 @@ S3HW1E HTML63 — Native directional content and paragraph movement for the HTML
 Sixteen fresh actual-model cases cover backward combining/surrogate/NULL movement, unchanged marks/label affinity, real table/adjacent-cell boundaries, transient index lifetime, paragraph direction/edge combinations, empty paragraphs and structural points. The initial fresh transient-index case exposed an older GoAdjacentPos omission: it called the nonmutating nodes.navigation query without the original SwNodes wrapper's temporary-index reassignment. That reassignment is now restored before range checking, and the actual temporary index is disposed on both success and failure. This is a port correction, not an upstream suspected issue. Initial compiler failures from a removed still-used type import and polymorphic-this assertion are fixed by restoring the type binding and using the actual native nullable text-node getter; lint rejects no-this-alias and no rules are suppressed. Initial97case snapshot had96pass/1fresh scope-registration failure; the final source has98pass with the additional structural case.
 
 This remains the explicit consumed fnNd/fnPos, Chars nonhidden/noncell profile. Six other collection slots and the complete Cells/grapheme/hidden/search/document/section/locale/ICU movement family are not represented, fabricated or claimed complete. Full HTML first-cell context/fly owners, recursive production/materialization/layout, RTF direction and final capability/UI audit remain required. Broad module/API/ABI/default/lifetime statuses remain unverified. Save/open/autosave/recovery exceptions are unchanged.
+
+S3HW1E HTML64 — Native owning anchor/wrap state prerequisites for HTML first-table context. Real SwFormatAnchor and SwFormatSurround now preserve source WhichIds114/111, PAGE/zero/null/nonshareable and PARALLEL/three-false defaults, native anchor IDs and independent wrap bits. Static defaults use actual ItemInfoPackageSwAttributes instances and document-pool registration; typed getters live on original SwAttrSet/SwFormat owners and are inherited by frame formats. No fake empty fly-query, anchor pointer, frame producer or serialized position value is introduced. Full special-frame registry/factory/sections/fly layout remain absent/unverified; these items do not constitute completed first-cell context or production HTML-table import.
+
+Anchors own actual copied SwPositions, obtain a new uint32 order on construction/copy or changed assignment and exclude order from equality. Paragraph/fly anchors keep nNode while unregistering nContent. Original raw type/page setters do not normalize the position. Native SwPosition copy construction, clone and value assignment now preserve raw node/content bindings and affinity; an engaged optional position is assigned in place instead of destroyed/replaced. SetAnchor preserves source optional emplace destroy-before-copy order for distinct valid input. WRITER345 records its potential self-alias lifetime hazard without claiming a compiled defect, reachable caller or defined native undefined-behavior result. SwFormat now releases its actual attribute-set member after dependent reparenting and before base modify teardown, so frame-owned nonshareable anchor positions are actually destroyed. Seventeen fresh real-object cases validate type/default/pool/copy/order/lease/destruction/inheritance/replacement contracts; no result providers or dummy model objects substitute for source owners.
+
+All focused tests pass. Initial lint alias/import findings were fixed with pinned literal enum values plus cross-enum assertions and unused-import cleanup; no rule was disabled. Initial JSDoc failures from imports preceding fileoverview and the new generated enum's basename-only provenance failure were corrected in authored files/canonical symbols without weakening gates. Bounded edit-script source-location misses were corrected before final source verification. UNO frame/property conversions, runtime enum type registration, localized presentation, complete anchor-position snapshot restoration, special-frame registry/factory/layout, full document destructor orchestration and whole-module/ABI parity remain unported/unverified. Production recursive HTML orchestration/materialization/layout, RTF direction and final format/UI audit remain open. Intentional save/open/autosave/recovery deviations are unchanged.

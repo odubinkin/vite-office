@@ -75,36 +75,54 @@ export class SwPosition {
   public readonly nNode: SwNodeIndex;
   public readonly nContent: SwContentIndex;
 
+  /** Original copy constructor retains raw node/content bindings, owner category and affinity. @param source - Actual source position. @returns Position. */
+  public constructor(source: SwPosition);
+  /** Existing original node-based position binding. @param node - Actual node. @param nContent - UTF16 offset. @param ownerKind - Host owner category. @param affinity - Host boundary affinity. @returns Position. */
+  public constructor(
+    node: SwNode,
+    nContent?: number,
+    ownerKind?: SwContentIndexOwnerKind,
+    affinity?: SwContentIndexAffinity,
+  );
   /**
    * Creates a native position on a content or structural node.
-   * @param node - Positioned native node.
+   * @param nodeOrSource - Positioned native node or original position copied by value.
    * @param nContent - UTF-16 offset inside node.
    * @param ownerKind - Registered owner category.
    * @param affinity - Boundary affinity.
    * @returns Nothing; initializes this position.
    */
   public constructor(
-    node: SwNode,
+    nodeOrSource: SwNode | SwPosition,
     nContent = 0,
-    ownerKind: SwContentIndexOwnerKind = "cursor",
-    affinity: SwContentIndexAffinity = "after",
+    ownerKind?: SwContentIndexOwnerKind,
+    affinity?: SwContentIndexAffinity,
   ) {
+    const source = nodeOrSource instanceof SwPosition ? nodeOrSource : undefined,
+      node = source ? source.GetNode() : (nodeOrSource as SwNode);
+    if (source) nContent = source.GetContentIndex();
     if (
       !Number.isInteger(nContent) ||
       nContent < 0 ||
-      nContent > (node instanceof SwContentNode ? node.Len() : 0)
+      nContent >
+        (source
+          ? (source.nContent.GetContentNode()?.Len() ?? 0)
+          : node instanceof SwContentNode
+            ? node.Len()
+            : 0)
     )
       throw new Error("SwPosition content offset is outside its node.");
     this.nNode = new SwNodeIndex(node);
     this.nContent = new SwContentIndex(
-      node instanceof SwContentNode ? node : undefined,
+      source ? source.nContent.GetContentNode() : node instanceof SwContentNode ? node : undefined,
       nContent,
-      ownerKind,
-      affinity,
+      ownerKind ?? source?.nContent.GetOwnerKind() ?? "cursor",
+      affinity ?? source?.nContent.GetAffinity() ?? "after",
       /** Keeps the paired SwNodeIndex synchronized when structural operations transfer this content index. @param nextNode - New content node. @returns Nothing. */ (
         nextNode,
       ) => this.nNode.Assign(nextNode),
     );
+    if (source) this.nNode.Assign(source.nNode);
   }
 
   /** Returns the current node array offset. @returns Current node offset. */
@@ -141,10 +159,25 @@ export class SwPosition {
     );
   }
 
-  /** Reassigns both node and registered content index. @param node - Destination native node. @param offset - Destination offset. @returns Nothing. */
-  public Assign(node: SwNode, offset = 0): void {
-    this.nContent.Assign(node instanceof SwContentNode ? node : undefined, offset);
-    this.nNode.Assign(node);
+  /** Original value-copy assignment preserves raw node/content binding, including unregistered paragraph anchors. @param source - Actual source position. @returns This original position. */
+  public Assign(source: SwPosition): this;
+  /** Original node-based assignment binds the content index to that actual content node. @param node - Actual node. @param offset - Original content offset. @returns Nothing. */
+  public Assign(node: SwNode, offset?: number): void;
+  /** Dispatches original copy/node forms without changing the target's logical owner role. @param nodeOrSource - Actual node or position value. @param offset - Node-form offset. @returns This for copy assignment, nothing for node assignment. */
+  public Assign(nodeOrSource: SwNode | SwPosition, offset = 0): this | void {
+    if (nodeOrSource instanceof SwPosition) {
+      const node = nodeOrSource.GetNode(),
+        owner = nodeOrSource.nContent.GetContentNode(),
+        content = nodeOrSource.GetContentIndex(),
+        affinity = nodeOrSource.nContent.GetAffinity();
+      this.nNode.Assign(node);
+      this.nContent.Assign(owner, content);
+      this.nNode.Assign(node);
+      this.nContent.SetAffinity(affinity);
+      return this;
+    }
+    this.nContent.Assign(nodeOrSource instanceof SwContentNode ? nodeOrSource : undefined, offset);
+    this.nNode.Assign(nodeOrSource);
   }
 
   /** Changes the bounded position owner category. @param ownerKind - New owner kind. @returns Nothing. */
@@ -160,12 +193,9 @@ export class SwPosition {
 
   /** Creates an independent registered position on the same node. @param ownerKind - Optional owner override. @returns Cloned position. */
   public clone(ownerKind = this.nContent.GetOwnerKind()): SwPosition {
-    return new SwPosition(
-      this.GetNode(),
-      this.GetContentIndex(),
-      ownerKind,
-      this.nContent.GetAffinity(),
-    );
+    const copy = new SwPosition(this);
+    copy.SetOwnerKind(ownerKind);
+    return copy;
   }
 }
 

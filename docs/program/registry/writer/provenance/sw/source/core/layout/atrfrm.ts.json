@@ -36,12 +36,28 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtanchr-surround.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
           "marker": "SwFrameFormat::SetFormatName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatAnchor::SwFormatAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatSurround::SwFormatSurround"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/format.cxx",
+          "marker": "SwFormat::~SwFormat"
         }
       ]
     },
@@ -62,7 +78,8 @@
       "Task V4DQJW page-frame prerequisite replaces the geometry-only SwPageDesc state with four document-pool-owned SwFrameFormat owners, native usage flags, registered-name uniqueness and copy/follow behavior. SwTextGridItem retains native eleven-field defaults, typed UNO members and paper-mode arithmetic; page UNO properties use actual pooled items. Browser graph records retain all four direct item sets, independent frame names and optional native user grid defaults; legacy geometry ingress remains explicit. Consumed ItemInfoStatic/User metadata now serves registered pool defaults without inventing contiguous ranges. Complete frame-size codec is shared with tables; LR browser transport copies original raw scalar fields including propLeft/propRight through explicit host field access, avoiding proportional setter rescaling. This host serialization binding is local infrastructure, not native semantic certification. SectionPropertyMap/default-page-mode/document/style loading, DOCX export/Open/download and ODT grid serialization remain pending. Existing statuses and intentional recovery/autosave/file UI deviations are preserved.",
       "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved.",
       "Added the native fill range to the represented generic frame-format default ranges; explicit bounded table ranges are unchanged.",
-      "The portable admitted Which ranges include only registered fill style/color/transparency/slide-background values; unported gradient/bitmap/hatch items are not admitted or fabricated as defaults. Native global fill endpoint constants remain unchanged."
+      "The portable admitted Which ranges include only registered fill style/color/transparency/slide-background values; unported gradient/bitmap/hatch items are not admitted or fabricated as defaults. Native global fill endpoint constants remain unchanged.",
+      "S3HW1E HTML64: native anchor/wrap prerequisites for the HTML first-table context now use real SwFormatAnchor/SwFormatSurround items, original RndStdIds/TextContentAnchorType identities, RES_ANCHOR114 and RES_SURROUND111, actual module-global static defaults, document-pool registration and typed inherited frame getters. Anchor owns an optional real copied SwPosition, is nonshareable, allocates a new uint32 order on construction/copy or changed assignment, excludes order from equality, detaches content binding for paragraph/fly anchors and preserves original raw type/page setter behavior. SwPosition now has the original copy form and clone preserves raw node/content bindings, owner category and affinity instead of reattaching a node-only anchor to text. Surround retains PARALLEL/three-false defaults and independent flags through real copy/equality/pooling. SwFormat releases its owned attribute-set member after dependent reparenting and before base modify teardown; this is needed for real owning anchor-position destruction. This is native state/default/position ownership, not completed UNO frame/property conversion, localized presentation, serialized anchor-position restoration, special-frame registry/factory/sections or fly layout. Those absent services are not simulated or certified. HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Save/open/autosave/recovery deviations are unchanged. HTML64 follow-up preserves the actual engaged optional-position identity on anchor copy assignment, using native raw SwPosition value assignment, and preserves SetAnchor destroy-before-copy replacement order. WRITER345 records the potential source self-alias hazard without asserting a defined compiled result or native reachability."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/layout/atrfrm.cxx",

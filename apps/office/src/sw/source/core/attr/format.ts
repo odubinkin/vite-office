@@ -2,6 +2,8 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SwFormatAnchor } from "../../../inc/fmtanchr";
+import type { SwFormatSurround } from "../../../inc/fmtsrnd";
 import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
@@ -72,6 +74,14 @@ export class SwFormat extends BroadcastingModify {
     if (broadcast) this.NotifyFormatInheritance();
   }
 
+  /** Original inline generic format anchor getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
+  public GetAnchor(searchInParent = true): SwFormatAnchor {
+    return this.attributeSet.GetAnchor(searchInParent);
+  }
+  /** Original inline generic format wrap getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
+  public GetSurround(searchInParent = true): SwFormatSurround {
+    return this.attributeSet.GetSurround(searchInParent);
+  }
   /** Returns the owned attribute set. @returns Format attributes. */
   public GetAttrSet(): SwAttrSet {
     return this.attributeSet;
@@ -251,6 +261,7 @@ export class SwFormat extends BroadcastingModify {
   /** Runs native format destruction before inherited notifier and modify teardown. @returns Nothing. */
   public override DisposeModify(): void {
     this.Destr();
+    this.attributeSet.Dispose();
     super.DisposeModify();
   }
 

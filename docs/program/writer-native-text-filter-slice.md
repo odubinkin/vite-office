@@ -1626,3 +1626,14 @@ Only the consumed fnNd/fnPos nonhidden/noncell profile is implemented; the other
 collection slots and full Cells/hidden/locale services are not fabricated or
 certified. This prepares actual HTML table first-cell cursor movement; it does
 not certify production HTML-table import/materialization or full format parity.
+
+HTML64 adds real native anchor/wrap item state and position ownership needed by
+HTML first-table context and floating-frame admission. Static PAGE/zero/null
+nonshareable anchor and PARALLEL/three-false wrap defaults are registered in the
+actual Writer pool. Node-only anchor positions retain their null content binding
+through native position copies; format-owned attribute sets release owning
+positions through the original destructor order. No empty fly-query provider,
+synthetic frame/section or serialized position substitute is introduced. UNO
+frame/property conversion, presentation, special-frame registry/factory/layout
+and production HTML-table orchestration remain unported/unverified; these state
+owners alone do not establish format completion.

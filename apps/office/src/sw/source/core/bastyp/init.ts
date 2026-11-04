@@ -1,4 +1,7 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
+import { SwFormatSurround } from "../../../inc/fmtsrnd";
+
 import { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
@@ -145,6 +148,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatRowSplit());
     add(new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR));
     add(new SwFormatFillOrder());
+    add(new SwFormatAnchor());
+    add(new SwFormatSurround());
     add(new SvxBoxItem(RES_BOX));
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));

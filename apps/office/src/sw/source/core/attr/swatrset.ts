@@ -1,6 +1,10 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import type { SwFormatAnchor } from "../../../inc/fmtanchr";
+import type { SwFormatSurround } from "../../../inc/fmtsrnd";
+import { RES_ANCHOR, RES_SURROUND } from "../../../inc/hintids";
+
 import { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { RES_FILL_ORDER } from "../../../inc/hintids";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
@@ -135,6 +139,8 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    register(RES_ANCHOR);
+    register(RES_SURROUND);
     register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
     register(WriterWhich.RES_TXTATR_AUTOFMT);
     register(
@@ -700,6 +706,14 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original typed anchor getter from fmtanchr.hxx. @param searchInParent - Native inherited lookup. @returns Actual anchor item. */
+  public GetAnchor(searchInParent = true): SwFormatAnchor {
+    return this.Get(RES_ANCHOR, searchInParent) as SwFormatAnchor;
+  }
+  /** Original typed wrap getter from fmtsrnd.hxx. @param searchInParent - Native inherited lookup. @returns Actual wrap item. */
+  public GetSurround(searchInParent = true): SwFormatSurround {
+    return this.Get(RES_SURROUND, searchInParent) as SwFormatSurround;
+  }
   /** Original inline fmtfordr.hxx effective item query. @param searchInParent - Native inheritance flag. @returns Borrowed fill-order item. */
   public GetFillOrder(searchInParent = true): SwFormatFillOrder {
     return this.Get(RES_FILL_ORDER, searchInParent) as SwFormatFillOrder;
