@@ -3,6 +3,7 @@
  */
 
 import {
+  RES_TXTFMTCOLL,
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
   WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
@@ -33,14 +34,15 @@ export type WriterParagraphStyle = string;
 
 /** Named Writer format collection; unlike SwFormat it is not automatic. */
 export class SwFormatColl extends SwFormat {
-  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @param ranges - Original admitted style ranges. @returns Nothing. */
+  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @param ranges - Original admitted style ranges. @param formatWhich - Native collection identity. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,
     name: string,
     parent?: SwFormatColl,
     ranges: WhichRangesContainer = WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
+    formatWhich = RES_TXTFMTCOLL,
   ) {
-    super(pool, name, ranges, parent);
+    super(pool, name, ranges, parent, formatWhich);
     this.SetAuto(false);
   }
 }

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { RES_TXTFMTCOLL } from "../../../inc/hintids";
 import { createTabs } from "../../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
@@ -207,7 +208,13 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const pool = writer.GetAttrPool();
     const parent = writer.GetDfltTextFormatColl();
     parent.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
-    const format = new SwFormat(pool, "Direct", WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    const format = new SwFormat(
+      pool,
+      "Direct",
+      WRITER_TEXT_NODE_WHICH_RANGES,
+      parent,
+      RES_TXTFMTCOLL,
+    );
     format.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture paragraph is missing.");
@@ -231,7 +238,13 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const parent = writer.GetDfltTextFormatColl();
     const heading = writer.GetTextFormatColl("heading-1");
     const textBody = writer.GetTextFormatColl("text-body");
-    const format = new SwFormat(pool, "Automatic", WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    const format = new SwFormat(
+      pool,
+      "Automatic",
+      WRITER_TEXT_NODE_WHICH_RANGES,
+      parent,
+      RES_TXTFMTCOLL,
+    );
     expect(format.GetName()).toBe("Automatic");
     format.SetFormatName("Changed");
     expect(format.GetName()).toBe("Changed");

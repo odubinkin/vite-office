@@ -91,8 +91,18 @@ export class TableBoxFormatChanged implements BrowserNotificationPayload {
 export class TableHeadingChange implements BrowserNotificationPayload {
   public readonly kind = "table-heading-change";
 }
+/** Original registered-frame rename notification borrows old and new native names. */
+export class NameChanged implements BrowserNotificationPayload {
+  readonly kind = "name-changed";
+  /** Captures the original names before collection rename. @param m_sOld - Previous name. @param m_sNew - New name. @returns Hint. */
+  constructor(
+    readonly m_sOld: string,
+    readonly m_sNew: string,
+  ) {}
+}
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | NameChanged
   | UpdateAttrHint
   | LegacyModifyHint
   | ModifyChangedHint

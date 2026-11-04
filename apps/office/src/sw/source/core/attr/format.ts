@@ -32,12 +32,13 @@ export class SwFormat extends BroadcastingModify {
   private poolFormatId = SwPoolFormatId.UNKNOWN;
   private formatInDTOR = false;
 
-  /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @returns Nothing. */
+  /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @param formatWhich - Original required format identity. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,
     private formatName: string,
     ranges: WhichRangesContainer,
-    derivedFrom?: SwFormat,
+    derivedFrom: SwFormat | undefined,
+    private readonly formatWhich: number,
   ) {
     super();
     this.attributeSet = new SwAttrSet(pool, ranges);
@@ -49,6 +50,10 @@ export class SwFormat extends BroadcastingModify {
     }
   }
 
+  /** Original SwFormat identity, distinct from pool attribute identities. @returns Native format WhichId. */
+  public Which(): number {
+    return this.formatWhich;
+  }
   /** Reads the native common-format pool identity, initially UNKNOWN. @returns Identity. */
   public GetPoolFormatId(): SwPoolFormatId {
     return this.poolFormatId;

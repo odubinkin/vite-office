@@ -340,6 +340,25 @@ export const RES_UNKNOWNATR_BEGIN = 163 as const;
 /** Original RES_UNKNOWNATR_END range boundary from hintids.hxx. */
 export const RES_UNKNOWNATR_END = 164 as const;
 
+/** Original format identities follow the pool attribute boundary. */
+export const RES_FMT_BEGIN = RES_UNKNOWNATR_END;
+/** Original character format identity. */
+export const RES_CHRFMT = RES_FMT_BEGIN;
+/** Original frame format identity. */
+export const RES_FRMFMT = RES_FMT_BEGIN + 1;
+/** Original fly frame format identity. */
+export const RES_FLYFRMFMT = RES_FMT_BEGIN + 2;
+/** Original text collection identity. */
+export const RES_TXTFMTCOLL = RES_FMT_BEGIN + 3;
+/** Original graphic collection identity. */
+export const RES_GRFFMTCOLL = RES_FMT_BEGIN + 4;
+/** Original drawing frame format identity. */
+export const RES_DRAWFRMFMT = RES_FMT_BEGIN + 5;
+/** Original conditional text collection identity. */
+export const RES_CONDTXTFMTCOLL = RES_FMT_BEGIN + 6;
+/** Original exclusive format identity bound. */
+export const RES_FMT_END = RES_FMT_BEGIN + 7;
+
 /** Original frame protection identity, RES_FRMATR_BEGIN +18. */
 export const RES_PROTECT = 110 as const;
 

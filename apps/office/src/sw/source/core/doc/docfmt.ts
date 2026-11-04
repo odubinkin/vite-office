@@ -1,5 +1,6 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import { SwFlyFrameFormat, type SwFrameFormat } from "../layout/atrfrm";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { BroadcastingModify } from "../../../inc/calbck";
@@ -441,5 +442,17 @@ export function CopyCharFormat(doc: SwDoc, source: SwCharFormat): SwCharFormat {
   format.SetAuto(source.IsAuto());
   for (const item of source.GetAttrSet().entries()) format.SetFormatAttr(item);
   format.SetPoolFormatId(source.GetPoolFormatId());
+  return format;
+}
+
+/** Original source factory registers the real fly format before publishing modified state. @param doc - Actual document. @param name - Native name. @param parent - Actual inherited frame format. @returns Registered fly format. */
+export function MakeFlyFrameFormat(
+  doc: SwDoc,
+  name: string,
+  parent: SwFrameFormat | undefined,
+): SwFlyFrameFormat {
+  const format = new SwFlyFrameFormat(doc.GetAttrPool(), name, parent);
+  doc.GetSpzFrameFormats().push_back(format);
+  doc.GetDocumentStateManager().SetModified();
   return format;
 }

@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
 import { GetEditShell, CorrAbsNodes } from "./doccorr";
 import * as unoCursor from "./doc.unocursor";
@@ -17,7 +18,13 @@ import {
   IsSquaredPageMode,
   SetDefaultPageMode,
 } from "./docdesc";
-import { CopyTextColl, ChgFormat, SetDefault, ForEachParaAtrTabStopItem } from "./docfmt";
+import {
+  CopyTextColl,
+  ChgFormat,
+  SetDefault,
+  ForEachParaAtrTabStopItem,
+  MakeFlyFrameFormat,
+} from "./docfmt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SwCharFormat } from "../../../inc/charfmt";
@@ -26,7 +33,7 @@ import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
-import { SwFrameFormat } from "../layout/atrfrm";
+import { SwFrameFormat, type SwFlyFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
 import { IsUsed } from "./poolfmt";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
@@ -149,7 +156,6 @@ export class SwDoc {
   cleanupUnoCursorTable(): void {
     unoCursor.cleanupUnoCursorTable(this);
   }
-
   private mpNumberFormatter: SvNumberFormatter | null = null;
   /** Original lazy formatter initializes SYSTEM locale, Writer date evaluation and configured two-digit-year default. Browser execution has no native thread mutex or fuzzing mode. @returns Nothing. */
   private EnsureNumberFormatter(): void {
@@ -164,7 +170,6 @@ export class SwDoc {
     if (create) this.EnsureNumberFormatter();
     return this.mpNumberFormatter;
   }
-
   /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing.  @param mode - Native operation input. */
   public InsertPoolItem(
     range: SwPaM,
@@ -262,6 +267,15 @@ export class SwDoc {
   /** Sets the native reading phase around document import. @param reading - New flag. @returns Nothing. */
   public SetInReading(reading: boolean): void {
     this.mbInReading = reading;
+  }
+  private readonly mpSpzFrameFormatTable: SpzFrameFormats = new FrameFormats();
+  /** Original document-owned special frame collection. @returns Owning collection. */
+  GetSpzFrameFormats(): SpzFrameFormats {
+    return this.mpSpzFrameFormatTable;
+  }
+  /** Original factory registers the real fly format before publishing modified state. @param name - Name. @param parent - Actual parent. @returns Registered format. */
+  MakeFlyFrameFormat(name: string, parent: SwFrameFormat | undefined): SwFlyFrameFormat {
+    return MakeFlyFrameFormat(this, name, parent);
   }
   private readonly defaultFrameFormat: SwFrameFormat;
   private nextTableLineFormat = 0;
@@ -616,7 +630,6 @@ export class SwDoc {
   public ChgFormat(collection: SwTextFormatColl, set: SfxItemSet): void {
     ChgFormat(this, collection, set);
   }
-
   /** Removes a named collection and corrects follow links before original format death. Used by creation undo with recording suppressed. @param collection - Owned non-default collection. @returns Nothing. */
   public DelTextFormatColl(collection: SwTextFormatColl): void {
     if (collection === this.GetDfltTextFormatColl()) return;
@@ -626,7 +639,6 @@ export class SwDoc {
     collection.DisposeModify();
     this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: collection.GetName() });
   }
-
   /** Copies a paragraph style through the original docfmt owner. @param source - Source collection. @returns Destination collection. */
   public CopyTextColl(source: SwTextFormatColl): SwTextFormatColl {
     return CopyTextColl(this, source);
@@ -635,7 +647,6 @@ export class SwDoc {
   public GetUniqueNumRuleName(checkName?: string): string {
     return GetUniqueNumRuleName(this, checkName);
   }
-
   /** Returns the actual document-owned outline rule created during docnew initialization. @returns Borrowed outline owner. */
   public GetOutlineNumRule(): SwNumRule {
     return this.mpOutlineRule;
@@ -660,7 +671,6 @@ export class SwDoc {
   public FindNumRulePtr(name: string): SwNumRule | undefined {
     return this.listsManager.FindNumRulePtr(name);
   }
-
   /** Searches native ordered text nodes, stopping at the nearest rule even when incompatible. @param position - Search origin. @param forward - Search direction. @param numbered - Enumeration rather than itemization. @param outline - Required rule classification. @param nonEmptyAllowed - Plain nonempty paragraphs allowed, minus one for unlimited. @param listId - Caller-owned output list identity. @param investigateStart - Include the origin, false by default. @returns Matching native rule, if any. */
   public SearchNumRule(
     position: SwPosition,
@@ -710,7 +720,6 @@ export class SwDoc {
   public GetNumRuleTable(): readonly SwNumRule[] {
     return this.listsManager.GetNumRuleTable();
   }
-
   /** Applies native numbering rule and list identities over an inclusive node range. @param range - Actual native range. @param rule - Source rule value. @param mode - Native operation flags. @param continuedListId - Optional existing list identity. @returns Explicit list identity applied, otherwise empty. */
   public SetNumRule(
     range: SwPaM,
@@ -720,7 +729,6 @@ export class SwDoc {
   ): string {
     return SetNumRule(this, range, rule, mode, continuedListId);
   }
-
   /** Changes native restart only on a numbered text node with a different flag. @param position - Actual node position. @param flag - Requested restart state. @returns Whether a flag changed. */
   public SetNumRuleStart(position: SwPosition, flag: boolean): boolean {
     const node = position.GetNode();
@@ -756,7 +764,6 @@ export class SwDoc {
       },
     );
   }
-
   /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
   public CanNumUpDown(range: SwPaM, down: boolean): boolean {
     const nodes = this.GetNumberedNodes(range);
@@ -769,7 +776,6 @@ export class SwDoc {
       )
     );
   }
-
   /** Changes only list levels in the actual selected node range, including cells. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
   public NumUpDown(range: SwPaM, down: boolean): boolean {
     if (!this.CanNumUpDown(range, down)) return false;
@@ -783,12 +789,10 @@ export class SwDoc {
       },
     );
   }
-
   /** Moves outline levels through the source-owned docnum method body. @param range - Actual native selection. @param offset - Signed short displacement. @returns Native whole-range applicability. */
   public OutlineUpDown(range: SwPaM, offset: number): boolean {
     return moveOutlineLevels(this, range, offset);
   }
-
   /** Applies native numbering visibility or removes an already uncounted direct list. @param node - Actual document node. @param del - Hide numbering when true. @returns Whether numbering changed. */
   public NumOrNoNum(node: SwNode, del = false): boolean {
     if (node.GetNodes() !== this.nodes)
@@ -820,7 +824,6 @@ export class SwDoc {
     }
     return false;
   }
-
   /** Removes numbering over native inclusive node coordinates. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */
   public DelNumRules(range: SwPaM): boolean {
     const nodes = this.GetNumberedNodes(range);
@@ -846,7 +849,6 @@ export class SwDoc {
       },
     );
   }
-
   /** Selects native text owners with rules across inclusive SwNodes coordinates. @param range - Native selection. @returns Selected numbered nodes. */
   private GetNumberedNodes(range: SwPaM): readonly SwTextNode[] {
     // SwPaM validates both endpoints belong to the same node array.
@@ -897,12 +899,10 @@ export class SwDoc {
   public static GetBoxAlign(cursor: SwCursor): number {
     return GetSwBoxAlign(cursor);
   }
-
   /** Sets the original table headline count through native document history and notification. @param table - Original native owner. @param count - Requested uint16 count. @returns Whether changed. */
   public SetRowsToRepeat(table: SwTable, count: number): boolean {
     return SetSwRowsToRepeat(this, table, count);
   }
-
   /** Applies native table separators and publishes document-owned attribute history. @param table - Actual table. @param next - Requested separator geometry. @param previous - Original geometry. @param start - Actual current box. @param currentRowOnly - Independent row graph request. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
   public SetTabCols(
     table: SwTable,
@@ -970,6 +970,7 @@ export class SwDoc {
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.markAccess.Dispose();
     this.undoManager.Dispose();
+    this.mpSpzFrameFormatTable.DeleteAndDestroyAll();
     this.defaultGrfFormatColl.DisposeModify();
     for (const format of [...this.GetCharFormats()].reverse()) format.DisposeModify();
     for (const node of this.nodes.entries())

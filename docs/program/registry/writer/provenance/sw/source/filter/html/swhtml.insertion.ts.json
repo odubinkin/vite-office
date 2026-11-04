@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/frameformats.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -28,6 +32,14 @@
         {
           "path": "sw/source/filter/html/htmlgrin.cxx",
           "marker": "SwHTMLParser::HasCurrentParaBookmarks"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::HasCurrentParaFlys"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::HasCurrentParaFlys"
         }
       ]
     },
@@ -44,7 +56,8 @@
     ],
     "preservedResponsibilities": [
       "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
-      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified."
+      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified.",
+      "S3HW1E HTML65: actual document-owned FrameFormats<SpzFrameFormat> storage, source fly-format construction/factory registration and native HasCurrentParaFlys registry scan replace the missing prerequisite without an empty-provider substitute. Stored SwFormat Which identities are explicit for character, text, graphic and frame/fly construction. Collection preserves positional traversal, unique object membership, independent name/type/pointer ordering, exact erase, owning deletion and default relocation. Opaque stable JS reference order represents pointer comparison, not a native address/ABI. Registered special-frame rename uses native NameChanged old/new names directly on the notifier. WRITER346 preserves original newDefault back-reference omission. WRITER347 records the source base rename inconsistency and the still-unported native document/style rename route; the existing general base-setter browser notification is not migrated or certified in this special-frame prerequisite block. Actual HTML query admits only current-node paragraph/character anchors, preserves NONE precedence and THROUGH exclusions, and evaluates simultaneous flags in source order. The collection/factory/query are real model owners, but MakeFlySection, fly/drawing contact/layout destruction and anchored-node list maintenance, recursive HTML first-cell/table grammar/materialization/layout, full document teardown, RTF direction and final format/UI audit remain unported or unverified. No synthetic frame/section/measurement or result provider is introduced. Existing save/open/autosave/recovery deviations are unchanged; whole-module semantic/default/contract/ABI parity remains unverified."
     ],
     "omittedResponsibilities": [
       "General editing/undo/word-interior profiles, unrepresented sections/flys/redlines and desktop shell/layout services are not implemented by this consumed filter profile. Full filter/module parity remains unverified."

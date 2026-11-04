@@ -1,4 +1,6 @@
 /** @fileoverview Native SwHTMLParser CallParser/Continue existing-document split, target-attribute snapshot and final boundary joins from swhtml.cxx. */
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { SwHTMLParser } from "./swhtml";
 import { SwNodeIndex, GoNextPos, GoPreviousPos } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -126,4 +128,40 @@ export function FinishHTMLInsertion(parser: SwHTMLParser, strippedLF: boolean): 
     if (pam.GetMark().GetNode() === previous) pam.GetMark().Assign(node, 0);
     node.JoinPrev();
   }
+}
+
+/** Original special-format scan at the actual current node; wrap-through is ignored only for the surround-only search. @param parser - Actual importer. @param noSurroundOnly - Seek NONE. @param surroundOnly - Seek wrapping but reject any NONE. @returns Original order-sensitive result. */
+export function HasCurrentParaFlys(
+  parser: SwHTMLParser,
+  noSurroundOnly = false,
+  surroundOnly = false,
+): boolean {
+  const node = parser.m_pPam.GetPoint().GetNode();
+  let found = false;
+  for (const format of parser.m_xDoc.GetSpzFrameFormats()) {
+    const anchor = format.GetAnchor();
+    if (
+      anchor.GetAnchorNode() !== node ||
+      (anchor.GetAnchorId() !== RndStdIds.FLY_AT_PARA &&
+        anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR)
+    )
+      continue;
+    if (!(noSurroundOnly || surroundOnly)) {
+      found = true;
+      break;
+    }
+    const surround = format.GetSurround().GetSurround();
+    if (noSurroundOnly && surround === WrapTextMode.NONE) {
+      found = true;
+      break;
+    }
+    if (surroundOnly) {
+      if (surround === WrapTextMode.NONE) {
+        found = false;
+        break;
+      }
+      if (surround !== WrapTextMode.THROUGH) found = true;
+    }
+  }
+  return found;
 }

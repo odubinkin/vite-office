@@ -1637,3 +1637,17 @@ synthetic frame/section or serialized position substitute is introduced. UNO
 frame/property conversion, presentation, special-frame registry/factory/layout
 and production HTML-table orchestration remain unported/unverified; these state
 owners alone do not establish format completion.
+
+HTML65 adds the actual document-owned special-frame collection, source fly-format
+factory and original current-paragraph fly/wrap query. The query now inspects
+actual owned format/anchor/wrap items, not a placeholder empty result. Native
+format Which identities, registered special-frame name-change dispatch, exact
+collection membership and owning destruction are covered. WRITER346 retains
+source default-insertion back-reference behavior. WRITER347 records the source
+base rename issue and the still-unported document/style rename route; the legacy
+general base-setter browser notification is not migrated or certified here. Opaque JS
+pointer ordering is not C++ address/ABI parity. This enables the next first-cell
+context step; it does not implement MakeFlySection, fly/contact/layout creation,
+anchored-node list maintenance, recursive HTML-table production/materialization,
+RTF direction or the final current-slice format/UI audit. Those remain required
+or explicitly unverified; full format completion is not established here.

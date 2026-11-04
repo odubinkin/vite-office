@@ -132,6 +132,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts",
           "marker": "GetParagraphMarkerProperties"
+        },
+        {
+          "path": "apps/office/src/sw/inc/frameformats.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -162,6 +166,10 @@
         {
           "path": "sw/source/core/txtnode/thints.cxx",
           "marker": "case RES_TXTATR_INETFMT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+          "marker": "SwDoc::MakeFlyFrameFormat"
         }
       ]
     },
@@ -203,7 +211,8 @@
       "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged.",
       "S3HW1E replaces unpartitioned direct-character hint reconstruction in InsertPoolItem with existing native MakeTextAttr/InsertHint owners, retaining incoming insertion flags and native whole-paragraph character-style precedence. Actual Markdown HTML CSS cases expose and verify the failure, including explicit normal weight over Strong Emphasis. Full SwDoc/SwTextNode insertion parity is not promoted.",
       "The existing InsertPoolItem facade now passes SwFormatINetFormat directly to the actual node InsertItem/MakeTextAttr/SwTextINetFormat path with the original insertion flags. The old SetHyperlink portable re-construction lost native pool-style IDs and dropped empty URL items; that conversion is removed. Actual HTML/Markdown filter items retain strings, style IDs, backlink and native hint/context range ownership. This bounded facade is not a full DocumentContentOperationsManager undo/layout/structured-attribute certificate.",
-      "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified."
+      "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
+      "S3HW1E HTML65: original SwDoc::MakeFlyFrameFormat body lives in the native docfmt responsibility, with a thin SwDoc declaration forwarder. Actual construction, owning special-registry insertion and SetModified retain source order; no fly section, contact or layout result is supplied. Full factory/layout services and whole-module parity remain unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/docfmt.cxx",

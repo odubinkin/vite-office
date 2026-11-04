@@ -2,6 +2,7 @@
 import { SwFormatColl } from "../source/core/doc/fmtcol";
 import type { SwAttrPool } from "../source/core/attr/swatrset";
 import {
+  RES_GRFFMTCOLL,
   RES_FRMATR_BEGIN,
   RES_GRFATR_END,
   RES_UNKNOWNATR_BEGIN,
@@ -12,9 +13,15 @@ import {
 export class SwGrfFormatColl extends SwFormatColl {
   /** Original graphic collection constructor from fmtcol.hxx. @param pool - Document pool. @param name - Native name. @param parent - Optional graphic parent. @returns Collection. */
   constructor(pool: SwAttrPool, name: string, parent?: SwGrfFormatColl) {
-    super(pool, name, parent, [
-      [RES_FRMATR_BEGIN, RES_GRFATR_END - 1],
-      [RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1],
-    ]);
+    super(
+      pool,
+      name,
+      parent,
+      [
+        [RES_FRMATR_BEGIN, RES_GRFATR_END - 1],
+        [RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1],
+      ],
+      RES_GRFFMTCOLL,
+    );
   }
 }

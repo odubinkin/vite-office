@@ -64,6 +64,7 @@ import {
   JoinHTMLInsertionStart,
   FinishHTMLInsertion,
   HasCurrentParaBookmarks,
+  HasCurrentParaFlys,
 } from "./swhtml.insertion";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
@@ -75,6 +76,10 @@ export class SwHTMLParser extends HTMLParser {
   m_xTable: HTMLTable | null = null;
   readonly m_aTables: HTMLTable[] = [];
   readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
+  /** Original special-format query delegates the source responsibility fragment. @param noSurroundOnly - Seek NONE. @param surroundOnly - Seek wrapping and reject NONE. @returns Native query result. */
+  HasCurrentParaFlys(noSurroundOnly = false, surroundOnly = false): boolean {
+    return HasCurrentParaFlys(this, noSurroundOnly, surroundOnly);
+  }
   /** Original parser table registration. @param table - Borrowed native intermediate table. @returns Nothing. */
   RegisterHTMLTable(table: HTMLTable): void {
     this.m_aTables.push(table);

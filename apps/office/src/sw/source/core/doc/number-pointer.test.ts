@@ -1,4 +1,5 @@
 /** @fileoverview Differentially verifies complete native pointer/reference Set and implemented-field assignment ownership against pinned native output. */
+import { RES_TXTFMTCOLL } from "../../../inc/hintids";
 import { expect, it } from "vitest";
 import type { SwNumberTreeNode } from "../SwNumberTree/SwNumberTree";
 import native from "./number-pointer-native.json";
@@ -23,7 +24,13 @@ import {
 
 it("retains virtual Writer name lookup while native base copy and equality read stored base fields", /** Only GetName is borrowed from an actual SwFormat;no SwCharFormat service or mock owner is constructed. @returns Nothing. */ () => {
   const doc = createWriterDocument();
-  const owner = new SwFormat(doc.GetAttrPool(), "Original registered name", [[1, 1]]);
+  const owner = new SwFormat(
+    doc.GetAttrPool(),
+    "Original registered name",
+    [[1, 1]],
+    undefined,
+    RES_TXTFMTCOLL,
+  );
   const writer = new SwNumFormat();
   writer.SetCharFormatName("Stored base name");
   expect(writer.GetCharFormatName()).toBe("");

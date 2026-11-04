@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 414
+revision: 418
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T13:27:00.775Z"
+  updated_at: "2026-11-04T13:51:24.867Z"
   updated_by: "CODER"
-  note: "HTML64 verified checkpoint: 252 unique cases/19 files, whole-app types, Writer/Shared registries and all source/static/WhichId gates pass. Native anchor/wrap state/default/pool ownership and raw position copy/assignment implemented; format attribute-set member destruction and original optional replacement/assignment ordering preserved. WRITER345 documented. Full UNO conversions/special-frame factory/layout, HTML first-cell/recursive production, RTF direction and final format/UI audit remain unverified."
-  attempts: 75
+  note: "HTML65 checkpoint verified:389 unique cases/22 files, whole-app types and all source/style/registry/static gates pass. Real special-frame owner/factory, format Which identities and native current-paragraph fly/wrap scan implemented. WRITER346 retained; WRITER347 records pending general style-rename migration, with existing UI path preserved. First-cell/recursive HTML production, fly content/layout, RTF direction and final format/UI audit remain incomplete."
+  attempts: 76
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1205,8 +1208,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T13:51:24.867Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML65 checkpoint verified:389 unique cases/22 files, whole-app types and all source/style/registry/static gates pass. Real special-frame owner/factory, format Which identities and native current-paragraph fly/wrap scan implemented. WRITER346 retained; WRITER347 records pending general style-rename migration, with existing UI path preserved. First-cell/recursive HTML production, fly content/layout, RTF direction and final format/UI audit remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T13:51:39.453Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T13:27:11.119Z"
+doc_updated_at: "2026-11-04T13:51:39.453Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3201,6 +3217,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T13:51:24.867Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML65 checkpoint verified:389 unique cases/22 files, whole-app types and all source/style/registry/static gates pass. Real special-frame owner/factory, format Which identities and native current-paragraph fly/wrap scan implemented. WRITER346 retained; WRITER347 records pending general style-rename migration, with existing UI path preserved. First-cell/recursive HTML production, fly content/layout, RTF direction and final format/UI audit remain incomplete.
+    Attempts: 76
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:51:23.463Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3410,6 +3456,17 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html64-types-getters-final.log). Scope: whole application final source/test contracts including actual position copy/value-assignment overloads, native item types/defaults and inherited typed getters; prior source compiler snapshots also pass.
     - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files ->pass (html64-eslint-source-final.log, html64-prettier-source-final.log). Initial prefer-literal-enum-member/unused-import findings remain in html64-eslint-initial.log and were fixed without suppression.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope shared; git diff --check ->pass (html64-boundaries-final.log, html64-jsdoc-source-final.log, html64-filesize-final.log, html64-source-tree.log, html64-hintids.log, html64-provenance-source-final.log, html64-registry-source-final.log, html64-shared-registry-source-final.log). Evidence:1944runtime provenance modules/1731mapped;1943boundary sources/10794imports/229edges;4365JSDoc files;84native WhichIds;0Writer/Shared registry semantic violations. Initial enum-symbol/header-doc gate failures are retained and corrected, not bypassed. Paired new native-header/IDL runtime/provenance records and appended existing histories retain unverified broader statuses. No full-suite replay: same approved AgentPlane task and focused verification under the user's cadence.
+
+    HTML65 final checkpoint (parent goal still incomplete).
+    Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/frameformats.native.test.ts src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/attr/native-format-death.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/doc/number-pointer.test.ts src/sw/source/core/txtnode/text-collection-numbering.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx src/sw/source/uibase/app/docst.test.ts src/sw/browser/presentation/writer-style-selector.test.tsx src/sw/source/core/edit/edfcol.test.ts src/sw/source/core/edit/edfcol-history.test.ts)
+    Result: pass. Evidence:389tests/22files, including25fresh actual native owners; html65-tests-verified.log. Scope: special frames/registry/anchor/wrap, format construction/destruction/inheritance, HTML insertion, TXT/RTF/Markdown/document I/O and related UI/style selector.
+    Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+    Result: pass, terminal0. Evidence: html65-types-verified.log. Scope: whole application types.
+    Command: node_modules/.bin/eslint <intentional changed/new TS allowlist>; node_modules/.bin/prettier --check <same TS allowlist>.
+    Result: pass. Evidence: html65-gates-verified.log, html65-files.json. Scope: all intentional changed/new source/test files.
+    Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+    Result: pass, terminal0. Evidence: html65-gates-verified.log, html65-writer-registry-verified.json, html65-size-verified.log. Scope: provenance1946runtime/1733mapped, Writer registry0semantic violations,1945runtime boundaries,4368JSDoc files,4372authored size scan,115required source paths/32retired roots and84guarded Which identities.
+    Remaining and diagnostic remediation are recorded in Findings. Full source style rename, first-cell/recursive HTML production, fly/content/layout and RTF direction remain incomplete; no full format or whole-module parity claim.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4736,6 +4793,17 @@ sections:
     Anchors own actual copied SwPositions, obtain a new uint32 order on construction/copy or changed assignment and exclude order from equality. Paragraph/fly anchors keep nNode while unregistering nContent. Original raw type/page setters do not normalize the position. Native SwPosition copy construction, clone and value assignment now preserve raw node/content bindings and affinity; an engaged optional position is assigned in place instead of destroyed/replaced. SetAnchor preserves source optional emplace destroy-before-copy order for distinct valid input. WRITER345 records its potential self-alias lifetime hazard without claiming a compiled defect, reachable caller or defined native undefined-behavior result. SwFormat now releases its actual attribute-set member after dependent reparenting and before base modify teardown, so frame-owned nonshareable anchor positions are actually destroyed. Seventeen fresh real-object cases validate type/default/pool/copy/order/lease/destruction/inheritance/replacement contracts; no result providers or dummy model objects substitute for source owners.
 
     All focused tests pass. Initial lint alias/import findings were fixed with pinned literal enum values plus cross-enum assertions and unused-import cleanup; no rule was disabled. Initial JSDoc failures from imports preceding fileoverview and the new generated enum's basename-only provenance failure were corrected in authored files/canonical symbols without weakening gates. Bounded edit-script source-location misses were corrected before final source verification. UNO frame/property conversions, runtime enum type registration, localized presentation, complete anchor-position snapshot restoration, special-frame registry/factory/layout, full document destructor orchestration and whole-module/ABI parity remain unported/unverified. Production recursive HTML orchestration/materialization/layout, RTF direction and final format/UI audit remain open. Intentional save/open/autosave/recovery deviations are unchanged.
+
+    S3HW1E HTML65 — Real document-owned special-frame registry and HTML paragraph-fly query.
+    Implemented source FrameFormats/SwFormatsBase positional storage, exact identity membership/erase, distinct name/type/pointer ordering, owning destruction/default relocation, real SpzFrameFormat/SwFlyFrameFormat identities, SwDoc GetSpzFrameFormats and docfmt-owned MakeFlyFrameFormat registration-before-modified order. SwFormat now stores explicit native Which identities; character/text/graphic/frame/fly constructors supply original discriminants. HasCurrentParaFlys scans the actual owning document registry and actual optional anchor/wrap items, preserving current-node paragraph/character admission, NONE precedence, THROUGH exclusion and simultaneous-flag source ordering. Registered frame rename dispatches source NameChanged old/new payload directly on its notifier, through collection rename. No synthetic empty query, frame/section/layout or measurement provider is supplied. JS pointer ordering remains opaque reference ordering, not C++ address/ABI.
+
+    WRITER346 records and preserves newDefault's source missing back-reference assignment. WRITER347 records base rename's source new/new hint fields and filtering. A diagnostic attempt to migrate that unrelated base setter exposed the existing browser selector's dependency on its legacy document-inheritance notification; it was reverted rather than leaving a UI regression. Full SwDoc::RenameFormat/rename undo/BroadcastStyleOperation and base-setter/UI migration remain required before certifying that route. This checkpoint implements only registered special-frame rename, not the complete source style-renaming route. No broad semantic/default/contract/source-responsibility status was promoted.
+
+    Verification: final389unique cases/22actual files pass, including25fresh actual owner/registry/anchor/wrap cases, existing format/item destruction, actual HTML insertion, native TXT/RTF/Markdown/document-I/O and style-selector UI. Whole-app TypeScript, changed-source ESLint/Prettier, source provenance1946runtime/1733mapped/182browser/31infra, Writer registry0semantic violations, module boundaries1945runtime/10805imports/229edges, JSDoc4368source files, file-size4372authored files, source-tree115required/32retired and WhichId84identities gates pass. Final logs html65-tests-verified.log, html65-types-verified.log, html65-gates-verified.log, html65-writer-registry-verified.json and html65-size-verified.log. No full-project replay; current parent task remains incomplete.
+
+    Diagnostic failures retained: initial fixture used nonexistent text-node getters/builder and an empty stream without required bytes/encoding; corrected to actual APIs. Required base Which argument migration briefly added extraneous parameters to three SwAttrSet fixtures; removed those parameters. Existing no-client destructor test read a destroyed format; it now observes real member destruction and absence of reset through call-through spies. Initial lint/JSDoc assertions and basename-only FrameFormats provenance were corrected in authored source/test/evidence. One log redirection and one guessed source-tree script name failed; final exact installed command is node scripts/check-lo-source-tree.mjs. No verifier, acceptance rule or production result provider was weakened. Base-rename diagnostic UI failure is retained in html65-rename-ui-tests.log; final389/22 passes after restoring the existing general base path and recording its pending migration.
+
+    Remaining: MakeFlySection/format content and anchored-node list/contact/fly layout ownership, first-cell/table context and complete recursive HTML production/materialization/layout, native RTF direction resolution and final fixed current-slice format/UI audit. Complete document destruction and unconsumed whole-module APIs/ABI remain unverified; intentional browser save/open/autosave/recovery deviations unchanged. The parent task and active goal are not complete.
 id_source: "generated"
 ---
 ## Summary
@@ -6741,6 +6809,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T13:51:24.867Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML65 checkpoint verified:389 unique cases/22 files, whole-app types and all source/style/registry/static gates pass. Real special-frame owner/factory, format Which identities and native current-paragraph fly/wrap scan implemented. WRITER346 retained; WRITER347 records pending general style-rename migration, with existing UI path preserved. First-cell/recursive HTML production, fly content/layout, RTF direction and final format/UI audit remain incomplete.
+Attempts: 76
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T13:51:23.463Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6950,6 +7048,17 @@ S3HW1E HTML64 checkpoint —252 unique passing cases/19actual files in final rel
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html64-types-getters-final.log). Scope: whole application final source/test contracts including actual position copy/value-assignment overloads, native item types/defaults and inherited typed getters; prior source compiler snapshots also pass.
 - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files ->pass (html64-eslint-source-final.log, html64-prettier-source-final.log). Initial prefer-literal-enum-member/unused-import findings remain in html64-eslint-initial.log and were fixed without suppression.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-writer-hintids.ts; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope shared; git diff --check ->pass (html64-boundaries-final.log, html64-jsdoc-source-final.log, html64-filesize-final.log, html64-source-tree.log, html64-hintids.log, html64-provenance-source-final.log, html64-registry-source-final.log, html64-shared-registry-source-final.log). Evidence:1944runtime provenance modules/1731mapped;1943boundary sources/10794imports/229edges;4365JSDoc files;84native WhichIds;0Writer/Shared registry semantic violations. Initial enum-symbol/header-doc gate failures are retained and corrected, not bypassed. Paired new native-header/IDL runtime/provenance records and appended existing histories retain unverified broader statuses. No full-suite replay: same approved AgentPlane task and focused verification under the user's cadence.
+
+HTML65 final checkpoint (parent goal still incomplete).
+Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/inc/frameformats.native.test.ts src/sw/inc/fmtanchr-surround.native.test.ts src/sw/source/core/attr/native-format-death.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/doc/number-pointer.test.ts src/sw/source/core/txtnode/text-collection-numbering.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/source/filter/html/swhtml.insertion.integration.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx src/sw/source/uibase/app/docst.test.ts src/sw/browser/presentation/writer-style-selector.test.tsx src/sw/source/core/edit/edfcol.test.ts src/sw/source/core/edit/edfcol-history.test.ts)
+Result: pass. Evidence:389tests/22files, including25fresh actual native owners; html65-tests-verified.log. Scope: special frames/registry/anchor/wrap, format construction/destruction/inheritance, HTML insertion, TXT/RTF/Markdown/document I/O and related UI/style selector.
+Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+Result: pass, terminal0. Evidence: html65-types-verified.log. Scope: whole application types.
+Command: node_modules/.bin/eslint <intentional changed/new TS allowlist>; node_modules/.bin/prettier --check <same TS allowlist>.
+Result: pass. Evidence: html65-gates-verified.log, html65-files.json. Scope: all intentional changed/new source/test files.
+Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+Result: pass, terminal0. Evidence: html65-gates-verified.log, html65-writer-registry-verified.json, html65-size-verified.log. Scope: provenance1946runtime/1733mapped, Writer registry0semantic violations,1945runtime boundaries,4368JSDoc files,4372authored size scan,115required source paths/32retired roots and84guarded Which identities.
+Remaining and diagnostic remediation are recorded in Findings. Full source style rename, first-cell/recursive HTML production, fly/content/layout and RTF direction remain incomplete; no full format or whole-module parity claim.
 
 ## Rollback Plan
 
@@ -8280,3 +8389,14 @@ S3HW1E HTML64 — Native owning anchor/wrap state prerequisites for HTML first-t
 Anchors own actual copied SwPositions, obtain a new uint32 order on construction/copy or changed assignment and exclude order from equality. Paragraph/fly anchors keep nNode while unregistering nContent. Original raw type/page setters do not normalize the position. Native SwPosition copy construction, clone and value assignment now preserve raw node/content bindings and affinity; an engaged optional position is assigned in place instead of destroyed/replaced. SetAnchor preserves source optional emplace destroy-before-copy order for distinct valid input. WRITER345 records its potential self-alias lifetime hazard without claiming a compiled defect, reachable caller or defined native undefined-behavior result. SwFormat now releases its actual attribute-set member after dependent reparenting and before base modify teardown, so frame-owned nonshareable anchor positions are actually destroyed. Seventeen fresh real-object cases validate type/default/pool/copy/order/lease/destruction/inheritance/replacement contracts; no result providers or dummy model objects substitute for source owners.
 
 All focused tests pass. Initial lint alias/import findings were fixed with pinned literal enum values plus cross-enum assertions and unused-import cleanup; no rule was disabled. Initial JSDoc failures from imports preceding fileoverview and the new generated enum's basename-only provenance failure were corrected in authored files/canonical symbols without weakening gates. Bounded edit-script source-location misses were corrected before final source verification. UNO frame/property conversions, runtime enum type registration, localized presentation, complete anchor-position snapshot restoration, special-frame registry/factory/layout, full document destructor orchestration and whole-module/ABI parity remain unported/unverified. Production recursive HTML orchestration/materialization/layout, RTF direction and final format/UI audit remain open. Intentional save/open/autosave/recovery deviations are unchanged.
+
+S3HW1E HTML65 — Real document-owned special-frame registry and HTML paragraph-fly query.
+Implemented source FrameFormats/SwFormatsBase positional storage, exact identity membership/erase, distinct name/type/pointer ordering, owning destruction/default relocation, real SpzFrameFormat/SwFlyFrameFormat identities, SwDoc GetSpzFrameFormats and docfmt-owned MakeFlyFrameFormat registration-before-modified order. SwFormat now stores explicit native Which identities; character/text/graphic/frame/fly constructors supply original discriminants. HasCurrentParaFlys scans the actual owning document registry and actual optional anchor/wrap items, preserving current-node paragraph/character admission, NONE precedence, THROUGH exclusion and simultaneous-flag source ordering. Registered frame rename dispatches source NameChanged old/new payload directly on its notifier, through collection rename. No synthetic empty query, frame/section/layout or measurement provider is supplied. JS pointer ordering remains opaque reference ordering, not C++ address/ABI.
+
+WRITER346 records and preserves newDefault's source missing back-reference assignment. WRITER347 records base rename's source new/new hint fields and filtering. A diagnostic attempt to migrate that unrelated base setter exposed the existing browser selector's dependency on its legacy document-inheritance notification; it was reverted rather than leaving a UI regression. Full SwDoc::RenameFormat/rename undo/BroadcastStyleOperation and base-setter/UI migration remain required before certifying that route. This checkpoint implements only registered special-frame rename, not the complete source style-renaming route. No broad semantic/default/contract/source-responsibility status was promoted.
+
+Verification: final389unique cases/22actual files pass, including25fresh actual owner/registry/anchor/wrap cases, existing format/item destruction, actual HTML insertion, native TXT/RTF/Markdown/document-I/O and style-selector UI. Whole-app TypeScript, changed-source ESLint/Prettier, source provenance1946runtime/1733mapped/182browser/31infra, Writer registry0semantic violations, module boundaries1945runtime/10805imports/229edges, JSDoc4368source files, file-size4372authored files, source-tree115required/32retired and WhichId84identities gates pass. Final logs html65-tests-verified.log, html65-types-verified.log, html65-gates-verified.log, html65-writer-registry-verified.json and html65-size-verified.log. No full-project replay; current parent task remains incomplete.
+
+Diagnostic failures retained: initial fixture used nonexistent text-node getters/builder and an empty stream without required bytes/encoding; corrected to actual APIs. Required base Which argument migration briefly added extraneous parameters to three SwAttrSet fixtures; removed those parameters. Existing no-client destructor test read a destroyed format; it now observes real member destruction and absence of reset through call-through spies. Initial lint/JSDoc assertions and basename-only FrameFormats provenance were corrected in authored source/test/evidence. One log redirection and one guessed source-tree script name failed; final exact installed command is node scripts/check-lo-source-tree.mjs. No verifier, acceptance rule or production result provider was weakened. Base-rename diagnostic UI failure is retained in html65-rename-ui-tests.log; final389/22 passes after restoring the existing general base path and recording its pending migration.
+
+Remaining: MakeFlySection/format content and anchored-node list/contact/fly layout ownership, first-cell/table context and complete recursive HTML production/materialization/layout, native RTF direction resolution and final fixed current-slice format/UI audit. Complete document destruction and unconsumed whole-module APIs/ABI remain unverified; intentional browser save/open/autosave/recovery deviations unchanged. The parent task and active goal are not complete.
