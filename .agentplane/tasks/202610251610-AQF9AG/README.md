@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 171
+revision: 174
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T09:47:13.790Z"
+  updated_at: "2026-11-04T10:09:11.102Z"
   updated_by: "CODER"
-  note: "Original RBBI forward checkpoint passes2450native forward states,1220native UText states,35related tests,197CSV tests,1browser scenario and declared static/build checks. Full original word/title/NatNum12 service/output and multiline EditEngine paths remain incomplete;keep goal active."
-  attempts: 42
+  note: "Original safe reverse/UText checkpoint passes2450forward+2450reverse native states and1220text sequences,46related tests,196CSV initial passes plus1unchanged failed-scenario recheck,1browser scenario and declared checks. Initial UI wait timeout retained in Findings. Full CSV services/multiline paths remain incomplete;keep goal active."
+  attempts: 43
 commit: null
 comments:
   -
@@ -280,6 +280,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after verified original RBBI forward/UText checkpoint; full source construction/cache/dictionary/word/title and multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
 events:
   -
     type: "status"
@@ -1000,8 +1003,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue active CSV goal after verified original RBBI forward/UText checkpoint; full source construction/cache/dictionary/word/title and multiline paths remain pending."
+  -
+    type: "verify"
+    at: "2026-11-04T10:09:11.102Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original safe reverse/UText checkpoint passes2450forward+2450reverse native states and1220text sequences,46related tests,196CSV initial passes plus1unchanged failed-scenario recheck,1browser scenario and declared checks. Initial UI wait timeout retained in Findings. Full CSV services/multiline paths remain incomplete;keep goal active."
+  -
+    type: "status"
+    at: "2026-11-04T10:09:53.461Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
 doc_version: 3
-doc_updated_at: "2026-11-04T09:48:07.864Z"
+doc_updated_at: "2026-11-04T10:09:53.461Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2281,6 +2297,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T10:09:11.102Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original safe reverse/UText checkpoint passes2450forward+2450reverse native states and1220text sequences,46related tests,196CSV initial passes plus1unchanged failed-scenario recheck,1browser scenario and declared checks. Initial UI wait timeout retained in Findings. Full CSV services/multiline paths remain incomplete;keep goal active.
+    Attempts: 43
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:09:08.874Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3438,6 +3484,26 @@ sections:
     - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
       Result: pass. Evidence: rbbi-build.log and rbbi-browser.log;1browser CSV import/primary ODS save/active-sheet export,31.4s. No timeouts/assertions relaxed.
     - Same open AgentPlane task, not the tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title service graph, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.
+
+    ### Original safe reverse rules and cache-consumed UText queries
+
+    - Previous goal turn is progress:b186166c9 added source forward RBBI/UText. Current preflight revalidates approved calc/direct/DOING, CODER and clean non-scratch tracked state. This block adds actual required reverse/text operations, without claiming a completed word/title service.
+    - Ported original ICU78.3 handleSafePrevious, utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength. Retained the original reverse table/trie, safe restart semantics, unchanged iterator position/status/end/dictionary fields, native provider transitions and transient/restored cursor/length operations. Final source review also aligns reverse row access after the initial UText operation, as upstream. UText callback declarations and test projections use the actual native-length callback; no substitute provider/iterator factory or guessed word boundary is exported. CALC-460 documents the original null check following the earlier data dereference; source order is preserved. Full construction/lifecycle, public caches/dictionaries/word/title/UNO and allocator/ABI remain incomplete/unverified; broad flags unchanged.
+    - Command: npx --no-install tsx scripts/icu-rbbi-forward-native-probe.mjs
+      Result: pass. Evidence: rbbi-reverse-native.log and output/native/AQF9AG-icu-grego/rbbi-forward-comparison.json; authored native observations preserve exact UTF16 units. Original ICU compiled8LibreOffice rule files plus2rule-compiler witnesses. Direct comparison retained2450forward states, added2450safe reverse states and extended1220UText sequences with current/previous/index-restoration/length results. Original libraries and private methods/providers remain unchanged; test visibility only is exposed. Prepared fields/seeded observation slots do not assert original constructor defaults. No whole iterator/cache/dictionary/ABI certificate.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts --maxWorkers=1
+      Result: pass. Evidence: rbbi-reverse-related-tests.log,46cases in5files. Earlier forward UText assertions retain their original9-value prefix; the new full-sequence assertion compares every extended native result. After the final row-read ordering adjustment, npm run test:shared -- src/external/icu/source/common/rbbi.reverse.test.ts --maxWorkers=1 passes11cases (rbbi-reverse-order-tests.log), with final focused lint (rbbi-reverse-order-lint.log).
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: initial196pass/1fail. Evidence: rbbi-reverse-csv-tests.log. Scope: CSV recognition/export/file UI. One original UI waitFor timed out waiting for onClose after import/persistence; no semantic error was reported. Read-only import search confirms current rbbi/utext modules are not on this existing UI production path. Retained the failure evidence rather than treating the mixed run as fully green.
+    - Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter' --maxWorkers=1
+      Result: pass. Evidence: rbbi-reverse-ui-recheck.log;the same previously failing scenario passes unchanged,663ms test time,1pass/5previously passed scenarios intentionally deselected. This closes selected-scenario coverage with the196earlier passes; it does not claim a proven root cause for the timing sensitivity. No test/timeout/assertion/environment guard changes.
+    - Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources
+      Result: pass. Evidence under output/native/AQF9AG-libnumbertext: rbbi-reverse-typecheck.log, rbbi-reverse-lint.log, rbbi-reverse-dependencies.log, rbbi-reverse-provenance.log, rbbi-reverse-shared-parity.log, rbbi-reverse-calc-parity.log, rbbi-reverse-resources.log.1952runtime/1739mapped;464commands. No readiness/guard relaxation. Final row-expression ordering does not change type signatures and passes its focused lint/test closure.
+    - Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact intentional paths; node .agentplane/policy/check-routing.mjs; ap doctor
+      Result: pass. Evidence: rbbi-reverse-docs.log, rbbi-reverse-size.log, rbbi-reverse-format-check-final.log, rbbi-reverse-routing.log, rbbi-reverse-doctor.log.4371authored files;doctor zero errors with existing managed-hook warning. Final scope review finds zero unexpected paths;git diff --check passes.
+    - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: rbbi-reverse-build.log, rbbi-reverse-browser.log;1browser CSV import/primary ODS save/active-sheet export,5.9s. No timeout/assertion relaxation.
+    - Same open AgentPlane task, not tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title installation, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.
 id_source: "generated"
 ---
 ## Summary
@@ -4726,6 +4792,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T10:09:11.102Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original safe reverse/UText checkpoint passes2450forward+2450reverse native states and1220text sequences,46related tests,196CSV initial passes plus1unchanged failed-scenario recheck,1browser scenario and declared checks. Initial UI wait timeout retained in Findings. Full CSV services/multiline paths remain incomplete;keep goal active.
+Attempts: 43
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T10:09:08.874Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5887,3 +5983,23 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
   Result: pass. Evidence: rbbi-build.log and rbbi-browser.log;1browser CSV import/primary ODS save/active-sheet export,31.4s. No timeouts/assertions relaxed.
 - Same open AgentPlane task, not the tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title service graph, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.
+
+### Original safe reverse rules and cache-consumed UText queries
+
+- Previous goal turn is progress:b186166c9 added source forward RBBI/UText. Current preflight revalidates approved calc/direct/DOING, CODER and clean non-scratch tracked state. This block adds actual required reverse/text operations, without claiming a completed word/title service.
+- Ported original ICU78.3 handleSafePrevious, utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength. Retained the original reverse table/trie, safe restart semantics, unchanged iterator position/status/end/dictionary fields, native provider transitions and transient/restored cursor/length operations. Final source review also aligns reverse row access after the initial UText operation, as upstream. UText callback declarations and test projections use the actual native-length callback; no substitute provider/iterator factory or guessed word boundary is exported. CALC-460 documents the original null check following the earlier data dereference; source order is preserved. Full construction/lifecycle, public caches/dictionaries/word/title/UNO and allocator/ABI remain incomplete/unverified; broad flags unchanged.
+- Command: npx --no-install tsx scripts/icu-rbbi-forward-native-probe.mjs
+  Result: pass. Evidence: rbbi-reverse-native.log and output/native/AQF9AG-icu-grego/rbbi-forward-comparison.json; authored native observations preserve exact UTF16 units. Original ICU compiled8LibreOffice rule files plus2rule-compiler witnesses. Direct comparison retained2450forward states, added2450safe reverse states and extended1220UText sequences with current/previous/index-restoration/length results. Original libraries and private methods/providers remain unchanged; test visibility only is exposed. Prepared fields/seeded observation slots do not assert original constructor defaults. No whole iterator/cache/dictionary/ABI certificate.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/ucptrie.binary.test.ts src/i18npool/source/breakiterator/breakiteratorImpl.test.ts src/i18npool/source/characterclassification/cclass_unicode.lower.test.ts --maxWorkers=1
+  Result: pass. Evidence: rbbi-reverse-related-tests.log,46cases in5files. Earlier forward UText assertions retain their original9-value prefix; the new full-sequence assertion compares every extended native result. After the final row-read ordering adjustment, npm run test:shared -- src/external/icu/source/common/rbbi.reverse.test.ts --maxWorkers=1 passes11cases (rbbi-reverse-order-tests.log), with final focused lint (rbbi-reverse-order-lint.log).
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: initial196pass/1fail. Evidence: rbbi-reverse-csv-tests.log. Scope: CSV recognition/export/file UI. One original UI waitFor timed out waiting for onClose after import/persistence; no semantic error was reported. Read-only import search confirms current rbbi/utext modules are not on this existing UI production path. Retained the failure evidence rather than treating the mixed run as fully green.
+- Command: npm run test:calc -- src/sc/browser/presentation/calc-files.test.tsx -t 'imports CSV from the file dialog and downloads the active sheet through the text filter' --maxWorkers=1
+  Result: pass. Evidence: rbbi-reverse-ui-recheck.log;the same previously failing scenario passes unchanged,663ms test time,1pass/5previously passed scenarios intentionally deselected. This closes selected-scenario coverage with the196earlier passes; it does not claim a proven root cause for the timing sensitivity. No test/timeout/assertion/environment guard changes.
+- Command: npm run typecheck; npm run lint; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc; npm run check:calc-resources
+  Result: pass. Evidence under output/native/AQF9AG-libnumbertext: rbbi-reverse-typecheck.log, rbbi-reverse-lint.log, rbbi-reverse-dependencies.log, rbbi-reverse-provenance.log, rbbi-reverse-shared-parity.log, rbbi-reverse-calc-parity.log, rbbi-reverse-resources.log.1952runtime/1739mapped;464commands. No readiness/guard relaxation. Final row-expression ordering does not change type signatures and passes its focused lint/test closure.
+- Command: node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npx --no-install prettier --check exact intentional paths; node .agentplane/policy/check-routing.mjs; ap doctor
+  Result: pass. Evidence: rbbi-reverse-docs.log, rbbi-reverse-size.log, rbbi-reverse-format-check-final.log, rbbi-reverse-routing.log, rbbi-reverse-doctor.log.4371authored files;doctor zero errors with existing managed-hook warning. Final scope review finds zero unexpected paths;git diff --check passes.
+- Command: npx --no-install vite build (apps/office); npx --no-install playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: rbbi-reverse-build.log, rbbi-reverse-browser.log;1browser CSV import/primary ODS save/active-sheet export,5.9s. No timeout/assertion relaxation.
+- Same open AgentPlane task, not tenth completed task;related suites only. No network/vendor/policy/unrelated mutations. Native scratch excluded from commit. Overall goal remains active/incomplete: original data/provider/iterator construction and caches/dictionaries/word/title installation, NatNum12 output callers, full multiline EditEngine/DocImport and final CSV audit remain. No task finish or full native CSV readiness claim.

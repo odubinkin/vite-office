@@ -5051,3 +5051,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/icu-reference/source/common/rbbi.cpp`, templated `RuleBasedBreakIterator::handleNext`, comment referencing ICU-20837.
 - Observation: the accepting-state check reads `fLookAheadMatches` before the same row's `fLookAhead` position is recorded. Upstream explicitly notes that reversing these checks would support hard-break rules without following context, but also causes line-break test failures. This is an upstream-documented suspected defect; the port does not independently assert a repair or a complete reproducer.
 - Preserve the check order and original state mutations. Native tests compare the original private method on compiled LibreOffice rules and a lookahead rule. No eager recording or guessed hard-break behavior is added.
+
+### CALC-460 — ICU safe reverse null check follows a dereference of the same data pointer
+
+- Source: `vendor/icu-reference/source/common/rbbi.cpp`, `RuleBasedBreakIterator::handleSafePrevious` dispatcher and templated body.
+- Observation: the method reads `fData->fReverseTable` before its later `fData == nullptr` guard. The guard therefore cannot protect that earlier access. This is a source-order observation, not a claim about a defined result for invalid null iterator data.
+- Preserve the dereference/check order and normal valid-data behavior. Native tests exercise real initialized iterator data; the port adds no earlier guard, fallback boundary or synthetic null-data result.

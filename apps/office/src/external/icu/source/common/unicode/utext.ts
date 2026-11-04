@@ -1,6 +1,8 @@
 /** @fileoverview Consumed original ICU78.3 UText chunk/provider fields. Provider construction, cloning and general lifecycle remain outside this interface projection. */
 /** Original callbacks consumed by native-index and forward codepoint operations. */
 export interface UTextFuncs {
+  /** Original provider length callback. @param text - Actual provider state. @returns Native length. */
+  nativeLength(text: UText): number;
   /** Original provider access callback. @param text - Actual provider state. @param index - Native index. @param forward - Direction. @returns Whether access succeeds. */
   access(text: UText, index: number, forward: boolean): boolean;
   mapOffsetToNative: ((text: UText) => number) | null;
@@ -19,4 +21,12 @@ export interface UText {
   a: number;
   pFuncs: UTextFuncs;
 }
-export { utext_getNativeIndex, utext_setNativeIndex, utext_next32 } from "../utext";
+export {
+  utext_getNativeIndex,
+  utext_setNativeIndex,
+  utext_next32,
+  utext_previous32,
+  utext_current32,
+  utext_getPreviousNativeIndex,
+  utext_nativeLength,
+} from "../utext";

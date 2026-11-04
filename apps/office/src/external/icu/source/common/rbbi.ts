@@ -1,8 +1,40 @@
-/** @fileoverview Original ICU78.3 RuleBasedBreakIterator::handleNext body over its actual prepared state. Full iterator constructors, caches, dictionaries and public break operations remain pending. */
+/** @fileoverview Original ICU78.3 RuleBasedBreakIterator forward/safe reverse bodies over actual prepared state. Full iterator constructors, caches, dictionaries and public break operations remain pending. */
 import type { UText } from "./unicode/utext";
-import { utext_getNativeIndex, utext_setNativeIndex, utext_next32 } from "./utext";
+import {
+  utext_getNativeIndex,
+  utext_setNativeIndex,
+  utext_next32,
+  utext_previous32,
+} from "./utext";
 import { ucptrie_get } from "./ucptrie";
-import { RBBI_BOF_REQUIRED, type RBBIForwardData } from "./rbbidata.h";
+import { RBBI_BOF_REQUIRED, type RBBIForwardData, type RBBIReverseData } from "./rbbidata.h";
+/** Original fields consumed by the private safe reverse method. */
+export interface RuleBasedBreakIteratorReverseState {
+  fText: UText;
+  fData: RBBIReverseData;
+}
+/** Original safe reverse method locates a safe restart point without changing iterator position/status/end fields. @param this - Actual prepared iterator fields. @param fromPosition - Original native UTF16 position. @returns Safe restart point or DONE. */
+export function handleSafePrevious(
+  this: RuleBasedBreakIteratorReverseState,
+  fromPosition: number,
+): number {
+  const table = this.fData.fReverseTable;
+  utext_setNativeIndex(this.fText, fromPosition);
+  // Preserve source ordering: fData was already dereferenced before this null check.
+  if (this.fData === null || utext_getNativeIndex(this.fText) === 0) return -1;
+  let c = utext_previous32(this.fText),
+    state = 1;
+  const data = table.fTableData,
+    rowLength = table.fRowLen / data.BYTES_PER_ELEMENT;
+  let row = rowLength * state;
+  for (; c !== -1; c = utext_previous32(this.fText)) {
+    const category = ucptrie_get(this.fData.fTrie, c);
+    state = data[row + 3 + category] as number;
+    row = rowLength * state;
+    if (state === 0) break;
+  }
+  return utext_getNativeIndex(this.fText);
+}
 /** Original fields consumed and mutated by the private forward method; no substitute iterator state owner or factory. */
 export interface RuleBasedBreakIteratorForwardState {
   fText: UText;

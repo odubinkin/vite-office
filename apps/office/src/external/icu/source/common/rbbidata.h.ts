@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 RBBI forward table layout and consumed data-wrapper fields; typed-array views project native struct/row pointers without copying rule data. */
+/** @fileoverview Original ICU78.3 RBBI forward/reverse table layout and consumed data-wrapper fields; typed-array views project native struct/row pointers without copying rule data. */
 import type { UCPTrie } from "./unicode/ucptrie";
 export const RBBI_BOF_REQUIRED = 2;
 export const RBBI_8BITS_ROWS = 4;
@@ -28,5 +28,10 @@ export class RBBIStateTable {
 /** Actual wrapper members consumed by the forward method. Full wrapper construction/lifetime remains pending. */
 export interface RBBIForwardData {
   fForwardTable: RBBIStateTable;
+  fTrie: UCPTrie;
+}
+/** Original wrapper members consumed by the safe reverse method. */
+export interface RBBIReverseData {
+  fReverseTable: RBBIStateTable;
   fTrie: UCPTrie;
 }

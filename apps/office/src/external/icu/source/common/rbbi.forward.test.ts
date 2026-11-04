@@ -4,7 +4,13 @@ import native from "./rbbi.forward.native-observations.json" with { type: "json"
 import { handleNext, type RuleBasedBreakIteratorForwardState } from "./rbbi";
 import { RBBIStateTable } from "./rbbidata.h";
 import { ucptrie_openFromBinary } from "./ucptrie";
-import { ucstrTextAccess, utext_getNativeIndex, utext_next32, utext_setNativeIndex } from "./utext";
+import {
+  ucstrTextAccess,
+  ucstrTextLength,
+  utext_getNativeIndex,
+  utext_next32,
+  utext_setNativeIndex,
+} from "./utext";
 import type { UText } from "./unicode/utext";
 /** Projects exactly the native fixture's original provider fields and caller-owned UTF16 allocation. No iterator/provider construction is emulated. @param text - Original text. @param fields - Captured native initial fields. @returns Prepared actual field projection. */
 function prepared(text: number[], fields: number[]): UText {
@@ -20,7 +26,12 @@ function prepared(text: number[], fields: number[]): UText {
     a: fields[6] as number,
     context: units,
     chunkContents: units,
-    pFuncs: { access: ucstrTextAccess, mapOffsetToNative: null, mapNativeIndexToUTF16: null },
+    pFuncs: {
+      access: ucstrTextAccess,
+      nativeLength: ucstrTextLength,
+      mapOffsetToNative: null,
+      mapNativeIndexToUTF16: null,
+    },
   };
 }
 it.each(native.fixtures)(
@@ -86,6 +97,6 @@ it("retains native explicit/NUL-length chunk access, pinning and surrogate behav
       text.nativeIndexingLimit,
       text.providerProperties,
       text.a,
-    ]).toEqual(observation.expected);
+    ]).toEqual(observation.expected.slice(0, 9));
   }
 });

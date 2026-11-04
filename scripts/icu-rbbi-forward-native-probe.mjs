@@ -3,11 +3,19 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { resolve } from "node:path";
-import { handleNext } from "../apps/office/src/external/icu/source/common/rbbi.ts";
+import {
+  handleNext,
+  handleSafePrevious,
+} from "../apps/office/src/external/icu/source/common/rbbi.ts";
 import { RBBIStateTable } from "../apps/office/src/external/icu/source/common/rbbidata.h.ts";
 import { ucptrie_openFromBinary } from "../apps/office/src/external/icu/source/common/ucptrie.ts";
 import {
   ucstrTextAccess,
+  ucstrTextLength,
+  utext_current32,
+  utext_getPreviousNativeIndex,
+  utext_previous32,
+  utext_nativeLength,
   utext_getNativeIndex,
   utext_setNativeIndex,
   utext_next32,
@@ -93,6 +101,11 @@ int main(int argc,char**argv){
     cout<<"C "<<rid-3<<' '<<tid<<' '<<start<<' '<<t.chunkNativeStart<<' '<<t.chunkNativeLimit<<' '<<t.chunkOffset<<' '<<t.chunkLength<<' '<<t.nativeIndexingLimit<<' '<<t.providerProperties<<' '<<t.a;
     int result=bi.handleNext();
     cout<<' '<<result<<' '<<bi.fPosition<<' '<<bi.fRuleStatusIndex<<' '<<bi.fDictionaryCharCount<<' '<<int(bi.fDone)<<' '<<utext_getNativeIndex(&t)<<' '<<t.chunkOffset<<'\n';
+    ut=utext_openUChars(nullptr,reinterpret_cast<const char16_t*>(s.data()),s.size(),&status);bi.setText(ut,status);utext_close(ut);if(U_FAILURE(status))return 6;
+    bi.fPosition=start;bi.fRuleStatusIndex=777;bi.fDictionaryCharCount=888;bi.fDone=false;
+    cout<<"B "<<rid-3<<' '<<tid<<' '<<start<<' '<<t.chunkNativeStart<<' '<<t.chunkNativeLimit<<' '<<t.chunkOffset<<' '<<t.chunkLength<<' '<<t.nativeIndexingLimit<<' '<<t.providerProperties<<' '<<t.a;
+    result=bi.handleSafePrevious(start);
+    cout<<' '<<result<<' '<<bi.fPosition<<' '<<bi.fRuleStatusIndex<<' '<<bi.fDictionaryCharCount<<' '<<int(bi.fDone)<<' '<<utext_getNativeIndex(&t)<<' '<<t.chunkOffset<<'\n';
    }
   }
  }
@@ -100,7 +113,9 @@ int main(int argc,char**argv){
   UErrorCode status=U_ZERO_ERROR;auto&s=texts[tid];UText*t=utext_openUChars(nullptr,s.data(),mode?-1:s.size(),&status);if(U_FAILURE(status))return 5;
   cout<<"U "<<tid<<' '<<mode<<' '<<pos<<' '<<direct<<' '<<t->chunkNativeStart<<' '<<t->chunkNativeLimit<<' '<<t->chunkOffset<<' '<<t->chunkLength<<' '<<t->nativeIndexingLimit<<' '<<t->providerProperties<<' '<<t->a;
   if(direct)t->pFuncs->access(t,pos,true);else utext_setNativeIndex(t,pos);auto before=utext_getNativeIndex(t);int c=utext_next32(t);
-  cout<<' '<<before<<' '<<c<<' '<<utext_getNativeIndex(t)<<' '<<t->chunkNativeLimit<<' '<<t->chunkOffset<<' '<<t->chunkLength<<' '<<t->nativeIndexingLimit<<' '<<t->providerProperties<<' '<<t->a<<'\n';utext_close(t);
+  cout<<' '<<before<<' '<<c<<' '<<utext_getNativeIndex(t)<<' '<<t->chunkNativeLimit<<' '<<t->chunkOffset<<' '<<t->chunkLength<<' '<<t->nativeIndexingLimit<<' '<<t->providerProperties<<' '<<t->a;
+  int current=utext_current32(t);auto currentIndex=utext_getNativeIndex(t),previousIndex=utext_getPreviousNativeIndex(t),restoredIndex=utext_getNativeIndex(t);int previous=utext_previous32(t);auto previousPosition=utext_getNativeIndex(t),length=utext_nativeLength(t);
+  cout<<' '<<current<<' '<<currentIndex<<' '<<previousIndex<<' '<<restoredIndex<<' '<<previous<<' '<<previousPosition<<' '<<length<<' '<<t->chunkNativeLimit<<' '<<t->chunkOffset<<' '<<t->chunkLength<<' '<<t->nativeIndexingLimit<<' '<<t->providerProperties<<' '<<t->a<<'\n';utext_close(t);
  }
 }
 `;
@@ -146,12 +161,14 @@ const rows = execFileSync(prefix, [`${source}/data/in`, prefix, ...rules], {
     .trim()
     .split("\n"),
   fixtures = [];
-let matched = 0;
+let matched = 0,
+  matchedReverse = 0;
 for (let rid = 0; rid < rules.length; ++rid) {
   const bytes = new Uint8Array(readFileSync(`${prefix}-${rid}.bin`)),
     header = new Uint32Array(bytes.buffer, bytes.byteOffset, 20),
     status = [0];
   const fForwardTable = new RBBIStateTable(bytes.subarray(header[4], header[4] + header[5])),
+    fReverseTable = new RBBIStateTable(bytes.subarray(header[6], header[6] + header[7])),
     fTrie = ucptrie_openFromBinary(
       0,
       -1,
@@ -193,7 +210,12 @@ for (let rid = 0; rid < rules.length; ++rid) {
           a: fields[6],
           context: units,
           chunkContents: units,
-          pFuncs: { access: ucstrTextAccess, mapOffsetToNative: null, mapNativeIndexToUTF16: null },
+          pFuncs: {
+            access: ucstrTextAccess,
+            nativeLength: ucstrTextLength,
+            mapOffsetToNative: null,
+            mapNativeIndexToUTF16: null,
+          },
         };
         const state = {
           fData: { fForwardTable, fTrie },
@@ -223,11 +245,70 @@ for (let rid = 0; rid < rules.length; ++rid) {
         return { text: tid, start, initial: fields.slice(0, 7), expected };
       },
     );
+  const reverseCases = rows
+    .filter(
+      /** Selects original safe reverse rows. @param row - Native row. @returns Match. */ (row) =>
+        row.startsWith(`B ${rid} `),
+    )
+    .map(
+      /** Compares original safe reverse cursor/unchanged iterator state. @param row - Native row. @returns Exact observation tuple. */ (
+        row,
+      ) => {
+        const values = row.split(" ").slice(2).map(Number),
+          [tid, start, ...fields] = values,
+          text = texts[tid],
+          units = new Uint16Array(text.length + 1);
+        for (let i = 0; i < text.length; ++i) units[i] = text.charCodeAt(i);
+        const fText = {
+          chunkNativeStart: fields[0],
+          chunkNativeLimit: fields[1],
+          chunkOffset: fields[2],
+          chunkLength: fields[3],
+          nativeIndexingLimit: fields[4],
+          providerProperties: fields[5],
+          a: fields[6],
+          context: units,
+          chunkContents: units,
+          pFuncs: {
+            access: ucstrTextAccess,
+            nativeLength: ucstrTextLength,
+            mapOffsetToNative: null,
+            mapNativeIndexToUTF16: null,
+          },
+        };
+        const state = {
+          fText,
+          fData: { fReverseTable, fTrie },
+          fPosition: start,
+          fRuleStatusIndex: 777,
+          fDictionaryCharCount: 888,
+          fDone: false,
+        };
+        const result = handleSafePrevious.call(state, start),
+          actual = [
+            result,
+            state.fPosition,
+            state.fRuleStatusIndex,
+            state.fDictionaryCharCount,
+            Number(state.fDone),
+            utext_getNativeIndex(fText),
+            fText.chunkOffset,
+          ];
+        if (JSON.stringify(actual) !== JSON.stringify(fields.slice(7)))
+          throw Error(
+            `Native safe reverse mismatch ${rid}/${tid}/${start}: ${actual} != ${fields.slice(7)}`,
+          );
+        ++matchedReverse;
+        return values;
+      },
+    );
   fixtures.push({
     name: rid < names.length ? names[rid] : rid === names.length ? "lookahead" : "many-states",
     binary: Buffer.from(bytes).toString("base64"),
     flags: fForwardTable.fFlags,
     cases,
+    reverseFlags: fReverseTable.fFlags,
+    reverseCases,
   });
 }
 const utextCases = rows
@@ -261,7 +342,12 @@ const utextCases = rows
         a: fields[6],
         context: units,
         chunkContents: units,
-        pFuncs: { access: ucstrTextAccess, mapOffsetToNative: null, mapNativeIndexToUTF16: null },
+        pFuncs: {
+          access: ucstrTextAccess,
+          nativeLength: ucstrTextLength,
+          mapOffsetToNative: null,
+          mapNativeIndexToUTF16: null,
+        },
       };
       if (direct) ucstrTextAccess(fText, start, true);
       else utext_setNativeIndex(fText, start);
@@ -279,6 +365,28 @@ const utextCases = rows
           fText.a,
         ],
         expected = fields.slice(7);
+      const current = utext_current32(fText),
+        currentIndex = utext_getNativeIndex(fText),
+        previousIndex = utext_getPreviousNativeIndex(fText),
+        restoredIndex = utext_getNativeIndex(fText),
+        previous = utext_previous32(fText),
+        previousPosition = utext_getNativeIndex(fText),
+        length = utext_nativeLength(fText);
+      actual.push(
+        current,
+        currentIndex,
+        previousIndex,
+        restoredIndex,
+        previous,
+        previousPosition,
+        length,
+        fText.chunkNativeLimit,
+        fText.chunkOffset,
+        fText.chunkLength,
+        fText.nativeIndexingLimit,
+        fText.providerProperties,
+        fText.a,
+      );
       if (JSON.stringify(actual) !== JSON.stringify(expected))
         throw Error(`Native UText mismatch ${tid}/${mode}/${start}: ${actual} != ${expected}`);
       return { text: tid, mode, start, direct, initial: fields.slice(0, 7), expected };
@@ -301,8 +409,9 @@ for (const path of [
 const report = {
   icuVersion: "78.3",
   scope:
-    "Original private handleNext and explicit/NUL-length UChars native-index/forward state. Access-only header token; unchanged method/provider bodies. No complete iterator/cache/dictionary/title/service claim.",
+    "Original private forward/safe reverse methods and explicit/NUL-length UChars index/current/forward/backward/length state. Access-only header token; unchanged native method/provider bodies. No complete iterator/cache/dictionary/title/service claim.",
   matched,
+  matchedReverse,
   hashes,
   texts: texts.map(
     /** Stores explicit UTF16 units, including lone surrogates, without relying on JSON scalar normalization. @param text - Actual supplied text. @returns Original code units. */ (
@@ -323,7 +432,11 @@ writeFileSync(
   "apps/office/src/external/icu/source/common/rbbi.forward.native-observations.json",
   JSON.stringify(report, null, 2) + "\n",
 );
-writeFileSync(`${prefix}-comparison.json`, JSON.stringify({ matched, hashes }, null, 2) + "\n");
+writeFileSync(
+  `${prefix}-comparison.json`,
+  JSON.stringify({ matched, matchedReverse, utextCases: utextCases.length, hashes }, null, 2) +
+    "\n",
+);
 process.stdout.write(
-  `Matched ${matched} original forward-state observations for ${rules.length} compiled rule sets and ${utextCases.length} UText observations.\n`,
+  `Matched ${matched} original forward-state observations, ${matchedReverse} safe reverse observations for ${rules.length} compiled rule sets and ${utextCases.length} UText sequences.\n`,
 );

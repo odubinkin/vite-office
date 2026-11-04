@@ -4106,3 +4106,18 @@ header token permits calling the original private method; native bodies and
 providers are unchanged. It matches 2,450 forward states and 1,220 UText states.
 Fixtures encode UTF16 as code-unit arrays, preserving lone surrogates through
 the JSON import path. No complete allocator/ABI or CSV readiness claim.
+
+## Safe reverse rule scans and cache-consumed text queries
+
+The original private `handleSafePrevious` now uses the native reverse table
+and frozen trie. It returns a safe restart point while retaining the iterator's
+position/status/end/dictionary fields. This point is an input to the original
+boundary cache, whose public behavior remains pending.
+
+Original UText current/backward queries, previous-native-index lookup and
+provider length operations retain surrogate handling, transient/restored cursor
+operations and deferred NUL-length scanning. Native comparison adds 2,450 safe
+reverse observations and extends all 1,220 text sequences while retaining the
+existing forward observations. No alternate word-boundary algorithm is added.
+Full data/provider/iterator construction, caches, dictionary engines and the
+LibreOffice word/title/service callers remain incomplete.
