@@ -1,4 +1,14 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
+import {
+  RES_OPAQUE,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_UNKNOWNATR_BEGIN,
+  RES_UNKNOWNATR_END,
+} from "../../../inc/hintids";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { SwFormatContent } from "../../../inc/fmtcntnt";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatSurround } from "../../../inc/fmtsrnd";
@@ -109,6 +119,13 @@ import {
   type ItemInfo,
 } from "../../../../svl/source/items/itempool";
 import { RES_CHRATR_BEGIN, POOLATTR_END } from "../../../inc/hintids";
+/** Original complete frame-format ranges from init.cxx, including unknown XML attributes and all drawing-layer fill items. */
+export const aFrameFormatSetRange: WhichRangesContainer = [
+  [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+  [RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1],
+  [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+];
+
 /** Source ItemInfoPackageSwAttributes for all currently represented Writer item types. Unknown native entries stay explicitly unrepresented; no stand-in items are created. */
 class ItemInfoPackageSwAttributes extends ItemInfoPackage {
   private readonly maItemInfos = defaultMetadata.map(
@@ -149,6 +166,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatRowSplit());
     add(new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR));
     add(new SwFormatFillOrder());
+    add(new SvxOpaqueItem(RES_OPAQUE));
     add(new SwFormatContent());
     add(new SwFormatAnchor());
     add(new SwFormatSurround());

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 427
+revision: 431
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T14:32:35.928Z"
+  updated_at: "2026-11-04T15:05:21.088Z"
   updated_by: "CODER"
-  note: "HTML67 checkpoint verified:322 unique related cases/22files by consolidated run plus final47/3 source-backed lifetime/fresh rerun;29 new cases pass. Whole-app types and final source/style/registry/static gates pass. Native range/index ownership and SectionDown stack wrapping implemented; WRITER348 preserved. MakeFlySection and production HTML first-cell/recursive materialization/layout, RTF direction and final format/UI closure remain incomplete."
-  attempts: 78
+  note: "HTML68 verified checkpoint:260unique cases/21files, whole-app types and all source/style/Writer+Shared registry/static gates pass. Eight original frame-pool default branches, full native frame ranges, opacity item/default/pool/getters and independent auto-update flag implemented; WRITER349 preserved. Frame style lookup/factory/modified restoration, MakeFlySection, production HTML tables, RTF direction and final format/UI audit remain incomplete."
+  attempts: 79
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1253,8 +1256,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T15:05:21.088Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML68 verified checkpoint:260unique cases/21files, whole-app types and all source/style/Writer+Shared registry/static gates pass. Eight original frame-pool default branches, full native frame ranges, opacity item/default/pool/getters and independent auto-update flag implemented; WRITER349 preserved. Frame style lookup/factory/modified restoration, MakeFlySection, production HTML tables, RTF direction and final format/UI audit remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T15:06:30.048Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T14:33:45.923Z"
+doc_updated_at: "2026-11-04T15:06:30.048Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3309,6 +3325,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T15:05:21.088Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML68 verified checkpoint:260unique cases/21files, whole-app types and all source/style/Writer+Shared registry/static gates pass. Eight original frame-pool default branches, full native frame ranges, opacity item/default/pool/getters and independent auto-update flag implemented; WRITER349 preserved. Frame style lookup/factory/modified restoration, MakeFlySection, production HTML tables, RTF direction and final format/UI audit remain incomplete.
+    Attempts: 79
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:05:20.190Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3553,6 +3599,19 @@ sections:
     Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
     Result: pass, terminal0. Evidence:html67-gates-verified.log,html67-registry-verified.json,html67-size-verified.log. Scope:1948runtime/1735mapped provenance,0registry semantic violations,1947source boundaries,4374JSDoc files,4378authored size scan,115required source paths/32retired roots and84guarded Which identities. WRITER348 preserves source range output behavior without claiming a compiled upstream defect.
     Remaining work is recorded in Findings and the capability matrix. Full native format/current-slice completion is not claimed; no full-project replay.
+
+    HTML68 verified source checkpoint; parent goal incomplete.
+    Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/poolfmt-frame.native.test.ts src/sw/inc/fmtcntnt.native.test.ts src/sw/inc/fmtanchr-surround.native.test.ts src/sw/inc/frameformats.native.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/bastyp/native-defaults.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/doc/native-page-copy.test.ts src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/native-insert-table-command.test.tsx)
+    Result: pass, terminal0. Evidence:256cases/20files; html68-tests-final.log. Scope:16fresh frame-pool default/opacity/range/flag cases and related actual native attributes/defaults/formats/pages/tables/HTML, TXT/RTF/Markdown/document-I/O and UI.
+    Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/svl/source/items/native-bool-item.test.ts)
+    Result: pass, terminal0. Evidence:4cases/1file; html68-bool-tests-final.log. Scope: actual shared SfxBoolItem values/pool and Writer bool descendants in their declared Writer-owned project. Unique union260cases/21files, no double counting.
+    Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+    Result: pass, terminal0. Evidence:html68-types-final.log. Scope: whole application; subsequent source change only attaches the existing lambda JSDoc correctly and preserves executable/type semantics.
+    Command: node_modules/.bin/eslint <all changed/new TS>; node_modules/.bin/prettier --check <same TS>.
+    Result: pass. Evidence:html68-gates-verified.log and html68-files.json. Scope: all intentional TypeScript source/test files, including the source-pinned enum alias annotation.
+    Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+    Result: pass, terminal0. Evidence:html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Scope:1950runtime provenance/1737mapped,both registries0semantic violations,1949source boundaries,4377JSDoc files,4381authored size scan,115required source paths/32retired and85guarded Which identities. WRITER349 source redundancy is retained, not normalized or claimed a confirmed compiled defect.
+    Remaining factory/modified-state/MakeFlySection/HTML production/RTF direction/format-UI closure gaps are explicit in Findings and the capability matrix. No full native format/module/ABI completeness claim; no full-project replay.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4916,6 +4975,19 @@ sections:
     Other retained diagnostics: first fresh run28/29 failed only in fixture cleanup, because the existing DeleteTable helper requires following text while this wrapped table is followed by a real structural end. Cleanup now uses the actual original DelNodes full-section path, preserving all graph assertions and avoiding a synthetic following paragraph. Final29/2 passes. Initial runtime registry evidence incorrectly listed the reexported SwNodeIndex as a new local executable declaration; corrected to SwNodeRange while keeping the same actual index class. No verifier was weakened or fake class introduced. InsertNode visibility was aligned with the pinned private friend boundary; guard tests retain actual array/endpoint assertions and public DelNodes observations rather than spying on a private implementation hook. Initial and final types/style evidence is retained.
 
     Remaining: actual MakeFlySection style-pool/name/content/inline-fly/contact/layout/undo lifecycle, production first-cell and recursive HTML table grammar/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit. Full SectionUp/general Delete, node-array/document teardown and whole-module/C++ ABI remain unported or unverified. WRITER347 style-rename migration and intentional save/open/autosave/recovery deviations unchanged. Parent task and active goal remain incomplete.
+
+    S3HW1E HTML68 — Original eight frame-style default-item branches and full general frame ranges.
+    Implemented the original frame default switch over real SwFrameFormat/SwAttrSet/items for Frame (normal/HTML), Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels. Source anchor/wrap/relative-orientation choices, hairline black border85twip distances,114twip spacing, integral5/1/35mm dimensions and source width/height modes are retained. Label content/size/position protection bits remain independent; the native auto-update-on-direct-format flag has separate false construction/true setter-default/query state and does not change IsAuto. Original source repeated Formula vertical Put is preserved and documented as WRITER349, without claiming an observed compiled functional defect.
+
+    The original aFrameFormatSetRange global now lives in init responsibility and is used by general SwFrameFormat construction:92..145,163..163,1014..1034. This replaces the prior table-sized/default fill-subset admission. Explicit row/box range overrides stay intact; the actual row fixture is disposed explicitly before its document rather than relying on unverified general document teardown. Native SvxOpaqueItem uses caller Which, source true default and actual dynamic copy/Clone over existing SfxBoolItem. RES_OPAQUE109 static/pool defaults and native SwAttrSet/SwFormat typed getters use the actual item, not a generic bool/provider. Native FRM_BEGIN/FRM_FRAME retain the same3072 alias, using the repository's existing targeted native enum-alias lint convention and a literal/native alias assertion; no global rule or verifier was weakened.
+
+    This is the actual default-switch responsibility, not completed GetFormatFromPool family lookup/invalid-ID fallback, owned frame-style collection/factory, UndoGuard/modified-state restoration or localized resource/style creation. No fake modified-state or style-result provider is introduced. Frame FillStyle clearing affects the fresh local set, not already-authored destination items. Graphic/OLE style values do not fabricate graphic/OLE content nodes or services. Opacity localized GetPresentation and broader generic format copy/assignment/C++ const/RTTI/ABI remain unported or unverified. No broad semantic/default/contract/sourceResponsibility confidence was promoted.
+
+    Final260unique related tests/21files pass:256Writer cases/20files plus4existing real bool-item cases in their declared Writer-owned test project. Fresh pool/default/opacity/range/flag responsibility has16cases in one real-owner file. Whole-app types and all final source/style/static/Writer+Shared registry gates pass: provenance1950runtime/1737mapped/182browser/31infra; both registries0semantic violations; boundaries1949runtime/10871imports/229edges; JSDoc4377source files; size4381authored files; source-tree115required/32retired; WhichId85native identities. Evidence html68-tests-final.log,html68-bool-tests-final.log,html68-types-final.log,html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Full-project replay was not run.
+
+    Retained diagnostics: an initial bounded edit marker assumed an exported ItemInfoPackage class, while the real class is private; corrected the source anchor before applying the remaining approved edits. Initial preexisting31/3 adjacent pass was not used as proof of the unloaded new producer; the later actual47/4 and final256/20 execute the new defaults/ranges. Initial lint rejected the real duplicate native enum boundary alias; a narrow source-justified annotation, matching existing htmltokn conventions, preserves exact identity instead of inventing another number or dropping a required alias. The new temporary Put lambda's JSDoc was moved from the variable declaration onto the actual function expression. A bool-test invocation under shared config found no tests because the established project explicitly assigns that Writer-importing shared-owner test to Writer; the correct Writer config passed all4cases, without changing include/exclude rules or waiving the test. No production regression was hidden, verifier changed or fake provider added.
+
+    Remaining: actual frame pool lookup/creation/undo/modified-state/resource lifecycle, MakeFlySection/style naming/content/inline-fly/contact/layout/undo, production HTML first-cell/recursive table grammar/materialization/layout, RTF direction and final fixed-current-slice format/UI audit. WRITER347 general style rename remains open. Intentional browser save/open/autosave/recovery policies are unchanged. Parent task and active goal remain incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -6981,6 +7053,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T15:05:21.088Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML68 verified checkpoint:260unique cases/21files, whole-app types and all source/style/Writer+Shared registry/static gates pass. Eight original frame-pool default branches, full native frame ranges, opacity item/default/pool/getters and independent auto-update flag implemented; WRITER349 preserved. Frame style lookup/factory/modified restoration, MakeFlySection, production HTML tables, RTF direction and final format/UI audit remain incomplete.
+Attempts: 79
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:05:20.190Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -7225,6 +7327,19 @@ Result: pass. Evidence:html67-gates-verified.log. Scope: all intentional changed
 Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
 Result: pass, terminal0. Evidence:html67-gates-verified.log,html67-registry-verified.json,html67-size-verified.log. Scope:1948runtime/1735mapped provenance,0registry semantic violations,1947source boundaries,4374JSDoc files,4378authored size scan,115required source paths/32retired roots and84guarded Which identities. WRITER348 preserves source range output behavior without claiming a compiled upstream defect.
 Remaining work is recorded in Findings and the capability matrix. Full native format/current-slice completion is not claimed; no full-project replay.
+
+HTML68 verified source checkpoint; parent goal incomplete.
+Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/poolfmt-frame.native.test.ts src/sw/inc/fmtcntnt.native.test.ts src/sw/inc/fmtanchr-surround.native.test.ts src/sw/inc/frameformats.native.test.ts src/sw/source/core/attr/native-format-construction.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/core/bastyp/native-defaults.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/doc/native-page-copy.test.ts src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/core/docnode/native-table-construction-formats.test.ts src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/editor/native-format-construction.test.tsx src/sw/browser/presentation/native-insert-table-command.test.tsx)
+Result: pass, terminal0. Evidence:256cases/20files; html68-tests-final.log. Scope:16fresh frame-pool default/opacity/range/flag cases and related actual native attributes/defaults/formats/pages/tables/HTML, TXT/RTF/Markdown/document-I/O and UI.
+Command: (cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/svl/source/items/native-bool-item.test.ts)
+Result: pass, terminal0. Evidence:4cases/1file; html68-bool-tests-final.log. Scope: actual shared SfxBoolItem values/pool and Writer bool descendants in their declared Writer-owned project. Unique union260cases/21files, no double counting.
+Command: (cd apps/office && ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit).
+Result: pass, terminal0. Evidence:html68-types-final.log. Scope: whole application; subsequent source change only attaches the existing lambda JSDoc correctly and preserves executable/type semantics.
+Command: node_modules/.bin/eslint <all changed/new TS>; node_modules/.bin/prettier --check <same TS>.
+Result: pass. Evidence:html68-gates-verified.log and html68-files.json. Scope: all intentional TypeScript source/test files, including the source-pinned enum alias annotation.
+Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
+Result: pass, terminal0. Evidence:html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Scope:1950runtime provenance/1737mapped,both registries0semantic violations,1949source boundaries,4377JSDoc files,4381authored size scan,115required source paths/32retired and85guarded Which identities. WRITER349 source redundancy is retained, not normalized or claimed a confirmed compiled defect.
+Remaining factory/modified-state/MakeFlySection/HTML production/RTF direction/format-UI closure gaps are explicit in Findings and the capability matrix. No full native format/module/ABI completeness claim; no full-project replay.
 
 ## Rollback Plan
 
@@ -8592,3 +8707,16 @@ Whole-app types and final source/static/style gates pass: provenance1948runtime/
 Other retained diagnostics: first fresh run28/29 failed only in fixture cleanup, because the existing DeleteTable helper requires following text while this wrapped table is followed by a real structural end. Cleanup now uses the actual original DelNodes full-section path, preserving all graph assertions and avoiding a synthetic following paragraph. Final29/2 passes. Initial runtime registry evidence incorrectly listed the reexported SwNodeIndex as a new local executable declaration; corrected to SwNodeRange while keeping the same actual index class. No verifier was weakened or fake class introduced. InsertNode visibility was aligned with the pinned private friend boundary; guard tests retain actual array/endpoint assertions and public DelNodes observations rather than spying on a private implementation hook. Initial and final types/style evidence is retained.
 
 Remaining: actual MakeFlySection style-pool/name/content/inline-fly/contact/layout/undo lifecycle, production first-cell and recursive HTML table grammar/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit. Full SectionUp/general Delete, node-array/document teardown and whole-module/C++ ABI remain unported or unverified. WRITER347 style-rename migration and intentional save/open/autosave/recovery deviations unchanged. Parent task and active goal remain incomplete.
+
+S3HW1E HTML68 — Original eight frame-style default-item branches and full general frame ranges.
+Implemented the original frame default switch over real SwFrameFormat/SwAttrSet/items for Frame (normal/HTML), Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels. Source anchor/wrap/relative-orientation choices, hairline black border85twip distances,114twip spacing, integral5/1/35mm dimensions and source width/height modes are retained. Label content/size/position protection bits remain independent; the native auto-update-on-direct-format flag has separate false construction/true setter-default/query state and does not change IsAuto. Original source repeated Formula vertical Put is preserved and documented as WRITER349, without claiming an observed compiled functional defect.
+
+The original aFrameFormatSetRange global now lives in init responsibility and is used by general SwFrameFormat construction:92..145,163..163,1014..1034. This replaces the prior table-sized/default fill-subset admission. Explicit row/box range overrides stay intact; the actual row fixture is disposed explicitly before its document rather than relying on unverified general document teardown. Native SvxOpaqueItem uses caller Which, source true default and actual dynamic copy/Clone over existing SfxBoolItem. RES_OPAQUE109 static/pool defaults and native SwAttrSet/SwFormat typed getters use the actual item, not a generic bool/provider. Native FRM_BEGIN/FRM_FRAME retain the same3072 alias, using the repository's existing targeted native enum-alias lint convention and a literal/native alias assertion; no global rule or verifier was weakened.
+
+This is the actual default-switch responsibility, not completed GetFormatFromPool family lookup/invalid-ID fallback, owned frame-style collection/factory, UndoGuard/modified-state restoration or localized resource/style creation. No fake modified-state or style-result provider is introduced. Frame FillStyle clearing affects the fresh local set, not already-authored destination items. Graphic/OLE style values do not fabricate graphic/OLE content nodes or services. Opacity localized GetPresentation and broader generic format copy/assignment/C++ const/RTTI/ABI remain unported or unverified. No broad semantic/default/contract/sourceResponsibility confidence was promoted.
+
+Final260unique related tests/21files pass:256Writer cases/20files plus4existing real bool-item cases in their declared Writer-owned test project. Fresh pool/default/opacity/range/flag responsibility has16cases in one real-owner file. Whole-app types and all final source/style/static/Writer+Shared registry gates pass: provenance1950runtime/1737mapped/182browser/31infra; both registries0semantic violations; boundaries1949runtime/10871imports/229edges; JSDoc4377source files; size4381authored files; source-tree115required/32retired; WhichId85native identities. Evidence html68-tests-final.log,html68-bool-tests-final.log,html68-types-final.log,html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Full-project replay was not run.
+
+Retained diagnostics: an initial bounded edit marker assumed an exported ItemInfoPackage class, while the real class is private; corrected the source anchor before applying the remaining approved edits. Initial preexisting31/3 adjacent pass was not used as proof of the unloaded new producer; the later actual47/4 and final256/20 execute the new defaults/ranges. Initial lint rejected the real duplicate native enum boundary alias; a narrow source-justified annotation, matching existing htmltokn conventions, preserves exact identity instead of inventing another number or dropping a required alias. The new temporary Put lambda's JSDoc was moved from the variable declaration onto the actual function expression. A bool-test invocation under shared config found no tests because the established project explicitly assigns that Writer-importing shared-owner test to Writer; the correct Writer config passed all4cases, without changing include/exclude rules or waiving the test. No production regression was hidden, verifier changed or fake provider added.
+
+Remaining: actual frame pool lookup/creation/undo/modified-state/resource lifecycle, MakeFlySection/style naming/content/inline-fly/contact/layout/undo, production HTML first-cell/recursive table grammar/materialization/layout, RTF direction and final fixed-current-slice format/UI audit. WRITER347 general style rename remains open. Intentional browser save/open/autosave/recovery policies are unchanged. Parent task and active goal remain incomplete.

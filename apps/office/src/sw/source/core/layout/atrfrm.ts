@@ -1,13 +1,8 @@
-/** @fileoverview Represents table frame-format identity from pinned atrfrm.cxx; fly frames and the full frame attribute collection remain unverified. */
+/** @fileoverview Native frame identity, complete attribute ranges and special/fly-format construction from atrfrm.cxx/frmfmt.hxx; layout/contact and full destructor families remain unverified. */
 import { NameChanged } from "../../../inc/hints";
 import type { SwFormatsBase } from "../../../inc/docary";
 import { RES_FRMFMT, RES_FLYFRMFMT, RES_DRAWFRMFMT } from "../../../inc/hintids";
-import {
-  XATTR_FILLSTYLE,
-  XATTR_FILLCOLOR,
-  XATTR_FILLTRANSPARENCE,
-  XATTR_FILLUSESLIDEBACKGROUND,
-} from "../../../../svx/inc/xdef";
+import { aFrameFormatSetRange } from "../bastyp/init";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import type { WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -16,7 +11,7 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { RES_BOX, RES_VERT_ORIENT } from "../../../inc/hintids";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import { RES_ROW_SPLIT, RES_FRM_SIZE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import { RES_ROW_SPLIT, RES_FRM_SIZE } from "../../../inc/hintids";
 import { RES_TEXTGRID } from "../../../inc/hintids";
 import type { SwTextGridItem } from "../../../inc/tgrditem";
 
@@ -40,12 +35,7 @@ export class SwFrameFormat extends SwFormat {
   public constructor(
     pool: SwAttrPool,
     name: string,
-    ranges: WhichRangesContainer = [
-      [RES_FRM_SIZE, RES_COLLAPSING_BORDERS],
-      [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
-      [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
-      [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
-    ],
+    ranges: WhichRangesContainer = aFrameFormatSetRange,
     derivedFrom?: SwFrameFormat,
     formatWhich = RES_FRMFMT,
   ) {

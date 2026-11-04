@@ -10,9 +10,23 @@ export const POOLGRP_NOCOLLID = 1 << 10;
 export const COLL_GET_RANGE_BITS = 15 << 11;
 /** Original character-format group value. */
 export const POOLGRP_CHARFMT = POOLGRP_NOCOLLID;
+/** Original frame-format group value. */
+export const POOLGRP_FRAMEFMT = (1 << 11) + POOLGRP_NOCOLLID;
 
 /** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
+  /** Original frame pool start. */ FRM_BEGIN = 3072,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values -- Native FRM_BEGIN/FRM_FRAME share the pinned source identity.
+  /** Original Frame style. */ FRM_FRAME = 3072,
+  /** Original Graphics style. */ FRM_GRAPHIC = 3073,
+  /** Original OLE style. */ FRM_OLE = 3074,
+  /** Original Formula style. */ FRM_FORMEL = 3075,
+  /** Original Marginalia style. */ FRM_MARGINAL = 3076,
+  /** Original Watermark style. */ FRM_WATERSIGN = 3077,
+  /** Original Labels style. */ FRM_LABEL = 3078,
+  /** Original Inline Heading style. */ FRM_INLINE_HEADING = 3079,
+  /** Original exclusive frame pool end. */ FRM_END = 3080,
+
   /** Original page group start, POOLGRP_NOCOLLID + (2 << 11). */
   PAGE_STANDARD = 5120,
   /** Original first page pool identity. */

@@ -1679,3 +1679,15 @@ but its style-pool/naming/inline-fly/contact/layout/undo and complete factory
 lifecycle are not yet implemented. Recursive HTML first-cell/table production,
 materialization/layout, RTF direction and final current-slice format/UI closure
 remain required; this checkpoint does not establish full native format parity.
+
+HTML68 implements the original default-item switch for all eight frame pool
+styles using real native frame/items and document HTML_MODE. It restores the
+complete original frame admission ranges, adds actual opacity default109/true
+and separate auto-update-on-direct-format state, and preserves integral size
+conversions and original Formula duplicate Put (WRITER349). Existing explicit
+row/box ranges are retained. The switch is a source responsibility fragment;
+GetFormatFromPool family lookup, real style collection/factory/undo/modified
+restoration and localized style resources are not supplied or simulated here.
+MakeFlySection and production first-cell/recursive HTML table materialization,
+layout, RTF direction and final current-slice format/UI closure remain open.
+No full native format/module or binary-ABI completion is claimed.

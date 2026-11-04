@@ -359,6 +359,9 @@ export const RES_CONDTXTFMTCOLL = RES_FMT_BEGIN + 6;
 /** Original exclusive format identity bound. */
 export const RES_FMT_END = RES_FMT_BEGIN + 7;
 
+/** Original frame opacity identity, RES_FRMATR_BEGIN +17. */
+export const RES_OPAQUE = 109 as const;
+
 /** Original frame protection identity, RES_FRMATR_BEGIN +18. */
 export const RES_PROTECT = 110 as const;
 

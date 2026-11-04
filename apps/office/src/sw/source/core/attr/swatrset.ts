@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import { RES_OPAQUE } from "../../../inc/hintids";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
 import { RES_CNTNT } from "../../../inc/hintids";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
@@ -141,6 +143,7 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    register(RES_OPAQUE);
     register(RES_CNTNT);
     register(RES_ANCHOR);
     register(RES_SURROUND);
@@ -709,6 +712,10 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original opacity getter from swatrset.hxx. @param searchInParent - Native inherited lookup. @returns Actual opacity item. */
+  GetOpaque(searchInParent = true): SvxOpaqueItem {
+    return this.Get(RES_OPAQUE, searchInParent) as SvxOpaqueItem;
+  }
   /** Original inline content getter from fmtcntnt.hxx. @param searchInParent - Native inherited lookup. @returns Actual content item. */
   GetContent(searchInParent = true): SwFormatContent {
     return this.Get(RES_CNTNT, searchInParent) as SwFormatContent;

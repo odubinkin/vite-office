@@ -2,6 +2,7 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
@@ -30,6 +31,7 @@ export class SwFormat extends BroadcastingModify {
   }
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
+  private m_bAutoUpdateOnDirectFormat = false;
   private poolFormatId = SwPoolFormatId.UNKNOWN;
   private formatInDTOR = false;
 
@@ -80,6 +82,18 @@ export class SwFormat extends BroadcastingModify {
     if (broadcast) this.NotifyFormatInheritance();
   }
 
+  /** Original independent auto-update flag query from format.hxx. @returns Flag. */
+  IsAutoUpdateOnDirectFormat(): boolean {
+    return this.m_bAutoUpdateOnDirectFormat;
+  }
+  /** Original flag setter, default true; this does not change IsAuto. @param value - Native new flag. @returns Nothing. */
+  SetAutoUpdateOnDirectFormat(value = true): void {
+    this.m_bAutoUpdateOnDirectFormat = value;
+  }
+  /** Original generic opacity getter. @param searchInParent - Native inherited lookup. @returns Actual item. */
+  GetOpaque(searchInParent = true): SvxOpaqueItem {
+    return this.attributeSet.GetOpaque(searchInParent);
+  }
   /** Original inline content getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual content item. */
   GetContent(searchInParent = true): SwFormatContent {
     return this.attributeSet.GetContent(searchInParent);
