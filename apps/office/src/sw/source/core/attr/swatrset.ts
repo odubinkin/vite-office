@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import type { SwFormatContent } from "../../../inc/fmtcntnt";
+import { RES_CNTNT } from "../../../inc/hintids";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
 import { RES_ANCHOR, RES_SURROUND } from "../../../inc/hintids";
@@ -139,6 +141,7 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    register(RES_CNTNT);
     register(RES_ANCHOR);
     register(RES_SURROUND);
     register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
@@ -706,6 +709,10 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original inline content getter from fmtcntnt.hxx. @param searchInParent - Native inherited lookup. @returns Actual content item. */
+  GetContent(searchInParent = true): SwFormatContent {
+    return this.Get(RES_CNTNT, searchInParent) as SwFormatContent;
+  }
   /** Original typed anchor getter from fmtanchr.hxx. @param searchInParent - Native inherited lookup. @returns Actual anchor item. */
   public GetAnchor(searchInParent = true): SwFormatAnchor {
     return this.Get(RES_ANCHOR, searchInParent) as SwFormatAnchor;

@@ -560,3 +560,14 @@ export function EndAttr(
   if (!insert) attr.SourceDispose();
   return result;
 }
+
+/** Original point-item InsertAttr overload from swhtml.cxx; HTMLAttr owns an actual copied position/item and the parser owns its existing queue. @param parser - Actual importer. @param item - Borrowed native item. @param atStart - Front versus back insertion. @returns Nothing. */
+export function InsertAttrAtPoint(
+  parser: SwHTMLAttributeState,
+  item: SfxPoolItem,
+  atStart: boolean,
+): void {
+  const attr = new HTMLAttr(parser.m_pPam.GetPoint(), item, null, null);
+  if (atStart) parser.m_aSetAttrTab.unshift(attr);
+  else parser.m_aSetAttrTab.push(attr);
+}

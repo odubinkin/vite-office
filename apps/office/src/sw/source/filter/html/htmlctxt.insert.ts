@@ -1,7 +1,7 @@
 /** @fileoverview Native consumed InsertAttrs context margins, spacing and deferred item insertion from htmlctxt.cxx. */
 import type { SwHTMLParser } from "./swhtml";
 import { HTMLAttrContext } from "./htmlctxt";
-import { NewAttr, type HTMLAttrHead } from "./swhtml.attr";
+import { NewAttr, InsertAttrAtPoint, type HTMLAttrHead } from "./swhtml.attr";
 import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -99,3 +99,20 @@ export function InsertAttrs(
 }
 
 import { GetAttrTabEntry } from "./htmlcss1.attr";
+
+/** Original InsertAttr overload dispatch across htmlctxt.cxx/swhtml.cxx responsibility fragments; context and point attributes retain their original ownership. @param parser - Actual importer. @param headOrItem - Native head or item. @param itemOrAtStart - Item or queue-front selector. @param context - Actual context for head form. @returns Nothing. */
+export function InsertAttr(
+  parser: SwHTMLParser,
+  headOrItem: HTMLAttrHead | SfxPoolItem,
+  itemOrAtStart: SfxPoolItem | boolean,
+  context?: HTMLAttrContext,
+): void {
+  if (typeof itemOrAtStart === "boolean")
+    InsertAttrAtPoint(parser, headOrItem as SfxPoolItem, itemOrAtStart);
+  else {
+    if (!context) throw new Error("assert(HTML attribute context)");
+    const head = headOrItem as HTMLAttrHead;
+    if (NewAttr(parser, parser.m_xAttrTab, head, itemOrAtStart) && head[0])
+      context.GetAttrs().push(head[0]);
+  }
+}

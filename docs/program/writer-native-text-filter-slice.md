@@ -1651,3 +1651,18 @@ context step; it does not implement MakeFlySection, fly/contact/layout creation,
 anchored-node list maintenance, recursive HTML-table production/materialization,
 RTF direction or the final current-slice format/UI audit. Those remain required
 or explicitly unverified; full format completion is not established here.
+
+HTML66 implements the original table-consumed legacy HTML anchor/alignment
+producer, using real context margins, special-frame no-wrap queries, point
+attributes, no-space paragraph append and Unicode cursor movement. The original
+inline error retains the written vertical item and does not invent an anchor.
+Reader frame reset changes only LR/UL/box. Actual nonshareable SwFormatContent
+owns a registered optional node index, with native copy/clone/assignment/reset,
+static default/pool registration and original typed getters. Point/head InsertAttr
+overloads share actual existing attribute owners; no extra model or parser is
+introduced. The unchanged spacing-context body is only moved to its native
+htmlcss1 responsibility fragment for the source-size limit. CSS/container frame
+alignment, MakeFlySection/content/contact/layout, complete first-cell/table
+context and recursive HTML production/materialization/layout remain unported
+or unverified, as do RTF direction and final current-slice format/UI closure.
+These prerequisites do not establish full native format or module parity.

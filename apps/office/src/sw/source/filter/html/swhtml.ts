@@ -1,6 +1,10 @@
 /** @fileoverview Consumed native SwHTMLParser body, paragraph and inline-attribute paths over HTMLParser, actual SwPaM and deferred HTMLAttr owners. */
-import { GetMarginsFromContext, GetMarginsFromContextWithNumberBullet } from "./htmlcss1.attr";
-import { CanRemoveNode, StripTrailingPara } from "./htmlgrin";
+import {
+  GetMarginsFromContext,
+  GetMarginsFromContextWithNumberBullet,
+  GetULSpaceFromContext,
+} from "./htmlcss1.attr";
+import { CanRemoveNode, StripTrailingPara, SetAnchorAndAdjustment } from "./htmlgrin";
 import { aHTMLPAlignTable } from "./swhtml.options";
 import { HTMLParser } from "../../../../svtools/source/svhtml/parhtml";
 import { HtmlTokenId as T, HtmlOptionId as O } from "../../../../svtools/inc/htmltokn";
@@ -12,7 +16,6 @@ import { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   HTMLAttr,
   HTMLAttrTable,
-  NewAttr,
   EndAttr,
   SaveAttrTab,
   RestoreAttrTab,
@@ -44,14 +47,14 @@ import {
   FontLineStyle,
 } from "../../../../tools/inc/fontenum";
 import * as H from "../../../inc/hintids";
-import { SwPoolFormatId, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SwCSS1Parser } from "./htmlcss1";
 import { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { ParseStyleOptions } from "./htmlcss1.options";
 import { InsertBookmark, NewAnchor } from "./htmlgrin";
-import { InsertAttrs } from "./htmlctxt.insert";
+import { InsertAttrs, InsertAttr as InsertHTMLAttr } from "./htmlctxt.insert";
 import { NewBasefontAttr, EndBasefontAttr, NewFontAttr, EndFontAttr } from "./swhtml.font";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import type { HTMLTable } from "./htmltab";
@@ -76,6 +79,15 @@ export class SwHTMLParser extends HTMLParser {
   m_xTable: HTMLTable | null = null;
   readonly m_aTables: HTMLTable[] = [];
   readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
+  /** Original legacy HTML frame anchor/alignment producer. @param vertical - Native vertical ID. @param horizontal - Native horizontal ID. @param items - Actual frame items. @param dontAppend - Suppress original no-wrap paragraph append. @returns Nothing. */
+  SetAnchorAndAdjustment(
+    vertical: number,
+    horizontal: number,
+    items: SfxItemSet,
+    dontAppend = false,
+  ): void {
+    SetAnchorAndAdjustment(this, vertical, horizontal, items, dontAppend);
+  }
   /** Original special-format query delegates the source responsibility fragment. @param noSurroundOnly - Seek NONE. @param surroundOnly - Seek wrapping and reject NONE. @returns Native query result. */
   HasCurrentParaFlys(noSurroundOnly = false, surroundOnly = false): boolean {
     return HasCurrentParaFlys(this, noSurroundOnly, surroundOnly);
@@ -295,9 +307,17 @@ export class SwHTMLParser extends HTMLParser {
     }
     return this.m_aContexts.splice(position, 1)[0] ?? null;
   }
-  /** Native deferred item insertion. @param head - Stable attribute-table slot. @param item - Borrowed item. @param context - Actual new context. @returns Nothing. */
-  InsertAttr(head: HTMLAttrHead, item: SfxPoolItem, context: HTMLAttrContext): void {
-    if (NewAttr(this, this.m_xAttrTab, head, item) && head[0]) context.GetAttrs().push(head[0]);
+  /** Original deferred item-head insertion. @param head - Stable head. @param item - Borrowed item. @param context - Actual context. @returns Nothing. */
+  InsertAttr(head: HTMLAttrHead, item: SfxPoolItem, context: HTMLAttrContext): void;
+  /** Original point-item overload. @param item - Borrowed item. @param atStart - Queue at front. @returns Nothing. */
+  InsertAttr(item: SfxPoolItem, atStart: boolean): void;
+  /** Dispatches original overloads without allocating another attribute queue. @param headOrItem - Native head or item. @param itemOrAtStart - Item or front flag. @param context - Native context for head form. @returns Nothing. */
+  InsertAttr(
+    headOrItem: HTMLAttrHead | SfxPoolItem,
+    itemOrAtStart: SfxPoolItem | boolean,
+    context?: HTMLAttrContext,
+  ): void {
+    InsertHTMLAttr(this, headOrItem, itemOrAtStart, context);
   }
   /** Original parser-owned attribute close delegates to the shared native implementation and script service. @param attr - Actual open attribute. @param checkEmpty - Native empty-range policy. @returns Original close result. */
   EndAttr(attr: HTMLAttr, checkEmpty = true): boolean {
@@ -391,25 +411,9 @@ export class SwHTMLParser extends HTMLParser {
     GetMarginsFromContextWithNumberBullet(this, left, right, indent);
   }
 
-  /** Native spacing lookup takes the nearest changed context or the default body paragraph style. @param upper - Output. @param lower - Output. @returns Nothing. */
+  /** Original nearest spacing lookup delegates its source responsibility fragment. @param upper - Native output. @param lower - Native output. @returns Nothing. */
   GetULSpaceFromContext(upper: [number], lower: [number]): void {
-    let pool = SwPoolFormatId.ZERO as number;
-    for (let index = this.m_aContexts.length; index > this.m_nContextStAttrMin;) {
-      const context = this.m_aContexts[--index];
-      if (context?.IsULSpaceChanged()) {
-        context.GetULSpace(upper, lower);
-        return;
-      }
-      if (!pool && context?.GetDefaultTextFormatColl()) pool = context.GetDefaultTextFormatColl();
-    }
-    const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
-      /** Resolves the original default pool. @param item - Metadata. @returns Match. */ (item) =>
-        item.poolId === (pool || SwPoolFormatId.COLL_TEXT),
-    );
-    if (!entry) throw new Error("assert(default HTML paragraph style)");
-    const spacing = this.m_xDoc.GetTextFormatColl(entry.id).GetULSpace();
-    upper[0] = spacing.GetUpper();
-    lower[0] = spacing.GetLower();
+    GetULSpaceFromContext(this, upper, lower);
   }
   /** Native semantic tags retain a separate character-format stack beneath direct CSS attributes. @param token - Native opening token. @returns Nothing. */
   NewCharFormat(token: T): void {

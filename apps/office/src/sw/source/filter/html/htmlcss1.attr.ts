@@ -1,4 +1,5 @@
 /** @fileoverview Native GetAttrTabEntry and InsertParaAttrs from htmlcss1.cxx using registered current-model Which IDs and original deferred heads. */
+import { SwPoolFormatId, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import type { HTMLAttrContext } from "./htmlctxt";
 import type { SwHTMLParser } from "./swhtml";
 import { NewAttr, type HTMLAttrHead, type HTMLAttrTable } from "./swhtml.attr";
@@ -104,4 +105,29 @@ export function GetMarginsFromContextWithNumberBullet(
     left[0] = (left[0] + format.GetAbsLSpace()) & 0xffff;
     indent[0] = (format.GetFirstLineOffset() << 16) >> 16;
   }
+}
+
+/** Original nearest spacing context/default-style lookup, retained unchanged across the parser responsibility split. @param parser - Actual importer. @param upper - Native output. @param lower - Native output. @returns Nothing. */
+export function GetULSpaceFromContext(
+  parser: SwHTMLParser,
+  upper: [number],
+  lower: [number],
+): void {
+  let pool = SwPoolFormatId.ZERO as number;
+  for (let index = parser.m_aContexts.length; index > parser.m_nContextStAttrMin;) {
+    const context = parser.m_aContexts[--index];
+    if (context?.IsULSpaceChanged()) {
+      context.GetULSpace(upper, lower);
+      return;
+    }
+    if (!pool && context?.GetDefaultTextFormatColl()) pool = context.GetDefaultTextFormatColl();
+  }
+  const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+    /** Resolves the original default pool. @param item - Metadata. @returns Match. */ (item) =>
+      item.poolId === (pool || SwPoolFormatId.COLL_TEXT),
+  );
+  if (!entry) throw new Error("assert(default HTML paragraph style)");
+  const spacing = parser.m_xDoc.GetTextFormatColl(entry.id).GetULSpace();
+  upper[0] = spacing.GetUpper();
+  lower[0] = spacing.GetLower();
 }

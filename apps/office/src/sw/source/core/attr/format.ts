@@ -2,6 +2,7 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SwFormatContent } from "../../../inc/fmtcntnt";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
 import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
@@ -79,6 +80,10 @@ export class SwFormat extends BroadcastingModify {
     if (broadcast) this.NotifyFormatInheritance();
   }
 
+  /** Original inline content getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual content item. */
+  GetContent(searchInParent = true): SwFormatContent {
+    return this.attributeSet.GetContent(searchInParent);
+  }
   /** Original inline generic format anchor getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
   public GetAnchor(searchInParent = true): SwFormatAnchor {
     return this.attributeSet.GetAnchor(searchInParent);
