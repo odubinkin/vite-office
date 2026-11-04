@@ -4247,3 +4247,51 @@ lookup, public iterator/provider construction, concrete dictionary engines,
 word/title and production service installation, NatNum12 output wiring,
 multiline EditEngine import and final CSV acceptance remain required. No broad
 parity or complete CSV readiness is inferred from the helper observations.
+
+
+### Original common-data TOC formats and dispatch
+
+`ucmndata` now retains both original table formats, independent prefix binary
+searches, first/last priming, unsigned-byte comparisons, count/length output
+rules, checker dispatch installation and failure close. It does not sort input
+entries or add size/content/status guards absent from the source. A lookup miss
+leaves length untouched; callbacks ignore incoming errors; the last offset
+entry and every pointer entry have unknown length. Null TOCs retain the source
+header-return fallback without changing length.
+
+The real LibreOffice `CustomTarget_breakiterator.mk` uses `gencmn -S`, producing
+`ToCP`, not `CmnD`. Original `genbrk`, `genccode` and `gencmn` now build the eight
+pinned LibreOffice rules into both actual native formats for comparison. The
+static pointer table references original generated symbols with their alignment
+double prefix. In ESM, direct name/data references bind those relocated pointer
+fields at exact byte addresses. `DataHeader` retains a platform relocation map;
+normalization preserves it when advancing eight bytes. This is managed pointer
+storage, not a replacement table provider or a conversion to offset tables.
+Raw pointer ABI and unreadable/unbound pointer spans are not certified.
+
+1938 complete native checker/dispatch/lookup traces match, including all original
+names and their prefixes, misses, NUL tails, non-ASCII query bytes, incoming
+warnings/errors, null/empty/one-entry/unsorted tables, relocation offsets and
+negative lengths. The binary generator emits a 144-byte copyright-bearing
+header for this CmnD package; the owner reads its actual size. The test harness
+initially assumed 32 and was corrected using that original header. Production
+size queries were already source-defined.
+
+`udata_setAppData` caching, `udata_open` orchestration and actual application
+package installation remain incomplete. These real table functions do not
+replace those callers. Iterator/provider/engine construction, word/title and
+production services, NatNum12 output, multiline import and final CSV acceptance
+remain mandatory; no complete CSV or broad semantic parity is claimed.
+
+The original public application-data API also confirms the full-path versus
+basename duplicate-key behavior documented as CALC-467. Native statuses
+0,0,-127 are retained as native-only observations, not evidence of a local
+application-cache implementation. The later cache port must preserve this
+lookup/insertion asymmetry.
+
+The common-data checker binds the table address without reading its pointer
+entries. Empty pointer tables can therefore be validated, counted and searched
+from raw bytes with no relocation map. Nonempty tables can also be validated
+and counted while their entry pointers remain opaque. Entry relocations are
+required only when the original lookup dereferences an actual entry. The native
+witness includes both cases; no eager binding requirement is imposed.

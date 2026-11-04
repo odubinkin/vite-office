@@ -34,12 +34,23 @@ export function UDataMemory_createNewInstance(status: [number]): UDataMemory | n
   return data;
 }
 /** Original non-OS400 normalization checks only the initial magic, otherwise advances exactly one double. No signature search or validation is added. @param pointer - Actual readable allocation/null. @returns Header pointer/null. */
-export function UDataMemory_normalizeDataPointer(pointer: Uint8Array | null): DataHeader | null {
+export function UDataMemory_normalizeDataPointer(
+  pointer: Uint8Array | DataHeader | null,
+): DataHeader | null {
   if (pointer === null) return null;
-  return new DataHeader(pointer[2] === 0xda && pointer[3] === 0x27 ? pointer : pointer.subarray(8));
+  const bytes = pointer instanceof DataHeader ? pointer.data : pointer;
+  if (bytes[2] === 0xda && bytes[3] === 0x27)
+    return pointer instanceof DataHeader ? pointer : new DataHeader(bytes);
+  return new DataHeader(
+    bytes.subarray(8),
+    pointer instanceof DataHeader ? pointer.relocations : null,
+  );
 }
 /** Original setter does not reset other descriptor state. @param data - Actual handle. @param pointer - Actual allocation/null. @returns Nothing. */
-export function UDataMemory_setData(data: UDataMemory, pointer: Uint8Array | null): void {
+export function UDataMemory_setData(
+  data: UDataMemory,
+  pointer: Uint8Array | DataHeader | null,
+): void {
   data.pHeader = UDataMemory_normalizeDataPointer(pointer);
 }
 /** Original close/unmap then allocation-dependent destruction or reinitialization. Managed final deletion drops descriptor-owned references; access to a heap descriptor after close is outside the source contract. @param data - Actual descriptor/null. @returns Nothing. */

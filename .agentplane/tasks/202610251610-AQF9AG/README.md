@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 191
+revision: 194
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T14:07:21.587Z"
+  updated_at: "2026-11-04T14:39:57.252Z"
   updated_by: "CODER"
-  note: "UDataMemory and its actual rule-owner constructor match original ICU in 196608 header rows and 743 complete traces; 71 related ICU cases, all 197 CSV cases, Chromium CSV, build and required static checks pass. Remaining application-data loader, iterator/engines/services, NatNum12 output and multiline import prevent full CSV readiness; continue approved scope without pausing the goal."
-  attempts: 48
+  note: "Original CmnD/ToCP checker and dispatch match 1938 complete native traces, including opaque/empty pointer tables; 38 related ICU and all 197 CSV cases, build, Chromium and final static checks pass. CALC-467 records native cache duplicate-key behavior to preserve. Application-data cache/open, iterator/engines/services, NatNum12 output and multiline import remain incomplete; continue the approved CSV goal without pausing."
+  attempts: 49
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1096,8 +1099,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T14:39:57.252Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original CmnD/ToCP checker and dispatch match 1938 complete native traces, including opaque/empty pointer tables; 38 related ICU and all 197 CSV cases, build, Chromium and final static checks pass. CALC-467 records native cache duplicate-key behavior to preserve. Application-data cache/open, iterator/engines/services, NatNum12 output and multiline import remain incomplete; continue the approved CSV goal without pausing."
+  -
+    type: "status"
+    at: "2026-11-04T14:40:09.454Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T14:07:30.757Z"
+doc_updated_at: "2026-11-04T14:40:09.454Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2557,6 +2573,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T14:39:57.252Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original CmnD/ToCP checker and dispatch match 1938 complete native traces, including opaque/empty pointer tables; 38 related ICU and all 197 CSV cases, build, Chromium and final static checks pass. CALC-467 records native cache duplicate-key behavior to preserve. Application-data cache/open, iterator/engines/services, NatNum12 output and multiline import remain incomplete; continue the approved CSV goal without pausing.
+    Attempts: 49
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T14:39:56.301Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3831,6 +3877,31 @@ sections:
     - Command: npm run lint; npm run typecheck; npm run check:docs; node_modules/.bin/prettier --check (32 exact code/JSON paths from udata-source-paths.txt); npm run check:source-tree
       Result: pass. Evidence: udata-lint-final-all.log,udata-typecheck-final.log,udata-jsdoc-final.log,udata-format-check.log,udata-source-tree.log. Scope: full lint/typecheck/JSDoc and original path guard plus scoped formatting. Initial lint reported only unified-signatures for two same-arity native constructor overloads; combined their ESM type signature while retaining original runtime branches. Initial JSDoc errors were anonymous test-producer callbacks; added documentation without changing the observer. No validation rule changes.
     - Final scope:34 exact intentional paths including task README; native scratch excluded. Source/diff review finds no unexpected paths; git diff --check passes. Same open AgentPlane task, not the tenth completed task; related suites only. Actual application-data/TOC loader, public iterator/provider/engines, word/title/production service installation, NatNum12 output wiring, multiline EditEngine import and final CSV acceptance remain mandatory. Overall verification stays rework and task continues DOING; no goal finish/pause, CSV-complete claim or broad parity promotion.
+
+    ### Original CmnD/ToCP common-data search and dispatch checkpoint
+
+    - Previous goal turn classified as progress: d534eba66 committed actual UDataMemory and its real rule-owner constructor. Revalidated current calc branch, approved DOING task, route, CODER owner and Verify Steps. The same approved CSV dependency scope continues; no network, vendor mutation, source guard changes, external publication or goal pause.
+    - Source audit confirms LibreOffice CustomTarget_breakiterator.mk generates OpenOffice_dat with original gencmn -S, genccode and genbrk, so ToCP pointer fields cannot be replaced by a CmnD-only path. Ported both original prefix searches and callback tables, offset struct views, count/length/status behavior, common-data validation/dispatch/error-close. No extra header/TOC sorting/content/status checks. DataHeader carries a platform-only opaque address-to-managed-reference relocation map; original pointer table types stay in ucmndata.cpp's owner, not the header. Native pointer relocations become direct fields, not callbacks/providers. Normalization retains exact original double advancement and preserves the address binding. Physical pointer ABI, unreadable/unbound pointers and native allocation/mapping remain unverified.
+    - Command: make -C output/native/AQF9AG-icu-grego/tools/toolutil -j4; make -C output/native/AQF9AG-icu-grego/tools/gencmn -j2; make -C output/native/AQF9AG-icu-grego/tools/genccode -j2; make -C output/native/AQF9AG-icu-grego/tools/genbrk -j2
+      Result: pass. Evidence: toc-native-toolutil.log,toc-native-gencmn-final.log,toc-native-genccode-final.log,toc-native-genbrk-final.log. Initial link failed because this scratch build had no bin directory; created only output/native/.../bin and repeated. Scope: original unchanged pinned ICU toolutil/generator builds, no download or implementation/header replacement.
+    - Command: npx --no-install tsx scripts/icu-common-data-native-probe.mjs
+      Result: pass. Evidence: toc-native-final.log,1938 full live original checker/descriptor/dispatch/lookup/return/header traces across actual generator-produced ToCP and CmnD packages containing all eight pinned LibreOffice rules. Full rows compare before native fingerprints; original rule/Makefile/ICU source, libraries, generator binaries, generated C/object/package and witness hashes are retained. Includes every actual name/prefix, NUL tails, non-ASCII queries, warning/error/null/miss/empty/one-entry/unsorted/negative-length cases and relocated table/alignment prefixes. Initial native witness SIGBUS came from its incorrect fixed32 CmnD header assumption; actual gencmn emits a144-byte copyright-bearing header. Corrected only the driver to use the actual generated header size; runtime already read the source field. Scope: common-data module, not udata_open/application cache or public word iterators.
+    - Source issue CALC-467: cache insertion and normal lookup use basename, but duplicate lookup uses full path. The same original native public udata_setAppData produces statuses0,0,-127 for folder/OpenOffice, folder/OpenOffice, OpenOffice. Native-only duplicateCacheStatuses are retained in the fixture; no local cache parity is inferred. Journal documents the original asymmetry and requires preserving it in the forthcoming cache port.
+    - Command: npm run test:shared -- src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/common/rbbidata.native.test.ts --maxWorkers=1
+      Result: pass,38 tests/3 files in4.50s. Evidence: toc-related-final.log. Scope:6 common-data groups,9 descriptor groups and23 original raw owner/value groups. Replayed after final source storage/boundary changes.
+    - Command: npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+      Result: pass. Evidence: toc-provenance-final.log,toc-shared-parity-final.log,toc-calc-parity-final.log. Scope:1972 runtime modules/1759 mapped; three existing runtime/provenance pairs and existing capability updated with exact original responsibilities and managed-pointer binding limits. Broad contract/behavior/default/verified flags remain false.
+
+    - Final source review removed an eager platform relocation requirement: the original checker and NumEntries do not dereference pointer entries, and empty ToCP lookup does not either. Actual raw-byte empty tables now work without a relocation map; nonempty opaque tables can be validated/counted before entry access. The final1938-trace witness adds48 original cases proving that source order; no fake pointer entries or extra rejection is supplied.
+
+    - Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (14 exact code/JSON paths in toc-source-paths.txt)
+      Result: pass. Evidence: toc-lint-final-all.log,toc-typecheck-final.log,toc-jsdoc-final.log,toc-dependencies.log,toc-resources.log,toc-source-tree.log,toc-size.log,toc-routing.log,toc-doctor.log,toc-format-check.log. Scope: full lint/types/JSDoc,1971 boundary sources/10729 imports/236 allowed edges,464 resources,4410 authored files, source-tree/routing and scoped formatting. Doctor has zero errors and existing managed-hook warning, with no unrelated hook edits. Initial lint flagged unused source initialization and asserted optional managed-pointer bindings; retained the comparison assignment order without its unobservable overwritten initializer and used explicit opaque storage casts. Corrected observer caught-error cause and JSDoc only. No lint/type/source-rule suppression or guard weakening.
+
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass,197 tests/8 files in33.12s. Evidence: toc-csv-tests-final.log. Scope: represented CSV import/recognition/options/export/docshell and file UI after the final opaque-pointer source correction. Heavy static checks finished before this selection; no timeout/assertion/source changes to accommodate failures.
+    - Command: node_modules/.bin/vite build (apps/office, binary ../../node_modules/.bin/vite); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+      Result: pass. Evidence: toc-build-final.log,7.51s;toc-browser-final.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and actual browser workflow.
+    - Final scope:17 exact intentional paths including task README, reviewed in toc-commit-paths.txt; git diff --check passes and no unexpected non-output changes. Original native scratch is excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual application-data cache/open, production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Verification remains rework and task continues DOING; no finish, goal pause/completion, default file-access change, OS mapper substitute or full CSV/native parity claim.
 id_source: "generated"
 ---
 ## Summary
@@ -5299,6 +5370,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T14:39:57.252Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original CmnD/ToCP checker and dispatch match 1938 complete native traces, including opaque/empty pointer tables; 38 related ICU and all 197 CSV cases, build, Chromium and final static checks pass. CALC-467 records native cache duplicate-key behavior to preserve. Application-data cache/open, iterator/engines/services, NatNum12 output and multiline import remain incomplete; continue the approved CSV goal without pausing.
+Attempts: 49
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T14:39:56.301Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6577,3 +6678,28 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Command: npm run lint; npm run typecheck; npm run check:docs; node_modules/.bin/prettier --check (32 exact code/JSON paths from udata-source-paths.txt); npm run check:source-tree
   Result: pass. Evidence: udata-lint-final-all.log,udata-typecheck-final.log,udata-jsdoc-final.log,udata-format-check.log,udata-source-tree.log. Scope: full lint/typecheck/JSDoc and original path guard plus scoped formatting. Initial lint reported only unified-signatures for two same-arity native constructor overloads; combined their ESM type signature while retaining original runtime branches. Initial JSDoc errors were anonymous test-producer callbacks; added documentation without changing the observer. No validation rule changes.
 - Final scope:34 exact intentional paths including task README; native scratch excluded. Source/diff review finds no unexpected paths; git diff --check passes. Same open AgentPlane task, not the tenth completed task; related suites only. Actual application-data/TOC loader, public iterator/provider/engines, word/title/production service installation, NatNum12 output wiring, multiline EditEngine import and final CSV acceptance remain mandatory. Overall verification stays rework and task continues DOING; no goal finish/pause, CSV-complete claim or broad parity promotion.
+
+### Original CmnD/ToCP common-data search and dispatch checkpoint
+
+- Previous goal turn classified as progress: d534eba66 committed actual UDataMemory and its real rule-owner constructor. Revalidated current calc branch, approved DOING task, route, CODER owner and Verify Steps. The same approved CSV dependency scope continues; no network, vendor mutation, source guard changes, external publication or goal pause.
+- Source audit confirms LibreOffice CustomTarget_breakiterator.mk generates OpenOffice_dat with original gencmn -S, genccode and genbrk, so ToCP pointer fields cannot be replaced by a CmnD-only path. Ported both original prefix searches and callback tables, offset struct views, count/length/status behavior, common-data validation/dispatch/error-close. No extra header/TOC sorting/content/status checks. DataHeader carries a platform-only opaque address-to-managed-reference relocation map; original pointer table types stay in ucmndata.cpp's owner, not the header. Native pointer relocations become direct fields, not callbacks/providers. Normalization retains exact original double advancement and preserves the address binding. Physical pointer ABI, unreadable/unbound pointers and native allocation/mapping remain unverified.
+- Command: make -C output/native/AQF9AG-icu-grego/tools/toolutil -j4; make -C output/native/AQF9AG-icu-grego/tools/gencmn -j2; make -C output/native/AQF9AG-icu-grego/tools/genccode -j2; make -C output/native/AQF9AG-icu-grego/tools/genbrk -j2
+  Result: pass. Evidence: toc-native-toolutil.log,toc-native-gencmn-final.log,toc-native-genccode-final.log,toc-native-genbrk-final.log. Initial link failed because this scratch build had no bin directory; created only output/native/.../bin and repeated. Scope: original unchanged pinned ICU toolutil/generator builds, no download or implementation/header replacement.
+- Command: npx --no-install tsx scripts/icu-common-data-native-probe.mjs
+  Result: pass. Evidence: toc-native-final.log,1938 full live original checker/descriptor/dispatch/lookup/return/header traces across actual generator-produced ToCP and CmnD packages containing all eight pinned LibreOffice rules. Full rows compare before native fingerprints; original rule/Makefile/ICU source, libraries, generator binaries, generated C/object/package and witness hashes are retained. Includes every actual name/prefix, NUL tails, non-ASCII queries, warning/error/null/miss/empty/one-entry/unsorted/negative-length cases and relocated table/alignment prefixes. Initial native witness SIGBUS came from its incorrect fixed32 CmnD header assumption; actual gencmn emits a144-byte copyright-bearing header. Corrected only the driver to use the actual generated header size; runtime already read the source field. Scope: common-data module, not udata_open/application cache or public word iterators.
+- Source issue CALC-467: cache insertion and normal lookup use basename, but duplicate lookup uses full path. The same original native public udata_setAppData produces statuses0,0,-127 for folder/OpenOffice, folder/OpenOffice, OpenOffice. Native-only duplicateCacheStatuses are retained in the fixture; no local cache parity is inferred. Journal documents the original asymmetry and requires preserving it in the forthcoming cache port.
+- Command: npm run test:shared -- src/external/icu/source/common/ucmndata.native.test.ts src/external/icu/source/common/udatamem.native.test.ts src/external/icu/source/common/rbbidata.native.test.ts --maxWorkers=1
+  Result: pass,38 tests/3 files in4.50s. Evidence: toc-related-final.log. Scope:6 common-data groups,9 descriptor groups and23 original raw owner/value groups. Replayed after final source storage/boundary changes.
+- Command: npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:calc
+  Result: pass. Evidence: toc-provenance-final.log,toc-shared-parity-final.log,toc-calc-parity-final.log. Scope:1972 runtime modules/1759 mapped; three existing runtime/provenance pairs and existing capability updated with exact original responsibilities and managed-pointer binding limits. Broad contract/behavior/default/verified flags remain false.
+
+- Final source review removed an eager platform relocation requirement: the original checker and NumEntries do not dereference pointer entries, and empty ToCP lookup does not either. Actual raw-byte empty tables now work without a relocation map; nonempty opaque tables can be validated/counted before entry access. The final1938-trace witness adds48 original cases proving that source order; no fake pointer entries or extra rejection is supplied.
+
+- Command: npm run lint; npm run typecheck; npm run check:docs; npm run check:dependencies; npm run check:calc-resources; npm run check:source-tree; npm run check:file-size; node .agentplane/policy/check-routing.mjs; ap doctor; node_modules/.bin/prettier --check (14 exact code/JSON paths in toc-source-paths.txt)
+  Result: pass. Evidence: toc-lint-final-all.log,toc-typecheck-final.log,toc-jsdoc-final.log,toc-dependencies.log,toc-resources.log,toc-source-tree.log,toc-size.log,toc-routing.log,toc-doctor.log,toc-format-check.log. Scope: full lint/types/JSDoc,1971 boundary sources/10729 imports/236 allowed edges,464 resources,4410 authored files, source-tree/routing and scoped formatting. Doctor has zero errors and existing managed-hook warning, with no unrelated hook edits. Initial lint flagged unused source initialization and asserted optional managed-pointer bindings; retained the comparison assignment order without its unobservable overwritten initializer and used explicit opaque storage casts. Corrected observer caught-error cause and JSDoc only. No lint/type/source-rule suppression or guard weakening.
+
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass,197 tests/8 files in33.12s. Evidence: toc-csv-tests-final.log. Scope: represented CSV import/recognition/options/export/docshell and file UI after the final opaque-pointer source correction. Heavy static checks finished before this selection; no timeout/assertion/source changes to accommodate failures.
+- Command: node_modules/.bin/vite build (apps/office, binary ../../node_modules/.bin/vite); node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts
+  Result: pass. Evidence: toc-build-final.log,7.51s;toc-browser-final.log,one Chromium CSV import/primary ODS save/active-sheet export case4.2s (5.8s total). Scope: final production build and actual browser workflow.
+- Final scope:17 exact intentional paths including task README, reviewed in toc-commit-paths.txt; git diff --check passes and no unexpected non-output changes. Original native scratch is excluded. Same open AgentPlane task, not the tenth completed task: related suites only. Actual application-data cache/open, production package installation, public iterator/provider/engines, word/title/services, NatNum12 output, multiline import and final CSV acceptance remain required. Verification remains rework and task continues DOING; no finish, goal pause/completion, default file-access change, OS mapper substitute or full CSV/native parity claim.
