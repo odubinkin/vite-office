@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/doclay.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/doclay.ts",
+        "apps/office/src/sw/source/core/doc/doclay.native-name.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/doclay.cxx"
+      ],
+      "justification": "S3HW1E HTML69 implements original frame-name allocation over actual special-format collection membership, native fly Which filtering, o3tl integer suffix conversion, sorted deduplication and first numeric hole. The actual document mail-merge branch uses real mbInMailMerge, actual current SYSTEM DateTime and original full special-format count+1. Repeated calls do not reserve a name or mutate/notify the document, preserving the native contract. The current English STR_FRAME_DEFNAME resource is Frame, matching existing table/style name bindings; localization, graphic/OLE/copy/shape name families and native drawing-object/group ownership are unported. MakeFlySection, style-pool factory/modified restoration, production recursive HTML tables, RTF direction and complete original-slice filter/UI closure remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetUniqueFrameName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/doclay.cxx",
+      "upstreamSymbols": [
+        "SwDoc::GetUniqueFrameName",
+        "lcl_GetUniqueFlyName",
+        "first_available_number",
+        "lcl_collectUsedNums"
+      ]
+    }
+  }
+}

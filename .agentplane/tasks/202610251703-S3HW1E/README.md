@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 431
+revision: 435
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T15:05:21.088Z"
+  updated_at: "2026-11-04T15:24:15.440Z"
   updated_by: "CODER"
-  note: "HTML68 verified checkpoint:260unique cases/21files, whole-app types and all source/style/Writer+Shared registry/static gates pass. Eight original frame-pool default branches, full native frame ranges, opacity item/default/pool/getters and independent auto-update flag implemented; WRITER349 preserved. Frame style lookup/factory/modified restoration, MakeFlySection, production HTML tables, RTF direction and final format/UI audit remain incomplete."
-  attempts: 79
+  note: "HTML69 verified checkpoint:168unique cases/15files,whole-app types and final source/style/Writer+Shared registry gates pass. Native frame naming uses actual special-format collection and document mail-merge state; original SYSTEM DateTime and serializer preserve WRITER350. MakeFlySection, frame-style factory/modified restoration, production recursive HTML tables, RTF direction and final current-slice native format/UI audit remain incomplete."
+  attempts: 80
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1269,8 +1272,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T15:24:15.440Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML69 verified checkpoint:168unique cases/15files,whole-app types and final source/style/Writer+Shared registry gates pass. Native frame naming uses actual special-format collection and document mail-merge state; original SYSTEM DateTime and serializer preserve WRITER350. MakeFlySection, frame-style factory/modified restoration, production recursive HTML tables, RTF direction and final current-slice native format/UI audit remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-04T15:24:40.958Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T15:06:30.048Z"
+doc_updated_at: "2026-11-04T15:24:40.958Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3355,6 +3371,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T15:24:15.440Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML69 verified checkpoint:168unique cases/15files,whole-app types and final source/style/Writer+Shared registry gates pass. Native frame naming uses actual special-format collection and document mail-merge state; original SYSTEM DateTime and serializer preserve WRITER350. MakeFlySection, frame-style factory/modified restoration, production recursive HTML tables, RTF direction and final current-slice native format/UI audit remain incomplete.
+    Attempts: 80
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:24:14.501Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3612,6 +3658,18 @@ sections:
     Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
     Result: pass, terminal0. Evidence:html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Scope:1950runtime provenance/1737mapped,both registries0semantic violations,1949source boundaries,4377JSDoc files,4381authored size scan,115required source paths/32retired and85guarded Which identities. WRITER349 source redundancy is retained, not normalized or claimed a confirmed compiled defect.
     Remaining factory/modified-state/MakeFlySection/HTML production/RTF direction/format-UI closure gaps are explicit in Findings and the capability matrix. No full native format/module/ABI completeness claim; no full-project replay.
+
+    HTML69 verified checkpoint; parent goal incomplete.
+
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/doclay.native-name.test.ts src/sw/source/core/doc/poolfmt-frame.native.test.ts src/sw/inc/frameformats.native.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/core/crsr/native-table-shell-owner.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/table/native-row-frame-format.test.ts
+    - Result: pass,148cases/11files. Evidence: output/playwright/rtf-properties-native/html69-writer-final.log. Scope: actual frame-name allocator/state/collection and related frame pool, row/column native owners, native TXT/RTF/Markdown and document I/O.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/tools/source/datetime/datetimeutils.test.ts src/tools/source/datetime/datetime.test.ts src/tools/source/datetime/tdate.test.ts src/tools/source/datetime/ttime.test.ts
+    - Result: pass,20cases/4files. Evidence: html69-shared-final.log. Scope: real SYSTEM/default/copy/failure/clock/serializer/date/time scalar owners. Combined unique total168cases/15files, including17fresh cases; earlier repeated runs are not added.
+    - Command: from apps/office, ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit.
+    - Result: pass. Evidence: html69-types-corrected.log, terminal0. Scope: whole application source/tests and the preserved native optional row/column signatures and distinct SYSTEM tags.
+    - Command: node_modules/.bin/eslint <eight changed/new TypeScript paths> --max-warnings 0; node_modules/.bin/prettier --check <html69-files.json paths>; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; same --scope shared; git diff --check.
+    - Result: pass. Evidence: ignored output/playwright/rtf-properties-native/html69-* final logs and scoped registry JSON. Scope:1952runtime/1739mapped/182browser/31infra provenance,1951sources/10879imports/229module edges,4381JSDoc sourcefiles,4385authored file-size scan,115required/32retired tree paths,85native WhichIDs and0semantic violations in Writer/Shared registries. All broad native semantic/default/contract/sourceResponsibility statuses remain unverified.
+    - Full application tests were not scheduled in this continuing parent AgentPlane task; the approved focused-test cadence remains unchanged. Native compiled/platform differential QA and production HTML-table/RTF direction/full UI-format closure are not established by these component/native-owner tests.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4988,6 +5046,15 @@ sections:
     Retained diagnostics: an initial bounded edit marker assumed an exported ItemInfoPackage class, while the real class is private; corrected the source anchor before applying the remaining approved edits. Initial preexisting31/3 adjacent pass was not used as proof of the unloaded new producer; the later actual47/4 and final256/20 execute the new defaults/ranges. Initial lint rejected the real duplicate native enum boundary alias; a narrow source-justified annotation, matching existing htmltokn conventions, preserves exact identity instead of inventing another number or dropping a required alias. The new temporary Put lambda's JSDoc was moved from the variable declaration onto the actual function expression. A bool-test invocation under shared config found no tests because the established project explicitly assigns that Writer-importing shared-owner test to Writer; the correct Writer config passed all4cases, without changing include/exclude rules or waiving the test. No production regression was hidden, verifier changed or fake provider added.
 
     Remaining: actual frame pool lookup/creation/undo/modified-state/resource lifecycle, MakeFlySection/style naming/content/inline-fly/contact/layout/undo, production HTML first-cell/recursive table grammar/materialization/layout, RTF direction and final fixed-current-slice format/UI audit. WRITER347 general style rename remains open. Intentional browser save/open/autosave/recovery policies are unchanged. Parent task and active goal remain incomplete.
+
+    S3HW1E HTML69 — Native frame naming and consumed system date/time owners.
+
+    - Implemented actual SwDoc mbInMailMerge false default/silent inline accessors and source GetUniqueFrameName delegation. doclay allocation inspects the actual document-owned special-format collection, filters native fly identity, uses actual o3tl signed integer suffix conversion, numeric sorting/deduplication and first hole. It does not reserve names, change membership or publish model modifications. Mail merge retains source full collection count+1 and actual SYSTEM DateTime, including repeated same-count/same-second results.
+    - Implemented optional native platform date/time output pointers from one actual browser clock sample, unchanged outputs on failure, actual SYSTEM DateTime scalar state and original 1900-01-01/zero-time failure fallback. Native DateTimeToOUString serializes unconverted fields, two-digit 00 fallback and trailing Z without fractions. WRITER350 documents local fields with Z; no compiled native defect/uniqueness/precision equivalence is claimed.
+    - Current English STR_FRAME_DEFNAME binding follows existing table/style naming. Localized frame resources, graphic/OLE/copy/drawing/group families remain unported. Browser system-clock precision remains milliseconds; native nanosecond/platform ABI parity is not claimed. SYSTEM tag hiding uses a type-only constructor projection over the exact existing runtime Date base; DateTime.SYSTEM and Date.SYSTEM remain distinct and actual Date inheritance/copy ownership is tested.
+    - Original document row/column insertion optional signature and count1/true/true defaults are retained with a type-only argument tuple in existing ndtbl responsibility, allowing real mail-merge state/accessors within the source size limit without relocating private document state or creating a replacement state provider. Actual insertion/history bodies remain unchanged. Initial inferred tuples omitted wrapper defaults and TypeScript caught the incompatible call contract; explicit optional tuple/defaults restored and native row/column owner suites plus whole-app typecheck passed. Initial SYSTEM static tag type conflicted with inherited Date.SYSTEM; original distinct tags/runtime base are now retained through the type-only constructor projection. No consumer casts, weakened tests, global verifier changes, skip or mock result providers were introduced.
+    - Diagnostic tooling invocations used unsupported registry --json and a nonexistent .mjs WhichId path. Final commands use native JSON-producing registry check without --json and the package-declared tsx scripts/check-writer-hintids.ts; all final gates passed. Initial diagnostics remain in ignored html69 logs.
+    - MakeFlySection, original frame style collection/factory/UndoGuard/modified restoration, production recursive HTML table parsing/materialization/layout, RTF layout/page/fly direction and final fixed-original-slice native filter/UI closure remain open. No broad semantic/default/contract/sourceResponsibility status is promoted and existing save/open/autosave/recovery behavior is unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -7083,6 +7150,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T15:24:15.440Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML69 verified checkpoint:168unique cases/15files,whole-app types and final source/style/Writer+Shared registry gates pass. Native frame naming uses actual special-format collection and document mail-merge state; original SYSTEM DateTime and serializer preserve WRITER350. MakeFlySection, frame-style factory/modified restoration, production recursive HTML tables, RTF direction and final current-slice native format/UI audit remain incomplete.
+Attempts: 80
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T15:24:14.501Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -7340,6 +7437,18 @@ Result: pass. Evidence:html68-gates-verified.log and html68-files.json. Scope: a
 Command: node_modules/.bin/tsx scripts/check-source-provenance.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; git diff --check.
 Result: pass, terminal0. Evidence:html68-gates-verified.log,html68-writer-registry-verified.json,html68-shared-registry-verified.json,html68-size-verified.log. Scope:1950runtime provenance/1737mapped,both registries0semantic violations,1949source boundaries,4377JSDoc files,4381authored size scan,115required source paths/32retired and85guarded Which identities. WRITER349 source redundancy is retained, not normalized or claimed a confirmed compiled defect.
 Remaining factory/modified-state/MakeFlySection/HTML production/RTF direction/format-UI closure gaps are explicit in Findings and the capability matrix. No full native format/module/ABI completeness claim; no full-project replay.
+
+HTML69 verified checkpoint; parent goal incomplete.
+
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/doclay.native-name.test.ts src/sw/source/core/doc/poolfmt-frame.native.test.ts src/sw/inc/frameformats.native.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/core/crsr/native-table-shell-owner.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/table/native-numeric-row-insertion.test.ts src/sw/source/core/table/native-row-frame-format.test.ts
+- Result: pass,148cases/11files. Evidence: output/playwright/rtf-properties-native/html69-writer-final.log. Scope: actual frame-name allocator/state/collection and related frame pool, row/column native owners, native TXT/RTF/Markdown and document I/O.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/tools/source/datetime/datetimeutils.test.ts src/tools/source/datetime/datetime.test.ts src/tools/source/datetime/tdate.test.ts src/tools/source/datetime/ttime.test.ts
+- Result: pass,20cases/4files. Evidence: html69-shared-final.log. Scope: real SYSTEM/default/copy/failure/clock/serializer/date/time scalar owners. Combined unique total168cases/15files, including17fresh cases; earlier repeated runs are not added.
+- Command: from apps/office, ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit.
+- Result: pass. Evidence: html69-types-corrected.log, terminal0. Scope: whole application source/tests and the preserved native optional row/column signatures and distinct SYSTEM tags.
+- Command: node_modules/.bin/eslint <eight changed/new TypeScript paths> --max-warnings 0; node_modules/.bin/prettier --check <html69-files.json paths>; node_modules/.bin/tsx scripts/check-source-provenance.ts; node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node_modules/.bin/tsx scripts/check-writer-hintids.ts; node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer; same --scope shared; git diff --check.
+- Result: pass. Evidence: ignored output/playwright/rtf-properties-native/html69-* final logs and scoped registry JSON. Scope:1952runtime/1739mapped/182browser/31infra provenance,1951sources/10879imports/229module edges,4381JSDoc sourcefiles,4385authored file-size scan,115required/32retired tree paths,85native WhichIDs and0semantic violations in Writer/Shared registries. All broad native semantic/default/contract/sourceResponsibility statuses remain unverified.
+- Full application tests were not scheduled in this continuing parent AgentPlane task; the approved focused-test cadence remains unchanged. Native compiled/platform differential QA and production HTML-table/RTF direction/full UI-format closure are not established by these component/native-owner tests.
 
 ## Rollback Plan
 
@@ -8720,3 +8829,12 @@ Final260unique related tests/21files pass:256Writer cases/20files plus4existing 
 Retained diagnostics: an initial bounded edit marker assumed an exported ItemInfoPackage class, while the real class is private; corrected the source anchor before applying the remaining approved edits. Initial preexisting31/3 adjacent pass was not used as proof of the unloaded new producer; the later actual47/4 and final256/20 execute the new defaults/ranges. Initial lint rejected the real duplicate native enum boundary alias; a narrow source-justified annotation, matching existing htmltokn conventions, preserves exact identity instead of inventing another number or dropping a required alias. The new temporary Put lambda's JSDoc was moved from the variable declaration onto the actual function expression. A bool-test invocation under shared config found no tests because the established project explicitly assigns that Writer-importing shared-owner test to Writer; the correct Writer config passed all4cases, without changing include/exclude rules or waiving the test. No production regression was hidden, verifier changed or fake provider added.
 
 Remaining: actual frame pool lookup/creation/undo/modified-state/resource lifecycle, MakeFlySection/style naming/content/inline-fly/contact/layout/undo, production HTML first-cell/recursive table grammar/materialization/layout, RTF direction and final fixed-current-slice format/UI audit. WRITER347 general style rename remains open. Intentional browser save/open/autosave/recovery policies are unchanged. Parent task and active goal remain incomplete.
+
+S3HW1E HTML69 — Native frame naming and consumed system date/time owners.
+
+- Implemented actual SwDoc mbInMailMerge false default/silent inline accessors and source GetUniqueFrameName delegation. doclay allocation inspects the actual document-owned special-format collection, filters native fly identity, uses actual o3tl signed integer suffix conversion, numeric sorting/deduplication and first hole. It does not reserve names, change membership or publish model modifications. Mail merge retains source full collection count+1 and actual SYSTEM DateTime, including repeated same-count/same-second results.
+- Implemented optional native platform date/time output pointers from one actual browser clock sample, unchanged outputs on failure, actual SYSTEM DateTime scalar state and original 1900-01-01/zero-time failure fallback. Native DateTimeToOUString serializes unconverted fields, two-digit 00 fallback and trailing Z without fractions. WRITER350 documents local fields with Z; no compiled native defect/uniqueness/precision equivalence is claimed.
+- Current English STR_FRAME_DEFNAME binding follows existing table/style naming. Localized frame resources, graphic/OLE/copy/drawing/group families remain unported. Browser system-clock precision remains milliseconds; native nanosecond/platform ABI parity is not claimed. SYSTEM tag hiding uses a type-only constructor projection over the exact existing runtime Date base; DateTime.SYSTEM and Date.SYSTEM remain distinct and actual Date inheritance/copy ownership is tested.
+- Original document row/column insertion optional signature and count1/true/true defaults are retained with a type-only argument tuple in existing ndtbl responsibility, allowing real mail-merge state/accessors within the source size limit without relocating private document state or creating a replacement state provider. Actual insertion/history bodies remain unchanged. Initial inferred tuples omitted wrapper defaults and TypeScript caught the incompatible call contract; explicit optional tuple/defaults restored and native row/column owner suites plus whole-app typecheck passed. Initial SYSTEM static tag type conflicted with inherited Date.SYSTEM; original distinct tags/runtime base are now retained through the type-only constructor projection. No consumer casts, weakened tests, global verifier changes, skip or mock result providers were introduced.
+- Diagnostic tooling invocations used unsupported registry --json and a nonexistent .mjs WhichId path. Final commands use native JSON-producing registry check without --json and the package-declared tsx scripts/check-writer-hintids.ts; all final gates passed. Initial diagnostics remain in ignored html69 logs.
+- MakeFlySection, original frame style collection/factory/UndoGuard/modified restoration, production recursive HTML table parsing/materialization/layout, RTF layout/page/fly direction and final fixed-original-slice native filter/UI closure remain open. No broad semantic/default/contract/sourceResponsibility status is promoted and existing save/open/autosave/recovery behavior is unchanged.

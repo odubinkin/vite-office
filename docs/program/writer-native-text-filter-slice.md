@@ -1691,3 +1691,17 @@ restoration and localized style resources are not supplied or simulated here.
 MakeFlySection and production first-cell/recursive HTML table materialization,
 layout, RTF direction and final current-slice format/UI closure remain open.
 No full native format/module or binary-ABI completion is claimed.
+
+HTML69 implements native GetUniqueFrameName allocation over the real document-owned
+special-format collection, original numeric parsing/sorted deduplication/hole
+selection, and actual mail-merge state with the original timestamp/count branch.
+Names are queried without registry reservation or modified-state notification.
+SYSTEM DateTime now consumes both optional platform date/time outputs from one
+host sample and retains the source failure fallback. The original field serializer
+keeps local fields with a final Z (WRITER350); browser clock precision remains
+milliseconds and native platform nanosecond/ABI parity is unverified. Current
+English resource binding matches existing table/style naming; localized frame
+names and other graphic/OLE/drawing/copy name families remain unported. These
+prerequisites do not implement MakeFlySection, frame-style lookup/factory/modified
+restoration, production recursive HTML tables, RTF direction or final format/UI
+closure. Original format support remains incomplete.

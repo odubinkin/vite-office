@@ -2854,3 +2854,7 @@ Pinned `sw/source/core/docnode/nodes.cxx`, `SwNodes::SectionDown`, decrements `a
 ### WRITER349 — Formula frame-pool defaults repeat the same vertical item write
 
 Pinned `sw/source/core/doc/DocumentStylePoolManager.cxx`, `DocumentStylePoolManager::GetFormatFromPool`, shares the FRM_FORMEL/FRM_INLINE_HEADING branch. It first inserts CHAR_CENTER/FRAME vertical orientation for both styles, then the Formula-only else branch inserts that identical vertical item again. This looks like a redundant retained write, not a confirmed functional defect; no compiled upstream notification, allocation or performance effect is claimed. Preserve both source Put operations. The native default-set consumer keeps the ordinary one-item-per-Which final value; it does not add an invented second attribute or remove the repeated source operation.
+
+### WRITER350 — DateTimeToOUString appends Z without converting local fields to UTC
+
+Pinned `tools/source/datetime/datetimeutils.cxx`, `DateTimeToStringImpl`, keeps the UTC conversion commented out and serializes the supplied date/time fields with a trailing `Z`. `sw/source/core/doc/doclay.cxx`, `lcl_GetUniqueFlyName`, passes `DateTime(DateTime::SYSTEM)` for mail-merge names, so this source path labels local system fields with that suffix. Preserve the original fields, omitted fractions and suffix in our serializer and native name allocation. This is a source-observed semantic suspicion; no compiled LibreOffice differential, uniqueness defect or platform precision equivalence is asserted.

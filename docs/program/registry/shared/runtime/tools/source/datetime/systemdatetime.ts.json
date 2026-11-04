@@ -17,9 +17,10 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/tools/source/datetime/systemdatetime.ts"
+        "apps/office/src/tools/source/datetime/systemdatetime.ts",
+        "apps/office/src/tools/source/datetime/datetimeutils.test.ts"
       ],
-      "justification": "Original GetSystemDateTime date-output branch. The browser host supplies system_clock/localtime through numeric Date construction and local field getters; text date parsing and calendar arithmetic are not delegated to it. Native nanosecond time output is not exposed by this binding. Only the original date-output branch is exposed. The browser host supplies numeric system-clock/local-date fields; nanosecond clock output and native platform failure/ABI behavior remain unverified. Text parsing and calendar arithmetic are not delegated to the host.",
+      "justification": "Original GetSystemDateTime date-output branch. The browser host supplies system_clock/localtime through numeric Date construction and local field getters; text date parsing and calendar arithmetic are not delegated to it. Native nanosecond time output is not exposed by this binding. Only the original date-output branch is exposed. The browser host supplies numeric system-clock/local-date fields; nanosecond clock output and native platform failure/ABI behavior remain unverified. Text parsing and calendar arithmetic are not delegated to the host. S3HW1E HTML69 implements both optional date/time output pointers and no-output admission from a single actual host clock sample, retaining output contents on platform conversion failure. Local calendar/clock fields and packed signed64 clock use the original decimal masks. The existing browser host clock exposes milliseconds; it does not claim native system_clock nanosecond precision or compiled/platform ABI parity. No replacement clock/result provider is introduced.",
       "knownViolations": [],
       "localSymbols": [
         "GetSystemDateTime"

@@ -281,6 +281,16 @@ export function SetSwTabCols(
   );
 }
 
+/** Original document row/column insertion call contract, including its optional wrapper defaults and existing shell cursor transport. */
+export type SwInsertRowsColsArgs = [
+  boxes: readonly SwTableBox[],
+  count?: number,
+  behind?: boolean,
+  insertDummy?: boolean,
+  cursorState?: SwUndoCursorState,
+  afterCursor?: SwUndoCursorState,
+];
+
 /** Inserts columns with source-owned history gating. @param doc - Actual owner. @param boxes - Original selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Native redline flag. @param cursorState - Optional shell cursor. @param afterCursor - Optional preserved selection. @returns Whether inserted. */
 export function InsertSwTableColumns(
   doc: SwDoc,

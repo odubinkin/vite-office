@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { GetUniqueFrameName } from "./doclay";
 import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
 import { GetEditShell, CorrAbsNodes } from "./doccorr";
@@ -74,6 +75,7 @@ import {
   FindTableFormatByName,
   GetUniqueTableName,
   type SwInsertTableArgs,
+  type SwInsertRowsColsArgs,
 } from "../docnode/ndtbl";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
@@ -246,6 +248,7 @@ export class SwDoc {
     return SetSwTabRows(this, next, currentColumnOnly, frame, start, cursorState);
   }
   private mbDtor = false;
+  private mbInMailMerge = false;
   private mbInReading = false;
   private mbInXMLImport = false;
   /** Reads the native XML-import portion-building policy. @returns Import flag. */
@@ -914,30 +917,28 @@ export class SwDoc {
   ): boolean {
     return SetSwTabCols(this, table, next, previous, start, currentRowOnly, cursorState);
   }
-  /** Inserts native counted flat rows and publishes one document-owned history record. @param boxes - Actual selected boxes. @param count - Native row count. @param behind - Insert after the selected edge. @param insertDummy - Native tracked-change policy. @param cursorState - Original browser cursor attributes. @param afterCursor - Optional unchanged live selection after insertion. @returns Whether admitted. */
-  public InsertRow(
-    boxes: readonly SwTableBox[],
-    count = 1,
-    behind = true,
-    insertDummy = true,
-    cursorState?: SwUndoCursorState,
-    afterCursor?: SwUndoCursorState,
-  ): boolean {
+  /** Forwards original row insertion arguments/defaults unchanged to their native owner. @param args - Native operation arguments without the document. @returns Whether inserted. */
+  public InsertRow(...args: SwInsertRowsColsArgs): boolean {
+    const [boxes, count = 1, behind = true, insertDummy = true, cursorState, afterCursor] = args;
     return InsertSwTableRows(this, boxes, count, behind, insertDummy, cursorState, afterCursor);
   }
-
-  /** Inserts native columns and publishes one already-executed document history action. @param boxes - Expanded actual column selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Redline policy. @param cursorState - Optional shell attributes. @param afterCursor - Optional preserved live selection. @returns Whether inserted. */
-  public InsertCol(
-    boxes: readonly SwTableBox[],
-    count = 1,
-    behind = true,
-    insertDummy = true,
-    cursorState?: SwUndoCursorState,
-    afterCursor?: SwUndoCursorState,
-  ): boolean {
+  /** Forwards original column insertion arguments/defaults unchanged to their native owner. @param args - Native operation arguments without the document. @returns Whether inserted. */
+  public InsertCol(...args: SwInsertRowsColsArgs): boolean {
+    const [boxes, count = 1, behind = true, insertDummy = true, cursorState, afterCursor] = args;
     return InsertSwTableColumns(this, boxes, count, behind, insertDummy, cursorState, afterCursor);
   }
-
+  /** Reads original document mail-merge state. @returns Native state. */
+  public IsInMailMerge(): boolean {
+    return this.mbInMailMerge;
+  }
+  /** Assigns original mail-merge state without a model notification. @param value - New state. @returns Nothing. */
+  public SetInMailMerge(value: boolean): void {
+    this.mbInMailMerge = value;
+  }
+  /** Allocates the native frame name from actual special formats. @returns Available source name. */
+  public GetUniqueFrameName(): string {
+    return GetUniqueFrameName(this);
+  }
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */
   public GetUniqueTableName(): string {
     return GetUniqueTableName(this);
