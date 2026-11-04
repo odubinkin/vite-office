@@ -483,20 +483,28 @@ export class SwNodes {
         client.DestroyImpl();
       continue writerClients2;
     }
-    for (const box of section.line.GetTabBoxes()) this.DestroyTableBox(box);
+    for (const box of section.line.GetTabBoxes()) this.DestroyTableBoxFrames(box);
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
-  /** Removes actual cell layout clients before releasing the original model box. @param box - Deleted native cell. @returns Nothing. */
-  private DestroyTableBox(box: SwTableBox): void {
-    writerClients3: for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+  /** Removes nested and content-cell layout clients before model-owned vectors destroy their actual children. @param box - Original model box. @returns Nothing. */
+  private DestroyTableBoxFrames(box: SwTableBox): void {
+    for (const line of box.GetTabLines()) {
+      for (const client of new SwIterator(SwClient, line.GetFrameFormat()))
+        if (client instanceof SwRowFrame && client.GetTabLine() === line) client.DestroyImpl();
+      for (const child of line.GetTabBoxes()) this.DestroyTableBoxFrames(child);
+    }
+    for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
       if (client instanceof SwCellFrame && client.GetTabBox() === box) {
         if (client.GetUpper() !== undefined) client.RemoveFromLayout();
         client.DestroyImpl();
       }
-      continue writerClients3;
     }
+  }
+  /** Removes actual cell layout clients before releasing one erased model box. @param box - Deleted native cell. @returns Nothing. */
+  private DestroyTableBox(box: SwTableBox): void {
+    this.DestroyTableBoxFrames(box);
     box.Dispose();
   }
 
@@ -515,8 +523,7 @@ export class SwNodes {
         if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
         continue writerClients1;
       }
-      for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
-      row.Dispose();
+      for (const box of row.GetTabBoxes()) this.DestroyTableBoxFrames(box);
     }
     node.GetTable().Dispose();
   }

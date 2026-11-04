@@ -533,7 +533,7 @@ function lcl_transferTableBreaks(
   format: SwFrameFormat,
 ): void {
   if (target.StartOfSectionNode().GetIndex() + 1 !== target.GetIndex()) return;
-  const tableNode = parent.GetSttNd().FindTableNode();
+  const tableNode = parent.GetStartNode().FindTableNode();
   if (!tableNode) throw new Error("assert(parent box has a native table)");
   const table = tableNode.GetTable();
   if (parent.FindPreviousBox(table, parent)) return;

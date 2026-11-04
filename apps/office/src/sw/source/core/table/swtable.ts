@@ -153,6 +153,7 @@ export class SwTable extends SwClient {
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
+    for (const line of this.lines.splice(0)) line.Dispose();
   }
 
   /** Returns the owning start node. @returns Table node. */
@@ -816,10 +817,17 @@ export class SwTable extends SwClient {
 
   /** Resolves a connected native box by its section start index. @param startIndex - Native node coordinate. @returns Actual box or undefined. */
   public GetTableBox(startIndex: number): SwTableBox | undefined {
-    for (const line of this.lines)
-      for (const box of line.GetTabBoxes())
-        if (box.GetStartNode().GetIndex() === startIndex) return box;
-    return undefined;
+    /** Current graph fallback visits actual owned descendants; complete native sorted-content registry and layout-first query remain separate responsibilities. @param lines - Actual lines. @returns Matching real content box. */
+    function find(lines: readonly SwTableLine[]): SwTableBox | undefined {
+      for (const line of lines)
+        for (const box of line.GetTabBoxes()) {
+          if (box.GetSttNd()?.GetIndex() === startIndex) return box;
+          const found = find(box.GetTabLines());
+          if (found) return found;
+        }
+      return undefined;
+    }
+    return find(this.lines);
   }
 
   /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */

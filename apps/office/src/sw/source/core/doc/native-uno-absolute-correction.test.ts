@@ -21,8 +21,8 @@ function fixture() {
   body.SetText("abcdef");
   const table = doc.nodes.MakeTableNode("correction");
   const line = doc.nodes.AppendTableRow(table, 2);
-  const first = present(line.GetTabBoxes()[0]).GetSttNd();
-  const second = present(line.GetTabBoxes()[1]).GetSttNd();
+  const first = present(line.GetTabBoxes()[0]).GetStartNode();
+  const second = present(line.GetTabBoxes()[1]).GetStartNode();
   const one = doc.nodes.at(first.GetIndex() + 1),
     two = doc.nodes.at(second.GetIndex() + 1);
   assert(one instanceof SwTextNode);

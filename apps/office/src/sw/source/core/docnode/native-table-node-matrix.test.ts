@@ -76,7 +76,7 @@ it.each([false, true])(
     const outer = nested
       ? present(
           doc.nodes.AppendTableRow(doc.nodes.MakeTableNode("Outer"), 1).GetTabBoxes()[0],
-        ).GetSttNd()
+        ).GetStartNode()
       : doc.nodes.MakeTextSection(
           doc.nodes.GetEndOfExtras(),
           K.SwNormalStartNode,

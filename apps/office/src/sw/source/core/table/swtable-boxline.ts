@@ -24,17 +24,46 @@ import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import type { SwTable, SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
 
-/** Owns one cell section and its ordered paragraphs. */
+/** Owns either one native content-cell section or anonymous nested lines. */
 export class SwTableBox extends SwClient {
-  /** Registers the original cell at its native format. @param format - Native owner. @param startNode - Original cell section. @returns Nothing. */
+  private readonly lines: SwTableLine[] = [];
+  private startNode: SwTableBoxStartNode | null;
+  private upper: SwTableLine | null;
+  /** Native leaf or anonymous-box constructor: a line count reserves capacity without creating lines or a text section. @param format - Actual box format. @param startOrLines - Real cell start, or native anonymous-box line capacity. @param upper - Actual containing row. @returns Nothing. */
   public constructor(
     format: SwNativeTableBoxFormat,
-    private readonly startNode: SwTableBoxStartNode,
+    startOrLines: SwTableBoxStartNode | number,
+    upper: SwTableLine | null = null,
   ) {
     super();
-    if (format.GetDoc() !== startNode.GetDoc())
+    this.startNode = typeof startOrLines === "number" ? null : startOrLines;
+    this.upper = upper;
+    if (this.startNode && format.GetDoc() !== this.startNode.GetDoc())
       throw new Error("Writer cell format belongs to another document.");
     this.RegisterToModify(this.CheckBoxFormat(format));
+  }
+  /** Original borrowed upper row. @returns Actual row or null. */
+  public GetUpper(): SwTableLine | null {
+    return this.upper;
+  }
+  /** Original direct upper-row assignment. @param upper - Actual new row or null. @returns Nothing. */
+  public SetUpper(upper: SwTableLine | null): void {
+    this.upper = upper;
+  }
+  /** Original nested-row vector. @returns Actual owned lines, empty for content boxes. */
+  public GetTabLines(): readonly SwTableLine[] {
+    return this.lines;
+  }
+  /** TypeScript mutation boundary for the original owned line vector. @param line - Actual nested line. @param index - Original vector insertion coordinate. @returns Nothing. */
+  public AddLine(line: SwTableLine, index = this.lines.length): void {
+    line.SetUpper(this);
+    this.lines.splice(index, 0, line);
+  }
+  /** Original vector erase transfers ownership without destroying the line or changing its upper pointer. @param line - Actual contained row. @returns Nothing. */
+  public RemoveLine(line: SwTableLine): void {
+    const index = this.lines.indexOf(line);
+    if (index < 0) throw new Error("assert(nested line belongs to box)");
+    this.lines.splice(index, 1);
   }
   /** Keeps direct value/formula owners exclusive at native box construction. @param format - Requested owner. @returns Admitted native format. */
   private CheckBoxFormat(format: SwNativeTableBoxFormat): SwNativeTableBoxFormat {
@@ -99,24 +128,26 @@ export class SwTableBox extends SwClient {
     this.RegisterToModify(format);
     if (!original.HasWriterListeners()) original.DisposeModify();
   }
-  /** Releases the native box and deletes only a final-client format. @returns Nothing. */
+  /** Releases owned nested lines and the original box client, deleting only a final-client format. @returns Nothing. */
   public override Dispose(): void {
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
+    for (const line of this.lines.splice(0)) line.Dispose();
   }
-  /** Original tblrwcl.cxx predecessor lookup for the current leaf-box model. The native upper line is resolved through its actual owning graph, not copied into an alternate owner list. @param table - Actual owning table. @param search - Original optional search pointer, null returns this leaf. @returns Actual predecessor or null. */
+  /** Original tblrwcl.cxx predecessor lookup uses this actual upper line and nested owned lines. @param table - Actual owning table. @param search - Original optional search pointer, null returns this leaf. @returns Actual predecessor or null. */
   public FindPreviousBox(table: SwTable, search: SwTableBox | null): SwTableBox | null {
     return FindPreviousBoxInBox(this, table, search);
   }
 
-  /** Original GetSttNd borrows the cell's actual section owner. @returns Native section start. */
-  public GetSttNd(): SwTableBoxStartNode {
+  /** Original GetSttNd borrows the cell's actual section owner. @returns Actual content start or null for an anonymous box. */
+  public GetSttNd(): SwTableBoxStartNode | null {
     return this.startNode;
   }
-  /** Existing section-name binding delegates to the original native getter. @returns Section start. */
+  /** Existing required-leaf binding asserts the original nullable start. @returns Section start. */
   public GetStartNode(): SwTableBoxStartNode {
-    return this.GetSttNd();
+    if (!this.startNode) throw new Error("assert(content box has a start node)");
+    return this.startNode;
   }
   /** Copies direct items only for construction/transport. @returns Independent boundary values. */
   public GetFormat(): SwTableBoxFormat {
@@ -157,10 +188,11 @@ export class SwTableBox extends SwClient {
   }
   /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */
   public GetParagraphs(): readonly SwTextNode[] {
-    const nodes = this.startNode.GetNodes();
+    const start = this.GetStartNode(),
+      nodes = start.GetNodes();
     return nodes
       .entries()
-      .slice(this.startNode.GetIndex() + 1, this.startNode.EndOfSectionNode().GetIndex())
+      .slice(start.GetIndex() + 1, start.EndOfSectionNode().GetIndex())
       .filter(
         /** Selects actual cell text owners. @param node - Section member. @returns Whether text. */
         (node): node is SwTextNode => node instanceof SwTextNode,
@@ -172,12 +204,23 @@ export class SwTableBox extends SwClient {
 export class SwTableLine extends SwClient {
   private readonly boxes: SwTableBox[] = [];
 
-  /** Registers a row at its document-owned native format. @param format - Native row format. @returns Nothing. */
-  public constructor(format: SwTableLineFormat) {
+  private upper: SwTableBox | null;
+  /** Registers a native row without constructing reserved boxes. @param format - Actual row format. @param boxes - Native reserve capacity. @param upper - Actual containing box, null for base rows. @returns Nothing. */
+  public constructor(format: SwTableLineFormat, boxes = 0, upper: SwTableBox | null = null) {
     super();
+    this.upper = upper;
+    void boxes; // Native reserve does not construct cells.
     this.RegisterToModify(format);
   }
-  /** Original tblrwcl.cxx predecessor algorithm for current base lines and leaf boxes; anonymous nested-line boxes are not admitted by this model. @param table - Actual table. @param search - Optional box search pointer. @param overTableLines - Original true default. @returns Previous actual leaf box or null. */
+  /** Original borrowed containing box, null for base lines. @returns Actual upper box. */
+  public GetUpper(): SwTableBox | null {
+    return this.upper;
+  }
+  /** Original direct upper assignment. @param upper - New borrowed box. @returns Nothing. */
+  public SetUpper(upper: SwTableBox | null): void {
+    this.upper = upper;
+  }
+  /** Original tblrwcl.cxx predecessor algorithm traverses actual base/nested rows and anonymous boxes. @param table - Actual table. @param search - Optional box search pointer. @param overTableLines - Original true default. @returns Previous actual leaf box or null. */
   public FindPreviousBox(
     table: SwTable,
     search: SwTableBox | null = null,
@@ -226,8 +269,9 @@ export class SwTableLine extends SwClient {
     this.RegisterToModify(format);
     if (!original.HasWriterListeners()) original.DisposeModify();
   }
-  /** Ends original row client lifetime without touching surviving format peers. @returns Nothing. */
+  /** Destroys owned boxes before ending the row client lifetime, preserving surviving format peers. @returns Nothing. */
   public override Dispose(): void {
+    for (const box of this.boxes.splice(0)) box.Dispose();
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
@@ -260,6 +304,7 @@ export class SwTableLine extends SwClient {
 
   /** Adds a cell to this row. @param box - Canonical cell. @param index - Native insertion coordinate. @returns Nothing. */
   public AddBox(box: SwTableBox, index = this.boxes.length): void {
+    box.SetUpper(this);
     this.boxes.splice(index, 0, box);
   }
 

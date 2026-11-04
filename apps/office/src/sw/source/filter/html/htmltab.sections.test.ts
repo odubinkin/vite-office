@@ -114,7 +114,7 @@ it("uses exact40twip direct heights in the predecessor overload without moving t
       const node = parser.m_xDoc.nodes.at(start.GetIndex() + 1);
       assert(node instanceof SwTextNode);
       expect(point.GetNode()).toBe(original);
-      expect(start.GetIndex()).toBe(box.GetSttNd().EndOfSectionNode().GetIndex() + 1);
+      expect(start.GetIndex()).toBe(box.GetStartNode().EndOfSectionNode().GetIndex() + 1);
       for (const which of [
         H.RES_CHRATR_FONTSIZE,
         H.RES_CHRATR_CJK_FONTSIZE,

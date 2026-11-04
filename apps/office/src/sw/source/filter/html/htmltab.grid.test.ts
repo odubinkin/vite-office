@@ -455,7 +455,7 @@ it("transfers only a genuinely unconsumed first box on deregistration and retain
         row = doc.nodes.AppendTableRow(node, 1),
         borrowed = row.GetTabBoxes()[0];
       assert(borrowed);
-      const unconsumed = new SwTableBox(borrowed.GetFrameFormat(), borrowed.GetSttNd());
+      const unconsumed = new SwTableBox(borrowed.GetFrameFormat(), borrowed.GetStartNode());
       const other = new HTMLTable(parser, false, false, false, new HTMLTableOptions([], A.Left));
       table.m_xBox1 = unconsumed;
       table.SourceDispose();

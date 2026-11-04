@@ -452,8 +452,9 @@ export class SwMarkdownParser {
     const row = table.GetTabLines()[state.GetCurRow()],
       box = row?.GetTabBoxes()[state.GetCurCol()];
     if (!box) throw new Error("assert(Markdown cell requires an actual table box)");
-    const start = box.GetSttNd(),
-      node = start.GetNodes().at(start.GetIndex() + 1);
+    const start = box.GetSttNd();
+    if (!start) throw new Error("assert(Markdown content box has a start node)");
+    const node = start.GetNodes().at(start.GetIndex() + 1);
     if (!(node instanceof SwTextNode)) return;
     const adjust = adjustMap.get(align);
     if (adjust === undefined) throw new RangeError("Markdown alignment is absent from adjustMap");

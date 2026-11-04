@@ -1594,3 +1594,14 @@ Forward default-character movement uses the original SAL code-point operation
 and actual node-range checks; complete movement services and reader reference
 counting/paste behavior remain unverified. This checkpoint does not close the
 native recursive HTML table path, RTF direction or final format/UI audit.
+
+HTML61 adds actual anonymous-box/nested-row owners required by native HTML table
+materialization. Reserve counts create neither dummy rows nor text sections;
+content starts are genuinely nullable. Source predecessor traversal now uses
+real upper identities and descends nested vectors. Table/row/box vectors own
+recursive model deletion, while node deletion removes frame clients before
+those owners are destroyed. The tests exercise actual DeleteTable, not an
+assumed complete SwDoc.Dispose implementation. Native sorted-content registry
+and layout-first box lookup, document teardown, recursive HTML table production
+and materialization/layout remain unverified; this is a core ownership step,
+not completed HTML-table import or a complete native format claim.

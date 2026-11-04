@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 398
+revision: 402
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T11:53:14.262Z"
+  updated_at: "2026-11-04T12:04:27.089Z"
   updated_by: "CODER"
-  note: "HTML60 checkpoint verified: 122 unique cases in 13 related files, application types and source/static gates pass. Actual Markdown table registration/destruction, native move-append-release, original defaults and span cleanup implemented; cell selection uses native node/checked alignment contracts. WRITER343 preserved; WRITER153 withdrawn as a local-default false positive. Parent native HTML table path, RTF direction and final format/UI audit remain incomplete."
-  attempts: 71
+  note: "HTML61 verified checkpoint: 246 unique cases/20 files, app types and all source/static gates pass. Real anonymous boxes/nested rows, upper identities, nullable content starts, source predecessor traversal and recursive owned model destruction implemented. Explicit DeleteTable fixture validates actual lifetime; whole document destructor, sorted-content registration/layout-first query, recursive HTML production/materialization/layout and RTF direction remain open."
+  attempts: 72
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1141,8 +1144,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T12:04:27.089Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML61 verified checkpoint: 246 unique cases/20 files, app types and all source/static gates pass. Real anonymous boxes/nested rows, upper identities, nullable content starts, source predecessor traversal and recursive owned model destruction implemented. Explicit DeleteTable fixture validates actual lifetime; whole document destructor, sorted-content registration/layout-first query, recursive HTML production/materialization/layout and RTF direction remain open."
+  -
+    type: "status"
+    at: "2026-11-04T12:04:34.659Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T11:53:22.139Z"
+doc_updated_at: "2026-11-04T12:04:34.659Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3017,6 +3033,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T12:04:27.089Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML61 verified checkpoint: 246 unique cases/20 files, app types and all source/static gates pass. Real anonymous boxes/nested rows, upper identities, nullable content starts, source predecessor traversal and recursive owned model destruction implemented. Explicit DeleteTable fixture validates actual lifetime; whole document destructor, sorted-content registration/layout-first query, recursive HTML production/materialization/layout and RTF direction remain open.
+    Attempts: 72
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T12:04:17.931Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3192,6 +3238,14 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html60-types-cell-final.log). Scope: complete application type contracts including real MDTable parser constructor and actual box start/node selection. Earlier initial and pre-cell type runs also pass; no nullable cast hides a rejected table.
     - Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html60-eslint-cell-final.log, html60-eslint-callback-final.log, html60-prettier-final.log). Initial no-useless-assignment finding in the new movement result declaration was fixed; no rule suppression. Callback final expectation formatting passed in write output.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html60-boundaries.log, html60-jsdoc-callback-final.log, html60-filesize.log, html60-source-tree.log, html60-provenance-final.log, html60-registry-final.log). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10757imports/229edges,4354JSDoc files and0Writer registry semantic violations. Paired existing metadata histories retain broad unverified statuses. These gates do not certify complete native movement/parser reference counting/paste, recursive HTML grammar/table construction/layout, RTF direction or final format/UI completeness. Full-suite replay was not due under the user's once-per-ten-AgentPlane-tasks rule; this remains the same approved parent task.
+
+    S3HW1E HTML61 checkpoint —246 unique passing cases/20actual files; no final relevant case failing or skipped. Parent remains incomplete. Evidence: output/playwright/rtf-properties-native/html61-*.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/layout/native-table-frame-hierarchy.test.ts src/sw/source/core/docnode/native-table-section-insertion.test.ts src/sw/source/core/docnode/native-table-node-matrix.test.ts src/sw/source/core/docnode/native-text-section.test.ts src/sw/source/core/doc/native-uno-absolute-correction.test.ts ->109pass/10files (html61-native-final.log). Scope: eight fresh real hierarchy/ownership cases, actual content starts/upper identities, native nested predecessor ascent/descent/empty-row behavior, once-only recursive destruction on real DeleteTable, row/box frames, column/insertion undo and registered-node/UNO positions. Initial64case run had one fresh fixture failure from assuming SwDoc.Dispose calls node-owned table destructors; the fixture now invokes actual DeleteTable and records the broader document-dtor gap instead of claiming it passed.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/source/filter/xml/xmltbli-default-cell.test.ts ->137pass/10files (html61-filter-ui.log). Scope: HTML intermediate actual grid/sections/content owners, existing Markdown native callbacks, native TXT/RTF, real document I/O and table UI/XML consumers. Component tests do not prove production recursive HTML tables.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html61-types-final.log; initial actual compiler run also passes). Scope: whole app nullable GetSttNd, actual anonymous-box constructor and all source consumers. Initial root-cwd redirect failed before invoking a compiler and is not counted as verification.
+    - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html61-eslint.log, html61-prettier.log; final source-comment formatting check stdout also passes). Scope: actual complete source/test edits, no suppressed rules or source substitutes.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html61-boundaries.log, html61-jsdoc.log, html61-filesize.log, html61-source-tree.log, html61-provenance.log, html61-registry.log). Evidence:1937runtime provenance modules/1724mapped;1936boundary sources/10757imports/229edges;4355JSDoc source files;0Writer registry semantic violations. Existing paired registry/provenance histories append this scoped responsibility and retain broader unverified statuses. Native sorted-content registration/layout-first lookup, whole document teardown, native recursive HTML grammar/context/materialization/layout, RTF direction and final format/UI audit remain open. No full suite replay: same approved AgentPlane parent task, under the user's once-per-ten-tasks policy.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4492,6 +4546,14 @@ sections:
     The original parser constructor starts quote depth at -1 and noParSpace true. The prior local zero/false defaults were porting errors. In particular, WRITER153 was a false upstream suspicion based on an incorrect initial depth; the issue entry now explicitly withdraws it and preserves the exact source default and test-before-decrement order. Actual nested/direct md4c quotes now restore body style. Owned span pop and parser teardown call actual item Dispose; the reader releases parser-owned table/items before its caller-owned PaM/document on success and failure. Table cell selection uses the actual box start+1 node and original checked four-entry adjustMap. Invalid active-cursor/box preconditions are exposed rather than silently accepted; translated assertions do not certify native undefined behavior. The direct real footnote/md4c failure test preserves WRITER342's null contract without claiming reachable upstream reader crashes.
 
     Fifteen new actual model/callback tests cover ten lifecycle/default/ownership and five forward-content cases. Existing golden outputs were corrected only after the pinned constructor/EndTable source audit and observed four obsolete expectations. No fake model tables, mocked return providers, measurement substitutes or private parser trees were introduced. Whole parser/doc reference counting, insertion/paste reader, native recursive HTML table context/materialization/layout, RTF direction and final format/UI audit remain open. Whole module behavior/contract/default statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.
+
+    S3HW1E HTML61 — Actual anonymous-box/nested-line model and owned destruction required for HTML table materialization. Native box construction now accepts either a real cell start or an anonymous line-capacity argument; the latter leaves GetSttNd null and creates no child rows/content nodes. Native line capacity likewise creates no boxes. GetUpper/SetUpper and owned GetTabLines represent real parent/vector identities, replacing the old table-scan reconstruction of upper pointers. Existing TypeScript vector mutation boundaries bind actual owners; vector erase retains the borrowed upper pointer as source erase does. Required leaf convenience boundaries assert an existing start; original nullable GetSttNd remains observable. Markdown requires a real content start instead of hiding null.
+
+    The tblrwcl.cxx previous-box responsibility now implements nested predecessor descent and parent ascent, source row-only behavior (false suppresses only base-line crossing), and empty previous-row recursion. It never fabricates a last leaf for a malformed anonymous box with an empty terminal row. Actual SwTableLines/SwTableLine ownership destroys nested model children; box/table member vectors release after their own format-client destruction, while rows delete boxes before row-format release. Node/table/row deletion removes actual registered layout-frame clients separately, allowing the model owner to invoke each child destructor exactly once. Eight fresh tests build real native table cells and reparent them into actual anonymous boxes; no result providers, fabricated text cells, measurement substitutes or alternate parser/tree adapters are introduced.
+
+    The existing section-index graph query now visits actual nested descendants. This is still the preexisting graph-query profile: native layout-first lookup and sorted-content-box registration/removal remain unported/unverified; it must not be called complete SwTable::GetTableBox parity. Tests use actual DeleteTable for destruction. An initial fresh destructor fixture incorrectly assumed SwDoc.Dispose routes node-owned tables; current SwDoc.Dispose tears down notifications/styles but does not invoke that full native node destructor sequence. The fixture now tests real explicit table removal, and whole document teardown remains an explicit unresolved core responsibility rather than a fabricated successful destructor test. One initial root-cwd typecheck redirect failed before running the compiler; both actual compiler runs use authoritative apps/office cwd. No external files or network accessed.
+
+    Whole native table registration/destruction/default-format bootstrap, nested editing/rendering, recursive HTML first-cell/row/section/table production and materialization/layout, RTF direction and final format/UI audit remain unverified. This block supplies real model owners required by HTMLTable::MakeTableLine/MakeTableBox; it does not certify production HTML-table import or complete native formats. Existing save/open/autosave/recovery deviations are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -6377,6 +6439,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T12:04:27.089Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML61 verified checkpoint: 246 unique cases/20 files, app types and all source/static gates pass. Real anonymous boxes/nested rows, upper identities, nullable content starts, source predecessor traversal and recursive owned model destruction implemented. Explicit DeleteTable fixture validates actual lifetime; whole document destructor, sorted-content registration/layout-first query, recursive HTML production/materialization/layout and RTF direction remain open.
+Attempts: 72
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T12:04:17.931Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6552,6 +6644,14 @@ S3HW1E HTML60 checkpoint —122 unique actual cases across13files in the combine
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html60-types-cell-final.log). Scope: complete application type contracts including real MDTable parser constructor and actual box start/node selection. Earlier initial and pre-cell type runs also pass; no nullable cast hides a rejected table.
 - Command (cwd repository): node_modules/.bin/eslint intentional changed/new source/test files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html60-eslint-cell-final.log, html60-eslint-callback-final.log, html60-prettier-final.log). Initial no-useless-assignment finding in the new movement result declaration was fixed; no rule suppression. Callback final expectation formatting passed in write output.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html60-boundaries.log, html60-jsdoc-callback-final.log, html60-filesize.log, html60-source-tree.log, html60-provenance-final.log, html60-registry-final.log). Evidence:1937runtime provenance modules/1724mapped,1936boundary sources/10757imports/229edges,4354JSDoc files and0Writer registry semantic violations. Paired existing metadata histories retain broad unverified statuses. These gates do not certify complete native movement/parser reference counting/paste, recursive HTML grammar/table construction/layout, RTF direction or final format/UI completeness. Full-suite replay was not due under the user's once-per-ten-AgentPlane-tasks rule; this remains the same approved parent task.
+
+S3HW1E HTML61 checkpoint —246 unique passing cases/20actual files; no final relevant case failing or skipped. Parent remains incomplete. Evidence: output/playwright/rtf-properties-native/html61-*.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/table/native-column-insertion.test.ts src/sw/source/core/undo/native-insert-table-history.test.ts src/sw/source/core/layout/native-table-frame-hierarchy.test.ts src/sw/source/core/docnode/native-table-section-insertion.test.ts src/sw/source/core/docnode/native-table-node-matrix.test.ts src/sw/source/core/docnode/native-text-section.test.ts src/sw/source/core/doc/native-uno-absolute-correction.test.ts ->109pass/10files (html61-native-final.log). Scope: eight fresh real hierarchy/ownership cases, actual content starts/upper identities, native nested predecessor ascent/descent/empty-row behavior, once-only recursive destruction on real DeleteTable, row/box frames, column/insertion undo and registered-node/UNO positions. Initial64case run had one fresh fixture failure from assuming SwDoc.Dispose calls node-owned table destructors; the fixture now invokes actual DeleteTable and records the broader document-dtor gap instead of claiming it passed.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.sections.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx src/sw/source/filter/xml/xmltbli-default-cell.test.ts ->137pass/10files (html61-filter-ui.log). Scope: HTML intermediate actual grid/sections/content owners, existing Markdown native callbacks, native TXT/RTF, real document I/O and table UI/XML consumers. Component tests do not prove production recursive HTML tables.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html61-types-final.log; initial actual compiler run also passes). Scope: whole app nullable GetSttNd, actual anonymous-box constructor and all source consumers. Initial root-cwd redirect failed before invoking a compiler and is not counted as verification.
+- Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html61-eslint.log, html61-prettier.log; final source-comment formatting check stdout also passes). Scope: actual complete source/test edits, no suppressed rules or source substitutes.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html61-boundaries.log, html61-jsdoc.log, html61-filesize.log, html61-source-tree.log, html61-provenance.log, html61-registry.log). Evidence:1937runtime provenance modules/1724mapped;1936boundary sources/10757imports/229edges;4355JSDoc source files;0Writer registry semantic violations. Existing paired registry/provenance histories append this scoped responsibility and retain broader unverified statuses. Native sorted-content registration/layout-first lookup, whole document teardown, native recursive HTML grammar/context/materialization/layout, RTF direction and final format/UI audit remain open. No full suite replay: same approved AgentPlane parent task, under the user's once-per-ten-tasks policy.
 
 ## Rollback Plan
 
@@ -7856,3 +7956,11 @@ S3HW1E HTML60 — Markdown table lifecycle and source callback contracts. MDTabl
 The original parser constructor starts quote depth at -1 and noParSpace true. The prior local zero/false defaults were porting errors. In particular, WRITER153 was a false upstream suspicion based on an incorrect initial depth; the issue entry now explicitly withdraws it and preserves the exact source default and test-before-decrement order. Actual nested/direct md4c quotes now restore body style. Owned span pop and parser teardown call actual item Dispose; the reader releases parser-owned table/items before its caller-owned PaM/document on success and failure. Table cell selection uses the actual box start+1 node and original checked four-entry adjustMap. Invalid active-cursor/box preconditions are exposed rather than silently accepted; translated assertions do not certify native undefined behavior. The direct real footnote/md4c failure test preserves WRITER342's null contract without claiming reachable upstream reader crashes.
 
 Fifteen new actual model/callback tests cover ten lifecycle/default/ownership and five forward-content cases. Existing golden outputs were corrected only after the pinned constructor/EndTable source audit and observed four obsolete expectations. No fake model tables, mocked return providers, measurement substitutes or private parser trees were introduced. Whole parser/doc reference counting, insertion/paste reader, native recursive HTML table context/materialization/layout, RTF direction and final format/UI audit remain open. Whole module behavior/contract/default statuses remain unverified. Save/open/autosave/recovery deviations are unchanged.
+
+S3HW1E HTML61 — Actual anonymous-box/nested-line model and owned destruction required for HTML table materialization. Native box construction now accepts either a real cell start or an anonymous line-capacity argument; the latter leaves GetSttNd null and creates no child rows/content nodes. Native line capacity likewise creates no boxes. GetUpper/SetUpper and owned GetTabLines represent real parent/vector identities, replacing the old table-scan reconstruction of upper pointers. Existing TypeScript vector mutation boundaries bind actual owners; vector erase retains the borrowed upper pointer as source erase does. Required leaf convenience boundaries assert an existing start; original nullable GetSttNd remains observable. Markdown requires a real content start instead of hiding null.
+
+The tblrwcl.cxx previous-box responsibility now implements nested predecessor descent and parent ascent, source row-only behavior (false suppresses only base-line crossing), and empty previous-row recursion. It never fabricates a last leaf for a malformed anonymous box with an empty terminal row. Actual SwTableLines/SwTableLine ownership destroys nested model children; box/table member vectors release after their own format-client destruction, while rows delete boxes before row-format release. Node/table/row deletion removes actual registered layout-frame clients separately, allowing the model owner to invoke each child destructor exactly once. Eight fresh tests build real native table cells and reparent them into actual anonymous boxes; no result providers, fabricated text cells, measurement substitutes or alternate parser/tree adapters are introduced.
+
+The existing section-index graph query now visits actual nested descendants. This is still the preexisting graph-query profile: native layout-first lookup and sorted-content-box registration/removal remain unported/unverified; it must not be called complete SwTable::GetTableBox parity. Tests use actual DeleteTable for destruction. An initial fresh destructor fixture incorrectly assumed SwDoc.Dispose routes node-owned tables; current SwDoc.Dispose tears down notifications/styles but does not invoke that full native node destructor sequence. The fixture now tests real explicit table removal, and whole document teardown remains an explicit unresolved core responsibility rather than a fabricated successful destructor test. One initial root-cwd typecheck redirect failed before running the compiler; both actual compiler runs use authoritative apps/office cwd. No external files or network accessed.
+
+Whole native table registration/destruction/default-format bootstrap, nested editing/rendering, recursive HTML first-cell/row/section/table production and materialization/layout, RTF direction and final format/UI audit remain unverified. This block supplies real model owners required by HTMLTable::MakeTableLine/MakeTableBox; it does not certify production HTML-table import or complete native formats. Existing save/open/autosave/recovery deviations are unchanged.

@@ -55,8 +55,8 @@ it("inserts a sibling section after an actual cell end instead of nesting it in 
       first = row.GetTabBoxes()[0],
       second = row.GetTabBoxes()[1];
     assert(first && second);
-    const end = first.GetSttNd().EndOfSectionNode(),
-      where = second.GetSttNd(),
+    const end = first.GetStartNode().EndOfSectionNode(),
+      where = second.GetStartNode(),
       saved = new SwNodeIndex(where);
     const start = doc.nodes.MakeTextSection(
       where,
@@ -70,7 +70,7 @@ it("inserts a sibling section after an actual cell end instead of nesting it in 
     expect(start.FindTableNode()).toBe(table.GetTableNode());
     expect(table.GetTableNode().FindTableNode()).toBe(table.GetTableNode());
     expect(table.GetTableNode().EndOfSectionNode().FindTableNode()).toBe(table.GetTableNode());
-    expect(first.GetSttNd().GetStartNodeType()).toBe(K.SwTableBoxStartNode);
+    expect(first.GetStartNode().GetStartNodeType()).toBe(K.SwTableBoxStartNode);
   } finally {
     doc.Dispose();
   }
