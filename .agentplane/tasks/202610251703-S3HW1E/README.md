@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 406
+revision: 410
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T12:18:57.263Z"
+  updated_at: "2026-11-04T12:33:05.858Z"
   updated_by: "CODER"
-  note: "HTML62 checkpoint verified: 249 unique cases/18 files, whole-app types and source/static gates pass. Actual content-pointer registration/removal and native layout-first/reverse-registry lookup replace the graph fallback; native starts clear before owned child death. WRITER344 foreign-table/layout asymmetry documented and preserved. Default/bootstrap/document teardown, recursive HTML production/materialization/layout, RTF direction and final format/UI audit remain open."
-  attempts: 73
+  note: "HTML63 verified checkpoint: 280 unique cases/16 files, whole-app types and source/static gates pass. Actual SwPaM.Move, consumed directional Chars and paragraph strategies replace the forward helper; Markdown uses native owner dispatch. Native pamtyp/paminit paths and transient node-index reassignment/scope release restored. Broader collection/Cells/hidden services, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified."
+  attempts: 74
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1173,8 +1176,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-04T12:33:05.858Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML63 verified checkpoint: 280 unique cases/16 files, whole-app types and source/static gates pass. Actual SwPaM.Move, consumed directional Chars and paragraph strategies replace the forward helper; Markdown uses native owner dispatch. Native pamtyp/paminit paths and transient node-index reassignment/scope release restored. Broader collection/Cells/hidden services, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified."
+  -
+    type: "status"
+    at: "2026-11-04T12:33:21.225Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T12:19:04.434Z"
+doc_updated_at: "2026-11-04T12:33:21.225Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3109,6 +3125,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-04T12:33:05.858Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML63 verified checkpoint: 280 unique cases/16 files, whole-app types and source/static gates pass. Actual SwPaM.Move, consumed directional Chars and paragraph strategies replace the forward helper; Markdown uses native owner dispatch. Native pamtyp/paminit paths and transient node-index reassignment/scope release restored. Broader collection/Cells/hidden services, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified.
+    Attempts: 74
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T12:32:39.815Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -3301,6 +3347,14 @@ sections:
     - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html62-types-issue-final.log; prior corrected html62-types-final.log also passes). Initial protected SwFrame class-selector compiler error is retained in html62-types-initial.log and fixed without a cast or dummy constructor. Scope: whole app final source/test types.
     - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files and final registry test formatting ->pass (html62-eslint.log, html62-eslint-registry-final.log, html62-prettier.log and final formatting stdout). Scope: actual edited/new source/test files with repository matching rules; no rule suppressions.
     - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html62-boundaries.log, html62-jsdoc-final.log, html62-filesize.log, html62-source-tree.log, html62-provenance-issue-final.log, html62-registry-issue-final.log). Evidence:1938runtime provenance modules/1725mapped;1937boundary sources/10765imports/229allowed edges;4357JSDoc files;0Writer registry semantic violations. Initial missing filename explanation failures remain in html62-provenance.log/html62-registry.log; canonical filenameDivergence now passes without weakening validation. New physical source responsibility is paired in canonical runtime/provenance records. Broader whole-module/native address/default/bootstrap/document teardown/HTML production/RTF direction/final format completion remain unverified. Focused verification follows the user's once-per-ten-AgentPlane-tasks full-run policy within this same active approved task.
+
+    S3HW1E HTML63 checkpoint —280 unique passing cases/16actual files; no final relevant failure or skip. Evidence: output/playwright/rtf-properties-native/html63-*.
+
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/crsr/native-directional-content-move.test.ts src/sw/source/core/crsr/native-forward-content-move.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/crsr/pam-selection.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/docnode/native-text-section.test.ts ->98pass/8files (html63-core-source-final.log). Scope:16fresh actual directional/paragraph/lifetime cases, five migrated forward cases, actual Markdown table/default/lifetime callbacks, marked selection/search/native index correction and real text sections. Initial34case baseline passes; initial97case implementation run had one fresh temporary-index registration failure, fixed in source rather than replacing its observed native owner.
+    - Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx ->182pass/8files (html63-filter-ui.log). Scope: actual native current TXT/RTF/Markdown readers/writers, callbacks, existing HTML insertion, document I/O and mounted table command consumers. Does not certify the unfinished HTML-table production path.
+    - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html63-types-source-final.log). Scope: complete application final source/test contracts, native nullable getter and source-separated movement bindings. Initial type/import errors remain in html63-types-initial.log and are superseded by final source compilation; no unknown/dummy owner cast is used to hide a missing object.
+    - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html63-eslint-final.log, html63-prettier.log). Initial no-this-alias lint findings were resolved with the original native getter; no rule suppression or mock result provider.
+    - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html63-boundaries.log, html63-jsdoc.log, html63-filesize.log, html63-source-tree.log, html63-provenance.log, html63-registry.log). Evidence:1940runtime provenance modules/1727mapped;1939boundary sources/10776imports/229allowed edges;4360JSDoc files;0Writer registry semantic violations. New pamtyp/paminit responsibilities have paired canonical source/runtime records with exact source-native basenames. Broad collection/skip-mode/module/default/ABI/lifetime statuses remain unverified. Same approved AgentPlane task; focused verification follows the user's full-run cadence.
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
@@ -4615,6 +4669,12 @@ sections:
     Eleven fresh real-model tests cover independent pointer membership, duplicate section indices, live index movement, removal, nested complexity, ordered destruction and actual text/nested-table layout selection. WRITER344 documents the original layout-dependent foreign-table index result; source behavior is retained. This is a translated source-contract reproduction, not proof that compiled Writer callers reach the questionable input. Two older tests fabricated content boxes by casting the body start to a cell start; they now assert the source constructor's actual containing-table precondition. The initial compiler rejected a protected class constructor under the previous overly strict public-new selector type; final whole-app compilation passes. Initial provenance/registry checks correctly rejected the new physical file split's missing filename explanation. The canonical new provenance record now owns its filenameDivergence; a mistaken edit of the ignored generated compatibility view was removed, with no enforcement changes or generated view committed.
 
     Whole default/unbound table and native format registry/bootstrap, document destructor orchestration, production recursive HTML first-cell/row/section/table reading and materialization/layout, RTF text direction and final capability/UI audit remain unverified. All broader semantic/module statuses remain unverified; intentional save/open/autosave/recovery deviations are unchanged.
+
+    S3HW1E HTML63 — Native directional content and paragraph movement for the HTML first-cell cursor path. The extracted free forward-only helper is removed; actual SwPaM.Move now dispatches the selected original strategy and clears label affinity only after return, retaining mark/physical-bound identities. Markdown EndTable calls actual Move(fnMoveForward). SwContentNode owns the represented GoNext/GoPrevious content-index overloads, using real registered indices and the native SAL non-SKIPCELL Unicode code-point primitive. SwNode.GetTextNode preserves the original nullable inline discriminator. Native GoInNode preserves checked adjacency and backward content-end placement; GoInContent attempts Chars before node crossing. Original GoPrevPara/GoNextPara/GoCurrPara and forward/start/backward/end alias identity retain the source at-edge and empty-paragraph behavior. Types and binding responsibilities live at source-native pamtyp/paminit paths, with no dummy callback slots/providers or compatibility forwarding owner.
+
+    Sixteen fresh actual-model cases cover backward combining/surrogate/NULL movement, unchanged marks/label affinity, real table/adjacent-cell boundaries, transient index lifetime, paragraph direction/edge combinations, empty paragraphs and structural points. The initial fresh transient-index case exposed an older GoAdjacentPos omission: it called the nonmutating nodes.navigation query without the original SwNodes wrapper's temporary-index reassignment. That reassignment is now restored before range checking, and the actual temporary index is disposed on both success and failure. This is a port correction, not an upstream suspected issue. Initial compiler failures from a removed still-used type import and polymorphic-this assertion are fixed by restoring the type binding and using the actual native nullable text-node getter; lint rejects no-this-alias and no rules are suppressed. Initial97case snapshot had96pass/1fresh scope-registration failure; the final source has98pass with the additional structural case.
+
+    This remains the explicit consumed fnNd/fnPos, Chars nonhidden/noncell profile. Six other collection slots and the complete Cells/grapheme/hidden/search/document/section/locale/ICU movement family are not represented, fabricated or claimed complete. Full HTML first-cell context/fly owners, recursive production/materialization/layout, RTF direction and final capability/UI audit remain required. Broad module/API/ABI/default/lifetime statuses remain unverified. Save/open/autosave/recovery exceptions are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -6560,6 +6620,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-04T12:33:05.858Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML63 verified checkpoint: 280 unique cases/16 files, whole-app types and source/static gates pass. Actual SwPaM.Move, consumed directional Chars and paragraph strategies replace the forward helper; Markdown uses native owner dispatch. Native pamtyp/paminit paths and transient node-index reassignment/scope release restored. Broader collection/Cells/hidden services, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified.
+Attempts: 74
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-04T12:32:39.815Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -6752,6 +6842,14 @@ S3HW1E HTML62 checkpoint —249 unique passing cases/18actual files in final rel
 - Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html62-types-issue-final.log; prior corrected html62-types-final.log also passes). Initial protected SwFrame class-selector compiler error is retained in html62-types-initial.log and fixed without a cast or dummy constructor. Scope: whole app final source/test types.
 - Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new files and final registry test formatting ->pass (html62-eslint.log, html62-eslint-registry-final.log, html62-prettier.log and final formatting stdout). Scope: actual edited/new source/test files with repository matching rules; no rule suppressions.
 - Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html62-boundaries.log, html62-jsdoc-final.log, html62-filesize.log, html62-source-tree.log, html62-provenance-issue-final.log, html62-registry-issue-final.log). Evidence:1938runtime provenance modules/1725mapped;1937boundary sources/10765imports/229allowed edges;4357JSDoc files;0Writer registry semantic violations. Initial missing filename explanation failures remain in html62-provenance.log/html62-registry.log; canonical filenameDivergence now passes without weakening validation. New physical source responsibility is paired in canonical runtime/provenance records. Broader whole-module/native address/default/bootstrap/document teardown/HTML production/RTF direction/final format completion remain unverified. Focused verification follows the user's once-per-ten-AgentPlane-tasks full-run policy within this same active approved task.
+
+S3HW1E HTML63 checkpoint —280 unique passing cases/16actual files; no final relevant failure or skip. Evidence: output/playwright/rtf-properties-native/html63-*.
+
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/crsr/native-directional-content-move.test.ts src/sw/source/core/crsr/native-forward-content-move.test.ts src/sw/source/filter/md/mdtab.lifecycle.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/core/crsr/pam-selection.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/docnode/native-node-index-removal.test.ts src/sw/source/core/docnode/native-text-section.test.ts ->98pass/8files (html63-core-source-final.log). Scope:16fresh actual directional/paragraph/lifetime cases, five migrated forward cases, actual Markdown table/default/lifetime callbacks, marked selection/search/native index correction and real text sections. Initial34case baseline passes; initial97case implementation run had one fresh temporary-index registration failure, fixed in source rather than replacing its observed native owner.
+- Command (cwd apps/office): ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/md/swmd.callbacks.integration.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sw/source/uibase/app/docsh.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/browser/presentation/native-insert-table-command.test.tsx ->182pass/8files (html63-filter-ui.log). Scope: actual native current TXT/RTF/Markdown readers/writers, callbacks, existing HTML insertion, document I/O and mounted table command consumers. Does not certify the unfinished HTML-table production path.
+- Command (cwd apps/office): ../../node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit ->pass (html63-types-source-final.log). Scope: complete application final source/test contracts, native nullable getter and source-separated movement bindings. Initial type/import errors remain in html63-types-initial.log and are superseded by final source compilation; no unknown/dummy owner cast is used to hide a missing object.
+- Command (cwd repository): node_modules/.bin/eslint intentional changed/new TypeScript files --max-warnings 0; node_modules/.bin/prettier --check intentional changed/new source/test/metadata/docs ->pass (html63-eslint-final.log, html63-prettier.log). Initial no-this-alias lint findings were resolved with the original native getter; no rule suppression or mock result provider.
+- Command: node scripts/check-module-boundaries.mjs; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; node scripts/check-lo-source-tree.mjs; node node_modules/tsx/dist/cli.mjs scripts/check-source-provenance.ts; node node_modules/tsx/dist/cli.mjs scripts/libreoffice-inventory/registry-cli.ts check --scope writer; git diff --check ->pass (html63-boundaries.log, html63-jsdoc.log, html63-filesize.log, html63-source-tree.log, html63-provenance.log, html63-registry.log). Evidence:1940runtime provenance modules/1727mapped;1939boundary sources/10776imports/229allowed edges;4360JSDoc files;0Writer registry semantic violations. New pamtyp/paminit responsibilities have paired canonical source/runtime records with exact source-native basenames. Broad collection/skip-mode/module/default/ABI/lifetime statuses remain unverified. Same approved AgentPlane task; focused verification follows the user's full-run cadence.
 
 ## Rollback Plan
 
@@ -8070,3 +8168,9 @@ S3HW1E HTML62 — Native content-box registration and layout-first lookup replac
 Eleven fresh real-model tests cover independent pointer membership, duplicate section indices, live index movement, removal, nested complexity, ordered destruction and actual text/nested-table layout selection. WRITER344 documents the original layout-dependent foreign-table index result; source behavior is retained. This is a translated source-contract reproduction, not proof that compiled Writer callers reach the questionable input. Two older tests fabricated content boxes by casting the body start to a cell start; they now assert the source constructor's actual containing-table precondition. The initial compiler rejected a protected class constructor under the previous overly strict public-new selector type; final whole-app compilation passes. Initial provenance/registry checks correctly rejected the new physical file split's missing filename explanation. The canonical new provenance record now owns its filenameDivergence; a mistaken edit of the ignored generated compatibility view was removed, with no enforcement changes or generated view committed.
 
 Whole default/unbound table and native format registry/bootstrap, document destructor orchestration, production recursive HTML first-cell/row/section/table reading and materialization/layout, RTF text direction and final capability/UI audit remain unverified. All broader semantic/module statuses remain unverified; intentional save/open/autosave/recovery deviations are unchanged.
+
+S3HW1E HTML63 — Native directional content and paragraph movement for the HTML first-cell cursor path. The extracted free forward-only helper is removed; actual SwPaM.Move now dispatches the selected original strategy and clears label affinity only after return, retaining mark/physical-bound identities. Markdown EndTable calls actual Move(fnMoveForward). SwContentNode owns the represented GoNext/GoPrevious content-index overloads, using real registered indices and the native SAL non-SKIPCELL Unicode code-point primitive. SwNode.GetTextNode preserves the original nullable inline discriminator. Native GoInNode preserves checked adjacency and backward content-end placement; GoInContent attempts Chars before node crossing. Original GoPrevPara/GoNextPara/GoCurrPara and forward/start/backward/end alias identity retain the source at-edge and empty-paragraph behavior. Types and binding responsibilities live at source-native pamtyp/paminit paths, with no dummy callback slots/providers or compatibility forwarding owner.
+
+Sixteen fresh actual-model cases cover backward combining/surrogate/NULL movement, unchanged marks/label affinity, real table/adjacent-cell boundaries, transient index lifetime, paragraph direction/edge combinations, empty paragraphs and structural points. The initial fresh transient-index case exposed an older GoAdjacentPos omission: it called the nonmutating nodes.navigation query without the original SwNodes wrapper's temporary-index reassignment. That reassignment is now restored before range checking, and the actual temporary index is disposed on both success and failure. This is a port correction, not an upstream suspected issue. Initial compiler failures from a removed still-used type import and polymorphic-this assertion are fixed by restoring the type binding and using the actual native nullable text-node getter; lint rejects no-this-alias and no rules are suppressed. Initial97case snapshot had96pass/1fresh scope-registration failure; the final source has98pass with the additional structural case.
+
+This remains the explicit consumed fnNd/fnPos, Chars nonhidden/noncell profile. Six other collection slots and the complete Cells/grapheme/hidden/search/document/section/locale/ICU movement family are not represented, fabricated or claimed complete. Full HTML first-cell context/fly owners, recursive production/materialization/layout, RTF direction and final capability/UI audit remain required. Broad module/API/ABI/default/lifetime statuses remain unverified. Save/open/autosave/recovery exceptions are unchanged.

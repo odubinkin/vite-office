@@ -2,6 +2,9 @@
  * @fileoverview Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.
  */
 
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { SwContentIndex } from "../bastyp/index";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -75,6 +78,10 @@ export abstract class SwNode extends SwContentIndexRegistry {
     super();
   }
 
+  /** Original inline node-type getter from ndtxt.hxx returns null for nontext nodes. @returns Actual text owner or null. */
+  public GetTextNode(): SwTextNode | null {
+    return this.nodeType === "text" ? (this as SwNode as SwTextNode) : null;
+  }
   /** Reports whether end-equal hints ignore DontExpand during coordinate updates. @returns Native node state. */
   public IsIgnoreDontExpand(): boolean {
     return this.m_bIgnoreDontExpand;
@@ -241,6 +248,44 @@ export class SwEndNode extends SwNode {
 export abstract class SwContentNode extends SwNode {
   private readonly mpAttrSet: SwAttrSetHandle = { value: undefined };
 
+  /** Original GoNext content-index overload for the consumed Chars (0), nonhidden/noncell responsibility. Other skip-mode services are not represented by this signature. @param index - Actual registered content index. @param mode - Original SwCursorSkipMode::Chars. @returns Whether one original code point was consumed. */
+  public GoNext(index: SwContentIndex, mode: 0): boolean {
+    void mode;
+    if (index.GetIndex() >= this.Len()) return false;
+    let offset = index.GetIndex() + 1;
+    const node = this.GetTextNode();
+    if (node) {
+      const text = unicode(node.GetText()),
+        pos: [number] = [index.GetIndex()];
+      try {
+        text.iterateCodePoints(pos);
+        offset = pos[0];
+      } finally {
+        text.dispose();
+      }
+    }
+    index.Assign(index.GetContentNode(), offset);
+    return true;
+  }
+  /** Original GoPrevious content-index overload for the consumed Chars (0), nonhidden/noncell responsibility. @param index - Actual registered content index. @param mode - Original SwCursorSkipMode::Chars. @returns Whether one original code point was consumed. */
+  public GoPrevious(index: SwContentIndex, mode: 0): boolean {
+    void mode;
+    if (index.GetIndex() <= 0) return false;
+    let offset = index.GetIndex() - 1;
+    const node = this.GetTextNode();
+    if (node) {
+      const text = unicode(node.GetText()),
+        pos: [number] = [index.GetIndex()];
+      try {
+        text.iterateCodePoints(pos, -1);
+        offset = pos[0];
+      } finally {
+        text.dispose();
+      }
+    }
+    index.Assign(index.GetContentNode(), offset);
+    return true;
+  }
   /** Borrows a registered content frame through the native no-view-position query. Only text content frames are represented; native geometry/Calc and non-text content remain unported. @param layout - Optional original layout filter. @param position - Optional original model position. @returns Original text content frame or no registered match. */
   public getLayoutFrame(layout?: SwRootFrame, position?: SwPosition): SwContentFrame | undefined {
     return GetFrameOfModify(layout, this, SwFrameType.Txt, position) as SwContentFrame | undefined;

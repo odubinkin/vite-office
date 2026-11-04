@@ -26,7 +26,7 @@ import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { resetTextFormatCollAttributes, setTextFormatCollAtNode } from "../../core/doc/docfmt";
 import { resetParagraphTextAttributes } from "../../core/txtnode/txtedt";
-import { SwPaM, SwPosition, MoveForwardInContent } from "../../core/crsr/pam";
+import { SwPaM, SwPosition, fnMoveForward } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { DontExpandFormat } from "../../core/txtnode/ndtxt-format-change";
 import { SwNumRule } from "../../core/doc/number";
@@ -463,7 +463,7 @@ export class SwMarkdownParser {
   }
   /** Original EndTable moves the actual PaM forward, appends with AM_SPACE, then releases the table cursor. The retained post-table paragraph is preserved as upstream. @returns Nothing. */
   public EndTable(): void {
-    MoveForwardInContent(this.m_pPam);
+    this.m_pPam.Move(fnMoveForward);
     this.AppendTextNode(SwMdAppendMode.AM_SPACE);
     const table = this.table;
     this.table = undefined;

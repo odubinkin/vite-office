@@ -2,7 +2,10 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { SwMoveFnCollection } from "../inc/pamtyp";
+export type { SwMoveFnCollection } from "../inc/pamtyp";
+import { fnMoveForward, fnMoveBackward, fnParaStart, fnParaEnd } from "./paminit";
+export { fnMoveForward, fnMoveBackward, fnParaStart, fnParaEnd } from "./paminit";
 import { goNext, goPrevious } from "../docnode/nodes.navigation";
 import { Ring } from "../../../inc/ring";
 import { SwContentNode, SwNode } from "../docnode/node";
@@ -169,6 +172,12 @@ export class SwPosition {
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
 export class SwPaM extends Ring<SwPaM> {
   private inFrontOfLabel = false;
+  /** Original SwPaM::Move invokes the selected strategy before clearing label affinity; mark and physical bound identities are retained. @param fnMove - Original movement collection, default forward. @param fnGo - Original strategy, default content-character movement. @returns Strategy result. */
+  public Move(fnMove: SwMoveFnCollection = fnMoveForward, fnGo: SwGoInDoc = GoInContent): boolean {
+    const result = fnGo(this, fnMove);
+    this.inFrontOfLabel = false;
+    return result;
+  }
   /** Reads native list-label cursor affinity. @returns Label position state. */
   public IsInFrontOfLabel(): boolean {
     return this.inFrontOfLabel;
@@ -418,37 +427,83 @@ function GoAdjacentPos(
   check: boolean,
 ): SwContentNode | undefined {
   const index = new SwNodeIndex(position.GetNode());
-  const node = direction > 0 ? goNext(index) : goPrevious(index, false);
-  if (node !== undefined) {
-    if (
-      check &&
-      Math.abs(node.GetIndex() - position.GetNodeIndex()) !== 1 &&
-      !CheckNodesRange(position.GetNode(), node, true)
-    )
-      return undefined;
-    position.Assign(node, 0);
+  try {
+    const node = direction > 0 ? goNext(index) : goPrevious(index, false);
+    if (node !== undefined) {
+      index.Assign(node);
+      if (
+        check &&
+        Math.abs(node.GetIndex() - position.GetNodeIndex()) !== 1 &&
+        !CheckNodesRange(position.GetNode(), node, true)
+      )
+        return undefined;
+      position.Assign(node, 0);
+    }
+    return node;
+  } finally {
+    index.Dispose();
   }
-  return node;
 }
 
-/** Original default forward-character Move/GoInContent/GoInNode responsibility for current text content, using the original Unicode non-SKIPCELL nextCharacters code-point primitive. That source branch ignores locale. This is not the complete SwMoveFnCollection, hidden/grapheme/word service. @param range - Actual point/mark owner. @returns Original move result, retaining mark and clearing label affinity even on failure. */
-export function MoveForwardInContent(range: SwPaM): boolean {
+/** Original movement strategy signature. */
+export type SwGoInDoc = (range: SwPaM, movement: SwMoveFnCollection) => boolean;
+/** Original GoNext dispatch to a real content node, with structural nodes returning false. @param node - Actual node. @param index - Actual index. @param mode - Native Chars. @returns Move result. */
+export function GoNext(node: SwNode, index: SwContentIndex, mode: 0): boolean {
+  return node instanceof SwContentNode && node.GoNext(index, mode);
+}
+/** Original GoPrevious dispatch to a real content node. @param node - Actual node. @param index - Actual index. @param mode - Native Chars. @returns Move result. */
+export function GoPrevious(node: SwNode, index: SwContentIndex, mode: 0): boolean {
+  return node instanceof SwContentNode && node.GoPrevious(index, mode);
+}
+/** Original GoInNode chooses beginning/end only after checked actual node movement. @param range - Actual range. @param movement - Original direction collection. @returns Whether moved. */
+export function GoInNode(range: SwPaM, movement: SwMoveFnCollection): boolean {
+  const node = movement.fnPos(range.GetPoint(), true);
+  if (node) range.GetPoint().SetContent(movement === fnMoveForward ? 0 : node.Len());
+  return node !== undefined;
+}
+/** Original default GoInContent tries one Chars move before crossing a checked node boundary. @param range - Actual range. @param movement - Original direction collection. @returns Whether moved. */
+export function GoInContent(range: SwPaM, movement: SwMoveFnCollection): boolean {
+  return (
+    movement.fnNd(range.GetPoint().GetNode(), range.GetPoint().nContent, 0) ||
+    GoInNode(range, movement)
+  );
+}
+/** Original previous-paragraph strategy always moves backward, then uses the requested edge alias. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoPrevPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
+  if (!range.Move(fnMoveBackward, GoInNode)) return false;
+  const node = range.GetPoint().GetNode();
+  if (!(node instanceof SwContentNode))
+    throw new Error("assert(paragraph movement reaches content)");
+  range.GetPoint().SetContent(edge === fnMoveForward ? 0 : node.Len());
+  return true;
+}
+/** Original next-paragraph strategy always moves forward, then chooses the requested edge. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoNextPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
+  if (!range.Move(fnMoveForward, GoInNode)) return false;
+  const node = range.GetPoint().GetNode();
+  if (!(node instanceof SwContentNode))
+    throw new Error("assert(paragraph movement reaches content)");
+  range.GetPoint().SetContent(edge === fnMoveForward ? 0 : node.Len());
+  return true;
+}
+/** Original current-paragraph strategy goes to its edge, then crosses to the previous start or following end when already there. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoCurrPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
   const point = range.GetPoint(),
     node = point.GetNode();
-  let moved: boolean;
-  if (node instanceof SwContentNode && point.GetContentIndex() < node.Len()) {
-    if (node.GetNodeType() === "text") {
-      const text = unicode((node as SwTextNode).GetText()),
-        pos: [number] = [point.GetContentIndex()];
-      try {
-        text.iterateCodePoints(pos);
-        point.SetContent(pos[0]);
-      } finally {
-        text.dispose();
-      }
-    } else point.SetContent(point.GetContentIndex() + 1);
-    moved = true;
-  } else moved = GoNextPos(point, true) !== undefined;
-  range.SetInFrontOfLabel_(false);
-  return moved;
+  if (node instanceof SwContentNode) {
+    const offset = edge === fnMoveForward ? 0 : node.Len();
+    if (point.GetContentIndex() !== offset) {
+      point.SetContent(offset);
+      return true;
+    }
+  }
+  const next =
+    edge === fnParaStart
+      ? GoPreviousPos(point, true)
+      : edge === fnParaEnd
+        ? GoNextPos(point, true)
+        : undefined;
+  if (!next) return false;
+  point.SetContent(edge === fnMoveForward ? 0 : next.Len());
+  return true;
 }

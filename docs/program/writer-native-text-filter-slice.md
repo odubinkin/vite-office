@@ -1616,3 +1616,13 @@ Real removal and table destruction clear registry membership/content starts;
 owned row/box vectors retain model destruction. Full table default/bootstrap,
 document teardown and production HTML table grammar/materialization/layout
 remain unverified; format completion is not established by this checkpoint.
+
+HTML63 replaces the extracted forward-only movement helper with original
+SwPaM.Move strategy dispatch and native pamtyp/paminit bindings. The represented
+Chars path moves through actual content indices, checked node ranges and native
+paragraph edge aliases, with original backward end positioning and at-edge
+paragraph crossing. Markdown EndTable consumes that actual owner entry point.
+Only the consumed fnNd/fnPos nonhidden/noncell profile is implemented; the other
+collection slots and full Cells/hidden/locale services are not fabricated or
+certified. This prepares actual HTML table first-cell cursor movement; it does
+not certify production HTML-table import/materialization or full format parity.
