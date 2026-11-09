@@ -1814,3 +1814,18 @@ direction items. An RTF-to-Worker-to-RTF round trip verifies the table and cell
 controls with actual document owners. General nested RTF table orchestration,
 the physical table direction/layout path, production Markdown HTML tables and
 the complete fixed-slice parity audit remain open.
+
+### HTML76 — Native HTML table width allocation and format publication
+
+The original second pass now distributes widths over the real layout grid:
+minimum compression, maximum expansion, mixed relative columns, percent
+eligibility, and nested filler calculation. SetWidths publishes directly to
+actual box, table and enclosing fly formats, preserving shared cell contents
+and recursive anonymous box structure. WRITER359 and WRITER360 record source
+rounding and unsigned-width behavior. Phase-two tests use the native phase-one
+metric fields and actual format owners.
+
+Automatic text measurement, phase-one integration, parser dispatch and
+production table materialization are still required for inline HTML tables
+in Markdown. Broad module, behavior, contract and default statuses remain
+unverified.

@@ -1,11 +1,18 @@
-/** @fileoverview Original SwHTMLTableLayout construction, grid ownership and width/spacing utility operations from htmltbl.cxx/htmltbl.hxx; automatic measurement/resize passes are separate consumers. */
-import type { SwTable } from "../table/swtable";
+/** @fileoverview Original SwHTMLTableLayout construction, grid ownership and width/spacing utility operations from htmltbl.cxx/htmltbl.hxx; including native width allocation and publication. */
+import type { SwTable, SwTableLine } from "../table/swtable";
 import type { SwHTMLTableLayoutCell } from "./htmltbl.values";
 import type { SwHTMLTableLayoutColumn } from "./htmltbl.column";
-import type { SvxAdjust } from "../../../../editeng/inc/svxenum";
-import { MIN_BORDER_DIST } from "../../../inc/swtypes";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { MIN_BORDER_DIST, MINLAY } from "../../../inc/swtypes";
 import type { SwTableBox } from "../table/swtable";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import type { SwFrameFormat } from "../layout/atrfrm";
+import type { SwStartNode } from "../docnode/node";
+
+const USHRT_MAX = 65535;
+const MAX_TABWIDTH = USHRT_MAX - 2001;
 
 /** Native layout owns its original grid/options. Protected visibility binds original private fields across forthcoming responsibility fragments without a second state object. */
 export class SwHTMLTableLayout {
@@ -252,4 +259,408 @@ export class SwHTMLTableLayout {
     }
     return space;
   }
+  /** Distributes an actual available width over the native first-pass column metrics. @param absolute - Available twips. @param relative - Available relative width, zero for a top table. @param leftSpace - Surrounding left cell space. @param rightSpace - Surrounding right cell space. @param parentInherited - Surrounding inherited space. @returns Nothing. */
+  AutoLayoutPass2(
+    absolute: number,
+    relative: number,
+    leftSpace: number,
+    rightSpace: number,
+    parentInherited: number,
+  ): void {
+    absolute &= USHRT_MAX;
+    relative &= USHRT_MAX;
+    leftSpace &= USHRT_MAX;
+    rightSpace &= USHRT_MAX;
+    parentInherited &= USHRT_MAX;
+    this.m_nLastResizeAbsAvail = absolute;
+
+    const top = this.IsTopTable();
+    let leftFill = 0,
+      rightFill = 0;
+    if (!top && this.m_nMin + leftSpace + rightSpace <= absolute) {
+      leftFill = leftSpace;
+      rightFill = rightSpace;
+    }
+    if (top) absolute = (absolute - this.m_nLeftMargin - this.m_nRightMargin) & USHRT_MAX;
+    else if (this.m_nMin + this.m_nLeftMargin + this.m_nRightMargin <= absolute) {
+      leftFill = (leftFill + this.m_nLeftMargin) & USHRT_MAX;
+      rightFill = (rightFill + this.m_nRightMargin) & USHRT_MAX;
+    }
+    this.m_nRelLeftFill = this.m_nRelRightFill = 0;
+    if (!top && (leftFill || rightFill)) {
+      this.m_nRelLeftFill = ((leftFill * relative) / absolute) & USHRT_MAX;
+      this.m_nRelRightFill = ((rightFill * relative) / absolute) & USHRT_MAX;
+      absolute = (absolute - leftFill - rightFill) & USHRT_MAX;
+      if (relative) relative = (relative - this.m_nRelLeftFill - this.m_nRelRightFill) & USHRT_MAX;
+    }
+
+    let tableWidth = 0;
+    this.m_bUseRelWidth = false;
+    if (this.m_nWidthOption) {
+      if (this.m_bPercentWidthOption) {
+        this.m_nWidthOption = Math.min(this.m_nWidthOption, 100);
+        tableWidth = Math.trunc((absolute * this.m_nWidthOption) / 100);
+        if (top && tableWidth > this.m_nMin) {
+          relative = USHRT_MAX;
+          this.m_bUseRelWidth = true;
+        }
+      } else tableWidth = Math.min(this.m_nWidthOption, MAX_TABWIDTH);
+    }
+    if ((!top || relative) && tableWidth > absolute) tableWidth = absolute;
+
+    if ((!top && this.m_nMin > absolute) || this.m_nMin > MAX_TABWIDTH) {
+      tableWidth = top ? MAX_TABWIDTH : absolute;
+      this.m_nRelTabWidth = relative || tableWidth;
+      this.DistributeConstrainedMinimum(tableWidth);
+    } else if (this.m_nMax <= (tableWidth || absolute)) {
+      tableWidth ||= this.m_nMax & USHRT_MAX;
+      absolute = Math.max(absolute, tableWidth);
+      this.m_nRelTabWidth = relative
+        ? relativeTableWidth(tableWidth, relative, absolute)
+        : tableWidth;
+      this.DistributeMaximum(tableWidth);
+    } else {
+      tableWidth ||= absolute;
+      if (tableWidth < this.m_nMin) tableWidth = this.m_nMin & USHRT_MAX;
+      absolute = Math.max(absolute, tableWidth);
+      this.m_nRelTabWidth = relative
+        ? relativeTableWidth(tableWidth, relative, absolute)
+        : tableWidth;
+      const available = tableWidth - this.m_nMin,
+        difference = this.m_nMax - this.m_nMin || 1;
+      let usedAbsolute = 0,
+        usedRelative = 0;
+      for (let index = 0; index < this.m_nCols - 1; ++index) {
+        const column = this.LayoutColumn(index),
+          width =
+            column.GetMin() +
+            Math.trunc(((column.GetMax() - column.GetMin()) * available) / difference),
+          relWidth = relative ? (width * this.m_nRelTabWidth) / tableWidth : width;
+        column.SetAbsColWidth(width);
+        column.SetRelColWidth(relWidth);
+        usedAbsolute += column.GetAbsColWidth();
+        usedRelative += column.GetRelColWidth();
+      }
+      const last = this.LayoutColumn(this.m_nCols - 1);
+      last.SetAbsColWidth(tableWidth - usedAbsolute);
+      last.SetRelColWidth(this.m_nRelTabWidth - usedRelative);
+    }
+
+    this.m_nInhAbsLeftSpace = this.m_nInhAbsRightSpace = 0;
+    if (!top && (this.m_nRelLeftFill || this.m_nRelRightFill || tableWidth < absolute))
+      this.DistributeFill(
+        (absolute - tableWidth) & USHRT_MAX,
+        (relative - this.m_nRelTabWidth) & USHRT_MAX,
+        leftFill,
+        rightFill,
+        leftSpace,
+        rightSpace,
+        parentInherited,
+      );
+  }
+
+  /** Publishes the original width pass on actual content, container boxes and table formats. @param callPass2 - Recalculate against the supplied available widths. @param absolute - Native absolute availability. @param relative - Native relative availability. @param leftSpace - Parent cell left space. @param rightSpace - Parent cell right space. @param parentInherited - Parent inherited space. @returns Nothing. */
+  SetWidths(
+    callPass2 = false,
+    absolute = 0,
+    relative = 0,
+    leftSpace = 0,
+    rightSpace = 0,
+    parentInherited = 0,
+  ): void {
+    this.m_nWidthSet = (this.m_nWidthSet + 1) & 255;
+    if (callPass2) this.AutoLayoutPass2(absolute, relative, leftSpace, rightSpace, parentInherited);
+    for (let row = 0; row < this.m_nRows; ++row) {
+      for (let column = 0; column < this.m_nCols; ++column) {
+        const cell = this.GetCell(row, column);
+        if (cell === null) throw new Error("assert(layout cell)");
+        const span = cell.GetColSpan();
+        let contents = cell.GetContents();
+        while (contents !== null && !contents.IsWidthSet(this.m_nWidthSet)) {
+          const box = contents.GetTableBox();
+          if (box !== null) this.SetBoxWidth(box, column, span);
+          else {
+            const table = contents.GetTable();
+            if (table !== null) {
+              const abs: [number] = [0],
+                rel: [number] = [0];
+              if (callPass2) this.GetAvail(column, span, abs, rel);
+              table.SetWidths(
+                callPass2,
+                abs[0],
+                rel[0],
+                callPass2 ? this.GetLeftCellSpace(column, span) : 0,
+                callPass2 ? this.GetRightCellSpace(column, span) : 0,
+                callPass2 ? this.GetInhCellSpace(column, span) : 0,
+              );
+            }
+          }
+          contents.SetWidthSet(this.m_nWidthSet);
+          contents = contents.GetNext();
+        }
+      }
+    }
+
+    const table = this.m_pSwTable;
+    if (table === null) return;
+    for (const line of table.GetTabLines()) resizeLine(line);
+    const format = table.GetFrameFormat(),
+      size = format.GetFrameSize().Clone();
+    table.LockModify();
+    try {
+      size.SetWidth(this.m_nRelTabWidth);
+      const useRelative =
+        this.m_bUseRelWidth && format.GetHoriOrient().GetHoriOrient() !== HoriOrientation.FULL;
+      size.SetWidthPercent(useRelative ? this.m_nWidthOption : 0);
+      format.SetFormatAttr(size);
+    } finally {
+      size.Dispose();
+      table.UnlockModify();
+    }
+    if (this.MayBeInFlyFrame()) {
+      const fly = this.FindFlyFrameFormat();
+      if (fly !== undefined) {
+        const flySize = new SwFormatFrameSize(SwFrameSize.Variable, this.m_nRelTabWidth, MINLAY);
+        try {
+          if (this.m_bUseRelWidth) {
+            flySize.SetWidth(Math.min(this.m_nMin, USHRT_MAX));
+            flySize.SetWidthPercent(this.m_nWidthOption);
+          }
+          fly.SetFormatAttr(flySize);
+        } finally {
+          flySize.Dispose();
+        }
+      }
+    }
+  }
+
+  /** Follows the first real content-box path through anonymous core box groups. @returns Original content start. */
+  private GetAnyBoxStartNode(): SwStartNode {
+    let box = this.m_pSwTable?.GetTabLines()[0]?.GetTabBoxes()[0];
+    while (box !== undefined) {
+      const start = box.GetSttNd();
+      if (start !== null) return start;
+      box = box.GetTabLines()[0]?.GetTabBoxes()[0];
+    }
+    throw new Error("assert(table content box)");
+  }
+
+  /** Resolves the actual enclosing fly through the original content box and table node. @returns Actual enclosing fly format or absent. */
+  private FindFlyFrameFormat(): SwFrameFormat | undefined {
+    const node = this.GetAnyBoxStartNode().FindTableNode();
+    if (node === null) throw new Error("assert(table node)");
+    return node.GetFlyFormat();
+  }
+
+  /** Dereferences an original populated column during layout. @param index - Native column index. @returns Actual column. */
+  private LayoutColumn(index: number): SwHTMLTableLayoutColumn {
+    const column = this.GetColumn(index);
+    if (column === null) throw new Error("assert(layout column)");
+    return column;
+  }
+
+  /** Preserves the source proportional minimum, optionally keeping native content and border minima. @param tableWidth - Actual absolute table width. @returns Nothing. */
+  private DistributeConstrainedMinimum(tableWidth: number): void {
+    const minima: number[] = [];
+    let realMinimum = 0;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const minimum: [number] = [MINLAY];
+      this.AddBorderWidth(minimum, [0], [0], index, 1);
+      minima.push(minimum[0]);
+      realMinimum += minimum[0];
+    }
+    const preserveMinima = realMinimum < tableWidth && realMinimum < this.m_nMin;
+    let usedAbsolute = 0,
+      usedRelative = 0;
+    for (let index = 0; index < this.m_nCols - 1; ++index) {
+      const column = this.LayoutColumn(index),
+        columnMinimum = column.GetMin();
+      if (preserveMinima) {
+        const minimum = minima[index] as number,
+          difference = this.m_nMin - realMinimum,
+          weight = columnMinimum - minimum;
+        const integral = columnMinimum <= USHRT_MAX;
+        column.SetAbsColWidth(
+          scaleMinimumDelta(weight, tableWidth - realMinimum, difference, minimum, integral),
+        );
+        column.SetRelColWidth(
+          scaleMinimumDelta(
+            weight,
+            this.m_nRelTabWidth - realMinimum,
+            difference,
+            minimum,
+            integral,
+          ),
+        );
+      } else {
+        column.SetAbsColWidth((columnMinimum * tableWidth) / this.m_nMin);
+        column.SetRelColWidth((columnMinimum * this.m_nRelTabWidth) / this.m_nMin);
+      }
+      usedAbsolute += column.GetAbsColWidth();
+      usedRelative += column.GetRelColWidth();
+    }
+    const last = this.LayoutColumn(this.m_nCols - 1);
+    last.SetAbsColWidth(tableWidth - usedAbsolute);
+    last.SetRelColWidth(this.m_nRelTabWidth - usedRelative);
+  }
+
+  /** Expands maximum widths, keeping fixed columns when relative options are mixed. @param tableWidth - Actual absolute table width. @returns Nothing. */
+  private DistributeMaximum(tableWidth: number): void {
+    let fixedMaximum = this.m_nMax;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (column.IsRelWidthOption() && column.GetWidthOption() > 0) fixedMaximum -= column.GetMax();
+    }
+    if (fixedMaximum > 0 && fixedMaximum < this.m_nMax) {
+      let usedAbsolute = 0,
+        usedRelative = 0,
+        finished = 0;
+      for (let index = 0; index < this.m_nCols; ++index) {
+        const column = this.LayoutColumn(index);
+        if (column.IsRelWidthOption() && column.GetWidthOption() > 0) continue;
+        const width = column.GetMax();
+        let relative = Math.trunc((width * this.m_nRelTabWidth) / tableWidth);
+        const check = Math.trunc((relative * tableWidth) / this.m_nRelTabWidth);
+        if (check < width) ++relative;
+        else if (check > width) --relative;
+        column.SetAbsColWidth(width);
+        column.SetRelColWidth(relative);
+        usedAbsolute += column.GetAbsColWidth();
+        usedRelative += column.GetRelColWidth();
+        ++finished;
+      }
+      const max = this.m_nMax - fixedMaximum,
+        absolute = (tableWidth - usedAbsolute) & USHRT_MAX,
+        relative = (this.m_nRelTabWidth - usedRelative) & USHRT_MAX;
+      for (let index = 0; index < this.m_nCols; ++index) {
+        const column = this.LayoutColumn(index);
+        if (!column.IsRelWidthOption() || !column.GetWidthOption()) continue;
+        if (++finished === this.m_nCols) {
+          column.SetAbsColWidth(tableWidth - usedAbsolute);
+          column.SetRelColWidth(this.m_nRelTabWidth - usedRelative);
+        } else {
+          column.SetAbsColWidth((column.GetMax() * absolute) / max);
+          column.SetRelColWidth((column.GetMax() * relative) / max);
+        }
+        usedAbsolute += column.GetAbsColWidth();
+        usedRelative += column.GetRelColWidth();
+      }
+    } else if (this.m_nCols > 0) {
+      if (this.m_nMax === 0) throw new RangeError("division by zero");
+      for (let index = 0; index < this.m_nCols; ++index) {
+        const column = this.LayoutColumn(index);
+        column.SetAbsColWidth((column.GetMax() * tableWidth) / this.m_nMax);
+        column.SetRelColWidth((column.GetMax() * this.m_nRelTabWidth) / this.m_nMax);
+      }
+    }
+  }
+
+  /** Allocates the remaining native nested-table spaces and merges fillers that cannot own a box. @param absolute - Remaining absolute space. @param relative - Remaining relative space. @param left - Initial left filler. @param right - Initial right filler. @param leftSpace - Parent cell left space. @param rightSpace - Parent cell right space. @param inherited - Parent inherited space. @returns Nothing. */
+  private DistributeFill(
+    absolute: number,
+    relative: number,
+    left: number,
+    right: number,
+    leftSpace: number,
+    rightSpace: number,
+    inherited: number,
+  ): void {
+    let inheritedLeft = 0,
+      inheritedRight = 0;
+    switch (this.m_eTableAdjust) {
+      case SvxAdjust.Right:
+        left += absolute;
+        this.m_nRelLeftFill += relative;
+        inheritedLeft = inherited;
+        break;
+      case SvxAdjust.Center: {
+        const leftAbsolute = absolute >> 1,
+          leftRelative = relative >> 1;
+        left += leftAbsolute;
+        right += absolute - leftAbsolute;
+        this.m_nRelLeftFill += leftRelative;
+        this.m_nRelRightFill += relative - leftRelative;
+        inheritedLeft = inherited >> 1;
+        inheritedRight = inherited - inheritedLeft;
+        break;
+      }
+      default:
+        right += absolute;
+        this.m_nRelRightFill += relative;
+        inheritedRight = inherited;
+    }
+    left &= USHRT_MAX;
+    right &= USHRT_MAX;
+    this.m_nRelLeftFill &= USHRT_MAX;
+    this.m_nRelRightFill &= USHRT_MAX;
+    if (
+      this.m_nRelLeftFill &&
+      (this.m_nWidthSet > 0 ||
+        left < MINLAY + this.m_nInhLeftBorderWidth ||
+        (this.HasColTags() && left < leftSpace + inheritedLeft + 20))
+    ) {
+      const column = this.LayoutColumn(0);
+      column.SetAbsColWidth(column.GetAbsColWidth() + left);
+      column.SetRelColWidth(column.GetRelColWidth() + this.m_nRelLeftFill);
+      this.m_nRelLeftFill = 0;
+      this.m_nInhAbsLeftSpace = (leftSpace + inheritedLeft) & USHRT_MAX;
+    }
+    if (
+      this.m_nRelRightFill &&
+      (this.m_nWidthSet > 0 ||
+        right < MINLAY + this.m_nInhRightBorderWidth ||
+        (this.HasColTags() && right < rightSpace + inheritedRight + 20))
+    ) {
+      const column = this.LayoutColumn(this.m_nCols - 1);
+      column.SetAbsColWidth(column.GetAbsColWidth() + right);
+      column.SetRelColWidth(column.GetRelColWidth() + this.m_nRelRightFill);
+      this.m_nRelRightFill = 0;
+      this.m_nInhAbsRightSpace = (rightSpace + inheritedRight) & USHRT_MAX;
+    }
+  }
+}
+/** Native relative table-width calculation preserves the guarded zero denominator. @param width - Absolute table width. @param relative - Relative available width. @param absolute - Absolute available width. @returns Native uint16 result. */
+function relativeTableWidth(width: number, relative: number, absolute: number): number {
+  if (absolute === 0) throw new RangeError("division by zero");
+  return ((width * relative) / absolute) & USHRT_MAX;
+}
+
+/** Recursively recalculates anonymous boxes from the last actual subline width, as the native width reference is replaced on each row. @param line - Actual Writer table line. @returns Width of the original line. */
+function resizeLine(line: SwTableLine): number {
+  let width = 0;
+  for (const box of line.GetTabBoxes()) {
+    const format = box.GetFrameFormat();
+    if (box.GetSttNd() !== null) width += format.GetFrameSize().GetWidth();
+    else {
+      let boxWidth = 0;
+      for (const lower of box.GetTabLines()) boxWidth = resizeLine(lower);
+      const size = new SwFormatFrameSize(SwFrameSize.Variable, boxWidth, 0);
+      try {
+        format.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
+      width += boxWidth;
+    }
+  }
+  return width;
+}
+
+/** Keeps the native integral product width when the available delta or column delta wraps. @param weight - Column delta. @param available - Available delta. @param total - Total minimum delta. @param base - Native column baseline. @param integral - Source integer rather than double branch. @returns Scaled width before final uint16 storage. */
+function scaleMinimumDelta(
+  weight: number,
+  available: number,
+  total: number,
+  base: number,
+  integral: boolean,
+): number {
+  if (weight < 0 || available < 0) {
+    const availableUnsigned = BigInt.asUintN(64, BigInt(available));
+    if (integral) {
+      const product = BigInt.asUintN(64, BigInt(weight) * availableUnsigned);
+      return Number((product / BigInt(total) + BigInt(base)) & 65535n);
+    }
+    return Math.trunc((weight * Number(availableUnsigned)) / total + base);
+  }
+  return Math.trunc((weight * available) / total) + base;
 }

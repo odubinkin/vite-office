@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 456
+revision: 459
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T17:55:07.458Z"
+  updated_at: "2026-11-09T18:04:36.775Z"
   updated_by: "CODER"
-  note: "HTML75 checkpoint: 798 related cases in 33 suites and whole-app TypeScript plus source/style/Writer registry checks pass. RTF row and cell direction now traverse native sprms, table properties, UNO format items, Worker and RTF export. Complete physical and nested table semantics, production Markdown HTML tables and final filter audit remain pending."
-  attempts: 86
+  note: "HTML76 checkpoint: 175 related tests across 13 suites and whole-app TypeScript plus source/style/Writer registry checks pass. Native pass two allocates widths and writes actual table, box and fly formats. First-pass measurement and production HTML table parsing and materialization remain pending."
+  attempts: 87
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1381,8 +1384,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:04:36.775Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML76 checkpoint: 175 related tests across 13 suites and whole-app TypeScript plus source/style/Writer registry checks pass. Native pass two allocates widths and writes actual table, box and fly formats. First-pass measurement and production HTML table parsing and materialization remain pending."
+  -
+    type: "status"
+    at: "2026-11-09T18:05:02.315Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T17:55:22.758Z"
+doc_updated_at: "2026-11-09T18:05:02.315Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3677,6 +3693,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:04:36.775Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML76 checkpoint: 175 related tests across 13 suites and whole-app TypeScript plus source/style/Writer registry checks pass. Native pass two allocates widths and writes actual table, box and fly formats. First-pass measurement and production HTML table parsing and materialization remain pending.
+    Attempts: 87
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:04:36.137Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5413,6 +5459,14 @@ sections:
     - Existing Worker native table/box records carry the actual item rather than scalar state. Legacy snapshots may omit it. Real-byte tests exercise source row flags, group scoping, consecutive cell snapshots, all five spellings, ignored cases, row merge, Worker transfer, re-export and re-import. Initial 45-case run passed. TypeScript identified a duplicate already-generated ID introduced by the initial edit; duplicate removed. Metadata script's initial local-only schema mismatch was corrected using existing browser responsibilities; final checks passed.
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts src/sw/browser/filter/xml/native-table-geometry-transport.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts. Result: 798 passed across 33 suites, including seven original direction cases. Evidence: html75-tests-final.log, terminal zero.
     - Whole-app TypeScript, changed ESLint/Prettier, provenance (1959 runtime/1746 mapped), Writer registry (zero semantic violations), module boundaries (1958 runtime sources/10953 imports/229 allowed edges), JSDoc, file-size, source-tree, WhichId and git diff checks passed. No full-project replay at this parent-task checkpoint. Native malformed/nested table buffer handling, layout directions, production Markdown HTML tables, and full original-slice filter/UI closure remain unverified. Broad semantic/default/contract/sourceResponsibility statuses remain unchanged.
+
+    S3HW1E HTML76 — Native HTML table second layout pass and width publication.
+
+    - Original AutoLayoutPass2 consumes real column metrics and retains minimum compression, maximum expansion, mixed relative columns, percent eligibility, available-space accounting and nested filler distribution. The original relative reference rounding and constrained integral width narrowing are preserved (WRITER359/360). Supported 64-bit unsigned integral arithmetic uses actual fixed-width BigInt conversion for the wrapping path; floating conversion outside its representable native domain is not certified.
+    - SetWidths uses the original uint8 reference to visit actual shared content once per pass, recurses into the actual nested layout, and changes real leaf/anonymous boxes, table and enclosing fly formats. Native table modify lock and width-percent conditions are applied. Actual sections, frame content indices, core table graphs and no fake device/result providers are used.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/doc/docnew.native-lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 175 tests passed across 13 suites. Final width test replay after adding a native start-node type check: 10 cases passed, already included in the total.
+    - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1959 runtime modules), Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial lint identified a missing test tuple JSDoc and TypeScript required a section-start type guard; both were resolved. The initial terminal Verify Steps display closed the output pipe early; authoritative route and Verify Steps were reread to complete files before editing.
+    - No full-project replay at this continuing parent checkpoint. Actual first-pass physical text measurement, first-pass aggregation, resize timers, production HTML table parser/materialization, and the complete original TXT/RTF/Markdown slice remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -7718,6 +7772,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:04:36.775Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML76 checkpoint: 175 related tests across 13 suites and whole-app TypeScript plus source/style/Writer registry checks pass. Native pass two allocates widths and writes actual table, box and fly formats. First-pass measurement and production HTML table parsing and materialization remain pending.
+Attempts: 87
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:04:36.137Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9458,3 +9542,11 @@ S3HW1E HTML75 — Native RTF table and cell direction across import, Worker, and
 - Existing Worker native table/box records carry the actual item rather than scalar state. Legacy snapshots may omit it. Real-byte tests exercise source row flags, group scoping, consecutive cell snapshots, all five spellings, ignored cases, row merge, Worker transfer, re-export and re-import. Initial 45-case run passed. TypeScript identified a duplicate already-generated ID introduced by the initial edit; duplicate removed. Metadata script's initial local-only schema mismatch was corrected using existing browser responsibilities; final checks passed.
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/filter/ww8/rtfexport.table-list.test.ts src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts src/sw/browser/filter/xml/native-table-geometry-transport.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts. Result: 798 passed across 33 suites, including seven original direction cases. Evidence: html75-tests-final.log, terminal zero.
 - Whole-app TypeScript, changed ESLint/Prettier, provenance (1959 runtime/1746 mapped), Writer registry (zero semantic violations), module boundaries (1958 runtime sources/10953 imports/229 allowed edges), JSDoc, file-size, source-tree, WhichId and git diff checks passed. No full-project replay at this parent-task checkpoint. Native malformed/nested table buffer handling, layout directions, production Markdown HTML tables, and full original-slice filter/UI closure remain unverified. Broad semantic/default/contract/sourceResponsibility statuses remain unchanged.
+
+S3HW1E HTML76 — Native HTML table second layout pass and width publication.
+
+- Original AutoLayoutPass2 consumes real column metrics and retains minimum compression, maximum expansion, mixed relative columns, percent eligibility, available-space accounting and nested filler distribution. The original relative reference rounding and constrained integral width narrowing are preserved (WRITER359/360). Supported 64-bit unsigned integral arithmetic uses actual fixed-width BigInt conversion for the wrapping path; floating conversion outside its representable native domain is not certified.
+- SetWidths uses the original uint8 reference to visit actual shared content once per pass, recurses into the actual nested layout, and changes real leaf/anonymous boxes, table and enclosing fly formats. Native table modify lock and width-percent conditions are applied. Actual sections, frame content indices, core table graphs and no fake device/result providers are used.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/doc/docnew.native-lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 175 tests passed across 13 suites. Final width test replay after adding a native start-node type check: 10 cases passed, already included in the total.
+- Whole-app TypeScript, changed ESLint/Prettier, source provenance (1959 runtime modules), Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial lint identified a missing test tuple JSDoc and TypeScript required a section-start type guard; both were resolved. The initial terminal Verify Steps display closed the output pipe early; authoritative route and Verify Steps were reread to complete files before editing.
+- No full-project replay at this continuing parent checkpoint. Actual first-pass physical text measurement, first-pass aggregation, resize timers, production HTML table parser/materialization, and the complete original TXT/RTF/Markdown slice remain unverified.

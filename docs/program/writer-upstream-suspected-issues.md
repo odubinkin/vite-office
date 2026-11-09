@@ -2923,3 +2923,23 @@ current box format without ClaimFrameFormat. An invalid Any therefore
 replaces the previous direction with Environment. Preserve the original
 conversion and direct-format behavior. The local test exercises the invalid
 Any result on an actual imported cell.
+
+### WRITER359 — HTML table maximum-width expansion drops per-column rounding remainders
+
+Pinned `SwHTMLTableLayout::AutoLayoutPass2` in
+`sw/source/core/doc/htmltbl.cxx` independently truncates each column in the
+ordinary maximum-width branch. Unlike the constrained and mixed-width
+branches, it does not assign the remaining twips to the last column. The
+calculated table width can therefore differ from the sum of the actual column
+widths. Preserve the branch's independent truncation. The local layout test
+uses a 302-twip table with three equal maxima and observes 100 twips per column.
+
+### WRITER360 — HTML table minimum constraint subtracts an absolute baseline from a relative width
+
+In the same source method, the constrained nested-width branch subtracts the
+absolute content-and-border baseline from the relative table width in
+`sal_uLong`. If the relative width is smaller, the subtraction wraps.
+The represented 64-bit integral path retains that arithmetic and the later
+16-bit narrowing. This observation concerns the calculation on the supplied
+layout inputs. Reachability from a particular native HTML document and
+platform-width variants remain unverified.
