@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.ts",
+        "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+        "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.package.json",
+        "apps/office/src/external/icu/source/common/normalizer2.native.test.ts",
+        "apps/office/src/external/icu/source/common/normalizer2.native-observations.json",
+        "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts"
+      ],
+      "justification": "The pinned nfkc.nrm member is re-packaged byte-for-byte by original gencmn. The managed binding registers the generated CmnD image on the original data loader and can be re-registered after cleanup.",
+      "knownViolations": [],
+      "localSymbols": [
+        "registerNfkcCommonData"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+      "upstreamSymbols": [
+        "createCommonDataFile"
+      ]
+    }
+  }
+}

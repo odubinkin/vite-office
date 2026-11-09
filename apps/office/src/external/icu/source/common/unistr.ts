@@ -126,6 +126,40 @@ export class UnicodeString {
     }
     return unit;
   }
+  /** Original pinned UTF-16 code-point movement. @param index - Initial code-unit position. @param delta - Signed scalar displacement. @returns Resulting native index. */
+  moveIndex32(index: number, delta: number): number {
+    const end = this.value.length;
+    index = Math.min(end, Math.max(0, index | 0));
+    delta |= 0;
+    if (delta > 0) {
+      for (; delta > 0 && index < end; --delta) {
+        const lead = this.value.charCodeAt(index++);
+        if ((lead & 0xfc00) === 0xd800 && (this.value.charCodeAt(index) & 0xfc00) === 0xdc00)
+          ++index;
+      }
+    } else {
+      for (; delta < 0 && index > 0; ++delta) {
+        const trail = this.value.charCodeAt(--index);
+        if ((trail & 0xfc00) === 0xdc00 && (this.value.charCodeAt(index - 1) & 0xfc00) === 0xd800)
+          --index;
+      }
+    }
+    return index;
+  }
+
+  /** Original code-point count over a clamped counted UTF-16 range. @param start - Start code unit. @param length - Number of code units. @returns Code-point count. */
+  countChar32(start = 0, length = 0x7fffffff): number {
+    start = Math.min(this.value.length, Math.max(0, start | 0));
+    length = Math.min(this.value.length - start, Math.max(0, length | 0));
+    const end = start + length;
+    let count = 0;
+    for (let i = start; i < end; ++count) {
+      const lead = this.value.charCodeAt(i++);
+      if ((lead & 0xfc00) === 0xd800 && i < end && (this.value.charCodeAt(i) & 0xfc00) === 0xdc00)
+        ++i;
+    }
+    return count;
+  }
   /** Original bogus assignment discards text. @returns Nothing. */
   setToBogus(): void {
     this.value = "";

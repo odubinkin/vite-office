@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/loadednormalizer2impl.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/loadednormalizer2impl.cpp",
+    "localSymbols": [
+      "isAcceptable",
+      "load",
+      "getNFKCInstance",
+      "uprv_loaded_normalizer2_cleanup"
+    ],
+    "upstreamSymbols": [
+      "isAcceptable",
+      "load",
+      "getNFKCInstance",
+      "uprv_loaded_normalizer2_cleanup"
+    ],
+    "preservedResponsibilities": [
+      "Original NFKC file admission, owned data handle, loaded FAST16 trie and composition singleton use udata_openChoice, UInitOnce and common cleanup. The original nfkc.nrm is reached through the native CmnD data route."
+    ],
+    "omittedResponsibilities": [
+      "Other normalization singleton modes and caller-provided package caches are outside the consumed path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/loadednormalizer2impl.ts",
+          "marker": "function getNFKCInstance"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/loadednormalizer2impl.cpp",
+          "marker": "isAcceptable"
+        }
+      ]
+    }
+  }
+}

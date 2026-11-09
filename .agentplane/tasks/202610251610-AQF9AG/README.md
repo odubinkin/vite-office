@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 220
+revision: 224
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:19:18.511Z"
+  updated_at: "2026-11-09T18:35:03.594Z"
   updated_by: "CODER"
-  note: "The original Thai, Lao, Burmese and Khmer dictionary engines and signed UText movement match 390 engine calls and 245 native movement cases. Focused shared and CSV tests and the Chromium workflow pass. The next portion is the CJK normalization and dictionary engine followed by factory and formatter integration."
-  attempts: 57
+  note: "Original ICU NFKC loaded data and CJK dictionary engine validated on all code point values, 100,170 Unicode normalization corpus inputs, 4,116 targeted strings, 712 CJK calls and the focused shared and CSV browser suites. Factory registration, production formatter services and multiline CSV import remain in scope."
+  attempts: 58
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1240,8 +1243,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:35:03.594Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original ICU NFKC loaded data and CJK dictionary engine validated on all code point values, 100,170 Unicode normalization corpus inputs, 4,116 targeted strings, 712 CJK calls and the focused shared and CSV browser suites. Factory registration, production formatter services and multiline CSV import remain in scope."
+  -
+    type: "status"
+    at: "2026-11-09T18:35:25.266Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:20:37.786Z"
+doc_updated_at: "2026-11-09T18:35:51.158Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2971,6 +2987,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:35:03.594Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original ICU NFKC loaded data and CJK dictionary engine validated on all code point values, 100,170 Unicode normalization corpus inputs, 4,116 targeted strings, 712 CJK calls and the focused shared and CSV browser suites. Factory registration, production formatter services and multiline CSV import remain in scope.
+    Attempts: 58
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:35:02.946Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4391,6 +4437,19 @@ sections:
       Result: pass. Evidence: 4,445 JSDoc-checked sources, 1,994 provenance entries, 1,781 mapped entries, 1,993 boundary sources, 10,823 relative imports, 236 allowed edges, and 464 Calc commands. The header re-export uses the existing declaration inventory convention. The implementation and generator pass changed-path lint after fixing the unused original locale argument and adding required JSDoc. The full lint rerun passes.
     - Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
     - This is a checkpoint in the existing AgentPlane task. No full test suite was due. CJK normalization and dictionary breaking, factory registration and the LibreOffice word and production formatter services remain pending alongside multiline CSV import.
+
+    ### Original ICU NFKC and CJK dictionary engine
+
+    - Packaged the original format-5 nfkc.nrm member without rewriting it. The original udata_openChoice callback, FAST16 trie, mappings, composition tuples, NFKC singleton and cleanup now drive counted UTF-16 composition, normalized-state checks and boundary-before queries. JavaScript uses its UTF-16 string representation and actual typed array views over the linked data.
+    - Ported original non-ML CJK segmentation with native normalization and supplementary index maps, CJK/Korean modes, dictionary costs, original Katakana run limits, and Japanese extensions read from the named brkitr bundle. Ported the UnicodeString code-point operations and original UnicodeString UText provider read path used by the matcher. The managed binding materializes the readable UTF-16 chunk at open. Documented the confirmed CJK vector-count manifestation of CALC-480 and retained it.
+    - Commands: node scripts/icu-brkitr-package.mjs --nfkc --check; node scripts/icu-brkitr-package.mjs --check; node scripts/icu-cjk-native-probe.mjs --check; node_modules/.bin/tsx scripts/icu-normalizer2-native-probe.mjs --check.
+      Result: pass. Evidence: 56,304-byte CmnD NFKC package, unchanged 36-member brkitr package, 712 original CJK calls, 1,114,112 code point values, 100,170 Unicode normalization conformance columns, and 4,116 targeted normalization sequences. The CJK calls include compatibility expansions, native UTF-16 indexing, phrase rules, capacity errors and all three UTF-16 provider paths.
+    - Command: npm run test:shared -- src/external/icu/source/common/normalizer2.native.test.ts src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.sea.native.test.ts src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts --maxWorkers=1.
+      Result: pass. Evidence: 56 tests across six files. Reran the two CJK tests after adding explicit single-scalar-to-multiple-scalar expansion cases and verified all 712 cases.
+    - Commands: npm run typecheck, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 4,454 JSDoc-checked sources, 1,999 provenance entries, 1,786 mapped entries, 1,998 boundary sources, 10,849 relative imports, 236 allowed edges, and 464 Calc commands. Full repository ESLint passes.
+    - Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
+    - This is a checkpoint in the existing AgentPlane task. No full test suite was due. Original iterator factory integration, the enclosing LibreOffice word and production formatter services, and multiline CSV import remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -6129,6 +6188,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:35:03.594Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original ICU NFKC loaded data and CJK dictionary engine validated on all code point values, 100,170 Unicode normalization corpus inputs, 4,116 targeted strings, 712 CJK calls and the focused shared and CSV browser suites. Factory registration, production formatter services and multiline CSV import remain in scope.
+Attempts: 58
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:35:02.946Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7553,3 +7642,16 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass. Evidence: 4,445 JSDoc-checked sources, 1,994 provenance entries, 1,781 mapped entries, 1,993 boundary sources, 10,823 relative imports, 236 allowed edges, and 464 Calc commands. The header re-export uses the existing declaration inventory convention. The implementation and generator pass changed-path lint after fixing the unused original locale argument and adding required JSDoc. The full lint rerun passes.
 - Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
 - This is a checkpoint in the existing AgentPlane task. No full test suite was due. CJK normalization and dictionary breaking, factory registration and the LibreOffice word and production formatter services remain pending alongside multiline CSV import.
+
+### Original ICU NFKC and CJK dictionary engine
+
+- Packaged the original format-5 nfkc.nrm member without rewriting it. The original udata_openChoice callback, FAST16 trie, mappings, composition tuples, NFKC singleton and cleanup now drive counted UTF-16 composition, normalized-state checks and boundary-before queries. JavaScript uses its UTF-16 string representation and actual typed array views over the linked data.
+- Ported original non-ML CJK segmentation with native normalization and supplementary index maps, CJK/Korean modes, dictionary costs, original Katakana run limits, and Japanese extensions read from the named brkitr bundle. Ported the UnicodeString code-point operations and original UnicodeString UText provider read path used by the matcher. The managed binding materializes the readable UTF-16 chunk at open. Documented the confirmed CJK vector-count manifestation of CALC-480 and retained it.
+- Commands: node scripts/icu-brkitr-package.mjs --nfkc --check; node scripts/icu-brkitr-package.mjs --check; node scripts/icu-cjk-native-probe.mjs --check; node_modules/.bin/tsx scripts/icu-normalizer2-native-probe.mjs --check.
+  Result: pass. Evidence: 56,304-byte CmnD NFKC package, unchanged 36-member brkitr package, 712 original CJK calls, 1,114,112 code point values, 100,170 Unicode normalization conformance columns, and 4,116 targeted normalization sequences. The CJK calls include compatibility expansions, native UTF-16 indexing, phrase rules, capacity errors and all three UTF-16 provider paths.
+- Command: npm run test:shared -- src/external/icu/source/common/normalizer2.native.test.ts src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.sea.native.test.ts src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts --maxWorkers=1.
+  Result: pass. Evidence: 56 tests across six files. Reran the two CJK tests after adding explicit single-scalar-to-multiple-scalar expansion cases and verified all 712 cases.
+- Commands: npm run typecheck, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 4,454 JSDoc-checked sources, 1,999 provenance entries, 1,786 mapped entries, 1,998 boundary sources, 10,849 relative imports, 236 allowed edges, and 464 Calc commands. Full repository ESLint passes.
+- Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
+- This is a checkpoint in the existing AgentPlane task. No full test suite was due. Original iterator factory integration, the enclosing LibreOffice word and production formatter services, and multiline CSV import remain pending.

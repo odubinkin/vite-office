@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/norm2allmodes.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/norm2allmodes.h",
+    "localSymbols": [
+      "ComposeNormalizer2",
+      "normalize",
+      "isNormalized",
+      "hasBoundaryBefore"
+    ],
+    "upstreamSymbols": [
+      "ComposeNormalizer2",
+      "normalize",
+      "isNormalized",
+      "hasBoundaryBefore"
+    ],
+    "preservedResponsibilities": [
+      "The original composition owner validates sticky status, bogus input and source/destination aliasing. It forwards counted UTF-16 normalization, isNormalized and boundary-before queries to the loaded implementation."
+    ],
+    "omittedResponsibilities": [
+      "Other modes and storage/allocation ABI are outside the consumed path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/norm2allmodes.ts",
+          "marker": "class ComposeNormalizer2"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/norm2allmodes.h",
+          "marker": "ComposeNormalizer2"
+        }
+      ]
+    }
+  }
+}

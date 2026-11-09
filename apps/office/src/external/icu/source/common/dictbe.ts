@@ -1,19 +1,38 @@
-/** @fileoverview Original ICU dictionary span owner and Southeast Asian dictionary break engines. */
+/** @fileoverview Original ICU dictionary span owner and dictionary break engines. */
 import type { LanguageBreakEngine } from "./brkeng.h";
 import type { DictionaryMatcher } from "./dictionarydata";
+import cjkRanges from "./dictbe.cjk.sets.json" with { type: "json" };
 import ranges from "./dictbe.sea.sets.json" with { type: "json" };
 import {
+  utext_char32At,
+  utext_close,
   utext_current32,
   utext_getNativeIndex,
   utext_moveIndex32,
+  utext_nativeLength,
   utext_next32,
+  utext_openUnicodeString,
   utext_previous32,
   utext_setNativeIndex,
+  type OpenUText,
   type UText,
+  UTextStorage,
+  UTEXT_PROVIDER_STABLE_CHUNKS,
 } from "./unicode/utext";
+import { getNFKCInstance, type Normalizer2 } from "./unicode/normalizer2";
 import { U_FAILURE, U_SUCCESS } from "./unicode/utypes";
+import { U_ICUDATA_BRKITR } from "./ubrkimpl";
+import { UnicodeString } from "./unistr";
+import {
+  ures_close,
+  ures_getByKey,
+  ures_getNextResource,
+  ures_getString,
+  ures_hasNext,
+  ures_open,
+} from "./uresbund";
 import { UnicodeSet } from "./uniset";
-import type { UVector32 } from "./uvectr32.h";
+import { UVector32 } from "./uvectr32.h";
 
 /** Base engine keeps the constructor's compact character set and limits runs to its members. */
 export abstract class DictionaryBreakEngine implements LanguageBreakEngine {
@@ -325,5 +344,299 @@ export class KhmerBreakEngine extends SoutheastAsianBreakEngine {
   /** Adopts the original Khmer matcher. @param dictionary - Original dictionary. @param status - Sticky source status. @returns Engine owner. */
   constructor(dictionary: DictionaryMatcher, status: [number]) {
     super(dictionary, ranges.khmer, status);
+  }
+}
+
+/** Original CJK engine modes. */
+export enum LanguageType {
+  kKorean,
+  kChineseJapanese,
+}
+
+const kuint32max = 0xffffffff;
+const kMaxKatakanaLength = 8;
+const kMaxKatakanaGroupLength = 20;
+const maxSnlp = 255;
+const katakanaCost = [8192, 984, 408, 240, 204, 252, 300, 372, 480];
+
+/** Original Katakana cost table and out-of-range value. @param length - Run length. @returns Dictionary cost. */
+function getKatakanaCost(length: number): number {
+  return length > kMaxKatakanaLength ? 8192 : (katakanaCost[length] as number);
+}
+
+/** Original Katakana run membership, including half-width code points. @param c - Scalar. @returns Membership. */
+function isKatakana(c: number): boolean {
+  return (c >= 0x30a1 && c <= 0x30fe && c !== 0x30fb) || (c >= 0xff66 && c <= 0xff9f);
+}
+
+/** Original CJK dictionary engine for the non-ML build. */
+export class CjkBreakEngine extends DictionaryBreakEngine {
+  private readonly nfkcNorm2: Normalizer2 | null;
+  private readonly fHangulWordSet = new UnicodeSet(cjkRanges.hangul);
+  private readonly fDigitOrOpenPunctuationOrAlphabetSet = new UnicodeSet(
+    cjkRanges.digitOrOpenOrAlphabetic,
+  );
+  private readonly fClosePunctuationSet = new UnicodeSet(cjkRanges.closePunctuation);
+  private readonly fSkipSet = new Set<string>();
+
+  /** Adopts the original dictionary and reads the Japanese phrase parameters. @param fDictionary - Original CJK matcher. @param type - Source language mode. @param status - Sticky source status. @returns Engine owner. */
+  constructor(
+    private readonly fDictionary: DictionaryMatcher,
+    type: LanguageType,
+    status: [number],
+  ) {
+    const nfkc = getNFKCInstance(status);
+    super(
+      new UnicodeSet(
+        U_FAILURE(status[0]) ? [] : type === LanguageType.kKorean ? cjkRanges.hangul : cjkRanges.cj,
+      ),
+    );
+    this.nfkcNorm2 = nfkc;
+    if (type === LanguageType.kChineseJapanese && U_SUCCESS(status[0])) {
+      this.loadJapaneseExtensions(status);
+      for (let i = 0; i < cjkRanges.hiragana.length && U_SUCCESS(status[0]); i += 2) {
+        const end = cjkRanges.hiragana[i + 1] as number;
+        for (let c = cjkRanges.hiragana[i] as number; c < end; ++c)
+          this.fSkipSet.add(String.fromCodePoint(c));
+      }
+    }
+  }
+
+  /** Releases the adopted dictionary image. @returns Nothing. */
+  dispose(): void {
+    this.fDictionary.dispose();
+  }
+
+  /** Original Japanese extension strings from the brkitr ja bundle. @param status - Sticky source status. @returns Nothing. */
+  private loadJapaneseExtensions(status: [number]): void {
+    const ja = ures_open(U_ICUDATA_BRKITR, "ja", status);
+    const extensions = ures_getByKey(ja, "extensions", null, status);
+    let item = null;
+    while (U_SUCCESS(status[0]) && ures_hasNext(extensions)) {
+      item = ures_getNextResource(extensions, item, status);
+      const value = ures_getString(item, null, status);
+      if (value !== null && U_SUCCESS(status[0])) this.fSkipSet.add(value);
+    }
+    ures_close(item);
+    ures_close(extensions);
+    ures_close(ja);
+  }
+
+  /** Original native-index mapping and dictionary dynamic programming. @param inText - Actual provider. @param rangeStart - Native range start. @param rangeEnd - Native range limit. @param foundBreaks - Shared vector owner. @param isPhraseBreaking - Native phrase flag. @param status - Sticky source status. @returns Number of emitted breaks. */
+  protected divideUpDictionaryRange(
+    inText: UText,
+    rangeStart: number,
+    rangeEnd: number,
+    foundBreaks: UVector32,
+    isPhraseBreaking: boolean,
+    status: [number],
+  ): number {
+    if (U_FAILURE(status[0]) || rangeStart >= rangeEnd) return 0;
+    const nfkc = this.nfkcNorm2 as Normalizer2;
+    let inputMap: UVector32 | null = null;
+    let input = "";
+    if (
+      (inText.providerProperties & (1 << UTEXT_PROVIDER_STABLE_CHUNKS)) !== 0 &&
+      inText.chunkNativeStart <= rangeStart &&
+      inText.chunkNativeLimit >= rangeEnd &&
+      inText.nativeIndexingLimit >= rangeEnd - inText.chunkNativeStart
+    ) {
+      const offset = rangeStart - inText.chunkNativeStart;
+      const limit = rangeEnd - inText.chunkNativeStart;
+      for (let i = offset; i < limit; ++i)
+        input += String.fromCharCode(inText.chunkContents[i] as number);
+    } else {
+      utext_setNativeIndex(inText, rangeStart);
+      const limit = Math.min(rangeEnd, utext_nativeLength(inText));
+      inputMap = new UVector32(status);
+      if (U_FAILURE(status[0])) return 0;
+      while (utext_getNativeIndex(inText) < limit) {
+        const nativePosition = utext_getNativeIndex(inText) | 0;
+        input += String.fromCodePoint(utext_next32(inText));
+        while (inputMap.size() < input.length) inputMap.addElement(nativePosition, status);
+      }
+      inputMap.addElement(limit, status);
+    }
+
+    let inString = new UnicodeString(input, input.length);
+    if (!nfkc.isNormalized(inString, status)) {
+      const normalizedInput = new UnicodeString();
+      const normalizedMap = new UVector32(status);
+      if (U_FAILURE(status[0])) return 0;
+      const normalizedFragment = new UnicodeString();
+      for (let srcI = 0; srcI < inString.length();) {
+        const fragmentStartI = srcI;
+        for (;;) {
+          srcI = inString.moveIndex32(srcI, 1);
+          if (srcI === inString.length() || nfkc.hasBoundaryBefore(inString.char32At(srcI))) break;
+        }
+        const fragment = new UnicodeString(
+          input.slice(fragmentStartI, srcI),
+          srcI - fragmentStartI,
+        );
+        nfkc.normalize(fragment, normalizedFragment, status);
+        normalizedInput.append(normalizedFragment);
+        const fragmentOriginalStart =
+          inputMap === null ? fragmentStartI + rangeStart : inputMap.elementAti(fragmentStartI);
+        while (normalizedMap.size() < normalizedInput.length()) {
+          normalizedMap.addElement(fragmentOriginalStart, status);
+          if (U_FAILURE(status[0])) break;
+        }
+      }
+      const nativeEnd =
+        inputMap === null ? inString.length() + rangeStart : inputMap.elementAti(inString.length());
+      normalizedMap.addElement(nativeEnd, status);
+      inputMap = normalizedMap;
+      inString = normalizedInput;
+      input = inString.getBuffer() as string;
+    }
+
+    const numCodePts = inString.countChar32();
+    if (numCodePts !== inString.length()) {
+      const hadExistingMap = inputMap !== null;
+      if (inputMap === null) {
+        inputMap = new UVector32(status);
+        if (U_FAILURE(status[0])) return 0;
+      }
+      let cpIdx = 0;
+      for (let cuIdx = 0; ; cuIdx = inString.moveIndex32(cuIdx, 1)) {
+        if (hadExistingMap) inputMap.setElementAt(inputMap.elementAti(cuIdx), cpIdx);
+        else inputMap.addElement(cuIdx + rangeStart, status);
+        ++cpIdx;
+        if (cuIdx === inString.length()) break;
+      }
+    }
+
+    const bestSnlp = new UVector32(numCodePts + 1, status);
+    bestSnlp.addElement(0, status);
+    for (let i = 1; i <= numCodePts; ++i) bestSnlp.addElement(kuint32max, status);
+    const prev = new UVector32(numCodePts + 1, status);
+    for (let i = 0; i <= numCodePts; ++i) prev.addElement(-1, status);
+    const maxWordSize = 20;
+    const values = new UVector32(numCodePts, status);
+    values.setSize(numCodePts);
+    const lengths = new UVector32(numCodePts, status);
+    lengths.setSize(numCodePts);
+    const fu = utext_openUnicodeString(new UTextStorage(), inString, status) as OpenUText;
+
+    let ix = 0;
+    let isPrevKatakana = false;
+    for (let i = 0; i < numCodePts; ++i, ix = inString.moveIndex32(ix, 1)) {
+      const currentCost = bestSnlp.elementAti(i) >>> 0;
+      if (currentCost === kuint32max) continue;
+      utext_setNativeIndex(fu, ix);
+      let count = this.fDictionary.matches(
+        fu,
+        maxWordSize,
+        numCodePts,
+        null,
+        lengths.getBuffer(),
+        values.getBuffer(),
+        null,
+      );
+      if (
+        (count === 0 || lengths.elementAti(0) !== 1) &&
+        !this.fHangulWordSet.contains(inString.char32At(ix))
+      ) {
+        values.setElementAt(maxSnlp, count);
+        lengths.setElementAt(1, count++);
+      }
+
+      for (let j = 0; j < count; ++j) {
+        const newSnlp = (currentCost + (values.elementAti(j) >>> 0)) >>> 0;
+        const next = lengths.elementAti(j) + i;
+        if (newSnlp < bestSnlp.elementAti(next) >>> 0) {
+          bestSnlp.setElementAt(newSnlp, next);
+          prev.setElementAt(i, next);
+        }
+      }
+
+      const katakana = isKatakana(inString.char32At(ix));
+      let katakanaRunLength = 1;
+      if (!isPrevKatakana && katakana) {
+        let j = inString.moveIndex32(ix, 1);
+        while (
+          j < inString.length() &&
+          katakanaRunLength < kMaxKatakanaGroupLength &&
+          isKatakana(inString.char32At(j))
+        ) {
+          j = inString.moveIndex32(j, 1);
+          ++katakanaRunLength;
+        }
+        if (katakanaRunLength < kMaxKatakanaGroupLength) {
+          const newSnlp = (currentCost + getKatakanaCost(katakanaRunLength)) >>> 0;
+          const next = i + katakanaRunLength;
+          if (newSnlp < bestSnlp.elementAti(next) >>> 0) {
+            bestSnlp.setElementAt(newSnlp, next);
+            prev.setElementAt(i, next);
+          }
+        }
+      }
+      isPrevKatakana = katakana;
+    }
+    utext_close(fu);
+
+    const tBoundary = new UVector32(numCodePts + 1, status);
+    let numBreaks = 0;
+    if (bestSnlp.elementAti(numCodePts) >>> 0 === kuint32max) {
+      tBoundary.addElement(numCodePts, status);
+      ++numBreaks;
+    } else if (isPhraseBreaking) {
+      tBoundary.addElement(numCodePts, status);
+      if (U_SUCCESS(status[0])) {
+        ++numBreaks;
+        let prevIdx = numCodePts;
+        for (let i = prev.elementAti(numCodePts); i > 0; i = prev.elementAti(i)) {
+          const codeUnitIdx = inString.moveIndex32(0, i);
+          const prevCodeUnitIdx = inString.moveIndex32(0, prevIdx);
+          prevIdx = i;
+          if (
+            !this.fSkipSet.has(input.slice(codeUnitIdx, prevCodeUnitIdx)) &&
+            (!isKatakana(inString.char32At(inString.moveIndex32(codeUnitIdx, -1))) ||
+              !isKatakana(inString.char32At(codeUnitIdx)))
+          ) {
+            tBoundary.addElement(i, status);
+            ++numBreaks;
+          }
+        }
+      }
+    } else {
+      for (let i = numCodePts; i > 0; i = prev.elementAti(i)) {
+        tBoundary.addElement(i, status);
+        ++numBreaks;
+      }
+    }
+
+    if (foundBreaks.size() === 0 || foundBreaks.peeki() < rangeStart) {
+      tBoundary.addElement(0, status);
+      ++numBreaks;
+    }
+    let prevUTextPos = -1;
+    let correctedNumBreaks = 0;
+    for (let i = numBreaks - 1; i >= 0; --i) {
+      const cpPos = tBoundary.elementAti(i);
+      const utextPos = inputMap === null ? cpPos + rangeStart : inputMap.elementAti(cpPos);
+      if (utextPos > prevUTextPos) {
+        if (
+          utextPos !== rangeStart ||
+          (isPhraseBreaking &&
+            utextPos > 0 &&
+            this.fClosePunctuationSet.contains(utext_char32At(inText, utextPos - 1)))
+        ) {
+          foundBreaks.push(utextPos, status);
+          ++correctedNumBreaks;
+        }
+      } else --numBreaks;
+      prevUTextPos = utextPos;
+    }
+
+    const nextChar = utext_char32At(inText, rangeEnd);
+    if (!foundBreaks.isEmpty() && foundBreaks.peeki() === rangeEnd) {
+      if (!isPhraseBreaking || !this.fDigitOrOpenPunctuationOrAlphabetSet.contains(nextChar)) {
+        foundBreaks.popi();
+        --correctedNumBreaks;
+      }
+    }
+    return correctedNumBreaks;
   }
 }

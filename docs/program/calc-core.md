@@ -4468,3 +4468,19 @@ moves across range limits, combining marks, vector capacity errors and
 unpaired surrogates. CALC-480 and CALC-481 record the retained vector count
 and Thai minimum-span edge cases. CJK normalization and dictionary breaking,
 factory registration and the enclosing LibreOffice service remain pending.
+
+### Native NFKC and CJK dictionary breaks
+
+The original ICU format-5 `nfkc.nrm` data opens through `udata_openChoice`.
+The loaded FAST16 trie and mapping and composition units drive counted
+UTF-16 normalization, normalized-state queries and composition boundaries.
+The NFKC singleton retains the native initialization and cleanup contracts.
+
+The original non-ML CJK engine uses that normalizer to recover native
+indices after expansion and to account for supplementary input. It uses
+the original dictionary costs, Katakana run limits, Japanese extensions
+from the linked `brkitr` resource, and phrase boundary rules. The replay
+compares 712 native engine calls, all 1,114,112 code point values
+including isolated surrogate units, 100,170 normalization conformance
+inputs, and over 4,000 additional normalization sequences. Concrete iterator factory integration and the
+enclosing LibreOffice word and formatter services remain pending.

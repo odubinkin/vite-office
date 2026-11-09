@@ -20,9 +20,11 @@
         "vendor/icu-reference/source/common/dictbe.cpp",
         "apps/office/src/external/icu/source/common/dictbe.sea.sets.json",
         "apps/office/src/external/icu/source/common/dictbe.sea.native.test.ts",
-        "apps/office/src/external/icu/source/common/dictbe.sea.native-observations.json"
+        "apps/office/src/external/icu/source/common/dictbe.sea.native-observations.json",
+        "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+        "apps/office/src/external/icu/source/common/dictbe.cjk.native-observations.json"
       ],
-      "justification": "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors.",
+      "justification": "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors. The non-ML CJK engine now retains source dynamic-programming costs, supplementary and normalized native-index mapping, dictionary fallback, original Japanese extensions, and phrase boundary filtering. Native replay covers 712 original CJK calls across counted, deferred and UnicodeString providers.",
       "knownViolations": [],
       "localSymbols": [
         "DictionaryBreakEngine",
@@ -30,7 +32,11 @@
         "ThaiBreakEngine",
         "LaoBreakEngine",
         "BurmeseBreakEngine",
-        "KhmerBreakEngine"
+        "KhmerBreakEngine",
+        "CjkBreakEngine",
+        "LanguageType",
+        "getKatakanaCost",
+        "isKatakana"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
@@ -40,7 +46,11 @@
         "ThaiBreakEngine",
         "LaoBreakEngine",
         "BurmeseBreakEngine",
-        "KhmerBreakEngine"
+        "KhmerBreakEngine",
+        "CjkBreakEngine",
+        "LanguageType",
+        "getKatakanaCost",
+        "isKatakana"
       ]
     }
   }

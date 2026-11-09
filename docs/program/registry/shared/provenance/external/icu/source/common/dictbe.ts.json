@@ -12,7 +12,11 @@
       "ThaiBreakEngine",
       "LaoBreakEngine",
       "BurmeseBreakEngine",
-      "KhmerBreakEngine"
+      "KhmerBreakEngine",
+      "CjkBreakEngine",
+      "LanguageType",
+      "getKatakanaCost",
+      "isKatakana"
     ],
     "upstreamSymbols": [
       "DictionaryBreakEngine",
@@ -20,19 +24,28 @@
       "ThaiBreakEngine",
       "LaoBreakEngine",
       "BurmeseBreakEngine",
-      "KhmerBreakEngine"
+      "KhmerBreakEngine",
+      "CjkBreakEngine",
+      "LanguageType",
+      "getKatakanaCost",
+      "isKatakana"
     ],
     "preservedResponsibilities": [
-      "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors."
+      "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors.",
+      "The non-ML CJK engine now retains source dynamic-programming costs, supplementary and normalized native-index mapping, dictionary fallback, original Japanese extensions, and phrase boundary filtering. Native replay covers 712 original CJK calls across counted, deferred and UnicodeString providers."
     ],
     "omittedResponsibilities": [
-      "The CJK engine, normalization and factory registration remain pending. Constructor heap-allocation and physical ICU ABI are outside the managed port."
+      "The concrete factory registration remains pending. Constructor heap-allocation and physical ICU ABI are outside the managed port."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/external/icu/source/common/dictbe.ts",
           "marker": "class DictionaryBreakEngine"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+          "marker": "matches original CJK dictionary mode"
         }
       ],
       "upstream": [

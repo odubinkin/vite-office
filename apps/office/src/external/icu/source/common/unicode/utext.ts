@@ -1,4 +1,6 @@
-/** @fileoverview ICU78.3 UText provider contracts, initializer fields and public UChars lifecycle. */
+/** @fileoverview ICU78.3 UText provider contracts, initializer fields and public UTF-16 provider lifecycle. */
+import type { UnicodeString } from "../unistr";
+
 /** Original callbacks consumed by native-index and forward codepoint operations. */
 export interface UTextFuncs {
   /** Original provider length callback. @param text - Actual provider state. @returns Native length. */
@@ -23,7 +25,7 @@ export interface UText {
   chunkLength: number;
   nativeIndexingLimit: number;
   chunkContents: Uint16Array;
-  context: Uint16Array;
+  context: Uint16Array | UnicodeString;
   providerProperties: number;
   a: number;
   pFuncs: UTextFuncs;
@@ -40,7 +42,7 @@ export class UTextStorage {
   chunkLength = 0;
   nativeIndexingLimit = 0;
   chunkContents: Uint16Array | null = null;
-  context: Uint16Array | null = null;
+  context: Uint16Array | UnicodeString | null = null;
   providerProperties = 0;
   a = 0;
   pFuncs: UTextFuncs | null = null;
@@ -64,6 +66,9 @@ export {
   utext_setup,
   utext_close,
   utext_openUChars,
+  utext_openUnicodeString,
+  utext_openConstUnicodeString,
+  UTEXT_PROVIDER_STABLE_CHUNKS,
   utext_clone,
   utext_freeze,
 } from "../utext";

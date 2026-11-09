@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 UText navigation and UChars provider opening, cloning and closing. */
+/** @fileoverview Original ICU78.3 UText navigation and UChars and UnicodeString provider ownership. */
 import {
   UTEXT_MAGIC,
   UTextStorage,
@@ -6,6 +6,7 @@ import {
   type UText,
   type UTextFuncs,
 } from "./unicode/utext";
+import { UnicodeString } from "./unistr";
 import { UErrorCode as E, U_FAILURE, U_SUCCESS } from "./unicode/utypes";
 /** Original native-length forwarding. @param text - Prepared provider. @returns Native length. */
 export function utext_nativeLength(text: UText): number {
@@ -14,7 +15,7 @@ export function utext_nativeLength(text: UText): number {
 /** Original UChars deferred-length query preserves the current cursor. @param text - Prepared UChars fields. @returns Native UTF16 length. */
 export function ucstrTextLength(text: UText): number {
   if (text.a < 0) {
-    while (text.context[text.chunkNativeLimit] !== 0) ++text.chunkNativeLimit;
+    while ((text.context as Uint16Array)[text.chunkNativeLimit] !== 0) ++text.chunkNativeLimit;
     text.a = text.chunkNativeLimit;
     text.chunkLength = text.chunkNativeLimit;
     text.nativeIndexingLimit = text.chunkLength;
@@ -148,7 +149,7 @@ export function utext_next32(text: UText): number {
 }
 /** Original UTF16 provider access, including deferred NUL-length scanning and codepoint-aligned chunks. @param text - Original prepared UChars provider fields. @param index - Native requested offset. @param forward - Direction. @returns Whether a character exists in the requested direction. */
 export function ucstrTextAccess(text: UText, index: number, forward: boolean): boolean {
-  const str = text.context;
+  const str = text.context as Uint16Array;
   if (index < 0) index = 0;
   else if (index < text.chunkNativeLimit) {
     if (
@@ -202,7 +203,7 @@ const UTEXT_HEAP_ALLOCATED = 1;
 const UTEXT_EXTRA_HEAP_ALLOCATED = 2;
 const UTEXT_OPEN = 4;
 const UTEXT_PROVIDER_LENGTH_IS_EXPENSIVE = 1;
-const UTEXT_PROVIDER_STABLE_CHUNKS = 2;
+export const UTEXT_PROVIDER_STABLE_CHUNKS = 2;
 const UTEXT_PROVIDER_WRITABLE = 3;
 const UTEXT_PROVIDER_OWNS_TEXT = 5;
 const gEmptyUString = new Uint16Array(1);
@@ -324,7 +325,7 @@ function ucstrTextClone(
   if (deep && U_SUCCESS(status[0]) && result !== null) {
     const length = utext_nativeLength(result as OpenUText);
     const copy = new Uint16Array(length + 1);
-    copy.set(src.context.subarray(0, length));
+    copy.set((src.context as Uint16Array).subarray(0, length));
     result.context = copy;
     result.providerProperties |= 1 << UTEXT_PROVIDER_OWNS_TEXT;
   }
@@ -368,5 +369,77 @@ export function utext_openUChars(
     result.a = length;
     result.chunkNativeLimit = result.chunkLength = result.nativeIndexingLimit = Math.max(0, length);
   }
+  return result;
+}
+
+/** Original UnicodeString context length. @param text - UnicodeString provider. @returns Counted UTF-16 length. */
+function unistrTextLength(text: UText): number {
+  return (text.context as UnicodeString).length();
+}
+
+/** Original single-chunk UnicodeString access and boundary result. @param text - UnicodeString provider. @param index - Native index. @param forward - Access direction. @returns Whether the requested direction contains text. */
+function unistrTextAccess(text: UText, index: number, forward: boolean): boolean {
+  text.chunkOffset = Math.min(text.chunkLength, Math.max(0, index));
+  return forward ? index < text.chunkLength : index > 0;
+}
+
+/** Original UnicodeString clone ownership and writability. @param dest - Caller storage or null. @param src - UnicodeString provider. @param deep - Copy the source string. @param status - Sticky status. @returns Cloned storage. */
+function unistrTextClone(
+  dest: UTextStorage | null,
+  src: OpenUText,
+  deep: boolean,
+  status: [number],
+): UTextStorage | null {
+  const result = shallowTextClone(dest, src, status);
+  if (deep && U_SUCCESS(status[0]) && result !== null) {
+    result.context = new UnicodeString(src.context as UnicodeString);
+    result.providerProperties |= (1 << UTEXT_PROVIDER_OWNS_TEXT) | (1 << UTEXT_PROVIDER_WRITABLE);
+  }
+  return result;
+}
+
+const unistrFuncs: UTextFuncs = {
+  nativeLength: unistrTextLength,
+  access: unistrTextAccess,
+  clone: unistrTextClone,
+  close: ucstrTextClose,
+  mapOffsetToNative: null,
+  mapNativeIndexToUTF16: null,
+};
+
+/** Original read-only single-chunk UnicodeString provider. @param text - Caller storage or null. @param source - Actual UnicodeString. @param status - Sticky status. @returns Open storage or source failure result. */
+export function utext_openConstUnicodeString(
+  text: UTextStorage | null,
+  source: UnicodeString,
+  status: [number],
+): UTextStorage | null {
+  if (U_SUCCESS(status[0]) && source.isBogus()) {
+    utext_openUChars(text, null, 0, status);
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+    return text;
+  }
+  const result = utext_setup(text, 0, status);
+  if (U_SUCCESS(status[0]) && result !== null) {
+    const value = source.getBuffer() as string;
+    const chunk = new Uint16Array(value.length);
+    for (let i = 0; i < value.length; ++i) chunk[i] = value.charCodeAt(i);
+    result.pFuncs = unistrFuncs;
+    result.context = source;
+    result.providerProperties = 1 << UTEXT_PROVIDER_STABLE_CHUNKS;
+    result.chunkContents = chunk;
+    result.chunkLength = result.chunkNativeLimit = result.nativeIndexingLimit = source.length();
+  }
+  return result;
+}
+
+/** Original writable UnicodeString provider flags on the same opening path. @param text - Caller storage or null. @param source - Actual UnicodeString. @param status - Sticky status. @returns Provider storage. */
+export function utext_openUnicodeString(
+  text: UTextStorage | null,
+  source: UnicodeString,
+  status: [number],
+): UTextStorage | null {
+  const result = utext_openConstUnicodeString(text, source, status);
+  if (U_SUCCESS(status[0]) && result !== null)
+    result.providerProperties |= 1 << UTEXT_PROVIDER_WRITABLE;
   return result;
 }

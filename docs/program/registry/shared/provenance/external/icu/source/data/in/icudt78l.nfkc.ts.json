@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.ts",
+    "upstreamPath": "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+    "localSymbols": [
+      "registerNfkcCommonData"
+    ],
+    "upstreamSymbols": [
+      "createCommonDataFile"
+    ],
+    "preservedResponsibilities": [
+      "The pinned nfkc.nrm member is re-packaged byte-for-byte by original gencmn. The managed binding registers the generated CmnD image on the original data loader and can be re-registered after cleanup."
+    ],
+    "omittedResponsibilities": [
+      "The binding packages only the NFKC data member."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.ts",
+          "marker": "function registerNfkcCommonData"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+          "marker": "createCommonDataFile"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/data/in/icudt78l.nfkc.ts",
+      "stackNecessity": "generated-resource-boundary",
+      "rationale": "The original CmnD package is embedded as an immutable managed byte array at the data registration boundary."
+    }
+  }
+}

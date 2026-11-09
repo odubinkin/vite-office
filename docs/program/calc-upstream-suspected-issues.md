@@ -5181,6 +5181,7 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source `vendor/icu-reference/source/common/dictbe.cpp`, the four Southeast Asian `divideUpDictionaryRange` implementations and `vendor/icu-reference/source/common/uvectr32.cpp`.
 - The word count advances before the break is pushed onto the vector. In original ICU, a Thai range containing `ภาษาไทย` with a capacity-one break vector returns two while the vector contains one boundary and the status is `U_BUFFER_OVERFLOW_ERROR`.
+- The same mismatch occurs in `CjkBreakEngine::divideUpDictionaryRange`. For `東京都に行く` with a capacity-one vector, original ICU returns four and the vector contains one boundary with `U_BUFFER_OVERFLOW_ERROR`.
 - Preserve the returned count, partial vector and failure status. The native replay checks all three.
 
 ### CALC-481 — The Thai minimum-span equality skips a dictionary run
