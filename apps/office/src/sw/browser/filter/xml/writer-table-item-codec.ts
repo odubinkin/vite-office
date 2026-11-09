@@ -24,6 +24,7 @@ import {
   RES_UL_SPACE,
   RES_LAYOUT_SPLIT,
   RES_COLLAPSING_BORDERS,
+  RES_FRAMEDIR,
 } from "../../../inc/hintids";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { encodeSfxPoolItem } from "./item-codec";
@@ -31,10 +32,11 @@ import { encodeSfxPoolItem } from "./item-codec";
 export interface WriterTableSpacingRecord {
   readonly upperLower?: SfxPoolItemSnapshot | undefined;
 }
-/** Direct native flow/border presence, independent of older geometry and spacing records. */
+/** Direct native flow, border and direction presence, independent of older geometry and spacing records. */
 export interface WriterTableFlowRecord {
   readonly layoutSplit?: SfxPoolItemSnapshot | undefined;
   readonly collapsingBorders?: SfxPoolItemSnapshot | undefined;
+  readonly frameDirection?: SfxPoolItemSnapshot | undefined;
 }
 /** Complete original horizontal item carried across process/storage boundaries. */
 export interface WriterHoriOrientRecord {
@@ -76,6 +78,7 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
     nativeFlow: {
       layoutSplit: split === undefined ? undefined : encodeSfxPoolItem(split),
       collapsingBorders: borders === undefined ? undefined : encodeSfxPoolItem(borders),
+      frameDirection: encodeFrameDirection(table.GetFrameFormat()),
     },
     nativeSpacing: {
       upperLower: spacing === undefined ? undefined : encodeSfxPoolItem(spacing),
@@ -95,7 +98,7 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
   };
 }
 
-/** Restores original direct table booleans after validating both items, retaining legacy marker absence. @param format - Native frame owner. @param flow - Current native record or older absent marker. @returns Nothing. */
+/** Restores direct table flow items after validating the complete record, retaining legacy marker absence. @param format - Native frame owner. @param flow - Current native record or older absent marker. @returns Nothing. */
 export function restoreTableFlow(
   format: SwFrameFormat,
   flow: WriterTableFlowRecord | undefined,
@@ -104,11 +107,36 @@ export function restoreTableFlow(
   if (flow === null || typeof flow !== "object" || Array.isArray(flow))
     throw new Error("Stored Writer native table flow is invalid.");
   const split = decodeTableBoolItem(format, flow.layoutSplit, RES_LAYOUT_SPLIT),
-    borders = decodeTableBoolItem(format, flow.collapsingBorders, RES_COLLAPSING_BORDERS);
+    borders = decodeTableBoolItem(format, flow.collapsingBorders, RES_COLLAPSING_BORDERS),
+    direction = decodeFrameDirection(format, flow.frameDirection);
   format.ResetFormatAttr(RES_LAYOUT_SPLIT);
   format.ResetFormatAttr(RES_COLLAPSING_BORDERS);
+  format.ResetFormatAttr(RES_FRAMEDIR);
   if (split !== undefined) format.SetFormatAttr(split);
   if (borders !== undefined) format.SetFormatAttr(borders);
+  if (direction !== undefined) format.SetFormatAttr(direction);
+}
+
+/** Serializes the actual direct direction item of a table or cell. @param format - Native format. @returns Existing pool snapshot or absent. */
+export function encodeFrameDirection(format: SwFrameFormat): SfxPoolItemSnapshot | undefined {
+  const item = format.GetAttrSet().GetItemIfSet(RES_FRAMEDIR, false);
+  return item === undefined ? undefined : encodeSfxPoolItem(item);
+}
+
+/** Decodes the typed item via the actual registered pool factory. @param format - Native format. @param snapshot - Candidate record. @returns Typed original item or absent. */
+export function decodeFrameDirection(
+  format: SwFrameFormat,
+  snapshot: SfxPoolItemSnapshot | undefined,
+) {
+  if (snapshot === undefined) return undefined;
+  if (
+    snapshot === null ||
+    typeof snapshot !== "object" ||
+    Array.isArray(snapshot) ||
+    snapshot.which !== RES_FRAMEDIR
+  )
+    throw new Error("Stored Writer native frame direction is invalid.");
+  return format.GetAttrSet().GetPool().CreateItem(snapshot);
 }
 
 /** Validates native identity/value before the registered factory can coerce legacy input. @param format - Native frame owner. @param snapshot - Optional direct item. @param which - Original identity. @returns Registered item or direct absence. */

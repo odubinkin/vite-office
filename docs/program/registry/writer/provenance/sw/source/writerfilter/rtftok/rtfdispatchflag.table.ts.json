@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+    "localSymbols": [
+      "dispatchTableDirection"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::dispatchFlag"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners."
+    ],
+    "omittedResponsibilities": [
+      "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+          "marker": "dispatchTableDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFlag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+      "rationale": "Separates direction-specific flag handling from the existing tokenizer event dispatch while preserving its real parser-state owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

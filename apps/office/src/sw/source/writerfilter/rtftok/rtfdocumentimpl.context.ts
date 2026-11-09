@@ -58,6 +58,8 @@ export interface RtfState {
   characterSprms: RTFSprms;
   paragraphSprms: RTFSprms;
   sectionSprms: RTFSprms;
+  tableRowSprms: RTFSprms;
+  tableCellSprms: RTFSprms;
   tableSprms: RTFSprms;
   tableAttributes: RTFSprms;
   listLevelEntries: RTFSprms;
@@ -146,6 +148,8 @@ export type RtfBlock =
     }>;
 /** One RTF table row with physical cell boundaries in twips. */
 export interface RtfTableRow {
+  readonly rowSprms: RTFSprms;
+  readonly cellSprms: readonly RTFSprms[];
   readonly cells: readonly (readonly RtfParagraph[])[];
   readonly header: boolean;
   readonly boundaries: readonly number[];

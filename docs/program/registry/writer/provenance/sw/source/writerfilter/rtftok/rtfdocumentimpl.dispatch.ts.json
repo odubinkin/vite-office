@@ -38,7 +38,8 @@
       "The broad section regression confirms source first-run gating for LANG-only streams: pending character/paragraph language stays unconsumed until ordinary text/PAR, while explicit empty PAR retains authored language. WRITER284 records the native distinction; the old same-language acceptance was migrated only after source control-flow inspection, with native re-export assertions retained.",
       "S3HW1E PAGE/section lifecycle checkpoint: exact pinned metadata distinguishes all 1823 known spellings from unknown controls, preserves native dispatch kinds/defaults and PAR aliases, and starts sections for recognized no-op handlers. Original needSect/needCr/needFinalPar/needPar, parAtEndOfSection, ignore-next-continuous and lazy break reset govern SECT, synthetic PAGE and root-pop. The existing atomic mapper binding preserves deferred-page paragraph phases, including zero-length utext first-run changes, without claiming a streaming mapper ABI. Required final table paragraphs follow the table. Literal tests plus unchanged cont-section-pagebreak.rtf preserve native empty paragraph/page-style expectations. Existing strict RTF1 lexical admission is retained. First/follow/title-page producer/export and HTML/current-model audits remain open; no broad semantic or ABI confidence promotion.",
       "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
-      "S3HW1E HTML74 preserves the original LTRSECT and RTLSECT raw paragraph sprm and associated-run reset. Their raw 0/1 are distinct from the STEXTFLOW generated IDs, so they reach the source mapper fallback (WRITER357)."
+      "S3HW1E HTML74 preserves the original LTRSECT and RTLSECT raw paragraph sprm and associated-run reset. Their raw 0/1 are distinct from the STEXTFLOW generated IDs, so they reach the source mapper fallback (WRITER357).",
+      "S3HW1E HTML75: TROWD resets original row-direction state, CELLX captures the cell sprms and restores its direction default, and ROW captures current row properties. Group pop releases the original borrowed list copies."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -135,6 +136,10 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.direction.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
         }
       ],

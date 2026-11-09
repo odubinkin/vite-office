@@ -19,7 +19,9 @@ import {
   cppu_detail_getUnoType_BorderLine,
 } from "../../../../offapi/com/sun/star/table/BorderLine";
 import type { SwTableBox } from "../table/swtable";
-import { RES_BOX } from "../../../inc/hintids";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
@@ -105,6 +107,17 @@ export class SwXTextTable {
           toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100),
         ),
       });
+      return;
+    }
+    if (n === "WritingMode") {
+      const format = table.GetFrameFormat(),
+        item = format.GetFrameDir().Clone();
+      try {
+        if (!item.PutValue(value, 0)) illegal("Invalid table writing mode");
+        format.SetFormatAttr(item);
+      } finally {
+        item.Dispose();
+      }
       return;
     }
     if (n === "HoriOrient") {
@@ -268,6 +281,16 @@ export function convertToTable(
 
 /** Native cell-format properties write the claimed box format rather than a browser table record. @param box - Actual cell. @param name - Native property name. @param value - Native Any. @returns Whether the cell-format map consumed the property. */
 export function setCellProperty(box: SwTableBox, name: string, value: Any): boolean {
+  if (name === "FRMDirection") {
+    const item = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
+    try {
+      item.PutValue(value, 0);
+      box.GetFrameFormat().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    return true;
+  }
   if (name === "VertOrient") {
     const item = box.GetVertOrient();
     item.PutValue(scalar(value, "sal_Int16"), 0);

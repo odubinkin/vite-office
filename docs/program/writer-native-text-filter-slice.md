@@ -1799,3 +1799,18 @@ LTRSECT and RTLSECT retain the original raw paragraph sprm and the mapper's
 default LTR result for that raw value. WRITER356 records the native grid
 comparison's horizontal RTL consequence. WRITER357 records the source flag
 owner/value mismatch with STEXTFLOW's generated identities.
+
+### HTML75 — Native RTF table and cell direction import
+
+Row and cell direction use group-owned native sprms. CELLX captures the actual
+cell set and resets its direction state. The mapper merges the table properties
+from completed rows and applies supported cell WritingMode values through the
+existing native table and cell UNO wrappers. CLTXLRTB remains ignored by the
+mapper, and the table's absent-property default is Context. The hidden cell
+setter preserves the native failed-conversion result in WRITER358.
+
+The existing Writer Worker transport carries the actual direct table and box
+direction items. An RTF-to-Worker-to-RTF round trip verifies the table and cell
+controls with actual document owners. General nested RTF table orchestration,
+the physical table direction/layout path, production Markdown HTML tables and
+the complete fixed-slice parity audit remain open.

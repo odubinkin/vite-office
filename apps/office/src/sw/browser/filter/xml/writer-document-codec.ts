@@ -36,13 +36,15 @@ import { SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import { SwTableNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
-import type { SwTableBoxFormat } from "../../../source/core/table/swtable";
+import type { SwTableBox, SwTableBoxFormat } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import {
   encodeTableFormat,
   restoreTableGeometry,
   restoreTableSpacing,
   restoreTableFlow,
+  encodeFrameDirection,
+  decodeFrameDirection,
   type WriterTableFormatRecord,
   encodeRowFormat,
   decodeRowFormat,
@@ -137,6 +139,7 @@ interface WriterTableRecord {
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
 type WriterBoxFormatRecord = {
+  readonly frameDirection?: SfxPoolItemSnapshot | undefined;
   readonly frameSize?: WriterFrameSizeRecord | undefined;
   readonly box?:
     | Readonly<{
@@ -152,11 +155,12 @@ type WriterBoxFormatRecord = {
     Readonly<{ position: number; orientation: number; relation: number }> | undefined;
   readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
 };
-/** Encodes complete public native fields without transporting a class. @param value - Original box format. @returns Primitive format. */
-function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
-  const { vertOrient, box, frameSize } = value;
+/** Encodes the original cell format items at the browser boundary. @param cell - Actual cell. @returns Primitive format. */
+function encodeBoxFormat(cell: SwTableBox): WriterBoxFormatRecord {
+  const { vertOrient, box, frameSize } = cell.GetFormat();
   return {
     frameSize: encodeFrameSize(frameSize),
+    frameDirection: encodeFrameDirection(cell.GetFrameFormat()),
     box: box === undefined ? undefined : encodeNativeBoxItem(box),
     vertOrient:
       vertOrient === undefined
@@ -273,7 +277,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
           paragraphs.push(encodeTextNode(document, node));
           yield;
         }
-        cells.push({ format: encodeBoxFormat(cell.GetFormat()), paragraphs });
+        cells.push({ format: encodeBoxFormat(cell), paragraphs });
         yield;
       }
       rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
@@ -730,6 +734,9 @@ export function* decodeWriterDocumentSteps(
           const cell = row.GetTabBoxes()[cellIndex];
           if (cell === undefined || cellRecord.paragraphs.length === 0)
             throw new Error("Stored Writer table cell is invalid.");
+          const frame = cell.GetFrameFormat(),
+            direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
+          if (direction !== undefined) frame.SetFormatAttr(direction);
           for (const [paragraphIndex, paragraphRecord] of cellRecord.paragraphs.entries()) {
             const node =
               paragraphIndex === 0

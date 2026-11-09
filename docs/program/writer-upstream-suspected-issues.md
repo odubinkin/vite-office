@@ -2913,3 +2913,13 @@ instead recognizes generated TextDirection identities, as sent by STEXTFLOW.
 Both raw values reach its default LR_TB branch. Preserve the original sprm
 owner, value, and mapper fallback. This is not evidence of an identical
 outcome in every native section-layout context.
+
+### WRITER358 — Hidden UNO cell direction applies Environment when conversion fails
+
+Pinned `SwXCell::setPropertyValue` in `sw/source/core/unocore/unotbl.cxx`
+handles the hidden FRMDirection property with a fresh Environment item.
+It ignores the boolean result of PutValue and applies that item to the
+current box format without ClaimFrameFormat. An invalid Any therefore
+replaces the previous direction with Environment. Preserve the original
+conversion and direct-format behavior. The local test exercises the invalid
+Any result on an actual imported cell.

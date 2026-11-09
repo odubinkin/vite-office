@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": [
+      "ApplyRtfTableDirection"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::replayBuffer"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
+          "marker": "ApplyRtfTableDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFDocumentImpl::replayBuffer"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
+      "rationale": "Keeps table property replay at the original parser responsibility in the browser atomic document-construction stack.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

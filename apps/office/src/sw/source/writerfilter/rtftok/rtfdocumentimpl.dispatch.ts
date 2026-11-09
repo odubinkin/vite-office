@@ -40,6 +40,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       paragraphSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
       sectionSprms: new RTFSprms(previous?.sectionSprms),
+      tableRowSprms: new RTFSprms(previous?.tableRowSprms),
+      tableCellSprms: new RTFSprms(previous?.tableCellSprms),
       tableSprms: new RTFSprms(previous?.tableSprms),
       tableAttributes: new RTFSprms(previous?.tableAttributes),
       listLevelEntries: new RTFSprms(previous?.listLevelEntries),
@@ -182,6 +184,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       previous?.destinationText.dispose();
       previous?.paragraphSprms.dispose();
       previous?.sectionSprms.dispose();
+      previous?.tableRowSprms.dispose();
+      previous?.tableCellSprms.dispose();
       previous?.tableSprms.dispose();
       previous?.tableAttributes.dispose();
       previous?.listLevelEntries.dispose();
@@ -543,7 +547,7 @@ export function DispatchBodyControl(
     state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));
     return;
   }
-  if (["ltrrow", "rtlrow"].includes(name)) state.runType = RunType.NONE;
+  if (dispatchTableDirection(name, state)) return;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
@@ -566,6 +570,8 @@ export function DispatchBodyControl(
     this["m_bNeedPap"] = true;
     this["inTable"] = true;
     this["rowBoundaries"] = [];
+    state.tableRowSprms.clear();
+    for (const list of this["rowCellSprms"].splice(0)) list.dispose();
     this["rowAlignment"] = "left";
     this["rowLeft"] = 0;
     this["rowHeight"] = 0;
@@ -718,6 +724,8 @@ export function DispatchBodyControl(
   if (name === "cellx") {
     if (parameter !== undefined) {
       this["rowBoundaries"].push(parameter);
+      this["rowCellSprms"].push(new RTFSprms(state.tableCellSprms));
+      state.tableCellSprms.clear();
       this["rowVerticals"].push(this["nextCellVertical"]);
       this["nextCellVertical"] = undefined;
       this["rowBorders"].push(this["nextCellBorders"]);
@@ -748,6 +756,8 @@ export function DispatchBodyControl(
         cells: this["tableRow"].splice(0),
         header: this["rowHeader"],
         boundaries: this["rowBoundaries"].splice(0),
+        rowSprms: new RTFSprms(state.tableRowSprms),
+        cellSprms: this["rowCellSprms"].splice(0),
         alignment: this["rowAlignment"],
         left: this["rowLeft"],
         height: this["rowHeight"],
@@ -963,5 +973,6 @@ import {
   DispatchSectionControl,
   DispatchPageBreak,
 } from "./rtfdocumentimpl.section";
+import { dispatchTableDirection } from "./rtfdispatchflag.table";
 import { RTFKeyword } from "./rtfcontrolwords";
 import { getSymbolData, RTFControlType } from "./rtftokenizer";

@@ -135,14 +135,19 @@ export class RtfDocumentImpl {
     const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
       values: readonly RtfTableRow[],
     ) => {
-      for (const row of values)
+      for (const row of values) {
+        lists.add(row.rowSprms);
+        for (const list of row.cellSprms) lists.add(list);
         for (const cell of row.cells) for (const value of cell) paragraph(value);
+      }
     };
     for (const state of this.states) {
       state.destinationText.dispose();
       lists.add(state.characterSprms);
       lists.add(state.paragraphSprms);
       lists.add(state.sectionSprms);
+      lists.add(state.tableRowSprms);
+      lists.add(state.tableCellSprms);
       lists.add(state.tableSprms);
       lists.add(state.tableAttributes);
       lists.add(state.listLevelEntries);
@@ -159,6 +164,7 @@ export class RtfDocumentImpl {
       if (block.kind === "paragraph") paragraph(block.paragraph);
       else rows(block.rows);
     rows(this.tableRows);
+    for (const list of this.rowCellSprms.splice(0)) lists.add(list);
     for (const cell of this.tableRow) for (const value of cell) paragraph(value);
     for (const value of this.tableCell) paragraph(value);
     lists.add(this.m_aListTableSprms);
@@ -189,6 +195,7 @@ export class RtfDocumentImpl {
   protected tableRow: RtfParagraph[][] = [];
   protected tableCell: RtfParagraph[] = [];
   protected rowBoundaries: number[] = [];
+  protected readonly rowCellSprms: RTFSprms[] = [];
   protected rowAlignment: "left" | "center" | "right" = "left";
   protected rowLeft = 0;
   protected rowHeight = 0;
