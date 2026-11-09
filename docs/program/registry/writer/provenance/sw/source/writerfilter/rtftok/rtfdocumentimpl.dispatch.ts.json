@@ -48,7 +48,8 @@
       "Recognizes and closes native shape destinations and uses the current text append context.",
       "Retains lexical row width-after state and allows a row without a repeated definition to keep the original table open.",
       "Replays native width and margin properties and restores the source cell defaults at the nested property boundary.",
-      "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD."
+      "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD.",
+      "Sends the original palette shading resource and retains the zero-index exclusion."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -166,6 +167,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -268,6 +273,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
           "marker": "case RTFKeyword::FLYMAINCNT:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::CBPAT:"
         }
       ]
     },

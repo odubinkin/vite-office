@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { XATTR_FILLSTYLE } from "../../../../svx/inc/xdef";
+import { getSvxBrushItemFromSourceSet } from "../../../../svx/source/unodraw/unobrushitemhelper";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
 import {
@@ -944,6 +946,21 @@ export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "tr
 /** Projects a native highlight brush to the Writer text/worker/DOM boundary. @param item - Actual highlight item. @returns Primitive color. */
 export function writerHighlightColorValue(item: Readonly<SvxBrushItem>): string {
   return writerColorValue(item.GetColor(), "transparent");
+}
+
+/** Projects the native paragraph fill at the browser paint boundary. Existing brush items retain their local precedence. @param items - Actual paragraph item set. @returns Primitive color. */
+export function writerParagraphBackgroundColor(items: SwAttrSet): string {
+  for (let scope: SfxItemSet | undefined = items; scope; scope = scope.GetParent()) {
+    const legacy = scope.GetItemIfSet(RES_BACKGROUND, false);
+    if (legacy instanceof SvxBrushItem) return writerHighlightColorValue(legacy);
+    if (scope.GetItemIfSet(XATTR_FILLSTYLE, false)) break;
+  }
+  const brush = getSvxBrushItemFromSourceSet(items, RES_BACKGROUND);
+  try {
+    return writerHighlightColorValue(brush);
+  } finally {
+    brush.Dispose();
+  }
 }
 
 import * as WriterWhich from "../../../inc/hintids";

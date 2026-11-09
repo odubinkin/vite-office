@@ -25,7 +25,6 @@
       "OutputTextCharFormat",
       "FormatFrameDirection",
       "WriteStyleFrameDirection",
-      "TableBackgroundColor",
       "TableBackgrounds",
       "TablePositioning"
     ],
@@ -76,7 +75,8 @@
       "S3HW1E HTML73: Actual section, paragraph and stylesheet controls consume typed native directions. The ordinary paragraph vertical-to-LTR behavior in WRITER330 is preserved; physical fly syntax is unrepresented.",
       "Applies source table, row and cell brush precedence and emits CLCBPAT only for an opaque selected color.",
       "Emits the pinned floating-table row relation, coordinate, distance and no-overlap controls.",
-      "Emits native document line-number section controls and the paragraph and style count exclusion."
+      "Emits native document line-number section controls and the paragraph and style count exclusion.",
+      "Consumes native paragraph fill and legacy brush properties in the original RTF paragraph output."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -160,7 +160,7 @@
           "marker": "@fileoverview"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts",
           "marker": "TableBackgroundColor"
         },
         {
@@ -173,6 +173,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -232,6 +236,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::SectionLineNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::FormatBackground"
         }
       ]
     }

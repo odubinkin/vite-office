@@ -55,7 +55,8 @@
       "Registers effective native table background colors before header output and invokes the source cell background producer.",
       "Writes the actual native splittable text-fly table contents at the owning anchor and uses the fly width fallback for relative row output.",
       "Emits ordinary text fly content with an independent table depth at the native paragraph or character position.",
-      "Publishes active line numbering at the original initial and later section stream boundaries."
+      "Publishes active line numbering at the original initial and later section stream boundaries.",
+      "Indexes native paragraph and style fill and brush colors before writing the RTF palette."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -185,6 +186,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -279,6 +284,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
           "marker": "AttrOutput().SectionLineNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
+          "marker": "TextFrame or paragraph background solid fill."
         }
       ]
     }

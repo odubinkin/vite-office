@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 555
+revision: 558
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T23:25:40.761Z"
+  updated_at: "2026-11-09T23:37:11.647Z"
   updated_by: "CODER"
-  note: "RTF108 native line numbering verified in 1,372 related Writer tests and 81 final focused tests. Native paragraph fill and final capability reconciliation remain."
-  attempts: 119
+  note: "RTF109 native paragraph fill verified in 2,076 Writer and 12 shared focused tests. Original RTF cell-border resource path and final capability reconciliation remain."
+  attempts: 120
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1909,8 +1912,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T23:37:11.647Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF109 native paragraph fill verified in 2,076 Writer and 12 shared focused tests. Original RTF cell-border resource path and final capability reconciliation remain."
+  -
+    type: "status"
+    at: "2026-11-09T23:37:34.185Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T23:26:11.852Z"
+doc_updated_at: "2026-11-09T23:37:34.185Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -5195,6 +5211,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T23:37:11.647Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF109 native paragraph fill verified in 2,076 Writer and 12 shared focused tests. Original RTF cell-border resource path and final capability reconciliation remain.
+    Attempts: 120
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:37:11.020Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -7137,6 +7183,8 @@ sections:
     RTF107 row flow checkpoint: original row resources replace scalar header, split and height state. The native table manager's contiguous header cap and handler's all-header and sole-row split rules reach the connected table. MeasureHandler supplies typed row height and SizeType through SwXTextTableRow. Native cell vertical alignment retains NONE for explicit top. The actual pinned tblrepeat.rtf imports three repeating rows. WRITER410 and WRITER411 record the source cap/finalization interaction and native auto/minimum row height behavior. All 1,452 targeted Writer tests in 87 files pass. TypeScript, ESLint, formatting, dependencies, JSDoc, file size, source tree, hint identities, source provenance and Writer registry pass. The portable Writer line-number configuration is available through UI, ODF and Worker but lacks native RTF controls. Complete that connected behavior before the final capability review.
 
     RTF108 line numbering checkpoint: source RTF section resources now apply the shared mapper interval, distance and restart properties through SwXLineNumberingProperties. Initial and later section export consume the actual SwLineNumberInfo and paragraph/style count items. The pinned linenumbering.rtf verifies import and reopen. WRITER412 and WRITER413 record NOLINE erasure and buffered section ordering. Numeric per-paragraph starts require an item field outside the current participation-only paragraph item. All 1,372 targeted Writer tests in 83 files and 81 focused tests in eight files after splitting the source-sized line-number output pass. TypeScript, lint/format, dependencies, JSDoc, file size, source tree, hint identities, provenance and Writer registry pass. The current Writer paragraph fill is already persisted and displayed through native owners, but RTF CBPAT is unconnected. Complete the native paragraph fill path and final capability reconciliation.
+
+    RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live native drawing fill, including stylesheet inheritance and automatic palette admission. The original opaque brush output consumes native drawing fill and legacy paragraph items through the predeclared palette. HTML converts its deferred native brush to drawing fill through selected OtherSet insertion. The browser paints the existing native fill, and Worker and ODT retain it. The pinned fdo47764 fixture covers index zero. WRITER414 records ignored zero and transparent output. WRITER415 records the original CutImpl insertion join dropping first-paragraph drawing fill. All 2,076 targeted Writer cases in 124 files and 12 shared conversion cases pass. TypeScript, lint/format, dependencies, JSDoc, size, source tree, hint identities, provenance and Writer/shared registries pass. A remaining older RTF cell-border buffer stores a shared scalar border across lexical groups rather than the original tcBorders resources. Reconcile that native path and the final capability matrix.
 id_source: "generated"
 ---
 ## Summary
@@ -10432,6 +10480,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T23:37:11.647Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF109 native paragraph fill verified in 2,076 Writer and 12 shared focused tests. Original RTF cell-border resource path and final capability reconciliation remain.
+Attempts: 120
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:37:11.020Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -12378,3 +12456,5 @@ RTF106 legacy paragraph-frame checkpoint: original RTFFrame group properties, ge
 RTF107 row flow checkpoint: original row resources replace scalar header, split and height state. The native table manager's contiguous header cap and handler's all-header and sole-row split rules reach the connected table. MeasureHandler supplies typed row height and SizeType through SwXTextTableRow. Native cell vertical alignment retains NONE for explicit top. The actual pinned tblrepeat.rtf imports three repeating rows. WRITER410 and WRITER411 record the source cap/finalization interaction and native auto/minimum row height behavior. All 1,452 targeted Writer tests in 87 files pass. TypeScript, ESLint, formatting, dependencies, JSDoc, file size, source tree, hint identities, source provenance and Writer registry pass. The portable Writer line-number configuration is available through UI, ODF and Worker but lacks native RTF controls. Complete that connected behavior before the final capability review.
 
 RTF108 line numbering checkpoint: source RTF section resources now apply the shared mapper interval, distance and restart properties through SwXLineNumberingProperties. Initial and later section export consume the actual SwLineNumberInfo and paragraph/style count items. The pinned linenumbering.rtf verifies import and reopen. WRITER412 and WRITER413 record NOLINE erasure and buffered section ordering. Numeric per-paragraph starts require an item field outside the current participation-only paragraph item. All 1,372 targeted Writer tests in 83 files and 81 focused tests in eight files after splitting the source-sized line-number output pass. TypeScript, lint/format, dependencies, JSDoc, file size, source tree, hint identities, provenance and Writer registry pass. The current Writer paragraph fill is already persisted and displayed through native owners, but RTF CBPAT is unconnected. Complete the native paragraph fill path and final capability reconciliation.
+
+RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live native drawing fill, including stylesheet inheritance and automatic palette admission. The original opaque brush output consumes native drawing fill and legacy paragraph items through the predeclared palette. HTML converts its deferred native brush to drawing fill through selected OtherSet insertion. The browser paints the existing native fill, and Worker and ODT retain it. The pinned fdo47764 fixture covers index zero. WRITER414 records ignored zero and transparent output. WRITER415 records the original CutImpl insertion join dropping first-paragraph drawing fill. All 2,076 targeted Writer cases in 124 files and 12 shared conversion cases pass. TypeScript, lint/format, dependencies, JSDoc, size, source tree, hint identities, provenance and Writer/shared registries pass. A remaining older RTF cell-border buffer stores a shared scalar border across lexical groups rather than the original tcBorders resources. Reconcile that native path and the final capability matrix.

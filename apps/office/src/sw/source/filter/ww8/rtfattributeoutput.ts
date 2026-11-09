@@ -46,7 +46,11 @@ import {
 } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { COL_AUTO, type Color } from "../../../../tools/inc/color";
+import {
+  FormatBackground,
+  FormatParagraphFill,
+  TableBackgroundColor,
+} from "./rtfattributeoutput.background";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { TransColToIco } from "../../../../filter/source/msfilter/util";
@@ -82,22 +86,6 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
-
-/** Selects the original effective RTF cell background from table, row and cell. @param table - Native table format. @param row - Native row format. @param cell - Native cell format. @returns Original selected color. */
-export function TableBackgroundColor(
-  table: SwFrameFormat,
-  row: SwFrameFormat,
-  cell: SwFrameFormat,
-): Readonly<Color> {
-  const tableBrush = table.GetAttrSet().GetItem(RES_BACKGROUND) as SvxBrushItem | undefined,
-    rowBrush = row.GetAttrSet().GetItem(RES_BACKGROUND) as SvxBrushItem | undefined,
-    cellBrush = cell.GetAttrSet().GetItemIfSet(RES_BACKGROUND) as SvxBrushItem | undefined;
-  const cellColor = cellBrush?.GetColor();
-  if (cellColor && !cellColor.equals(COL_AUTO)) return cellColor;
-  const rowColor = rowBrush?.GetColor();
-  if (rowColor && !rowColor.equals(COL_AUTO)) return rowColor;
-  return tableBrush?.GetColor() ?? COL_AUTO;
-}
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput extends AttributeOutputBase {
@@ -425,7 +413,7 @@ export class RtfAttributeOutput extends AttributeOutputBase {
           ) => a.Which() - b.Which(),
         ))
         if (item.Which() !== RES_PARATR_NUMRULE) output += this.WriteParagraphItem(item, paragraph);
-      return output;
+      return output + FormatParagraphFill(set, this.colorIndex);
     } finally {
       this.exporter.m_pOutFormatNode = previousNode;
       this.exporter.m_pISet = previousSet;
@@ -466,6 +454,8 @@ export class RtfAttributeOutput extends AttributeOutputBase {
         const value = item as SvxULSpaceItem;
         return `\\sb${value.GetUpper()}\\sa${value.GetLower()}${value.GetContext() ? "\\contextualspace" : ""}`;
       }
+      case RES_BACKGROUND:
+        return FormatBackground(item as SvxBrushItem, this.colorIndex);
       case RES_LINENUMBER:
         return FormatLineNumbering(item as SfxBoolItem);
       case RES_KEEP:
@@ -563,7 +553,12 @@ export class RtfAttributeOutput extends AttributeOutputBase {
       ) +
       this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined) +
       FormatLineNumbering(items.GetItemIfSet(RES_LINENUMBER, true) as SfxBoolItem | undefined) +
-      this.WriteStyleFrameDirection(style)
+      this.WriteStyleFrameDirection(style) +
+      FormatBackground(
+        items.GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined,
+        this.colorIndex,
+      ) +
+      FormatParagraphFill(items, this.colorIndex)
     );
   }
 

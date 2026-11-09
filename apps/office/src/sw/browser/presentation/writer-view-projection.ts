@@ -1,7 +1,10 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
-import { RES_BACKGROUND } from "../../inc/hintids";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
-import { writerTextColorValue, writerHighlightColorValue } from "../../source/core/attr/swatrset";
+import {
+  writerTextColorValue,
+  writerHighlightColorValue,
+  writerParagraphBackgroundColor,
+} from "../../source/core/attr/swatrset";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../inc/hintids";
@@ -334,7 +337,7 @@ export class WriterViewProjection {
         const highlight = writerHighlightColorValue(
           node.GetAttr(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
         );
-        const background = writerHighlightColorValue(node.GetAttr(RES_BACKGROUND) as SvxBrushItem);
+        const background = writerParagraphBackgroundColor(node.GetSwAttrSet());
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({

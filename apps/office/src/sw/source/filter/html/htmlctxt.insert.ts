@@ -81,8 +81,7 @@ export function InsertAttrs(
       continue;
     }
     if (item.Which() === H.RES_BACKGROUND) {
-      // The current model owns paragraph RES_BACKGROUND but has no native
-      // RES_CHRATR_BACKGROUND. Do not substitute the distinct highlight item.
+      // The pending paragraph brush becomes drawing fill in SetAttr_.
       if (!charLevel) parser.InsertAttr(tab.pBrush, item, context);
       continue;
     }

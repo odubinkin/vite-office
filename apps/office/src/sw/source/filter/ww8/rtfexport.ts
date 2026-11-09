@@ -67,11 +67,8 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
-import {
-  GetCharacterPropertiesMode,
-  RtfAttributeOutput,
-  TableBackgroundColor,
-} from "./rtfattributeoutput";
+import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
+import { TableBackgroundColor, IndexParagraphBackgrounds } from "./rtfattributeoutput.background";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { SwWW8AttrIter } from "./wrtw8nds";
 import { MSWordStyles, type wwFont } from "./wrtw8sty";
@@ -215,6 +212,9 @@ export class RtfExport extends MSWordExportBase {
     this.m_pStyles = styleTable;
     const blocks = document.GetNodes().getBodyContent();
     this.textFlyFrames = CollectTextFlyFrames(document);
+    const indexBackground =
+      /** Registers original paragraph fill and brush colors in the document palette. @param color - Actual RGB. @returns Color index. */
+      (color: Readonly<Color>) => this.IndexColor(rtfColorKey(color));
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
       for (const run of this.GetTextRuns(node as SwTextNode)) {
@@ -225,10 +225,12 @@ export class RtfExport extends MSWordExportBase {
       }
       const paragraph = node as SwTextNode;
       this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
+      IndexParagraphBackgrounds(paragraph.GetSwAttrSet(), indexBackground);
     }
     for (const style of styleTable.GetStyles()) {
       if (!(style instanceof SwTextFormatColl)) continue;
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
+      IndexParagraphBackgrounds(style.GetAttrSet(), indexBackground);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);

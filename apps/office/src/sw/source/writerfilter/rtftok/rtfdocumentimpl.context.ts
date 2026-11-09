@@ -307,6 +307,7 @@ export const STYLE_PROPERTY_CONTROLS = new Set([
   "deflang",
   "adeflang",
   "kerning",
+  "cbpat",
   "box",
   "brdrt",
   "brdrl",

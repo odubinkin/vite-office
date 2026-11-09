@@ -40,6 +40,7 @@ import {
   Locale,
   cppu_detail_getUnoType_Locale as localeType,
 } from "../../../../udkapi/com/sun/star/lang/Locale";
+import { CellColorHandler } from "./CellColorHandler";
 import { ApplyFrameAttribute } from "./DomainMapper.frame";
 import { ThemeColorHandler } from "./ThemeColorHandler";
 
@@ -433,6 +434,32 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_CT_PrBase_shd: {
+        if (!context) break;
+        const handler = new CellColorHandler();
+        handler.setOutputFormat(CellColorHandler.Paragraph);
+        try {
+          resolveReturnedReference(modifier.getProps(), handler);
+          const properties = handler.getProperties();
+          try {
+            // The represented RTF palette supplies resolved RGB and an automatic sentinel.
+            for (const id of [P.PROP_FILL_STYLE, P.PROP_FILL_COLOR]) {
+              const value = properties.getProperty(id)?.[1];
+              if (!value) continue;
+              try {
+                context.Insert(id, value);
+              } finally {
+                value.dispose();
+              }
+            }
+          } finally {
+            properties.dispose();
+          }
+        } finally {
+          handler.dispose();
+        }
+        break;
+      }
       case N.LN_EG_SectPrContents_lnNumType: {
         resolveReturnedReference(modifier.getProps(), this);
         const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);

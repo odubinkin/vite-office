@@ -78,6 +78,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -104,6 +108,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
           "marker": "case NS_ooxml::LN_EG_SectPrContents_lnNumType:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_CT_PrBase_shd:"
         }
       ]
     },
@@ -139,7 +147,8 @@
       "The original parent-style WritingMode lookup and short extraction are retained before RTF insertion even though RTF excludes the following justification rewrite. The temporary returned Any is released at the original expression boundary. Derived-style inheritance and direct overrides use actual imported styles and items.",
       "S3HW1E HTML74: Original section text-direction sprm maps through the real section context to the signed-short PROP_WRITING_MODE with native mode fallback.",
       "Resolves original framePr attributes on the actual paragraph property context.",
-      "Resolves original line-number section attributes and publishes the shared document settings."
+      "Resolves original line-number section attributes and publishes the shared document settings.",
+      "Resolves paragraph shading into live drawing fill through the original CellColorHandler."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

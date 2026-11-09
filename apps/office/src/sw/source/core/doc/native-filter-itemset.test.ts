@@ -1,5 +1,8 @@
 /** @fileoverview Native no-undo boundary InsertItemSet profile used by HTML target snapshots, with actual sets, marks and automatic-style handles. */
 import { expect, it, assert } from "vitest";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { XATTR_FILLSTYLE } from "../../../../svx/inc/xdef";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import { SwDoc } from "./doc";
 import { SwPosition, SwPaM } from "../crsr/pam";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -120,4 +123,36 @@ it("rejects unsupported editing and word-interior profiles before applying a fil
       expect(node.GetpSwAttrSet()?.GetItemIfSet(RES_CHRATR_WEIGHT, false)).toBeUndefined();
     },
   );
+});
+
+it("applies a drawing fill set to the source range's partial first and final paragraphs", /** Uses actual point and mark ownership and the native whole-paragraph OtherSet path. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    doc.GetUndoManager().DoUndo(false);
+    const first = doc.paragraphs[0];
+    assert(first);
+    first.SetText("First");
+    const last = doc.nodes.MakeTextNode("Last");
+    const tail = doc.nodes.MakeTextNode("Tail");
+    const point = new SwPosition(last, 0);
+    const mark = new SwPosition(first, 3);
+    const range = new SwPaM(point, mark);
+    point.Dispose();
+    mark.Dispose();
+    const fill = new SfxItemSet(doc.GetAttrPool(), [[XATTR_FILLSTYLE, XATTR_FILLSTYLE]]);
+    const item = new XFillStyleItem(FillStyle.SOLID);
+    try {
+      fill.Put(item);
+      doc.GetDocumentContentOperationsManager().InsertItemSet(range, fill);
+      expect((first.GetAttr(XATTR_FILLSTYLE) as XFillStyleItem).GetValue()).toBe(FillStyle.SOLID);
+      expect((last.GetAttr(XATTR_FILLSTYLE) as XFillStyleItem).GetValue()).toBe(FillStyle.SOLID);
+      expect((tail.GetAttr(XATTR_FILLSTYLE) as XFillStyleItem).GetValue()).toBe(FillStyle.NONE);
+    } finally {
+      item.Dispose();
+      fill.Dispose();
+      range.Dispose();
+    }
+  } finally {
+    doc.Dispose();
+  }
 });

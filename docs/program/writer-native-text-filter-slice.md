@@ -2327,3 +2327,19 @@ different handling of NOLINE. WRITER413 records the source order
 for line-number controls and buffered section breaks. The current
 paragraph line-number item stores participation. Per-paragraph
 numeric starts require a separate native item contract.
+
+### RTF109 — Native paragraph shading
+
+CBPAT feeds the original paragraph shading resource through
+CellColorHandler into Writer drawing fill items. RTF export reads
+native paragraph and stylesheet drawing fill and the existing
+brush item, and registers the corresponding colors before
+writing the palette. The browser reads the same native fill
+and supports earlier paragraph brush items.
+
+The Markdown HTML path converts a pending paragraph brush to the
+original drawing fill set. The native selected paragraph attribute
+path applies the fill across actual text nodes. Drawing fill then
+uses the existing Worker and ODT storage paths. WRITER414 records
+the zero palette and transparency rules. WRITER415 records fill
+loss at the native HTML insertion join.

@@ -27,7 +27,7 @@ import {
   dispatchTableShading,
 } from "./rtfdispatchvalue.table";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
-import { COL_AUTO } from "../../../../tools/inc/color";
+import { COL_AUTO, COL_BLACK } from "../../../../tools/inc/color";
 
 /** Dispatches one lexical event under the current group state. @param token - Source event.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
 export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
@@ -580,6 +580,16 @@ export function DispatchBodyControl(
   if (name === "ltrpar" || name === "rtlpar") {
     state.runType = RunType.NONE;
     state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));
+    return;
+  }
+  if (name === "cbpat") {
+    if (parameter)
+      putNestedAttribute(
+        state.paragraphSprms,
+        N.LN_CT_PrBase_shd,
+        N.LN_CT_Shd_fill,
+        new RTFValue((this["colors"][parameter >>> 0] ?? COL_BLACK).toUInt32() | 0),
+      );
     return;
   }
   if (dispatchTableFlag(name, state)) return;

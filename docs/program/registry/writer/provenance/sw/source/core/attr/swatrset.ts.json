@@ -228,6 +228,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -302,6 +306,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
           "marker": "RES_FLY_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
+          "marker": "getSvxBrushItemFromSourceSet"
         }
       ]
     },
@@ -310,7 +318,8 @@
       "SwAttrPool",
       "SwAttrSet",
       "GetFrameDir",
-      "writerColorValue"
+      "writerColorValue",
+      "writerParagraphBackgroundColor"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwAttrPool, SwAttrSet, SwAttrPool::SwAttrPool, o3tl::convert and the bounded SwAttrPool, SwAttrSet contract remain intentionally omitted.",
@@ -376,7 +385,8 @@
       "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified.",
       "S3HW1E HTML73: Typed direction reads the actual Which item through the native effective-item owner.",
       "Projects actual native Color at the existing Writer primitive output boundary, retaining the original packed alpha and auto sentinel.",
-      "Registers concrete fly split, containment and wrap-influence items with native pool ownership."
+      "Registers concrete fly split, containment and wrap-influence items with native pool ownership.",
+      "Projects the original drawing fill and accepts an existing brush through the current paint boundary."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

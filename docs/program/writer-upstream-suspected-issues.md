@@ -3398,3 +3398,22 @@ section-break buffer. A section transition buffered by a preceding
 text node can therefore write the new line-number controls into
 the preceding section. Preserve the order of the stream and
 the buffered section controls.
+
+### WRITER414 — RTF cannot clear an earlier paragraph shading with CBPAT0
+
+The paragraph CBPAT value handler omits index zero, so a later
+CBPAT0 does not clear an earlier nonzero shading value in the
+same paragraph. The writer emits CBPAT only for a fully opaque
+brush, so an explicit transparent drawing fill has no equivalent
+output through this path. Preserve the original import and export
+admission rules.
+
+### WRITER415 — An HTML insertion join can drop the first paragraph's drawing fill
+
+The HTML filter converts pending paragraph brushes into drawing
+fill items. In insertion mode it joins the first imported text
+node with the destination prefix. CutImpl copies complete
+paragraph properties only through Writer's HINT_END, below
+the drawing fill range. The first paragraph can lose that fill
+at the join, including when Markdown invokes the HTML filter.
+Retain the source range and join behavior.

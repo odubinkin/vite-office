@@ -1,4 +1,8 @@
 /** @fileoverview Native SetAttr_ body-range/item application from swhtml.cxx over actual SwPaM and deferred HTMLAttr owners. */
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
+import { setSvxBrushItemAsFillAttributesToTargetSet } from "../../../../svx/source/unodraw/unobrushitemhelper";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwDoc } from "../../core/doc/doc";
@@ -102,6 +106,22 @@ export function SetAttr_(parser: SwHTMLSetAttrState, checkEnd: boolean, beforeTa
             const node = range.GetPoint().GetNode();
             if (!(node instanceof SwTextNode)) throw new Error("assert(bookmark content node)");
             marks.MakeMark(node, range.GetPoint().GetContentIndex(), item.GetValue());
+            continue;
+          }
+          if (which === H.RES_BACKGROUND) {
+            const brush = attr.GetItem();
+            if (!(brush instanceof SvxBrushItem)) throw new Error("assert(paragraph brush)");
+            const fill = new SfxItemSet(parser.m_xDoc.GetAttrPool(), [
+              [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+            ]);
+            try {
+              setSvxBrushItemAsFillAttributesToTargetSet(brush, fill);
+              parser.m_xDoc
+                .GetDocumentContentOperationsManager()
+                .InsertItemSet(range, fill, SetAttrMode.DONTREPLACE);
+            } finally {
+              fill.Dispose();
+            }
             continue;
           }
           if (

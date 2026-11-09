@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts#FormatBackground",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx#RtfAttributeOutput::FormatBackground",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts"
+      ],
+      "justification": "Writes represented opaque paragraph shading and selects native table and palette colors. Image and gradient paragraph backgrounds have no represented fill payload.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FormatBackground",
+        "FormatParagraphFill",
+        "TableBackgroundColor",
+        "IndexParagraphBackgrounds"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+      "upstreamSymbols": [
+        "RtfAttributeOutput::FormatBackground"
+      ]
+    }
+  }
+}
