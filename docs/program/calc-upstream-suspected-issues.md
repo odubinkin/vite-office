@@ -5195,3 +5195,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/icu-reference/source/common/brkeng.cpp`, `UnhandledEngine::handleCharacter`, and `vendor/icu-reference/source/common/uniset_props.cpp`, `UnicodeSet::applyIntPropertyValue`.
 - The code applies the whole script property to the existing set. The operation replaces its contents. Original ICU handles Latin after admitting `a`, then handles Common and stops handling Latin after admitting `1`. Passing an invalid code point clears the previous set.
 - Keep the single current script and the original empty-set behavior. The replay compares those transitions through the actual reject engine.
+
+### CALC-483 — The Unicode word implementation can inspect an end offset
+
+- Source `vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx`, `BreakIterator_Unicode::previousWord`, and `include/o3tl/string_view.hxx`, `iterateCodePoints`.
+- A direct call beyond the end can get the text length back from ICU's `preceding`. In the two whitespace-skipping modes, the method then passes that offset to the code-point reader, which requires an index strictly below the length.
+- Keep the original Unicode implementation and the separate bounds policy of the outer `BreakIteratorImpl::previousWord`, which handles such requests before delegation.

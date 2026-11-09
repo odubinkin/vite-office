@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
+    "upstreamPath": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+    "localSymbols": [
+      "BreakIterator_Unicode",
+      "loadICUBreakIterator",
+      "nextWord",
+      "previousWord",
+      "getWordBoundary"
+    ],
+    "upstreamSymbols": [
+      "BreakIterator_Unicode",
+      "loadICUBreakIterator",
+      "nextWord",
+      "previousWord",
+      "getWordBoundary"
+    ],
+    "preservedResponsibilities": [
+      "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences."
+    ],
+    "omittedResponsibilities": [
+      "Character, sentence and line methods and the enclosing UNO dispatcher remain outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
+          "marker": "class BreakIterator_Unicode"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "BreakIterator_Unicode"
+        }
+      ]
+    }
+  }
+}

@@ -168,6 +168,9 @@ export class RuleBasedBreakIterator implements RuleBasedBreakIteratorCacheOwner 
   private dictionaryCache: DictionaryCache | null = null;
   private fLanguageBreakEngines: LanguageBreakEngine[] | null = null;
   private fUnhandledBreakEngine: UnhandledEngine | null = null;
+  private requestLocale = Locale.getRoot();
+  private validLocale = Locale.getRoot();
+  private actualLocale = Locale.getRoot();
   fErrorCode = 0;
   fPosition = 0;
   fRuleStatusIndex = 0;
@@ -228,12 +231,18 @@ export class RuleBasedBreakIterator implements RuleBasedBreakIteratorCacheOwner 
     return this.fUnhandledBreakEngine;
   }
 
-  /** A rule-data constructor inherits the original three root locale defaults. @param type - Locale selector. @param status - Sticky status. @returns Locale ID. */
+  /** Publishes the original locale identities selected by the ICU resource constructor. @param requested - Original request. @param valid - Selected locale resource. @param actual - Actual rule locale. @returns Nothing. */
+  setLocaleIDs(requested: Locale, valid: Locale, actual: Locale): void {
+    this.requestLocale = new Locale(requested);
+    this.validLocale = new Locale(valid);
+    this.actualLocale = new Locale(actual);
+  }
+
+  /** Original three root defaults and locale lookup after resource construction. @param type - Locale selector. @param status - Sticky status. @returns Locale ID. */
   getLocaleID(type: number, status: [number]): string | null {
     if (U_FAILURE(status[0])) return null;
-    const root = Locale.getRoot();
-    if (type === ULocDataLocaleType.ULOC_REQUESTED_LOCALE) return root.getName();
-    return LocaleBased.getLocaleID(root, root, type, status);
+    if (type === ULocDataLocaleType.ULOC_REQUESTED_LOCALE) return this.requestLocale.getName();
+    return LocaleBased.getLocaleID(this.validLocale, this.actualLocale, type, status);
   }
 
   /** Original rule forward dispatch over this owner. @returns Boundary or DONE. */

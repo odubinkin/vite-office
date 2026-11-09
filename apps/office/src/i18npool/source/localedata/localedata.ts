@@ -13,6 +13,7 @@ import {
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import breakRules from "./data/break-rules.json" with { type: "json" };
 import calendars from "./data/calendars.json" with { type: "json" };
 import currencies from "./data/currencies.json" with { type: "json" };
 import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
@@ -26,6 +27,9 @@ import numeric from "./data/numeric-separators.json" with { type: "json" };
 import reservedWords from "./data/reserved-words.json" with { type: "json" };
 import timeFields from "./data/time-fields.json" with { type: "json" };
 import transliterations from "./data/transliterations.json" with { type: "json" };
+/** Original ordered LC_MISC rules after resolving generator refs. */
+const breakRuleResources = new Map<string, readonly string[]>(Object.entries(breakRules));
+
 /** Original Sequence<OUString> value specialization. */
 const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
 /** Original compiled Sequence<FormatElement> specialization over the real generated compound type. */
@@ -383,11 +387,10 @@ export function getLocaleThousandSeparator(locale: LocaleConstReference): string
   );
 }
 
-/** Original getTransliterations field resource binding with native fallback and real Sequence string values;not a whole LocaleData service facade. @param locale - Prepared native locale. @returns Owned ordered module-name sequence. */
-export function getLocaleTransliterations(
-  locale: LocaleConstReference,
+/** Builds an owned source Sequence<OUString> from the original generated string array. @param names - Actual generated values. @returns Owned sequence. */
+function makeStringSequence(
+  names: readonly string[],
 ): Sequence<ReturnType<OUString["getDataAddress"]>> {
-  const names = getLocaleDataField(locale, transliterationResources);
   const values: OUString[] = [],
     cells = new Map<number, ReturnType<OUString["getDataAddress"]>>();
   try {
@@ -400,4 +403,18 @@ export function getLocaleTransliterations(
   } finally {
     for (const value of values) value.dispose();
   }
+}
+
+/** Original getBreakIteratorRules through the registered locale and ref fallback. @param locale - Actual requested locale. @returns Owned ordered rule names. */
+export function getBreakIteratorRules(
+  locale: LocaleConstReference,
+): Sequence<ReturnType<OUString["getDataAddress"]>> {
+  return makeStringSequence(getLocaleDataField(locale, breakRuleResources));
+}
+
+/** Original getTransliterations field resource binding with native fallback and real Sequence string values. @param locale - Prepared native locale. @returns Owned ordered module-name sequence. */
+export function getLocaleTransliterations(
+  locale: LocaleConstReference,
+): Sequence<ReturnType<OUString["getDataAddress"]>> {
+  return makeStringSequence(getLocaleDataField(locale, transliterationResources));
 }

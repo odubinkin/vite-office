@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/brkiter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/brkiter.ts",
+        "vendor/icu-reference/source/common/brkiter.cpp",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native.test.ts",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json"
+      ],
+      "justification": "Original ICU stock word construction opens the requested brkitr locale without default-locale fallback, follows the boundaries word resource, opens the original binary rules and retains requested/valid/actual metadata.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createWordInstance"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/brkiter.cpp",
+      "upstreamSymbols": [
+        "createWordInstance",
+        "buildInstance"
+      ]
+    }
+  }
+}

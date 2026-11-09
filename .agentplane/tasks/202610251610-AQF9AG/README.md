@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 228
+revision: 231
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:48:16.778Z"
+  updated_at: "2026-11-09T19:02:58.934Z"
   updated_by: "CODER"
-  note: "Concrete ICU RuleBasedBreakIterator factory validated on 88 original public traversal sequences, 14 shared factory identities, native model/reject behavior, 152 focused shared tests and the Chromium CSV workflow. Enclosing LibreOffice word and production formatter services and multiline CSV import remain in scope."
-  attempts: 59
+  note: "Original LibreOffice Unicode word methods, native locale-rule cache and ICU stock rule loading verified with 2,020 word queries, pinned property digest, 103 focused shared tests, 197 CSV tests and the browser workflow. Enclosing production title and formatter services and multiline CSV import remain in scope."
+  attempts: 60
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1272,8 +1275,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:02:58.934Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original LibreOffice Unicode word methods, native locale-rule cache and ICU stock rule loading verified with 2,020 word queries, pinned property digest, 103 focused shared tests, 197 CSV tests and the browser workflow. Enclosing production title and formatter services and multiline CSV import remain in scope."
+  -
+    type: "status"
+    at: "2026-11-09T19:03:13.266Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:49:16.574Z"
+doc_updated_at: "2026-11-09T19:03:13.266Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3063,6 +3079,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:02:58.934Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original LibreOffice Unicode word methods, native locale-rule cache and ICU stock rule loading verified with 2,020 word queries, pinned property digest, 103 focused shared tests, 197 CSV tests and the browser workflow. Enclosing production title and formatter services and multiline CSV import remain in scope.
+    Attempts: 60
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:02:58.295Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4510,6 +4556,20 @@ sections:
     - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
       Result: pass. Evidence: 4,455 JSDoc-checked sources, 2,000 provenance records, 1,787 mapped entries, 1,999 boundary sources, 10,863 relative imports, 236 allowed edges, and 464 Calc commands.
     - This is a checkpoint in the existing AgentPlane task. No full suite was due. The enclosing LibreOffice word and title services, production formatter integration, and multiline CSV import remain pending.
+
+    ### Original LibreOffice Unicode word service and stock ICU rule loading
+
+    - Added the original BreakIterator_Unicode word operations with the native inherited script owner, word slots, cache keys and shared retained UText. Selection follows locale overrides, language-specific and generic OpenOffice rules, then original stock ICU word loading through the brkitr boundaries resource. The latter retains requested, valid and actual locale identity. LanguageTagIcu uses the original ISO versus full BCP47 path.
+    - The LC_MISC generator walks the registered LibreOffice service table and native ref chains. It emits all five original fields for 284 registered locales and the runtime returns their owned Sequence<OUString>. Original UWhiteSpace, Java-style whitespace and alphanumeric predicates use the pinned ICU character data.
+    - CALC-483 records the direct Unicode previousWord precondition at the end offset. The native witness compiles the three original C++ word bodies with native ICU and a counted UTF-16 adapter. The fixture independently supplies the selected rule and keeps requests within the original direct-method preconditions. No word algorithm is substituted in the witness.
+    - Commands: python3 scripts/generate-locale-break-rules.py --check; node scripts/lo-word-break-native-probe.mjs --check.
+      Result: pass. Evidence: 68 Unicode word sequences and 2,020 boundary operations across four WordType modes, actual ICU stock locale identities including POSIX, and the ICU property digest over all 1,114,112 code point values.
+    - Command: npm run test:shared -- src/i18npool/source/breakiterator src/i18npool/source/localedata/native-transliteration-catalog.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts --maxWorkers=1.
+      Result: pass. Evidence: 103 tests in four files, including locale override/ref behavior, source text rebinding and unchanged shared locale sequences.
+    - Result: 197 focused Calc CSV tests, production Vite build and Chromium CSV import, ODS save and CSV export pass.
+    - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 4,461 JSDoc-checked sources, 2,004 provenance entries, 1,791 mapped entries, 2,003 module boundary sources, 236 allowed cross-module edges and 464 Calc commands.
+    - Same open AgentPlane task and below the full-suite cadence. The enclosing LibreOffice locale-specific dispatcher, title and production formatter wiring, and multiline CSV import remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -6308,6 +6368,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:02:58.934Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original LibreOffice Unicode word methods, native locale-rule cache and ICU stock rule loading verified with 2,020 word queries, pinned property digest, 103 focused shared tests, 197 CSV tests and the browser workflow. Enclosing production title and formatter services and multiline CSV import remain in scope.
+Attempts: 60
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:02:58.295Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7759,3 +7849,17 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
   Result: pass. Evidence: 4,455 JSDoc-checked sources, 2,000 provenance records, 1,787 mapped entries, 1,999 boundary sources, 10,863 relative imports, 236 allowed edges, and 464 Calc commands.
 - This is a checkpoint in the existing AgentPlane task. No full suite was due. The enclosing LibreOffice word and title services, production formatter integration, and multiline CSV import remain pending.
+
+### Original LibreOffice Unicode word service and stock ICU rule loading
+
+- Added the original BreakIterator_Unicode word operations with the native inherited script owner, word slots, cache keys and shared retained UText. Selection follows locale overrides, language-specific and generic OpenOffice rules, then original stock ICU word loading through the brkitr boundaries resource. The latter retains requested, valid and actual locale identity. LanguageTagIcu uses the original ISO versus full BCP47 path.
+- The LC_MISC generator walks the registered LibreOffice service table and native ref chains. It emits all five original fields for 284 registered locales and the runtime returns their owned Sequence<OUString>. Original UWhiteSpace, Java-style whitespace and alphanumeric predicates use the pinned ICU character data.
+- CALC-483 records the direct Unicode previousWord precondition at the end offset. The native witness compiles the three original C++ word bodies with native ICU and a counted UTF-16 adapter. The fixture independently supplies the selected rule and keeps requests within the original direct-method preconditions. No word algorithm is substituted in the witness.
+- Commands: python3 scripts/generate-locale-break-rules.py --check; node scripts/lo-word-break-native-probe.mjs --check.
+  Result: pass. Evidence: 68 Unicode word sequences and 2,020 boundary operations across four WordType modes, actual ICU stock locale identities including POSIX, and the ICU property digest over all 1,114,112 code point values.
+- Command: npm run test:shared -- src/i18npool/source/breakiterator src/i18npool/source/localedata/native-transliteration-catalog.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts --maxWorkers=1.
+  Result: pass. Evidence: 103 tests in four files, including locale override/ref behavior, source text rebinding and unchanged shared locale sequences.
+- Result: 197 focused Calc CSV tests, production Vite build and Chromium CSV import, ODS save and CSV export pass.
+- Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 4,461 JSDoc-checked sources, 2,004 provenance entries, 1,791 mapped entries, 2,003 module boundary sources, 236 allowed cross-module edges and 464 Calc commands.
+- Same open AgentPlane task and below the full-suite cadence. The enclosing LibreOffice locale-specific dispatcher, title and production formatter wiring, and multiline CSV import remain pending.

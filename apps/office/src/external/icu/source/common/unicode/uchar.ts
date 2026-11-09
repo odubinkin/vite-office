@@ -1,6 +1,6 @@
 /** @fileoverview Original ICU78.3 public scalar casing declarations retain their implementation owner in ucase.cpp. */
 export { u_tolower, u_toupper, u_totitle, u_foldCase } from "../ucase";
-export { u_charDigitValue, u_digit } from "../uchar";
+export { u_charDigitValue, u_digit, u_isalnum, u_isUWhiteSpace, u_isWhitespace } from "../uchar";
 
 /** Original ICU78.3 Unicode block identities. */
 export enum UBlockCode {

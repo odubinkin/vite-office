@@ -4498,3 +4498,19 @@ including dictionary-marked Thai, Lao, Burmese, Khmer and CJK input,
 mixed scripts, and cache refill. It also compares factory engine identity
 and the LSTM model lookup statuses. The enclosing LibreOffice word and
 formatter services remain pending.
+
+### Original LibreOffice Unicode word boundaries
+
+The Unicode word implementation now selects LibreOffice rules through the
+original locale, language, and rule-only cache keys. The locale table
+retains all five LC_MISC values for each of the 284 registered locales and
+returns the original owned string sequence. The stock ICU branch loads
+the original `brkitr` word rule and preserves requested, valid and actual
+locale identities.
+
+The original next, previous and directional boundary method bodies were
+compiled against native ICU with the source-selected rules and counted
+UTF-16 input. The replay covers 2,020 calls over 68 sequences and checks
+the ICU whitespace and alphanumeric data over all code points. CALC-483
+records the lower-level previous-word offset contract. The enclosing
+LibreOffice locale dispatcher and production title service remain pending.

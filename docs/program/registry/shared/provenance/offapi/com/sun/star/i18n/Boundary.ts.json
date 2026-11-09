@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
+    "upstreamPath": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+    "localSymbols": [
+      "Boundary"
+    ],
+    "upstreamSymbols": [
+      "Boundary",
+      "startPos",
+      "endPos"
+    ],
+    "preservedResponsibilities": [
+      "Original Boundary compound carries the same two signed UTF-16 offsets for word service results."
+    ],
+    "omittedResponsibilities": [
+      "Full compound typelib construction is outside the consumed direct word query."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
+          "marker": "interface Boundary"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+          "marker": "long startPos"
+        }
+      ]
+    }
+  }
+}

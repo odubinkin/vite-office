@@ -10,7 +10,7 @@ import {
 import { UTRIE2_GET16 } from "./utrie2.h";
 import { ucptrie_get } from "./ucptrie";
 import { UScriptCode } from "./unicode/uscript";
-import type { UBlockCode } from "./unicode/uchar";
+import { UCharCategory as Cat, type UBlockCode } from "./unicode/uchar";
 /** Original property-vector lookup;nonnegative column is a native precondition. @param c - UChar32. @param column - Property column. @returns Unsigned properties. */
 export function u_getUnicodeProperties(c: number, column: number): number {
   if (column >= propsVectorsColumns) return 0;
@@ -63,4 +63,31 @@ export function u_digit(ch: number, radix: number): number {
     }
   }
   return value < radix ? value : -1;
+}
+
+/** Original Unicode White_Space binary property. @param c - Code point. @returns Membership. */
+export function u_isUWhiteSpace(c: number): boolean {
+  return (u_getUnicodeProperties(c, 1) & 1) !== 0;
+}
+
+/** Original Java-style whitespace with control admission and nonbreaking exclusions. @param c - Code point. @returns Membership. */
+export function u_isWhitespace(c: number): boolean {
+  const category = u_charType(c);
+  return (
+    (category >= Cat.U_SPACE_SEPARATOR &&
+      category <= Cat.U_PARAGRAPH_SEPARATOR &&
+      c !== 0xa0 &&
+      c !== 0x2007 &&
+      c !== 0x202f) ||
+    (c >= 9 && c <= 0x1f && (c <= 0x0d || c >= 0x1c))
+  );
+}
+
+/** Original letter-or-decimal-digit classification. @param c - Code point. @returns Membership. */
+export function u_isalnum(c: number): boolean {
+  const category = u_charType(c);
+  return (
+    (category >= Cat.U_UPPERCASE_LETTER && category <= Cat.U_OTHER_LETTER) ||
+    category === Cat.U_DECIMAL_DIGIT_NUMBER
+  );
 }
