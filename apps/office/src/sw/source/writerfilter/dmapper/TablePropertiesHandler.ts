@@ -2,6 +2,7 @@
 import { resolveReturnedReference, type Sprm } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { CellColorHandler } from "./CellColorHandler";
+import { TDefTableHandler } from "./TDefTableHandler";
 import { MeasureHandler } from "./MeasureHandler";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -29,6 +30,19 @@ export class TablePropertiesHandler {
   /** Resolves the original native cell brush and inserts its actual property map. @param modifier - Table resource sprm. @returns Whether the property was consumed. */
   sprm(modifier: Sprm): boolean {
     const id = modifier.getId();
+    if (id === N.LN_CT_TcPrBase_tcBorders) {
+      const handler = new TDefTableHandler();
+      const properties = new TablePropertyMap();
+      try {
+        resolveReturnedReference(modifier.getProps(), handler);
+        handler.fillCellProperties(properties);
+        this.m_pTableManager?.cellProps(properties);
+      } finally {
+        properties.dispose();
+        handler.dispose();
+      }
+      return true;
+    }
     if (id === N.LN_CT_TrPrBase_trHeight) {
       const measure = new MeasureHandler();
       const properties = new TablePropertyMap();

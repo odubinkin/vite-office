@@ -769,3 +769,15 @@ it("resolves TRGAPH, row defaults, cell overrides and explicit table indent thro
   expect(b?.GetBox().GetDistance(SvxBoxItemLine.LEFT)).toBe(50);
   expect(b?.GetBox().GetDistance(SvxBoxItemLine.RIGHT)).toBe(90);
 });
+
+it("keeps the first duplicate cell edge and restores border destination ownership at group pop", /** Uses original append order and source lexical group state. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clbrdrl\brdrs\brdrw20\clbrdrl\brdrs\brdrw40` +
+      String.raw`{\clbrdrr\brdrs\brdrw60}\cellx1200\clbrdrt\brdrs\cellx2400\intbl One\cell Two\cell\row`,
+  );
+  const [first, second] = table(document).GetTabLines()[0]?.GetTabBoxes() ?? [];
+  assert(first && second);
+  expect(first.GetFrameFormat().GetBox().GetLeft()?.GetWidth()).toBe(20);
+  expect(first.GetFrameFormat().GetBox().GetRight()).toBeUndefined();
+  expect(second.GetFrameFormat().GetBox().GetTop()?.GetWidth()).toBe(15);
+});

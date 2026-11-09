@@ -25,7 +25,8 @@
       "Does not convert positioned rows in shape text into floating tables, following the original shape guard.",
       "Uses the original positive-column correction for the actual cell size and merge separators.",
       "Emits the original default width and indent measures and uses native table and cell margin properties.",
-      "Applies original row and table flow through the connected table handler and native UNO properties."
+      "Applies original row and table flow through the connected table handler and native UNO properties.",
+      "Uses staged native cell properties for margins and retains typed borders through merge and table conversion."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -85,6 +86,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "tdf#88496/tdf#138020"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "lcl_adjustBorderDistance"
         }
       ]
     },

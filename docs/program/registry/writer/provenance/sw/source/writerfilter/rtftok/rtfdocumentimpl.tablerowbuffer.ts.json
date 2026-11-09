@@ -21,7 +21,8 @@
       "Binds rows to the active text append context and releases actual shape and table properties recursively.",
       "Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell.",
       "Restores native default cell resource properties at each CELLX and clears them on ROW.",
-      "Emits native row height, split and header properties and cell vertical alignment into original row snapshots."
+      "Emits native row height, split and header properties and cell vertical alignment into original row snapshots.",
+      "Uses original cell resource snapshots for border definitions and the grid-after cell."
     ],
     "omittedResponsibilities": [
       "Malformed row-definition restoration, full resource buffer polymorphism and the desktop renderer remain unverified. The preexisting browser nesting bound also applies to explicit ITAP depth."
@@ -73,6 +74,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "case RTFKeyword::TRHDR:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "aBorderIds"
         }
       ]
     },

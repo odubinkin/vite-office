@@ -18,7 +18,12 @@ import {
 } from "./rtfdocumentimpl.context";
 import { DispatchFrameControl, RTFFrame } from "./rtfdocumentimpl.frame";
 import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
-import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
+import {
+  createRtfBorder,
+  dispatchRtfBorder,
+  DispatchCellBorderValue,
+  RTF_BORDER_STYLES,
+} from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
 import {
   dispatchFloatingTableValue,
@@ -45,6 +50,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     this["states"].push({
       destination: previous?.destination ?? "body",
       frame: new RTFFrame(previous?.frame),
+      cellBorder: previous?.cellBorder ?? false,
       shape: previous?.shape,
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
@@ -634,6 +640,7 @@ export function DispatchBodyControl(
                 ? SvxBoxItemLine.BOTTOM
                 : SvxBoxItemLine.RIGHT;
     state.paragraphBorder = edge;
+    state.cellBorder = false;
     const borders = new Map(state.paragraph.borders);
     if (edge === "box")
       for (const side of [
@@ -670,8 +677,8 @@ export function DispatchBodyControl(
         borders.set(edge, border);
       }
       state.paragraph = { ...state.paragraph, borders };
-    } else if (this["tableBuffer"].activeBorder !== undefined)
-      dispatchRtfBorder(this["tableBuffer"].activeBorder, name, parameter);
+    } else if (state.cellBorder)
+      DispatchCellBorderValue(state.tableCellSprms, name, parameter ?? 0, this["colors"]);
     else {
       // putBorderProperty with border state NONE clears all paragraph borders.
       const borders = new Map(state.paragraph.borders);

@@ -2343,3 +2343,18 @@ path applies the fill across actual text nodes. Drawing fill then
 uses the existing Worker and ODT storage paths. WRITER414 records
 the zero palette and transparency rules. WRITER415 records fill
 loss at the native HTML insertion join.
+
+### RTF110 — Native table cell border resources
+
+Cell border flags append the original tcBorders resources to each
+RTF parser group's cell properties. TDefTableHandler resolves those
+resources into native BorderLine2 values. The Writer cell property
+setter consumes the complete border value. Repeated edges and
+inherited row definitions retain source modifier order. Grid-after
+uses the same native border resources for its zero-width sides.
+
+The table handler uses the first resolved cell border widths for
+spacing and table indent. Positioned tables use the original
+left spacing and half the first cell's left border before
+adjusting the cell contents. WRITER416 and WRITER417 record the
+original repeated-edge and row-border behavior.

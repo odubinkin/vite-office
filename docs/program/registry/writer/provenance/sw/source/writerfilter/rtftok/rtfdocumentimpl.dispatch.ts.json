@@ -49,7 +49,8 @@
       "Retains lexical row width-after state and allows a row without a repeated definition to keep the original table open.",
       "Replays native width and margin properties and restores the source cell defaults at the nested property boundary.",
       "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD.",
-      "Sends the original palette shading resource and retains the zero-index exclusion."
+      "Sends the original palette shading resource and retains the zero-index exclusion.",
+      "Applies border properties to the original lexical destination and current cell properties."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -277,6 +278,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::CBPAT:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFBorderState::CELL"
         }
       ]
     },

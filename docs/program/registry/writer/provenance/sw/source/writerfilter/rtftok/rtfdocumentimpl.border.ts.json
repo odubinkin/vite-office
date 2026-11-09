@@ -7,19 +7,23 @@
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
     "localSymbols": [
-      "RtfCellBorder",
       "RTF_BORDER_STYLES",
       "createRtfBorder",
       "dispatchRtfBorder",
       "createRtfBorderLine",
-      "getRtfBorderDistance"
+      "getRtfBorderDistance",
+      "RtfParagraphBorder",
+      "DispatchCellBorder",
+      "DispatchCellBorderValue",
+      "ClearCellBorders"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::dispatchValue"
     ],
     "preservedResponsibilities": [
       "Maps represented RTF border style controls, eighth-point width admission, whole-point distances, BorderHandler defaults and native BorderLine2/Box conversion; unknown border flags do not change existing styles.",
-      "Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior."
+      "Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior.",
+      "Emits original ordered cell border modifiers and shares the native border token and metric conversion."
     ],
     "omittedResponsibilities": [
       "Native frame shadows, arbitrary OOXML art borders and compiled-upstream differential behavior are outside this value fragment."
@@ -63,6 +67,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx",
           "marker": "no auto color for borders"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "void putBorderProperty"
         }
       ]
     },

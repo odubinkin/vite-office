@@ -3417,3 +3417,20 @@ paragraph properties only through Writer's HINT_END, below
 the drawing fill range. The first paragraph can lose that fill
 at the join, including when Markdown invokes the HTML filter.
 Retain the source range and join behavior.
+
+### WRITER416 — RTF cell borders retain the first repeated edge
+
+The cell border flag appends each edge as a separate modifier.
+TDefTableHandler collects those modifiers in order and inserts the
+first result for each side. A later definition of the same side
+does not replace the earlier one. The handler initializes width
+to zero. ConvertBorderWidthFromWord interprets that value as the
+0.75 pt default when a single line is specified without a size.
+Preserve the source append, selection and conversion order.
+
+### WRITER417 — RTF row border words have no corresponding flag handler
+
+The pinned tokenizer recognizes TRBRDRT, TRBRDRL, TRBRDRB,
+TRBRDRR, TRBRDRH and TRBRDRV. The reader has no row-border
+dispatch case for these tokens. Cell border flags do reach the
+mapper. Preserve the reader's admitted control set.

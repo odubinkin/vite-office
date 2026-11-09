@@ -14,11 +14,11 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import type { RtfDocumentImpl } from "./rtfdocumentimpl";
 import type { TableRowBuffer } from "./rtfdocumentimpl.tablerowbuffer";
-import { RTF_BORDER_STYLES, type RtfCellBorder } from "./rtfdocumentimpl.border";
-export type { RtfCellBorder } from "./rtfdocumentimpl.border";
+import { RTF_BORDER_STYLES, type RtfParagraphBorder } from "./rtfdocumentimpl.border";
+export type { RtfParagraphBorder } from "./rtfdocumentimpl.border";
 /** Paragraph properties represented by the current Writer model. */
 export interface RtfParagraphState {
-  borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfCellBorder>>;
+  borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfParagraphBorder>>;
   alignment: WriterParagraphAlignment;
   distributeLastLine: boolean;
   before: number;
@@ -95,6 +95,7 @@ export class RTFColorTableEntry {
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
   frame: RTFFrame;
+  cellBorder: boolean;
   shape: RTFShape | undefined;
   shapeRoot?: boolean;
   shapeTextRoot?: boolean;
@@ -214,7 +215,6 @@ export interface RtfTableRowDefinition {
   readonly cellSprms: readonly RTFSprms[];
   readonly boundaries: readonly number[];
   readonly left: number;
-  readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
 }
 /** One replayable row with its definition and ordered cell content. */
 export interface RtfTableRow extends RtfTableRowDefinition {

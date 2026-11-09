@@ -1,9 +1,12 @@
 /** @fileoverview Original mapper merge collection and native cell border reconciliation. */
 import { SequenceAsHashMap } from "../../../../comphelper/source/misc/sequenceashashmap";
-import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import { SwXText } from "../../core/unocore/unotext";
 import type { TablePositionHandler } from "./TablePositionHandler";
-import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import type { SwTable, SwTableLine } from "../../core/table/swtable";
 import { SwXTextTableCursor, SwXTextTableRow } from "../../core/unocore/unotbl";
@@ -59,8 +62,24 @@ export function FinalizeTableFlowProperties(table: SwTable, properties: TablePro
   }
 }
 
-/** Applies the source end-of-table width and relative-width properties through the existing UNO table owner. @param table - Actual converted table. @param properties - Accumulated native table properties. @returns Nothing. */
-export function ApplyTableMeasures(table: SwTable, properties: TablePropertyMap): void {
+/** Reads the original line width directly from the resolved first-cell property. @param cell - Source cell property map. @param id - Original border property. @returns Width in mm100. */
+function CellBorderWidth(cell: TablePropertyMap | undefined, id: P): number {
+  const property = cell?.getProperty(id)?.[1];
+  if (!property) return 0;
+  try {
+    const line = new BorderLine2();
+    return property.extract(line, cppu_detail_getUnoType_BorderLine2) ? line.LineWidth : 0;
+  } finally {
+    property.dispose();
+  }
+}
+
+/** Applies the source end-of-table width and relative-width properties through the existing UNO table owner. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @returns Source horizontal correction for floating table placement in mm100. */
+export function ApplyTableMeasures(
+  table: SwTable,
+  properties: TablePropertyMap,
+  firstCell?: TablePropertyMap,
+): number {
   const width: [number] = [0],
     type: [number] = [SizeType.FIX],
     margin: [number] = [0];
@@ -95,12 +114,9 @@ export function ApplyTableMeasures(table: SwTable, properties: TablePropertyMap)
     orientation.dispose();
   }
   const hasMargin = properties.getValue(T.LEFT_MARGIN, margin);
-  const first = table.GetTabLines()[0]?.GetTabBoxes()[0];
-  const border = first?.GetFrameFormat().GetBox().GetLeft();
   const nested = table.GetTableNode().FindTableBoxStartNode() !== null;
-  const adjusted =
-    (nested ? Math.max(0, margin[0]) : margin[0]) +
-    Math.trunc(convertTwipToMm100_Limited(border?.GetWidth() ?? 0) / 2);
+  const halfBorder = Math.trunc(CellBorderWidth(firstCell, P.PROP_LEFT_BORDER) / 2);
+  const adjusted = (nested ? Math.max(0, margin[0]) : margin[0]) + halfBorder;
   if (hasMargin || adjusted) {
     const left = new Any([adjusted], "sal_Int32");
     try {
@@ -109,11 +125,17 @@ export function ApplyTableMeasures(table: SwTable, properties: TablePropertyMap)
       left.dispose();
     }
   }
+  const cellMargin: [number] = [0];
+  properties.getValue(T.CELL_MAR_LEFT, cellMargin);
+  return cellMargin[0] + (nested ? 0 : halfBorder);
 }
 
-/** Applies original default cell margins before the cell-specific UNO overrides. @param table - Actual converted table. @param properties - Accumulated native table properties. @returns Nothing. */
-export function ApplyTableMargins(table: SwTable, properties: TablePropertyMap): void {
-  const first = table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFrameFormat().GetBox();
+/** Applies original default cell margins before the cell-specific UNO overrides. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @returns Nothing. */
+export function ApplyTableMargins(
+  table: SwTable,
+  properties: TablePropertyMap,
+  firstCell?: TablePropertyMap,
+): void {
   const left: [number] = [0],
     right: [number] = [0],
     top: [number] = [0],
@@ -122,8 +144,8 @@ export function ApplyTableMargins(table: SwTable, properties: TablePropertyMap):
   properties.getValue(T.CELL_MAR_RIGHT, right);
   properties.getValue(T.CELL_MAR_TOP, top);
   properties.getValue(T.CELL_MAR_BOTTOM, bottom);
-  const halfLeft = Math.trunc(convertTwipToMm100_Limited(first?.GetLeft()?.GetWidth() ?? 0) / 2);
-  const halfRight = Math.trunc(convertTwipToMm100_Limited(first?.GetRight()?.GetWidth() ?? 0) / 2);
+  const halfLeft = Math.trunc(CellBorderWidth(firstCell, P.PROP_LEFT_BORDER) / 2);
+  const halfRight = Math.trunc(CellBorderWidth(firstCell, P.PROP_RIGHT_BORDER) / 2);
   const actualLeft = Math.max(halfLeft, left[0]);
   const actualRight = Math.max(actualLeft + halfRight, left[0] + right[0]) - actualLeft;
   const margins = [
@@ -251,26 +273,21 @@ export function ApplyVerticalMergeBorders(
   }
 }
 
-/** Applies the original table positioning sequence through the connected Writer XText owner. @param table - Actual converted native table. @param position - Original row position handler. @returns Nothing. */
-export function ConvertFloatingRtfTable(table: SwTable, position: TablePositionHandler): void {
+/** Applies the original table positioning sequence through the connected Writer XText owner. @param table - Actual converted native table. @param position - Original row position handler. @param horizontalShift - Native unadjusted cell spacing and outside border shift in mm100. @returns Nothing. */
+export function ConvertFloatingRtfTable(
+  table: SwTable,
+  position: TablePositionHandler,
+  horizontalShift: number,
+): void {
   const node = table.GetTableNode();
   const text = new SwXText(node.GetDoc(), node.StartOfSectionNode());
   const original = position.getTablePosition();
   const values = new SequenceAsHashMap(original, "PropertyValue");
   const key = unicode("HoriOrientPosition");
   try {
-    const tableBox = table.GetFrameFormat().GetBox();
-    const first = table.GetTabLines()[0]?.GetTabBoxes()[0];
-    const edge = SvxBoxItemLine.LEFT;
-    const border =
-      first === undefined ? tableBox.GetLine(edge) : first.GetFrameFormat().GetBox().GetLine(edge);
-    const leftDistance = convertTwipToMm100_Limited(tableBox.GetDistance(edge));
-    const halfBorder = node.FindTableBoxStartNode()
-      ? 0
-      : Math.trunc(SvxBoxItem.SvxLineToLine(border, true).LineWidth / 2);
     const x = values.operatorIndex(key);
     const offset = scalar(x, "sal_Int32") as number;
-    x.insert([offset - leftDistance - halfBorder], "sal_Int32");
+    x.insert([offset - horizontalShift], "sal_Int32");
     const properties = values.getAsConstPropertyValueList();
     try {
       text.convertToSwTextFrame(table, properties);

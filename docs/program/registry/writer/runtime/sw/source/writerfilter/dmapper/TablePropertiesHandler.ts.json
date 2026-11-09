@@ -21,9 +21,10 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TblPrBase_tblCellMar",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TrPrBase_trHeight"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TrPrBase_trHeight",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#case NS_ooxml::LN_CT_TcPrBase_tcBorders"
       ],
-      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager. RTF105. Reuses the original CellMarginHandler for table and cell margin properties and maps table justification. RTF107. Resolves the original row height and split and cell vertical alignment into typed mapper properties.",
+      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager. RTF105. Reuses the original CellMarginHandler for table and cell margin properties and maps table justification. RTF107. Resolves the original row height and split and cell vertical alignment into typed mapper properties. RTF110. Resolves original tcBorders modifiers through TDefTableHandler.",
       "knownViolations": [],
       "localSymbols": [
         "TablePropertiesHandler",

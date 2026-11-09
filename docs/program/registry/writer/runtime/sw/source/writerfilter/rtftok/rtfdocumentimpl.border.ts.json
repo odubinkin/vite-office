@@ -20,17 +20,21 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx#RTFKeyword::BRDRW",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#void putBorderProperty"
       ],
-      "justification": "Source-shaped RTF border value admission and native box metric conversion; complete filter parity remains unverified. RTF96. Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior.",
+      "justification": "Source-shaped RTF border value admission and native box metric conversion; complete filter parity remains unverified. RTF96. Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior. RTF110. Emits original ordered cell border modifiers and shares the native border token and metric conversion.",
       "knownViolations": [],
       "localSymbols": [
-        "RtfCellBorder",
         "RTF_BORDER_STYLES",
         "createRtfBorder",
         "dispatchRtfBorder",
         "createRtfBorderLine",
-        "getRtfBorderDistance"
+        "getRtfBorderDistance",
+        "RtfParagraphBorder",
+        "DispatchCellBorder",
+        "DispatchCellBorderValue",
+        "ClearCellBorders"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",

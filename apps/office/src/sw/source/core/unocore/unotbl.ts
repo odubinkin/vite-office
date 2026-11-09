@@ -15,17 +15,14 @@ import { scalar, stringValue, illegal, unknown } from "./unocrsrhelper";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { MID_FRMSIZE_SIZE_TYPE } from "../../../inc/unomid";
-import {
-  BorderLine,
-  cppu_detail_getUnoType_BorderLine,
-} from "../../../../offapi/com/sun/star/table/BorderLine";
+import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import type { SwTableBox } from "../table/swtable";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { RES_BACKGROUND, RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { MID_BACK_COLOR } from "../../../../editeng/inc/memberids";
-import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { lcl_extractBorderLine, type SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { TableMergeErr } from "../../../inc/tblenum";
@@ -417,15 +414,19 @@ export function setCellProperty(box: SwTableBox, name: string, value: Any): bool
   const member = members[name];
   if (member === undefined) return false;
   const item = box.GetFrameFormat().GetAttrSet().Get(RES_BOX).Clone() as SvxBoxItem;
-  let input: unknown;
-  if (member <= 4) {
-    const line = new BorderLine();
-    if (!value.extract(line, cppu_detail_getUnoType_BorderLine)) illegal("Expected BorderLine");
-    input = line;
-  } else input = scalar(value, "sal_Int32");
-  if (!item.PutValue(input, member | 0x80)) illegal("Invalid cell border");
-  box.ClaimFrameFormat().SetFormatAttr(item);
-  return true;
+  try {
+    let input: unknown;
+    if (member <= 4) {
+      const line = new BorderLine2();
+      if (!lcl_extractBorderLine(value, line)) illegal("Expected BorderLine or BorderLine2");
+      input = line;
+    } else input = scalar(value, "sal_Int32");
+    if (!item.PutValue(input, member | 0x80)) illegal("Invalid cell border");
+    box.ClaimFrameFormat().SetFormatAttr(item);
+    return true;
+  } finally {
+    item.Dispose();
+  }
 }
 
 /** Reads native current row values in public units. @param line - Actual row. @param name - Native property name. @returns Typed Any. */

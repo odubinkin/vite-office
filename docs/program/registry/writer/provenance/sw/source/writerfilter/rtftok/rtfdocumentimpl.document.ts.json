@@ -44,7 +44,8 @@
       "Binds the native Color palette to original paragraph border materialization.",
       "Completes native table frame conversion after the following paragraph is materialized.",
       "Materializes the shape append stream into a real Writer fly section at the original character position.",
-      "Converts original paragraph ranges after table materialization in their native text append scope."
+      "Converts original paragraph ranges after table materialization in their native text append scope.",
+      "Passes the original floating-table shift to native post-table conversion."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -236,6 +237,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
           "marker": "DomainMapper_Impl::ExecuteFrameConversion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "lcl_DecrementHoriOrientPosition"
         }
       ]
     },

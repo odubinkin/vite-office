@@ -23,9 +23,10 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#A text frame created for floating tables is always allowed to split",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#lcl_adjustBorderDistance",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#tdf#88496/tdf#138020"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#tdf#88496/tdf#138020",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#lcl_DecrementHoriOrientPosition"
       ],
-      "justification": "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items. RTF91. Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389). RTF101. Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion. RTF105. Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment. RTF107. Finalizes the original repeating header count, all-header and single-row split behavior, and row split default.",
+      "justification": "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items. RTF91. Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389). RTF101. Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion. RTF105. Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment. RTF107. Finalizes the original repeating header count, all-header and single-row split behavior, and row split default. RTF110. Applies the resolved first-cell border width to native table spacing, indent and original floating placement.",
       "knownViolations": [],
       "localSymbols": [
         "ApplyVerticalMergeBorders",

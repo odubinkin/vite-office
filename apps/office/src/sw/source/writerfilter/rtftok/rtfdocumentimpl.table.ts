@@ -20,10 +20,10 @@ import {
   CollectVerticalMerge,
   type VerticallyMergedCell,
 } from "../../core/unocore/unotext";
+import type { TablePropertyMap } from "../dmapper/PropertyMap";
 import { scalar, text } from "../../core/unocore/unocrsrhelper";
 import type { RtfDocumentImplContext, RtfTableRow } from "./rtfdocumentimpl.context";
 import type { SwDoc } from "../../core/doc/doc";
-import { createRtfBorderLine } from "./rtfdocumentimpl.border";
 import type { TablePositionHandler } from "../dmapper/TablePositionHandler";
 import { RTFSprm, RTFSprms } from "./rtfsprm";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
@@ -71,12 +71,13 @@ function PrepareTableRowProperties(row: RtfTableRow): RTFSprms {
   }
 }
 
-/** Replays native buffered table properties after creating actual Writer cells. @param table - Original table. @param rows - Actual source rows and cell properties. @returns Nothing. */
-export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableRow[]): void {
+/** Replays native buffered table properties after creating actual Writer cells. @param table - Original table. @param rows - Actual source rows and cell properties. @returns Original horizontal frame shift in mm100. */
+export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableRow[]): number {
   const manager = new DomainMapperTableManager();
   const merges: VerticallyMergedCell[] = [];
   const horizontalMerges: HorizontallyMergedCell[] = [];
   const mergeRows: (boolean | undefined)[][] = [];
+  const cellProperties: TablePropertyMap[][] = [];
   try {
     for (const [index, row] of rows.entries()) {
       const rowProperties = PrepareTableRowProperties(row);
@@ -93,52 +94,57 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
         resolved.dispose();
       }
       manager.endOfRowAction(PrepareRtfTableGrid(row));
+      const cells: TablePropertyMap[] = [];
+      cellProperties.push(cells);
+      const boxes = table.GetTabLines()[index]?.GetTabBoxes() ?? [];
+      for (let cellIndex = 0; cellIndex < boxes.length; cellIndex++) {
+        const source = row.cellSprms[cellIndex];
+        if (source) for (const [id, value] of source) manager.sprm(new RTFSprm(id, value));
+        cells.push(manager.takeCellProperties());
+      }
     }
     const tableProperties = manager.getTableProps();
-    ApplyTableMargins(table, tableProperties);
+    const firstCell = cellProperties[0]?.[0];
+    ApplyTableMargins(table, tableProperties, firstCell);
     for (const [rowIndex, row] of rows.entries()) {
       const mergeRow: (boolean | undefined)[] = [];
       mergeRows.push(mergeRow);
       let separators: number[] | undefined;
       const boxes = table.GetTabLines()[rowIndex]?.GetTabBoxes();
       for (const [cellIndex, box] of (boxes ?? []).entries()) {
-        const source = row.cellSprms[cellIndex];
-        if (source !== undefined)
-          for (const [id, value] of source) manager.sprm(new RTFSprm(id, value));
-        const cell = manager.takeCellProperties();
-        try {
-          CollectHorizontalMerge(horizontalMerges, cell, rowIndex, cellIndex);
-          const properties = cell.GetPropertyValues();
-          if (properties.length !== 0) {
-            const uno = new SwXCell(box);
-            try {
-              for (const property of properties) {
-                if (text(property.Name) === "VerticalMerge") {
-                  const restart = scalar(property.Value, "bool") as boolean;
-                  mergeRow[cellIndex] = restart;
-                  separators ??= GetTableGridSeparators(PrepareRtfTableGrid(row));
-                  const left = cellIndex === 0 ? 0 : (separators[cellIndex - 1] ?? -1);
-                  CollectVerticalMerge(merges, box, left, restart);
-                } else uno.setPropertyValue(property.Name, property.Value);
-              }
-            } finally {
-              uno.dispose();
+        const cell = cellProperties[rowIndex]?.[cellIndex];
+        if (!cell) continue;
+        CollectHorizontalMerge(horizontalMerges, cell, rowIndex, cellIndex);
+        const properties = cell.GetPropertyValues();
+        if (properties.length !== 0) {
+          const uno = new SwXCell(box);
+          try {
+            for (const property of properties) {
+              if (text(property.Name) === "VerticalMerge") {
+                const restart = scalar(property.Value, "bool") as boolean;
+                mergeRow[cellIndex] = restart;
+                separators ??= GetTableGridSeparators(PrepareRtfTableGrid(row));
+                const left = cellIndex === 0 ? 0 : (separators[cellIndex - 1] ?? -1);
+                CollectVerticalMerge(merges, box, left, restart);
+              } else uno.setPropertyValue(property.Name, property.Value);
             }
+          } finally {
+            uno.dispose();
           }
-        } finally {
-          cell.dispose();
         }
       }
     }
     ApplyVerticalMergeBorders(table, mergeRows);
     ApplyVerticalMerges(merges);
     FinalizeTableFlowProperties(table, tableProperties);
-    ApplyTableMeasures(table, tableProperties);
+    const horizontalShift = ApplyTableMeasures(table, tableProperties, firstCell);
     const uno = new SwXTextTable(table);
     for (const property of tableProperties.GetPropertyValues())
       uno.setPropertyValue(property.Name, property.Value);
     ApplyHorizontalMerges(table, horizontalMerges);
+    return horizontalShift;
   } finally {
+    for (const row of cellProperties) for (const cell of row) cell.dispose();
     manager.dispose();
   }
 }
@@ -147,6 +153,7 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
 export interface PendingRtfTableFrame {
   readonly table: SwTable;
   readonly position: TablePositionHandler;
+  readonly horizontalShift: number;
 }
 
 /** Compares original row positions before handing each contiguous table to the native materializer. @param this - Original RTF reader. @param document - Native Writer owner. @param table - First connected table. @param rows - Buffered source rows. @param pending - Owned pending native fly conversions, absent in shape text. @returns Nothing. */
@@ -164,9 +171,15 @@ export function MaterializeRtfTable(
 
   /** Publishes one finished source table group and transfers its row position. @param reader - Native reader. @param end - Exclusive row index. @returns Nothing. */
   function finish(reader: RtfDocumentImplContext, end: number): void {
-    MaterializeRtfTableGroup.call(reader, document, target, rows.slice(from, end), pending);
+    const horizontalShift = MaterializeRtfTableGroup.call(
+      reader,
+      document,
+      target,
+      rows.slice(from, end),
+      pending,
+    );
     if (current !== undefined) {
-      pending?.push({ table: target, position: current });
+      pending?.push({ table: target, position: current, horizontalShift });
       current = undefined;
     }
   }
@@ -204,14 +217,14 @@ export function MaterializeRtfTable(
   }
 }
 
-/** Replays one group of completed rows into native cell sections. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @param pending - Owned pending native fly conversions, absent in shape text. @returns Nothing. */
+/** Replays one group of completed rows into native cell sections. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @param pending - Owned pending native fly conversions, absent in shape text. @returns Original horizontal frame shift in mm100. */
 function MaterializeRtfTableGroup(
   this: RtfDocumentImplContext,
   document: SwDoc,
   table: SwTable,
   rows: readonly RtfTableRow[],
   pending: PendingRtfTableFrame[] | undefined,
-): void {
+): number {
   const rightEdge = rows.reduce(
     /** Computes the maximum result. @param maximum - Maximum. @param row - Row. @returns The computed result. */ (
       maximum,
@@ -230,13 +243,6 @@ function MaterializeRtfTableGroup(
     for (const [index, cell] of row.cells.entries()) {
       // AppendTableRow created exactly row.cells.length boxes before this bounded iteration.
       const box = line.GetTabBoxes()[index] as ReturnType<typeof line.GetTabBoxes>[number];
-      const borders = row.borders[index];
-      if (borders !== undefined && borders.size > 0) {
-        const item = box.GetBox();
-        for (const [edge, border] of borders)
-          item.SetLine(createRtfBorderLine(border, this["colors"]), edge);
-        box.ClaimFrameFormat().SetFormatAttr(item);
-      }
       const width = widths[index] ?? 0;
       if (width > 0) {
         const size = box.GetFrameSize();
@@ -263,5 +269,5 @@ function MaterializeRtfTableGroup(
       if (last && "rows" in last && !available) document.nodes.AppendTableCellParagraph(box);
     }
   }
-  ApplyRtfTableProperties(table, rows);
+  return ApplyRtfTableProperties(table, rows);
 }

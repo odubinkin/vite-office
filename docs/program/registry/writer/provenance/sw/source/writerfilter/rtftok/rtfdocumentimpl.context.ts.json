@@ -61,7 +61,8 @@
       "Keeps table padding in the original row and cell resource property owners.",
       "Keeps a native frame-property owner on each original parser state.",
       "Stores native row flow and cell vertical alignment in the original resource property owners.",
-      "Admits native paragraph shading in the source style state."
+      "Admits native paragraph shading in the source style state.",
+      "Keeps the cell border destination scoped to each original parser group."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -333,6 +334,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::CBPAT:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "m_nBorderState"
         }
       ]
     },

@@ -154,3 +154,15 @@ it("retains the source asymmetry for exported left and top position words", /** 
     doc.Dispose();
   }
 });
+
+it("subtracts the original floating-table padding and half the cell border once each", /** Verifies the native horizontal shift before adjusted content margins. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`\trowd\tphmrg\tpvmrg\tposx300\trgaph20\clbrdrl\brdrs\brdrw100\cellx1500\intbl Cell\cell\row\pard Tail`,
+  );
+  try {
+    const fly = doc.GetSpzFrameFormats().GetFormat(0);
+    expect(fly.GetHoriOrient().GetPos()).toBe(230);
+  } finally {
+    doc.Dispose();
+  }
+});

@@ -1,14 +1,11 @@
 /** @fileoverview Original RTF table row buffer ownership and depth-based replay. */
 import { MINLAY } from "../../../inc/swtypes";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import { createRtfBorder } from "./rtfdocumentimpl.border";
+import { ClearCellBorders, DispatchCellBorder } from "./rtfdocumentimpl.border";
 import { stringValue } from "./rtfdocumentimpl.character";
 import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import type {
   RtfBlock,
-  RtfCellBorder,
   RtfDocumentImplContext,
   RtfParagraph,
   RtfState,
@@ -26,18 +23,12 @@ export class TableRowBuffer {
   readonly cell: RtfTableCellContent[] = [];
   readonly boundaries: number[] = [];
   readonly cellSprms: RTFSprms[] = [];
-  readonly borders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
-  nextCellBorders = new Map<SvxBoxItemLine, RtfCellBorder>();
-  activeBorder: RtfCellBorder | undefined;
   left = 0;
 
   /** Resets the row definition without discarding content already buffered. @returns Nothing. */
   ResetProperties(): void {
     this.boundaries.length = 0;
     for (const list of this.cellSprms.splice(0)) list.dispose();
-    this.borders.length = 0;
-    this.nextCellBorders = new Map();
-    this.activeBorder = undefined;
     this.left = 0;
   }
 
@@ -48,7 +39,6 @@ export class TableRowBuffer {
       rowSprms: new RTFSprms(state.tableRowSprms),
       cellSprms: this.cellSprms.splice(0),
       left: this.left,
-      borders: this.borders.splice(0),
     };
   }
 
@@ -58,8 +48,6 @@ export class TableRowBuffer {
     this.boundaries.splice(0, this.boundaries.length, ...definition.boundaries);
     for (const list of definition.cellSprms) this.cellSprms.push(new RTFSprms(list));
     this.left = definition.left;
-    this.borders.length = 0;
-    for (const map of definition.borders) this.borders.push(new Map(map));
   }
 
   /** Transfers cell contents and definitions to the completed row. @param state - Current group. @returns Completed row. */
@@ -146,15 +134,8 @@ function AppendWidthAfterCell(
   row.boundaries.push((row.boundaries.at(-1) ?? 0) + state.tableRowWidthAfter);
   const index = row.cells.length - 1;
   if (row.cellSprms.length <= index) row.cellSprms.push(new RTFSprms(state.tableCellSprms));
-  const borders = new Map<SvxBoxItemLine, RtfCellBorder>();
-  for (const edge of [
-    SvxBoxItemLine.TOP,
-    SvxBoxItemLine.LEFT,
-    SvxBoxItemLine.BOTTOM,
-    SvxBoxItemLine.RIGHT,
-  ])
-    borders.set(edge, { ...createRtfBorder(), style: BorderLineStyle.NONE, width: 0 });
-  row.borders[index] = borders;
+  const cell = row.cellSprms[index];
+  if (cell) ClearCellBorders(cell);
   state.tableRowWidthAfter = 0;
 }
 
@@ -269,19 +250,9 @@ export function DispatchTableControl(
     this["m_aTextBuffer"].terminatedParagraph = true;
     return true;
   }
-  if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
+  if (DispatchCellBorder(state.tableCellSprms, name)) {
     delete state.paragraphBorder;
-    const edge =
-      name === "clbrdrt"
-        ? SvxBoxItemLine.TOP
-        : name === "clbrdrl"
-          ? SvxBoxItemLine.LEFT
-          : name === "clbrdrb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    const border: RtfCellBorder = createRtfBorder();
-    row.nextCellBorders.set(edge, border);
-    row.activeBorder = border;
+    state.cellBorder = true;
     return true;
   }
   if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
@@ -345,9 +316,6 @@ export function DispatchTableControl(
       row.cellSprms.push(new RTFSprms(state.tableCellSprms));
       state.tableCellSprms.dispose();
       state.tableCellSprms = new RTFSprms(text.m_aDefaultTableCellSprms);
-      row.borders.push(row.nextCellBorders);
-      row.nextCellBorders = new Map();
-      row.activeBorder = undefined;
     }
     return true;
   }

@@ -310,7 +310,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       }
     }
     for (const pending of pendingTableFrames)
-      ConvertFloatingRtfTable(pending.table, pending.position);
+      ConvertFloatingRtfTable(pending.table, pending.position, pending.horizontalShift);
     ExecuteFrameConversion(pendingParagraphFrames);
     complete = true;
     return document;

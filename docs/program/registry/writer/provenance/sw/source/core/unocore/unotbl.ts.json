@@ -30,7 +30,8 @@
       "Applies the original UNO BackColor property to the claimed native cell brush item with MID_BACK_COLOR.",
       "Resolves the flat cell-name coordinate in the cursor's nearest native table, including the source leading-nested-table asymmetry in WRITER404.",
       "Applies the original UNO absolute and relative width properties to the actual table frame item.",
-      "Applies the original row SizeType and returns the native variable-height test for IsAutoHeight."
+      "Applies the original row SizeType and returns the native variable-height test for IsAutoHeight.",
+      "Preserves the full BorderLine2 values and the original legacy BorderLine extraction fallback on cell properties."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -94,6 +95,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
           "marker": "FN_UNO_ROW_AUTO_HEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "lcl_extractBorderLine"
         }
       ]
     }
