@@ -1,10 +1,11 @@
 ---
 id: "202610251610-AQF9AG"
 title: "Implement Calc CSV import export and existing file UI integration"
-status: "DOING"
+result_summary: "verified-202610251610-AQF9AG"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 254
+revision: 256
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-09T21:15:43.205Z"
+  updated_at: "2026-11-09T21:16:08.736Z"
   updated_by: "CODER"
   note: "verified-202610251610-AQF9AG"
   attempts: 0
@@ -44,7 +45,9 @@ quality_review:
   findings:
     - "Pinned CSV option defaults, SAL detection and conversion, Calc cell admission and native formatter dispatch, and load warning handoff are implemented through their source owners."
     - "Focused Calc, shared SAL and diagnostic tests, dependency and provenance checks, Calc resources, and the production Chromium file workflow passed."
-commit: null
+commit:
+  hash: "0f5f681c4b794cc7bba20f291fb1f1bf641605af"
+  message: "🚧 AQF9AG task: Record CSV verification and quality review"
 comments:
   -
     author: "CODER"
@@ -373,6 +376,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610251610-AQF9AG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -1423,8 +1429,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610251610-AQF9AG"
+  -
+    type: "verify"
+    at: "2026-11-09T21:16:08.736Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610251610-AQF9AG"
+  -
+    type: "status"
+    at: "2026-11-09T21:16:09.685Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610251610-AQF9AG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:15:43.387Z"
+doc_updated_at: "2026-11-09T21:16:09.722Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3514,6 +3533,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-09T21:16:08.736Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610251610-AQF9AG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:43.387Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 0f5f681c4b794cc7bba20f291fb1f1bf641605af
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5031,6 +5080,10 @@ sections:
     - The final focused Calc run passed 211 cases in 10 files, including ScAsciiOptions, ScImportExport recognition and date admission, all CSV shell tests and the existing mounted file workflow. The final shared diagnostic run passed 9 cases in 2 files. The charset checkpoint passed 302 shared cases, including 4,105,147 defined native encoding observations and two streaming retry sequences. The full-size source-backed module-edge check and 47 guard tests passed. Production Chromium imported CSV, saved the primary ODS copy and downloaded CSV for the active sheet.
     - Typecheck, full ESLint plus final changed-file lint, Calc resources, source provenance, Calc and shared parity inventories, JSDoc, source-tree, source-size and git diff checks passed. The diagnostic port imports the actual comphelper error owner, as declared by scerrors.hxx and linked by Library_sc.mk. Two AgentPlane closures follow the previous recorded full-run validation, so this is the third task for the configured cadence. The full test suite was not repeated.
     - This acceptance covers data conversion and the existing browser file workflow in the approved current core slice. Desktop column auto-sizing depends on the native VCL virtual and reference devices and printer-to-screen measurement. Device optimum is outside the current Calc geometry slice. The browser open and download actions retain their existing default controls. The implementation does not claim complete desktop, all SAL codepages, physical ABI or undefined memory access parity. Native scratch artifacts and logs stay out of the source commit.
+extensions:
+  implementation_commit:
+    hash: "4c841234d98aa1a4623c283f0be9ed5c178e906d"
+    message: "🚧 AQF9AG task: Preserve native CSV filter diagnostics"
 id_source: "generated"
 ---
 ## Summary
@@ -7122,6 +7175,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 4c841234d98aa1a4623c283f0be9ed5c178e906d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-09T21:16:08.736Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610251610-AQF9AG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:43.387Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 0f5f681c4b794cc7bba20f291fb1f1bf641605af
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
