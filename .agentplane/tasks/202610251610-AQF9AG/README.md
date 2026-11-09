@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 209
+revision: 212
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T17:48:18.925Z"
+  updated_at: "2026-11-09T17:57:31.771Z"
   updated_by: "CODER"
-  note: "Verified eight linked rule symbols, 1560 native boundary operations, 100 related tests, 197 CSV tests and Chromium acceptance. Concrete dictionary and LibreOffice word service integration remain."
-  attempts: 54
+  note: "Verified 312 native matcher cases, 133 related tests, 197 CSV tests and Chromium acceptance. Dictionary resource and concrete segmentation engine integration remain."
+  attempts: 55
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1192,8 +1195,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T17:57:31.771Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified 312 native matcher cases, 133 related tests, 197 CSV tests and Chromium acceptance. Dictionary resource and concrete segmentation engine integration remain."
+  -
+    type: "status"
+    at: "2026-11-09T17:57:39.229Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T17:48:28.493Z"
+doc_updated_at: "2026-11-09T17:57:39.229Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2833,6 +2849,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T17:57:31.771Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified 312 native matcher cases, 133 related tests, 197 CSV tests and Chromium acceptance. Dictionary resource and concrete segmentation engine integration remain.
+    Attempts: 55
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:57:30.993Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4211,6 +4257,22 @@ sections:
     - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
       Result: pass. Evidence: 14.59s build and one Chromium import, ODS save and CSV export scenario.
     - Exact-path formatting, fixture review and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
+
+    ### Original ICU dictionary matchers and UTF-16 trie reading
+
+    - Previous goal turn made progress at c72ce0ca7. The route remains the approved direct CODER task in the calc checkout. This checkpoint ports the consumed UTF-16 trie reader, the original UChars and byte matchers, and the binary matcher selection and data-handle ownership from the original ICU factory. Real dictionary resource selection and concrete segmentation engines remain pending.
+    - CALC-477 records the interaction between an out-of-range offset transform and the signed byte 0xFF key. CALC-478 records the direct UTF-16 unit lookup with supplementary inputs. CALC-479 records the limit check after recording a match. The original witness confirms each behavior and the implementation preserves it.
+    - Command: node_modules/.bin/tsx scripts/icu-dictionary-native-probe.mjs
+      Result: pass. Evidence: 144 builder cases and 168 original archive cases across all five dictionaries. The native executable uses unchanged ICU builders, matchers, UText and data opening. TypeScript registers the same original archive and reaches each dictionary through the public data loader. The comparison covers all output slots, null outputs, signed word values, prefix and native cursor, plus explicit UCharsTrie codepoint and stopped transitions.
+    - Command: npm run test:shared -- src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/udata.open.native.test.ts --maxWorkers=1
+      Result: pass. Evidence: 133 tests across five files. The portable native builder fixture checks real matcher ownership, close for a rejected trie kind, and existing byte reader, rule iterator and data loading behavior.
+    - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 1990 runtime modules, 1777 mapped records, 1989 boundary sources, 10802 relative imports, 236 allowed edges, 4437 JSDoc-checked source files and 464 Calc commands.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: 197 tests across eight files. Scope: existing CSV and Calc file workflow regressions.
+    - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
+      Result: pass. Evidence: production build and one Chromium import, ODS save and CSV export scenario.
+    - Exact-path formatting and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary resource discovery and segmentation engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
 id_source: "generated"
 ---
 ## Summary
@@ -5859,6 +5921,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T17:57:31.771Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified 312 native matcher cases, 133 related tests, 197 CSV tests and Chromium acceptance. Dictionary resource and concrete segmentation engine integration remain.
+Attempts: 55
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:57:30.993Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7241,3 +7333,19 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
   Result: pass. Evidence: 14.59s build and one Chromium import, ODS save and CSV export scenario.
 - Exact-path formatting, fixture review and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
+
+### Original ICU dictionary matchers and UTF-16 trie reading
+
+- Previous goal turn made progress at c72ce0ca7. The route remains the approved direct CODER task in the calc checkout. This checkpoint ports the consumed UTF-16 trie reader, the original UChars and byte matchers, and the binary matcher selection and data-handle ownership from the original ICU factory. Real dictionary resource selection and concrete segmentation engines remain pending.
+- CALC-477 records the interaction between an out-of-range offset transform and the signed byte 0xFF key. CALC-478 records the direct UTF-16 unit lookup with supplementary inputs. CALC-479 records the limit check after recording a match. The original witness confirms each behavior and the implementation preserves it.
+- Command: node_modules/.bin/tsx scripts/icu-dictionary-native-probe.mjs
+  Result: pass. Evidence: 144 builder cases and 168 original archive cases across all five dictionaries. The native executable uses unchanged ICU builders, matchers, UText and data opening. TypeScript registers the same original archive and reaches each dictionary through the public data loader. The comparison covers all output slots, null outputs, signed word values, prefix and native cursor, plus explicit UCharsTrie codepoint and stopped transitions.
+- Command: npm run test:shared -- src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/udata.open.native.test.ts --maxWorkers=1
+  Result: pass. Evidence: 133 tests across five files. The portable native builder fixture checks real matcher ownership, close for a rejected trie kind, and existing byte reader, rule iterator and data loading behavior.
+- Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 1990 runtime modules, 1777 mapped records, 1989 boundary sources, 10802 relative imports, 236 allowed edges, 4437 JSDoc-checked source files and 464 Calc commands.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: 197 tests across eight files. Scope: existing CSV and Calc file workflow regressions.
+- Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
+  Result: pass. Evidence: production build and one Chromium import, ODS save and CSV export scenario.
+- Exact-path formatting and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary resource discovery and segmentation engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.

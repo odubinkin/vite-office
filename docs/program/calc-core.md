@@ -4430,3 +4430,18 @@ chunk pointer recorded in CALC-476. The comparison covers 40 traversal
 sequences across all eight rules, with Unicode, embedded NUL and cache refill
 cases. The production iterator still requires the dictionary engine factory
 and the enclosing LibreOffice word service.
+
+### Native dictionary trie matching
+
+The original ICU UTF-16 trie reader and both dictionary matchers now consume
+the serialized trie data reached through a real `UDataMemory` handle. The
+break-engine loader's binary dispatch chooses the native trie format and
+passes ownership to the matcher. Match results include both source indexing
+units and Unicode codepoint lengths, with the native prefix and output
+capacity rules.
+
+The witness compares portable builder output and all five original archive
+dictionaries through the public ICU data loader. CALC-477 and CALC-478 record
+the retained byte transform and supplementary input behavior. Resource and
+script selection and concrete break-engine algorithms remain the next
+integration step.

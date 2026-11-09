@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/dictionarydata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/dictionarydata.cpp",
+    "localSymbols": [
+      "DictionaryData",
+      "DictionaryMatcher",
+      "UCharsDictionaryMatcher",
+      "BytesDictionaryMatcher"
+    ],
+    "upstreamSymbols": [
+      "DictionaryData",
+      "UCharsDictionaryMatcher",
+      "BytesDictionaryMatcher",
+      "matches"
+    ],
+    "preservedResponsibilities": [
+      "Original dictionary indexes, byte transform and matcher handle owners. Native and codepoint lengths, optional outputs, capacity, prefix and consumed cursor follow the original loops. CALC-477 and CALC-478 record retained upstream behavior. The original native builder and archive witness compares 144 portable builder cases and 168 cases on the five real ICU dictionary files opened via udata. This is the matcher layer for the native dictionary break engines."
+    ],
+    "omittedResponsibilities": [
+      "Remaining trie reader APIs, dictionary resource discovery, and concrete break engines are outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.ts",
+          "marker": "DictionaryData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+          "marker": "matches original dictionary outputs"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictionarydata.cpp",
+          "marker": "UCharsDictionaryMatcher"
+        }
+      ]
+    }
+  }
+}

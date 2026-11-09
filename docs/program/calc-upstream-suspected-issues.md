@@ -5158,3 +5158,21 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/icu-reference/source/common/utext.cpp`, `shallowTextClone` and `ucstrTextClone`.
 - The deep clone copies text into a new allocation and replaces `context`. The existing `chunkContents` pointer still refers to the original allocation. The original witness mutates the first input code unit after cloning. Indexed access sees the mutation even though the cloned context contains the original value.
 - Preserve the original context and chunk pointer assignments. The rule iterator requests a shallow read-only clone.
+
+### CALC-477 — An out-of-range dictionary transform can reach the joiner key
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, `BytesDictionaryMatcher::transform` and `matches`, and `BytesTrie::first` / `next`.
+- Offset mode maps a zero-width joiner to 0xFF and an out-of-range scalar to -1. The byte reader accepts signed byte inputs and adds 0x100 to -1. The original witness confirms that a serialized 0xFF key can match an unrelated out-of-range scalar, with that scalar's native UTF-16 length. This test uses an original builder to expose the interaction directly.
+- Preserve the original transform and signed-byte admission.
+
+### CALC-478 — The UChars dictionary matcher passes a scalar to unit traversal
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, `UCharsDictionaryMatcher::matches`, and `vendor/icu-reference/source/common/ucharstrie.cpp`.
+- The matcher reads a Unicode codepoint from UText and calls the trie unit entrypoints. A supplementary codepoint fails to match a key stored as its two UTF-16 units. The original builder witness confirms that the same key is reachable through the separate codepoint entrypoint.
+- Keep the source unit entrypoints in the matcher and the original cursor and prefix changes on rejection.
+
+### CALC-479 — The matcher checks maximum native length after recording a value
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, both `matches` implementations.
+- Each loop consumes a codepoint, traverses the trie, and records its value before checking the native length limit. In the original builder witness, an input starting with a serialized one-unit word returns that match even with a maximum length of zero.
+- Preserve the limit check after traversal and output. The replay compares both the written match and the resulting cursor.
