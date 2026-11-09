@@ -8,6 +8,7 @@ import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100_Limited } from "../dmapper/ConversionHelper";
+import { COL_AUTO, COL_BLACK, type Color } from "../../../../tools/inc/color";
 
 /** BorderHandler's source defaults, populated by group-scoped RTF controls. */
 export interface RtfCellBorder {
@@ -42,7 +43,7 @@ export const RTF_BORDER_STYLES: Readonly<Record<string, BorderLineStyle>> = {
 
 /** Creates the source BorderHandler defaults before explicit attributes. @returns New parsed border. */
 export function createRtfBorder(): RtfCellBorder {
-  return { style: BorderLineStyle.NONE, width: 15, colorIndex: 0, distance: 0 };
+  return { style: BorderLineStyle.NONE, width: 15, colorIndex: -1, distance: 0 };
 }
 
 /** Resolves a registered border value; unknown flags leave prior state intact. @param border - Current parsed border. @param name - Control name. @param parameter - Optional numeric value. @returns Whether handled. */
@@ -67,10 +68,10 @@ export function dispatchRtfBorder(
 /** Materializes the same BorderLine2 metric boundary as ConversionHelper::MakeBorderLine and UNO. @param border - Parsed border. @param colors - RTF color table. @returns Native line or no border. */
 export function createRtfBorderLine(
   border: Readonly<RtfCellBorder>,
-  colors: readonly string[],
+  colors: readonly Readonly<Color>[],
 ): SvxBorderLine | undefined {
-  const text = colors[border.colorIndex] ?? "#000000";
-  const color = /^#[0-9a-f]{6}$/i.test(text) ? Number.parseInt(text.slice(1), 16) : 0;
+  const valueColor = colors[border.colorIndex] ?? COL_BLACK;
+  const color = valueColor.equals(COL_AUTO) ? COL_BLACK.toInt32() : valueColor.toInt32();
   const width =
     border.style === BorderLineStyle.NONE
       ? 0

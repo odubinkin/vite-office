@@ -25,7 +25,8 @@
       "Task SWRD7X delegates point/range attribute endpoints to the original GetAnyEnd owner, retains nonempty property-result guarantees after validated text spans, and preserves the original live split-boundary endpoint correction after first <= last admission. Unsupported properties and native item rejections retain typed failures. Existing semantic statuses and omitted native responsibilities are unchanged.",
       "S3HW1E HTML75: Actual table WritingMode and hidden UNO cell FRMDirection write the original pooled direction items. The original hidden cell conversion failure and direct-format behavior are retained (WRITER358).",
       "Consumes the native RowSpan property and original internal VerticalMerge numbering cleanup on actual text nodes.",
-      "Selects actual native table endpoints and calls the document merge path before rebuilding the native box selection."
+      "Selects actual native table endpoints and calls the document merge path before rebuilding the native box selection.",
+      "Applies the original UNO BackColor property to the claimed native cell brush item with MID_BACK_COLOR."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -51,6 +52,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/unotbl.ts",
           "marker": "SwXTextTableCursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -65,6 +70,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
           "marker": "SwXTextTableCursor::mergeRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomap.cxx",
+          "marker": "MID_BACK_COLOR"
         }
       ]
     }

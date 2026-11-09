@@ -24,7 +24,9 @@
       "WriteParagraphProperties",
       "OutputTextCharFormat",
       "FormatFrameDirection",
-      "WriteStyleFrameDirection"
+      "WriteStyleFrameDirection",
+      "TableBackgroundColor",
+      "TableBackgrounds"
     ],
     "upstreamSymbols": [
       "RtfAttributeOutput::OutputCharEscapement",
@@ -70,7 +72,8 @@
       "B8TCAE source-contract regressions drive actual named Writer style items through a genuine RtfExport/SwPaM context and its real font/color table callbacks. Tests cover physical/logical alignment, last-line justification, native twip margins/context spacing, keep/split/widow flags, tab leaders/offsets, page breaks and proportional line spacing. The real common Word numbering writer generates a valid single-placeholder level9 payload from SwNumFormat; original extended-level group imbalance is preserved and documented as WRITER244, outside ordinary0..8 list-definition traversal. Repeated StartStyles is explicitly an existing local checked-lifecycle guard, not native invalid-state or recovery parity. Two suites/20 tests pass; no runtime implementation or coverage exception changes are made here, and broader native RTF/ABI parity remains unverified.",
       "The user separately approved B8TCAE-A06: exclude only the false LINESTYLE_NONE fallback alternative under the readonly boolean/optional-enum value contract. Its expression and genuine native NONE/reset handling remain unchanged. Exact source/counter comparison excludes no statement/function or other alternative. All443 actual RTF/HTML consumer cases pass with strict100 coverage:385 statements,351 arms,43 functions,333 lines. WRITER246 labels this as a local projection audit, distinct from the upstream grouping concern WRITER244.",
       "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
-      "S3HW1E HTML73: Actual section, paragraph and stylesheet controls consume typed native directions. The ordinary paragraph vertical-to-LTR behavior in WRITER330 is preserved; physical fly syntax is unrepresented."
+      "S3HW1E HTML73: Actual section, paragraph and stylesheet controls consume typed native directions. The ordinary paragraph vertical-to-LTR behavior in WRITER330 is preserved; physical fly syntax is unrepresented.",
+      "Applies source table, row and cell brush precedence and emits CLCBPAT only for an opaque selected color."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -144,6 +147,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+          "marker": "TableBackgroundColor"
         }
       ],
       "upstream": [
@@ -190,6 +205,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::FormatFrameDirection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::TableBackgrounds"
         }
       ]
     }

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePropertiesHandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/TablePropertiesHandler.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+      ],
+      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TablePropertiesHandler",
+        "sprm"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+      "upstreamSymbols": [
+        "TablePropertiesHandler::sprm"
+      ]
+    }
+  }
+}

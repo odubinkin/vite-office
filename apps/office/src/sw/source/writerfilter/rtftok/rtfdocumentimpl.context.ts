@@ -5,6 +5,7 @@ import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/in
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
+import { COL_AUTO, COL_BLACK, Color } from "../../../../tools/inc/color";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
@@ -54,6 +55,42 @@ export enum RunType {
   RTLCH_LTRCH_1,
   RTLCH_LTRCH_2,
 }
+
+/** Original color table entry remains automatic until the first component is set. */
+export class RTFColorTableEntry {
+  private m_bAuto: boolean;
+  private readonly color: Color;
+
+  /** Copies the saved group color entry or starts the original automatic entry. @param source - Optional copied entry. @returns Color entry. */
+  constructor(source?: RTFColorTableEntry) {
+    this.m_bAuto = source?.m_bAuto ?? true;
+    this.color = new Color(source?.color ?? COL_BLACK);
+  }
+
+  /** Sets the native red component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetRed(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetRed(value);
+  }
+
+  /** Sets the native green component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetGreen(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetGreen(value);
+  }
+
+  /** Sets the native blue component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetBlue(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetBlue(value);
+  }
+
+  /** Returns the original automatic sentinel or authored RGB color. @returns Native color. */
+  GetColor(): Readonly<Color> {
+    return this.m_bAuto ? COL_AUTO : this.color;
+  }
+}
+
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
   characterSprms: RTFSprms;
@@ -62,6 +99,7 @@ export interface RtfState {
   tableRowSprms: RTFSprms;
   tableCellSprms: RTFSprms;
   tableBuffer: TableRowBuffer | undefined;
+  currentColor: RTFColorTableEntry;
   tableSprms: RTFSprms;
   tableAttributes: RTFSprms;
   listLevelEntries: RTFSprms;

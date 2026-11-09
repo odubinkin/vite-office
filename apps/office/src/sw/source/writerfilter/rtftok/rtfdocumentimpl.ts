@@ -8,6 +8,7 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { RTF_FONT_SUFFIX_CODEPAGE } from "./rtfcharsets";
 import {
   DEFAULT_PARAGRAPH,
+  RTFColorTableEntry,
   equalCharacter,
   equalControls,
   type RtfBlock,
@@ -21,6 +22,7 @@ import { DecodeBytes } from "./rtfdocumentimpl.decode";
 import { Dispatch, DispatchBodyControl } from "./rtfdocumentimpl.dispatch";
 import { ApplyParagraph, ApplyStyleDefinition, Finish } from "./rtfdocumentimpl.document";
 import { RtfTokenizer, type RtfToken } from "./rtftokenizer";
+import { COL_BLACK, type Color } from "../../../../tools/inc/color";
 import {
   CollectParagraphSprms,
   CollectTableRowSprms,
@@ -104,7 +106,7 @@ export class RtfDocumentImpl {
   protected readonly fontCodepages = new Map<number, number>();
   protected defaultCodepage = 1252;
   protected defaultFontIndex = -1;
-  protected readonly colors: string[] = [];
+  protected readonly colors: Readonly<Color>[] = [];
   protected readonly m_aListTableSprms = new RTFSprms();
   protected readonly m_aListTable = new Map<number, SvRef<RTFValue>>();
   protected readonly m_aListOverrideTable = new Map<number, number>();
@@ -170,7 +172,6 @@ export class RtfDocumentImpl {
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected fontName = "";
-  protected color = { red: 0, green: 0, blue: 0 };
   protected sawHeader = false;
   protected terminatedParagraph = false;
   protected tableRows: RtfTableRow[] = [];
@@ -406,16 +407,18 @@ export class RtfDocumentImpl {
     return DecodeBytes.call(this, bytes, state);
   }
 
-  /** Adds color table entries separated by semicolons. @param value - Color table text.  @returns Nothing. */
-  protected ReadColorText(value: string): void {
+  /** Adds color table entries separated by semicolons. @param value - Color table text. @param state - Original group color owner. @returns Nothing. */
+  protected ReadColorText(value: string, state: RtfState): void {
     for (const character of value)
       if (character === ";") {
-        const { red, green, blue } = this.color;
-        this.colors.push(
-          `#${[red, green, blue].map(/** Computes the channel result. @param channel - Channel. @returns The computed result. */ (channel) => channel.toString(16).padStart(2, "0")).join("")}`,
-        );
-        this.color = { red: 0, green: 0, blue: 0 };
+        this.colors.push(state.currentColor.GetColor());
+        state.currentColor = new RTFColorTableEntry();
       }
+  }
+
+  /** Original out-of-range palette lookup falls back to RGB zero. @param index - Native color index. @returns Actual source color. */
+  protected getColorTable(index: number): Readonly<Color> {
+    return this.colors[index] ?? COL_BLACK;
   }
 }
 

@@ -10,6 +10,7 @@ import {
   DEFAULT_PARAGRAPH,
   parseRtfHyperlinkInstruction,
   RTF_UNDERLINE_STYLES,
+  RTFColorTableEntry,
   SKIPPED_DESTINATIONS,
   STYLE_PROPERTY_CONTROLS,
   type RtfDocumentImplContext,
@@ -17,7 +18,9 @@ import {
 } from "./rtfdocumentimpl.context";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
+import { dispatchTableShading } from "./rtfdispatchvalue.table";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
+import { COL_AUTO } from "../../../../tools/inc/color";
 
 /** Dispatches one lexical event under the current group state. @param token - Source event.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
 export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
@@ -42,6 +45,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       tableRowSprms: new RTFSprms(previous?.tableRowSprms),
       tableCellSprms: new RTFSprms(previous?.tableCellSprms),
       tableBuffer: previous?.tableBuffer,
+      currentColor: new RTFColorTableEntry(previous?.currentColor),
       tableSprms: new RTFSprms(previous?.tableSprms),
       tableAttributes: new RTFSprms(previous?.tableAttributes),
       listLevelEntries: new RTFSprms(previous?.listLevelEntries),
@@ -246,7 +250,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       } finally {
         native.dispose();
       }
-    } else if (state.destination === "colortbl") this["ReadColorText"](value);
+    } else if (state.destination === "colortbl") this["ReadColorText"](value, state);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;
     else if (state.destination === "body") this["AppendText"](value, state);
@@ -433,9 +437,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (state.destination === "colortbl") {
-    if (token.name === "red") this["color"].red = token.parameter ?? 0;
-    else if (token.name === "green") this["color"].green = token.parameter ?? 0;
-    else if (token.name === "blue") this["color"].blue = token.parameter ?? 0;
+    if (token.name === "red") state.currentColor.SetRed(token.parameter ?? 0);
+    else if (token.name === "green") state.currentColor.SetGreen(token.parameter ?? 0);
+    else if (token.name === "blue") state.currentColor.SetBlue(token.parameter ?? 0);
     return;
   }
   if (
@@ -558,6 +562,7 @@ export function DispatchBodyControl(
     return;
   }
   if (dispatchTableFlag(name, state)) return;
+  if (dispatchTableShading.call(this, name, parameter ?? 0, state)) return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
@@ -692,7 +697,7 @@ export function DispatchBodyControl(
   } else if (name === "ulc" && parameter !== undefined) {
     state.character = {
       ...state.character,
-      underlineColor: parameter === 0 ? "auto" : (this["colors"][parameter] ?? "auto"),
+      underlineColor: writerColorValue(this["getColorTable"](parameter)),
     };
   } else if (name === "strike" || name === "striked") {
     state.characterSprms.set(
@@ -734,19 +739,19 @@ export function DispatchBodyControl(
       state.paragraphSprms.set(N.LN_CT_PPrBase_pStyle, stringValue(styleName));
   } else if (name === "cf" && parameter !== undefined) {
     state.colorIndex = parameter;
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "color");
-    const color = parameter === 0 ? undefined : this["colors"][parameter];
-    state.character = { ...character, ...(color === undefined ? {} : { color }) };
+    state.character = {
+      ...state.character,
+      color: writerColorValue(this["getColorTable"](parameter)),
+    };
   } else if (name === "highlight" && parameter !== undefined) {
     const character = { ...state.character };
     Reflect.deleteProperty(character, "highlight");
-    const highlight = parameter === 0 ? undefined : this["colors"][parameter];
-    state.characterSprms.set(
-      N.LN_EG_RPrBase_highlight,
-      new RTFValue(writerColorFromPrimitive(highlight ?? "auto", "auto").toInt32()),
-    );
-    state.character = { ...character, ...(highlight === undefined ? {} : { highlight }) };
+    const highlight = parameter === 0 ? COL_AUTO : this["getColorTable"](parameter);
+    state.characterSprms.set(N.LN_EG_RPrBase_highlight, new RTFValue(highlight.toInt32()));
+    state.character = {
+      ...character,
+      ...(highlight.equals(COL_AUTO) ? {} : { highlight: writerColorValue(highlight) }),
+    };
   } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj" || name === "qd")
     state.paragraph = {
       ...state.paragraph,
@@ -814,7 +819,7 @@ import { createRtfStyleProperties } from "./rtfdocumentimpl.character";
 import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { writerColorValue } from "../../core/attr/swatrset";
 
 import { stringValue } from "./rtfdocumentimpl.character";
 

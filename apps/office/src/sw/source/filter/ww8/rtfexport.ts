@@ -60,7 +60,11 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
-import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
+import {
+  GetCharacterPropertiesMode,
+  RtfAttributeOutput,
+  TableBackgroundColor,
+} from "./rtfattributeoutput";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { SwWW8AttrIter } from "./wrtw8nds";
 import { MSWordStyles, type wwFont } from "./wrtw8sty";
@@ -224,10 +228,17 @@ export class RtfExport extends MSWordExportBase {
     }
     for (const block of document.GetNodes().entries()) {
       if (!(block instanceof SwTableNode)) continue;
-      for (const row of block.GetTable().GetTabLines())
+      const table = block.GetTable();
+      for (const row of table.GetTabLines())
         for (const cell of row.GetTabBoxes()) {
           const box = cell.GetFormat().box;
           if (box !== undefined) this.IndexBoxColors(box);
+          const background = TableBackgroundColor(
+            table.GetFrameFormat(),
+            row.GetFrameFormat(),
+            cell.GetFrameFormat(),
+          );
+          if (!background.IsTransparent()) this.IndexColor(rtfColorKey(background));
         }
     }
     // Source OutColorTable visits native character items before attribute callbacks.
@@ -404,6 +415,7 @@ export class RtfExport extends MSWordExportBase {
             if (distance > 0) definition += `\\${unitControl}3\\${valueControl}${distance}`;
           }
         if (format !== undefined) {
+          definition += this.attributeOutput.TableBackgrounds(tableFormat, rowFormat, format);
           const direction = this.TrueFrameDirection(format);
           if (direction === SvxFrameDirection.Vertical_RL_TB) definition += "\\cltxtbrl";
           else if (direction === SvxFrameDirection.Vertical_LR_BT) definition += "\\cltxbtlr";

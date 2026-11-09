@@ -6,12 +6,19 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMap } from "./PropertyMap";
 import { UNO_TABLE_COLUMN_SUM } from "../../../inc/swtypes";
+import { TablePropertiesHandler } from "./TablePropertiesHandler";
 
 /** Actual mapper property owners for the represented top-level table direction path. */
 export class DomainMapperTableManager {
   private readonly m_aTableProperties = new TablePropertyMap();
   private m_aTmpTableProperties = new TablePropertyMap();
   private m_pCellProps = new TablePropertyMap();
+  private readonly m_pTablePropsHandler = new TablePropertiesHandler();
+
+  /** Connects the original fallback table property handler. @returns Table manager. */
+  constructor() {
+    this.m_pTablePropsHandler.SetTableManager(this);
+  }
 
   /** Original row and cell property consumers. @param modifier - Actual resource sprm. @returns Whether the table manager consumed it. */
   sprm(modifier: Sprm): boolean {
@@ -38,7 +45,7 @@ export class DomainMapperTableManager {
       }
       return true;
     }
-    if (id !== N.LN_CT_TcPrBase_textDirection) return false;
+    if (id !== N.LN_CT_TcPrBase_textDirection) return this.m_pTablePropsHandler.sprm(modifier);
     let direction: number;
     switch (value) {
       case N.LN_Value_ST_TextDirection_tbRl:
@@ -61,6 +68,11 @@ export class DomainMapperTableManager {
       item.dispose();
     }
     return true;
+  }
+
+  /** Merges native cell properties into the current cell context. @param properties - Actual borrowed property map. @returns Nothing. */
+  cellProps(properties: TablePropertyMap): void {
+    this.m_pCellProps.InsertProps(properties);
   }
 
   /** Original end-of-row accumulation; absent properties do not overwrite the table's previous values. @returns Nothing. */

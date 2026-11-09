@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 516
+revision: 519
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T21:09:48.792Z"
+  updated_at: "2026-11-09T21:19:15.258Z"
   updated_by: "CODER"
-  note: "RTF95 native TXT and Markdown nested traversal checks pass. Keep parent open for table visual attributes and anchored layout."
-  attempts: 106
+  note: "RTF96 native cell shading and palette checks pass. Keep parent open for visual item transport and rendering."
+  attempts: 107
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1701,8 +1704,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:19:15.258Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF96 native cell shading and palette checks pass. Keep parent open for visual item transport and rendering."
+  -
+    type: "status"
+    at: "2026-11-09T21:19:44.034Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:10:53.383Z"
+doc_updated_at: "2026-11-09T21:19:44.034Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4597,6 +4613,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T21:19:15.258Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF96 native cell shading and palette checks pass. Keep parent open for visual item transport and rendering.
+    Attempts: 107
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:19:14.612Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6507,6 +6553,14 @@ sections:
     - Commands: scoped final ASCII/shell/file-dialog rerun and native ASCII/box ownership retest. Result: pass. Evidence: 55 tests in 3 files (rtf95-ascii-final.log), 30 tests in 2 files after replacing a lint-disallowed this alias with the same original line traversal (rtf95-coordinate-final.log). Tests overlap with the original scope.
     - Commands: Writer TypeScript check, targeted ESLint/Prettier, dependency, JSDoc, size, source-tree, WhichId and diff checks. Result: pass. Source provenance and Writer inventory passed for 1986 runtime modules with zero semantic violations (rtf95-registry.log).
     - Native table background and direction persistence plus anchored/floating table scenarios remain open. No full-suite run in this checkpoint.
+
+    ### RTF96 — Native cell shading, effective brush export and actual palette
+
+    The source CLCBPAT/CLCBPATRAW and CLSHDNG branches now populate the real nested shading sprms. TablePropertiesHandler resolves these through the existing CellColorHandler and the UNO BackColor setter applies the actual brush item. Native table/row/cell precedence and transparency control emitted CLCBPAT and palette registration. The group-owned RTFColorTableEntry retains an automatic entry and authored RGB components. CF, ULC, HIGHLIGHT and borders share the native palette lookup, including RGB zero for a missing entry. The stale missing-color fixture was corrected to the pinned behavior. WRITER396 and WRITER397 record the foreground-dispatch omission and fallback distinction.
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok native-cell-color.test.ts native-border-handlers.test.ts rtfexport.test.ts rtfexport.table-list.test.ts rtfattributeoutput.test.ts WriterFileDialog.test.tsx odt-table-roundtrip.test.ts swmd.html-table.test.ts`. Result: pass. Evidence: 779 tests in 32 files, rtf96-writer.log. Includes the real cell shading thresholds, nested palette, automatic/opaque colors, alpha omission, and round trips.
+    - Commands: Writer TypeScript, targeted lint and format, module boundaries, JSDoc, size, source tree, WhichId, diff, source provenance and Writer inventory. Result: pass. Evidence: rtf96-typecheck.log, rtf96-static.log, rtf96-registry.log, 1988 runtime modules and zero semantic violations.
+    - Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -9412,6 +9466,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T21:19:15.258Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF96 native cell shading and palette checks pass. Keep parent open for visual item transport and rendering.
+Attempts: 107
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:19:14.612Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11326,3 +11410,11 @@ SwMDWriter scans native nodes and stacks the original table boundary maps. Exact
 - Commands: scoped final ASCII/shell/file-dialog rerun and native ASCII/box ownership retest. Result: pass. Evidence: 55 tests in 3 files (rtf95-ascii-final.log), 30 tests in 2 files after replacing a lint-disallowed this alias with the same original line traversal (rtf95-coordinate-final.log). Tests overlap with the original scope.
 - Commands: Writer TypeScript check, targeted ESLint/Prettier, dependency, JSDoc, size, source-tree, WhichId and diff checks. Result: pass. Source provenance and Writer inventory passed for 1986 runtime modules with zero semantic violations (rtf95-registry.log).
 - Native table background and direction persistence plus anchored/floating table scenarios remain open. No full-suite run in this checkpoint.
+
+### RTF96 — Native cell shading, effective brush export and actual palette
+
+The source CLCBPAT/CLCBPATRAW and CLSHDNG branches now populate the real nested shading sprms. TablePropertiesHandler resolves these through the existing CellColorHandler and the UNO BackColor setter applies the actual brush item. Native table/row/cell precedence and transparency control emitted CLCBPAT and palette registration. The group-owned RTFColorTableEntry retains an automatic entry and authored RGB components. CF, ULC, HIGHLIGHT and borders share the native palette lookup, including RGB zero for a missing entry. The stale missing-color fixture was corrected to the pinned behavior. WRITER396 and WRITER397 record the foreground-dispatch omission and fallback distinction.
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok native-cell-color.test.ts native-border-handlers.test.ts rtfexport.test.ts rtfexport.table-list.test.ts rtfattributeoutput.test.ts WriterFileDialog.test.tsx odt-table-roundtrip.test.ts swmd.html-table.test.ts`. Result: pass. Evidence: 779 tests in 32 files, rtf96-writer.log. Includes the real cell shading thresholds, nested palette, automatic/opaque colors, alpha omission, and round trips.
+- Commands: Writer TypeScript, targeted lint and format, module boundaries, JSDoc, size, source tree, WhichId, diff, source provenance and Writer inventory. Result: pass. Evidence: rtf96-typecheck.log, rtf96-static.log, rtf96-registry.log, 1988 runtime modules and zero semantic violations.
+- Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.

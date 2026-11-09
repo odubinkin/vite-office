@@ -42,7 +42,8 @@
       "S3HW1E HTML75: TROWD resets original row-direction state, CELLX captures the cell sprms and restores its direction default, and ROW captures current row properties. Group pop releases the original borrowed list copies.",
       "Routes original table flag dispatch including the existing vMerge keywords.",
       "Routes the original nested table destinations and table control families, keeping independent row property buffers.",
-      "Accepts the original RTF destination independently of its numeric suffix, including the upstream bare destination fixture (WRITER393)."
+      "Accepts the original RTF destination independently of its numeric suffix, including the upstream bare destination fixture (WRITER393).",
+      "Routes original table shading and RGB color controls to the actual palette and nested property handlers."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -148,6 +149,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
           "marker": "admits the original RTF destination"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -230,6 +235,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
           "marker": "case RTFKeyword::RTF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::CLCBPAT:"
         }
       ]
     },

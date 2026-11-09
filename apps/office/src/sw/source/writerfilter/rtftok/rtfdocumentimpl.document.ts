@@ -42,12 +42,13 @@ import {
 import { RtfSyntaxError } from "./rtftokenizer";
 import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
 import { MaterializeRtfTable } from "./rtfdocumentimpl.table";
+import type { Color } from "../../../../tools/inc/color";
 
 /** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
 function paragraphBorderBox(
   inherited: SvxBoxItem,
   paragraph: RtfParagraphState,
-  colors: readonly string[],
+  colors: readonly Readonly<Color>[],
   previous?: SwTextNode,
 ): SvxBoxItem | undefined {
   let box: SvxBoxItem | undefined;

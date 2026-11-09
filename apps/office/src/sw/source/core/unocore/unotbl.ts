@@ -21,7 +21,9 @@ import {
 import type { SwTableBox } from "../table/swtable";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
-import { RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
+import { RES_BACKGROUND, RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { MID_BACK_COLOR } from "../../../../editeng/inc/memberids";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
@@ -328,6 +330,17 @@ export function convertToTable(
 
 /** Native cell-format properties write the claimed box format rather than a browser table record. @param box - Actual cell. @param name - Native property name. @param value - Native Any. @returns Whether the cell-format map consumed the property. */
 export function setCellProperty(box: SwTableBox, name: string, value: Any): boolean {
+  if (name === "BackColor") {
+    const format = box.ClaimFrameFormat();
+    const item = (format.GetAttrSet().Get(RES_BACKGROUND) as SvxBrushItem).Clone();
+    try {
+      if (!item.PutValue(value, MID_BACK_COLOR)) illegal("Invalid cell background color");
+      format.SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    return true;
+  }
   if (name === "RowSpan") {
     box.setRowSpan(scalar(value, "sal_Int32") as number);
     return true;

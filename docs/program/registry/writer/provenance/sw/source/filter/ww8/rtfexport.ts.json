@@ -48,7 +48,8 @@
       "S3HW1E HTML73: The actual byte stream consumes the native direction path for text runs, sections, table rows and vertical cells; flow and page selection use existing real export contexts.",
       "Writes the original RTF vertical merge flags for source master and covered row spans after cell direction.",
       "Uses the source ungrouped-only separator after a cell paragraph terminator. Merged horizontal cells emit the native cumulative CELLX.",
-      "Exports nested cell text at its actual depth, emits source NESTCELL and nested row definitions, and collects child box colors before the header."
+      "Exports nested cell text at its actual depth, emits source NESTCELL and nested row definitions, and collects child box colors before the header.",
+      "Registers effective native table background colors before header output and invokes the source cell background producer."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -158,6 +159,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
           "marker": "WriteTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -236,6 +241,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::EndTableRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::TableBackgrounds"
         }
       ]
     }

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TablePropertiesHandler.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+    "localSymbols": [
+      "TablePropertiesHandler",
+      "sprm"
+    ],
+    "upstreamSymbols": [
+      "TablePropertiesHandler::sprm"
+    ],
+    "preservedResponsibilities": [
+      "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager."
+    ],
+    "omittedResponsibilities": [
+      "The other table resource families and cell interop grab bag are outside this RTF brush path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePropertiesHandler.ts",
+          "marker": "TablePropertiesHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+          "marker": "case NS_ooxml::LN_CT_TcPrBase_shd:"
+        }
+      ]
+    }
+  }
+}

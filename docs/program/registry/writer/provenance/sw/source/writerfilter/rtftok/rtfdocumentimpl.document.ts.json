@@ -39,7 +39,8 @@
       "S3HW1E HTML58: original static SwNodes::InsertTable now forwards to its actual ndtbl.cxx node-matrix responsibility InsertTableNodes. Zero boxes return null without mutation; zero lines create one body row; supplied headline/body collections transition using the original repetition condition. Actual table/cell/text/end nodes retain their real enclosing section, including extra/caption and genuine existing cell boundaries. The seven native propagation identities (adjustment, Latin/CJK/CTL font families and heights) copy only effective SET source items when the selected cell collection has no effective SET value; direct or inherited collection values win, defaults and other source items do not propagate. SwDoc consumes this actual matrix before page-attribute transfer and builds its original shared line/box formats over those existing sections instead of rebuilding text sections and unconditionally overwriting adjustment. The old independent browser empty-table builder is explicitly named MakeTableNodeBefore and migrated in real XML/RTF and test consumers; it no longer masquerades as the native static InsertTable API. The existing bound SwTable/early frame bootstrap remains a representation difference requiring further native constructor/lifetime audit; no raw/default table or nullable frame contract is certified by these node-matrix tests. Full native module/API/ABI/default/lifetime behavior remains unverified. First-cell context/floating/section orchestration, recursive table grammar, caption placement/materialization/layout/real text measurement, RTF direction export and final format/UI audit remain required. Browser open/save/autosave/recovery deviations are unchanged.",
       "S3HW1E HTML75: The actual materialized Writer table consumes buffered direction properties through the native mapper and existing UNO wrappers.",
       "Actual imported table rows receive the native buffered property consumer after core creation.",
-      "Materializes active section tables by replaying completed top-level and nested native row buffers."
+      "Materializes active section tables by replaying completed top-level and nested native row buffers.",
+      "Binds the native Color palette to original paragraph border materialization."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -129,6 +130,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -199,6 +204,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFDocumentImpl::replayRowBuffer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::BRDRCF:"
         }
       ]
     },

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+      ],
+      "justification": "Preserves all original shade thresholds and CLCBPAT aliases through the native nested cell sprm owner (WRITER396).",
+      "knownViolations": [],
+      "localSymbols": [
+        "dispatchTableShading"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::dispatchTableValue"
+      ]
+    }
+  }
+}

@@ -18,7 +18,8 @@
       "RTFDocumentImpl::dispatchValue"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF border style controls, eighth-point width admission, whole-point distances, BorderHandler defaults and native BorderLine2/Box conversion; unknown border flags do not change existing styles."
+      "Maps represented RTF border style controls, eighth-point width admission, whole-point distances, BorderHandler defaults and native BorderLine2/Box conversion; unknown border flags do not change existing styles.",
+      "Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior."
     ],
     "omittedResponsibilities": [
       "Native frame shadows, arbitrary OOXML art borders and compiled-upstream differential behavior are outside this value fragment."
@@ -32,6 +33,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
           "marker": "source hairline quantization"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -50,6 +59,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx",
           "marker": "void MakeBorderLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx",
+          "marker": "no auto color for borders"
         }
       ]
     },

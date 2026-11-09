@@ -3235,3 +3235,17 @@ both source behaviors.
 An inner cell can continue a paragraph run from the outer cell with
 the same coordinates, while a different inner coordinate can advance
 the outer column. Retain this traversal and its tab and line separators.
+
+### WRITER396 — RTF registers cell foreground controls without a value consumer
+
+The tokenizer recognizes CLCFPAT and CLCFPATRAW. The pinned value
+dispatcher has no case for either control, so a cell shade uses the
+default automatic foreground through `CellColorHandler` even if one
+of these controls appears. Keep that source behavior.
+
+### WRITER397 — An out-of-range RTF palette index resolves to opaque black
+
+`RTFDocumentImpl::getColorTable` returns color zero when an index is
+absent. A present palette entry with no RGB components instead returns
+`COL_AUTO`. Preserve the distinction in character and cell color
+consumers, including an authored color at index zero.

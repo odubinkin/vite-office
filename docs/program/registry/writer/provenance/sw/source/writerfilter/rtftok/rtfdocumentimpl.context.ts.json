@@ -28,7 +28,8 @@
       "parseRtfHyperlinkInstruction",
       "RtfDocumentImplContext",
       "RtfNestedTable",
-      "RtfTableCellContent"
+      "RtfTableCellContent",
+      "RTFColorTableEntry"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::resolveSubstream"
@@ -52,7 +53,8 @@
       "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged.",
       "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
       "S3HW1E HTML75: Native row and cell sprms are group-owned; copied per-cell and row sets survive actual buffer capture.",
-      "Retains actual nested rows in order and references the selected table buffer in each parser group."
+      "Retains actual nested rows in order and references the selected table buffer in each parser group.",
+      "Copies the original group-owned RGB entry with automatic state until a native component is set."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -214,6 +216,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
           "marker": "RtfNestedTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
+          "marker": "RTFColorTableEntry"
         }
       ],
       "upstream": [
@@ -284,6 +294,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
           "marker": "class TableRowBuffer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "class RTFColorTableEntry"
         }
       ]
     },

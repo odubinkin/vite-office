@@ -875,8 +875,12 @@ export function createWriterTextColorItem(value: unknown): SvxColorItem {
 }
 /** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
 export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
-  const color = item.GetValue();
-  if (color.equals(COL_AUTO)) return "auto";
+  return writerColorValue(item.GetValue());
+}
+
+/** Projects a native color only at an existing primitive boundary. @param color - Original packed color. @param automatic - External sentinel spelling. @returns Primitive color. */
+export function writerColorValue(color: Readonly<Color>, automatic = "auto"): string {
+  if (color.equals(COL_AUTO)) return automatic;
   if (color.GetAlpha() !== 255)
     return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
   return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
@@ -921,11 +925,7 @@ export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "tr
 
 /** Projects a native highlight brush to the Writer text/worker/DOM boundary. @param item - Actual highlight item. @returns Primitive color. */
 export function writerHighlightColorValue(item: Readonly<SvxBrushItem>): string {
-  const color = item.GetColor();
-  if (color.equals(COL_TRANSPARENT)) return "transparent";
-  if (color.GetAlpha() !== 255)
-    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
-  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+  return writerColorValue(item.GetColor(), "transparent");
 }
 
 import * as WriterWhich from "../../../inc/hintids";

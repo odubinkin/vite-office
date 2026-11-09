@@ -4,7 +4,7 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import type { wwFont } from "./wrtw8sty";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
-import { RES_CHRATR_FONT, RES_FRAMEDIR } from "../../../inc/hintids";
+import { RES_BACKGROUND, RES_CHRATR_FONT, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { RtfExport } from "./rtfexport";
 import { OutHex, OutString } from "../../../../filter/source/msfilter/rtfutil";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
@@ -42,6 +42,8 @@ import {
   type SvxBorderLine,
 } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { COL_AUTO, type Color } from "../../../../tools/inc/color";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { TransColToIco } from "../../../../filter/source/msfilter/util";
@@ -68,12 +70,29 @@ import {
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import type { SwAttrSet } from "../../core/attr/swatrset";
-import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swatrset";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
+
+/** Selects the original effective RTF cell background from table, row and cell. @param table - Native table format. @param row - Native row format. @param cell - Native cell format. @returns Original selected color. */
+export function TableBackgroundColor(
+  table: SwFrameFormat,
+  row: SwFrameFormat,
+  cell: SwFrameFormat,
+): Readonly<Color> {
+  const tableBrush = table.GetAttrSet().GetItem(RES_BACKGROUND) as SvxBrushItem | undefined,
+    rowBrush = row.GetAttrSet().GetItem(RES_BACKGROUND) as SvxBrushItem | undefined,
+    cellBrush = cell.GetAttrSet().GetItemIfSet(RES_BACKGROUND) as SvxBrushItem | undefined;
+  const cellColor = cellBrush?.GetColor();
+  if (cellColor && !cellColor.equals(COL_AUTO)) return cellColor;
+  const rowColor = rowBrush?.GetColor();
+  if (rowColor && !rowColor.equals(COL_AUTO)) return rowColor;
+  return tableBrush?.GetColor() ?? COL_AUTO;
+}
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput extends AttributeOutputBase {
@@ -89,6 +108,12 @@ export class RtfAttributeOutput extends AttributeOutputBase {
       /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
       (font, assoc) => this.OutputCharFontAssoc(font, assoc),
     );
+  }
+
+  /** Original TableBackgrounds writes only an opaque selected color as a cell background. @param table - Native table format. @param row - Native row format. @param cell - Native cell format. @returns RTF cell controls. */
+  TableBackgrounds(table: SwFrameFormat, row: SwFrameFormat, cell: SwFrameFormat): string {
+    const color = TableBackgroundColor(table, row, cell);
+    return color.IsTransparent() ? "" : `\\clcbpat${this.colorIndex(writerColorValue(color))}`;
   }
 
   /** Original virtual returns the genuine RTF owner. @returns Actual exporter. */

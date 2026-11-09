@@ -1,11 +1,14 @@
 /** @fileoverview RTF row and cell direction sprms through actual mapper, table formats, and Worker transfer. */
 import { afterEach, assert, expect, it } from "vitest";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { COL_AUTO, Color } from "../../../../tools/inc/color";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SwXCell } from "../../core/unocore/unotbl";
 import { unicode } from "../../core/unocore/unocrsrhelper";
-import { RES_FRAMEDIR } from "../../../inc/hintids";
+import { RES_BACKGROUND, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SwTableNode } from "../../core/docnode/node";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
@@ -267,6 +270,87 @@ it("uses the browser nesting bound for explicit RTF table depth", /** Applies th
     /** Imports an oversized logical table depth. @returns The resulting invalid document. */ () =>
       read(String.raw`\itap2147483647`),
   ).toThrow("RTF table nesting is too deep.");
+});
+
+/** Reads a box's effective native background. @param frame - Actual frame. @returns Native brush color. */
+function background(frame: SwFrameFormat | undefined): Color | undefined {
+  return (frame?.GetAttrSet().Get(RES_BACKGROUND) as SvxBrushItem | undefined)?.GetColor();
+}
+
+/** Applies one actual background brush to a connected native format. @param frame - Actual table/row/box format. @param color - Original color. @returns Nothing. */
+function setBackground(frame: SwFrameFormat, color: Readonly<Color>): void {
+  const brush = new SvxBrushItem(color, RES_BACKGROUND);
+  try {
+    frame.SetFormatAttr(brush);
+  } finally {
+    brush.Dispose();
+  }
+}
+
+it("maps table background and shading controls through the actual cell brush owner", /** Tests source automatic palette entries, raw alias, strict threshold, and foreground defaults. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\colortbl;\red200\green100\blue40;\red0\green255\blue0;}\trowd` +
+      String.raw`\clcbpat1\cellx1000\clcbpatraw1\clshdng749\cellx2000\clcbpat1\clshdng750\cellx3000` +
+      String.raw`\clcbpat1\clcfpat2\clshdng9750\cellx4000\clcbpat0\cellx5000\clcbpat999\cellx6000\intbl a\cell b\cell c\cell d\cell e\cell f\cell\row`,
+  );
+  const boxes = table(document).GetTabLines()[0]?.GetTabBoxes() ?? [];
+  const expected = [0xc86428, 0xbe5f26, 0xb45a24, 0, COL_AUTO.toUInt32(), 0];
+  expect(
+    boxes.map(
+      /** Reads the original packed brush color. @param box - Actual cell. @returns Color. */ (
+        box,
+      ) => background(box.GetFrameFormat())?.toUInt32(),
+    ),
+  ).toEqual(expected);
+  const reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
+  documents.push(reopened);
+  expect(
+    table(reopened)
+      .GetTabLines()[0]
+      ?.GetTabBoxes()
+      .map(
+        /** Reads the original packed brush color after export. @param box - Actual cell. @returns Color. */ (
+          box,
+        ) => background(box.GetFrameFormat())?.toUInt32(),
+      ),
+  ).toEqual(expected);
+});
+
+it("exports effective table, row and cell brush colors in original priority order", /** Direct automatic color falls back, while partial alpha suppresses the selected cell background. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx1000\cellx2000\cellx3000\intbl a\cell b\cell c\cell\row\trowd\cellx3000\intbl d\cell\row`,
+  );
+  const owner = table(document),
+    row = owner.GetTabLines()[0],
+    [first, second, third] = row?.GetTabBoxes() ?? [];
+  assert(row && first && second && third);
+  setBackground(owner.GetFrameFormat(), new Color(0x5c983a));
+  setBackground(row.GetFrameFormat(), new Color(0x386b9c));
+  setBackground(first.GetFrameFormat(), new Color(0xc82546));
+  setBackground(second.GetFrameFormat(), COL_AUTO);
+  const partial = new Color(0xffee22);
+  partial.SetAlpha(128);
+  setBackground(third.GetFrameFormat(), partial);
+  const bytes = RtfExport.WriteDocument(document);
+  expect(new TextDecoder().decode(bytes).match(/\\clcbpat\d+/gu)).toHaveLength(3);
+  const reopened = new RtfDocumentImpl().ResolveBytes(bytes);
+  documents.push(reopened);
+  expect(
+    table(reopened)
+      .GetTabLines()
+      .map(
+        /** Reads the exported selected brush at each actual cell. @param line - Actual row. @returns Original values. */ (
+          line,
+        ) =>
+          line
+            .GetTabBoxes()
+            .map(
+              /** Reads the original packed brush color. @param box - Actual cell. @returns Color. */ (
+                box,
+              ) => background(box.GetFrameFormat())?.toUInt32(),
+            ),
+      ),
+  ).toEqual([[0xc82546, 0x386b9c, COL_AUTO.toUInt32()], [0x5c983a]]);
 });
 
 it("converts native RTF vertical merge flags to signed boxes and writes the same controls", /** Verifies buffered cell sprms, UNO row-span setters, border selection and native reimport. @returns Nothing. */ () => {
