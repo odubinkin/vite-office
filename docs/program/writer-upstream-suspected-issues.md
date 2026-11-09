@@ -3042,3 +3042,36 @@ points and returns when the resulting position reaches the range end.
 units with four and return only if it is smaller. Preserve the exact
 comparison and unit on each path. Native gendict fixtures cover spans of
 three, four and five script characters.
+
+### WRITER372 — Patched Khmer cluster scans track cursor and offset separately
+
+The pinned LibreOffice ICU patch advances the cursor through ignored joiners
+without advancing the parallel cluster counter on those paths.
+`scanAfterEnd` also takes the scalar returned by the advancing operation,
+which is the character at the old position. Preserve the cursor movements
+and independent counter changes. The native comparison covers joiners,
+adjacent punctuation and nonzero UTF-16 subranges.
+
+### WRITER373 — Patched Khmer inhibitor scan rechecks the old scalar
+
+In the same patch, `DictionaryBreakEngine::scanWJ` keeps the scalar that
+triggered the cluster scan. It tests that scalar again after the scan.
+Because the enclosing branch already admitted ZWSP or WJ, the check always
+continues there. The port preserves the continuation and the original
+updated scan position without rereading the character.
+
+### WRITER374 — Patched Khmer candidate vectors retain a reduced logical size
+
+The Khmer weighted segmentation removes candidates immediately before marks.
+The native UVector32 size shrinks, but later dictionary matches still write
+through the raw twenty-entry buffers. Subsequent vector reads continue to
+use the reduced logical size. Preserve both the raw capacity and the logical
+size. The boundary result is compared against the compiled patch.
+
+### WRITER375 — Patched Khmer compares the word/line bitmask with a scalar break type
+
+The Khmer constructor stores the combined word and line bits in `fTypes`.
+Its boundary conditions compare that combined value numerically with
+`UBRK_LINE`. The resulting branches apply the same checks on the compiled
+Khmer engine regardless of the caller's phrase flag. The port keeps the
+effective conditions for the fixed Khmer constructor.

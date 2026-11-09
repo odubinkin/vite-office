@@ -76,7 +76,7 @@ export class PossibleWord {
 }
 
 /** Reads native UTF16 at a clipped position, backing up from the trail of a surrogate pair. @param text - Source. @param index - Requested native position. @returns Aligned index. */
-function nativeIndex(text: string, index: number): number {
+export function dictionaryNativeIndex(text: string, index: number): number {
   const position = Math.max(0, Math.min(index, text.length));
   const unit = text.charCodeAt(position),
     previous = text.charCodeAt(position - 1);
@@ -125,7 +125,7 @@ export abstract class DictionaryBreakEngine {
     status: [number],
   ): number {
     if (U_FAILURE(status[0])) return 0;
-    const rangeStart = nativeIndex(text, start);
+    const rangeStart = dictionaryNativeIndex(text, start);
     let rangeEnd = rangeStart;
     for (
       let code = text.codePointAt(rangeEnd);

@@ -1893,3 +1893,14 @@ records their differing short-span checks.
 
 Resource registration, the Khmer and CJK engines, DictionaryCache and the
 public word-boundary connection to Writer remain open.
+
+### HTML82 — LibreOffice's patched Khmer dictionary engine
+
+The Khmer engine preserves the source UnicodeSet ranges, cluster scans
+around invisible separators and punctuation, and weighted segmentation.
+Native results matched across 2842 inputs using the LibreOffice replacement
+dictionary, with 45 smaller compiled witnesses retained in tests. WRITER372
+through WRITER375 record the retained details of the patch.
+
+The CJK engine, runtime dictionary resource registration, DictionaryCache
+and the Writer paragraph-width connection remain open.

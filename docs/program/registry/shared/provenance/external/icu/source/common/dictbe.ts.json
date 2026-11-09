@@ -23,7 +23,8 @@
     ],
     "preservedResponsibilities": [
       "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370.",
-      "S3HW1E HTML81: the original DictionaryBreakEngine cursor/span and ICU Thai, Lao and Burmese engines preserve native candidate slots, three-word lookahead, resynchronization, script-specific combining mark sets, Thai suffixes and final stack semantics. Source and TS cursor/breaks matched on 4250 real-dictionary inputs plus 48 fixture witnesses. WRITER371 records the unequal four-character admission boundary."
+      "S3HW1E HTML81: the original DictionaryBreakEngine cursor/span and ICU Thai, Lao and Burmese engines preserve native candidate slots, three-word lookahead, resynchronization, script-specific combining mark sets, Thai suffixes and final stack semantics. Source and TS cursor/breaks matched on 4250 real-dictionary inputs plus 48 fixture witnesses. WRITER371 records the unequal four-character admission boundary.",
+      "S3HW1E HTML82: patched KhmerBreakEngine retains original ICU UnicodeSet properties, cloned UTF16 scans with separate counters, inhibitor windows, dictionary weight minimization, candidate vector logical size and original output gates. Native cursor/boundary traces match 2842 real-dictionary inputs plus 45 compiled fixture witnesses. See WRITER372–375."
     ],
     "omittedResponsibilities": [
       "The language-specific break-engine scans and DictionaryCache are pending."
@@ -40,6 +41,10 @@
         },
         {
           "path": "apps/office/src/external/icu/source/common/dictbe.southeast-asian.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.khmer.native.test.ts",
           "marker": "@fileoverview"
         }
       ],
