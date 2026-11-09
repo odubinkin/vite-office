@@ -4413,3 +4413,20 @@ synchronous filesystem reader. The app can supply linked common data and
 registered application packages through the original public APIs. The
 production OpenOffice rule package and iterator consumers are the next
 integration point for the CSV formatting paths.
+
+### Linked OpenOffice rule data and ICU iterator ownership
+
+The OpenOffice rule package now carries the original generated ToCP table and
+all eight linked rule allocations. The native witness follows the LibreOffice
+make target through genbrk, genccode and gencmn and reads the linked C symbol.
+The browser binds native pointer slots to the actual names and aligned rule
+bytes. Registration and lookup use the public ICU data loader.
+
+The rule iterator owns the actual UDataMemory wrapper, UChars provider and
+boundary caches. The new public operations preserve native index clamping,
+UTF-16 surrogate positioning, cursor and rule status. The UChars binding
+retains the original open, clone and close behavior, including the deep clone
+chunk pointer recorded in CALC-476. The comparison covers 40 traversal
+sequences across all eight rules, with Unicode, embedded NUL and cache refill
+cases. The production iterator still requires the dictionary engine factory
+and the enclosing LibreOffice word service.

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 206
+revision: 209
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T17:35:46.742Z"
+  updated_at: "2026-11-09T17:48:18.925Z"
   updated_by: "CODER"
-  note: "Public ICU data open checkpoint verified with 32 native cases, 72 related tests, 197 CSV tests and Chromium acceptance. Production rule package and iterator integration remain."
-  attempts: 53
+  note: "Verified eight linked rule symbols, 1560 native boundary operations, 100 related tests, 197 CSV tests and Chromium acceptance. Concrete dictionary and LibreOffice word service integration remain."
+  attempts: 54
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1176,8 +1179,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T17:48:18.925Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified eight linked rule symbols, 1560 native boundary operations, 100 related tests, 197 CSV tests and Chromium acceptance. Concrete dictionary and LibreOffice word service integration remain."
+  -
+    type: "status"
+    at: "2026-11-09T17:48:28.493Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T17:35:53.583Z"
+doc_updated_at: "2026-11-09T17:48:28.493Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2787,6 +2803,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T17:48:18.925Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified eight linked rule symbols, 1560 native boundary operations, 100 related tests, 197 CSV tests and Chromium acceptance. Concrete dictionary and LibreOffice word service integration remain.
+    Attempts: 54
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:48:18.299Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4149,6 +4195,22 @@ sections:
     - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
       Result: pass. Evidence: 6.24s build and one Chromium CSV import, ODS save and active sheet CSV export scenario.
     - Exact-path formatting and git diff --check pass. The checkpoint stages 26 reviewed implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. Next integration includes the production OpenOffice package, iterator and service consumers, NatNum12 formatting and multiline EditEngine import. The goal remains active. The user requested a pause at 15% remaining quota and the reported weekly Codex quota still has 43% remaining.
+
+    ### Linked OpenOffice rules and UChars-backed iterator ownership
+
+    - Previous goal turn made progress at d577a5cae. The route remains the approved direct CODER task in the calc checkout. This checkpoint builds the actual generated OpenOffice_dat table and binds its original ToCP pointer slots to eight native rule allocations. The public ICU loader opens the linked package and gives ownership of each handle to the actual rule wrapper. The iterator uses the existing forward and reverse algorithms and boundary caches. Dictionary lookup remains abstract until the concrete native factories and engines are ported.
+    - Added original UChars storage initialization, open, clone, indexed codepoint access and close. CALC-476 records the native deep clone's copied context and borrowed chunk pointer. The original witness confirms both pointer relationships and the visible consequence of mutating the old chunk. The consumed iterator uses a shallow read-only clone.
+    - Command: node_modules/.bin/tsx scripts/icu-openoffice-rule-iterator-native-probe.mjs
+      Result: pass. Evidence: eight linked symbols, 40 native sequences, and 1560 boundary operations with result, cursor and rule tag. All inputs use the original generated rules and the original public ICU data and iterator entry points. The native UChars lifecycle witness records deferred length, surrogate normalization, aliasing, flags and close results. The linked asset matches its recorded SHA256.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/udata.open.native.test.ts --maxWorkers=1
+      Result: pass. Evidence: 100 tests across five files. Scope: linked public open and ownership, UChars lifecycle, current and adjacent rule boundary operations, existing forward/reverse and cache regressions. The test subclass rejects any unexpected dictionary request. The concrete dictionary paths remain pending.
+    - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 1986 runtime modules, 1773 mapped records, 1985 boundary sources, 10791 relative imports, 236 allowed edges, 4430 JSDoc-checked source files and 464 Calc commands. Initial lint found a forwarding test constructor. Removed the test constructor and used the native public access level on the actual UDataMemory constructor. Final typecheck, lint and the related replay passed.
+    - Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+      Result: pass. Evidence: 197 tests across eight files in 26.33s. Scope: existing CSV and Calc file workflow regressions.
+    - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
+      Result: pass. Evidence: 14.59s build and one Chromium import, ODS save and CSV export scenario.
+    - Exact-path formatting, fixture review and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
 id_source: "generated"
 ---
 ## Summary
@@ -5767,6 +5829,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T17:48:18.925Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified eight linked rule symbols, 1560 native boundary operations, 100 related tests, 197 CSV tests and Chromium acceptance. Concrete dictionary and LibreOffice word service integration remain.
+Attempts: 54
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:48:18.299Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7133,3 +7225,19 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
   Result: pass. Evidence: 6.24s build and one Chromium CSV import, ODS save and active sheet CSV export scenario.
 - Exact-path formatting and git diff --check pass. The checkpoint stages 26 reviewed implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. Next integration includes the production OpenOffice package, iterator and service consumers, NatNum12 formatting and multiline EditEngine import. The goal remains active. The user requested a pause at 15% remaining quota and the reported weekly Codex quota still has 43% remaining.
+
+### Linked OpenOffice rules and UChars-backed iterator ownership
+
+- Previous goal turn made progress at d577a5cae. The route remains the approved direct CODER task in the calc checkout. This checkpoint builds the actual generated OpenOffice_dat table and binds its original ToCP pointer slots to eight native rule allocations. The public ICU loader opens the linked package and gives ownership of each handle to the actual rule wrapper. The iterator uses the existing forward and reverse algorithms and boundary caches. Dictionary lookup remains abstract until the concrete native factories and engines are ported.
+- Added original UChars storage initialization, open, clone, indexed codepoint access and close. CALC-476 records the native deep clone's copied context and borrowed chunk pointer. The original witness confirms both pointer relationships and the visible consequence of mutating the old chunk. The consumed iterator uses a shallow read-only clone.
+- Command: node_modules/.bin/tsx scripts/icu-openoffice-rule-iterator-native-probe.mjs
+  Result: pass. Evidence: eight linked symbols, 40 native sequences, and 1560 boundary operations with result, cursor and rule tag. All inputs use the original generated rules and the original public ICU data and iterator entry points. The native UChars lifecycle witness records deferred length, surrogate normalization, aliasing, flags and close results. The linked asset matches its recorded SHA256.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbi.owner.native.test.ts src/external/icu/source/common/rbbi.forward.test.ts src/external/icu/source/common/rbbi.reverse.test.ts src/external/icu/source/common/rbbi_cache.test.ts src/external/icu/source/common/udata.open.native.test.ts --maxWorkers=1
+  Result: pass. Evidence: 100 tests across five files. Scope: linked public open and ownership, UChars lifecycle, current and adjacent rule boundary operations, existing forward/reverse and cache regressions. The test subclass rejects any unexpected dictionary request. The concrete dictionary paths remain pending.
+- Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 1986 runtime modules, 1773 mapped records, 1985 boundary sources, 10791 relative imports, 236 allowed edges, 4430 JSDoc-checked source files and 464 Calc commands. Initial lint found a forwarding test constructor. Removed the test constructor and used the native public access level on the actual UDataMemory constructor. Final typecheck, lint and the related replay passed.
+- Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/browser/presentation/calc-files.test.tsx --maxWorkers=1
+  Result: pass. Evidence: 197 tests across eight files in 26.33s. Scope: existing CSV and Calc file workflow regressions.
+- Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
+  Result: pass. Evidence: 14.59s build and one Chromium import, ODS save and CSV export scenario.
+- Exact-path formatting, fixture review and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.ts",
+    "upstreamPath": "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
+    "localSymbols": [
+      "OpenOffice_dat",
+      "decode"
+    ],
+    "upstreamSymbols": [
+      "OpenOffice_dat"
+    ],
+    "preservedResponsibilities": [
+      "The generated OpenOffice_dat C table and eight compiled rule allocations are embedded as the original ToCP bytes and managed pointer relocations. The original LibreOffice genbrk, genccode and gencmn invocation order is reproduced against pinned ICU tools and rules. Original public app registration and loading replay every rule."
+    ],
+    "omittedResponsibilities": [
+      "The pinned browser data bundle contains all eight rules from the all-locales build."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.ts",
+          "marker": "OpenOffice_dat"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.json",
+          "marker": "OpenOffice/count_word.brk"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
+          "marker": "OpenOffice_dat.c"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.ts",
+      "stackNecessity": "generated-resource-boundary",
+      "rationale": "The generated OpenOffice_dat C symbol is materialized as an ESM module from the pinned LibreOffice make target and the original ICU generators."
+    }
+  }
+}

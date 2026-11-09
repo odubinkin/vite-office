@@ -5152,3 +5152,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source `vendor/icu-reference/source/common/udata.cpp`, `isTimeZoneFile` and its caller in `doOpenChoice`. The public declaration permits null type in `unicode/udata.h`.
 - ICU data requests enter the timezone classifier, which compares type against res with no null check. With a null type the C++ call has undefined behavior. The managed comparison treats null as unequal and otherwise preserves the four exact resource names and the original classification order.
+
+### CALC-476 — A deep UChars clone can keep reading from the original chunk
+
+- Source `vendor/icu-reference/source/common/utext.cpp`, `shallowTextClone` and `ucstrTextClone`.
+- The deep clone copies text into a new allocation and replaces `context`. The existing `chunkContents` pointer still refers to the original allocation. The original witness mutates the first input code unit after cloning. Indexed access sees the mutation even though the cloned context contains the original value.
+- Preserve the original context and chunk pointer assignments. The rule iterator requests a shallow read-only clone.

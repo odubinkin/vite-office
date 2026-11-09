@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.ts",
+        "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.json",
+        "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json"
+      ],
+      "justification": "The generated OpenOffice_dat C table and eight compiled rule allocations are embedded as the original ToCP bytes and managed pointer relocations. The original LibreOffice genbrk, genccode and gencmn invocation order is reproduced against pinned ICU tools and rules. Original public app registration and loading replay every rule.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OpenOffice_dat",
+        "decode"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
+      "upstreamSymbols": [
+        "OpenOffice_dat"
+      ]
+    }
+  }
+}

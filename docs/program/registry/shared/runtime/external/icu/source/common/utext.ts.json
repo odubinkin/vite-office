@@ -20,9 +20,12 @@
         "apps/office/src/external/icu/source/common/rbbi.forward.test.ts",
         "apps/office/src/external/icu/source/common/rbbi.forward.native-observations.json",
         "vendor/icu-reference/source/common/utext.cpp",
-        "apps/office/src/external/icu/source/common/rbbi.reverse.test.ts"
+        "apps/office/src/external/icu/source/common/rbbi.reverse.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json",
+        "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.json"
       ],
-      "justification": "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. Original RuleBasedBreakIterator/RBBIDataWrapper construction, public caches/dictionaries/word/title/UNO bootstrap and native allocator/ABI remain unverified; no fake iterator factory is exported. Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. Public iterator/cache/dictionary/word/title/service construction and native allocator/ABI remain incomplete; a raw safe point is not exposed as a public word boundary.",
+      "justification": "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. The forward checkpoint preceded the actual rule-owner integration. Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. The safe reverse checkpoint tested raw restart points. Original linked OpenOffice rule data uses the real generated ToCP name and padded rule symbols. The UDataMemory-backed iterator owns the actual rule wrapper, UChars provider, break cache and dictionary cache, and drives public boundary queries through the original cache and rule methods. UText setup, close, indexed access and shallow/deep cloning retain source ownership and cursor behavior, including CALC-476. Forty native boundary sequences across all eight generated rules match initialized public results, cursor and rule status. Dictionary factory lookup remains an abstract dependency of the concrete production iterator. General native allocation failure, obsolete CharacterIterator adapters and ICU provider ABI are outside the implemented UChars binding.",
       "knownViolations": [],
       "localSymbols": [
         "utext_getNativeIndex",
@@ -33,7 +36,17 @@
         "utext_current32",
         "utext_getPreviousNativeIndex",
         "utext_nativeLength",
-        "ucstrTextLength"
+        "ucstrTextLength",
+        "utext_char32At",
+        "utext_setup",
+        "utext_close",
+        "utext_clone",
+        "utext_freeze",
+        "shallowTextClone",
+        "ucstrTextClone",
+        "ucstrTextClose",
+        "ucstrFuncs",
+        "utext_openUChars"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/icu-reference/source/common/utext.cpp",
@@ -46,7 +59,17 @@
         "utext_current32",
         "utext_getPreviousNativeIndex",
         "utext_nativeLength",
-        "ucstrTextLength"
+        "ucstrTextLength",
+        "utext_char32At",
+        "utext_setup",
+        "utext_close",
+        "utext_clone",
+        "utext_freeze",
+        "shallowTextClone",
+        "ucstrTextClone",
+        "ucstrTextClose",
+        "ucstrFuncs",
+        "utext_openUChars"
       ]
     }
   }
