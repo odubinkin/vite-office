@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 504
+revision: 507
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:36:09.920Z"
+  updated_at: "2026-11-09T20:43:05.914Z"
   updated_by: "CODER"
-  note: "RTF91 passes 150 scoped tests and source gates. Keep parent open for compound ranges and remaining format scenarios."
-  attempts: 102
+  note: "RTF92 source and scoped tests pass after correcting the BRDRW28 fixture. Keep parent open for remaining table/filter scenarios."
+  attempts: 103
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1637,8 +1640,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:43:05.914Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF92 source and scoped tests pass after correcting the BRDRW28 fixture. Keep parent open for remaining table/filter scenarios."
+  -
+    type: "status"
+    at: "2026-11-09T20:43:16.138Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:36:18.613Z"
+doc_updated_at: "2026-11-09T20:43:16.138Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4413,6 +4429,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:43:05.914Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF92 source and scoped tests pass after correcting the BRDRW28 fixture. Keep parent open for remaining table/filter scenarios.
+    Attempts: 103
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:43:04.312Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6284,6 +6330,16 @@ sections:
     - Result: pass. Evidence: rtf91-typecheck.log and rtf91-static.log. Scope: Writer TypeScript and source gates.
     - Command: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 runtime modules and 0 semantic violations, rtf91-registry-final.log. The SwDoc declaration and ndtbl implementation use distinct pinned files, recorded separately in the evidence.
     - Residual scope: compound horizontal/vertical and cross-row selections, nested RTF buffers, and browser representation of nested/anchored raw Markdown HTML remain open. This is an import-only merge branch, with no new interactive merge or undo entry point. Full suite not scheduled at this checkpoint.
+
+    ### RTF92 — Compound native table merge and border correction
+
+    The new-model selection uses the original logical endpoint rectangle, source midpoint tests, signed span extension and ordered width corrections. Preparation retains original nodes and box ownership, skips existing covered content, applies shared native formats and cleans up whole covered lines with pre-delete span adjustment. Original top/bottom and left/right border handoff preserves adjacent surviving edges. WRITER390 and WRITER391 document source quirks. The complete importer/exporter tests cover simultaneous horizontal and vertical flags, a surviving continuation, deletion of the whole covered row, a cross-row width correction, reverse deletion border handoff, and native RTF reimport.
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtf-table-direction.test.ts rtfdocumentimpl.document.test.ts rtfexport.table-list.test.ts rtfexport.test.ts native-column-insertion.test.ts native-independent-columns.test.ts native-node-index-removal.test.ts native-table-delete.test.ts native-import-table-errors.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`.
+    - Result: 185 passed and 1 fixture failure in 12 files (rtf92-writer.log). The runtime returned the original 27-twip converted solid line for BRDRW28, while the fixture asserted 28. Verified the pinned eighth-point converter and corrected the test expectation. Replaying `rtf-table-direction.test.ts` alone passed all 17 scenarios (rtf92-writer-retest.log). Combined scope covers 186 distinct scenarios on the same runtime source, with no full-suite run.
+    - Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, dependency, JSDoc, size, source-tree, WhichId, and diff checks. Result: pass. Evidence: rtf92-typecheck.log and rtf92-static.log. Scope: affected Writer runtime and static invariants.
+    - Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 modules and zero semantic violations, rtf92-registry.log.
+    - Residual scope: nested RTF buffers and the browser view and storage of existing nested/anchored Markdown tables. Interactive merge undo is separate from native file import.
 id_source: "generated"
 ---
 ## Summary
@@ -9069,6 +9125,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:43:05.914Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF92 source and scoped tests pass after correcting the BRDRW28 fixture. Keep parent open for remaining table/filter scenarios.
+Attempts: 103
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:43:04.312Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10944,3 +11030,13 @@ The CLMGF/CLMRG group sprms reach the native mapper-only hMerge property. The ha
 - Result: pass. Evidence: rtf91-typecheck.log and rtf91-static.log. Scope: Writer TypeScript and source gates.
 - Command: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 runtime modules and 0 semantic violations, rtf91-registry-final.log. The SwDoc declaration and ndtbl implementation use distinct pinned files, recorded separately in the evidence.
 - Residual scope: compound horizontal/vertical and cross-row selections, nested RTF buffers, and browser representation of nested/anchored raw Markdown HTML remain open. This is an import-only merge branch, with no new interactive merge or undo entry point. Full suite not scheduled at this checkpoint.
+
+### RTF92 — Compound native table merge and border correction
+
+The new-model selection uses the original logical endpoint rectangle, source midpoint tests, signed span extension and ordered width corrections. Preparation retains original nodes and box ownership, skips existing covered content, applies shared native formats and cleans up whole covered lines with pre-delete span adjustment. Original top/bottom and left/right border handoff preserves adjacent surviving edges. WRITER390 and WRITER391 document source quirks. The complete importer/exporter tests cover simultaneous horizontal and vertical flags, a surviving continuation, deletion of the whole covered row, a cross-row width correction, reverse deletion border handoff, and native RTF reimport.
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtf-table-direction.test.ts rtfdocumentimpl.document.test.ts rtfexport.table-list.test.ts rtfexport.test.ts native-column-insertion.test.ts native-independent-columns.test.ts native-node-index-removal.test.ts native-table-delete.test.ts native-import-table-errors.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`.
+- Result: 185 passed and 1 fixture failure in 12 files (rtf92-writer.log). The runtime returned the original 27-twip converted solid line for BRDRW28, while the fixture asserted 28. Verified the pinned eighth-point converter and corrected the test expectation. Replaying `rtf-table-direction.test.ts` alone passed all 17 scenarios (rtf92-writer-retest.log). Combined scope covers 186 distinct scenarios on the same runtime source, with no full-suite run.
+- Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, dependency, JSDoc, size, source-tree, WhichId, and diff checks. Result: pass. Evidence: rtf92-typecheck.log and rtf92-static.log. Scope: affected Writer runtime and static invariants.
+- Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 modules and zero semantic violations, rtf92-registry.log.
+- Residual scope: nested RTF buffers and the browser view and storage of existing nested/anchored Markdown tables. Interactive merge undo is separate from native file import.

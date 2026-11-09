@@ -20,19 +20,23 @@
         "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
       ],
-      "justification": "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections.",
+      "justification": "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections. RTF92. Extends the physical rectangle across row spans, corrects overlapping logical widths, moves visible content, shares native formats and adjusts row spans while deleting wholly covered lines (WRITER391).",
       "knownViolations": [],
       "localSymbols": [
         "CollectBoxSelection",
         "PrepareMerge",
-        "NewMerge"
+        "NewMerge",
+        "FindStartOfRowSpan",
+        "PrepareDelBox"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/table/swnewtable.cxx",
       "upstreamSymbols": [
         "SwTable::CollectBoxSelection",
         "SwTable::PrepareMerge",
-        "SwTable::NewMerge"
+        "SwTable::NewMerge",
+        "SwTableBox::FindStartOfRowSpan",
+        "SwTable::PrepareDelBoxes"
       ]
     }
   }

@@ -116,6 +116,84 @@ it("retains a horizontal merge across an unmarked cell and skips restart-only gr
   ]);
 });
 
+it.each([true, false])(
+  "merges compound RTF cells and removes wholly covered rows when outside cells are present: %s",
+  /** Tests the source vertical-span extension and superfluous-row deletion branches. @param outside - Whether a visible outside column survives. @returns Nothing. */ (
+    outside,
+  ) => {
+    const end = outside ? String.raw`\cellx3000` : "";
+    const document = read(
+      String.raw`\trowd\clmgf\clvmgf\cellx1000\clmrg\clvmgf\cellx2000` +
+        end +
+        String.raw`\intbl a\cell b\cell` +
+        (outside ? String.raw` c\cell` : "") +
+        String.raw`\row` +
+        String.raw`\trowd\clmgf\clvmrg\cellx1000\clmrg\clvmrg\cellx2000` +
+        end +
+        String.raw`\intbl\cell\cell` +
+        (outside ? String.raw` d\cell` : "") +
+        String.raw`\row`,
+    );
+    const expected = outside
+      ? [
+          [
+            [2000, ["a", "b"]],
+            [1000, ["c"]],
+          ],
+          [
+            [2000, [""]],
+            [1000, ["d"]],
+          ],
+        ]
+      : [[[2000, ["a", "b"]]]];
+    expect(cellContents(document)).toEqual(expected);
+    expect(spans(document)).toEqual(
+      outside
+        ? [
+            [2, 1],
+            [-1, 1],
+          ]
+        : [[1]],
+    );
+    const reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
+    documents.push(reopened);
+    expect(cellContents(reopened)).toEqual(expected);
+    expect(spans(reopened)).toEqual(spans(document));
+  },
+);
+
+it("uses the physical endpoint rectangle and transfers excess widths to the outside cell", /** A cross-row continuation selects the source rectangle and corrects an overhanging right box. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmgf\cellx1000\cellx2300\cellx3000\intbl a\cell b\cell outside1\cell\row` +
+      String.raw`\trowd\cellx1200\clmrg\cellx2000\cellx3000\intbl c\cell d\cell outside2\cell\row`,
+  );
+  expect(spans(document)).toEqual([
+    [2, 1],
+    [-1, 1],
+  ]);
+  expect(cellContents(document)).toEqual([
+    [
+      [2000, ["a", "b", "c", "d"]],
+      [1000, ["outside1"]],
+    ],
+    [
+      [2000, [""]],
+      [1000, ["outside2"]],
+    ],
+  ]);
+});
+
+it("hands the removed cell's side border to the surviving outside cell", /** Exercises reverse deletion and the original adjacent-border handoff. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmgf\cellx1000\clbrdrl\brdrs\brdrw28\cellx2000\clmrg\cellx3000\cellx4000\intbl a\cell b\cell c\cell d\cell\row`,
+  );
+  const cells = table(document).GetTabLines()[0]?.GetTabBoxes();
+  expect(cells).toHaveLength(2);
+  expect(cells?.[0]?.GetFrameFormat().GetBox().GetRight()).toBeUndefined();
+  // The source's eighth-point conversion reduces a 28-twip solid line to 27.
+  expect(cells?.[1]?.GetFrameFormat().GetBox().GetLeft()?.GetOutWidth()).toBe(27);
+});
+
 it("converts native RTF vertical merge flags to signed boxes and writes the same controls", /** Verifies buffered cell sprms, UNO row-span setters, border selection and native reimport. @returns Nothing. */ () => {
   const document = read(
     String.raw`\trowd\cellx1000\clvmgf\clbrdrb\brdrs\brdrw20\cellx3000\intbl left\cell start\cell\row` +

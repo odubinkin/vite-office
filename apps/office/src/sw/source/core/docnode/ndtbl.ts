@@ -49,7 +49,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { TableMergeErr } from "../../../inc/tblenum";
 import { CollectBoxSelection, NewMerge, PrepareMerge } from "../table/swnewtable";
 
-/** Original document merge boundary for a same-row new-model selection. @param doc - Native document. @param pam - Actual cell selection. @returns Native merge result. */
+/** Original document merge boundary for a rectangular new-model selection. @param doc - Native document. @param pam - Actual cell selection. @returns Native merge result. */
 export function MergeTable(doc: SwDoc, pam: SwPaM): TableMergeErr {
   const start = pam.Start().GetNode().GetTableBox(),
     end = pam.End().GetNode().GetTableBox(),
@@ -60,11 +60,12 @@ export function MergeTable(doc: SwDoc, pam: SwPaM): TableMergeErr {
   if (!selection) return TableMergeErr.NoSelection;
   return doc.RunModelTransaction(
     /** Moves the PaM off deleted boxes before native structural removal. @returns Successful merge. */ () => {
-      const master = PrepareMerge(selection);
+      const merge = PrepareMerge(selection);
+      if (!merge) return TableMergeErr.NoSelection;
       pam.DeleteMark();
-      pam.GetPoint().Assign(master.GetParagraphs()[0] as SwTextNode, 0);
+      pam.GetPoint().Assign(merge.master.GetParagraphs()[0] as SwTextNode, 0);
       if (pam instanceof SwTableCursor) pam.NewTableSelection();
-      NewMerge(table, selection, master);
+      NewMerge(table, merge);
       doc.GetDocumentStateManager().SetModified();
       return TableMergeErr.Ok;
     },

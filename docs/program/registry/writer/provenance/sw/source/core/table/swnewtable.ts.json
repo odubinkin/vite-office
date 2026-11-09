@@ -9,18 +9,23 @@
     "localSymbols": [
       "CollectBoxSelection",
       "PrepareMerge",
-      "NewMerge"
+      "NewMerge",
+      "FindStartOfRowSpan",
+      "PrepareDelBox"
     ],
     "upstreamSymbols": [
       "SwTable::CollectBoxSelection",
       "SwTable::PrepareMerge",
-      "SwTable::NewMerge"
+      "SwTable::NewMerge",
+      "SwTableBox::FindStartOfRowSpan",
+      "SwTable::PrepareDelBoxes"
     ],
     "preservedResponsibilities": [
-      "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections."
+      "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections.",
+      "Extends the physical rectangle across row spans, corrects overlapping logical widths, moves visible content, shares native formats and adjusts row spans while deleting wholly covered lines (WRITER391)."
     ],
     "omittedResponsibilities": [
-      "Cross-row rectangles, width-adjusted selections, combined row spans, old table models and interactive merge undo are outside this import branch."
+      "Nested/anonymous boxes, old table models, layout-frame restoration and interactive merge undo remain outside this import branch."
     ],
     "evidence": {
       "local": [
@@ -31,12 +36,20 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swnewtable.ts",
+          "marker": "FindStartOfRowSpan"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
           "marker": "SwTable::CollectBoxSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
+          "marker": "SwTableBox::FindStartOfRowSpan"
         }
       ]
     }

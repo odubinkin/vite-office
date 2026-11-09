@@ -3188,3 +3188,17 @@ that range at an unmarked cell. A continuation after a gap in the same
 row therefore includes the intermediate cell when the table cursor
 merges the endpoints. Preserve that range and the source rule that a
 restart with no continuation does not attempt a merge.
+
+### WRITER390 — The preceding cell's top edge can prevent bottom-border handoff
+
+`lcl_SaveUpperLowerBorder` checks the predecessor's bottom edge when
+considering transfer to the next row, then checks the predecessor's
+top edge when considering transfer to the predecessor's bottom edge.
+Keep the source's different edge tests.
+
+### WRITER391 — The right-overlap branch uses a different sum threshold
+
+In `SwTable::CollectBoxSelection` the left-overlap branch compares the
+sum of a box's borders with twice the minimum boundary. The corresponding
+right-overlap branch compares that sum with the maximum boundary itself.
+Preserve both comparisons during ragged-row width correction.
