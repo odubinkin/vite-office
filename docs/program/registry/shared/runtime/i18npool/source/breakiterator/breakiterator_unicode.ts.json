@@ -19,16 +19,20 @@
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
         "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native.test.ts",
-        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json"
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts#com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
+        "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+        "i18npool/qa/cppunit/test_characterclassification.cxx"
       ],
-      "justification": "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences.",
+      "justification": "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences. Original Unicode component exposes its own implementation name and acquired constructor through the enclosing word service interface. Other break operations and registered CJK subtype construction remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "BreakIterator_Unicode",
         "loadICUBreakIterator",
         "nextWord",
         "previousWord",
-        "getWordBoundary"
+        "getWordBoundary",
+        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
@@ -37,7 +41,8 @@
         "loadICUBreakIterator",
         "nextWord",
         "previousWord",
-        "getWordBoundary"
+        "getWordBoundary",
+        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
       ]
     }
   }

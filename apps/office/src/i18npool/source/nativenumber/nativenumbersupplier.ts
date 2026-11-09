@@ -1,4 +1,11 @@
-/** @fileoverview NativeNumberSupplierService NATNUM0 through NATNUM11 paths from the pinned i18npool source. */
+/** @fileoverview NativeNumberSupplierService NATNUM0 through NATNUM12 paths from the pinned i18npool source. */
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { CharacterClassification } from "../../../offapi/com/sun/star/i18n/CharacterClassification";
+import type { XCharacterClassification } from "../../../offapi/com/sun/star/i18n/XCharacterClassification";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { getNumberText } from "./nativenumbersupplier.numbertext";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import data from "./data/numberchar.json" with { type: "json" };
@@ -15,8 +22,8 @@ import {
   getHebrewNativeNumberString,
   getCyrillicNativeNumberString,
 } from "./nativenumbersupplier.alphabetic";
-/** The represented source modes; mode12 needs the original NumberText dependency. */
-export type NativeNumberMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+/** Original NativeNumberMode constants consumed by the supplier. */
+export type NativeNumberMode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 const natnum1Locales = data.natnum1Locales;
 const numberChar = data.numberChar.flat();
 const multiplierChar = data.multiplierChar7Cjk.flat();
@@ -142,14 +149,19 @@ function nativeToAscii(input: OUStringConstReference, offsets?: number[]): OUStr
   return new OUString(Uint16Array.from(state.output.slice(0, state.count)), state.count);
 }
 
-/** Source supplier locale cache and shared-table dispatch. NumberText/mode12 and unconsumed XML/char service methods remain unported. */
+/** Original NatNum12 casing entries, in source search order. */
+const Casings = ["capitalize", "upper", "lower", "title"] as const;
+
+/** Source supplier locale cache, shared-table dispatch and NatNum12 number text. */
 export class NativeNumberSupplierService {
   private readonly aLocale = new Locale();
+  private readonly xCharClass = new Reference<XCharacterClassification>();
   /** Native value-member destruction. @returns Nothing. */
   dispose(): void {
+    this.xCharClass.dispose();
     this.aLocale.dispose();
   }
-  /** Original mode validity including the source mode12 validity declaration, independent of conversion availability. @param locale - Actual locale. @param mode - Native mode scalar. @returns Original validity. */
+  /** Original mode validity including the source mode12 validity declaration, independent of the language number. @param locale - Actual locale. @param mode - Native mode scalar. @returns Original validity. */
   static isValidNatNumImpl(locale: LocaleConstReference, mode: number): boolean {
     const langnum = getLanguageNumber(locale);
     switch (mode) {
@@ -175,6 +187,77 @@ export class NativeNumberSupplierService {
     }
     return false;
   }
+  /** Original NatNum12 spelling and casing branch. @param input - Complete original text. @param locale - Requested number-text locale. @param params - Source modifier view. @returns Owned result. */
+  private getNativeNumberText(
+    input: OUStringConstReference,
+    locale: LocaleConstReference,
+    params?: OUStringConstReference,
+  ): OUString {
+    const modifiers = params === undefined ? "" : text(params);
+    const casing = Casings.find(
+      /** Matches the source prefix before checking its space delimiter. @param literal - Native casing keyword. @returns Prefix match. */
+      (literal) => modifiers.startsWith(literal),
+    );
+    const strip = casing?.length ?? 0;
+    const applies =
+      casing !== undefined && (modifiers.length === strip || modifiers.charCodeAt(strip) === 32);
+    const argument = unicode(applies ? modifiers.slice(strip + 1) : modifiers);
+    try {
+      const result = getNumberText(locale, input, argument);
+      if (!applies) return result;
+      try {
+        if (!this.xCharClass.is()) {
+          const classifier = CharacterClassification.create(
+            getProcessComponentContext() as Reference<XComponentContext>,
+          );
+          try {
+            this.xCharClass.moveAssign(classifier);
+          } finally {
+            classifier.dispose();
+          }
+        }
+        const classifier = this.xCharClass.operatorStar();
+        // The source uses the previous non-spellout locale member for all case calls.
+        switch (casing) {
+          case "capitalize": {
+            const title = classifier.toTitle(result, 0, 1, this.aLocale);
+            try {
+              if (result.getLength() > 1)
+                title.append(result.getStr().subarray(1, result.getLength()));
+              return title;
+            } catch (error) {
+              title.dispose();
+              throw error;
+            }
+          }
+          case "upper":
+            return classifier.toUpper(result, 0, result.getLength(), this.aLocale);
+          case "lower":
+            return classifier.toLower(result, 0, result.getLength(), this.aLocale);
+          case "title":
+            if (text(locale.Language) === "en") {
+              const expanded = unicode(text(result).replaceAll("-", "- "));
+              try {
+                const title = classifier.toTitle(expanded, 0, expanded.getLength(), this.aLocale);
+                try {
+                  return unicode(text(title).replaceAll("- ", "-").replaceAll(" And ", " and "));
+                } finally {
+                  title.dispose();
+                }
+              } finally {
+                expanded.dispose();
+              }
+            }
+            return classifier.toTitle(result, 0, result.getLength(), this.aLocale);
+        }
+      } finally {
+        result.dispose();
+      }
+    } finally {
+      argument.dispose();
+    }
+  }
+
   /** Original XNativeNumberSupplier2 forwarding to the shared conversion entry. @param input - Source text. @param locale - Actual locale. @param mode - Represented mode. @param params - Actual parameters. @returns Owned result. */
   getNativeNumberStringParams(
     input: OUStringConstReference,
@@ -184,7 +267,7 @@ export class NativeNumberSupplierService {
   ): OUString {
     return this.getNativeNumberString(input, locale, mode, undefined, params);
   }
-  /** Source getNativeNumberString dispatch. Unknown locales retain identity even for mode3; locale changes mutate the original shared punctuation arrays. @param input - Input. @param locale - Locale. @param mode - Represented original mode. @param offsets - Optional output sequence. @param params - Original parameter view, ignored by represented modes0..11. @returns Owned result. */
+  /** Source getNativeNumberString dispatch. Unknown locales retain identity even for mode3; locale changes mutate the original shared punctuation arrays. @param input - Input. @param locale - Locale. @param mode - Represented original mode. @param offsets - Optional output sequence. @param params - Original NatNum12 parameter view. @returns Owned result. */
   getNativeNumberString(
     input: OUStringConstReference,
     locale: LocaleConstReference,
@@ -192,8 +275,8 @@ export class NativeNumberSupplierService {
     offsets?: number[],
     params?: OUStringConstReference,
   ): OUString {
-    void params;
     if (!NativeNumberSupplierService.isValidNatNumImpl(locale, mode)) return new OUString(input);
+    if (mode === 12) return this.getNativeNumberText(input, locale, params);
     const langnum = getLanguageNumber(locale);
     if (langnum === -1) return new OUString(input);
     let number: NumberSpec | undefined,

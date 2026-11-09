@@ -18,13 +18,17 @@
       "evidence": [
         "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
         "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.output.test.ts",
-        "i18npool/source/nativenumber/nativenumbersupplier.cxx"
+        "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+        "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts#Casings",
+        "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+        "sc/qa/uitest/calc_tests/formatCells.py"
       ],
-      "justification": "Original modes0..11 supplier dispatch, validity and unknown-locale identity gates, per-instance Locale with source shared mutable DecimalChar/SeparatorChar refresh, character/CJK/alphabetic producers and offsets. Mode12 NumberText and unconsumed XML/character service methods remain unported. Scalar helper comparisons are not full native service/SAL/UNO ABI certification. Original XNativeNumberSupplier2 getNativeNumberStringParams delegates to the shared conversion entry with offsets absent and actual parameter view. Modes0..11 ignore parameters exactly as the original non12 branches do; mode12 NumberText remains unported.",
+      "justification": "Original modes0..11 supplier dispatch, validity and unknown-locale identity gates, per-instance Locale with source shared mutable DecimalChar/SeparatorChar refresh, character/CJK/alphabetic producers and offsets. Unconsumed XML and character service methods remain outside this slice. Scalar helper comparisons are not full native service/SAL/UNO ABI certification. Original XNativeNumberSupplier2 getNativeNumberStringParams delegates to the shared conversion entry with offsets absent and actual parameter view. Modes0..11 ignore parameters exactly as the original non12 branches do. Original NatNum12 path uses NumberText and the process-context CharacterClassification, with source literal matching, exact delimiter, lazy case service, remembered casing locale, and the English title transformations. Tests invoke the real component constructors with an explicit test registry. Production process bootstrap, formatter integration, other native supplier interface methods and complete native service or ABI verification remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "NativeNumberSupplierService",
-        "NativeNumberMode"
+        "NativeNumberMode",
+        "Casings"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
@@ -34,7 +38,8 @@
         "NativeToAscii",
         "NativeToAscii_numberMaker",
         "getLanguageNumber",
-        "NativeNumberSupplierService::getNativeNumberStringParams"
+        "NativeNumberSupplierService::getNativeNumberStringParams",
+        "Casings"
       ]
     }
   }

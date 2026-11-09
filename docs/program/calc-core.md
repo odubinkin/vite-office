@@ -4180,8 +4180,8 @@ paragraphs or test counts:
 
 | CSV/root path | Source requirement and current boundary | Completion evidence still required |
 | --- | --- | --- |
-| Export displayed numbers | `ScDocShell` shown callback calls `ScCellFormat::GetString`; `SvNumberformat` currently excludes mode12 and retains a nonstandard-output error. NativeNumberSupplierService still ignores mode12 parameters. | Connect original NatNum12 supplier and all numeric/logical/date/time output call sites, then test shown CSV bytes against original values. Remove local exclusions only with the real path installed. |
-| Capitalize/title modifiers | Original cclass_Unicode::toTitle constructs BreakIteratorImpl and invokes getWordBoundary/nextWord; local class currently supplies script operations only. | Original locale dispatch/caches, Unicode and registered locale-specific iterators, word boundaries, character classification and original service construction, including non-ASCII cases. |
+| Export displayed numbers | `ScDocShell` shown callback calls `ScCellFormat::GetString`. The supplier implements mode 12. `SvNumberformat` still excludes this mode and retains a nonstandard-output error. | Install the process services and connect the original numeric, logical, date and time call sites. Verify displayed CSV bytes. |
+| Capitalize/title modifiers | `NativeNumberSupplierService` uses the original classifier and its word-boundary operations through the component context. | Install the production services, including the registered locale-specific iterators. |
 | Custom word-rule loading | Original breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from UDataMemory returned by udata_open, after udata_setAppData. Raw binary constructors are not a replacement. | Original application-data/container lookup, real UDataMemory handle/constructor/lifecycle, UText/public iterator and engine wiring, native full-path witnesses. |
 | Process services | NumberText component/default constructor and process getter exist; production ComponentContext/ServiceManager installation is absent. Test fixture managers are explicitly not production. | Original context/environment/mapping entry orchestration, actual manager/constructor registry and browser application bootstrap; no fixture providers in production. |
 | Quoted/multiline import | Local SetTextCell still splits lines manually and assigns LATIN. Original implementation is in document.cxx, not documen7.cxx, and calls GetEditEngine/SetTextCurrentDefaults/CreateTextObject. | Replace the manual path and correct responsibility ownership with the actual document engine/ScFieldEditEngine/ImpEditEngine/defaults/script and import transfer path. Source GetEditEngine is in documen2.cxx (found by bounded -uuu fallback); preserve layout=false, undo=false, Map100thMM and Asian settings. |
@@ -4514,3 +4514,22 @@ UTF-16 input. The replay covers 2,020 calls over 68 sequences and checks
 the ICU whitespace and alphanumeric data over all code points. CALC-483
 records the lower-level previous-word offset contract. The enclosing
 LibreOffice locale dispatcher and production title service remain pending.
+
+### LibreOffice word dispatch, character classification and NatNum12 modifiers
+
+`BreakIteratorImpl` now uses the component context to resolve locale services,
+including the traditional-Chinese fallback for Hong Kong and Macau. Its
+original bounds checks, directional whitespace selection and Asian-script
+sentinel surround the Unicode word methods. `CharacterClassificationImpl`
+reuses the Unicode default and dispatches through the original ordered locale
+service suffixes.
+
+`cclass_Unicode::toTitle` uses word starts and the original single UTF-16 unit
+case mapping. The tests replay the upstream casing assertions and check the
+typed runtime exception from a multi-unit mapping (CALC-484). The NatNum12
+supplier calls NumberText and the classifier through the process context. It
+retains all four modifier keywords, the English title transformations and the
+original remembered casing locale (CALC-485). Tests exercise the upstream
+English Calc examples through the real component constructors and NumberText
+library, with an explicit test service registry. Production service installation,
+Calc formatter call sites and the multiline edit path remain open.

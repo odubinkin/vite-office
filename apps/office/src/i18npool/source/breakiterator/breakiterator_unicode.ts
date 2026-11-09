@@ -1,4 +1,9 @@
 /** @fileoverview Original BreakIterator_Unicode word rules, cache keys and counted UTF-16 boundary operations. */
+import { acquire } from "../../../cppuhelper/inc/weak";
+import type { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import type { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { createWordInstance } from "../../../external/icu/source/common/brkiter";
@@ -92,6 +97,11 @@ function whitespaceAt(textValue: OUStringConstReference, pos: number, wordType: 
 /** Original Unicode implementation of the consumed word service. */
 export class BreakIterator_Unicode extends BreakIteratorImpl {
   private readonly words = [emptySlot(), emptySlot(), emptySlot(), emptySlot()];
+
+  /** Original concrete implementation identity. @returns Owned name. */
+  override getImplementationName(): OUString {
+    return unicode("com.sun.star.i18n.BreakIterator_Unicode");
+  }
 
   /** Original locale/rule cache selection and text adoption for word operations. @param locale - Requested locale. @param wordType - Original WordType. @param value - Actual input string. @returns Current ICU iterator. */
   private loadICUBreakIterator(
@@ -232,7 +242,7 @@ export class BreakIterator_Unicode extends BreakIteratorImpl {
   }
 
   /** Original nextWord behavior, including the single whitespace boundary skip. @param value - Actual text. @param start - Native position. @param locale - Requested locale. @param wordType - Word type. @returns Original boundary. */
-  nextWord(
+  override nextWord(
     value: OUStringConstReference,
     start: number,
     locale: LocaleConstReference,
@@ -247,7 +257,7 @@ export class BreakIterator_Unicode extends BreakIteratorImpl {
   }
 
   /** Original previousWord behavior. @param value - Actual text. @param start - Native position. @param locale - Requested locale. @param wordType - Word type. @returns Original boundary. */
-  previousWord(
+  override previousWord(
     value: OUStringConstReference,
     start: number,
     locale: LocaleConstReference,
@@ -262,7 +272,7 @@ export class BreakIterator_Unicode extends BreakIteratorImpl {
   }
 
   /** Original word-boundary method and directional endpoint behavior. @param value - Actual text. @param pos - Native position. @param locale - Requested locale. @param wordType - Word type. @param direction - Forward preference. @returns Original boundary. */
-  getWordBoundary(
+  override getWordBoundary(
     value: OUStringConstReference,
     pos: number,
     locale: LocaleConstReference,
@@ -291,4 +301,14 @@ export class BreakIterator_Unicode extends BreakIteratorImpl {
     else if (endPos === DONE) endPos = startPos;
     return { startPos, endPos };
   }
+}
+
+/** Original context-independent Unicode service constructor. @param context - Original unused context. @param arguments_ - Original unused arguments. @returns Acquired component. */
+export function com_sun_star_i18n_BreakIterator_Unicode_get_implementation(
+  context: XComponentContext | null,
+  arguments_: Sequence<Any>,
+): XInterface {
+  void context;
+  void arguments_;
+  return acquire(new BreakIterator_Unicode());
 }

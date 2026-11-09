@@ -1,5 +1,6 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -417,4 +418,28 @@ export function getLocaleTransliterations(
   locale: LocaleConstReference,
 ): Sequence<ReturnType<OUString["getDataAddress"]>> {
   return makeStringSequence(getLocaleDataField(locale, transliterationResources));
+}
+
+/** Original LocaleDataImpl primary service suffix. @param locale - Actual UNO locale. @returns Primary suffix. */
+export function getFirstLocaleServiceName(locale: LocaleConstReference): string {
+  const language = text(locale.Language);
+  if (language === "qlt") return text(locale.Variant).replaceAll("-", "_");
+  return locale.Country.isEmpty() ? language : language + "_" + text(locale.Country);
+}
+
+/** Original LocaleDataImpl fallback suffixes, excluding the primary suffix. @param locale - Actual UNO locale. @returns Ordered fallback suffixes. */
+export function getFallbackLocaleServiceNames(locale: LocaleConstReference): string[] {
+  const language = text(locale.Language);
+  if (language === "qlt") {
+    const tag = new LanguageTag(locale);
+    try {
+      return tag.getFallbackStrings(false).map(
+        /** Converts the source BCP47 spelling to a service suffix. @param fallback - Fallback language tag. @returns Native service spelling. */
+        (fallback) => fallback.replaceAll("-", "_"),
+      );
+    } finally {
+      tag.dispose();
+    }
+  }
+  return locale.Country.isEmpty() ? [] : [language];
 }

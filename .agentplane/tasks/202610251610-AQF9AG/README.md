@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 231
+revision: 234
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:02:58.934Z"
+  updated_at: "2026-11-09T19:19:10.774Z"
   updated_by: "CODER"
-  note: "Original LibreOffice Unicode word methods, native locale-rule cache and ICU stock rule loading verified with 2,020 word queries, pinned property digest, 103 focused shared tests, 197 CSV tests and the browser workflow. Enclosing production title and formatter services and multiline CSV import remain in scope."
-  attempts: 60
+  note: "Verified checkpoint: original word locale dispatch, CharacterClassification case service and NatNum12 supplier modifiers pass focused, CSV and browser verification. Continue with production component installation, formatter integration and multiline CSV import."
+  attempts: 61
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1288,8 +1291,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:19:10.774Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified checkpoint: original word locale dispatch, CharacterClassification case service and NatNum12 supplier modifiers pass focused, CSV and browser verification. Continue with production component installation, formatter integration and multiline CSV import."
+  -
+    type: "status"
+    at: "2026-11-09T19:19:17.986Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:03:13.266Z"
+doc_updated_at: "2026-11-09T19:19:17.986Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3109,6 +3125,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:19:10.774Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified checkpoint: original word locale dispatch, CharacterClassification case service and NatNum12 supplier modifiers pass focused, CSV and browser verification. Continue with production component installation, formatter integration and multiline CSV import.
+    Attempts: 61
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:19:09.546Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4570,6 +4616,14 @@ sections:
     - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
       Result: pass. Evidence: 4,461 JSDoc-checked sources, 2,004 provenance entries, 1,791 mapped entries, 2,003 module boundary sources, 236 allowed cross-module edges and 464 Calc commands.
     - Same open AgentPlane task and below the full-suite cadence. The enclosing LibreOffice locale-specific dispatcher, title and production formatter wiring, and multiline CSV import remain pending.
+
+    ### LibreOffice word dispatch, character classification and NatNum12 casing
+
+    - The original outer BreakIterator word operations apply the pinned source bounds, Unicode whitespace and U+200B handling, mixed-script clamp and Asian-script sentinel. Locale dispatch uses the actual context-aware UNO manager/query path and caches source partial and full lookup keys. Requests include the Hong Kong and Macau fallback to the traditional-Chinese service.
+    - The original classifier's Unicode default and locale-aware facade are acquired UNO components. Their generated case service uses the original manager and deployment-exception contract. The title method invokes the source word dispatch and the original single-unit mapper. CALC-484 records the typed target Any wrapping for a leading U+FB03. Generic checked-exception bridging for other dynamic types is outside this slice.
+    - The NatNum12 supplier connects the original NumberText cache, four casing modifiers, delimiter checks and English title adjustments through the real process-context contract. CALC-485 records that the case mapper receives the supplier's remembered locale and NumberText receives the requested locale. The registered production context and Calc formatter consumers remain open.
+    - Focused Vitest runs passed with 176 word, case and number-text tests and 197 Calc CSV tests. The new group replays upstream case and Calc English spellout assertions and checks the actual service names, acquired constructors and exception target. The test registry supplies only the enclosing service-manager boundary. The production build and browser CSV import, ODS save and CSV export flow passed.
+    - Typecheck, lint, JSDoc, module boundaries, Calc resources, source provenance, shared and Calc parity inventories, and diff whitespace checks passed. The module boundary now admits the cppuhelper link explicitly declared by Library_i18npool.mk. The full-suite cadence is unchanged because this is a checkpoint of the same AgentPlane task.
 id_source: "generated"
 ---
 ## Summary
@@ -6398,6 +6452,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:19:10.774Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified checkpoint: original word locale dispatch, CharacterClassification case service and NatNum12 supplier modifiers pass focused, CSV and browser verification. Continue with production component installation, formatter integration and multiline CSV import.
+Attempts: 61
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:19:09.546Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7863,3 +7947,11 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
   Result: pass. Evidence: 4,461 JSDoc-checked sources, 2,004 provenance entries, 1,791 mapped entries, 2,003 module boundary sources, 236 allowed cross-module edges and 464 Calc commands.
 - Same open AgentPlane task and below the full-suite cadence. The enclosing LibreOffice locale-specific dispatcher, title and production formatter wiring, and multiline CSV import remain pending.
+
+### LibreOffice word dispatch, character classification and NatNum12 casing
+
+- The original outer BreakIterator word operations apply the pinned source bounds, Unicode whitespace and U+200B handling, mixed-script clamp and Asian-script sentinel. Locale dispatch uses the actual context-aware UNO manager/query path and caches source partial and full lookup keys. Requests include the Hong Kong and Macau fallback to the traditional-Chinese service.
+- The original classifier's Unicode default and locale-aware facade are acquired UNO components. Their generated case service uses the original manager and deployment-exception contract. The title method invokes the source word dispatch and the original single-unit mapper. CALC-484 records the typed target Any wrapping for a leading U+FB03. Generic checked-exception bridging for other dynamic types is outside this slice.
+- The NatNum12 supplier connects the original NumberText cache, four casing modifiers, delimiter checks and English title adjustments through the real process-context contract. CALC-485 records that the case mapper receives the supplier's remembered locale and NumberText receives the requested locale. The registered production context and Calc formatter consumers remain open.
+- Focused Vitest runs passed with 176 word, case and number-text tests and 197 Calc CSV tests. The new group replays upstream case and Calc English spellout assertions and checks the actual service names, acquired constructors and exception target. The test registry supplies only the enclosing service-manager boundary. The production build and browser CSV import, ODS save and CSV export flow passed.
+- Typecheck, lint, JSDoc, module boundaries, Calc resources, source provenance, shared and Calc parity inventories, and diff whitespace checks passed. The module boundary now admits the cppuhelper link explicitly declared by Library_i18npool.mk. The full-suite cadence is unchanged because this is a checkpoint of the same AgentPlane task.

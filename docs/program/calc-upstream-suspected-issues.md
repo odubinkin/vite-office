@@ -5201,3 +5201,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx`, `BreakIterator_Unicode::previousWord`, and `include/o3tl/string_view.hxx`, `iterateCodePoints`.
 - A direct call beyond the end can get the text length back from ICU's `preceding`. In the two whitespace-skipping modes, the method then passes that offset to the code-point reader, which requires an index strictly below the length.
 - Keep the original Unicode implementation and the separate bounds policy of the outer `BreakIteratorImpl::previousWord`, which handles such requests before delegation.
+
+### CALC-484 — Character classification title conversion rejects some ligatures
+
+- Source `vendor/libreoffice-reference/i18npool/source/characterclassification/cclass_unicode.cxx`, `cclass_Unicode::toTitle`, and `i18npool/source/transliteration/transliteration_body.cxx`, `Transliteration_body::transliterateChar2Char`.
+- The title loop allocates one output unit per input unit and asks for a single-unit mapping at a word start. The original table supplies three units for U+FB03. The scalar method throws `MultipleCharsOutputException` and the classifier wraps it in a `WrappedTargetRuntimeException` with the typed target Any.
+- Keep the single-unit mapping, exception identity and wrapper. The regression case starts a word with U+FB03.
+
+### CALC-485 — NatNum12 capitalization uses the supplier's remembered locale
+
+- Source `vendor/libreoffice-reference/i18npool/source/nativenumber/nativenumbersupplier.cxx`, `NativeNumberSupplierService::getNativeNumberString`.
+- NumberText receives the requested locale. The casing calls receive the supplier's `aLocale` member, which starts empty and is updated by the other native-number paths that refresh the shared punctuation tables. The English title branch tests the requested locale.
+- Keep the original locale arguments and update points.

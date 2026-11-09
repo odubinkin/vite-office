@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.ts",
+    "upstreamPath": "i18npool/source/characterclassification/characterclassificationImpl.cxx",
+    "localSymbols": [
+      "CharacterClassificationImpl",
+      "com_sun_star_i18n_CharacterClassification_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "CharacterClassificationImpl::createLocaleSpecificCharacterClassification",
+      "CharacterClassificationImpl::getLocaleSpecificCharacterClassification",
+      "CharacterClassificationImpl::toTitle",
+      "com_sun_star_i18n_CharacterClassification_get_implementation"
+    ],
+    "preservedResponsibilities": [
+      "Original enclosing case service loads the Unicode default, reuses matching locale or name, and resolves first and fallback suffixes through the real UNO context."
+    ],
+    "omittedResponsibilities": [
+      "Other classifier methods and production component registration remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.ts",
+          "marker": "com_sun_star_i18n_CharacterClassification_get_implementation"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/characterclassification/characterclassificationImpl.cxx",
+          "marker": "com_sun_star_i18n_CharacterClassification_get_implementation"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTitleCase"
+        }
+      ]
+    }
+  }
+}

@@ -113,7 +113,8 @@ const allowedEdges = new Map([
   // Original languagetag.cxx includes liblangtag/langtag.h; Library_i18nlangtag links liblangtag and ICU.
   ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
+  // Original Library_i18npool links cppu and cppuhelper for UNO references and service implementations.
+  // Original numberformatcode.hxx/cxx uses SDK API headers and consumes
   // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
   // Native Library_i18npool links ICU i18n/common; calendar_gregorian uses its real Calendar/TimeZone factories.
   // Original nativenumbersupplier.cxx uses comphelper/processfactory.hxx; Library_i18npool links comphelper.
@@ -122,6 +123,7 @@ const allowedEdges = new Map([
     new Set([
       "comphelper",
       "cppu",
+      "cppuhelper",
       "external",
       "i18nlangtag",
       "i18nutil",

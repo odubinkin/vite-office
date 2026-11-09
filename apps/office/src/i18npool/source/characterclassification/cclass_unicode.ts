@@ -1,4 +1,27 @@
-/** @fileoverview Original cclass_Unicode::toUpper/toLower and getCharacterType operations with native range/category contracts; service construction and other operations remain unimplemented. */
+/** @fileoverview Original cclass_Unicode case operations and constructor over native word boundaries. */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
+import { XServiceInfo } from "../../../cppu/inc/com/sun/star/lang/XServiceInfo";
+import { WrappedTargetRuntimeException } from "../../../cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException";
+import { UnoType } from "../../../cppu/inc/unotype";
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { supportsService } from "../../../cppuhelper/inc/supportsservice";
+import { acquire } from "../../../cppuhelper/inc/weak";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import {
+  MultipleCharsOutputException,
+  cppu_detail_getUnoType as getMultipleCharsOutputType,
+} from "../../../offapi/com/sun/star/i18n/MultipleCharsOutputException";
+import { ANYWORD_IGNOREWHITESPACES } from "../../../offapi/com/sun/star/i18n/WordType";
+import { XCharacterClassification } from "../../../offapi/com/sun/star/i18n/XCharacterClassification";
+import { SAL_NO_ACQUIRE } from "../../../sal/inc/types";
+import type { rtl_uStringSlot } from "../../../sal/inc/rtl/ustring.h";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { BreakIteratorImpl } from "../breakiterator/breakiteratorImpl";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { u_charType } from "../../../external/icu/source/common/uchar";
@@ -88,5 +111,171 @@ export function getCharacterType(Text: OUStringConstReference, nPos: number): nu
       return K.CONTROL | K.PRINTABLE;
     default:
       return 0;
+  }
+}
+
+/** Copies the original checked exception into the UNO target Any for title mapping. @param error - Actual caught value. @returns Never. */
+function throwTitleException(error: unknown): never {
+  if (error instanceof RuntimeException || !(error instanceof Exception)) throw error;
+  const type =
+    error instanceof MultipleCharsOutputException
+      ? getMultipleCharsOutputType()
+      : error.constructor === Exception
+        ? UnoType.get("Exception")
+        : null;
+  if (type === null) throw error;
+  const payload = new Any(
+    new Map<number, unknown>([
+      [0, error.Message.getDataAddress()],
+      [8, error.Context.getAddress()],
+    ]),
+    type,
+  );
+  const typeName = payload.getValueTypeName();
+  const message = unicode(`wrapped ${text(typeName)}: ${text(error.Message)}`);
+  const context = new Reference();
+  try {
+    throw new WrappedTargetRuntimeException(message, context, payload);
+  } finally {
+    context.dispose();
+    message.dispose();
+    typeName.dispose();
+    payload.dispose();
+    error.dispose();
+  }
+}
+
+/** Original locale-independent implementation with three owned case mappers. */
+export class cclass_Unicode
+  extends WeakImplHelper.specialize(XCharacterClassification, XServiceInfo)
+  implements XCharacterClassification, XServiceInfo
+{
+  private readonly transToUpper = new Transliteration_casemapping();
+  private readonly transToLower = new Transliteration_casemapping();
+  private readonly transToTitle = new Transliteration_casemapping();
+  private readonly m_xContext: Reference<XComponentContext>;
+
+  /** Retains the source context and initializes the original three mapping modes. @param context - Actual source context. @returns Classifier. */
+  constructor(context: Reference<XComponentContext>) {
+    super();
+    this.m_xContext = new Reference(context);
+    this.transToUpper.setMappingType(MappingType.ToUpper);
+    this.transToLower.setMappingType(MappingType.ToLower);
+    this.transToTitle.setMappingType(MappingType.ToTitle);
+  }
+
+  /** Original Unicode implementation identity. @returns Owned name. */
+  getImplementationName(): OUString {
+    return unicode("com.sun.star.i18n.CharacterClassification_Unicode");
+  }
+
+  /** Original shared service-name predicate. @param name - Requested service. @returns Membership. */
+  supportsService(name: OUString): boolean {
+    return supportsService(this, name);
+  }
+
+  /** Original Unicode advertised service name. @returns Owned sequence. */
+  getSupportedServiceNames(): Sequence<rtl_uStringSlot> {
+    const name = this.getImplementationName();
+    try {
+      return new (Sequence.specialize<rtl_uStringSlot>("OUString", 8))(
+        new Map([[0, name.getDataAddress()]]),
+        1,
+      );
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Releases the owned source mapping and context values. @returns Nothing. */
+  protected override destroy(): void {
+    this.transToTitle.dispose();
+    this.transToLower.dispose();
+    this.transToUpper.dispose();
+    this.m_xContext.dispose();
+    super.destroy();
+  }
+
+  /** Original uppercase dispatch through the retained mapping owner. @param input - Counted text. @param pos - Native start. @param count - Native length. @param locale - Requested locale. @returns Owned result. */
+  toUpper(
+    input: OUStringConstReference,
+    pos: number,
+    count: number,
+    locale: LocaleConstReference,
+  ): OUString {
+    return this.changeCase(this.transToUpper, input, pos, count, locale);
+  }
+
+  /** Original lowercase dispatch through the retained mapping owner. @param input - Counted text. @param pos - Native start. @param count - Native length. @param locale - Requested locale. @returns Owned result. */
+  toLower(
+    input: OUStringConstReference,
+    pos: number,
+    count: number,
+    locale: LocaleConstReference,
+  ): OUString {
+    return this.changeCase(this.transToLower, input, pos, count, locale);
+  }
+
+  /** Shared original upper/lower range and locale preparation. @param mapper - Actual source mapping owner. @param input - Counted text. @param pos - Native start. @param count - Native length. @param locale - Requested locale. @returns Owned result. */
+  private changeCase(
+    mapper: Transliteration_casemapping,
+    input: OUStringConstReference,
+    pos: number,
+    count: number,
+    locale: LocaleConstReference,
+  ): OUString {
+    const len = input.getLength();
+    if (pos >= len) return new OUString();
+    if (pos + count > len) count = len - pos;
+    mapper.setLocale(locale);
+    return mapper.transliterateString2String(input, pos, count);
+  }
+
+  /** Original title mapping uses one UTF-16 unit at each source word start. @param input - Counted text. @param pos - Native start. @param count - Native length. @param locale - Requested locale. @returns Owned result. */
+  toTitle(
+    input: OUStringConstReference,
+    pos: number,
+    count: number,
+    locale: LocaleConstReference,
+  ): OUString {
+    try {
+      const len = input.getLength();
+      if (pos >= len) return new OUString();
+      if (pos + count > len) count = len - pos;
+      this.transToTitle.setLocale(locale);
+      const result = new Uint16Array(count);
+      const owner = new BreakIteratorImpl(this.m_xContext);
+      owner.acquire();
+      const iterator = new Reference(owner, SAL_NO_ACQUIRE);
+      try {
+        let boundary = owner.getWordBoundary(input, pos, locale, ANYWORD_IGNOREWHITESPACES, true);
+        for (let i = pos; i < pos + count; ++i) {
+          if (i >= boundary.endPos)
+            boundary = owner.nextWord(input, boundary.endPos, locale, ANYWORD_IGNOREWHITESPACES);
+          const unit = input.charAt(i);
+          result[i - pos] =
+            i === boundary.startPos ? this.transToTitle.transliterateChar2Char(unit) : unit;
+        }
+        return new OUString(result, count);
+      } finally {
+        iterator.dispose();
+      }
+    } catch (error) {
+      return throwTitleException(error);
+    }
+  }
+}
+
+/** Original Unicode classifier UNO constructor. @param context - Source raw context. @param arguments_ - Original unused arguments. @returns Acquired component. */
+export function com_sun_star_i18n_CharacterClassification_Unicode_get_implementation(
+  context: XComponentContext | null,
+  arguments_: Sequence<Any>,
+): XInterface {
+  void arguments_;
+  const reference = new Reference(context);
+  try {
+    return acquire(new cclass_Unicode(reference));
+  } finally {
+    reference.dispose();
   }
 }
