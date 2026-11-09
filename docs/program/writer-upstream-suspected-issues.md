@@ -3318,3 +3318,11 @@ name, the mapper's outer cell merge can merge the nested cells and
 leave the outer row intact. Preserve the original lookup scope for
 the flat new-table model and keep this separate from moves of whole
 nested sections selected through their outer cell paragraphs.
+
+### WRITER405 — RTF grid-after uses the width value without its unit control
+
+The tokenizer knows both TRWWIDTHA and TRFTSWIDTHA.
+`RTFDocumentImpl::dispatchValue` stores TRWWIDTHA without consulting
+TRFTSWIDTHA, and the ROW handler adds a borderless filler cell for
+each positive stored width as a twip value. Preserve the original
+interpretation even when the width-type control specifies another unit.

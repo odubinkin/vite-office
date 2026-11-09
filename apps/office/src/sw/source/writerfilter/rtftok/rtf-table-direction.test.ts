@@ -1,4 +1,5 @@
 /** @fileoverview RTF row and cell direction sprms through actual mapper, table formats, and Worker transfer. */
+import { existsSync, readFileSync } from "node:fs";
 import { afterEach, assert, expect, it } from "vitest";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -6,7 +7,8 @@ import { COL_AUTO, Color } from "../../../../tools/inc/color";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SwXCell, SwXTextTableCursor } from "../../core/unocore/unotbl";
 import { unicode } from "../../core/unocore/unocrsrhelper";
-import { RES_BACKGROUND, RES_FRAMEDIR } from "../../../inc/hintids";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { RES_BACKGROUND, RES_FRAMEDIR, RES_UL_SPACE } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SwTableNode } from "../../core/docnode/node";
@@ -582,3 +584,122 @@ it("keeps the original table cursor's nearest-table name lookup when the first c
     ),
   ).toEqual(["InnerA", "InnerB"]);
 });
+
+it("restores the last live row definition after a second TROWD erases it", /** Keeps native row and cell geometry captured before the invalid mid-row reset. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\trleft100\trrh480\trkeep\cltxtbrl\cellx1500\cellx2500\pard\intbl A\cell B\cell\trowd\row`,
+  );
+  const row = table(document).GetTabLines()[0];
+  expect(row?.GetFrameFormat().GetFrameSize().GetHeight()).toBe(480);
+  expect(row?.GetFrameFormat().GetRowSplit().GetValue()).toBe(false);
+  expect(cellContents(document)).toEqual([
+    [
+      [1400, ["A"]],
+      [1000, ["B"]],
+    ],
+  ]);
+  expect(row?.GetTabBoxes()[0]?.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+    Direction.Vertical_RL_TB,
+  );
+});
+
+it("inherits the previous table row's cell properties when the next row has no definition", /** PARD and INTBL keep the same source table open before the next cell. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\trleft100\cltxtbrl\cellx1500\cellx2500\pard\intbl A\cell B\cell\row` +
+      String.raw`\pard\intbl C\cell D\cell\row\pard After`,
+  );
+  expect(document.GetTables()).toHaveLength(1);
+  expect(cellContents(document)).toEqual([
+    [
+      [1400, ["A"]],
+      [1000, ["B"]],
+    ],
+    [
+      [1400, ["C"]],
+      [1000, ["D"]],
+    ],
+  ]);
+  expect(
+    table(document).GetTabLines()[1]?.GetTabBoxes()[0]?.GetFrameFormat().GetFrameDir().GetValue(),
+  ).toBe(Direction.Vertical_RL_TB);
+});
+
+it("widens only the final cell of a shorter row by the source minimum correction threshold", /** Earlier widths remain unchanged, and a paragraph break resets the tracked table maximum. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx1000\cellx2000\pard\intbl A\cell B\cell\row` +
+      String.raw`\trowd\cellx1000\cellx1980\pard\intbl C\cell D\cell\row` +
+      String.raw`\trowd\cellx1000\cellx1977\pard\intbl E\cell F\cell\row\pard Break\par` +
+      String.raw`\trowd\cellx700\pard\intbl G\cell\row`,
+  );
+  expect(cellContents(document)).toEqual([
+    [
+      [1000, ["A"]],
+      [1000, ["B"]],
+    ],
+    [
+      [1000, ["C"]],
+      [980, ["D"]],
+    ],
+    [
+      [1000, ["E"]],
+      [1000, ["F"]],
+    ],
+  ]);
+  expect(
+    document.GetTables()[1]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFrameSize().GetWidth(),
+  ).toBe(700);
+});
+
+it("materializes TRWWIDTHA as a borderless empty grid-after cell", /** The source uses the positive width independently of TRFTSWIDTHA and removes the filler paragraph's spacing. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\trftsWidthA1\trwWidthA420\clbrdrr\brdrs\brdrw25\cellx1000\pard\sa200\fs36\intbl Visible\cell\row`,
+  );
+  expect(cellContents(document)).toEqual([
+    [
+      [1000, ["Visible"]],
+      [420, [""]],
+    ],
+  ]);
+  const row = table(document).GetTabLines()[0];
+  const [visible, fill] = row?.GetTabBoxes() ?? [];
+  expect(visible?.GetFrameFormat().GetBox().GetRight()).toBeDefined();
+  const box = fill?.GetFrameFormat().GetBox();
+  expect(box?.GetLeft()).toBeUndefined();
+  expect(box?.GetRight()).toBeUndefined();
+  expect(box?.GetTop()).toBeUndefined();
+  expect(box?.GetBottom()).toBeUndefined();
+  expect(
+    (fill?.GetParagraphs()[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem | undefined)?.GetLower(),
+  ).toBe(0);
+});
+
+it("uses the native minimum width after a non-increasing CELLX following a positive column", /** Checks that prepareProperties reaches the actual cell size, not just merge separators. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx1000\cellx1000\cellx1600\pard\intbl A\cell B\cell C\cell\row`,
+  );
+  expect(cellContents(document)).toEqual([
+    [
+      [1000, ["A"]],
+      [41, ["B"]],
+      [600, ["C"]],
+    ],
+  ]);
+});
+
+const gridAfterFixture =
+  "../../vendor/libreoffice-reference/sw/qa/extras/rtfexport/data/tdf44986.rtf";
+it.skipIf(!existsSync(gridAfterFixture))(
+  "keeps both cells in the first row of LibreOffice's grid-after regression",
+  /** Verifies the pinned RTF input and the native RTF export of the filler cell. @returns Nothing. */
+  () => {
+    const document = new RtfDocumentImpl().ResolveBytes(readFileSync(gridAfterFixture));
+    documents.push(document);
+    const reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
+    documents.push(reopened);
+    for (const model of [document, reopened]) {
+      const cells = table(model).GetTabLines()[0]?.GetTabBoxes();
+      expect(cells).toHaveLength(2);
+      expect(cells?.[1]?.GetParagraphs()[0]?.GetText()).toBe("");
+    }
+  },
+);

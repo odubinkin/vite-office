@@ -1,8 +1,14 @@
 /** @fileoverview Atomic RTF text append context for the document and its shape text. */
-import type { RtfBlock, RtfRun, RtfTableRow } from "./rtfdocumentimpl.context";
+import type {
+  RtfBlock,
+  RtfRun,
+  RtfTableRow,
+  RtfTableRowDefinition,
+} from "./rtfdocumentimpl.context";
 import type { RtfShapeAnchor } from "./rtfdocumentimpl.shape";
 import {
   CollectBlockSprms,
+  CollectRowDefinitionSprms,
   CollectTableRowSprms,
   TableRowBuffer,
 } from "./rtfdocumentimpl.tablerowbuffer";
@@ -16,6 +22,9 @@ export class RtfTextBuffer {
   readonly frames: RtfShapeAnchor[] = [];
   readonly m_aTableBufferStack = [new TableRowBuffer()];
   tableRows: RtfTableRow[] = [];
+  m_BackupTopLevelTableRow: RtfTableRowDefinition | undefined;
+  m_PreviousTopLevelTableRow: RtfTableRowDefinition | undefined;
+  nCellXMax = 0;
   inTable = false;
   terminatedParagraph = false;
   pendingPageBreak = false;
@@ -45,6 +54,8 @@ export class RtfTextBuffer {
     lists.add(this.m_aParagraphSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
     for (const { shape } of this.frames) CollectBlockSprms(lists, shape.blocks ?? []);
+    if (this.m_BackupTopLevelTableRow)
+      CollectRowDefinitionSprms(lists, this.m_BackupTopLevelTableRow);
     CollectTableRowSprms(lists, this.tableRows);
     for (const buffer of this.m_aTableBufferStack) buffer.CollectSprms(lists);
   }

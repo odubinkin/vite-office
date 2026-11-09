@@ -360,6 +360,7 @@ export class RtfDocumentImpl {
       section: this.currentSection,
       pageBreakBefore: buffer.pendingPageBreak,
     });
+    buffer.nCellXMax = 0;
     buffer.pendingPageBreak = false;
     buffer.m_bParagraphPageBreak = false;
     buffer.m_bIsFirstRun = true;

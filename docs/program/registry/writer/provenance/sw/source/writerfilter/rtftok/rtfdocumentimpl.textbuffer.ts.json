@@ -13,7 +13,8 @@
       "case Destination::SHAPETEXT:"
     ],
     "preservedResponsibilities": [
-      "Owns the atomic native append context for body and shape text with independent paragraph, row and run state."
+      "Owns the atomic native append context for body and shape text with independent paragraph, row and run state.",
+      "Keeps the original previous and backup top-level row definitions in the active text stream and releases owned saved sprms."
     ],
     "omittedResponsibilities": [
       "The full live mapper stream and shapes outside Writer text frames remain unrepresented."
@@ -27,12 +28,20 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "case Destination::SHAPETEXT:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "m_PreviousTopLevelTableRow"
         }
       ]
     },

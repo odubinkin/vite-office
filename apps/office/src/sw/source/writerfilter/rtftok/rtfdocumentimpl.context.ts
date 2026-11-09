@@ -103,6 +103,7 @@ export interface RtfState {
   tableRowSprms: RTFSprms;
   tableCellSprms: RTFSprms;
   tableBuffer: TableRowBuffer | undefined;
+  tableRowWidthAfter: number;
   currentColor: RTFColorTableEntry;
   tableSprms: RTFSprms;
   tableAttributes: RTFSprms;
@@ -205,11 +206,10 @@ export interface RtfNestedTable {
 /** Paragraph and nested-row events retain their relative cell order. */
 export type RtfTableCellContent = RtfParagraph | RtfNestedTable;
 
-/** One RTF table row with physical cell boundaries in twips. */
-export interface RtfTableRow {
+/** Original buffered row definition with physical cell boundaries in twips. */
+export interface RtfTableRowDefinition {
   readonly rowSprms: RTFSprms;
   readonly cellSprms: readonly RTFSprms[];
-  readonly cells: readonly (readonly RtfTableCellContent[])[];
   readonly header: boolean;
   readonly boundaries: readonly number[];
   readonly alignment: "left" | "center" | "right";
@@ -220,6 +220,10 @@ export interface RtfTableRow {
   readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
   readonly paddings: readonly ReadonlyMap<SvxBoxItemLine, number>[];
   readonly defaultPaddings: ReadonlyMap<SvxBoxItemLine, number>;
+}
+/** One replayable row with its definition and ordered cell content. */
+export interface RtfTableRow extends RtfTableRowDefinition {
+  readonly cells: readonly (readonly RtfTableCellContent[])[];
 }
 export const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   bold: false,

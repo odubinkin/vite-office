@@ -47,6 +47,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       tableRowSprms: new RTFSprms(previous?.tableRowSprms),
       tableCellSprms: new RTFSprms(previous?.tableCellSprms),
       tableBuffer: previous?.tableBuffer,
+      tableRowWidthAfter: previous?.tableRowWidthAfter ?? 0,
       currentColor: new RTFColorTableEntry(previous?.currentColor),
       tableSprms: new RTFSprms(previous?.tableSprms),
       tableAttributes: new RTFSprms(previous?.tableAttributes),
@@ -680,8 +681,6 @@ export function DispatchBodyControl(
   if (name === "pard") {
     state.paragraphSprms.clear();
     this["m_aTextBuffer"].m_bNeedPap = true;
-    if (!this["m_aTextBuffer"].inTable && this["m_aTextBuffer"].tableRows.length > 0)
-      this["FlushTable"]();
     state.paragraph = { ...DEFAULT_PARAGRAPH };
     delete state.paragraphBorder;
     return;

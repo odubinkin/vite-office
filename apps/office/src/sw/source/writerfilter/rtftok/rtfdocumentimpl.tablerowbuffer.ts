@@ -1,5 +1,7 @@
 /** @fileoverview Original RTF table row buffer ownership and depth-based replay. */
+import { MINLAY } from "../../../inc/swtypes";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { createRtfBorder } from "./rtfdocumentimpl.border";
@@ -11,6 +13,7 @@ import type {
   RtfState,
   RtfTableCellContent,
   RtfTableRow,
+  RtfTableRowDefinition,
 } from "./rtfdocumentimpl.context";
 import { RTFConflictPolicy, RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
@@ -55,10 +58,9 @@ export class TableRowBuffer {
     this.header = false;
   }
 
-  /** Transfers the live cell content and property snapshots to a completed row. @param state - Current group state. @returns Actual completed row. */
-  FinishRow(state: RtfState): RtfTableRow {
+  /** Transfers the current row definition separately from its buffered content. @param state - Current group. @returns Native row definition. */
+  TakeDefinition(state: RtfState): RtfTableRowDefinition {
     return {
-      cells: this.cells.splice(0),
       header: this.header,
       boundaries: this.boundaries.splice(0),
       rowSprms: new RTFSprms(state.tableRowSprms),
@@ -72,6 +74,25 @@ export class TableRowBuffer {
       paddings: this.paddings.splice(0),
       defaultPaddings: this.defaultPaddings,
     };
+  }
+
+  /** Restores the original cell and row geometry from a retained definition. @param definition - Saved row definition. @returns Nothing. */
+  RestoreCellDefinition(definition: RtfTableRowDefinition): void {
+    for (const list of this.cellSprms.splice(0)) list.dispose();
+    this.boundaries.splice(0, this.boundaries.length, ...definition.boundaries);
+    for (const list of definition.cellSprms) this.cellSprms.push(new RTFSprms(list));
+    this.left = definition.left;
+    this.verticals.splice(0, this.verticals.length, ...definition.verticals);
+    this.borders.length = 0;
+    for (const map of definition.borders) this.borders.push(new Map(map));
+    this.paddings.length = 0;
+    for (const map of definition.paddings) this.paddings.push(new Map(map));
+    this.defaultPaddings = new Map(definition.defaultPaddings);
+  }
+
+  /** Transfers cell contents and definitions to the completed row. @param state - Current group. @returns Completed row. */
+  FinishRow(state: RtfState): RtfTableRow {
+    return { ...this.TakeDefinition(state), cells: this.cells.splice(0) };
   }
 
   /** Collects unfinished and completed cell property ownership for cleanup. @param lists - Actual property lists. @returns Nothing. */
@@ -101,10 +122,15 @@ function CollectTableCellSprms(lists: Set<RTFSprms>, cell: readonly RtfTableCell
 /** Collects actual completed row property owners. @param lists - Actual property lists. @param rows - Original rows. @returns Nothing. */
 export function CollectTableRowSprms(lists: Set<RTFSprms>, rows: readonly RtfTableRow[]): void {
   for (const row of rows) {
-    lists.add(row.rowSprms);
-    for (const list of row.cellSprms) lists.add(list);
+    CollectRowDefinitionSprms(lists, row);
     for (const cell of row.cells) CollectTableCellSprms(lists, cell);
   }
+}
+
+/** Collects the original row and cell property snapshots. @param lists - Property owners. @param row - Original row definition. @returns Nothing. */
+export function CollectRowDefinitionSprms(lists: Set<RTFSprms>, row: RtfTableRowDefinition): void {
+  lists.add(row.rowSprms);
+  for (const list of row.cellSprms) lists.add(list);
 }
 
 /** Collects completed paragraph and table events in an owned native text section. @param lists - Property owners. @param blocks - Original text stream. @returns Nothing. */
@@ -112,6 +138,52 @@ export function CollectBlockSprms(lists: Set<RTFSprms>, blocks: readonly RtfBloc
   for (const block of blocks)
     if (block.kind === "paragraph") CollectParagraphSprms(lists, block.paragraph);
     else CollectTableRowSprms(lists, block.rows);
+}
+
+/** Adds the native borderless grid-after cell and copies the preceding cell's last character size. @param this - Native reader. @param state - Current group. @param row - Buffered top-level row. @returns Nothing. */
+function AppendWidthAfterCell(
+  this: RtfDocumentImplContext,
+  state: RtfState,
+  row: TableRowBuffer,
+): void {
+  const previous = row.cells.at(-1);
+  let run;
+  for (const content of previous ?? [])
+    if (!("rows" in content)) run = content.marker ?? content.runs.at(-1) ?? run;
+  this["CommitParagraph"](state, true);
+  const paragraph = row.cell.pop();
+  if (paragraph && !("rows" in paragraph)) {
+    paragraph.paragraphSprms?.erase(N.LN_CT_PPrBase_spacing);
+    if (run && paragraph.marker) {
+      for (const id of [N.LN_EG_RPrBase_sz, N.LN_EG_RPrBase_szCs]) {
+        const size = run.characterSprms.find(id);
+        try {
+          if (size.is()) paragraph.marker.characterSprms.set(id, size);
+        } finally {
+          size.dispose();
+        }
+      }
+    }
+    row.cells.push([
+      {
+        ...paragraph,
+        state: { ...paragraph.state, beforeSet: false, afterSet: false, contextualSet: false },
+      },
+    ]);
+  }
+  row.boundaries.push((row.boundaries.at(-1) ?? 0) + state.tableRowWidthAfter);
+  const index = row.cells.length - 1;
+  if (row.cellSprms.length <= index) row.cellSprms.push(new RTFSprms(state.tableCellSprms));
+  const borders = new Map<SvxBoxItemLine, RtfCellBorder>();
+  for (const edge of [
+    SvxBoxItemLine.TOP,
+    SvxBoxItemLine.LEFT,
+    SvxBoxItemLine.BOTTOM,
+    SvxBoxItemLine.RIGHT,
+  ])
+    borders.set(edge, { ...createRtfBorder(), style: BorderLineStyle.NONE, width: 0 });
+  row.borders[index] = borders;
+  state.tableRowWidthAfter = 0;
 }
 
 /** Original cell/row controls through the active table buffer. @param this - Native reader. @param name - Source control. @param parameter - Optional source value. @param state - Original group. @returns Whether consumed. */
@@ -142,7 +214,16 @@ export function DispatchTableControl(
     return true;
   }
   if (name === "trowd") {
-    this["m_aTextBuffer"].m_bNeedPap = true;
+    const topLevel = buffers[0] as TableRowBuffer;
+    if (row === topLevel && topLevel.boundaries.at(-1)) {
+      const previousBackup = text.m_BackupTopLevelTableRow;
+      if (previousBackup) {
+        previousBackup.rowSprms.dispose();
+        for (const list of previousBackup.cellSprms) list.dispose();
+      }
+      text.m_BackupTopLevelTableRow = topLevel.TakeDefinition(state);
+    }
+    text.m_bNeedPap = true;
     this["m_aTextBuffer"].inTable = true;
     state.tableBuffer = row;
     row.ResetProperties();
@@ -185,9 +266,36 @@ export function DispatchTableControl(
       else parent.cell.push({ rows: [row] });
       this["m_aTextBuffer"].m_bNeedPap = true;
     } else {
-      if (active.cells.length > 0) this["m_aTextBuffer"].tableRows.push(active.FinishRow(state));
-      this["m_aTextBuffer"].inTable = false;
-      this["m_aTextBuffer"].m_bNeedFinalPar = true;
+      if (state.tableRowWidthAfter > 0) AppendWidthAfterCell.call(this, state, active);
+      const backup = text.m_BackupTopLevelTableRow;
+      const restored = !active.boundaries.at(-1) && !!backup;
+      if (restored) {
+        active.RestoreCellDefinition(backup);
+        active.alignment = backup.alignment;
+        active.height = backup.height;
+        active.header = backup.header;
+        active.split = backup.split;
+        state.tableRowSprms.dispose();
+        state.tableRowSprms = new RTFSprms(backup.rowSprms);
+      } else if (active.boundaries.length === 0 && text.m_PreviousTopLevelTableRow) {
+        active.RestoreCellDefinition(text.m_PreviousTopLevelTableRow);
+      }
+      const currentX = active.boundaries.at(-1);
+      if (currentX !== undefined && text.nCellXMax - currentX >= MINLAY)
+        active.boundaries[active.boundaries.length - 1] = text.nCellXMax;
+      if (active.cells.length > 0) {
+        const completed = active.FinishRow(state);
+        text.tableRows.push(completed);
+        if (completed.boundaries.length) text.m_PreviousTopLevelTableRow = completed;
+      }
+      active.ResetProperties();
+      state.tableCellSprms.clear();
+      if (restored) state.tableRowSprms.clear();
+      for (const group of this["states"])
+        if (group.tableBuffer === active) group.tableBuffer = undefined;
+      text.inTable = false;
+      text.m_bNeedPap = true;
+      text.m_bNeedFinalPar = true;
     }
     this["m_aTextBuffer"].terminatedParagraph = true;
     return true;
@@ -256,6 +364,10 @@ export function DispatchTableControl(
     row.alignment = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
     return true;
   }
+  if (name === "trwWidthA") {
+    state.tableRowWidthAfter = parameter ?? 0;
+    return true;
+  }
   if (name === "trleft") {
     row.left = parameter ?? 0;
     return true;
@@ -263,6 +375,7 @@ export function DispatchTableControl(
   if (name === "cellx") {
     if (parameter !== undefined) {
       row.boundaries.push(parameter);
+      if (row === buffers[0]) text.nCellXMax = Math.max(parameter, text.nCellXMax);
       row.cellSprms.push(new RTFSprms(state.tableCellSprms));
       state.tableCellSprms.clear();
       row.verticals.push(row.nextCellVertical);

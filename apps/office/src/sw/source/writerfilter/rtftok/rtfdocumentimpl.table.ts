@@ -215,6 +215,7 @@ function MaterializeRtfTableGroup(
     table.GetFrameFormat().SetFormatAttr(size);
   }
   for (const row of rows) {
+    const widths = PrepareRtfTableGrid(row);
     const line = document.nodes.AppendTableRow(table, row.cells.length);
     if (row.height !== 0) {
       const size = line.GetFrameFormat().GetFrameSize().Clone();
@@ -246,11 +247,10 @@ function MaterializeRtfTableGroup(
         for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
         box.ClaimFrameFormat().SetFormatAttr(item);
       }
-      const right = row.boundaries[index];
-      const left = index === 0 ? row.left : row.boundaries[index - 1];
-      if (right !== undefined && left !== undefined && right > left) {
+      const width = widths[index] ?? 0;
+      if (width > 0) {
         const size = box.GetFrameSize();
-        size.SetWidth(right - left);
+        size.SetWidth(width);
         box.SetFrameSize(size);
       }
       const cellEnd = box.GetStartNode().EndOfSectionNode();
