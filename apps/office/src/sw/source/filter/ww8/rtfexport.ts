@@ -1,4 +1,5 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
+import { SectionLineNumbering } from "./rtfattributeoutput.linenumbering";
 import {
   CollectTextFlyFrames,
   type BoundTextFrame,
@@ -310,6 +311,7 @@ export class RtfExport extends MSWordExportBase {
       .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
     if (defaultTabs.Count() > 0) output += `\\deftab${defaultTabs.At(0).GetTabPos()}`;
     output += this.WriteInitialPageDescription(document, blocks[0]);
+    output += this.WriteSectionLineNumbering();
     output += "\n";
     let currentPage = this.ResolvePageDescription(document, blocks[0]);
     let previousPageDesc: SwPageDesc | undefined;
@@ -319,7 +321,11 @@ export class RtfExport extends MSWordExportBase {
         if (item !== undefined) {
           const page = document.FindPageDesc(item.GetPageDescName()) ?? currentPage;
           if (currentPage.GetFollow() !== page) {
-            const section = this.WriteLaterSection(page, item.GetNumOffset());
+            const section = this.WriteLaterSection(
+              page,
+              item.GetNumOffset(),
+              !(blocks[blockIndex - 1] instanceof SwTableNode),
+            );
             output += section.output;
             currentPage = section.currentPage;
           } else currentPage = page;
@@ -565,15 +571,25 @@ export class RtfExport extends MSWordExportBase {
     return IsPlausableSingleWordSection(page.GetFirstMaster(), follow.GetMaster());
   }
 
-  /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @returns The { output: string; currentPage: SwPageDesc } result. */
+  /** Reads the current Writer line numbering only when it is active. @returns Original section controls. */
+  private WriteSectionLineNumbering(): string {
+    const info = this.m_rDoc.GetLineNumberInfo();
+    return info.IsPaintLineNumbers() ? SectionLineNumbering(info) : "";
+  }
+
+  /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @param buffered - Whether the previous text node buffers the section break. @returns The { output: string; currentPage: SwPageDesc } result. */
   private WriteLaterSection(
     page: SwPageDesc,
     restart?: number,
+    buffered = false,
   ): { output: string; currentPage: SwPageDesc } {
     const combined = this.IsSingleWordSectionPageChain(page);
     const titlePage = combined || !page.IsFirstShared();
     const currentPage = combined ? page.GetFollow() : page;
-    let output = "\\sect\\sectd\\sectunlocked1";
+    const numbering = this.WriteSectionLineNumbering();
+    let output = buffered
+      ? `${numbering}\\sect\\sectd\\sectunlocked1`
+      : `\\sect\\sectd${numbering}\\sectunlocked1`;
     output += this.WriteSectionPageDescription(currentPage, false);
     if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
     if (titlePage) output += "\\titlepg";

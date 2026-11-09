@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "SectionLineNumbering",
+      "FormatLineNumbering"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::SectionLineNumbering"
+    ],
+    "preservedResponsibilities": [
+      "Emits original RTF document interval, distance, restart and paragraph count controls."
+    ],
+    "omittedResponsibilities": [
+      "Numeric paragraph start is not represented by the current paragraph item."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts",
+          "marker": "SectionLineNumbering"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::SectionLineNumbering"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates original section and paragraph line-number output callbacks from the main attribute output file while keeping the source native settings and emission order."
+    }
+  }
+}

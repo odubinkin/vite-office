@@ -17,8 +17,11 @@ import { listAutoFormatType } from "../../core/unocore/unoobj-listautofmt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../core/unocore/unocrsrhelper";
-import { PropertyIds as P, isCharacterProperty } from "./PropertyIds";
+import { PropertyIds as P, getPropertyName, isCharacterProperty } from "./PropertyIds";
 import { StyleSheetTable, type StyleSheetEntry } from "./StyleSheetTable";
+import { NS_ooxml } from "../inc/ooxml/resourceids";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { LineNumberPosition } from "../../../inc/lineinfo";
 
 /** Original ContextType declaration order. */
 export enum ContextType {
@@ -54,6 +57,13 @@ interface Context {
   readonly properties: PropertyMap;
   readonly owned: boolean;
   readonly sectionReference?: SvRef<SectionPropertyMap>;
+}
+
+/** Original mapper-wide line-number settings passed across section property groups. */
+interface LineNumberSettings {
+  readonly nDistance: number;
+  readonly nInterval: number;
+  readonly bRestartAtEachPage: boolean;
 }
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
@@ -92,6 +102,96 @@ export class DomainMapper_Impl {
       element
     ];
     if (name !== undefined) this.m_aPageMargins[name] = convertTwipToMm100_Limited(value);
+  }
+  private m_aLineNumberSettings: LineNumberSettings = {
+    nDistance: -1,
+    nInterval: 0,
+    bRestartAtEachPage: true,
+  };
+  private m_bLineNumberingSet = false;
+  /** Reads the native mapper-wide line-number settings. @returns Current immutable settings. */
+  GetLineNumberSettings(): LineNumberSettings {
+    return this.m_aLineNumberSettings;
+  }
+  /** Saves the updated global settings while retaining the active section properties. @param settings - Original line-number settings. @returns Nothing. */
+  SetLineNumberSettings(settings: LineNumberSettings): void {
+    this.m_aLineNumberSettings = settings;
+  }
+  /** Applies the original line number properties to their native document service in source order. @param values - Typed property and value tuples. @returns Nothing. */
+  private ApplyLineNumberProperties(
+    values: readonly (readonly [P, number | boolean, "bool" | "sal_Int16" | "sal_Int32"])[],
+  ): void {
+    const properties = this.GetTextDocument().getLineNumberingProperties();
+    try {
+      for (const [property, value, type] of values) {
+        const item = new Any([value], type);
+        try {
+          properties.setPropertyValue(getPropertyName(property), item);
+        } finally {
+          item.dispose();
+        }
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+  }
+  /** Publishes each actual lnNumType group through the original global document property owner. @param section - Actual section context when available. @returns Nothing. */
+  ApplyLineNumberSettings(section?: SectionPropertyMap): void {
+    const { nInterval, nDistance, bRestartAtEachPage } = this.GetLineNumberSettings();
+    if (!nInterval) {
+      this.ApplyLineNumberProperties([[P.PROP_IS_ON, false, "bool"]]);
+      return;
+    }
+    this.ApplyLineNumberProperties([
+      [P.PROP_IS_ON, true, "bool"],
+      [P.PROP_INTERVAL, (nInterval << 16) >> 16, "sal_Int16"],
+      [P.PROP_DISTANCE, nDistance === -1 ? 500 : nDistance, "sal_Int32"],
+      [P.PROP_RESTART_AT_EACH_PAGE, bRestartAtEachPage, "bool"],
+    ]);
+    if (nDistance === -1) section?.SetdxaLnn(283);
+  }
+  /** Finalizes source section line numbering and the imported header and footer style count flags. @param interval - Section interval. @param restart - Original restart token. @param distance - Section twips. @returns Nothing. */
+  SetLineNumbering(interval: number, restart: number, distance: number): void {
+    if (!this.m_bLineNumberingSet)
+      this.ApplyLineNumberProperties([
+        [P.PROP_IS_ON, true, "bool"],
+        [P.PROP_COUNT_EMPTY_LINES, true, "bool"],
+        [P.PROP_COUNT_LINES_IN_FRAMES, false, "bool"],
+        [P.PROP_INTERVAL, (interval << 16) >> 16, "sal_Int16"],
+        [P.PROP_DISTANCE, convertTwipToMm100_Limited(distance), "sal_Int32"],
+        [P.PROP_NUMBER_POSITION, LineNumberPosition.Left, "sal_Int16"],
+        [
+          P.PROP_RESTART_AT_EACH_PAGE,
+          restart === NS_ooxml.LN_Value_ST_LineNumberRestart_newPage,
+          "bool",
+        ],
+      ]);
+    this.m_bLineNumberingSet = true;
+    const family = unicode("ParagraphStyles");
+    try {
+      const styles = this.model.getStyleFamilies().getByName(family);
+      for (const name of ["Header", "Footer"]) {
+        const entry = this.GetStyleSheetTable().FindStyleSheetByISTD(name);
+        if (!entry?.m_pProperties) continue;
+        const key = unicode(name);
+        try {
+          if (!styles.hasByName(key)) continue;
+          const style = styles.getStyleByName(key);
+          const counted = new Any(entry.m_pProperties.props().GetListId() >= 0);
+          try {
+            style.setPropertyValue(getPropertyName(P.PROP_PARA_LINE_NUMBER_COUNT), counted);
+          } finally {
+            counted.dispose();
+            style.dispose();
+          }
+        } finally {
+          key.dispose();
+        }
+      }
+    } finally {
+      family.dispose();
+    }
   }
   private m_bIsFirstSection = true;
   private m_xPageStyles: SwXStyleFamily | undefined;

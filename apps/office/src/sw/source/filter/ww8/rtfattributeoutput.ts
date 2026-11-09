@@ -62,6 +62,7 @@ import {
   RES_BREAK,
   RES_BOX,
   RES_KEEP,
+  RES_LINENUMBER,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -72,6 +73,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
+import { FormatLineNumbering } from "./rtfattributeoutput.linenumbering";
 import type { SwAttrSet } from "../../core/attr/swatrset";
 import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swatrset";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
@@ -464,6 +466,8 @@ export class RtfAttributeOutput extends AttributeOutputBase {
         const value = item as SvxULSpaceItem;
         return `\\sb${value.GetUpper()}\\sa${value.GetLower()}${value.GetContext() ? "\\contextualspace" : ""}`;
       }
+      case RES_LINENUMBER:
+        return FormatLineNumbering(item as SfxBoolItem);
       case RES_KEEP:
         return (item as SfxBoolItem).GetValue() ? "\\keepn" : "";
       case RES_PARATR_SPLIT:
@@ -558,6 +562,7 @@ export class RtfAttributeOutput extends AttributeOutputBase {
         ),
       ) +
       this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined) +
+      FormatLineNumbering(items.GetItemIfSet(RES_LINENUMBER, true) as SfxBoolItem | undefined) +
       this.WriteStyleFrameDirection(style)
     );
   }

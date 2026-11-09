@@ -70,6 +70,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -92,6 +96,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/model.xml",
           "marker": "CT_FramePr_hAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_LineNumber_countBy"
         }
       ]
     },
@@ -124,7 +132,8 @@
       "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged.",
       "S3HW1E section type/parity checkpoint: raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD use exact generated resource tokens and original paragraph sectPr wrapper. SectionPropertyMap preserves nextPage default, one-column nextColumn promotion, continuous orientation promotion and inherited page-style identity. Real metadata-driven even/odd style copies retain the native denylist, unrestricted/mirrored regular follow style, even-only mirrored margin swap and actual Converted name allocation. DomainMapper_Impl now retains the last top-level section map with genuine tools::SvRef, leaving nested maps out of that slot and releasing old maps only after replacement. Original page-section grid defaults, document DefaultPageMode and Standard Asian-height precedence are applied after styles are imported. Original first-run SettingsTable emission snapshots actual RTFReferenceTable/RTFReferenceProperties and delivers the consumed mirror-margin flag through native mapper callbacks; late flags do not mutate the emitted table. Actual RTF/UNO tests preserve continuous restart omission and grid defaults/export no-op (WRITER281-283). Remaining PAGE/terminal-SECT state and first/follow/title-page producer/export checks, plus HTML/current-model audits, prevent full goal completion. No whole-module/ABI confidence promotion; intentional browser file UI/autosave/recovery deviations remain unchanged.",
       "S3HW1E HTML74: Section text-direction property and values are exact pinned resourceids.py output from the original namespace and model preprocessing.",
-      "Consumes the original generated paragraph-frame attributes and associated enum IDs."
+      "Consumes the original generated paragraph-frame attributes and associated enum IDs.",
+      "Admits the original generated section line-number identities."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

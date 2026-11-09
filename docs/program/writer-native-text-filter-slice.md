@@ -2309,3 +2309,21 @@ for explicit top alignment.
 WRITER410 records the interaction between the ten-header limit and
 all-header finalization. WRITER411 records the original auto-height
 and metric overflow behavior.
+
+### RTF108 — Document line numbering and paragraph count controls
+
+The RTF reader emits the original section line-number resources.
+DomainMapper retains the shared interval, distance and restart
+settings and publishes them through the Writer line-number property
+service. The first numbered section applies the source defaults for
+empty lines, text frames and number position. The pinned
+linenumbering.rtf reopens with the same represented line-number
+configuration.
+
+The RTF writer uses SwLineNumberInfo to emit the interval, distance
+and continuous mode. It emits the original NOLINE control from
+paragraph or style count items. WRITER412 records the reader's
+different handling of NOLINE. WRITER413 records the source order
+for line-number controls and buffered section breaks. The current
+paragraph line-number item stores participation. Per-paragraph
+numeric starts require a separate native item contract.

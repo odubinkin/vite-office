@@ -336,6 +336,22 @@ export class SectionPropertyMap extends PropertyMap {
   private m_nBottomMargin = Number(convert(1n, Length.in, Length.mm100));
   protected m_nPageNumber = -1;
   protected m_nBreakType = -1;
+  protected m_nLnnMod = 0;
+  protected m_nLnc: number = NS_ooxml.LN_Value_ST_LineNumberRestart_newPage;
+  protected m_ndxaLnn = 0;
+  /** Stores the original section line interval. @param value - Native interval. @returns Nothing. */
+  SetLnnMod(value: number): void {
+    this.m_nLnnMod = value;
+  }
+  /** Stores the original section restart control. @param value - Native restart token. @returns Nothing. */
+  SetLnc(value: number): void {
+    this.m_nLnc = value;
+  }
+  /** Stores the original section line-number distance. @param value - Native twips. @returns Nothing. */
+  SetdxaLnn(value: number): void {
+    this.m_ndxaLnn = value;
+  }
+
   /** Original stored break type. @param value - Generated section token. @returns Nothing. */
   SetBreakType(value: number): void {
     this.m_nBreakType = value;

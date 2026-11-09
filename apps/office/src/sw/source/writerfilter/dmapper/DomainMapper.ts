@@ -193,6 +193,29 @@ export class DomainMapper implements Properties {
     )
       return;
     switch (id) {
+      case N.LN_CT_LineNumber_countBy:
+      case N.LN_CT_LineNumber_distance:
+      case N.LN_CT_LineNumber_restart: {
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        const settings = this.impl.GetLineNumberSettings();
+        if (id === N.LN_CT_LineNumber_countBy) {
+          this.impl.SetLineNumberSettings({ ...settings, nInterval: n });
+          if (section instanceof SectionPropertyMap) section.SetLnnMod(n);
+        } else if (id === N.LN_CT_LineNumber_distance) {
+          this.impl.SetLineNumberSettings({
+            ...settings,
+            nDistance: convertTwipToMm100_Limited(n),
+          });
+          if (section instanceof SectionPropertyMap) section.SetdxaLnn(n);
+        } else {
+          this.impl.SetLineNumberSettings({
+            ...settings,
+            bRestartAtEachPage: n === N.LN_Value_ST_LineNumberRestart_newPage,
+          });
+          if (section instanceof SectionPropertyMap) section.SetLnc(n);
+        }
+        break;
+      }
       case N.LN_CT_PageSz_w:
         this.CT_PageSz.w = PaperInfo.sloppyFitPageDimension(Number(convertTwipToMm100(BigInt(n))));
         break;
@@ -410,6 +433,14 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_EG_SectPrContents_lnNumType: {
+        resolveReturnedReference(modifier.getProps(), this);
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        this.impl.ApplyLineNumberSettings(
+          section instanceof SectionPropertyMap ? section : undefined,
+        );
+        break;
+      }
       case N.LN_CT_PPrBase_framePr:
         if (context instanceof ParagraphPropertiesPropertyMap) context.props().SetFrameMode();
         resolveReturnedReference(modifier.getProps(), this);

@@ -3381,3 +3381,20 @@ special-cases exact, so auto reaches the table row as SizeType.MIN.
 Its IsAutoHeight getter reports true only for variable height. The
 same measure conversion also returns zero for positive twip
 values at or above 32768. Retain these row property results.
+
+### WRITER412 — RTF paragraph line-number exclusion clears the section distance
+
+The exporter writes NOLINE for a paragraph excluded from the line
+count. The reader dispatches NOLINE by erasing the distance from
+the section line-number properties. It leaves the paragraph's count
+item alone. The mapper can therefore use the default distance and
+count the paragraph on reopen. Keep the reader and writer behaviors.
+
+### WRITER413 — Later RTF line numbering can precede the section break
+
+The RTF attribute writer emits the line-number controls to its
+stream even while StartSection holds SECT and SECTD in the
+section-break buffer. A section transition buffered by a preceding
+text node can therefore write the new line-number controls into
+the preceding section. Preserve the order of the stream and
+the buffered section controls.

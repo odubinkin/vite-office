@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts#SectionLineNumbering",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx#RtfAttributeOutput::SectionLineNumbering",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts"
+      ],
+      "justification": "Emits original RTF document interval, distance, restart and paragraph count controls. Numeric paragraph start is not represented by the current paragraph item.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SectionLineNumbering",
+        "FormatLineNumbering"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+      "upstreamSymbols": [
+        "RtfAttributeOutput::SectionLineNumbering"
+      ]
+    }
+  }
+}

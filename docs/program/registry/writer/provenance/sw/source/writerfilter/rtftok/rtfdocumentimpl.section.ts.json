@@ -25,7 +25,8 @@
       "S3HW1E PAGE/section lifecycle checkpoint: exact pinned metadata distinguishes all 1823 known spellings from unknown controls, preserves native dispatch kinds/defaults and PAR aliases, and starts sections for recognized no-op handlers. Original needSect/needCr/needFinalPar/needPar, parAtEndOfSection, ignore-next-continuous and lazy break reset govern SECT, synthetic PAGE and root-pop. The existing atomic mapper binding preserves deferred-page paragraph phases, including zero-length utext first-run changes, without claiming a streaming mapper ABI. Required final table paragraphs follow the table. Literal tests plus unchanged cont-section-pagebreak.rtf preserve native empty paragraph/page-style expectations. Existing strict RTF1 lexical admission is retained. First/follow/title-page producer/export and HTML/current-model audits remain open; no broad semantic or ABI confidence promotion.",
       "S3HW1E HTML74: STEXTFLOW only publishes native section sprms for zero and one, preserving group cloning and SECTD reset on the actual parser state.",
       "Separates ordinary body paragraph and section state from an independent shape text scope.",
-      "Retains the native PAGE and SECT behavior when a frame is active."
+      "Retains the native PAGE and SECT behavior when a frame is active.",
+      "Emits native line-number resources and retains the original NOLINE distance erasure."
     ],
     "omittedResponsibilities": [
       "First/follow/title-page producer and export audit remain required. Header/footer content, columns, floating objects and complete rtftok/dmapper/Writer ABI are unrepresented or unverified."
@@ -50,6 +51,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -93,6 +98,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
           "marker": "testTdf158586_0: convert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::LINEMOD:"
         }
       ]
     },

@@ -2,7 +2,7 @@
 import type { RtfDocumentImplContext, RtfState } from "./rtfdocumentimpl.context";
 import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
-import { putNestedAttribute } from "./rtfdocumentimpl.properties";
+import { eraseNestedAttribute, putNestedAttribute } from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { RTFReferenceProperties } from "./rtfreferenceproperties";
 import { DomainMapper } from "../dmapper/DomainMapper";
@@ -200,6 +200,50 @@ export function DispatchSectionControl(
       new RTFValue(N.LN_Value_ST_PageOrientation_landscape),
     );
     return true;
+  }
+  const lineNumbering = N.LN_EG_SectPrContents_lnNumType;
+  switch (name) {
+    case "linemod":
+      putNestedAttribute(
+        state.sectionSprms,
+        lineNumbering,
+        N.LN_CT_LineNumber_countBy,
+        new RTFValue(parameter ?? 1),
+      );
+      return true;
+    case "linex":
+      if (parameter)
+        putNestedAttribute(
+          state.sectionSprms,
+          lineNumbering,
+          N.LN_CT_LineNumber_distance,
+          new RTFValue(parameter),
+        );
+      return true;
+    case "linestarts":
+      putNestedAttribute(
+        state.sectionSprms,
+        lineNumbering,
+        N.LN_CT_LineNumber_start,
+        new RTFValue(((parameter ?? 1) - 1) | 0),
+      );
+      return true;
+    case "lineppage":
+    case "linecont":
+      putNestedAttribute(
+        state.sectionSprms,
+        lineNumbering,
+        N.LN_CT_LineNumber_restart,
+        new RTFValue(
+          name === "lineppage"
+            ? N.LN_Value_ST_LineNumberRestart_newPage
+            : N.LN_Value_ST_LineNumberRestart_continuous,
+        ),
+      );
+      return true;
+    case "noline":
+      eraseNestedAttribute(state.sectionSprms, lineNumbering, N.LN_CT_LineNumber_distance);
+      return true;
   }
   if (name === "stextflow") {
     if (parameter === 0 || parameter === 1)

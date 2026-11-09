@@ -74,6 +74,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -96,6 +100,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
           "marker": "case NS_ooxml::LN_CT_FramePr_hAnchor:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_EG_SectPrContents_lnNumType:"
         }
       ]
     },
@@ -130,7 +138,8 @@
       "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
       "The original parent-style WritingMode lookup and short extraction are retained before RTF insertion even though RTF excludes the following justification rewrite. The temporary returned Any is released at the original expression boundary. Derived-style inheritance and direct overrides use actual imported styles and items.",
       "S3HW1E HTML74: Original section text-direction sprm maps through the real section context to the signed-short PROP_WRITING_MODE with native mode fallback.",
-      "Resolves original framePr attributes on the actual paragraph property context."
+      "Resolves original framePr attributes on the actual paragraph property context.",
+      "Resolves original line-number section attributes and publishes the shared document settings."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

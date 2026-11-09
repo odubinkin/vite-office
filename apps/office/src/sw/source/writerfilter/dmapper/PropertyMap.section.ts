@@ -160,6 +160,8 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
     booleanProperty(this, P.PROP_IS_LANDSCAPE) !== booleanProperty(previous, P.PROP_IS_LANDSCAPE)
   )
     this["m_nBreakType"] = N.LN_Value_ST_SectionMark_nextPage;
+  if (this["m_nLnnMod"])
+    mapper.SetLineNumbering(this["m_nLnnMod"], this["m_nLnc"], this["m_ndxaLnn"]);
   if (this["m_nBreakType"] === N.LN_Value_ST_SectionMark_continuous) {
     this.InheritOrFinalizePageStyles(mapper);
     return;
