@@ -13,6 +13,41 @@ afterEach(
     vi.restoreAllMocks();
   },
 );
+
+it("renders a nested native table inside its actual cell between surrounding paragraphs", /** Verifies ordered mounted content and the browser's native table-node coordinates. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  sessions.push(session);
+  const doc = session.docShell.GetDoc(),
+    outer = doc.nodes.MakeTableNode("Outer", { width: 3600 }, required(doc.paragraphs[0]));
+  outer.AddColumnWidth(3600);
+  const cell = required(doc.nodes.AppendTableRow(outer, 1).GetTabBoxes()[0]);
+  required(cell.GetParagraphs()[0]).SetText("Before inner table");
+  const inner = doc.nodes.MakeTableNodeBefore(cell.GetStartNode().EndOfSectionNode(), "Inner", {
+    width: 1200,
+  });
+  inner.AddColumnWidth(1200);
+  required(doc.nodes.AppendTableRow(inner, 1).GetTabBoxes()[0]?.GetParagraphs()[0]).SetText(
+    "Inside",
+  );
+  doc.nodes.AppendTableCellParagraph(cell).SetText("After inner table");
+  render(<WriterWorkbench isActive view={session.view} />);
+  const outerElement = screen.getByRole("table", { name: "Outer" }),
+    innerElement = screen.getByRole("table", { name: "Inner" }),
+    owner = required(innerElement.closest("td,th"));
+  expect(outerElement).toContainElement(innerElement);
+  expect(innerElement).toHaveAttribute(
+    "data-writer-table-node",
+    String(inner.GetTableNode().GetIndex()),
+  );
+  expect(
+    [...owner.children].map(
+      /** Observes the real element order within the outer native box. @param node - Mounted direct child. @returns Display text. */ (
+        node,
+      ) => node.textContent,
+    ),
+  ).toEqual(["Before inner table", "Inside", "After inner table"]);
+});
+
 /** Requires an original native/DOM owner. @param value - Optional owner. @returns Actual value. */
 function required<T>(value: T | undefined | null): T {
   if (value === undefined || value === null)

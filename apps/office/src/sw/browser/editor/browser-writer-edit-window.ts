@@ -15,6 +15,7 @@ import {
 import { BrowserWriterSelectionMapper, getWriterDomPosition } from "./writer-selection";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import { SwTab } from "../../inc/fesh";
+import { SwTableNode } from "../../source/core/docnode/node";
 import { browserPointerStyle } from "../../../vcl/browser/pointer";
 import {
   SwTabFrame,
@@ -560,13 +561,21 @@ export class BrowserWriterEditWindow {
     try {
       if (this.root !== undefined)
         for (const element of this.root.querySelectorAll<HTMLTableElement>("table")) {
-          const table = this.editWindow
-            .GetDoc()
-            .GetTables()
-            .find(
-              /** Resolves the existing mounted owner. @param owner - Canonical table. @returns Whether named by the frame. */
-              (owner) => owner.GetName() === element.getAttribute("aria-label"),
-            );
+          const doc = this.editWindow.GetDoc(),
+            index = element.dataset.writerTableNode,
+            node = index === undefined ? undefined : doc.GetNodes().entries()[Number(index)];
+          const table =
+            index === undefined
+              ? doc
+                  .GetTables()
+                  .find(
+                    /** Resolves legacy injected device markup by its table name. @param owner - Canonical table. @returns Whether named by the frame. */ (
+                      owner,
+                    ) => owner.GetName() === element.getAttribute("aria-label"),
+                  )
+              : node instanceof SwTableNode
+                ? node.GetTable()
+                : undefined;
           if (table === undefined) continue;
           const rect = element.getBoundingClientRect();
           if (rect.width <= 0 || rect.height <= 0) continue;

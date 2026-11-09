@@ -160,11 +160,11 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
     /** Reads unsupported body section. @returns Result. */ () =>
       helper.CreateTextChildContext(XMLToken.TEXT_SECTION, attrs(), "Body"),
   ).toThrow("Unsupported ODF text section");
-  for (const token of [XMLToken.TEXT_SECTION, XMLToken.TABLE_TABLE])
-    expect(
-      /** Reads unsupported nested structure. @returns Result. */ () =>
-        helper.CreateTextChildContext(token, attrs(), "Cell"),
-    ).toThrow("Unsupported ODF table cell section or nested table");
+  expect(helper.CreateTextChildContext(XMLToken.TABLE_TABLE, attrs(), "Cell")).toBeNull();
+  expect(
+    /** Reads unsupported nested section. @returns Result. */ () =>
+      helper.CreateTextChildContext(XMLToken.TEXT_SECTION, attrs(), "Cell"),
+  ).toThrow("Unsupported ODF table cell section");
   const sink: XMLTableImportTarget = {
     ...base,
     registerTableStyle: /** No style mutation here. @returns Nothing. */ () => {},
@@ -187,5 +187,11 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
       sink,
       new SwXTextDocument(createWriterDocument()),
     ).CreateTextChildContext(XMLToken.TABLE_TABLE, attrs({ "table:name": "Shared" }), "Body"),
+  ).toBeInstanceOf(XMLTableContext);
+  expect(
+    new XMLTextImportHelper(
+      sink,
+      new SwXTextDocument(createWriterDocument()),
+    ).CreateTextChildContext(XMLToken.TABLE_TABLE, attrs({ "table:name": "Nested" }), "Cell"),
   ).toBeInstanceOf(XMLTableContext);
 });

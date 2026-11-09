@@ -300,6 +300,18 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "marker": "projectBlock"
         }
       ],
       "upstream": [
@@ -514,6 +526,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
           "marker": "SwXMLExport::ExportTableLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "SwXMLExport::ExportTableBox"
         }
       ]
     },
@@ -523,7 +539,8 @@
       "exportContentXml",
       "exportMetaXml",
       "getCharacterProperties",
-      "projectXmlTextRuns"
+      "projectXmlTextRuns",
+      "projectBlock"
     ],
     "omittedResponsibilities": [
       "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
@@ -571,7 +588,8 @@
       "V4DQJW preserves newly admitted native word-line-mode/automatic-kerning items in primary ODT export and its supported-item admission. Actual item values flow into existing typed xmloff transport; previous storage/UI deviations are unchanged.",
       "S3HW1E projects actual direct fill items into native ODF paragraph attributes, preserves parent inheritance and emits original drawing namespace. Root Writer NONE override remains serializable.",
       "B8TCAE source-contract regression: A real named paragraph style containing only an explicit empty tab-stop child survives package export/import without paragraph attributes. No production algorithm or private state is replaced.",
-      "The ODF table source borrows the signed native model row span before export."
+      "The ODF table source borrows the signed native model row span before export.",
+      "Projects native direct cell text and child tables through original table cell text export in node order."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

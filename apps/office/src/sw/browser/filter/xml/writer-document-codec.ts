@@ -34,9 +34,9 @@ import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem"
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
-import { SwTableNode } from "../../../source/core/docnode/node";
+import { SwTableNode, type SwNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
-import type { SwTableBox, SwTableBoxFormat } from "../../../source/core/table/swtable";
+import type { SwTable, SwTableBox, SwTableBoxFormat } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import {
   encodeTableFormat,
@@ -133,6 +133,8 @@ interface WriterTableRecord {
     cells: readonly Readonly<{
       format: WriterBoxFormatRecord;
       paragraphs: readonly WriterTextNodeRecord[];
+      tables?: readonly WriterTableRecord[];
+      contentOrder?: readonly ("text" | "table")[];
       rowSpan?: number;
     }>[];
   }>[];
@@ -260,6 +262,49 @@ export interface WriterDocumentRecord {
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
 
+/** Encodes the actual table graph in native cell-content order. @param document - Native Writer document. @param table - Connected table. @returns Primitive table record. */
+function* encodeWriterTableSteps(
+  document: SwDoc,
+  table: SwTable,
+): Generator<void, WriterTableRecord> {
+  const rows: WriterTableRecord["rows"][number][] = [];
+  for (const row of table.GetTabLines()) {
+    const cells: WriterTableRecord["rows"][number]["cells"][number][] = [];
+    for (const cell of row.GetTabBoxes()) {
+      const paragraphs: WriterTextNodeRecord[] = [];
+      const tables: WriterTableRecord[] = [];
+      const contentOrder: ("text" | "table")[] = [];
+      for (const node of cell.GetContentNodes()) {
+        if (node instanceof SwTableNode) {
+          tables.push(yield* encodeWriterTableSteps(document, node.GetTable()));
+          contentOrder.push("table");
+        } else {
+          paragraphs.push(encodeTextNode(document, node));
+          contentOrder.push("text");
+        }
+        yield;
+      }
+      const rowSpan = cell.getRowSpan();
+      cells.push({
+        format: encodeBoxFormat(cell),
+        paragraphs,
+        ...(tables.length ? { tables, contentOrder } : {}),
+        ...(rowSpan === 1 ? {} : { rowSpan }),
+      });
+      yield;
+    }
+    rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
+    yield;
+  }
+  return {
+    name: table.GetName(),
+    format: encodeTableFormat(table),
+    columnWidths: table.GetColumnWidths(),
+    softPageBreakRows: table.GetSoftPageBreakRows(),
+    rows,
+  };
+}
+
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, WriterDocumentRecord> {
   const textNodes: WriterTextNodeRecord[] = [];
@@ -268,35 +313,8 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     textNodes.push(encodeTextNode(document, node));
     yield;
   }
-  for (const table of document.GetTables()) {
-    const rows: WriterTableRecord["rows"][number][] = [];
-    for (const row of table.GetTabLines()) {
-      const cells: WriterTableRecord["rows"][number]["cells"][number][] = [];
-      for (const cell of row.GetTabBoxes()) {
-        const paragraphs: WriterTextNodeRecord[] = [];
-        for (const node of cell.GetParagraphs()) {
-          paragraphs.push(encodeTextNode(document, node));
-          yield;
-        }
-        const rowSpan = cell.getRowSpan();
-        cells.push({
-          format: encodeBoxFormat(cell),
-          paragraphs,
-          ...(rowSpan === 1 ? {} : { rowSpan }),
-        });
-        yield;
-      }
-      rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
-      yield;
-    }
-    tables.push({
-      name: table.GetName(),
-      format: encodeTableFormat(table),
-      columnWidths: table.GetColumnWidths(),
-      softPageBreakRows: table.GetSoftPageBreakRows(),
-      rows,
-    });
-  }
+  for (const table of document.GetTables())
+    tables.push(yield* encodeWriterTableSteps(document, table));
   const textGridDefault = encodeTextGridDefault(document);
   return {
     embeddedFonts: document.GetEmbeddedFonts(),
@@ -718,48 +736,7 @@ export function* decodeWriterDocumentSteps(
       }
       const tableRecord = record.tables?.[tableIndex++];
       if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-      const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
-      const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
-      restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
-      restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
-      restoreTableFlow(table.GetFrameFormat(), nativeFlow);
-      for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
-      for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
-        if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();
-        const row = document.nodes.AppendTableRow(
-          table,
-          rowRecord.cells.length,
-          decodeRowFormat(rowRecord.format),
-          rowRecord.cells.map(
-            /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-              cell,
-            ) => decodeBoxFormat(cell.format),
-          ),
-        );
-        for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
-          const cell = row.GetTabBoxes()[cellIndex];
-          if (cell === undefined || cellRecord.paragraphs.length === 0)
-            throw new Error("Stored Writer table cell is invalid.");
-          if (cellRecord.rowSpan !== undefined) {
-            const span = cellRecord.rowSpan;
-            if (!Number.isInteger(span) || span < -0x80000000 || span > 0x7fffffff)
-              throw new Error("Stored Writer table cell row span is invalid.");
-            cell.setRowSpan(span);
-          }
-          const frame = cell.GetFrameFormat(),
-            direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
-          if (direction !== undefined) frame.SetFormatAttr(direction);
-          for (const [paragraphIndex, paragraphRecord] of cellRecord.paragraphs.entries()) {
-            const node =
-              paragraphIndex === 0
-                ? cell.GetParagraphs()[0]
-                : document.nodes.AppendTableCellParagraph(cell);
-            decodeTextNode(document, node as SwTextNode, paragraphRecord);
-            yield;
-          }
-        }
-      }
-      if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();
+      yield* decodeWriterTableSteps(document, tableRecord);
     }
     if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
       throw new Error("Stored Writer body order is invalid.");
@@ -816,6 +793,83 @@ export function* decodeWriterDocumentSteps(
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])
     document.GetIDocumentMarkAccess().AddSoftPageBreak(node, offset);
+}
+
+/** Decodes a table into its actual enclosing section. @param document - Native Writer document. @param tableRecord - Primitive table record. @param where - Optional direct cell insertion boundary. @returns Completion. */
+function* decodeWriterTableSteps(
+  document: SwDoc,
+  tableRecord: WriterTableRecord,
+  where?: SwNode,
+): Generator<void, void> {
+  const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
+  const table =
+    where === undefined
+      ? document.nodes.MakeTableNode(tableRecord.name, legacyFormat)
+      : document.nodes.MakeTableNodeBefore(where, tableRecord.name, legacyFormat);
+  restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
+  restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
+  restoreTableFlow(table.GetFrameFormat(), nativeFlow);
+  for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
+  for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
+    if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();
+    const row = document.nodes.AppendTableRow(
+      table,
+      rowRecord.cells.length,
+      decodeRowFormat(rowRecord.format),
+      rowRecord.cells.map(
+        /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+          cell,
+        ) => decodeBoxFormat(cell.format),
+      ),
+    );
+    for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
+      const cell = row.GetTabBoxes()[cellIndex];
+      if (cell === undefined || cellRecord.paragraphs.length === 0)
+        throw new Error("Stored Writer table cell is invalid.");
+      if (cellRecord.rowSpan !== undefined) {
+        const span = cellRecord.rowSpan;
+        if (!Number.isInteger(span) || span < -0x80000000 || span > 0x7fffffff)
+          throw new Error("Stored Writer table cell row span is invalid.");
+        cell.setRowSpan(span);
+      }
+      const frame = cell.GetFrameFormat(),
+        direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
+      if (direction !== undefined) frame.SetFormatAttr(direction);
+      const order =
+        cellRecord.contentOrder ??
+        cellRecord.paragraphs.map(
+          /** Legacy flat cells contain text in paragraph order. @returns Text block kind. */ () =>
+            "text" as const,
+        );
+      const end = cell.GetStartNode().EndOfSectionNode();
+      let available = cell.GetParagraphs()[0];
+      let textIndex = 0;
+      let tableIndex = 0;
+      for (const kind of order) {
+        if (kind === "text") {
+          const paragraph = cellRecord.paragraphs[textIndex++];
+          if (!paragraph) throw new Error("Stored Writer table cell order is invalid.");
+          decodeTextNode(
+            document,
+            available ?? document.nodes.AppendTableCellParagraph(cell),
+            paragraph,
+          );
+          available = undefined;
+        } else if (kind === "table") {
+          const nested = cellRecord.tables?.[tableIndex++];
+          if (!nested) throw new Error("Stored Writer table cell order is invalid.");
+          yield* decodeWriterTableSteps(document, nested, available ?? end);
+        } else throw new Error("Stored Writer table cell order is invalid.");
+        yield;
+      }
+      if (
+        textIndex !== cellRecord.paragraphs.length ||
+        tableIndex !== (cellRecord.tables?.length ?? 0)
+      )
+        throw new Error("Stored Writer table cell order is invalid.");
+    }
+  }
+  if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();
 }
 
 /** Lists all canonical text nodes including table cell paragraphs in body order. */

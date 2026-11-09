@@ -306,7 +306,6 @@ export class XMLTextImportHelper {
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE) {
-      if (type === "Cell") throw new Error("Unsupported ODF table cell section or nested table.");
       if ("beginTable" in this.target)
         return new XMLTableContext(this.target as XMLTableImportTarget, attributes, this);
       return null;
@@ -315,9 +314,7 @@ export class XMLTextImportHelper {
       return new SvXMLIgnoreContext(true);
     if (element === XMLToken.TEXT_SECTION)
       throw new Error(
-        type === "Cell"
-          ? "Unsupported ODF table cell section or nested table."
-          : "Unsupported ODF text section.",
+        type === "Cell" ? "Unsupported ODF table cell section." : "Unsupported ODF text section.",
       );
     return null;
   }

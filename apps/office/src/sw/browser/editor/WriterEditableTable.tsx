@@ -7,6 +7,7 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import { SwRowFrame, SwCellFrame } from "../../source/core/layout/tabfrm";
 
 import type { SwTable } from "../../source/core/table/swtable";
+import { SwTableNode } from "../../source/core/docnode/node";
 import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
@@ -84,6 +85,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
       <div className="max-w-full" data-writer-table={table.GetName()}>
         <table
           aria-label={table.GetName()}
+          data-writer-table-node={table.GetTableNode().GetIndex()}
           className="table-fixed"
           ref={retainElement}
           style={{
@@ -202,11 +204,37 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                             fixed,
                           );
                         }
-                        const content = cell.GetParagraphs().map(
-                          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                        let paragraphIndex = 0;
+                        const content = cell.GetContentNodes().map(
+                          /** Renders the actual child table or direct paragraph in cell order. @param paragraph - Direct content node. @returns Connected browser content. */ (
                             paragraph,
-                            paragraphIndex,
                           ) => {
+                            if (paragraph instanceof SwTableNode) {
+                              const width = nativeTable.GetBoxPrintWidth(
+                                cell,
+                                availableWidth ?? area.left + area.width + area.right,
+                              );
+                              return (
+                                <WriterEditableTable
+                                  key={paragraph.GetIndex()}
+                                  table={paragraph.GetTable()}
+                                  availableWidth={Math.max(
+                                    0,
+                                    width - boxItem.GetDistance(2) - boxItem.GetDistance(3),
+                                  )}
+                                  paragraphs={paragraphs}
+                                  selectedBoxes={isRepeatedHeadline ? undefined : selectedBoxes}
+                                  {...(activeParagraphId === undefined
+                                    ? {}
+                                    : { activeParagraphId })}
+                                  {...(retainParagraphElement === undefined
+                                    ? {}
+                                    : { retainParagraphElement })}
+                                  measureNaturalRows={measureNaturalRows}
+                                />
+                              );
+                            }
+                            const index = paragraphIndex++;
                             const projection = paragraphs.get(paragraph.GetIndex());
                             if (projection === undefined)
                               throw new Error(
@@ -214,8 +242,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                               );
                             return (
                               <WriterEditableParagraph
-                                cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
-                                index={paragraphIndex}
+                                cellPosition={{ rowIndex, cellIndex, paragraphIndex: index }}
+                                index={index}
                                 isActive={activeParagraphId === projection.id}
                                 key={projection.id}
                                 listMarker={projection.listMarker}

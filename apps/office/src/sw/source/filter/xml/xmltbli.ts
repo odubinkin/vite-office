@@ -30,20 +30,39 @@ interface SwXMLVerticalSpan {
   readonly covered: SwTableBox[];
 }
 
-/** Keeps table import state scoped to one Writer XML stream coordinator. */
+/** Active source table context. Rows, cursors and vertical reservations belong to this table only. */
+class SwXMLTableContextState {
+  activeRow: SwTableLine | undefined;
+  activeCell: SwTableBox | undefined;
+  oldCursor: XMLTextCursor | undefined;
+  rowCellIndex = 0;
+  readonly columnWidths: number[] = [];
+  readonly verticalSpans = new Map<number, SwXMLVerticalSpan>();
+  pendingCovered = 0;
+  inHeaderRows = false;
+  headerRowCount = 0;
+
+  /** Binds the connected native table to its SAX import state. @param table - Actual table owner. @returns State. */
+  constructor(readonly table: SwTable) {}
+}
+
+/** Keeps the native table contexts scoped to one Writer XML stream coordinator. */
 export class SwXMLTableImport extends SvXMLImport {
   private readonly tableStyles = new Map<string, OdfTableStyle>();
-  private activeTable: SwTable | undefined;
-  private activeRow: SwTableLine | undefined;
-  protected activeCell: SwTableBox | undefined;
+  private readonly tableContexts: SwXMLTableContextState[] = [];
   protected textImport: XMLTextImportHelper | undefined;
-  private oldCursor: XMLTextCursor | undefined;
-  private rowCellIndex = 0;
-  private readonly columnWidths: number[] = [];
-  private readonly verticalSpans = new Map<number, SwXMLVerticalSpan>();
-  private pendingCovered = 0;
-  private inHeaderRows = false;
-  private headerRowCount = 0;
+
+  /** Borrows the innermost active table context. @returns Original row and cell state. */
+  private get tableContext(): SwXMLTableContextState {
+    const context = this.tableContexts.at(-1);
+    if (!context) throw new Error("ODF table content is outside a table.");
+    return context;
+  }
+
+  /** Releases saved parent cursors after an interrupted nested import. @returns Nothing. */
+  protected DisposeTableContexts(): void {
+    for (const context of this.tableContexts.splice(0).reverse()) context.oldCursor?.dispose();
+  }
 
   /** Binds the table callbacks to the temporary document. @param document - Canonical Writer graph. @returns Nothing. */
   public constructor(public readonly document: SwDoc) {
@@ -64,22 +83,23 @@ export class SwXMLTableImport extends SvXMLImport {
     name: string,
     styleName: string,
   ): void {
-    /* istanbul ignore next -- SAX table contexts cannot nest under a table context. */
-    if (this.activeTable !== undefined) throw new Error("Nested ODF tables are not supported.");
+    const parent = this.tableContexts.at(-1);
+    if (parent && !parent.activeCell) throw new Error("ODF nested table is outside a cell.");
     const style = this.resolveTableStyle(styleName, "table") as Extract<
       OdfTableStyle,
       { family: "table" }
     >;
     const cursor = this.textImport?.GetCursor() as
       import("../../core/unocore/unoobj").SwXTextCursor | undefined;
-    this.activeTable = cursor
+    const table = cursor
       ? this.document.nodes.MakeTableNodeBefore(
           cursor.GetPaM().GetPoint().GetNode() as SwTextNode,
           name,
           {},
         )
       : this.document.nodes.MakeTableNode(name);
-    const frameFormat = this.activeTable.GetFrameFormat();
+    this.tableContexts.push(new SwXMLTableContextState(table));
+    const frameFormat = table.GetFrameFormat();
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
     if (hasMargins) {
       const item = frameFormat.GetLRSpace().Clone();
@@ -137,22 +157,18 @@ export class SwXMLTableImport extends SvXMLImport {
       );
     if (style.layoutSplit !== undefined)
       frameFormat.SetFormatAttr(new SwFormatLayoutSplit(style.layoutSplit));
-    this.columnWidths.length = 0;
-    this.verticalSpans.clear();
-    this.headerRowCount = 0;
-    this.inHeaderRows = false;
   }
 
   /** Starts the repeated header row group. @returns Nothing. */
   public beginTableHeaderRows(): void {
-    this.inHeaderRows = true;
+    this.tableContext.inHeaderRows = true;
   }
 
   /** Persists the count of imported repeated header rows. @returns Nothing. */
   public endTableHeaderRows(): void {
-    this.inHeaderRows = false;
+    this.tableContext.inHeaderRows = false;
     const table = this.requireTable();
-    table.SetRowsToRepeat(this.headerRowCount);
+    table.SetRowsToRepeat(this.tableContext.headerRowCount);
   }
 
   /** Appends one physical table column. */
@@ -165,27 +181,29 @@ export class SwXMLTableImport extends SvXMLImport {
       { family: "table-column" }
     >;
     table.AddColumnWidth(style.columnWidth ?? 0);
-    this.columnWidths.push(style.columnWidth ?? 0);
+    this.tableContext.columnWidths.push(style.columnWidth ?? 0);
   }
 
   /** Opens one ordered table row with the declared column count. */
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ public beginTableRow(
     styleName: string,
   ): void {
-    const table = this.requireTable();
+    const context = this.tableContext;
+    const table = context.table;
     /* istanbul ignore next -- SAX row contexts cannot nest under a row context. */
-    if (this.activeRow !== undefined) throw new Error("Nested ODF table rows are not supported.");
+    if (context.activeRow !== undefined)
+      throw new Error("Nested ODF table rows are not supported.");
     const style = this.resolveTableStyle(styleName, "table-row") as Extract<
       OdfTableStyle,
       { family: "table-row" }
     >;
-    const count = this.columnWidths.length;
+    const count = context.columnWidths.length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
     const rowIndex = table.GetTabLines().length;
-    for (const [column, span] of this.verticalSpans)
-      if (span.endRow <= rowIndex) this.verticalSpans.delete(column);
+    for (const [column, span] of context.verticalSpans)
+      if (span.endRow <= rowIndex) context.verticalSpans.delete(column);
     const frameFormat = table.GetTableNode().GetDoc().MakeTableLineFormat();
-    this.activeRow = new SwTableLine(frameFormat);
+    context.activeRow = new SwTableLine(frameFormat);
     if (style.keepTogether !== undefined)
       frameFormat.SetFormatAttr(new SwFormatRowSplit(!style.keepTogether));
     if (style.minHeight !== undefined)
@@ -200,10 +218,10 @@ export class SwXMLTableImport extends SvXMLImport {
       frameFormat.SetFormatAttr(
         new SwFormatFrameSize(SwFrameSize.Fixed, 0, Math.min(65535, Math.max(1, style.height))),
       );
-    table.AddLine(this.activeRow);
-    this.pendingCovered = 0;
-    if (this.inHeaderRows) this.headerRowCount += 1;
-    this.rowCellIndex = 0;
+    table.AddLine(context.activeRow);
+    context.pendingCovered = 0;
+    if (context.inHeaderRows) context.headerRowCount += 1;
+    context.rowCellIndex = 0;
   }
 
   /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @param rowSpan - Number of source grid rows. @returns Nothing. */ public beginTableCell(
@@ -211,22 +229,26 @@ export class SwXMLTableImport extends SvXMLImport {
     columnSpan = 1,
     rowSpan = 1,
   ): void {
+    const context = this.tableContext;
     /* istanbul ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
-    if (this.activeRow === undefined || this.activeCell !== undefined)
+    if (context.activeRow === undefined || context.activeCell !== undefined)
       throw new Error("ODF table cell is outside a row.");
     this.InsertImplicitCoveredBoxes();
-    if (this.pendingCovered !== 0 || this.rowCellIndex + columnSpan > this.columnWidths.length)
+    if (
+      context.pendingCovered !== 0 ||
+      context.rowCellIndex + columnSpan > context.columnWidths.length
+    )
       throw new Error("ODF table row contains more cells than declared columns.");
-    const firstColumn = this.rowCellIndex;
-    for (const column of this.verticalSpans.keys())
+    const firstColumn = context.rowCellIndex;
+    for (const column of context.verticalSpans.keys())
       if (firstColumn < column && column < firstColumn + columnSpan)
         throw new Error("ODF table cell overlaps a covered cell.");
     const cell = this.CreateBox(styleName, columnSpan);
     if (rowSpan > 1) {
-      const firstRow = this.requireTable().GetTabLines().length - 1;
+      const firstRow = context.table.GetTabLines().length - 1;
       const endRow = Math.min(firstRow + rowSpan, 65535);
       cell.setRowSpan(endRow - firstRow);
-      this.verticalSpans.set(firstColumn, {
+      context.verticalSpans.set(firstColumn, {
         firstRow,
         endRow,
         columns: columnSpan,
@@ -235,20 +257,21 @@ export class SwXMLTableImport extends SvXMLImport {
         covered: [],
       });
     }
-    this.activeCell = cell;
+    context.activeCell = cell;
     if (this.textImport) {
-      this.oldCursor = this.textImport.GetCursor();
+      context.oldCursor = this.textImport.GetCursor();
       this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
     }
-    this.pendingCovered = columnSpan - 1;
+    context.pendingCovered = columnSpan - 1;
   }
 
   /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @returns Actual core box. */
   private CreateBox(styleName: string, columnSpan: number): SwTableBox {
-    const row = this.activeRow;
+    const context = this.tableContext;
+    const row = context.activeRow;
     if (row === undefined) throw new Error("ODF table cell is outside a row.");
-    const width = this.columnWidths
-        .slice(this.rowCellIndex, this.rowCellIndex + columnSpan)
+    const width = context.columnWidths
+        .slice(context.rowCellIndex, context.rowCellIndex + columnSpan)
         .reduce(
           /** Sums native declared columns for this source cell span. @param sum - Prior extent. @param value - Native grid width. @returns Cell width. */ (
             sum,
@@ -279,7 +302,7 @@ export class SwXMLTableImport extends SvXMLImport {
                 : VertOrientation.NONE,
         ),
       );
-    this.rowCellIndex += columnSpan;
+    context.rowCellIndex += columnSpan;
     return cell;
   }
 
@@ -293,64 +316,69 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Materializes reserved vertical boxes without requiring a redundant covered-cell tag. @returns Nothing. */
   private InsertImplicitCoveredBoxes(): void {
-    if (this.pendingCovered) return;
-    let span = this.verticalSpans.get(this.rowCellIndex);
+    const context = this.tableContext;
+    if (context.pendingCovered) return;
+    let span = context.verticalSpans.get(context.rowCellIndex);
     while (span !== undefined) {
       this.InsertCoveredBox(span);
-      span = this.verticalSpans.get(this.rowCellIndex);
+      span = context.verticalSpans.get(context.rowCellIndex);
     }
   }
 
   /** Consumes a covered grid slot. The default native TABLE_ROW_KEEP setting ignores authored covered-cell styles. @returns Nothing. */
   public coveredTableCell(): void {
-    if (this.pendingCovered > 0) {
-      this.pendingCovered--;
+    const context = this.tableContext;
+    if (context.pendingCovered > 0) {
+      context.pendingCovered--;
       return;
     }
-    const span = this.verticalSpans.get(this.rowCellIndex);
+    const span = context.verticalSpans.get(context.rowCellIndex);
     if (span === undefined) throw new Error("ODF covered table cell has no spanning cell.");
     this.InsertCoveredBox(span);
-    this.pendingCovered = span.columns - 1;
+    context.pendingCovered = span.columns - 1;
   }
 
   /** Closes a cell after its paragraph contexts. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableCell(): void {
-    if (this.textImport && this.oldCursor) {
+    const context = this.tableContext;
+    if (this.textImport && context.oldCursor) {
       const cursor = this.textImport.GetCursor();
-      if ((this.activeCell as SwTableBox).GetParagraphs().length > 1)
-        this.textImport.DeleteParagraph();
-      this.textImport.SetCursor(this.oldCursor);
+      const content = context.activeCell?.GetContentNodes();
+      if (content?.at(-2)?.IsTextNode()) this.textImport.DeleteParagraph();
+      this.textImport.SetCursor(context.oldCursor);
       cursor.dispose();
-      this.oldCursor = undefined;
+      context.oldCursor = undefined;
     }
-    this.activeCell = undefined;
+    context.activeCell = undefined;
   }
 
   /** Validates the row's cell cardinality. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableRow(): void {
+    const context = this.tableContext;
     this.InsertImplicitCoveredBoxes();
     if (
-      this.activeRow === undefined ||
-      this.rowCellIndex !== this.columnWidths.length ||
-      this.pendingCovered !== 0
+      context.activeRow === undefined ||
+      context.rowCellIndex !== context.columnWidths.length ||
+      context.pendingCovered !== 0
     )
       throw new Error("ODF table row cell count differs from declared columns.");
-    this.activeRow = undefined;
+    context.activeRow = undefined;
   }
 
   /** Closes the current table. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTable(): void {
-    const table = this.requireTable();
+    const context = this.tableContext;
+    const table = context.table;
     const rows = table.GetTabLines().length;
-    for (const span of this.verticalSpans.values()) {
+    for (const span of context.verticalSpans.values()) {
       if (span.endRow <= rows) continue;
       const adjusted = rows - span.firstRow;
       span.master.setRowSpan(adjusted);
       for (const [index, box] of span.covered.entries()) box.setRowSpan(index + 1 - adjusted);
     }
-    this.verticalSpans.clear();
-    table.SetRowsToRepeat(this.headerRowCount);
-    this.activeTable = undefined;
+    context.verticalSpans.clear();
+    table.SetRowsToRepeat(context.headerRowCount);
+    this.tableContexts.pop();
   }
 
   /** Records a table-owned pagination marker at the next row boundary. */
@@ -360,9 +388,7 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Requires a currently open table. @returns Canonical table. */
   private requireTable(): SwTable {
-    /* istanbul ignore next -- Only descendants of the table SAX context call this method. */
-    if (this.activeTable === undefined) throw new Error("ODF table content is outside a table.");
-    return this.activeTable;
+    return this.tableContext.table;
   }
 
   /** Resolves a table-family style or its omitted default. @param name - Style reference. @param family - Required family. @returns Table geometry. */

@@ -181,6 +181,7 @@ class SwXMLImport
   /** Releases import API cursors and model wrappers without destroying the imported SwDoc. @returns Nothing. */
   public dispose(): void {
     this.textImport?.ResetCursor();
+    this.DisposeTableContexts();
     this.model.dispose();
   }
 

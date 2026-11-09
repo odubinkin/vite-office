@@ -1,12 +1,16 @@
 /** @fileoverview Verifies accessible Writer Open and Export dialog states. */
 
 import { readFileSync } from "node:fs";
+import {
+  ICULanguageBreakFactory,
+  type WordDictionaryName,
+} from "../../../external/icu/source/common/brkeng";
 import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
 import { g_pBreakIt } from "../../source/core/bastyp/breakit";
 import { prepareWriterWordDictionaries } from "../filter/word-dictionaries";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { describe, expect, it, vi } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
@@ -14,12 +18,22 @@ import { SwTableNode } from "../../source/core/docnode/node";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-odt-store";
 import type { WriterSessionServices } from "../workflows/writer-workflows";
+import { openBrowserWriterDocument } from "../workflows/writer-odt-io";
 import { WriterFileDialog } from "./WriterFileDialog";
 
-/** Creates a Writer shell for dialog behavior. @returns Active shell. */
-function shell(): SwDocShell {
+/** Creates a Writer shell for dialog behavior. @param measure - Supplies the device used by native HTML tables. @returns Active shell. */
+function shell(measure = false): SwDocShell {
   return new SwDocShell(
-    createWriterDocument(),
+    measure
+      ? new SwDoc({
+          defaultFontDevice: {
+            /** Uses the existing default. @returns No override. */
+            getDefaultFont: () => undefined,
+            /** Supplies deterministic measurements through the output-device interface. @param _font - Selected font. @param _text - Original input. @param _start - UTF16 range start. @param length - UTF16 range length. @returns Twip width. */
+            measureTextWidth: (_font, _text, _start, length) => length * 30,
+          },
+        })
+      : createWriterDocument(),
     createDocument({ id: "dialog-document", suiteId: "writer", title: "Draft" }),
   );
 }
@@ -232,6 +246,78 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     documentShell.Close();
   });
 
+  it.each([
+    [
+      "rtf",
+      String.raw`{\rtf1 Lead\par\trowd\cellx3000\pard\intbl before\par\pard\itap2 nested\nestcell{\*\nesttableprops\trowd\cellx1200\nestrow}\pard\intbl after\cell\row}`,
+    ],
+    [
+      "md",
+      "Lead\n\n<table><tr><td>before<table><tr><td>nested</td></tr></table>after</td></tr></table>\n",
+    ],
+  ] as const)(
+    "preserves a nested %s table when the imported document is reopened from browser storage",
+    /** Opens the selected source, then opens the existing saved ODF package through the normal browser workflow. @param extension - Imported format. @param source - Actual input. @returns Completion. */ async (
+      extension,
+      source,
+    ) => {
+      const documentShell = shell(extension === "md");
+      const store = new IndexedDbWriterOdtStore(`dialog-nested-${extension}`, new IDBFactory());
+      const close = vi.fn();
+      const read =
+        /** Reads one pinned dictionary asset. @param name - Native dictionary. @returns Bytes. */ (
+          name: WordDictionaryName,
+        ) => readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
+      try {
+        render(
+          <WriterFileDialog
+            docShell={documentShell}
+            kind="open"
+            onClose={close}
+            services={{
+              ...services(store),
+              prepareWordDictionaries:
+                /** Provides the shipped ICU assets to the real Markdown import. @returns Prepared native factory. */ async () =>
+                  new ICULanguageBreakFactory({
+                    thaidict: read("thaidict"),
+                    laodict: read("laodict"),
+                    burmesedict: read("burmesedict"),
+                    khmerdict: read("khmerdict"),
+                    cjdict: read("cjdict"),
+                  }),
+            }}
+          />,
+        );
+        fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+        fireEvent.change(screen.getByLabelText("Browse"), {
+          target: { files: [new File([source], `Nested.${extension}`)] },
+        });
+        await waitFor(
+          /** Waits for the primary browser copy before reopening. @returns Nothing. */ () =>
+            expect(close).toHaveBeenCalledOnce(),
+        );
+        const [record] = await store.list();
+        assert(record);
+        expect(await openBrowserWriterDocument(documentShell, store, record.id)).toBe(true);
+        const cell = documentShell.GetDoc().GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0];
+        const nested = cell
+          ?.GetContentNodes()
+          .find(
+            /** Locates the actual nested table inside the outer cell. @param node - Direct content node. @returns Whether the node is the nested table. */ (
+              node,
+            ) => node instanceof SwTableNode,
+          );
+        assert(cell && nested instanceof SwTableNode);
+        expect(nested.StartOfSectionNode()).toBe(cell.GetStartNode());
+        expect(
+          nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+        ).toBe("nested");
+      } finally {
+        documentShell.Close();
+      }
+    },
+  );
+
   it("exports Markdown from the native Writer model", /** Checks shell-owned Markdown output reaches the browser port. @returns Completion. */ async () => {
     const documentShell = shell();
     const paragraph = documentShell.GetDoc().paragraphs[0];
@@ -263,17 +349,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   });
 
   it("imports Markdown through the native shell and persists browser identity", /** Checks existing Open flow with Markdown content. @returns Completion. */ async () => {
-    const documentShell = new SwDocShell(
-      new SwDoc({
-        defaultFontDevice: {
-          /** Uses the existing default. @returns No override. */
-          getDefaultFont: () => undefined,
-          /** Supplies deterministic measurements through the output-device interface. @param _font - Selected font. @param _text - Original input. @param _start - UTF16 range start. @param length - UTF16 range length. @returns Twip width. */
-          measureTextWidth: (_font, _text, _start, length) => length * 30,
-        },
-      }),
-      createDocument({ id: "dialog-document", suiteId: "writer", title: "Draft" }),
-    );
+    const documentShell = shell(true);
     const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
     const close = vi.fn();
     let rejectOnce = true;

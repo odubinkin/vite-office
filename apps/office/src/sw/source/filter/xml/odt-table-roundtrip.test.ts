@@ -8,7 +8,7 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -25,6 +25,7 @@ import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
+import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 
 /** Reads an exact upstream ODT copied from the pinned LibreOffice checkout. @returns Fixture bytes. */
 function upstreamTableOdt(): Uint8Array {
@@ -74,6 +75,44 @@ function tableShape(document: ReturnType<typeof createWriterDocument>) {
 }
 
 describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("preserves real nested RTF sections through ODF XML and Worker transfer", /** The cell owns ordered text/table/text, including the inner cell format and bookmark. @returns Completion. */ async () => {
+    const source = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(
+        String.raw`{\rtf1 Lead\par\trowd\cellx3000\pard\intbl before\par` +
+          String.raw`\pard\itap2 {\*\bkmkstart Inner}{\*\bkmkend Inner}inside\nestcell` +
+          String.raw`{\*\nesttableprops\trowd\clbrdrt\brdrs\brdrw30\cellx1200\nestrow}\pard\intbl after\cell\row}`,
+      ),
+    );
+    const metadata = { title: "Nested table" };
+    const bytes = writeOdtDocument(source, metadata);
+    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    expect(xml.match(/<table:table table:name=/gu)).toHaveLength(2);
+    expect(xml).toContain('style:name="T2.C1"');
+    const odt = (await readOdtDocument(bytes, metadata)).document;
+    const transferred = decodeWriterDocument(encodeWriterDocument(odt));
+    try {
+      for (const document of [source, odt, transferred]) {
+        const outer = document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0];
+        const [before, nested, after] = outer?.GetContentNodes() ?? [];
+        assert(outer && nested instanceof SwTableNode);
+        expect(before?.GetTextNode()?.GetText()).toBe("before");
+        expect(after?.GetTextNode()?.GetText()).toBe("after");
+        expect(nested.StartOfSectionNode()).toBe(outer.GetStartNode());
+        const inner = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+        expect(inner?.GetFrameFormat().GetFrameSize().GetWidth()).toBe(1200);
+        expect(inner?.GetFrameFormat().GetBox().GetTop()?.GetOutWidth()).toBe(30);
+        expect(inner?.GetParagraphs()[0]?.GetText()).toBe("inside");
+        expect(document.GetIDocumentMarkAccess().GetBookmarks()[0]?.GetMarkPos().GetNode()).toBe(
+          inner?.GetParagraphs()[0],
+        );
+      }
+    } finally {
+      transferred.Dispose();
+      odt.Dispose();
+      source.Dispose();
+    }
+  });
+
   it("round trips a table whose only row is a repeated header", /** Checks repeated header export and import. @returns Nothing. */ async () => {
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Headings", {
@@ -386,14 +425,17 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           "<table:table-column/><table:table-row><table:table-cell><table:table-row/></table:table-cell></table:table-row>",
         ),
     ).not.toThrow();
-    for (const unsupported of ["<table:table/>", "<text:section/>"])
+    for (const [unsupported, message] of [
+      ["<table:table/>", "table name"],
+      ["<text:section/>", "Unsupported ODF table cell section"],
+    ] as const)
       expect(
         /** Preserves explicit rejection for native cell features not implemented here. @returns Nothing. */ () =>
           open(
             tableProps('style:width="1cm"'),
             `<table:table-column/><table:table-row><table:table-cell>${unsupported}</table:table-cell></table:table-row>`,
           ),
-      ).toThrow("Unsupported ODF table cell section or nested table");
+      ).toThrow(message);
     const invalidFamily = new FastAttributeList([
       {
         name: "style:name",
