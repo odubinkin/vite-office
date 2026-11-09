@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/scerrors.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/scerrors.hxx",
+    "localSymbols": [
+      "SCERR_IMPORT_CONNECT",
+      "SCERR_EXPORT_DATA",
+      "SCWARN_IMPORT_ROW_OVERFLOW",
+      "SCWARN_IMPORT_COLUMN_OVERFLOW",
+      "SCWARN_IMPORT_CELL_OVERFLOW"
+    ],
+    "upstreamSymbols": [
+      "SCERR_IMPORT_CONNECT",
+      "SCERR_EXPORT_DATA",
+      "SCWARN_IMPORT_ROW_OVERFLOW",
+      "SCWARN_IMPORT_COLUMN_OVERFLOW",
+      "SCWARN_IMPORT_CELL_OVERFLOW"
+    ],
+    "preservedResponsibilities": [
+      "The original Calc diagnostic constants retain their area, class, warning bit and exact code for text import and numbered-sheet export."
+    ],
+    "omittedResponsibilities": [
+      "Unrelated filter errors remain outside this source slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/scerrors.ts",
+          "marker": "SCERR_IMPORT_CONNECT"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
+          "marker": "packed warning"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scerrors.hxx",
+          "marker": "SCERR_IMPORT_CONNECT"
+        }
+      ]
+    }
+  }
+}

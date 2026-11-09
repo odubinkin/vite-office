@@ -1,4 +1,5 @@
 /** @fileoverview Bounded ScDocShell lifecycle,ODS filter and shared Sfx history ownership. Browser primary media use existing Sfx acknowledgement/generation contracts;native drawing/formatting services remain unported. */
+import { ERRCODE_NONE, ErrCodeMsg } from "../../../../comphelper/inc/errcode";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -35,6 +36,13 @@ import { SfxListener } from "../../../../svl/source/notify/lstner";
 import { SfxUndoManager } from "../../../../svl/source/undo/undo";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { ScAddress } from "../../../inc/address";
+import {
+  SCERR_EXPORT_DATA,
+  SCERR_IMPORT_CONNECT,
+  SCWARN_IMPORT_CELL_OVERFLOW,
+  SCWARN_IMPORT_COLUMN_OVERFLOW,
+  SCWARN_IMPORT_ROW_OVERFLOW,
+} from "../../../inc/scerrors";
 import { ScDocument } from "../../../inc/document";
 import { CellType, ScGlobal } from "../../../inc/global";
 import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
@@ -196,7 +204,7 @@ export class ScDocShell extends SfxObjectShell {
   private DisposeDocument(document: ScDocument): void {
     document.Dispose();
   }
-  /** Atomically installs model,state,medium and a fresh history. @param document - New graph. @param state - Lifecycle. @param medium - Source/destination. @returns Installed model. */
+  /** Atomically installs model, state, medium and a fresh history. @param document - New graph. @param state - Lifecycle. @param medium - Source/destination. @returns Installed model. */
   ReplaceDocument(
     document: ScDocument,
     state: SfxObjectShellState,
@@ -212,6 +220,7 @@ export class ScDocShell extends SfxObjectShell {
     SetDocumentShell.call(document, this);
     this.document = document;
     this.CommitObjectStateReplacement(replacement);
+    this.ResetError();
     this.undo.Clear();
     if (state.isModified) this.undo.ClearSavePosition();
     else this.undo.SetSavePosition();
@@ -232,6 +241,7 @@ export class ScDocShell extends SfxObjectShell {
       current = this.document;
     let candidate: ScDocument | undefined;
     let updatedFilterOptions: string | undefined;
+    let conversionCode = ERRCODE_NONE;
     try {
       if (medium?.filterId === ScDocShell.CSV_FILTER_NAME) {
         if (!ArrayBuffer.isView(bytes)) throw new Error("CSV input requires a byte stream.");
@@ -250,7 +260,11 @@ export class ScDocShell extends SfxObjectShell {
         converter.SetExtOptions(options);
         stream.SetStreamEncoding(options.eCharSet);
         stream.Seek(0);
-        if (!converter.ImportStream(stream)) throw new Error("CSV import failed.");
+        if (!converter.ImportStream(stream))
+          throw new Error("CSV import failed.", { cause: new ErrCodeMsg(SCERR_IMPORT_CONNECT) });
+        if (converter.IsOverflowRow()) conversionCode = SCWARN_IMPORT_ROW_OVERFLOW;
+        else if (converter.IsOverflowCol()) conversionCode = SCWARN_IMPORT_COLUMN_OVERFLOW;
+        else if (converter.IsOverflowCell()) conversionCode = SCWARN_IMPORT_CELL_OVERFLOW;
         candidate.StartAllListeners();
         candidate.SetAllFormulasDirty(new SetFormulaDirtyContext());
         if (medium.name) {
@@ -296,6 +310,8 @@ export class ScDocShell extends SfxObjectShell {
           source: { kind: "external", reference: bytes },
         },
       );
+      // SfxBaseModel::handleLoadError retains successful load warnings on the medium.
+      if (conversionCode.IsWarning()) input.SetWarningError(new ErrCodeMsg(conversionCode));
       input.SetOperation("open", "succeeded", metadata.contentGeneration);
       return this.ReplaceDocument(
         candidate,
@@ -656,7 +672,11 @@ export class ScDocShell extends SfxObjectShell {
     if (requested === 0) return [{ sheetName: null, bytes: this.AsciiSave(options, saveTab) }];
     const start = requested === -1 ? 0 : requested - 1,
       end = requested === -1 ? count : requested;
-    if (start < 0 || end > count || start >= end) throw new RangeError("Invalid CSV sheet number.");
+    if (start < 0 || end > count || start >= end) {
+      const error = new ErrCodeMsg(SCERR_EXPORT_DATA);
+      this.SetError(error);
+      throw new RangeError("Invalid CSV sheet number.", { cause: error });
+    }
     const streams: { sheetName: string; bytes: Uint8Array }[] = [];
     for (let tab = start; tab < end; tab++) {
       const name = unicode("");

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 249
+revision: 250
 origin:
   system: "manual"
 depends_on: []
@@ -1385,7 +1385,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:06:17.115Z"
+doc_updated_at: "2026-11-09T21:14:50.866Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -4895,6 +4895,13 @@ sections:
     - Ran the unchanged pinned C++ converter bodies and native tables with ASan/UBSan. The fixture verifies 1,811,484 decode and 2,293,663 defined encode observations plus two streaming retries. The native DBCS corpus now includes 13 descriptors and 164,912 forward/reverse comparisons. CALC-490 through CALC-493 record original table bounds, retained streaming indices and flush behavior. Native undefined reads are reported separately from byte comparisons.
     - Focused tests passed in 25 shared files (302 cases) and 8 Calc files (200 cases), including native ICU auto-detection and exact CSV shell export for all three encodings. Vite production build and the existing Chromium CSV import, primary ODS save and CSV download passed. Generated table check, scoped ESLint, typecheck, provenance, both inventories, dependency boundaries, Calc resources, documentation, source tree, file sizes and git diff check passed. The global lint initially flagged assertion syntax in new code, which was replaced by typed native-index projections and rechecked with scoped ESLint.
     - Full suite not run, per same open task cadence. Next, connect existing import overflow flags to the original shell diagnostics and finish the focused acceptance audit. Scratch native build and log files remain outside the source commit.
+
+    ### CSV filter and browser acceptance
+
+    - Original packed ErrCode values and the code-only ErrCodeMsg reach the SfxObjectShell and SfxMedium owners. The original filter selects successful overflow diagnostics in row, column and cell order. The outer load handoff retains the accepted warning on the input medium and clears transient errors. Failed candidate conversion retains its original import code in the rejection and leaves the installed model untouched. The original invalid numbered sheet path sets SCERR_EXPORT_DATA. Unknown trailing export tokens are ignored by the existing parser, and the native missing-converter fallback is unchanged.
+    - The final focused Calc run passed 211 cases in 10 files, including ScAsciiOptions, ScImportExport recognition and date admission, all CSV shell tests and the existing mounted file workflow. The final shared diagnostic run passed 9 cases in 2 files. The charset checkpoint passed 302 shared cases, including 4,105,147 defined native encoding observations and two streaming retry sequences. The full-size source-backed module-edge check and 47 guard tests passed. Production Chromium imported CSV, saved the primary ODS copy and downloaded CSV for the active sheet.
+    - Typecheck, full ESLint plus final changed-file lint, Calc resources, source provenance, Calc and shared parity inventories, JSDoc, source-tree, source-size and git diff checks passed. The diagnostic port imports the actual comphelper error owner, as declared by scerrors.hxx and linked by Library_sc.mk. Two AgentPlane closures follow the previous recorded full-run validation, so this is the third task for the configured cadence. The full test suite was not repeated.
+    - This acceptance covers data conversion and the existing browser file workflow in the approved current core slice. Desktop column auto-sizing depends on the native VCL virtual and reference devices and printer-to-screen measurement. Device optimum is outside the current Calc geometry slice. The browser open and download actions retain their existing default controls. The implementation does not claim complete desktop, all SAL codepages, physical ABI or undefined memory access parity. Native scratch artifacts and logs stay out of the source commit.
 id_source: "generated"
 ---
 ## Summary
@@ -8417,3 +8424,10 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Ran the unchanged pinned C++ converter bodies and native tables with ASan/UBSan. The fixture verifies 1,811,484 decode and 2,293,663 defined encode observations plus two streaming retries. The native DBCS corpus now includes 13 descriptors and 164,912 forward/reverse comparisons. CALC-490 through CALC-493 record original table bounds, retained streaming indices and flush behavior. Native undefined reads are reported separately from byte comparisons.
 - Focused tests passed in 25 shared files (302 cases) and 8 Calc files (200 cases), including native ICU auto-detection and exact CSV shell export for all three encodings. Vite production build and the existing Chromium CSV import, primary ODS save and CSV download passed. Generated table check, scoped ESLint, typecheck, provenance, both inventories, dependency boundaries, Calc resources, documentation, source tree, file sizes and git diff check passed. The global lint initially flagged assertion syntax in new code, which was replaced by typed native-index projections and rechecked with scoped ESLint.
 - Full suite not run, per same open task cadence. Next, connect existing import overflow flags to the original shell diagnostics and finish the focused acceptance audit. Scratch native build and log files remain outside the source commit.
+
+### CSV filter and browser acceptance
+
+- Original packed ErrCode values and the code-only ErrCodeMsg reach the SfxObjectShell and SfxMedium owners. The original filter selects successful overflow diagnostics in row, column and cell order. The outer load handoff retains the accepted warning on the input medium and clears transient errors. Failed candidate conversion retains its original import code in the rejection and leaves the installed model untouched. The original invalid numbered sheet path sets SCERR_EXPORT_DATA. Unknown trailing export tokens are ignored by the existing parser, and the native missing-converter fallback is unchanged.
+- The final focused Calc run passed 211 cases in 10 files, including ScAsciiOptions, ScImportExport recognition and date admission, all CSV shell tests and the existing mounted file workflow. The final shared diagnostic run passed 9 cases in 2 files. The charset checkpoint passed 302 shared cases, including 4,105,147 defined native encoding observations and two streaming retry sequences. The full-size source-backed module-edge check and 47 guard tests passed. Production Chromium imported CSV, saved the primary ODS copy and downloaded CSV for the active sheet.
+- Typecheck, full ESLint plus final changed-file lint, Calc resources, source provenance, Calc and shared parity inventories, JSDoc, source-tree, source-size and git diff checks passed. The diagnostic port imports the actual comphelper error owner, as declared by scerrors.hxx and linked by Library_sc.mk. Two AgentPlane closures follow the previous recorded full-run validation, so this is the third task for the configured cadence. The full test suite was not repeated.
+- This acceptance covers data conversion and the existing browser file workflow in the approved current core slice. Desktop column auto-sizing depends on the native VCL virtual and reference devices and printer-to-screen measurement. Device optimum is outside the current Calc geometry slice. The browser open and download actions retain their existing default controls. The implementation does not claim complete desktop, all SAL codepages, physical ABI or undefined memory access parity. Native scratch artifacts and logs stay out of the source commit.

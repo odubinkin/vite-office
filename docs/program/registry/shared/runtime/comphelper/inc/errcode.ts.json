@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/inc/errcode.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0114"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/comphelper/inc/errcode.ts#ErrCode",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
+        "apps/office/src/sfx2/source/doc/objsh.test.ts",
+        "vendor/libreoffice-reference/include/comphelper/errcode.hxx"
+      ],
+      "justification": "The original packed error code retains area, class and low code, independent warning bit, unsigned projection and the code-only message behavior used by file filters. Native source-location and dialog argument overloads are outside this code-only slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ErrCode",
+        "ErrCodeArea",
+        "ErrCodeClass",
+        "WarningFlag",
+        "ErrCodeMsg",
+        "ERRCODE_NONE"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/comphelper/errcode.hxx",
+      "upstreamSymbols": [
+        "ErrCode",
+        "ErrCodeArea",
+        "ErrCodeClass",
+        "WarningFlag",
+        "ErrCodeMsg",
+        "ERRCODE_NONE"
+      ]
+    }
+  }
+}

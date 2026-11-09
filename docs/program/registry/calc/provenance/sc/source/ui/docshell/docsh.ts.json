@@ -30,7 +30,8 @@
       "Task AQF9AG follows ScDocShell::ConvertTo for CSV sheet selection: zero exports the active sheet, minus one exports each sheet separately, positive numbers select one-based sheet indices, and invalid selectors fail. Browser downloads use the selected export medium's filter options.",
       "AQF9AG restores source CSV ConvertFrom post-import order: ImportStream, StartAllListeners(), SetAllFormulasDirty(default context), then the existing medium/BOM/name completion. Imported dirty formulas are entered into the normal formula tree and their listeners use native whole-document traversal.",
       "AsciiSave now expands edit objects through the original document-owned EditEngine before writing CSV text. The shell links adopted model graphs for field display.",
-      "Original ConvertFrom distinguishes an absent filter item, which uses API defaults, from an explicitly empty item, which uses the ScAsciiOptions parser."
+      "Original ConvertFrom distinguishes an absent filter item, which uses API defaults, from an explicitly empty item, which uses the ScAsciiOptions parser.",
+      "The browser open method covers the original filter and outer load handoff. CSV overflow preserves row, column and cell priority, successful imports retain the warning on the input medium, and failed replacement leaves the previously active model intact. The original invalid numbered sheet path supplies the packed export diagnostic."
     ],
     "omittedResponsibilities": [
       "The browser handles input identity and primary persistence through its existing file workflows."
@@ -68,6 +69,14 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+          "marker": "SCWARN_IMPORT_ROW_OVERFLOW"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -94,6 +103,14 @@
         {
           "path": "sc/source/ui/dbgui/asciiopt.cxx",
           "marker": "ScAsciiOptions::ReadFromString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx",
+          "marker": "precedence: row, column, cell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/doc/sfxbasemodel.cxx",
+          "marker": "pMedium->SetWarningError(nError)"
         }
       ]
     }

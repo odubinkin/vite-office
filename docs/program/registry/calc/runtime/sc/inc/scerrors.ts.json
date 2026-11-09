@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/scerrors.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0114"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/scerrors.ts#SCERR_IMPORT_CONNECT",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
+        "apps/office/src/sfx2/source/doc/objsh.test.ts",
+        "vendor/libreoffice-reference/sc/inc/scerrors.hxx"
+      ],
+      "justification": "The original Calc diagnostic constants retain their area, class, warning bit and exact code for text import and numbered-sheet export. Unrelated filter errors remain outside this source slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SCERR_IMPORT_CONNECT",
+        "SCERR_EXPORT_DATA",
+        "SCWARN_IMPORT_ROW_OVERFLOW",
+        "SCWARN_IMPORT_COLUMN_OVERFLOW",
+        "SCWARN_IMPORT_CELL_OVERFLOW"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/inc/scerrors.hxx",
+      "upstreamSymbols": [
+        "SCERR_IMPORT_CONNECT",
+        "SCERR_EXPORT_DATA",
+        "SCWARN_IMPORT_ROW_OVERFLOW",
+        "SCWARN_IMPORT_COLUMN_OVERFLOW",
+        "SCWARN_IMPORT_CELL_OVERFLOW"
+      ]
+    }
+  }
+}

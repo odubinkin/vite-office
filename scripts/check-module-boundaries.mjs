@@ -162,11 +162,11 @@ const allowedEdges = new Map([
   // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
   ["stoc", new Set()],
 
-  // Original converter.cxx uses comphelper::date and published util::DateTime;
-  // Library_sax links comphelper and uses the SDK API.
   [
     "sc",
     new Set([
+      // Original scerrors.hxx includes comphelper/errcode.hxx; Library_sc links comphelper.
+      "comphelper",
       // Native richstring.cxx includes oox/helper/attributelist.hxx; Library_scfilt.mk links oox.
       "oox",
       // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.

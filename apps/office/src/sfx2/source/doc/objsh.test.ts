@@ -1,4 +1,5 @@
 /** @fileoverview Exercises object-shell state validation and lifecycle transitions. */
+import { ErrCode, ErrCodeMsg } from "../../../comphelper/inc/errcode";
 import { MapUnit } from "../../../tools/inc/mapunit";
 import { describe, expect, it } from "vitest";
 
@@ -154,5 +155,36 @@ it("owns the native default and arbitrary map-unit assignment without changing l
   shell.SetMapUnit(MapUnit.MapRelative);
   expect(shell.GetMapUnit()).toBe(MapUnit.MapRelative);
   expect(shell.GetDocumentState()).toEqual(before);
+  shell.Dispose();
+});
+
+it("uses native diagnostic precedence and clears both owners on reset", /** Tests shell and medium stores independently through their source APIs. @returns Nothing. */ () => {
+  const shell = new SfxObjectShell(createDocument({ id: "diag", suiteId: "calc", title: "CSV" }), {
+    kind: "untitled",
+    name: "CSV",
+  });
+  const firstWarning = new ErrCodeMsg(new ErrCode(0x80041102));
+  const secondWarning = new ErrCodeMsg(new ErrCode(0x80041103));
+  const firstError = new ErrCodeMsg(new ErrCode(0x00040b01));
+  const secondError = new ErrCodeMsg(new ErrCode(0x00040c02));
+  const medium = shell.GetMedium();
+  medium.SetWarningError(secondWarning);
+  medium.SetError(firstWarning);
+  medium.SetError(secondWarning);
+  expect(medium.GetErrorCode()).toBe(firstWarning);
+  expect(medium.GetErrorIgnoreWarning().IsSet()).toBe(false);
+  expect(shell.GetErrorCode()).toBe(firstWarning);
+  medium.SetError(firstError);
+  medium.SetError(secondError);
+  expect(shell.GetErrorCode()).toBe(firstError);
+  shell.SetError(secondWarning);
+  expect(shell.GetErrorCode()).toBe(secondWarning);
+  shell.SetError(secondError);
+  shell.SetError(firstError);
+  expect(shell.GetErrorCode()).toBe(secondError);
+  shell.ResetError();
+  expect(shell.GetErrorCode().IsSet()).toBe(false);
+  expect(medium.GetErrorCode().IsSet()).toBe(false);
+  expect(medium.GetWarningError()).toBe(secondWarning);
   shell.Dispose();
 });
