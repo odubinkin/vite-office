@@ -316,6 +316,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -603,7 +607,8 @@
       "The ODF table source borrows the signed native model row span before export.",
       "Projects native direct cell text and child tables through original table cell text export in node order.",
       "Supplies original direct table, row and cell brush and writing-direction items to ODF export.",
-      "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export."
+      "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export.",
+      "Shares the native text-fly collection with browser projection and retains anchored section output."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

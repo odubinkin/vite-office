@@ -21,7 +21,8 @@ import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { XMLTextParagraphMarker } from "../../../../xmloff/source/text/txtparae";
-import { SwFlyFrameFormat } from "../../core/layout/atrfrm";
+import type { SwFlyFrameFormat } from "../../core/layout/atrfrm";
+import type { BoundTextFrames } from "../../core/layout/flycnt";
 import { MakeFlySection } from "../../core/doc/doclay";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXText } from "../../core/unocore/unotext";
@@ -191,36 +192,6 @@ export function exportTextFrame(
     },
     content,
   };
-}
-
-/** Actual text frame content bound to its native anchor. */
-type BoundTextFrame = Readonly<{
-  format: SwFlyFrameFormat;
-  content: readonly (SwTextNode | SwTableNode)[];
-}>;
-/** Native export frame sets indexed by their actual text owner. */
-export type BoundTextFrames = ReadonlyMap<SwTextNode, readonly BoundTextFrame[]>;
-
-/** Collects native text frame formats by their actual anchored Writer paragraph. @param document - Native Writer model. @returns Bound frame sets. */
-export function getBoundTextFrames(document: SwDoc): BoundTextFrames {
-  const anchored = new Map<SwTextNode, BoundTextFrame[]>();
-  for (const format of document.GetSpzFrameFormats()) {
-    if (!(format instanceof SwFlyFrameFormat)) continue;
-    const anchor = format.GetAnchor();
-    const owner = anchor.GetAnchorNode()?.GetTextNode();
-    const start = format.GetContent().GetContentIdx()?.GetNode();
-    if (
-      !owner ||
-      !start?.IsStartNode() ||
-      (anchor.GetAnchorId() !== RndStdIds.FLY_AT_PARA &&
-        anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR)
-    )
-      continue;
-    const frames = anchored.get(owner) ?? [];
-    frames.push({ format, content: document.nodes.GetSectionContent(start) });
-    anchored.set(owner, frames);
-  }
-  return anchored;
 }
 
 /** Projects native frame portions at the original paragraph or character position. @param node - Native anchor paragraph. @param anchored - Actual bound frames. @param projectBlock - Projects direct text and table children. @returns XML frame portions. */

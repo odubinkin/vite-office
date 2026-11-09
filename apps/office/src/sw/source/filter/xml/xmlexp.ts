@@ -1,12 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
-import {
-  getBoundTextFrames,
-  getTextFrameExportParagraphs,
-  projectAnchoredTextFrames,
-  type BoundTextFrames,
-} from "./xmltextframe";
+import { getTextFrameExportParagraphs, projectAnchoredTextFrames } from "./xmltextframe";
+import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
@@ -341,7 +337,7 @@ function exportWriterText(
   ) => string,
   existingFontFaceName: (family: string) => string | undefined,
 ): OdfTextExport {
-  const anchored = getBoundTextFrames(document);
+  const anchored = CollectTextFlyFrames(document);
   return exportTextParagraphs(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */

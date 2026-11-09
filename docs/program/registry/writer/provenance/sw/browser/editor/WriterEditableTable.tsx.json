@@ -268,6 +268,10 @@
         {
           "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
           "marker": "browserFrameBackground"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+          "marker": "RenderAnchoredFrames"
         }
       ],
       "upstream": [
@@ -444,7 +448,8 @@
       "Task129 replaces represented primitive border colors with actual shared Tools Color values. SvxBorderLine copies optional native Color input and SetColor into its stable owned value, GetColor exposes the borrowed const value, clones own independent values and equality compares all represented Color channels. Svx frame Style reads Color by value and owns independent copies. FrameSelector GetVisibleColor restores the native bool/out-Color contract, copying only on consensus and leaving output unchanged on failure, including alpha-sensitive equality. Shared border page holds an owned Color; no numeric compatibility overload remains in the represented core. Writer callers use Color and actual JSON/UNO/XML/CSS/color-input boundaries explicitly convert signed32 or unsigned32 values; serialized schema is unchanged. Original width/style and incomplete prior responsibilities remain unchanged. Shading callbacks, ComplexColor/theme, unrepresented style APIs and full original QA remain unported, not certified. Existing provenance/history and browser IO/recovery deviations retained. Human explicitly authorizes shared and Writer fixes, ordinary JS arithmetic and Writer-only coverage exceptions. Full regression remains gated on actual UI/document plus same-model ODS readiness.",
       "Adapts the original signed row span and first-nonheadline follow behavior to the existing browser table fragments, preserving the actual native boxes while omitting their covered DOM cells.",
       "Renders ordered direct cell content and a nested native table by its actual node coordinate in the browser.",
-      "Projects native table, row and cell brushes and native frame axes to browser CSS."
+      "Projects native table, row and cell brushes and native frame axes to browser CSS.",
+      "Passes the actual cell print extent to anchored text children and keeps nested native table editing connected."
     ],
     "browserResponsibilities": [
       "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners.",

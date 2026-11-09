@@ -9,12 +9,19 @@ import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
+import { WriterEditableFlyFrame } from "./WriterEditableFlyFrame";
 import { WriterEditableTable } from "./WriterEditableTable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { type SwPageDescriptorLayout, type SwTableFrame } from "../../source/core/layout/newfrm";
+import {
+  type SwPageDescriptorLayout,
+  type SwPageFrame,
+  type SwTableFrame,
+} from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
-import type { SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
+import { CollectTextFlyFrames, IsTextFlyAnchorFrame } from "../../source/core/layout/flycnt";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import type { SwTextFrame, SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
 import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-line-measurement";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
@@ -109,7 +116,9 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     /** Starts without browser line measurements. @returns Empty line map. */ () => new Map(),
   );
   const measurements = createWriterLineMeasurements(props.paragraphs, measuredLines);
-  const tables = props.editWindow.GetDoc().GetTables();
+  const document = props.editWindow.GetDoc();
+  const anchored = CollectTextFlyFrames(document);
+  const tables = document.GetTables();
   const tableMeasurements = tables.map(
     /** map handles this value. @param table - Input 1. @returns The result. */ (table) => ({
       tableName: table.GetName(),
@@ -149,9 +158,59 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const lastFrame = new Map<string, string>();
   for (const [pageIndex, page] of pages.entries())
     for (const frame of page.textFrames) lastFrame.set(frame.nodeId, `${pageIndex}:${frame.start}`);
+  /** Paints the actual native fly anchors in a mounted body, cell or text-box fragment. @param page - Current physical page. @param nodeIndex - Actual anchor paragraph. @param width - Current native print width. @param fragment - Native body master or follow, if one exists. @returns Connected fly elements. */
+  function renderAnchoredFrames(
+    page: SwPageFrame,
+    nodeIndex: number,
+    width: number,
+    fragment?: SwTextFrame,
+  ): ReactNode {
+    const node = document.nodes.entries()[nodeIndex]?.GetTextNode();
+    if (!node) return null;
+    const flies = anchored.get(node);
+    if (!flies?.length) return null;
+    return flies.map(
+      /** Resolves the actual anchor owner in this fragment. @param fly - Original native format and section. @returns Browser frame or absent. */
+      (fly) => {
+        if (fragment && !IsTextFlyAnchorFrame(fly.format, fragment)) return null;
+        return (
+          <WriterEditableFlyFrame
+            key={fly.format.GetName()}
+            fly={fly}
+            page={page.descriptor}
+            pageNumber={page.number}
+            availableWidth={width}
+            paragraphLeft={node.GetParagraphTextLeftMargin()}
+            paragraphRight={node.GetParagraphRightMargin()}
+            rightToLeft={
+              fragment?.IsRightToLeft() ??
+              node.GetSwAttrSet().GetFrameDir().GetValue() === SvxFrameDirection.Horizontal_RL_TB
+            }
+            paragraphs={paragraphByNodeIndex}
+            activeParagraphId={props.activeParagraphId}
+            selectedBoxes={props.selectedTableBoxes}
+            retainParagraphElement={
+              /** Registers fly text and cells in the common native cursor surface. @param id - Display paragraph identity. @param element - Mounted element or cleanup. @returns Nothing. */
+              (id, element) => {
+                const key = `fly:${page.number}:${fly.format.GetName()}:${id}`;
+                if (element === null) paragraphElements.delete(key);
+                else paragraphElements.set(key, element);
+              }
+            }
+            renderAnchoredFrames={
+              /** Paints child text-frame anchors on the same physical page. @param index - Actual text anchor. @param availableWidth - Enclosing native width. @returns Editable child frames. */
+              (index, availableWidth) => renderAnchoredFrames(page, index, availableWidth)
+            }
+          />
+        );
+      },
+    );
+  }
+
   const renderTable =
-    /** renderTable handles this value. @param frame - Input 1. @returns The result. */ (
+    /** Renders the original table and its cell-owned fly frames. @param frame - Native table fragment. @param page - Owning page. @returns Browser table. */ (
       frame: SwTableFrame,
+      page: SwPageFrame,
     ): React.JSX.Element => {
       const tableName = frame.table.GetName();
       return (
@@ -174,6 +233,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           lastRow={frame.lastRow}
           repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
           selectedBoxes={props.selectedTableBoxes}
+          renderAnchoredFrames={
+            anchored.size === 0
+              ? undefined
+              : /** Paints cell-owned frames within their actual print extent. @param index - Native anchor node. @param width - Actual cell print width. @returns Editable frames. */
+                (index, width) => renderAnchoredFrames(page, index, width)
+          }
         />
       );
     };
@@ -504,6 +569,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 data-writer-page={pageIndex + 1}
                 role="document"
                 style={{
+                  display: page.textFrames.some(
+                    /** Chooses native-flow paint when the page contains a text anchor. @param frame - Actual page text frame. @returns Whether native float paint applies. */
+                    (frame) => anchored.has(frame.GetTextNodeFirst()),
+                  )
+                    ? "flow-root"
+                    : undefined,
                   height: page.descriptor.height / 15,
                   paddingBottom: page.descriptor.bottomMargin / 15,
                   paddingLeft: page.descriptor.leftMargin / 15,
@@ -524,7 +595,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                         ) => props.paragraphs[frame.afterParagraphIndex]?.id === textFrame.nodeId,
                       ),
                   )
-                  .map(renderTable)}
+                  .map(
+                    /** Paints one leading native table on this page. @param table - Actual table fragment. @returns Browser table. */
+                    (table) => renderTable(table, page),
+                  )}
                 {page.textFrames.map(
                   /** Renders one Writer text-frame fragment on the current page. @param frame - Writer fragment. @param frameIndex - Fragment index. @returns Browser paragraph. */ (
                     frame,
@@ -541,6 +615,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     );
                     return (
                       <Fragment key={`${paragraph.id}:${frame.start}`}>
+                        {renderAnchoredFrames(
+                          page,
+                          paragraph.nodeIndex,
+                          page.descriptor.width -
+                            page.descriptor.leftMargin -
+                            page.descriptor.rightMargin,
+                          frame,
+                        )}
                         <WriterEditableParagraph
                           index={index}
                           isActive={paragraph.id === props.activeParagraphId}
@@ -569,7 +651,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                                   tableFrame,
                                 ) => tableFrame.afterParagraphIndex === index,
                               )
-                              .map(renderTable)
+                              .map(
+                                /** Paints each table on its native page. @param table - Actual table fragment. @returns Browser table. */
+                                (table) => renderTable(table, page),
+                              )
                           : null}
                       </Fragment>
                     );

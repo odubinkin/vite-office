@@ -62,6 +62,9 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   };
 }
 
+/** Paints native frames anchored to a text node within its enclosing print width. */
+export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) => React.ReactNode;
+
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
   table,
@@ -77,6 +80,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   paragraphs,
   activeParagraphId,
   retainParagraphElement,
+  renderAnchoredFrames,
 }: Readonly<{
   table: SwTable;
   nativeFrame?: SwTabFrame | undefined;
@@ -92,6 +96,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   activeParagraphId?: string;
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
+  renderAnchoredFrames?: RenderAnchoredFrames | undefined;
 }>): React.JSX.Element {
   const nativeTable = nativeFrame ?? new SwTabFrame(table);
   try {
@@ -239,24 +244,36 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                             fixed,
                           );
                         }
+                        const contentNodes = cell.GetContentNodes();
+                        const hasChildren =
+                          renderAnchoredFrames !== undefined ||
+                          contentNodes.some(
+                            /** Checks whether child sections need the native cell print width. @param node - Direct native content. @returns Whether this is a nested table. */
+                            (node) => node instanceof SwTableNode,
+                          );
+                        const cellPrintWidth = hasChildren
+                          ? Math.max(
+                              0,
+                              nativeTable.GetBoxPrintWidth(
+                                cell,
+                                availableWidth ?? area.left + area.width + area.right,
+                              ) -
+                                boxItem.GetDistance(2) -
+                                boxItem.GetDistance(3),
+                            )
+                          : 0;
                         let paragraphIndex = 0;
-                        const content = cell.GetContentNodes().map(
+                        const content = contentNodes.map(
                           /** Renders the actual child table or direct paragraph in cell order. @param paragraph - Direct content node. @returns Connected browser content. */ (
                             paragraph,
                           ) => {
                             if (paragraph instanceof SwTableNode) {
-                              const width = nativeTable.GetBoxPrintWidth(
-                                cell,
-                                availableWidth ?? area.left + area.width + area.right,
-                              );
                               return (
                                 <WriterEditableTable
                                   key={paragraph.GetIndex()}
                                   table={paragraph.GetTable()}
-                                  availableWidth={Math.max(
-                                    0,
-                                    width - boxItem.GetDistance(2) - boxItem.GetDistance(3),
-                                  )}
+                                  availableWidth={cellPrintWidth}
+                                  renderAnchoredFrames={renderAnchoredFrames}
                                   paragraphs={paragraphs}
                                   selectedBoxes={isRepeatedHeadline ? undefined : selectedBoxes}
                                   {...(activeParagraphId === undefined
@@ -275,7 +292,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                               throw new Error(
                                 "Writer table cell has no connected paragraph projection.",
                               );
-                            return (
+                            const paragraphElement = (
                               <WriterEditableParagraph
                                 cellPosition={{ rowIndex, cellIndex, paragraphIndex: index }}
                                 index={index}
@@ -290,6 +307,18 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                   ) => retainParagraphElement?.(id, element)
                                 }
                               />
+                            );
+                            const flies = renderAnchoredFrames?.(
+                              paragraph.GetIndex(),
+                              cellPrintWidth,
+                            );
+                            return flies ? (
+                              <div key={projection.id} style={{ display: "flow-root" }}>
+                                {flies}
+                                {paragraphElement}
+                              </div>
+                            ) : (
+                              paragraphElement
                             );
                           },
                         );

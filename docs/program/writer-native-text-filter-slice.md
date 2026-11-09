@@ -454,7 +454,7 @@ The immediate remaining work is defined by format scenarios, not generic module 
 
 | Supported scenario | Current evidence | Required work |
 | --- | --- | --- |
-| Markdown raw HTML blocks | EndHtmlBlock feeds the native HTML tokenizer and parser. Ordinary text, CSS, named semantic formats, fonts, links, bookmarks, lists and tables have connected current-model consumers. | The browser renders and reopens real nested tables, and ODT storage preserves anchored table sections. Physical browser projection of anchored tables remains open. |
+| Markdown raw HTML blocks | EndHtmlBlock feeds the native HTML tokenizer and parser. Ordinary text, CSS, named semantic formats, fonts, links, bookmarks, lists and tables have connected current-model consumers. | The browser renders and reopens real nested tables, and ODT storage preserves anchored table sections. The editor displays and edits paragraph- and character-anchored table sections. Native cross-page fly reflow remains open. |
 | RTF language metadata on represented Western/CJK/CTL items | The native parser and mapper now apply LANG, ALANG and LANGFE through the actual script-specific items. | Covered by the connected RTF language checkpoint below. |
 | RTF position/vertical-alignment property normalization | Raw independent properties now pass through actual RTFSprms style/run normalization, native mapper stylesheet substitution and deferred final-height resolution. Related actual-model tests cover equality, zero replacement/no-op, control order, inherited height and group boundaries. | Consumed represented body/style path connected; whole-format capability audit remains open. Preserve the native updnprop reduction (WRITER209). |
 
@@ -2167,3 +2167,18 @@ change across ODF export and reopen.
 The normal browser file dialog now preserves nested content within
 the anchored frame when it reopens the stored ODT. Physical browser
 page projection of the floating frame remains a separate consumer.
+
+### RTF100 — Display and edit anchored text-frame tables in the browser
+
+The editor consumes the same actual fly formats and text sections as
+ODF export. The native anchor selects its paragraph master or
+character-containing follow. The represented relative size and
+horizontal position calculations consume native frame items and
+the original page and paragraph reference widths. The browser
+uses CSS floats for side wrapping and reuses the existing editable
+table, paragraph and cursor surfaces inside the fly.
+
+Mounted tests cover both wrapping sides and a native edit in the fly
+table cell. Browser line wrapping around the fly is performed by
+the paint device. Complete fly contour, cross-page splitting and
+native pagination reflow are outside this horizontal projection.

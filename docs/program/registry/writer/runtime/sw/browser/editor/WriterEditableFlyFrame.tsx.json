@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/WriterEditableFlyFrame.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0117",
+      "CAP-4231f95a-b499-43df-b69d-ae3b29851892",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/WriterEditableFlyFrame.tsx#WriterEditableFlyFrame",
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "Projects native text-fly width, position and wrap values to browser CSS and reuses the ordinary Writer paragraph, table and cursor device surfaces. Physical native fly contour and pagination reflow remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterEditableFlyFrame"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

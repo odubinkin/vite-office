@@ -9,14 +9,14 @@
     "localSymbols": [
       "importTextFrame",
       "endTextFrame",
-      "getBoundTextFrames",
       "projectAnchoredTextFrames"
     ],
     "upstreamSymbols": [
       "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
     ],
     "preservedResponsibilities": [
-      "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF."
+      "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF.",
+      "Uses the common native bound fly collection rather than a separate filter-only anchor registry."
     ],
     "omittedResponsibilities": [
       "Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice."
@@ -34,6 +34,14 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
           "marker": "anchored Markdown"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
