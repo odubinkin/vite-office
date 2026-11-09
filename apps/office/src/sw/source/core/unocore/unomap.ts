@@ -46,12 +46,17 @@ export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
 > = new Map([
   ["DefaultPageMode", { which: WID_DOC_DEFAULT_PAGE_MODE, member: 0, kind: "bool", type: "bool" }],
 ]);
-/** Original page-style grid entries from unomap1.cxx, kept out of cursor/paragraph property maps. */
-export const SwUnoPageStylePropertyMap: ReadonlyMap<
+/** Original page-style grid and direction entries from unomap1.cxx. */
+type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
+export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEntry> = new Map<
   string,
-  SwUnoPropertyEntry & { readonly type: UnoTypeArgument }
-> = new Map(
+  PageStylePropertyEntry
+>([
   [
+    "WritingMode",
+    { which: H.RES_FRAMEDIR, member: 0, kind: "short", type: "sal_Int16", attributes: 0 },
+  ],
+  ...[
     ["GridColor", Grid.MID_GRID_COLOR, "sal_Int32"],
     ["GridLines", Grid.MID_GRID_LINES, "sal_Int16"],
     ["GridBaseHeight", Grid.MID_GRID_BASEHEIGHT | 0x80, "sal_Int32"],
@@ -66,17 +71,18 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<
   ].map(
     /** Retains original Which/member/type descriptors. @param row - Original property row. @returns Entry. */ (
       row,
-    ) => [
-      row[0] as string,
-      {
-        which: H.RES_TEXTGRID,
-        member: row[1] as number,
-        kind: "any" as const,
-        type: row[2] as UnoTypeArgument,
-      },
-    ],
+    ) =>
+      [
+        row[0] as string,
+        {
+          which: H.RES_TEXTGRID,
+          member: row[1] as number,
+          kind: "any" as const,
+          type: row[2] as UnoTypeArgument,
+        },
+      ] as const,
   ),
-);
+]);
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
   ["ListAutoFormat", { which: FN_UNO_PARA_NUM_AUTO_FORMAT, member: 0, kind: "any", attributes: 1 }],

@@ -78,7 +78,7 @@ export class SwXStyle {
           ["IsLandscape", "bool"],
           ["PageStyleLayout", pageLayoutType],
           ...[...SwUnoPageStylePropertyMap].map(
-            /** Publishes original grid property types. @param entry - Entry. @returns Descriptor. */ ([
+            /** Publishes original page-style item property types. @param entry - Entry. @returns Descriptor. */ ([
               name,
               entry,
             ]) => [name, entry.type] as const,

@@ -530,6 +530,14 @@ export function DispatchBodyControl(
     if (this["defaultCodepage"] === 1255) state.currentCodepage = 1255;
     return;
   }
+  if (name === "ltrsect" || name === "rtlsect") {
+    state.runType = RunType.NONE;
+    state.paragraphSprms.set(
+      N.LN_EG_SectPrContents_textDirection,
+      new RTFValue(name === "rtlsect" ? 1 : 0),
+    );
+    return;
+  }
   if (name === "ltrpar" || name === "rtlpar") {
     state.runType = RunType.NONE;
     state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));

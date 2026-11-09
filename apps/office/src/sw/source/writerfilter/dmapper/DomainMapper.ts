@@ -31,6 +31,7 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
 import { getEnumAsINT32 } from "../../../../comphelper/source/misc/types";
+import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { PropertyMap, SectionPropertyMap } from "./PropertyMap";
 import { DomainMapper_Impl, ContextType as C, PageMarElement as M } from "./DomainMapper_Impl";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
@@ -443,6 +444,24 @@ export class DomainMapper implements Properties {
           section.SetBottomMargin(margins.bottom);
           section.SetLeftMargin(margins.left);
         }
+        break;
+      }
+      case N.LN_EG_SectPrContents_textDirection: {
+        let direction: number = WritingMode2.LR_TB;
+        switch (n) {
+          case N.LN_Value_ST_TextDirection_tbRl:
+            direction = WritingMode2.TB_RL;
+            break;
+          case N.LN_Value_ST_TextDirection_btLr:
+            direction = WritingMode2.BT_LR;
+            break;
+          case N.LN_Value_ST_TextDirection_tbRlV:
+          case N.LN_Value_ST_TextDirection_tbLrV:
+            direction = WritingMode2.TB_LR;
+            break;
+        }
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+        this.insert(section ?? context, P.PROP_WRITING_MODE, new Any([direction], "sal_Int16"));
         break;
       }
       case N.LN_EG_SectPrContents_pgNumType:

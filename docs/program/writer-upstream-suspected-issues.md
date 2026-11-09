@@ -2892,3 +2892,24 @@ Neither loop checks for a repeated format. A cycle of Environment fly anchors
 would leave neither loop a terminating condition. Preserve the original walk
 and the expectation of an acyclic model. This observation concerns the loop
 contract and makes no claim that the native UI can construct such a cycle.
+
+### WRITER356 — Section grid size treats horizontal RTL as a width-based mode
+
+Pinned `SectionPropertyMap::CloseSectionGroup` in
+`sw/source/writerfilter/dmapper/PropertyMap.cxx` selects usable page height
+only when WritingMode is exactly LR_TB. Every other value selects usable page
+width, including RL_TB, which the native DomainMapper can insert for section
+BiDi. Preserve this comparison rather than switching it to a vertical-mode
+test. The RTF STEXTFLOW path exercises the vertical width case. The horizontal
+RTL observation is source-level.
+
+### WRITER357 — RTF section BiDi flags publish raw values to paragraph sprms
+
+Pinned `RTFDocumentImpl::dispatchFlag` in
+`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` inserts LTRSECT/RTLSECT
+as raw 0/1 under `LN_EG_SectPrContents_textDirection` in the paragraph sprms
+and resets associated run type. The native mapper's textDirection switch
+instead recognizes generated TextDirection identities, as sent by STEXTFLOW.
+Both raw values reach its default LR_TB branch. Preserve the original sprm
+owner, value, and mapper fallback. This is not evidence of an identical
+outcome in every native section-layout context.

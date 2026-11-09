@@ -10,6 +10,7 @@ import {
   PageStyleLayout,
   cppu_detail_getUnoType_PageStyleLayout as layoutType,
 } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
+import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 
 /** Original write-only/header-content denylist retained even though this model has no header/footer content owner. */
@@ -168,11 +169,19 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
   if (mapper.GetSettingsTable().GetMirrorMarginSettings())
     insert(this, P.PROP_PAGE_STYLE_LAYOUT, new Any([PageStyleLayout.MIRRORED], layoutType));
   // These are the native defaults for the currently unrepresented section grid controls.
+  const writingMode = this.getProperty(P.PROP_WRITING_MODE),
+    direction: [number] = [WritingMode2.LR_TB];
+  try {
+    writingMode?.[1].extract(direction, "sal_Int16");
+  } finally {
+    writingMode?.[1].dispose();
+  }
   const pitch = 1,
-    lines = Math.trunc(
-      (integerProperty(this, P.PROP_HEIGHT) - this["m_nTopMargin"] - this["m_nBottomMargin"]) /
-        pitch,
-    );
+    textAreaHeight =
+      direction[0] === WritingMode2.LR_TB
+        ? integerProperty(this, P.PROP_HEIGHT) - this["m_nTopMargin"] - this["m_nBottomMargin"]
+        : integerProperty(this, P.PROP_WIDTH) - this["m_nLeftMargin"] - this["m_nRightMargin"],
+    lines = Math.trunc(textAreaHeight / pitch);
   if (lines >= 0 && lines <= 32767) insert(this, P.PROP_GRID_LINES, new Any([lines], "sal_Int16"));
   insert(this, P.PROP_GRID_MODE, new Any([0], "sal_Int16"));
   insert(this, P.PROP_GRID_STANDARD_MODE, new Any(true));

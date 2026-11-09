@@ -1779,3 +1779,23 @@ page/section/fly direction, view-point geometry, native browse/draft and cell
 direction invalidation, native fly-syntax output, reciprocal RTF page/table
 direction import and the final format/UI matrix remain open. Broad source,
 contract, behavior and default statuses remain unverified.
+
+### HTML74 — Native RTF section direction import
+
+The pinned STEXTFLOW value handler maps 0 and 1 to the original generated
+section sprms. The actual DomainMapper writes signed-short WritingMode into the
+section property map. Page-style application uses the real typed UNO entry
+and document-owned format items. The section grid selects usable width for
+non-LR_TB directions, as in the original mapper. The Worker page-format codec
+already carries the actual direction items and is exercised without changes.
+
+Group restoration, section carryover, explicit horizontal reset, ignored
+unsupported values, and vertical page round trips are covered. Continuous
+physical section layout, table row/cell import, and the final RTF/Markdown
+capability audit remain open. Broad contract, behavior, default and source
+responsibility status remains unverified.
+
+LTRSECT and RTLSECT retain the original raw paragraph sprm and the mapper's
+default LTR result for that raw value. WRITER356 records the native grid
+comparison's horizontal RTL consequence. WRITER357 records the source flag
+owner/value mismatch with STEXTFLOW's generated identities.

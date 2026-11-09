@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 450
+revision: 453
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T17:39:45.451Z"
+  updated_at: "2026-11-09T17:47:00.751Z"
   updated_by: "CODER"
-  note: "HTML73 checkpoint: 573 unique related cases in 37 suites passed, including final numbering/direction replay, UI workflows, and shared locale. Types, style, source and both registries passed. Actual RTF paragraph/style/page/table output now consumes native direction owners. Reciprocal import, physical layout families, production Markdown HTML tables and final filter closure remain incomplete."
-  attempts: 84
+  note: "HTML74 checkpoint: 271 unique related tests across 12 suites, whole-app TypeScript and source/style/Writer registry gates pass. Actual native STEXTFLOW and section flag mapping apply through DomainMapper and the typed page style. Table direction import, represented physical sections, production Markdown HTML tables and full filter closure remain pending."
+  attempts: 85
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1349,8 +1352,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T17:47:00.751Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML74 checkpoint: 271 unique related tests across 12 suites, whole-app TypeScript and source/style/Writer registry gates pass. Actual native STEXTFLOW and section flag mapping apply through DomainMapper and the typed page style. Table direction import, represented physical sections, production Markdown HTML tables and full filter closure remain pending."
+  -
+    type: "status"
+    at: "2026-11-09T17:47:17.172Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T17:40:01.471Z"
+doc_updated_at: "2026-11-09T17:47:17.172Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3585,6 +3601,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T17:47:00.751Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML74 checkpoint: 271 unique related tests across 12 suites, whole-app TypeScript and source/style/Writer registry gates pass. Actual native STEXTFLOW and section flag mapping apply through DomainMapper and the typed page style. Table direction import, represented physical sections, production Markdown HTML tables and full filter closure remain pending.
+    Attempts: 85
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:46:59.340Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5305,6 +5351,14 @@ sections:
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/html/swhtml.direction.integration.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts. Result: 527 passed across 33 suites. Final 51 of those cases across four suites reran after the last source change; do not double count. Separate Writer file-dialog/workflow run: 22 passed across two suites. Shared configured and script classification: 24 passed in two selected suites. Total 573 unique passed across 37 suites. Evidence: html73-tests.log, html73-final-numbering-tests.log, html73-workflows.log, html73-shared-tests.log.
     - Two old exact expectations omitted the source-generated LTRPAR. They now check the full native control sequence. Provenance and registry initially rejected obsolete/local-reference-only symbol records; changed those to match actual declarations. Final whole-app TypeScript, changed ESLint/Prettier, provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, source tree, Which IDs, file-size and diff gates passed.
     - No full-project replay at this continuing parent-task checkpoint. Actual production HTML tables, complete represented RTF import/export and final fixed-slice UI verification remain open. Broad source, contract, default and behavior statuses remain unverified.
+
+    S3HW1E HTML74 — Native RTF section direction import through the real page style.
+
+    - Pinned namespaces.py/modelpreprocess.py/resourceids.py reproduced the numeric direction property and enums locally. STEXTFLOW 0/1 publish the original section sprm, and the real DomainMapper uses the original signed-short WritingMode switch and target context. The existing UNO style property path then writes actual page frames. The original grid extent uses width for non-LR_TB and height for LR_TB, including the source behavior in WRITER356. RTLSECT/LTRSECT retain the raw paragraph sprm and associated-run reset, reaching the native fallback for raw values (WRITER357).
+    - Native byte-stream tests cover both section modes, out-of-range parameter, group restoration, carryover and horizontal reset, vertical grid width, Worker transport and RTF reimport. The initial run found a duplicate test import, an inferred Map type too narrow for the new entry, and a grid-only property-count expectation. They were corrected without weakening the grid descriptor checks. Source follow-up added both section flags with their unchanged original value contracts.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/filter/ww8/rtfexport.first-page.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 269 cases across 12 files; the final first four files reran with 169 passes, including two new flags for 271 total unique cases across 12 files. Evidence: html74-tests-final.log and html74-flags-final.log.
+    - Whole-app TypeScript, changed ESLint/Prettier, provenance (1956 modules), Writer registry (0 violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Evidence: html74-types-final.log and html74-*-final gate logs. Scope: this current Writer/RTF slice and adjacent filter/UI paths. No full-project replay at this continuing task checkpoint.
+    - RTF row/cell import still requires original table manager consumption and actual UNO/table properties; physical continuous sections and production Markdown HTML tables remain open. Broad module/source/default/contract/behavior statuses stay unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -7550,6 +7604,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T17:47:00.751Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML74 checkpoint: 271 unique related tests across 12 suites, whole-app TypeScript and source/style/Writer registry gates pass. Actual native STEXTFLOW and section flag mapping apply through DomainMapper and the typed page style. Table direction import, represented physical sections, production Markdown HTML tables and full filter closure remain pending.
+Attempts: 85
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:46:59.340Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9274,3 +9358,11 @@ S3HW1E HTML73 — Native direction query and RTF paragraph, style, page and tabl
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/html/swhtml.direction.integration.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts. Result: 527 passed across 33 suites. Final 51 of those cases across four suites reran after the last source change; do not double count. Separate Writer file-dialog/workflow run: 22 passed across two suites. Shared configured and script classification: 24 passed in two selected suites. Total 573 unique passed across 37 suites. Evidence: html73-tests.log, html73-final-numbering-tests.log, html73-workflows.log, html73-shared-tests.log.
 - Two old exact expectations omitted the source-generated LTRPAR. They now check the full native control sequence. Provenance and registry initially rejected obsolete/local-reference-only symbol records; changed those to match actual declarations. Final whole-app TypeScript, changed ESLint/Prettier, provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, source tree, Which IDs, file-size and diff gates passed.
 - No full-project replay at this continuing parent-task checkpoint. Actual production HTML tables, complete represented RTF import/export and final fixed-slice UI verification remain open. Broad source, contract, default and behavior statuses remain unverified.
+
+S3HW1E HTML74 — Native RTF section direction import through the real page style.
+
+- Pinned namespaces.py/modelpreprocess.py/resourceids.py reproduced the numeric direction property and enums locally. STEXTFLOW 0/1 publish the original section sprm, and the real DomainMapper uses the original signed-short WritingMode switch and target context. The existing UNO style property path then writes actual page frames. The original grid extent uses width for non-LR_TB and height for LR_TB, including the source behavior in WRITER356. RTLSECT/LTRSECT retain the raw paragraph sprm and associated-run reset, reaching the native fallback for raw values (WRITER357).
+- Native byte-stream tests cover both section modes, out-of-range parameter, group restoration, carryover and horizontal reset, vertical grid width, Worker transport and RTF reimport. The initial run found a duplicate test import, an inferred Map type too narrow for the new entry, and a grid-only property-count expectation. They were corrected without weakening the grid descriptor checks. Source follow-up added both section flags with their unchanged original value contracts.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/filter/ww8/rtfexport.first-page.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 269 cases across 12 files; the final first four files reran with 169 passes, including two new flags for 271 total unique cases across 12 files. Evidence: html74-tests-final.log and html74-flags-final.log.
+- Whole-app TypeScript, changed ESLint/Prettier, provenance (1956 modules), Writer registry (0 violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Evidence: html74-types-final.log and html74-*-final gate logs. Scope: this current Writer/RTF slice and adjacent filter/UI paths. No full-project replay at this continuing task checkpoint.
+- RTF row/cell import still requires original table manager consumption and actual UNO/table properties; physical continuous sections and production Markdown HTML tables remain open. Broad module/source/default/contract/behavior statuses stay unverified.

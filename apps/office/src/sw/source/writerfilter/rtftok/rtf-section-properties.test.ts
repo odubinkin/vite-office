@@ -4,6 +4,12 @@ import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { RES_PAGEDESC } from "../../../inc/hintids";
+import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
+import { RtfExport } from "../../filter/ww8/rtfexport";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases document-owned page and item graphs. @returns Nothing. */ () => {
@@ -307,7 +313,6 @@ it("does not re-emit a mirror setting written after the original first-run table
 });
 
 import { SwTextGrid } from "../../../inc/tgrditem";
-import { RtfExport } from "../../filter/ww8/rtfexport";
 it("retains the pinned native RTF grid-export no-op and reader defaults", /** RtfAttributeOutput::FormatTextGrid is an explicit TODO; authored grid metadata is not a native RTF roundtrip promise. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1 A}`);
   const grid = (
@@ -327,3 +332,82 @@ it("retains the pinned native RTF grid-export no-op and reader defaults", /** Rt
   expect(result.GetBaseHeight()).toBe(100);
   expect(imported.paragraphs[0]?.GetText()).toBe("A");
 });
+
+it.each([
+  [0, Direction.Horizontal_LR_TB],
+  [1, Direction.Vertical_RL_TB],
+] as const)(
+  "applies the actual section writing mode for STEXTFLOW %i",
+  /** Exercises the tokenizer, section sprm, mapper, typed UNO page style and native four-format owners. @param flow - Source value. @param expected - Actual direction. @returns Nothing. */ (
+    flow,
+    expected,
+  ) => {
+    const doc = read(`{\\rtf1\\stextflow${flow} body}`);
+    const page = doc.GetPageDesc();
+    for (const frame of [
+      page.GetMaster(),
+      page.GetLeft(),
+      page.GetFirstMaster(),
+      page.GetFirstLeft(),
+    ])
+      expect(frame.GetFrameDir().GetValue()).toBe(expected);
+  },
+);
+
+it("retains valid section direction when an unsupported STEXTFLOW is consumed", /** Native dispatch inserts only values zero and one, leaving the valid sprm in place. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1\stextflow1\stextflow2 body}`);
+  expect(doc.GetPageDesc().GetMaster().GetFrameDir().GetValue()).toBe(Direction.Vertical_RL_TB);
+});
+
+it("inherits section direction across SECT and applies the explicit horizontal reset", /** Real section properties flow to the actual generated page-style identities. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1\stextflow1 A\sect B\sect\sectd\stextflow0 C}`);
+  expect(doc.GetPageDesc().GetMaster().GetFrameDir().GetValue()).toBe(Direction.Vertical_RL_TB);
+  expect(doc.FindPageDesc("Converted1")?.GetMaster().GetFrameDir().GetValue()).toBe(
+    Direction.Vertical_RL_TB,
+  );
+  expect(doc.FindPageDesc("Converted2")?.GetMaster().GetFrameDir().GetValue()).toBe(
+    Direction.Horizontal_LR_TB,
+  );
+});
+
+it("restores the outer group's section direction and selects width for vertical grid lines", /** Original scope restoration and vertical grid dimension use actual physical page properties. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1\paperw12000\paperh16000\margl1000\margr1100\stextflow1 A{\stextflow0}\sect B}`,
+  );
+  const page = doc.GetPageDesc(),
+    grid = page.GetMaster().GetTextGrid();
+  expect(page.GetMaster().GetFrameDir().GetValue()).toBe(Direction.Vertical_RL_TB);
+  expect(doc.FindPageDesc("Converted1")?.GetMaster().GetFrameDir().GetValue()).toBe(
+    Direction.Vertical_RL_TB,
+  );
+  expect(grid.GetLines()).toBe(17463);
+});
+
+it("round trips the original direction through Writer Worker page items and RTF section bytes", /** Actual existing UI transfer retains the typed page-frame direction. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1\stextflow1 body}`);
+  const restored = decodeWriterDocument(encodeWriterDocument(doc));
+  docs.push(restored);
+  expect(restored.GetPageDesc().GetMaster().GetFrameDir().GetValue()).toBe(
+    Direction.Vertical_RL_TB,
+  );
+  const bytes = RtfExport.WriteDocument(restored);
+  expect(new TextDecoder().decode(bytes)).toContain(String.raw`\stextflow1`);
+  const imported = new RtfDocumentImpl().ResolveBytes(bytes);
+  docs.push(imported);
+  expect(imported.GetPageDesc().GetMaster().GetFrameDir().GetValue()).toBe(
+    Direction.Vertical_RL_TB,
+  );
+});
+
+it.each(["ltrsect", "rtlsect"])(
+  "preserves the native raw paragraph sprm and LTR fallback for %s",
+  /** Both flags send raw 0/1, neither of which is a generated direction value. @param flag - Original RTF token. @returns Nothing. */ (
+    flag,
+  ) => {
+    const doc = read(`{\\rtf1\\stextflow1\\${flag} body}`);
+    expect(doc.GetPageDesc().GetMaster().GetFrameDir().GetValue()).toBe(Direction.Vertical_RL_TB);
+    expect(doc.paragraphs[0]?.GetSwAttrSet().GetFrameDir().GetValue()).toBe(
+      Direction.Horizontal_LR_TB,
+    );
+  },
+);

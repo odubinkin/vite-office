@@ -192,6 +192,16 @@ export function DispatchSectionControl(
     );
     return true;
   }
+  if (name === "stextflow") {
+    if (parameter === 0 || parameter === 1)
+      state.sectionSprms.set(
+        N.LN_EG_SectPrContents_textDirection,
+        new RTFValue(
+          parameter === 0 ? N.LN_Value_ST_TextDirection_lrTb : N.LN_Value_ST_TextDirection_tbRl,
+        ),
+      );
+    return true;
+  }
   const entry = geometry.get(name);
   if (!entry) return false;
   if (parameter !== undefined) {
