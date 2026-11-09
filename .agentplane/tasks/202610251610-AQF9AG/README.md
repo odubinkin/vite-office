@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 234
+revision: 237
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:19:10.774Z"
+  updated_at: "2026-11-09T19:37:11.154Z"
   updated_by: "CODER"
-  note: "Verified checkpoint: original word locale dispatch, CharacterClassification case service and NatNum12 supplier modifiers pass focused, CSV and browser verification. Continue with production component installation, formatter integration and multiline CSV import."
-  attempts: 61
+  note: "Verified checkpoint: production UNO components and original NatNum12 formatter output pass 1001 focused shared tests, 198 Calc CSV tests and the Chromium workflow. Continue with original multiline EditEngine construction and CSV import transfer."
+  attempts: 62
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1304,8 +1307,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:37:11.154Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified checkpoint: production UNO components and original NatNum12 formatter output pass 1001 focused shared tests, 198 Calc CSV tests and the Chromium workflow. Continue with original multiline EditEngine construction and CSV import transfer."
+  -
+    type: "status"
+    at: "2026-11-09T19:37:27.178Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:19:17.986Z"
+doc_updated_at: "2026-11-09T19:37:27.178Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3155,6 +3171,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:37:11.154Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified checkpoint: production UNO components and original NatNum12 formatter output pass 1001 focused shared tests, 198 Calc CSV tests and the Chromium workflow. Continue with original multiline EditEngine construction and CSV import transfer.
+    Attempts: 62
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:37:08.172Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4624,6 +4670,15 @@ sections:
     - The NatNum12 supplier connects the original NumberText cache, four casing modifiers, delimiter checks and English title adjustments through the real process-context contract. CALC-485 records that the case mapper receives the supplier's remembered locale and NumberText receives the requested locale. The registered production context and Calc formatter consumers remain open.
     - Focused Vitest runs passed with 176 word, case and number-text tests and 197 Calc CSV tests. The new group replays upstream case and Calc English spellout assertions and checks the actual service names, acquired constructors and exception target. The test registry supplies only the enclosing service-manager boundary. The production build and browser CSV import, ODS save and CSV export flow passed.
     - Typecheck, lint, JSDoc, module boundaries, Calc resources, source provenance, shared and Calc parity inventories, and diff whitespace checks passed. The module boundary now admits the cppuhelper link explicitly declared by Library_i18npool.mk. The full-suite cadence is unchanged because this is a checkpoint of the same AgentPlane task.
+
+    ### Production UNO components and displayed NatNum12 CSV output
+
+    - The browser entrypoint uses the native desktop service initialization sequence. The bundled ServiceManager preserves service-before-implementation lookup, acquires actual constructors through the original context, and exposes the DefaultContext property with its original descriptor and veto. The selected registry records correspond to the pinned i18npool and NumberText component declarations. The browser binds static modules within its single UNO environment. Dynamic RDB/library deployment and unrelated singleton registries are outside this binding.
+    - The CJK break-iterator components use the original four acquired constructors, implementation names, inherited Unicode word logic and locale-derived hanging-character state. The generator verifies the source data and native reference chains for all 284 registered locales. CJK line layout is outside the word-service slice.
+    - SvNumberformat now uses the original standard and custom output switches, including their empty default outcome. The production supplier is reachable through the real numeric, logical, time and calendar producers. DATE applies its source NatNum12 keyword gate and exact token group after calendar display and year padding. DATETIME retains the separate native behavior.
+    - The ScDocShell CSV regression exercises the real production registry, number format table, NativeNumberSupplier and NumberText library. Ordinary export writes the raw numeric amount and standard date representation. Displayed output matches the original title, currency, ordinal-day and no-keyword date cases. Focused Calc verification passed 198 tests, and the production Vite build and Chromium CSV import, ODS save and CSV export passed.
+    - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-tree, npm run check:file-size, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc and python3 scripts/generate-locale-break-rules.py --check. Focused shared verification covers 1,001 tests and boundary tooling covers 49 tests. No full suite is due in this checkpoint of the same task.
+    - The remaining in-scope CSV path is original multiline EditEngine construction and import transfer. Final CSV acceptance follows that path.
 id_source: "generated"
 ---
 ## Summary
@@ -6482,6 +6537,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:37:11.154Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified checkpoint: production UNO components and original NatNum12 formatter output pass 1001 focused shared tests, 198 Calc CSV tests and the Chromium workflow. Continue with original multiline EditEngine construction and CSV import transfer.
+Attempts: 62
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:37:08.172Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7955,3 +8040,12 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - The NatNum12 supplier connects the original NumberText cache, four casing modifiers, delimiter checks and English title adjustments through the real process-context contract. CALC-485 records that the case mapper receives the supplier's remembered locale and NumberText receives the requested locale. The registered production context and Calc formatter consumers remain open.
 - Focused Vitest runs passed with 176 word, case and number-text tests and 197 Calc CSV tests. The new group replays upstream case and Calc English spellout assertions and checks the actual service names, acquired constructors and exception target. The test registry supplies only the enclosing service-manager boundary. The production build and browser CSV import, ODS save and CSV export flow passed.
 - Typecheck, lint, JSDoc, module boundaries, Calc resources, source provenance, shared and Calc parity inventories, and diff whitespace checks passed. The module boundary now admits the cppuhelper link explicitly declared by Library_i18npool.mk. The full-suite cadence is unchanged because this is a checkpoint of the same AgentPlane task.
+
+### Production UNO components and displayed NatNum12 CSV output
+
+- The browser entrypoint uses the native desktop service initialization sequence. The bundled ServiceManager preserves service-before-implementation lookup, acquires actual constructors through the original context, and exposes the DefaultContext property with its original descriptor and veto. The selected registry records correspond to the pinned i18npool and NumberText component declarations. The browser binds static modules within its single UNO environment. Dynamic RDB/library deployment and unrelated singleton registries are outside this binding.
+- The CJK break-iterator components use the original four acquired constructors, implementation names, inherited Unicode word logic and locale-derived hanging-character state. The generator verifies the source data and native reference chains for all 284 registered locales. CJK line layout is outside the word-service slice.
+- SvNumberformat now uses the original standard and custom output switches, including their empty default outcome. The production supplier is reachable through the real numeric, logical, time and calendar producers. DATE applies its source NatNum12 keyword gate and exact token group after calendar display and year padding. DATETIME retains the separate native behavior.
+- The ScDocShell CSV regression exercises the real production registry, number format table, NativeNumberSupplier and NumberText library. Ordinary export writes the raw numeric amount and standard date representation. Displayed output matches the original title, currency, ordinal-day and no-keyword date cases. Focused Calc verification passed 198 tests, and the production Vite build and Chromium CSV import, ODS save and CSV export passed.
+- Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-tree, npm run check:file-size, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc and python3 scripts/generate-locale-break-rules.py --check. Focused shared verification covers 1,001 tests and boundary tooling covers 49 tests. No full suite is due in this checkpoint of the same task.
+- The remaining in-scope CSV path is original multiline EditEngine construction and import transfer. Final CSV acceptance follows that path.

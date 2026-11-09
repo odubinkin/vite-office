@@ -4180,8 +4180,8 @@ paragraphs or test counts:
 
 | CSV/root path | Source requirement and current boundary | Completion evidence still required |
 | --- | --- | --- |
-| Export displayed numbers | `ScDocShell` shown callback calls `ScCellFormat::GetString`. The supplier implements mode 12. `SvNumberformat` still excludes this mode and retains a nonstandard-output error. | Install the process services and connect the original numeric, logical, date and time call sites. Verify displayed CSV bytes. |
-| Capitalize/title modifiers | `NativeNumberSupplierService` uses the original classifier and its word-boundary operations through the component context. | Install the production services, including the registered locale-specific iterators. |
+| Export displayed numbers | `ScDocShell` calls `ScCellFormat::GetString`. The number formatter and process UNO services now produce NatNum12 values through the original numeric, logical, date and time paths. | Check final CSV acceptance alongside multiline import. |
+| Capitalize/title modifiers | The process context now supplies NumberText, the original classifier and the registered Unicode and CJK word iterators. | Covered by the service and displayed CSV tests. |
 | Custom word-rule loading | Original breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from UDataMemory returned by udata_open, after udata_setAppData. Raw binary constructors are not a replacement. | Original application-data/container lookup, real UDataMemory handle/constructor/lifecycle, UText/public iterator and engine wiring, native full-path witnesses. |
 | Process services | NumberText component/default constructor and process getter exist; production ComponentContext/ServiceManager installation is absent. Test fixture managers are explicitly not production. | Original context/environment/mapping entry orchestration, actual manager/constructor registry and browser application bootstrap; no fixture providers in production. |
 | Quoted/multiline import | Local SetTextCell still splits lines manually and assigns LATIN. Original implementation is in document.cxx, not documen7.cxx, and calls GetEditEngine/SetTextCurrentDefaults/CreateTextObject. | Replace the manual path and correct responsibility ownership with the actual document engine/ScFieldEditEngine/ImpEditEngine/defaults/script and import transfer path. Source GetEditEngine is in documen2.cxx (found by bounded -uuu fallback); preserve layout=false, undo=false, Map100thMM and Asian settings. |
@@ -4531,5 +4531,22 @@ supplier calls NumberText and the classifier through the process context. It
 retains all four modifier keywords, the English title transformations and the
 original remembered casing locale (CALC-485). Tests exercise the upstream
 English Calc examples through the real component constructors and NumberText
-library, with an explicit test service registry. Production service installation,
-Calc formatter call sites and the multiline edit path remain open.
+library, with an explicit test service registry. The next section covers the
+production service installation and Calc formatter call sites.
+
+### Production NatNum12 output in Calc CSV
+
+The browser entrypoint installs the bundled UNO implementations before mounting
+either application. The original CPPU service manager resolves service and
+implementation names, and its actual component context owns the original
+service-manager singleton entry. The browser binds the selected component
+metadata to linked constructors. The native desktop loader and the unconsumed
+registries are outside this browser binding.
+
+The formatter's standard and custom switches call the original output
+producers. Their native number paths now reach NatNum12. DATE applies the
+source per-keyword conversion to the original fields after calendar display
+and year padding. DATETIME uses its existing calendar and clock field paths.
+The source switch's default leaves the result empty. The displayed CSV tests
+exercise numbers, monetary amounts and dates through the production service
+registrations. The multiline edit-engine import path remains open.

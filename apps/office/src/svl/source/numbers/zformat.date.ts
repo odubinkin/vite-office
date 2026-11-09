@@ -1,4 +1,4 @@
-/** @fileoverview Original finite DATE/DATETIME output with original native-number fields: calendar switching, Gregorian range checks, month case and actual token/name owners. Selected NatNum12 spellout remains unported. */
+/** @fileoverview Original finite DATE/DATETIME output with original native-number fields: calendar switching, Gregorian range checks, month case and actual token/name owners. Date-only NatNum12 uses the original per-keyword spellout calls. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -18,6 +18,7 @@ import type { ImpSvNumFor } from "./zformat";
 import type { SvNFLanguageData } from "./zforlist";
 import { ImpGetNatNumString, ImpGetFractionOfSecondString } from "./zformat.time";
 import { impTransliterate } from "./zformat.transliterate";
+import { impTransliterate as impTransliterateDate } from "./zformat.transliterate-date";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { InsertBlanks } from "./zformat.output";
 import type { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
@@ -221,7 +222,23 @@ function calendarState(current: SvNFLanguageData, section: ImpSvNumFor): Calenda
     throw error;
   }
 }
-/** Original common calendar/date token cases; caller leaves NatNum12 spellout branches pending. @param type - Token kind. @param token - Actual string. @param section - Actual section. @param native - Original native-number owner. @param current - Language. @param state - Switch/month references. @param buffer - Output. @param star - Source fill flag. @param result - In/out latest star result. @returns Nothing. */
+/** Original date-only tokens with a NatNum12 spellout call. */
+const spelloutDateKeys: ReadonlySet<number> = new Set([
+  K.M,
+  K.MMM,
+  K.MMMM,
+  K.MMMMM,
+  K.D,
+  K.DDD,
+  K.DDDD,
+  K.YYYY,
+  K.NN,
+  K.AAA,
+  K.NNN,
+  K.AAAA,
+]);
+
+/** Original common calendar/date token cases. @param type - Token kind. @param token - Actual string. @param section - Actual section. @param native - Original native-number owner. @param current - Language. @param state - Switch/month references. @param buffer - Output. @param star - Source fill flag. @param result - In/out latest star result. @param useSpellout - Original DATE-only token gate. @returns Nothing. */
 function dateToken(
   type: number,
   token: OUStringConstReference,
@@ -232,6 +249,7 @@ function dateToken(
   buffer: OUStringBuffer,
   star: boolean,
   result: [boolean],
+  useSpellout = false,
 ): void {
   const calendar = current.GetCalendar();
   let code: number;
@@ -373,18 +391,32 @@ function dateToken(
     !hasEra(section)
   )
     buffer.append(Uint16Array.of(45));
-  const value = calendar.getDisplayString(code, section.GetNatNum().GetNatNum());
+  const number = section.GetNatNum();
+  const value = calendar.getDisplayString(code, number.GetNatNum());
   try {
     if (type === K.YYYY && value.getLength() < 4 && !hasEra(section)) {
       const padding = new OUStringBuffer();
       try {
         for (let digit = 0; digit < 4 - value.getLength(); ++digit)
           padding.append(Uint16Array.of(48));
-        impTransliterate(padding, section.GetNatNum(), native);
+        impTransliterate(padding, number, native);
         padding.append(value);
-        buffer.append(OUString.unacquired(padding));
+        const padded = padding.makeStringAndClear();
+        try {
+          value.moveAssign(padded);
+        } finally {
+          padded.dispose();
+        }
       } finally {
         padding.dispose();
+      }
+    }
+    if (useSpellout && spelloutDateKeys.has(type)) {
+      const words = impTransliterateDate(value, number, type, native, current);
+      try {
+        buffer.append(words);
+      } finally {
+        words.dispose();
       }
     } else buffer.append(value);
   } finally {
@@ -420,10 +452,14 @@ export function GetDateOutput(
   const state = calendarState(current, section),
     result: [boolean] = [false],
     info = section.Info();
+  const number = section.GetNatNum();
+  const count = section.GetCount();
+  const useSpellout =
+    number.GetNatNum() === 12 && (count === 1 || number.GetParams().indexOf(61) !== -1);
   let buffer: OUStringBuffer | undefined;
   try {
     buffer = new OUStringBuffer();
-    for (let index = 0; index < section.GetCount(); ++index)
+    for (let index = 0; index < count; ++index)
       dateToken(
         info.nTypeArray[index] as number,
         info.sStrArray[index] as OUString,
@@ -434,6 +470,7 @@ export function GetDateOutput(
         buffer,
         star,
         result,
+        useSpellout,
       );
     if (state.original.getLength())
       current.GetCalendar().loadCalendar(state.original, current.GetLocaleData().getMyLocale());

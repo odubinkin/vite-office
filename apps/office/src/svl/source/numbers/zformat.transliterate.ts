@@ -1,4 +1,4 @@
-/** @fileoverview Original free impTransliterate string/buffer overloads from zformat.cxx over actual NatNum metadata, original ID-to-Locale conversion and NativeNumberWrapper. Represented callers currently admit modes0..11. */
+/** @fileoverview Original free impTransliterate string/buffer overloads from zformat.cxx over actual NatNum metadata, original ID-to-Locale conversion and NativeNumberWrapper. Numeric, logical and time callers admit the original modes including NatNum12. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";

@@ -97,10 +97,17 @@ function whitespaceAt(textValue: OUStringConstReference, pos: number, wordType: 
 /** Original Unicode implementation of the consumed word service. */
 export class BreakIterator_Unicode extends BreakIteratorImpl {
   private readonly words = [emptySlot(), emptySlot(), emptySlot(), emptySlot()];
+  protected readonly cBreakIterator = unicode("com.sun.star.i18n.BreakIterator_Unicode");
 
   /** Original concrete implementation identity. @returns Owned name. */
   override getImplementationName(): OUString {
-    return unicode("com.sun.star.i18n.BreakIterator_Unicode");
+    return new OUString(this.cBreakIterator);
+  }
+
+  /** Releases the original implementation-name member. @returns Nothing. */
+  protected override destroy(): void {
+    this.cBreakIterator.dispose();
+    super.destroy();
   }
 
   /** Original locale/rule cache selection and text adoption for word operations. @param locale - Requested locale. @param wordType - Original WordType. @param value - Actual input string. @returns Current ICU iterator. */

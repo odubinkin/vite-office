@@ -689,7 +689,7 @@ export class SvNumberformat {
     current: SvNFLanguageData,
     star?: boolean,
   ): boolean;
-  /** Binds original text/numeric overloads without projecting language state into scalar arguments. Native modifiers remain with their unfinished producers. @param value - Numeric or text input. @param output - Mutable output. @param color - Color pointer. @param nativeOrStar - Native owner or text fill flag. @param current - Numeric current-language owner. @param star - Numeric fill flag. @returns Numeric fill result or nothing. */
+  /** Binds original text/numeric overloads without projecting language state into scalar arguments. Native modifiers are owned by the selected subformat. @param value - Numeric or text input. @param output - Mutable output. @param color - Color pointer. @param nativeOrStar - Native owner or text fill flag. @param current - Numeric current-language owner. @param star - Numeric fill flag. @returns Numeric fill result or nothing. */
   GetOutputString(
     value: number | OUStringConstReference,
     output: OUString,
@@ -717,100 +717,73 @@ export class SvNumberformat {
       output.assign(value !== 0 ? language.GetTrueString() : language.GetFalseString());
       return false;
     }
-    if (
-      !(this.eType & SvNumFormatType.TEXT) &&
-      this.bStandard &&
-      (precision & 65535) === INPUTSTRING_PRECISION
-    ) {
-      this.ImpGetOutputInputLine(value, output, language);
+    if (this.eType & SvNumFormatType.TEXT) {
+      ImpGetOutputStandard.call(this, value, output, native, language);
       return false;
     }
-    const hadStandard =
-      this.bStandard &&
-      (this.eType === SvNumFormatType.NUMBER ||
-        this.eType === SvNumFormatType.DATE ||
-        this.eType === SvNumFormatType.TIME ||
-        this.eType === SvNumFormatType.DATETIME);
-    const index =
-      hadStandard || this.eType & SvNumFormatType.TEXT ? 0 : this.GetSubformatIndex(value);
+    if (this.bStandard) {
+      if ((precision & 65535) === INPUTSTRING_PRECISION) {
+        this.ImpGetOutputInputLine(value, output, language);
+        return false;
+      }
+      const first = this.NumFor[0] as ImpSvNumFor;
+      switch (this.eType) {
+        case SvNumFormatType.NUMBER:
+          if (precision === UNLIMITED_PRECISION) {
+            const result = formatStandardNumber(value, precision, decimal);
+            try {
+              output.assign(result);
+            } finally {
+              result.dispose();
+            }
+          } else ImpGetOutputStandard.call(this, value, output, native, language);
+          return false;
+        case SvNumFormatType.DATE:
+          return GetDateOutput(value, first, native, language, output, star);
+        case SvNumFormatType.TIME:
+          return GetTimeOutput(value, 0, first, native, language, output, star);
+        case SvNumFormatType.DATETIME:
+          return GetDateTimeOutput(value, first, native, language, output, star);
+      }
+    }
+    const index = this.GetSubformatIndex(value);
     if (
-      !hadStandard &&
-      !(this.eType & SvNumFormatType.TEXT) &&
       value < 0 &&
       ((index === 0 && this.IsFirstSubformatRealNegative()) ||
         (index === 1 && this.IsSecondSubformatRealNegative()))
     )
       value = -value;
-    const section = this.NumFor[index] as ImpSvNumFor,
-      info = section.Info();
-    if (!(this.eType & SvNumFormatType.TEXT) && !hadStandard) {
-      color[0] = section.GetColor();
-      if (section.GetCount() === 0 && info.eScannedType === SvNumFormatType.EMPTY) return false;
-      if (section.GetCount() === 0) {
+    const section = this.NumFor[index] as ImpSvNumFor;
+    const type = section.Info().eScannedType;
+    color[0] = section.GetColor();
+    if (section.GetCount() === 0) {
+      if (type !== SvNumFormatType.EMPTY)
         ImpGetOutputStandard.call(this, value, output, native, language);
-        return false;
-      }
-
-      if (
-        section.GetCount() !== 0 &&
-        (info.eScannedType === SvNumFormatType.TEXT ||
-          info.eScannedType === SvNumFormatType.DEFINED)
-      )
+      return false;
+    }
+    switch (type) {
+      case SvNumFormatType.TEXT:
+      case SvNumFormatType.DEFINED:
         return Output.GetLiteralOutput(section, output, star);
-    }
-    if (
-      !(this.eType & SvNumFormatType.TEXT) &&
-      info.eScannedType === SvNumFormatType.LOGICAL &&
-      section.GetNatNum().GetNatNum() !== 12
-    )
-      return Output.GetLogicalOutput(value, section, native, language, output);
-    if (!(this.eType & SvNumFormatType.TEXT) && section.GetNatNum().GetNatNum() !== 12) {
-      if (info.eScannedType === SvNumFormatType.DATE)
+      case SvNumFormatType.DATE:
         return GetDateOutput(value, section, native, language, output, star);
-      if (info.eScannedType === SvNumFormatType.DATETIME)
+      case SvNumFormatType.TIME:
+        return GetTimeOutput(value, index, section, native, language, output, star);
+      case SvNumFormatType.DATETIME:
         return GetDateTimeOutput(value, section, native, language, output, star);
-    }
-    if (
-      !(this.eType & SvNumFormatType.TEXT) &&
-      info.eScannedType === SvNumFormatType.TIME &&
-      Number.isFinite(value) &&
-      section.GetNatNum().GetNatNum() !== 12
-    )
-      return GetTimeOutput(value, index, section, native, language, output, star);
-    if (
-      !hadStandard &&
-      Number.isFinite(value) &&
-      (info.eScannedType === SvNumFormatType.NUMBER ||
-        info.eScannedType === SvNumFormatType.PERCENT ||
-        info.eScannedType === SvNumFormatType.CURRENCY ||
-        info.eScannedType === SvNumFormatType.SCIENTIFIC ||
-        info.eScannedType === SvNumFormatType.FRACTION) &&
-      section.GetNatNum().GetNatNum() !== 12 &&
-      (this.NumFor[0] as ImpSvNumFor).GetNatNum().GetNatNum() !== 12
-    ) {
-      color[0] = section.GetColor();
-      if (info.eScannedType === SvNumFormatType.FRACTION)
+      case SvNumFormatType.NUMBER:
+      case SvNumFormatType.PERCENT:
+      case SvNumFormatType.CURRENCY:
+        return GetNumberOutput.call(this, value, index, star, native, language, output);
+      case SvNumFormatType.LOGICAL:
+        return Output.GetLogicalOutput(value, section, native, language, output);
+      case SvNumFormatType.FRACTION:
         return GetFractionOutput.call(this, value, index, star, native, language, output);
-      return info.eScannedType === SvNumFormatType.SCIENTIFIC
-        ? GetScientificOutput.call(this, value, index, star, native, language, output)
-        : GetNumberOutput.call(this, value, index, star, native, language, output);
+      case SvNumFormatType.SCIENTIFIC:
+        return GetScientificOutput.call(this, value, index, star, native, language, output);
+      default:
+        return false;
     }
-    if (
-      !(this.eType & SvNumFormatType.TEXT) &&
-      (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
-    )
-      throw new Error("SvNumberformat nonstandard output is not implemented");
-    if (this.eType & SvNumFormatType.TEXT || precision !== UNLIMITED_PRECISION) {
-      ImpGetOutputStandard.call(this, value, output, native, language);
-    } else {
-      const result = formatStandardNumber(value, precision, decimal);
-      try {
-        output.assign(result);
-      } finally {
-        result.dispose();
-      }
-    }
-    return false;
   }
   /** Original ImpGetOutputInputLine uses automatic precision and percent scaling below the native overflow threshold. @param value - Binary64 input. @param outputString - Actual output. @param current - Actual current-language owner. @returns Nothing. */
   private ImpGetOutputInputLine(

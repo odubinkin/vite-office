@@ -1,5 +1,7 @@
 /** @fileoverview Native CSV export contracts for sparse sheets, encoded quotes and formula output. */
 import { assert, expect, it } from "vitest";
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
@@ -156,6 +158,58 @@ it("clips fixed-width text, hashes overflowing numbers and centers text", /** Ch
     options.bFixedWidth = true;
     expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe(
       "abcde  ###  X  \n",
+    );
+  } finally {
+    shell.Close();
+  }
+});
+
+it("exports NatNum12 displayed amounts through the production UNO services", /** Exercises ScDocShell, the genuine format table and the two CSV number-output options. @returns Nothing. */ () => {
+  InitApplicationServiceManager(implementations);
+  const shell = new ScDocShell();
+  const document = shell.GetDocument();
+  const formatter = document.GetFormatTable();
+  try {
+    const cases = [
+      ["[NatNum12 title cardinal]0", 22],
+      ["[NatNum12 capitalize cardinal]0", 100],
+      ["[NatNum12 title USD]0.00", 1.2],
+      ["[NatNum12 upper cardinal]0", 100],
+      ['[NatNum12 D=ordinal-number]D" of "MMMM', 32964],
+      ['[NatNum12 ordinal-number]D" of "MMMM', 32964],
+      ["[NatNum12 ordinal-number]D", 32964],
+    ] as const;
+    for (let i = 0; i < cases.length; ++i) {
+      const [pattern, value] = cases[i] as (typeof cases)[number];
+      const code = unicode(pattern);
+      const key: [number] = [0];
+      const type: [number] = [0];
+      const check: [number] = [0];
+      const position = new ScAddress(i, 0, 0);
+      try {
+        formatter["m_aFormatData"].PutEntry(
+          formatter["m_aCurrentLanguage"],
+          formatter.GetNatNum(),
+          code,
+          check,
+          type,
+          key,
+          0x409,
+        );
+        expect(check[0], pattern).toBe(0);
+        document.SetValue(position, value);
+        document.SetNumberFormat(position, key[0]);
+      } finally {
+        code.dispose();
+      }
+    }
+    const options = new ScImportOptions();
+    expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(
+      "22,100,1.2,100,04/01/1990,04/01/1990,04/01/1990\n",
+    );
+    options.bSaveAsShown = true;
+    expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(
+      "Twenty-Two,One hundred,One U.S. Dollar and Twenty Cents,ONE HUNDRED,1st of April,1 of April,1st\n",
     );
   } finally {
     shell.Close();

@@ -20,6 +20,7 @@ const moduleNames = [
   "cppu",
   "cppuhelper",
   "cui",
+  "desktop",
   "docmodel",
   "editeng",
   "external",
@@ -53,24 +54,24 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
-  // Original attributelist.hxx/cxx also owns actual OUString values.
-  // Original OFOPXMLHelper uses the native SAX parser/writer services.
-  // Original interfacecontainer3.hxx owns its vector through o3tl::cow_wrapper.
+  // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.
+  // Original OFOPXMLHelper uses SAX; interfacecontainer3.hxx uses o3tl::cow_wrapper.
   // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.
   ["comphelper", new Set(["cppu", "cppuhelper", "o3tl", "offapi", "sal", "sax", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
-  // Original internal interfacecontainer4.hxx includes o3tl/cow_wrapper.hxx.
+  // Original implbase/queryinterface/weak use UNO/SAL; interfacecontainer4 uses o3tl/cow_wrapper.
   // Original component_context.cxx includes comphelper/sequence.hxx.
   ["cppuhelper", new Set(["comphelper", "cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
-  // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
-  // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
-  // Original UnoComplexColor.hxx includes cppuhelper/implbase and offapi XComplexColor;
-  // Library_docmodel links cppuhelper/cppu for actual component references.
+  // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors.
+  [
+    "desktop",
+    new Set(["comphelper", "cppu", "cppuhelper", "i18npool", "lingucomponent", "udkapi"]),
+  ],
+  // Original justifyitem/frmitems use UNO values, table/style enums and Tools/o3tl units.
+  // Original UnoComplexColor uses implbase and XComplexColor; Library_docmodel links CPPU/cppuhelper.
   ["docmodel", new Set(["tools", "o3tl", "cppu", "cppuhelper", "offapi"])],
   // Original xmlcnitm.hxx includes xmloff/xmlcnimp.hxx; Library_editeng links xo.
   [
@@ -112,10 +113,8 @@ const allowedEdges = new Map([
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
   // Original languagetag.cxx includes liblangtag/langtag.h; Library_i18nlangtag links liblangtag and ICU.
   ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
-  // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  // Original Library_i18npool links cppu and cppuhelper for UNO references and service implementations.
-  // Original numberformatcode.hxx/cxx uses SDK API headers and consumes
-  // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
+  // Original i18npool uses LanguageTag/MsLangId/Locale values and links CPPU/cppuhelper for UNO services.
+  // Original numberformatcode uses UNO Sequence, NumberFormatCode, FormatElement and SAL/locale values.
   // Native Library_i18npool links ICU i18n/common; calendar_gregorian uses its real Calendar/TimeZone factories.
   // Original nativenumbersupplier.cxx uses comphelper/processfactory.hxx; Library_i18npool links comphelper.
   [
@@ -439,6 +438,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/uno/")) return "writer-model-api";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("desktop/source/")) return "upstream-mechanism";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
     return "upstream-mechanism";
   if (portablePath.startsWith("docmodel/inc/")) return "upstream-mechanism";

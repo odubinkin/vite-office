@@ -15,6 +15,7 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import breakRules from "./data/break-rules.json" with { type: "json" };
+import hangingCharacters from "./data/hanging-characters.json" with { type: "json" };
 import calendars from "./data/calendars.json" with { type: "json" };
 import currencies from "./data/currencies.json" with { type: "json" };
 import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
@@ -30,6 +31,7 @@ import timeFields from "./data/time-fields.json" with { type: "json" };
 import transliterations from "./data/transliterations.json" with { type: "json" };
 /** Original ordered LC_MISC rules after resolving generator refs. */
 const breakRuleResources = new Map<string, readonly string[]>(Object.entries(breakRules));
+const hangingResources = new Map<string, string>(Object.entries(hangingCharacters));
 
 /** Original Sequence<OUString> value specialization. */
 const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
@@ -442,4 +444,9 @@ export function getFallbackLocaleServiceNames(locale: LocaleConstReference): str
     }
   }
   return locale.Country.isEmpty() ? [] : [language];
+}
+
+/** Original third LC_MISC forbidden-character field. @param locale - Requested locale. @returns Owned hanging-character string. */
+export function getHangingCharacters(locale: LocaleConstReference): OUString {
+  return unicode(getLocaleDataField(locale, hangingResources));
 }

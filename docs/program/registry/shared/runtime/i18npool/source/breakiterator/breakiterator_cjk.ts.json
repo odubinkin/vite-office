@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_cjk.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_cjk.ts#BreakIterator_ko",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+        "i18npool/util/i18npool.component"
+      ],
+      "justification": "Original registered CJK word-service subclasses preserve source names, inherited Unicode word methods and the locale-specific hanging characters initialized by each native constructor. CJK line-breaking and unused iterator operations remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BreakIterator_CJK",
+        "BreakIterator_zh",
+        "BreakIterator_zh_TW",
+        "BreakIterator_ja",
+        "BreakIterator_ko"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+      "upstreamSymbols": [
+        "BreakIterator_CJK::BreakIterator_CJK",
+        "BreakIterator_zh::BreakIterator_zh",
+        "BreakIterator_zh_TW::BreakIterator_zh_TW",
+        "BreakIterator_ja::BreakIterator_ja",
+        "BreakIterator_ko::BreakIterator_ko"
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 /** @fileoverview Native selection/default policies over actual generated compound values and shared UNO COW. */
 import { createNumberFormatLanguage } from "../../../test/number-format-language";
-import { expect, it, vi } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -768,18 +768,25 @@ it("keeps real engine fallback and separately represented input/format null-date
     SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color);
     expect(text(out)).toBe("literal");
     const precision = current.GetStandardPrec();
-    expect(
-      /** Exercises temporary output cleanup on an unrepresented numeric type. @returns No owned output. */ () =>
-        SvNFEngine.GetInputLineString(
-          current,
-          values.table,
-          current.GetFormatScanner().getColorCallback().GetNatNum(),
-          SvNFEngine.GetRWPolicy(values.table),
-          1.2345,
-          0,
-          true,
-        ),
-    ).toThrow("SvNumberformat nonstandard output is not implemented");
+    const info = entry["NumFor"][0]?.Info();
+    assert(info);
+    const scannedType = info.eScannedType;
+    info.eScannedType = SvNumFormatType.ALL;
+    const input = SvNFEngine.GetInputLineString(
+      current,
+      values.table,
+      current.GetFormatScanner().getColorCallback().GetNatNum(),
+      SvNFEngine.GetRWPolicy(values.table),
+      1.2345,
+      0,
+      true,
+    );
+    try {
+      expect(text(input)).toBe("");
+    } finally {
+      input.dispose();
+      info.eScannedType = scannedType;
+    }
     expect(current.GetStandardPrec()).toBe(precision);
     entry.SetType(16);
     SvNFEngine.ChangeNullDate(current, 32, 2, 1999);

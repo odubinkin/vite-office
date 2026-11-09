@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/source/defaultbootstrap.ts",
+    "upstreamPath": "cppuhelper/source/defaultbootstrap.cxx",
+    "localSymbols": [
+      "defaultBootstrap_InitialComponentContext"
+    ],
+    "upstreamSymbols": [
+      "defaultBootstrap_InitialComponentContext",
+      "createComponentContext",
+      "setContext"
+    ],
+    "preservedResponsibilities": [
+      "The initial context's service manager is installed under the original singleton key with an XInterface Any. The actual ComponentContext owner and manager default context are linked in the original order."
+    ],
+    "omittedResponsibilities": [
+      "The browser supplies bundled registry records. Filesystem UNO deployment, type and macro registries, access controller, and cross-environment native ABI remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/source/defaultbootstrap.ts",
+          "marker": "defaultBootstrap_InitialComponentContext"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/source/defaultbootstrap.cxx",
+          "marker": "setContext"
+        },
+        {
+          "path": "cppuhelper/source/component_context.cxx",
+          "marker": "createComponentContext"
+        }
+      ]
+    }
+  }
+}

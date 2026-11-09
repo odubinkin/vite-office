@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "uno-component-context",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/desktop/browser/app/uno-components.ts#implementations",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "i18npool/util/i18npool.component",
+        "lingucomponent/source/numbertext/numbertext.component"
+      ],
+      "justification": "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners.",
+      "knownViolations": [],
+      "localSymbols": [
+        "implementations"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

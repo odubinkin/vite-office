@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-property-contracts",
+    "capabilityIds": [
+      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts#READONLY",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "udkapi/com/sun/star/beans/PropertyAttribute.idl",
+        "cppuhelper/source/servicemanager.cxx"
+      ],
+      "justification": "Original READONLY flag and value consumed by the default-context property descriptor. Unconsumed flags remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "READONLY"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
+      "upstreamSymbols": [
+        "PropertyAttribute",
+        "READONLY"
+      ]
+    }
+  }
+}

@@ -22,9 +22,12 @@
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json",
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts#com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
         "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
-        "i18npool/qa/cppunit/test_characterclassification.cxx"
+        "i18npool/qa/cppunit/test_characterclassification.cxx",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts#getImplementationName",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "i18npool/source/breakiterator/breakiterator_cjk.cxx"
       ],
-      "justification": "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences. Original Unicode component exposes its own implementation name and acquired constructor through the enclosing word service interface. Other break operations and registered CJK subtype construction remain outside this slice.",
+      "justification": "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences. Original Unicode component exposes its own implementation name and acquired constructor through the enclosing word service interface. The original Unicode implementation-name member supplies the inherited implementation identity for the actual registered CJK subclasses. CJK line breaking and unused iterator operations remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "BreakIterator_Unicode",
@@ -42,7 +45,8 @@
         "nextWord",
         "previousWord",
         "getWordBoundary",
-        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
+        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
+        "BreakIterator_Unicode::getImplementationName"
       ]
     }
   }

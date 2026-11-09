@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-d938b831-56b3-41f5-9d7c-60a8a5a3ec52"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts#getCppuType",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "udkapi/com/sun/star/beans/PropertyVetoException.idl",
+        "cppuhelper/source/servicemanager.cxx"
+      ],
+      "justification": "Original generated fieldless derived exception retains checked Exception ownership and real cached UNO type registration. Full native ABI and exception bridge remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PropertyVetoException",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/beans/PropertyVetoException.idl",
+      "upstreamSymbols": [
+        "Exception",
+        "PropertyVetoException"
+      ]
+    }
+  }
+}

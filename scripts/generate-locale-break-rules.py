@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project the original registered LC_MISC break rules and reference chains."""
+"""Project the original registered LC_MISC word rules and hanging characters."""
 from __future__ import annotations
 
 import argparse
@@ -12,7 +12,7 @@ from subprocess import check_output
 FIELDS = ("EditMode", "DictionaryMode", "WordCountMode", "CharacterMode", "LineMode")
 
 
-def catalog(source: Path) -> dict[str, list[str]]:
+def catalog(source: Path) -> tuple[dict[str, list[str]], dict[str, str]]:
     """Resolve the registered source LC_MISC rules in native generated order."""
     pin = check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
     if pin != "9bc445578031fecf56086729d8e4940c77e14d65":
@@ -26,9 +26,9 @@ def catalog(source: Path) -> dict[str, list[str]]:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     roots = module.registered_roots(source)
-    resolved: dict[str, list[str]] = {}
+    resolved: dict[str, tuple[list[str], str]] = {}
 
-    def rules(name: str, trail: tuple[str, ...] = ()) -> list[str]:
+    def rules(name: str, trail: tuple[str, ...] = ()) -> tuple[list[str], str]:
         """Follow the source reference or generate all five string fields."""
         if name in resolved:
             return resolved[name]
@@ -42,11 +42,14 @@ def catalog(source: Path) -> dict[str, list[str]]:
             value = rules(ref.replace("-", "_"), trail + (name,))
         else:
             block = misc.find("BreakIteratorRules")
-            value = [block.findtext(key) or "" for key in FIELDS] if block is not None else [""] * len(FIELDS)
+            breaks = [block.findtext(key) or "" for key in FIELDS] if block is not None else [""] * len(FIELDS)
+            hanging = misc.findtext("ForbiddenCharacters/LineBreakHangingCharacters") or ""
+            value = breaks, hanging
         resolved[name] = value
         return value
 
-    return {name: rules(name) for name in sorted(roots)}
+    names = sorted(roots)
+    return {name: rules(name)[0] for name in names}, {name: rules(name)[1] for name in names}
 
 
 def main() -> None:
@@ -54,15 +57,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    target = Path("apps/office/src/i18npool/source/localedata/data/break-rules.json")
     data = catalog(Path("vendor/libreoffice-reference"))
-    rendered = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
-    if args.check:
-        if target.read_text() != rendered:
-            raise ValueError("Pinned break rules differ")
-    else:
-        target.write_text(rendered)
-    print(f"Original break rules: {len(data)} locales x5 fields")
+    directory = Path("apps/office/src/i18npool/source/localedata/data")
+    for filename, values in zip(("break-rules.json", "hanging-characters.json"), data):
+        target = directory / filename
+        rendered = json.dumps(values, ensure_ascii=False, indent=2) + "\n"
+        if args.check:
+            if target.read_text() != rendered:
+                raise ValueError("Pinned locale field differs: " + filename)
+        else:
+            target.write_text(rendered)
+    print(f"Original break data: {len(data[0])} locales x5 rule fields and hanging characters")
 
 
 if __name__ == "__main__":

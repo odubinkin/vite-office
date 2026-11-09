@@ -104,4 +104,9 @@ export class Property {
           ? this.typeSlot
           : this.attributes;
   }
+  /** Original member destruction releases the owned type and name. @returns Nothing. */
+  dispose(): void {
+    this.type.dispose();
+    this.name.dispose();
+  }
 }

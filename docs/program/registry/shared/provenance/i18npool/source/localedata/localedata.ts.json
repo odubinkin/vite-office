@@ -41,7 +41,8 @@
       "getLocaleReservedWords",
       "getBreakIteratorRules",
       "getFirstLocaleServiceName",
-      "getFallbackLocaleServiceNames"
+      "getFallbackLocaleServiceNames",
+      "getHangingCharacters"
     ],
     "upstreamSymbols": [
       "LocaleDataImpl::getLocaleItem2",
@@ -56,7 +57,8 @@
       "LocaleDataImpl::getAllCurrencies",
       "LocaleDataImpl::getAllInstalledLocaleNames",
       "getLocaleItem",
-      "getBreakIteratorRules"
+      "getBreakIteratorRules",
+      "LocaleDataImpl::getHangingCharacters"
     ],
     "preservedResponsibilities": [
       "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine.",
@@ -81,7 +83,8 @@
       "Human-approved coverage exception B8TCAE-U02: Only the missing LC_INFO throw statement and its impossible true alternative are excluded. The original integrity guard is unchanged; an explicit empty else preserves the formerly implicit covered normal path through source-map remapping. Before/after source and instrumentation maps prove that no other statement, branch or function is excluded. Seventeen suites/115 tests pass, including compiled original currency/era/calendar observations and all fixed locale catalog callers. Thresholds/discovery remain unchanged. Runtime logic and broad semantic status fields are unchanged; this is not a final full project verification.",
       "Original LC_MISC generated resource now retains all12 ReserveWord fields for every284 registered locale, preserving actual refs and missing-field defaults from LocaleNode.cxx. Existing boolean fields are byte-value unchanged. getLocaleReservedWords projects original slot order; quarter display consumes these actual fields. Source generator check covers all284x12 values; full generated C++ locale/SAL ABI remains unverified.",
       "The original LC_MISC break rule query returns an owned Sequence<OUString> after using the registered source locale table and resolving generator refs. All five names are projected in original order for 284 registered locales.",
-      "Original LocaleDataImpl first and fallback service-name functions retain qlt BCP47 conversion through the actual LanguageTag and ordinary language/country selection."
+      "Original LocaleDataImpl first and fallback service-name functions retain qlt BCP47 conversion through the actual LanguageTag and ordinary language/country selection.",
+      "The LC_MISC generator also preserves the original third forbidden-character field, including all native locale reference chains. The CJK word component constructors consume the same owned hanging-character value."
     ],
     "omittedResponsibilities": [
       "Full UNO locale data facade and native shared-library loading remain outside this slice."
@@ -143,6 +146,10 @@
         {
           "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -185,6 +192,14 @@
         {
           "path": "i18npool/source/characterclassification/characterclassificationImpl.cxx",
           "marker": "getLocaleSpecificCharacterClassification"
+        },
+        {
+          "path": "i18npool/source/localedata/localedata.cxx",
+          "marker": "getHangingCharacters"
+        },
+        {
+          "path": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+          "marker": "getHangingCharacters"
         }
       ]
     }
