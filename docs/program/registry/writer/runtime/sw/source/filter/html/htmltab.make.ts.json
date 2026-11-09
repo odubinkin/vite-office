@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmltab.make.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmltab.make.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+        "apps/office/src/sw/source/filter/html/htmltab.make.test.ts"
+      ],
+      "justification": "Reuses the actual first row and box, splits at original colspan boundaries, generates native covered and missing sections, publishes signed row spans, brush, row height, orientation and real calculated width. WRITER382 preserves the nested source null-table early return.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MakeTable",
+        "MakeTableLine",
+        "MakeTableBox",
+        "NewTableBox"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmltab.cxx",
+      "upstreamSymbols": [
+        "HTMLTable::MakeTable",
+        "HTMLTable::MakeTableLine",
+        "HTMLTable::MakeTableBox",
+        "HTMLTable::NewTableBox"
+      ]
+    }
+  }
+}

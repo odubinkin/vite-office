@@ -21,6 +21,7 @@ import type { SwTable, SwTableBox } from "../../core/table/swtable";
 import type { SwTableBoxFormat, SwTableLineFormat } from "../../../inc/swtblfmt";
 import { MIN_BORDER_DIST } from "../../../inc/swtypes";
 import { InsertTableContents } from "./htmltab.sections";
+import { MakeTable } from "./htmltab.make";
 import { HTMLTableFrame as F, HTMLTableRules as R } from "../../../../svtools/inc/parhtml";
 /** Native table owns its intermediate grid and original options; protected fields keep future source method fragments on this same owner rather than a parallel DTO. */
 export class HTMLTable {
@@ -264,6 +265,17 @@ export class HTMLTable {
   /** Original top-level core table borrow. @returns Actual table. */
   GetSwTable(): SwTable | null {
     return this.m_pSwTable;
+  }
+  /** Runs the original table materialization at the import boundary. @param upper - Containing box or null. @param absolute - Native browse width. @param relative - Parent relative width. @param left - Parent left space. @param right - Parent right space. @param inherited - Parent inherited space. @returns Nothing. */
+  MakeTable(
+    upper: SwTableBox | null,
+    absolute: number,
+    relative = 0,
+    left = 0,
+    right = 0,
+    inherited = 0,
+  ): void {
+    MakeTable.call(this, upper, absolute, relative, left, right, inherited);
   }
   /** Original brush value copy. @param value - Actual brush. @returns Nothing. */
   SetBGBrush(value: SvxBrushItem): void {

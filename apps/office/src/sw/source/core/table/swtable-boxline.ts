@@ -29,6 +29,7 @@ export class SwTableBox extends SwClient {
   private readonly lines: SwTableLine[] = [];
   private startNode: SwTableBoxStartNode | null;
   private upper: SwTableLine | null;
+  private mnRowSpan = 1;
   /** Native leaf or anonymous-box constructor: a line count reserves capacity without creating lines or a text section. @param format - Actual box format. @param startOrLines - Real cell start, or native anonymous-box line capacity. @param upper - Actual containing row. @returns Nothing. */
   public constructor(
     format: SwNativeTableBoxFormat,
@@ -64,6 +65,25 @@ export class SwTableBox extends SwClient {
   /** Original content-start index returns zero for anonymous/removed boxes. @returns Native node offset. */
   public GetSttIdx(): number {
     return this.startNode ? this.startNode.GetIndex() : 0;
+  }
+  /** Original signed row span. Covered cells have a negative value. @returns Native row span. */
+  public getRowSpan(): number {
+    return this.mnRowSpan;
+  }
+  /** Assigns the original signed row span. @param span - Native row span. @returns Nothing. */
+  public setRowSpan(span: number): void {
+    this.mnRowSpan = span | 0;
+  }
+  /** Original empty-cell test for one ordinary text node or source marker-only content. @returns Whether the represented leaf cell is empty. */
+  public IsEmpty(): boolean {
+    const start = this.startNode;
+    if (start === null || start.GetIndex() + 2 !== start.EndOfSectionIndex()) return false;
+    const text = start
+      .GetNodes()
+      .at(start.GetIndex() + 1)
+      .GetTextNode()
+      ?.GetText();
+    return text === "" || text === "\u0001\u0001";
   }
   /** Original borrowed upper row. @returns Actual row or null. */
   public GetUpper(): SwTableLine | null {

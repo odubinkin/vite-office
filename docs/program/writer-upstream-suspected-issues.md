@@ -3127,3 +3127,24 @@ reference, and `SwHTMLTableLayoutCnts::IsPass1Done` compares only that
 value. A newly attached content object starts at zero, the same reference
 as a wrapped pass. Retain the original initial value, wrap and equality
 test.
+
+### WRITER382 — HTML MakeTable returns after layout when the child has no SwTable
+
+Pinned `HTMLTable::MakeTable` takes an optional upper box and is called
+with that box for intermediate nested tables. First-cell initialization
+binds a core `SwTable` only for the outer table. `MakeTable` calculates
+the child layout, then returns on a null core table before adding rows to
+the upper box. Retain that source branch.
+
+### WRITER383 — HTML leaf format uses the table's right border flag on every cell
+
+`HTMLTable::FixFrameFormat` tests the table-wide right border flag
+without checking the cell's ending column. The left edge uses its
+column's flag. Preserve the original per-box right-edge assignment.
+
+### WRITER384 — Two field marker characters count as an empty Writer cell
+
+For a single text node with exactly two U+0001 characters,
+`SwTableBox::IsEmpty` returns true. The source records this as
+compatibility behavior for imported OOXML cells. HTML numeric format
+publication uses the same test, including its marker-only case.

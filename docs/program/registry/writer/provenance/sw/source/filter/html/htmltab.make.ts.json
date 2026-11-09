@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.make.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.make.ts",
+          "marker": "MakeTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.make.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+          "marker": "HTMLTable::MakeTable"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "MakeTable",
+      "MakeTableLine",
+      "MakeTableBox",
+      "NewTableBox"
+    ],
+    "upstreamSymbols": [
+      "HTMLTable::MakeTable",
+      "HTMLTable::MakeTableLine",
+      "HTMLTable::MakeTableBox",
+      "HTMLTable::NewTableBox"
+    ],
+    "preservedResponsibilities": [
+      "Reuses the actual first row and box, splits at original colspan boundaries, generates native covered and missing sections, publishes signed row spans, brush, row height, orientation and real calculated width. WRITER382 preserves the nested source null-table early return."
+    ],
+    "omittedResponsibilities": [
+      "GCLines cleanup, desktop frame regeneration, ReqIF and drawing object updates, and production token and browser integration remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.make.ts",
+      "rationale": "Keeps the original HTMLTable materialization and format responsibilities separated from the existing grid implementation.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

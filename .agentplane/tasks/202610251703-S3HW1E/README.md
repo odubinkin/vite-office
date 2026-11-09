@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 489
+revision: 492
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:46:28.923Z"
+  updated_at: "2026-11-09T19:55:10.666Z"
   updated_by: "CODER"
-  note: "HTML86 native paragraph widths and HTML first pass verified on actual Writer nodes. Remaining work includes production parsing and materialization of raw HTML tables embedded in Markdown, plus final current-slice filter audit."
-  attempts: 97
+  note: "HTML87 source table layout and materialization verified against actual Writer rows and boxes. Next source checkpoint is wiring first-cell context and original raw-HTML token grammar."
+  attempts: 98
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1557,8 +1560,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:55:10.666Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML87 source table layout and materialization verified against actual Writer rows and boxes. Next source checkpoint is wiring first-cell context and original raw-HTML token grammar."
+  -
+    type: "status"
+    at: "2026-11-09T19:55:16.477Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:46:34.298Z"
+doc_updated_at: "2026-11-09T19:55:16.477Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4183,6 +4199,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:55:10.666Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML87 source table layout and materialization verified against actual Writer rows and boxes. Next source checkpoint is wiring first-cell context and original raw-HTML token grammar.
+    Attempts: 98
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:55:09.505Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6014,6 +6060,13 @@ sections:
     - Initial targeted run caught a logical string/OUString mismatch and a constraint-narrowing error, corrected by using the actual explicit-length OUString constructor and ordinary constraint-chain branches. The terminated-string overload requires a NUL-terminated array and was replaced before validation. The first JSDoc check also identified callbacks lacking attached comments. Verification is scoped, with no full repository suite for this checkpoint.
     - Next production work is original SwHTMLParser table grammar and HTMLTable materialization for raw HTML tables embedded in Markdown. GitHub-style pipe tables already use the direct native Markdown callbacks. TXT, RTF, save/open, autosave and no-recovery policies are outside this checkpoint. No final format completeness is asserted.
     - Verification: 212 Writer cases across 17 targeted suites, then the final min/max and table integration file passed 14 cases including WRITER381. Application TypeScript, provenance, Writer inventory with zero semantic violations, module boundaries, JSDoc, file size, source-tree, WhichId, ESLint, Prettier and git diff checks passed. See html86-writer-final.log, html86-metric-last.log and the HTML86 static logs. No full repository suite.
+
+    ### HTML87 — Native HTML grid materialization
+
+    - Pinned source: sw/source/filter/html/htmltab.cxx MakeTable, MakeTable_, MakeTableLine, MakeTableBox, NewTableBox and FixFrameFormat, and sw/source/core/table/swtable.cxx row span and empty cell predicates. Actual parsed sections feed both original layout passes. Materialization reuses the initial SwTableLine and SwTableBox, splits the grid by the original decreasing colspan fields, creates real sections for covered and missing cells, binds layout content to the actual leaf, and publishes the original width and frame items. Numeric items, borders, row-height, brush and vertical orientation use real owner/pool paths. Signed core spans carry the source default 1 and covered negative values.
+    - WRITER382 preserves the pinned nested MakeTable early return after layout if no SwTable was bound. WRITER383 preserves right border assignment without per-cell ending-column admission. WRITER384 records the preserved two-U+0001 empty cell case. Browser graph serialization/rendering of signed spans, GCLines structural cleanup, live desktop frame regeneration, ReqIF formatting, drawing updates and the production raw-HTML table consumer remain unverified or pending. Direct GitHub-style Markdown tables already use MDTable, independently of this work.
+    - Targeted Writer verification: 151 tests across nine suites (new materialization fixture, grid, sections, borders, cell-save, width passes, paragraph measure and Markdown). A preliminary type check identified the local overload spelling SetFormatAttrSet; corrected before final application type check passed. The two new tests use actual InsertTable bootstrap, real section and layout owners and genuine packaged dictionaries, with a deterministic physical-width fixture. No full suite was run.
+    - Final materialization fixture passed both tests after the exact layout-column assertion. Static checks passed for JSDoc, size, boundaries, source tree, WhichId, provenance, Writer inventory (zero semantic violations), ESLint, Prettier and diff whitespace. Logs are html87-{make-last,static,registry,style,types-final}.log.
 id_source: "generated"
 ---
 ## Summary
@@ -8649,6 +8702,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:55:10.666Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML87 source table layout and materialization verified against actual Writer rows and boxes. Next source checkpoint is wiring first-cell context and original raw-HTML token grammar.
+Attempts: 98
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:55:09.505Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10484,3 +10567,10 @@ S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdow
 - Initial targeted run caught a logical string/OUString mismatch and a constraint-narrowing error, corrected by using the actual explicit-length OUString constructor and ordinary constraint-chain branches. The terminated-string overload requires a NUL-terminated array and was replaced before validation. The first JSDoc check also identified callbacks lacking attached comments. Verification is scoped, with no full repository suite for this checkpoint.
 - Next production work is original SwHTMLParser table grammar and HTMLTable materialization for raw HTML tables embedded in Markdown. GitHub-style pipe tables already use the direct native Markdown callbacks. TXT, RTF, save/open, autosave and no-recovery policies are outside this checkpoint. No final format completeness is asserted.
 - Verification: 212 Writer cases across 17 targeted suites, then the final min/max and table integration file passed 14 cases including WRITER381. Application TypeScript, provenance, Writer inventory with zero semantic violations, module boundaries, JSDoc, file size, source-tree, WhichId, ESLint, Prettier and git diff checks passed. See html86-writer-final.log, html86-metric-last.log and the HTML86 static logs. No full repository suite.
+
+### HTML87 — Native HTML grid materialization
+
+- Pinned source: sw/source/filter/html/htmltab.cxx MakeTable, MakeTable_, MakeTableLine, MakeTableBox, NewTableBox and FixFrameFormat, and sw/source/core/table/swtable.cxx row span and empty cell predicates. Actual parsed sections feed both original layout passes. Materialization reuses the initial SwTableLine and SwTableBox, splits the grid by the original decreasing colspan fields, creates real sections for covered and missing cells, binds layout content to the actual leaf, and publishes the original width and frame items. Numeric items, borders, row-height, brush and vertical orientation use real owner/pool paths. Signed core spans carry the source default 1 and covered negative values.
+- WRITER382 preserves the pinned nested MakeTable early return after layout if no SwTable was bound. WRITER383 preserves right border assignment without per-cell ending-column admission. WRITER384 records the preserved two-U+0001 empty cell case. Browser graph serialization/rendering of signed spans, GCLines structural cleanup, live desktop frame regeneration, ReqIF formatting, drawing updates and the production raw-HTML table consumer remain unverified or pending. Direct GitHub-style Markdown tables already use MDTable, independently of this work.
+- Targeted Writer verification: 151 tests across nine suites (new materialization fixture, grid, sections, borders, cell-save, width passes, paragraph measure and Markdown). A preliminary type check identified the local overload spelling SetFormatAttrSet; corrected before final application type check passed. The two new tests use actual InsertTable bootstrap, real section and layout owners and genuine packaged dictionaries, with a deterministic physical-width fixture. No full suite was run.
+- Final materialization fixture passed both tests after the exact layout-column assertion. Static checks passed for JSDoc, size, boundaries, source tree, WhichId, provenance, Writer inventory (zero semantic violations), ESLint, Prettier and diff whitespace. Logs are html87-{make-last,static,registry,style,types-final}.log.

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.format.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.format.ts",
+          "marker": "FixFrameFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.make.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+          "marker": "HTMLTable::FixFrameFormat"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "FixFrameFormat"
+    ],
+    "upstreamSymbols": [
+      "HTMLTable::FixFrameFormat"
+    ],
+    "preservedResponsibilities": [
+      "Uses the actual native box format, per-column reusable cache, source border/background/padding/vertical and number-item branches. Retains the table-wide right edge behavior from WRITER383."
+    ],
+    "omittedResponsibilities": [
+      "ReqIF cell autoformat and full desktop table/number-update parity remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.format.ts",
+      "rationale": "Keeps the original HTMLTable materialization and format responsibilities separated from the existing grid implementation.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

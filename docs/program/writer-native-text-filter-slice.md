@@ -1960,3 +1960,17 @@ point-hint expansion and full desktop font shaping are outside this
 measurement implementation. The remaining reader work concerns raw HTML
 tables embedded in Markdown. GitHub-style pipe tables already use
 Writer's direct Markdown table callbacks.
+
+### HTML87 — Native conversion of the HTML grid to Writer rows and boxes
+
+`HTMLTable::MakeTable` uses the live cell sections for both layout passes,
+then reuses the original bootstrap row and first box. It adds boxes for
+authored spans, covered positions and missing cells, binds each content
+layout to its real box, and publishes widths and source formatting.
+Covered row spans keep their signed Writer representation. Native brush,
+border, orientation, row height, and numeric items are owned by the
+resulting row or cell formats. See WRITER382 through WRITER384.
+
+Raw HTML input still needs the first-cell and token grammar connection.
+Desktop frame regeneration, `GCLines` cleanup for structural boxes, and
+browser presentation and storage for signed spans remain open.
