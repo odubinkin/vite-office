@@ -170,6 +170,17 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                       ) => {
                         const frame = nativeCell as SwCellFrame;
                         nativeCell = frame.GetNext();
+                        const signedSpan = frame.GetTabBox().getRowSpan();
+                        // The browser uses the original row frames for each displayed follow fragment.
+                        const startsFollow =
+                          !isRepeatedHeadline && firstRow > 0 && rowIndex === firstRow;
+                        const layoutSpan =
+                          startsFollow && signedSpan < 0 ? -signedSpan : signedSpan;
+                        if (layoutSpan < 1) return null;
+                        const rowSpan = Math.min(
+                          layoutSpan,
+                          (isRepeatedHeadline ? repeatedHeaderRows : lastRow + 1) - rowIndex,
+                        );
                         const cellFormat = frame.GetFormat(),
                           boxItem = cellFormat.GetBox(),
                           boxStyle = browserCellBoxStyle(boxItem, fixed);
@@ -245,6 +256,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                 : "relative"
                             }
                             colSpan={grid.GetColumnSpan(cell)}
+                            rowSpan={rowSpan > 1 ? rowSpan : undefined}
                             key={cellIndex}
                             style={{
                               ...(fixed ? { border: "none", padding: 0 } : boxStyle),

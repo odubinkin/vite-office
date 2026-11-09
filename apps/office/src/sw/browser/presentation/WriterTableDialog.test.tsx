@@ -256,6 +256,31 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(screen.getByRole("table", { name: "Unsized" })).toHaveStyle({ width: "120px" });
   });
 
+  it("projects native vertical spans and the first continued row of a fragment", /** Covered boxes remain native while only the visible cell gets a DOM owner. @returns Nothing. */ () => {
+    const document = createWriterDocument();
+    const table = document.nodes.MakeTableNode("Merged", { headerRows: 0 });
+    table.AddColumnWidth(1800);
+    for (const span of [3, -2, -1]) {
+      const row = document.nodes.AppendTableRow(table, 1);
+      const box = row.GetTabBoxes()[0];
+      if (!box) throw new Error("Missing merged box");
+      box.setRowSpan(span);
+    }
+    const paragraphs = paragraphMap(document);
+    const view = render(<WriterEditableTable table={table} paragraphs={paragraphs} />);
+    try {
+      const rendered = screen.getByRole("table", { name: "Merged" });
+      expect(within(rendered).getByRole("cell")).toHaveAttribute("rowspan", "3");
+      expect(rendered.querySelectorAll("tr")).toHaveLength(3);
+      view.rerender(<WriterEditableTable table={table} paragraphs={paragraphs} firstRow={1} />);
+      expect(within(rendered).getByRole("cell")).toHaveAttribute("rowspan", "2");
+      expect(rendered.querySelectorAll("tr")).toHaveLength(2);
+    } finally {
+      view.unmount();
+      document.Dispose();
+    }
+  });
+
   it("renders a middle-page table fragment without first-page margins", /** callback handles this value. @returns The result. */ () => {
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Split", { marginTop: 150, marginBottom: 300 });

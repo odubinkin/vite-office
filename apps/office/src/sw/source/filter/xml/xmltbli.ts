@@ -20,6 +20,16 @@ import type { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { type SwTable, type SwTableBox, SwTableLine } from "../../core/table/swtable";
 
+/** Streaming view of one native XML table master's reserved slots and covered boxes. */
+interface SwXMLVerticalSpan {
+  readonly firstRow: number;
+  readonly endRow: number;
+  readonly columns: number;
+  readonly styleName: string;
+  readonly master: SwTableBox;
+  readonly covered: SwTableBox[];
+}
+
 /** Keeps table import state scoped to one Writer XML stream coordinator. */
 export class SwXMLTableImport extends SvXMLImport {
   private readonly tableStyles = new Map<string, OdfTableStyle>();
@@ -30,6 +40,7 @@ export class SwXMLTableImport extends SvXMLImport {
   private oldCursor: XMLTextCursor | undefined;
   private rowCellIndex = 0;
   private readonly columnWidths: number[] = [];
+  private readonly verticalSpans = new Map<number, SwXMLVerticalSpan>();
   private pendingCovered = 0;
   private inHeaderRows = false;
   private headerRowCount = 0;
@@ -127,6 +138,7 @@ export class SwXMLTableImport extends SvXMLImport {
     if (style.layoutSplit !== undefined)
       frameFormat.SetFormatAttr(new SwFormatLayoutSplit(style.layoutSplit));
     this.columnWidths.length = 0;
+    this.verticalSpans.clear();
     this.headerRowCount = 0;
     this.inHeaderRows = false;
   }
@@ -169,6 +181,9 @@ export class SwXMLTableImport extends SvXMLImport {
     >;
     const count = this.columnWidths.length;
     if (count === 0) throw new Error("ODF table has no declared columns.");
+    const rowIndex = table.GetTabLines().length;
+    for (const [column, span] of this.verticalSpans)
+      if (span.endRow <= rowIndex) this.verticalSpans.delete(column);
     const frameFormat = table.GetTableNode().GetDoc().MakeTableLineFormat();
     this.activeRow = new SwTableLine(frameFormat);
     if (style.keepTogether !== undefined)
@@ -191,17 +206,47 @@ export class SwXMLTableImport extends SvXMLImport {
     this.rowCellIndex = 0;
   }
 
-  /** Selects one canonical cell and its first paragraph. */
-  /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @returns Nothing. */ public beginTableCell(
+  /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @param rowSpan - Number of source grid rows. @returns Nothing. */ public beginTableCell(
     styleName: string,
     columnSpan = 1,
+    rowSpan = 1,
   ): void {
-    const row = this.activeRow;
     /* istanbul ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
-    if (row === undefined || this.activeCell !== undefined)
+    if (this.activeRow === undefined || this.activeCell !== undefined)
       throw new Error("ODF table cell is outside a row.");
+    this.InsertImplicitCoveredBoxes();
     if (this.pendingCovered !== 0 || this.rowCellIndex + columnSpan > this.columnWidths.length)
       throw new Error("ODF table row contains more cells than declared columns.");
+    const firstColumn = this.rowCellIndex;
+    for (const column of this.verticalSpans.keys())
+      if (firstColumn < column && column < firstColumn + columnSpan)
+        throw new Error("ODF table cell overlaps a covered cell.");
+    const cell = this.CreateBox(styleName, columnSpan);
+    if (rowSpan > 1) {
+      const firstRow = this.requireTable().GetTabLines().length - 1;
+      const endRow = Math.min(firstRow + rowSpan, 65535);
+      cell.setRowSpan(endRow - firstRow);
+      this.verticalSpans.set(firstColumn, {
+        firstRow,
+        endRow,
+        columns: columnSpan,
+        styleName,
+        master: cell,
+        covered: [],
+      });
+    }
+    this.activeCell = cell;
+    if (this.textImport) {
+      this.oldCursor = this.textImport.GetCursor();
+      this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
+    }
+    this.pendingCovered = columnSpan - 1;
+  }
+
+  /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @returns Actual core box. */
+  private CreateBox(styleName: string, columnSpan: number): SwTableBox {
+    const row = this.activeRow;
+    if (row === undefined) throw new Error("ODF table cell is outside a row.");
     const width = this.columnWidths
         .slice(this.rowCellIndex, this.rowCellIndex + columnSpan)
         .reduce(
@@ -234,19 +279,38 @@ export class SwXMLTableImport extends SvXMLImport {
                 : VertOrientation.NONE,
         ),
       );
-    this.activeCell = cell;
-    if (this.textImport) {
-      this.oldCursor = this.textImport.GetCursor();
-      this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
-    }
     this.rowCellIndex += columnSpan;
-    this.pendingCovered = columnSpan - 1;
+    return cell;
   }
 
-  /** Consumes one covered union-grid slot without creating a duplicate native box. @returns Nothing. */
+  /** Inserts the native empty box for a vertically covered position. @param span - Actual owning master reservation. @returns Nothing. */
+  private InsertCoveredBox(span: SwXMLVerticalSpan): void {
+    const rowIndex = this.requireTable().GetTabLines().length - 1;
+    const cell = this.CreateBox(span.styleName, span.columns);
+    cell.setRowSpan(rowIndex - span.endRow);
+    span.covered.push(cell);
+  }
+
+  /** Materializes reserved vertical boxes without requiring a redundant covered-cell tag. @returns Nothing. */
+  private InsertImplicitCoveredBoxes(): void {
+    if (this.pendingCovered) return;
+    let span = this.verticalSpans.get(this.rowCellIndex);
+    while (span !== undefined) {
+      this.InsertCoveredBox(span);
+      span = this.verticalSpans.get(this.rowCellIndex);
+    }
+  }
+
+  /** Consumes a covered grid slot. The default native TABLE_ROW_KEEP setting ignores authored covered-cell styles. @returns Nothing. */
   public coveredTableCell(): void {
-    if (this.pendingCovered === 0) throw new Error("ODF covered table cell has no spanning cell.");
-    this.pendingCovered--;
+    if (this.pendingCovered > 0) {
+      this.pendingCovered--;
+      return;
+    }
+    const span = this.verticalSpans.get(this.rowCellIndex);
+    if (span === undefined) throw new Error("ODF covered table cell has no spanning cell.");
+    this.InsertCoveredBox(span);
+    this.pendingCovered = span.columns - 1;
   }
 
   /** Closes a cell after its paragraph contexts. */
@@ -264,6 +328,7 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Validates the row's cell cardinality. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableRow(): void {
+    this.InsertImplicitCoveredBoxes();
     if (
       this.activeRow === undefined ||
       this.rowCellIndex !== this.columnWidths.length ||
@@ -275,7 +340,16 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Closes the current table. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTable(): void {
-    this.requireTable().SetRowsToRepeat(this.headerRowCount);
+    const table = this.requireTable();
+    const rows = table.GetTabLines().length;
+    for (const span of this.verticalSpans.values()) {
+      if (span.endRow <= rows) continue;
+      const adjusted = rows - span.firstRow;
+      span.master.setRowSpan(adjusted);
+      for (const [index, box] of span.covered.entries()) box.setRowSpan(index + 1 - adjusted);
+    }
+    this.verticalSpans.clear();
+    table.SetRowsToRepeat(this.headerRowCount);
     this.activeTable = undefined;
   }
 

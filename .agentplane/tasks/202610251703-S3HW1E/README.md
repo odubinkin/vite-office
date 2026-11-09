@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 495
+revision: 498
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:10:13.368Z"
+  updated_at: "2026-11-09T20:19:06.064Z"
   updated_by: "CODER"
-  note: "HTML88 raw HTML table lexer, core insertion and actual Markdown shell/dialog entry verified. Remaining target work covers browser retention of the new structural data and the final represented filter audit."
-  attempts: 99
+  note: "HTML89 native signed spans survive browser/worker/ODT paths and visible fragments. Remaining work includes RTF vertical-merge handling and final current-slice filter verification."
+  attempts: 100
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1589,8 +1592,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:19:06.064Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML89 native signed spans survive browser/worker/ODT paths and visible fragments. Remaining work includes RTF vertical-merge handling and final current-slice filter verification."
+  -
+    type: "status"
+    at: "2026-11-09T20:19:23.896Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:10:42.959Z"
+doc_updated_at: "2026-11-09T20:19:23.896Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4275,6 +4291,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:19:06.064Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML89 native signed spans survive browser/worker/ODT paths and visible fragments. Remaining work includes RTF vertical-merge handling and final current-slice filter verification.
+    Attempts: 100
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:19:05.416Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6121,6 +6167,13 @@ sections:
     - Integration tests open real Markdown bytes via SwDocShell and verify header repeats, inline formatting, caption relocation, implicit row/cell ends, nested real table, and native floating anchor/style. Existing mounted file dialog now opens Markdown with a raw HTML table and checks actual Thai cell text and calculated layout on the active model, while retaining asset retry and existing browser save/open identity. Initial fixture run used incomplete object-shell state and was repaired using the real state factory. A type check found the preexisting cell save lacked an explicit destructor; its optional native no-break index is now released on replacement/destruction.
     - Main scoped Writer run passed 839 tests across 56 suites (HTML, Markdown, table layout/measure, frame style pool, shell and dialog). Remaining application work includes representation and retention for signed vertical spans and imported fly content through the existing browser/format boundaries, and the final fixed-current-slice TXT/RTF/Markdown comparison. No full repository suite was run.
     - Final focused regression after the parser/caption ownership adjustments: 38 passing cases across four Writer suites. Application TypeScript, changed-source lint/format, source provenance, Writer inventory (zero semantic violations), boundaries, JSDoc, file size, source tree, WhichId and whitespace checks passed. Evidence: html88-{latest,types-last,style-last,static-last,registry-last,writer-final}.log. The registry initially named an imported helper as a declaration in swhtml.ts, then was corrected to the actual NextToken owner.
+
+    ### HTML89 — Preserve native signed vertical spans through browser and ODT
+
+    - Source: SwCellFrame::GetLayoutRowSpan, SwXMLExport::ExportTableLine, SwXMLTableContext::InsertCell/InsertCoveredCell/FixRowSpan, and actual SwTableBox signed row span. Writer's editable browser table projects master and follow-fragment spans and retains actual native boxes. The worker codec writes a signed optional field, validates int32 input and uses the original default 1 for older records. Existing browser save/open policies are retained.
+    - Actual ODT tables write number-rows-spanned and the covered cell element/style, alongside unchanged horizontal placeholders. The existing SAX and Writer import owners reserve vertical slots, build actual signed covered boxes, permit implicit vertical coverage, and clip masters and covered countdown at the last row. Default covered styles follow the source flag behavior (WRITER387). Scope is the existing flat ODT table profile, not nested-table or fly XML persistence.
+    - New tests round-trip literal source signs 3/-2/-1 through actual ODT bytes and worker snapshots, reconstruct omitted vertical covered tags, retain text and clip an overlong source span. Mounted DOM tests cover one visible master, hidden covered boxes and positive first-follow continuation. Initial fixtures used the implicit header role and the wrong ODF import wrapper; corrected before final runs.
+    - Verification: 99 Writer tests in 11 targeted suites, application TypeScript, source provenance, Writer/Shared registries with zero semantic violations, module boundaries, JSDoc, size, source tree, WhichId, ESLint/Prettier and diff checks passed. Logs html89-{writer-final,types-retry,static,style,writer-registry-last,shared-registry}.log. No full repository suite. Next filter work covers RTF vertical-merge dispatch and consumption, browser fly retention and the final represented filter capability audit.
 id_source: "generated"
 ---
 ## Summary
@@ -8816,6 +8869,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:19:06.064Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML89 native signed spans survive browser/worker/ODT paths and visible fragments. Remaining work includes RTF vertical-merge handling and final current-slice filter verification.
+Attempts: 100
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:19:05.416Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10666,3 +10749,10 @@ S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdow
 - Integration tests open real Markdown bytes via SwDocShell and verify header repeats, inline formatting, caption relocation, implicit row/cell ends, nested real table, and native floating anchor/style. Existing mounted file dialog now opens Markdown with a raw HTML table and checks actual Thai cell text and calculated layout on the active model, while retaining asset retry and existing browser save/open identity. Initial fixture run used incomplete object-shell state and was repaired using the real state factory. A type check found the preexisting cell save lacked an explicit destructor; its optional native no-break index is now released on replacement/destruction.
 - Main scoped Writer run passed 839 tests across 56 suites (HTML, Markdown, table layout/measure, frame style pool, shell and dialog). Remaining application work includes representation and retention for signed vertical spans and imported fly content through the existing browser/format boundaries, and the final fixed-current-slice TXT/RTF/Markdown comparison. No full repository suite was run.
 - Final focused regression after the parser/caption ownership adjustments: 38 passing cases across four Writer suites. Application TypeScript, changed-source lint/format, source provenance, Writer inventory (zero semantic violations), boundaries, JSDoc, file size, source tree, WhichId and whitespace checks passed. Evidence: html88-{latest,types-last,style-last,static-last,registry-last,writer-final}.log. The registry initially named an imported helper as a declaration in swhtml.ts, then was corrected to the actual NextToken owner.
+
+### HTML89 — Preserve native signed vertical spans through browser and ODT
+
+- Source: SwCellFrame::GetLayoutRowSpan, SwXMLExport::ExportTableLine, SwXMLTableContext::InsertCell/InsertCoveredCell/FixRowSpan, and actual SwTableBox signed row span. Writer's editable browser table projects master and follow-fragment spans and retains actual native boxes. The worker codec writes a signed optional field, validates int32 input and uses the original default 1 for older records. Existing browser save/open policies are retained.
+- Actual ODT tables write number-rows-spanned and the covered cell element/style, alongside unchanged horizontal placeholders. The existing SAX and Writer import owners reserve vertical slots, build actual signed covered boxes, permit implicit vertical coverage, and clip masters and covered countdown at the last row. Default covered styles follow the source flag behavior (WRITER387). Scope is the existing flat ODT table profile, not nested-table or fly XML persistence.
+- New tests round-trip literal source signs 3/-2/-1 through actual ODT bytes and worker snapshots, reconstruct omitted vertical covered tags, retain text and clip an overlong source span. Mounted DOM tests cover one visible master, hidden covered boxes and positive first-follow continuation. Initial fixtures used the implicit header role and the wrong ODF import wrapper; corrected before final runs.
+- Verification: 99 Writer tests in 11 targeted suites, application TypeScript, source provenance, Writer/Shared registries with zero semantic violations, module boundaries, JSDoc, size, source tree, WhichId, ESLint/Prettier and diff checks passed. Logs html89-{writer-final,types-retry,static,style,writer-registry-last,shared-registry}.log. No full repository suite. Next filter work covers RTF vertical-merge dispatch and consumption, browser fly retention and the final represented filter capability audit.

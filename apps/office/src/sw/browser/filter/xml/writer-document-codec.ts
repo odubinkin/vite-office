@@ -133,6 +133,7 @@ interface WriterTableRecord {
     cells: readonly Readonly<{
       format: WriterBoxFormatRecord;
       paragraphs: readonly WriterTextNodeRecord[];
+      rowSpan?: number;
     }>[];
   }>[];
 }
@@ -277,7 +278,12 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
           paragraphs.push(encodeTextNode(document, node));
           yield;
         }
-        cells.push({ format: encodeBoxFormat(cell), paragraphs });
+        const rowSpan = cell.getRowSpan();
+        cells.push({
+          format: encodeBoxFormat(cell),
+          paragraphs,
+          ...(rowSpan === 1 ? {} : { rowSpan }),
+        });
         yield;
       }
       rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
@@ -734,6 +740,12 @@ export function* decodeWriterDocumentSteps(
           const cell = row.GetTabBoxes()[cellIndex];
           if (cell === undefined || cellRecord.paragraphs.length === 0)
             throw new Error("Stored Writer table cell is invalid.");
+          if (cellRecord.rowSpan !== undefined) {
+            const span = cellRecord.rowSpan;
+            if (!Number.isInteger(span) || span < -0x80000000 || span > 0x7fffffff)
+              throw new Error("Stored Writer table cell row span is invalid.");
+            cell.setRowSpan(span);
+          }
           const frame = cell.GetFrameFormat(),
             direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
           if (direction !== undefined) frame.SetFormatAttr(direction);

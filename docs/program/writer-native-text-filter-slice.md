@@ -1990,3 +1990,15 @@ dictionary bytes. The represented synchronous reader has no pending device
 stream, form objects, or desktop frame regeneration. The browser still
 needs projection and persistence for newly admitted signed spans and fly
 content. The full TXT, RTF and Markdown capability audit remains open.
+
+### HTML89 — Vertical table spans in the editor and saved document
+
+Writer's signed row spans reach the existing table renderer, including
+the first continued row on a following fragment. The browser worker
+codec preserves the signed values and reads older records with the
+default span of one. ODT writes master row spans and styled covered cells
+and restores the native negative countdown, including source clipping
+at the final row. See WRITER387 for the default covered-style rule.
+
+RTF vertical merge controls and browser persistence of fly content
+remain open.

@@ -438,6 +438,7 @@ function exportWriterText(
                         const orient = orientation?.GetVertOrient();
                         return {
                           columnSpan: grid.GetColumnSpan(cell),
+                          rowSpan: cell.getRowSpan(),
                           format: {
                             ...exportBoxProperties(box),
                             verticalAlign:

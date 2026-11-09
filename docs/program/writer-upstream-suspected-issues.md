@@ -3163,3 +3163,10 @@ Without an effective frame-size item, `SwDoc::MakeFlySection_` passes
 `0, DEF_FLY_WIDTH` as width and height to the variable-size constructor.
 Preserve the literal argument order. HTML tables supply their own size
 item before that fallback.
+
+### WRITER387 — Covered ODF cell styles depend on a compatibility flag
+
+`SwXMLExport::ExportTableLine` writes the covered box's style so its
+border can be recovered. `SwXMLTableContext::InsertCoveredCell` applies
+that style only with `TABLE_ROW_KEEP`. Keep the inherited spanning-cell
+style in the represented default import profile.

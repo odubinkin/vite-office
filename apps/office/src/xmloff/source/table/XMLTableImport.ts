@@ -40,8 +40,8 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
   beginTableHeaderRows(): void;
   endTableHeaderRows(): void;
   beginTableRow(styleName: string): void;
-  beginTableCell(styleName: string, columnSpan?: number): void;
-  coveredTableCell?(): void;
+  beginTableCell(styleName: string, columnSpan?: number, rowSpan?: number): void;
+  coveredTableCell?(styleName?: string): void;
   endTableCell(): void;
   endTableRow(): void;
   endTable(): void;
@@ -354,8 +354,8 @@ class XMLTableRowContext extends SvXMLImportContext {
     if (element === XMLToken.TABLE_TABLE_CELL)
       return new XMLTableCellContext(this.target, attributes, this.helper);
     if (element === XMLToken.TABLE_COVERED_TABLE_CELL) {
-      attributes.assertOnly([], "covered table cell");
-      this.target.coveredTableCell?.();
+      attributes.assertOnly([XMLToken.TABLE_STYLE_NAME], "covered table cell");
+      this.target.coveredTableCell?.(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
       return new SvXMLIgnoreContext();
     }
     return null;
@@ -376,12 +376,18 @@ class XMLTableCellContext extends SvXMLImportContext {
   ) {
     super();
     attributes.assertOnly(
-      [XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_VALUE_TYPE, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED],
+      [
+        XMLToken.TABLE_STYLE_NAME,
+        XMLToken.TABLE_VALUE_TYPE,
+        XMLToken.TABLE_NUMBER_COLUMNS_SPANNED,
+        XMLToken.TABLE_NUMBER_ROWS_SPANNED,
+      ],
       "table cell",
     );
     this.target.beginTableCell(
       attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
       repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED),
+      repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 65535),
     );
   }
   /** Imports a cell paragraph with the existing Writer text context. @param element - Child token. @param attributes - Paragraph values. @returns Child context. */
@@ -397,11 +403,11 @@ class XMLTableCellContext extends SvXMLImportContext {
   }
 }
 
-/** Validates a bounded ODF column repeat count. @param attributes - XML attributes. @param token - Repeat attribute. @returns Repeat count. */
-function repeatCount(attributes: FastAttributeList, token: XMLToken): number {
+/** Validates a bounded ODF table repeat or span count. @param attributes - XML attributes. @param token - Repeat attribute. @param maximum - Native admitted range. @returns Repeat count. */
+function repeatCount(attributes: FastAttributeList, token: XMLToken, maximum = 256): number {
   const raw = attributes.get(token);
   const count = raw === null ? 1 : Number(raw);
-  if (!Number.isInteger(count) || count < 1 || count > 256)
+  if (!Number.isInteger(count) || count < 1 || count > maximum)
     throw new Error(`Unsupported ODF table repeat count: ${raw}`);
   return count;
 }
