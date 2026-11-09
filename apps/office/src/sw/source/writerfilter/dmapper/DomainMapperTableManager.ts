@@ -1,10 +1,11 @@
-/** @fileoverview Native direction sprm handling in DomainMapperTableManager and the current table/row/cell property-map lifecycle. */
+/** @fileoverview Native table/row/cell property ownership and original grid separators. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import type { Sprm } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMap } from "./PropertyMap";
+import { UNO_TABLE_COLUMN_SUM } from "../../../inc/swtypes";
 
 /** Actual mapper property owners for the represented top-level table direction path. */
 export class DomainMapperTableManager {
@@ -12,7 +13,7 @@ export class DomainMapperTableManager {
   private m_aTmpTableProperties = new TablePropertyMap();
   private m_pCellProps = new TablePropertyMap();
 
-  /** Original row and cell direction consumers. @param modifier - Actual resource sprm. @returns Whether the table manager consumed it. */
+  /** Original row and cell property consumers. @param modifier - Actual resource sprm. @returns Whether the table manager consumed it. */
   sprm(modifier: Sprm): boolean {
     const id = modifier.getId(),
       value = modifier.getValue()?.getInt() ?? 0;
@@ -20,6 +21,15 @@ export class DomainMapperTableManager {
       const item = new Any([value ? WritingMode2.RL_TB : WritingMode2.LR_TB], "sal_Int16");
       try {
         this.m_aTmpTableProperties.Insert(P.PROP_WRITING_MODE, item);
+      } finally {
+        item.dispose();
+      }
+      return true;
+    }
+    if (id === N.LN_CT_TcPrBase_vMerge) {
+      const item = new Any([value === N.LN_Value_ST_Merge_restart], "bool");
+      try {
+        this.m_pCellProps.Insert(P.PROP_VERTICAL_MERGE, item);
       } finally {
         item.dispose();
       }
@@ -75,4 +85,21 @@ export class DomainMapperTableManager {
     this.m_aTmpTableProperties.dispose();
     this.m_aTableProperties.dispose();
   }
+}
+
+/** Original one-grid-slot-per-cell separator calculation on the supplied grid. @param grid - Original grid widths. @returns Native relative column separators. */
+export function GetTableGridSeparators(grid: readonly number[]): number[] {
+  let width = 0;
+  for (const cellWidth of grid)
+    width = Math.min(0x7fffffff, Math.max(-0x80000000, width + cellWidth));
+  let relative = 0;
+  const positions: number[] = [];
+  for (const gridWidth of grid.slice(0, -1)) {
+    if (gridWidth) {
+      if (!width) throw new Error("divide_by_zero");
+      relative += (gridWidth * UNO_TABLE_COLUMN_SUM) / width;
+    }
+    positions.push(((Math.sign(relative) * Math.round(Math.abs(relative))) << 16) >> 16);
+  }
+  return positions;
 }

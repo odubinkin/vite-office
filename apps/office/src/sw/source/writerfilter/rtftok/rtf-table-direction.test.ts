@@ -37,6 +37,76 @@ function table(document: SwDoc) {
   throw new Error("Expected an imported table.");
 }
 
+/** Reads the native span values from the actual imported table. @param document - Writer document. @returns Signed model spans. */
+function spans(document: SwDoc): number[][] {
+  const result: number[][] = [];
+  for (const row of table(document).GetTabLines()) {
+    const values: number[] = [];
+    for (const box of row.GetTabBoxes()) values.push(box.getRowSpan());
+    result.push(values);
+  }
+  return result;
+}
+
+it("converts native RTF vertical merge flags to signed boxes and writes the same controls", /** Verifies buffered cell sprms, UNO row-span setters, border selection and native reimport. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx1000\clvmgf\clbrdrb\brdrs\brdrw20\cellx3000\intbl left\cell start\cell\row` +
+      String.raw`\trowd\cellx1000\clvmrg\cellx3000\intbl middle\cell\cell\row` +
+      String.raw`\trowd\cellx1000\clvmrg\clbrdrb\brdrs\brdrw45\cellx3000\intbl last\cell\cell\row`,
+  );
+  const expected = [
+    [1, 3],
+    [1, -2],
+    [1, -1],
+  ];
+  expect(spans(document)).toEqual(expected);
+  const rows = table(document).GetTabLines();
+  const master = rows[0]?.GetTabBoxes()[1];
+  const covered = rows[2]?.GetTabBoxes()[1];
+  assert(master && covered);
+  const lastBorder = covered.GetFrameFormat().GetBox().GetBottom()?.GetOutWidth();
+  expect(lastBorder).toBeGreaterThan(0);
+  expect(master.GetFrameFormat().GetBox().GetBottom()?.GetOutWidth()).toBe(lastBorder);
+  expect(covered.GetParagraphs()[0]?.IsCountedInList()).toBe(false);
+  const output = RtfExport.WriteDocument(document);
+  const rtf = new TextDecoder().decode(output);
+  expect(rtf.match(/\\clvmgf/gu)).toHaveLength(1);
+  expect(rtf.match(/\\clvmrg/gu)).toHaveLength(2);
+  const reopened = new RtfDocumentImpl().ResolveBytes(output);
+  documents.push(reopened);
+  expect(spans(reopened)).toEqual(expected);
+});
+
+it("retains open native merge groups across ordinary rows and ignores an orphan continuation", /** Preserves the source position-grouping behavior and the no-master branch. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clvmrg\cellx1000\intbl orphan\cell\row` +
+      String.raw`\trowd\clvmgf\cellx1000\intbl master\cell\row` +
+      String.raw`\trowd\cellx1000\intbl gap\cell\row` +
+      String.raw`\trowd\clvmrg\cellx1000\intbl covered\cell\row`,
+  );
+  expect(spans(document)).toEqual([[1], [2], [1], [-1]]);
+});
+
+it.each([
+  [1101, [2, -1]],
+  [1102, [1, 1]],
+] as const)(
+  "uses the native strict two-unit merge tolerance with left-indent correction at cellx %s",
+  /** The master and continuation use corrected relative positions, including the exclusive threshold. @param boundary - Following row's first CELLX. @param expected - Expected master and continuation span. @returns Nothing. */ (
+    boundary,
+    expected,
+  ) => {
+    const document = read(
+      String.raw`\trowd\cellx1000\clvmgf\cellx10000\intbl left\cell master\cell\row` +
+        String.raw`\trowd\trleft100\cellx${boundary}\clvmrg\cellx10100\intbl left\cell\cell\row`,
+    );
+    expect(spans(document)).toEqual([
+      [1, expected[0]],
+      [1, expected[1]],
+    ]);
+  },
+);
+
 it.each([
   ["ltrrow", Direction.Horizontal_LR_TB],
   ["rtlrow", Direction.Horizontal_RL_TB],

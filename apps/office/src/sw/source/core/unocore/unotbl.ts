@@ -281,6 +281,14 @@ export function convertToTable(
 
 /** Native cell-format properties write the claimed box format rather than a browser table record. @param box - Actual cell. @param name - Native property name. @param value - Native Any. @returns Whether the cell-format map consumed the property. */
 export function setCellProperty(box: SwTableBox, name: string, value: Any): boolean {
+  if (name === "RowSpan") {
+    box.setRowSpan(scalar(value, "sal_Int32") as number);
+    return true;
+  }
+  if (name === "VerticalMerge") {
+    for (const node of box.GetParagraphs()) node.SetCountedInList(false);
+    return true;
+  }
   if (name === "FRMDirection") {
     const item = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
     try {

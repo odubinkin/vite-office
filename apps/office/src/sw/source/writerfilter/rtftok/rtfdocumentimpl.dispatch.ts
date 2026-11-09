@@ -547,7 +547,7 @@ export function DispatchBodyControl(
     state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));
     return;
   }
-  if (dispatchTableDirection(name, state)) return;
+  if (dispatchTableFlag(name, state)) return;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
@@ -973,6 +973,6 @@ import {
   DispatchSectionControl,
   DispatchPageBreak,
 } from "./rtfdocumentimpl.section";
-import { dispatchTableDirection } from "./rtfdispatchflag.table";
+import { dispatchTableFlag } from "./rtfdispatchflag.table";
 import { RTFKeyword } from "./rtfcontrolwords";
 import { getSymbolData, RTFControlType } from "./rtftokenizer";

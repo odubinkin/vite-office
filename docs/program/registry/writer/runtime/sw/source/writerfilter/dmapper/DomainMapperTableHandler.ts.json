@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+      ],
+      "justification": "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ApplyVerticalMergeBorders"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+      "upstreamSymbols": [
+        "DomainMapperTableHandler::endTableGetCellProperties"
+      ]
+    }
+  }
+}

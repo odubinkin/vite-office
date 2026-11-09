@@ -393,6 +393,9 @@ export class RtfExport extends MSWordExportBase {
               if (direction === SvxFrameDirection.Vertical_RL_TB) output += "\\cltxtbrl";
               else if (direction === SvxFrameDirection.Vertical_LR_BT) output += "\\cltxbtlr";
             }
+            const rowSpan = boxes[index]?.getRowSpan() ?? 1;
+            if (rowSpan > 1) output += "\\clvmgf";
+            else if (rowSpan < 1) output += "\\clvmrg";
             const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
             if (vertical !== undefined)
               output +=

@@ -25,6 +25,7 @@ import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 /** Parent text owner for body or a table cell; no text is stored in this API object. */
 export class SwXText implements SwXTextOwner {
   private valid = true;
@@ -362,6 +363,59 @@ export class SwXCell extends SwXText {
     } finally {
       cursor.dispose();
     }
+  }
+}
+
+/** Original open vertical-merge group keyed by a relative cell border. */
+export interface VerticallyMergedCell {
+  readonly nLeftPosition: number;
+  readonly aCells: SwTableBox[];
+  bOpen: boolean;
+}
+
+const COL_POS_FUZZY = 2;
+
+/** Original lcl_ApplyCellProperties VerticalMerge branch. @param merged - Native open groups. @param cell - Actual Writer box. @param left - Native relative left position. @param restart - Original merge restart value. @returns Nothing. */
+export function CollectVerticalMerge(
+  merged: VerticallyMergedCell[],
+  cell: SwTableBox,
+  left: number,
+  restart: boolean,
+): void {
+  for (const group of merged) {
+    if (Math.abs(group.nLeftPosition - left) >= COL_POS_FUZZY) continue;
+    if (restart) group.bOpen = false;
+    else if (group.bOpen) group.aCells.push(cell);
+  }
+  if (restart) merged.push({ nLeftPosition: left, aCells: [cell], bOpen: true });
+}
+
+/** Original lcl_MergeCells writes the signed span through the cell property owner. @param merged - Original collected groups. @returns Nothing. */
+export function ApplyVerticalMerges(merged: readonly VerticallyMergedCell[]): void {
+  if (!merged.length) return;
+  const clearNumbering = new Any([true], "bool");
+  const rowSpanName = unicode("RowSpan");
+  const verticalMergeName = unicode("VerticalMerge");
+  try {
+    for (const group of merged) {
+      const count = group.aCells.length;
+      if (count < 2) continue;
+      for (const [index, box] of group.aCells.entries()) {
+        const cell = new SwXCell(box);
+        const span = new Any([index === 0 ? count : index - count], "sal_Int32");
+        try {
+          cell.setPropertyValue(rowSpanName, span);
+          if (index > 0) cell.setPropertyValue(verticalMergeName, clearNumbering);
+        } finally {
+          span.dispose();
+          cell.dispose();
+        }
+      }
+    }
+  } finally {
+    verticalMergeName.dispose();
+    rowSpanName.dispose();
+    clearNumbering.dispose();
   }
 }
 

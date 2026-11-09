@@ -2002,3 +2002,13 @@ at the final row. See WRITER387 for the default covered-style rule.
 
 RTF vertical merge controls and browser persistence of fly content
 remain open.
+
+### RTF90 — Vertical merge flags through the native table mapper
+
+RTF import captures `clvmgf` and `clvmrg` in the original cell sprm
+buffer. The mapper resolves relative left positions and applies native
+signed row spans through Writer's cell properties. Covered cell
+paragraphs stop advancing list numbering. The table handler takes the
+last contiguous continuation's bottom border, and export writes the
+corresponding RTF controls. See WRITER388 for an open group across an
+ordinary row.

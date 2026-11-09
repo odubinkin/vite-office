@@ -1,5 +1,5 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
-import { ApplyRtfTableDirection } from "./rtfdocumentimpl.table";
+import { ApplyRtfTableProperties } from "./rtfdocumentimpl.table";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
@@ -385,7 +385,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
             }
           }
         }
-        ApplyRtfTableDirection(table, block.rows);
+        ApplyRtfTableProperties(table, block.rows);
         let repeatedRows = 0;
         for (const row of block.rows) {
           if (!row.header) break;

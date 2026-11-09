@@ -39,6 +39,8 @@ export const MIN_BORDER_DIST = 28;
 
 /** Original signed text-position sentinel. */
 export const COMPLETE_STRING = 0x7fffffff;
+/** Original relative width sum used by UNO table column separators. */
+export const UNO_TABLE_COLUMN_SUM = 10000;
 /** Original nonbreaking space and hyphen and discretionary hyphen. */
 export const CHAR_HARDBLANK = "\u00a0";
 export const CHAR_HARDHYPHEN = "\u2011";

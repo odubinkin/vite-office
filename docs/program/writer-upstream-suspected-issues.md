@@ -3170,3 +3170,12 @@ item before that fallback.
 border can be recovered. `SwXMLTableContext::InsertCoveredCell` applies
 that style only with `TABLE_ROW_KEEP`. Keep the inherited spanning-cell
 style in the represented default import profile.
+
+### WRITER388 — An ordinary row does not close an open vertical merge group
+
+`lcl_ApplyCellProperties` in `unotext.cxx` closes earlier groups only
+when a new merge starts at a similar left position. An ordinary row
+without a merge property leaves the group open, so a continuation can
+join it after a gap. Preserve the group's signed cell-count sequence.
+Bottom-border selection still follows the separate contiguous-row scan
+in `DomainMapperTableHandler`.

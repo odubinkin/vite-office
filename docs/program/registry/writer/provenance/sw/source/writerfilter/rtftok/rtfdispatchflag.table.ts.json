@@ -7,13 +7,14 @@
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
     "localSymbols": [
-      "dispatchTableDirection"
+      "dispatchTableFlag"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::dispatchFlag"
     ],
     "preservedResponsibilities": [
-      "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners."
+      "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners.",
+      "Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -22,7 +23,7 @@
       "local": [
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
-          "marker": "dispatchTableDirection"
+          "marker": "dispatchTableFlag"
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
@@ -33,6 +34,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "RTFDocumentImpl::dispatchFlag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::CLVMGF:"
         }
       ]
     },

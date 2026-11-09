@@ -1,4 +1,4 @@
-/** @fileoverview Original RTF row and cell text-direction flags and their native sprm destinations. */
+/** @fileoverview Original RTF row and cell flags and their native sprm destinations. */
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { RunType, type RtfState } from "./rtfdocumentimpl.context";
 import { RTFValue } from "./rtfvalue";
@@ -12,10 +12,15 @@ const cellDirections = new Map<string, number>([
 ]);
 
 /** Original flag dispatch into the current group-owned row or cell sprm set. @param name - Native token spelling. @param state - Actual parser state. @returns Whether the flag was consumed. */
-export function dispatchTableDirection(name: string, state: RtfState): boolean {
+export function dispatchTableFlag(name: string, state: RtfState): boolean {
   if (name === "rtlrow" || name === "ltrrow") {
     state.runType = RunType.NONE;
     state.tableRowSprms.set(N.LN_CT_TblPrBase_bidiVisual, new RTFValue(name === "rtlrow" ? 1 : 0));
+    return true;
+  }
+  if (name === "clvmgf" || name === "clvmrg") {
+    const merge = name === "clvmgf" ? N.LN_Value_ST_Merge_restart : N.LN_Value_ST_Merge_continue;
+    state.tableCellSprms.set(N.LN_CT_TcPrBase_vMerge, new RTFValue(merge));
     return true;
   }
   const direction = cellDirections.get(name);

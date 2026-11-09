@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 498
+revision: 501
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:19:06.064Z"
+  updated_at: "2026-11-09T20:28:27.039Z"
   updated_by: "CODER"
-  note: "HTML89 native signed spans survive browser/worker/ODT paths and visible fragments. Remaining work includes RTF vertical-merge handling and final current-slice filter verification."
-  attempts: 100
+  note: "RTF90 checkpoint passes 130 scoped tests and static checks. Keep the parent task open for remaining native filter coverage."
+  attempts: 101
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1605,8 +1608,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:28:27.039Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF90 checkpoint passes 130 scoped tests and static checks. Keep the parent task open for remaining native filter coverage."
+  -
+    type: "status"
+    at: "2026-11-09T20:28:34.159Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:19:23.896Z"
+doc_updated_at: "2026-11-09T20:28:34.159Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4321,6 +4337,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:28:27.039Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF90 checkpoint passes 130 scoped tests and static checks. Keep the parent task open for remaining native filter coverage.
+    Attempts: 101
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:28:26.387Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6174,6 +6220,13 @@ sections:
     - Actual ODT tables write number-rows-spanned and the covered cell element/style, alongside unchanged horizontal placeholders. The existing SAX and Writer import owners reserve vertical slots, build actual signed covered boxes, permit implicit vertical coverage, and clip masters and covered countdown at the last row. Default covered styles follow the source flag behavior (WRITER387). Scope is the existing flat ODT table profile, not nested-table or fly XML persistence.
     - New tests round-trip literal source signs 3/-2/-1 through actual ODT bytes and worker snapshots, reconstruct omitted vertical covered tags, retain text and clip an overlong source span. Mounted DOM tests cover one visible master, hidden covered boxes and positive first-follow continuation. Initial fixtures used the implicit header role and the wrong ODF import wrapper; corrected before final runs.
     - Verification: 99 Writer tests in 11 targeted suites, application TypeScript, source provenance, Writer/Shared registries with zero semantic violations, module boundaries, JSDoc, size, source tree, WhichId, ESLint/Prettier and diff checks passed. Logs html89-{writer-final,types-retry,static,style,writer-registry-last,shared-registry}.log. No full repository suite. Next filter work covers RTF vertical-merge dispatch and consumption, browser fly retention and the final represented filter capability audit.
+
+    ### RTF90 — Native vertical merge import and export
+
+    - Source: rtftok/rtfdispatchflag.cxx, rtfdocumentimpl.cxx prepareProperties, dmapper/DomainMapperTableManager.cxx and DomainMapperTableHandler.cxx, core/unocore/{unotext,unotbl}.cxx and filter/ww8/rtfattributeoutput.cxx TableVerticalCell. CLVMGF/CLVMRG now use actual per-cell sprm snapshots and the native boolean VerticalMerge property. The represented RTF grid uses original left-indent correction, minimal-cell width after an earlier positive width, 10000-unit relative positions and strict two-unit grouping tolerance. Source UNO RowSpan and internal VerticalMerge properties apply the signed box sequence and clear counted numbering on covered text nodes. The mapper selects the final contiguous continuation's bottom border. Export writes native start/continue flags at the original position after cell direction.
+    - Tests import actual RTF bytes and reexport/reimport 3/-2/-1, observe a real transferred bottom border and covered numbering state, retain orphan and open-group-through-gap behavior (WRITER388), and verify strict one-versus-two-unit relative position selection after TRLEFT. Preliminary tests caught using JS strings instead of OUString for two UNO property names and an incorrect direct Any getter. Corrected to the real wrappers before the successful 20-test focused run. Current support is the represented one-grid-slot, top-level RTF row path; horizontal merge controls, unsupported nested input and other mapper families remain outside this verified block.
+
+    Final scoped Writer verification passed: 130 tests in 8 files. Type checking, targeted lint and format, source provenance and registry, module boundaries, JSDoc, size, source tree, WhichId, and diff checks passed.
 id_source: "generated"
 ---
 ## Summary
@@ -8899,6 +8952,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:28:27.039Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF90 checkpoint passes 130 scoped tests and static checks. Keep the parent task open for remaining native filter coverage.
+Attempts: 101
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:28:26.387Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10756,3 +10839,10 @@ S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdow
 - Actual ODT tables write number-rows-spanned and the covered cell element/style, alongside unchanged horizontal placeholders. The existing SAX and Writer import owners reserve vertical slots, build actual signed covered boxes, permit implicit vertical coverage, and clip masters and covered countdown at the last row. Default covered styles follow the source flag behavior (WRITER387). Scope is the existing flat ODT table profile, not nested-table or fly XML persistence.
 - New tests round-trip literal source signs 3/-2/-1 through actual ODT bytes and worker snapshots, reconstruct omitted vertical covered tags, retain text and clip an overlong source span. Mounted DOM tests cover one visible master, hidden covered boxes and positive first-follow continuation. Initial fixtures used the implicit header role and the wrong ODF import wrapper; corrected before final runs.
 - Verification: 99 Writer tests in 11 targeted suites, application TypeScript, source provenance, Writer/Shared registries with zero semantic violations, module boundaries, JSDoc, size, source tree, WhichId, ESLint/Prettier and diff checks passed. Logs html89-{writer-final,types-retry,static,style,writer-registry-last,shared-registry}.log. No full repository suite. Next filter work covers RTF vertical-merge dispatch and consumption, browser fly retention and the final represented filter capability audit.
+
+### RTF90 — Native vertical merge import and export
+
+- Source: rtftok/rtfdispatchflag.cxx, rtfdocumentimpl.cxx prepareProperties, dmapper/DomainMapperTableManager.cxx and DomainMapperTableHandler.cxx, core/unocore/{unotext,unotbl}.cxx and filter/ww8/rtfattributeoutput.cxx TableVerticalCell. CLVMGF/CLVMRG now use actual per-cell sprm snapshots and the native boolean VerticalMerge property. The represented RTF grid uses original left-indent correction, minimal-cell width after an earlier positive width, 10000-unit relative positions and strict two-unit grouping tolerance. Source UNO RowSpan and internal VerticalMerge properties apply the signed box sequence and clear counted numbering on covered text nodes. The mapper selects the final contiguous continuation's bottom border. Export writes native start/continue flags at the original position after cell direction.
+- Tests import actual RTF bytes and reexport/reimport 3/-2/-1, observe a real transferred bottom border and covered numbering state, retain orphan and open-group-through-gap behavior (WRITER388), and verify strict one-versus-two-unit relative position selection after TRLEFT. Preliminary tests caught using JS strings instead of OUString for two UNO property names and an incorrect direct Any getter. Corrected to the real wrappers before the successful 20-test focused run. Current support is the represented one-grid-slot, top-level RTF row path; horizontal merge controls, unsupported nested input and other mapper families remain outside this verified block.
+
+Final scoped Writer verification passed: 130 tests in 8 files. Type checking, targeted lint and format, source provenance and registry, module boundaries, JSDoc, size, source tree, WhichId, and diff checks passed.
