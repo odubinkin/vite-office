@@ -1,5 +1,6 @@
-/** @fileoverview Native ICU78.3 PossibleWord candidate selection with the LibreOffice Khmer patch. */
+/** @fileoverview Native ICU78.3 dictionary span and candidate owners with the LibreOffice Khmer patch. */
 import type { DictionaryIgnoreSet, DictionaryMatcher } from "./dictionarydata";
+import { U_FAILURE } from "./unicode/utypes";
 
 const POSSIBLE_WORD_LIST_MAX = 20;
 
@@ -72,4 +73,88 @@ export class PossibleWord {
   markedCPLength(): number {
     return this.cpLengths[this.mark] as number;
   }
+}
+
+/** Reads native UTF16 at a clipped position, backing up from the trail of a surrogate pair. @param text - Source. @param index - Requested native position. @returns Aligned index. */
+function nativeIndex(text: string, index: number): number {
+  const position = Math.max(0, Math.min(index, text.length));
+  const unit = text.charCodeAt(position),
+    previous = text.charCodeAt(position - 1);
+  return unit >= 0xdc00 && unit <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff
+    ? position - 1
+    : position;
+}
+
+/** Advances after the next original UTF16 scalar, retaining isolated surrogate units. @param text - Source. @param index - Native position. @returns Next position or unchanged end. */
+export function nextDictionaryIndex(text: string, index: number): number {
+  const code = text.codePointAt(index);
+  return code === undefined ? index : index + (code > 0xffff ? 2 : 1);
+}
+
+/** Tests a native UnicodeSet projected as sorted inclusive range pairs. @param ranges - Original property ranges. @param code - Candidate scalar. @returns Membership. */
+export function dictionarySetContains(ranges: readonly number[], code: number): boolean {
+  let low = 0,
+    high = ranges.length / 2;
+  while (low < high) {
+    const middle = (low + high) >> 1;
+    if ((ranges[2 * middle + 1] as number) < code) low = middle + 1;
+    else high = middle;
+  }
+  return low < ranges.length / 2 && (ranges[2 * low] as number) <= code;
+}
+
+/** Original ICU base scans the registered character span before dispatching to the language engine. */
+export abstract class DictionaryBreakEngine {
+  /** Stores the actual immutable source character set. @param characters - Native inclusive range pairs. @returns Engine. */
+  constructor(private readonly characters: readonly number[]) {}
+
+  /** Original ICU ignores locale when testing its internal script set. @param code - Unicode scalar. @param locale - Requested ICU locale. @returns Membership. */
+  handles(code: number, locale: string): boolean {
+    void locale;
+    return dictionarySetContains(this.characters, code);
+  }
+
+  /** Finds original dictionary boundaries inside the native handled span. @param text - UTF16 input. @param position - Mutable UText index. @param start - Requested start. @param end - Exclusive extent. @param foundBreaks - Appended native break stack. @param phrase - Original phrase-break selector. @param status - Sticky ICU status. @returns Number of new boundaries. */
+  findBreaks(
+    text: string,
+    position: [number],
+    start: number,
+    end: number,
+    foundBreaks: number[],
+    phrase: boolean,
+    status: [number],
+  ): number {
+    if (U_FAILURE(status[0])) return 0;
+    const rangeStart = nativeIndex(text, start);
+    let rangeEnd = rangeStart;
+    for (
+      let code = text.codePointAt(rangeEnd);
+      rangeEnd < end && code !== undefined && dictionarySetContains(this.characters, code);
+      code = text.codePointAt(rangeEnd)
+    )
+      rangeEnd = nextDictionaryIndex(text, rangeEnd);
+    position[0] = rangeEnd;
+    const count = this.divideUpDictionaryRange(
+      text,
+      position,
+      rangeStart,
+      rangeEnd,
+      foundBreaks,
+      phrase,
+      status,
+    );
+    position[0] = rangeEnd;
+    return count;
+  }
+
+  /** Original language-specific split. @param text - Source. @param position - Native cursor. @param start - Handled span start. @param end - Handled span end. @param foundBreaks - Native break stack. @param phrase - Phrase selector. @param status - ICU status. @returns Added break count. */
+  protected abstract divideUpDictionaryRange(
+    text: string,
+    position: [number],
+    start: number,
+    end: number,
+    foundBreaks: number[],
+    phrase: boolean,
+    status: [number],
+  ): number;
 }

@@ -1881,3 +1881,15 @@ Burmese and CJK dictionaries. See WRITER367 through WRITER370.
 The dictionary engine scans, cache and locale selection still need to
 connect these candidates to the public word-boundary query. The full
 dictionary assets are used by the native comparison at this stage.
+
+### HTML81 — ICU Thai, Lao and Burmese dictionary engine scans
+
+The original dictionary base scans a handled UTF-16 span and restores its
+end to the caller. The Thai, Lao and Burmese engines apply the source
+three-word lookahead, unknown-word resynchronization and combining-mark
+rules, including Thai suffixes. The real ICU dictionaries produced identical
+boundaries and cursor positions across 4250 source comparisons. WRITER371
+records their differing short-span checks.
+
+Resource registration, the Khmer and CJK engines, DictionaryCache and the
+public word-boundary connection to Writer remain open.

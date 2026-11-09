@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 471
+revision: 474
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:47:53.555Z"
+  updated_at: "2026-11-09T18:53:49.291Z"
   updated_by: "CODER"
-  note: "HTML80 verified patched ICU matchers, 2554 native input pairs, 189 focused tests, and static gates. Dictionary engine scans and public Writer word/measurement integration remain open."
-  attempts: 91
+  note: "HTML81 verified original Thai, Lao and Burmese dictionary scans, 4250 real-dictionary native comparisons, 188 focused tests and static gates. Khmer/CJK and Writer word-boundary integration remain open."
+  attempts: 92
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1461,8 +1464,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:53:49.291Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML81 verified original Thai, Lao and Burmese dictionary scans, 4250 real-dictionary native comparisons, 188 focused tests and static gates. Khmer/CJK and Writer word-boundary integration remain open."
+  -
+    type: "status"
+    at: "2026-11-09T18:53:55.164Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:48:00.844Z"
+doc_updated_at: "2026-11-09T18:53:55.164Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3907,6 +3923,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:53:49.291Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML81 verified original Thai, Lao and Burmese dictionary scans, 4250 real-dictionary native comparisons, 188 focused tests and static gates. Khmer/CJK and Writer word-boundary integration remain open.
+    Attempts: 92
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:53:48.572Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5684,6 +5730,14 @@ sections:
     - Native CreateLSTMDataForScript against the packaged pinned ICU data returned U_MISSING_RESOURCE_ERROR and null for Thai, Lao, Myanmar and Khmer. That distribution therefore reaches the dictionary fallback for those languages. The full patched dictbe.cpp compiles with the same local source, and its native-engine probe observes a Thai breakpoint at UTF16 index 4 in the seven-unit ภาษาไทย. ICU UnicodeSet property ranges were exported into ignored evidence for the next engine checkpoint.
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/uchar.test.ts src/i18npool/source/breakiterator. Result: 67 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 189 unique tests in 14 suites, evidence html80-shared.log and html80-writer.log. No full-project replay at this continuing parent-task checkpoint.
     - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1967 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and git diff checks passed. Remaining: per-language dictionary engine scans and resource registration, boundary cache/public queries, locale dispatch, Writer paragraph measurement and production Markdown table integration. The pinned full dictionaries are only native verification inputs at this checkpoint.
+
+    S3HW1E HTML81 — Native ICU Thai, Lao and Burmese dictionary engine scans.
+
+    - Original DictionaryBreakEngine handles its UnicodeSet independently of locale, scans the actual UTF16 span, passes sticky status and restores the native cursor to the handled range end. The original language classes share equivalent three-word lookahead and resynchronization, retaining actual property membership, combining marks, signed return, source stack semantics and Thai suffix behavior. No guessed segmentation or fake language provider is involved. WRITER371 records the original Thai codepoint cutoff and Lao/Burmese code-unit cutoff.
+    - The native compiled ICU78.3 stand links actual patched dictbe.cpp/dictionarydata.cpp and the original ICU static libraries. Actual Thai/Lao/Burmese dictionary assets yielded byte-identical cursor/count/break outputs over 1421, 1415 and 1414 input lines respectively (4250 cases). Evidence: html81-differential-final.log and html81-sea/{host-engine.mts,*-input.txt,*-native.log,*-host.log}. The 48 fixture witnesses use genuine gendict bytes; direct tests also cover a nonzero UTF16 offset, existing stack content, phrase flag behavior and sticky status.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/i18npool/source/breakiterator. Result: 66 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 188 unique tests in 14 suites. Initial ESLint flagged the original unused locale parameter; the signature now explicitly discards it. All four new cases and all 4250 comparisons replayed after the final source edit. Evidence: html81-shared.log and html81-writer.log. No full-project replay at this continuing parent checkpoint.
+    - Whole-app TypeScript, changed ESLint/Prettier, source provenance, Writer/Shared registries (zero violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
+    - The actual replacement Khmer dictionary yielded 1042 native scan witnesses under html82-khmer, ready for the original Khmer algorithm port. Resource registration, Khmer and CJK engines, DictionaryCache/public break queries, and their Writer paragraph/Markdown table integration remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -8139,6 +8193,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:53:49.291Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML81 verified original Thai, Lao and Burmese dictionary scans, 4250 real-dictionary native comparisons, 188 focused tests and static gates. Khmer/CJK and Writer word-boundary integration remain open.
+Attempts: 92
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:53:48.572Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9920,3 +10004,11 @@ S3HW1E HTML80 — Native dictionary data, scalar tries and patched candidate sel
 - Native CreateLSTMDataForScript against the packaged pinned ICU data returned U_MISSING_RESOURCE_ERROR and null for Thai, Lao, Myanmar and Khmer. That distribution therefore reaches the dictionary fallback for those languages. The full patched dictbe.cpp compiles with the same local source, and its native-engine probe observes a Thai breakpoint at UTF16 index 4 in the seven-unit ภาษาไทย. ICU UnicodeSet property ranges were exported into ignored evidence for the next engine checkpoint.
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/uchar.test.ts src/i18npool/source/breakiterator. Result: 67 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 189 unique tests in 14 suites, evidence html80-shared.log and html80-writer.log. No full-project replay at this continuing parent-task checkpoint.
 - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1967 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and git diff checks passed. Remaining: per-language dictionary engine scans and resource registration, boundary cache/public queries, locale dispatch, Writer paragraph measurement and production Markdown table integration. The pinned full dictionaries are only native verification inputs at this checkpoint.
+
+S3HW1E HTML81 — Native ICU Thai, Lao and Burmese dictionary engine scans.
+
+- Original DictionaryBreakEngine handles its UnicodeSet independently of locale, scans the actual UTF16 span, passes sticky status and restores the native cursor to the handled range end. The original language classes share equivalent three-word lookahead and resynchronization, retaining actual property membership, combining marks, signed return, source stack semantics and Thai suffix behavior. No guessed segmentation or fake language provider is involved. WRITER371 records the original Thai codepoint cutoff and Lao/Burmese code-unit cutoff.
+- The native compiled ICU78.3 stand links actual patched dictbe.cpp/dictionarydata.cpp and the original ICU static libraries. Actual Thai/Lao/Burmese dictionary assets yielded byte-identical cursor/count/break outputs over 1421, 1415 and 1414 input lines respectively (4250 cases). Evidence: html81-differential-final.log and html81-sea/{host-engine.mts,*-input.txt,*-native.log,*-host.log}. The 48 fixture witnesses use genuine gendict bytes; direct tests also cover a nonzero UTF16 offset, existing stack content, phrase flag behavior and sticky status.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/i18npool/source/breakiterator. Result: 66 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 188 unique tests in 14 suites. Initial ESLint flagged the original unused locale parameter; the signature now explicitly discards it. All four new cases and all 4250 comparisons replayed after the final source edit. Evidence: html81-shared.log and html81-writer.log. No full-project replay at this continuing parent checkpoint.
+- Whole-app TypeScript, changed ESLint/Prettier, source provenance, Writer/Shared registries (zero violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
+- The actual replacement Khmer dictionary yielded 1042 native scan witnesses under html82-khmer, ready for the original Khmer algorithm port. Resource registration, Khmer and CJK engines, DictionaryCache/public break queries, and their Writer paragraph/Markdown table integration remain open.

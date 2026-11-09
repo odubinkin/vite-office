@@ -3033,3 +3033,12 @@ query without adding them to the cache key. Range-end changes also leave
 the cache eligible. Preserve the original cache condition. The local test
 reuses the same slot and observes a previously selected candidate after
 the range end shrinks.
+
+### WRITER371 — Thai and Lao/Burmese admit different four-character spans
+
+Pinned ICU 78.3 `ThaiBreakEngine::divideUpDictionaryRange` moves four code
+points and returns when the resulting position reaches the range end.
+`LaoBreakEngine` and `BurmeseBreakEngine` compare the span length in code
+units with four and return only if it is smaller. Preserve the exact
+comparison and unit on each path. Native gendict fixtures cover spans of
+three, four and five script characters.

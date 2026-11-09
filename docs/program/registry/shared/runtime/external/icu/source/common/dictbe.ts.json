@@ -19,22 +19,27 @@
         "apps/office/src/external/icu/source/common/dictbe.ts",
         "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
         "vendor/icu-reference/source/common/dictbe.cpp",
-        "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1"
+        "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+        "apps/office/src/external/icu/source/common/dictbe.southeast-asian.native.test.ts"
       ],
-      "justification": "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370.",
+      "justification": "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370. S3HW1E HTML81: the original DictionaryBreakEngine cursor/span and ICU Thai, Lao and Burmese engines preserve native candidate slots, three-word lookahead, resynchronization, script-specific combining mark sets, Thai suffixes and final stack semantics. Source and TS cursor/breaks matched on 4250 real-dictionary inputs plus 48 fixture witnesses. WRITER371 records the unequal four-character admission boundary.",
       "knownViolations": [],
       "localSymbols": [
         "PossibleWord",
         "candidates",
         "acceptMarked",
-        "backUp"
+        "backUp",
+        "DictionaryBreakEngine",
+        "findBreaks"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
       "upstreamSymbols": [
         "PossibleWord::candidates",
         "PossibleWord::acceptMarked",
-        "PossibleWord::backUp"
+        "PossibleWord::backUp",
+        "DictionaryBreakEngine::handles",
+        "DictionaryBreakEngine::findBreaks"
       ]
     }
   }
