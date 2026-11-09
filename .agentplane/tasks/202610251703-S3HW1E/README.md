@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 483
+revision: 486
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:19:51.571Z"
+  updated_at: "2026-11-09T19:30:54.749Z"
   updated_by: "CODER"
-  note: "HTML84 verified native ICU word dictionaries and public cache behavior, 11124 matching traces, 144 focused tests and static gates. LibreOffice locale and Writer filter integration remain open."
-  attempts: 95
+  note: "HTML85 Writer dictionary word boundaries and browser asset preparation verified. Remaining task work includes paragraph min/max, production HTML table first pass and Markdown table materialization."
+  attempts: 96
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1525,8 +1528,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:30:54.749Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML85 Writer dictionary word boundaries and browser asset preparation verified. Remaining task work includes paragraph min/max, production HTML table first pass and Markdown table materialization."
+  -
+    type: "status"
+    at: "2026-11-09T19:30:59.391Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:19:56.827Z"
+doc_updated_at: "2026-11-09T19:30:59.391Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4091,6 +4107,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:30:54.749Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML85 Writer dictionary word boundaries and browser asset preparation verified. Remaining task work includes paragraph min/max, production HTML table first pass and Markdown table materialization.
+    Attempts: 96
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:30:53.731Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5905,6 +5951,15 @@ sections:
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.khmer.native.test.ts src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/i18npool/source/breakiterator. Result: 22 passed in seven suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed in nine suites. The final three already-counted cache suites' tests replayed after replacing an inferred map cast with an explicit five-resource test record. Total 144 unique tests across 16 suites. Evidence: html84-shared.log, html84-writer.log and html84-fixture-final.log. No full-project run at this continuing parent checkpoint.
     - Changed ESLint/Prettier, byte reproduction, source provenance (1973 runtime modules), Writer/Shared registries (zero violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
     - Whole-app TypeScript passed after typing the five test resource keys explicitly (the initial Object.fromEntries assertion was too broad). Final source and test checks pass without suppressing that type error. Evidence: html84-tsc-final.log and terminal zero.
+
+    S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdown asset preparation.
+
+    - Original dictionary-word UNO constants and Boundary logical fields are bound. LocaleDataImpl returns the five generated LCMisc rule values from all 285 pinned locale records and their original refs. The Unicode word path uses explicit locale rules, Hungarian language-specific data and the original shared default. BreakIteratorImpl retains ICU letter/whitespace semantics, the period exception, source directional edges, UTF16 cursor behavior and DONE handling. SwBreakIt borrows its original cached native LanguageTag locale. WRITER379 records the source range/direction behavior.
+    - Differential compares literal source skipSpace/word-boundary bodies in a bounded C++ harness with native ICU public queries, source UTF16 iteration and the actual replacement dictionary package. Native setup explicitly chooses each compiled rule and the TypeScript service performs actual locale selection. en-US, hu-HU and de-AT each matched 1854 input rows and 80476 queries, 241428 total. Evidence: html85-lo-word/{native-lo-word.cpp,host-lo-word.mts,query-input.txt,*-native.log,*-host.log}. The initial harness generator omitted its local output path variable; corrected before compiling. No whole UNO service is certified.
+    - Existing browser Markdown open prepares native bytes through five Vite asset URLs and passes the actual factory to SwDocShell before parsing. The original writer dialog/store/atomic shell paths remain the existing owners. The mounted dialog test uses the real packaged bytes, verifies retry after one failed fetch and verifies Thai boundary 0..4 through the installed SwBreakIt. Browser request retry and persistent factory are native data binding, not a change to the save/autosave/no-recovery policy.
+    - Command: python3 scripts/writer-native-word-locales.py --check. Result: byte-identical generation. Command: from apps/office, ../../node_modules/.bin/vite build --outDir /Users/odubinkin/Projects/vite-office-writer/output/playwright/rtf-properties-native/html85-vite --emptyOutDir. Result: pass, five separate assets, every output Dict byte matched its tracked original. Vite emitted its chunk-size warning. Evidence: html85-build.log and html85-assets.log.
+    - Whole-app TypeScript, changed ESLint/Prettier, source provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Remaining work includes using the prepared dictionary service in paragraph min/max accumulation, native table first-pass traversal and production Markdown table materialization. Other LibreOffice word modes and complete UNO factory/ABI remain outside this dictionary-only Writer path.
+    - Scoped verification passed: 165 Writer tests across 12 suites (Markdown and TXT filters, RTF direction, HTML width and Writer entry/workflows), and 17 Shared tests across five suites (break iterator, locale fallback and ICU). See html85-writer.log and html85-shared.log. No full repository suite was run for this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -8480,6 +8535,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:30:54.749Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML85 Writer dictionary word boundaries and browser asset preparation verified. Remaining task work includes paragraph min/max, production HTML table first pass and Markdown table materialization.
+Attempts: 96
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:30:53.731Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10298,3 +10383,12 @@ S3HW1E HTML84 — Native ICU dictionary package, circular break cache and public
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.khmer.native.test.ts src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/i18npool/source/breakiterator. Result: 22 passed in seven suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed in nine suites. The final three already-counted cache suites' tests replayed after replacing an inferred map cast with an explicit five-resource test record. Total 144 unique tests across 16 suites. Evidence: html84-shared.log, html84-writer.log and html84-fixture-final.log. No full-project run at this continuing parent checkpoint.
 - Changed ESLint/Prettier, byte reproduction, source provenance (1973 runtime modules), Writer/Shared registries (zero violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
 - Whole-app TypeScript passed after typing the five test resource keys explicitly (the initial Object.fromEntries assertion was too broad). Final source and test checks pass without suppressing that type error. Evidence: html84-tsc-final.log and terminal zero.
+
+S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdown asset preparation.
+
+- Original dictionary-word UNO constants and Boundary logical fields are bound. LocaleDataImpl returns the five generated LCMisc rule values from all 285 pinned locale records and their original refs. The Unicode word path uses explicit locale rules, Hungarian language-specific data and the original shared default. BreakIteratorImpl retains ICU letter/whitespace semantics, the period exception, source directional edges, UTF16 cursor behavior and DONE handling. SwBreakIt borrows its original cached native LanguageTag locale. WRITER379 records the source range/direction behavior.
+- Differential compares literal source skipSpace/word-boundary bodies in a bounded C++ harness with native ICU public queries, source UTF16 iteration and the actual replacement dictionary package. Native setup explicitly chooses each compiled rule and the TypeScript service performs actual locale selection. en-US, hu-HU and de-AT each matched 1854 input rows and 80476 queries, 241428 total. Evidence: html85-lo-word/{native-lo-word.cpp,host-lo-word.mts,query-input.txt,*-native.log,*-host.log}. The initial harness generator omitted its local output path variable; corrected before compiling. No whole UNO service is certified.
+- Existing browser Markdown open prepares native bytes through five Vite asset URLs and passes the actual factory to SwDocShell before parsing. The original writer dialog/store/atomic shell paths remain the existing owners. The mounted dialog test uses the real packaged bytes, verifies retry after one failed fetch and verifies Thai boundary 0..4 through the installed SwBreakIt. Browser request retry and persistent factory are native data binding, not a change to the save/autosave/no-recovery policy.
+- Command: python3 scripts/writer-native-word-locales.py --check. Result: byte-identical generation. Command: from apps/office, ../../node_modules/.bin/vite build --outDir /Users/odubinkin/Projects/vite-office-writer/output/playwright/rtf-properties-native/html85-vite --emptyOutDir. Result: pass, five separate assets, every output Dict byte matched its tracked original. Vite emitted its chunk-size warning. Evidence: html85-build.log and html85-assets.log.
+- Whole-app TypeScript, changed ESLint/Prettier, source provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Remaining work includes using the prepared dictionary service in paragraph min/max accumulation, native table first-pass traversal and production Markdown table materialization. Other LibreOffice word modes and complete UNO factory/ABI remain outside this dictionary-only Writer path.
+- Scoped verification passed: 165 Writer tests across 12 suites (Markdown and TXT filters, RTF direction, HTML width and Writer entry/workflows), and 17 Shared tests across five suites (break iterator, locale fallback and ICU). See html85-writer.log and html85-shared.log. No full repository suite was run for this checkpoint.

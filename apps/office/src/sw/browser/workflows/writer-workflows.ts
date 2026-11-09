@@ -3,6 +3,7 @@
  * operation-presentation workflows outside the SwView model/view-shell boundary.
  */
 
+import type { ICULanguageBreakFactory } from "../../../external/icu/source/common/brkeng";
 import type { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
@@ -24,6 +25,7 @@ export interface WriterSessionServices {
   readonly documentOpen: DocumentOpenPort;
   readonly documentExport: DocumentExportPort;
   readonly createDownloadFilename: (title: string, extension: string) => string;
+  readonly prepareWordDictionaries?: () => Promise<ICULanguageBreakFactory>;
   readonly readRichClipboard: () => Promise<RichClipboardPayload>;
   readonly odtStore?: WriterOdtStore;
   readonly fileDialogs?: WriterFileDialogController;

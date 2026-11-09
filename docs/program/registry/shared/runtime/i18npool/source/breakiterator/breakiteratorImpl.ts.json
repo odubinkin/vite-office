@@ -18,13 +18,16 @@
       "evidence": [
         "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.ts",
         "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
-        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.test.ts"
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.test.ts",
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts"
       ],
-      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. Original beginOfScript performs exact-class backward UTF16 traversal without absorbing weak characters and retains source low-surrogate offset behavior.",
+      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. Original beginOfScript performs exact-class backward UTF16 traversal without absorbing weak characters and retains source low-surrogate offset behavior. S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
       "knownViolations": [],
       "localSymbols": [
         "BreakIteratorImpl",
-        "beginOfScript"
+        "beginOfScript",
+        "getWordBoundary",
+        "BindWordDictionaryFactory"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
@@ -32,7 +35,8 @@
         "getScriptClass",
         "getScriptType",
         "endOfScript",
-        "beginOfScript"
+        "beginOfScript",
+        "getWordBoundary"
       ]
     }
   }

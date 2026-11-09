@@ -3101,3 +3101,13 @@ status on its fast path and leaves `fDone` untouched. The source comment in
 `following` describes the interaction with an earlier query that ran past
 the text. Preserve the explicit completion reset in `following` and the
 original fast-path behavior.
+
+### WRITER379 — LibreOffice dictionary range direction can override the caller's flag
+
+Pinned `BreakIteratorImpl::getWordBoundary` examines both sides of the
+requested position. If a dictionary character is already on the requested
+edge of a gap, the source can select that edge regardless of the supplied
+direction. If the text has no qualifying character on either side, it
+returns the original position as both range endpoints. Preserve both cases.
+Native comparisons cover punctuation-only strings, surrogate interiors
+and positions at either edge of skipped text.

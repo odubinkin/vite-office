@@ -22,9 +22,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterWorkflowCommandShell",
-        "apps/office/src/sw/browser/workflows/writer-workflows.test.ts#rejectsEmptyPaste"
+        "apps/office/src/sw/browser/workflows/writer-workflows.test.ts#rejectsEmptyPaste",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
       ],
-      "justification": "Owns the browser-only Sfx shell for file, clipboard, download, and IndexedDB commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell.",
+      "justification": "Owns the browser-only Sfx shell for file, clipboard, download, and IndexedDB commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell. S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
       "knownViolations": [],
       "localSymbols": [
         "copyWriterSelection",

@@ -1,5 +1,9 @@
 /** @fileoverview Verifies accessible Writer Open and Export dialog states. */
 
+import { readFileSync } from "node:fs";
+import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
+import { g_pBreakIt } from "../../source/core/bastyp/breakit";
+import { prepareWriterWordDictionaries } from "../filter/word-dictionaries";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
@@ -261,31 +265,58 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     const documentShell = shell();
     const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
     const close = vi.fn();
-    render(
-      <WriterFileDialog
-        docShell={documentShell}
-        kind="open"
-        onClose={close}
-        services={services(store)}
-      />,
+    let rejectOnce = true;
+    const fetchDictionary = vi.fn(
+      /** Serves the actual built-in binary assets. @param url - Browser asset URL. @returns Response. */ async (
+        url: URL,
+      ) => {
+        if (rejectOnce) {
+          rejectOnce = false;
+          return new Response(null, { status: 503 });
+        }
+        const name = url.pathname.split("/").at(-1);
+        return new Response(
+          new Uint8Array(readFileSync(`src/external/icu/source/data/brkitr/${name}`)),
+        );
+      },
     );
-    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
-    fireEvent.change(screen.getByLabelText("Browse"), {
-      target: { files: [new File(["# Imported"], "Imported.md")] },
-    });
-    await waitFor(
-      /** Waits for completed import. @returns Nothing. */ () =>
-        expect(close).toHaveBeenCalledOnce(),
-    );
-    expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
-    expect(
-      (await store.list()).map(
-        /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (
-          record,
-        ) => record.title,
-      ),
-    ).toEqual(["Imported"]);
-    documentShell.Close();
+    vi.stubGlobal("fetch", fetchDictionary);
+    try {
+      await expect(prepareWriterWordDictionaries()).rejects.toThrow("could not be loaded");
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={{ ...services(store), prepareWordDictionaries: prepareWriterWordDictionaries }}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File(["# Imported"], "Imported.md")] },
+      });
+      await waitFor(
+        /** Waits for completed import. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+      expect(
+        (await store.list()).map(
+          /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+            record,
+          ) => record.title,
+        ),
+      ).toEqual(["Imported"]);
+      expect(fetchDictionary).toHaveBeenCalledTimes(10);
+      expect(
+        g_pBreakIt
+          .GetBreakIter()
+          .getWordBoundary("ภาษาไทย", 0, g_pBreakIt.GetLocale(0x041e), DICTIONARY_WORD, true),
+      ).toEqual({ startPos: 0, endPos: 4 });
+    } finally {
+      vi.unstubAllGlobals();
+      documentShell.Close();
+    }
   });
 
   it("reports list failures and allows switching between source tabs", /** Checks recoverable browser-list errors. @returns Completion. */ async () => {

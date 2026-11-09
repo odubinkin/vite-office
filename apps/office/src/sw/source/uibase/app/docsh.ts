@@ -2,6 +2,8 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
+import type { ICULanguageBreakFactory } from "../../../../external/icu/source/common/brkeng";
+import { g_pBreakIt } from "../../core/bastyp/breakit";
 import { SwXTextDocument } from "../uno/unotxdoc";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
@@ -111,13 +113,16 @@ export class SwDocShell extends SfxObjectShell {
     return new SwMDWriter().WriteDocument(this.document);
   }
 
-  /** Reads Markdown before atomically replacing the active model. @param bytes - Complete UTF-8 stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
+  /** Reads Markdown before atomically replacing the active model. @param bytes - Complete UTF-8 stream. @param metadata - Target identity. @param medium - Source medium. @param dictionaries - Prepared native word dictionaries. @returns Installed model. */
   public OpenMarkdown(
     bytes: Uint8Array,
     metadata: SfxObjectShellState,
     medium: SfxMediumInput,
+    dictionaries?: ICULanguageBreakFactory,
   ): SwDoc {
     this.EnsureOpen();
+    if (dictionaries !== undefined)
+      g_pBreakIt.GetBreakIter().BindWordDictionaryFactory(dictionaries);
     const document = new MarkdownReader().Read(
       bytes,
       {

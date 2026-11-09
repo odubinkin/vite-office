@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/filter/word-dictionaries.ts",
+    "rationale": "The native build loads packaged ICU data synchronously. Browser file import prepares the same immutable resources through the browser asset boundary before the shell runs.",
+    "responsibilities": [
+      "Loads the five built-in ICU Dict resources through Vite URLs and shares the prepared native factory across Writer Markdown opens, with retry after a failed local asset request."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser Vite assets supply the original bytes instead of the compiled native package address."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/word-dictionaries.ts",
+          "marker": "prepareWriterWordDictionaries"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "imports Markdown through the native shell"
+        }
+      ]
+    }
+  }
+}

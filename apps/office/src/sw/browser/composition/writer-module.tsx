@@ -5,6 +5,7 @@
 
 /* eslint-disable react-refresh/only-export-components -- the private lifecycle host belongs to the exported Writer module factory. */
 
+import { prepareWriterWordDictionaries } from "../filter/word-dictionaries";
 import { useEffect, useState } from "react";
 
 import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
@@ -102,6 +103,7 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
     createDownloadFilename,
     documentExport: createBrowserDocumentExportPort(),
     documentOpen: createBrowserDocumentOpenPort(),
+    prepareWordDictionaries: prepareWriterWordDictionaries,
     readRichClipboard,
     ...(globalThis.indexedDB === undefined ? {} : { odtStore: new IndexedDbWriterOdtStore() }),
   };

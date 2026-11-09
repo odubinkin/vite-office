@@ -43,6 +43,21 @@ export function ublock_getCode(c: number): UBlockCode {
 export function u_charType(c: number): number {
   return UTRIE2_GET16(propsTrie, c | 0) & 0x1f;
 }
+/** Original ICU letter/decimal-digit predicate over frozen general categories. @param c - Unicode scalar. @returns Whether it is a letter or decimal digit. */
+export function u_isalnum(c: number): boolean {
+  const type = u_charType(c);
+  return (type >= 1 && type <= 5) || type === 9;
+}
+
+/** Original Java-compatible ICU whitespace predicate. @param c - Unicode scalar. @returns Whether it is source whitespace. */
+export function u_isWhitespace(c: number): boolean {
+  const type = u_charType(c);
+  return (
+    (type >= 12 && type <= 14 && c !== 0xa0 && c !== 0x2007 && c !== 0x202f) ||
+    (c >= 9 && c <= 0x1f && (c <= 13 || c >= 0x1c))
+  );
+}
+
 /** Original decimal digit value reads numeric-type/value bits from the pinned property trie. @param c - UChar32. @returns Decimal digit or minus one. */
 export function u_charDigitValue(c: number): number {
   const value = (UTRIE2_GET16(propsTrie, c | 0) >>> 6) - 1;

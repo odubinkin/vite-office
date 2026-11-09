@@ -1,13 +1,75 @@
-/** @fileoverview Original script queries from BreakIteratorImpl,using pinned compatibility classes and UTF16 iteration. Other break services remain unported. */
+/** @fileoverview Original BreakIteratorImpl script and dictionary word queries on native UTF16 input. */
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
 import { GetScriptClass } from "../../../i18nutil/source/utility/scriptclass";
 import { WEAK } from "../../../offapi/com/sun/star/i18n/ScriptType";
+import { u_isalnum, u_isWhitespace } from "../../../external/icu/source/common/uchar";
+import type { ICULanguageBreakFactory } from "../../../external/icu/source/common/brkeng";
+import type { Boundary } from "../../../offapi/com/sun/star/i18n/Boundary";
+import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { BreakIterator_Unicode } from "./breakiterator_unicode";
+
+/** Original skipSpace for dictionary words, including the source period exception. @param text - Native UTF16 view. @param position - Original position. @param forward - Search direction. @returns Native offset. */
+function skipSpace(text: Uint16Array, position: number, forward: boolean): number {
+  const cursor: [number] = [position];
+  while (forward ? position < text.length : position > 0) {
+    const code = iterateCodePoints(text, cursor, forward ? 1 : -1);
+    if (!u_isWhitespace(code) && code !== 0x200b && (code === 0x2e || u_isalnum(code))) break;
+    position = cursor[0];
+  }
+  return position;
+}
 
 // Native static function-local state is shared across instances. Preserve CALC-200's initial NUL behavior.
 let lastChar = 0;
 let nRet: number = WEAK;
-/** Source script-class service subset;this is not a locale break-iterator factory. */
+/** Source script and dictionary-word service for the represented Writer path. */
 export class BreakIteratorImpl {
+  private dictionaryFactory: ICULanguageBreakFactory | undefined;
+  private unicodeWordIterator: BreakIterator_Unicode | undefined;
+  private wordText = "";
+  private wordUnits = new Uint16Array();
+
+  /** Binds the packaged ICU dictionary factory at the application boundary. @param factory - Actual prepared resource owner. @returns Nothing. */
+  BindWordDictionaryFactory(factory: ICULanguageBreakFactory): void {
+    if (factory === this.dictionaryFactory) return;
+    this.dictionaryFactory = factory;
+    this.unicodeWordIterator = new BreakIterator_Unicode(factory);
+  }
+
+  /** Original BreakIteratorImpl::getWordBoundary for the Writer DICTIONARY_WORD path. @param text - Logical UTF16 input. @param position - Native position. @param locale - Native locale. @param wordType - Original UNO mode. @param forward - Requested direction. @returns Word range. */
+  getWordBoundary(
+    text: string,
+    position: number,
+    locale: LocaleConstReference,
+    wordType: number,
+    forward: boolean,
+  ): Boundary {
+    if (wordType !== DICTIONARY_WORD)
+      throw new Error("Only the native dictionary word mode is available.");
+    const length = text.length;
+    if (position < 0 || length === 0) return { startPos: 0, endPos: 0 };
+    if (position > length) return { startPos: length, endPos: length };
+    if (this.wordText !== text) {
+      this.wordText = text;
+      this.wordUnits = new Uint16Array(length);
+      for (let i = 0; i < length; ++i) this.wordUnits[i] = text.charCodeAt(i);
+    }
+    const next = skipSpace(this.wordUnits, position, true),
+      previous = skipSpace(this.wordUnits, position, false);
+    if (previous === 0 && next === length) return { startPos: position, endPos: position };
+    if (previous === 0 && !forward) return { startPos: 0, endPos: 0 };
+    if (next === length && forward) return { startPos: length, endPos: length };
+    if (next !== previous) {
+      if (next === position && next !== length) forward = true;
+      else if (previous === position && previous !== 0) forward = false;
+      else position = forward ? next : previous;
+    }
+    if (this.unicodeWordIterator === undefined)
+      throw new Error("ICU word dictionaries have not been prepared.");
+    return this.unicodeWordIterator.getWordBoundary(text, position, locale, forward);
+  }
+
   /** Original single-entry process cache. @param currentChar - Unsigned32 scalar. @returns Script class. */
   getScriptClass(currentChar: number): number {
     currentChar >>>= 0;

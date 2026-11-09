@@ -1931,3 +1931,15 @@ circular refill. See WRITER377 and WRITER378 for source cache behavior.
 The native iterator accepts actual prepared resource bytes. Browser asset
 preparation, LibreOffice locale dispatch and the Writer measurement
 connection remain open.
+
+### HTML85 — LibreOffice locale dispatch and browser word-dictionary preparation
+
+Writer can obtain dictionary word ranges through the original LibreOffice
+directional wrapper and ICU status cache. The native locale data includes
+285 LCMisc rule arrays, with inherited rule selection and the Hungarian
+language-specific resource. Browser Markdown open prepares the five local
+Dict assets and binds the factory through the document shell. Asset
+failures can be retried through the existing import flow. See WRITER379.
+
+Paragraph measurement and table materialization still need to consume
+the installed word service.

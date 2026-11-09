@@ -28,6 +28,10 @@
         {
           "path": "apps/office/src/sw/browser/composition/writer-module.test.tsx",
           "marker": "uses browser font metrics when native RTF leading"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
         }
       ]
     },
@@ -37,7 +41,8 @@
     "responsibilities": [
       "Creates and disposes the browser Writer document session from document, shell, frame, persistence, and presentation adapters.",
       "Supplies browser Canvas text-height measurements to the native RTF leading conversion through the existing default output-device adapter.",
-      "S3HW1E HTML77: The existing Writer document device delegates width measurement to actual browser Canvas. Existing import shell and device ownership remain in use."
+      "S3HW1E HTML77: The existing Writer document device delegates width measurement to actual browser Canvas. Existing import shell and device ownership remain in use.",
+      "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
