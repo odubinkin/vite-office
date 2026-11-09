@@ -215,11 +215,11 @@ it("emits reset numbering margins from real style inheritance and keeps explicit
         style.SetFormatAttr(first);
         node.ChgFormatColl(style);
         node.SetAttr(reset);
-        expect(output.WriteParagraphProperties(node)).toBe("\\fi-120\\li480\\lin480");
+        expect(output.WriteParagraphProperties(node)).toBe("\\fi-120\\li480\\lin480\\ltrpar");
         const explicit = new SvxTextLeftMarginItem(SvxIndentValue.twips(720), RES_MARGIN_TEXTLEFT);
         try {
           node.SetAttr(explicit);
-          expect(output.WriteParagraphProperties(node)).toBe("\\fi-120\\li720\\lin720");
+          expect(output.WriteParagraphProperties(node)).toBe("\\fi-120\\li720\\lin720\\ltrpar");
         } finally {
           explicit.Dispose();
         }
@@ -357,7 +357,7 @@ it("uses the Latin default for an empty paragraph with actual proportional line 
         spacing.SetLineSpaceRule(SvxLineSpaceRule.Auto);
         spacing.SetPropLineSpace(200);
         node.SetAttr(spacing);
-        expect(output.WriteParagraphProperties(node)).toBe("\\sl480\\slmult1");
+        expect(output.WriteParagraphProperties(node)).toBe("\\sl480\\slmult1\\ltrpar");
       } finally {
         spacing.Dispose();
       }

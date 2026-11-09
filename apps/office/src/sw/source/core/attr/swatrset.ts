@@ -712,6 +712,10 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original frame direction item query. @param searchInParent - Native inheritance flag. @returns Borrowed direction item. */
+  GetFrameDir(searchInParent = true): SvxFrameDirectionItem {
+    return this.Get(RES_FRAMEDIR, searchInParent) as SvxFrameDirectionItem;
+  }
   /** Original opacity getter from swatrset.hxx. @param searchInParent - Native inherited lookup. @returns Actual opacity item. */
   GetOpaque(searchInParent = true): SvxOpaqueItem {
     return this.Get(RES_OPAQUE, searchInParent) as SvxOpaqueItem;

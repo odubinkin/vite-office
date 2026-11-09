@@ -1,6 +1,7 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 import type { SwFormat } from "../attr/format";
-import { GetUniqueFrameName } from "./doclay";
+import type { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { GetTextDirection, GetUniqueFrameName } from "./doclay";
 import { ClearFrameFormatIndices, DestroyFrameFormatTables } from "./docnew";
 import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
@@ -924,6 +925,10 @@ export class SwDoc {
   /** Allocates the native frame name from actual special formats. @returns Available source name. */
   public GetUniqueFrameName(): string {
     return GetUniqueFrameName(this);
+  }
+  /** Native physical direction with model fallback. @param position - Actual positioned node. @returns Original direction. */
+  public GetTextDirection(position: SwPosition): SvxFrameDirection {
+    return GetTextDirection(this, position);
   }
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */
   public GetUniqueTableName(): string {

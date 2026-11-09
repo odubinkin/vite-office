@@ -25,6 +25,11 @@ import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFrameType } from "../layout/wsfrm";
 import { GetFrameOfModify } from "../layout/frmtool";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FLYFRMFMT, RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFrameFormat } from "../layout/atrfrm";
+import type { SwFormatPageDesc } from "../attr/fmtpdsc";
+import type { SwPageDesc } from "../layout/pagedesc";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
@@ -114,6 +119,22 @@ export abstract class SwNode extends SwContentIndexRegistry {
     while (current.GetStartNodeType() !== type && current.GetIndex())
       current = current.StartOfSectionNode();
     return current.GetStartNodeType() === type ? current : null;
+  }
+  /** Original fly start-node query. @returns Actual fly section or null. */
+  public FindFlyStartNode(): SwStartNode | null {
+    return this.FindStartNodeByType(SwStartNodeType.SwFlyStartNode);
+  }
+  /** Original registry branch of GetFlyFormat for the represented model, where there are no physical fly frames. @returns Actual original owning fly format, if any. */
+  public GetFlyFormat(): SwFrameFormat | undefined {
+    const start = this.FindFlyStartNode();
+    if (start !== null)
+      for (const format of this.GetDoc().GetSpzFrameFormats())
+        if (
+          format.Which() === RES_FLYFRMFMT &&
+          format.GetContent().GetContentIdx()?.GetNode() === start
+        )
+          return format;
+    return undefined;
   }
   /** Original table-box section lookup delegates to the generic tag search. @returns Actual start or null. */
   public FindTableBoxStartNode(): SwStartNode | null {
@@ -289,6 +310,31 @@ export abstract class SwContentNode extends SwNode {
   /** Borrows a registered content frame through the native no-view-position query. Only text content frames are represented; native geometry/Calc and non-text content remain unported. @param layout - Optional original layout filter. @param position - Optional original model position. @returns Original text content frame or no registered match. */
   public getLayoutFrame(layout?: SwRootFrame, position?: SwPosition): SwContentFrame | undefined {
     return GetFrameOfModify(layout, this, SwFrameType.Txt, position) as SwContentFrame | undefined;
+  }
+
+  /** Original physical direction query uses the current registered frame without invoking formatting. @param position - Actual model position. @returns Physical direction or Unknown when there is no frame. */
+  public GetTextDirection(position: SwPosition): SvxFrameDirection {
+    const frame = this.getLayoutFrame(
+      this.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
+      position,
+    );
+    if (frame === undefined) return SvxFrameDirection.Unknown;
+    if (frame.IsVertical()) {
+      if (frame.IsVertLRBT()) return SvxFrameDirection.Vertical_LR_BT;
+      return frame.IsRightToLeft()
+        ? SvxFrameDirection.Vertical_LR_TB
+        : SvxFrameDirection.Vertical_RL_TB;
+    }
+    return frame.IsRightToLeft()
+      ? SvxFrameDirection.Horizontal_RL_TB
+      : SvxFrameDirection.Horizontal_LR_TB;
+  }
+  /** Original content-node page assignment and no-physical-pages fallback in FindPageDesc. The existing page item binds by name to the actual owned descriptor. @returns Borrowed descriptor, or absent outside the document node array. */
+  public FindPageDesc(): SwPageDesc | undefined {
+    if (!this.GetNodes().IsDocNodes()) return undefined;
+    const doc = this.GetDoc(),
+      assignment = this.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+    return doc.FindPageDesc(assignment.GetPageDescName()) ?? doc.GetPageDesc(0);
   }
 
   /** Original numbering invalidation for represented nonconditional collections and actual document-owned rules. @returns Whether a named native rule was found. */

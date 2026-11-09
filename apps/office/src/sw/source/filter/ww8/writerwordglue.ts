@@ -7,6 +7,7 @@ import { GetExtendedTextEncoding } from "../../../../tools/inc/tenccvt";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { GetWhichOfScript } from "../../core/attr/hints";
+import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { CharRunEntry, type CharRuns } from "../inc/msfilter";
 import {
@@ -88,7 +89,16 @@ export class IfBeforeStart {
     return entry.mnEndPos < this.mnStart;
   }
 }
-/** Field-specific GetPseudoCharRuns body binding over genuine node fonts, BreakIteratorImpl and existing ICU default-mode levels. The upstream one-argument public entry point is not implemented by this helper. The native SwDoc.GetTextDirection result is an explicit required field binding until the layout-direction API is ported; it is never guessed from text/locale. No global break service or opaque UBiDi owner is fabricated. @param node - Actual text node. @param textDirection - Actual native paragraph-direction result supplied by the caller. @returns Original owned run records. */
+/** Native public run producer over the document's physical direction query. @param node - Actual text node. @returns Original owned run records. */
+export function GetPseudoCharRuns(node: SwTextNode): CharRuns {
+  const position = new SwPosition(node);
+  try {
+    return getPseudoCharRunsForDirection(node, node.GetDoc().GetTextDirection(position));
+  } finally {
+    position.Dispose();
+  }
+}
+/** Field-level run calculation over native node fonts, script breaks and default-mode bidi levels. @param node - Actual text node. @param textDirection - Resolved native paragraph direction. @returns Original owned run records. */
 export function getPseudoCharRunsForDirection(
   node: SwTextNode,
   textDirection: SvxFrameDirection,

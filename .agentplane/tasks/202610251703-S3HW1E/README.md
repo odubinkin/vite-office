@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 447
+revision: 450
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-04T16:36:50.555Z"
+  updated_at: "2026-11-09T17:39:45.451Z"
   updated_by: "CODER"
-  note: "HTML72 verified checkpoint:199unique cases/15files,whole-app types and source/style/Writer registry gates pass. Native generic delete/paragraph subtype now records before real deletion, restores snapshot/auto/range in source order and owns disposal. Native next/default boundaries and WRITER352/353 omissions are preserved; WRITER354 conditional parent precondition is documented. Concrete frame factories/style broadcast, modified restoration, MakeFlySection, production HTML tables, RTF direction and final native filter/UI audit remain incomplete."
-  attempts: 83
+  note: "HTML73 checkpoint: 573 unique related cases in 37 suites passed, including final numbering/direction replay, UI workflows, and shared locale. Types, style, source and both registries passed. Actual RTF paragraph/style/page/table output now consumes native direction owners. Reciprocal import, physical layout families, production Markdown HTML tables and final filter closure remain incomplete."
+  attempts: 84
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1333,8 +1336,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T17:39:45.451Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML73 checkpoint: 573 unique related cases in 37 suites passed, including final numbering/direction replay, UI workflows, and shared locale. Types, style, source and both registries passed. Actual RTF paragraph/style/page/table output now consumes native direction owners. Reciprocal import, physical layout families, production Markdown HTML tables and final filter closure remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-09T17:40:01.471Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-04T16:39:35.735Z"
+doc_updated_at: "2026-11-09T17:40:01.471Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3539,6 +3555,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T17:39:45.451Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML73 checkpoint: 573 unique related cases in 37 suites passed, including final numbering/direction replay, UI workflows, and shared locale. Types, style, source and both registries passed. Actual RTF paragraph/style/page/table output now consumes native direction owners. Reciprocal import, physical layout families, production Markdown HTML tables and final filter closure remain incomplete.
+    Attempts: 84
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:39:44.816Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5251,6 +5297,14 @@ sections:
     - New actual-session/core tests exercise native recording before death, real repeated Undo/Redo, direct items/parent/auto/range state, eager constructor copy, disabled guards/default protection, source skip-zero next loop, saved parent-name lookup after rename, actual attributes-before-auto order with recreated false/current saved true, real owned-set disposal and preserved independent-flag/follow omissions. Call-through spies observe real owners; no mock factory/result/cursor provider or destroyed-format dereference is used. Last source review retained constructor name/set/parent ordering and the existing logical native parent precondition; source snapshot/default flags are not inferred from tests alone.
     - All focused test/type/style runs passed; no production regression was masked with an assertion update. Initial3related files28cases and expanded4files41cases are earlier repeated evidence, not added to final counts. Final15files199cases passed; after a test-only strengthening of observable auto order, the changed new suite13cases passed again. Final unique total remains199cases/15files including13fresh cases.
     - Previous goal turn is progress: ee7b49212 committed genuine generic create/rewriter/cache/scalar lookup work. Required concrete frame factory/delete/broadcast/rename history, true native stylesheet-pool/document-shell path, frame-pool UndoGuard/modified restoration, MakeFlySection, production recursive HTML tables/layout, RTF direction and final fixed-original-slice native filter/UI audit remain open. Source investigation confirms those missing owners require actual modules; no empty style pool was introduced to make the factory appear complete. Broad semantic/default/contract/sourceResponsibility statuses remain unverified.
+
+    S3HW1E HTML73 — Native direction query and RTF paragraph, style, page and table export.
+
+    - The actual Writer content frame owns lazy physical direction flags and resolves through the real registered frame without Calc. The model fallback walks native fly content indices/anchors, then actual page assignments and page master, then the user/pool item. Current page snapshots are browser projections, so full physical page/section/fly/cell and browse/draft direction remain unverified.
+    - Native RTF export resolves pseudo-runs, Environment, direct/style controls, RTL list indents, vertical sections and row/cell directions from actual items/contexts. Shared MsLangId classification preserves exact primary/ID exceptions and actual registry-backed script lookup. Application data language uses the existing host system-language binding. Native shape/fly output and reciprocal RTF section/table direction import remain open. WRITER330's vertical paragraph collapse is preserved and tested. WRITER355 records the original fly-anchor loop precondition.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/html/swhtml.direction.integration.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts. Result: 527 passed across 33 suites. Final 51 of those cases across four suites reran after the last source change; do not double count. Separate Writer file-dialog/workflow run: 22 passed across two suites. Shared configured and script classification: 24 passed in two selected suites. Total 573 unique passed across 37 suites. Evidence: html73-tests.log, html73-final-numbering-tests.log, html73-workflows.log, html73-shared-tests.log.
+    - Two old exact expectations omitted the source-generated LTRPAR. They now check the full native control sequence. Provenance and registry initially rejected obsolete/local-reference-only symbol records; changed those to match actual declarations. Final whole-app TypeScript, changed ESLint/Prettier, provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, source tree, Which IDs, file-size and diff gates passed.
+    - No full-project replay at this continuing parent-task checkpoint. Actual production HTML tables, complete represented RTF import/export and final fixed-slice UI verification remain open. Broad source, contract, default and behavior statuses remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -7466,6 +7520,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T17:39:45.451Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML73 checkpoint: 573 unique related cases in 37 suites passed, including final numbering/direction replay, UI workflows, and shared locale. Types, style, source and both registries passed. Actual RTF paragraph/style/page/table output now consumes native direction owners. Reciprocal import, physical layout families, production Markdown HTML tables and final filter closure remain incomplete.
+Attempts: 84
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T17:39:44.816Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9182,3 +9266,11 @@ S3HW1E HTML72 — Native generic delete history and actual document paragraph de
 - New actual-session/core tests exercise native recording before death, real repeated Undo/Redo, direct items/parent/auto/range state, eager constructor copy, disabled guards/default protection, source skip-zero next loop, saved parent-name lookup after rename, actual attributes-before-auto order with recreated false/current saved true, real owned-set disposal and preserved independent-flag/follow omissions. Call-through spies observe real owners; no mock factory/result/cursor provider or destroyed-format dereference is used. Last source review retained constructor name/set/parent ordering and the existing logical native parent precondition; source snapshot/default flags are not inferred from tests alone.
 - All focused test/type/style runs passed; no production regression was masked with an assertion update. Initial3related files28cases and expanded4files41cases are earlier repeated evidence, not added to final counts. Final15files199cases passed; after a test-only strengthening of observable auto order, the changed new suite13cases passed again. Final unique total remains199cases/15files including13fresh cases.
 - Previous goal turn is progress: ee7b49212 committed genuine generic create/rewriter/cache/scalar lookup work. Required concrete frame factory/delete/broadcast/rename history, true native stylesheet-pool/document-shell path, frame-pool UndoGuard/modified restoration, MakeFlySection, production recursive HTML tables/layout, RTF direction and final fixed-original-slice native filter/UI audit remain open. Source investigation confirms those missing owners require actual modules; no empty style pool was introduced to make the factory appear complete. Broad semantic/default/contract/sourceResponsibility statuses remain unverified.
+
+S3HW1E HTML73 — Native direction query and RTF paragraph, style, page and table export.
+
+- The actual Writer content frame owns lazy physical direction flags and resolves through the real registered frame without Calc. The model fallback walks native fly content indices/anchors, then actual page assignments and page master, then the user/pool item. Current page snapshots are browser projections, so full physical page/section/fly/cell and browse/draft direction remain unverified.
+- Native RTF export resolves pseudo-runs, Environment, direct/style controls, RTL list indents, vertical sections and row/cell directions from actual items/contexts. Shared MsLangId classification preserves exact primary/ID exceptions and actual registry-backed script lookup. Application data language uses the existing host system-language binding. Native shape/fly output and reciprocal RTF section/table direction import remain open. WRITER330's vertical paragraph collapse is preserved and tested. WRITER355 records the original fly-anchor loop precondition.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/html/swhtml.direction.integration.test.ts src/sw/source/writerfilter/rtftok/rtf-direction.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/core/layout/native-content-frame-query.test.ts. Result: 527 passed across 33 suites. Final 51 of those cases across four suites reran after the last source change; do not double count. Separate Writer file-dialog/workflow run: 22 passed across two suites. Shared configured and script classification: 24 passed in two selected suites. Total 573 unique passed across 37 suites. Evidence: html73-tests.log, html73-final-numbering-tests.log, html73-workflows.log, html73-shared-tests.log.
+- Two old exact expectations omitted the source-generated LTRPAR. They now check the full native control sequence. Provenance and registry initially rejected obsolete/local-reference-only symbol records; changed those to match actual declarations. Final whole-app TypeScript, changed ESLint/Prettier, provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, source tree, Which IDs, file-size and diff gates passed.
+- No full-project replay at this continuing parent-task checkpoint. Actual production HTML tables, complete represented RTF import/export and final fixed-slice UI verification remain open. Broad source, contract, default and behavior statuses remain unverified.

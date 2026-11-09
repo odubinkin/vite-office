@@ -18,6 +18,7 @@ import {
   getConfiguredSystemLanguage,
   getConfiguredSystemUILanguage,
   getRealLanguage,
+  isRightToLeft,
   convertLanguageToLocale,
   convertLocaleToLanguage,
   getFallbackLocale,
@@ -34,6 +35,7 @@ export const MsLangId = {
   getConfiguredSystemLanguage,
   getConfiguredSystemUILanguage,
   getRealLanguage,
+  isRightToLeft,
   getFallbackLocale,
   getDefinedLanguagetags,
   Conversion: {

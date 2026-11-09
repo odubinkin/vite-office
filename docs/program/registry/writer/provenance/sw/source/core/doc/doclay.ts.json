@@ -12,24 +12,43 @@
         {
           "path": "apps/office/src/sw/source/core/doc/doclay.native-name.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doclay.ts",
+          "marker": "GetTextDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doclay.ts",
+          "marker": "GetFlyFrameDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/doclay.cxx",
           "marker": "SwDoc::GetUniqueFrameName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/doclay.cxx",
+          "marker": "SwDoc::GetTextDirection"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/doc/doclay.ts",
     "localSymbols": [
-      "GetUniqueFrameName"
+      "GetUniqueFrameName",
+      "GetTextDirection",
+      "GetFlyFrameDirection"
     ],
     "omittedResponsibilities": [
       "Only the stated consumed source responsibility is implemented; full module, platform ABI and end-to-end native format parity remain unverified."
     ],
     "preservedResponsibilities": [
-      "S3HW1E HTML69 implements original frame-name allocation over actual special-format collection membership, native fly Which filtering, o3tl integer suffix conversion, sorted deduplication and first numeric hole. The actual document mail-merge branch uses real mbInMailMerge, actual current SYSTEM DateTime and original full special-format count+1. Repeated calls do not reserve a name or mutate/notify the document, preserving the native contract. The current English STR_FRAME_DEFNAME resource is Frame, matching existing table/style name bindings; localization, graphic/OLE/copy/shape name families and native drawing-object/group ownership are unported. MakeFlySection, style-pool factory/modified restoration, production recursive HTML tables, RTF direction and complete original-slice filter/UI closure remain unverified."
+      "S3HW1E HTML69 implements original frame-name allocation over actual special-format collection membership, native fly Which filtering, o3tl integer suffix conversion, sorted deduplication and first numeric hole. The actual document mail-merge branch uses real mbInMailMerge, actual current SYSTEM DateTime and original full special-format count+1. Repeated calls do not reserve a name or mutate/notify the document, preserving the native contract. The current English STR_FRAME_DEFNAME resource is Frame, matching existing table/style name bindings; localization, graphic/OLE/copy/shape name families and native drawing-object/group ownership are unported. MakeFlySection, style-pool factory/modified restoration, production recursive HTML tables, RTF direction and complete original-slice filter/UI closure remain unverified.",
+      "S3HW1E HTML73: The direction query consumes the physical content-frame result first, then a real fly-format anchor walk, the actual page master's item and the user/pool default."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doclay.cxx",

@@ -1,4 +1,5 @@
 /** @fileoverview Owns native frame registration and linked layout children from wsfrm.cxx and ssfrm.cxx. */
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -50,6 +51,120 @@ export enum SwFrameInvFlags {
 export class SwFrame extends SwClient {
   protected mnFrameType = SwFrameType.None;
   private mbInDtor = false;
+  private mbInvalidR2L = true;
+  private mbDerivedR2L = false;
+  private mbRightToLeft = false;
+  private mbInvalidVert = true;
+  private mbDerivedVert = false;
+  private mbVertical = false;
+  private mbVertLR = false;
+  private mbVertLRBT = false;
+
+  /** Original lazy vertical direction query. @returns Physical vertical flag. */
+  public IsVertical(): boolean {
+    if (this.mbInvalidVert) this.SetDirFlags(true);
+    return this.mbVertical;
+  }
+  /** Original cached vertical column order query. @returns Physical LR flag. */
+  public IsVertLR(): boolean {
+    return this.mbVertLR;
+  }
+  /** Original cached bottom-to-top direction query. @returns Physical LRBT flag. */
+  public IsVertLRBT(): boolean {
+    return this.mbVertLRBT;
+  }
+  /** Original lazy bidi direction query. @returns Physical RTL flag. */
+  public IsRightToLeft(): boolean {
+    if (this.mbInvalidR2L) this.SetDirFlags(false);
+    return this.mbRightToLeft;
+  }
+  /** Original direction validation for the represented frame families. @param direction - Effective native item value. @param vertical - Which flag group is requested. @param onlyBiDi - Derive vertical flags even with an explicit item. @param browse - Actual browse-mode admission. @returns Nothing. */
+  protected CheckDir(
+    direction: SvxFrameDirection,
+    vertical: boolean,
+    onlyBiDi: boolean,
+    browse: boolean,
+  ): void {
+    if (direction === SvxFrameDirection.Environment || (vertical && onlyBiDi)) {
+      this.mbDerivedVert = true;
+      if (direction === SvxFrameDirection.Environment) this.mbDerivedR2L = true;
+      this.SetDirFlags(vertical);
+    } else if (vertical) {
+      this.mbInvalidVert = false;
+      if (
+        direction === SvxFrameDirection.Horizontal_LR_TB ||
+        direction === SvxFrameDirection.Horizontal_RL_TB ||
+        browse
+      ) {
+        this.mbVertical = false;
+        this.mbVertLR = false;
+        this.mbVertLRBT = false;
+      } else {
+        this.mbVertical = true;
+        if (
+          direction === SvxFrameDirection.Vertical_RL_TB ||
+          direction === SvxFrameDirection.Vertical_RL_TB90
+        ) {
+          this.mbVertLR = false;
+          this.mbVertLRBT = false;
+        } else if (
+          direction === SvxFrameDirection.Vertical_LR_TB ||
+          direction === SvxFrameDirection.Vertical_LR_BT
+        ) {
+          this.mbVertLR = true;
+          this.mbVertLRBT = direction === SvxFrameDirection.Vertical_LR_BT;
+        }
+      }
+    } else {
+      this.mbInvalidR2L = false;
+      this.mbRightToLeft = direction === SvxFrameDirection.Horizontal_RL_TB;
+    }
+  }
+  /** Original virtual base direction check for represented non-header/footer frames. @param vertical - Which flag group is requested. @returns Nothing. */
+  protected CheckDirection(vertical: boolean): void {
+    if (vertical) {
+      this.mbDerivedVert = true;
+      this.SetDirFlags(true);
+    } else this.mbDerivedR2L = true;
+  }
+  /** Revalidates direction flags from the original upper chain. Physical fly-anchor and predecessor-cell owners are separate layout responsibilities. @param vertical - Which flag group is requested. @returns Nothing. */
+  private SetDirFlags(vertical: boolean): void {
+    if (vertical) {
+      if (this.mbDerivedVert) {
+        const upper = this.GetUpper();
+        if (upper !== undefined) {
+          this.mbVertical = upper.IsVertical();
+          this.mbVertLR = upper.IsVertLR();
+          this.mbVertLRBT = upper.IsVertLRBT();
+          if (!upper.mbInvalidVert) this.mbInvalidVert = false;
+        }
+      } else this.CheckDirection(true);
+    } else {
+      let invalid = false;
+      if (!this.mbDerivedR2L) this.CheckDirection(false);
+      if (this.mbDerivedR2L) {
+        const upper = this.GetUpper();
+        if (upper !== undefined) this.mbRightToLeft = upper.IsRightToLeft();
+        if (upper === undefined || upper.mbInvalidR2L) invalid = this.mbInvalidR2L;
+      }
+      this.mbInvalidR2L = invalid;
+    }
+  }
+  /** Original derived bidi flag setter for a changed item or format. @param value - New flag. @returns Nothing. */
+  protected SetDerivedR2L(value: boolean): void {
+    this.mbDerivedR2L = value;
+  }
+  /** Original direction-change ordering and invalidation for the represented text frames. @returns Nothing. */
+  protected CheckDirChange(): void {
+    const oldVertical = this.mbVertical,
+      oldRTL = this.mbRightToLeft;
+    this.mbInvalidVert = true;
+    this.mbInvalidR2L = true;
+    const changedRTL = oldRTL !== this.IsRightToLeft(),
+      oldVerticalLR = this.IsVertLR();
+    if (this.IsVertical() !== oldVertical || changedRTL || oldVerticalLR !== this.IsVertLR())
+      this.InvalidateAll();
+  }
   /** Original frame-area base component preserving the native registered frame identity. */
   public readonly areaDefinition = new SwFrameAreaDefinition();
   private mbCompletePaint = true;

@@ -1,5 +1,8 @@
 /** @fileoverview Writer text-frame fragments over one unchanged text node, after browser line layout. */
 
+import type { SwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
+import { RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
@@ -163,6 +166,30 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 /** A master or follow frame; offsets always refer to the same source text node. */
 export class SwTextFrame extends SwContentFrame {
   #para: SwParaPortion | undefined;
+  /** Original text frames take bidi from their paragraph owner and derive vertical flags. Current Writer view represents paged, non-draft layout. @param vertical - Which flag group is requested. @returns Nothing. */
+  protected override CheckDirection(vertical: boolean): void {
+    this.CheckDir(
+      this.GetTextNodeFirst().GetSwAttrSet().GetFrameDir().GetValue(),
+      vertical,
+      true,
+      false,
+    );
+  }
+  /** Original bidi flag reset and complete repaint when the native direction item changes. @param source - Original notifying owner. @param hint - Actual model notification. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    super.SwClientNotify(source, hint);
+    if (
+      (hint.kind === "legacy-modify" && (hint.m_pNew ?? hint.m_pOld)?.Which() === RES_FRAMEDIR) ||
+      (hint.kind === "attr-set-change" &&
+        hint.m_pNew?.GetChgSet().GetItemIfSet(RES_FRAMEDIR, false) !== undefined) ||
+      hint.kind === "format-change" ||
+      hint.kind === "format-inheritance-changed"
+    ) {
+      this.SetDerivedR2L(false);
+      this.CheckDirChange();
+      this.SetCompletePaint();
+    }
+  }
   /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @returns Frame. */
   public constructor(
     node: SwTextNode,

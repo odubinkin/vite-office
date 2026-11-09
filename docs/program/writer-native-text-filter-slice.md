@@ -1757,3 +1757,25 @@ style-pool/Find/broadcast, format, parent or modified-state provider is introduc
 WRITER352 independent auto-update omission is retained for delete, and WRITER353
 records the source paragraph follow-pointer omission in both generic histories.
 These tests do not certify complete style deletion, module/native ABI or formats.
+
+### HTML73 — Native direction in RTF paragraph, section and table output
+
+The export uses the actual Writer document direction query. The represented
+physical text-frame path uses original lazy direction flags without formatting.
+The model fallback traverses actual fly formats and anchors, then reads the actual
+page master or the user/pool default. The current page-item binding resolves
+descriptor names against the document-owned registry. The plain-text and Markdown
+paths retain their original logical-text behavior.
+
+Native Word export direction drives pseudo-character runs, Environment
+normalization, list first-line offsets, paragraph styles and RTF paragraph,
+section, table-row and cell output. The shared language classifier retains native
+language-ID exceptions and the registered script lookup. The browser binds
+application data language through its existing system-language owner. RTF keeps
+the original vertical-to-LTR paragraph emission described in WRITER330.
+
+The current physical page snapshots are browser projections. Full physical
+page/section/fly direction, view-point geometry, native browse/draft and cell
+direction invalidation, native fly-syntax output, reciprocal RTF page/table
+direction import and the final format/UI matrix remain open. Broad source,
+contract, behavior and default statuses remain unverified.

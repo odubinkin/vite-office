@@ -2876,3 +2876,19 @@ WRITER352 extension (HTML72): the generic delete owner has the same independent 
 ### WRITER354 — Generic delete history assumes a nonnull derived parent
 
 Pinned `sw/source/core/undo/SwUndoFmt.cxx`, `SwUndoFormatDelete` constructor, dereferences `_pOld->DerivedFrom()` to obtain its name without checking null. The regular `SwFormat` constructor in `sw/source/core/attr/format.cxx` explicitly accepts a null parent, and `SwDoc::MakeTextFormatColl` in `sw/source/core/doc/docfmt.cxx` forwards that pointer unchanged. Document deletion protects its particular default collection but does not itself check every nondefault format's derived parent before constructing delete history. If a nondefault parentless format reaches that recording-enabled path, the source assumes a parent that the constructor graph need not supply. Preserve the precondition; do not synthesize a default/empty parent or claim a defined native exception/success outcome for that input. The host port rejects the missing-parent precondition and releases its partially constructed value set. This is a conditional source-level suspicion, not proof that a normal LibreOffice UI workflow reaches it or compiled-native crash evidence.
+
+WRITER330 extension (HTML73): the actual RTF byte writer now exercises the
+ordinary paragraph callback. A direct Vertical_LR_BT item emits LTRPAR and
+reimport produces Horizontal_LR_TB. Vertical section and table-cell controls
+use their original separate dispatch. This is source-backed local evidence.
+
+### WRITER355 — Environment fly direction depends on an acyclic anchor chain
+
+Pinned `SwDoc::GetTextDirection` in `sw/source/core/doc/doclay.cxx` and
+`MSWordExportBase::TrueFrameDirection` in `sw/source/filter/ww8/wrtw8nds.cxx`
+walk from an Environment fly format to its anchor node's owning fly format.
+They stop at an explicit direction, an at-page anchor, or an absent owner.
+Neither loop checks for a repeated format. A cycle of Environment fly anchors
+would leave neither loop a terminating condition. Preserve the original walk
+and the expectation of an acyclic model. This observation concerns the loop
+contract and makes no claim that the native UI can construct such a cycle.

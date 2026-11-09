@@ -5,7 +5,7 @@ import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sa
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
 import {
   rtl_TextEncodingToWinCharset,
-  getPseudoCharRunsForDirection,
+  GetPseudoCharRuns,
   IsPlausableSingleWordSection,
 } from "./writerwordglue";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
@@ -42,6 +42,7 @@ import {
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import {
   RES_BOX,
+  RES_FRAMEDIR,
   RES_PAGEDESC,
   RES_PARATR_TABSTOP,
   WRITER_CHARACTER_WHICH_RANGES,
@@ -305,6 +306,7 @@ export class RtfExport extends MSWordExportBase {
           } else currentPage = page;
         }
       }
+      this.m_pCurrentPageDesc = currentPage;
       if (block instanceof SwTableNode) {
         for (const row of block.GetTable().GetTabLines()) {
           const boxes = row.GetTabBoxes();
@@ -323,9 +325,10 @@ export class RtfExport extends MSWordExportBase {
             )
               output += `\\trleft${tableLeft}`;
           }
-          // TableDefinition emits orientation, resolved frame direction, height,
-          // then row splitting. The current table frame has no direction item.
-          output += "\\ltrrow";
+          output +=
+            this.TrueFrameDirection(tableFormat) === SvxFrameDirection.Horizontal_RL_TB
+              ? "\\rtlrow"
+              : "\\ltrrow";
           const rowSize = rowFormat.GetFrameSize();
           if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
             output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
@@ -366,6 +369,7 @@ export class RtfExport extends MSWordExportBase {
           let right = 0;
           for (const [index, width] of nativeWidths.entries()) {
             const box = boxes[index]?.GetFormat().box;
+            const format = boxes[index]?.GetFrameFormat();
             if (box !== undefined)
               for (const [edge, control] of [
                 [SvxBoxItemLine.TOP, "clbrdrt"],
@@ -384,6 +388,11 @@ export class RtfExport extends MSWordExportBase {
                 const distance = box.GetDistance(edge);
                 if (distance > 0) output += `\\${unitControl}3\\${valueControl}${distance}`;
               }
+            if (format !== undefined) {
+              const direction = this.TrueFrameDirection(format);
+              if (direction === SvxFrameDirection.Vertical_RL_TB) output += "\\cltxtbrl";
+              else if (direction === SvxFrameDirection.Vertical_LR_BT) output += "\\cltxbtlr";
+            }
             const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
             if (vertical !== undefined)
               output +=
@@ -449,7 +458,8 @@ export class RtfExport extends MSWordExportBase {
   /** Mirrors OutPageDescription for the currently represented physical page fields.  @param page - Page. @param titlePage - Title Page. @returns The string result. */
   private WriteSectionPageDescription(page: SwPageDesc, titlePage = true): string {
     const follow = page.GetFollow();
-    const value = titlePage ? follow.GetValue() : page.GetValue();
+    const sectionPage = titlePage ? follow : page;
+    const value = sectionPage.GetValue();
     let output = "";
     if (value.landscape) output += "\\lndscpsxn";
     output += `\\pgwsxn${value.width}\\pghsxn${value.height}`;
@@ -457,6 +467,18 @@ export class RtfExport extends MSWordExportBase {
     if (value.rightMargin !== 0) output += `\\margrsxn${value.rightMargin}`;
     if (value.topMargin !== 0) output += `\\margtsxn${value.topMargin}`;
     if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
+    const direction = sectionPage.GetMaster().GetAttrSet().GetItemIfSet(RES_FRAMEDIR, true);
+    if (direction !== undefined) {
+      const previous = this.m_pCurrentPageDesc;
+      this.m_pCurrentPageDesc = sectionPage;
+      this.m_bOutPageDescs = true;
+      try {
+        output += this.attributeOutput.FormatFrameDirection(sectionPage.GetMaster().GetFrameDir());
+      } finally {
+        this.m_bOutPageDescs = false;
+        this.m_pCurrentPageDesc = previous;
+      }
+    }
     if (titlePage && (follow !== page || !follow.IsFirstShared())) output += "\\titlepg";
     return output;
   }
@@ -674,10 +696,7 @@ export class RtfExport extends MSWordExportBase {
   private *GetTextRuns(paragraph: SwTextNode): Generator<RtfTextRun> {
     const text = paragraph.GetText();
     const hints = paragraph.GetpSwpHints()?.entries() ?? [];
-    // The current paragraph model has no authored frame direction or layout frame.
-    // Preserve init.cxx's native Environment default rather than guessing from text/locale.
-    // GetPseudoCharRuns only tests Horizontal_RL_TB; this binds its represented non-RTL path.
-    const characterRuns = getPseudoCharRunsForDirection(paragraph, SvxFrameDirection.Environment);
+    const characterRuns = GetPseudoCharRuns(paragraph);
     const boundaries = new Set([
       0,
       text.length,

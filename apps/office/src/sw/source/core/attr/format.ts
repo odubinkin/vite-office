@@ -2,6 +2,7 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
@@ -89,6 +90,10 @@ export class SwFormat extends BroadcastingModify {
   /** Original flag setter, default true; this does not change IsAuto. @param value - Native new flag. @returns Nothing. */
   SetAutoUpdateOnDirectFormat(value = true): void {
     this.m_bAutoUpdateOnDirectFormat = value;
+  }
+  /** Original effective frame direction query. @param searchInParent - Native inheritance flag. @returns Borrowed direction item. */
+  GetFrameDir(searchInParent = true): SvxFrameDirectionItem {
+    return this.attributeSet.GetFrameDir(searchInParent);
   }
   /** Original generic opacity getter. @param searchInParent - Native inherited lookup. @returns Actual item. */
   GetOpaque(searchInParent = true): SvxOpaqueItem {
