@@ -1904,3 +1904,17 @@ through WRITER375 record the retained details of the patch.
 
 The CJK engine, runtime dictionary resource registration, DictionaryCache
 and the Writer paragraph-width connection remain open.
+
+### HTML83 — CJK and Korean dictionary segmentation with pinned NFKC
+
+The native CJK engine applies the dictionary weights, Katakana grouping,
+Korean syllable policy and packaged Japanese phrase rules. NFKC data for
+its admitted input set comes from ICU 78.3. Normalization maps each
+resulting code point to its source UTF-16 fragment before duplicate
+positions are removed, preserving the source boundary behavior. See
+WRITER376 for the Katakana limit.
+
+Native comparisons covered 6928 word/phrase cases and 112957 normalization
+inputs, including every scalar admitted by the Chinese/Japanese engine.
+The ICU dictionary factory, public boundary cache and Writer measurement
+path remain to be connected.

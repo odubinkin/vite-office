@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 477
+revision: 480
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:01:31.027Z"
+  updated_at: "2026-11-09T19:08:39.602Z"
   updated_by: "CODER"
-  note: "HTML82 verified LibreOffice's patched Khmer engine, 2842 real dictionary comparisons, 45 compiled fixture witnesses, 138 focused tests and static gates. CJK and end-to-end Writer integration remain open."
-  attempts: 93
+  note: "HTML83 verified CJK/Korean engines, 6928 source boundary and 112957 native NFKC comparisons, 141 focused tests and static gates. Dictionary cache and Writer integration remain open."
+  attempts: 94
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1493,8 +1496,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:08:39.602Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML83 verified CJK/Korean engines, 6928 source boundary and 112957 native NFKC comparisons, 141 focused tests and static gates. Dictionary cache and Writer integration remain open."
+  -
+    type: "status"
+    at: "2026-11-09T19:08:44.895Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:01:37.025Z"
+doc_updated_at: "2026-11-09T19:08:44.895Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3999,6 +4015,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:08:39.602Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML83 verified CJK/Korean engines, 6928 source boundary and 112957 native NFKC comparisons, 141 focused tests and static gates. Dictionary cache and Writer integration remain open.
+    Attempts: 94
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:08:38.951Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5793,6 +5839,15 @@ sections:
     - TypeScript, ESLint/Prettier and diff gates passed. Initial source provenance tried to find five patched functions in unpatched ICU and used a method signature absent from the patch's diff context. The unpatched method remains the main mapping and every patch addition now has a literal marker in the pinned LibreOffice patch.
     - For the next CJK checkpoint, native ICU exported 1475 CJK scalar decompositions, four scalar combining-class entries, 58 composition pairs and four input scalars without boundary-before. All precomposed Hangul syllables in the Korean engine set were checked as already normalized with boundary-before. CJK/Hangul reference corpus has 1748 and 1716 native rows respectively under html83-cjk. Runtime CJK, dictionary registration/cache/public queries, Writer measurement and Markdown table materialization remain open.
     - Final source provenance (1969 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree and WhichId gates passed. Evidence: html82-static-ready.log and html82-registries-ready.log.
+
+    S3HW1E HTML83 — Native CJK/Korean dictionary engines, bounded NFKC and original phrase resources.
+
+    - CjkBreakEngine consumes the original CJK/Korean admitted sets, actual matcher values, unsigned costs, unmatched-scalar/Hangul defaults, Katakana candidates, original word/phrase selection and native mapped UTF16 publication. WRITER376 documents the strict twenty-character Katakana heuristic limit. Native ja.res extensions, Hiragana, adjacent punctuation rules and ICU default non-ML phrase path are retained.
+    - The source Normalizer2 binding uses exact ICU78.3 decomposition, canonical class, composition and boundary-before data over the native CJK engine input set. It implements canonical reordering/composition and the original fragment-to-source positions. Precomposed Hangul's unchanged NFKC and per-syllable boundary-before were verified by the generator. The runtime does not claim generic NFKC outside this admitted input domain. Command: node scripts/writer-cjk-data.mjs output/playwright/rtf-properties-native/html79-icu --check. Result: byte-identical regeneration. An initial compiler invocation was missing unicode/udata.h for the native resource macro; corrected and final check passed.
+    - Exact differential: native ICU78.3 NFKC with source fragment offset observations matched the TS result for 112957 strings, including every one of 104057 admitted CJK scalars, decomposed-scalar/continuation pairs and seeded runs. The original native CjkBreakEngine was compared with the actual cjdict and the same contiguous UTF16 UText provider used by LibreOffice. 1748 CJK and 1716 Korean input/range pairs in both word and phrase modes yielded 6928 identical cursor/count/boundary outputs. Evidence: html83-cjk/{native-cjk-phases.cpp,host-cjk.mts,native-nfkc.cpp,host-nfkc.mts,*-native.log,*-host.log}.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.khmer.native.test.ts src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/i18npool/source/breakiterator. Result: 19 tests passed across six suites, including 70 native CJK fixture cases and direct normalization map assertions. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 141 unique tests in 15 suites. Evidence: html83-shared.log and html83-writer.log. No full-project replay at this continuing parent-task checkpoint.
+    - Whole-app TypeScript, ESLint/Prettier, source provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
+    - Native full word oracle ready under html84-word. The pinned ICU package was locally rebuilt with LibreOffice's replacement khmerdict.dict; the loaded native dictionary header was verified. Patched ICU object layouts are used by a locally rebuilt brkeng.cpp. The compiled oracle returned refined public boundaries for Thai, CJK and Khmer. Runtime dictionary package registration, DictionaryCache, public word queries, Writer measurement and Markdown table materialization remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -8308,6 +8363,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:08:39.602Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML83 verified CJK/Korean engines, 6928 source boundary and 112957 native NFKC comparisons, 141 focused tests and static gates. Dictionary cache and Writer integration remain open.
+Attempts: 94
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:08:38.951Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10106,3 +10191,12 @@ S3HW1E HTML82 — Khmer word boundaries from LibreOffice's pinned ICU patch.
 - TypeScript, ESLint/Prettier and diff gates passed. Initial source provenance tried to find five patched functions in unpatched ICU and used a method signature absent from the patch's diff context. The unpatched method remains the main mapping and every patch addition now has a literal marker in the pinned LibreOffice patch.
 - For the next CJK checkpoint, native ICU exported 1475 CJK scalar decompositions, four scalar combining-class entries, 58 composition pairs and four input scalars without boundary-before. All precomposed Hangul syllables in the Korean engine set were checked as already normalized with boundary-before. CJK/Hangul reference corpus has 1748 and 1716 native rows respectively under html83-cjk. Runtime CJK, dictionary registration/cache/public queries, Writer measurement and Markdown table materialization remain open.
 - Final source provenance (1969 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree and WhichId gates passed. Evidence: html82-static-ready.log and html82-registries-ready.log.
+
+S3HW1E HTML83 — Native CJK/Korean dictionary engines, bounded NFKC and original phrase resources.
+
+- CjkBreakEngine consumes the original CJK/Korean admitted sets, actual matcher values, unsigned costs, unmatched-scalar/Hangul defaults, Katakana candidates, original word/phrase selection and native mapped UTF16 publication. WRITER376 documents the strict twenty-character Katakana heuristic limit. Native ja.res extensions, Hiragana, adjacent punctuation rules and ICU default non-ML phrase path are retained.
+- The source Normalizer2 binding uses exact ICU78.3 decomposition, canonical class, composition and boundary-before data over the native CJK engine input set. It implements canonical reordering/composition and the original fragment-to-source positions. Precomposed Hangul's unchanged NFKC and per-syllable boundary-before were verified by the generator. The runtime does not claim generic NFKC outside this admitted input domain. Command: node scripts/writer-cjk-data.mjs output/playwright/rtf-properties-native/html79-icu --check. Result: byte-identical regeneration. An initial compiler invocation was missing unicode/udata.h for the native resource macro; corrected and final check passed.
+- Exact differential: native ICU78.3 NFKC with source fragment offset observations matched the TS result for 112957 strings, including every one of 104057 admitted CJK scalars, decomposed-scalar/continuation pairs and seeded runs. The original native CjkBreakEngine was compared with the actual cjdict and the same contiguous UTF16 UText provider used by LibreOffice. 1748 CJK and 1716 Korean input/range pairs in both word and phrase modes yielded 6928 identical cursor/count/boundary outputs. Evidence: html83-cjk/{native-cjk-phases.cpp,host-cjk.mts,native-nfkc.cpp,host-nfkc.mts,*-native.log,*-host.log}.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.khmer.native.test.ts src/external/icu/source/common/dictbe.southeast-asian.native.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/i18npool/source/breakiterator. Result: 19 tests passed across six suites, including 70 native CJK fixture cases and direct normalization map assertions. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 141 unique tests in 15 suites. Evidence: html83-shared.log and html83-writer.log. No full-project replay at this continuing parent-task checkpoint.
+- Whole-app TypeScript, ESLint/Prettier, source provenance, Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed.
+- Native full word oracle ready under html84-word. The pinned ICU package was locally rebuilt with LibreOffice's replacement khmerdict.dict; the loaded native dictionary header was verified. Patched ICU object layouts are used by a locally rebuilt brkeng.cpp. The compiled oracle returned refined public boundaries for Thai, CJK and Khmer. Runtime dictionary package registration, DictionaryCache, public word queries, Writer measurement and Markdown table materialization remain open.

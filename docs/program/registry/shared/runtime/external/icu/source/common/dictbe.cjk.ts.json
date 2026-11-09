@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/dictbe.cjk.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-script-attributes",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/dictbe.cjk.ts",
+        "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+        "apps/office/src/external/icu/source/common/dictbe.cjk.data.json",
+        "scripts/writer-cjk-data.mjs",
+        "vendor/icu-reference/source/common/dictbe.cpp"
+      ],
+      "justification": "S3HW1E HTML83: original CJK weighted dictionary segmentation, bounded pinned NFKC input domain, normalization-fragment UTF16 map, Katakana and Hangul policies, and packaged phrase resources. Exact native results matched on 6928 dictionary and 112957 normalization comparisons. See WRITER376.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CjkBreakEngine",
+        "CjkLanguageType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
+      "upstreamSymbols": [
+        "CjkBreakEngine::divideUpDictionaryRange",
+        "getKatakanaCost",
+        "CjkBreakEngine::loadJapaneseExtensions"
+      ]
+    }
+  }
+}

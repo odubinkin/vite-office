@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/dictbe.cjk.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/dictbe.cpp",
+    "localSymbols": [
+      "CjkBreakEngine",
+      "CjkLanguageType"
+    ],
+    "upstreamSymbols": [
+      "CjkBreakEngine::divideUpDictionaryRange",
+      "getKatakanaCost",
+      "CjkBreakEngine::loadJapaneseExtensions"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML83: original CJK weighted dictionary segmentation, bounded pinned NFKC input domain, normalization-fragment UTF16 map, Katakana and Hangul policies, and packaged phrase resources. Exact native results matched on 6928 dictionary and 112957 normalization comparisons. See WRITER376."
+    ],
+    "omittedResponsibilities": [
+      "The compile-time optional ML phrase engine and arbitrary non-UTF16 UText providers are outside the pinned LibreOffice input path. DictionaryCache, package registration and Writer integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.ts",
+          "marker": "CjkBreakEngine"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.data.json",
+          "marker": "decomposition"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "CjkBreakEngine::divideUpDictionaryRange"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "getKatakanaCost"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "CjkBreakEngine::loadJapaneseExtensions"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/dictbe.cjk.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original ICU source responsibility in a separate file for the consumed CJK dictionary path."
+    }
+  }
+}

@@ -3075,3 +3075,13 @@ Its boundary conditions compare that combined value numerically with
 `UBRK_LINE`. The resulting branches apply the same checks on the compiled
 Khmer engine regardless of the caller's phrase flag. The port keeps the
 effective conditions for the fixed Khmer constructor.
+
+### WRITER376 — The Katakana group heuristic excludes exactly twenty characters
+
+Pinned ICU 78.3 `CjkBreakEngine::divideUpDictionaryRange` grows a Katakana
+group to its limit of twenty. It considers the group as a weighted
+candidate only while its length is strictly below that limit. The
+previous-Katakana flag also prevents trying the same heuristic at later
+positions inside that run. Preserve the original limit and entry
+condition. The compiled fixture compares nineteen- and twenty-character
+runs against native ICU.
