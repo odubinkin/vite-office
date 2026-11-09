@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/stubdata/stubdata.ts",
+    "upstreamPath": "vendor/icu-reference/source/stubdata/stubdata.cpp",
+    "localSymbols": [
+      "U_ICUDATA_ENTRY_POINT"
+    ],
+    "upstreamSymbols": [
+      "U_ICUDATA_ENTRY_POINT"
+    ],
+    "preservedResponsibilities": [
+      "Actual ICU78.3 linked stub data entry point with the source little-endian 64-bit header, zero count, reserved fields and empty pointer TOC. The stub is the source bootstrap package in the public data loader."
+    ],
+    "omittedResponsibilities": [
+      "The full compiled ICU data package can be supplied through the original common-data loader."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/stubdata/stubdata.ts",
+          "marker": "U_ICUDATA_ENTRY_POINT"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.open.native.test.ts",
+          "marker": "matches original public open case"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/stubdata/stubdata.cpp",
+          "marker": "U_ICUDATA_ENTRY_POINT"
+        }
+      ]
+    }
+  }
+}

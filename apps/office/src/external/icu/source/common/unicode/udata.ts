@@ -1,4 +1,27 @@
-/** @fileoverview Original UDataInfo binary layout; views borrow the real data header without interpreting format or version policy. */
+/** @fileoverview ICU data information, file-access policy, and public loading declarations. */
+
+export const U_TREE_SEPARATOR = 45;
+export const U_TREE_ENTRY_SEP_CHAR = 47;
+export const U_ICUDATA_ALIAS = "ICUDATA";
+
+/** Original data search policies and their native values. */
+export enum UDataFileAccess {
+  UDATA_FILES_FIRST,
+  UDATA_DEFAULT_ACCESS = 0, // Alias of UDATA_FILES_FIRST in udata.h.
+  UDATA_ONLY_PACKAGES,
+  UDATA_PACKAGES_FIRST,
+  UDATA_NO_FILES,
+  UDATA_FILE_ACCESS_COUNT,
+}
+
+/** Original acceptance callback receives the original arguments and borrowed data information. */
+export type UDataMemoryIsAcceptable = (
+  context: unknown,
+  type: string | null,
+  name: string,
+  info: UDataInfo,
+) => boolean;
+
 /** Original UDataInfo fields at their native byte offsets. */
 export class UDataInfo {
   private readonly words: Uint16Array;
@@ -39,4 +62,10 @@ export class UDataInfo {
 }
 export { udata_close, udata_getMemory } from "../udatamem";
 
-export { udata_setAppData } from "../udata";
+export {
+  udata_open,
+  udata_openChoice,
+  udata_setAppData,
+  udata_setCommonData,
+  udata_setFileAccess,
+} from "../udata";

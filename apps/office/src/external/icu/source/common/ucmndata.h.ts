@@ -1,6 +1,8 @@
 /** @fileoverview Original common-data binary header layout and mandatory TOC function-pointer contracts. Offset layouts and common-data dispatch retain source owners. Relocated native pointer slots bind real managed references, not callbacks. */
 import { UDataInfo } from "./unicode/udata";
 import type { UDataMemory } from "./udatamem.h";
+import { U_ICUDATA_NAME } from "./unicode/utypes";
+export const COMMON_DATA_NAME = U_ICUDATA_NAME;
 /** Original leading mapped-data fields. */
 export class MappedData {
   private readonly size: Uint16Array;

@@ -5135,3 +5135,20 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/icu-reference/source/common/udata.cpp`, `UDataPathIterator` constructor and `next`; `charstr.h` initializes only byte zero of an empty CharString.
 - Observation: a null pkg leaves packageStub empty. The ordinary-directory branch of next still calls append(packageStub.data()+1, packageStub.length()-1), passing length -1 and a pointer beyond the initialized NUL. CharString::append then uses strlen on potentially uninitialized stack bytes. The usual open callers pass nonnull package strings; this is a source-only precondition/contract concern, not evidence of a failure in those callers. The native witness does not read or compare this undefined/uninitialized span.
 - Preserve the exact append arguments and branches. Do not clamp the negative length, silently omit the append or invent an empty-package fallback. Keep undefined/uninitialized spans outside native parity claims.
+
+### CALC-473 — A rejected individual data file can suppress the registered package fallback
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `doLoadFromIndividualFiles`, `doLoadFromCommonData` and `openCommonData`.
+- Individual file rejection writes `U_INVALID_FORMAT_ERROR` to the shared nonfatal status. The later FILES_FIRST package lookup passes that same status to `openCommonData`, whose incoming failure guard returns before the named cache lookup. Original ICU reproduces this with both invalid file magic and a rejecting acceptance callback when a valid OpenOffice item is registered.
+- Preserve the shared status and the package lookup guard. A later valid individual file can still succeed because each individual attempt uses the distinct fatal status.
+
+### CALC-474 — NO_FILES can still open a named common package from disk
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `doOpenChoice`, `doLoadFromCommonData` and `openCommonData`.
+- The NO_FILES branch passes an empty data directory to the common loader. That parameter is unused and named package discovery calls `u_getDataDirectory()` again. Original ICU loads an unregistered OpenOffice.dat from that directory under NO_FILES. The timezone override also precedes file-access policy dispatch.
+- Preserve that dispatch and named package discovery. The public loader replay exercises the original disk package and timezone cases.
+
+### CALC-475 — Timezone recognition can pass a nullable type to strcmp
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `isTimeZoneFile` and its caller in `doOpenChoice`. The public declaration permits null type in `unicode/udata.h`.
+- ICU data requests enter the timezone classifier, which compares type against res with no null check. With a null type the C++ call has undefined behavior. The managed comparison treats null as unequal and otherwise preserves the four exact resource names and the original classification order.

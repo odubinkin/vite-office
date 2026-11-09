@@ -4396,3 +4396,20 @@ Actual udata_open/file-mapper/common-data orchestration, production package and
 iterator/provider/engine/service installation, NatNum12 output, multiline
 EditEngine import and final CSV acceptance remain required. FILES_FIRST stays
 the original default; this block does not select MAP_NONE or skip file attempts.
+
+### ICU public data opening for break rules
+
+The original public ICU loading path now connects package and tree naming,
+`UDataPathIterator`, individual file mappings, common-data cache and TOC lookup,
+application acceptance, and `UDataMemory` ownership. The original FILES_FIRST
+default, alternate policies, linked empty stub, common package extension and
+timezone directory overrides share the original status flow. CALC-473 through
+CALC-475 record source interactions between file rejection, the file access
+setting and nullable type.
+
+The POSIX mapping boundary receives file bytes through a synchronous host
+reader. A mapping owns independent managed bytes. Browser startup has no ambient
+synchronous filesystem reader. The app can supply linked common data and
+registered application packages through the original public APIs. The
+production OpenOffice rule package and iterator consumers are the next
+integration point for the CSV formatting paths.

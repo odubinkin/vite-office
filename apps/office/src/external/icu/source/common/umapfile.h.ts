@@ -1,2 +1,2 @@
-/** @fileoverview Original consumed unmap declaration boundary; a file-mapping factory is not exported until implemented. */
-export { uprv_unmapFile } from "./umapfile";
+/** @fileoverview Original ICU platform mapping declarations. */
+export { uprv_mapFile, uprv_unmapFile } from "./umapfile";

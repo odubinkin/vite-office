@@ -24,6 +24,7 @@ export const UErrorCode = {
 export type UErrorCode = number;
 /** Original double UTC milliseconds from 1 January 1970. */
 export type UDate = number;
+export const U_ICUDATA_NAME = "icudt78l";
 export const U_MILLIS_PER_DAY = 86400000;
 /** Original warnings count as success. @param status - ICU status. @returns Success. */
 export function U_SUCCESS(status: UErrorCode): boolean {

@@ -1,22 +1,32 @@
-/** @fileoverview Original ICU application-data registration/common-data cache. Native module-static records are exported read-only ESM bindings for source-owned observation, not alternative factories. File loading/open orchestration remains separate and unimplemented here. Synchronous realm storage binds native mutex boundaries; physical allocation/free/thread ABI is unverified. */
+/** @fileoverview Original ICU data opening, path iteration, common-data cache, and application-data registration. */
 import {
   UDataMemory,
   UDataMemory_init,
   UDataMemory_setData,
   UDataMemory_createNewInstance,
+  UDataMemory_isLoaded,
   UDatamemory_assign,
 } from "./udatamem.h";
-import { udata_close } from "./unicode/udata";
-import { DataHeader, udata_checkCommonData } from "./ucmndata.h";
+import {
+  UDataFileAccess,
+  U_ICUDATA_ALIAS,
+  U_TREE_ENTRY_SEP_CHAR,
+  U_TREE_SEPARATOR,
+  type UDataMemoryIsAcceptable,
+} from "./unicode/udata";
+import { udata_close } from "./udatamem";
+import { COMMON_DATA_NAME, DataHeader, udata_checkCommonData } from "./ucmndata.h";
 import * as H from "./uhash";
 import { UInitOnce, umtx_initOnce } from "./umutex.h";
 import { ECleanupCommonType as C, ucln_common_registerCleanup } from "./ucln_cmn.h";
-import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
+import { UErrorCode as E, U_FAILURE, U_SUCCESS, U_ICUDATA_NAME } from "./unicode/utypes";
 import { CharString } from "./charstr.h";
 import { StringPiece } from "./unicode/stringpiece";
 import { cStringLength } from "./stringpiece";
 import { U_FILE_SEP_CHAR, U_PATH_SEP_CHAR } from "./unicode/putil";
-import { u_getDataDirectory } from "./putil";
+import { u_getDataDirectory, u_getTimeZoneFilesDirectory, uprv_pathIsAbsolute } from "./putil";
+import { uprv_mapFile } from "./umapfile.h";
+import { U_ICUDATA_ENTRY_POINT } from "../stubdata/stubdata";
 /** Original cache entry record. Native allocation is represented by actual managed storage. */
 export interface DataCacheElement {
   name: string;
@@ -26,6 +36,8 @@ export let gCommonDataCache: H.UHashtable<string, DataCacheElement> | null = nul
 export const gCommonDataCacheInitOnce = new UInitOnce();
 const gCommonICUDataArray: (UDataMemory | null)[] = Array(10).fill(null);
 export let gHaveTriedToLoadCommonData = 0;
+// UDATA_DEFAULT_ACCESS is the zero-valued FILES_FIRST enumerator.
+let gDataFileAccess: UDataFileAccess = 0;
 /** Original data cleanup body. No replacement public cleanup facade. @returns True. */
 export function udata_cleanup(): boolean {
   if (gCommonDataCache !== null) {
@@ -251,4 +263,379 @@ export class UDataPathIterator {
     } while (this.path);
     return null;
   }
+}
+
+/** Projects a narrow string as NUL-terminated bytes. @param value - Narrow string. @returns Byte storage. */
+function narrowBytes(value: string): Uint8Array {
+  const bytes = new Uint8Array(value.length + 1);
+  for (let i = 0; i < value.length; ++i) bytes[i] = value.charCodeAt(i);
+  return bytes;
+}
+
+/** Projects actual narrow bytes for the existing string-keyed ICU hash table. @param bytes - NUL bytes. @returns Narrow string. */
+function narrowString(bytes: Uint8Array): string {
+  let value = "";
+  for (let i = 0; bytes[i] !== 0; ++i) value += String.fromCharCode(bytes[i] as number);
+  return value;
+}
+
+/** Original common-data slot installation retains existing owners and deduplicates by address. @param data - Source descriptor. @param warn - Warn when full. @param status - Sticky status. @returns Whether a slot was written. */
+function setCommonICUData(data: UDataMemory, warn: boolean, status: [number]): boolean {
+  const owned = UDataMemory_createNewInstance(status);
+  if (owned === null) return false;
+  UDatamemory_assign(owned, data);
+  for (let i = 0; i < gCommonICUDataArray.length; ++i) {
+    const existing = gCommonICUDataArray[i];
+    if (existing === null) {
+      gCommonICUDataArray[i] = owned;
+      ucln_common_registerCleanup(C.UCLN_COMMON_UDATA, udata_cleanup);
+      return true;
+    }
+    if (samePathAddress(existing?.pHeader?.data ?? null, data.pHeader?.data ?? null)) return false;
+  }
+  if (warn) status[0] = E.U_USING_DEFAULT_WARNING;
+  return false;
+}
+
+/** Original validated registration of caller-owned ICU common data. @param pointer - Header address/null. @param status - Sticky status or null. @returns Nothing. */
+export function udata_setCommonData(
+  pointer: Uint8Array | DataHeader | null,
+  status: [number] | null,
+): void {
+  if (status === null || U_FAILURE(status[0])) return;
+  if (pointer === null) {
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+  const data = new UDataMemory();
+  UDataMemory_init(data);
+  UDataMemory_setData(data, pointer);
+  udata_checkCommonData(data, status);
+  if (U_SUCCESS(status[0])) setCommonICUData(data, true, status);
+}
+
+/** Original package cache lookup and file discovery. @param path - NUL package path. @param commonDataIndex - Linked data slot, or -1 for named package. @param status - Sticky status. @returns Common descriptor/null. */
+function openCommonData(
+  path: Uint8Array,
+  commonDataIndex: number,
+  status: [number],
+): UDataMemory | null {
+  if (U_FAILURE(status[0])) return null;
+  const data = new UDataMemory();
+  UDataMemory_init(data);
+  if (commonDataIndex >= 0) {
+    if (commonDataIndex >= gCommonICUDataArray.length) return null;
+    const existing = gCommonICUDataArray[commonDataIndex];
+    if (existing !== null) return existing as UDataMemory;
+    for (let i = 0; i < commonDataIndex; ++i) {
+      if (samePathAddress(gCommonICUDataArray[i]?.pHeader?.data ?? null, U_ICUDATA_ENTRY_POINT))
+        return null;
+    }
+    UDataMemory_setData(data, U_ICUDATA_ENTRY_POINT);
+    udata_checkCommonData(data, status);
+    setCommonICUData(data, false, status);
+    return gCommonICUDataArray[commonDataIndex] ?? null;
+  }
+
+  const basename = findBasename(path);
+  if (basename[0] === 0) {
+    status[0] = E.U_FILE_ACCESS_ERROR;
+    return null;
+  }
+  const key = narrowString(basename);
+  const cached = udata_findCachedData(key, status);
+  if (cached !== null || U_FAILURE(status[0])) return cached;
+
+  const iter = new UDataPathIterator(
+    u_getDataDirectory(),
+    basename,
+    path,
+    narrowBytes(".dat"),
+    true,
+    status,
+  );
+  let candidate: Uint8Array | null;
+  while (!UDataMemory_isLoaded(data) && (candidate = iter.next(status)) !== null) {
+    uprv_mapFile(data, candidate, status);
+  }
+  if (U_FAILURE(status[0])) return null;
+  if (!UDataMemory_isLoaded(data)) {
+    status[0] = E.U_FILE_ACCESS_ERROR;
+    return null;
+  }
+  udata_checkCommonData(data, status);
+  return udata_cacheDataItem(key, data, status);
+}
+
+/** Original one-attempt extension and cached-pointer lookup. @param status - Sticky status. @returns Whether extended data is visible. */
+function extendICUData(status: [number]): boolean {
+  if (!gHaveTriedToLoadCommonData) {
+    const mapped = openCommonData(narrowBytes(U_ICUDATA_NAME), -1, status);
+    if (mapped !== null) {
+      const copy = new UDataMemory();
+      UDataMemory_init(copy);
+      UDatamemory_assign(copy, mapped);
+      copy.map = null;
+      copy.mapAddr = null;
+      setCommonICUData(copy, false, status);
+    }
+    gHaveTriedToLoadCommonData = 1;
+  }
+  const cached = udata_findCachedData(U_ICUDATA_NAME, status);
+  if (U_FAILURE(status[0]) || cached === null) return false;
+  return gCommonICUDataArray.some(
+    /** Tests the original header-address comparison. @param item - Common data slot. @returns Whether it holds the mapped data. */
+    (item) =>
+      item !== null && samePathAddress(item.pHeader?.data ?? null, cached.pHeader?.data ?? null),
+  );
+}
+
+/** The original acceptance callback and its arguments travel together through the two load paths. */
+interface DataItemRequest {
+  type: string | null;
+  name: string;
+  isAcceptable: UDataMemoryIsAcceptable | null;
+  context: unknown;
+}
+
+/** Original magic/callback checks and separate fatal/nonfatal status channels. @param header - Item header. @param request - Original acceptance arguments. @param subError - Nonfatal status. @param status - Fatal status. @returns Accepted descriptor/null. */
+function checkDataItem(
+  header: DataHeader,
+  request: DataItemRequest,
+  subError: [number],
+  status: [number],
+): UDataMemory | null {
+  if (U_FAILURE(status[0])) return null;
+  if (
+    header.dataHeader.magic1 !== 0xda ||
+    header.dataHeader.magic2 !== 0x27 ||
+    (request.isAcceptable !== null &&
+      !request.isAcceptable(request.context, request.type, request.name, header.info))
+  ) {
+    subError[0] = E.U_INVALID_FORMAT_ERROR;
+    return null;
+  }
+  const data = UDataMemory_createNewInstance(status);
+  if (data !== null) data.pHeader = header;
+  return data;
+}
+
+/** Original individual-file load loop and mapping transfer. @param pkgName - Package bytes. @param dataPath - Search directory bytes. @param suffix - Item path suffix. @param path - Package path. @param request - Item request. @param subError - Nonfatal status. @param status - Fatal status. @returns Accepted descriptor/null. */
+function doLoadFromIndividualFiles(
+  pkgName: Uint8Array,
+  dataPath: Uint8Array,
+  suffix: Uint8Array,
+  path: Uint8Array,
+  request: DataItemRequest,
+  subError: [number],
+  status: [number],
+): UDataMemory | null {
+  const iter = new UDataPathIterator(dataPath, pkgName, path, suffix, false, status);
+  const mapped = new UDataMemory();
+  let candidate: Uint8Array | null;
+  while ((candidate = iter.next(status)) !== null) {
+    if (!uprv_mapFile(mapped, candidate, status)) continue;
+    const data = checkDataItem(mapped.pHeader as DataHeader, request, subError, status);
+    if (data !== null) {
+      data.mapAddr = mapped.mapAddr;
+      data.map = mapped.map;
+      data.length = mapped.length;
+      return data;
+    }
+    udata_close(mapped);
+    if (U_FAILURE(status[0])) return null;
+    subError[0] = E.U_INVALID_FORMAT_ERROR;
+  }
+  return null;
+}
+
+/** Original common-package lookup and extended ICU data retry. @param isICUData - Whether to search ICU slots. @param tocName - Original tree entry key. @param path - Package path. @param request - Item request. @param subError - Nonfatal status. @param status - Fatal status. @returns Accepted descriptor/null. */
+function doLoadFromCommonData(
+  isICUData: boolean,
+  tocName: Uint8Array,
+  path: Uint8Array,
+  request: DataItemRequest,
+  subError: [number],
+  status: [number],
+): UDataMemory | null {
+  let index = isICUData ? 0 : -1;
+  let checkedExtendedICUData = false;
+  for (;;) {
+    const common = openCommonData(path, index, subError);
+    if (U_SUCCESS(subError[0]) && common !== null && common.vFuncs !== null) {
+      const length: [number] = [-1];
+      const header = common.vFuncs.Lookup(common, tocName, length, subError);
+      if (header !== null) {
+        const data = checkDataItem(header, request, subError, status);
+        if (U_FAILURE(status[0])) return null;
+        if (data !== null) {
+          data.length = length[0];
+          return data;
+        }
+      }
+    }
+    if (subError[0] === E.U_MEMORY_ALLOCATION_ERROR) {
+      status[0] = subError[0];
+      return null;
+    }
+    if (!isICUData) return null;
+    if (common !== null) ++index;
+    else if (!checkedExtendedICUData && extendICUData(subError)) checkedExtendedICUData = true;
+    else return null;
+  }
+}
+
+/** Original four timezone resource exceptions. @param name - Item name. @param type - Item type. @returns Whether a timezone directory override applies. */
+function isTimeZoneFile(name: string, type: string | null): boolean {
+  return (
+    type === "res" &&
+    (name === "zoneinfo64" ||
+      name === "timezoneTypes" ||
+      name === "windowsZones" ||
+      name === "metaZones")
+  );
+}
+
+/** Original POSIX package/tree naming and file-access dispatch. @param path - Original package path. @param request - Item and acceptance arguments. @param status - Sticky status. @returns Data descriptor/null. */
+function doOpenChoice(
+  path: string | null,
+  request: DataItemRequest,
+  status: [number],
+): UDataMemory | null {
+  let pathBytes = path === null ? null : narrowBytes(path);
+  const pathText = pathBytes === null ? null : narrowString(pathBytes);
+  const isICUData =
+    pathText === null ||
+    pathText === U_ICUDATA_ALIAS ||
+    pathText.startsWith(U_ICUDATA_NAME + "-") ||
+    pathText.startsWith(U_ICUDATA_ALIAS + "-");
+  const pkg = new CharString();
+  const tree = new CharString();
+  if (pathText === null) pkg.append(narrowBytes(U_ICUDATA_NAME), status);
+  else {
+    const first = pathText.indexOf("/");
+    const last = pathText.lastIndexOf("/");
+    if (uprv_pathIsAbsolute(pathBytes) || last !== first) {
+      pkg.append((pathBytes as Uint8Array).subarray(last + 1), status);
+    } else {
+      const separator = (pathBytes as Uint8Array)
+        .subarray(0, pathText.length)
+        .indexOf(U_TREE_SEPARATOR);
+      if (separator >= 0) {
+        tree.append((pathBytes as Uint8Array).subarray(separator + 1), status);
+        if (isICUData) pkg.append(narrowBytes(U_ICUDATA_NAME), status);
+        else {
+          pkg.append(pathBytes, separator, status);
+          if (first < 0) pathBytes = pkg.data();
+        }
+      } else pkg.append(isICUData ? narrowBytes(U_ICUDATA_NAME) : pathBytes, status);
+    }
+  }
+
+  const tocName = new CharString().append(pkg, status);
+  const tocPath = new CharString().append(pkg, status);
+  const suffixIndex = tocName.length();
+  if (!tree.isEmpty()) {
+    tocName.append(U_TREE_ENTRY_SEP_CHAR, status).append(tree, status);
+    tocPath.append(U_FILE_SEP_CHAR, status).append(tree, status);
+  }
+  const name = narrowBytes(request.name);
+  tocName.append(U_TREE_ENTRY_SEP_CHAR, status).append(name, status);
+  tocPath.append(U_FILE_SEP_CHAR, status).append(name, status);
+  const type = request.type === null ? null : narrowBytes(request.type);
+  if (type !== null && type[0] !== 0) {
+    tocName.append(46, status).append(type, status);
+    tocPath.append(46, status).append(type, status);
+  }
+  const suffix = tocPath.data().subarray(suffixIndex + 1);
+  pathBytes ??= narrowBytes(COMMON_DATA_NAME);
+  const dataPath = u_getDataDirectory();
+  const subError: [number] = [E.U_ZERO_ERROR];
+
+  let result: UDataMemory | null;
+  if (isICUData && isTimeZoneFile(narrowString(name), type === null ? null : narrowString(type))) {
+    const directory = u_getTimeZoneFilesDirectory(status);
+    if (directory[0] !== 0) {
+      const empty = new Uint8Array([0]);
+      result = doLoadFromIndividualFiles(
+        empty,
+        directory,
+        suffix,
+        empty,
+        request,
+        subError,
+        status,
+      );
+      if (result !== null || U_FAILURE(status[0])) return result;
+    }
+  }
+  if (gDataFileAccess === UDataFileAccess.UDATA_PACKAGES_FIRST) {
+    result = doLoadFromCommonData(isICUData, tocName.data(), pathBytes, request, subError, status);
+    if (result !== null || U_FAILURE(status[0])) return result;
+  }
+  if (
+    (gDataFileAccess === UDataFileAccess.UDATA_PACKAGES_FIRST ||
+      gDataFileAccess === UDataFileAccess.UDATA_FILES_FIRST) &&
+    (dataPath[0] !== 0 || !isICUData)
+  ) {
+    result = doLoadFromIndividualFiles(
+      pkg.data(),
+      dataPath,
+      suffix,
+      pathBytes,
+      request,
+      subError,
+      status,
+    );
+    if (result !== null || U_FAILURE(status[0])) return result;
+  }
+  if (
+    gDataFileAccess === UDataFileAccess.UDATA_ONLY_PACKAGES ||
+    gDataFileAccess === UDataFileAccess.UDATA_FILES_FIRST ||
+    gDataFileAccess === UDataFileAccess.UDATA_NO_FILES
+  ) {
+    result = doLoadFromCommonData(isICUData, tocName.data(), pathBytes, request, subError, status);
+    if (result !== null || U_FAILURE(status[0])) return result;
+  }
+  if (U_SUCCESS(status[0]))
+    status[0] = U_SUCCESS(subError[0]) ? E.U_FILE_ACCESS_ERROR : subError[0];
+  return null;
+}
+
+/** Original unconditional item admission with native argument guards. @param path - Package path/null. @param type - Item type/null. @param name - Item name/null. @param status - Sticky status/null. @returns Owned data descriptor/null. */
+export function udata_open(
+  path: string | null,
+  type: string | null,
+  name: string | null,
+  status: [number] | null,
+): UDataMemory | null {
+  if (status === null || U_FAILURE(status[0])) return null;
+  if (name === null || name.length === 0 || name.charCodeAt(0) === 0) {
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+    return null;
+  }
+  return doOpenChoice(path, { type, name, isAcceptable: null, context: null }, status);
+}
+
+/** Original caller-controlled item admission with native argument guards. @param path - Package path/null. @param type - Item type/null. @param name - Item name/null. @param isAcceptable - Callback/null. @param context - Callback context. @param status - Sticky status/null. @returns Owned data descriptor/null. */
+export function udata_openChoice(
+  path: string | null,
+  type: string | null,
+  name: string | null,
+  isAcceptable: UDataMemoryIsAcceptable | null,
+  context: unknown,
+  status: [number] | null,
+): UDataMemory | null {
+  if (status === null || U_FAILURE(status[0])) return null;
+  if (name === null || name.length === 0 || name.charCodeAt(0) === 0 || isAcceptable === null) {
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+    return null;
+  }
+  return doOpenChoice(path, { type, name, isAcceptable, context }, status);
+}
+
+/** Original unsynchronized file-access setting, which ignores status. @param access - Search policy. @param status - Unused status. @returns Nothing. */
+export function udata_setFileAccess(access: UDataFileAccess, status: [number] | null): void {
+  void status;
+  gDataFileAccess = access;
 }

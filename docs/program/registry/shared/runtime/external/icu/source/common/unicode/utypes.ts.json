@@ -26,21 +26,25 @@
         "scripts/icu-likelysubtags-native-probe.mjs",
         "scripts/icu-resource-fallback-native-probe.mjs",
         "apps/office/src/external/icu/source/common/ustrtrns.native.test.ts",
-        "apps/office/src/external/icu/source/common/ustrtrns.native-observations.json"
+        "apps/office/src/external/icu/source/common/ustrtrns.native-observations.json",
+        "apps/office/src/external/icu/source/common/udata.open.native.test.ts",
+        "apps/office/src/external/icu/source/common/udata.open.native-observations.json"
       ],
-      "justification": "AQF9AG ports consumed ICU78.3 UDate, millis-per-day and status predicates/constants. Negative warnings remain successful; positive statuses remain failures. Other ICU error constants, compiler/platform declarations and generic export machinery are not ported. Adds original U_INDEX_OUTOFBOUNDS_ERROR8 for the actual resource iterator exhaustion contract, independently observed in the native iterator comparison. Other unconsumed status constants remain outside this partial declaration. Adds original U_STRING_NOT_TERMINATED_WARNING(-124) and U_BUFFER_OVERFLOW_ERROR15 for actual termination/checked-buffer contracts; no invented locale error codes are introduced. Native primitive/keyword facade comparisons verify exact statuses and warning clearing. Adds original U_MEMORY_ALLOCATION_ERROR7, U_INVARIANT_CONVERSION_ERROR26 and U_NO_WRITE_PERMISSION30 for source constructor/pool guards. Adds original U_USING_DEFAULT_WARNING=-127 and U_FILE_ACCESS_ERROR=4 for source resource loading/fallback. Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified.",
+      "justification": "AQF9AG ports consumed ICU78.3 UDate, millis-per-day and status predicates/constants. Negative warnings remain successful; positive statuses remain failures. Other ICU error constants, compiler/platform declarations and generic export machinery are not ported. Adds original U_INDEX_OUTOFBOUNDS_ERROR8 for the actual resource iterator exhaustion contract, independently observed in the native iterator comparison. Other unconsumed status constants remain outside this partial declaration. Adds original U_STRING_NOT_TERMINATED_WARNING(-124) and U_BUFFER_OVERFLOW_ERROR15 for actual termination/checked-buffer contracts; no invented locale error codes are introduced. Native primitive/keyword facade comparisons verify exact statuses and warning clearing. Adds original U_MEMORY_ALLOCATION_ERROR7, U_INVARIANT_CONVERSION_ERROR26 and U_NO_WRITE_PERMISSION30 for source constructor/pool guards. Adds original U_USING_DEFAULT_WARNING=-127 and U_FILE_ACCESS_ERROR=4 for source resource loading/fallback. Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified. The public ICU loader uses original package and tree naming, individual-file and common-package dispatch, acceptance, sticky statuses and descriptor ownership. UDATA_DEFAULT_ACCESS retains FILES_FIRST. The POSIX mapping contract binds a synchronous host reader at the mapping boundary, with independent managed byte storage per open. The browser has no ambient synchronous filesystem reader. Original native comparisons cover all four policies, named and linked ICU data, package extension, timezone override and status/callback admission. Production OpenOffice package installation and iterator/service consumers remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "UErrorCode",
         "U_SUCCESS",
-        "U_FAILURE"
+        "U_FAILURE",
+        "U_ICUDATA_NAME"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/icu-reference/source/common/unicode/utypes.h",
       "upstreamSymbols": [
         "UErrorCode",
         "U_SUCCESS",
-        "U_FAILURE"
+        "U_FAILURE",
+        "U_ICUDATA_NAME"
       ]
     }
   }
