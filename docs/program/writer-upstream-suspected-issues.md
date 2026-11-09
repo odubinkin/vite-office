@@ -2960,3 +2960,30 @@ remaining right space for a non-FRAME right relation and negative remaining
 left space for a non-FRAME left relation. The original comparison is preserved
 on each side. Focused local tests use actual attached fly formats and preserve
 their source order.
+
+### WRITER363 — HTML spanning-cell constraints are not ordered lexicographically
+
+Pinned `SwHTMLTableLayoutConstraints::InsertNext` in
+`sw/source/core/doc/htmltbl.cxx` stops on either a greater row or a greater
+column. A constraint in a later row can consequently be inserted before one
+in an earlier row if its column is smaller. Preserve this condition because
+successive constraints operate on column widths already changed by the
+preceding constraints.
+
+### WRITER364 — HTML spanning-cell maxima discard fractional remainders
+
+Pinned `SwHTMLTableLayout::AutoLayoutPass1` assigns the remainder of a
+proportional minimum increase to the last spanned column. The maximum increase
+instead truncates each share independently. The sum of maximum widths can
+therefore fall short of the constraint. The local regression preserves a
+210-twip constraint with a 209-twip result.
+
+### WRITER365 — HTML inferred percentages include ineligible fixed columns in the denominator
+
+The same first pass uses the maximum of all non-percent columns when it
+distributes unclaimed percentages, including fixed-width columns. It only
+assigns percentages to nonempty columns with no authored width, and it
+independently truncates each share. Preserve the source denominator and
+assignment conditions. The local regression retains an inferred 45% from
+60 unclaimed points when a fixed column occupies one quarter of the
+denominator.

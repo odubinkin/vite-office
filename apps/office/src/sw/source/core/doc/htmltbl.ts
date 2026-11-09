@@ -14,6 +14,56 @@ import type { SwStartNode } from "../docnode/node";
 const USHRT_MAX = 65535;
 const MAX_TABWIDTH = USHRT_MAX - 2001;
 
+/** Original first-pass constraint for one spanning cell, linked in native insertion order. */
+export class SwHTMLTableLayoutConstraints {
+  private m_pNext: SwHTMLTableLayoutConstraints | null = null;
+  /** Owns the measured cell widths and original grid position. @param minimum - Provisional minimum. @param maximum - Provisional maximum. @param row - Start row. @param column - Start column. @param span - Column span. @returns Constraint. */
+  constructor(
+    private readonly minimum: number,
+    private readonly maximum: number,
+    private readonly row: number,
+    private readonly column: number,
+    private readonly span: number,
+  ) {}
+  /** Original insertion stops on either greater coordinate. @param value - Detached constraint. @returns Chain head after insertion. */
+  InsertNext(value: SwHTMLTableLayoutConstraints): SwHTMLTableLayoutConstraints {
+    if (this.row > value.row || this.column > value.column) {
+      value.m_pNext = this;
+      return value;
+    }
+    let next = this.m_pNext;
+    let previous: SwHTMLTableLayoutConstraints | null = null;
+    while (next !== null && next.row <= value.row && next.column <= value.column) {
+      previous = next;
+      next = next.m_pNext;
+    }
+    value.m_pNext = next;
+    if (previous === null) this.m_pNext = value;
+    else previous.m_pNext = value;
+    return this;
+  }
+  /** Original provisional minimum. @returns Width. */
+  GetMinNoAlign(): number {
+    return this.minimum;
+  }
+  /** Original provisional maximum. @returns Width. */
+  GetMaxNoAlign(): number {
+    return this.maximum;
+  }
+  /** Original start column. @returns Column. */
+  GetColumn(): number {
+    return this.column;
+  }
+  /** Original covered column count. @returns Span. */
+  GetColSpan(): number {
+    return this.span;
+  }
+  /** Borrows the next constraint. @returns Native successor or null. */
+  GetNext(): SwHTMLTableLayoutConstraints | null {
+    return this.m_pNext;
+  }
+}
+
 /** Native layout owns its original grid/options. Protected visibility binds original private fields across forthcoming responsibility fragments without a second state object. */
 export class SwHTMLTableLayout {
   protected readonly m_aColumns: (SwHTMLTableLayoutColumn | null)[];
@@ -259,6 +309,204 @@ export class SwHTMLTableLayout {
     }
     return space;
   }
+  /** Applies native cell wrapping, authored width and border policy to measured content. @param row - Native row. @param index - Native start column. @param minimum - Content minimum. @param maximum - Content maximum. @param absoluteMinimum - Absolute content minimum. @returns Constraint for a spanning cell, otherwise null after merging the column. */
+  protected AccumulatePass1CellWidths(
+    row: number,
+    index: number,
+    minimum: number,
+    maximum: number,
+    absoluteMinimum: number,
+  ): SwHTMLTableLayoutConstraints | null {
+    const cell = this.GetCell(row, index);
+    if (cell === null) throw new Error("assert(layout cell)");
+    const span = cell.GetColSpan(),
+      width = cell.GetWidthOption(),
+      relative = cell.IsPercentWidthOption();
+    if (cell.HasNoWrapOption()) {
+      if (!width || relative) minimum = absoluteMinimum = maximum;
+      else {
+        minimum = Math.max(width, minimum);
+        absoluteMinimum = Math.max(width, absoluteMinimum);
+      }
+    }
+    const cellMin: [number] = [Math.max(minimum, MINLAY)],
+      cellMax: [number] = [Math.max(maximum, MINLAY)],
+      cellAbsMin: [number] = [Math.max(absoluteMinimum, MINLAY)];
+    this.AddBorderWidth(cellMin, cellMax, cellAbsMin, index, span);
+    if (span === 1) {
+      const column = this.LayoutColumn(index);
+      column.MergeMinMaxNoAlign(cellMin[0], cellMax[0], cellAbsMin[0]);
+      if (!this.HasColTags()) column.MergeCellWidthOption(width, relative);
+      return null;
+    }
+    if (!this.HasColTags() && width && !relative) {
+      const absoluteWidth: [number] = [width];
+      this.AddBorderWidth(absoluteWidth, [0], [0], index, span, false);
+      if (absoluteWidth[0] >= cellMin[0]) {
+        cellMax[0] = absoluteWidth[0];
+        if (this.HasColsOption()) cellMin[0] = absoluteWidth[0];
+      } else cellMin[0] = cellMax[0] = Math.max(absoluteWidth[0], cellAbsMin[0]);
+    } else if (this.HasColsOption() || this.HasColTags()) cellMin[0] = cellAbsMin[0];
+    return new SwHTMLTableLayoutConstraints(cellMin[0], cellMax[0], row, index, span);
+  }
+
+  /** Resolves a scanned column with single-span cells using its native provisional widths. @param index - Native column. @returns Nothing. */
+  protected SetPass1ColumnWidths(index: number): void {
+    const column = this.LayoutColumn(index);
+    if (column.GetWidthOption() && !column.IsRelWidthOption()) {
+      const absolute: [number] = [column.GetWidthOption()];
+      this.AddBorderWidth(absolute, [0], [0], index, 1, false);
+      const width = absolute[0];
+      if (width >= column.GetMinNoAlign())
+        column.SetMinMax(this.HasColsOption() ? width : column.GetMinNoAlign(), width);
+      else {
+        const minimum = Math.max(width, column.GetAbsMinNoAlign());
+        column.SetMinMax(minimum, minimum);
+      }
+    } else
+      column.SetMinMax(
+        this.HasColsOption() ? column.GetAbsMinNoAlign() : column.GetMinNoAlign(),
+        column.GetMaxNoAlign(),
+      );
+  }
+
+  /** Completes the original first pass after cell measurement has populated column totals and constraints. @param constraints - Native spanning-cell chain. @param fixRelative - Relative-width admission from the column scan. @returns Nothing. */
+  protected FinishAutoLayoutPass1(
+    constraints: SwHTMLTableLayoutConstraints | null,
+    fixRelative: boolean,
+  ): void {
+    for (let constraint = constraints; constraint !== null; constraint = constraint.GetNext()) {
+      const start = constraint.GetColumn(),
+        end = start + constraint.GetColSpan(),
+        constraintMin = constraint.GetMinNoAlign(),
+        constraintMax = constraint.GetMaxNoAlign();
+      let columnsMin = 0,
+        columnsMax = 0;
+      for (let index = start; index < end; ++index) {
+        const column = this.LayoutColumn(index);
+        columnsMin += column.GetMin();
+        columnsMax += column.GetMax();
+      }
+
+      if (columnsMin < constraintMin) {
+        const difference = constraintMin - columnsMin;
+        let remainder = difference;
+        if (constraintMin > columnsMax) {
+          for (let index = start; index < end; ++index) {
+            const column = this.LayoutColumn(index),
+              oldMin = column.GetMin(),
+              oldMax = column.GetMax(),
+              add = index < end - 1 ? dividePass1(oldMin * difference, columnsMin) : remainder,
+              minimum = oldMin + add,
+              maximum = Math.max(oldMax, minimum);
+            this.m_nMin += add;
+            this.m_nMax += maximum - oldMax;
+            columnsMax += maximum - oldMax;
+            remainder -= add;
+            column.SetMinMax(minimum, maximum);
+          }
+        } else {
+          for (let index = start; index < end; ++index) {
+            const column = this.LayoutColumn(index),
+              add = Math.min(remainder, column.GetMax() - column.GetMin());
+            column.AddToMin(add);
+            this.m_nMin += add;
+            remainder -= add;
+          }
+        }
+      }
+
+      if (!this.HasColTags() && columnsMax < constraintMax) {
+        const difference = constraintMax - columnsMax;
+        for (let index = start; index < end; ++index) {
+          const column = this.LayoutColumn(index),
+            add = dividePass1(column.GetMax() * difference, columnsMax);
+          column.AddToMax(add);
+          this.m_nMax += add;
+        }
+      }
+    }
+    if (!fixRelative) return;
+    if (this.HasColTags()) this.FixPass1RelativeColumnTags();
+    else this.FixPass1RelativeCellWidths();
+  }
+
+  /** Applies original COL/COLGROUP relative weights while retaining the limiting column minimum. @returns Nothing. */
+  private FixPass1RelativeColumnTags(): void {
+    let absoluteMinimum = 0;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (column.IsRelWidthOption() && column.GetWidthOption()) absoluteMinimum += column.GetMin();
+    }
+    let quotient = Infinity;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (!column.IsRelWidthOption()) continue;
+      this.m_nMax -= column.GetMax();
+      if (column.GetWidthOption() && column.GetMin()) {
+        column.SetMax(absoluteMinimum * column.GetWidthOption());
+        quotient = Math.min(quotient, dividePass1(column.GetMax(), column.GetMin()));
+      }
+    }
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (!column.IsRelWidthOption()) continue;
+      column.SetMax(
+        column.GetWidthOption() ? dividePass1(column.GetMax(), quotient) : column.GetMin(),
+      );
+      this.m_nMax += column.GetMax();
+    }
+  }
+
+  /** Applies original cell-derived percentages and maximum widths when COL tags were absent. @returns Nothing. */
+  private FixPass1RelativeCellWidths(): void {
+    let relative = 0,
+      relativeColumns = 0,
+      relativeMaximum = 0;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (column.IsRelWidthOption() && column.GetWidthOption()) {
+        let width = column.GetWidthOption();
+        if (relative + width > 100) {
+          width = 100 - relative;
+          column.SetWidthOption(width);
+        }
+        relativeMaximum += column.GetMax();
+        relative += width;
+        ++relativeColumns;
+      } else if (!column.GetMin()) ++relativeColumns;
+    }
+    const fixedMaximum =
+      relative < 100 && relativeColumns < this.m_nCols ? this.m_nMax - relativeMaximum : 0;
+    if (fixedMaximum) {
+      for (let index = 0; index < this.m_nCols; ++index) {
+        const column = this.LayoutColumn(index);
+        if (!column.IsRelWidthOption() && !column.GetWidthOption() && column.GetMin())
+          column.SetWidthOption(dividePass1(column.GetMax() * (100 - relative), fixedMaximum));
+      }
+    }
+
+    let quotient = Infinity;
+    const oldMaximum = this.m_nMax;
+    this.m_nMax = 0;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (column.IsRelWidthOption() && column.GetWidthOption()) {
+        const maximum = (this.m_nWidthOption ? this.m_nMin : oldMaximum) * column.GetWidthOption(),
+          divisor = this.m_nWidthOption ? column.GetMin() : column.GetMax();
+        quotient = Math.min(quotient, dividePass1(maximum, divisor));
+        column.SetMax(maximum);
+      } else if (this.HasColsOption() || this.m_nWidthOption || column.IsRelWidthOption())
+        column.SetMax(column.GetMin());
+    }
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      if (column.IsRelWidthOption() && column.GetWidthOption() && quotient)
+        column.SetMax(Math.max(column.GetMin(), dividePass1(column.GetMax(), quotient)));
+      this.m_nMax += column.GetMax();
+    }
+  }
+
   /** Distributes an actual available width over the native first-pass column metrics. @param absolute - Available twips. @param relative - Available relative width, zero for a top table. @param leftSpace - Surrounding left cell space. @param rightSpace - Surrounding right cell space. @param parentInherited - Surrounding inherited space. @returns Nothing. */
   AutoLayoutPass2(
     absolute: number,
@@ -663,4 +911,10 @@ function scaleMinimumDelta(
     return Math.trunc((weight * Number(availableUnsigned)) / total + base);
   }
   return Math.trunc((weight * available) / total) + base;
+}
+
+/** Performs the original integral quotient over represented layout metrics. @param numerator - Native dividend. @param denominator - Nonzero native divisor, or the unchanged maximum sentinel. @returns Truncated result. */
+function dividePass1(numerator: number, denominator: number): number {
+  if (denominator === 0) throw new Error("division by zero in HTML table first pass");
+  return Math.trunc(numerator / denominator);
 }

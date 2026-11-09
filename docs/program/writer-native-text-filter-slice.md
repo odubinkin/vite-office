@@ -1843,3 +1843,16 @@ tables at either edge of a fly. See WRITER361 and WRITER362.
 The source ICU dictionary rules, full paragraph accumulation and first-pass
 HTML table aggregation remain separate work. This checkpoint does not yet
 connect HTML table import to the Markdown parser.
+
+### HTML78 — First-pass HTML cell and spanning-column width policy
+
+The native layout owner applies authored cell width, wrapping and borders to
+provisional content widths. It records spanning cells in the original linked
+constraint order, distributes minimum and maximum widths, and resolves both
+COL/COLGROUP weights and cell-derived percentages. WRITER363 through
+WRITER365 record retained source behavior for constraint ordering, fractional
+remainders and fixed columns in the percentage denominator.
+
+The first-pass traversal that produces provisional content widths remains to
+be connected to native paragraph measurement and nested tables. This
+checkpoint supplies the cell and column policy for that traversal.

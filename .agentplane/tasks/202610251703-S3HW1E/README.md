@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 462
+revision: 465
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:20:31.177Z"
+  updated_at: "2026-11-09T18:27:55.608Z"
   updated_by: "CODER"
-  note: "HTML77 verified native anchored paragraph width inputs and physical output-device binding. Writer 122 focused tests, Shared 36, TypeScript, lint and architecture gates passed. Parent requires native dictionary boundaries, full HTML table first pass and production Markdown table import, plus final represented format parity audit."
-  attempts: 88
+  note: "HTML78 verified native first-pass cell, span and column constraints; 178 tests across 13 focused suites and static gates passed. Remaining first-pass traversal requires original dictionary and paragraph measurement."
+  attempts: 89
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1413,8 +1416,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:27:55.608Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML78 verified native first-pass cell, span and column constraints; 178 tests across 13 focused suites and static gates passed. Remaining first-pass traversal requires original dictionary and paragraph measurement."
+  -
+    type: "status"
+    at: "2026-11-09T18:28:00.894Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:20:37.667Z"
+doc_updated_at: "2026-11-09T18:28:00.894Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3769,6 +3785,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:27:55.608Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML78 verified native first-pass cell, span and column constraints; 178 tests across 13 focused suites and static gates passed. Remaining first-pass traversal requires original dictionary and paragraph measurement.
+    Attempts: 89
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:27:54.351Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5521,6 +5567,14 @@ sections:
     - The focused Writer run selected native min/max, attribute iteration, HTML widths, TXT range, Markdown reader/writer, RTF direction import/export, browser module and workflows. Nine suites and 121 of 122 tests passed before correcting the new test fixture. The temporary set had been disposed after transferring it to the automatic-style handle; the final replay of the changed suite passed all seven tests. Final Writer total is 122 unique tests across ten suites. The shared default-font and style-preview device run passed 36 tests across two suites. Final total 158 across 12. Evidence: html77-tests-ready.log, html77-hint-final.log and html77-shared-ready.log. No full-project run at this continuing parent checkpoint.
     - Whole-app TypeScript, changed ESLint/Prettier, provenance (1961 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Boundary validation caught an initial core-to-VCL import and confirmed its removal after reuse of the injected capability.
     - Source ICU dictionary word boundaries, complete GetMinMaxSize, first-pass HTML aggregation and production parser/materialization remain open. No production filter calls the new width query yet. Broad native TXT/RTF/Markdown model and UI parity remain unverified.
+
+    S3HW1E HTML78 — Original first-pass cell, span and column width policy.
+
+    - Measured content inputs go to the native cell/column/spacing owners. NOWRAP differs for fixed and percentage options. Column tags and COLS select original provisional versus absolute minima. The original linked span constraints preserve the either-coordinate insertion comparison, proportional minimum remainder, ordered slack and independent maximum truncation. Fixed and relative width options update native column metrics. Weighted COL and inferred TD percentages retain source quotient, cap and denominator rules. WRITER363–365 record the source ordering, independent maximum rounding and fixed-column denominator.
+    - The first-pass scan must still call these original-owner operations with actual paragraph and nested-table measurements. The protected operations do not expose a new browser/runtime filter path and no paragraph width estimate or substituted dictionary segmenter was added. The nine tests exercise the real layout/cell/column operations at their native provisional numeric boundary.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 178 passed across 13 suites (html78-tests.log). Nine final first-pass cases replayed after the ESLint-driven removal of a this alias; passed and already included in the total (html78-pass1-final.log). No full-project replay at this continuing parent checkpoint.
+    - Whole-app TypeScript, changed ESLint/Prettier, provenance, Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. The initial linter flagged a linked-list cursor alias of this; final insertion uses the source head test and follows the original links without the alias.
+    - Actual dictionary measurement, first-pass scanning/materialization, end-to-end Markdown tables and the fixed original capability matrix remain open. Broad behavior/default/contract/source statuses remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -7886,6 +7940,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:27:55.608Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML78 verified native first-pass cell, span and column constraints; 178 tests across 13 focused suites and static gates passed. Remaining first-pass traversal requires original dictionary and paragraph measurement.
+Attempts: 89
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:27:54.351Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9642,3 +9726,11 @@ S3HW1E HTML77 — Original anchored paragraph measurement inputs and physical wi
 - The focused Writer run selected native min/max, attribute iteration, HTML widths, TXT range, Markdown reader/writer, RTF direction import/export, browser module and workflows. Nine suites and 121 of 122 tests passed before correcting the new test fixture. The temporary set had been disposed after transferring it to the automatic-style handle; the final replay of the changed suite passed all seven tests. Final Writer total is 122 unique tests across ten suites. The shared default-font and style-preview device run passed 36 tests across two suites. Final total 158 across 12. Evidence: html77-tests-ready.log, html77-hint-final.log and html77-shared-ready.log. No full-project run at this continuing parent checkpoint.
 - Whole-app TypeScript, changed ESLint/Prettier, provenance (1961 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Boundary validation caught an initial core-to-VCL import and confirmed its removal after reuse of the injected capability.
 - Source ICU dictionary word boundaries, complete GetMinMaxSize, first-pass HTML aggregation and production parser/materialization remain open. No production filter calls the new width query yet. Broad native TXT/RTF/Markdown model and UI parity remain unverified.
+
+S3HW1E HTML78 — Original first-pass cell, span and column width policy.
+
+- Measured content inputs go to the native cell/column/spacing owners. NOWRAP differs for fixed and percentage options. Column tags and COLS select original provisional versus absolute minima. The original linked span constraints preserve the either-coordinate insertion comparison, proportional minimum remainder, ordered slack and independent maximum truncation. Fixed and relative width options update native column metrics. Weighted COL and inferred TD percentages retain source quotient, cap and denominator rules. WRITER363–365 record the source ordering, independent maximum rounding and fixed-column denominator.
+- The first-pass scan must still call these original-owner operations with actual paragraph and nested-table measurements. The protected operations do not expose a new browser/runtime filter path and no paragraph width estimate or substituted dictionary segmenter was added. The nine tests exercise the real layout/cell/column operations at their native provisional numeric boundary.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 178 passed across 13 suites (html78-tests.log). Nine final first-pass cases replayed after the ESLint-driven removal of a this alias; passed and already included in the total (html78-pass1-final.log). No full-project replay at this continuing parent checkpoint.
+- Whole-app TypeScript, changed ESLint/Prettier, provenance, Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. The initial linter flagged a linked-list cursor alias of this; final insertion uses the source head test and follows the original links without the alias.
+- Actual dictionary measurement, first-pass scanning/materialization, end-to-end Markdown tables and the fixed original capability matrix remain open. Broad behavior/default/contract/source statuses remain unverified.
