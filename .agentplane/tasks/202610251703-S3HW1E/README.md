@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 465
+revision: 468
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:27:55.608Z"
+  updated_at: "2026-11-09T18:35:37.457Z"
   updated_by: "CODER"
-  note: "HTML78 verified native first-pass cell, span and column constraints; 178 tests across 13 focused suites and static gates passed. Remaining first-pass traversal requires original dictionary and paragraph measurement."
-  attempts: 89
+  note: "HTML79 verified pinned genbrk byte reproduction and original ICU forward boundary candidates. 3705 native differential input/rule pairs, 174 focused tests, and static gates passed. Dictionary engines, queries, and filter integration remain open."
+  attempts: 90
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1429,8 +1432,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:35:37.457Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML79 verified pinned genbrk byte reproduction and original ICU forward boundary candidates. 3705 native differential input/rule pairs, 174 focused tests, and static gates passed. Dictionary engines, queries, and filter integration remain open."
+  -
+    type: "status"
+    at: "2026-11-09T18:35:42.099Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:28:00.894Z"
+doc_updated_at: "2026-11-09T18:35:42.099Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3815,6 +3831,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:35:37.457Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML79 verified pinned genbrk byte reproduction and original ICU forward boundary candidates. 3705 native differential input/rule pairs, 174 focused tests, and static gates passed. Dictionary engines, queries, and filter integration remain open.
+    Attempts: 90
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:35:36.822Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5575,6 +5621,15 @@ sections:
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 178 passed across 13 suites (html78-tests.log). Nine final first-pass cases replayed after the ESLint-driven removal of a this alias; passed and already included in the total (html78-pass1-final.log). No full-project replay at this continuing parent checkpoint.
     - Whole-app TypeScript, changed ESLint/Prettier, provenance, Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. The initial linter flagged a linked-list cursor alias of this; final insertion uses the source head test and follows the original links without the alias.
     - Actual dictionary measurement, first-pass scanning/materialization, end-to-end Markdown tables and the fixed original capability matrix remain open. Broad behavior/default/contract/source statuses remain unverified.
+
+    S3HW1E HTML79 — Pinned ICU Brk resources and forward boundary candidates.
+
+    - Built the local ICU 78.3 source in output/playwright/rtf-properties-native/html79-icu with configure --disable-tests --disable-samples --disable-extras --disable-icuio --disable-shared --enable-static --with-data-packaging=static and make -j 4. The same genbrk action as LibreOffice compiles dict_word, dict_word_hu and dict_word_prepostdash. node scripts/writer-native-word-rules.mjs output/playwright/rtf-properties-native/html79-icu --check reproduced the tracked bytes. No download or SDK was needed.
+    - The original ICU Brk/Trie3 readers borrow the packaged sections and bind native-width trie rows to the existing UCPTrie getter. The forward transition loop retains UTF16 scalar advancement, end/begin pseudo categories, native status, dictionary admission and original hard-lookahead order. WRITER366 records the source concern about hard-break completion before storing the offset. The three actual tables have zero lookahead slots.
+    - The in-repo clang++ harness links unchanged ICU libicuuc.a/libicudata.a and exposes private handleNext solely to observe boundaries before dictionary refinement. The 105 fixed input/rule witnesses compare all positions, statuses and dictionary counts in Vitest. Additional seeded protocol comparison used 1200 input lines per compiled rule and byte-identical native and TS output for all 3600 pairs. The probe source, exact UTF16 inputs and expected/actual logs are under html79-icu; terminal evidence html79-forward-final.log.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/i18npool/source/breakiterator src/external/icu/source/common/uchar.test.ts src/external/icu/source/common/loclikelysubtags.data.integration.test.ts src/i18npool/source/search/levdis.test.ts. Result: 52 passed across four suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed across nine suites. Final shared rule suite replay after extracting the documented native section reader passed four already-counted tests. Total 174 unique across 13 suites. Evidence: html79-shared.log, html79-writer.log and html79-replay-final.log. No full-project replay at this continuing task checkpoint.
+    - Whole-app TypeScript, changed ESLint/Prettier, provenance (1964 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial provenance interpreted a scripts/ entry in local source provenance as an upstream relative path; the generator remains runtime evidence. Initial JSDoc rejected the closure form; the section borrow is now a documented typed function and both actual native differential and tests were replayed.
+    - Dictionary break engines/cache, Unicode word-range queries, LibreOffice locale dispatch and production Writer paragraph and Markdown table integration remain open. The RBBI candidate code does not claim complete ICU or filter behavior.
 id_source: "generated"
 ---
 ## Summary
@@ -7970,6 +8025,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:35:37.457Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML79 verified pinned genbrk byte reproduction and original ICU forward boundary candidates. 3705 native differential input/rule pairs, 174 focused tests, and static gates passed. Dictionary engines, queries, and filter integration remain open.
+Attempts: 90
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:35:36.822Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9734,3 +9819,12 @@ S3HW1E HTML78 — Original first-pass cell, span and column width policy.
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 178 passed across 13 suites (html78-tests.log). Nine final first-pass cases replayed after the ESLint-driven removal of a this alias; passed and already included in the total (html78-pass1-final.log). No full-project replay at this continuing parent checkpoint.
 - Whole-app TypeScript, changed ESLint/Prettier, provenance, Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. The initial linter flagged a linked-list cursor alias of this; final insertion uses the source head test and follows the original links without the alias.
 - Actual dictionary measurement, first-pass scanning/materialization, end-to-end Markdown tables and the fixed original capability matrix remain open. Broad behavior/default/contract/source statuses remain unverified.
+
+S3HW1E HTML79 — Pinned ICU Brk resources and forward boundary candidates.
+
+- Built the local ICU 78.3 source in output/playwright/rtf-properties-native/html79-icu with configure --disable-tests --disable-samples --disable-extras --disable-icuio --disable-shared --enable-static --with-data-packaging=static and make -j 4. The same genbrk action as LibreOffice compiles dict_word, dict_word_hu and dict_word_prepostdash. node scripts/writer-native-word-rules.mjs output/playwright/rtf-properties-native/html79-icu --check reproduced the tracked bytes. No download or SDK was needed.
+- The original ICU Brk/Trie3 readers borrow the packaged sections and bind native-width trie rows to the existing UCPTrie getter. The forward transition loop retains UTF16 scalar advancement, end/begin pseudo categories, native status, dictionary admission and original hard-lookahead order. WRITER366 records the source concern about hard-break completion before storing the offset. The three actual tables have zero lookahead slots.
+- The in-repo clang++ harness links unchanged ICU libicuuc.a/libicudata.a and exposes private handleNext solely to observe boundaries before dictionary refinement. The 105 fixed input/rule witnesses compare all positions, statuses and dictionary counts in Vitest. Additional seeded protocol comparison used 1200 input lines per compiled rule and byte-identical native and TS output for all 3600 pairs. The probe source, exact UTF16 inputs and expected/actual logs are under html79-icu; terminal evidence html79-forward-final.log.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/i18npool/source/breakiterator src/external/icu/source/common/uchar.test.ts src/external/icu/source/common/loclikelysubtags.data.integration.test.ts src/i18npool/source/search/levdis.test.ts. Result: 52 passed across four suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed across nine suites. Final shared rule suite replay after extracting the documented native section reader passed four already-counted tests. Total 174 unique across 13 suites. Evidence: html79-shared.log, html79-writer.log and html79-replay-final.log. No full-project replay at this continuing task checkpoint.
+- Whole-app TypeScript, changed ESLint/Prettier, provenance (1964 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial provenance interpreted a scripts/ entry in local source provenance as an upstream relative path; the generator remains runtime evidence. Initial JSDoc rejected the closure form; the section borrow is now a documented typed function and both actual native differential and tests were replayed.
+- Dictionary break engines/cache, Unicode word-range queries, LibreOffice locale dispatch and production Writer paragraph and Markdown table integration remain open. The RBBI candidate code does not claim complete ICU or filter behavior.

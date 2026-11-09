@@ -2987,3 +2987,14 @@ independently truncates each share. Preserve the source denominator and
 assignment conditions. The local regression retains an inferred 45% from
 60 unclaimed points when a fixed column occupies one quarter of the
 denominator.
+
+### WRITER366 — ICU tests completion before storing a lookahead position
+
+Pinned ICU 78.3 `RuleBasedBreakIterator::handleNext` in
+`vendor/icu-reference/source/common/rbbi.cpp` checks the accepting row before
+recording the current position for a lookahead rule. The source comment
+describes the effect on hard breaks with no following context and notes
+line-break test failures when reversing the checks (ICU-20837). Preserve
+the ordering. All three compiled LibreOffice dictionary word tables have
+zero lookahead slots, so this observation does not establish a discrepancy
+for their word boundaries.

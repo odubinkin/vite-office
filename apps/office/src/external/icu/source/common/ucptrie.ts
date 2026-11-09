@@ -1,5 +1,90 @@
-/** @fileoverview Original ICU78.3 scalar UCPTrie read and small-index algorithm; remaining APIs are unported. */
+/** @fileoverview Original ICU78.3 serialized UCPTrie construction and scalar read. */
 import type { UCPTrie } from "./unicode/ucptrie";
+import { UErrorCode, U_FAILURE } from "./unicode/utypes";
+/** Opens native Tri3 bytes. Portable byte reads stand in for native typed pointers. @param type - Required type or ANY. @param valueWidth - Required width or ANY. @param bytes - Aligned source buffer. @param actualLength - Optional consumed-length reference. @param status - Sticky source status. @returns Trie or null. */
+export function ucptrie_openFromBinary(
+  type: number,
+  valueWidth: number,
+  bytes: DataView,
+  actualLength: [number] | null,
+  status: [number],
+): UCPTrie | null {
+  if (U_FAILURE(status[0])) return null;
+  if (
+    bytes.byteLength <= 0 ||
+    bytes.byteOffset % 4 !== 0 ||
+    type < -1 ||
+    type > 1 ||
+    valueWidth < -1 ||
+    valueWidth > 2
+  ) {
+    status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+    return null;
+  }
+  if (bytes.byteLength < 16 || bytes.getUint32(0, true) !== 0x54726933) {
+    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+    return null;
+  }
+  const options = bytes.getUint16(4, true),
+    actualType = (options >> 6) & 3,
+    actualWidth = options & 7;
+  if (
+    actualType > 1 ||
+    actualWidth > 2 ||
+    (options & 0x38) !== 0 ||
+    (type !== -1 && type !== actualType) ||
+    (valueWidth !== -1 && valueWidth !== actualWidth)
+  ) {
+    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+    return null;
+  }
+  const indexLength = bytes.getUint16(6, true),
+    dataLength = ((options & 0xf000) << 4) | bytes.getUint16(8, true),
+    index3NullOffset = bytes.getUint16(10, true),
+    dataNullOffset = ((options & 0xf00) << 8) | bytes.getUint16(12, true),
+    highStart = bytes.getUint16(14, true) << 9,
+    dataStart = 16 + indexLength * 2,
+    valueBytes = actualWidth === 0 ? 2 : actualWidth === 1 ? 4 : 1,
+    length = dataStart + dataLength * valueBytes;
+  if (bytes.byteLength < length) {
+    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+    return null;
+  }
+
+  const index = new Uint16Array(indexLength);
+  for (let i = 0; i < indexLength; ++i) index[i] = bytes.getUint16(16 + i * 2, true);
+  const data =
+    actualWidth === 0
+      ? new Uint16Array(dataLength)
+      : actualWidth === 1
+        ? new Uint32Array(dataLength)
+        : new Uint8Array(dataLength);
+  for (let i = 0; i < dataLength; ++i) {
+    const offset = dataStart + i * valueBytes;
+    data[i] =
+      actualWidth === 0
+        ? bytes.getUint16(offset, true)
+        : actualWidth === 1
+          ? bytes.getUint32(offset, true)
+          : bytes.getUint8(offset);
+  }
+  if (actualLength !== null) actualLength[0] = length;
+  return {
+    index,
+    data,
+    indexLength,
+    dataLength,
+    highStart,
+    shifted12HighStart: (highStart + 0xfff) >> 12,
+    type: actualType,
+    valueWidth: actualWidth,
+    reserved32: 0,
+    reserved16: 0,
+    index3NullOffset,
+    dataNullOffset,
+    nullValue: data[dataNullOffset < dataLength ? dataNullOffset : dataLength - 2] as number,
+  };
+}
 /** Original ICU small-index lookup,including 18-bit groups. @param trie - Properly initialized frozen trie. @param c - Native code point below highStart. @returns Data offset. */
 export function ucptrie_internalSmallIndex(trie: UCPTrie, c: number): number {
   let i1 = c >> 14;

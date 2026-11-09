@@ -1856,3 +1856,15 @@ remainders and fixed columns in the percentage denominator.
 The first-pass traversal that produces provisional content widths remains to
 be connected to native paragraph measurement and nested tables. This
 checkpoint supplies the cell and column policy for that traversal.
+
+### HTML79 — Compiled dictionary rules and ICU forward boundary candidates
+
+The pinned ICU 78.3 `genbrk` compiles LibreOffice's three dictionary word
+resources into native format-6 Brk data. The shared runtime opens their
+forward/reverse tables and category trie. Its forward state machine preserves
+UTF-16 positions, rule status and dictionary admission. Native ICU produced
+the expected observations for 105 input/rule pairs.
+
+The rule-machine results are candidates. Native dictionary refinement, public
+break-cache queries and LibreOffice's locale dispatch still need to connect
+before these rules can measure words in Writer paragraphs.
