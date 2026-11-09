@@ -104,6 +104,7 @@ export class SwFormatAnchor extends SfxPoolItem {
     this.m_oContentAnchor = copy;
     if (this.m_eAnchorId === RndStdIds.FLY_AT_PARA || this.m_eAnchorId === RndStdIds.FLY_AT_FLY)
       copy.nContent.Assign(undefined, 0);
+    else if (this.m_eAnchorId === RndStdIds.FLY_AT_CHAR) copy.nContent.SetAffinity("before");
   }
   /** Original assignment ignores order for equality, and only a changed payload obtains new order/position ownership. @param source - Actual source item. @returns This item. */
   Assign(source: SwFormatAnchor): this {

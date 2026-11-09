@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
@@ -125,17 +126,18 @@ export interface XMLTextParagraphSource {
   /** Direct numbering item; common style ownership remains on the original named parent. */
   readonly directListRule?: string;
   /** Zero-width Writer marks and imported pagination hints in UTF-16 coordinates. */
-  readonly markers?: readonly Readonly<{
-    kind: "bookmark" | "soft-page-break";
-    name?: string;
-    offset: number;
-  }>[];
+  readonly markers?: readonly XMLTextParagraphMarker[];
   readonly paragraphProperties?: OdfParagraphProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
   readonly style: XMLParagraphStyle;
   readonly styleName?: string;
 }
+
+/** Native zero-width paragraph contents in original text coordinates. */
+export type XMLTextParagraphMarker =
+  | Readonly<{ kind: "bookmark" | "soft-page-break"; name?: string; offset: number }>
+  | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
 export interface XMLTextExportSource {
@@ -306,8 +308,11 @@ export class XMLTextParagraphExport {
     const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
     const usedXmlIds = new Set<string>();
     const renderParagraphs =
-      /** Renders one text location while borrowing the full export-pass identity catalogue. @param paragraphs - Actual text location. @returns XML. */
-      (paragraphs: Iterable<XMLTextParagraphSource>): string =>
+      /** Renders one text location while borrowing the full export-pass identity catalogue. @param paragraphs - Actual text location. @param renderFrame - Original nested frame exporter. @returns XML. */
+      (
+        paragraphs: Iterable<XMLTextParagraphSource>,
+        renderFrame?: (frame: XMLTextFrameExportSource) => string,
+      ): string =>
         exportParagraphBody(
           paragraphs,
           paragraphStyleNames,
@@ -316,6 +321,7 @@ export class XMLTextParagraphExport {
           isCancelled,
           listIdentities,
           usedXmlIds,
+          renderFrame,
         );
     const rendered =
       source.blocks === undefined
@@ -349,7 +355,7 @@ export function exportTextParagraphs(
   ).Export();
 }
 
-/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @returns ODF body fragment. */
+/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @param renderFrame - Native frame body exporter. @returns ODF body fragment. */
 function exportParagraphBody(
   paragraphs: Iterable<XMLTextParagraphSource>,
   paragraphStyleNames: ReadonlyMap<string, string>,
@@ -358,6 +364,7 @@ function exportParagraphBody(
   isCancelled: () => boolean,
   listIdentities: Map<string, { readonly rootId: string; segments: number }>,
   usedXmlIds: Set<string>,
+  renderFrame?: (frame: XMLTextFrameExportSource) => string,
 ): string {
   let body = "";
   let activeListId: string | undefined;
@@ -415,6 +422,7 @@ function exportParagraphBody(
       paragraph,
       paragraphStyleNames,
       characterStyleNames,
+      renderFrame,
     );
     info.Set(paragraph.list);
     if (paragraph.list === undefined) {
@@ -461,11 +469,12 @@ function exportParagraphBody(
   return body;
 }
 
-/** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @returns Element XML. */
+/** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param renderFrame - Native frame body exporter. @returns Element XML. */
 function exportParagraphElement(
   paragraph: XMLTextParagraphSource,
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
+  renderFrame?: (frame: XMLTextFrameExportSource) => string,
 ): string {
   const baseStyleName = getOdfStyleName(paragraph);
   const styleName =
@@ -499,16 +508,12 @@ function exportParagraphElement(
       let localOffset = 0;
       while (
         markerIndex < markers.length &&
-        (markers[markerIndex] as { offset: number }).offset < start + text.length
+        (markers[markerIndex] as XMLTextParagraphMarker).offset < start + text.length
       ) {
-        const marker = markers[markerIndex] as {
-          kind: "bookmark" | "soft-page-break";
-          name?: string;
-          offset: number;
-        };
+        const marker = markers[markerIndex] as XMLTextParagraphMarker;
         if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
         encoded += exportText(text.slice(localOffset, marker.offset - start));
-        encoded += exportMarker(marker);
+        encoded += exportMarker(marker, renderFrame);
         localOffset = marker.offset - start;
         markerIndex += 1;
       }
@@ -531,13 +536,9 @@ function exportParagraphElement(
   }
   if (activeHyperlink !== undefined) content += "</text:a>";
   while (markerIndex < markers.length) {
-    const marker = markers[markerIndex] as {
-      kind: "bookmark" | "soft-page-break";
-      name?: string;
-      offset: number;
-    };
+    const marker = markers[markerIndex] as XMLTextParagraphMarker;
     if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");
-    content += exportMarker(marker);
+    content += exportMarker(marker, renderFrame);
     markerIndex += 1;
   }
   return paragraph.style === "heading-1"
@@ -545,10 +546,15 @@ function exportParagraphElement(
     : `<text:p text:style-name="${escapeXml(styleName)}">${content}</text:p>`;
 }
 
-/** Emits one zero-width Writer marker. @param marker - Canonical position. @returns ODF element. */
+/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @returns ODF element. */
 function exportMarker(
-  marker: Readonly<{ kind: "bookmark" | "soft-page-break"; name?: string; offset: number }>,
+  marker: XMLTextParagraphMarker,
+  renderFrame: ((frame: XMLTextFrameExportSource) => string) | undefined,
 ): string {
+  if (marker.kind === "frame") {
+    if (!renderFrame) throw new Error("ODF anchored frame has no text export owner.");
+    return renderFrame(marker.frame);
+  }
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLTextFrameExport.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLTextFrameExport.ts#exportTextFrameStyle",
+        "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx#XMLTextParagraphExport::_exportTextFrame",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Writes original draw:frame and draw:text-box markup and the consumed automatic style attributes. Full frame property-map coverage and measured fallback size from native desktop fly layout remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportTextFrameStyle",
+        "exportTextFrameElement"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtparae.cxx",
+      "upstreamSymbols": [
+        "XMLTextParagraphExport::_exportTextFrame"
+      ]
+    }
+  }
+}

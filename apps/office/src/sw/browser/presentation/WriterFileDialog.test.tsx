@@ -251,16 +251,24 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
 
   it.each([
     [
+      "nested RTF",
       "rtf",
       String.raw`{\rtf1{\colortbl;\red200\green100\blue40;}Lead\par\trowd\rtlrow\cellx3000\pard\intbl before\par\pard\itap2 nested\nestcell{\*\nesttableprops\trowd\clcbpat1\cltxbtlr\cellx1200\nestrow}\pard\intbl after\cell\row}`,
     ],
     [
+      "nested Markdown",
       "md",
       "Lead\n\n<table><tr><td>before<table><tr><td>nested</td></tr></table>after</td></tr></table>\n",
     ],
+    [
+      "anchored Markdown",
+      "md",
+      'Lead\n\n<table align="left"><tr><td>before<table><tr><td>nested</td></tr></table>after</td></tr></table>\n',
+    ],
   ] as const)(
-    "preserves a nested %s table when the imported document is reopened from browser storage",
-    /** Opens the selected source, then opens the existing saved ODF package through the normal browser workflow. @param extension - Imported format. @param source - Actual input. @returns Completion. */ async (
+    "preserves %s tables when the imported document is reopened from browser storage",
+    /** Opens the selected source, then opens the saved ODF package through the normal browser workflow. @param scenario - Source case. @param extension - Imported format. @param source - Actual input. @returns Completion. */ async (
+      scenario,
       extension,
       source,
     ) => {
@@ -302,7 +310,20 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
         const [record] = await store.list();
         assert(record);
         expect(await openBrowserWriterDocument(documentShell, store, record.id)).toBe(true);
-        const cell = documentShell.GetDoc().GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0];
+        const doc = documentShell.GetDoc();
+        let outer = doc.GetTables()[0];
+        if (scenario === "anchored Markdown") {
+          expect(outer).toBeUndefined();
+          const fly = doc.GetSpzFrameFormats().GetFormat(0);
+          const content = fly.GetContent().GetContentIdx()?.GetNode();
+          assert(content?.IsStartNode());
+          const table = doc.nodes.GetSectionContent(content)[0];
+          assert(table instanceof SwTableNode);
+          expect(table.GetFlyFormat()).toBe(fly);
+          expect(fly.GetAnchor().GetAnchorNode()?.GetTextNode()).toBeDefined();
+          outer = table.GetTable();
+        }
+        const cell = outer?.GetTabLines()[0]?.GetTabBoxes()[0];
         const nested = cell
           ?.GetContentNodes()
           .find(

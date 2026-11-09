@@ -1,6 +1,12 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import {
+  getBoundTextFrames,
+  getTextFrameExportParagraphs,
+  projectAnchoredTextFrames,
+  type BoundTextFrames,
+} from "./xmltextframe";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
@@ -8,7 +14,6 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
-
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
@@ -24,7 +29,6 @@ import {
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
-
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties, exportFrameVisualProperties } from "./xmlexpit";
@@ -63,6 +67,7 @@ import {
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
   type XMLTextParagraphSource,
+  type XMLTextParagraphMarker,
   type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -336,21 +341,17 @@ function exportWriterText(
   ) => string,
   existingFontFaceName: (family: string) => string | undefined,
 ): OdfTextExport {
+  const anchored = getBoundTextFrames(document);
   return exportTextParagraphs(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
-        for (const block of document.nodes.getBodyContent()) {
-          if (block instanceof SwTableNode) {
-            for (const row of block.GetTable().GetTabLines())
-              for (const cell of row.GetTabBoxes())
-                for (const node of cell.GetParagraphs()) yield projectParagraph(node);
-          } else yield projectParagraph(block);
-        }
+        for (const node of getTextFrameExportParagraphs(document, anchored))
+          yield projectParagraph(node);
       },
       /** Iterates ordered direct body blocks and projects table cells through the same text exporter. @returns Body blocks. */
       *blocks() {
-        for (const block of document.nodes.getBodyContent()) yield projectBlock(block);
+        for (const block of document.nodes.getBodyContent()) yield projectBlock(block, anchored);
       },
     },
     isCancelled,
@@ -359,10 +360,13 @@ function exportWriterText(
   );
 }
 
-/** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @returns Neutral ODF body block. */
-function projectBlock(block: SwTextNode | SwTableNode): XMLTextExportBlock {
+/** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
+function projectBlock(
+  block: SwTextNode | SwTableNode,
+  anchored: BoundTextFrames,
+): XMLTextExportBlock {
   if (!(block instanceof SwTableNode))
-    return { kind: "paragraph", paragraph: projectParagraph(block) };
+    return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
   const table = block.GetTable(),
     grid = new SwXMLTableLines(table);
   const items = table.GetFrameFormat().GetAttrSet();
@@ -454,7 +458,10 @@ function projectBlock(block: SwTextNode | SwTableNode): XMLTextExportBlock {
                               ? "top"
                               : "",
                   },
-                  content: cell.GetContentNodes().map(projectBlock),
+                  content: cell.GetContentNodes().map(
+                    /** Projects one actual cell text or table block. @param child - Native block. @returns ODF block. */
+                    (child) => projectBlock(child, anchored),
+                  ),
                 };
               },
             ),
@@ -470,8 +477,8 @@ export function exportMetaXml(title: string, locale?: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-meta xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" office:version="1.3"><office:meta><dc:title>${escapeXml(title)}</dc:title>${locale === undefined ? "" : `<dc:language>${escapeXml(locale)}</dc:language>`}<meta:generator>vite-office LibreOffice TypeScript reimplementation</meta:generator></office:meta></office:document-meta>`;
 }
 
-/** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @returns Neutral paragraph. */
-function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
+/** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @param anchored - Actual frame sets during body export. @returns Neutral paragraph. */
+function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLTextParagraphSource {
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
   assertSupportedItems(directItems, `paragraph at node ${node.GetIndex()}`, true);
   const ruleName = node.GetNumRuleName();
@@ -495,7 +502,8 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
   const marks = node.GetDoc().GetIDocumentMarkAccess();
-  const markers = [
+  const markers: XMLTextParagraphMarker[] = [
+    ...projectAnchoredTextFrames(node, anchored, projectBlock),
     ...marks
       .GetBookmarks()
       .filter(

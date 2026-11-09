@@ -3267,3 +3267,11 @@ special format. It neither searches subsequent formats nor appends
 their contents. The new selection ends at the structural section end,
 so the last frame paragraph retains its separator. Preserve these
 conditions and keep ordinary TXT selection on the original range.
+
+### WRITER400 — ODF text frames reopen variable height as a minimum height
+
+`XMLTextParagraphExport::addTextFrameAttributes` writes zero
+`fo:min-height` for a variable-height text frame without relative
+height. `XMLTextFrameContext_Impl::Create` sees the minimum-height
+attribute and sets `SizeType::MIN`, even though the dimension is zero.
+Keep the resulting minimum sizing type on reopen.

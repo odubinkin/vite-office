@@ -4,6 +4,11 @@ import { escapeXml, exportOdfLength, type XMLTextParagraphSource } from "../text
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import type { OdfTableVisualProperties } from "./XMLTableImport";
 import { exportWritingDirection } from "../style/prhdlfac";
+import {
+  exportTextFrameStyle,
+  exportTextFrameElement,
+  type XMLTextFrameExportSource,
+} from "../text/XMLTextFrameExport";
 import { WritingMode2 } from "../../../offapi/com/sun/star/text/WritingMode2";
 
 /** Ordered text and table blocks supplied by Writer's canonical node array. */
@@ -72,17 +77,27 @@ function exportTableVisualProperties(
 /** Renders table-owned styles and body elements while sharing paragraph automatic styles. */
 /** Processes one ODF table value. @param argument1 - Callback input. @param argument2 - Callback input. @param argument3 - Callback input. @returns Callback result. */ export function exportTableBlocks(
   blocks: Iterable<XMLTextExportBlock>,
-  renderParagraphs: (paragraphs: Iterable<XMLTextParagraphSource>) => string,
+  renderParagraphs: (
+    paragraphs: Iterable<XMLTextParagraphSource>,
+    renderFrame: (frame: XMLTextFrameExportSource) => string,
+  ) => string,
   isCancelled: () => boolean,
 ): { readonly body: string; readonly automaticStyles: string } {
   let automaticStyles = "";
   let tableIndex = 0;
+  let frameIndex = 0;
+  /** Shares graphic and table style identity across every nested native text box. @param frame - Native frame properties. @returns Frame XML. */
+  function renderFrame(frame: XMLTextFrameExportSource): string {
+    const name = `fr${++frameIndex}`;
+    automaticStyles += exportTextFrameStyle(frame, name);
+    return exportTextFrameElement(frame, name, renderBlocks(frame.content));
+  }
   /** Exports ordered text and nested tables with one shared style identity counter. @param content - Blocks in this text section. @returns Ordered XML for the section. */
   function renderBlocks(content: Iterable<XMLTextExportBlock>): string {
     let body = "";
     let paragraphRun: XMLTextParagraphSource[] = [];
     const flush = /** Processes one ODF table value.  @returns Callback result. */ (): void => {
-      body += renderParagraphs(paragraphRun);
+      body += renderParagraphs(paragraphRun, renderFrame);
       paragraphRun = [];
     };
     for (const block of content) {

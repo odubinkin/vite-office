@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/txtprhdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/txtprhdl.ts#importFrameConstant",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#pXML_HoriRel_Enum",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values. Property handlers for text-frame types and other text properties outside this slice are not represented here.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importFrameConstant",
+        "exportFrameConstant"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtprhdl.cxx",
+      "upstreamSymbols": [
+        "pXML_HoriRel_Enum"
+      ]
+    }
+  }
+}

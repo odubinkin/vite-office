@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmltextframe.ts",
+    "upstreamPath": "sw/source/core/unocore/unoframe.cxx",
+    "localSymbols": [
+      "importTextFrame",
+      "endTextFrame",
+      "getBoundTextFrames",
+      "projectAnchoredTextFrames"
+    ],
+    "upstreamSymbols": [
+      "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
+    ],
+    "preservedResponsibilities": [
+      "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF."
+    ],
+    "omittedResponsibilities": [
+      "Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltextframe.ts",
+          "marker": "importTextFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "persists native Markdown tables"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "anchored Markdown"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx",
+          "marker": "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmltextframe.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Isolates the Writer native text-frame ownership and item projection shared by import and export, keeping the consumed UNO frame-size conversion separate from the main ODF stream coordinators."
+    }
+  },
+  "legacyOrder": 243
+}

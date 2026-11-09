@@ -11,6 +11,13 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { readOdtDocument } from "../xml/swxml";
+import { writeOdtDocument } from "../xml/wrtxml";
+import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { SwPosition } from "../../core/crsr/pam";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
@@ -192,6 +199,97 @@ it("round trips the anchored HTML table and its section through the Writer Worke
     shell.Close();
   }
 });
+
+it.each(["paragraph", "char"] as const)(
+  "persists native Markdown tables and their %s anchors in ODT",
+  /** Exercises native frame/style SAX and the ODT-to-Worker handoff. @param type - Native anchor type. @returns Completion. */ async (
+    type,
+  ) => {
+    const { shell, doc } = open(
+      'Lead.\n\n<table align="left" hspace="8" vspace="3"><tr><td><b>Floating</b></td></tr></table>\n\nAfter.\n',
+    );
+    const metadata = { title: "Native floating table" };
+    let reopened: SwDoc | undefined, transferred: SwDoc | undefined;
+    try {
+      const [original] = [...doc.GetSpzFrameFormats()];
+      assert(original);
+      if (type === "char") {
+        const owner = doc.paragraphs.find(
+          /** Selects the body paragraph containing text before and after the char anchor. @param node - Body paragraph. @returns Whether selected. */
+          (node) => node.GetText() === "After.",
+        );
+        assert(owner);
+        const point = new SwPosition(owner, 2);
+        const anchor = new SwFormatAnchor(RndStdIds.FLY_AT_CHAR);
+        const size = original.GetFrameSize().Clone();
+        try {
+          anchor.SetAnchor(point);
+          original.SetFormatAttr(anchor);
+          size.SetWidthPercent(70);
+          original.SetFormatAttr(size);
+        } finally {
+          size.Dispose();
+          anchor.Dispose();
+          point.Dispose();
+        }
+      }
+      const bytes = writeOdtDocument(doc, metadata);
+      const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+      expect(xml).toContain('<draw:frame draw:style-name="fr1"');
+      expect(xml).toContain('<draw:text-box fo:min-height="0cm">');
+      expect(xml).toContain('style:horizontal-pos="left"');
+      expect(xml).toContain('style:wrap="right"');
+      expect(xml).toContain(`text:anchor-type="${type}" svg:width=`);
+      if (type === "char") expect(xml).toContain('style:rel-width="70%"');
+      reopened = (await readOdtDocument(bytes, metadata)).document;
+      transferred = decodeWriterDocument(encodeWriterDocument(reopened));
+      for (const candidate of [reopened, transferred]) {
+        const [fly] = [...candidate.GetSpzFrameFormats()];
+        const start = fly?.GetContent().GetContentIdx()?.GetNode();
+        assert(fly && start?.IsStartNode());
+        const content = candidate.nodes.GetSectionContent(start);
+        const table = content[0];
+        expect(content).toHaveLength(1);
+        assert(table instanceof SwTableNode);
+        expect(table.GetFlyFormat()).toBe(fly);
+        const paragraph = table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
+        assert(paragraph);
+        expect(paragraph.GetText()).toBe("Floating");
+        expect(projectWriterTextRuns(paragraph)[0]?.attributes.bold).toBe(true);
+        expect(fly.GetName()).toBe(original.GetName());
+        expect(fly.GetFrameSize().GetWidth()).toBe(original.GetFrameSize().GetWidth());
+        expect(original.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Variable);
+        expect(fly.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Minimum);
+        expect(fly.GetFrameSize().GetWidthPercent()).toBe(
+          original.GetFrameSize().GetWidthPercent(),
+        );
+        expect(fly.GetAnchor().GetAnchorContentOffset()).toBe(type === "char" ? 2 : 0);
+        expect(fly.GetSurround().GetSurround()).toBe(WrapTextMode.RIGHT);
+        expect(fly.GetLRSpace().ResolveLeft()).toBe(original.GetLRSpace().ResolveLeft());
+        expect(fly.GetULSpace().GetUpper()).toBe(original.GetULSpace().GetUpper());
+        expect(fly.GetAnchor().GetAnchorId()).toBe(original.GetAnchor().GetAnchorId());
+        expect(fly.GetAnchor().GetAnchorNode()?.GetTextNode()?.GetText()).toBe(
+          original.GetAnchor().GetAnchorNode()?.GetTextNode()?.GetText(),
+        );
+        expect(
+          candidate.paragraphs.map(
+            /** Observes the original body, excluding the floating text section. @param node - Body owner. @returns Text. */
+            (node) => node.GetText(),
+          ),
+        ).toEqual(
+          doc.paragraphs.map(
+            /** Observes the original HTML-imported body. @param node - Body owner. @returns Text. */
+            (node) => node.GetText(),
+          ),
+        );
+      }
+    } finally {
+      transferred?.Dispose();
+      reopened?.Dispose();
+      shell.Close();
+    }
+  },
+);
 
 it("keeps a child table reached through the recursive original table token loop", /** Inspects actual table section ownership and the parent's live layout. @returns Nothing. */ () => {
   const { shell, doc } = open(

@@ -1,6 +1,7 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
 import type { XMLNumberingRules } from "../../inc/txtimp";
+import type { XMLTextFrameImportTarget } from "./XMLTextFrameContext";
 import { XMLTextImportHelper } from "./txtimp";
 
 import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../core/xmlimp";
@@ -94,7 +95,7 @@ export interface XMLParagraphListState {
 }
 
 /** Model-facing import supplier and source declaration lookup. */
-export interface XMLTextImportTarget {
+export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
@@ -299,6 +300,7 @@ function createInlineContext(
   hyperlink?: OdfHyperlink,
   allowHyperlink = true,
 ): SvXMLImportContext | null {
+  if (element === XMLToken.DRAW_FRAME) return paragraph.CreateTextFrameContext(attributes);
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextFrameExport.ts",
+    "upstreamPath": "xmloff/source/text/txtparae.cxx",
+    "localSymbols": [
+      "exportTextFrameStyle",
+      "exportTextFrameElement"
+    ],
+    "upstreamSymbols": [
+      "XMLTextParagraphExport::_exportTextFrame"
+    ],
+    "preservedResponsibilities": [
+      "Writes original draw:frame and draw:text-box markup and the consumed automatic style attributes."
+    ],
+    "omittedResponsibilities": [
+      "Full frame property-map coverage and measured fallback size from native desktop fly layout remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextFrameExport.ts",
+          "marker": "exportTextFrameStyle"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "persists native Markdown tables"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "anchored Markdown"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport::_exportTextFrame"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/text/XMLTextFrameExport.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps frame automatic style and element emission as a responsibility shard of txtparae.cxx, so the same paragraph and table style pass can recurse into native frame content within the authored file-size boundary."
+    }
+  },
+  "legacyOrder": 302
+}

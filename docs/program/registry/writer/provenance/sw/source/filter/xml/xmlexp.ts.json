@@ -312,6 +312,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
           "marker": "projectBlock"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -534,6 +538,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
           "marker": "aTableCellItemMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport::_exportTextFrame"
         }
       ]
     },
@@ -594,7 +602,8 @@
       "B8TCAE source-contract regression: A real named paragraph style containing only an explicit empty tab-stop child survives package export/import without paragraph attributes. No production algorithm or private state is replaced.",
       "The ODF table source borrows the signed native model row span before export.",
       "Projects native direct cell text and child tables through original table cell text export in node order.",
-      "Supplies original direct table, row and cell brush and writing-direction items to ODF export."
+      "Supplies original direct table, row and cell brush and writing-direction items to ODF export.",
+      "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

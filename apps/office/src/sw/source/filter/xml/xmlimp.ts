@@ -1,4 +1,11 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import type {
+  XMLTextFrameAttributes,
+  XMLTextFrameStyle,
+} from "../../../../xmloff/source/text/XMLTextFrameContext";
+import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
+import type { SwXTextCursor } from "../../core/unocore/unoobj";
+import { importTextFrame, endTextFrame } from "./xmltextframe";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -143,6 +150,46 @@ class SwXMLImport
   extends SwXMLTableImport
   implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
 {
+  private readonly textFrameStyles = new Map<
+    string,
+    { style: XMLTextFrameStyle; parent: string | undefined }
+  >();
+
+  /** Registers the native graphic style values referenced by a text frame. @param name - ODF style name. @param style - Native frame values. @param parent - Optional inherited style. @returns Nothing. */
+  public registerTextFrameStyle(name: string, style: XMLTextFrameStyle, parent?: string): void {
+    this.textFrameStyles.set(name, { style, parent });
+  }
+
+  /** Enters the native Writer frame anchored at the current paragraph cursor. @param value - Original frame attributes. @returns Native frame text cursor. */
+  public beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor {
+    const chain: XMLTextFrameStyle[] = [];
+    const visited = new Set<string>();
+    let name: string | undefined = value.styleName;
+    while (name !== undefined && !visited.has(name)) {
+      visited.add(name);
+      const entry = this.textFrameStyles.get(name);
+      if (!entry) break;
+      chain.unshift(entry.style);
+      name = entry.parent;
+    }
+    const style = Object.fromEntries(
+      chain.flatMap(
+        /** Retains only the actual style deltas, allowing parent properties to survive. @param entry - Current style. @returns Defined values. */
+        (entry) =>
+          Object.entries(entry).filter(
+            /** Omits unauthored values. @param pair - Property tuple. @returns Whether present. */
+            ([, value]) => value !== undefined,
+          ),
+      ),
+    );
+    return importTextFrame(this.GetTextImport().GetCursor() as SwXTextCursor, value, style);
+  }
+
+  /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
+  public endTextFrame(cursor: XMLTextCursor): void {
+    endTextFrame(cursor as SwXTextCursor);
+  }
+
   private lineNumberingSeen = false;
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;

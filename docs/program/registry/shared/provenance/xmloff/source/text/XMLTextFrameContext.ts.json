@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextFrameContext.ts",
+    "upstreamPath": "xmloff/source/text/XMLTextFrameContext.cxx",
+    "localSymbols": [
+      "XMLTextFrameContext",
+      "XMLTextFrameStyleContext",
+      "XMLTextBoxContext"
+    ],
+    "upstreamSymbols": [
+      "XMLTextFrameContext_Impl::Create"
+    ],
+    "preservedResponsibilities": [
+      "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration."
+    ],
+    "omittedResponsibilities": [
+      "Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextFrameContext.ts",
+          "marker": "XMLTextFrameContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "persists native Markdown tables"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "anchored Markdown"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
+          "marker": "XMLTextFrameContext_Impl::Create"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 302
+}
