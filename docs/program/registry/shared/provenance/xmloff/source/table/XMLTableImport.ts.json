@@ -92,6 +92,10 @@
         {
           "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
           "marker": "importTableVisualProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -178,6 +182,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
           "marker": "aTableCellItemMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "MID_FRMSIZE_REL_COL_WIDTH"
         }
       ]
     },
@@ -203,7 +211,8 @@
       "CorrectionYCZ38R (2/10 after BZQGYC) removes row/cell GetFormat projections from original Writer XML export. Borrowed original frame item sets supply direct SET row size/split and cell box/vertical orientation; inherited or pool normal items are omitted. Native Fixed/Minimum heights and split inversion retained, independent box edges exported from original item. Native vertical token table is TOP1/top,CENTER2/middle,BOTTOM3/bottom; NONE and unmapped native orientations emit empty, while absence emits no attribute. Empty vertical imports as original explicit NONE per i8855, top imports as TOP; exported unmapped horizontal emits empty and XML style import leaves alignment unset before native FULL table initialization. The earlier R12SRT unmapped-orientation omission is historical/incomplete and corrected here. Current browser codec legacy top mapping, UI orientation menu completeness, generic invalid token policy, table import scalar assembly, full native shared mapper/style/UNO/VCL/relative/layout widths remain separately partial or unverified. All prior metadata statuses/defaults/classes/historical evidence and registered recovery/open/save/settings/UI deviations retained; no whole-module promotion. Evidence task202610092323-YCZ38R.",
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "Routes row span and covered style name through the existing Writer SAX target, with actual grid and content mutation owned by Writer.",
-      "Recognizes the original table, row and cell background attributes and table and cell writing modes, applying recognized modes in source attribute order."
+      "Recognizes the original table, row and cell background attributes and table and cell writing modes, applying recognized modes in source attribute order.",
+      "Reads native relative table and column width lexical values."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/table/XMLTableImport.cxx",

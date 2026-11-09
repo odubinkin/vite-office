@@ -3326,3 +3326,23 @@ The tokenizer knows both TRWWIDTHA and TRFTSWIDTHA.
 TRFTSWIDTHA, and the ROW handler adds a borderless filler cell for
 each positive stored width as a twip value. Preserve the original
 interpretation even when the width-type control specifies another unit.
+
+### WRITER406 — RTF's numeric percent width misses the mapper's percent branch
+
+`RTFDocumentImpl::dispatchTableValue` stores TRFTSWIDTH as the raw
+RTF number. `MeasureHandler::getMeasureValue` accepts the numeric
+value 3 as an absolute twip unit. `DomainMapperTableManager::sprm`
+checks the separate generated OOXML percent resource identifier for
+relative sizing. The ordinary numeric RTF percent value 2 therefore
+falls back to the cell grid. Preserve the original unit distinction.
+
+### WRITER407 — RTF treats the half-gap as padding and reopens left alignment with a width
+
+The pinned TRGAPH handler explicitly notes that it writes a half-gap
+as left and right cell padding. It uses the TblCellMar left resource
+identifier, while the table-indent subtraction checks the distinct
+TcMar left identifier used by TRPADDL. The half-gap can therefore
+affect padding without participating in that subtraction. The
+original table justification conversion maps TRQL to LEFT_AND_WIDTH,
+including when RTF was exported from a Writer table with NONE.
+Retain these reader and writer choices.

@@ -19,7 +19,8 @@
     "preservedResponsibilities": [
       "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path.",
       "Binds rows to the active text append context and releases actual shape and table properties recursively.",
-      "Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell."
+      "Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell.",
+      "Restores native default cell resource properties at each CELLX and clears them on ROW."
     ],
     "omittedResponsibilities": [
       "Malformed row-definition restoration, full resource buffer polymorphism and the desktop renderer remain unverified. The preexisting browser nesting bound also applies to explicit ITAP depth."
@@ -59,6 +60,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
           "marker": "restoreTableRowProperties()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "The scope of the table cell defaults is one row."
         }
       ]
     },

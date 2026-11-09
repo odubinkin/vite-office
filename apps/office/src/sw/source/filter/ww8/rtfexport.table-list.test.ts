@@ -110,7 +110,8 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
         SwFrameSize.Fixed,
       );
       expect(restored.GetTable().GetTabLines()[0]?.GetRowSplit().GetValue()).toBe(false);
-      expect(restored.GetTable().GetHoriOrient()).toBe(HoriOrientation.NONE);
+      // The original mapper maps TRQL to LEFT_AND_WIDTH for the reopened table.
+      expect(restored.GetTable().GetHoriOrient()).toBe(HoriOrientation.LEFT_AND_WIDTH);
       expect(restored.GetTable().GetFrameFormat().GetLRSpace().ResolveLeft()).toBe(360);
       expect(restored.GetTable().GetFrameFormat().GetBox().GetDistance(SvxBoxItemLine.TOP)).toBe(
         40,

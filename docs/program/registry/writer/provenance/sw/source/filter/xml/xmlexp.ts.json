@@ -320,6 +320,10 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -546,6 +550,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport::_exportTextFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "nPercentWidth"
         }
       ]
     },
@@ -608,7 +616,8 @@
       "Projects native direct cell text and child tables through original table cell text export in node order.",
       "Supplies original direct table, row and cell brush and writing-direction items to ODF export.",
       "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export.",
-      "Shares the native text-fly collection with browser projection and retains anchored section output."
+      "Shares the native text-fly collection with browser projection and retains anchored section output.",
+      "Projects native percentage table widths and headless relative column references."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

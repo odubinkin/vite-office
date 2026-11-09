@@ -1,6 +1,7 @@
 /** @fileoverview Consumed original ConversionHelper twip-to-mm100 admission rules; shared integral and floating unit owners perform the actual conversion. */
 import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { getToken, toInt32 } from "../../../../o3tl/inc/string_view";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import {
@@ -25,6 +26,19 @@ export function convertTwipToMm100_LimitedRoundUp(twips: number): number {
 export function convertTwipToMm100_LimitedUnsigned(twips: number): number {
   twips |= 0;
   return twips < 0 ? 0 : convertTwipToMm100_Limited(twips);
+}
+
+/** Converts original table justification, defaulting to left and width. @param value - Original OOXML justification. @returns Native horizontal orientation. */
+export function convertTableJustification(value: number): HoriOrientation {
+  switch (value) {
+    case N.LN_Value_ST_Jc_center:
+      return HoriOrientation.CENTER;
+    case N.LN_Value_ST_Jc_right:
+    case N.LN_Value_ST_Jc_end:
+      return HoriOrientation.RIGHT;
+    default:
+      return HoriOrientation.LEFT_AND_WIDTH;
+  }
 }
 
 /** Original OOXML border-style-to-Word bridge; unsupported identifiers fall back to Word0. @param token - Native resource identity. @returns Word style number. */

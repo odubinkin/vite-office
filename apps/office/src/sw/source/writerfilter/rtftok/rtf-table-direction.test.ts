@@ -1,4 +1,10 @@
 /** @fileoverview RTF row and cell direction sprms through actual mapper, table formats, and Worker transfer. */
+import { SwTabFrame } from "../../core/layout/tabfrm";
+import { readOdtDocument } from "../../filter/xml/swxml";
+import { writeOdtDocument } from "../../filter/xml/wrtxml";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { existsSync, readFileSync } from "node:fs";
 import { afterEach, assert, expect, it } from "vitest";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
@@ -703,3 +709,63 @@ it.skipIf(!existsSync(gridAfterFixture))(
     }
   },
 );
+
+it("applies the original preferred width and distinguishes numeric RTF and OOXML percentage units", /** Checks the native table-size item after RTF resource resolution. @returns Nothing. */ () => {
+  const fixed = read(
+    String.raw`\trowd\trftsWidth3\trwWidth4200\cellx800\cellx1900\pard\intbl A\cell B\cell\row`,
+  );
+  expect(table(fixed).GetFrameFormat().GetFrameSize().GetWidth()).toBe(4200);
+  const rawPercent = read(
+    String.raw`\trowd\trftsWidth2\trwWidth3000\cellx800\cellx1900\pard\intbl A\cell B\cell\row`,
+  );
+  const size = table(rawPercent).GetFrameFormat().GetFrameSize();
+  expect(size.GetWidth()).toBe(1900);
+  expect(size.GetWidthPercent()).toBe(0);
+});
+
+it("retains a resolved percentage and its column references through the browser's ODT format", /** Checks native relative size and actual layout from the opened document. @returns Completion. */ async () => {
+  const document = read(
+    `\\trowd\\trftsWidth${N.LN_Value_ST_TblWidth_pct}\\trwWidth3000\\cellx800\\cellx2000\\pard\\intbl A\\cell B\\cell\\row`,
+  );
+  const metadata = { title: "Relative table" };
+  const bytes = writeOdtDocument(document, metadata);
+  const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+  expect(xml).toContain('style:rel-width="60%"');
+  expect(xml).toContain('style:rel-column-width="800*"');
+  const reopened = (await readOdtDocument(bytes, metadata)).document;
+  documents.push(reopened);
+  for (const model of [document, reopened]) {
+    const native = table(model);
+    expect(native.GetFrameFormat().GetFrameSize().GetWidthPercent()).toBe(60);
+    expect(
+      native
+        .GetTabLines()[0]
+        ?.GetTabBoxes()
+        .map(
+          /** Reads the authored column reference. @param box - Native cell. @returns Original width. */
+          (box) => box.GetFrameSize().GetWidth(),
+        ),
+    ).toEqual([800, 1200]);
+    const frame = new SwTabFrame(native);
+    try {
+      expect(frame.Format(6000).width).toBe(3600);
+    } finally {
+      frame.DestroyImpl();
+    }
+  }
+});
+
+it("resolves TRGAPH, row defaults, cell overrides and explicit table indent through native margin properties", /** Checks half-gap fallback, unsigned metrics and the original left-margin subtraction. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\trgaph90\trpaddfl3\trpaddl50\tblind300\clpadt30\cellx1000\cellx2000\pard\intbl A\cell B\cell\row`,
+  );
+  const native = table(document);
+  const format = native.GetFrameFormat();
+  expect(format.GetLRSpace().ResolveLeft()).toBe(250);
+  expect(format.GetBox().GetDistance(SvxBoxItemLine.LEFT)).toBe(50);
+  expect(format.GetBox().GetDistance(SvxBoxItemLine.RIGHT)).toBe(90);
+  const [a, b] = native.GetTabLines()[0]?.GetTabBoxes() ?? [];
+  expect(a?.GetBox().GetDistance(SvxBoxItemLine.LEFT)).toBe(30);
+  expect(b?.GetBox().GetDistance(SvxBoxItemLine.LEFT)).toBe(50);
+  expect(b?.GetBox().GetDistance(SvxBoxItemLine.RIGHT)).toBe(90);
+});

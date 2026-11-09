@@ -19,7 +19,12 @@ import {
 import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
-import { dispatchFloatingTableValue, dispatchTableShading } from "./rtfdispatchvalue.table";
+import {
+  dispatchFloatingTableValue,
+  dispatchTableMeasure,
+  dispatchTableMargin,
+  dispatchTableShading,
+} from "./rtfdispatchvalue.table";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 import { COL_AUTO } from "../../../../tools/inc/color";
 
@@ -328,7 +333,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (state.destination === "body" && token.name === "nesttableprops") {
     state.destination = "nestedtableproperties";
     state.starred = false;
-    state.tableCellSprms.clear();
+    state.tableCellSprms.dispose();
+    state.tableCellSprms = new RTFSprms(this["m_aTextBuffer"].m_aDefaultTableCellSprms);
     return;
   }
   if (state.destination === "body" && token.name === "nonesttables") {
@@ -568,6 +574,11 @@ export function DispatchBodyControl(
   if (dispatchTableFlag(name, state)) return;
   if (dispatchFloatingTableValue(name, parameter ?? 0, state)) return;
   if (dispatchTableShading.call(this, name, parameter ?? 0, state)) return;
+  if (dispatchTableMeasure(name, parameter ?? 0, state)) return;
+  if (
+    dispatchTableMargin(name, parameter ?? 0, state, this["m_aTextBuffer"].m_aDefaultTableCellSprms)
+  )
+    return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
   if (
     !this["m_aTextBufferStack"].length &&

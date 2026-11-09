@@ -36,6 +36,7 @@ export class RtfTextBuffer {
   m_bIsFirstParaInSection = true;
   m_bParagraphPageBreak = false;
   m_aParagraphSprms = new RTFSprms();
+  readonly m_aDefaultTableCellSprms = new RTFSprms();
 
   /** Detects content attached to the current paragraph even when it has no text. @returns Whether a native paragraph is needed. */
   HasParagraphContent(): boolean {
@@ -52,6 +53,7 @@ export class RtfTextBuffer {
   /** Collects native sprms still held by the live append context. @param lists - Owned property lists. @returns Nothing. */
   CollectIncomplete(lists: Set<RTFSprms>): void {
     lists.add(this.m_aParagraphSprms);
+    lists.add(this.m_aDefaultTableCellSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
     for (const { shape } of this.frames) CollectBlockSprms(lists, shape.blocks ?? []);
     if (this.m_BackupTopLevelTableRow)

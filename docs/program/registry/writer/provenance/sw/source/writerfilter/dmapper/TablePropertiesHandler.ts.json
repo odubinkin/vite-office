@@ -14,7 +14,8 @@
       "TablePropertiesHandler::sprm"
     ],
     "preservedResponsibilities": [
-      "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager."
+      "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager.",
+      "Reuses the original CellMarginHandler for table and cell margin properties and maps table justification."
     ],
     "omittedResponsibilities": [
       "The other table resource families and cell interop grab bag are outside this RTF brush path."
@@ -34,6 +35,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
           "marker": "case NS_ooxml::LN_CT_TcPrBase_shd:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+          "marker": "LN_CT_TblPrBase_tblCellMar"
         }
       ]
     }

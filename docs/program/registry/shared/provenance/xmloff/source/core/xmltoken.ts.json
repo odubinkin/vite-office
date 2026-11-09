@@ -140,6 +140,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -250,6 +254,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
           "marker": "XML_REL_WIDTH_REL"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_REL_COLUMN_WIDTH"
         }
       ]
     },
@@ -289,7 +297,8 @@
       "Registers ordinary and LibreOffice extension writing-mode attributes in their original namespaces.",
       "Recognizes native frame, text-box, geometry, graphic property and anchor tokens.",
       "Recognizes the original ODF fly split, overlap, flow and wrap influence attributes.",
-      "Admits the original relative size relation extension tokens."
+      "Admits the original relative size relation extension tokens.",
+      "Recognizes the original relative column-width token."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

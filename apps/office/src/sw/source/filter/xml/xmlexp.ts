@@ -383,7 +383,8 @@ function projectBlock(
       name: table.GetName(),
       format: {
         ...exportFrameVisualProperties(items),
-        width: size?.GetWidth(),
+        width: size?.GetWidthPercent() ? undefined : size?.GetWidth(),
+        relativeWidth: size?.GetWidthPercent() || undefined,
         marginTop: ul?.GetUpper(),
         marginBottom: ul?.GetLower(),
         layoutSplit: split?.GetValue(),

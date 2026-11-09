@@ -80,6 +80,10 @@
         {
           "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
           "marker": "renderFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -142,6 +146,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport::_exportTextFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "XML_REL_COLUMN_WIDTH"
         }
       ]
     },
@@ -167,7 +175,8 @@
       "Writes original ODF number-rows-spanned and a styled covered-cell element when Writer supplies signed row span, retaining horizontal covered slots.",
       "Shares the original automatic-style naming context across text paragraphs and the regular nested tables in each cell.",
       "Writes the represented native background attributes and writes extension-only direction values in the cell style extension namespace.",
-      "Shares one XML naming pass across regular text and tables in native frame sections."
+      "Shares one XML naming pass across regular text and tables in native frame sections.",
+      "Writes the original relative table and column measure properties."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/table/XMLTableExport.cxx",

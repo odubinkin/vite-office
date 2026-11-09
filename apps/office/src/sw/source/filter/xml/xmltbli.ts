@@ -102,6 +102,7 @@ export class SwXMLTableImport extends SvXMLImport {
     const frameFormat = table.GetFrameFormat();
     importFrameVisualProperties(frameFormat, style);
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
+    const hasWidth = style.width !== undefined || style.relativeWidth !== undefined;
     if (hasMargins) {
       const item = frameFormat.GetLRSpace().Clone();
       item.SetLeft(SvxIndentValue.twips(style.marginLeft ?? 0));
@@ -113,7 +114,7 @@ export class SwXMLTableImport extends SvXMLImport {
       switch (style.align) {
         case "left":
           item.SetHoriOrient(
-            style.width === undefined
+            !hasWidth
               ? hasMargins
                 ? HoriOrientation.NONE
                 : HoriOrientation.FULL
@@ -123,14 +124,10 @@ export class SwXMLTableImport extends SvXMLImport {
           );
           break;
         case "center":
-          item.SetHoriOrient(
-            style.width === undefined ? HoriOrientation.FULL : HoriOrientation.CENTER,
-          );
+          item.SetHoriOrient(!hasWidth ? HoriOrientation.FULL : HoriOrientation.CENTER);
           break;
         case "right":
-          item.SetHoriOrient(
-            style.width === undefined ? HoriOrientation.FULL : HoriOrientation.RIGHT,
-          );
+          item.SetHoriOrient(!hasWidth ? HoriOrientation.FULL : HoriOrientation.RIGHT);
           break;
         case "margins":
           item.SetHoriOrient(hasMargins ? HoriOrientation.NONE : HoriOrientation.FULL);
@@ -147,9 +144,10 @@ export class SwXMLTableImport extends SvXMLImport {
           frameFormat.GetULSpace().GetContext(),
         ),
       );
-    if (style.width !== undefined) {
+    if (hasWidth) {
       const item = frameFormat.GetFrameSize().Clone();
-      item.SetWidth(style.width);
+      if (style.width !== undefined) item.SetWidth(style.width);
+      if (style.relativeWidth !== undefined) item.SetWidthPercent(style.relativeWidth);
       frameFormat.SetFormatAttr(item);
     }
     if (style.borderModel !== undefined)
@@ -181,8 +179,13 @@ export class SwXMLTableImport extends SvXMLImport {
       OdfTableStyle,
       { family: "table-column" }
     >;
-    table.AddColumnWidth(style.columnWidth ?? 0);
-    this.tableContext.columnWidths.push(style.columnWidth ?? 0);
+    const isRelative = table.GetFrameFormat().GetFrameSize().GetWidthPercent() !== 0;
+    const width =
+      (isRelative
+        ? (style.relativeColumnWidth ?? style.columnWidth)
+        : (style.columnWidth ?? style.relativeColumnWidth)) ?? 0;
+    table.AddColumnWidth(width);
+    this.tableContext.columnWidths.push(width);
   }
 
   /** Opens one ordered table row with the declared column count. */
@@ -191,6 +194,17 @@ export class SwXMLTableImport extends SvXMLImport {
   ): void {
     const context = this.tableContext;
     const table = context.table;
+    const format = table.GetFrameFormat();
+    const size = format.GetFrameSize();
+    if (size.GetWidthPercent() && !size.GetWidth()) {
+      let baseWidth = 0;
+      for (const width of context.columnWidths) baseWidth += width;
+      if (baseWidth) {
+        const item = size.Clone();
+        item.SetWidth(baseWidth);
+        format.SetFormatAttr(item);
+      }
+    }
     /* istanbul ignore next -- SAX row contexts cannot nest under a row context. */
     if (context.activeRow !== undefined)
       throw new Error("Nested ODF table rows are not supported.");

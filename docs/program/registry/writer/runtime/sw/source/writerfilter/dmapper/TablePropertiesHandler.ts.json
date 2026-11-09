@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/writerfilter/dmapper/TablePropertiesHandler.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
-        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TblPrBase_tblCellMar"
       ],
-      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager.",
+      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager. RTF105. Reuses the original CellMarginHandler for table and cell margin properties and maps table justification.",
       "knownViolations": [],
       "localSymbols": [
         "TablePropertiesHandler",

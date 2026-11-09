@@ -11,7 +11,9 @@
       "HorizontallyMergedCell",
       "CollectHorizontalMerge",
       "ApplyHorizontalMerges",
-      "ConvertFloatingRtfTable"
+      "ConvertFloatingRtfTable",
+      "ApplyTableMeasures",
+      "ApplyTableMargins"
     ],
     "upstreamSymbols": [
       "DomainMapperTableHandler::endTableGetCellProperties",
@@ -20,7 +22,8 @@
     "preservedResponsibilities": [
       "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
       "Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389).",
-      "Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion."
+      "Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion.",
+      "Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment."
     ],
     "omittedResponsibilities": [
       "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
@@ -60,6 +63,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "A text frame created for floating tables is always allowed to split"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "lcl_adjustBorderDistance"
         }
       ]
     }

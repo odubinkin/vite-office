@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Owns the atomic native append context for body and shape text with independent paragraph, row and run state.",
-      "Keeps the original previous and backup top-level row definitions in the active text stream and releases owned saved sprms."
+      "Keeps the original previous and backup top-level row definitions in the active text stream and releases owned saved sprms.",
+      "Owns and releases the original row-local default cell property snapshots."
     ],
     "omittedResponsibilities": [
       "The full live mapper stream and shapes outside Writer text frames remain unrepresented."
@@ -42,6 +43,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
           "marker": "m_PreviousTopLevelTableRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "The scope of the table cell defaults is one row."
         }
       ]
     },

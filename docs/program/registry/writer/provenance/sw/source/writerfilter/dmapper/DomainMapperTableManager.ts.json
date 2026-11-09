@@ -13,7 +13,8 @@
       "GetTableGridSeparators",
       "cellProps",
       "resolvePositionSprm",
-      "takeRowPosition"
+      "takeRowPosition",
+      "insertTableProps"
     ],
     "upstreamSymbols": [
       "DomainMapperTableManager::sprm",
@@ -24,7 +25,8 @@
       "Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path.",
       "Maps hMerge restart/continue to the native boolean horizontal merge property.",
       "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties.",
-      "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position."
+      "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position.",
+      "Resolves the original preferred-width and indent measures and preserves source grid fallback."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -76,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "LN_CT_TblPrBase_tblpPr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "LN_CT_TblPrBase_tblW"
         }
       ]
     }

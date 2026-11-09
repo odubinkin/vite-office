@@ -28,7 +28,8 @@
       "Consumes the native RowSpan property and original internal VerticalMerge numbering cleanup on actual text nodes.",
       "Selects actual native table endpoints and calls the document merge path before rebuilding the native box selection.",
       "Applies the original UNO BackColor property to the claimed native cell brush item with MID_BACK_COLOR.",
-      "Resolves the flat cell-name coordinate in the cursor's nearest native table, including the source leading-nested-table asymmetry in WRITER404."
+      "Resolves the flat cell-name coordinate in the cursor's nearest native table, including the source leading-nested-table asymmetry in WRITER404.",
+      "Applies the original UNO absolute and relative width properties to the actual table frame item."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -80,6 +81,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
           "marker": "SwCursor::GotoTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
+          "marker": "FN_TABLE_RELATIVE_WIDTH"
         }
       ]
     }

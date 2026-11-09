@@ -27,12 +27,13 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#!m_bIsInShape && pProperties",
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#RTFDocumentImpl::prepareProperties"
       ],
-      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility. RTF91. Runs original horizontal merges after completing cell and table property application on the actual table. RTF93. Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs. RTF101. Separates native row groups at original TablePositionHandler comparison boundaries, retaining the final equal position's distance payload. RTF102. Does not convert positioned rows in shape text into floating tables, following the original shape guard. RTF104. Uses the original positive-column correction for the actual cell size and merge separators.",
+      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility. RTF91. Runs original horizontal merges after completing cell and table property application on the actual table. RTF93. Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs. RTF101. Separates native row groups at original TablePositionHandler comparison boundaries, retaining the final equal position's distance payload. RTF102. Does not convert positioned rows in shape text into floating tables, following the original shape guard. RTF104. Uses the original positive-column correction for the actual cell size and merge separators. RTF105. Emits the original default width and indent measures and uses native table and cell margin properties.",
       "knownViolations": [],
       "localSymbols": [
         "ApplyRtfTableProperties",
         "PrepareRtfTableGrid",
-        "MaterializeRtfTable"
+        "MaterializeRtfTable",
+        "PrepareTableRowProperties"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",

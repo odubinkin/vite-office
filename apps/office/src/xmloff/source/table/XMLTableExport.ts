@@ -22,6 +22,7 @@ export interface XMLTableExportSource {
   readonly format: Readonly<
     OdfTableVisualProperties & {
       width?: number | undefined;
+      relativeWidth?: number | undefined;
       align?: string | undefined;
       marginLeft?: number | undefined;
       marginRight?: number | undefined;
@@ -114,6 +115,7 @@ function exportTableVisualProperties(
           table.format.width === undefined
             ? ""
             : ` style:width="${exportOdfLength(table.format.width)}"`,
+          table.format.relativeWidth ? ` style:rel-width="${table.format.relativeWidth}%"` : "",
           table.format.align === undefined ? "" : ` table:align="${escapeXml(table.format.align)}"`,
           table.format.marginLeft === undefined
             ? ""
@@ -138,7 +140,13 @@ function exportTableVisualProperties(
       body += `<table:table table:name="${escapeXml(table.name)}" table:style-name="${prefix}">`;
       for (const [columnIndex, width] of table.columnWidths.entries()) {
         const styleName = `${prefix}.C${columnIndex + 1}`;
-        automaticStyles += `<style:style style:name="${styleName}" style:family="table-column"><style:table-column-properties${width > 0 ? ` style:column-width="${exportOdfLength(width)}"` : ""}/></style:style>`;
+        const columnWidth =
+          width <= 0
+            ? ""
+            : table.format.relativeWidth
+              ? ` style:rel-column-width="${width}*"`
+              : ` style:column-width="${exportOdfLength(width)}"`;
+        automaticStyles += `<style:style style:name="${styleName}" style:family="table-column"><style:table-column-properties${columnWidth}/></style:style>`;
         body += `<table:table-column table:style-name="${styleName}"/>`;
       }
       const repeatedHeaders = table.format.repeatHeaderRows

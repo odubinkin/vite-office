@@ -46,7 +46,8 @@
       "Routes original table shading and RGB color controls to the actual palette and nested property handlers.",
       "Delivers floating position modifiers to the same native group-owned table state.",
       "Recognizes and closes native shape destinations and uses the current text append context.",
-      "Retains lexical row width-after state and allows a row without a repeated definition to keep the original table open."
+      "Retains lexical row width-after state and allows a row without a repeated definition to keep the original table open.",
+      "Replays native width and margin properties and restores the source cell defaults at the nested property boundary."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."

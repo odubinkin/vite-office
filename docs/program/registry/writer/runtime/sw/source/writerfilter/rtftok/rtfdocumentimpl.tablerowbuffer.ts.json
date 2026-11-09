@@ -24,9 +24,10 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::PushShapeContext",
-        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#restoreTableRowProperties()"
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#restoreTableRowProperties()",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#The scope of the table cell defaults is one row."
       ],
-      "justification": "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path. RTF102. Binds rows to the active text append context and releases actual shape and table properties recursively. RTF104. Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell.",
+      "justification": "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path. RTF102. Binds rows to the active text append context and releases actual shape and table properties recursively. RTF104. Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell. RTF105. Restores native default cell resource properties at each CELLX and clears them on ROW.",
       "knownViolations": [],
       "localSymbols": [
         "TableRowBuffer",

@@ -212,14 +212,11 @@ export interface RtfTableRowDefinition {
   readonly cellSprms: readonly RTFSprms[];
   readonly header: boolean;
   readonly boundaries: readonly number[];
-  readonly alignment: "left" | "center" | "right";
   readonly left: number;
   readonly height: number;
   readonly split: boolean;
   readonly verticals: readonly (VertOrientation | undefined)[];
   readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
-  readonly paddings: readonly ReadonlyMap<SvxBoxItemLine, number>[];
-  readonly defaultPaddings: ReadonlyMap<SvxBoxItemLine, number>;
 }
 /** One replayable row with its definition and ordered cell content. */
 export interface RtfTableRow extends RtfTableRowDefinition {

@@ -4,9 +4,12 @@ import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2"
 import { resolveReturnedReference, type Sprm } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
-import { TablePropertyMap } from "./PropertyMap";
+import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
+import { TablePropertyMap, TablePropertyMapTarget as T } from "./PropertyMap";
 import { UNO_TABLE_COLUMN_SUM } from "../../../inc/swtypes";
 import { TablePositionHandler } from "./TablePositionHandler";
+import { MeasureHandler } from "./MeasureHandler";
+import { convertTwipToMm100_LimitedRoundUp } from "./ConversionHelper";
 import { TablePropertiesHandler } from "./TablePropertiesHandler";
 
 /** Actual mapper property owners for the represented top-level table direction path. */
@@ -15,6 +18,7 @@ export class DomainMapperTableManager {
   private m_aTmpTableProperties = new TablePropertyMap();
   private m_pCellProps = new TablePropertyMap();
   private readonly m_pTablePropsHandler = new TablePropertiesHandler();
+  private m_nTableWidth = 0;
   private m_pTmpPosition: TablePositionHandler | undefined;
 
   /** Connects the original fallback table property handler. @returns Table manager. */
@@ -52,6 +56,31 @@ export class DomainMapperTableManager {
   sprm(modifier: Sprm): boolean {
     const id = modifier.getId(),
       value = modifier.getValue()?.getInt() ?? 0;
+    if (id === N.LN_CT_TblPrBase_tblW || id === N.LN_CT_TblPrBase_tblInd) {
+      const handler = new MeasureHandler();
+      try {
+        resolveReturnedReference(modifier.getProps(), handler);
+        const width = handler.getMeasureValue();
+        if (id === N.LN_CT_TblPrBase_tblInd)
+          this.m_aTmpTableProperties.setValue(T.LEFT_MARGIN, width);
+        else {
+          this.m_nTableWidth = width;
+          if (width) {
+            this.m_aTmpTableProperties.setValue(T.TABLE_WIDTH_TYPE, SizeType.FIX);
+            this.m_aTmpTableProperties.setValue(T.TABLE_WIDTH, width);
+          } else if (handler.getUnit() === N.LN_Value_ST_TblWidth_pct) {
+            this.m_aTmpTableProperties.setValue(T.TABLE_WIDTH_TYPE, SizeType.VARIABLE);
+            this.m_aTmpTableProperties.setValue(
+              T.TABLE_WIDTH,
+              Math.min(100, Math.trunc(handler.getValue() / 50)),
+            );
+          }
+        }
+      } finally {
+        handler.dispose();
+      }
+      return true;
+    }
     if (id === N.LN_CT_TblPrBase_bidiVisual) {
       const item = new Any([value ? WritingMode2.RL_TB : WritingMode2.LR_TB], "sal_Int16");
       try {
@@ -103,8 +132,29 @@ export class DomainMapperTableManager {
     this.m_pCellProps.InsertProps(properties);
   }
 
-  /** Original end-of-row accumulation; absent properties do not overwrite the table's previous values. @returns Nothing. */
-  endOfRowAction(): void {
+  /** Merges original table property slots into the current row's table context. @param properties - Borrowed table properties. @returns Nothing. */
+  insertTableProps(properties: TablePropertyMap): void {
+    this.m_aTmpTableProperties.InsertProps(properties);
+  }
+
+  /** Accumulates row table properties with the source grid fallback. @param grid - Prepared RTF row grid, when present. @returns Nothing. */
+  endOfRowAction(grid?: readonly number[]): void {
+    const type: [number] = [SizeType.VARIABLE];
+    const width: [number] = [0];
+    if (grid?.length) {
+      this.m_aTmpTableProperties.getValue(T.TABLE_WIDTH_TYPE, type);
+      this.m_aTmpTableProperties.getValue(T.TABLE_WIDTH, width);
+      if (!this.m_nTableWidth) {
+        let sum = 0;
+        for (const column of grid) sum = Math.max(-0x80000000, Math.min(0x7fffffff, sum + column));
+        this.m_nTableWidth = convertTwipToMm100_LimitedRoundUp(sum);
+      }
+      if (type[0] === SizeType.VARIABLE && (width[0] <= 0 || width[0] > 100)) {
+        this.m_aTmpTableProperties.setValue(T.TABLE_WIDTH_TYPE, SizeType.FIX);
+        this.m_aTmpTableProperties.setValue(T.TABLE_WIDTH, this.m_nTableWidth);
+      }
+    }
+    this.m_nTableWidth = 0;
     this.m_aTableProperties.InsertProps(this.m_aTmpTableProperties);
     this.m_aTmpTableProperties.dispose();
     this.m_aTmpTableProperties = new TablePropertyMap();

@@ -8,14 +8,18 @@
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
     "localSymbols": [
       "dispatchTableShading",
-      "dispatchFloatingTableValue"
+      "dispatchFloatingTableValue",
+      "dispatchTableMeasure",
+      "dispatchTableMargin",
+      "putTableIndent"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::dispatchTableValue"
     ],
     "preservedResponsibilities": [
       "Preserves all original shade thresholds and CLCBPAT aliases through the native nested cell sprm owner (WRITER396).",
-      "Routes the source RTF floating coordinates and distances to the nested row properties."
+      "Routes the source RTF floating coordinates and distances to the nested row properties.",
+      "Emits native width, half-gap and padding resource values, including the original top/left cell token swap."
     ],
     "omittedResponsibilities": [
       "Registered CLCFPAT and CLCFPATRAW retain the upstream absence of a consumer. Other table value families use existing owner paths."
@@ -47,6 +51,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::TPOSX:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::TRGAPH:"
         }
       ]
     },

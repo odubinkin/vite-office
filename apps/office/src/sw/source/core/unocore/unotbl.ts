@@ -143,16 +143,20 @@ export class SwXTextTable {
       table.SetRowsToRepeat(scalar(value, "sal_Int32") as number);
       return;
     }
-    const fields: Record<
-      string,
-      "width" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom"
-    > = {
-      Width: "width",
+    const fields: Record<string, "marginLeft" | "marginRight" | "marginTop" | "marginBottom"> = {
       LeftMargin: "marginLeft",
       RightMargin: "marginRight",
       TopMargin: "marginTop",
       BottomMargin: "marginBottom",
     };
+    if (n === "Width") {
+      const format = table.GetFrameFormat();
+      const size = format.GetFrameSize().Clone();
+      size.SetWidthPercent(0);
+      size.SetWidth(Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)));
+      format.SetFormatAttr(size);
+      return;
+    }
     if (fields[n]) {
       table.SetFormat({
         ...table.GetFormat(),
@@ -160,6 +164,18 @@ export class SwXTextTable {
           toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100),
         ),
       });
+      return;
+    }
+    if (n === "RelativeWidth" || n === "IsWidthRelative") {
+      const format = table.GetFrameFormat();
+      const size = format.GetFrameSize().Clone();
+      if (n === "RelativeWidth") {
+        const width = scalar(value, "sal_Int16") as number;
+        if (width !== 0 && width <= 100) size.SetWidthPercent(width & 255);
+      } else if (scalar(value, "bool") === false) size.SetWidthPercent(0);
+      else if (size.GetWidthPercent() === 0)
+        illegal("relative width cannot be switched on with this property");
+      format.SetFormatAttr(size);
       return;
     }
     if (n === "WritingMode") {

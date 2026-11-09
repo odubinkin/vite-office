@@ -27,13 +27,9 @@ export class TableRowBuffer {
   readonly cellSprms: RTFSprms[] = [];
   readonly verticals: (VertOrientation | undefined)[] = [];
   readonly borders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
-  readonly paddings: Map<SvxBoxItemLine, number>[] = [];
-  defaultPaddings = new Map<SvxBoxItemLine, number>();
   nextCellVertical: VertOrientation | undefined;
   nextCellBorders = new Map<SvxBoxItemLine, RtfCellBorder>();
-  nextCellPaddings = new Map<SvxBoxItemLine, number>();
   activeBorder: RtfCellBorder | undefined;
-  alignment: "left" | "center" | "right" = "left";
   left = 0;
   height = 0;
   split = true;
@@ -45,13 +41,9 @@ export class TableRowBuffer {
     for (const list of this.cellSprms.splice(0)) list.dispose();
     this.verticals.length = 0;
     this.borders.length = 0;
-    this.paddings.length = 0;
-    this.defaultPaddings = new Map();
     this.nextCellVertical = undefined;
     this.nextCellBorders = new Map();
-    this.nextCellPaddings = new Map();
     this.activeBorder = undefined;
-    this.alignment = "left";
     this.left = 0;
     this.height = 0;
     this.split = true;
@@ -65,14 +57,11 @@ export class TableRowBuffer {
       boundaries: this.boundaries.splice(0),
       rowSprms: new RTFSprms(state.tableRowSprms),
       cellSprms: this.cellSprms.splice(0),
-      alignment: this.alignment,
       left: this.left,
       height: this.height,
       split: this.split,
       verticals: this.verticals.splice(0),
       borders: this.borders.splice(0),
-      paddings: this.paddings.splice(0),
-      defaultPaddings: this.defaultPaddings,
     };
   }
 
@@ -85,9 +74,6 @@ export class TableRowBuffer {
     this.verticals.splice(0, this.verticals.length, ...definition.verticals);
     this.borders.length = 0;
     for (const map of definition.borders) this.borders.push(new Map(map));
-    this.paddings.length = 0;
-    for (const map of definition.paddings) this.paddings.push(new Map(map));
-    this.defaultPaddings = new Map(definition.defaultPaddings);
   }
 
   /** Transfers cell contents and definitions to the completed row. @param state - Current group. @returns Completed row. */
@@ -271,7 +257,6 @@ export function DispatchTableControl(
       const restored = !active.boundaries.at(-1) && !!backup;
       if (restored) {
         active.RestoreCellDefinition(backup);
-        active.alignment = backup.alignment;
         active.height = backup.height;
         active.header = backup.header;
         active.split = backup.split;
@@ -289,6 +274,7 @@ export function DispatchTableControl(
         if (completed.boundaries.length) text.m_PreviousTopLevelTableRow = completed;
       }
       active.ResetProperties();
+      text.m_aDefaultTableCellSprms.clear();
       state.tableCellSprms.clear();
       if (restored) state.tableRowSprms.clear();
       for (const group of this["states"])
@@ -298,30 +284,6 @@ export function DispatchTableControl(
       text.m_bNeedFinalPar = true;
     }
     this["m_aTextBuffer"].terminatedParagraph = true;
-    return true;
-  }
-  if (name === "trpaddt" || name === "trpaddl" || name === "trpaddb" || name === "trpaddr") {
-    const edge =
-      name === "trpaddt"
-        ? SvxBoxItemLine.TOP
-        : name === "trpaddl"
-          ? SvxBoxItemLine.LEFT
-          : name === "trpaddb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    row.defaultPaddings.set(edge, parameter ?? 0);
-    return true;
-  }
-  if (name === "clpadl" || name === "clpadt" || name === "clpadb" || name === "clpadr") {
-    const edge =
-      name === "clpadl"
-        ? SvxBoxItemLine.TOP
-        : name === "clpadt"
-          ? SvxBoxItemLine.LEFT
-          : name === "clpadb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    row.nextCellPaddings.set(edge, parameter ?? 0);
     return true;
   }
   if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
@@ -361,7 +323,16 @@ export function DispatchTableControl(
     return true;
   }
   if (name === "trql" || name === "trqc" || name === "trqr") {
-    row.alignment = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
+    state.tableRowSprms.set(
+      N.LN_CT_TrPrBase_jc,
+      new RTFValue(
+        name === "trqc"
+          ? N.LN_Value_ST_Jc_center
+          : name === "trqr"
+            ? N.LN_Value_ST_Jc_right
+            : N.LN_Value_ST_Jc_left,
+      ),
+    );
     return true;
   }
   if (name === "trwWidthA") {
@@ -377,13 +348,12 @@ export function DispatchTableControl(
       row.boundaries.push(parameter);
       if (row === buffers[0]) text.nCellXMax = Math.max(parameter, text.nCellXMax);
       row.cellSprms.push(new RTFSprms(state.tableCellSprms));
-      state.tableCellSprms.clear();
+      state.tableCellSprms.dispose();
+      state.tableCellSprms = new RTFSprms(text.m_aDefaultTableCellSprms);
       row.verticals.push(row.nextCellVertical);
       row.nextCellVertical = undefined;
       row.borders.push(row.nextCellBorders);
       row.nextCellBorders = new Map();
-      row.paddings.push(row.nextCellPaddings);
-      row.nextCellPaddings = new Map();
       row.activeBorder = undefined;
     }
     return true;

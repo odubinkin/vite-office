@@ -9,6 +9,8 @@ import {
 } from "../dmapper/DomainMapperTableManager";
 import {
   ApplyHorizontalMerges,
+  ApplyTableMeasures,
+  ApplyTableMargins,
   ApplyVerticalMergeBorders,
   CollectHorizontalMerge,
   type HorizontallyMergedCell,
@@ -22,13 +24,15 @@ import { scalar, text } from "../../core/unocore/unocrsrhelper";
 import { PropertyIds as P } from "../dmapper/PropertyIds";
 import type { RtfDocumentImplContext, RtfTableRow } from "./rtfdocumentimpl.context";
 import type { SwDoc } from "../../core/doc/doc";
-import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { createRtfBorderLine } from "./rtfdocumentimpl.border";
 import type { TablePositionHandler } from "../dmapper/TablePositionHandler";
-import { RTFSprm } from "./rtfsprm";
+import { RTFSprm, RTFSprms } from "./rtfsprm";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";
+import { putTableIndent } from "./rtfdispatchvalue.table";
+import { RTFValue } from "./rtfvalue";
 
 const COL_DFLT_WIDTH = 41;
 
@@ -47,6 +51,29 @@ function PrepareRtfTableGrid(row: RtfTableRow): number[] {
   return grid;
 }
 
+/** Builds the original effective row resource values without mutating the captured group. @param row - Native row snapshot. @returns Owned row property list. */
+function PrepareTableRowProperties(row: RtfTableRow): RTFSprms {
+  const sprms = new RTFSprms(row.rowSprms);
+  const width = sprms.find(N.LN_CT_TblPrBase_tblW);
+  const indent = sprms.find(N.LN_CT_TblPrBase_tblInd);
+  try {
+    if (!width.is()) {
+      putNestedAttribute(sprms, N.LN_CT_TblPrBase_tblW, N.LN_CT_TblWidth_type, new RTFValue(3));
+      putNestedAttribute(
+        sprms,
+        N.LN_CT_TblPrBase_tblW,
+        N.LN_CT_TblWidth_w,
+        new RTFValue((row.boundaries.at(-1) ?? 0) - row.left),
+      );
+    }
+    if (row.left && !indent.is()) putTableIndent(sprms, row.left);
+    return sprms;
+  } finally {
+    width.dispose();
+    indent.dispose();
+  }
+}
+
 /** Replays native buffered table properties after creating actual Writer cells. @param table - Original table. @param rows - Actual source rows and cell properties. @returns Nothing. */
 export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableRow[]): void {
   const manager = new DomainMapperTableManager();
@@ -54,11 +81,21 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
   const horizontalMerges: HorizontallyMergedCell[] = [];
   const mergeRows: (boolean | undefined)[][] = [];
   try {
+    for (const row of rows) {
+      const rowProperties = PrepareTableRowProperties(row);
+      try {
+        for (const [id, value] of rowProperties) manager.sprm(new RTFSprm(id, value));
+      } finally {
+        rowProperties.dispose();
+      }
+      manager.endOfRowAction(PrepareRtfTableGrid(row));
+    }
+    const tableProperties = manager.getTableProps();
+    ApplyTableMargins(table, tableProperties);
     for (const [rowIndex, row] of rows.entries()) {
       const mergeRow: (boolean | undefined)[] = [];
       mergeRows.push(mergeRow);
       let separators: number[] | undefined;
-      for (const [id, value] of row.rowSprms) manager.sprm(new RTFSprm(id, value));
       const boxes = table.GetTabLines()[rowIndex]?.GetTabBoxes();
       for (const [cellIndex, box] of (boxes ?? []).entries()) {
         const source = row.cellSprms[cellIndex];
@@ -88,17 +125,16 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
           cell.dispose();
         }
       }
-      manager.endOfRowAction();
     }
     ApplyVerticalMergeBorders(table, mergeRows);
     ApplyVerticalMerges(merges);
-    const tableProperties = manager.getTableProps(),
-      defaultDirection = new Any([WritingMode2.CONTEXT], "sal_Int16");
+    const defaultDirection = new Any([WritingMode2.CONTEXT], "sal_Int16");
     try {
       tableProperties.Insert(P.PROP_WRITING_MODE, defaultDirection, false);
     } finally {
       defaultDirection.dispose();
     }
+    ApplyTableMeasures(table, tableProperties);
     const uno = new SwXTextTable(table);
     for (const property of tableProperties.GetPropertyValues())
       uno.setPropertyValue(property.Name, property.Value);
@@ -177,31 +213,6 @@ function MaterializeRtfTableGroup(
   rows: readonly RtfTableRow[],
   pending: PendingRtfTableFrame[] | undefined,
 ): void {
-  const firstRow = rows[0];
-  if (firstRow !== undefined) {
-    const format = table.GetFrameFormat();
-    const orient = format.GetHoriOrient().Clone();
-    orient.SetHoriOrient(
-      firstRow.alignment === "center"
-        ? HoriOrientation.CENTER
-        : firstRow.alignment === "right"
-          ? HoriOrientation.RIGHT
-          : firstRow.left !== 0
-            ? HoriOrientation.NONE
-            : HoriOrientation.LEFT,
-    );
-    format.SetFormatAttr(orient);
-    if (firstRow.left !== 0) {
-      const lr = format.GetLRSpace().Clone();
-      lr.SetLeft(SvxIndentValue.twips(firstRow.left));
-      format.SetFormatAttr(lr);
-    }
-    if (firstRow.defaultPaddings.size > 0) {
-      const item = format.GetBox().Clone();
-      for (const [edge, value] of firstRow.defaultPaddings) item.SetDistance(value, edge);
-      format.SetFormatAttr(item);
-    }
-  }
   const rightEdge = rows.reduce(
     /** Computes the maximum result. @param maximum - Maximum. @param row - Row. @returns The computed result. */ (
       maximum,
@@ -238,13 +249,6 @@ function MaterializeRtfTableGroup(
         const item = box.GetBox();
         for (const [edge, border] of borders)
           item.SetLine(createRtfBorderLine(border, this["colors"]), edge);
-        box.ClaimFrameFormat().SetFormatAttr(item);
-      }
-      const paddings = row.paddings[index];
-      if (row.defaultPaddings.size > 0 || (paddings !== undefined && paddings.size > 0)) {
-        const item = box.GetBox();
-        for (const [edge, value] of row.defaultPaddings) item.SetDistance(value, edge);
-        for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
         box.ClaimFrameFormat().SetFormatAttr(item);
       }
       const width = widths[index] ?? 0;

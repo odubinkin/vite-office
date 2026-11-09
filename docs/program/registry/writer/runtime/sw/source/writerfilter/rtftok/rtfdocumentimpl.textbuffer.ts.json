@@ -21,9 +21,10 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
-        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx#m_PreviousTopLevelTableRow"
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx#m_PreviousTopLevelTableRow",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#The scope of the table cell defaults is one row."
       ],
-      "justification": "Owns the atomic native append context for body and shape text with independent paragraph, row and run state. The full live mapper stream and shapes outside Writer text frames remain unrepresented. RTF104. Keeps the original previous and backup top-level row definitions in the active text stream and releases owned saved sprms.",
+      "justification": "Owns the atomic native append context for body and shape text with independent paragraph, row and run state. The full live mapper stream and shapes outside Writer text frames remain unrepresented. RTF104. Keeps the original previous and backup top-level row definitions in the active text stream and releases owned saved sprms. RTF105. Owns and releases the original row-local default cell property snapshots.",
       "knownViolations": [],
       "localSymbols": [
         "RtfTextBuffer"

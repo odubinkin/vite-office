@@ -492,11 +492,13 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Resolves native orientation spacing without fly or outer-border offsets. @param upperWidth - Actual upper print width. @returns Table print area. */
   public Format(upperWidth: number): SwTablePrintArea {
     const lr = this.GetFormat().GetLRSpace();
+    const size = this.GetFormat().GetFrameSize();
+    const percent = size.GetWidthPercent();
     const wished = Math.min(
       65535,
       Math.max(
         this.table.GetColumnWidths().length * 23,
-        this.GetFormat().GetFrameSize().GetWidth(),
+        percent ? Math.trunc((upperWidth * percent) / 100) : size.GetWidth(),
       ),
     );
     let left = 0;

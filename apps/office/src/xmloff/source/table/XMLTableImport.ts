@@ -20,6 +20,7 @@ export type OdfTableStyle =
   | (OdfTableVisualProperties & {
       readonly family: "table";
       readonly width?: number | undefined;
+      readonly relativeWidth?: number | undefined;
       readonly align?: "left" | "center" | "right" | "margins" | undefined;
       readonly marginLeft?: number | undefined;
       readonly marginRight?: number | undefined;
@@ -28,7 +29,11 @@ export type OdfTableStyle =
       readonly borderModel?: "collapsing" | "separating" | undefined;
       readonly layoutSplit?: boolean | undefined;
     })
-  | { readonly family: "table-column"; readonly columnWidth?: number | undefined }
+  | {
+      readonly family: "table-column";
+      readonly columnWidth?: number | undefined;
+      readonly relativeColumnWidth?: number | undefined;
+    }
   | (Pick<OdfTableVisualProperties, "background"> & {
       readonly family: "table-row";
       readonly minHeight?: number | undefined;
@@ -161,10 +166,16 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       if (borderModel !== undefined && borderModel !== "collapsing" && borderModel !== "separating")
         throw new Error(`Unsupported ODF table border model: ${borderModel}`);
       const split = attributes.get(XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS);
+      const relative = attributes.get(XMLToken.STYLE_REL_WIDTH);
+      const percent: [number] = [0];
       this.style = {
         family: "table",
         ...importTableVisualProperties(attributes),
         width: length(XMLToken.STYLE_WIDTH, "table width"),
+        relativeWidth:
+          relative !== null && Converter.convertPercent(percent, relative)
+            ? Math.max(1, Math.min(100, percent[0]))
+            : undefined,
         marginLeft:
           attributes.get(XMLToken.FO_MARGIN_LEFT) === null
             ? undefined
@@ -198,10 +209,19 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       this.family === "table-column" &&
       element === XMLToken.STYLE_TABLE_COLUMN_PROPERTIES
     ) {
-      attributes.assertOnly([XMLToken.STYLE_COLUMN_WIDTH], "table column properties");
+      attributes.assertOnly(
+        [XMLToken.STYLE_COLUMN_WIDTH, XMLToken.STYLE_REL_COLUMN_WIDTH],
+        "table column properties",
+      );
+      const relative = attributes.get(XMLToken.STYLE_REL_COLUMN_WIDTH);
+      const value: [number] = [0];
       this.style = {
         family: "table-column",
         columnWidth: length(XMLToken.STYLE_COLUMN_WIDTH, "table column width"),
+        relativeColumnWidth:
+          relative?.endsWith("*") && Converter.convertNumber(value, relative.slice(0, -1), 0, 65535)
+            ? value[0]
+            : undefined,
       };
     } else if (this.family === "table-row" && element === XMLToken.STYLE_TABLE_ROW_PROPERTIES) {
       attributes.assertOnly(

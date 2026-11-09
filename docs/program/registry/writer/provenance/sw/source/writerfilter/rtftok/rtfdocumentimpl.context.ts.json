@@ -57,7 +57,8 @@
       "Retains actual nested rows in order and references the selected table buffer in each parser group.",
       "Copies the original group-owned RGB entry with automatic state until a native component is set.",
       "Owns native shape group identity and paragraph-positioned shape events.",
-      "Separates the original buffered table row definition from its ordered content."
+      "Separates the original buffered table row definition from its ordered content.",
+      "Keeps table padding in the original row and cell resource property owners."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
