@@ -5,6 +5,12 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 
+import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirectionItem } from "../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { Color } from "../../../tools/inc/color";
+import { RES_BACKGROUND, RES_FRAMEDIR } from "../../inc/hintids";
+
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases actual platform capture and native view owners. @returns Nothing. */ () => {
@@ -30,11 +36,21 @@ it("renders a nested native table inside its actual cell between surrounding par
     "Inside",
   );
   doc.nodes.AppendTableCellParagraph(cell).SetText("After inner table");
+  const background = new SvxBrushItem(new Color(0xc86428), RES_BACKGROUND);
+  const direction = new SvxFrameDirectionItem(SvxFrameDirection.Vertical_LR_BT, RES_FRAMEDIR);
+  try {
+    cell.GetFrameFormat().SetFormatAttr(background);
+    cell.GetFrameFormat().SetFormatAttr(direction);
+  } finally {
+    background.Dispose();
+    direction.Dispose();
+  }
   render(<WriterWorkbench isActive view={session.view} />);
   const outerElement = screen.getByRole("table", { name: "Outer" }),
     innerElement = screen.getByRole("table", { name: "Inner" }),
     owner = required(innerElement.closest("td,th"));
   expect(outerElement).toContainElement(innerElement);
+  expect(owner).toHaveStyle({ backgroundColor: "rgb(200, 100, 40)", writingMode: "sideways-lr" });
   expect(innerElement).toHaveAttribute(
     "data-writer-table-node",
     String(inner.GetTableNode().GetIndex()),

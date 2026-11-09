@@ -44,6 +44,8 @@ import {
   restoreTableSpacing,
   restoreTableFlow,
   encodeFrameDirection,
+  encodeFrameBackground,
+  restoreFrameBackground,
   decodeFrameDirection,
   type WriterTableFormatRecord,
   encodeRowFormat,
@@ -130,6 +132,7 @@ interface WriterTableRecord {
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
     format: WriterRowFormatRecord;
+    background?: SfxPoolItemSnapshot | undefined;
     cells: readonly Readonly<{
       format: WriterBoxFormatRecord;
       paragraphs: readonly WriterTextNodeRecord[];
@@ -143,6 +146,7 @@ interface WriterTableRecord {
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
 type WriterBoxFormatRecord = {
   readonly frameDirection?: SfxPoolItemSnapshot | undefined;
+  readonly background?: SfxPoolItemSnapshot | undefined;
   readonly frameSize?: WriterFrameSizeRecord | undefined;
   readonly box?:
     | Readonly<{
@@ -164,6 +168,7 @@ function encodeBoxFormat(cell: SwTableBox): WriterBoxFormatRecord {
   return {
     frameSize: encodeFrameSize(frameSize),
     frameDirection: encodeFrameDirection(cell.GetFrameFormat()),
+    background: encodeFrameBackground(cell.GetFrameFormat()),
     box: box === undefined ? undefined : encodeNativeBoxItem(box),
     vertOrient:
       vertOrient === undefined
@@ -293,7 +298,11 @@ function* encodeWriterTableSteps(
       });
       yield;
     }
-    rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
+    rows.push({
+      format: encodeRowFormat(row.GetFormat()),
+      background: encodeFrameBackground(row.GetFrameFormat()),
+      cells,
+    });
     yield;
   }
   return {
@@ -822,6 +831,7 @@ function* decodeWriterTableSteps(
         ) => decodeBoxFormat(cell.format),
       ),
     );
+    restoreFrameBackground(row.GetFrameFormat(), rowRecord.background);
     for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
       const cell = row.GetTabBoxes()[cellIndex];
       if (cell === undefined || cellRecord.paragraphs.length === 0)
@@ -835,6 +845,7 @@ function* decodeWriterTableSteps(
       const frame = cell.GetFrameFormat(),
         direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
       if (direction !== undefined) frame.SetFormatAttr(direction);
+      restoreFrameBackground(frame, cellRecord.format.background);
       const order =
         cellRecord.contentOrder ??
         cellRecord.paragraphs.map(

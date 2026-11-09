@@ -27,7 +27,7 @@ import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { exportBoxProperties } from "./xmlexpit";
+import { exportBoxProperties, exportFrameVisualProperties } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -382,6 +382,7 @@ function projectBlock(block: SwTextNode | SwTableNode): XMLTextExportBlock {
     table: {
       name: table.GetName(),
       format: {
+        ...exportFrameVisualProperties(items),
         width: size?.GetWidth(),
         marginTop: ul?.GetUpper(),
         marginBottom: ul?.GetLower(),
@@ -419,6 +420,7 @@ function projectBlock(block: SwTextNode | SwTableNode): XMLTextExportBlock {
           const split = items.GetItemIfSet(RES_ROW_SPLIT, false) as SwFormatRowSplit | undefined;
           return {
             format: {
+              background: exportFrameVisualProperties(items).background,
               keepTogether: split === undefined ? undefined : !split.GetValue(),
               ...(size?.GetHeightSizeType() === SwFrameSize.Minimum
                 ? { minHeight: size.GetHeight() }
@@ -440,6 +442,7 @@ function projectBlock(block: SwTextNode | SwTableNode): XMLTextExportBlock {
                   rowSpan: cell.getRowSpan(),
                   format: {
                     ...exportBoxProperties(box),
+                    ...exportFrameVisualProperties(items),
                     verticalAlign:
                       orient === undefined
                         ? undefined

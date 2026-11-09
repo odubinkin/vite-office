@@ -530,6 +530,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
           "marker": "SwXMLExport::ExportTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
+          "marker": "aTableCellItemMap"
         }
       ]
     },
@@ -589,7 +593,8 @@
       "S3HW1E projects actual direct fill items into native ODF paragraph attributes, preserves parent inheritance and emits original drawing namespace. Root Writer NONE override remains serializable.",
       "B8TCAE source-contract regression: A real named paragraph style containing only an explicit empty tab-stop child survives package export/import without paragraph attributes. No production algorithm or private state is replaced.",
       "The ODF table source borrows the signed native model row span before export.",
-      "Projects native direct cell text and child tables through original table cell text export in node order."
+      "Projects native direct cell text and child tables through original table cell text export in node order.",
+      "Supplies original direct table, row and cell brush and writing-direction items to ODF export."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

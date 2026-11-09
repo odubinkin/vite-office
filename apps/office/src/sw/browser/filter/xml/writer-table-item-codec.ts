@@ -25,9 +25,10 @@ import {
   RES_LAYOUT_SPLIT,
   RES_COLLAPSING_BORDERS,
   RES_FRAMEDIR,
+  RES_BACKGROUND,
 } from "../../../inc/hintids";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import { encodeSfxPoolItem } from "./item-codec";
+import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
 /** Direct native spacing presence, independently versioned from older geometry records. */
 export interface WriterTableSpacingRecord {
   readonly upperLower?: SfxPoolItemSnapshot | undefined;
@@ -37,6 +38,7 @@ export interface WriterTableFlowRecord {
   readonly layoutSplit?: SfxPoolItemSnapshot | undefined;
   readonly collapsingBorders?: SfxPoolItemSnapshot | undefined;
   readonly frameDirection?: SfxPoolItemSnapshot | undefined;
+  readonly background?: SfxPoolItemSnapshot | undefined;
 }
 /** Complete original horizontal item carried across process/storage boundaries. */
 export interface WriterHoriOrientRecord {
@@ -79,6 +81,7 @@ export function encodeTableFormat(table: SwTable): WriterTableFormatRecord {
       layoutSplit: split === undefined ? undefined : encodeSfxPoolItem(split),
       collapsingBorders: borders === undefined ? undefined : encodeSfxPoolItem(borders),
       frameDirection: encodeFrameDirection(table.GetFrameFormat()),
+      background: encodeFrameBackground(table.GetFrameFormat()),
     },
     nativeSpacing: {
       upperLower: spacing === undefined ? undefined : encodeSfxPoolItem(spacing),
@@ -115,6 +118,34 @@ export function restoreTableFlow(
   if (split !== undefined) format.SetFormatAttr(split);
   if (borders !== undefined) format.SetFormatAttr(borders);
   if (direction !== undefined) format.SetFormatAttr(direction);
+  restoreFrameBackground(format, flow.background);
+}
+
+/** Encodes a directly set native frame brush. @param format - Native frame owner. @returns Full brush snapshot or absence. */
+export function encodeFrameBackground(format: SwFrameFormat): SfxPoolItemSnapshot | undefined {
+  const item = format.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false);
+  return item === undefined ? undefined : encodeSfxPoolItem(item);
+}
+
+/** Restores the native brush using the existing packed-color item codec. @param format - Native frame owner. @param snapshot - Optional direct brush. @returns Nothing. */
+export function restoreFrameBackground(
+  format: SwFrameFormat,
+  snapshot: SfxPoolItemSnapshot | undefined,
+): void {
+  if (snapshot === undefined) return;
+  if (
+    snapshot === null ||
+    typeof snapshot !== "object" ||
+    Array.isArray(snapshot) ||
+    snapshot.which !== RES_BACKGROUND
+  )
+    throw new Error("Stored Writer native frame background is invalid.");
+  const item = decodeSfxPoolItem(format.GetAttrSet().GetPool(), snapshot);
+  try {
+    format.SetFormatAttr(item);
+  } finally {
+    item.Dispose();
+  }
 }
 
 /** Serializes the actual direct direction item of a table or cell. @param format - Native format. @returns Existing pool snapshot or absent. */

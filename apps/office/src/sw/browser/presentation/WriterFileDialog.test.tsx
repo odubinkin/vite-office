@@ -14,6 +14,9 @@ import { assert, describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
+import type { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { RES_BACKGROUND } from "../../inc/hintids";
 import { SwTableNode } from "../../source/core/docnode/node";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-odt-store";
@@ -249,7 +252,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   it.each([
     [
       "rtf",
-      String.raw`{\rtf1 Lead\par\trowd\cellx3000\pard\intbl before\par\pard\itap2 nested\nestcell{\*\nesttableprops\trowd\cellx1200\nestrow}\pard\intbl after\cell\row}`,
+      String.raw`{\rtf1{\colortbl;\red200\green100\blue40;}Lead\par\trowd\rtlrow\cellx3000\pard\intbl before\par\pard\itap2 nested\nestcell{\*\nesttableprops\trowd\clcbpat1\cltxbtlr\cellx1200\nestrow}\pard\intbl after\cell\row}`,
     ],
     [
       "md",
@@ -309,9 +312,18 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
           );
         assert(cell && nested instanceof SwTableNode);
         expect(nested.StartOfSectionNode()).toBe(cell.GetStartNode());
-        expect(
-          nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
-        ).toBe("nested");
+        const inner = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+        expect(inner?.GetParagraphs()[0]?.GetText()).toBe("nested");
+        if (extension === "rtf") {
+          assert(inner);
+          const frame = inner.GetFrameFormat();
+          const brush = frame.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem;
+          expect(brush.GetColor().toUInt32()).toBe(0xc86428);
+          expect(frame.GetFrameDir().GetValue()).toBe(SvxFrameDirection.Vertical_LR_BT);
+          expect(
+            documentShell.GetDoc().GetTables()[0]?.GetFrameFormat().GetFrameDir().GetValue(),
+          ).toBe(SvxFrameDirection.Horizontal_RL_TB);
+        }
       } finally {
         documentShell.Close();
       }

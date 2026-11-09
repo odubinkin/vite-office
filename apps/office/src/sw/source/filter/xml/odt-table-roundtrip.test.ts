@@ -27,6 +27,29 @@ import { exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { Color } from "../../../../tools/inc/color";
+import { RES_BACKGROUND } from "../../../inc/hintids";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+
+/** Reads a direct table brush with presence and packed color. @param format - Actual frame owner. @returns Native color. */
+function frameColor(format: SwFrameFormat): Color | undefined {
+  return (
+    format.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined
+  )?.GetColor();
+}
+
+/** Sets an authored native frame brush. @param format - Actual frame owner. @param color - Native color. @returns Nothing. */
+function setFrameColor(format: SwFrameFormat, color: Color): void {
+  const brush = new SvxBrushItem(color, RES_BACKGROUND);
+  try {
+    format.SetFormatAttr(brush);
+  } finally {
+    brush.Dispose();
+  }
+}
+
 /** Reads an exact upstream ODT copied from the pinned LibreOffice checkout. @returns Fixture bytes. */
 function upstreamTableOdt(): Uint8Array {
   return new Uint8Array(
@@ -109,6 +132,53 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     } finally {
       transferred.Dispose();
       odt.Dispose();
+      source.Dispose();
+    }
+  });
+
+  it("keeps native RTF table directions and brush ownership across Worker and ODT", /** Exercises the original table, row and cell property maps. @returns Completion. */ async () => {
+    const source = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(
+        String.raw`{\rtf1{\colortbl;\red200\green100\blue40;}Lead\par\trowd\rtlrow\clcbpat1\cltxbtlr\cellx1500\cellx3000\intbl first\cell second\cell\row}`,
+      ),
+    );
+    const table = source.GetTables()[0],
+      row = table?.GetTabLines()[0];
+    assert(table && row);
+    const translucent = new Color(0x5588bb);
+    translucent.SetAlpha(64);
+    setFrameColor(table.GetFrameFormat(), new Color(0xabcdef));
+    setFrameColor(row.GetFrameFormat(), translucent);
+    const worker = decodeWriterDocument(encodeWriterDocument(source));
+    const metadata = { title: "Native table visuals" };
+    const bytes = writeOdtDocument(worker, metadata);
+    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const odt = (await readOdtDocument(bytes, metadata)).document;
+    try {
+      expect(xml).toContain('fo:background-color="#abcdef" style:writing-mode="rl-tb"');
+      expect(xml).toContain('fo:background-color="#c86428" loext:writing-mode="bt-lr"');
+      expect(xml).toContain('fo:background-color="transparent"');
+      for (const doc of [source, worker, odt]) {
+        const actual = doc.GetTables()[0],
+          line = actual?.GetTabLines()[0];
+        const [cell, unpainted] = line?.GetTabBoxes() ?? [];
+        assert(actual && line && cell && unpainted);
+        expect(frameColor(actual.GetFrameFormat())?.toUInt32()).toBe(0xabcdef);
+        expect(frameColor(line.GetFrameFormat())?.GetAlpha()).toBe(doc === odt ? 0 : 64);
+        if (doc !== odt)
+          expect(frameColor(line.GetFrameFormat())?.toUInt32()).toBe(translucent.toUInt32());
+        expect(frameColor(cell.GetFrameFormat())?.toUInt32()).toBe(0xc86428);
+        expect(frameColor(unpainted.GetFrameFormat())).toBeUndefined();
+        expect(actual.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          SvxFrameDirection.Horizontal_RL_TB,
+        );
+        expect(cell.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          SvxFrameDirection.Vertical_LR_BT,
+        );
+      }
+    } finally {
+      odt.Dispose();
+      worker.Dispose();
       source.Dispose();
     }
   });

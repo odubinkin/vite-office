@@ -124,6 +124,10 @@
         {
           "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
           "marker": "XMLToken"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -218,6 +222,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/token/tokens.txt",
           "marker": "fill-color"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_WRITING_MODE"
         }
       ]
     },
@@ -253,7 +261,8 @@
       "TaskANN4R2 adds source fo:wrap-option vocabulary without renumbering existing tokens;Calc original wrap handler owns semantics.",
       "TaskRXH8BN connects original Writer escapement Which6 and0/100 default through complete signed16 offset/unsigned8 height, registered value codec, native automatic-style inheritance and source sign-based superscript/subscript commands. Original explicit Bool slot requests select ON/OFF; INVALID complete item state emits false for both source bool slots. Sidebar pair and native menu/toolbar resources consume actual frame bindings. Body/cell/numbering projection supplies browser font metrics to the original horizontal SwSubFont CalcEsc arithmetic; native font cache/HarfBuzz/vertical/printer/layout services remain unverified. Original XMLEscapementPropHdl and Height share one text-position attribute, retain exact ASCII-space/empty-token and signed narrowing behavior, then actual item PutValue applies native range constraints. Complete browser codec preserves raw fields independently of narrower UNO import. No native service/provider is fabricated; existing classification/status/default and intentional save/open/recovery exceptions remain unchanged.",
       "V4DQJW appends original ODF text-underline/overline/line-through mode and letter-kerning lexical associations. Existing bounded SAX token identities remain unchanged.",
-      "S3HW1E adds original drawing namespace and fill/fill-color/opacity attribute tokens without renumbering existing portable tokens."
+      "S3HW1E adds original drawing namespace and fill/fill-color/opacity attribute tokens without renumbering existing portable tokens.",
+      "Registers ordinary and LibreOffice extension writing-mode attributes in their original namespaces."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

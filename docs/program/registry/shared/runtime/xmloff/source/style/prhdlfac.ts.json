@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/prhdlfac.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/prhdlfac.ts#importWritingDirection",
+        "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx#aXML_WritingDirection_Enum",
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+      ],
+      "justification": "Ports the default-capable writing-mode constant handler selection, original enum order, canonical tokens and import aliases for Writer table styles.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aXML_WritingDirection_Enum",
+        "importWritingDirection",
+        "exportWritingDirection"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/prhdlfac.cxx",
+      "upstreamSymbols": [
+        "aXML_WritingDirection_Enum",
+        "XMLPropertyHandlerFactory::CreatePropertyHandler"
+      ]
+    }
+  }
+}

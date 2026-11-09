@@ -226,6 +226,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
           "marker": "SwXMLTableCellContext_Impl::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
+          "marker": "aTableCellItemMap"
         }
       ]
     },
@@ -263,7 +267,8 @@
       "Task SWRD7X retains native owner and dispatch invariants: attached bookmark marks always retain their document/text owners; property metadata validates represented style keys before dispatch; a bounded cursor decrement stays inside the current node array; native generated numbering compounds share one addressed-copy path; an active import cell exists whenever its saved body cursor is present. Remove only redundant impossible alternatives, retaining public invalid-owner and unsupported-property failures. No coverage exclusions, thresholds, semantic statuses or broader parity claims change.",
       "S3HW1E HTML58: original static SwNodes::InsertTable now forwards to its actual ndtbl.cxx node-matrix responsibility InsertTableNodes. Zero boxes return null without mutation; zero lines create one body row; supplied headline/body collections transition using the original repetition condition. Actual table/cell/text/end nodes retain their real enclosing section, including extra/caption and genuine existing cell boundaries. The seven native propagation identities (adjustment, Latin/CJK/CTL font families and heights) copy only effective SET source items when the selected cell collection has no effective SET value; direct or inherited collection values win, defaults and other source items do not propagate. SwDoc consumes this actual matrix before page-attribute transfer and builds its original shared line/box formats over those existing sections instead of rebuilding text sections and unconditionally overwriting adjustment. The old independent browser empty-table builder is explicitly named MakeTableNodeBefore and migrated in real XML/RTF and test consumers; it no longer masquerades as the native static InsertTable API. The existing bound SwTable/early frame bootstrap remains a representation difference requiring further native constructor/lifetime audit; no raw/default table or nullable frame contract is certified by these node-matrix tests. Full native module/API/ABI/default/lifetime behavior remains unverified. First-cell context/floating/section orchestration, recursive table grammar, caption placement/materialization/layout/real text measurement, RTF direction export and final format/UI audit remain required. Browser open/save/autosave/recovery deviations are unchanged.",
       "Restores the original native vertical master and covered signs, materializes reserved covered slots and clips outstanding spans at final-row truncation. The original default TABLE_ROW_KEEP covered style behavior is retained (WRITER387).",
-      "Keeps table-local grid and cursor ownership while recursively importing real nested ODF table sections through the cell text context."
+      "Keeps table-local grid and cursor ownership while recursively importing real nested ODF table sections through the cell text context.",
+      "Applies ODF brush and writing-direction attributes to original Writer table, row and cell formats."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmltbli.cxx",

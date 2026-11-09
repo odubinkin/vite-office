@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/prhdlfac.ts",
+    "upstreamPath": "xmloff/source/style/prhdlfac.cxx",
+    "localSymbols": [
+      "aXML_WritingDirection_Enum",
+      "importWritingDirection",
+      "exportWritingDirection"
+    ],
+    "upstreamSymbols": [
+      "aXML_WritingDirection_Enum",
+      "XMLPropertyHandlerFactory::CreatePropertyHandler"
+    ],
+    "preservedResponsibilities": [
+      "Ports the default-capable writing-mode constant handler selection, original enum order, canonical tokens and import aliases for Writer table styles."
+    ],
+    "omittedResponsibilities": [
+      "Other generic property-handler factory entries remain outside this table direction slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/prhdlfac.ts",
+          "marker": "aXML_WritingDirection_Enum"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "keeps native RTF table directions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+          "marker": "aXML_WritingDirection_Enum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+          "marker": "XMLPropertyHandlerFactory::CreatePropertyHandler"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 302
+}

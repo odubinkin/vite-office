@@ -10,12 +10,24 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/xmlexpit.ts",
           "marker": "exportBorderShorthand"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexpit.ts",
+          "marker": "exportFrameVisualProperties"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
           "marker": "SvXMLExportItemMapper::QueryXMLValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "case MID_BACK_COLOR:"
         }
       ]
     },
@@ -25,10 +37,12 @@
     ],
     "localSymbols": [
       "exportBorderShorthand",
-      "exportBoxProperties"
+      "exportBoxProperties",
+      "exportFrameVisualProperties"
     ],
     "preservedResponsibilities": [
-      "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine."
+      "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine.",
+      "Queries the original writing-mode value and preserves the original transparent token for any nonopaque brush."
     ],
     "omittedResponsibilities": [
       "Full native SvXMLImportItemMapper/SvXMLExportItemMapper class/API/Any and broader property families remain unported; existing bounded browser transfer signatures are explicit adaptations."

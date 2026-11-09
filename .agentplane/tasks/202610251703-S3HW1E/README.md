@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 519
+revision: 522
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T21:19:15.258Z"
+  updated_at: "2026-11-09T21:27:56.222Z"
   updated_by: "CODER"
-  note: "RTF96 native cell shading and palette checks pass. Keep parent open for visual item transport and rendering."
-  attempts: 107
+  note: "RTF97 verified 168 focused tests, native direction and brush storage, mounted editor, static checks and Writer/shared provenance. Keep the task open for the approved anchored-frame and remaining filter audit."
+  attempts: 108
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1717,8 +1720,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:27:56.222Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF97 verified 168 focused tests, native direction and brush storage, mounted editor, static checks and Writer/shared provenance. Keep the task open for the approved anchored-frame and remaining filter audit."
+  -
+    type: "status"
+    at: "2026-11-09T21:28:03.821Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:19:44.034Z"
+doc_updated_at: "2026-11-09T21:28:03.821Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4643,6 +4659,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T21:27:56.222Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF97 verified 168 focused tests, native direction and brush storage, mounted editor, static checks and Writer/shared provenance. Keep the task open for the approved anchored-frame and remaining filter audit.
+    Attempts: 108
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:27:55.592Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6561,6 +6607,8 @@ sections:
     - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok native-cell-color.test.ts native-border-handlers.test.ts rtfexport.test.ts rtfexport.table-list.test.ts rtfattributeoutput.test.ts WriterFileDialog.test.tsx odt-table-roundtrip.test.ts swmd.html-table.test.ts`. Result: pass. Evidence: 779 tests in 32 files, rtf96-writer.log. Includes the real cell shading thresholds, nested palette, automatic/opaque colors, alpha omission, and round trips.
     - Commands: Writer TypeScript, targeted lint and format, module boundaries, JSDoc, size, source tree, WhichId, diff, source provenance and Writer inventory. Result: pass. Evidence: rtf96-typecheck.log, rtf96-static.log, rtf96-registry.log, 1988 runtime modules and zero semantic violations.
     - Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.
+
+    RTF97 checkpoint. ODF table, row and cell styles retain the source background brush mapping, table/cell writing direction, canonical tokens and source extension-only output for bt-lr and tb-rl90 in cell styles. Worker uses the existing native item codec and keeps packed alpha at each owner. The browser table projects original frame items to CSS. The existing Open workflow reopens the actual persisted ODT containing the nested RTF cell. WRITER398 documents source MID_BACK_COLOR flattening partial alpha to transparent. Final focused Writer 161/13 and shared 7/3 tests pass. The first focused run failed two fixture constructors from an incorrect Color import, corrected in the final run. Typecheck, changed-path ESLint and Prettier, dependency, JSDoc, size, tree, Which, provenance, Writer/shared registry and diff checks passed. Anchored text-frame persistence and rendering, floating RTF mapping and malformed nesting recovery remain subject to the approved current-model audit.
 id_source: "generated"
 ---
 ## Summary
@@ -9496,6 +9544,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T21:27:56.222Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF97 verified 168 focused tests, native direction and brush storage, mounted editor, static checks and Writer/shared provenance. Keep the task open for the approved anchored-frame and remaining filter audit.
+Attempts: 108
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:27:55.592Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11418,3 +11496,5 @@ The source CLCBPAT/CLCBPATRAW and CLSHDNG branches now populate the real nested 
 - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok native-cell-color.test.ts native-border-handlers.test.ts rtfexport.test.ts rtfexport.table-list.test.ts rtfattributeoutput.test.ts WriterFileDialog.test.tsx odt-table-roundtrip.test.ts swmd.html-table.test.ts`. Result: pass. Evidence: 779 tests in 32 files, rtf96-writer.log. Includes the real cell shading thresholds, nested palette, automatic/opaque colors, alpha omission, and round trips.
 - Commands: Writer TypeScript, targeted lint and format, module boundaries, JSDoc, size, source tree, WhichId, diff, source provenance and Writer inventory. Result: pass. Evidence: rtf96-typecheck.log, rtf96-static.log, rtf96-registry.log, 1988 runtime modules and zero semantic violations.
 - Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.
+
+RTF97 checkpoint. ODF table, row and cell styles retain the source background brush mapping, table/cell writing direction, canonical tokens and source extension-only output for bt-lr and tb-rl90 in cell styles. Worker uses the existing native item codec and keeps packed alpha at each owner. The browser table projects original frame items to CSS. The existing Open workflow reopens the actual persisted ODT containing the nested RTF cell. WRITER398 documents source MID_BACK_COLOR flattening partial alpha to transparent. Final focused Writer 161/13 and shared 7/3 tests pass. The first focused run failed two fixture constructors from an incorrect Color import, corrected in the final run. Typecheck, changed-path ESLint and Prettier, dependency, JSDoc, size, tree, Which, provenance, Writer/shared registry and diff checks passed. Anchored text-frame persistence and rendering, floating RTF mapping and malformed nesting recovery remain subject to the approved current-model audit.

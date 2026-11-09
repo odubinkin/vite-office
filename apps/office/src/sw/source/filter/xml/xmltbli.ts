@@ -7,7 +7,7 @@ import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { importBoxProperties } from "./xmlimpit";
+import { importBoxProperties, importFrameVisualProperties } from "./xmlimpit";
 import { RES_BOX, RES_UL_SPACE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
@@ -100,6 +100,7 @@ export class SwXMLTableImport extends SvXMLImport {
       : this.document.nodes.MakeTableNode(name);
     this.tableContexts.push(new SwXMLTableContextState(table));
     const frameFormat = table.GetFrameFormat();
+    importFrameVisualProperties(frameFormat, style);
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
     if (hasMargins) {
       const item = frameFormat.GetLRSpace().Clone();
@@ -203,6 +204,7 @@ export class SwXMLTableImport extends SvXMLImport {
     for (const [column, span] of context.verticalSpans)
       if (span.endRow <= rowIndex) context.verticalSpans.delete(column);
     const frameFormat = table.GetTableNode().GetDoc().MakeTableLineFormat();
+    importFrameVisualProperties(frameFormat, style);
     context.activeRow = new SwTableLine(frameFormat);
     if (style.keepTogether !== undefined)
       frameFormat.SetFormatAttr(new SwFormatRowSplit(!style.keepTogether));
@@ -288,6 +290,7 @@ export class SwXMLTableImport extends SvXMLImport {
     >;
     const frameFormat = cell.GetFrameFormat(),
       box = importBoxProperties(style, RES_BOX);
+    importFrameVisualProperties(frameFormat, style);
     if (box !== undefined) frameFormat.SetFormatAttr(box);
     if (style.verticalAlign !== undefined)
       frameFormat.SetFormatAttr(

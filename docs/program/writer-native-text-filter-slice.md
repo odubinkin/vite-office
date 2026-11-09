@@ -2120,3 +2120,18 @@ records the source out-of-range palette result. The source interop grab
 bag is not required for the current RTF brush model. Browser ODT,
 Worker and editing paint for these visual properties are a separate
 transport and presentation step.
+
+### RTF97 — Preserve table brush and writing direction across browser storage
+
+Writer ODF uses the original background item for table, row and cell
+styles. Table and cell directions use the original default-capable
+writing-mode property handler and its aliases. The extension cell
+map emits the vertical bottom-to-top and rotated writing modes under
+`loext:writing-mode`. Worker transfer preserves direct brush ownership
+and complete packed color, while ODF exports every nonopaque brush as
+`transparent` per WRITER398.
+
+The existing browser table editor paints native backgrounds and maps
+the represented frame axes to CSS. The existing Open flow stores RTF
+table visuals in the ODT copy and reopens that copy with the same native
+opaque brushes and directions, including in a nested cell.

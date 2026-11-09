@@ -269,6 +269,8 @@ export enum XMLToken {
   DRAW_FILL,
   DRAW_FILL_COLOR,
   DRAW_OPACITY,
+  STYLE_WRITING_MODE,
+  LOEXT_WRITING_MODE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -427,6 +429,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "may-break-between-rows", XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS],
   [ODF_NAMESPACES.style, "column-width", XMLToken.STYLE_COLUMN_WIDTH],
   [ODF_NAMESPACES.style, "vertical-align", XMLToken.STYLE_VERTICAL_ALIGN],
+  [ODF_NAMESPACES.style, "writing-mode", XMLToken.STYLE_WRITING_MODE],
+  [ODF_NAMESPACES.loext, "writing-mode", XMLToken.LOEXT_WRITING_MODE],
   [ODF_NAMESPACES.style, "text-align-source", XMLToken.STYLE_TEXT_ALIGN_SOURCE],
   [ODF_NAMESPACES.style, "repeat-content", XMLToken.STYLE_REPEAT_CONTENT],
   [ODF_NAMESPACES.table, "align", XMLToken.TABLE_ALIGN],

@@ -3249,3 +3249,12 @@ of these controls appears. Keep that source behavior.
 absent. A present palette entry with no RGB components instead returns
 `COL_AUTO`. Preserve the distinction in character and cell color
 consumers, including an authored color at index zero.
+
+### WRITER398 — ODF table backgrounds flatten any nonopaque brush to transparent
+
+The `MID_BACK_COLOR` path in `SvXMLExportItemMapper::QueryXMLValue`
+writes `transparent` whenever the brush color has any transparency.
+On import the matching path sets alpha to zero on the existing brush.
+An ODT save and reopen therefore loses a partially transparent
+table, row or cell fill. Preserve the pinned ODF behavior and retain
+the original packed value in native Worker transfer.
