@@ -39,7 +39,7 @@ export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
-  /** Moves the represented native text-node interval used by HTML caption relocation. @param range - Actual half-open source interval. @param destination - Actual insertion boundary. @returns Whether the native move occurred. */
+  /** Moves a represented native interval with its complete nested table sections. @param range - Actual half-open source interval. @param destination - Actual insertion boundary. @returns Whether the native move occurred. */
   public MoveNodeRange(range: SwNodeRange, destination: SwNode): boolean {
     return this.document.GetNodes().MoveNodes(range, destination);
   }
@@ -142,7 +142,19 @@ export class DocumentContentOperationsManager {
 
   /** Appends an empty paragraph with the source AppendNode successor policy; import callers retain the same style and no text hints. @param position - Current text position, updated to the new paragraph. @returns Success. */
   public AppendTextNode(position: SwPosition): boolean {
-    const source = this.GetTextNode(position, "paragraph append");
+    const node = position.GetNode();
+    const source = node.GetTextNode();
+    if (source === null) {
+      const nodes = this.document.GetNodes();
+      const index = nodes.indexOfOrUndefined(node);
+      if (node.GetDoc() !== this.document || index === undefined || index + 1 >= nodes.Count())
+        throw new Error("Writer paragraph append requires a connected position.");
+      const next = nodes.MakeTextNode(nodes.at(index + 1), this.document.GetDfltTextFormatColl());
+      position.Assign(next, 0);
+      this.document.NotifyModelChange({ kind: "document-modified", modified: true });
+      return true;
+    }
+    this.AssertConnectedTextNode(source, "paragraph append");
     const next = new SwTextNode(
       source.GetNodes(),
       source.StartOfSectionNode(),

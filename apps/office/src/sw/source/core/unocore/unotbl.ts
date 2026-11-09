@@ -44,13 +44,17 @@ export class SwXTextTableCursor {
     }
   }
 
-  /** Moves to the resolved cell within the current table. @param box - Connected target cell. @param expand - Whether to expand the selection. @returns Whether the cell was reached. */
+  /** Resolves the flat cell name's coordinates in the table at the cursor, as native GotoTableBox does. @param box - Cell supplying the name. @param expand - Whether to expand the selection. @returns Whether the cell was reached. */
   gotoCell(box: SwTableBox, expand: boolean): boolean {
-    const point = this.cursor.GetPoint(),
-      target = box.GetParagraphs()[0];
-    if (!target || point.GetNode().FindTableNode() !== target.FindTableNode()) return false;
+    const point = this.cursor.GetPoint();
+    const current = point.GetNode().FindTableNode();
+    const coordinates = box.GetCoordinates();
     if (expand) this.cursor.SetMark();
     else this.cursor.DeleteMark();
+    const line = current?.GetTable().GetTabLines()[coordinates.Y() - 1];
+    const cell = line?.GetTabBoxes()[coordinates.X() - 1];
+    const target = cell?.GetParagraphs()[0];
+    if (!target || current !== target.FindTableNode()) return false;
     point.Assign(target, 0);
     return true;
   }

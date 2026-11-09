@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 537
+revision: 540
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T22:26:31.840Z"
+  updated_at: "2026-11-09T22:34:46.534Z"
   updated_by: "CODER"
-  note: "RTF102 verified ordinary native RTF text frames, fixture and Markdown/RTF round trips, and native Worker/ODF properties. Keep open for merging cells with nested sections and the remaining current-model audit."
-  attempts: 113
+  note: "RTF103 verified native nested-section merge, original ownership through Writer I/O, and 145 related tests. Keep open for native row definition recovery and the current-model audit."
+  attempts: 114
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1813,8 +1816,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T22:34:46.534Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF103 verified native nested-section merge, original ownership through Writer I/O, and 145 related tests. Keep open for native row definition recovery and the current-model audit."
+  -
+    type: "status"
+    at: "2026-11-09T22:34:58.935Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T22:26:48.568Z"
+doc_updated_at: "2026-11-09T22:34:58.935Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4919,6 +4935,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T22:34:46.534Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF103 verified native nested-section merge, original ownership through Writer I/O, and 145 related tests. Keep open for native row definition recovery and the current-model audit.
+    Attempts: 114
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T22:34:45.662Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6849,6 +6895,8 @@ sections:
     RTF101 checkpoint. RTF row positioning now uses nested native table properties and actual DomainMapper table positioning. A complete table section moves into an actual paragraph-anchored splittable text fly with its existing cells, tracked indexes and bookmarks. The writer emits native position and distance controls, with original relative-width recovery. Worker and ODF preserve native split, overlap, flow, transparent fill and empty border items. The normal file dialog persists and reopens RTF whose only visible text is in a floating table. WRITER401 records native ignored top/left position flags. Final focused tests passed 1205 Writer tests in 61 files and 11 shared tests in 4 files. Typecheck, changed ESLint/Prettier, dependency, JSDoc, size, source tree, Which, source provenance, Writer/shared semantic registry and diff checks passed. Ordinary RTF text boxes and full physical fly pagination remain separate. No full replay was due within this task.
 
     RTF102 checkpoint. Original shape instructions and ordered source properties create a native character-anchored Writer text fly with a separate text append context. Native frame paragraphs, table sections, mark ownership, geometry, border, fill, wrap, writing direction and relative size have a connected RTF route. Shape table positions use the original inline guard, and the surrounding cell retains its independent row buffer. Worker and ODF retain the direction and relative reference frames. WRITER402 and WRITER403 retain original padding/wrap and automatic-height asymmetries. The pinned textframe-table and textframe-borders fixtures verify their represented properties. The real Markdown to RTF filter path preserves the native fly table. Focused Writer run passed 1086 tests in 53 files, shared run passed 11 in 4 files, and the final amended focused run passed 12 tests in 2 files. Typecheck, changed ESLint and Prettier, module boundaries, JSDoc, size, source tree, Which, source provenance, Writer/shared registry and diff checks passed. Native drawing objects, gradients/shadows and full physical fly layout are outside this represented path. The next open current-model audit is preserving complete nested cell sections during native merges. No full replay was due within this task.
+
+    RTF103 checkpoint. The native rectangular selection admits complete nested table sections and PrepareMerge moves the actual half-open cell range. The original AppendTextNode branch creates a Standard paragraph after a structural end. This keeps real nested table and cell identity, marks and position ownership through native table merge, Worker transfer and RTF reopen. The native nearest-table cell-name lookup is retained and documented in WRITER404. Initial focus caught an invalid structural predicate; using the actual SwTableNode class fixed both cases. Final 145 focused Writer tests in 10 files passed. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, size, tree, Which, source provenance, Writer registry and diff checks passed. Keep open for native row-definition recovery and remaining current-model audit. No full-suite replay was due.
 id_source: "generated"
 ---
 ## Summary
@@ -9964,6 +10012,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T22:34:46.534Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF103 verified native nested-section merge, original ownership through Writer I/O, and 145 related tests. Keep open for native row definition recovery and the current-model audit.
+Attempts: 114
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T22:34:45.662Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11898,3 +11976,5 @@ RTF100 checkpoint. The browser editor resolves original text-fly owners, actual 
 RTF101 checkpoint. RTF row positioning now uses nested native table properties and actual DomainMapper table positioning. A complete table section moves into an actual paragraph-anchored splittable text fly with its existing cells, tracked indexes and bookmarks. The writer emits native position and distance controls, with original relative-width recovery. Worker and ODF preserve native split, overlap, flow, transparent fill and empty border items. The normal file dialog persists and reopens RTF whose only visible text is in a floating table. WRITER401 records native ignored top/left position flags. Final focused tests passed 1205 Writer tests in 61 files and 11 shared tests in 4 files. Typecheck, changed ESLint/Prettier, dependency, JSDoc, size, source tree, Which, source provenance, Writer/shared semantic registry and diff checks passed. Ordinary RTF text boxes and full physical fly pagination remain separate. No full replay was due within this task.
 
 RTF102 checkpoint. Original shape instructions and ordered source properties create a native character-anchored Writer text fly with a separate text append context. Native frame paragraphs, table sections, mark ownership, geometry, border, fill, wrap, writing direction and relative size have a connected RTF route. Shape table positions use the original inline guard, and the surrounding cell retains its independent row buffer. Worker and ODF retain the direction and relative reference frames. WRITER402 and WRITER403 retain original padding/wrap and automatic-height asymmetries. The pinned textframe-table and textframe-borders fixtures verify their represented properties. The real Markdown to RTF filter path preserves the native fly table. Focused Writer run passed 1086 tests in 53 files, shared run passed 11 in 4 files, and the final amended focused run passed 12 tests in 2 files. Typecheck, changed ESLint and Prettier, module boundaries, JSDoc, size, source tree, Which, source provenance, Writer/shared registry and diff checks passed. Native drawing objects, gradients/shadows and full physical fly layout are outside this represented path. The next open current-model audit is preserving complete nested cell sections during native merges. No full replay was due within this task.
+
+RTF103 checkpoint. The native rectangular selection admits complete nested table sections and PrepareMerge moves the actual half-open cell range. The original AppendTextNode branch creates a Standard paragraph after a structural end. This keeps real nested table and cell identity, marks and position ownership through native table merge, Worker transfer and RTF reopen. The native nearest-table cell-name lookup is retained and documented in WRITER404. Initial focus caught an invalid structural predicate; using the actual SwTableNode class fixed both cases. Final 145 focused Writer tests in 10 files passed. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, size, tree, Which, source provenance, Writer registry and diff checks passed. Keep open for native row-definition recovery and remaining current-model audit. No full-suite replay was due.

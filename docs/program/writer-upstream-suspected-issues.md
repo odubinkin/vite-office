@@ -3306,3 +3306,15 @@ branch of `RtfAttributeOutput::OutputFlyFrame_Impl` writes height
 geometry and relative sizing properties without that flag. The new
 RTF text frame uses the fixed default on reopen. Preserve the
 original producer and consumer.
+
+### WRITER404 — A leading nested table can redirect an outer RTF horizontal merge
+
+The pinned `SwXTextTableCursor` starts at a cell's section start and
+uses GoInNode, which walks to the first content node. When the cell
+starts with a nested table, this can be a paragraph in the nested
+table. `SwCursor::GotoTableBox` looks up the next cell name in the
+table containing that paragraph. If the nested table also has that
+name, the mapper's outer cell merge can merge the nested cells and
+leave the outer row intact. Preserve the original lookup scope for
+the flat new-table model and keep this separate from moves of whole
+nested sections selected through their outer cell paragraphs.

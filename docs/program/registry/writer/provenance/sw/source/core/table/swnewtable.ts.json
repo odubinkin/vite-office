@@ -22,7 +22,8 @@
     ],
     "preservedResponsibilities": [
       "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections.",
-      "Extends the physical rectangle across row spans, corrects overlapping logical widths, moves visible content, shares native formats and adjusts row spans while deleting wholly covered lines (WRITER391)."
+      "Extends the physical rectangle across row spans, corrects overlapping logical widths, moves visible content, shares native formats and adjusts row spans while deleting wholly covered lines (WRITER391).",
+      "Moves the full selected native cell interval including nested table sections and original descendant marks."
     ],
     "omittedResponsibilities": [
       "Nested/anonymous boxes, old table models, layout-frame restoration and interactive merge undo remain outside this import branch."
@@ -50,6 +51,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
           "marker": "SwTableBox::FindStartOfRowSpan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
+          "marker": "SwTable::PrepareMerge"
         }
       ]
     }

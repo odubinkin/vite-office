@@ -4,7 +4,7 @@ import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { COL_AUTO, Color } from "../../../../tools/inc/color";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { SwXCell } from "../../core/unocore/unotbl";
+import { SwXCell, SwXTextTableCursor } from "../../core/unocore/unotbl";
 import { unicode } from "../../core/unocore/unocrsrhelper";
 import { RES_BACKGROUND, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
@@ -503,4 +503,82 @@ it("keeps the original invalid hidden-cell-property fallback to Environment", /*
     key.dispose();
     invalid.dispose();
   }
+});
+
+it("moves the nested table section from an RTF horizontal merge into the surviving cell", /** Verifies native parent identities, contents, mark and the exported RTF row structure. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmgf\cellx1000\clmrg\cellx2800\pard\intbl Master\cell Before\par` +
+      String.raw`\pard\itap2 {\*\bkmkstart Nested}{\*\bkmkend Nested}Inner\nestcell{\*\nesttableprops\trowd\cellx1100\nestrow}` +
+      String.raw`\pard\itap0\intbl After\cell\row`,
+  );
+  const reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
+  const worker = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
+  documents.push(reopened, worker);
+  for (const model of [document, reopened, worker]) {
+    const boxes = table(model).GetTabLines()[0]?.GetTabBoxes();
+    expect(boxes).toHaveLength(1);
+    const box = boxes?.[0];
+    assert(box);
+    expect(box.GetFrameFormat().GetFrameSize().GetWidth()).toBe(2800);
+    const [master, before, nested, after] = box.GetContentNodes();
+    expect(master?.GetTextNode()?.GetText()).toBe("Master");
+    expect(before?.GetTextNode()?.GetText()).toBe("Before");
+    expect(after?.GetTextNode()?.GetText()).toBe("After");
+    assert(nested instanceof SwTableNode);
+    expect(nested.StartOfSectionNode()).toBe(box.GetStartNode());
+    const inner = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+    const paragraph = inner?.GetParagraphs()[0];
+    expect(paragraph?.GetText()).toBe("Inner");
+    expect(paragraph?.GetTableBox()).toBe(inner);
+    expect(model.GetIDocumentMarkAccess().GetBookmarks()[0]?.GetMarkPos().GetNode()).toBe(
+      paragraph,
+    );
+  }
+});
+
+it("appends the merge replacement paragraph after a structural end and moves the original section", /** Uses the original native append operation when the selected cell ends in a nested table. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx1000\cellx2800\pard\intbl Master\cell Before\par` +
+      String.raw`\pard\itap2 Inner\nestcell{\*\nesttableprops\trowd\cellx1100\nestrow}` +
+      String.raw`\pard\itap0\intbl Trailer\cell\row`,
+  );
+  const boxes = table(document).GetTabLines()[0]?.GetTabBoxes();
+  const master = boxes?.[0],
+    source = boxes?.[1];
+  assert(master && source);
+  const [before, nested, trailer] = source.GetContentNodes();
+  assert(nested instanceof SwTableNode && trailer && trailer.IsTextNode());
+  document.nodes.RemoveNode(trailer.GetIndex(), 1, true);
+  const cursor = new SwXTextTableCursor(master);
+  try {
+    expect(cursor.gotoCell(source, true)).toBe(true);
+    expect(cursor.mergeRange()).toBe(true);
+    const [, movedBefore, movedTable] = master.GetContentNodes();
+    expect(movedBefore).toBe(before);
+    expect(movedTable).toBe(nested);
+    expect(nested.StartOfSectionNode()).toBe(master.GetStartNode());
+  } finally {
+    cursor.dispose();
+  }
+});
+
+it("keeps the original table cursor's nearest-table name lookup when the first cell opens with a nested table", /** The outer B1 name resolves against the nested table reached by GoInNode. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmgf\cellx1600\clmrg\cellx2800\pard\itap2 InnerA\nestcell InnerB\nestcell` +
+      String.raw`{\*\nesttableprops\trowd\cellx550\cellx1100\nestrow}\pard\itap0\intbl OuterA\cell OuterB\cell\row`,
+  );
+  const boxes = table(document).GetTabLines()[0]?.GetTabBoxes();
+  expect(boxes).toHaveLength(2);
+  const [nested, trailing] = boxes?.[0]?.GetContentNodes() ?? [];
+  assert(nested instanceof SwTableNode);
+  expect(trailing?.GetTextNode()?.GetText()).toBe("OuterA");
+  expect(boxes?.[1]?.GetContentNodes()[0]?.GetTextNode()?.GetText()).toBe("OuterB");
+  const row = nested.GetTable().GetTabLines()[0]?.GetTabBoxes();
+  expect(row).toHaveLength(1);
+  expect(
+    row?.[0]?.GetParagraphs().map(
+      /** Reads each native paragraph left by the name-resolved merge. @param node - Original node. @returns Content. */
+      (node) => node.GetText(),
+    ),
+  ).toEqual(["InnerA", "InnerB"]);
 });

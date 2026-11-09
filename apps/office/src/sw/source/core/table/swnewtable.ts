@@ -1,4 +1,4 @@
-/** @fileoverview Native SwTable selection, PrepareMerge and NewMerge for the flat new-table model. */
+/** @fileoverview Native SwTable selection, PrepareMerge and NewMerge for the native new-table model. */
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwNodeRange } from "../../../inc/ndindex";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -6,6 +6,7 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { SwPosition } from "../crsr/pam";
 import { DelBookmarks } from "../doc/docbm";
 import { SaveLeftRightBorder, SaveUpperLowerBorder } from "../doc/tblrwcl";
+import { SwTableNode } from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTableBox, SwTableLine } from "./swtable-boxline";
 import type { SwTable } from "./swtable";
@@ -166,8 +167,13 @@ export function CollectBoxSelection(
         nodes = section.GetNodes(),
         endIndex = section.EndOfSectionIndex();
       if (endIndex <= section.GetIndex() + 1) return null;
-      for (let index = section.GetIndex() + 1; index < endIndex; ++index)
-        if (!nodes.at(index).IsTextNode()) return null;
+      for (let index = section.GetIndex() + 1; index < endIndex;) {
+        const node = nodes.at(index);
+        if (node.IsTextNode()) index++;
+        else if (node instanceof SwTableNode && node.EndOfSectionIndex() < endIndex)
+          index = node.EndOfSectionIndex() + 1;
+        else return null;
+      }
     }
     if (leftBoundary.span) --leftBoundary.span;
     if (rightBoundary.span) --rightBoundary.span;
@@ -176,7 +182,7 @@ export function CollectBoxSelection(
   return checkBottom > bottom ? null : { rows, widthChanges, mergeWidth: max - min };
 }
 
-/** Original IsEmptyBox test for a lone empty text node with no paragraph or character fly. @param paragraph - First paragraph of the selected box. @param count - Paragraph count. @returns Whether the box is empty. */
+/** Original IsEmptyBox test for a lone empty text node with no paragraph or character fly. @param paragraph - First direct paragraph of the selected box. @param count - Number of nodes in the cell. @returns Whether the box is empty. */
 function IsEmptyBox(paragraph: SwTextNode, count: number): boolean {
   if (count !== 1 || paragraph.Len() !== 0) return false;
   for (const format of paragraph.GetDoc().GetSpzFrameFormats()) {
@@ -191,20 +197,24 @@ function IsEmptyBox(paragraph: SwTextNode, count: number): boolean {
   return true;
 }
 
-/** Moves a nonempty cell's whole original paragraph nodes to the master section. @param box - Original visible cell. @param master - Surviving cell. @returns Nothing. */
+/** Moves the complete original cell section content to the master, retaining direct and nested nodes. @param box - Original visible cell. @param master - Surviving cell. @returns Nothing. */
 function MoveBoxContent(box: SwTableBox, master: SwTableBox): void {
-  const paragraphs = box.GetParagraphs(),
-    first = paragraphs[0] as SwTextNode;
-  if (IsEmptyBox(first, paragraphs.length)) return;
-  const destination = master.GetStartNode().EndOfSectionNode(),
-    ops = destination.GetDoc().GetDocumentContentOperationsManager(),
-    last = paragraphs.at(-1) as SwTextNode,
-    position = new SwPosition(last, last.Len());
+  const source = box.GetStartNode();
+  const nodes = source.GetNodes();
+  const end = source.EndOfSectionNode();
+  const first = nodes.at(source.GetIndex() + 1);
+  const text = first.GetTextNode();
+  if (text && IsEmptyBox(text, end.GetIndex() - first.GetIndex())) return;
+  const destination = master.GetStartNode().EndOfSectionNode();
+  const ops = destination.GetDoc().GetDocumentContentOperationsManager();
+  const last = nodes.at(end.GetIndex() - 1);
+  const position = new SwPosition(last, last.GetTextNode()?.Len() ?? 0);
   try {
     ops.AppendTextNode(position);
     const range = new SwNodeRange(first, position.GetNode());
     try {
-      ops.MoveNodeRange(range, destination);
+      if (!ops.MoveNodeRange(range, destination))
+        throw new Error("assert(complete native cell range)");
     } finally {
       range.Dispose();
     }
@@ -267,7 +277,13 @@ export function PrepareMerge(selection: SwBoxSelection): SwPreparedMerge | null 
       if (column > 0) box.SetFrameSize(new SwFormatFrameSize(SwFrameSize.Variable, 0, 0));
       else if (row > 0) {
         box.ChgFrameFormat(format);
-        for (const paragraph of box.GetParagraphs()) paragraph.SetCountedInList(false);
+        const start = box.GetStartNode();
+        const nodes = start.GetNodes();
+        for (let index = start.GetIndex() + 1; index < start.EndOfSectionIndex(); ++index) {
+          const paragraph = nodes.at(index).GetTextNode();
+          if (!paragraph) break;
+          paragraph.SetCountedInList(false);
+        }
       }
     }
   }
