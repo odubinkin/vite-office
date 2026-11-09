@@ -41,11 +41,11 @@ export function SectBreak(this: RtfDocumentImplContext, state: RtfState, final =
   } finally {
     type.dispose();
   }
-  if (this["m_bNeedPar"] && (!final || this["m_bNeedSect"] || continuous)) {
+  if (this["m_aTextBuffer"].m_bNeedPar && (!final || this["m_bNeedSect"] || continuous)) {
     this["m_bParAtEndOfSection"] = true;
     this["Dispatch"]({ kind: "control", name: "par" });
   }
-  if (this["m_bNeedFinalPar"] && final) {
+  if (this["m_aTextBuffer"].m_bNeedFinalPar && final) {
     this["Dispatch"]({ kind: "control", name: "pard" });
     this["m_bParAtEndOfSection"] = true;
     this["Dispatch"]({ kind: "control", name: "par" });
@@ -57,28 +57,28 @@ export function SectBreak(this: RtfDocumentImplContext, state: RtfState, final =
   this["FlushTable"]();
   CaptureSection.call(this, state);
   this["currentSection"]++;
-  this["m_bNeedPar"] = false;
+  this["m_aTextBuffer"].m_bNeedPar = false;
   this["m_bNeedSect"] = false;
 }
 /** Original guarded root-pop paragraph/section finalization. @param this - Reader. @param state - Root state before pop. @returns Nothing. */
 export function FinishRtfSections(this: RtfDocumentImplContext, state: RtfState): void {
-  if (this["m_bNeedCr"]) this["Dispatch"]({ kind: "control", name: "par" });
+  if (this["m_aTextBuffer"].m_bNeedCr) this["Dispatch"]({ kind: "control", name: "par" });
   if (this["m_bNeedSect"]) SectBreak.call(this, state, true);
-  if (this["m_bNeedPar"]) {
+  if (this["m_aTextBuffer"].m_bNeedPar) {
     this["Dispatch"]({ kind: "control", name: "par" });
     this["m_bNeedSect"] = false;
   }
 }
 /** Atomic binding for the original non-newline lcl_utext deferred-page phase. Zero-length utext still clears first-run state. Completed table buffers retain the break until native table-frame placement. @param this - Reader. @param state - Incoming paragraph state. @returns Nothing. */
 export function FlushDeferredPageBreak(this: RtfDocumentImplContext, state: RtfState): void {
-  if (this["inTable"]) return;
-  if (this["pendingPageBreak"]) {
-    if (this["m_bIsFirstParaInSection"] || !this["m_bIsFirstRun"])
+  if (this["m_aTextBuffer"].inTable) return;
+  if (this["m_aTextBuffer"].pendingPageBreak) {
+    if (this["m_aTextBuffer"].m_bIsFirstParaInSection || !this["m_aTextBuffer"].m_bIsFirstRun)
       this["CommitParagraph"](state, false, true);
-    this["m_bParagraphPageBreak"] = true;
-    this["pendingPageBreak"] = false;
+    this["m_aTextBuffer"].m_bParagraphPageBreak = true;
+    this["m_aTextBuffer"].pendingPageBreak = false;
   }
-  this["m_bIsFirstRun"] = false;
+  this["m_aTextBuffer"].m_bIsFirstRun = false;
 }
 /** Original PAGE/one-column COLUMN handling, including synthetic section state and lazy reset. @param this - Reader. @param name - Original symbol. @param state - Current group. @returns Nothing. */
 export function DispatchPageBreak(
@@ -87,7 +87,7 @@ export function DispatchPageBreak(
   state: RtfState,
 ): void {
   if (name === "column") this["checkFirstRun"]();
-  if (this["inTable"]) return;
+  if (this["m_aTextBuffer"].inTable) return;
   const type = state.sectionSprms.find(N.LN_EG_SectPrContents_type),
     title = state.sectionSprms.find(N.LN_EG_SectPrContents_titlePg);
   let synthetic: boolean;
@@ -103,19 +103,19 @@ export function DispatchPageBreak(
   if (synthetic) {
     SectBreak.call(this, state);
     this["Dispatch"]({ kind: "control", name: "sbkpage" });
-    if (this["m_bNeedPar"]) this["Dispatch"]({ kind: "control", name: "par" });
+    if (this["m_aTextBuffer"].m_bNeedPar) this["Dispatch"]({ kind: "control", name: "par" });
     this["m_bIgnoreNextContSectBreak"] = true;
     this["m_nResetBreakOnSectBreak"] = RTFKeyword.SBKNONE;
   } else {
     const first = this["firstRun"];
     this["checkFirstRun"]();
-    if (this["tableRows"].length > 0) this["FlushTable"]();
-    if (first || this["m_bNeedCr"]) {
+    if (this["m_aTextBuffer"].tableRows.length > 0) this["FlushTable"]();
+    if (first || this["m_aTextBuffer"].m_bNeedCr) {
       this["checkNeedPap"](state);
       FlushDeferredPageBreak.call(this, state);
     }
-    this["pendingPageBreak"] = true;
-    this["m_bNeedCr"] = true;
+    this["m_aTextBuffer"].pendingPageBreak = true;
+    this["m_aTextBuffer"].m_bNeedCr = true;
   }
 }
 /** Consumes native section control families without flattening parser state into physical DTOs. @param this - Actual reader. @param name - Original control. @param parameter - Optional integer. @param state - Actual group owner. @returns Whether consumed. */
@@ -129,7 +129,7 @@ export function DispatchSectionControl(
     this["m_bHadSect"] = true;
     if (this["m_bIgnoreNextContSectBreak"]) this["m_bIgnoreNextContSectBreak"] = false;
     else {
-      if (this["m_bNeedCr"]) this["m_bNeedPar"] = true;
+      if (this["m_aTextBuffer"].m_bNeedCr) this["m_aTextBuffer"].m_bNeedPar = true;
       SectBreak.call(this, state);
       if (this["m_nResetBreakOnSectBreak"] !== RTFKeyword.invalid) {
         const reset = this["m_nResetBreakOnSectBreak"];
@@ -147,7 +147,7 @@ export function DispatchSectionControl(
         this["m_nResetBreakOnSectBreak"] = RTFKeyword.invalid;
         this["m_bNeedSect"] = false;
       }
-      this["m_bNeedPar"] = true;
+      this["m_aTextBuffer"].m_bNeedPar = true;
     }
     return true;
   }

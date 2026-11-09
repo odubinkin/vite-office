@@ -4,6 +4,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { createRtfBorder } from "./rtfdocumentimpl.border";
 import type {
+  RtfBlock,
   RtfCellBorder,
   RtfDocumentImplContext,
   RtfParagraph,
@@ -86,6 +87,7 @@ export function CollectParagraphSprms(lists: Set<RTFSprms>, paragraph: RtfParagr
   for (const run of paragraph.runs) lists.add(run.characterSprms);
   if (paragraph.paragraphSprms) lists.add(paragraph.paragraphSprms);
   if (paragraph.marker) lists.add(paragraph.marker.characterSprms);
+  for (const { shape } of paragraph.frames ?? []) CollectBlockSprms(lists, shape.blocks ?? []);
 }
 
 /** Collects cell properties recursively through original nested rows. @param lists - Actual property lists. @param cell - Original cell content. @returns Nothing. */
@@ -105,6 +107,13 @@ export function CollectTableRowSprms(lists: Set<RTFSprms>, rows: readonly RtfTab
   }
 }
 
+/** Collects completed paragraph and table events in an owned native text section. @param lists - Property owners. @param blocks - Original text stream. @returns Nothing. */
+export function CollectBlockSprms(lists: Set<RTFSprms>, blocks: readonly RtfBlock[]): void {
+  for (const block of blocks)
+    if (block.kind === "paragraph") CollectParagraphSprms(lists, block.paragraph);
+    else CollectTableRowSprms(lists, block.rows);
+}
+
 /** Original cell/row controls through the active table buffer. @param this - Native reader. @param name - Source control. @param parameter - Optional source value. @param state - Original group. @returns Whether consumed. */
 export function DispatchTableControl(
   this: RtfDocumentImplContext,
@@ -112,13 +121,14 @@ export function DispatchTableControl(
   parameter: number | undefined,
   state: RtfState,
 ): boolean {
-  const buffers = this["m_aTableBufferStack"];
+  const text = this["m_aTextBuffer"];
+  const buffers = text.m_aTableBufferStack;
   if (name === "itap") {
     const depth = parameter ?? 1;
     state.paragraphSprms.set(N.LN_tblDepth, new RTFValue(depth), RTFConflictPolicy.ReplaceAtStart);
     if (depth > 0) {
       if (depth > RTF_MAX_NESTING_DEPTH) throw new RtfSyntaxError("RTF table nesting is too deep.");
-      if (depth > buffers.length && this["runs"].length > 0) this["CommitParagraph"](state);
+      if (depth > buffers.length && text.HasParagraphContent()) this["CommitParagraph"](state);
       while (buffers.length < depth) buffers.push(new TableRowBuffer());
       DispatchTableControl.call(this, "intbl", undefined, state);
     }
@@ -126,23 +136,23 @@ export function DispatchTableControl(
   }
   const row = this["tableBuffer"];
   if (name === "intbl") {
-    this["inTable"] = true;
+    this["m_aTextBuffer"].inTable = true;
     state.tableBuffer = row;
     state.paragraphSprms.set(N.LN_inTbl, new RTFValue(1));
     return true;
   }
   if (name === "trowd") {
-    this["m_bNeedPap"] = true;
-    this["inTable"] = true;
+    this["m_aTextBuffer"].m_bNeedPap = true;
+    this["m_aTextBuffer"].inTable = true;
     state.tableBuffer = row;
     row.ResetProperties();
     state.tableRowSprms.clear();
     return true;
   }
   if (name === "cell" || name === "nestcell") {
-    if (this["runs"].length > 0 || row.cell.length === 0) this["CommitParagraph"](state);
+    if (text.HasParagraphContent() || row.cell.length === 0) this["CommitParagraph"](state);
     row.cells.push(row.cell.splice(0));
-    this["terminatedParagraph"] = true;
+    this["m_aTextBuffer"].terminatedParagraph = true;
     return true;
   }
   if (name === "row" || name === "nestrow") {
@@ -151,15 +161,17 @@ export function DispatchTableControl(
       throw new RtfSyntaxError("Mismatch between ITAP and NESTROW.");
     if (!nested && buffers.length > 1) {
       const abandoned = new Set<RTFSprms>();
-      for (const buffer of buffers.splice(1)) buffer.CollectSprms(abandoned);
+      const abandonedRows = buffers.splice(1);
+      for (const buffer of abandonedRows) buffer.CollectSprms(abandoned);
       for (const list of abandoned) list.dispose();
       for (const group of this["states"]) {
-        if (group.tableBuffer) group.tableBuffer = buffers[0];
+        if (group.tableBuffer && abandonedRows.includes(group.tableBuffer))
+          group.tableBuffer = buffers[0];
       }
     }
     const active = this["tableBuffer"];
-    if (active.cell.length > 0 || this["runs"].length > 0) {
-      if (this["runs"].length > 0) this["CommitParagraph"](state);
+    if (active.cell.length > 0 || text.HasParagraphContent()) {
+      if (text.HasParagraphContent()) this["CommitParagraph"](state);
       active.cells.push(active.cell.splice(0));
     }
     if (nested) {
@@ -171,13 +183,13 @@ export function DispatchTableControl(
       const previous = parent.cell.at(-1);
       if (previous && "rows" in previous) previous.rows.push(row);
       else parent.cell.push({ rows: [row] });
-      this["m_bNeedPap"] = true;
+      this["m_aTextBuffer"].m_bNeedPap = true;
     } else {
-      if (active.cells.length > 0) this["tableRows"].push(active.FinishRow(state));
-      this["inTable"] = false;
-      this["m_bNeedFinalPar"] = true;
+      if (active.cells.length > 0) this["m_aTextBuffer"].tableRows.push(active.FinishRow(state));
+      this["m_aTextBuffer"].inTable = false;
+      this["m_aTextBuffer"].m_bNeedFinalPar = true;
     }
-    this["terminatedParagraph"] = true;
+    this["m_aTextBuffer"].terminatedParagraph = true;
     return true;
   }
   if (name === "trpaddt" || name === "trpaddl" || name === "trpaddb" || name === "trpaddr") {

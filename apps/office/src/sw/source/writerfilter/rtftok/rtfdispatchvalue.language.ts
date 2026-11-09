@@ -34,7 +34,7 @@ export function dispatchLanguageValue(
         ? N.LN_CT_Language_bidi
         : N.LN_CT_Language_val;
   putNestedAttribute(state.characterSprms, N.LN_EG_RPrBase_lang, id, value);
-  if (name === "lang" && this["m_bNeedPap"])
+  if (name === "lang" && this["m_aTextBuffer"].m_bNeedPap)
     putNestedAttribute(state.paragraphSprms, N.LN_EG_RPrBase_lang, id, value);
   return true;
 }

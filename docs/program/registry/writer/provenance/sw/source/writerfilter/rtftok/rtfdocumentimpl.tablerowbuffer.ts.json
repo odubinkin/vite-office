@@ -9,13 +9,15 @@
     "localSymbols": [
       "TableRowBuffer",
       "DispatchTableControl",
-      "CollectTableRowSprms"
+      "CollectTableRowSprms",
+      "CollectBlockSprms"
     ],
     "upstreamSymbols": [
       "TableRowBuffer"
     ],
     "preservedResponsibilities": [
-      "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path."
+      "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path.",
+      "Binds rows to the active text append context and releases actual shape and table properties recursively."
     ],
     "omittedResponsibilities": [
       "Malformed row-definition restoration, full resource buffer polymorphism and the desktop renderer remain unverified. The preexisting browser nesting bound also applies to explicit ITAP depth."
@@ -28,6 +30,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -43,6 +49,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::ITAP:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::PushShapeContext"
         }
       ]
     },

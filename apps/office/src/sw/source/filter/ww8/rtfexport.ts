@@ -1,5 +1,10 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
-import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
+import {
+  CollectTextFlyFrames,
+  type BoundTextFrame,
+  type BoundTextFrames,
+} from "../../core/layout/flycnt";
+import { OutputFlyFrame } from "./rtfattributeoutput.frame";
 import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
 import { OutString } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
@@ -349,6 +354,19 @@ export class RtfExport extends MSWordExportBase {
     return output;
   }
 
+  /** Writes the text box's own range with a fresh RTF table state. @param frame - Native fly and connected content. @returns RTF shape syntax. */
+  private WriteTextFrame(frame: BoundTextFrame): string {
+    let text = "";
+    for (const block of frame.content) {
+      if (block instanceof SwTableNode) text += this.WriteTable(block, 1);
+      else
+        text +=
+          this.WriteFloatingTables(block, 1) +
+          `\\pard${this.WriteParagraph(block)}${this.WriteParagraphEnd(block)}\n`;
+    }
+    return OutputFlyFrame(frame.format, text, this.GetDefaultFrameDirection());
+  }
+
   /** Writes native table definitions and interleaved nested table content in source depth order. @param block - Actual table node. @param depth - Original table depth. @returns RTF table bytes. */
   private WriteTable(block: SwTableNode, depth: number): string {
     let output = "";
@@ -679,19 +697,34 @@ export class RtfExport extends MSWordExportBase {
       .GetIDocumentMarkAccess()
       .GetBookmarks()
       .filter(
-        /** Computes the mark result. @param mark - Mark. @returns The computed result. */ (
-          mark,
-        ) => {
-          if (mark.GetMarkPos().GetNode() !== paragraph) return false;
-          const offset = mark.GetMarkPos().GetContentIndex();
-          return (
-            offset >= start &&
-            (offset < end || (offset === end && end === paragraph.GetText().length))
-          );
-        },
+        /** Selects bookmarks owned by the current paragraph. @param mark - Native mark. @returns Whether this paragraph owns it. */
+        (mark) => mark.GetMarkPos().GetNode() === paragraph,
+      )
+      .map(
+        /** Takes the native bookmark position. @param mark - Bookmark. @returns Positioned export event. */
+        (mark) => ({ offset: mark.GetMarkPos().GetContentIndex(), mark }),
+      );
+    const frames = (this.textFlyFrames.get(paragraph) ?? [])
+      .filter(
+        /** Selects the ordinary text-box route. @param frame - Native fly. @returns Whether this is an ordinary text box. */
+        (frame) => !frame.format.GetFlySplit().GetValue(),
+      )
+      .map(
+        /** Takes the native fly anchor position. @param frame - Native fly. @returns Positioned export event. */
+        (frame) => ({ offset: frame.format.GetAnchor().GetAnchorContentOffset(), frame }),
+      );
+    const markers = [...marks, ...frames]
+      .filter(
+        /** Applies original half-open paragraph ranges, including the end of the native node. @param marker - Positioned event. @returns Whether this output range contains it. */
+        ({ offset }) =>
+          offset >= start && (offset < end || (offset === end && end === paragraph.Len())),
+      )
+      .sort(
+        /** Orders markers in text stream order. @param a - First event. @param b - Second event. @returns Numeric order. */
+        (a, b) => a.offset - b.offset,
       );
     let offset = 0;
-    let markIndex = 0;
+    let markerIndex = 0;
     let activeLink: WriterHyperlink | undefined;
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
       run: RtfTextRun,
@@ -704,6 +737,15 @@ export class RtfExport extends MSWordExportBase {
       }
       output += this.WriteRun(run);
     };
+    const writeMarker =
+      /** Writes a positioned bookmark or fly. @param marker - Native owner. @returns Nothing. */ (
+        marker: (typeof markers)[number],
+      ): void => {
+        output +=
+          "mark" in marker
+            ? this.WriteBookmark(marker.mark.GetName())
+            : this.WriteTextFrame(marker.frame);
+      };
     for (const run of this.GetTextRuns(paragraph)) {
       const runStart = offset;
       offset += run.text.length;
@@ -711,21 +753,21 @@ export class RtfExport extends MSWordExportBase {
       const sliceEnd = Math.min(end, offset);
       if (sliceEnd < sliceStart || (sliceEnd === sliceStart && paragraph.Len() !== 0)) continue;
       let cursor = sliceStart;
-      while (markIndex < marks.length) {
+      while (markerIndex < markers.length) {
         // filter() produced a dense local array and this loop is bounded by its unchanged length.
-        const mark = marks[markIndex] as (typeof marks)[number];
-        const position = mark.GetMarkPos().GetContentIndex();
+        const marker = markers[markerIndex] as (typeof markers)[number];
+        const position = marker.offset;
         if (position >= sliceEnd) break;
         writeRun({ ...run, text: run.text.slice(cursor - runStart, position - runStart) });
-        output += this.WriteBookmark(mark.GetName());
+        writeMarker(marker);
         cursor = position;
-        markIndex++;
+        markerIndex++;
       }
       writeRun({ ...run, text: run.text.slice(cursor - runStart, sliceEnd - runStart) });
     }
     if (activeLink !== undefined) output += "}}";
-    for (; markIndex < marks.length; markIndex++)
-      output += this.WriteBookmark((marks[markIndex] as (typeof marks)[number]).GetName());
+    for (; markerIndex < markers.length; markerIndex++)
+      writeMarker(markers[markerIndex] as (typeof markers)[number]);
     return output;
   }
 

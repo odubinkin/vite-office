@@ -22,9 +22,11 @@
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
         "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx#m_isSplitAllowed"
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx#m_isSplitAllowed",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_RELWIDTHREL"
       ],
-      "justification": "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration. Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice. RTF101. Reads original split and graphic frame property values for native RTF-created text flies.",
+      "justification": "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration. Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice. RTF101. Reads original split and graphic frame property values for native RTF-created text flies. RTF102. Reads the original graphic style writing mode and both relative-size relation properties.",
       "knownViolations": [],
       "localSymbols": [
         "XMLTextFrameContext",

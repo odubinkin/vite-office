@@ -114,13 +114,13 @@ export interface PendingRtfTableFrame {
   readonly position: TablePositionHandler;
 }
 
-/** Compares original row positions before handing each contiguous table to the native materializer. @param this - Original RTF reader. @param document - Native Writer owner. @param table - First connected table. @param rows - Buffered source rows. @param pending - Owned pending native fly conversions. @returns Nothing. */
+/** Compares original row positions before handing each contiguous table to the native materializer. @param this - Original RTF reader. @param document - Native Writer owner. @param table - First connected table. @param rows - Buffered source rows. @param pending - Owned pending native fly conversions, absent in shape text. @returns Nothing. */
 export function MaterializeRtfTable(
   this: RtfDocumentImplContext,
   document: SwDoc,
   table: SwTable,
   rows: readonly RtfTableRow[],
-  pending: PendingRtfTableFrame[],
+  pending: PendingRtfTableFrame[] | undefined,
 ): void {
   const manager = new DomainMapperTableManager();
   let from = 0;
@@ -131,13 +131,14 @@ export function MaterializeRtfTable(
   function finish(reader: RtfDocumentImplContext, end: number): void {
     MaterializeRtfTableGroup.call(reader, document, target, rows.slice(from, end), pending);
     if (current !== undefined) {
-      pending.push({ table: target, position: current });
+      pending?.push({ table: target, position: current });
       current = undefined;
     }
   }
   try {
     for (const [index, row] of rows.entries()) {
-      for (const [id, value] of row.rowSprms) manager.resolvePositionSprm(new RTFSprm(id, value));
+      if (pending !== undefined)
+        for (const [id, value] of row.rowSprms) manager.resolvePositionSprm(new RTFSprm(id, value));
       const position = manager.takeRowPosition();
       try {
         if (
@@ -168,13 +169,13 @@ export function MaterializeRtfTable(
   }
 }
 
-/** Replays one group of completed rows into native cell sections. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @param pending - Owned pending native fly conversions. @returns Nothing. */
+/** Replays one group of completed rows into native cell sections. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @param pending - Owned pending native fly conversions, absent in shape text. @returns Nothing. */
 function MaterializeRtfTableGroup(
   this: RtfDocumentImplContext,
   document: SwDoc,
   table: SwTable,
   rows: readonly RtfTableRow[],
-  pending: PendingRtfTableFrame[],
+  pending: PendingRtfTableFrame[] | undefined,
 ): void {
   const firstRow = rows[0];
   if (firstRow !== undefined) {

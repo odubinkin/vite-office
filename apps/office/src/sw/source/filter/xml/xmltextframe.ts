@@ -1,4 +1,6 @@
 /** @fileoverview Writer native frame properties and fly text cursor at the shared ODF SAX boundary. */
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { aFrameFormatSetRange } from "../../core/bastyp/init";
 import { getFillProperties } from "./xmlexp-fill";
 import { importBoxProperties } from "./xmlimpit";
@@ -19,7 +21,7 @@ import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { MINLAY } from "../../../inc/swtypes";
-import { RES_BOX, RES_LR_SPACE, RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_BOX, RES_FRAMEDIR, RES_LR_SPACE, RES_UL_SPACE } from "../../../inc/hintids";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -113,6 +115,18 @@ export function importTextFrame(
     }
     const size = defaults.GetFrameSize().Clone();
     applyFrameSize(size, value);
+    if (style.relativeWidthRelation !== undefined)
+      size.SetWidthPercentRelation(style.relativeWidthRelation);
+    if (style.relativeHeightRelation !== undefined)
+      size.SetHeightPercentRelation(style.relativeHeightRelation);
+    if (style.writingMode !== undefined) {
+      const direction = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
+      try {
+        if (direction.PutValue(style.writingMode)) set.Put(direction);
+      } finally {
+        direction.Dispose();
+      }
+    }
     put(size);
 
     const format = MakeFlySection(doc, type, position, set);
@@ -215,6 +229,11 @@ export function exportTextFrame(
       verticalRelation: vertical.GetRelationOrient(),
       wrap: wrap.GetSurround(),
       anchorOnly: wrap.IsAnchorOnly(),
+      writingMode: items.GetItemIfSet(RES_FRAMEDIR, false)
+        ? format.GetFrameDir().QueryValue()
+        : undefined,
+      relativeWidthRelation: size.GetWidthPercentRelation(),
+      relativeHeightRelation: size.GetHeightPercentRelation(),
       followTextFlow: items.GetItemIfSet(RES_FOLLOW_TEXT_FLOW, false)
         ? format.GetFollowTextFlow().GetValue()
         : undefined,

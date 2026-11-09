@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfsdrimport.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfsdrimport.ts#ResolveTextFrame",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfsdrimport.cxx#void RTFSdrImport::resolve(RTFShape",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "Resolves consumed RTF TextFrame service properties to the actual Writer fly and native pooled item set. Shape groups, other drawing services, non-represented gradient or shadow state and drawing z-order remain outside the current model.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResolveTextFrame"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfsdrimport.cxx",
+      "upstreamSymbols": [
+        "void RTFSdrImport::resolve(RTFShape"
+      ]
+    }
+  }
+}

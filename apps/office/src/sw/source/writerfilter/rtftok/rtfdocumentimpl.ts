@@ -11,23 +11,18 @@ import {
   RTFColorTableEntry,
   equalCharacter,
   equalControls,
-  type RtfBlock,
   type RtfParagraph,
   type RtfParagraphState,
   type RtfRun,
   type RtfState,
-  type RtfTableRow,
 } from "./rtfdocumentimpl.context";
 import { DecodeBytes } from "./rtfdocumentimpl.decode";
 import { Dispatch, DispatchBodyControl } from "./rtfdocumentimpl.dispatch";
 import { ApplyParagraph, ApplyStyleDefinition, Finish } from "./rtfdocumentimpl.document";
 import { RtfTokenizer, type RtfToken } from "./rtftokenizer";
 import { COL_BLACK, type Color } from "../../../../tools/inc/color";
-import {
-  CollectParagraphSprms,
-  CollectTableRowSprms,
-  TableRowBuffer,
-} from "./rtfdocumentimpl.tablerowbuffer";
+import { CollectBlockSprms, type TableRowBuffer } from "./rtfdocumentimpl.tablerowbuffer";
+import { RtfTextBuffer } from "./rtfdocumentimpl.textbuffer";
 
 /** Imports a represented RTF body without coupling the tokenizer to browser I/O. */
 export class RtfDocumentImpl {
@@ -38,8 +33,6 @@ export class RtfDocumentImpl {
     return this.m_pMapperStream;
   }
   protected readonly states: RtfState[] = [];
-  protected m_bNeedPap = true;
-  protected m_aParagraphSprms = new RTFSprms();
   protected readonly m_aDefaultCharacterSprms = new RTFSprms();
   protected readonly m_aSettingsTableSprms = new RTFSprms();
   protected readonly m_pSettingsTable = new SvRef<RTFReferenceTable>();
@@ -94,14 +87,13 @@ export class RtfDocumentImpl {
   }
   /** Captures source paragraph properties when the stream first needs them. The atomic reader retains this emitted value until materialization. @param state - Actual current group. @returns Nothing. */
   protected checkNeedPap(state: RtfState): void {
-    if (!this.m_bNeedPap) return;
-    this.m_bNeedPap = false;
-    this.m_aParagraphSprms.dispose();
-    this.m_aParagraphSprms = GetNumberingProperties.call(this, state.paragraphSprms);
+    if (!this.m_aTextBuffer.m_bNeedPap) return;
+    this.m_aTextBuffer.m_bNeedPap = false;
+    this.m_aTextBuffer.m_aParagraphSprms.dispose();
+    this.m_aTextBuffer.m_aParagraphSprms = GetNumberingProperties.call(this, state.paragraphSprms);
   }
-  protected readonly blocks: RtfBlock[] = [];
-  protected readonly runs: RtfRun[] = [];
-  protected readonly marks: { name: string; offset: number }[] = [];
+  protected m_aTextBuffer = new RtfTextBuffer();
+  protected readonly m_aTextBufferStack: RtfTextBuffer[] = [];
   protected readonly fonts = new Map<number, string>();
   protected readonly fontCodepages = new Map<number, number>();
   protected defaultCodepage = 1252;
@@ -144,14 +136,12 @@ export class RtfDocumentImpl {
     lists.add(this.m_aDefaultSectionSprms);
     for (const section of this.m_aSectionSprms.values()) lists.add(section);
     this.m_aSectionSprms.clear();
-    lists.add(this.m_aParagraphSprms);
     lists.add(this.m_aDefaultCharacterSprms);
-    for (const run of this.runs) lists.add(run.characterSprms);
-    for (const block of this.blocks)
-      if (block.kind === "paragraph") CollectParagraphSprms(lists, block.paragraph);
-      else CollectTableRowSprms(lists, block.rows);
-    CollectTableRowSprms(lists, this.tableRows);
-    for (const buffer of this.m_aTableBufferStack) buffer.CollectSprms(lists);
+    for (const buffer of [...this.m_aTextBufferStack, this.m_aTextBuffer]) {
+      buffer.CollectIncomplete(lists);
+      CollectBlockSprms(lists, buffer.blocks);
+    }
+    for (const state of this.states) CollectBlockSprms(lists, state.shape?.blocks ?? []);
     lists.add(this.m_aListTableSprms);
     for (const table of this.m_aListTables) table.dispose();
     this.m_aListTables.length = 0;
@@ -163,49 +153,36 @@ export class RtfDocumentImpl {
     this.m_nListLevel = -1;
     for (const list of lists) list.dispose();
     this.states.length = 0;
-    this.runs.length = 0;
-    this.blocks.length = 0;
-    this.tableRows.length = 0;
-    this.m_aTableBufferStack.splice(0, this.m_aTableBufferStack.length, new TableRowBuffer());
+    this.m_aTextBufferStack.length = 0;
+    this.m_aTextBuffer = new RtfTextBuffer();
   }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected fontName = "";
   protected sawHeader = false;
-  protected terminatedParagraph = false;
-  protected tableRows: RtfTableRow[] = [];
-  protected readonly m_aTableBufferStack = [new TableRowBuffer()];
   /** Borrows the active source table buffer for the current nesting depth. @returns Actual buffer. */
   protected get tableBuffer(): TableRowBuffer {
-    return this.m_aTableBufferStack.at(-1) as TableRowBuffer;
+    return this.m_aTextBuffer.m_aTableBufferStack.at(-1) as TableRowBuffer;
   }
-  protected inTable = false;
   protected defaultTabStop = 720;
   protected firstRun = true;
-  protected pendingPageBreak = false;
   protected readonly m_aDefaultSectionSprms = new RTFSprms();
   protected readonly m_aSectionSprms = new Map<number, RTFSprms>();
-  protected m_bNeedPar = true;
   protected m_bHadSect = false;
   protected m_bNeedSect = false;
-  protected m_bNeedCr = false;
-  protected m_bNeedFinalPar = false;
   protected m_bParAtEndOfSection = false;
   protected m_bIgnoreNextContSectBreak = false;
   protected m_nResetBreakOnSectBreak: RTFKeyword = RTFKeyword.invalid;
-  /** Atomic capture of the original mapper paragraph flow; zero-length utext still ends first-run state. */
-  protected m_bIsFirstRun = false;
-  protected m_bIsFirstParaInSection = true;
-  protected m_bParagraphPageBreak = false;
   /** Original new-document, body-stream setNeedSect profile. @param value - Whether a section is needed. @returns Nothing. */
   protected setNeedSect(value: boolean): void {
+    if (this.m_aTextBufferStack.length) return;
     if (!this.m_bNeedSect && value && !this.firstRun) {
       this.m_bNeedSect = true;
-      this.m_bNeedPar = true;
-      this.m_bIsFirstParaInSection = true;
-      this.m_bIsFirstRun = true;
-      this.m_bParagraphPageBreak = this.pendingPageBreak;
+      this.m_aTextBuffer.m_bNeedPar = true;
+      this.m_aTextBuffer.m_bIsFirstParaInSection = true;
+      this.m_aTextBuffer.m_bIsFirstRun = true;
+      this.m_aTextBuffer.m_bParagraphPageBreak = this.m_aTextBuffer.pendingPageBreak;
     } else if (this.m_bNeedSect && !value) this.m_bNeedSect = false;
   }
   protected currentSection = 0;
@@ -283,9 +260,10 @@ export class RtfDocumentImpl {
     if (value.length === 0) return;
     this.checkFirstRun();
     this.checkNeedPap(state);
-    if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
+    const buffer = this.m_aTextBuffer;
+    if (!buffer.inTable && buffer.tableRows.length > 0) this.FlushTable();
     FlushDeferredPageBreak.call(this, state);
-    const previous = this.runs.at(-1);
+    const previous = buffer.runs.at(-1);
     if (
       previous !== undefined &&
       equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
@@ -297,11 +275,14 @@ export class RtfDocumentImpl {
       previous.currentCharacterStyleIndex === state.currentCharacterStyleIndex &&
       equalCharacter(previous.attributes, state.character)
     )
-      this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
-    else this.runs.push(this.SnapshotRun(value, state));
-    this.terminatedParagraph = false;
-    this.m_bNeedCr = true;
-    this.m_bIsFirstRun = false;
+      buffer.runs[buffer.runs.length - 1] = {
+        ...previous,
+        text: previous.text + value,
+      };
+    else buffer.runs.push(this.SnapshotRun(value, state));
+    buffer.terminatedParagraph = false;
+    buffer.m_bNeedCr = true;
+    buffer.m_bIsFirstRun = false;
   }
 
   /** Captures original runProps input at the atomic import boundary, including empty paragraph markers. @param value - Native text. @param state - Current group. @returns Owned state snapshot. */
@@ -330,51 +311,58 @@ export class RtfDocumentImpl {
   protected CommitParagraph(state = this.states.at(-1), marker = false, mapperSplit = false): void {
     this.checkFirstRun();
     if (state) this.checkNeedPap(state);
-    if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
+    const buffer = this.m_aTextBuffer;
+    if (!buffer.inTable && buffer.tableRows.length > 0) this.FlushTable();
     const paragraph: RtfParagraph = {
-      paragraphSprms: new RTFSprms(this.m_aParagraphSprms),
+      paragraphSprms: new RTFSprms(buffer.m_aParagraphSprms),
       ...(marker && state && !this.m_bParAtEndOfSection
         ? { marker: this.SnapshotRun("", state) }
         : {}),
-      runs: this.runs.splice(0),
+      runs: buffer.runs.splice(0),
       state: {
         ...(state?.paragraph ?? DEFAULT_PARAGRAPH),
-        ...(this.m_bParagraphPageBreak && !this.inTable
+        ...(buffer.m_bParagraphPageBreak && !buffer.inTable
           ? { pageBreakBefore: true, pageBreakBeforeSet: true }
           : {}),
       },
-      marks: this.marks.splice(0),
+      marks: buffer.marks.splice(0),
+      ...(buffer.frames.length ? { frames: buffer.frames.splice(0) } : {}),
     };
-    if (this.inTable) this.tableBuffer.cell.push(paragraph);
+    if (buffer.inTable) this.tableBuffer.cell.push(paragraph);
     else {
-      this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
+      buffer.blocks.push({
+        kind: "paragraph",
+        paragraph,
+        section: this.currentSection,
+      });
     }
-    this.terminatedParagraph = true;
-    this.m_bIsFirstParaInSection = false;
-    this.m_bIsFirstRun = !this.m_bParAtEndOfSection;
-    this.m_bParagraphPageBreak = this.m_bParAtEndOfSection ? false : this.pendingPageBreak;
+    buffer.terminatedParagraph = true;
+    buffer.m_bIsFirstParaInSection = false;
+    buffer.m_bIsFirstRun = !this.m_bParAtEndOfSection;
+    buffer.m_bParagraphPageBreak = this.m_bParAtEndOfSection ? false : buffer.pendingPageBreak;
     if (!mapperSplit) {
-      this.m_bNeedCr = false;
-      if (!this.inTable || marker) {
-        this.m_bNeedPar = false;
-        this.m_bNeedFinalPar = false;
+      buffer.m_bNeedCr = false;
+      if (!buffer.inTable || marker) {
+        buffer.m_bNeedPar = false;
+        buffer.m_bNeedFinalPar = false;
       }
-      this.m_bNeedPap = true;
+      buffer.m_bNeedPap = true;
     }
   }
 
   /** Completes rows as one native table block.  @returns Nothing. */
   protected FlushTable(): void {
-    if (this.tableRows.length === 0) return;
-    this.blocks.push({
+    const buffer = this.m_aTextBuffer;
+    if (buffer.tableRows.length === 0) return;
+    buffer.blocks.push({
       kind: "table",
-      rows: this.tableRows.splice(0),
+      rows: buffer.tableRows.splice(0),
       section: this.currentSection,
-      pageBreakBefore: this.pendingPageBreak,
+      pageBreakBefore: buffer.pendingPageBreak,
     });
-    this.pendingPageBreak = false;
-    this.m_bParagraphPageBreak = false;
-    this.m_bIsFirstRun = true;
+    buffer.pendingPageBreak = false;
+    buffer.m_bParagraphPageBreak = false;
+    buffer.m_bIsFirstRun = true;
   }
 
   /** Adds one font-family table token. @param value - Font text. @param state - Current group.  @returns Nothing. */

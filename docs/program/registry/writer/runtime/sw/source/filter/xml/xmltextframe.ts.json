@@ -34,9 +34,11 @@
         "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
         "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx#m_isSplitAllowed"
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx#m_isSplitAllowed",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_RELWIDTHREL"
       ],
-      "justification": "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF. Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice. RTF100. Uses the common native bound fly collection rather than a separate filter-only anchor registry. RTF101. Preserves original split, flow, overlap, frame border and transparency values in ODF.",
+      "justification": "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF. Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice. RTF100. Uses the common native bound fly collection rather than a separate filter-only anchor registry. RTF101. Preserves original split, flow, overlap, frame border and transparency values in ODF. RTF102. Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF.",
       "knownViolations": [],
       "localSymbols": [
         "importTextFrame",

@@ -478,7 +478,7 @@ it.each([
       /** Observes original native owners without acquiring them. @param value - Original text. @param state - Real parser state. @returns Nothing. */
       protected override AppendText(value: string, state: RtfState): void {
         super.AppendText(value, state);
-        const run = this.runs.at(-1);
+        const run = this.m_aTextBuffer.runs.at(-1);
         if (run !== undefined)
           for (const [, pointer] of run.characterSprms)
             this.values.push(pointer.operatorDereference());

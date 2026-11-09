@@ -3285,3 +3285,24 @@ and right horizontal specifications and center and bottom vertical
 specifications. With an otherwise positioned row, the left and top
 words leave the corresponding imported orientation at NONE. Preserve
 the source writer and reader behavior.
+
+### WRITER402 — RTF ordinary text frames export padding and wrap details the reader does not restore
+
+`RtfAttributeOutput::FormatBox` emits the four dxText/dyText padding
+properties. `RTFSdrImport::getTextFrameDefaults` sets the new-style
+Writer text frame to 254 mm100 at the sides and 127 mm100 at the top
+and bottom. `RTFSdrImport::resolve` does not consume the emitted
+padding properties. `RTFDocumentImpl::dispatchValue` records SHPWRK
+and tight wrap in character drawing properties, while the text-frame
+service gets its Surround from RTFShape's coarser wrap value. A
+dynamic frame written with SHPWR2/SHPWRK3 therefore reopens as
+parallel. Preserve both asymmetries.
+
+### WRITER403 — RTF ordinary text-frame automatic height reopens as fixed
+
+`RTFSdrImport::applyProperty` consumes fFitShapeToText and enables
+minimum height when its value is one. The ordinary Writer text-box
+branch of `RtfAttributeOutput::OutputFlyFrame_Impl` writes height
+geometry and relative sizing properties without that flag. The new
+RTF text frame uses the fixed default on reopen. Preserve the
+original producer and consumer.

@@ -16,6 +16,7 @@ import {
   type RtfDocumentImplContext,
   type RtfState,
 } from "./rtfdocumentimpl.context";
+import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
 import { dispatchFloatingTableValue, dispatchTableShading } from "./rtfdispatchvalue.table";
@@ -37,6 +38,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     destinationText.setLength(0);
     this["states"].push({
       destination: previous?.destination ?? "body",
+      shape: previous?.shape,
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       paragraphSprms:
@@ -164,18 +166,13 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       if (previous?.destination === "bookmarkstart") {
         const name = previous.bookmarkName.trim();
         if (name.length > 0)
-          this["marks"].push({
+          this["m_aTextBuffer"].marks.push({
             name,
-            offset: this["runs"].reduce(
-              /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
-                length,
-                run,
-              ) => length + run.text.length,
-              0,
-            ),
+            offset: this["m_aTextBuffer"].GetTextLength(),
           });
       }
       if (previous) {
+        FinishShapeGroup.call(this, previous);
         FinishLegacyNumbering.call(this, previous);
         FinishListLevelGroup.call(this, previous);
       }
@@ -243,7 +240,12 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
       state.bookmarkName += value;
     else if (state.destination === "leveltext") state.levelText += value;
-    else if (state.destination === "pntxta" || state.destination === "pntxtb") {
+    else if (
+      state.destination === "pntxta" ||
+      state.destination === "pntxtb" ||
+      state.destination === "shapepropertyname" ||
+      state.destination === "shapepropertyvalue"
+    ) {
       const native = unicode(value);
       try {
         state.currentDestinationText?.append(native);
@@ -260,6 +262,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = true;
     return;
   }
+  if (DispatchShape.call(this, token.name, token.parameter, state)) return;
   if (token.name === "rtf") {
     if (state.destination !== "skip") this["sawHeader"] = true;
     return;
@@ -565,7 +568,11 @@ export function DispatchBodyControl(
   if (dispatchFloatingTableValue(name, parameter ?? 0, state)) return;
   if (dispatchTableShading.call(this, name, parameter ?? 0, state)) return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
-  if (DispatchSectionControl.call(this, name, parameter, state)) return;
+  if (
+    !this["m_aTextBufferStack"].length &&
+    DispatchSectionControl.call(this, name, parameter, state)
+  )
+    return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
     return;
@@ -672,8 +679,9 @@ export function DispatchBodyControl(
   }
   if (name === "pard") {
     state.paragraphSprms.clear();
-    this["m_bNeedPap"] = true;
-    if (!this["inTable"] && this["tableRows"].length > 0) this["FlushTable"]();
+    this["m_aTextBuffer"].m_bNeedPap = true;
+    if (!this["m_aTextBuffer"].inTable && this["m_aTextBuffer"].tableRows.length > 0)
+      this["FlushTable"]();
     state.paragraph = { ...DEFAULT_PARAGRAPH };
     delete state.paragraphBorder;
     return;

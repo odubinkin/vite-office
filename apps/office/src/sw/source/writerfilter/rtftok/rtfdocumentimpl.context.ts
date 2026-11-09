@@ -1,4 +1,5 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
+import type { RTFShape, RtfShapeAnchor } from "./rtfdocumentimpl.shape";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -93,6 +94,9 @@ export class RTFColorTableEntry {
 
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
+  shape: RTFShape | undefined;
+  shapeRoot?: boolean;
+  shapeTextRoot?: boolean;
   characterSprms: RTFSprms;
   paragraphSprms: RTFSprms;
   sectionSprms: RTFSprms;
@@ -106,6 +110,11 @@ export interface RtfState {
   runType: RunType;
   destination:
     | "body"
+    | "shape"
+    | "shapeinstruction"
+    | "shapeproperty"
+    | "shapepropertyname"
+    | "shapepropertyvalue"
     | "nestedtableproperties"
     | "fonttbl"
     | "stylesheet"
@@ -164,6 +173,7 @@ export interface RtfState {
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
   readonly paragraphSprms?: RTFSprms;
+  readonly frames?: readonly RtfShapeAnchor[];
   readonly marker?: RtfRun;
   readonly runs: readonly RtfRun[];
   readonly state: RtfParagraphState;

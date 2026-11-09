@@ -39,6 +39,7 @@ import {
   type RtfParagraph,
   type RtfParagraphState,
 } from "./rtfdocumentimpl.context";
+import { ResolveTextFrame } from "./rtfsdrimport";
 import { RtfSyntaxError } from "./rtftokenizer";
 import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
 import { ConvertFloatingRtfTable } from "../dmapper/DomainMapperTableHandler";
@@ -77,9 +78,9 @@ function paragraphBorderBox(
 export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwDoc {
   if (!this["sawHeader"]) throw new RtfSyntaxError("RTF version control is missing.");
   if (
-    this["runs"].length > 0 ||
-    (this["blocks"].length === 0 && this["tableRows"].length === 0) ||
-    !this["terminatedParagraph"]
+    this["m_aTextBuffer"].HasParagraphContent() ||
+    (this["m_aTextBuffer"].blocks.length === 0 && this["m_aTextBuffer"].tableRows.length === 0) ||
+    !this["m_aTextBuffer"].terminatedParagraph
   )
     this["CommitParagraph"]();
   this["FlushTable"]();
@@ -246,7 +247,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     }
     let firstParagraph = true;
     const startedSections = new Set<number>();
-    for (const block of this["blocks"]) {
+    for (const block of this["m_aTextBuffer"].blocks) {
       const sectionStyle = sectionStyles.get(block.section);
       const startsSection = !startedSections.has(block.section);
       startedSections.add(block.section);
@@ -313,6 +314,41 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     mapper.dispose();
     model.dispose();
     if (!complete) document.Dispose();
+  }
+}
+
+/** Replays the original shape text append context into its own Writer fly section. @param this - Original reader. @param owner - Body or cell paragraph that holds the native anchor. @param paragraph - Original paragraph with shape events. @returns Nothing. */
+function MaterializeTextFrames(
+  this: RtfDocumentImplContext,
+  owner: SwTextNode,
+  paragraph: RtfParagraph,
+): void {
+  const document = owner.GetDoc();
+  for (const { shape, offset } of paragraph.frames ?? []) {
+    const frame = ResolveTextFrame(shape, owner, offset);
+    const start = frame.GetContent().GetContentIdx()?.GetNode();
+    if (!start?.IsStartNode()) throw new Error("assert(RTF text frame section)");
+    const first = document.nodes.at(start.GetIndex() + 1).GetTextNode();
+    if (!first) throw new Error("assert(RTF text frame initial paragraph)");
+    const end = start.EndOfSectionNode();
+    let available: SwTextNode | undefined = first;
+    for (const block of shape.blocks ?? []) {
+      if (block.kind === "paragraph") {
+        const node =
+          available ?? document.nodes.MakeTextNode(end, document.GetDfltTextFormatColl());
+        this["ApplyParagraph"](node, block.paragraph);
+        available = undefined;
+      } else {
+        const table = document.nodes.MakeTableNodeBefore(
+          available ?? end,
+          document.GetUniqueTableName(),
+          {},
+        );
+        MaterializeRtfTable.call(this, document, table, block.rows, undefined);
+      }
+    }
+    if (available && available.GetIndex() > start.GetIndex() + 1)
+      document.nodes.RemoveNode(available.GetIndex(), 1, true);
   }
 }
 
@@ -481,6 +517,7 @@ export function ApplyParagraph(
   if (paragraph.state.pageBreakBeforeSet)
     node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
+  MaterializeTextFrames.call(this, node, paragraph);
 }
 
 import type { SwCharFormat } from "../../../inc/charfmt";

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.textbuffer.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": [
+      "RtfTextBuffer"
+    ],
+    "upstreamSymbols": [
+      "case Destination::SHAPETEXT:"
+    ],
+    "preservedResponsibilities": [
+      "Owns the atomic native append context for body and shape text with independent paragraph, row and run state."
+    ],
+    "omittedResponsibilities": [
+      "The full live mapper stream and shapes outside Writer text frames remain unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.textbuffer.ts",
+          "marker": "RtfTextBuffer"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "case Destination::SHAPETEXT:"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.textbuffer.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates ownership of buffered paragraph and row events from the reader so shape text can temporarily enter an independent append context."
+    }
+  }
+}

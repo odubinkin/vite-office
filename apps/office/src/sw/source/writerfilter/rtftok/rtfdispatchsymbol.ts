@@ -25,8 +25,8 @@ export function DispatchTextSymbol(
 ): boolean {
   if (state.destination === "skip") return false;
   if (name === "line") {
-    this["runs"].push(this["SnapshotRun"]("\n", state));
-    this["terminatedParagraph"] = false;
+    this["m_aTextBuffer"].runs.push(this["SnapshotRun"]("\n", state));
+    this["m_aTextBuffer"].terminatedParagraph = false;
     return true;
   }
   const byte = trivial.get(name);

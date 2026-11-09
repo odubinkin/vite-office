@@ -11,6 +11,8 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { RtfExport } from "../ww8/rtfexport";
+import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
@@ -314,6 +316,37 @@ it("keeps a child table reached through the recursive original table token loop"
     );
     expect(parent.GetTable().GetHTMLTableLayout()?.GetMin()).toBeGreaterThan(0);
   } finally {
+    shell.Close();
+  }
+});
+
+it("exports a Markdown HTML text fly through the ordinary RTF shape path", /** Preserves the imported frame table across the native filters. @returns Nothing. */ () => {
+  const { shell, doc } = open(
+    'Lead.\n\n<table align="right"><tr><td>Floating table</td></tr></table>\n\nTail.\n',
+  );
+  let restored: SwDoc | undefined;
+  try {
+    const rtf = RtfExport.WriteDocument(doc);
+    expect(new TextDecoder().decode(rtf)).toContain(String.raw`{\*\shpinst`);
+    restored = new RtfDocumentImpl().ResolveBytes(rtf);
+    expect(restored.GetTables()).toHaveLength(0);
+    const [fly] = [...restored.GetSpzFrameFormats()];
+    const section = fly?.GetContent().GetContentIdx()?.GetNode();
+    assert(fly && section?.IsStartNode());
+    expect(fly.GetFlySplit().GetValue()).toBe(false);
+    const [table] = restored.nodes.GetSectionContent(section);
+    assert(table instanceof SwTableNode);
+    expect(table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
+      "Floating table",
+    );
+    expect(
+      restored.paragraphs.some(
+        /** Finds the main text after the independent shape stream. @param node - Body text node. @returns Whether this is the tail. */
+        (node) => node.GetText() === "Tail.",
+      ),
+    ).toBe(true);
+  } finally {
+    restored?.Dispose();
     shell.Close();
   }
 });

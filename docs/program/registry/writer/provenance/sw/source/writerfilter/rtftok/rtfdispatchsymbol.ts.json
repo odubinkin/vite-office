@@ -13,7 +13,8 @@
       "RTFDocumentImpl::dispatchSymbol"
     ],
     "preservedResponsibilities": [
-      "Original dispatchSymbol text stage: fixed MS1252 trivial punctuation/TAB conversion through the actual SAL converter, destination-aware text emission and original SVT hard-space/hyphen/soft-hyphen constants. LINE preserves its distinct singleChar/runProps path without prematurely capturing paragraph properties, including PN label destinations (WRITER279). Existing paragraph/table/section handlers retain their actual owner; no full module/ABI or goal completion claim."
+      "Original dispatchSymbol text stage: fixed MS1252 trivial punctuation/TAB conversion through the actual SAL converter, destination-aware text emission and original SVT hard-space/hyphen/soft-hyphen constants. LINE preserves its distinct singleChar/runProps path without prematurely capturing paragraph properties, including PN label destinations (WRITER279). Existing paragraph/table/section handlers retain their actual owner; no full module/ABI or goal completion claim.",
+      "Text symbols append within the current native body or shape text scope."
     ],
     "omittedResponsibilities": [
       "Other symbol responsibilities retain their existing native owner; complete module and compiled ABI parity remain unverified."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-symbol.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -37,6 +42,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFDocumentImpl::singleChar"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "case Destination::SHAPETEXT:"
         }
       ]
     }

@@ -53,7 +53,8 @@
       "S3HW1E PAGE/section lifecycle checkpoint: exact pinned metadata distinguishes all 1823 known spellings from unknown controls, preserves native dispatch kinds/defaults and PAR aliases, and starts sections for recognized no-op handlers. Original needSect/needCr/needFinalPar/needPar, parAtEndOfSection, ignore-next-continuous and lazy break reset govern SECT, synthetic PAGE and root-pop. The existing atomic mapper binding preserves deferred-page paragraph phases, including zero-length utext first-run changes, without claiming a streaming mapper ABI. Required final table paragraphs follow the table. Literal tests plus unchanged cont-section-pagebreak.rtf preserve native empty paragraph/page-style expectations. Existing strict RTF1 lexical admission is retained. First/follow/title-page producer/export and HTML/current-model audits remain open; no broad semantic or ABI confidence promotion.",
       "S3HW1E HTML75: Actual parsed row and cell sprm lists are released with their current/buffered owners including incomplete input.",
       "Owns the original table-buffer stack with separate property snapshots at every materialized depth.",
-      "Uses original automatic palette entry versus out-of-range RGB zero, without flattening the saved palette into string colors (WRITER397)."
+      "Uses original automatic palette entry versus out-of-range RGB zero, without flattening the saved palette into string colors (WRITER397).",
+      "Owns independent append buffers for shape and body text and restores the surrounding paragraph and table state after shape text."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -183,6 +184,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
           "marker": "getColorTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -245,6 +250,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFDocumentImpl::getColorTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "case Destination::SHAPETEXT:"
         }
       ]
     }

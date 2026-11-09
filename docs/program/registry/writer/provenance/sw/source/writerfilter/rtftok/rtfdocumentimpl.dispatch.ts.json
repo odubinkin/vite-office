@@ -44,7 +44,8 @@
       "Routes the original nested table destinations and table control families, keeping independent row property buffers.",
       "Accepts the original RTF destination independently of its numeric suffix, including the upstream bare destination fixture (WRITER393).",
       "Routes original table shading and RGB color controls to the actual palette and nested property handlers.",
-      "Delivers floating position modifiers to the same native group-owned table state."
+      "Delivers floating position modifiers to the same native group-owned table state.",
+      "Recognizes and closes native shape destinations and uses the current text append context."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -158,6 +159,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -248,6 +253,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::TPOSX:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+          "marker": "case RTFKeyword::SHPTXT:"
         }
       ]
     },

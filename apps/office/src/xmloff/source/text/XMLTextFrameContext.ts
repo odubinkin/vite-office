@@ -7,6 +7,7 @@ import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLTextImportHelper } from "./txtimp";
+import { importWritingDirection } from "../style/prhdlfac";
 import { importFrameConstant } from "./txtprhdl";
 
 /** Represented ODF automatic graphic style values shared with text-frame export. */
@@ -21,6 +22,9 @@ export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
   readonly allowOverlap?: boolean | undefined;
   readonly wrapInfluence?: number | undefined;
   readonly anchorOnly?: boolean | undefined;
+  readonly writingMode?: number | undefined;
+  readonly relativeWidthRelation?: number | undefined;
+  readonly relativeHeightRelation?: number | undefined;
   readonly marginLeft?: number | undefined;
   readonly marginRight?: number | undefined;
   readonly marginTop?: number | undefined;
@@ -104,6 +108,10 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
         : wrapped !== null && Converter.convertNumber(count, wrapped)
           ? count[0] === 1
           : undefined;
+    let writingMode: number | undefined;
+    for (const [token, value] of attrs)
+      if (token === T.STYLE_WRITING_MODE || token === T.LOEXT_WRITING_MODE)
+        writingMode = importWritingDirection(value) ?? writingMode;
     this.style = {
       ...importFillProperties(attrs),
       padding: length(attrs, T.FO_PADDING),
@@ -134,6 +142,15 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
       verticalRelation: importFrameConstant("verticalRelation", attrs.get(T.STYLE_VERTICAL_REL)),
       wrap: importFrameConstant("wrap", attrs.get(T.STYLE_WRAP)),
       anchorOnly,
+      writingMode,
+      relativeWidthRelation: importFrameConstant(
+        "horizontalRelation",
+        attrs.get(T.LOEXT_REL_WIDTH_REL),
+      ),
+      relativeHeightRelation: importFrameConstant(
+        "verticalRelation",
+        attrs.get(T.LOEXT_REL_HEIGHT_REL),
+      ),
       followTextFlow: boolean(attrs, T.STYLE_FLOW_WITH_TEXT, T.DRAW_FLOW_WITH_TEXT),
       allowOverlap: boolean(attrs, T.LOEXT_ALLOW_OVERLAP),
       wrapInfluence: importFrameConstant(

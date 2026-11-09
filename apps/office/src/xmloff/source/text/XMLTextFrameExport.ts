@@ -4,6 +4,7 @@ import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientati
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import type { XMLTextExportBlock } from "../table/XMLTableExport";
 import { escapeXml, exportOdfLength } from "./txtparae";
+import { exportWritingDirection } from "../style/prhdlfac";
 import { exportFrameConstant } from "./txtprhdl";
 import type { XMLTextFrameAttributes, XMLTextFrameStyle } from "./XMLTextFrameContext";
 
@@ -56,6 +57,22 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
     attribute(
       "draw:wrap-influence-on-position",
       exportFrameConstant("wrapInfluence", style.wrapInfluence),
+    ) +
+    attribute(
+      "style:writing-mode",
+      style.writingMode === undefined ? undefined : exportWritingDirection(style.writingMode),
+    ) +
+    attribute(
+      "loext:rel-width-rel",
+      frame.relativeWidth
+        ? exportFrameConstant("horizontalRelation", style.relativeWidthRelation)
+        : undefined,
+    ) +
+    attribute(
+      "loext:rel-height-rel",
+      frame.relativeHeight
+        ? exportFrameConstant("verticalRelation", style.relativeHeightRelation)
+        : undefined,
     ) +
     length("fo:margin-left", style.marginLeft) +
     length("fo:margin-right", style.marginRight) +
