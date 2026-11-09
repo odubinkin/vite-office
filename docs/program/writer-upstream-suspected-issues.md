@@ -3258,3 +3258,12 @@ On import the matching path sets alpha to zero on the existing brush.
 An ODT save and reopen therefore loses a partially transparent
 table, row or cell fill. Preserve the pinned ODF behavior and retain
 the original packed value in native Worker transfer.
+
+### WRITER399 — TXT switches to the first frame only for a single empty body paragraph
+
+When the full-document PaM selects exactly one empty body text node,
+`SwASCWriter::WriteStream` uses the section of the first registered
+special format. It neither searches subsequent formats nor appends
+their contents. The new selection ends at the structural section end,
+so the last frame paragraph retains its separator. Preserve these
+conditions and keep ordinary TXT selection on the original range.

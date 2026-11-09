@@ -7,6 +7,10 @@ import {
 } from "../../../../external/icu/source/common/brkeng";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwDoc } from "../../core/doc/doc";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
@@ -138,6 +142,53 @@ it("creates the source anchored fly when an HTML table has explicit left alignme
       "Floating",
     );
   } finally {
+    shell.Close();
+  }
+});
+
+it("round trips the anchored HTML table and its section through the Writer Worker graph", /** Verifies the actual imported frame anchor, original items, table content and bookmark after a structured-clone boundary. @returns Nothing. */ () => {
+  const { shell, doc } = open(
+    'Lead.\n\n<table align="right" hspace="8" vspace="3"><tr><td>Floating</td></tr></table>\n\nAfter.\n',
+  );
+  let restored: SwDoc | undefined;
+  try {
+    const [frame] = [...doc.GetSpzFrameFormats()];
+    const original = frame?.GetContent().GetContentIdx()?.GetNode();
+    assert(frame && original?.IsStartNode());
+    const [originalTable] = doc.nodes.GetSectionContent(original);
+    assert(originalTable instanceof SwTableNode);
+    const originalText = originalTable
+      .GetTable()
+      .GetTabLines()[0]
+      ?.GetTabBoxes()[0]
+      ?.GetParagraphs()[0];
+    assert(originalText);
+    doc.GetIDocumentMarkAccess().MakeMark(originalText, 3, "InsideFly");
+    const snapshot = structuredClone(encodeWriterDocument(doc));
+    expect(snapshot.textFrames).toHaveLength(1);
+    expect(snapshot.tables).toEqual([]);
+    restored = decodeWriterDocument(snapshot);
+    const [fly] = [...restored.GetSpzFrameFormats()];
+    const content = fly?.GetContent().GetContentIdx()?.GetNode();
+    assert(fly && content?.IsStartNode());
+    const [table] = restored.nodes.GetSectionContent(content);
+    assert(table instanceof SwTableNode);
+    expect(table.GetFlyFormat()).toBe(fly);
+    expect(fly.GetName()).toBe(frame.GetName());
+    expect(fly.DerivedFrom()?.GetPoolFormatId()).toBe(SwPoolFormatId.FRM_FRAME);
+    expect(fly.GetSurround().GetSurround()).toBe(WrapTextMode.LEFT);
+    expect(fly.GetAnchor().GetAnchorId()).toBe(frame.GetAnchor().GetAnchorId());
+    const anchorText = frame.GetAnchor().GetAnchorNode()?.GetTextNode();
+    assert(anchorText);
+    const anchorIndex = doc.paragraphs.indexOf(anchorText);
+    expect(anchorIndex).toBeGreaterThanOrEqual(0);
+    expect(fly.GetAnchor().GetAnchorNode()).toBe(restored.paragraphs[anchorIndex]);
+    const text = table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0];
+    expect(text?.GetText()).toBe("Floating");
+    expect(restored.GetIDocumentMarkAccess().GetBookmarks()[0]?.GetMarkPos().GetNode()).toBe(text);
+    expect(encodeWriterDocument(restored).textFrames).toEqual(snapshot.textFrames);
+  } finally {
+    restored?.Dispose();
     shell.Close();
   }
 });

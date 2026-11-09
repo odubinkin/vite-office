@@ -1,6 +1,7 @@
 /** @fileoverview Owns native Writer ASCII text-range iteration from sw/source/filter/ascii/wrtasc.cxx. */
 import { SwPosition, type SwPaM } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
+import type { SwNode } from "../../core/docnode/node";
 import { SwNodes } from "../../core/docnode/nodes";
 import { Point } from "../../../../tools/inc/gen";
 import type { SwTable } from "../../core/table/swtable";
@@ -22,29 +23,43 @@ export class SwASCWriter {
   /** Writes the full body in native block order, including table cells. @param document - Source model. @returns Filter text. */
   public WriteDocument(document: SwDoc): string {
     const nodes = document.GetNodes();
-    const first = nodes.getBodyContent()[0];
-    if (!first) return "";
+    const firstBody = nodes.getBodyContent()[0];
+    if (!firstBody) return "";
+    let first: SwNode = firstBody;
+    let endIndex = nodes.GetEndOfContent().GetIndex();
+    const formats = document.GetSpzFrameFormats();
+    const frameOnly =
+      !formats.empty() &&
+      first.GetTextNode()?.Len() === 0 &&
+      nodes.GetEndOfExtras().GetIndex() + 3 === endIndex &&
+      first.GetIndex() === endIndex - 1;
+    if (frameOnly) {
+      const content = formats.GetFormat(0).GetContent().GetContentIdx()?.GetNode();
+      if (!content) return "";
+      first = content;
+      endIndex = content.EndOfSectionIndex();
+    }
     const position = new SwPosition(first);
-    let node = first.GetTextNode() ?? SwNodes.GoNext(position)?.GetTextNode();
+    let node = first.GetTextNode() ?? this.NextText(position, endIndex);
     const firstText = node;
     let result = "";
     try {
       while (node) {
         const table = node.FindTableNode()?.GetTable();
         if (table && node.GetTableBox()) {
-          const rowOutput = this.WriteTable(table, position, node);
+          const rowOutput = this.WriteTable(table, position, node, endIndex);
           result += rowOutput.text;
           node = rowOutput.next;
         } else {
           const current: SwTextNode = node;
-          node = SwNodes.GoNext(position)?.GetTextNode();
+          node = this.NextText(position, endIndex);
           result += OutASC_SwTextNode(
             this,
             current,
             0,
             current.Len(),
-            !node,
-            current === firstText && !node,
+            !node && !frameOnly,
+            current === firstText && !node && !frameOnly,
           );
         }
       }
@@ -54,11 +69,18 @@ export class SwASCWriter {
     return result;
   }
 
-  /** Emits table rows by walking the actual text cursor and comparing original box coordinates. @param table - Connected table. @param position - Actual output cursor. @param first - Current native text. @returns Filter text and the next node. */
+  /** Advances the original text cursor within the selected native range. @param position - Actual cursor. @param endIndex - Selected section boundary. @returns Next selected text node. */
+  private NextText(position: SwPosition, endIndex: number): SwTextNode | undefined {
+    const next = SwNodes.GoNext(position);
+    return next && next.GetIndex() < endIndex ? (next.GetTextNode() ?? undefined) : undefined;
+  }
+
+  /** Emits table rows by walking the actual text cursor and comparing original box coordinates. @param table - Connected table. @param position - Actual output cursor. @param first - Current native text. @param endIndex - Selected section boundary. @returns Filter text and the next node. */
   private WriteTable(
     table: SwTable,
     position: SwPosition,
     first: SwTextNode,
+    endIndex: number,
   ): { text: string; next: SwTextNode | undefined } {
     const previousLineEnd = this.lineEnd;
     this.lineEnd = "";
@@ -70,7 +92,7 @@ export class SwASCWriter {
         for (let index = 0; index < boxes.length && paragraph; ++index) {
           const previous = paragraph.GetTableBox()?.GetCoordinates() ?? new Point();
           text += OutASC_SwTextNode(this, paragraph, 0, paragraph.Len(), true, false);
-          paragraph = SwNodes.GoNext(position)?.GetTextNode() ?? undefined;
+          paragraph = this.NextText(position, endIndex);
           while (paragraph) {
             const coordinates = paragraph.GetTableBox()?.GetCoordinates();
             if (
@@ -81,7 +103,7 @@ export class SwASCWriter {
               break;
             text +=
               previousLineEnd + OutASC_SwTextNode(this, paragraph, 0, paragraph.Len(), true, false);
-            paragraph = SwNodes.GoNext(position)?.GetTextNode() ?? undefined;
+            paragraph = this.NextText(position, endIndex);
           }
           if (index + 1 < boxes.length) text += "\t";
         }

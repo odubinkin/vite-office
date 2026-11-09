@@ -90,11 +90,11 @@
           "marker": "Writer named-style history"
         },
         {
-          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
           "marker": "encodeRowFormat"
         },
         {
-          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
           "marker": "decodeRowFormat"
         },
         {
@@ -186,8 +186,12 @@
           "marker": "@fileoverview"
         },
         {
-          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
           "marker": "encodeWriterTableSteps"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -284,7 +288,8 @@
       "S3HW1E HTML75: The existing Worker table graph carries direct cell frame-direction items from the actual format and restores them via the same pool; older records can omit the item.",
       "The existing worker record carries the signed native row span when nondefault and restores one for records without the field.",
       "Transfers the actual nested table order and direct text nodes while retaining the legacy flat-cell record representation.",
-      "Transfers direct table, row and cell brush snapshots with existing native table ownership and legacy record ingress."
+      "Transfers direct table, row and cell brush snapshots with existing native table ownership and legacy record ingress.",
+      "Transfers the optional connected native text-frame collection before binding bookmarks and delegates text/table sections to the shared Writer graph transport."
     ]
   },
   "legacyOrder": 93

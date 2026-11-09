@@ -1,6 +1,9 @@
 /** @fileoverview Checks native ASCII selection, numbering visibility and margin contracts on real Writer owners. */
 import { afterEach, assert, expect, it } from "vitest";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { MakeFlySection } from "../../core/doc/doclay";
+import { RES_MARGIN_FIRSTLINE, RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../../inc/hintids";
 import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
@@ -295,4 +298,33 @@ it("walks nested TXT cells by the source coordinates without comparing their tab
   innerRight?.GetParagraphs()[0]?.SetText("InnerB");
   doc.nodes.AppendTableCellParagraph(left).SetText("After");
   expect(new SwASCWriter().WriteDocument(doc)).toBe("Lead\nBefore\nInnerA\tInnerB\nAfter\tRight\n");
+});
+
+it("exports only the first fly range when the entire TXT document is one empty paragraph", /** Uses the original tracked fly section and sentinel-defined range. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  documents.push(doc);
+  const body = doc.paragraphs[0];
+  assert(body);
+  const position = new SwPosition(body, 0);
+  const items = new SfxItemSet(doc.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+  try {
+    for (const text of ["First frame", "Second frame"]) {
+      const fly = MakeFlySection(doc, RndStdIds.FLY_AT_PARA, position, items);
+      const start = fly.GetContent().GetContentIdx()?.GetNode();
+      assert(start?.IsStartNode());
+      const paragraph = doc.nodes.GetSectionContent(start)[0]?.GetTextNode();
+      assert(paragraph);
+      expect(paragraph.GetTextFormatColl().id).toBe("frame-contents");
+      paragraph.SetText(text);
+    }
+  } finally {
+    items.Dispose();
+    position.Dispose();
+  }
+  const writer = new SwASCWriter();
+  writer.m_bASCII_NoLastLineEnd = true;
+  expect(writer.WriteDocument(doc)).toBe("First frame\n");
+  expect(write(body, body, 0, 0, false, writer)).toBe("");
+  body.SetText("Body");
+  expect(writer.WriteDocument(doc)).toBe("Body");
 });

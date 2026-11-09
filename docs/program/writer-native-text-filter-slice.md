@@ -2135,3 +2135,20 @@ The existing browser table editor paints native backgrounds and maps
 the represented frame axes to CSS. The existing Open flow stores RTF
 table visuals in the ODT copy and reopens that copy with the same native
 opaque brushes and directions, including in a nested cell.
+
+### RTF98 — Transfer native anchored text frames and export the first-frame TXT range
+
+Worker transfer records the paragraph or character anchor, original
+frame item values and ordered direct text/table section of each
+HTML-imported fly. Restoring a frame uses the same native section
+constructor as HTML. It reconnects bookmarks inside the fly and
+reuses the existing table graph transport for nested table content.
+The default non-HTML bootstrap paragraph materializes the original
+Frame contents pool style. The optional frame field preserves older
+Worker documents.
+
+TXT follows the original first-frame branch when the full body is one
+empty paragraph. The range ends at that frame's structural end, and
+ordinary documents and clipboard selections keep their own ranges.
+WRITER399 records the source conditions. ODF text-frame SAX and
+browser page projection are separate consumers of the same native frame.

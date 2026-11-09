@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-text-frame-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-text-frame-codec.ts",
+          "marker": "encodeTextFrames"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
+    "responsibilities": [
+      "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}

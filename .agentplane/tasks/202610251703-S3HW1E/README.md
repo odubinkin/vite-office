@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 522
+revision: 525
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T21:27:56.222Z"
+  updated_at: "2026-11-09T21:35:17.630Z"
   updated_by: "CODER"
-  note: "RTF97 verified 168 focused tests, native direction and brush storage, mounted editor, static checks and Writer/shared provenance. Keep the task open for the approved anchored-frame and remaining filter audit."
-  attempts: 108
+  note: "RTF98 verified native text-fly Worker transfer and full-document TXT first-frame range with 126 focused tests and static/registry checks. ODF and browser frame consumers remain in scope."
+  attempts: 109
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1733,8 +1736,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:35:17.630Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF98 verified native text-fly Worker transfer and full-document TXT first-frame range with 126 focused tests and static/registry checks. ODF and browser frame consumers remain in scope."
+  -
+    type: "status"
+    at: "2026-11-09T21:35:23.058Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:28:03.821Z"
+doc_updated_at: "2026-11-09T21:35:23.058Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4689,6 +4705,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T21:35:17.630Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF98 verified native text-fly Worker transfer and full-document TXT first-frame range with 126 focused tests and static/registry checks. ODF and browser frame consumers remain in scope.
+    Attempts: 109
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:35:17.009Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6609,6 +6655,8 @@ sections:
     - Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.
 
     RTF97 checkpoint. ODF table, row and cell styles retain the source background brush mapping, table/cell writing direction, canonical tokens and source extension-only output for bt-lr and tb-rl90 in cell styles. Worker uses the existing native item codec and keeps packed alpha at each owner. The browser table projects original frame items to CSS. The existing Open workflow reopens the actual persisted ODT containing the nested RTF cell. WRITER398 documents source MID_BACK_COLOR flattening partial alpha to transparent. Final focused Writer 161/13 and shared 7/3 tests pass. The first focused run failed two fixture constructors from an incorrect Color import, corrected in the final run. Typecheck, changed-path ESLint and Prettier, dependency, JSDoc, size, tree, Which, provenance, Writer/shared registry and diff checks passed. Anchored text-frame persistence and rendering, floating RTF mapping and malformed nesting recovery remain subject to the approved current-model audit.
+
+    RTF98 checkpoint. Native HTML-created text fly frames now cross Worker structured clone as optional records. The codec restores actual paragraph or character anchor, native original item deltas, ordered table/text content and bookmarks through MakeFlySection and the existing text/table codec. The internal frame-contents style uses the native Standard parent. TXT now selects the first native fly's structural range only for the original one-empty-body case; WRITER399 records this. Final 126 focused Writer tests in 10 files passed. Initial Worker test exposed the missing built-in frame-contents admission; fixed with original pool entry. Initial TXT test asserted an empty selected paragraph without using its configured no-last-line option; corrected the test to exercise the configured selection. Typecheck, changed ESLint/Prettier, dependency, JSDoc, source-tree, size, Which, provenance, Writer registry and diff checks passed. ODF SAX/native frame projection and browser page layout remain open. There was no full replay because this is a checkpoint within the same AgentPlane task.
 id_source: "generated"
 ---
 ## Summary
@@ -9574,6 +9622,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T21:35:17.630Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF98 verified native text-fly Worker transfer and full-document TXT first-frame range with 126 focused tests and static/registry checks. ODF and browser frame consumers remain in scope.
+Attempts: 109
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:35:17.009Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11498,3 +11576,5 @@ The source CLCBPAT/CLCBPATRAW and CLSHDNG branches now populate the real nested 
 - Browser ODT/Worker persistence and visual display of table brushes and writing direction remain the next connected slice. No full-suite run in this checkpoint.
 
 RTF97 checkpoint. ODF table, row and cell styles retain the source background brush mapping, table/cell writing direction, canonical tokens and source extension-only output for bt-lr and tb-rl90 in cell styles. Worker uses the existing native item codec and keeps packed alpha at each owner. The browser table projects original frame items to CSS. The existing Open workflow reopens the actual persisted ODT containing the nested RTF cell. WRITER398 documents source MID_BACK_COLOR flattening partial alpha to transparent. Final focused Writer 161/13 and shared 7/3 tests pass. The first focused run failed two fixture constructors from an incorrect Color import, corrected in the final run. Typecheck, changed-path ESLint and Prettier, dependency, JSDoc, size, tree, Which, provenance, Writer/shared registry and diff checks passed. Anchored text-frame persistence and rendering, floating RTF mapping and malformed nesting recovery remain subject to the approved current-model audit.
+
+RTF98 checkpoint. Native HTML-created text fly frames now cross Worker structured clone as optional records. The codec restores actual paragraph or character anchor, native original item deltas, ordered table/text content and bookmarks through MakeFlySection and the existing text/table codec. The internal frame-contents style uses the native Standard parent. TXT now selects the first native fly's structural range only for the original one-empty-body case; WRITER399 records this. Final 126 focused Writer tests in 10 files passed. Initial Worker test exposed the missing built-in frame-contents admission; fixed with original pool entry. Initial TXT test asserted an empty selected paragraph without using its configured no-last-line option; corrected the test to exercise the configured selection. Typecheck, changed ESLint/Prettier, dependency, JSDoc, source-tree, size, Which, provenance, Writer registry and diff checks passed. ODF SAX/native frame projection and browser page layout remain open. There was no full replay because this is a checkpoint within the same AgentPlane task.
