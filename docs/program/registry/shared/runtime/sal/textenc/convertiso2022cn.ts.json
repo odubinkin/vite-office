@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/convertiso2022cn.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/convertiso2022cn.ts#ImplConvertIso2022CnToUnicode",
+        "apps/office/src/sal/textenc/cjk.test.ts",
+        "apps/office/src/sal/textenc/cjk.native.json",
+        "scripts/sal-cjk-native-probe.mjs",
+        "sal/textenc/convertiso2022cn.cxx",
+        "apps/office/src/sal/textenc/cns116431992.tables.json",
+        "scripts/generate-sal-cjk-converters.py"
+      ],
+      "justification": "Original GB2312 and CNS planes 1 and 2, escape and shift states, preferred active designation, partial writes, surrogate and flush behavior are preserved. Complete native SAL ABI, invalid memory access and unrelated encodings remain outside the verified converter slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplConvertIso2022CnToUnicode",
+        "ImplConvertUnicodeToIso2022Cn",
+        "ImplCreateIso2022CnToUnicodeContext",
+        "ImplCreateUnicodeToIso2022CnContext",
+        "ImplIso2022CnTranslateTo2312"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/convertiso2022cn.cxx",
+      "upstreamSymbols": [
+        "ImplConvertIso2022CnToUnicode",
+        "ImplConvertUnicodeToIso2022Cn",
+        "ImplCreateIso2022CnToUnicodeContext",
+        "ImplCreateUnicodeToIso2022CnContext",
+        "ImplIso2022CnTranslateTo2312"
+      ]
+    }
+  }
+}

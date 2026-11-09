@@ -6,6 +6,9 @@ import * as utf8 from "./tcvtutf8";
 import * as utf7 from "./tcvtutf7";
 import * as iscii from "./convertisciidevangari";
 import * as jp from "./convertiso2022jp";
+import * as gb18030 from "./convertgb18030";
+import * as cn from "./convertiso2022cn";
+import * as sharedContext from "./context";
 import * as kr from "./convertiso2022kr";
 import { ImplSymbolToUnicode, ImplUnicodeToSymbol } from "./tcvtbyte";
 import {
@@ -137,6 +140,10 @@ export function rtl_createTextToUnicodeContext(
       return iscii.ImplCreateIsciiDevanagariToUnicodeContext();
     case "iso2022jp":
       return jp.ImplCreateIso2022JpToUnicodeContext();
+    case "gb18030":
+      return gb18030.ImplCreateGb18030ToUnicodeContext();
+    case "iso2022cn":
+      return cn.ImplCreateIso2022CnToUnicodeContext();
     case "iso2022kr":
       return kr.ImplCreateIso2022KrToUnicodeContext();
     default:
@@ -163,6 +170,12 @@ export function rtl_resetTextToUnicodeContext(
       break;
     case "iso2022jp":
       jp.ImplResetIso2022JpToUnicodeContext(context as jp.ImplIso2022JpToUnicodeContext);
+      break;
+    case "gb18030":
+      gb18030.ImplResetGb18030ToUnicodeContext(context as gb18030.ImplGb18030ToUnicodeContext);
+      break;
+    case "iso2022cn":
+      cn.ImplResetIso2022CnToUnicodeContext(context as cn.ImplIso2022CnToUnicodeContext);
       break;
     case "iso2022kr":
       kr.ImplResetIso2022KrToUnicodeContext(context as kr.ImplIso2022KrToUnicodeContext);
@@ -268,6 +281,30 @@ export function rtl_convertTextToUnicode(
         status,
         consumed,
       );
+    case "gb18030":
+      return gb18030.ImplConvertGb18030ToUnicode(
+        converter.data,
+        context as gb18030.ImplGb18030ToUnicodeContext | null,
+        source,
+        sourceBytes,
+        destination,
+        destinationChars,
+        flags,
+        status,
+        consumed,
+      );
+    case "iso2022cn":
+      return cn.ImplConvertIso2022CnToUnicode(
+        converter.data,
+        context as cn.ImplIso2022CnToUnicodeContext | null,
+        source,
+        sourceBytes,
+        destination,
+        destinationChars,
+        flags,
+        status,
+        consumed,
+      );
     case "iso2022kr":
       return kr.ImplConvertIso2022KrToUnicode(
         null,
@@ -362,6 +399,10 @@ export function rtl_createUnicodeToTextContext(
       return iscii.ImplCreateUnicodeToIsciiDevanagariContext();
     case "iso2022jp":
       return jp.ImplCreateUnicodeToIso2022JpContext();
+    case "gb18030":
+      return sharedContext.ImplCreateUnicodeToTextContext();
+    case "iso2022cn":
+      return cn.ImplCreateUnicodeToIso2022CnContext();
     case "iso2022kr":
       return kr.ImplCreateUnicodeToIso2022KrContext();
     default:
@@ -388,6 +429,14 @@ export function rtl_resetUnicodeToTextContext(
       break;
     case "iso2022jp":
       jp.ImplResetUnicodeToIso2022JpContext(context as jp.ImplUnicodeToIso2022JpContext);
+      break;
+    case "gb18030":
+      sharedContext.ImplResetUnicodeToTextContext(
+        context as sharedContext.ImplUnicodeToTextContext,
+      );
+      break;
+    case "iso2022cn":
+      cn.ImplResetUnicodeToIso2022CnContext(context as cn.ImplUnicodeToIso2022CnContext);
       break;
     case "iso2022kr":
       kr.ImplResetUnicodeToIso2022KrContext(context as kr.ImplUnicodeToIso2022KrContext);
@@ -515,6 +564,30 @@ export function rtl_convertUnicodeToText(
       return jp.ImplConvertUnicodeToIso2022Jp(
         null,
         context as jp.ImplUnicodeToIso2022JpContext | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "gb18030":
+      return gb18030.ImplConvertUnicodeToGb18030(
+        converter.data,
+        context as sharedContext.ImplUnicodeToTextContext | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "iso2022cn":
+      return cn.ImplConvertUnicodeToIso2022Cn(
+        converter.data,
+        context as cn.ImplUnicodeToIso2022CnContext | null,
         source,
         sourceChars,
         destination,

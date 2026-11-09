@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertgb18030.ts",
+    "upstreamPath": "sal/textenc/convertgb18030.cxx",
+    "localSymbols": [
+      "ImplConvertGb18030ToUnicode",
+      "ImplConvertUnicodeToGb18030",
+      "ImplCreateGb18030ToUnicodeContext",
+      "ImplResetGb18030ToUnicodeContext"
+    ],
+    "upstreamSymbols": [
+      "ImplConvertGb18030ToUnicode",
+      "ImplConvertUnicodeToGb18030",
+      "ImplCreateGb18030ToUnicodeContext",
+      "ImplResetGb18030ToUnicodeContext"
+    ],
+    "preservedResponsibilities": [
+      "The original GB18030-2000 state machine, four-byte linear and gap tables, surrogate tracking, bad-input statuses, consumed units and capacity checks are retained."
+    ],
+    "omittedResponsibilities": [
+      "Complete native SAL ABI, invalid memory access and unrelated encodings remain outside the verified converter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertgb18030.ts",
+          "marker": "ImplConvertGb18030ToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.test.ts",
+          "marker": "matches native"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.native.json",
+          "marker": "driverHash"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertgb18030.tables.json",
+          "marker": "sourceSha256"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx",
+          "marker": "ImplConvertGb18030ToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertgb18030.tab",
+          "marker": "aImplGb18030ConvertData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/generate/gb180302000.tab",
+          "marker": "aImplGb180302000ToUnicodeRanges"
+        }
+      ]
+    }
+  }
+}

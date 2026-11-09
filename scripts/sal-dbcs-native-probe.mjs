@@ -82,6 +82,7 @@ const names = [
   "MS_936",
   "MS_949",
   "MS_950",
+  "BIG5",
   "EUC_CN",
   "EUC_KR",
   "MS_1361",

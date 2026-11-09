@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertiso2022cn.ts",
+    "upstreamPath": "sal/textenc/convertiso2022cn.cxx",
+    "localSymbols": [
+      "ImplConvertIso2022CnToUnicode",
+      "ImplConvertUnicodeToIso2022Cn",
+      "ImplCreateIso2022CnToUnicodeContext",
+      "ImplCreateUnicodeToIso2022CnContext",
+      "ImplIso2022CnTranslateTo2312"
+    ],
+    "upstreamSymbols": [
+      "ImplConvertIso2022CnToUnicode",
+      "ImplConvertUnicodeToIso2022Cn",
+      "ImplCreateIso2022CnToUnicodeContext",
+      "ImplCreateUnicodeToIso2022CnContext",
+      "ImplIso2022CnTranslateTo2312"
+    ],
+    "preservedResponsibilities": [
+      "Original GB2312 and CNS planes 1 and 2, escape and shift states, preferred active designation, partial writes, surrogate and flush behavior are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Complete native SAL ABI, invalid memory access and unrelated encodings remain outside the verified converter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022cn.ts",
+          "marker": "ImplConvertIso2022CnToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.test.ts",
+          "marker": "matches native"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.native.json",
+          "marker": "driverHash"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cns116431992.tables.json",
+          "marker": "sourceSha256"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022cn.cxx",
+          "marker": "ImplConvertIso2022CnToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022cn.tab",
+          "marker": "aImplIso2022CnConvertData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/generate/cns116431992.tab",
+          "marker": "aImplCns116431992ToUnicodePlaneOffsets"
+        }
+      ]
+    }
+  }
+}

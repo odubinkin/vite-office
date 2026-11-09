@@ -4,11 +4,14 @@ import {
   RTL_TEXTENCODING_APPLE_CHINTRAD,
   RTL_TEXTENCODING_APPLE_JAPANESE,
   RTL_TEXTENCODING_APPLE_KOREAN,
+  RTL_TEXTENCODING_BIG5,
   RTL_TEXTENCODING_EUC_CN,
   RTL_TEXTENCODING_EUC_JP,
   RTL_TEXTENCODING_EUC_KR,
+  RTL_TEXTENCODING_GB_18030,
   RTL_TEXTENCODING_ISCII_DEVANAGARI,
   RTL_TEXTENCODING_JIS_X_0201,
+  RTL_TEXTENCODING_ISO_2022_CN,
   RTL_TEXTENCODING_ISO_2022_JP,
   RTL_TEXTENCODING_ISO_2022_KR,
   RTL_TEXTENCODING_MS_1361,
@@ -23,6 +26,8 @@ import {
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 
+import { aImplGb18030ConvertData } from "./convertgb18030";
+import { aImplIso2022CnConvertData } from "./convertiso2022cn";
 import { aImplAPPLEJAPANESEDBCSCvtData } from "./tcvtjp6.applejapanese";
 import { aImplEUCJPCvtData } from "./tcvtjp6.eucjp";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
@@ -34,6 +39,7 @@ import { aImplAPPLECHINSIMPDBCSCvtData } from "./tcvtscn6.applechinsimp";
 import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
 import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
 import { aImplAPPLECHINTRADDBCSCvtData } from "./tcvttcn6.applechintrad";
+import { aImplBIG5DBCSCvtData } from "./tcvttcn6.big5";
 import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
 import type { ImplByteConvertData, ImplDBCSConvertData, ImplEUCJPConvertData } from "./tenchelp";
 
@@ -51,6 +57,8 @@ export function getSingleByteConvertData(
   | Readonly<{ kind: "iscii" }>
   | Readonly<{ kind: "iso2022jp" }>
   | Readonly<{ kind: "iso2022kr" }>
+  | Readonly<{ kind: "gb18030"; data: typeof aImplGb18030ConvertData }>
+  | Readonly<{ kind: "iso2022cn"; data: typeof aImplIso2022CnConvertData }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData; textToUnicode?: null }>
   | undefined result. */
@@ -64,6 +72,8 @@ export function getTextToUnicodeData(
   | Readonly<{ kind: "iscii" }>
   | Readonly<{ kind: "iso2022jp" }>
   | Readonly<{ kind: "iso2022kr" }>
+  | Readonly<{ kind: "gb18030"; data: typeof aImplGb18030ConvertData }>
+  | Readonly<{ kind: "iso2022cn"; data: typeof aImplIso2022CnConvertData }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData; textToUnicode?: null }>
   | undefined {
@@ -74,6 +84,10 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_EUC_JP) return { kind: "eucjp", data: aImplEUCJPCvtData };
   if (encoding === RTL_TEXTENCODING_ISCII_DEVANAGARI) return { kind: "iscii" };
   if (encoding === RTL_TEXTENCODING_ISO_2022_JP) return { kind: "iso2022jp" };
+  if (encoding === RTL_TEXTENCODING_GB_18030)
+    return { kind: "gb18030", data: aImplGb18030ConvertData };
+  if (encoding === RTL_TEXTENCODING_ISO_2022_CN)
+    return { kind: "iso2022cn", data: aImplIso2022CnConvertData };
   if (encoding === RTL_TEXTENCODING_ISO_2022_KR) return { kind: "iso2022kr" };
   if (encoding === RTL_TEXTENCODING_SHIFT_JIS) return { kind: "dbcs", data: aImplSJISDBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
@@ -87,6 +101,7 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_EUC_KR) return { kind: "dbcs", data: aImplKSC5601DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_KOREAN)
     return { kind: "dbcs", data: aImplMS949DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_BIG5) return { kind: "dbcs", data: aImplBIG5DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_950) return { kind: "dbcs", data: aImplMS950DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_CHINTRAD)
     return { kind: "dbcs", data: aImplAPPLECHINTRADDBCSCvtData };

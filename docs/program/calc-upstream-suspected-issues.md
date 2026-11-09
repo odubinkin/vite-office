@@ -5237,3 +5237,27 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/icu-reference/source/i18n/csrucode.cpp`, `CharsetRecog_UTF_32::match`.
 - The score treats values greater than or equal to U+10FFFF as invalid. A single UTF-32BE unit `00 10 FF FF` therefore produces no UTF-32BE match, even though U+10FFFF is representable as a Unicode scalar value.
 - Preserve the strict source cutoff and leave scalar conversion to the separate converter.
+
+### CALC-490 — Big5 reverse table describes more entries than it owns
+
+- Source `vendor/libreoffice-reference/sal/textenc/tcvttcn6.tab`, `aBIG5DBCSHighTab`, and `sal/textenc/tcvttcn2.tab`, `aImplUniToDBCSTab_BIG5_8B`.
+- The U+8B page accepts low bytes through FF, while the array has 160 entries. U+8BA0 through U+8BFF therefore index beyond the original array.
+- Preserve the table interval and original entries. The native comparison classifies the 96 out-of-bounds requests by actual array extent and compares only defined accesses.
+
+### CALC-491 — ISO-2022-CN inherits a GB2312 reverse-table overread
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertiso2022cn.cxx`, `ImplIso2022CnTranslateTo2312`, and `sal/textenc/tcvtscn6.tab`, `aGB2312DBCSHighTab`.
+- The reverse lookup reads one unit beyond `aImplUniToDBCSTab_GB_98` for U+98E9 with the initial designator. The unchanged native encoder reproduces a global-buffer-overflow under AddressSanitizer.
+- Preserve the table and lookup order. The native comparison excludes that undefined read from the byte digest.
+
+### CALC-492 — Streaming decoders retain an already-adjusted input index after a full buffer
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx`, `ImplConvertGb18030ToUnicode`, and `sal/textenc/convertiso2022cn.cxx`, `ImplConvertIso2022CnToUnicode`.
+- The GB18030 decoder multiplies its partial index before checking output space and saves the result when the final byte remains unconsumed. The ISO-2022-CN decoder adds 0x80 to the GB2312 row before the same check. Retrying the unconsumed byte can apply the arithmetic again and change the mapping or cause an out-of-bounds read.
+- Keep the mutation order and consumed-input boundary. The GB18030 supplementary case `90 30 81 30` with one output unit retains index 189000 after consuming three bytes. Retrying `30` with two output units yields the undefined multibyte replacement.
+
+### CALC-493 — Two SAL encoders retain an unmatched high surrogate on flush
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx`, `ImplConvertUnicodeToGb18030`, and `sal/textenc/convertiso2022cn.cxx`, `ImplConvertUnicodeToIso2022Cn`.
+- With `FLUSH` set, a final unmatched high surrogate sets `SRCBUFFERTOSMALL` and remains in the context. Without `FLUSH`, the original path applies the invalid-input policy and clears the surrogate if that policy can finish.
+- Keep the condition and resulting state. The native comparison includes all single surrogate units.

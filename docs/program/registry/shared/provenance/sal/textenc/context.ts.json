@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/context.ts",
+    "upstreamPath": "sal/textenc/context.cxx",
+    "localSymbols": [
+      "ImplCreateUnicodeToTextContext",
+      "ImplResetUnicodeToTextContext"
+    ],
+    "upstreamSymbols": [
+      "ImplCreateUnicodeToTextContext",
+      "ImplResetUnicodeToTextContext"
+    ],
+    "preservedResponsibilities": [
+      "The shared source context owns the pending high surrogate for the GB18030 encoder. JavaScript ownership supplies the native destructor's release-only behavior."
+    ],
+    "omittedResponsibilities": [
+      "Complete native SAL ABI, invalid memory access and unrelated encodings remain outside the verified converter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/context.ts",
+          "marker": "ImplCreateUnicodeToTextContext"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.test.ts",
+          "marker": "matches native"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/cjk.native.json",
+          "marker": "driverHash"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/context.cxx",
+          "marker": "ImplCreateUnicodeToTextContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/context.hxx",
+          "marker": "ImplUnicodeToTextContext"
+        }
+      ]
+    }
+  }
+}

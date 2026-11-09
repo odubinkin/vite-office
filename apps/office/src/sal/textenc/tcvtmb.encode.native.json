@@ -1,6 +1,6 @@
 {
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
-  "driverHash": "d1a43b99022d98443a1332093715fb20905d161be61daf54ec056ab1415bf382",
+  "driverHash": "00c9c8c9b20fc1eb11d75d2bcc860f0c2613a8002fc47044945df037d26a9703",
   "scope": "Unchanged original DBCS/EUC-JP reverse bodies and native table initializers; Every BMP unit is audited under UNDEFINED_ERROR; original out-of-bounds table reads are classified and excluded from byte digests, never executed. Defined cases and private-byte profile are compiled observations. Signed plain char is explicit. Native ignore-classification calls trap and are outside this witness. This is not a full SAL or LibreOffice service certificate.",
   "sources": {
     "sal/textenc/tenchelp.hxx": "b62d3429f7780648bf3d7f86834a55a07b23dd3a8685c1193770bdb52b3c8f44",
@@ -102,6 +102,20 @@
       ]
     },
     {
+      "encoding": 68,
+      "hash": 3978142462,
+      "undefinedUnits": [
+        35744, 35745, 35746, 35747, 35748, 35749, 35750, 35751, 35752, 35753, 35754, 35755, 35756,
+        35757, 35758, 35759, 35760, 35761, 35762, 35763, 35764, 35765, 35766, 35767, 35768, 35769,
+        35770, 35771, 35772, 35773, 35774, 35775, 35776, 35777, 35778, 35779, 35780, 35781, 35782,
+        35783, 35784, 35785, 35786, 35787, 35788, 35789, 35790, 35791, 35792, 35793, 35794, 35795,
+        35796, 35797, 35798, 35799, 35800, 35801, 35802, 35803, 35804, 35805, 35806, 35807, 35808,
+        35809, 35810, 35811, 35812, 35813, 35814, 35815, 35816, 35817, 35818, 35819, 35820, 35821,
+        35822, 35823, 35824, 35825, 35826, 35827, 35828, 35829, 35830, 35831, 35832, 35833, 35834,
+        35835, 35836, 35837, 35838, 35839
+      ]
+    },
+    {
       "encoding": 70,
       "hash": 1191029079,
       "undefinedUnits": [39145]
@@ -129,7 +143,7 @@
   ],
   "privateBytes": [0, 127, 255, 128, 255, 255],
   "roundTrip": {
-    "checked": 151032,
+    "checked": 164912,
     "divergences": {
       "56:unmappable": 1,
       "57:alias": 1,

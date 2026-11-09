@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 246
+revision: 249
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:48:56.531Z"
+  updated_at: "2026-11-09T21:06:04.362Z"
   updated_by: "CODER"
-  note: "Verified original ICU charset detection and native CSV option defaults. Pinned native comparison matched 76,524 inputs and 177,745 ranked results. Continue with Big5, GB18030 and ISO-2022-CN native converter registration and CSV conversion, then shell overflow status and final acceptance."
-  attempts: 65
+  note: "Verified source Big5, GB18030 and ISO-2022-CN dispatch, 4,105,147 defined native samples and streaming cases, 302 shared and 200 Calc tests, and production Chromium CSV flow. Continue source shell overflow diagnostics and final scoped acceptance."
+  attempts: 66
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1368,8 +1371,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:06:04.362Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified source Big5, GB18030 and ISO-2022-CN dispatch, 4,105,147 defined native samples and streaming cases, 302 shared and 200 Calc tests, and production Chromium CSV flow. Continue source shell overflow diagnostics and final scoped acceptance."
+  -
+    type: "status"
+    at: "2026-11-09T21:06:17.115Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:49:15.387Z"
+doc_updated_at: "2026-11-09T21:06:17.115Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3339,6 +3355,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T21:06:04.362Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified source Big5, GB18030 and ISO-2022-CN dispatch, 4,105,147 defined native samples and streaming cases, 302 shared and 200 Calc tests, and production Chromium CSV flow. Continue source shell overflow diagnostics and final scoped acceptance.
+    Attempts: 66
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:06:02.412Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4842,6 +4888,13 @@ sections:
     - SvStream now follows the original BOM check, 4096-byte sample, rewind, exact supported-name mapping and UTF-16 endian setting. The original best match is used alone. ScAsciiOptions distinguishes absent and present-empty import options and uses the source 500ms monotonic separator-scan timeout after a physical-line read. The browser scheduler shares the original clock binding.
     - Verified 203 focused Calc tests, 19 final option/shell cases after placing encoding assertions in a dedicated test file, 36 shared detector/stream/clock/scheduler tests, 47 dependency tooling tests, the production Vite build and Chromium CSV/ODS/download, typecheck, lint, docs, source tree, file size, Calc resources, provenance, shared/Calc inventory and generator reproducibility. The same AgentPlane task remains open and no full suite is due.
     - Audit of the actual SAL table found that the source detector can select Big5, GB18030 and ISO-2022-CN, while their corresponding native converter entries are still absent from the port. The source table preserves those selections. Complete the original converter owners and verify their normal CSV paths before claiming final encoding acceptance. Calc shell overflow status forwarding is also still open.
+
+    ### Native SAL encodings selected by CSV detection
+
+    - Connected the original Big5 descriptor and shared MS950 EUDC tables to the DBCS converter. Ported both GB18030-2000 directions and both ISO-2022-CN directions with original generated ranges, GB2312 and CNS 11643-1992 planes 1 and 2, context owners, status/consumption and destination-capacity branches. All three encodings use the same registered SAL dispatch in both directions and require no CSV-specific fallback or host charset substitution.
+    - Ran the unchanged pinned C++ converter bodies and native tables with ASan/UBSan. The fixture verifies 1,811,484 decode and 2,293,663 defined encode observations plus two streaming retries. The native DBCS corpus now includes 13 descriptors and 164,912 forward/reverse comparisons. CALC-490 through CALC-493 record original table bounds, retained streaming indices and flush behavior. Native undefined reads are reported separately from byte comparisons.
+    - Focused tests passed in 25 shared files (302 cases) and 8 Calc files (200 cases), including native ICU auto-detection and exact CSV shell export for all three encodings. Vite production build and the existing Chromium CSV import, primary ODS save and CSV download passed. Generated table check, scoped ESLint, typecheck, provenance, both inventories, dependency boundaries, Calc resources, documentation, source tree, file sizes and git diff check passed. The global lint initially flagged assertion syntax in new code, which was replaced by typed native-index projections and rechecked with scoped ESLint.
+    - Full suite not run, per same open task cadence. Next, connect existing import overflow flags to the original shell diagnostics and finish the focused acceptance audit. Scratch native build and log files remain outside the source commit.
 id_source: "generated"
 ---
 ## Summary
@@ -6820,6 +6873,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T21:06:04.362Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified source Big5, GB18030 and ISO-2022-CN dispatch, 4,105,147 defined native samples and streaming cases, 302 shared and 200 Calc tests, and production Chromium CSV flow. Continue source shell overflow diagnostics and final scoped acceptance.
+Attempts: 66
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:06:02.412Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8327,3 +8410,10 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - SvStream now follows the original BOM check, 4096-byte sample, rewind, exact supported-name mapping and UTF-16 endian setting. The original best match is used alone. ScAsciiOptions distinguishes absent and present-empty import options and uses the source 500ms monotonic separator-scan timeout after a physical-line read. The browser scheduler shares the original clock binding.
 - Verified 203 focused Calc tests, 19 final option/shell cases after placing encoding assertions in a dedicated test file, 36 shared detector/stream/clock/scheduler tests, 47 dependency tooling tests, the production Vite build and Chromium CSV/ODS/download, typecheck, lint, docs, source tree, file size, Calc resources, provenance, shared/Calc inventory and generator reproducibility. The same AgentPlane task remains open and no full suite is due.
 - Audit of the actual SAL table found that the source detector can select Big5, GB18030 and ISO-2022-CN, while their corresponding native converter entries are still absent from the port. The source table preserves those selections. Complete the original converter owners and verify their normal CSV paths before claiming final encoding acceptance. Calc shell overflow status forwarding is also still open.
+
+### Native SAL encodings selected by CSV detection
+
+- Connected the original Big5 descriptor and shared MS950 EUDC tables to the DBCS converter. Ported both GB18030-2000 directions and both ISO-2022-CN directions with original generated ranges, GB2312 and CNS 11643-1992 planes 1 and 2, context owners, status/consumption and destination-capacity branches. All three encodings use the same registered SAL dispatch in both directions and require no CSV-specific fallback or host charset substitution.
+- Ran the unchanged pinned C++ converter bodies and native tables with ASan/UBSan. The fixture verifies 1,811,484 decode and 2,293,663 defined encode observations plus two streaming retries. The native DBCS corpus now includes 13 descriptors and 164,912 forward/reverse comparisons. CALC-490 through CALC-493 record original table bounds, retained streaming indices and flush behavior. Native undefined reads are reported separately from byte comparisons.
+- Focused tests passed in 25 shared files (302 cases) and 8 Calc files (200 cases), including native ICU auto-detection and exact CSV shell export for all three encodings. Vite production build and the existing Chromium CSV import, primary ODS save and CSV download passed. Generated table check, scoped ESLint, typecheck, provenance, both inventories, dependency boundaries, Calc resources, documentation, source tree, file sizes and git diff check passed. The global lint initially flagged assertion syntax in new code, which was replaced by typed native-index projections and rechecked with scoped ESLint.
+- Full suite not run, per same open task cadence. Next, connect existing import overflow flags to the original shell diagnostics and finish the focused acceptance audit. Scratch native build and log files remain outside the source commit.
