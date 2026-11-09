@@ -43,7 +43,8 @@
       "getLongDateDayOfWeekSep",
       "getLongDateDaySep",
       "getLongDateMonthSep",
-      "getTimeSep"
+      "getTimeSep",
+      "LocaleDataWrapper"
     ],
     "upstreamSymbols": [
       "LocaleDataWrapper::mapMeasurementStringToEnum",
@@ -63,7 +64,8 @@
       "LocaleDataWrapper::getCurrPositiveFormat",
       "LocaleDataWrapper::getCurrNegativeFormat",
       "LocaleDataWrapper::getAllCurrencies",
-      "LocaleDataWrapper::getInstalledLocaleNames"
+      "LocaleDataWrapper::getInstalledLocaleNames",
+      "LocaleDataWrapper::getDate"
     ],
     "preservedResponsibilities": [
       "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit.",
@@ -78,10 +80,11 @@
       "Task AQF9AG ports scanCurrFormatImpl/loadCurrencyFormats over source-ordered CURRENCY codes, retaining medium/default and negative-section selection, escaped quotes, bracketed currency tokens, symbol spacing and native positive/negative layout indices; getCurrZeroChar preserves the upstream ASCII-zero stub.",
       "Task AQF9AG adds a wrapper-owned Locale for getAllCurrencies delegation and source-ordered installed Locale enumeration consumed by SvNumberFormatter currency table initialization.",
       "Task AQF9AG owns and refreshes the native LC_CTYPE long-date day-of-week, day and month separators for the input scanner.",
-      "Task AQF9AG adds the source TIME_SEPARATOR getter with a stable borrowed OUString field, refreshed on locale change."
+      "Task AQF9AG adds the source TIME_SEPARATOR getter with a stable borrowed OUString field, refreshed on locale change.",
+      "The original short-date representation writes the source separators, date order, zero-padded month/day and sign-aware minimum-four-digit year."
     ],
     "omittedResponsibilities": [
-      "Full ScDocCfg,user configuration,formatter services and connected Calc document/UI/ODS remain pending."
+      "Unconsumed locale text and long-date output remain outside this change."
     ],
     "evidence": {
       "local": [
@@ -96,6 +99,10 @@
         {
           "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
           "marker": "getTimeSep"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -130,6 +137,14 @@
         {
           "path": "include/unotools/localedatawrapper.hxx",
           "marker": "getTimeSep()"
+        },
+        {
+          "path": "unotools/source/i18n/localedatawrapper.cxx",
+          "marker": "getDate"
+        },
+        {
+          "path": "sc/source/core/tool/editutil.cxx",
+          "marker": "GetCellFieldValue"
         }
       ]
     }

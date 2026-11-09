@@ -1,6 +1,8 @@
 /** @fileoverview Consumed native ScDocument observable destructor from documen2.cxx,running on its original instance before GC reclaims physical stores. */
 import { CellAttributeHelper } from "../../../inc/patattr";
 import { ScChartListenerCollection } from "../../../inc/chartlis";
+import type { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
+import { ScFieldEditEngine } from "../tool/editutil";
 import { ScPoolHelper } from "../inc/poolhelp";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -25,10 +27,13 @@ export function Dispose(this: ScDocument): void {
   this["pUnoBroadcaster"] = null;
   uno?.Dispose();
   this.Clear();
+  this["mpEditEngine"]?.Dispose();
+  this["mpEditEngine"] = null;
   if (this["mxPoolHelper"] && !this.IsClipOrUndo()) this["mxPoolHelper"].SourceDocumentGone();
   this["mxPoolHelper"]?.release();
   this["mxPoolHelper"] = null;
   this["aDocName"].dispose();
+  this["mpShell"] = null;
 }
 
 /** Releases actual attribute registrations at document closure. @param this - Actual document instance. @returns Nothing. */
@@ -107,6 +112,24 @@ export function GetEditEnginePool(this: ScDocument): SfxItemPool {
   const helper = this["mxPoolHelper"];
   if (!helper) throw new Error("Document pool helper assertion");
   return helper.GetEditEnginePool();
+}
+
+/** Original borrowed document shell. @param this - Actual document. @returns Owning shell or null for detached documents. */
+export function GetDocumentShell(this: ScDocument): SfxObjectShell | null {
+  return this["mpShell"];
+}
+
+/** Binds the original shell reference when the browser shell adopts a document graph. @param this - Actual document. @param shell - Owning shell. @returns Nothing. */
+export function SetDocumentShell(this: ScDocument, shell: SfxObjectShell): void {
+  this["mpShell"] = shell;
+}
+
+/** Original document editor creation with layout and undo disabled. @param this - Actual document. @returns Borrowed editor. */
+export function GetEditEngine(this: ScDocument): ScFieldEditEngine {
+  const engine = new ScFieldEditEngine(this, this.GetEditEnginePool());
+  engine.SetUpdateLayout(false);
+  engine.EnableUndo(false);
+  return engine;
 }
 
 /** Original actual cell-attribute resource helper,partitioned unchanged from the facade. @param this - Actual document. @returns Borrowed canonical helper. */

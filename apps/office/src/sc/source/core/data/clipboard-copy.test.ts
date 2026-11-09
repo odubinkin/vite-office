@@ -1,4 +1,6 @@
 /** @fileoverview Native general clipboard column/table copying through actual typed storage and shared formula/metadata owners. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ScMergeAttr } from "../../../inc/attrib";
 import { expect, it } from "vitest";
@@ -27,6 +29,8 @@ function context(doc: ScDocument, clip: ScDocument): CopyFromClipContext {
   return new CopyFromClipContext(doc, null, clip, InsertDeleteFlags.CONTENTS, false, false);
 }
 const grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
+InitApplicationServiceManager(implementations);
+
 it("copies sparse source-tab content and original text metadata while preserving destination geometry and patterns", /** Sparse source indexes remain genuine clipboard slots. @returns Nothing. */ () => {
   const doc = new ScDocument(),
     clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);

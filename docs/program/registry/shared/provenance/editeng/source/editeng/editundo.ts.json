@@ -8,7 +8,8 @@
     "upstreamPath": "editeng/source/editeng/editundo.cxx",
     "localSymbols": [
       "EditUndoInsertChars",
-      "EditUndoSplitPara"
+      "EditUndoSplitPara",
+      "EditUndoSetParaAttribs"
     ],
     "upstreamSymbols": [
       "EditUndoInsertChars::EditUndoInsertChars",
@@ -17,13 +18,15 @@
       "EditUndoInsertChars::Merge",
       "EditUndoSplitPara::EditUndoSplitPara",
       "EditUndoSplitPara::Undo",
-      "EditUndoSplitPara::Redo"
+      "EditUndoSplitPara::Redo",
+      "EditUndoSetParaAttribs"
     ],
     "preservedResponsibilities": [
-      "Actual inserted-character and paragraph-split action constructors/Undo/Redo/Merge retain owned SAL text/position values, unsigned16 split narrowing, source outer engine calls, active-view selection timing, original stored-length redo selection and type/paragraph/adjacency-only merge. Native destruction binds existing shared Dispose for owned SAL values. No deletion/split/connect/view implementation is fabricated; those source dependencies remain mandatory."
+      "Actual inserted-character and paragraph-split action constructors/Undo/Redo/Merge retain owned SAL text/position values, unsigned16 split narrowing, source outer engine calls, active-view selection timing, original stored-length redo selection and type/paragraph/adjacency-only merge. Native destruction binds existing shared Dispose for owned SAL values. No deletion/split/connect/view implementation is fabricated; those source dependencies remain mandatory.",
+      "Paragraph attribute undo owns the source and replacement item sets and restores the original paragraph-end selection."
     ],
     "omittedResponsibilities": [
-      "Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending."
+      "Other edit undo families and interactive undo execution remain outside the document text-object slice."
     ],
     "evidence": {
       "local": [
@@ -33,6 +36,10 @@
         },
         {
           "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
           "marker": "it("
         }
       ],
@@ -44,6 +51,14 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/editeng/editundo.hxx",
           "marker": "class EditUndoInsertChars"
+        },
+        {
+          "path": "editeng/source/editeng/editundo.cxx",
+          "marker": "EditUndoSetParaAttribs"
+        },
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "SetParaAttribs"
         }
       ]
     }

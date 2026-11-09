@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit2.document.ts",
+    "upstreamPath": "editeng/source/editeng/impedit2.cxx",
+    "localSymbols": [
+      "DocumentImpEditEngine"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::ImpEditEngine",
+      "ImpEditEngine::Dispose",
+      "ImpEditEngine::UpdateFields"
+    ],
+    "preservedResponsibilities": [
+      "The document-only engine constructs the actual EditDoc, paragraph portion and edit status, and installs the original paragraph callbacks and document modification link.",
+      "The document engine exposes source rich-text insertion and field-refresh operations using the same actual EditDoc as literal import."
+    ],
+    "omittedResponsibilities": [
+      "The no-layout document scope omits interactive view formatting, device output, style notifications and selection-range editing."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.document.ts",
+          "marker": "DocumentImpEditEngine"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "Dispose"
+        },
+        {
+          "path": "editeng/source/editeng/impedit3.cxx",
+          "marker": "FormatAndLayout"
+        },
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "UpdateFields"
+        },
+        {
+          "path": "editeng/source/editeng/impedit4.cxx",
+          "marker": "ImpEditEngine::SetText"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit2.document.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The constructor and lifecycle for a document-owned editor are isolated from interactive view operations."
+    }
+  }
+}

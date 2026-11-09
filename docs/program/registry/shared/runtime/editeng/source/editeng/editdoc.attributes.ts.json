@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editdoc.attributes.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editdoc.attributes.ts#InsertAttrib",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "editeng/source/editeng/editdoc.cxx",
+        "editeng/source/editeng/ContentNode.cxx"
+      ],
+      "justification": "The native non-YRS insertion retains empty-range precedence, source-range trimming, splits and adjacent equivalent item expansion. YRS synchronization, interactive spell-check disablement and general selection attribute removal remain outside the document text slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InsertAttrib"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editdoc.cxx",
+      "upstreamSymbols": [
+        "EditDoc::InsertAttrib",
+        "EditDoc::InsertAttribInSelection"
+      ]
+    }
+  }
+}

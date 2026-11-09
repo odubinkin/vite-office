@@ -1,4 +1,6 @@
 /** @fileoverview Atomic Calc ODS shell replacement,confirmed save generations and real undo boundaries. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { expect, it, vi } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -20,6 +22,8 @@ import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 function state(title = "Opened") {
   return createDocument({ id: crypto.randomUUID(), suiteId: "calc", title });
 }
+
+InitApplicationServiceManager(implementations);
 
 it("opens CSV through the text filter and exports the canonical cells without adopting the export medium", /** Checks opens CSV through the text filter and exports the canonical cells without adopting the export medium. @returns Test completion or assertion result. */ async () => {
   const shell = new ScDocShell();

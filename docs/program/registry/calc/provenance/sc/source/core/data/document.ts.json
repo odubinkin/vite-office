@@ -63,7 +63,8 @@
       "ScDocument::SetNumberFormat",
       "ScDocument::SetString",
       "ScDocument::SetTextCell",
-      "ScDocument::SetEditText"
+      "ScDocument::SetEditText",
+      "GetEditEngine"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -97,10 +98,11 @@
       "AQF9AG represents original Latin/CJK/CTL scalar fields initialized to ScGlobal eLnge SYSTEM0 and exposes original GetLanguage reads for CSV date formatting. SetLanguage/pool-default/drawing updates remain unported, not fabricated. Existing pattern-area dispatch body moves unchanged to document10 to retain the source responsibility and file budget.",
       "AQF9AG restores original address-convention extraction and actual link-formula check flag/accessors/compiled-token dispatch. Existing frame traversal moves unchanged to document.frame; document.cxx remains its source origin.",
       "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
-      "Original document facade exposes the edit-engine pool accessor through documen2."
+      "Original document facade exposes the edit-engine pool accessor through documen2.",
+      "The document facade exposes its lazy native edit engine for literal text transfer and text-object creation."
     ],
     "omittedResponsibilities": [
-      "Concrete EditEngine creation and multiline CSV wiring remain incomplete."
+      "The browser document text-object slice only admits the consumed operations."
     ],
     "evidence": {
       "local": [
@@ -274,6 +276,10 @@
         },
         {
           "path": "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
           "marker": "it("
         }
       ],
@@ -465,6 +471,14 @@
         {
           "path": "sc/source/core/data/documen2.cxx",
           "marker": "ScDocument::GetEditEnginePool"
+        },
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "GetEditEngine"
+        },
+        {
+          "path": "sc/source/core/data/documen2.cxx",
+          "marker": "ScDocument::GetEditEngine"
         }
       ]
     }

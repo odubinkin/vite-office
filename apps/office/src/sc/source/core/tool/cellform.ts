@@ -3,6 +3,7 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 import type { Color } from "../../../../tools/inc/color";
 import { CellType, ScGlobal } from "../../../inc/global";
 import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -51,6 +52,21 @@ export const ScCellFormat = {
         return new OUString();
     }
   },
+  /** Original multiline display path keeps paragraph and feature expansion before scalar formatting. @param doc - Actual document. @param position - Source cell address. @param cell - Actual cell view. @returns Owned display text. */
+  GetOutputString(doc: ScDocument, position: ScAddress, cell: ScRefCellValue): OUString {
+    if (cell.isEmpty()) return new OUString();
+    if (cell.getType() === CellType.CELLTYPE_EDIT) {
+      const edit = cell.getEditText();
+      if (!edit) return new OUString();
+      const engine = doc.GetEditEngine();
+      engine.SetTextCurrentDefaults(edit);
+      return engine.GetText();
+    }
+    const context = doc.GetNonThreadedContext();
+    const format = doc.GetPattern(position)?.GetNumberFormat(context) ?? 0;
+    return ScCellFormat.GetString(cell, format, [null], context, doc);
+  },
+
   /** Original first GetString overload preserves color reset,context selection and scalar/formula evaluation order. The admitted core has native macro level0;macro callbacks and their running-cell branch remain unported. @param cell - Actual borrowed cell. @param format - Native format key. @param color - Native output pointer. @param context - Actual context or native null. @param doc - Actual document. @param nullValues - Original defaulttrue display-zero flag. @param formula - Original defaultfalse formula-output flag. @param star - Original defaultfalse formatter flag. @returns Owned native output. */
   GetString(
     cell: ScRefCellValue,

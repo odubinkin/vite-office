@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/editutil.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/editutil.cxx",
+    "localSymbols": [
+      "ScEditEngineDefaulter",
+      "ScFieldEditEngine",
+      "GetCellFieldValue"
+    ],
+    "upstreamSymbols": [
+      "ScEditEngineDefaulter::SetTextCurrentDefaults",
+      "ScEditEngineDefaulter::ApplyDefaults",
+      "ScFieldEditEngine::ScFieldEditEngine",
+      "ScEditUtil::GetCellFieldValue",
+      "ScFieldEditEngine::CalcFieldValue"
+    ],
+    "preservedResponsibilities": [
+      "The Calc document editor applies the actual edit language, field-marking control flags and original default-item and literal-text operations.",
+      "The Calc document editor expands rich text through the original owner and resolves supported field classes using native URL, date, sheet and shell values."
+    ],
+    "omittedResponsibilities": [
+      "Extended-time field producers, document metadata outside the existing shell title and field colors remain outside this working slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/editutil.ts",
+          "marker": "SetTextCurrentDefaults"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/editutil.cxx",
+          "marker": "ScFieldEditEngine"
+        },
+        {
+          "path": "sc/source/core/data/documen2.cxx",
+          "marker": "ScDocument::GetEditEngine"
+        },
+        {
+          "path": "sc/source/core/tool/editutil.cxx",
+          "marker": "CalcFieldValue"
+        },
+        {
+          "path": "sc/source/ui/docshell/docsh.cxx",
+          "marker": "rEngine.SetText( *pObj)"
+        }
+      ]
+    }
+  }
+}

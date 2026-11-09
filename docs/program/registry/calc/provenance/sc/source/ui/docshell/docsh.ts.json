@@ -28,13 +28,11 @@
       "Task AQF9AG makes AsciiSave test sal_Unicode delimiter codes for zero before taking source quote, separator and sep= header branches; the fixed-width width calculation follows the original operation order and sep= matching is ASCII-only.",
       "Task AQF9AG passes the CSV input stream into ScAsciiOptions::ReadFromString so DETECT separators use the upstream SfxObjectShell owner before ExtText2Doc consumes the source bytes.",
       "Task AQF9AG follows ScDocShell::ConvertTo for CSV sheet selection: zero exports the active sheet, minus one exports each sheet separately, positive numbers select one-based sheet indices, and invalid selectors fail. Browser downloads use the selected export medium's filter options.",
-      "AQF9AG restores source CSV ConvertFrom post-import order: ImportStream, StartAllListeners(), SetAllFormulasDirty(default context), then the existing medium/BOM/name completion. Imported dirty formulas are entered into the normal formula tree and their listeners use native whole-document traversal."
+      "AQF9AG restores source CSV ConvertFrom post-import order: ImportStream, StartAllListeners(), SetAllFormulasDirty(default context), then the existing medium/BOM/name completion. Imported dirty formulas are entered into the normal formula tree and their listeners use native whole-document traversal.",
+      "AsciiSave now expands edit objects through the original document-owned EditEngine before writing CSV text. The shell links adopted model graphs for field display."
     ],
     "omittedResponsibilities": [
-      "Full native menus,formatting/sidebar/status services,clipboard,rich/multiline cells,functions/ranges/cross-sheet references and locale-aware number formats remain outside this current-core slice.",
-      "Shared file dialogs,ODS filters,primary browser storage/autosave and close workflows are subsequent approved UI tasks;no recovery UI is introduced.",
-      "Token array copies share native const token identities;physical memory uses JS GC. Full native deep-copy/undo-document services and sheet reference transformation are not claimed.",
-      "Browser geometry is platform-owned;native row coordinates are projected onto a bounded physical scroll track. Exact VCL implementation parity is not claimed."
+      "Browser primary-media behavior remains separate from the native CSV conversion."
     ],
     "evidence": {
       "local": [
@@ -61,6 +59,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -71,6 +73,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx",
           "marker": "if (aOptions.nSheetToExport)"
+        },
+        {
+          "path": "sc/source/ui/docshell/docsh.cxx",
+          "marker": "AsciiSave"
+        },
+        {
+          "path": "sc/source/ui/docshell/docsh.cxx",
+          "marker": "rEngine.SetText( *pObj)"
         }
       ]
     }

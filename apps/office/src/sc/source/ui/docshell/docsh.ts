@@ -38,6 +38,7 @@ import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { CellType, ScGlobal } from "../../../inc/global";
 import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
+import { SetDocumentShell } from "../../core/data/documen2";
 import { ScHorizontalCellIterator } from "../../core/data/dociter";
 import { ScCellFormat } from "../../core/tool/cellform";
 import {
@@ -139,6 +140,7 @@ export class ScDocShell extends SfxObjectShell {
       createDocument({ id: crypto.randomUUID(), suiteId: "calc", title: "Untitled Calc Document" }),
       { kind: "untitled", name: "Untitled Calc Document" },
     );
+    SetDocumentShell.call(document, this);
     if (!document.GetTableCount()) document.InsertTab(0, unicode("Sheet1"));
   }
   /** Borrows the actual document. @returns Model. */
@@ -207,6 +209,7 @@ export class ScDocShell extends SfxObjectShell {
     if (!document.GetTableCount()) document.InsertTab(0, unicode("Sheet1"));
     this.openRequest++;
     const previous = this.document;
+    SetDocumentShell.call(document, this);
     this.document = document;
     this.CommitObjectStateReplacement(replacement);
     this.undo.Clear();
@@ -608,7 +611,9 @@ export class ScDocShell extends SfxObjectShell {
         case CellType.CELLTYPE_EDIT: {
           const edit = cell.getEditText();
           if (edit) {
-            const contents = edit.GetText();
+            const engine = this.document.GetEditEngine();
+            engine.SetText(edit);
+            const contents = engine.GetText();
             try {
               value = text(contents);
             } finally {

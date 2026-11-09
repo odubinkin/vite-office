@@ -18,7 +18,7 @@ test("imports CSV, saves the primary ODS copy and exports the active sheet", /**
   await page.getByLabel("Browse").setInputFiles({
     name: "csv-browser-flow.csv",
     mimeType: "text/csv",
-    buffer: Buffer.from('Name,Value\n"A, B",42\n"two\nlines",7\n'),
+    buffer: Buffer.from('Name,Value\n"A, B",42\n"two\tcolumns\nlines",7\n'),
   });
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByRole("textbox", { name: "Input line", exact: true })).toHaveValue("Name");
@@ -26,7 +26,9 @@ test("imports CSV, saves the primary ODS copy and exports the active sheet", /**
   await address.fill("A3");
   await address.press("Enter");
   await expect(address).toHaveValue("A3");
-  await expect(page.getByRole("gridcell", { name: "A3", exact: true })).toHaveText(/two\s+lines/u);
+  await expect(page.getByRole("gridcell", { name: "A3", exact: true })).toHaveText(
+    /two\s+columns\s+lines/u,
+  );
   await page.getByRole("menuitem", { name: "File", exact: true }).click();
   await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
   const downloadPromise = page.waitForEvent("download");
@@ -34,7 +36,7 @@ test("imports CSV, saves the primary ODS copy and exports the active sheet", /**
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("csv-browser-flow.csv");
   expect(await readFile(await download.path(), "utf8")).toBe(
-    'Name,Value\n"A, B",42\n"two\nlines",7\n',
+    'Name,Value\n"A, B",42\n"two\tcolumns\nlines",7\n',
   );
   expect(errors).toEqual([]);
 });

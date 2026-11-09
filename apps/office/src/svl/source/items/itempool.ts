@@ -196,14 +196,16 @@ export class SfxItemPool {
     if (this.mpSecondary && deep) return this.mpSecondary.GetTrueWhichIDFromSlotID(slot);
     return 0;
   }
+  /** Original true Which-to-slot lookup with zero for non-Which values or an unmapped slot. @param which - Native Which ID. @returns Registered slot or zero. */
+  public GetTrueSlotId(which: number): number {
+    if (!SfxItemPool.IsWhich(which)) return 0;
+    const info = this.getTargetPool(which)?.getItemInfo(which);
+    if (info === undefined) throw new Error("Unknown WhichId for slot lookup.");
+    return info.getSlotID();
+  }
   /** Original chain-aware Which-to-slot conversion and identity fallback. @param which - Native identity. @returns Registered nonzero slot or unchanged identity. */
   public GetSlotId(which: number): number {
-    if (!SfxItemPool.IsWhich(which)) return which;
-    const target = this.getTargetPool(which),
-      info = target?.getItemInfo(which);
-    if (info === undefined) throw new Error("Unknown WhichId for slot lookup.");
-    const slot = info.getSlotID();
-    return slot !== 0 ? slot : which;
+    return this.GetTrueSlotId(which) || which;
   }
 
   /** Binds an actual shared native static entry or a consumed default value independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Actual native metadata entry or owned default-value input. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @param flags - Original ItemInfo flags. @returns Nothing. */

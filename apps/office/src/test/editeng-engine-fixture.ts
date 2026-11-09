@@ -116,6 +116,7 @@ export class PreparedEngine extends ImpEditEngine {
   meDefaultHorizontalTextDirection = EEHorizontalTextDirection.Default;
   mpRefDev: object | null = null;
   pEmptyItemSet: SfxItemSet | null = null;
+  readonly layoutRequests: Array<[EditView | null | undefined, boolean | undefined]> = [];
   readonly writingRequests: number[] = [];
   readonly breakIterator = new BreakIteratorImpl();
   protected mbFuzzing = false;
@@ -211,6 +212,10 @@ export class PreparedEngine extends ImpEditEngine {
   /** Prepared history-reset dependency records the source call; full undo execution is outside this fixture. @returns Nothing. */
   override ResetUndoManager(): void {
     this.resets++;
+  }
+  /** Records an admitted layout request on the prepared test view. @param view - Current view. @param fromUndo - Undo flag. @returns Nothing. */
+  override FormatAndLayout(view?: EditView | null, fromUndo?: boolean): void {
+    this.layoutRequests.push([view, fromUndo]);
   }
   /** Prepared measurement dependency only observes the requested actual next paragraph; no height is fabricated. @param portion - Actual next paragraph. @returns Nothing. */
   override CalcHeight(portion: ParaPortion): void {

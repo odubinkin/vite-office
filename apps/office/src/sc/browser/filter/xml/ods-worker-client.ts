@@ -19,7 +19,7 @@ export class OdsWorkerClient implements OdsFilterService {
   /** Injects worker creation for transport tests. @param factory - Dedicated Worker factory. @returns Client. */
   constructor(
     private readonly factory: () => Worker = /** Coordinates the exact active Calc worker request.  @returns Operation result. */ () =>
-      new Worker(new URL("./ods-worker.ts", import.meta.url), {
+      new Worker(new URL("../../../../calc-ods-worker.ts", import.meta.url), {
         type: "module",
         name: "calc-ods-filter",
       }),

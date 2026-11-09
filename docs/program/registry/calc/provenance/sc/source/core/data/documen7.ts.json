@@ -48,10 +48,11 @@
       "Original document.cxx CopyToDocument orders a value-copy range,copies an empty destination document name,creates actual AutoCalcSwitch/ScBulkBroadcast/DelayDeletingBroadcasters/CopyToDocContext owners in source order,disables context listening,walks the minimum real sparse table bounds and finally starts native listeners. Cleanup reverses original scope order. Original true bColRowFlags and default clone/caption arguments are retained. The previous attribute-only alternate document copy and custom pattern-run copier are removed.",
       "Coordinate CopyToDocument validates native tab inputs before real range-overload forwarding,with unchanged geometry true. Content DeleteSelection now tears down intersected groups,purges real broadcasters,traverses selected populated sheets with broadcast defaulttrue,restarts needed listeners and performs source post-split dirty phases. Attribute-only selection deletion retains its original early return. No per-cell browser fill or separate snapshot model is introduced.",
       "AQF9AG adds the no-range ScDocument::StartAllListeners overload: create one StartListeningContext and call StartListeners(context,true) on every existing sheet. The range overload remains in document10 with its original separate guards.",
-      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
+      "Multiline SetTextCell uses the document-owned editor, applies source text defaults and transfers the actual rich text object to ScTable."
     ],
     "omittedResponsibilities": [
-      "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
+      "Other document member groups remain outside the current change."
     ],
     "evidence": {
       "local": [
@@ -142,6 +143,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [

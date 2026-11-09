@@ -1,4 +1,5 @@
 /** @fileoverview Original EditDoc paragraph ownership/text operations, font assembly and EditEngineItemPool over actual shared items. Native pool reference counting remains the existing GC boundary. */
+import { InsertAttrib } from "./editdoc.attributes";
 import { SfxItemPool } from "../../../svl/source/items/itempool";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { getItemInfoPackageEditEngine } from "./eerdll";
@@ -499,6 +500,10 @@ export class EditDoc {
     this.SetModified(true);
     result.SetIndex(result.GetIndex() + 1);
     return result;
+  }
+  /** Original selection/caret character-attribute insertion. @param node - Actual paragraph. @param start - Native start. @param end - Native end. @param item - Borrowed source item. @returns Nothing. */
+  InsertAttrib(node: ContentNode, start: number, end: number, item: SfxPoolItem): void {
+    InsertAttrib(this, node, start, end, item);
   }
   /** Original join order: attributes first, text second, then right owner removal. @param left - Actual left paragraph. @param right - Actual right paragraph. @returns Original left-end position. */
   ConnectParagraphs(left: ContentNode, right: ContentNode): EditPaM {

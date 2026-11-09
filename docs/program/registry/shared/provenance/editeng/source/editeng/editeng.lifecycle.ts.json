@@ -22,16 +22,22 @@
       "EditEngine::CreateTextObject",
       "EditEngine::SetText",
       "EditEngine::SetDefaultLanguage",
-      "EditEngine::GetUndoComment"
+      "EditEngine::GetUndoComment",
+      "EditEngine::SetUpdateLayout",
+      "EditEngine::SetParaAttribs",
+      "EditEngine::GetText",
+      "EditEngine::CalcFieldValue"
     ],
     "preservedResponsibilities": [
       "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory.",
       "Original GetActiveView, CreateEditPaM, InsertText and DeleteSelection delegation bodies now target the actual source implementation. Localized GetUndoComment, ConnectContents and SplitContent remain mandatory abstract source declarations until their true implementation is bound; no label/deletion/connection/split provider is invented.",
       "Original public CreateSelection and three CreateTextObject overloads delegate to the same actual internal owner, preserve the paragraph-count default one, direct selection conversion and native EditTextObject base return contract. Actual creation does not admit an unported constructor, renderer or process service.",
-      "Original outer text/default-language/control/paragraph-count/undo methods delegate to the actual internal owner. Undo comment dispatch uses the source English strings."
+      "Original outer text/default-language/control/paragraph-count/undo methods delegate to the actual internal owner. Undo comment dispatch uses the source English strings.",
+      "Source SetText restores the original conditional layout call. Source SetUpdateLayout and paragraph-attribute wrappers delegate to the actual internal engine.",
+      "Original whole-text and paragraph getters expand actual document features and the base field virtual returns a single space."
     ],
     "omittedResponsibilities": [
-      "Concrete outer construction and other edit engine methods, view/layout and localized UI remain outside this checkpoint."
+      "Interactive layout and application-specific field presentation remain outside the shared document text slice."
     ],
     "evidence": {
       "local": [
@@ -50,6 +56,14 @@
         {
           "path": "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -64,6 +78,22 @@
         {
           "path": "include/editeng/editrids.hrc",
           "marker": "RID_EDITUNDO_INSERT"
+        },
+        {
+          "path": "editeng/source/editeng/editeng.cxx",
+          "marker": "SetParaAttribs"
+        },
+        {
+          "path": "editeng/source/editeng/editeng.cxx",
+          "marker": "SetParaAttribsOnly"
+        },
+        {
+          "path": "editeng/source/editeng/editeng.cxx",
+          "marker": "CalcFieldValue"
+        },
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "UpdateFields"
         }
       ]
     },

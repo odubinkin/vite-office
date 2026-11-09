@@ -503,3 +503,36 @@ it("preserves scaling defaults, value copies and defaulted double equality", /**
   expect(source.equals(source)).toBe(false);
   expect(source.areValuesDefault()).toBe(false);
 });
+
+it("retains the native overlap split and reconnects equal character attributes", /** Exercises the character-attribute path used for rich text insertion. @returns Nothing. */ () => {
+  const outer = prepare("abcdef");
+  const engine = outer.implementation;
+  const doc = engine.GetEditDoc();
+  const node = doc.GetObject(0) as ContentNode;
+  const color = new SvxColorItem(new Color(0x112233), EE.EE_CHAR_COLOR);
+  const replacement = new SvxColorItem(new Color(0xabcdef), EE.EE_CHAR_COLOR);
+  try {
+    doc.InsertAttrib(node, 0, 6, color);
+    doc.InsertAttrib(node, 2, 4, replacement);
+    const attributes = node.GetCharAttribs().GetAttribs();
+    expect(
+      attributes.map(
+        /** Projects native attribute endpoints. @param attribute - Actual attribute. @returns Native endpoints. */ (
+          attribute,
+        ) => [attribute.GetStart(), attribute.GetEnd()],
+      ),
+    ).toEqual([
+      [0, 2],
+      [2, 4],
+      [4, 6],
+    ]);
+    doc.InsertAttrib(node, 2, 4, color);
+    expect(attributes).toHaveLength(1);
+    expect(attributes[0]?.GetStart()).toBe(0);
+    expect(attributes[0]?.GetEnd()).toBe(6);
+  } finally {
+    replacement.Dispose();
+    color.Dispose();
+    engine.dispose();
+  }
+});

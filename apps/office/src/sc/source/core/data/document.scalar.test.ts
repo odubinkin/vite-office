@@ -1,4 +1,6 @@
 /** @fileoverview First real document/sheet/column scalar editing integration,without a second grid model. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -7,6 +9,8 @@ import { MapUnit } from "../../../../tools/inc/mapunit";
 import { ScColumn } from "../../../inc/column";
 import { ScDocument } from "../../../inc/document";
 import { CellType } from "../../../inc/global";
+
+InitApplicationServiceManager(implementations);
 
 it("creates sheets and edits real numeric/string column blocks through the public document", /** Exercises replacements,clear,empty text and shared-string copy isolation. @returns Nothing. */ () => {
   const doc = new ScDocument(),

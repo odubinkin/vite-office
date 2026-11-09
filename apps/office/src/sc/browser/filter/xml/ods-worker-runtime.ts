@@ -28,7 +28,7 @@ export async function processOdsWorkerRequest(request: OdsWorkerRequest): Promis
     try {
       return encodeCalcDocument(document);
     } finally {
-      document.DisposeAttributes();
+      document.Dispose();
     }
   }
   const document = decodeCalcDocument(request.document);
@@ -36,6 +36,6 @@ export async function processOdsWorkerRequest(request: OdsWorkerRequest): Promis
     if (request.operation === "export-xml") return writeOdsXml(document);
     return writeOdsDocument(document).buffer as ArrayBuffer;
   } finally {
-    document.DisposeAttributes();
+    document.Dispose();
   }
 }

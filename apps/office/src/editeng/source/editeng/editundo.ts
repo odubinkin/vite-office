@@ -5,8 +5,10 @@ import type { EditView } from "./impedit.lifecycle";
 import { EPaM } from "../../inc/EPaM";
 import { EditPaM } from "../../inc/EditPaM";
 import { EditSelection } from "../../inc/EditSelection";
-import { EDITUNDO_INSERTCHARS, EDITUNDO_SPLITPARA } from "../../inc/editdata";
+import { EDITUNDO_INSERTCHARS, EDITUNDO_PARAATTRIBS, EDITUNDO_SPLITPARA } from "../../inc/editdata";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import type { ContentNode } from "../../inc/ContentNode";
 import type { SfxUndoAction } from "../../../svl/source/undo/undo";
 /** Original paragraph split action stores a signed32 node and narrowed unsigned16 split index. */
 export class EditUndoSplitPara extends EditUndo {
@@ -80,5 +82,53 @@ export class EditUndoInsertChars extends EditUndo {
   /** Binds native owned-string destruction to the existing shared manager's payload release entry. @returns Nothing. */
   override Dispose(): void {
     this.aText.dispose();
+  }
+}
+
+/** Original paragraph-attribute action owns both native item-set values. */
+export class EditUndoSetParaAttribs extends EditUndo {
+  private readonly aPrevItems: SfxItemSet;
+  private readonly aNewItems: SfxItemSet;
+
+  /** Original paragraph and by-value item-set inputs. @param engine - Actual engine. @param nPara - Native paragraph. @param previous - Previous items. @param next - Replacement items. @returns Action. */
+  constructor(
+    engine: EditEngine,
+    private readonly nPara: number,
+    previous: SfxItemSet,
+    next: SfxItemSet,
+  ) {
+    super(EDITUNDO_PARAATTRIBS, engine);
+    this.aPrevItems = new SfxItemSet(previous);
+    try {
+      this.aNewItems = new SfxItemSet(next);
+    } catch (error) {
+      this.aPrevItems.Dispose();
+      throw error;
+    }
+  }
+
+  /** Original undo selects the previous native items. @returns Nothing. */
+  override Undo(): void {
+    this.restore(this.aPrevItems);
+  }
+
+  /** Original redo selects the replacement native items. @returns Nothing. */
+  override Redo(): void {
+    this.restore(this.aNewItems);
+  }
+
+  /** Original attribute assignment and lcl_DoSetSelection cursor placement. @param items - Selected source item set. @returns Nothing. */
+  private restore(items: SfxItemSet): void {
+    const engine = this.GetEditEngine() as EditEngine;
+    engine.SetParaAttribsOnly(this.nPara, items);
+    const position = engine.CreateEditPaM(new EPaM(this.nPara & 0xffff, 0));
+    position.SetIndex((position.GetNode() as ContentNode).Len());
+    (engine.GetActiveView() as EditView).getImpl().SetEditSelection(new EditSelection(position));
+  }
+
+  /** Original reverse destruction of the owned item sets. @returns Nothing. */
+  override Dispose(): void {
+    this.aNewItems.Dispose();
+    this.aPrevItems.Dispose();
   }
 }

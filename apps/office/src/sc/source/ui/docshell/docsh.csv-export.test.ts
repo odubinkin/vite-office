@@ -2,6 +2,16 @@
 import { assert, expect, it } from "vitest";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
+import { CH_FEATURE } from "../../../../editeng/inc/editattr";
+import { EE_FEATURE_FIELD, EE_FEATURE_TAB } from "../../../../editeng/inc/eeitem";
+import {
+  SvxFieldItem,
+  SvxFileField,
+  SvxTableField,
+  SvxURLField,
+  SvxURLFormat,
+} from "../../../../editeng/inc/flditem";
+import { SfxVoidItem } from "../../../../svl/inc/voiditem";
 import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
@@ -19,6 +29,8 @@ import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
 import { ScPatternAttr } from "../../core/data/patattr";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocShell } from "./docsh";
+
+InitApplicationServiceManager(implementations);
 
 it("retains empty fields between sparse cells and rows in separated output", /** Checks output positions through a complete export. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -73,6 +85,52 @@ it("exports actual multi-paragraph edit cells and releases their owned text on r
     expect(doc.GetCellArea(99, endCol, endRow)).toBe(false);
     expect([endCol[0], endRow[0]]).toEqual([0, 0]);
   } finally {
+    shell.Close();
+  }
+});
+
+it("expands native tab and field features before quoting an edit cell", /** Checks actual field evaluation and native feature expansion through ScDocShell::AsciiSave. @returns Nothing. */ () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  const edit = new EditTextObjectImpl(
+    null,
+    MapUnit.MapTwip,
+    false,
+    TextRotation.NONE,
+    SvtScriptType.LATIN,
+  );
+  const marker = String.fromCharCode(CH_FEATURE);
+  const title = "Test title";
+  shell.Rename(title);
+  const paragraph = edit.CreateAndInsertContent();
+  const value = unicode(`A${marker}${marker}${marker}${marker}`);
+  const url = unicode("https://example.invalid/");
+  const representation = unicode("Link, label");
+  const tab = new SfxVoidItem(EE_FEATURE_TAB);
+  try {
+    paragraph.SetText(value);
+    const attributes = paragraph.GetCharAttribs();
+    attributes.push(edit.CreateAttrib(tab, 1, 2));
+    const fields = [
+      new SvxURLField(url, representation, SvxURLFormat.Repr),
+      new SvxTableField(0),
+      new SvxFileField(),
+    ];
+    for (const [index, field] of fields.entries()) {
+      const item = new SvxFieldItem(field, EE_FEATURE_FIELD);
+      try {
+        attributes.push(edit.CreateAttrib(item, index + 2, index + 3));
+      } finally {
+        item.Dispose();
+      }
+    }
+    doc.SetEditText(new ScAddress(), edit);
+    expect(new TextDecoder().decode(shell.AsciiSave())).toBe('"A\tLink, labelSheet1Test title"\n');
+  } finally {
+    tab.Dispose();
+    representation.dispose();
+    url.dispose();
+    value.dispose();
     shell.Close();
   }
 });
@@ -165,7 +223,6 @@ it("clips fixed-width text, hashes overflowing numbers and centers text", /** Ch
 });
 
 it("exports NatNum12 displayed amounts through the production UNO services", /** Exercises ScDocShell, the genuine format table and the two CSV number-output options. @returns Nothing. */ () => {
-  InitApplicationServiceManager(implementations);
   const shell = new ScDocShell();
   const document = shell.GetDocument();
   const formatter = document.GetFormatTable();

@@ -6,8 +6,6 @@ import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
 import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 import { DuplicateHandling, SfxListener } from "../../../svl/source/notify/lstner";
-import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
-import type { SfxHint } from "../../../svl/inc/hint";
 import type { StyleSheetUser } from "../../../svl/inc/stylesheetuser";
 import { GetScriptItemId, type EditDoc } from "../../inc/editdoc";
 import { ParaPortion, ScriptTypePosInfo, WritingDirectionInfo } from "../../inc/ParagraphPortion";
@@ -70,6 +68,7 @@ import {
   ANYWORD_IGNOREWHITESPACES,
   DICTIONARY_WORD,
 } from "../../../offapi/com/sun/star/i18n/WordType";
+import { SetParaAttribs } from "./impedit5.attributes";
 import { CalcHeight } from "./impedit2.height";
 import { PrepareInsertTextLine } from "./impedit2.text";
 import { LINE_SEP } from "./impedit.constants";
@@ -185,8 +184,6 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract mbCallParaInsertedOrDeleted: boolean;
   protected abstract maModifyHdl: ((argument: null) => void) | null;
   protected abstract maNotifyHdl: ((notification: EENotify) => void) | null;
-  /** Original unported style/application notification override, with no inherited substitute implementation. @param broadcaster - Actual source. @param hint - Actual hint. @returns Nothing. */
-  abstract override Notify(broadcaster: SfxBroadcaster, hint: SfxHint): void;
   /** Original mandatory range-deletion dependency; no alternative deletion provider. @param selection - Source range. @returns Actual resulting position. */
   abstract ImpDeleteSelection(selection: EditSelection): EditPaM;
   /** Original selected word honors the cursor-side locale and source endpoint preferences. @param selection - Source caret/range. @param wordType - Original WordType. @param acceptStart - Accept a cursor at the word start. @param acceptEnd - Accept a cursor at the word end. @returns Original resulting selection. */
@@ -701,6 +698,15 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
     if (enabled !== this.IsUndoEnabled()) this.ResetUndoManager();
     this.mbUndoEnabled = enabled;
   }
+  /** Original layout switch restores deferred formatting when enabling or forcing it. @param enabled - New layout flag. @param view - Optional original current view. @param force - Original forced-update flag. @returns Prior layout flag. */
+  SetUpdateLayout(enabled: boolean, view: EditView | null = null, force = false): boolean {
+    const previous = this.mbUpdateLayout;
+    this.mbUpdateLayout = enabled;
+    if (enabled && (previous !== enabled || force)) this.FormatAndLayout(view);
+    return previous;
+  }
+  /** Original mandatory formatting and view update path. @param view - Original current view. @param fromUndo - Original undo invalidation flag. @returns Nothing. */
+  abstract FormatAndLayout(view?: EditView | null, fromUndo?: boolean): void;
   /** Original layout-enable query. @returns Flag. */
   IsUpdateLayout(): boolean {
     return this.mbUpdateLayout;
@@ -843,6 +849,10 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   TextModified(): void {
     this.mbFormatted = false;
     if (this.maNotifyHdl) this.maNotifyHdl(new EENotify(EENotifyType.EE_NOTIFY_TEXTMODIFIED));
+  }
+  /** Original paragraph-attribute mutation. @param paragraph - Native paragraph. @param items - Actual item set. @returns Nothing. */
+  SetParaAttribs(paragraph: number, items: SfxItemSet): void {
+    SetParaAttribs(this, paragraph, items);
   }
   /** Original paragraph change order and conditional following-paragraph height recalculation. @param node - Actual paragraph. @param ignoreUndo - Source callback selection. @returns Nothing. */
   ParaAttribsChanged(node: ContentNode, ignoreUndo = false): void {

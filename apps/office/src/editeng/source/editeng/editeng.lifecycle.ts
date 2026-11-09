@@ -12,7 +12,13 @@ import type { EPaM } from "../../inc/EPaM";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { EditView } from "./impedit.lifecycle";
 import type { EEControlBits } from "../../inc/editstat";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
+import type { SvxFieldItem } from "../../inc/flditem";
+import type { Color } from "../../../tools/inc/color";
+import type { FontLineStyle } from "../../../tools/inc/fontenum";
+import { LINEEND_LF, type LineEnd } from "../../../tools/inc/lineend";
+
 /** Source outer-owner member group; original concrete constructor/layout/other APIs remain mandatory before production instantiation. */
 export abstract class EditEngine {
   /** Original static factory shares the existing single source implementation with ESM namespace callers. @returns Actual EditEngine item pool. */
@@ -103,10 +109,55 @@ export abstract class EditEngine {
   IsUndoEnabled(): boolean {
     return this.getImpl().IsUndoEnabled();
   }
+  /** Original outer layout switch delegates to the internal engine. @param enabled - New layout flag. @returns Prior layout flag. */
+  SetUpdateLayout(enabled: boolean): boolean {
+    return this.getImpl().SetUpdateLayout(enabled);
+  }
+  /** Original paragraph-attribute assignment followed by enabled layout. @param paragraph - Native paragraph. @param items - Actual item set. @returns Nothing. */
+  SetParaAttribs(paragraph: number, items: SfxItemSet): void {
+    const impl = this.getImpl();
+    impl.SetParaAttribs(paragraph, items);
+    if (impl.IsUpdateLayout()) impl.FormatAndLayout();
+  }
+  /** Original paragraph attribute assignment without view layout. @param paragraph - Native paragraph. @param items - Actual item set. @returns Nothing. */
+  SetParaAttribsOnly(paragraph: number, items: SfxItemSet): void {
+    this.getImpl().SetParaAttribs(paragraph, items);
+  }
   /** Original plain-text setter delegates to the actual internal engine. @param text - Counted original text. @returns Nothing. */
   SetText(text: OUStringConstReference): void {
-    this.getImpl().SetText(text);
+    const impl = this.getImpl();
+    impl.SetText(text);
+    if (!text.isEmpty() && impl.IsUpdateLayout()) impl.FormatAndLayout();
   }
+  /** Original expanded edit-document text with LF as the default paragraph separator. @param end - Native separator selector. @returns Owned text. */
+  GetText(end: LineEnd = LINEEND_LF): OUString {
+    return this.getImpl().GetEditDoc().GetText(end);
+  }
+
+  /** Original paragraph overload, named separately from the numeric LineEnd overload. @param paragraph - Native paragraph number. @returns Owned text. */
+  GetParagraphText(paragraph: number): OUString {
+    const doc = this.getImpl().GetEditDoc();
+    return doc.GetObject(paragraph) === null ? new OUString() : doc.GetParaAsString(paragraph);
+  }
+
+  /** Original base virtual result for a field without a specialized editor. @param _field - Borrowed item. @param _paragraph - Native paragraph. @param _position - Native offset. @param _textColor - Optional text color. @param _fieldColor - Optional field color. @param _lineStyle - Optional line style. @returns Owned single space. */
+  CalcFieldValue(
+    _field: SvxFieldItem,
+    _paragraph: number,
+    _position: number,
+    _textColor: [Color | null],
+    _fieldColor: [Color | null],
+    _lineStyle: [FontLineStyle | null],
+  ): OUString {
+    void _field;
+    void _paragraph;
+    void _position;
+    void _textColor;
+    void _fieldColor;
+    void _lineStyle;
+    return unicode(" ");
+  }
+
   /** Original paragraph range with public default count one. @param paragraph - Source start. @param count - Original default one. @returns Actual object or source null. */
   CreateTextObject(paragraph: number, count?: number): EditTextObject | null;
   /** Original whole-document and public-selection overloads, unified at the host declaration boundary. @param selection - Source public range, or absent for the whole document. @returns Actual owned object. */

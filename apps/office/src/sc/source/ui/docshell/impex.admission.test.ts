@@ -1,11 +1,18 @@
 /** @fileoverview CSV admission retains existing cells, literal multiline ownership and overflow counters. */
 import { assert, expect, it, vi } from "vitest";
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
+import { CH_FEATURE } from "../../../../editeng/inc/editattr";
+import { EE_FEATURE_TAB } from "../../../../editeng/inc/eeitem";
+import { EditTextObjectImpl } from "../../../../editeng/inc/editobj";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScAddress } from "../../../inc/address";
 import { CellType } from "../../../inc/global";
 import { SC_COL_TEXT, ScAsciiOptions } from "../dbgui/asciiopt";
 import { ScDocShell } from "./docsh";
 import { ScImportExport } from "./impex";
+
+InitApplicationServiceManager(implementations);
 
 it("clears empty fields only when skip-empty is disabled and rejects an unconfigured importer", /** Checks actual document cells through the public import route. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -30,7 +37,7 @@ it("clears empty fields only when skip-empty is disabled and rejects an unconfig
   }
 });
 
-it("imports literal multiline fields and empty fixed-width spans through native cells", /** Checks text-only multiline transport, block-position invalidation and zero-width field admission. @returns Nothing. */ () => {
+it("imports literal multiline fields and empty fixed-width spans through native cells", /** Checks text-only multiline transport, block-position reuse and zero-width field admission. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument();
   try {
@@ -61,6 +68,59 @@ it("imports literal multiline fields and empty fixed-width spans through native 
     converter.SetExtOptions(options);
     expect(converter.ImportStream(new TextEncoder().encode("ignored\n"))).toBe(true);
     expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
+  } finally {
+    shell.Close();
+  }
+});
+
+it("stores native tab features and independent paragraphs in both multiline branches", /** Checks typed and standard multiline cells and reuse of the document editor and column block position. @returns Nothing. */ () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  try {
+    const converter = new ScImportExport(doc);
+    const options = new ScAsciiOptions();
+    options.aFieldSeps = ",";
+    options.mvColStart = [1];
+    options.mvColFormat = [SC_COL_TEXT];
+    converter.SetExtOptions(options);
+    expect(
+      converter.ImportStream(new TextEncoder().encode('"a\tb\n\n末","c\td\ne",2\nplain,again,3\n')),
+    ).toBe(true);
+
+    for (const [column, first, paragraphs] of [
+      [0, "ab", ["", "末"]],
+      [1, "cd", ["e"]],
+    ] as const) {
+      const edit = doc.GetRefCellValue(new ScAddress(column, 0, 0)).getEditText();
+      assert(edit instanceof EditTextObjectImpl);
+      expect(edit.GetParagraphCount()).toBe(paragraphs.length + 1);
+      const firstParagraph = edit.GetText(0);
+      try {
+        expect(text(firstParagraph)).toBe(first[0] + String.fromCharCode(CH_FEATURE) + first[1]);
+      } finally {
+        firstParagraph.dispose();
+      }
+      const attributes = edit.GetContents()[0]?.GetCharAttribs();
+      expect(
+        attributes?.map(
+          /** Inspects the original feature's ID and raw span. @param attribute - Actual attribute. @returns ID and endpoints. */ (
+            attribute,
+          ) => [attribute.GetItem()?.Which(), attribute.GetStart(), attribute.GetEnd()],
+        ),
+      ).toEqual([[EE_FEATURE_TAB, 1, 2]]);
+      for (const [index, expected] of paragraphs.entries()) {
+        const paragraph = edit.GetText(index + 1);
+        try {
+          expect(text(paragraph)).toBe(expected);
+        } finally {
+          paragraph.dispose();
+        }
+      }
+    }
+    expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("plain");
+    expect(text(doc.GetSharedString(new ScAddress(1, 1, 0)).getString())).toBe("again");
+    expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(2);
+    expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(3);
   } finally {
     shell.Close();
   }

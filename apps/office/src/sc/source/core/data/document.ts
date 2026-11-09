@@ -48,6 +48,8 @@ import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import type { ScTable } from "../../../inc/table";
 import { ScViewOptions } from "../../../inc/viewopti";
 import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
+import type { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
+import type { DocumentEditEngine, ScFieldEditEngine } from "../tool/editutil";
 import type { ScPoolHelper } from "../inc/poolhelp";
 import type { ScScriptTypeData } from "../inc/scrdata";
 import type { ScDocumentPool } from "./docpool";
@@ -513,6 +515,8 @@ export class ScDocument {
     return this.pSelectionAttr;
   }
   private mxPoolHelper: ScPoolHelper | null = null;
+  private mpEditEngine: ScFieldEditEngine | null = null;
+  protected mpShell: SfxObjectShell | null = null;
   protected mpCellAttributeHelper: CellAttributeHelper | null = null;
   private readonly bIsClip: boolean;
   private readonly bIsUndo: boolean;
@@ -607,6 +611,10 @@ export class ScDocument {
   /** Original documen2 accessor for the shared edit-engine pool. @returns Borrowed edit-engine item pool. */
   GetEditEnginePool(): ReturnType<typeof documen2.GetEditEnginePool> {
     return documen2.GetEditEnginePool.call(this);
+  }
+  /** Original document-owned editor, exposed for literal and rich-text transfer. @returns Borrowed editor. */
+  GetEditEngine(): DocumentEditEngine {
+    return (this.mpEditEngine ??= documen2.GetEditEngine.call(this));
   }
   /** Native clipboard mode query. @returns Mode flag. */
   IsClipboard(): boolean {

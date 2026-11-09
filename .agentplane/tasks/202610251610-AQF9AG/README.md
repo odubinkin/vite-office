@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 240
+revision: 243
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:56:03.741Z"
+  updated_at: "2026-11-09T20:27:09.463Z"
   updated_by: "CODER"
-  note: "Verified checkpoint: original edit-engine pool, application data language, UNO word service, edit undo recording and paragraph height pass focused shared, Calc CSV and Chromium checks. Continue with concrete EditEngine construction and original multiline object transfer."
-  attempts: 63
+  note: "Verified native multiline import and export through the document edit engine, rich fields and tab features, 252 Calc cases, focused shared checks, worker verification, exact Chromium download bytes and static gates. Continue with the pinned ICU no-BOM DETECT option and the absent versus present-empty import options contract."
+  attempts: 64
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1336,8 +1339,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:27:09.463Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native multiline import and export through the document edit engine, rich fields and tab features, 252 Calc cases, focused shared checks, worker verification, exact Chromium download bytes and static gates. Continue with the pinned ICU no-BOM DETECT option and the absent versus present-empty import options contract."
+  -
+    type: "status"
+    at: "2026-11-09T20:27:33.960Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:56:13.202Z"
+doc_updated_at: "2026-11-09T20:27:33.960Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3247,6 +3263,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:27:09.463Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native multiline import and export through the document edit engine, rich fields and tab features, 252 Calc cases, focused shared checks, worker verification, exact Chromium download bytes and static gates. Continue with the pinned ICU no-BOM DETECT option and the absent versus present-empty import options contract.
+    Attempts: 64
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:27:08.824Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4734,6 +4780,14 @@ sections:
     - CalcHeight now uses actual lines, fixed spacing, stretching, visibility and the previous paragraph's validity. The targeted assertion exercises the original differing results before and after the previous portion becomes valid.
     - Focused shared verification passed 65 tests, and the explicit bundled BreakIterator constructor and word query passed on rerun. Calc document and application-language verification passed 11 tests. The existing CSV slice passed 198 tests and the production Vite and Chromium CSV/ODS workflow passed. Typecheck, lint, formatting, documentation, source provenance, file-size, source tree, module boundaries, resource and shared/Calc inventory gates were checked.
     - This checkpoint does not switch the CSV import path. The original concrete EditEngine and ScFieldEditEngine lifetime, deletion and style-notification members, and ScDocumentImport multiline object transfer remain open. The AgentPlane task and full-suite cadence are unchanged.
+
+    ### Native multiline CSV import and export
+
+    - ScDocument lazily creates its ScFieldEditEngine over the original shared edit pool and owns its lifetime. The source Calc defaults are applied through the actual EditDoc. CSV literal and standard multiline branches retain their distinct predicates and transfer the owned object directly through ScDocumentImport::setEditCell, including the source shared-string normalization and cached write path. ScDocument::SetTextCell uses the same editor.
+    - ScDocShell::AsciiSave now follows the pinned source by setting the edit object and asking the editor for expanded text. This retains native tab and line-break features, paragraph boundaries, field text and input metric conversion. URL, sheet name and shell title field display are exercised. Native layout, interactive range editing, field color and extended-time field producers lie outside the current document editor slice.
+    - The existing browser display and ODS worker text transfer use expanded rich text, so an imported native tab does not become a control character in the UI or ODF text. The worker composition root initializes the same UNO service registry before installing the Calc transport. The existing primary-save workflow persists the imported model and the CSV action exports the active sheet.
+    - Verification passed for 252 focused Calc tests, 57 focused shared tests plus a 22-test object-suite rerun with the character-attribute regression, and 16 worker/workflow tests after moving bootstrap to the composition root. Vite production build and Chromium passed with a tab-bearing multiline CSV, ODS persistence and exact download bytes. Typecheck, lint, JSDoc, module boundaries, Calc resources, source tree, file-size, source provenance, shared and Calc parity inventories, formatting and diff checks passed. No full test suite is due in this checkpoint of the same task.
+    - Final source audit identified a remaining actual CSV option. LibreOffice handles a present empty import options item differently from an absent item and SvStream::DetectEncoding uses ICU charset recognition after the BOM path. The current implementation only checks BOM for DETECT. A local native witness links the pinned ICU 78.3 charset API and produces ordered names, languages and confidences for no-BOM cases. The AgentPlane task remains in progress for the remaining source option and final acceptance.
 id_source: "generated"
 ---
 ## Summary
@@ -6652,6 +6706,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:27:09.463Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native multiline import and export through the document edit engine, rich fields and tab features, 252 Calc cases, focused shared checks, worker verification, exact Chromium download bytes and static gates. Continue with the pinned ICU no-BOM DETECT option and the absent versus present-empty import options contract.
+Attempts: 64
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:27:08.824Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8143,3 +8227,11 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - CalcHeight now uses actual lines, fixed spacing, stretching, visibility and the previous paragraph's validity. The targeted assertion exercises the original differing results before and after the previous portion becomes valid.
 - Focused shared verification passed 65 tests, and the explicit bundled BreakIterator constructor and word query passed on rerun. Calc document and application-language verification passed 11 tests. The existing CSV slice passed 198 tests and the production Vite and Chromium CSV/ODS workflow passed. Typecheck, lint, formatting, documentation, source provenance, file-size, source tree, module boundaries, resource and shared/Calc inventory gates were checked.
 - This checkpoint does not switch the CSV import path. The original concrete EditEngine and ScFieldEditEngine lifetime, deletion and style-notification members, and ScDocumentImport multiline object transfer remain open. The AgentPlane task and full-suite cadence are unchanged.
+
+### Native multiline CSV import and export
+
+- ScDocument lazily creates its ScFieldEditEngine over the original shared edit pool and owns its lifetime. The source Calc defaults are applied through the actual EditDoc. CSV literal and standard multiline branches retain their distinct predicates and transfer the owned object directly through ScDocumentImport::setEditCell, including the source shared-string normalization and cached write path. ScDocument::SetTextCell uses the same editor.
+- ScDocShell::AsciiSave now follows the pinned source by setting the edit object and asking the editor for expanded text. This retains native tab and line-break features, paragraph boundaries, field text and input metric conversion. URL, sheet name and shell title field display are exercised. Native layout, interactive range editing, field color and extended-time field producers lie outside the current document editor slice.
+- The existing browser display and ODS worker text transfer use expanded rich text, so an imported native tab does not become a control character in the UI or ODF text. The worker composition root initializes the same UNO service registry before installing the Calc transport. The existing primary-save workflow persists the imported model and the CSV action exports the active sheet.
+- Verification passed for 252 focused Calc tests, 57 focused shared tests plus a 22-test object-suite rerun with the character-attribute regression, and 16 worker/workflow tests after moving bootstrap to the composition root. Vite production build and Chromium passed with a tab-bearing multiline CSV, ODS persistence and exact download bytes. Typecheck, lint, JSDoc, module boundaries, Calc resources, source tree, file-size, source provenance, shared and Calc parity inventories, formatting and diff checks passed. No full test suite is due in this checkpoint of the same task.
+- Final source audit identified a remaining actual CSV option. LibreOffice handles a present empty import options item differently from an absent item and SvStream::DetectEncoding uses ICU charset recognition after the BOM path. The current implementation only checks BOM for DETECT. A local native witness links the pinned ICU 78.3 charset API and produces ordered names, languages and confidences for no-BOM cases. The AgentPlane task remains in progress for the remaining source option and final acceptance.

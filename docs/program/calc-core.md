@@ -4175,17 +4175,16 @@ unreadable spans, overlapping storage are outside the witness.
 
 ### CSV closure audit and actual raw binary-rule owner
 
-The remaining work is traced from actual CSV callers, not historical readiness
-paragraphs or test counts:
+The CSV paths are traced from the pinned source callers and the browser file
+workflow.
 
-| CSV/root path | Source requirement and current boundary | Completion evidence still required |
+| CSV path | Current source boundary | Evidence or open work |
 | --- | --- | --- |
-| Export displayed numbers | `ScDocShell` calls `ScCellFormat::GetString`. The number formatter and process UNO services now produce NatNum12 values through the original numeric, logical, date and time paths. | Check final CSV acceptance alongside multiline import. |
-| Capitalize/title modifiers | The process context now supplies NumberText, the original classifier and the registered Unicode and CJK word iterators. | Covered by the service and displayed CSV tests. |
-| Custom word-rule loading | Original breakiterator_unicode.cxx constructs OOoRuleBasedBreakIterator from UDataMemory returned by udata_open, after udata_setAppData. Raw binary constructors are not a replacement. | Original application-data/container lookup, real UDataMemory handle/constructor/lifecycle, UText/public iterator and engine wiring, native full-path witnesses. |
-| Process services | NumberText component/default constructor and process getter exist; production ComponentContext/ServiceManager installation is absent. Test fixture managers are explicitly not production. | Original context/environment/mapping entry orchestration, actual manager/constructor registry and browser application bootstrap; no fixture providers in production. |
-| Quoted/multiline import | Local SetTextCell still splits lines manually and assigns LATIN. Original implementation is in document.cxx, not documen7.cxx, and calls GetEditEngine/SetTextCurrentDefaults/CreateTextObject. | Replace the manual path and correct responsibility ownership with the actual document engine/ScFieldEditEngine/ImpEditEngine/defaults/script and import transfer path. Source GetEditEngine is in documen2.cxx (found by bounded -uuu fallback); preserve layout=false, undo=false, Map100thMM and Asian settings. |
-| Final acceptance | Existing parser/CSV/UI cases cover represented behavior, not all above service paths. | Original defaults/options/conversion audit and native-backed cases for the completed roots, real UI import/export roundtrips and exact bytes. Preserve intentional browser document workflow deviations. |
+| Displayed numbers | `ScDocShell` calls `ScCellFormat::GetString`. The formatter and actual process UNO services supply NatNum12 through the numeric, logical, date and time paths. | Focused displayed export covers spellout, currency and ordinal dates, including the original DATE keyword gate. |
+| Capitalize and title | The production process context supplies NumberText, the classifier and registered Unicode and CJK word iterators. The bundled ICU rule data uses the original application-data lookup. | Scoped native ICU witnesses and actual browser service construction cover the consumed call chain. |
+| Quoted and multiline input | `ScDocument` owns a lazy `ScFieldEditEngine` over the original item pool. The literal and standard CSV branches preserve separate predicates and transfer owned objects through `ScDocumentImport::setEditCell`. | Tests inspect stored tab features, blank paragraphs and cached column writes. The text-object metric is Map100thMM. Device layout and Asian layout settings are outside this no-view text path. |
+| Rich-text export | `AsciiSave` loads the object into the same document editor and requests expanded text, as in the pinned implementation. | Export tests cover exact LF and tab bytes and URL, sheet and title field values. Chromium exercises CSV import, browser ODS persistence and CSV download. |
+| Explicit encoding detection | `ScAsciiOptions::ReadFromString` uses `SvStream::DetectEncoding` for token `DETECT`. The source checks BOM, then asks ICU's charset detector to classify up to 4096 bytes. | The current bridge handles BOM only. Restore the detector and verify native no-BOM classification and the distinction between an absent and empty import option item. |
 
 Fresh UnicodeString::fromUTF8 needs an owned converted value in the existing
 managed UTF16 storage binding. It does not require exporting a replacement

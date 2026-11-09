@@ -7,16 +7,21 @@
     "localPath": "apps/office/src/editeng/source/editeng/impedit2.text.ts",
     "upstreamPath": "editeng/source/editeng/impedit2.cxx",
     "localSymbols": [
-      "PrepareInsertTextLine"
+      "PrepareInsertTextLine",
+      "ImpFastInsertText",
+      "ImpFastInsertParagraph"
     ],
     "upstreamSymbols": [
-      "ImpEditEngine::ImpInsertText"
+      "ImpEditEngine::ImpInsertText",
+      "ImpEditEngine::ImpFastInsertText",
+      "ImpEditEngine::ImpFastInsertParagraph"
     ],
     "preservedResponsibilities": [
-      "Literal aLine preparation/capacity block extracted from original ImpInsertText using real EditPaM/ContentNode length, SAL copy/iterateCodePoints and original pinned Unicode category owner. Retains mutable nEnd, complete-node capacity, exactly84 prior UTF16 offsets, explicit no-break exclusions, original hyphen/number rule and source zero-capacity retry arithmetic. Supplementary symbol overshoot/letter surrogate splitting and boundary hyphen outcome remain source-identical (CALC-431/432). This is an internal member-group extraction, not a public upstream helper or a completed engine/parser/provider."
+      "Literal aLine preparation/capacity block extracted from original ImpInsertText using real EditPaM/ContentNode length, SAL copy/iterateCodePoints and original pinned Unicode category owner. Retains mutable nEnd, complete-node capacity, exactly84 prior UTF16 offsets, explicit no-break exclusions, original hyphen/number rule and source zero-capacity retry arithmetic. Supplementary symbol overshoot/letter surrogate splitting and boundary hyphen outcome remain source-identical (CALC-431/432). This is an internal member-group extraction, not a public upstream helper or a completed engine/parser/provider.",
+      "The rich-text insertion path uses the original fast text insertion, character limit fallback and fast empty paragraph construction."
     ],
     "omittedResponsibilities": [
-      "Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending."
+      "Interactive view formatting remains outside the document text slice."
     ],
     "evidence": {
       "local": [
@@ -27,12 +32,24 @@
         {
           "path": "apps/office/src/editeng/source/editeng/native-insert-text-line.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit2.cxx",
           "marker": "ImpEditEngine::ImpInsertText"
+        },
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "ImpFastInsertParagraph"
+        },
+        {
+          "path": "editeng/source/editeng/impedit4.cxx",
+          "marker": "InsertTextObject"
         }
       ]
     },

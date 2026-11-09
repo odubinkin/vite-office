@@ -7,16 +7,21 @@
     "localPath": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
     "upstreamPath": "editeng/source/editeng/impedit4.cxx",
     "localSymbols": [
-      "CreateTextObject"
+      "CreateTextObject",
+      "SetTextObject",
+      "InsertTextObject"
     ],
     "upstreamSymbols": [
-      "ImpEditEngine::CreateTextObject"
+      "ImpEditEngine::CreateTextObject",
+      "ImpEditEngine::SetText",
+      "ImpEditEngine::InsertTextObject"
     ],
     "preservedResponsibilities": [
-      "Original private ImpEditEngine::CreateTextObject member-body extraction operates only the actual receiver and existing EditDoc, selection, pool, content, attributes, styles, WrongList, ParaPortion, TextPortion and EditLine owners. It preserves by-value selection adjustment, global whole-paragraph eligibility, actual DEF_METRIC/orientation/script metadata, destination-pool copies, empty-paragraph attributes, clipping, spell cloning, source cache conjunction and unsigned16 count narrowing, TextPortion copy/EditLine Clone behavior and exception cleanup. No second engine/state object, synthetic line model, default provider or renderer is introduced. CALC-439/440 preserve source narrowing and zero-count range behavior."
+      "Original private ImpEditEngine::CreateTextObject member-body extraction operates only the actual receiver and existing EditDoc, selection, pool, content, attributes, styles, WrongList, ParaPortion, TextPortion and EditLine owners. It preserves by-value selection adjustment, global whole-paragraph eligibility, actual DEF_METRIC/orientation/script metadata, destination-pool copies, empty-paragraph attributes, clipping, spell cloning, source cache conjunction and unsigned16 count narrowing, TextPortion copy/EditLine Clone behavior and exception cleanup. No second engine/state object, synthetic line model, default provider or renderer is introduced. CALC-439/440 preserve source narrowing and zero-count range behavior.",
+      "The source no-view replacement and insertion preserve paragraph defaults, actual character features, source metric conversion, field refresh and text orientation."
     ],
     "omittedResponsibilities": [
-      "Concrete engine construction/resources, source undo manager, general deletion/word-boundary/layout/view/application services, actual process BreakIterator factory, device/map operations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Fixtures prepare these dependencies explicitly and do not certify a complete engine. Native undefined arithmetic/invalid pointers, physical allocation/ABI/refcount/thread behavior, debug diagnostics and complete QA are unverified. NatNum12 and final CSV audit remain pending."
+      "Full style-pool lookup, layout cache replay and interactive insertion remain outside the document editor slice."
     ],
     "evidence": {
       "local": [
@@ -31,12 +36,24 @@
         {
           "path": "apps/office/src/test/editeng-engine-fixture.ts",
           "marker": "class PreparedEngine"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx",
           "marker": "ImpEditEngine::CreateTextObject"
+        },
+        {
+          "path": "editeng/source/editeng/impedit4.cxx",
+          "marker": "InsertTextObject"
+        },
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "ImpFastInsertText"
         }
       ]
     },

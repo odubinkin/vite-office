@@ -36,6 +36,10 @@
         {
           "path": "apps/office/src/svl/source/items/iteminfo.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -62,6 +66,14 @@
         {
           "path": "svl/source/items/itempool.cxx",
           "marker": "SfxItemPool::sendShutdownHint"
+        },
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "GetTrueSlotId"
+        },
+        {
+          "path": "editeng/source/editeng/editdoc.cxx",
+          "marker": "ConvertAndPutItems"
         }
       ]
     },
@@ -85,8 +97,7 @@
       "ItemInfoUser"
     ],
     "omittedResponsibilities": [
-      "Upstream obligations outside SfxItemPool, ScDocument::UpdateFontCharSet, ScDocument::GetDocColors, SwDoc::GetDocColors and the bounded SfxPoolItemFactory, SfxItemPool contract remain intentionally omitted.",
-      "Task141 does not port ItemInfoUser, pool chains/user defaults/surrogates/full pool copying, native lifetime/cache/debug/ABI machinery or complete Calc package/document/UI/ODS."
+      "Unrelated physical native item-pool lifetime remains outside this change."
     ],
     "preservedResponsibilities": [
       "Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.",
@@ -103,7 +114,8 @@
       "S3HW1E routes item entry construction to the real globalpool owner and releases replaced/reset ItemInfoUser entries. Default-item classification and metadata ownership remain distinct from held ordinary item counts. Full pool shutdown, surrogate registration, instance caching and all metadata lifecycle callers remain unverified.",
       "Module-global Writer defaults checkpoint: SwModule explicitly initializes/gets/removes its owned ItemInfoPackageSwAttributes; its getter requires initialization. Existing browser singleton bootstrap invokes the source swdll initialization boundary. SwDoc injects that package into the two-argument SwAttrPool constructor, while GetDfltAttr directly borrows the global package. Exact163 native Which/slot/flag entries are extracted from pinned init.cxx and macro/Which declarations. Represented defaults share actual static ItemInfo/default identities across documents/pool copies; sparse snapshot registration accepts actual static/dynamic metadata without value cloning. Global fonts use GetDefaultFonts. Existing document-creation font preferences and two-line orphan/widow values are user overlays, distinct from global defaults (orphan/widow zero). Strict lifecycle, identity, reset/copy, complete metadata/slot map and current consumer tests cover this path. Unrepresented native item classes retain no fabricated value; existing generic paragraph bool/count/break value carriers, full InitNew conditions/configuration and full native pool/ABI still require separate alignment. No whole-filter, module or goal promotion.",
       "S3HW1E adds native GetTrueWhichIDFromSlotID for consumed CSS parser construction, with non-slot/missing zero and original optional secondary-chain lookup. Native pool-chain tests distinguish this from GetWhichIDFromSlotID identity fallback. No wider pool parity promotion.",
-      "B8TCAE adds bounded source-contract/native evidence: The actual concrete caller closes the original logical ItemInfoPackage scope after detaching its static entry. The base virtual destructor projection owns no default table. No post-destruction package access, fabricated counters or native physical lifetime parity claim is introduced."
+      "B8TCAE adds bounded source-contract/native evidence: The actual concrete caller closes the original logical ItemInfoPackage scope after detaching its static entry. The base virtual destructor projection owns no default table. No post-destruction package access, fabricated counters or native physical lifetime parity claim is introduced.",
+      "The source true Which-to-slot accessor returns zero for unmapped slots and preserves the existing default identity in GetSlotId."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/itempool.cxx",
@@ -122,7 +134,8 @@
       "SfxItemPool::SetUserDefaultItem",
       "SfxItemPool::GetUserDefaultItem",
       "SfxItemPool::ResetUserDefaultItem",
-      "SfxItemPool::GetPoolDefaultItem"
+      "SfxItemPool::GetPoolDefaultItem",
+      "SfxItemPool::GetTrueSlotId"
     ]
   },
   "legacyOrder": 57

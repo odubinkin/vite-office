@@ -253,8 +253,9 @@ function lcl_PutString(
         }
       }
       if (ScStringUtil.isMultiline(string)) {
-        document.SetTextCell(pos, string);
-        docImport.invalidateBlockPositionSet(pos.Tab());
+        const engine = document.GetEditEngine();
+        engine.SetTextCurrentDefaults(string);
+        docImport.setEditCell(pos, engine.CreateTextObject());
       } else docImport.setStringCell(pos, string);
     } finally {
       string.dispose();
@@ -298,8 +299,9 @@ function lcl_PutString(
   if (value.includes("\n")) {
     const string = unicode(value);
     try {
-      document.SetTextCell(pos, string);
-      docImport.invalidateBlockPositionSet(pos.Tab());
+      const engine = document.GetEditEngine();
+      engine.SetTextCurrentDefaults(string);
+      docImport.setEditCell(pos, engine.CreateTextObject());
     } finally {
       string.dispose();
     }
