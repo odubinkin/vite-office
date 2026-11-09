@@ -239,7 +239,8 @@ export class ScDocShell extends SfxObjectShell {
         candidate.InsertTab(0, unicode("Sheet1"));
         const stream = new SvStream(bytes, RTL_TEXTENCODING_DONTKNOW);
         const options = new ScAsciiOptions();
-        if (medium.filterOptions) options.ReadFromString(medium.filterOptions, stream);
+        if (medium.filterOptions !== undefined)
+          options.ReadFromString(medium.filterOptions, stream);
         else {
           options.eCharSet = RTL_TEXTENCODING_UTF8;
           options.aFieldSeps = ",";

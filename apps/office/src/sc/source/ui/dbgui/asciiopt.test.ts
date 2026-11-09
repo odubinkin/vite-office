@@ -42,13 +42,12 @@ it("round-trips original legacy charset aliases through persistent CSV options",
   }
 });
 
-it("keeps copied column metadata independent and preserves options on empty input", /** Checks original copy ownership and the source empty-string no-op. @returns Nothing. */ () => {
+it("keeps copied column metadata independent", /** Checks original copy ownership and the source empty-string no-op. @returns Nothing. */ () => {
   const source = new ScAsciiOptions();
   source.ReadFromString(
     "FIX,34,UTF-8,3,1/9/5/1,1033,true,false,false,true,true,0,false,true,false",
   );
   const copy = new ScAsciiOptions(source);
-  copy.ReadFromString("");
   expect(copy).toEqual(source);
   expect(copy.mvColStart).not.toBe(source.mvColStart);
   expect(copy.mvColFormat).not.toBe(source.mvColFormat);
@@ -121,6 +120,19 @@ it("retains unprovided quote and charset fields in the shortest legacy options",
   expect(options.aFieldSeps).toBe(";");
   expect(options.cTextSep).toBe("'");
   expect(options.eCharSet).toBe(RTL_TEXTENCODING_UTF8);
+});
+
+it("applies compatibility defaults even when a present options string is empty", /** Distinguishes an empty token stream from the default constructor. @returns Nothing. */ () => {
+  const options = new ScAsciiOptions();
+  expect(options.bDetectSpecialNumber).toBe(false);
+  options.bRemoveSpace = true;
+  options.bIncludeBOM = true;
+  options.ReadFromString("");
+  expect(options.aFieldSeps).toBe(";");
+  expect(options.cTextSep).toBe('"');
+  expect(options.bDetectSpecialNumber).toBe(true);
+  expect(options.bRemoveSpace).toBe(false);
+  expect(options.bIncludeBOM).toBe(false);
 });
 
 it("serializes each UTF-16 separator unit as source OUString indexing does", /** Checks serializes each UTF-16 separator unit as source OUString indexing does. @returns Test completion or assertion result. */ () => {

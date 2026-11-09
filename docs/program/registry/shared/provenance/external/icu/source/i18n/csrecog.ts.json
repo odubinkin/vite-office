@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/csrecog.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/csrecog.cpp",
+    "localSymbols": [
+      "CharsetRecognizer"
+    ],
+    "upstreamSymbols": [
+      "CharsetRecognizer::getLanguage"
+    ],
+    "preservedResponsibilities": [
+      "Original recognizer virtual matching contract and default empty language."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrecog.ts",
+          "marker": "CharsetRecognizer"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/csrecog.cpp",
+          "marker": "getLanguage"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 243
+revision: 246
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:27:09.463Z"
+  updated_at: "2026-11-09T20:48:56.531Z"
   updated_by: "CODER"
-  note: "Verified native multiline import and export through the document edit engine, rich fields and tab features, 252 Calc cases, focused shared checks, worker verification, exact Chromium download bytes and static gates. Continue with the pinned ICU no-BOM DETECT option and the absent versus present-empty import options contract."
-  attempts: 64
+  note: "Verified original ICU charset detection and native CSV option defaults. Pinned native comparison matched 76,524 inputs and 177,745 ranked results. Continue with Big5, GB18030 and ISO-2022-CN native converter registration and CSV conversion, then shell overflow status and final acceptance."
+  attempts: 65
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1352,8 +1355,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:48:56.531Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified original ICU charset detection and native CSV option defaults. Pinned native comparison matched 76,524 inputs and 177,745 ranked results. Continue with Big5, GB18030 and ISO-2022-CN native converter registration and CSV conversion, then shell overflow status and final acceptance."
+  -
+    type: "status"
+    at: "2026-11-09T20:49:15.387Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:27:33.960Z"
+doc_updated_at: "2026-11-09T20:49:15.387Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3293,6 +3309,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:48:56.531Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified original ICU charset detection and native CSV option defaults. Pinned native comparison matched 76,524 inputs and 177,745 ranked results. Continue with Big5, GB18030 and ISO-2022-CN native converter registration and CSV conversion, then shell overflow status and final acceptance.
+    Attempts: 65
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:48:55.848Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4788,6 +4834,14 @@ sections:
     - The existing browser display and ODS worker text transfer use expanded rich text, so an imported native tab does not become a control character in the UI or ODF text. The worker composition root initializes the same UNO service registry before installing the Calc transport. The existing primary-save workflow persists the imported model and the CSV action exports the active sheet.
     - Verification passed for 252 focused Calc tests, 57 focused shared tests plus a 22-test object-suite rerun with the character-attribute regression, and 16 worker/workflow tests after moving bootstrap to the composition root. Vite production build and Chromium passed with a tab-bearing multiline CSV, ODS persistence and exact download bytes. Typecheck, lint, JSDoc, module boundaries, Calc resources, source tree, file-size, source provenance, shared and Calc parity inventories, formatting and diff checks passed. No full test suite is due in this checkpoint of the same task.
     - Final source audit identified a remaining actual CSV option. LibreOffice handles a present empty import options item differently from an absent item and SvStream::DetectEncoding uses ICU charset recognition after the BOM path. The current implementation only checks BOM for DETECT. A local native witness links the pinned ICU 78.3 charset API and produces ordered names, languages and confidences for no-BOM cases. The AgentPlane task remains in progress for the remaining source option and final acceptance.
+
+    ### Original ICU charset detection and CSV option defaults
+
+    - Ported the complete pinned ICU 78.3 detector scan with 28 source recognizer registrations, original bounded input munging, C1 aliases, source byte and n-gram tables, stable descending confidence, result reuse and C status gates. The source-table generator verifies all 36 original table groups and their original source hashes. CALC-486 through CALC-489 record and preserve malformed UTF-8 scores, the GB18030 decimal threshold, the default-disabled IBM matchers and the U+10FFFF cutoff.
+    - Compared 76,524 counted inputs and all 177,745 ranked matches against actual pinned static ICU libraries. Native and TypeScript name, language, confidence, status and order output matched exactly with SHA-256 6b53ad9c358163cb360ab37174121aa26b5a8c0a3f78143c59a6f2da18a7c51f. All 33 emitted charset names were observed. The source detector requires no runtime native library in the browser.
+    - SvStream now follows the original BOM check, 4096-byte sample, rewind, exact supported-name mapping and UTF-16 endian setting. The original best match is used alone. ScAsciiOptions distinguishes absent and present-empty import options and uses the source 500ms monotonic separator-scan timeout after a physical-line read. The browser scheduler shares the original clock binding.
+    - Verified 203 focused Calc tests, 19 final option/shell cases after placing encoding assertions in a dedicated test file, 36 shared detector/stream/clock/scheduler tests, 47 dependency tooling tests, the production Vite build and Chromium CSV/ODS/download, typecheck, lint, docs, source tree, file size, Calc resources, provenance, shared/Calc inventory and generator reproducibility. The same AgentPlane task remains open and no full suite is due.
+    - Audit of the actual SAL table found that the source detector can select Big5, GB18030 and ISO-2022-CN, while their corresponding native converter entries are still absent from the port. The source table preserves those selections. Complete the original converter owners and verify their normal CSV paths before claiming final encoding acceptance. Calc shell overflow status forwarding is also still open.
 id_source: "generated"
 ---
 ## Summary
@@ -6736,6 +6790,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:48:56.531Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified original ICU charset detection and native CSV option defaults. Pinned native comparison matched 76,524 inputs and 177,745 ranked results. Continue with Big5, GB18030 and ISO-2022-CN native converter registration and CSV conversion, then shell overflow status and final acceptance.
+Attempts: 65
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:48:55.848Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8235,3 +8319,11 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - The existing browser display and ODS worker text transfer use expanded rich text, so an imported native tab does not become a control character in the UI or ODF text. The worker composition root initializes the same UNO service registry before installing the Calc transport. The existing primary-save workflow persists the imported model and the CSV action exports the active sheet.
 - Verification passed for 252 focused Calc tests, 57 focused shared tests plus a 22-test object-suite rerun with the character-attribute regression, and 16 worker/workflow tests after moving bootstrap to the composition root. Vite production build and Chromium passed with a tab-bearing multiline CSV, ODS persistence and exact download bytes. Typecheck, lint, JSDoc, module boundaries, Calc resources, source tree, file-size, source provenance, shared and Calc parity inventories, formatting and diff checks passed. No full test suite is due in this checkpoint of the same task.
 - Final source audit identified a remaining actual CSV option. LibreOffice handles a present empty import options item differently from an absent item and SvStream::DetectEncoding uses ICU charset recognition after the BOM path. The current implementation only checks BOM for DETECT. A local native witness links the pinned ICU 78.3 charset API and produces ordered names, languages and confidences for no-BOM cases. The AgentPlane task remains in progress for the remaining source option and final acceptance.
+
+### Original ICU charset detection and CSV option defaults
+
+- Ported the complete pinned ICU 78.3 detector scan with 28 source recognizer registrations, original bounded input munging, C1 aliases, source byte and n-gram tables, stable descending confidence, result reuse and C status gates. The source-table generator verifies all 36 original table groups and their original source hashes. CALC-486 through CALC-489 record and preserve malformed UTF-8 scores, the GB18030 decimal threshold, the default-disabled IBM matchers and the U+10FFFF cutoff.
+- Compared 76,524 counted inputs and all 177,745 ranked matches against actual pinned static ICU libraries. Native and TypeScript name, language, confidence, status and order output matched exactly with SHA-256 6b53ad9c358163cb360ab37174121aa26b5a8c0a3f78143c59a6f2da18a7c51f. All 33 emitted charset names were observed. The source detector requires no runtime native library in the browser.
+- SvStream now follows the original BOM check, 4096-byte sample, rewind, exact supported-name mapping and UTF-16 endian setting. The original best match is used alone. ScAsciiOptions distinguishes absent and present-empty import options and uses the source 500ms monotonic separator-scan timeout after a physical-line read. The browser scheduler shares the original clock binding.
+- Verified 203 focused Calc tests, 19 final option/shell cases after placing encoding assertions in a dedicated test file, 36 shared detector/stream/clock/scheduler tests, 47 dependency tooling tests, the production Vite build and Chromium CSV/ODS/download, typecheck, lint, docs, source tree, file size, Calc resources, provenance, shared/Calc inventory and generator reproducibility. The same AgentPlane task remains open and no full suite is due.
+- Audit of the actual SAL table found that the source detector can select Big5, GB18030 and ISO-2022-CN, while their corresponding native converter entries are still absent from the port. The source table preserves those selections. Complete the original converter owners and verify their normal CSV paths before claiming final encoding acceptance. Calc shell overflow status forwarding is also still open.

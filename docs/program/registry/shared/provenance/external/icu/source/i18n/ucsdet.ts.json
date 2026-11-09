@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/ucsdet.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/ucsdet.cpp",
+    "localSymbols": [
+      "ucsdet_open",
+      "ucsdet_setText",
+      "ucsdet_detect",
+      "ucsdet_detectAll",
+      "ucsdet_getName"
+    ],
+    "upstreamSymbols": [
+      "ucsdet_open",
+      "ucsdet_setText",
+      "ucsdet_detect",
+      "ucsdet_detectAll",
+      "ucsdet_getName"
+    ],
+    "preservedResponsibilities": [
+      "Original counted-byte C APIs preserve status gates, borrowed handles and match name, language and confidence access."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.ts",
+          "marker": "ucsdet_open"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/ucsdet.cpp",
+          "marker": "ucsdet_getName"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

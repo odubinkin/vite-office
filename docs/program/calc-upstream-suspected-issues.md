@@ -5213,3 +5213,27 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/libreoffice-reference/i18npool/source/nativenumber/nativenumbersupplier.cxx`, `NativeNumberSupplierService::getNativeNumberString`.
 - NumberText receives the requested locale. The casing calls receive the supplier's `aLocale` member, which starts empty and is updated by the other native-number paths that refresh the shared punctuation tables. The English title branch tests the requested locale.
 - Keep the original locale arguments and update points.
+
+### CALC-486 — Charset detection can score malformed UTF-8 as a positive match
+
+- Source `vendor/icu-reference/source/i18n/csrutf8.cpp`, `CharsetRecog_UTF8::match`.
+- The recognizer checks the bit patterns and counts trailing bytes. It assigns UTF-8 confidence 80 to the overlong sequence `C0 AF`. It assigns confidence 15 to the incomplete sequence `E2 82` because reaching the end does not increment the invalid count.
+- Preserve recognition scores independently of the actual converter's validity policy.
+
+### CALC-487 — The GB18030 recognizer accepts trail byte 0x7F
+
+- Source `vendor/icu-reference/source/i18n/csrmbcs.cpp`, `CharsetRecog_gb_18030::nextChar`.
+- The second trail range starts at decimal 80. It overlaps the preceding range and accepts `0x7F`. Original ICU ranks GB18030 at confidence 10 for ten `81 7F` pairs.
+- Preserve the exact decimal bound in charset scoring. The actual text converter retains its own byte validity checks.
+
+### CALC-488 — Charset detection also tests the IBM recognizers registered as disabled
+
+- Source `vendor/icu-reference/source/i18n/csdetect.cpp`, `initRecognizers` and `CharsetDetector::detectAll`.
+- The registry marks all four IBM420 and IBM424 entries disabled by default. The detection loop still calls every matcher. The original result for `01 B8` includes `IBM420_ltr` with confidence 75.
+- Preserve the complete source scan and the original stable ordering. LibreOffice's stream layer maps only its selected names after ICU ranking.
+
+### CALC-489 — The UTF-32 recognizer excludes the maximum Unicode scalar
+
+- Source `vendor/icu-reference/source/i18n/csrucode.cpp`, `CharsetRecog_UTF_32::match`.
+- The score treats values greater than or equal to U+10FFFF as invalid. A single UTF-32BE unit `00 10 FF FF` therefore produces no UTF-32BE match, even though U+10FFFF is representable as a Unicode scalar value.
+- Preserve the strict source cutoff and leave scalar conversion to the separate converter.

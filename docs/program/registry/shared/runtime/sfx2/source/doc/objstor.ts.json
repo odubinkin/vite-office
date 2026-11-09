@@ -7,19 +7,32 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "text-csv-filter",
-    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "B",
-      "evidence": ["apps/office/src/sfx2/source/doc/objstor.ts#DetectCsvSeparators", "apps/office/src/sfx2/source/doc/objstor.test.ts", "sfx2/source/doc/objstor.cxx#SfxObjectShell::DetectCsvSeparators"],
-      "justification": "Task AQF9AG ports the source CSV separator scanner's sep= header, quoted-field skipping, per-line occurrence counts, distinct-count tie resolution, source priority order, 500ms bound and seek restoration. ICU charset detection remains outside this owner.",
+      "evidence": [
+        "apps/office/src/sfx2/source/doc/objstor.ts#DetectCsvSeparators",
+        "apps/office/src/sfx2/source/doc/objstor.test.ts",
+        "sfx2/source/doc/objstor.cxx#SfxObjectShell::DetectCsvSeparators",
+        "apps/office/src/sfx2/source/doc/objstor.ts#GetSystemTicks",
+        "sfx2/source/doc/objstor.cxx",
+        "tools/source/datetime/ttime.cxx"
+      ],
+      "justification": "Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind. The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read. Browser file storage remains separate from this detector.",
       "knownViolations": [],
-      "localSymbols": ["DetectCsvSeparators"],
+      "localSymbols": [
+        "DetectCsvSeparators"
+      ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sfx2/source/doc/objstor.cxx",
-      "upstreamSymbols": ["SfxObjectShell::DetectCsvSeparators"]
+      "upstreamSymbols": [
+        "SfxObjectShell::DetectCsvSeparators"
+      ]
     }
   }
 }

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/csrucode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/csrucode.ts#CharsetRecog_UTF_32",
+        "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+        "vendor/icu-reference/source/i18n/csrucode.cpp",
+        "vendor/icu-reference/source/i18n/csdetect.cpp"
+      ],
+      "justification": "Original endian variants preserve UTF-16 byte limits, BOM precedence and UTF-32 validity, including the source CALC-489 cutoff. Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CharsetRecog_UTF_16_BE",
+        "CharsetRecog_UTF_16_LE",
+        "CharsetRecog_UTF_32_BE",
+        "CharsetRecog_UTF_32_LE"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/i18n/csrucode.cpp",
+      "upstreamSymbols": [
+        "CharsetRecog_UTF_16_BE::match",
+        "CharsetRecog_UTF_16_LE::match",
+        "CharsetRecog_UTF_32::match"
+      ]
+    }
+  }
+}

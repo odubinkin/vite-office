@@ -1,4 +1,5 @@
 /** @fileoverview Browser/Worker SalTimer platform binding. Native VCL scheduler logic remains above this boundary,as with the upstream Qt single-shot system timer. */
+import { Time } from "../../tools/source/datetime/ttime";
 import { SalTimer } from "../inc/saltimer";
 import type { SchedulerPlatform } from "../inc/scheduler";
 
@@ -7,7 +8,7 @@ const MAX_BROWSER_TIMER_DELAY = 0x7fffffff;
 
 /** Monotonic millisecond clock at the browser platform boundary for native tools::Time::GetSystemTicks comparisons. @returns Unsigned64 ticks. */
 export function getSystemTicks(): bigint {
-  return BigInt.asUintN(64, BigInt(Math.floor(globalThis.performance.now())));
+  return Time.GetSystemTicks();
 }
 
 /** Queries actual host queued input where exposed. Browser rendering and unsupported host input queues remain controlled by the host event loop;no synthetic pending-event service is installed. @param includeContinuous - Include continuous pointer input. @returns Host pending input. */

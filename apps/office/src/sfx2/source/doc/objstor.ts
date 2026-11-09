@@ -1,5 +1,6 @@
 /** @fileoverview Source SfxObjectShell CSV separator detection from objstor.cxx. */
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import { Time } from "../../../tools/source/datetime/ttime";
 import type { SvStream } from "../../../tools/source/stream/stream";
 
 const commonSeparators = [",", "\t", ";", ":", "|", " ", "\\", "/"] as const;
@@ -28,7 +29,7 @@ export function DetectCsvSeparators(
   delimiter: string,
 ): string {
   const initialPosition = stream.Tell(),
-    startTime = Date.now(),
+    startTime = Time.GetSystemTicks(),
     previousLines: Array<Map<string, number>> = [],
     stats = new Map<string, SeparatorStats>(),
     common = new Set<string>(commonSeparators);
@@ -41,9 +42,9 @@ export function DetectCsvSeparators(
   if (!delimiter || delimiter === "\0") delimiter = '"';
   stream.StartReadingUnicodeText(encoding);
   stream.SetStreamEncoding(encoding);
-  while (Date.now() - startTime < 500) {
+  for (;;) {
     const line = stream.ReadUniOrByteStringLine();
-    if (stream.eof()) break;
+    if (stream.eof() || BigInt.asUintN(64, Time.GetSystemTicks() - startTime) >= 500n) break;
     if (!line) continue;
     if (!lineCount) {
       if (line.length === 5 && startsWithSepHeader(line, false)) {

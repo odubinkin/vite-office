@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/csrmbcs.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/csrmbcs.cpp",
+    "localSymbols": [
+      "CharsetRecog_mbcs",
+      "IteratedChar",
+      "CharsetRecog_sjis",
+      "CharsetRecog_gb_18030"
+    ],
+    "upstreamSymbols": [
+      "CharsetRecog_mbcs::match_mbcs",
+      "CharsetRecog_gb_18030::nextChar"
+    ],
+    "preservedResponsibilities": [
+      "The original five multibyte recognizers use their source byte cursors, frequency tables and logarithmic confidence. CALC-487 preserves the decimal GB18030 boundary."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrmbcs.ts",
+          "marker": "match_mbcs"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrmbcs.tables.json",
+          "marker": "sourceSha256"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/csrmbcs.cpp",
+          "marker": "nextChar"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

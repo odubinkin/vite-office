@@ -29,10 +29,11 @@
       "Task AQF9AG passes the CSV input stream into ScAsciiOptions::ReadFromString so DETECT separators use the upstream SfxObjectShell owner before ExtText2Doc consumes the source bytes.",
       "Task AQF9AG follows ScDocShell::ConvertTo for CSV sheet selection: zero exports the active sheet, minus one exports each sheet separately, positive numbers select one-based sheet indices, and invalid selectors fail. Browser downloads use the selected export medium's filter options.",
       "AQF9AG restores source CSV ConvertFrom post-import order: ImportStream, StartAllListeners(), SetAllFormulasDirty(default context), then the existing medium/BOM/name completion. Imported dirty formulas are entered into the normal formula tree and their listeners use native whole-document traversal.",
-      "AsciiSave now expands edit objects through the original document-owned EditEngine before writing CSV text. The shell links adopted model graphs for field display."
+      "AsciiSave now expands edit objects through the original document-owned EditEngine before writing CSV text. The shell links adopted model graphs for field display.",
+      "Original ConvertFrom distinguishes an absent filter item, which uses API defaults, from an explicitly empty item, which uses the ScAsciiOptions parser."
     ],
     "omittedResponsibilities": [
-      "Browser primary-media behavior remains separate from the native CSV conversion."
+      "The browser handles input identity and primary persistence through its existing file workflows."
     ],
     "evidence": {
       "local": [
@@ -63,6 +64,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -81,6 +86,14 @@
         {
           "path": "sc/source/ui/docshell/docsh.cxx",
           "marker": "rEngine.SetText( *pObj)"
+        },
+        {
+          "path": "sc/source/ui/docshell/docsh.cxx",
+          "marker": "ConvertFrom"
+        },
+        {
+          "path": "sc/source/ui/dbgui/asciiopt.cxx",
+          "marker": "ScAsciiOptions::ReadFromString"
         }
       ]
     }

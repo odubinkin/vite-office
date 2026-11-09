@@ -1,4 +1,4 @@
-/** @fileoverview Original tools::Time packed scalar, component normalization and nanosecond/day conversion. GetClock follows the original decimal rounding/truncation path; platform clocks remain separate. */
+/** @fileoverview Original tools::Time packed scalar, component normalization and nanosecond/day conversion. GetClock follows the original decimal rounding/truncation path and system ticks use the host monotonic clock. */
 import { approxFloor, round, pow10Exp } from "../../../sal/inc/rtl/math";
 import type { DateTime as UNODateTime } from "../../../offapi/com/sun/star/util/DateTime";
 
@@ -26,6 +26,16 @@ const HOUR_MASK = 10000000000000n,
   SEC_MASK = 1000000000n;
 /** Native signed64 packed time value; bigint retains the source encoded decimal fields. */
 export class Time implements TimeConstReference {
+  /** Original platform monotonic clock in microseconds. @returns Unsigned64 ticks. */
+  static GetMonotonicTicks(): bigint {
+    return BigInt.asUintN(64, BigInt(Math.floor(globalThis.performance.now() * 1000)));
+  }
+
+  /** Original truncation of microsecond monotonic ticks to milliseconds. @returns Unsigned64 ticks. */
+  static GetSystemTicks(): bigint {
+    return Time.GetMonotonicTicks() / 1000n;
+  }
+
   static readonly EMPTY = 0;
   static readonly hourPerDay = 24n;
   static readonly minutePerHour = 60n;

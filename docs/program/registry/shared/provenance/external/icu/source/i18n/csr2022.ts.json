@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/csr2022.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/csr2022.cpp",
+    "localSymbols": [
+      "CharsetRecog_2022JP",
+      "CharsetRecog_2022KR",
+      "CharsetRecog_2022CN"
+    ],
+    "upstreamSymbols": [
+      "CharsetRecog_2022::match_2022"
+    ],
+    "preservedResponsibilities": [
+      "Original JP, KR and CN escape tables and bounded score math use the prepared source bytes and count shifts exactly."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csr2022.ts",
+          "marker": "match_2022"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csr2022.tables.json",
+          "marker": "sourceSha256"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/csr2022.cpp",
+          "marker": "match_2022"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

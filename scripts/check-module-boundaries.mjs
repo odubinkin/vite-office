@@ -364,9 +364,9 @@ const allowedEdges = new Map([
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
-  // Original stream.cxx includes rtl/string.hxx and rtl/ustring.hxx for text conversion.
+  // Original stream.cxx uses RTL text conversion and unicode/ucsdet.h; Library_tl links ICU.
   // time.hxx/datetime.hxx consume published util::Time/DateTime; Library_tl uses the SDK API.
-  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal", "offapi"])],
+  ["tools", new Set(["o3tl", "cppu", "comphelper", "external", "sal", "offapi"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.
