@@ -1,6 +1,5 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
 import {
@@ -18,12 +17,7 @@ import {
 } from "./rtfdocumentimpl.context";
 import { DispatchFrameControl, RTFFrame } from "./rtfdocumentimpl.frame";
 import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
-import {
-  createRtfBorder,
-  dispatchRtfBorder,
-  DispatchCellBorderValue,
-  RTF_BORDER_STYLES,
-} from "./rtfdocumentimpl.border";
+import { DispatchBorder, DispatchBorderValue, RTFBorderState } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
 import {
   dispatchFloatingTableValue,
@@ -50,7 +44,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     this["states"].push({
       destination: previous?.destination ?? "body",
       frame: new RTFFrame(previous?.frame),
-      cellBorder: previous?.cellBorder ?? false,
+      borderState: previous?.borderState ?? RTFBorderState.NONE,
       shape: previous?.shape,
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
@@ -75,9 +69,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       currentCodepage: previous?.currentCodepage ?? this["defaultCodepage"],
       ...(previous?.fontCodepage === undefined ? {} : { fontCodepage: previous.fontCodepage }),
       colorIndex: previous?.colorIndex ?? 0,
-      ...(previous?.paragraphBorder === undefined
-        ? {}
-        : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
       ...(previous?.basedOnStyleName === undefined
@@ -607,6 +598,11 @@ export function DispatchBodyControl(
   )
     return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
+  if (
+    DispatchBorder(state, name) ||
+    DispatchBorderValue(state, name, parameter ?? 0, this["colors"])
+  )
+    return;
   if (DispatchFrameControl.call(this, name, parameter ?? 0, state)) return;
   if (
     !this["m_aTextBufferStack"].length &&
@@ -624,73 +620,6 @@ export function DispatchBodyControl(
   }
   if (name === "page" || name === "column") {
     DispatchPageBreak.call(this, name, state);
-    return;
-  }
-  if (["box", "brdrt", "brdrl", "brdrb", "brdrr", "brdrbtw"].includes(name)) {
-    const edge =
-      name === "box"
-        ? "box"
-        : name === "brdrbtw"
-          ? "between"
-          : name === "brdrt"
-            ? SvxBoxItemLine.TOP
-            : name === "brdrl"
-              ? SvxBoxItemLine.LEFT
-              : name === "brdrb"
-                ? SvxBoxItemLine.BOTTOM
-                : SvxBoxItemLine.RIGHT;
-    state.paragraphBorder = edge;
-    state.cellBorder = false;
-    const borders = new Map(state.paragraph.borders);
-    if (edge === "box")
-      for (const side of [
-        SvxBoxItemLine.TOP,
-        SvxBoxItemLine.LEFT,
-        SvxBoxItemLine.BOTTOM,
-        SvxBoxItemLine.RIGHT,
-      ])
-        borders.set(side, createRtfBorder());
-    else borders.set(edge, createRtfBorder());
-    state.paragraph = { ...state.paragraph, borders };
-    return;
-  }
-  if (
-    Object.hasOwn(RTF_BORDER_STYLES, name) ||
-    name === "brdrw" ||
-    name === "brdrcf" ||
-    name === "brsp"
-  ) {
-    if (state.paragraphBorder !== undefined) {
-      const borders = new Map(state.paragraph.borders);
-      const edges =
-        state.paragraphBorder === "box"
-          ? ([
-              SvxBoxItemLine.TOP,
-              SvxBoxItemLine.LEFT,
-              SvxBoxItemLine.BOTTOM,
-              SvxBoxItemLine.RIGHT,
-            ] as const)
-          : [state.paragraphBorder];
-      for (const edge of edges) {
-        const border = { ...(borders.get(edge) ?? createRtfBorder()) };
-        dispatchRtfBorder(border, name, parameter);
-        borders.set(edge, border);
-      }
-      state.paragraph = { ...state.paragraph, borders };
-    } else if (state.cellBorder)
-      DispatchCellBorderValue(state.tableCellSprms, name, parameter ?? 0, this["colors"]);
-    else {
-      // putBorderProperty with border state NONE clears all paragraph borders.
-      const borders = new Map(state.paragraph.borders);
-      for (const side of [
-        SvxBoxItemLine.TOP,
-        SvxBoxItemLine.LEFT,
-        SvxBoxItemLine.BOTTOM,
-        SvxBoxItemLine.RIGHT,
-      ])
-        borders.set(side, createRtfBorder());
-      state.paragraph = { ...state.paragraph, borders };
-    }
     return;
   }
   if (name === "par") {
@@ -719,7 +648,6 @@ export function DispatchBodyControl(
     state.paragraphSprms.clear();
     this["m_aTextBuffer"].m_bNeedPap = true;
     state.paragraph = { ...DEFAULT_PARAGRAPH };
-    delete state.paragraphBorder;
     return;
   }
   const underlineStyle = Object.hasOwn(RTF_UNDERLINE_STYLES, name)

@@ -82,6 +82,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -112,6 +116,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
           "marker": "case NS_ooxml::LN_CT_PrBase_shd:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_CT_PrBase_pBdr"
         }
       ]
     },
@@ -148,7 +156,8 @@
       "S3HW1E HTML74: Original section text-direction sprm maps through the real section context to the signed-short PROP_WRITING_MODE with native mode fallback.",
       "Resolves original framePr attributes on the actual paragraph property context.",
       "Resolves original line-number section attributes and publishes the shared document settings.",
-      "Resolves paragraph shading into live drawing fill through the original CellColorHandler."
+      "Resolves paragraph shading into live drawing fill through the original CellColorHandler.",
+      "Resolves the ordered native paragraph edge resources using BorderHandler and native UNO properties."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

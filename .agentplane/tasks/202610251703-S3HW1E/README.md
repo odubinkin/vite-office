@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 561
+revision: 564
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T23:51:21.701Z"
+  updated_at: "2026-11-09T23:56:40.503Z"
   updated_by: "CODER"
-  note: "RTF110 verified for the filter scope. The existing native column-history test failure was reproduced on efe0f2e31. Paragraph border resource ordering and current-model Markdown fly export remain open."
-  attempts: 121
+  note: "RTF111 passes related checks. Markdown anchored-fly output and final current-model matrix remain open."
+  attempts: 122
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1941,8 +1944,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T23:56:40.503Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF111 passes related checks. Markdown anchored-fly output and final current-model matrix remain open."
+  -
+    type: "status"
+    at: "2026-11-09T23:57:00.450Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T23:51:50.056Z"
+doc_updated_at: "2026-11-09T23:57:00.450Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -5287,6 +5303,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T23:56:40.503Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF111 passes related checks. Markdown anchored-fly output and final current-model matrix remain open.
+    Attempts: 122
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:56:39.866Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -7238,6 +7284,13 @@ sections:
     - First-cell mapped border widths participate in table padding and indent. Floating table position uses raw spacing plus half the first left border, with no second subtraction through adjusted padding.
     - WRITER416 records first-edge selection and 0.75 pt single-line fallback. WRITER417 records registered row-border controls without dispatch.
     - Related Writer sweep: 2,444 passed across 213 passing files. The single failure in native-table-frame-item-history.test.ts:70 reproduces with the pre-checkpoint source from efe0f2e31 restored temporarily (both runs produce width 6480 where the test expects 3000). All filter suites in the sweep passed. Typecheck, scoped ESLint and Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.
+
+    ### RTF111 — Native paragraph border resources
+
+    - RTFBorderState selects the original ordered pBdr and direct BOX resource graphs, native cell borders, or character/page destinations. PARD clears paragraph resources without resetting the selector. The pinned shared read-lookup mutation and independent write lookup are retained.
+    - DomainMapper resolves BorderHandler values for both native paragraphs and styles. Native UNO edge, distance and connection properties feed the actual box item. Between-border handling removes the previous bottom edge in the current text stream through SwXParagraph.
+    - WRITER418 records inherited BOX mutation across group pop. WRITER419 records source resource ordering and the PARD selector fallback. Focused regressions cover both quirks, border destination isolation, and style inheritance.
+    - Related Writer sweep: 1,391 tests passed across 86 files. Typecheck, scoped ESLint/Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.
 id_source: "generated"
 ---
 ## Summary
@@ -10593,6 +10646,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T23:56:40.503Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF111 passes related checks. Markdown anchored-fly output and final current-model matrix remain open.
+Attempts: 122
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:56:39.866Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -12548,3 +12631,10 @@ RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live
 - First-cell mapped border widths participate in table padding and indent. Floating table position uses raw spacing plus half the first left border, with no second subtraction through adjusted padding.
 - WRITER416 records first-edge selection and 0.75 pt single-line fallback. WRITER417 records registered row-border controls without dispatch.
 - Related Writer sweep: 2,444 passed across 213 passing files. The single failure in native-table-frame-item-history.test.ts:70 reproduces with the pre-checkpoint source from efe0f2e31 restored temporarily (both runs produce width 6480 where the test expects 3000). All filter suites in the sweep passed. Typecheck, scoped ESLint and Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.
+
+### RTF111 — Native paragraph border resources
+
+- RTFBorderState selects the original ordered pBdr and direct BOX resource graphs, native cell borders, or character/page destinations. PARD clears paragraph resources without resetting the selector. The pinned shared read-lookup mutation and independent write lookup are retained.
+- DomainMapper resolves BorderHandler values for both native paragraphs and styles. Native UNO edge, distance and connection properties feed the actual box item. Between-border handling removes the previous bottom edge in the current text stream through SwXParagraph.
+- WRITER418 records inherited BOX mutation across group pop. WRITER419 records source resource ordering and the PARD selector fallback. Focused regressions cover both quirks, border destination isolation, and style inheritance.
+- Related Writer sweep: 1,391 tests passed across 86 files. Typecheck, scoped ESLint/Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.

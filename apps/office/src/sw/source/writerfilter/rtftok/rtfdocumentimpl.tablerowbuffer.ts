@@ -1,7 +1,7 @@
 /** @fileoverview Original RTF table row buffer ownership and depth-based replay. */
 import { MINLAY } from "../../../inc/swtypes";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import { ClearCellBorders, DispatchCellBorder } from "./rtfdocumentimpl.border";
+import { ClearCellBorders } from "./rtfdocumentimpl.border";
 import { stringValue } from "./rtfdocumentimpl.character";
 import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import type {
@@ -248,11 +248,6 @@ export function DispatchTableControl(
       text.m_bNeedFinalPar = true;
     }
     this["m_aTextBuffer"].terminatedParagraph = true;
-    return true;
-  }
-  if (DispatchCellBorder(state.tableCellSprms, name)) {
-    delete state.paragraphBorder;
-    state.cellBorder = true;
     return true;
   }
   if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {

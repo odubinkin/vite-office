@@ -31,7 +31,8 @@
       "S3HW1E pStyle producer checkpoint: LISTLEVEL S resolves its currently known Word style name into CT_Lvl_pStyle and the actual StyleSheetEntry. ListLevel preserves null assignment, native paragraph-property contribution and the original index-to-bool AddParaProperties behavior (WRITER269). Style references retain raw pPr alongside rPr, including signed margins, outlineLvl and style numPr metadata. Zero geometry without basedOn uses original eraseNestedAttribute behavior; migrated stylesheet margins no longer replay clamped legacy scalar values. DomainMapper retains source list/outline levels and ListId on StyleSheetPropertyMap; accepted outline values receive the original Word9-to-native0/otherwise-plus1 conversion at style application, and Worker retains resulting actual style items. Original GetChapterNumberingWeight is implemented and independently tested with native defaults, signed narrowing and ID1/case-sensitive Heading bonuses. Weight selection/SwXChapterNumbering/SetOutlineNumRule and stylesheet postprocessing are still REQUIRED unfinished current-slice work, as are style-only paragraph-numbering inheritance, direct NumPr edges and remaining producer audit. No all-numbering or full module/ABI confidence promotion is made; browser open/save/recovery deviations are unchanged.",
       "Atomic RTF paragraph application resolves original pStyle/NumPr resources, runs the native finishParagraph numbering phase, applies the typed property vector through actual UNO setters and then invokes original abstract list mapping/startOverride on an actual SwXParagraph. S3HW1E paragraph NumPr checkpoint: actual native/RTF cases cover these consumed paths. Malformed-level recovery, old-style numbering and remaining section/HTML/current-core export producer audits remain required. No complete current-slice or full module/ABI confidence claim; intentional browser open/save/autosave/recovery behavior is unchanged.",
       "S3HW1E atomic paragraph-marker context: restore the selected native paragraph style in the fresh paragraph PropertyMap, preserving original map-before-saved-name lookup and character-before-paragraph style precedence. Actual ListAutoFormat handle tests cover empty/nonempty markers, negative displacement, parent font inheritance and character-style priority. Section dummy PAR omits marker properties while an explicit preceding PAR retains them, matching pinned sectBreak/dispatchSymbol. Remaining section transitions and HTML/current-model producer/export audits remain open; no whole-module/ABI or full-goal confidence promotion.",
-      "Projects the actual mapped paragraph frame properties into the deferred conversion."
+      "Projects the actual mapped paragraph frame properties into the deferred conversion.",
+      "Selects the native paragraph text stream before resolving emitted paragraph properties."
     ],
     "omittedResponsibilities": [
       "Drawing, binary-object, picture and crop RTFValue alternatives are outside the represented Writer core. Complete native pointer/iterator ABI and generic resource return-reference transport, parser-wide property state and mapper replay remain unverified."
@@ -73,6 +74,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -95,6 +100,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
           "marker": "DomainMapper_Impl::MakeFrameProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::handlePreviousParagraphBorderInBetween"
         }
       ]
     },

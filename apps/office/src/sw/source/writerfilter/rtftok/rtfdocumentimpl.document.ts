@@ -6,13 +6,10 @@ import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
-import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
   RES_BREAK,
-  RES_BOX,
-  RES_PARATR_CONNECT_BORDER,
   RES_KEEP,
   RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
@@ -45,38 +42,8 @@ import {
 } from "../dmapper/DomainMapper_Impl.frame";
 import { ResolveTextFrame } from "./rtfsdrimport";
 import { RtfSyntaxError } from "./rtftokenizer";
-import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
 import { ConvertFloatingRtfTable } from "../dmapper/DomainMapperTableHandler";
 import { MaterializeRtfTable, type PendingRtfTableFrame } from "./rtfdocumentimpl.table";
-import type { Color } from "../../../../tools/inc/color";
-
-/** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
-function paragraphBorderBox(
-  inherited: SvxBoxItem,
-  paragraph: RtfParagraphState,
-  colors: readonly Readonly<Color>[],
-  previous?: SwTextNode,
-): SvxBoxItem | undefined {
-  let box: SvxBoxItem | undefined;
-  for (const [side, border] of paragraph.borders ?? []) {
-    let edge = side;
-    if (edge === "between") {
-      if (
-        previous === undefined ||
-        (previous.GetAttr(RES_PARATR_CONNECT_BORDER) as SfxBoolItem).GetValue()
-      )
-        continue;
-      const priorBox = (previous.GetAttr(RES_BOX) as SvxBoxItem).Clone();
-      priorBox.SetLine(undefined, SvxBoxItemLine.BOTTOM);
-      previous.SetAttr(priorBox);
-      edge = SvxBoxItemLine.TOP;
-    }
-    box ??= inherited.Clone();
-    box.SetLine(createRtfBorderLine(border, colors), edge);
-    box.SetDistance(getRtfBorderDistance(border), edge);
-  }
-  return box;
-}
 
 /** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result.  @param this - Original native owner shared by its implementation fragments. */
 export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwDoc {
@@ -406,14 +373,6 @@ export function ApplyStyleDefinition(
   if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
   if (controls.has("sl") || controls.has("slmult"))
     collection.SetFormatAttr(createRtfLineSpacing(paragraph));
-  const borders = paragraphBorderBox(
-    collection.GetAttrSet().Get(RES_BOX) as SvxBoxItem,
-    paragraph,
-    this["colors"],
-  );
-  if (borders !== undefined) collection.SetFormatAttr(borders);
-  if (paragraph.borders?.has("between"))
-    collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
 }
 
 /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. @returns Deferred frame properties when present.  @param this - Original native owner shared by its implementation fragments. */
@@ -427,17 +386,6 @@ export function ApplyParagraph(
       ? undefined
       : this["importedStyles"].get(paragraph.state.styleIndex);
   if (style !== undefined) node.ChgFormatColl(style);
-  const section = node.StartOfSectionNode();
-  const borders = paragraphBorderBox(
-    node.GetAttr(RES_BOX) as SvxBoxItem,
-    paragraph.state,
-    this["colors"],
-    this["previousParagraphs"].get(section),
-  );
-  if (borders !== undefined) node.SetAttr(borders);
-  if (paragraph.state.borders?.has("between"))
-    node.SetAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
-  this["previousParagraphs"].set(section, node);
   let frame: ReturnType<typeof ApplyRtfParagraphProperties>;
   const propertyPointers: ReferencePointer<Properties>[] = [];
   try {

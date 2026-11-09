@@ -128,7 +128,11 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
       ] ?? "",
     );
   }
-  const out = new Any();
+  if (entry.kind === "long" && item instanceof SvxBoxItem) {
+    const distance = item.QueryValue(entry.member);
+    if (typeof distance !== "number") illegal("Unknown paragraph border distance");
+    return new Any([distance], "sal_Int32");
+  }
   if (entry.kind === "border") {
     const edge = { 3: 0, 4: 1, 1: 2, 2: 3 }[entry.member & 0x7f];
     if (edge === undefined || !(item instanceof SvxBoxItem)) illegal("Unknown paragraph border");
@@ -137,6 +141,7 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
       cppu_detail_getUnoType_BorderLine2,
     );
   }
+  const out = new Any();
   if (entry.kind === "any") {
     (item as unknown as { QueryValue(out: Any, member: number): boolean }).QueryValue(
       out,
@@ -211,6 +216,11 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   const copy = item.Clone();
   if (copy === null) invalid("Invalid pooled item");
+  if (entry.kind === "long" && copy instanceof SvxBoxItem) {
+    if (!copy.PutValue(scalar(value, "sal_Int32"), entry.member))
+      illegal("Invalid paragraph border distance");
+    return copy;
+  }
   if (entry.kind === "border") {
     if (!(copy instanceof SvxBoxItem)) illegal("Invalid paragraph border item");
     const line = new BorderLine2();

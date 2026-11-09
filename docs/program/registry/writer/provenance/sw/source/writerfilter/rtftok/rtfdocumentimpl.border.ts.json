@@ -8,22 +8,20 @@
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
     "localSymbols": [
       "RTF_BORDER_STYLES",
-      "createRtfBorder",
-      "dispatchRtfBorder",
-      "createRtfBorderLine",
-      "getRtfBorderDistance",
-      "RtfParagraphBorder",
-      "DispatchCellBorder",
-      "DispatchCellBorderValue",
-      "ClearCellBorders"
+      "ClearCellBorders",
+      "RTFBorderState",
+      "DispatchBorder",
+      "DispatchBorderValue",
+      "putBorderProperty"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::dispatchValue"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF border style controls, eighth-point width admission, whole-point distances, BorderHandler defaults and native BorderLine2/Box conversion; unknown border flags do not change existing styles.",
+      "Maps original RTF border style controls, eighth-point width admission and whole-point distances into native attributes.",
       "Uses the native Color palette, source default RGB zero and original automatic-to-black border behavior.",
-      "Emits original ordered cell border modifiers and shares the native border token and metric conversion."
+      "Emits original ordered cell border modifiers and shares the native border token and metric conversion.",
+      "Keeps native ordered paragraph, cell, character and page border attributes in their original parser destinations."
     ],
     "omittedResponsibilities": [
       "Native frame shadows, arbitrary OOXML art borders and compiled-upstream differential behavior are outside this value fragment."
@@ -44,6 +42,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
         }
       ],

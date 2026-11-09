@@ -3434,3 +3434,24 @@ The pinned tokenizer recognizes TRBRDRT, TRBRDRL, TRBRDRB,
 TRBRDRR, TRBRDRH and TRBRDRV. The reader has no row-border
 dispatch case for these tokens. Cell border flags do reach the
 mapper. Preserve the reader's admitted control set.
+
+### WRITER418 — RTF BOX attributes can survive a nested group's pop
+
+BOX stores the same RTFValue at four direct paragraph edge IDs.
+The later attribute setter uses read lookup. A child group that
+updates an inherited BOX value therefore changes the shared
+attributes, even though the parser restores the parent's
+selector and resource list when the child ends. An edge declared
+by the child uses a write lookup and can have its own owner.
+Preserve both source operations.
+
+### WRITER419 — RTF BOX and explicit edges compete in resource order
+
+BOX inserts top-level edge modifiers. Explicit BRDRT, BRDRL,
+BRDRB, BRDRR and BRDRBTW append beneath pBdr. When both
+representations target a side, the later top-level resource
+wins. Appending a side to an earlier pBdr does not move that
+parent after an already-inserted BOX. PARD clears paragraph
+resources but retains the border selector. Preserve this order
+and the original fallback when the selected border parent is
+missing.

@@ -62,7 +62,8 @@
       "Keeps a native frame-property owner on each original parser state.",
       "Stores native row flow and cell vertical alignment in the original resource property owners.",
       "Admits native paragraph shading in the source style state.",
-      "Keeps the cell border destination scoped to each original parser group."
+      "Keeps the cell border destination scoped to each original parser group.",
+      "Keeps the original border selector with the lexical parser group."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -244,6 +245,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -338,6 +343,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
           "marker": "m_nBorderState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "enum class RTFBorderState"
         }
       ]
     },

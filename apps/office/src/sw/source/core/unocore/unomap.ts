@@ -185,15 +185,20 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ],
   ["ParaLineNumberCount", { which: H.RES_LINENUMBER, member: 0, kind: "bool" }],
   ["ParaConnectBorder", { which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" }],
-  ...(["Top", "Bottom", "Left", "Right"] as const).map(
-    /** Computes the side result. @param side - Side. @param index - Index. @returns The computed result. */ (
+  ["ParaIsConnectBorder", { which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" }],
+  ["BorderDistance", { which: H.RES_BOX, member: 5 | 0x80, kind: "long" }],
+  ...(["Left", "Right", "Top", "Bottom"] as const).flatMap(
+    /** Exposes source paragraph edge and distance properties, retaining the existing cell paragraph aliases. @param side - Side. @param index - Native member order. @returns Property entries. */ (
       side,
       index,
-    ) =>
-      [
-        `Para${side}Border`,
-        { which: H.RES_BOX, member: ([3, 4, 1, 2][index] as number) | 0x80, kind: "border" },
-      ] as [string, SwUnoPropertyEntry],
+    ): [string, SwUnoPropertyEntry][] => {
+      const border = { which: H.RES_BOX, member: (index + 1) | 0x80, kind: "border" } as const;
+      return [
+        [`${side}Border`, border],
+        [`Para${side}Border`, border],
+        [`${side}BorderDistance`, { which: H.RES_BOX, member: (index + 6) | 0x80, kind: "long" }],
+      ];
+    },
   ),
   ["BreakType", { which: H.RES_BREAK, member: 0, kind: "break" }],
   ["PageDescName", { which: H.RES_PAGEDESC, member: MID_PAGEDESC_PAGEDESCNAME, kind: "pagedesc" }],

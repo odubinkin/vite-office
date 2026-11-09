@@ -531,6 +531,7 @@ export function ApplyRtfParagraphProperties(
   mapper.startParagraphGroup();
   try {
     const style = node.GetTextFormatColl();
+    mapper.impl.SetRtfParagraphNode(node);
     mapper.impl.SetCurrentParaStyleName(
       SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
     );

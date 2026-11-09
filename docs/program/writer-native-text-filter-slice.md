@@ -2358,3 +2358,20 @@ spacing and table indent. Positioned tables use the original
 left spacing and half the first cell's left border before
 adjusting the cell contents. WRITER416 and WRITER417 record the
 original repeated-edge and row-border behavior.
+
+### RTF111 — Native paragraph border resources
+
+Paragraph and cell borders now share the source RTFBorderState
+and putBorderProperty boundary. BOX inserts top-level paragraph
+edges. Explicit paragraph edges append in pBdr. Character and
+page selectors keep their own attributes without changing
+represented paragraph or cell borders. PARD preserves the
+selector across the paragraph reset.
+
+The native DomainMapper resolves paragraph borders through
+BorderHandler and the original UNO line, distance and border
+connection properties. Between-border handling clears the
+previous paragraph's bottom border through its native property
+owner. Stylesheet borders use the same mapper path. WRITER418
+and WRITER419 record the source's shared group values and
+competing resource order.

@@ -4,7 +4,6 @@ import type { RTFShape, RtfShapeAnchor } from "./rtfdocumentimpl.shape";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { COL_AUTO, COL_BLACK, Color } from "../../../../tools/inc/color";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
@@ -14,11 +13,9 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import type { RtfDocumentImpl } from "./rtfdocumentimpl";
 import type { TableRowBuffer } from "./rtfdocumentimpl.tablerowbuffer";
-import { RTF_BORDER_STYLES, type RtfParagraphBorder } from "./rtfdocumentimpl.border";
-export type { RtfParagraphBorder } from "./rtfdocumentimpl.border";
+import { RTF_BORDER_STYLES, type RTFBorderState } from "./rtfdocumentimpl.border";
 /** Paragraph properties represented by the current Writer model. */
 export interface RtfParagraphState {
-  borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfParagraphBorder>>;
   alignment: WriterParagraphAlignment;
   distributeLastLine: boolean;
   before: number;
@@ -95,7 +92,7 @@ export class RTFColorTableEntry {
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
   frame: RTFFrame;
-  cellBorder: boolean;
+  borderState: RTFBorderState;
   shape: RTFShape | undefined;
   shapeRoot?: boolean;
   shapeTextRoot?: boolean;
@@ -150,7 +147,6 @@ export interface RtfState {
   currentCodepage: number;
   fontCodepage?: number;
   colorIndex: number;
-  paragraphBorder?: SvxBoxItemLine | "between" | "box";
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
@@ -314,6 +310,8 @@ export const STYLE_PROPERTY_CONTROLS = new Set([
   "brdrb",
   "brdrr",
   "brdrbtw",
+  "chbrdr",
+  "brdrsh",
   "brdrw",
   "brdrcf",
   "brsp",

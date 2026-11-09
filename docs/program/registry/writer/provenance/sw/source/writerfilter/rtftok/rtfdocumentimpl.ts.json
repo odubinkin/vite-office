@@ -56,7 +56,8 @@
       "Uses original automatic palette entry versus out-of-range RGB zero, without flattening the saved palette into string colors (WRITER397).",
       "Owns independent append buffers for shape and body text and restores the surrounding paragraph and table state after shape text.",
       "Clears the running maximum row width when the active table ends.",
-      "Sends frame properties after paragraph properties with the original explicit page-break guard."
+      "Sends frame properties after paragraph properties with the original explicit page-break guard.",
+      "Keeps emitted native paragraph border resources with the existing paragraph property snapshot."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -190,6 +191,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -264,6 +269,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFDocumentImpl::checkNeedPap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "void RTFDocumentImpl::checkNeedPap"
         }
       ]
     }

@@ -43,6 +43,8 @@ import {
 import { CellColorHandler } from "./CellColorHandler";
 import { ApplyFrameAttribute } from "./DomainMapper.frame";
 import { ThemeColorHandler } from "./ThemeColorHandler";
+import { BorderHandler } from "./BorderHandler";
+import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 
 /** Original underline token mapping, with unknown tokens retaining NONE. */
 const underline = new Map<number, number>([
@@ -65,6 +67,14 @@ const underline = new Map<number, number>([
   [N.LN_Value_ST_Underline_wavyHeavy, U.BOLDWAVE],
   [N.LN_Value_ST_Underline_wavyDouble, U.DOUBLEWAVE],
 ]);
+/** Represented paragraph border properties in the source dmapper. */
+const paragraphBorderIds = new Map<number, readonly [P, P]>([
+  [N.LN_CT_PBdr_top, [P.PROP_TOP_BORDER, P.PROP_TOP_BORDER_DISTANCE]],
+  [N.LN_CT_PBdr_left, [P.PROP_LEFT_BORDER, P.PROP_LEFT_BORDER_DISTANCE]],
+  [N.LN_CT_PBdr_bottom, [P.PROP_BOTTOM_BORDER, P.PROP_BOTTOM_BORDER_DISTANCE]],
+  [N.LN_CT_PBdr_right, [P.PROP_RIGHT_BORDER, P.PROP_RIGHT_BORDER_DISTANCE]],
+]);
+
 /** Original highlight token order is contiguous in the generated resource model. */
 const highlights = [
   0x000000, 0x0000ff, 0x00ffff, 0x00ff00, 0xff00ff, 0xff0000, 0xffff00, 0xffffff, 0x000080,
@@ -434,6 +444,38 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_CT_PrBase_pBdr:
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
+      case N.LN_CT_PBdr_top:
+      case N.LN_CT_PBdr_left:
+      case N.LN_CT_PBdr_bottom:
+      case N.LN_CT_PBdr_right:
+      case N.LN_CT_PBdr_between: {
+        const properties = modifier.getProps();
+        if (!properties) break;
+        const handler = new BorderHandler(true);
+        try {
+          resolveReturnedReference(properties, handler);
+          let edge = id;
+          if (id === N.LN_CT_PBdr_between) {
+            this.insert(context, P.PROP_PARA_CONNECT_BORDERS, new Any([false], "bool"));
+            if (!this.impl.handlePreviousParagraphBorderInBetween()) break;
+            edge = N.LN_CT_PBdr_top;
+          }
+          const ids = paragraphBorderIds.get(edge);
+          if (!ids) break;
+          this.insert(
+            context,
+            ids[0],
+            new Any(handler.getBorderLine(), cppu_detail_getUnoType_BorderLine2),
+          );
+          this.insert(context, ids[1], new Any([handler.getLineDistance()], "sal_Int32"));
+        } finally {
+          handler.dispose();
+        }
+        break;
+      }
       case N.LN_CT_PrBase_shd: {
         if (!context) break;
         const handler = new CellColorHandler();

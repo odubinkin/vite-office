@@ -50,7 +50,8 @@
       "Replays native width and margin properties and restores the source cell defaults at the nested property boundary.",
       "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD.",
       "Sends the original palette shading resource and retains the zero-index exclusion.",
-      "Applies border properties to the original lexical destination and current cell properties."
+      "Applies border properties to the original lexical destination and current cell properties.",
+      "Retains border selector while PARD clears paragraph resources and preserves source group copying."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -172,6 +173,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -282,6 +287,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFBorderState::CELL"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::PARD"
         }
       ]
     },

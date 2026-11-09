@@ -22,7 +22,8 @@
       "Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell.",
       "Restores native default cell resource properties at each CELLX and clears them on ROW.",
       "Emits native row height, split and header properties and cell vertical alignment into original row snapshots.",
-      "Uses original cell resource snapshots for border definitions and the grid-after cell."
+      "Uses original cell resource snapshots for border definitions and the grid-after cell.",
+      "Uses the common border dispatcher while retaining the native table cell resource snapshots."
     ],
     "omittedResponsibilities": [
       "Malformed row-definition restoration, full resource buffer polymorphism and the desktop renderer remain unverified. The preexisting browser nesting bound also applies to explicit ITAP depth."
@@ -43,6 +44,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -78,6 +83,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
           "marker": "aBorderIds"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFBorderState::CELL"
         }
       ]
     },

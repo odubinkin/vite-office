@@ -45,7 +45,8 @@
       "Completes native table frame conversion after the following paragraph is materialized.",
       "Materializes the shape append stream into a real Writer fly section at the original character position.",
       "Converts original paragraph ranges after table materialization in their native text append scope.",
-      "Passes the original floating-table shift to native post-table conversion."
+      "Passes the original floating-table shift to native post-table conversion.",
+      "Uses the shared mapper path for body and stylesheet borders without a second scalar border map."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -151,6 +152,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -241,6 +246,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "lcl_DecrementHoriOrientPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_CT_PrBase_pBdr"
         }
       ]
     },

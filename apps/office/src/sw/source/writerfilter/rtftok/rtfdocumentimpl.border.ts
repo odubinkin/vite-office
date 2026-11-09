@@ -1,22 +1,21 @@
-/** @fileoverview RTF border value dispatch and native mapper metric conversion from pinned rtftok and BorderHandler. */
-import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
-import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
-import { MakeBorderLine, convertTwipToMm100_Limited } from "../dmapper/ConversionHelper";
+/** @fileoverview Original RTF border-state and resource dispatch from rtftok. */
+import { SvRef } from "../../../../tools/inc/ref";
 import { COL_BLACK, type Color } from "../../../../tools/inc/color";
 
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import { getLastAttributes, putNestedSprm } from "./rtfdocumentimpl.properties";
+import type { RtfState } from "./rtfdocumentimpl.context";
+import { getLastAttributes, getParagraphBorder, putNestedSprm } from "./rtfdocumentimpl.properties";
 import { RTFConflictPolicy, RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 
-/** BorderHandler's source defaults, populated by group-scoped RTF controls. */
-export interface RtfParagraphBorder {
-  type: number;
-  width: number;
-  colorIndex: number;
-  distance: number;
+/** Original RTFParserState border destinations. */
+export enum RTFBorderState {
+  NONE,
+  PARAGRAPH,
+  PARAGRAPH_BOX,
+  CELL,
+  PAGE,
+  CHARACTER,
 }
 
 /** Exact represented border-style controls; brdrth intentionally has no dispatch case upstream. */
@@ -42,6 +41,14 @@ export const RTF_BORDER_STYLES: Readonly<Record<string, number>> = {
   brdrnone: N.LN_Value_ST_Border_none,
 };
 
+const paragraphBorders = new Map<string, number>([
+  ["brdrt", N.LN_CT_PBdr_top],
+  ["brdrl", N.LN_CT_PBdr_left],
+  ["brdrb", N.LN_CT_PBdr_bottom],
+  ["brdrr", N.LN_CT_PBdr_right],
+  ["brdrbtw", N.LN_CT_PBdr_between],
+]);
+
 const cellBorders = new Map<string, number>([
   ["clbrdrt", N.LN_CT_TcBorders_top],
   ["clbrdrl", N.LN_CT_TcBorders_left],
@@ -49,47 +56,151 @@ const cellBorders = new Map<string, number>([
   ["clbrdrr", N.LN_CT_TcBorders_right],
 ]);
 
+const pageBorders = new Map<string, number>([
+  ["pgbrdrt", N.LN_CT_PageBorders_top],
+  ["pgbrdrl", N.LN_CT_PageBorders_left],
+  ["pgbrdrb", N.LN_CT_PageBorders_bottom],
+  ["pgbrdrr", N.LN_CT_PageBorders_right],
+]);
+
 /** Converts the original RTF twip width to the dmapper eighth-point resource value. @param width - Native signed twip width. @returns Source border size. */
 function borderWidth(width: number): number {
   return width === 2 ? 1 : width > 1 ? Math.trunc(((width * 2) | 0) / 5) : width;
 }
 
-/** Opens an ordered native border modifier on the actual cell definition. @param cell - Current cell property owner. @param side - Original cell edge token. @param policy - Source collision policy. @returns Nothing. */
-function putCellBorder(cell: RTFSprms, side: number, policy: RTFConflictPolicy): void {
+/** Opens an ordered native edge modifier on its original owner. @param sprms - Property owner. @param parent - Border parent token. @param side - Original edge token. @param policy - Source collision policy. @returns Nothing. */
+function putBorder(sprms: RTFSprms, parent: number, side: number, policy: RTFConflictPolicy): void {
   const attributes = new RTFSprms();
   try {
-    putNestedSprm(cell, N.LN_CT_TcPrBase_tcBorders, side, new RTFValue(attributes), policy);
+    putNestedSprm(sprms, parent, side, new RTFValue(attributes), policy);
   } finally {
     attributes.dispose();
   }
 }
 
-/** Emits the original CLBRDR edge and appends it in source order. @param cell - Current cell property owner. @param name - Native RTF control. @returns Whether this was a cell-border flag. */
-export function DispatchCellBorder(cell: RTFSprms, name: string): boolean {
-  const side = cellBorders.get(name);
-  if (side === undefined) return false;
-  putCellBorder(cell, side, RTFConflictPolicy.Append);
+/** Opens the original border resource and selects its group-owned destination. @param state - Current RTF state. @param name - Native RTF control. @returns Whether this was a border flag. */
+export function DispatchBorder(state: RtfState, name: string): boolean {
+  if (name === "box" || name === "chbrdr") {
+    const attributes = new RTFSprms();
+    try {
+      const value = new RTFValue(attributes);
+      if (name === "box") {
+        for (let index = 0; index < 4; ++index)
+          state.paragraphSprms.set(getParagraphBorder(index), value);
+        state.borderState = RTFBorderState.PARAGRAPH_BOX;
+      } else {
+        state.characterSprms.set(N.LN_EG_RPrBase_bdr, value);
+        state.borderState = RTFBorderState.CHARACTER;
+      }
+    } finally {
+      attributes.dispose();
+    }
+    return true;
+  }
+  const paragraph = paragraphBorders.get(name);
+  if (paragraph !== undefined) {
+    putBorder(state.paragraphSprms, N.LN_CT_PrBase_pBdr, paragraph, RTFConflictPolicy.Append);
+    state.borderState = RTFBorderState.PARAGRAPH;
+    return true;
+  }
+  const cell = cellBorders.get(name);
+  if (cell !== undefined) {
+    putBorder(state.tableCellSprms, N.LN_CT_TcPrBase_tcBorders, cell, RTFConflictPolicy.Append);
+    state.borderState = RTFBorderState.CELL;
+    return true;
+  }
+  const page = pageBorders.get(name);
+  if (page === undefined) return false;
+  putBorder(state.sectionSprms, N.LN_EG_SectPrContents_pgBorders, page, RTFConflictPolicy.Append);
+  state.borderState = RTFBorderState.PAGE;
   return true;
 }
 
-/** Writes an original attribute to the last cell-border modifier. @param cell - Current cell property owner. @param name - Native border control. @param value - RTF value or zero. @param colors - Original RTF palette. @returns Nothing. */
-export function DispatchCellBorderValue(
-  cell: RTFSprms,
+/** Updates a direct border value through the source read lookup. @param sprms - Original property owner. @param border - Border token. @param id - Attribute token. @param value - Shared source value. @returns Nothing. */
+function setDirectBorderProperty(
+  sprms: RTFSprms,
+  border: number,
+  id: number,
+  value: RTFValue,
+): void {
+  const reference = sprms.find(border);
+  try {
+    if (reference.is()) reference.operatorDereference().getAttributes().set(id, value);
+  } finally {
+    reference.dispose();
+  }
+}
+
+/** Original putBorderProperty dispatches by lexical destination and shares attributes through the native resource owner. @param state - Original parser state. @param id - Attribute token. @param value - Shared source value. @returns Nothing. */
+function putBorderProperty(state: RtfState, id: number, value: RTFValue): void {
+  switch (state.borderState) {
+    case RTFBorderState.PARAGRAPH_BOX:
+      for (let index = 0; index < 4; ++index)
+        setDirectBorderProperty(state.paragraphSprms, getParagraphBorder(index), id, value);
+      break;
+    case RTFBorderState.CHARACTER:
+      setDirectBorderProperty(state.characterSprms, N.LN_EG_RPrBase_bdr, id, value);
+      break;
+    case RTFBorderState.PARAGRAPH:
+      getLastAttributes(state.paragraphSprms, N.LN_CT_PrBase_pBdr).set(id, value);
+      break;
+    case RTFBorderState.CELL:
+      getLastAttributes(state.tableCellSprms, N.LN_CT_TcPrBase_tcBorders).set(id, value);
+      break;
+    case RTFBorderState.PAGE:
+      getLastAttributes(state.sectionSprms, N.LN_EG_SectPrContents_pgBorders).set(id, value);
+      break;
+    case RTFBorderState.NONE:
+      for (let index = 0; index < 4; ++index) {
+        const attributes = new RTFSprms();
+        try {
+          attributes.set(N.LN_CT_Border_val, new RTFValue(N.LN_Value_ST_Border_none));
+          putNestedSprm(
+            state.paragraphSprms,
+            N.LN_CT_PrBase_pBdr,
+            getParagraphBorder(index),
+            new RTFValue(attributes),
+            RTFConflictPolicy.Overwrite,
+          );
+        } finally {
+          attributes.dispose();
+        }
+      }
+      break;
+  }
+}
+
+/** Decodes the original border attribute before dispatch to its owning resource. @param state - Original parser state. @param name - Native control word. @param value - Control parameter. @param colors - RTF color table. @returns Whether consumed. */
+export function DispatchBorderValue(
+  state: RtfState,
   name: string,
   value: number,
   colors: readonly Readonly<Color>[],
-): void {
-  const attributes = getLastAttributes(cell, N.LN_CT_TcPrBase_tcBorders);
-  if (Object.hasOwn(RTF_BORDER_STYLES, name))
-    attributes.set(N.LN_CT_Border_val, new RTFValue(RTF_BORDER_STYLES[name] as number));
-  else if (name === "brdrw") attributes.set(N.LN_CT_Border_sz, new RTFValue(borderWidth(value)));
-  else if (name === "brdrcf")
-    attributes.set(
-      N.LN_CT_Border_color,
-      new RTFValue((colors[value >>> 0] ?? COL_BLACK).toInt32()),
-    );
-  else if (name === "brsp")
-    attributes.set(N.LN_CT_Border_space, new RTFValue(Math.trunc(value / 20)));
+): boolean {
+  let id: number;
+  if (Object.hasOwn(RTF_BORDER_STYLES, name)) {
+    id = N.LN_CT_Border_val;
+    value = RTF_BORDER_STYLES[name] as number;
+  } else if (name === "brdrw") {
+    id = N.LN_CT_Border_sz;
+    value = borderWidth(value);
+  } else if (name === "brdrcf") {
+    id = N.LN_CT_Border_color;
+    value = (colors[value >>> 0] ?? COL_BLACK).toInt32();
+  } else if (name === "brsp") {
+    id = N.LN_CT_Border_space;
+    value = Math.trunc(value / 20);
+  } else if (name === "brdrsh") {
+    id = N.LN_CT_Border_shadow;
+    value = 1;
+  } else return false;
+  const property = new SvRef(new RTFValue(value));
+  try {
+    putBorderProperty(state, id, property.operatorDereference());
+  } finally {
+    property.dispose();
+  }
+  return true;
 }
 
 /** Writes the native zero-width border properties of the grid-after cell. @param cell - Original filler cell definition. @returns Nothing. */
@@ -100,51 +211,9 @@ export function ClearCellBorders(cell: RTFSprms): void {
     N.LN_CT_TcBorders_left,
     N.LN_CT_TcBorders_right,
   ]) {
-    putCellBorder(cell, side, RTFConflictPolicy.Overwrite);
+    putBorder(cell, N.LN_CT_TcPrBase_tcBorders, side, RTFConflictPolicy.Overwrite);
     const attributes = getLastAttributes(cell, N.LN_CT_TcPrBase_tcBorders);
     attributes.set(N.LN_CT_Border_val, new RTFValue(N.LN_Value_ST_Border_none));
     attributes.set(N.LN_CT_Border_sz, new RTFValue(0));
   }
-}
-
-/** Creates the source BorderHandler defaults before explicit attributes. @returns New parsed border. */
-export function createRtfBorder(): RtfParagraphBorder {
-  return { type: N.LN_Value_ST_Border_none, width: 15, colorIndex: -1, distance: 0 };
-}
-
-/** Resolves a registered border value; unknown flags leave prior state intact. @param border - Current parsed border. @param name - Control name. @param parameter - Optional numeric value. @returns Whether handled. */
-export function dispatchRtfBorder(
-  border: RtfParagraphBorder,
-  name: string,
-  parameter: number | undefined,
-): boolean {
-  const value = parameter ?? 0;
-  if (Object.hasOwn(RTF_BORDER_STYLES, name)) border.type = RTF_BORDER_STYLES[name] as number;
-  else if (name === "brdrw") {
-    // rtftok twips -> OOXML eighth-points -> BorderHandler integral twips.
-    const eighthPoints = borderWidth(value);
-    border.width = Math.trunc((eighthPoints * 5) / 2);
-  } else if (name === "brdrcf") border.colorIndex = value;
-  else if (name === "brsp") border.distance = Math.trunc(value / 20) * 20;
-  else return false;
-  return true;
-}
-
-/** Materializes the same BorderLine2 metric boundary as ConversionHelper::MakeBorderLine and UNO. @param border - Parsed border. @param colors - RTF color table. @returns Native line or no border. */
-export function createRtfBorderLine(
-  border: Readonly<RtfParagraphBorder>,
-  colors: readonly Readonly<Color>[],
-): SvxBorderLine | undefined {
-  const color = colors[border.colorIndex >>> 0] ?? COL_BLACK;
-  const value = new BorderLine2();
-  MakeBorderLine(border.width, border.type, color.toInt32(), value, true);
-  const line = new SvxBorderLine();
-  return SvxBoxItem.LineToSvxLine(value, line, true, "BorderLine2") ? line : undefined;
-}
-
-/** Applies the mapper's point distance and native UNO metric conversion. @param border - Parsed border. @returns Native twip distance. */
-export function getRtfBorderDistance(border: Readonly<RtfParagraphBorder>): number {
-  return Number(
-    convert(BigInt(convertTwipToMm100_Limited(border.distance)), Length.mm100, Length.twip),
-  );
 }

@@ -29,7 +29,8 @@
       "S3HW1E connects native RTF lang/alang/langfe through saved RTFParserState run types, LanguageTag numeric-to-BCP47 conversion, real nested RTFSprms, DomainMapper Locale properties, typed UNO Locale transport and original SvxLanguageItem conversion. LANG-before-text paragraph properties are captured at checkNeedPap emission with owned snapshots, preserving nested-group and later-run order; plain/paragraph resets and empty paragraphs are tested. Source-derived pseudo character runs split actual export at script/bidi boundaries and feed RTLAndCJKState; for this direction-less Writer paragraph profile the caller explicitly supplies the pinned Environment pool default, not guessed text/locale direction. Native single-empty-run output omits braces. Deflang/adeflang zero-child nesting remains as upstream (WRITER251). Actual mixed-script and Markdown/Worker/RTF round-trips pass. Generic layout-direction/frame owners, fields and full RTF/OOXML/ABI parity are not claimed; all broad parity confidence remains unverified.",
       "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
       "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
-      "S3HW1E HTML74: Page-style WritingMode exposes the original signed-short member zero at RES_FRAMEDIR, independently of cursor properties."
+      "S3HW1E HTML74: Page-style WritingMode exposes the original signed-short member zero at RES_FRAMEDIR, independently of cursor properties.",
+      "Exposes the represented source border, distance and connection property names on native paragraphs and styles."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -79,6 +80,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -101,6 +106,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomap1.cxx",
           "marker": "UNO_NAME_WRITING_MODE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomapproperties.hxx",
+          "marker": "UNO_NAME_TOP_BORDER_DISTANCE"
         }
       ]
     }

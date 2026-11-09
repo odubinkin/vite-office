@@ -1,5 +1,11 @@
 /** @fileoverview Consumed DomainMapper_Impl property-context and body text-append ownership; all text mutations use existing native SwXText APIs. */
 import type { DomainMapper } from "./DomainMapper";
+import type { SwStartNode } from "../../core/docnode/node";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -206,6 +212,38 @@ export class DomainMapper_Impl {
   private m_bInDocDefaultsImport = false;
   /** Represented body stream; substream producers extend the original stack when consumed. */
   private readonly m_StreamStateStack = [{ deferredCharacterProperties: new Map<number, Any>() }];
+  private readonly m_aRtfParagraphs = new Map<SwStartNode, SwTextNode>();
+  private m_pRtfPreviousParagraph: SwTextNode | undefined;
+
+  /** Selects the previous paragraph in the current materialized text stream. @param node - Current RTF paragraph. @returns Nothing. */
+  SetRtfParagraphNode(node: SwTextNode): void {
+    const section = node.StartOfSectionNode();
+    this.m_pRtfPreviousParagraph = this.m_aRtfParagraphs.get(section);
+    this.m_aRtfParagraphs.set(section, node);
+  }
+
+  /** Implements the source previous-paragraph bottom-edge removal for consecutive between borders. @returns Whether the current border can become a top edge. */
+  handlePreviousParagraphBorderInBetween(): boolean {
+    const node = this.m_pRtfPreviousParagraph;
+    if (!node || this.IsStyleSheetImport()) return false;
+    const paragraph = new SwXParagraph(node, this.body);
+    const connect = paragraph.getPropertyValue(getPropertyName(P.PROP_PARA_CONNECT_BORDERS));
+    try {
+      const flag: [boolean] = [true];
+      connect.extract(flag, "bool");
+      if (flag[0]) return false;
+      const empty = new Any(new BorderLine2(), cppu_detail_getUnoType_BorderLine2);
+      try {
+        paragraph.setPropertyValue(getPropertyName(P.PROP_BOTTOM_BORDER), empty);
+      } finally {
+        empty.dispose();
+      }
+      return true;
+    } finally {
+      connect.dispose();
+      paragraph.Release();
+    }
+  }
   /** Borrows actual Writer model/text interfaces. @param m_rDMapper - Original mapper callback owner. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @returns Mapper state. */
   constructor(
     private readonly m_rDMapper: DomainMapper,
@@ -664,6 +702,8 @@ export class DomainMapper_Impl {
     for (const stream of this.m_StreamStateStack)
       for (const value of stream.deferredCharacterProperties.values()) value.dispose();
     this.m_StreamStateStack.length = 0;
+    this.m_aRtfParagraphs.clear();
+    this.m_pRtfPreviousParagraph = undefined;
     this.m_pLastSectionContext.clear();
     this.m_pListTable?.dispose();
     this.m_pListTable = undefined;

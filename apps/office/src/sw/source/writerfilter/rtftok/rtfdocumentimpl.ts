@@ -1,7 +1,6 @@
 /** @fileoverview Maps RTF tokenizer events into native Writer nodes following rtftok/rtfdocumentimpl.cxx. */
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
-import type { SwStartNode } from "../../core/docnode/node";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -174,7 +173,6 @@ export class RtfDocumentImpl {
   }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
-  protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected fontName = "";
   protected sawHeader = false;
   /** Borrows the active source table buffer for the current nesting depth. @returns Actual buffer. */
