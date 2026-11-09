@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/dictbe.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/dictbe.ts",
+        "vendor/icu-reference/source/common/dictbe.cpp",
+        "apps/office/src/external/icu/source/common/dictbe.sea.sets.json",
+        "apps/office/src/external/icu/source/common/dictbe.sea.native.test.ts",
+        "apps/office/src/external/icu/source/common/dictbe.sea.native-observations.json"
+      ],
+      "justification": "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DictionaryBreakEngine",
+        "PossibleWord",
+        "ThaiBreakEngine",
+        "LaoBreakEngine",
+        "BurmeseBreakEngine",
+        "KhmerBreakEngine"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
+      "upstreamSymbols": [
+        "DictionaryBreakEngine",
+        "PossibleWord",
+        "ThaiBreakEngine",
+        "LaoBreakEngine",
+        "BurmeseBreakEngine",
+        "KhmerBreakEngine"
+      ]
+    }
+  }
+}

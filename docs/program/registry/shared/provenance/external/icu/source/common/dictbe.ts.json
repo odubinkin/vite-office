@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/dictbe.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/dictbe.cpp",
+    "localSymbols": [
+      "DictionaryBreakEngine",
+      "PossibleWord",
+      "ThaiBreakEngine",
+      "LaoBreakEngine",
+      "BurmeseBreakEngine",
+      "KhmerBreakEngine"
+    ],
+    "upstreamSymbols": [
+      "DictionaryBreakEngine",
+      "PossibleWord",
+      "ThaiBreakEngine",
+      "LaoBreakEngine",
+      "BurmeseBreakEngine",
+      "KhmerBreakEngine"
+    ],
+    "preservedResponsibilities": [
+      "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors."
+    ],
+    "omittedResponsibilities": [
+      "The CJK engine, normalization and factory registration remain pending. Constructor heap-allocation and physical ICU ABI are outside the managed port."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.ts",
+          "marker": "class DictionaryBreakEngine"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "PossibleWord"
+        }
+      ]
+    }
+  }
+}

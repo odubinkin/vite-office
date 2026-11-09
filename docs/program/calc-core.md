@@ -4453,3 +4453,18 @@ calls across 12 scripts, including scripts without dictionaries. The pinned
 native archive returns `U_MISSING_RESOURCE_ERROR` for the Thai, Lao, Burmese,
 and Khmer LSTM models. The original factory then selects the dictionary
 engine. Concrete break-engine algorithms remain the next integration step.
+
+### Native Southeast Asian dictionary breaks
+
+The ICU dictionary span owner and `PossibleWord` candidate cache now drive
+Thai, Lao, Burmese and Khmer boundary selection. The four constructors use
+the exact UnicodeSet inversion lists exported from the original compiled
+constructors. Thai retains the separate code-point minimum span and suffix
+rules. The source lookahead, native indices, prefix handling and status
+propagation are retained by the dictionary algorithms.
+
+The native comparison includes 390 engine calls and 245 UText code-point
+moves across range limits, combining marks, vector capacity errors and
+unpaired surrogates. CALC-480 and CALC-481 record the retained vector count
+and Thai minimum-span edge cases. CJK normalization and dictionary breaking,
+factory registration and the enclosing LibreOffice service remain pending.

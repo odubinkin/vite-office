@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uniset.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uniset.cpp",
+    "localSymbols": [
+      "UnicodeSet",
+      "findCodePoint"
+    ],
+    "upstreamSymbols": [
+      "UnicodeSet",
+      "contains",
+      "findCodePoint"
+    ],
+    "preservedResponsibilities": [
+      "Original UnicodeSet::contains and findCodePoint use native inversion-list ranges and sentinel ordering. The consumed constructor sets come from the actual pinned ICU dictionary engines."
+    ],
+    "omittedResponsibilities": [
+      "Mutable UnicodeSet operations, general pattern parsing, string elements and frozen bitmap accelerators are outside the consumed immutable scalar set."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uniset.ts",
+          "marker": "class UnicodeSet"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uniset.cpp",
+          "marker": "contains"
+        }
+      ]
+    }
+  }
+}

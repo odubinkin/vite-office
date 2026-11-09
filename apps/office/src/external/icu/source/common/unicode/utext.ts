@@ -53,6 +53,7 @@ export type OpenUText = UTextStorage & UText;
 
 export {
   utext_getNativeIndex,
+  utext_moveIndex32,
   utext_setNativeIndex,
   utext_next32,
   utext_previous32,

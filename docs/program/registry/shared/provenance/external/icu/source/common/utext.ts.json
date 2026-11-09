@@ -25,7 +25,8 @@
       "ucstrTextClone",
       "ucstrTextClose",
       "ucstrFuncs",
-      "utext_openUChars"
+      "utext_openUChars",
+      "utext_moveIndex32"
     ],
     "upstreamSymbols": [
       "utext_getNativeIndex",
@@ -46,12 +47,14 @@
       "ucstrTextClone",
       "ucstrTextClose",
       "ucstrFuncs",
-      "utext_openUChars"
+      "utext_openUChars",
+      "utext_moveIndex32"
     ],
     "preservedResponsibilities": [
       "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. The forward checkpoint preceded the actual rule-owner integration.",
       "Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. The safe reverse checkpoint tested raw restart points.",
-      "Original linked OpenOffice rule data uses the real generated ToCP name and padded rule symbols. The UDataMemory-backed iterator owns the actual rule wrapper, UChars provider, break cache and dictionary cache, and drives public boundary queries through the original cache and rule methods. UText setup, close, indexed access and shallow/deep cloning retain source ownership and cursor behavior, including CALC-476. Forty native boundary sequences across all eight generated rules match initialized public results, cursor and rule status. Dictionary factory lookup remains an abstract dependency of the concrete production iterator. General native allocation failure, obsolete CharacterIterator adapters and ICU provider ABI are outside the implemented UChars binding."
+      "Original linked OpenOffice rule data uses the real generated ToCP name and padded rule symbols. The UDataMemory-backed iterator owns the actual rule wrapper, UChars provider, break cache and dictionary cache, and drives public boundary queries through the original cache and rule methods. UText setup, close, indexed access and shallow/deep cloning retain source ownership and cursor behavior, including CALC-476. Forty native boundary sequences across all eight generated rules match initialized public results, cursor and rule status. Dictionary factory lookup remains an abstract dependency of the concrete production iterator. General native allocation failure, obsolete CharacterIterator adapters and ICU provider ABI are outside the implemented UChars binding.",
+      "The original signed utext_moveIndex32 operation uses the same provider chunk access and surrogate traversal in each direction. The native replay verifies 245 UChars movement cases with partial movement, embedded NUL, isolated surrogate units, and out-of-range starting indices."
     ],
     "omittedResponsibilities": [
       "Concrete dictionary factory/engine integration and the enclosing LibreOffice word and title services remain pending. Other UText providers, legacy CharacterIterator APIs, physical allocation and concurrency remain outside the represented contracts."
@@ -73,6 +76,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
           "marker": "matches native linked iterator sequence"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.sea.native.test.ts",
+          "marker": "moves by original signed code-point deltas"
         }
       ],
       "upstream": [
@@ -87,6 +94,10 @@
         {
           "path": "vendor/icu-reference/source/common/utext.cpp",
           "marker": "utext_char32At"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/utext.cpp",
+          "marker": "utext_moveIndex32"
         }
       ]
     }

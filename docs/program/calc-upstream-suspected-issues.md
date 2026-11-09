@@ -5176,3 +5176,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/icu-reference/source/common/dictionarydata.cpp`, both `matches` implementations.
 - Each loop consumes a codepoint, traverses the trie, and records its value before checking the native length limit. In the original builder witness, an input starting with a serialized one-unit word returns that match even with a maximum length of zero.
 - Preserve the limit check after traversal and output. The replay compares both the written match and the resulting cursor.
+
+### CALC-480 — Dictionary break count can include a failed vector insertion
+
+- Source `vendor/icu-reference/source/common/dictbe.cpp`, the four Southeast Asian `divideUpDictionaryRange` implementations and `vendor/icu-reference/source/common/uvectr32.cpp`.
+- The word count advances before the break is pushed onto the vector. In original ICU, a Thai range containing `ภาษาไทย` with a capacity-one break vector returns two while the vector contains one boundary and the status is `U_BUFFER_OVERFLOW_ERROR`.
+- Preserve the returned count, partial vector and failure status. The native replay checks all three.
+
+### CALC-481 — The Thai minimum-span equality skips a dictionary run
+
+- Source `vendor/icu-reference/source/common/dictbe.cpp`, `ThaiBreakEngine::divideUpDictionaryRange` and `LaoBreakEngine::divideUpDictionaryRange`.
+- The Thai implementation advances by four code points and exits when it reaches the range limit, including equality. The other three engines exit only for a range shorter than four native units. Original ICU returns no interior boundary for Thai `ดีดี`, returns a boundary at index 2 for Thai `ดีดีด`, and allows a boundary at index 2 for four-unit Lao `ດີມາ`.
+- Keep each comparison and its indexing unit. The replay includes all three cases.

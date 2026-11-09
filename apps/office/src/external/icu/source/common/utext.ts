@@ -22,6 +22,32 @@ export function ucstrTextLength(text: UText): number {
   }
   return text.a;
 }
+/** Original signed codepoint movement with native chunk access. @param text - Prepared provider. @param delta - Signed codepoint displacement. @returns Whether the entire displacement succeeded. */
+export function utext_moveIndex32(text: UText, delta: number): boolean {
+  if (delta > 0) {
+    do {
+      if (
+        text.chunkOffset >= text.chunkLength &&
+        !text.pFuncs.access(text, text.chunkNativeLimit, true)
+      )
+        return false;
+      const c = text.chunkContents[text.chunkOffset] as number;
+      if ((c & 0xf800) === 0xd800) {
+        if (utext_next32(text) === -1) return false;
+      } else ++text.chunkOffset;
+    } while (--delta > 0);
+  } else if (delta < 0) {
+    do {
+      if (text.chunkOffset <= 0 && !text.pFuncs.access(text, text.chunkNativeStart, false))
+        return false;
+      const c = text.chunkContents[text.chunkOffset - 1] as number;
+      if ((c & 0xf800) === 0xd800) {
+        if (utext_previous32(text) === -1) return false;
+      } else --text.chunkOffset;
+    } while (++delta < 0);
+  }
+  return true;
+}
 /** Original backward codepoint query, including provider transitions and lone surrogates. @param text - Prepared provider. @returns Codepoint or U_SENTINEL. */
 export function utext_previous32(text: UText): number {
   if (text.chunkOffset <= 0 && !text.pFuncs.access(text, text.chunkNativeStart, false)) return -1;
