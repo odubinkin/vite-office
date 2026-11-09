@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 250
+revision: 254
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "blocked_external"
-  updated_at: "2026-11-09T21:06:04.362Z"
+  state: "ok"
+  updated_at: "2026-11-09T21:15:43.205Z"
   updated_by: "CODER"
-  note: "Verified source Big5, GB18030 and ISO-2022-CN dispatch, 4,105,147 defined native samples and streaming cases, 302 shared and 200 Calc tests, and production Chromium CSV flow. Continue source shell overflow diagnostics and final scoped acceptance."
-  attempts: 66
+  note: "verified-202610251610-AQF9AG"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-09T21:15:32.063Z"
+  updated_by: "EVALUATOR"
+  note: "Verified CSV conversion and existing Calc browser file integration in the approved current core slice."
+  evaluated_sha: "4c841234d98aa1a4623c283f0be9ed5c178e906d"
+  blueprint_digest: "9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032"
+  evidence_refs:
+    - ".agentplane/tasks/202610251610-AQF9AG/README.md"
+    - ".agentplane/tasks/202610251610-AQF9AG/quality/20261109-211532063-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610251610-AQF9AG/quality/20261109-211532063-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610251610-AQF9AG/quality/20261109-211532063-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json"
+    - "4c841234d98aa1a4623c283f0be9ed5c178e906d"
+    - "apps/office/src/sal/textenc/cjk.native.json"
+    - "output/native/AQF9AG-diagnostic/calc-final.log"
+    - "output/native/AQF9AG-diagnostic/browser.log"
+    - "output/native/AQF9AG-diagnostic/size-final.log"
+  findings:
+    - "Pinned CSV option defaults, SAL detection and conversion, Calc cell admission and native formatter dispatch, and load warning handoff are implemented through their source owners."
+    - "Focused Calc, shared SAL and diagnostic tests, dependency and provenance checks, Calc resources, and the production Chromium file workflow passed."
 commit: null
 comments:
   -
@@ -1384,8 +1405,26 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:15:03.223Z"
+    author: "CODER"
+    state: "ok"
+    note: "CSV filter and existing browser file workflow verified in the approved current core slice. Final 211 Calc and 9 shared diagnostic tests, Chromium production flow, typecheck, ESLint, dependency boundaries, Calc resources, source provenance and both parity inventories passed. Native device optimum belongs to the separate geometry slice."
+  -
+    type: "verify"
+    at: "2026-11-09T21:15:10.970Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610251610-AQF9AG"
+  -
+    type: "verify"
+    at: "2026-11-09T21:15:43.205Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610251610-AQF9AG"
 doc_version: 3
-doc_updated_at: "2026-11-09T21:14:50.866Z"
+doc_updated_at: "2026-11-09T21:15:43.387Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3383,6 +3422,96 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-09T21:15:03.223Z — VERIFY — ok
+
+    By: CODER
+
+    Note: CSV filter and existing browser file workflow verified in the approved current core slice. Final 211 Calc and 9 shared diagnostic tests, Chromium production flow, typecheck, ESLint, dependency boundaries, Calc resources, source provenance and both parity inventories passed. Native device optimum belongs to the separate geometry slice.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:14:50.866Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-09T21:15:10.970Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610251610-AQF9AG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:03.425Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 4c841234d98aa1a4623c283f0be9ed5c178e906d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-09T21:15:43.205Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610251610-AQF9AG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:11.152Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 4c841234d98aa1a4623c283f0be9ed5c178e906d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -6908,6 +7037,96 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-09T21:15:03.223Z — VERIFY — ok
+
+By: CODER
+
+Note: CSV filter and existing browser file workflow verified in the approved current core slice. Final 211 Calc and 9 shared diagnostic tests, Chromium production flow, typecheck, ESLint, dependency boundaries, Calc resources, source provenance and both parity inventories passed. Native device optimum belongs to the separate geometry slice.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:14:50.866Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-09T21:15:10.970Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610251610-AQF9AG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:03.425Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 4c841234d98aa1a4623c283f0be9ed5c178e906d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-09T21:15:43.205Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610251610-AQF9AG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:15:11.152Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251610-AQF9AG --result verified-202610251610-AQF9AG --commit 4c841234d98aa1a4623c283f0be9ed5c178e906d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
