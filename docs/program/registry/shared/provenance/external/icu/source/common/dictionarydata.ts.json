@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/dictionarydata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/dictionarydata.cpp",
+    "localSymbols": [
+      "DictionaryMatcher",
+      "UCharsDictionaryMatcher",
+      "BytesDictionaryMatcher",
+      "openDictionaryMatcher"
+    ],
+    "upstreamSymbols": [
+      "UCharsDictionaryMatcher::matches",
+      "BytesDictionaryMatcher::matches",
+      "BytesDictionaryMatcher::transform"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370."
+    ],
+    "omittedResponsibilities": [
+      "ICU resource selection and per-language engine segmentation remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.ts",
+          "marker": "DictionaryMatcher"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictionarydata.cpp",
+          "marker": "UCharsDictionaryMatcher::matches"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "ignoreSet->contains(c)"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.cpp",
+          "marker": "loadDictionaryMatcherFor"
+        }
+      ]
+    }
+  }
+}

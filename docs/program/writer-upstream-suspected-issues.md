@@ -2998,3 +2998,38 @@ line-break test failures when reversing the checks (ICU-20837). Preserve
 the ordering. All three compiled LibreOffice dictionary word tables have
 zero lookahead slots, so this observation does not establish a discrepancy
 for their word boundaries.
+
+### WRITER367 — ICU UTF16 dictionary matcher feeds supplementary scalars to single-unit lookup
+
+Pinned `UCharsDictionaryMatcher::matches` in
+`vendor/icu-reference/source/common/dictionarydata.cpp` reads a scalar from
+`UText` and passes it to `UCharsTrie::first` or `next`. Those methods only
+match a single UTF-16 unit. Preserve this path. A native gendict fixture
+containing U+20000 consumes both units and reports a one-scalar prefix with
+no dictionary word for that input.
+
+### WRITER368 — LibreOffice Khmer patch ignores results after advancing the trie
+
+The pinned `external/icu/icu4c-khmerbreakengine.patch.1` tests its
+`ignoreSet` after advancing the trie and counting the code point. Its early
+continuation also bypasses the stop and maximum-length checks for that unit.
+The minimum-length continuation occurs before the final-value stop. Preserve
+this order for both trie formats.
+
+### WRITER369 — ICU dictionary offset transform can treat out-of-range input as ZWJ
+
+Pinned `BytesDictionaryMatcher::transform` returns U_SENTINEL (-1) for a
+scalar outside its offset alphabet. `BytesTrie::first` and `next` add 256
+to negative inputs, so this sentinel enters the same trie branch as the
+ZWJ transform (255). Preserve the two native operations. The compiled
+byte-dictionary fixture reports the same match for Thai letter KO KAI
+followed by U+0061 and by U+200D.
+
+### WRITER370 — PossibleWord reuses candidates when only the starting offset matches
+
+Pinned `PossibleWord::candidates` caches by the original native offset.
+The pinned LibreOffice patch adds an ignore set and minimum length to the
+query without adding them to the cache key. Range-end changes also leave
+the cache eligible. Preserve the original cache condition. The local test
+reuses the same slot and observes a previously selected candidate after
+the range end shrinks.

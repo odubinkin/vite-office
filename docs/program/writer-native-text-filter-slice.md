@@ -1868,3 +1868,16 @@ the expected observations for 105 input/rule pairs.
 The rule-machine results are candidates. Native dictionary refinement, public
 break-cache queries and LibreOffice's locale dispatch still need to connect
 before these rules can measure words in Writer paragraphs.
+
+### HTML80 — Native ICU dictionary matchers with the LibreOffice Khmer patch
+
+The shared runtime opens native Dict resources and runs the original byte
+and UTF-16 trie matchers. It preserves the LibreOffice Khmer patch's
+ignore-set and minimum-length behavior, and the original PossibleWord
+cache used by Southeast Asian engines. The compiled witnesses used the
+LibreOffice replacement Khmer dictionary alongside ICU's Thai, Lao,
+Burmese and CJK dictionaries. See WRITER367 through WRITER370.
+
+The dictionary engine scans, cache and locale selection still need to
+connect these candidates to the public word-boundary query. The full
+dictionary assets are used by the native comparison at this stage.

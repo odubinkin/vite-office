@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/dictbe.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-script-attributes",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/dictbe.ts",
+        "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+        "vendor/icu-reference/source/common/dictbe.cpp",
+        "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1"
+      ],
+      "justification": "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PossibleWord",
+        "candidates",
+        "acceptMarked",
+        "backUp"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
+      "upstreamSymbols": [
+        "PossibleWord::candidates",
+        "PossibleWord::acceptMarked",
+        "PossibleWord::backUp"
+      ]
+    }
+  }
+}

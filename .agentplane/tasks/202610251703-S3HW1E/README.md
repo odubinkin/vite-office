@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 468
+revision: 471
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:35:37.457Z"
+  updated_at: "2026-11-09T18:47:53.555Z"
   updated_by: "CODER"
-  note: "HTML79 verified pinned genbrk byte reproduction and original ICU forward boundary candidates. 3705 native differential input/rule pairs, 174 focused tests, and static gates passed. Dictionary engines, queries, and filter integration remain open."
-  attempts: 90
+  note: "HTML80 verified patched ICU matchers, 2554 native input pairs, 189 focused tests, and static gates. Dictionary engine scans and public Writer word/measurement integration remain open."
+  attempts: 91
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1445,8 +1448,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:47:53.555Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML80 verified patched ICU matchers, 2554 native input pairs, 189 focused tests, and static gates. Dictionary engine scans and public Writer word/measurement integration remain open."
+  -
+    type: "status"
+    at: "2026-11-09T18:48:00.844Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:35:42.099Z"
+doc_updated_at: "2026-11-09T18:48:00.844Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3861,6 +3877,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:47:53.555Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML80 verified patched ICU matchers, 2554 native input pairs, 189 focused tests, and static gates. Dictionary engine scans and public Writer word/measurement integration remain open.
+    Attempts: 91
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:47:50.165Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5630,6 +5676,14 @@ sections:
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/i18npool/source/breakiterator src/external/icu/source/common/uchar.test.ts src/external/icu/source/common/loclikelysubtags.data.integration.test.ts src/i18npool/source/search/levdis.test.ts. Result: 52 passed across four suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed across nine suites. Final shared rule suite replay after extracting the documented native section reader passed four already-counted tests. Total 174 unique across 13 suites. Evidence: html79-shared.log, html79-writer.log and html79-replay-final.log. No full-project replay at this continuing task checkpoint.
     - Whole-app TypeScript, changed ESLint/Prettier, provenance (1964 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial provenance interpreted a scripts/ entry in local source provenance as an upstream relative path; the generator remains runtime evidence. Initial JSDoc rejected the closure form; the section borrow is now a documented typed function and both actual native differential and tests were replayed.
     - Dictionary break engines/cache, Unicode word-range queries, LibreOffice locale dispatch and production Writer paragraph and Markdown table integration remain open. The RBBI candidate code does not claim complete ICU or filter behavior.
+
+    S3HW1E HTML80 — Native dictionary data, scalar tries and patched candidate selection.
+
+    - Actual ICU Dict v1 bytes bind to existing BytesTrie or the new original UCharsTrie scalar reader. The source offset transform, UTF16 versus scalar lengths, weighted values, capacity, cursor, source prefix and distinct trie formats remain visible through the native matcher contract. The pinned LibreOffice Khmer patch adds ignore-set and minimum-length continuations in their original post-transition order. PossibleWord owns the original 20-slot offset cache, longest candidate, backup and marked selection. WRITER367–370 record the supplementary scalar lookup, early continuation order, transform sentinel/ZWJ alias and offset-only cache.
+    - Compiled unchanged ICU 78.3 trie code and the exact patched dictionarydata.cpp with clang++ -std=c++17 -DU_COMMON_IMPLEMENTATION using the local static ICU build. Native gendict produced both small fixture dictionaries. The tracked Vitest fixture compares 54 fixed source input/format pairs. An independent comparison used 500 seeded cases per Thai, Lao, Burmese, CJK and LibreOffice's actual replacement Khmer dictionary, with byte-identical source and TypeScript cursor/prefix/length/value traces for 2500 pairs. Evidence: output/playwright/rtf-properties-native/html80-dictionary/{native-matcher.cpp,host-matcher.mts,*-input.txt,*-native.log,*-host.log}.
+    - Native CreateLSTMDataForScript against the packaged pinned ICU data returned U_MISSING_RESOURCE_ERROR and null for Thai, Lao, Myanmar and Khmer. That distribution therefore reaches the dictionary fallback for those languages. The full patched dictbe.cpp compiles with the same local source, and its native-engine probe observes a Thai breakpoint at UTF16 index 4 in the seven-unit ภาษาไทย. ICU UnicodeSet property ranges were exported into ignored evidence for the next engine checkpoint.
+    - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/uchar.test.ts src/i18npool/source/breakiterator. Result: 67 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 189 unique tests in 14 suites, evidence html80-shared.log and html80-writer.log. No full-project replay at this continuing parent-task checkpoint.
+    - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1967 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and git diff checks passed. Remaining: per-language dictionary engine scans and resource registration, boundary cache/public queries, locale dispatch, Writer paragraph measurement and production Markdown table integration. The pinned full dictionaries are only native verification inputs at this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -8055,6 +8109,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:47:53.555Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML80 verified patched ICU matchers, 2554 native input pairs, 189 focused tests, and static gates. Dictionary engine scans and public Writer word/measurement integration remain open.
+Attempts: 91
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:47:50.165Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9828,3 +9912,11 @@ S3HW1E HTML79 — Pinned ICU Brk resources and forward boundary candidates.
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/i18npool/source/breakiterator src/external/icu/source/common/uchar.test.ts src/external/icu/source/common/loclikelysubtags.data.integration.test.ts src/i18npool/source/search/levdis.test.ts. Result: 52 passed across four suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 passed across nine suites. Final shared rule suite replay after extracting the documented native section reader passed four already-counted tests. Total 174 unique across 13 suites. Evidence: html79-shared.log, html79-writer.log and html79-replay-final.log. No full-project replay at this continuing task checkpoint.
 - Whole-app TypeScript, changed ESLint/Prettier, provenance (1964 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial provenance interpreted a scripts/ entry in local source provenance as an upstream relative path; the generator remains runtime evidence. Initial JSDoc rejected the closure form; the section borrow is now a documented typed function and both actual native differential and tests were replayed.
 - Dictionary break engines/cache, Unicode word-range queries, LibreOffice locale dispatch and production Writer paragraph and Markdown table integration remain open. The RBBI candidate code does not claim complete ICU or filter behavior.
+
+S3HW1E HTML80 — Native dictionary data, scalar tries and patched candidate selection.
+
+- Actual ICU Dict v1 bytes bind to existing BytesTrie or the new original UCharsTrie scalar reader. The source offset transform, UTF16 versus scalar lengths, weighted values, capacity, cursor, source prefix and distinct trie formats remain visible through the native matcher contract. The pinned LibreOffice Khmer patch adds ignore-set and minimum-length continuations in their original post-transition order. PossibleWord owns the original 20-slot offset cache, longest candidate, backup and marked selection. WRITER367–370 record the supplementary scalar lookup, early continuation order, transform sentinel/ZWJ alias and offset-only cache.
+- Compiled unchanged ICU 78.3 trie code and the exact patched dictionarydata.cpp with clang++ -std=c++17 -DU_COMMON_IMPLEMENTATION using the local static ICU build. Native gendict produced both small fixture dictionaries. The tracked Vitest fixture compares 54 fixed source input/format pairs. An independent comparison used 500 seeded cases per Thai, Lao, Burmese, CJK and LibreOffice's actual replacement Khmer dictionary, with byte-identical source and TypeScript cursor/prefix/length/value traces for 2500 pairs. Evidence: output/playwright/rtf-properties-native/html80-dictionary/{native-matcher.cpp,host-matcher.mts,*-input.txt,*-native.log,*-host.log}.
+- Native CreateLSTMDataForScript against the packaged pinned ICU data returned U_MISSING_RESOURCE_ERROR and null for Thai, Lao, Myanmar and Khmer. That distribution therefore reaches the dictionary fallback for those languages. The full patched dictbe.cpp compiles with the same local source, and its native-engine probe observes a Thai breakpoint at UTF16 index 4 in the seven-unit ภาษาไทย. ICU UnicodeSet property ranges were exported into ignored evidence for the next engine checkpoint.
+- Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.shared.config.ts --maxWorkers 2 src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/bytestrie.test.ts src/external/icu/source/common/bytestrie.native.integration.test.ts src/external/icu/source/common/uchar.test.ts src/i18npool/source/breakiterator. Result: 67 tests passed across five suites. Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/bastyp/breakit.test.ts src/sw/source/core/text/itratr.native-minmax.test.ts src/sw/source/core/doc/htmltbl.native-pass1.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts. Result: 122 tests passed across nine suites. Total 189 unique tests in 14 suites, evidence html80-shared.log and html80-writer.log. No full-project replay at this continuing parent-task checkpoint.
+- Whole-app TypeScript, changed ESLint/Prettier, source provenance (1967 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and git diff checks passed. Remaining: per-language dictionary engine scans and resource registration, boundary cache/public queries, locale dispatch, Writer paragraph measurement and production Markdown table integration. The pinned full dictionaries are only native verification inputs at this checkpoint.
