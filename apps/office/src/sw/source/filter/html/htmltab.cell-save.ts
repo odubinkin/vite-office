@@ -243,6 +243,7 @@ export class CellSaveStruct extends SectionSaveStruct {
   /** Stores a real node index and content offset for an admitted NOBR close. @param position - Actual cursor. @returns Nothing. */
   EndNoBreak(position: SwPosition): void {
     if (this.m_bNoBreak) {
+      this.m_oNoBreakEndNodeIndex?.Dispose();
       this.m_oNoBreakEndNodeIndex = new SwNodeIndex(position.GetNode());
       this.m_nNoBreakEndContentPos = position.GetContentIndex();
       this.m_bNoBreak = false;
@@ -264,5 +265,10 @@ export class CellSaveStruct extends SectionSaveStruct {
           this.m_xCnts.SetNoBreak();
       }
     }
+  }
+  /** Releases the owned optional no-break endpoint at native cell-save destruction. @returns Nothing. */
+  SourceDispose(): void {
+    this.m_oNoBreakEndNodeIndex?.Dispose();
+    this.m_oNoBreakEndNodeIndex = null;
   }
 }

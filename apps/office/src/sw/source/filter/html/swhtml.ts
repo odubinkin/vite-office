@@ -62,6 +62,7 @@ import type { SwTableBox } from "../../core/table/swtable";
 import type { Color } from "../../../../tools/inc/color";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { CreateBrushItem } from "./htmltab.brush";
+import { ReadHTMLTable } from "./htmltab.reader";
 import {
   PrepareHTMLInsertion,
   JoinHTMLInsertionStart,
@@ -77,6 +78,7 @@ export class SwHTMLParser extends HTMLParser {
   m_pSttNdIdx: SwNodeIndex | null = null;
   m_pTargetCharAttrs: SfxItemSet | null = null;
   m_xTable: HTMLTable | null = null;
+  m_nHTMLPageWidth = 0;
   readonly m_aTables: HTMLTable[] = [];
   readonly m_aOrphanedTableBoxes: SwTableBox[] = [];
   /** Original legacy HTML frame anchor/alignment producer. @param vertical - Native vertical ID. @param horizontal - Native horizontal ID. @param items - Actual frame items. @param dontAppend - Suppress original no-wrap paragraph append. @returns Nothing. */
@@ -748,6 +750,7 @@ export class SwHTMLParser extends HTMLParser {
       return;
     }
     if (this.m_bInTitle || this.bReadScript || this.bReadStyle) return;
+    if (token === T.TABLE_ON) return ReadHTMLTable(this, this.NextToken.bind(this));
     if (DispatchDefList(this, token) || DispatchNumberBulletList(this, token)) return;
     switch (token) {
       case T.TEXTTOKEN:

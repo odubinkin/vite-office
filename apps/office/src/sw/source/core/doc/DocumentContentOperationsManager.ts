@@ -11,6 +11,7 @@ import { PaMCorrAbs } from "./doccorr";
 import { DelBookmarks } from "./docbm";
 import { SwNodeIndex } from "../crsr/pam";
 import type { SwNode } from "../docnode/node";
+import type { SwNodeRange } from "../../../inc/ndindex";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
@@ -37,6 +38,11 @@ import {
 export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
+
+  /** Moves the represented native text-node interval used by HTML caption relocation. @param range - Actual half-open source interval. @param destination - Actual insertion boundary. @returns Whether the native move occurred. */
+  public MoveNodeRange(range: SwNodeRange, destination: SwNode): boolean {
+    return this.document.GetNodes().MoveNodes(range, destination);
+  }
 
   /** Original full-section deletion orders native bookmark deletion, global cursor correction and node destruction. Fly/redline objects are not represented by this current document model; no stand-in managers are called. @param node - Any actual node in the designated section. @returns Nothing. */
   public DeleteSection(node: SwNode): void {

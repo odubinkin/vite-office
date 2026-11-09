@@ -701,6 +701,43 @@ export class SwNodes {
     return node;
   }
 
+  /** Moves the represented contiguous text-node range to a connected destination, retaining actual node and content indices. @param range - Source half-open interval. @param destination - Existing node before which to insert. @returns Whether the range was moved. */
+  public MoveNodes(range: SwNodeRange, destination: SwNode): boolean {
+    if (
+      destination.GetNodes() !== this ||
+      range.aStart.GetNode().GetNodes() !== this ||
+      range.aEnd.GetNode().GetNodes() !== this
+    )
+      return false;
+    const first = range.aStart.GetIndex();
+    const last = range.aEnd.GetIndex();
+    const target = destination.GetIndex();
+    if (first >= last || (first <= target && target <= last)) return false;
+    const moved: SwTextNode[] = [];
+    const section = range.aStart.GetNode().StartOfSectionNode();
+    const parent = destination.StartOfSectionNode();
+    for (let index = first; index < last; ++index) {
+      const node = this.at(index);
+      if (!(node instanceof SwTextNode) || node.StartOfSectionNode() !== section) return false;
+      moved.push(node);
+    }
+    for (const node of moved) this.m_aOutlineNodes.erase(node);
+    const insertion = target > last ? target - moved.length : target;
+    if (target > last) this.nodeArray.copyWithin(first, last, target);
+    else this.nodeArray.copyWithin(target + moved.length, target, first);
+    for (const [offset, node] of moved.entries()) this.nodeArray[insertion + offset] = node;
+    for (const node of moved) {
+      node.SetStartOfSection(parent);
+      this.InsertOutlineNode(node);
+    }
+    this.document.NotifyModelChange({ index: first, kind: "node-removed" });
+    this.document.NotifyModelChange({
+      index: insertion,
+      kind: "node-inserted",
+    });
+    return true;
+  }
+
   /** Inserts one prepared text node after an existing node,including the actual body start sentinel during undo. @param source - Existing predecessor. @param node - Prepared new node. @returns Nothing. */
   public insertTextNodeAfter(source: SwNode, node: SwTextNode): void {
     if (source.GetNodes() !== this || node.GetNodes() !== this)

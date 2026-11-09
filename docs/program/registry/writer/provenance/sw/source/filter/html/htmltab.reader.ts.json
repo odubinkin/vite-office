@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.reader.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.reader.ts",
+          "marker": "ReadHTMLTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+          "marker": "SwHTMLParser::BuildTable"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "ReadHTMLTable",
+      "BuildTable",
+      "BuildTableSection",
+      "BuildTableRow",
+      "BuildTableCell",
+      "BuildTableCaption"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::BuildTable",
+      "SwHTMLParser::BuildTableSection",
+      "SwHTMLParser::BuildTableRow",
+      "SwHTMLParser::BuildTableCell",
+      "SwHTMLParser::BuildTableCaption"
+    ],
+    "preservedResponsibilities": [
+      "Consumes actual synchronous lexer tokens, restores source implicit-end boundaries, preserves fresh nested identity (WRITER385), moves actual caption nodes and materializes the real Writer table."
+    ],
+    "omittedResponsibilities": [
+      "Pending/asynchronous device streams, form, drawing and desktop view callbacks, full frame/table ABI, and browser projection/persistence for new structural spans and fly content."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.reader.ts",
+      "rationale": "Retains the original SwHTMLParser table responsibilities separately from grid materialization in the TypeScript source tree.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

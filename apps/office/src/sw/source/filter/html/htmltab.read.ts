@@ -1,4 +1,4 @@
-/** @fileoverview Original fresh-table construction block of SwHTMLParser::BuildTable from htmltab.cxx. Recursive token reading/materialization remain the separate native caller responsibility; no table reader or layout result is simulated here. */
+/** @fileoverview Original fresh-table construction block of SwHTMLParser::BuildTable from htmltab.cxx. */
 import type { SwHTMLParser } from "./swhtml";
 import { HTMLTable } from "./htmltab";
 import { HTMLTableOptions } from "./htmltab.options";
@@ -25,12 +25,16 @@ export function CreateHTMLTable(
   if (style) {
     const items = new SfxItemSet(parser.m_xDoc.GetAttrPool(), parser.m_pCSS1Parser.GetWhichMap()),
       info = new SvxCSS1PropertyInfo();
-    if (
-      parser.ParseStyleOptions(style, "", "", items, info) &&
-      info.m_eLeftMarginType === L.SVX_CSS1_LTYPE_AUTO &&
-      info.m_eRightMarginType === L.SVX_CSS1_LTYPE_AUTO
-    )
-      parentAdjust = A.Center;
+    try {
+      if (
+        parser.ParseStyleOptions(style, "", "", items, info) &&
+        info.m_eLeftMarginType === L.SVX_CSS1_LTYPE_AUTO &&
+        info.m_eRightMarginType === L.SVX_CSS1_LTYPE_AUTO
+      )
+        parentAdjust = A.Center;
+    } finally {
+      items.Dispose();
+    }
   }
   const tableOptions = new HTMLTableOptions(options, parentAdjust);
   if (tableOptions.aId) parser.InsertBookmark(tableOptions.aId);

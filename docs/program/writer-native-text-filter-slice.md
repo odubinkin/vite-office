@@ -1974,3 +1974,19 @@ resulting row or cell formats. See WRITER382 through WRITER384.
 Raw HTML input still needs the first-cell and token grammar connection.
 Desktop frame regeneration, `GCLines` cleanup for structural boxes, and
 browser presentation and storage for signed spans remain open.
+
+### HTML88 — Raw HTML table grammar in the Markdown open path
+
+The existing HTML lexer now drives the table, group, row, cell, column
+group and caption owners during Markdown import. First-cell initialization
+creates the original one-cell bootstrap and preserves the cursor, numbering
+and deferred attributes around the table. Caption paragraphs move as the
+same nodes, and explicit left or right alignment uses an anchored Writer
+fly section. Recursive table reads preserve the pinned current-table
+identity behavior. See WRITER385 and WRITER386.
+
+The document shell and mounted file dialog exercise this path using real
+dictionary bytes. The represented synchronous reader has no pending device
+stream, form objects, or desktop frame regeneration. The browser still
+needs projection and persistence for newly admitted signed spans and fly
+content. The full TXT, RTF and Markdown capability audit remains open.

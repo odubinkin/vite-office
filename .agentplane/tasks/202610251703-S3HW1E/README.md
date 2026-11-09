@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 492
+revision: 495
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:55:10.666Z"
+  updated_at: "2026-11-09T20:10:13.368Z"
   updated_by: "CODER"
-  note: "HTML87 source table layout and materialization verified against actual Writer rows and boxes. Next source checkpoint is wiring first-cell context and original raw-HTML token grammar."
-  attempts: 98
+  note: "HTML88 raw HTML table lexer, core insertion and actual Markdown shell/dialog entry verified. Remaining target work covers browser retention of the new structural data and the final represented filter audit."
+  attempts: 99
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1573,8 +1576,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:10:13.368Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML88 raw HTML table lexer, core insertion and actual Markdown shell/dialog entry verified. Remaining target work covers browser retention of the new structural data and the final represented filter audit."
+  -
+    type: "status"
+    at: "2026-11-09T20:10:42.959Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:55:16.477Z"
+doc_updated_at: "2026-11-09T20:10:42.959Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4229,6 +4245,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:10:13.368Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML88 raw HTML table lexer, core insertion and actual Markdown shell/dialog entry verified. Remaining target work covers browser retention of the new structural data and the final represented filter audit.
+    Attempts: 99
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:10:11.058Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6067,6 +6113,14 @@ sections:
     - WRITER382 preserves the pinned nested MakeTable early return after layout if no SwTable was bound. WRITER383 preserves right border assignment without per-cell ending-column admission. WRITER384 records the preserved two-U+0001 empty cell case. Browser graph serialization/rendering of signed spans, GCLines structural cleanup, live desktop frame regeneration, ReqIF formatting, drawing updates and the production raw-HTML table consumer remain unverified or pending. Direct GitHub-style Markdown tables already use MDTable, independently of this work.
     - Targeted Writer verification: 151 tests across nine suites (new materialization fixture, grid, sections, borders, cell-save, width passes, paragraph measure and Markdown). A preliminary type check identified the local overload spelling SetFormatAttrSet; corrected before final application type check passed. The two new tests use actual InsertTable bootstrap, real section and layout owners and genuine packaged dictionaries, with a deterministic physical-width fixture. No full suite was run.
     - Final materialization fixture passed both tests after the exact layout-column assertion. Static checks passed for JSDoc, size, boundaries, source tree, WhichId, provenance, Writer inventory (zero semantic violations), ESLint, Prettier and diff whitespace. Logs are html87-{make-last,static,registry,style,types-final}.log.
+
+    ### HTML88 — Production raw HTML table reading in native Markdown import
+
+    - Pinned source: sw/source/filter/html/{swhtml,htmltab,htmlsect}.cxx, sw/source/core/doc/doclay.cxx, DocumentStylePoolManager, DocumentContentOperationsManager and SwNodes. The original TABLE_ON path now drives actual cell, row, group, colgroup and caption token loops. The real lexer retains implicit close tokens. Actual contexts own point, numbering, deferred item tables and PRE/Listing/XMP state. First cell uses the actual 1x1 native document insertion. Explicit aligned tables use real frame format/style, anchor, wrap, and autotext section ownership. Caption movement preserves the real text and content-index owners. Real layout print area or cached HTML master-page width feeds the existing native materialization.
+    - WRITER385 records the fresh recursive m_xTable identity replacement and restoration. The ordinary nested case yields a real child table section. WRITER386 preserves literal width and height default argument order in MakeFlySection_. The main Writer and dialog tests use original packaged dictionaries and the supported physical-width port. Forms, asynchronous/pending HTML streams, desktop PostIt and live frame regeneration, multicolumn browse calculations, generalized content moves, and non-HTML fly editing remain outside this covered path.
+    - Integration tests open real Markdown bytes via SwDocShell and verify header repeats, inline formatting, caption relocation, implicit row/cell ends, nested real table, and native floating anchor/style. Existing mounted file dialog now opens Markdown with a raw HTML table and checks actual Thai cell text and calculated layout on the active model, while retaining asset retry and existing browser save/open identity. Initial fixture run used incomplete object-shell state and was repaired using the real state factory. A type check found the preexisting cell save lacked an explicit destructor; its optional native no-break index is now released on replacement/destruction.
+    - Main scoped Writer run passed 839 tests across 56 suites (HTML, Markdown, table layout/measure, frame style pool, shell and dialog). Remaining application work includes representation and retention for signed vertical spans and imported fly content through the existing browser/format boundaries, and the final fixed-current-slice TXT/RTF/Markdown comparison. No full repository suite was run.
+    - Final focused regression after the parser/caption ownership adjustments: 38 passing cases across four Writer suites. Application TypeScript, changed-source lint/format, source provenance, Writer inventory (zero semantic violations), boundaries, JSDoc, file size, source tree, WhichId and whitespace checks passed. Evidence: html88-{latest,types-last,style-last,static-last,registry-last,writer-final}.log. The registry initially named an imported helper as a declaration in swhtml.ts, then was corrected to the actual NextToken owner.
 id_source: "generated"
 ---
 ## Summary
@@ -8732,6 +8786,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:10:13.368Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML88 raw HTML table lexer, core insertion and actual Markdown shell/dialog entry verified. Remaining target work covers browser retention of the new structural data and the final represented filter audit.
+Attempts: 99
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:10:11.058Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10574,3 +10658,11 @@ S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdow
 - WRITER382 preserves the pinned nested MakeTable early return after layout if no SwTable was bound. WRITER383 preserves right border assignment without per-cell ending-column admission. WRITER384 records the preserved two-U+0001 empty cell case. Browser graph serialization/rendering of signed spans, GCLines structural cleanup, live desktop frame regeneration, ReqIF formatting, drawing updates and the production raw-HTML table consumer remain unverified or pending. Direct GitHub-style Markdown tables already use MDTable, independently of this work.
 - Targeted Writer verification: 151 tests across nine suites (new materialization fixture, grid, sections, borders, cell-save, width passes, paragraph measure and Markdown). A preliminary type check identified the local overload spelling SetFormatAttrSet; corrected before final application type check passed. The two new tests use actual InsertTable bootstrap, real section and layout owners and genuine packaged dictionaries, with a deterministic physical-width fixture. No full suite was run.
 - Final materialization fixture passed both tests after the exact layout-column assertion. Static checks passed for JSDoc, size, boundaries, source tree, WhichId, provenance, Writer inventory (zero semantic violations), ESLint, Prettier and diff whitespace. Logs are html87-{make-last,static,registry,style,types-final}.log.
+
+### HTML88 — Production raw HTML table reading in native Markdown import
+
+- Pinned source: sw/source/filter/html/{swhtml,htmltab,htmlsect}.cxx, sw/source/core/doc/doclay.cxx, DocumentStylePoolManager, DocumentContentOperationsManager and SwNodes. The original TABLE_ON path now drives actual cell, row, group, colgroup and caption token loops. The real lexer retains implicit close tokens. Actual contexts own point, numbering, deferred item tables and PRE/Listing/XMP state. First cell uses the actual 1x1 native document insertion. Explicit aligned tables use real frame format/style, anchor, wrap, and autotext section ownership. Caption movement preserves the real text and content-index owners. Real layout print area or cached HTML master-page width feeds the existing native materialization.
+- WRITER385 records the fresh recursive m_xTable identity replacement and restoration. The ordinary nested case yields a real child table section. WRITER386 preserves literal width and height default argument order in MakeFlySection_. The main Writer and dialog tests use original packaged dictionaries and the supported physical-width port. Forms, asynchronous/pending HTML streams, desktop PostIt and live frame regeneration, multicolumn browse calculations, generalized content moves, and non-HTML fly editing remain outside this covered path.
+- Integration tests open real Markdown bytes via SwDocShell and verify header repeats, inline formatting, caption relocation, implicit row/cell ends, nested real table, and native floating anchor/style. Existing mounted file dialog now opens Markdown with a raw HTML table and checks actual Thai cell text and calculated layout on the active model, while retaining asset retry and existing browser save/open identity. Initial fixture run used incomplete object-shell state and was repaired using the real state factory. A type check found the preexisting cell save lacked an explicit destructor; its optional native no-break index is now released on replacement/destruction.
+- Main scoped Writer run passed 839 tests across 56 suites (HTML, Markdown, table layout/measure, frame style pool, shell and dialog). Remaining application work includes representation and retention for signed vertical spans and imported fly content through the existing browser/format boundaries, and the final fixed-current-slice TXT/RTF/Markdown comparison. No full repository suite was run.
+- Final focused regression after the parser/caption ownership adjustments: 38 passing cases across four Writer suites. Application TypeScript, changed-source lint/format, source provenance, Writer inventory (zero semantic violations), boundaries, JSDoc, file size, source tree, WhichId and whitespace checks passed. Evidence: html88-{latest,types-last,style-last,static-last,registry-last,writer-final}.log. The registry initially named an imported helper as a declaration in swhtml.ts, then was corrected to the actual NextToken owner.

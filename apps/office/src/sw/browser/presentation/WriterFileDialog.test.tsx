@@ -9,7 +9,8 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../source/core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
+import { SwTableNode } from "../../source/core/docnode/node";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-odt-store";
 import type { WriterSessionServices } from "../workflows/writer-workflows";
@@ -262,7 +263,17 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   });
 
   it("imports Markdown through the native shell and persists browser identity", /** Checks existing Open flow with Markdown content. @returns Completion. */ async () => {
-    const documentShell = shell();
+    const documentShell = new SwDocShell(
+      new SwDoc({
+        defaultFontDevice: {
+          /** Uses the existing default. @returns No override. */
+          getDefaultFont: () => undefined,
+          /** Supplies deterministic measurements through the output-device interface. @param _font - Selected font. @param _text - Original input. @param _start - UTF16 range start. @param length - UTF16 range length. @returns Twip width. */
+          measureTextWidth: (_font, _text, _start, length) => length * 30,
+        },
+      }),
+      createDocument({ id: "dialog-document", suiteId: "writer", title: "Draft" }),
+    );
     const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
     const close = vi.fn();
     let rejectOnce = true;
@@ -293,13 +304,33 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
       );
       fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
       fireEvent.change(screen.getByLabelText("Browse"), {
-        target: { files: [new File(["# Imported"], "Imported.md")] },
+        target: {
+          files: [
+            new File(
+              ["# Imported\n\n<table><tr><td>ภาษาไทย</td><td>Cell</td></tr></table>\n"],
+              "Imported.md",
+            ),
+          ],
+        },
       });
       await waitFor(
         /** Waits for completed import. @returns Nothing. */ () =>
           expect(close).toHaveBeenCalledOnce(),
       );
       expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+      const table = documentShell
+        .GetDoc()
+        .GetNodes()
+        .entries()
+        .find(
+          /** Locates the actual native table node from the same open action. @param node - Actual document node. @returns Whether this is the table node. */ (
+            node,
+          ): node is SwTableNode => node instanceof SwTableNode,
+        );
+      expect(
+        table?.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+      ).toBe("ภาษาไทย");
+      expect(table?.GetTable().GetHTMLTableLayout()?.GetMax()).toBeGreaterThan(0);
       expect(
         (await store.list()).map(
           /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (

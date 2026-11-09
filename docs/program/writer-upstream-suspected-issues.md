@@ -3148,3 +3148,18 @@ For a single text node with exactly two U+0001 characters,
 `SwTableBox::IsEmpty` returns true. The source records this as
 compatibility behavior for imported OOXML cells. HTML numeric format
 publication uses the same test, including its marker-only case.
+
+### WRITER385 — A fresh nested HTML reader replaces the current table identity
+
+`SwHTMLParser::BuildTable` replaces `m_xTable` on fresh entry, even when
+called recursively from a cell. First-cell initialization uses pointer
+equality to identify a top table. In the fresh recursive case it creates
+an actual table section and the caller restores the previous identity
+after the recursive parse. Keep both the replacement and restoration.
+
+### WRITER386 — The default fly width constant occupies the height field
+
+Without an effective frame-size item, `SwDoc::MakeFlySection_` passes
+`0, DEF_FLY_WIDTH` as width and height to the variable-size constructor.
+Preserve the literal argument order. HTML tables supply their own size
+item before that fallback.

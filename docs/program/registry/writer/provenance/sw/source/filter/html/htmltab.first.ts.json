@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.first.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.first.ts",
+          "marker": "BeginTableCellContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+          "marker": "SwHTMLParser::BuildTableCell"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "BeginTableCellContext",
+      "InsertTableFly"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::BuildTableCell"
+    ],
+    "preservedResponsibilities": [
+      "First cell applies native style, cursor and attribute-table scopes, numbering and PRE preservation. Real 1x1 document insertion and actual anchored text fly feed original table materialization."
+    ],
+    "omittedResponsibilities": [
+      "Unsupported desktop PostIt and live frame regeneration, pending streams, unrelated as-character and no-text fly creation."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.first.ts",
+      "rationale": "Retains the original SwHTMLParser table responsibilities separately from grid materialization in the TypeScript source tree.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
