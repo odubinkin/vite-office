@@ -7,8 +7,10 @@ import {
   RES_HORI_ORIENT,
   RES_VERT_ORIENT,
   RES_SURROUND,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
 } from "../../../inc/hintids";
 import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
 import { SwFormatSurround } from "../../../inc/fmtsrnd";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
@@ -92,6 +94,11 @@ export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | 
       which: item.Which(),
       value: [item.GetSurround(), item.IsAnchorOnly(), item.IsContour(), item.IsOutside()],
     };
+  if (item instanceof SwFormatWrapInfluenceOnObjPos)
+    return {
+      which: item.Which(),
+      value: [item.GetWrapInfluenceOnObjPos(), item.GetAllowOverlap(), item.GetOverlapVertOffset()],
+    };
   if (!(item instanceof SvxLRSpaceItem)) return null;
   const measure =
     /** Copies both original measure fields without resolving relative units or rounding doubles. @param value - Measure. @returns Pair. */ (
@@ -124,6 +131,21 @@ export function decodeWriterFrameItem(snapshot: SfxPoolItemSnapshot): SfxPoolIte
     snapshot.which === RES_SURROUND
   )
     return Array.isArray(snapshot.value) ? decodeFlyOrientationItem(snapshot) : null;
+  if (snapshot.which === RES_WRAP_INFLUENCE_ON_OBJPOS) {
+    const value = snapshot.value;
+    if (
+      !Array.isArray(value) ||
+      value.length !== 3 ||
+      ![1, 2, 3].includes(value[0]) ||
+      typeof value[1] !== "boolean" ||
+      !Number.isSafeInteger(value[2])
+    )
+      throw new Error("Stored Writer wrap influence is invalid.");
+    const item = new SwFormatWrapInfluenceOnObjPos(value[0] as number);
+    item.SetAllowOverlap(value[1]);
+    item.SetOverlapVertOffset(value[2] as number);
+    return item;
+  }
   if (snapshot.which !== RES_LR_SPACE) return null;
   const value = snapshot.value;
   if (!Array.isArray(value) || value.length !== 11)

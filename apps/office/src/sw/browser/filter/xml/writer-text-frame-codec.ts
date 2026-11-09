@@ -3,8 +3,9 @@ import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
-import { RES_ANCHOR, RES_CNTNT, RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../../inc/hintids";
+import { RES_ANCHOR, RES_CNTNT } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
+import { aFrameFormatSetRange } from "../../../source/core/bastyp/init";
 import { SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { MakeFlySection } from "../../../source/core/doc/doclay";
@@ -113,7 +114,7 @@ export function* decodeTextFrames(
       throw new Error("Stored Writer text-frame anchor is invalid.");
     const position = new SwPosition(owner, offset);
     const anchor = new SwFormatAnchor(type);
-    const set = new SfxItemSet(document.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+    const set = new SfxItemSet(document.GetAttrPool(), aFrameFormatSetRange);
     let start: SwStartNode;
     try {
       anchor.SetAnchor(position);
@@ -122,8 +123,10 @@ export function* decodeTextFrames(
         if (
           !snapshot ||
           !Number.isInteger(snapshot.which) ||
-          snapshot.which < RES_FRMATR_BEGIN ||
-          snapshot.which >= RES_FRMATR_END ||
+          !aFrameFormatSetRange.some(
+            /** Allows only original attributes admitted by the real fly frame. @param range - Native Which interval. @returns Whether the attribute belongs. */
+            ([first, last]) => snapshot.which >= first && snapshot.which <= last,
+          ) ||
           snapshot.which === RES_ANCHOR ||
           snapshot.which === RES_CNTNT
         )

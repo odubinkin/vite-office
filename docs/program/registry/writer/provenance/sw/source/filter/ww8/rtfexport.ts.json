@@ -17,7 +17,8 @@
       "TrueFrameDirection",
       "FormatFrameDirection",
       "GetPseudoCharRuns",
-      "WriteTable"
+      "WriteTable",
+      "WriteFloatingTables"
     ],
     "upstreamSymbols": [
       "RtfExport::ExportDocument_Impl",
@@ -49,7 +50,8 @@
       "Writes the original RTF vertical merge flags for source master and covered row spans after cell direction.",
       "Uses the source ungrouped-only separator after a cell paragraph terminator. Merged horizontal cells emit the native cumulative CELLX.",
       "Exports nested cell text at its actual depth, emits source NESTCELL and nested row definitions, and collects child box colors before the header.",
-      "Registers effective native table background colors before header output and invokes the source cell background producer."
+      "Registers effective native table background colors before header output and invokes the source cell background producer.",
+      "Writes the actual native splittable text-fly table contents at the owning anchor and uses the fly width fallback for relative row output."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -163,6 +165,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
+          "marker": "WriteFloatingTables"
         }
       ],
       "upstream": [
@@ -245,6 +255,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::TableBackgrounds"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputFlyFrame_Impl"
         }
       ]
     }

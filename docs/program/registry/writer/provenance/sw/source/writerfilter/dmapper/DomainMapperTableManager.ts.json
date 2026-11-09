@@ -11,7 +11,9 @@
       "sprm",
       "endOfRowAction",
       "GetTableGridSeparators",
-      "cellProps"
+      "cellProps",
+      "resolvePositionSprm",
+      "takeRowPosition"
     ],
     "upstreamSymbols": [
       "DomainMapperTableManager::sprm",
@@ -21,7 +23,8 @@
       "S3HW1E HTML75: Real table, temporary row and cell PropertyMap owners consume native bidiVisual and textDirection modifiers, preserving supported/ignored values and table merge semantics. Full TableManager layout/position/style/nested-row orchestration remains unverified.",
       "Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path.",
       "Maps hMerge restart/continue to the native boolean horizontal merge property.",
-      "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties."
+      "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties.",
+      "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -47,6 +50,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
           "marker": "cellProps"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "resolvePositionSprm"
         }
       ],
       "upstream": [
@@ -61,6 +72,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "m_pTablePropsHandler->sprm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "LN_CT_TblPrBase_tblpPr"
         }
       ]
     }

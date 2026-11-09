@@ -26,6 +26,9 @@ import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/Proper
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import type { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { SwTable } from "../table/swtable";
+import { convertTableToSwTextFrame } from "./unotext.frame";
 /** Parent text owner for body or a table cell; no text is stored in this API object. */
 export class SwXText implements SwXTextOwner {
   private valid = true;
@@ -37,6 +40,14 @@ export class SwXText implements SwXTextOwner {
       .GetEndOfContent()
       .StartOfSectionNode(),
   ) {}
+  /** Borrows the original section which contains this XText. @returns Native section start. */
+  GetStartNode(): SwStartNode {
+    return this.start;
+  }
+  /** Converts the represented complete table range into the original Writer text fly. @param table - Original selected table. @param properties - Original UNO frame properties. @returns Native frame. */
+  convertToSwTextFrame(table: SwTable, properties: Sequence<PropertyValue>) {
+    return convertTableToSwTextFrame(this, table, properties);
+  }
   /** Borrows the owning canonical document. @returns The represented native operation result. */
   GetDoc(): SwDoc {
     if (!this.valid || this.document.IsInDtor()) invalid("Text is disposed");

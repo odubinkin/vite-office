@@ -1,4 +1,6 @@
 /** @fileoverview Native draw:frame and draw:text-box import for the represented Writer text frame. */
+import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import type { OdfBoxProperties } from "../style/bordrhdl";
 import { Converter } from "../../../sax/source/tools/converter";
 import type { XMLTextCursor } from "../../inc/txtimp";
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
@@ -8,13 +10,16 @@ import type { XMLTextImportHelper } from "./txtimp";
 import { importFrameConstant } from "./txtprhdl";
 
 /** Represented ODF automatic graphic style values shared with text-frame export. */
-export interface XMLTextFrameStyle {
+export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
   readonly horizontal?: number | undefined;
   readonly horizontalRelation?: number | undefined;
   readonly toggle?: boolean | undefined;
   readonly vertical?: number | undefined;
   readonly verticalRelation?: number | undefined;
   readonly wrap?: number | undefined;
+  readonly followTextFlow?: boolean | undefined;
+  readonly allowOverlap?: boolean | undefined;
+  readonly wrapInfluence?: number | undefined;
   readonly anchorOnly?: boolean | undefined;
   readonly marginLeft?: number | undefined;
   readonly marginRight?: number | undefined;
@@ -35,6 +40,7 @@ export interface XMLTextFrameAttributes {
   readonly minimumHeight?: number | undefined;
   readonly relativeWidth?: number | undefined;
   readonly relativeHeight?: number | undefined;
+  readonly splitAllowed?: boolean | undefined;
 }
 
 /** Shared SAX calls into the native Writer frame and text ownership. */
@@ -49,6 +55,16 @@ const converter = new SvXMLUnitConverter("twip");
 function length(attrs: FastAttributeList, token: T): number | undefined {
   const value = attrs.get(token);
   return value === null ? undefined : (converter.convertMeasureToCore(value) ?? undefined);
+}
+
+/** Reads the last valid native boolean among the admitted lexical aliases. @param attrs - Source attribute list. @param tokens - Original names. @returns Boolean or absence. */
+function boolean(attrs: FastAttributeList, ...tokens: readonly T[]): boolean | undefined {
+  let result: boolean | undefined;
+  for (const [token, value] of attrs) {
+    const output: [boolean] = [false];
+    if (tokens.includes(token) && Converter.convertBool(output, value)) result = output[0];
+  }
+  return result;
 }
 
 /** Reads the original relative-size attribute, including scale. @param text - Optional ODF value. @returns Percentage or synced sentinel. */
@@ -89,6 +105,22 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
           ? count[0] === 1
           : undefined;
     this.style = {
+      ...importFillProperties(attrs),
+      padding: length(attrs, T.FO_PADDING),
+      paddingTop: length(attrs, T.FO_PADDING_TOP),
+      paddingBottom: length(attrs, T.FO_PADDING_BOTTOM),
+      paddingLeft: length(attrs, T.FO_PADDING_LEFT),
+      paddingRight: length(attrs, T.FO_PADDING_RIGHT),
+      border: attrs.get(T.FO_BORDER) ?? undefined,
+      borderTop: attrs.get(T.FO_BORDER_TOP) ?? undefined,
+      borderBottom: attrs.get(T.FO_BORDER_BOTTOM) ?? undefined,
+      borderLeft: attrs.get(T.FO_BORDER_LEFT) ?? undefined,
+      borderRight: attrs.get(T.FO_BORDER_RIGHT) ?? undefined,
+      borderLineWidth: attrs.get(T.STYLE_BORDER_LINE_WIDTH) ?? undefined,
+      borderLineWidthTop: attrs.get(T.STYLE_BORDER_LINE_WIDTH_TOP) ?? undefined,
+      borderLineWidthBottom: attrs.get(T.STYLE_BORDER_LINE_WIDTH_BOTTOM) ?? undefined,
+      borderLineWidthLeft: attrs.get(T.STYLE_BORDER_LINE_WIDTH_LEFT) ?? undefined,
+      borderLineWidthRight: attrs.get(T.STYLE_BORDER_LINE_WIDTH_RIGHT) ?? undefined,
       horizontal: horizontalMode,
       horizontalRelation: importFrameConstant(
         "horizontalRelation",
@@ -102,6 +134,12 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
       verticalRelation: importFrameConstant("verticalRelation", attrs.get(T.STYLE_VERTICAL_REL)),
       wrap: importFrameConstant("wrap", attrs.get(T.STYLE_WRAP)),
       anchorOnly,
+      followTextFlow: boolean(attrs, T.STYLE_FLOW_WITH_TEXT, T.DRAW_FLOW_WITH_TEXT),
+      allowOverlap: boolean(attrs, T.LOEXT_ALLOW_OVERLAP),
+      wrapInfluence: importFrameConstant(
+        "wrapInfluence",
+        attrs.get(T.DRAW_WRAP_INFLUENCE_ON_POSITION),
+      ),
       marginLeft: length(attrs, T.FO_MARGIN_LEFT),
       marginRight: length(attrs, T.FO_MARGIN_RIGHT),
       marginTop: length(attrs, T.FO_MARGIN_TOP),
@@ -148,6 +186,9 @@ export class XMLTextFrameContext extends SvXMLImportContext {
       minimumHeight: length(frame, T.FO_MIN_HEIGHT) ?? length(attrs, T.FO_MIN_HEIGHT),
       relativeWidth: percent(frame.get(T.STYLE_REL_WIDTH) ?? attrs.get(T.FO_MIN_WIDTH)),
       relativeHeight: percent(frame.get(T.STYLE_REL_HEIGHT) ?? attrs.get(T.FO_MIN_HEIGHT)),
+      splitAllowed:
+        boolean(frame, T.LOEXT_MAY_BREAK_BETWEEN_PAGES, T.DRAW_MAY_BREAK_BETWEEN_PAGES) ??
+        boolean(attrs, T.LOEXT_MAY_BREAK_BETWEEN_PAGES, T.DRAW_MAY_BREAK_BETWEEN_PAGES),
     });
     this.helper.PushTextFrameCursor(cursor);
     return new XMLTextBoxContext(this.target, this.helper, cursor);

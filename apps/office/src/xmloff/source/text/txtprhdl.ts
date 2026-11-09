@@ -2,6 +2,7 @@
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation as V } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation as R } from "../../../offapi/com/sun/star/text/RelOrientation";
+import { WrapInfluenceOnPosition as I } from "../../../offapi/com/sun/star/text/WrapInfluenceOnPosition";
 import { WrapTextMode as W } from "../../../offapi/com/sun/star/text/WrapTextMode";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { SvXMLUnitConverter } from "../core/xmluconv";
@@ -69,6 +70,11 @@ const pXML_Wrap_Enum = [
   ["left", W.LEFT],
   ["right", W.RIGHT],
 ] as const;
+const pXML_WrapInfluenceOnPosition_Enum = [
+  ["once-successive", I.ONCE_SUCCESSIVE],
+  ["once-concurrent", I.ONCE_CONCURRENT],
+  ["iterative", I.ITERATIVE],
+] as const;
 const converter = new SvXMLUnitConverter("twip");
 const handlers = {
   horizontal: new XMLConstantsPropertyHandler(pXML_HoriPos_Enum, null),
@@ -77,6 +83,7 @@ const handlers = {
   vertical: new XMLConstantsPropertyHandler(pXML_VertPosAtChar_Enum, null),
   verticalRelation: new XMLConstantsPropertyHandler(pXML_VertRel_Enum, null),
   wrap: new XMLConstantsPropertyHandler(pXML_Wrap_Enum, null),
+  wrapInfluence: new XMLConstantsPropertyHandler(pXML_WrapInfluenceOnPosition_Enum, null),
 };
 
 /** Reads the original text-frame enum token via the shared constant property handler. @param property - Native property map. @param token - Optional authored XML. @returns Mapped value or absence. */

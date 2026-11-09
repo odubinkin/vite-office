@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/unocore/unotext.frame.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/unocore/unotext.frame.ts#convertTableToSwTextFrame",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unotext.cxx#SwXText::convertToSwTextFrame",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor. General rich text selection conversion, redlines, graphics and other UNO shape services remain outside this connected table route.",
+      "knownViolations": [],
+      "localSymbols": [
+        "convertTableToSwTextFrame"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/unocore/unotext.cxx",
+      "upstreamSymbols": [
+        "SwXText::convertToSwTextFrame"
+      ]
+    }
+  }
+}

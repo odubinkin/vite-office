@@ -207,6 +207,12 @@ export const RES_COLLAPSING_BORDERS = 135 as const;
 export const RES_LAYOUT_SPLIT = 123 as const;
 /** Native row split attribute, RES_FRMATR_BEGIN +40. */
 export const RES_ROW_SPLIT = 132 as const;
+/** Native splittable fly item, RES_FRMATR_BEGIN +41. */
+export const RES_FLY_SPLIT = 133 as const;
+/** Native frame containment item, RES_FRMATR_BEGIN +42. */
+export const RES_FOLLOW_TEXT_FLOW = 134 as const;
+/** Native wrap influence and overlap item, RES_FRMATR_BEGIN +44. */
+export const RES_WRAP_INFLUENCE_ON_OBJPOS = 136 as const;
 
 /** Native cell formula identity; concrete calculation remains unimplemented. */
 export const RES_BOXATR_FORMULA = 161 as const;

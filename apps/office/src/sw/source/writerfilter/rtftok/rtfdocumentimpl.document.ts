@@ -41,7 +41,8 @@ import {
 } from "./rtfdocumentimpl.context";
 import { RtfSyntaxError } from "./rtftokenizer";
 import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
-import { MaterializeRtfTable } from "./rtfdocumentimpl.table";
+import { ConvertFloatingRtfTable } from "../dmapper/DomainMapperTableHandler";
+import { MaterializeRtfTable, type PendingRtfTableFrame } from "./rtfdocumentimpl.table";
 import type { Color } from "../../../../tools/inc/color";
 
 /** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
@@ -86,6 +87,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   const model = new SwXTextDocument(document),
     mapper = new DomainMapper(model, SourceDocumentType.RTF);
   this["m_pMapperStream"] = mapper;
+  const pendingTableFrames: PendingRtfTableFrame[] = [];
   let complete = false;
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
@@ -297,12 +299,15 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
             );
         if (block.pageBreakBefore)
           table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
-        MaterializeRtfTable.call(this, document, table, block.rows);
+        MaterializeRtfTable.call(this, document, table, block.rows, pendingTableFrames);
       }
     }
+    for (const pending of pendingTableFrames)
+      ConvertFloatingRtfTable(pending.table, pending.position);
     complete = true;
     return document;
   } finally {
+    for (const pending of pendingTableFrames) pending.position.dispose();
     for (const pointer of nativeStyles?.values() ?? []) pointer.clear();
     this["m_pMapperStream"] = undefined;
     mapper.dispose();

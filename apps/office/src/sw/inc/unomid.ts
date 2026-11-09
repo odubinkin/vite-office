@@ -24,3 +24,8 @@
 /** Native grid base width. */ export const MID_GRID_BASEWIDTH = 8;
 /** Native grid character snapping. */ export const MID_GRID_SNAPTOCHARS = 9;
 /** Native standard mode (inverse squared mode). */ export const MID_GRID_STANDARD_MODE = 10;
+
+/** Original wrap-influence UNO member. */
+export const MID_WRAP_INFLUENCE = 0;
+/** Original allow-overlap UNO member. */
+export const MID_ALLOW_OVERLAP = 1;

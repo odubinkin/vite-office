@@ -1,6 +1,13 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import {
+  RES_FLY_SPLIT,
+  RES_FOLLOW_TEXT_FLOW,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
 import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import { RES_OPAQUE } from "../../../inc/hintids";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
@@ -147,6 +154,17 @@ export class SwAttrPool extends SfxItemPool {
     register(RES_CNTNT);
     register(RES_ANCHOR);
     register(RES_SURROUND);
+    register(
+      RES_FLY_SPLIT,
+      /** Restores the original boolean fly split item. @param value - Native wire value. @returns Actual item. */
+      (value) => new SwFormatFlySplit(Boolean(value)),
+    );
+    register(
+      RES_FOLLOW_TEXT_FLOW,
+      /** Restores the original native containment item. @param value - Native wire value. @returns Actual item. */
+      (value) => new SwFormatFollowTextFlow(Boolean(value)),
+    );
+    register(RES_WRAP_INFLUENCE_ON_OBJPOS);
     register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
     register(WriterWhich.RES_TXTATR_AUTOFMT);
     register(

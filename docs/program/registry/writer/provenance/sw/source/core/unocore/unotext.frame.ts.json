@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/unocore/unotext.frame.ts",
+    "upstreamPath": "sw/source/core/unocore/unotext.cxx",
+    "localSymbols": [
+      "convertTableToSwTextFrame"
+    ],
+    "upstreamSymbols": [
+      "SwXText::convertToSwTextFrame"
+    ],
+    "preservedResponsibilities": [
+      "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor."
+    ],
+    "omittedResponsibilities": [
+      "General rich text selection conversion, redlines, graphics and other UNO shape services remain outside this connected table route."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unotext.frame.ts",
+          "marker": "convertTableToSwTextFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotext.cxx",
+          "marker": "SwXText::convertToSwTextFrame"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/unocore/unotext.frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original text-frame conversion operation and typed frame property application separate from the existing general Writer XText methods and circular UNO object dependencies."
+    }
+  }
+}

@@ -2,6 +2,14 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import type { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import type { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
+import {
+  RES_FLY_SPLIT,
+  RES_FOLLOW_TEXT_FLOW,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
@@ -99,6 +107,24 @@ export class SwFormat extends BroadcastingModify {
   GetOpaque(searchInParent = true): SvxOpaqueItem {
     return this.attributeSet.GetOpaque(searchInParent);
   }
+  /** Reads the effective original fly split item. @param searchInParent - Whether inherited attributes participate. @returns Actual native split item. */
+  GetFlySplit(searchInParent = true): SwFormatFlySplit {
+    return this.attributeSet.Get(RES_FLY_SPLIT, searchInParent) as SwFormatFlySplit;
+  }
+
+  /** Reads the effective original fly containment item. @param searchInParent - Whether inherited attributes participate. @returns Actual native flow item. */
+  GetFollowTextFlow(searchInParent = true): SwFormatFollowTextFlow {
+    return this.attributeSet.Get(RES_FOLLOW_TEXT_FLOW, searchInParent) as SwFormatFollowTextFlow;
+  }
+
+  /** Reads the effective original wrap and overlap item. @param searchInParent - Whether inherited attributes participate. @returns Actual native wrap item. */
+  GetWrapInfluenceOnObjPos(searchInParent = true): SwFormatWrapInfluenceOnObjPos {
+    return this.attributeSet.Get(
+      RES_WRAP_INFLUENCE_ON_OBJPOS,
+      searchInParent,
+    ) as SwFormatWrapInfluenceOnObjPos;
+  }
+
   /** Original inline content getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual content item. */
   GetContent(searchInParent = true): SwFormatContent {
     return this.attributeSet.GetContent(searchInParent);

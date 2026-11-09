@@ -14,13 +14,18 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": []
     },
     "rationale": "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
     "responsibilities": [
-      "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners."
+      "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
+      "Uses the original admitted fly item ranges, including native drawing fill attributes."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

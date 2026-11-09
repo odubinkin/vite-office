@@ -132,6 +132,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -234,6 +238,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
           "marker": "XML_TEXT_BOX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
+          "marker": "m_isSplitAllowed"
         }
       ]
     },
@@ -271,7 +279,8 @@
       "V4DQJW appends original ODF text-underline/overline/line-through mode and letter-kerning lexical associations. Existing bounded SAX token identities remain unchanged.",
       "S3HW1E adds original drawing namespace and fill/fill-color/opacity attribute tokens without renumbering existing portable tokens.",
       "Registers ordinary and LibreOffice extension writing-mode attributes in their original namespaces.",
-      "Recognizes native frame, text-box, geometry, graphic property and anchor tokens."
+      "Recognizes native frame, text-box, geometry, graphic property and anchor tokens.",
+      "Recognizes the original ODF fly split, overlap, flow and wrap influence attributes."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

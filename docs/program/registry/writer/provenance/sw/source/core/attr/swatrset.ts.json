@@ -224,6 +224,10 @@
         {
           "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
           "marker": "writerColorValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -294,6 +298,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/inc/frmatr.hxx",
           "marker": "SwAttrSet::GetFrameDir"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+          "marker": "RES_FLY_SPLIT"
         }
       ]
     },
@@ -367,7 +375,8 @@
       "S3HW1E HTML66: the original table-consumed non-CSS SetAnchorAndAdjustment overload now produces actual native anchor, horizontal/vertical orientation and wrap items, consuming real context/numbering margins, actual HasCurrentParaFlys and SwPaM movement. No-wrap admission queues original point spacing at the front, appends a real no-space paragraph and opens the original successor spacing override only for nonzero upper margin. Character anchoring moves to the previous Unicode character and restores the source point; inline nontext error retains the original already-written vertical item and absent anchor. Original InsertAttr point/head overloads share the existing owned HTMLAttr queue and source context heads. Existing GetULSpaceFromContext body moves unchanged into its original htmlcss1 source fragment to retain the strict parser size cap. Original Reader::ResetFrameFormatAttrs resets only LR/UL/box items. Real nonshareable SwFormatContent owns an optional registered SwNodeIndex, copies/clones independently, reuses engaged optional assignment, resets/destructs the index without owning its section, and compares actual node identity. Static RES_CNTNT105 defaults and pool registration use actual native items; typed GetContent lives on SwAttrSet/SwFormat. No fabricated serialized pointer, fly section/layout or measurement provider is introduced. These are complete consumed state/legacy-alignment source responsibility fragments, not completed first-cell/table production. CSS-positioned/container alignment, full Reader/reset-format families, MakeFlySection/content/contact/layout ownership, recursive HTML first-cell/table grammar/materialization/layout, RTF direction and final current-slice format/UI audit remain unported or unverified. General style-rename migration remains WRITER347; intentional save/open/autosave/recovery deviations stay unchanged. Whole-module/default/contract/desktop ABI parity is not certified.",
       "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified.",
       "S3HW1E HTML73: Typed direction reads the actual Which item through the native effective-item owner.",
-      "Projects actual native Color at the existing Writer primitive output boundary, retaining the original packed alpha and auto sentinel."
+      "Projects actual native Color at the existing Writer primitive output boundary, retaining the original packed alpha and auto sentinel.",
+      "Registers concrete fly split, containment and wrap-influence items with native pool ownership."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

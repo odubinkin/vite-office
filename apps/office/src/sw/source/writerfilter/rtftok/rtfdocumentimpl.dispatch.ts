@@ -18,7 +18,7 @@ import {
 } from "./rtfdocumentimpl.context";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
-import { dispatchTableShading } from "./rtfdispatchvalue.table";
+import { dispatchFloatingTableValue, dispatchTableShading } from "./rtfdispatchvalue.table";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 import { COL_AUTO } from "../../../../tools/inc/color";
 
@@ -562,6 +562,7 @@ export function DispatchBodyControl(
     return;
   }
   if (dispatchTableFlag(name, state)) return;
+  if (dispatchFloatingTableValue(name, parameter ?? 0, state)) return;
   if (dispatchTableShading.call(this, name, parameter ?? 0, state)) return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;

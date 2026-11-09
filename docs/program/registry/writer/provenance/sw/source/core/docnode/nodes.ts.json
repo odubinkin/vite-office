@@ -220,6 +220,10 @@
         {
           "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
           "marker": "GetSectionContent"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -386,6 +390,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
           "marker": "GetIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "SwNodes::MoveNodes"
         }
       ]
     },
@@ -436,7 +444,8 @@
       "S3HW1E HTML61: real SwTableBox anonymous construction preserves a null start node and does not turn reserve capacities into child lines or dummy content. Original borrowed GetUpper/SetUpper pointers and owned nested GetTabLines vectors are represented, with explicit TypeScript vector mutation bridges binding actual owners. GetSttNd is nullable; existing required-leaf convenience boundaries assert an actual start rather than inventing one. The original tblrwcl predecessor algorithm now ascends through actual upper boxes/rows, descends last nested rows/boxes and preserves the source overTableLines flag, including its parent-ascent behavior when false and empty preceding-row recursion. Actual table/box member vectors and line destructor responsibilities own recursive model deletion; node deletion removes live frame clients separately and invokes each actual model destructor once. The existing table section-index graph query now visits actual descendants; native layout-first/sorted-content-box registry lookup is not certified. Core sorted-content registration/removal, complete default table/format lifetime, document destructor orchestration, native recursive HTML first-cell/grammar/materialization/layout and RTF direction remain unverified. Actual DeleteTable is used to test destruction; SwDoc.Dispose currently tears down the notification graph without routing all node-owned table destructors, so this checkpoint does not claim whole document teardown parity. Save/open/autosave/recovery exceptions are unchanged.",
       "S3HW1E HTML67: actual SwNodeRange value constructors own two existing native SwNodeIndex members, retain original absolute/relative defaults including end0, do not normalize endpoints, copy independently, assign contained index values in place and destroy end before start. The ndindex header owner reexports the same existing index class without a second index/registry. SwNodes::SectionDown now wraps actual existing nodes through original positional InsertNode, opposing EndNode/StartNode deletion, registered-index correction and native private static SectionUpDown stack repair. Matching ends/parent identities are repaired by the original forward walk until its stack empties at or beyond the completion boundary; ancestor continuation and traversal past the bound are retained. Genuine nested section/table/box/format/content and cursor owners survive wrapping. WRITER348 records original output endpoint ambiguity, including reversed output after both opposing boundaries are deleted; no endpoint sorting or matching-end substitute is introduced. This is actual structural wrapping needed by MakeFlySection_, not a fake fly-format/section result provider. Pure InsertNode retains native raw-array insertion without invented document-modified/undo publication; existing source host removal notifications remain unchanged. Full SectionUp/general Delete/native node-array/RTTI/ABI completion, MakeFlySection/style-pool/name/inline-fly/contact/layout/undo owners, recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed current-slice format/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations and WRITER347 general style-rename gap remain unchanged. No broad semantic/default/contract/source-responsibility status is promoted.",
       "Moves actual contiguous caption text nodes between native sections without reallocation or changing tracked node identities. Maintains the outline registry and publishes the existing model change notifications. Other move profiles remain unverified.",
-      "Visits direct section text and table nodes by native node index and parent ownership."
+      "Visits direct section text and table nodes by native node index and parent ownership.",
+      "Moves complete native table node sections with actual registered descendant nodes and outline identities intact."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/nodes.cxx",

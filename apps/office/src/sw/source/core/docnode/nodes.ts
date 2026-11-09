@@ -703,7 +703,7 @@ export class SwNodes {
     return node;
   }
 
-  /** Moves the represented contiguous text-node range to a connected destination, retaining actual node and content indices. @param range - Source half-open interval. @param destination - Existing node before which to insert. @returns Whether the range was moved. */
+  /** Moves the represented contiguous range of text and complete table sections to a connected destination, retaining actual node and content indices. @param range - Source half-open interval. @param destination - Existing node before which to insert. @returns Whether the range was moved. */
   public MoveNodes(range: SwNodeRange, destination: SwNode): boolean {
     if (
       destination.GetNodes() !== this ||
@@ -715,23 +715,28 @@ export class SwNodes {
     const last = range.aEnd.GetIndex();
     const target = destination.GetIndex();
     if (first >= last || (first <= target && target <= last)) return false;
-    const moved: SwTextNode[] = [];
+    const moved = this.nodeArray.slice(first, last);
+    const children: (SwTextNode | SwTableNode)[] = [];
     const section = range.aStart.GetNode().StartOfSectionNode();
     const parent = destination.StartOfSectionNode();
-    for (let index = first; index < last; ++index) {
+    for (let index = first; index < last;) {
       const node = this.at(index);
-      if (!(node instanceof SwTextNode) || node.StartOfSectionNode() !== section) return false;
-      moved.push(node);
+      if (node.StartOfSectionNode() !== section) return false;
+      if (node instanceof SwTableNode) {
+        const end = node.EndOfSectionNode().GetIndex();
+        if (end >= last) return false;
+        index = end + 1;
+      } else if (node instanceof SwTextNode) index++;
+      else return false;
+      children.push(node);
     }
-    for (const node of moved) this.m_aOutlineNodes.erase(node);
+    for (const node of moved) if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
     const insertion = target > last ? target - moved.length : target;
     if (target > last) this.nodeArray.copyWithin(first, last, target);
     else this.nodeArray.copyWithin(target + moved.length, target, first);
     for (const [offset, node] of moved.entries()) this.nodeArray[insertion + offset] = node;
-    for (const node of moved) {
-      node.SetStartOfSection(parent);
-      this.InsertOutlineNode(node);
-    }
+    for (const node of children) node.SetStartOfSection(parent);
+    for (const node of moved) if (node instanceof SwTextNode) this.InsertOutlineNode(node);
     this.document.NotifyModelChange({ index: first, kind: "node-removed" });
     this.document.NotifyModelChange({
       index: insertion,

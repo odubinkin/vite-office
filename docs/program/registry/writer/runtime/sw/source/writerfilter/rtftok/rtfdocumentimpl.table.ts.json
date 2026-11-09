@@ -19,9 +19,11 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#bool bSamePosition"
       ],
-      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility. RTF91. Runs original horizontal merges after completing cell and table property application on the actual table. RTF93. Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs.",
+      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility. RTF91. Runs original horizontal merges after completing cell and table property application on the actual table. RTF93. Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs. RTF101. Separates native row groups at original TablePositionHandler comparison boundaries, retaining the final equal position's distance payload.",
       "knownViolations": [],
       "localSymbols": [
         "ApplyRtfTableProperties",

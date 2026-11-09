@@ -1,4 +1,17 @@
 /** @fileoverview Writer native frame properties and fly text cursor at the shared ODF SAX boundary. */
+import { aFrameFormatSetRange } from "../../core/bastyp/init";
+import { getFillProperties } from "./xmlexp-fill";
+import { importBoxProperties } from "./xmlimpit";
+import { exportBoxProperties } from "./xmlexpit";
+import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import { XFillColorItem } from "../../../../svx/inc/xflclit";
+import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
+import type { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { Color } from "../../../../tools/inc/color";
+import { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import { RES_FOLLOW_TEXT_FLOW, RES_WRAP_INFLUENCE_ON_OBJPOS } from "../../../inc/hintids";
 import { SvxIndentValue, SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
@@ -6,7 +19,7 @@ import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { MINLAY } from "../../../inc/swtypes";
-import { RES_FRMATR_BEGIN, RES_FRMATR_END, RES_LR_SPACE, RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_BOX, RES_LR_SPACE, RES_UL_SPACE } from "../../../inc/hintids";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -36,7 +49,7 @@ export function importTextFrame(
   const doc = parent.GetDoc();
   const position = parent.GetPaM().GetPoint();
   const type = value.anchor === "char" ? RndStdIds.FLY_AT_CHAR : RndStdIds.FLY_AT_PARA;
-  const set = new SfxItemSet(doc.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+  const set = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
   /** Transfers a native item value into the original frame item set. @param item - Temporary item. @returns Nothing. */
   function put(item: SfxPoolItem): void {
     try {
@@ -84,6 +97,20 @@ export function importTextFrame(
     }
     if (style.marginTop !== undefined || style.marginBottom !== undefined)
       put(new SvxULSpaceItem(style.marginTop ?? 0, style.marginBottom ?? 0, RES_UL_SPACE));
+    const box = importBoxProperties(style, RES_BOX);
+    if (box !== undefined) put(box);
+    if (style.fillStyle !== undefined) put(new XFillStyleItem(style.fillStyle as FillStyle));
+    if (style.fillColor !== undefined) put(new XFillColorItem("", new Color(style.fillColor)));
+    if (style.fillTransparency !== undefined)
+      put(new XFillTransparenceItem(style.fillTransparency));
+    if (value.splitAllowed) put(new SwFormatFlySplit(true));
+    if (style.followTextFlow !== undefined) put(new SwFormatFollowTextFlow(style.followTextFlow));
+    if (style.allowOverlap !== undefined || style.wrapInfluence !== undefined) {
+      const item = defaults.GetWrapInfluenceOnObjPos().Clone();
+      if (style.allowOverlap !== undefined) item.SetAllowOverlap(style.allowOverlap);
+      if (style.wrapInfluence !== undefined) item.SetWrapInfluenceOnObjPos(style.wrapInfluence);
+      put(item);
+    }
     const size = defaults.GetFrameSize().Clone();
     applyFrameSize(size, value);
     put(size);
@@ -177,7 +204,10 @@ export function exportTextFrame(
           : size.GetHeight(),
     relativeWidth: size.GetWidthPercent(),
     relativeHeight,
+    splitAllowed: format.GetFlySplit().GetValue(),
     style: {
+      ...getFillProperties(items),
+      ...exportBoxProperties(items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined),
       horizontal: horizontal.GetHoriOrient(),
       horizontalRelation: horizontal.GetRelationOrient(),
       toggle: horizontal.IsPosToggle(),
@@ -185,6 +215,15 @@ export function exportTextFrame(
       verticalRelation: vertical.GetRelationOrient(),
       wrap: wrap.GetSurround(),
       anchorOnly: wrap.IsAnchorOnly(),
+      followTextFlow: items.GetItemIfSet(RES_FOLLOW_TEXT_FLOW, false)
+        ? format.GetFollowTextFlow().GetValue()
+        : undefined,
+      allowOverlap: items.GetItemIfSet(RES_WRAP_INFLUENCE_ON_OBJPOS, false)
+        ? format.GetWrapInfluenceOnObjPos().GetAllowOverlap()
+        : undefined,
+      wrapInfluence: items.GetItemIfSet(RES_WRAP_INFLUENCE_ON_OBJPOS, false)
+        ? format.GetWrapInfluenceOnObjPos().GetWrapInfluenceOnObjPos()
+        : undefined,
       marginLeft: lr?.ResolveLeft(),
       marginRight: lr?.ResolveRight(),
       marginTop: ul?.GetUpper(),

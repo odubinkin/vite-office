@@ -20,9 +20,11 @@
         "apps/office/src/xmloff/source/text/txtprhdl.ts#importFrameConstant",
         "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#pXML_HoriRel_Enum",
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#pXML_WrapInfluenceOnPosition_Enum"
       ],
-      "justification": "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values. Property handlers for text-frame types and other text properties outside this slice are not represented here.",
+      "justification": "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values. Property handlers for text-frame types and other text properties outside this slice are not represented here. RTF101. Adds the original wrap-influence mode map used by graphic frame styles.",
       "knownViolations": [],
       "localSymbols": [
         "importFrameConstant",

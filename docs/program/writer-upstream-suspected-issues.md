@@ -3275,3 +3275,13 @@ conditions and keep ordinary TXT selection on the original range.
 height. `XMLTextFrameContext_Impl::Create` sees the minimum-height
 attribute and sets `SizeType::MIN`, even though the dimension is zero.
 Keep the resulting minimum sizing type on reopen.
+
+### WRITER401 — RTF floating-table left and top controls are emitted without an import consumer
+
+`RtfAttributeOutput::TablePositioning` writes TPOSXL for left and
+TPOSYT for top. Both words are registered in the tokenizer, but
+`RTFDocumentImpl::dispatchFloatingTableFlag` only consumes the center
+and right horizontal specifications and center and bottom vertical
+specifications. With an otherwise positioned row, the left and top
+words leave the corresponding imported orientation at NONE. Preserve
+the source writer and reader behavior.

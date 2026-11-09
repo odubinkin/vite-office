@@ -291,6 +291,12 @@ export enum XMLToken {
   STYLE_VERTICAL_REL,
   STYLE_REL_HEIGHT,
   STYLE_NUMBER_WRAPPED_PARAGRAPHS,
+  DRAW_MAY_BREAK_BETWEEN_PAGES,
+  LOEXT_MAY_BREAK_BETWEEN_PAGES,
+  LOEXT_ALLOW_OVERLAP,
+  STYLE_FLOW_WITH_TEXT,
+  DRAW_FLOW_WITH_TEXT,
+  DRAW_WRAP_INFLUENCE_ON_POSITION,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -314,6 +320,12 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "vertical-rel", XMLToken.STYLE_VERTICAL_REL],
   [ODF_NAMESPACES.style, "rel-height", XMLToken.STYLE_REL_HEIGHT],
   [ODF_NAMESPACES.style, "number-wrapped-paragraphs", XMLToken.STYLE_NUMBER_WRAPPED_PARAGRAPHS],
+  [ODF_NAMESPACES.draw, "may-break-between-pages", XMLToken.DRAW_MAY_BREAK_BETWEEN_PAGES],
+  [ODF_NAMESPACES.loext, "may-break-between-pages", XMLToken.LOEXT_MAY_BREAK_BETWEEN_PAGES],
+  [ODF_NAMESPACES.loext, "allow-overlap", XMLToken.LOEXT_ALLOW_OVERLAP],
+  [ODF_NAMESPACES.style, "flow-with-text", XMLToken.STYLE_FLOW_WITH_TEXT],
+  [ODF_NAMESPACES.draw, "flow-with-text", XMLToken.DRAW_FLOW_WITH_TEXT],
+  [ODF_NAMESPACES.draw, "wrap-influence-on-position", XMLToken.DRAW_WRAP_INFLUENCE_ON_POSITION],
   [ODF_NAMESPACES.draw, "fill", XMLToken.DRAW_FILL],
   [ODF_NAMESPACES.draw, "fill-color", XMLToken.DRAW_FILL_COLOR],
   [ODF_NAMESPACES.draw, "opacity", XMLToken.DRAW_OPACITY],

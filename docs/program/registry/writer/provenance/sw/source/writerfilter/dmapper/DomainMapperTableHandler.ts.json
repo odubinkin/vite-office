@@ -10,7 +10,8 @@
       "ApplyVerticalMergeBorders",
       "HorizontallyMergedCell",
       "CollectHorizontalMerge",
-      "ApplyHorizontalMerges"
+      "ApplyHorizontalMerges",
+      "ConvertFloatingRtfTable"
     ],
     "upstreamSymbols": [
       "DomainMapperTableHandler::endTableGetCellProperties",
@@ -18,7 +19,8 @@
     ],
     "preservedResponsibilities": [
       "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
-      "Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389)."
+      "Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389).",
+      "Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion."
     ],
     "omittedResponsibilities": [
       "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
@@ -36,6 +38,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
           "marker": "HorizontallyMergedCell"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "ConvertFloatingRtfTable"
         }
       ],
       "upstream": [
@@ -46,6 +56,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "DomainMapperTableHandler::endTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "A text frame created for floating tables is always allowed to split"
         }
       ]
     }

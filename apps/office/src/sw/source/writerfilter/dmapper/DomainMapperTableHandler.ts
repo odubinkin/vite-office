@@ -1,9 +1,13 @@
 /** @fileoverview Original mapper merge collection and native cell border reconciliation. */
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SequenceAsHashMap } from "../../../../comphelper/source/misc/sequenceashashmap";
+import { convertTwipToMm100_Limited } from "./ConversionHelper";
+import { SwXText } from "../../core/unocore/unotext";
+import type { TablePositionHandler } from "./TablePositionHandler";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import type { SwTable } from "../../core/table/swtable";
 import { SwXTextTableCursor } from "../../core/unocore/unotbl";
-import { scalar } from "../../core/unocore/unocrsrhelper";
+import { scalar, unicode } from "../../core/unocore/unocrsrhelper";
 import { PropertyIds as P } from "./PropertyIds";
 import type { TablePropertyMap } from "./PropertyMap";
 
@@ -101,5 +105,39 @@ export function ApplyVerticalMergeBorders(
         box.Dispose();
       }
     }
+  }
+}
+
+/** Applies the original table positioning sequence through the connected Writer XText owner. @param table - Actual converted native table. @param position - Original row position handler. @returns Nothing. */
+export function ConvertFloatingRtfTable(table: SwTable, position: TablePositionHandler): void {
+  const node = table.GetTableNode();
+  const text = new SwXText(node.GetDoc(), node.StartOfSectionNode());
+  const original = position.getTablePosition();
+  const values = new SequenceAsHashMap(original, "PropertyValue");
+  const key = unicode("HoriOrientPosition");
+  try {
+    const tableBox = table.GetFrameFormat().GetBox();
+    const first = table.GetTabLines()[0]?.GetTabBoxes()[0];
+    const edge = SvxBoxItemLine.LEFT;
+    const border =
+      first === undefined ? tableBox.GetLine(edge) : first.GetFrameFormat().GetBox().GetLine(edge);
+    const leftDistance = convertTwipToMm100_Limited(tableBox.GetDistance(edge));
+    const halfBorder = node.FindTableBoxStartNode()
+      ? 0
+      : Math.trunc(SvxBoxItem.SvxLineToLine(border, true).LineWidth / 2);
+    const x = values.operatorIndex(key);
+    const offset = scalar(x, "sal_Int32") as number;
+    x.insert([offset - leftDistance - halfBorder], "sal_Int32");
+    const properties = values.getAsConstPropertyValueList();
+    try {
+      text.convertToSwTextFrame(table, properties);
+    } finally {
+      properties.dispose();
+    }
+  } finally {
+    key.dispose();
+    values.dispose();
+    original.dispose();
+    text.dispose();
   }
 }

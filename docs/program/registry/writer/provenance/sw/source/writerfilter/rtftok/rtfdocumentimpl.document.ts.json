@@ -40,7 +40,8 @@
       "S3HW1E HTML75: The actual materialized Writer table consumes buffered direction properties through the native mapper and existing UNO wrappers.",
       "Actual imported table rows receive the native buffered property consumer after core creation.",
       "Materializes active section tables by replaying completed top-level and nested native row buffers.",
-      "Binds the native Color palette to original paragraph border materialization."
+      "Binds the native Color palette to original paragraph border materialization.",
+      "Completes native table frame conversion after the following paragraph is materialized."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -134,6 +135,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -208,6 +217,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "case RTFKeyword::BRDRCF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "A text frame created for floating tables is always allowed to split"
         }
       ]
     },

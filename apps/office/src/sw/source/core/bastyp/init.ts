@@ -1,4 +1,7 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
 import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import {
@@ -166,6 +169,9 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatHoriOrient());
     add(new SwFormatLayoutSplit());
     add(new SwFormatRowSplit());
+    add(new SwFormatFlySplit());
+    add(new SwFormatFollowTextFlow());
+    add(new SwFormatWrapInfluenceOnObjPos());
     add(new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR));
     add(new SwFormatFillOrder());
     add(new SvxOpaqueItem(RES_OPAQUE));

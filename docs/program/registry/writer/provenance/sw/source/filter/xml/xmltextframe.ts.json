@@ -16,7 +16,8 @@
     ],
     "preservedResponsibilities": [
       "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF.",
-      "Uses the common native bound fly collection rather than a separate filter-only anchor registry."
+      "Uses the common native bound fly collection rather than a separate filter-only anchor registry.",
+      "Preserves original split, flow, overlap, frame border and transparency values in ODF."
     ],
     "omittedResponsibilities": [
       "Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice."
@@ -42,12 +43,24 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx",
           "marker": "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
+          "marker": "m_isSplitAllowed"
         }
       ]
     },

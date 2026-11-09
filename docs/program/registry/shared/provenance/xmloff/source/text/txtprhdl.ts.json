@@ -14,7 +14,8 @@
       "pXML_HoriRel_Enum"
     ],
     "preservedResponsibilities": [
-      "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values."
+      "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values.",
+      "Adds the original wrap-influence mode map used by graphic frame styles."
     ],
     "omittedResponsibilities": [
       "Property handlers for text-frame types and other text properties outside this slice are not represented here."
@@ -32,12 +33,20 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
           "marker": "anchored Markdown"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
           "marker": "pXML_HoriRel_Enum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
+          "marker": "pXML_WrapInfluenceOnPosition_Enum"
         }
       ]
     }

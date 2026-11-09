@@ -1,4 +1,7 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
 import { CollectCharFormatItems } from "./wrtw8nds.paragraph-marker";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import type { wwFont } from "./wrtw8sty";
@@ -107,6 +110,48 @@ export class RtfAttributeOutput extends AttributeOutputBase {
     this.associated = new RtfAssociatedProperties(
       /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
       (font, assoc) => this.OutputCharFontAssoc(font, assoc),
+    );
+  }
+
+  /** Emits original native floating-table row positioning and distance controls. @param fly - Actual enclosing frame. @returns RTF row controls. */
+  TablePositioning(fly: SwFrameFormat | undefined): string {
+    if (!fly?.GetFlySplit().GetValue()) return "";
+    const horizontal = fly.GetHoriOrient();
+    const vertical = fly.GetVertOrient();
+    const vertRelation = vertical.GetRelationOrient();
+    const horiRelation = horizontal.GetRelationOrient();
+    const vert = vertical.GetVertOrient();
+    const hori = horizontal.GetHoriOrient();
+    const lr = fly.GetLRSpace();
+    const ul = fly.GetULSpace();
+    return (
+      (vertRelation === RelOrientation.PAGE_PRINT_AREA
+        ? "\\tpvmrg"
+        : vertRelation === RelOrientation.PAGE_FRAME
+          ? "\\tpvpg"
+          : "\\tpvpara") +
+      (horiRelation === RelOrientation.FRAME
+        ? "\\tphcol"
+        : horiRelation === RelOrientation.PAGE_PRINT_AREA
+          ? "\\tphmrg"
+          : "\\tphpg") +
+      (hori === HoriOrientation.LEFT
+        ? "\\tposxl"
+        : hori === HoriOrientation.CENTER
+          ? "\\tposxc"
+          : hori === HoriOrientation.RIGHT
+            ? "\\tposxr"
+            : `\\tposx${horizontal.GetPos() | 0}`) +
+      (vert === VertOrientation.TOP
+        ? "\\tposyt"
+        : vert === VertOrientation.CENTER
+          ? "\\tposyc"
+          : vert === VertOrientation.BOTTOM
+            ? "\\tposyb"
+            : `\\tposy${vertical.GetPos() | 0}`) +
+      `\\tdfrmtxtTop${ul.GetUpper() & 0xffff}\\tdfrmtxtBottom${ul.GetLower() & 0xffff}` +
+      `\\tdfrmtxtLeft${lr.ResolveLeft() & 0xffff}\\tdfrmtxtRight${lr.ResolveRight() & 0xffff}` +
+      (fly.GetWrapInfluenceOnObjPos().GetAllowOverlap() ? "" : "\\tabsnoovrlp1")
     );
   }
 

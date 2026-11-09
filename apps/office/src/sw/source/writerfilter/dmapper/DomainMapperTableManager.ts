@@ -1,11 +1,12 @@
 /** @fileoverview Native table/row/cell property ownership and original grid separators. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
-import type { Sprm } from "../inc/dmapper/resourcemodel";
+import { resolveReturnedReference, type Sprm } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMap } from "./PropertyMap";
 import { UNO_TABLE_COLUMN_SUM } from "../../../inc/swtypes";
+import { TablePositionHandler } from "./TablePositionHandler";
 import { TablePropertiesHandler } from "./TablePropertiesHandler";
 
 /** Actual mapper property owners for the represented top-level table direction path. */
@@ -14,10 +15,37 @@ export class DomainMapperTableManager {
   private m_aTmpTableProperties = new TablePropertyMap();
   private m_pCellProps = new TablePropertyMap();
   private readonly m_pTablePropsHandler = new TablePropertiesHandler();
+  private m_pTmpPosition: TablePositionHandler | undefined;
 
   /** Connects the original fallback table property handler. @returns Table manager. */
   constructor() {
     this.m_pTablePropsHandler.SetTableManager(this);
+  }
+
+  /** Resolves original row position and overlap attributes in stream order. @param modifier - Actual resource modifier. @returns Whether consumed. */
+  resolvePositionSprm(modifier: Sprm): boolean {
+    switch (modifier.getId()) {
+      case N.LN_CT_TblPrBase_tblpPr: {
+        const properties = modifier.getProps();
+        if (properties !== null) {
+          this.m_pTmpPosition ??= new TablePositionHandler();
+          resolveReturnedReference(properties, this.m_pTmpPosition);
+        }
+        return true;
+      }
+      case N.LN_CT_TblPrBase_tblOverlap:
+        this.m_pTmpPosition?.setTableOverlap(modifier.getValue()?.getInt() ?? 0);
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Transfers the current native row position for the end-of-row comparison. @returns Owned position or absent. */
+  takeRowPosition(): TablePositionHandler | undefined {
+    const position = this.m_pTmpPosition;
+    this.m_pTmpPosition = undefined;
+    return position;
   }
 
   /** Original row and cell property consumers. @param modifier - Actual resource sprm. @returns Whether the table manager consumed it. */
@@ -96,6 +124,7 @@ export class DomainMapperTableManager {
 
   /** Releases represented native row, cell and table property maps. @returns Nothing. */
   dispose(): void {
+    this.m_pTmpPosition?.dispose();
     this.m_pCellProps.dispose();
     this.m_aTmpTableProperties.dispose();
     this.m_aTableProperties.dispose();

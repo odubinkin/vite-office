@@ -249,6 +249,47 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     documentShell.Close();
   });
 
+  it("reopens a table-only floating RTF document through normal browser storage", /** Exercises the real Open path with no text outside the native table. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-floating-rtf", new IDBFactory());
+    const close = vi.fn();
+    try {
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      const source = String.raw`{\rtf1\trowd\tpvpara\tphcol\tposxr\cellx3000\intbl Inside\cell\row}`;
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([source], "Floating.rtf")] },
+      });
+      await waitFor(
+        /** Waits for the existing open and persistence workflow. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      const [record] = await store.list();
+      assert(record);
+      expect(await openBrowserWriterDocument(documentShell, store, record.id)).toBe(true);
+      const doc = documentShell.GetDoc();
+      expect(doc.paragraphs[0]?.GetText()).toBe("");
+      const fly = doc.GetSpzFrameFormats().GetFormat(0);
+      expect(fly.GetFlySplit().GetValue()).toBe(true);
+      const section = fly.GetContent().GetContentIdx()?.GetNode();
+      assert(section?.IsStartNode());
+      const table = doc.nodes.GetSectionContent(section)[0];
+      assert(table instanceof SwTableNode);
+      expect(
+        table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+      ).toBe("Inside");
+    } finally {
+      documentShell.Close();
+    }
+  });
+
   it.each([
     [
       "nested RTF",

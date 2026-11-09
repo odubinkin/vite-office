@@ -1,4 +1,5 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
+import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
 import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
 import { OutString } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
@@ -104,6 +105,7 @@ export class RtfExport extends MSWordExportBase {
     this,
   );
   private readonly colors = new Map<string, number>();
+  private textFlyFrames: BoundTextFrames = new Map();
 
   private readonly m_eDefaultEncoding = rtl_getTextEncodingFromWindowsCharset(
     rtl_TextEncodingToWinCharset(RTL_TEXTENCODING_ASCII_US),
@@ -206,6 +208,7 @@ export class RtfExport extends MSWordExportBase {
     const styleTable = new MSWordStyles(this);
     this.m_pStyles = styleTable;
     const blocks = document.GetNodes().getBodyContent();
+    this.textFlyFrames = CollectTextFlyFrames(document);
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
       for (const run of this.GetTextRuns(node as SwTextNode)) {
@@ -321,6 +324,7 @@ export class RtfExport extends MSWordExportBase {
       if (block instanceof SwTableNode) {
         output += this.WriteTable(block, 1);
       } else {
+        output += this.WriteFloatingTables(block, 1);
         const result = this.WriteTextNode(document, block, currentPage, previousPageDesc);
         output += result.output;
         currentPage = result.currentPage;
@@ -334,9 +338,21 @@ export class RtfExport extends MSWordExportBase {
     return this.Strm().GetData();
   }
 
+  /** Original splittable text fly output revisits its actual table contents at the anchor. @param anchor - Actual text owner. @param depth - Original RTF table depth in this context. @returns Floating table controls and contents. */
+  private WriteFloatingTables(anchor: SwTextNode, depth: number): string {
+    let output = "";
+    for (const fly of this.textFlyFrames.get(anchor) ?? []) {
+      if (!fly.format.GetFlySplit().GetValue()) continue;
+      for (const block of fly.content)
+        if (block instanceof SwTableNode) output += this.WriteTable(block, depth);
+    }
+    return output;
+  }
+
   /** Writes native table definitions and interleaved nested table content in source depth order. @param block - Actual table node. @param depth - Original table depth. @returns RTF table bytes. */
   private WriteTable(block: SwTableNode, depth: number): string {
     let output = "";
+    const fly = block.GetFlyFormat();
     for (const row of block.GetTable().GetTabLines()) {
       const boxes = row.GetTabBoxes();
       const tableFormat = block.GetTable().GetFrameFormat();
@@ -359,6 +375,7 @@ export class RtfExport extends MSWordExportBase {
       if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
         definition += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
       if (!rowFormat.GetRowSplit().GetValue()) definition += "\\trkeep";
+      definition += this.attributeOutput.TablePositioning(fly);
       const tableBox = tableFormat.GetBox();
       for (const [edge, unitControl, valueControl] of [
         [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
@@ -385,7 +402,12 @@ export class RtfExport extends MSWordExportBase {
         widthPercent = 100;
       const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
       const page = this.ResolvePageDescription(this.m_rDoc, block).GetValue();
-      const pageWidth = page.width - page.leftMargin - page.rightMargin;
+      const flyMargins = fly?.GetLRSpace();
+      const pageWidth = fly?.GetFlySplit().GetValue()
+        ? fly.GetFrameSize().GetWidth() -
+          (flyMargins?.ResolveLeft() ?? 0) -
+          (flyMargins?.ResolveRight() ?? 0)
+        : page.width - page.leftMargin - page.rightMargin;
       const targetWidth = relative
         ? widthPercent === 0
           ? pageWidth
@@ -440,6 +462,7 @@ export class RtfExport extends MSWordExportBase {
         for (const [index, node] of content.entries()) {
           if (node instanceof SwTableNode) output += this.WriteTable(node, depth + 1);
           else {
+            output += this.WriteFloatingTables(node, depth + 1);
             output += "\\pard\\intbl";
             if (depth > 1) output += `\\itap${depth}`;
             output += " " + this.WriteParagraph(node);

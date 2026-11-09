@@ -14,7 +14,8 @@
       "XMLTextParagraphExport::_exportTextFrame"
     ],
     "preservedResponsibilities": [
-      "Writes original draw:frame and draw:text-box markup and the consumed automatic style attributes."
+      "Writes original draw:frame and draw:text-box markup and the consumed automatic style attributes.",
+      "Writes the source extension split and overlap flags and represented frame box and drawing fill properties."
     ],
     "omittedResponsibilities": [
       "Full frame property-map coverage and measured fallback size from native desktop fly layout remain outside this slice."
@@ -32,12 +33,20 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
           "marker": "anchored Markdown"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport::_exportTextFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XML_MAY_BREAK_BETWEEN_PAGES"
         }
       ]
     },

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 531
+revision: 534
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T21:54:05.193Z"
+  updated_at: "2026-11-09T22:11:07.200Z"
   updated_by: "CODER"
-  note: "RTF100 verified native anchored table browser paint and edit routing with 188 focused tests and static/registry checks. Keep open for RTF floating table producer and consumer."
-  attempts: 111
+  note: "RTF101 verified native floating table position, section ownership, browser document I/O and 1216 focused tests. Keep open for the ordinary RTF text-box route and remaining current-model audit."
+  attempts: 112
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1781,8 +1784,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T22:11:07.200Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF101 verified native floating table position, section ownership, browser document I/O and 1216 focused tests. Keep open for the ordinary RTF text-box route and remaining current-model audit."
+  -
+    type: "status"
+    at: "2026-11-09T22:11:21.478Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:54:10.946Z"
+doc_updated_at: "2026-11-09T22:11:21.478Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4827,6 +4843,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T22:11:07.200Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF101 verified native floating table position, section ownership, browser document I/O and 1216 focused tests. Keep open for the ordinary RTF text-box route and remaining current-model audit.
+    Attempts: 112
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T22:11:06.583Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6753,6 +6799,8 @@ sections:
     RTF99 checkpoint. Writer and xmloff now preserve paragraph- and character-anchored text fly frames in ODF draw:frame/draw:text-box with native graphic style geometry, size and wrapping members, actual fly section tables/text and nested section ownership. The original Writer text cursor and shared list/paragraph contexts are restored after every frame. Character anchors retain equal-offset insertion positions as pinned SwTextNode::Update does. Normal WriterFileDialog opens Markdown with an aligned nested table and reopens the persisted ODT without moving the table into body flow. WRITER400 documents variable height reopened as minimum. Final focused checks passed 200 Writer tests in 16 files and 14 shared tests in 5 files. Earlier test corrections addressed actual fixed HTML width and releasing the live frame cursor before removing its empty XML import terminator. Typecheck, changed ESLint/Prettier, dependency, JSDoc, file-size, source-tree, Which, source-provenance, Writer/shared registry and diff checks passed. Physical browser fly layout and the native floating RTF producer/consumer audit remain open.
 
     RTF100 checkpoint. The browser editor resolves original text-fly owners, actual anchor master/follow and connected native table and text blocks. The represented source paged fly relative-size and horizontal positioning calculations use actual frame sizes, wrap, frame margins and reference extents. Browser floats place and wrap represented left/right text frames; native paragraph and table edit device owners receive the same cursor and selection operations. Mounted fixtures verify both wrap sides, actual fly and table node identity, and a real beforeinput edit in the actual native cell while leaving the body anchor unchanged. Final 188 Writer tests in 23 related files passed, plus typecheck, ESLint/Prettier, dependency, JSDoc, file-size, source-tree, Which, source-provenance, Writer registry and diff checks. Native fly contour, cross-page reflow and floating RTF row positioning are outstanding. This is a checkpoint within the same task.
+
+    RTF101 checkpoint. RTF row positioning now uses nested native table properties and actual DomainMapper table positioning. A complete table section moves into an actual paragraph-anchored splittable text fly with its existing cells, tracked indexes and bookmarks. The writer emits native position and distance controls, with original relative-width recovery. Worker and ODF preserve native split, overlap, flow, transparent fill and empty border items. The normal file dialog persists and reopens RTF whose only visible text is in a floating table. WRITER401 records native ignored top/left position flags. Final focused tests passed 1205 Writer tests in 61 files and 11 shared tests in 4 files. Typecheck, changed ESLint/Prettier, dependency, JSDoc, size, source tree, Which, source provenance, Writer/shared semantic registry and diff checks passed. Ordinary RTF text boxes and full physical fly pagination remain separate. No full replay was due within this task.
 id_source: "generated"
 ---
 ## Summary
@@ -9808,6 +9856,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T22:11:07.200Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF101 verified native floating table position, section ownership, browser document I/O and 1216 focused tests. Keep open for the ordinary RTF text-box route and remaining current-model audit.
+Attempts: 112
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T22:11:06.583Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11738,3 +11816,5 @@ RTF98 checkpoint. Native HTML-created text fly frames now cross Worker structure
 RTF99 checkpoint. Writer and xmloff now preserve paragraph- and character-anchored text fly frames in ODF draw:frame/draw:text-box with native graphic style geometry, size and wrapping members, actual fly section tables/text and nested section ownership. The original Writer text cursor and shared list/paragraph contexts are restored after every frame. Character anchors retain equal-offset insertion positions as pinned SwTextNode::Update does. Normal WriterFileDialog opens Markdown with an aligned nested table and reopens the persisted ODT without moving the table into body flow. WRITER400 documents variable height reopened as minimum. Final focused checks passed 200 Writer tests in 16 files and 14 shared tests in 5 files. Earlier test corrections addressed actual fixed HTML width and releasing the live frame cursor before removing its empty XML import terminator. Typecheck, changed ESLint/Prettier, dependency, JSDoc, file-size, source-tree, Which, source-provenance, Writer/shared registry and diff checks passed. Physical browser fly layout and the native floating RTF producer/consumer audit remain open.
 
 RTF100 checkpoint. The browser editor resolves original text-fly owners, actual anchor master/follow and connected native table and text blocks. The represented source paged fly relative-size and horizontal positioning calculations use actual frame sizes, wrap, frame margins and reference extents. Browser floats place and wrap represented left/right text frames; native paragraph and table edit device owners receive the same cursor and selection operations. Mounted fixtures verify both wrap sides, actual fly and table node identity, and a real beforeinput edit in the actual native cell while leaving the body anchor unchanged. Final 188 Writer tests in 23 related files passed, plus typecheck, ESLint/Prettier, dependency, JSDoc, file-size, source-tree, Which, source-provenance, Writer registry and diff checks. Native fly contour, cross-page reflow and floating RTF row positioning are outstanding. This is a checkpoint within the same task.
+
+RTF101 checkpoint. RTF row positioning now uses nested native table properties and actual DomainMapper table positioning. A complete table section moves into an actual paragraph-anchored splittable text fly with its existing cells, tracked indexes and bookmarks. The writer emits native position and distance controls, with original relative-width recovery. Worker and ODF preserve native split, overlap, flow, transparent fill and empty border items. The normal file dialog persists and reopens RTF whose only visible text is in a floating table. WRITER401 records native ignored top/left position flags. Final focused tests passed 1205 Writer tests in 61 files and 11 shared tests in 4 files. Typecheck, changed ESLint/Prettier, dependency, JSDoc, size, source tree, Which, source provenance, Writer/shared semantic registry and diff checks passed. Ordinary RTF text boxes and full physical fly pagination remain separate. No full replay was due within this task.

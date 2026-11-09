@@ -27,6 +27,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { createRtfBorderLine } from "./rtfdocumentimpl.border";
+import type { TablePositionHandler } from "../dmapper/TablePositionHandler";
 import { RTFSprm } from "./rtfsprm";
 
 const COL_DFLT_WIDTH = 41;
@@ -107,12 +108,73 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
   }
 }
 
-/** Replays completed original row buffers into connected Writer sections in cell order. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @returns Nothing. */
+/** A native positioned table awaiting conversion after its following paragraph has been built. */
+export interface PendingRtfTableFrame {
+  readonly table: SwTable;
+  readonly position: TablePositionHandler;
+}
+
+/** Compares original row positions before handing each contiguous table to the native materializer. @param this - Original RTF reader. @param document - Native Writer owner. @param table - First connected table. @param rows - Buffered source rows. @param pending - Owned pending native fly conversions. @returns Nothing. */
 export function MaterializeRtfTable(
   this: RtfDocumentImplContext,
   document: SwDoc,
   table: SwTable,
   rows: readonly RtfTableRow[],
+  pending: PendingRtfTableFrame[],
+): void {
+  const manager = new DomainMapperTableManager();
+  let from = 0;
+  let current: TablePositionHandler | undefined;
+  let target = table;
+
+  /** Publishes one finished source table group and transfers its row position. @param reader - Native reader. @param end - Exclusive row index. @returns Nothing. */
+  function finish(reader: RtfDocumentImplContext, end: number): void {
+    MaterializeRtfTableGroup.call(reader, document, target, rows.slice(from, end), pending);
+    if (current !== undefined) {
+      pending.push({ table: target, position: current });
+      current = undefined;
+    }
+  }
+  try {
+    for (const [index, row] of rows.entries()) {
+      for (const [id, value] of row.rowSprms) manager.resolvePositionSprm(new RTFSprm(id, value));
+      const position = manager.takeRowPosition();
+      try {
+        if (
+          index > from &&
+          !(
+            current === position ||
+            (current !== undefined && position !== undefined && current.operatorEquals(position))
+          )
+        ) {
+          finish(this, index);
+          const boundary = document.nodes.at(
+            target.GetTableNode().EndOfSectionNode().GetIndex() + 1,
+          );
+          target = document.nodes.MakeTableNodeBefore(boundary, document.GetUniqueTableName(), {});
+          from = index;
+        }
+      } catch (error) {
+        position?.dispose();
+        throw error;
+      }
+      current?.dispose();
+      current = position;
+    }
+    finish(this, rows.length);
+  } finally {
+    current?.dispose();
+    manager.dispose();
+  }
+}
+
+/** Replays one group of completed rows into native cell sections. @param this - Actual reader. @param document - Native document. @param table - Connected table. @param rows - Buffered rows. @param pending - Owned pending native fly conversions. @returns Nothing. */
+function MaterializeRtfTableGroup(
+  this: RtfDocumentImplContext,
+  document: SwDoc,
+  table: SwTable,
+  rows: readonly RtfTableRow[],
+  pending: PendingRtfTableFrame[],
 ): void {
   const firstRow = rows[0];
   if (firstRow !== undefined) {
@@ -199,7 +261,7 @@ export function MaterializeRtfTable(
             document.GetUniqueTableName(),
             {},
           );
-          MaterializeRtfTable.call(this, document, nested, content.rows);
+          MaterializeRtfTable.call(this, document, nested, content.rows, pending);
         } else {
           const paragraph = available ?? document.nodes.AppendTableCellParagraph(box);
           this["ApplyParagraph"](paragraph, content);

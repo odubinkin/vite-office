@@ -64,3 +64,20 @@ export function dispatchTableShading(
   }
   return false;
 }
+
+const floatingTableValues = new Map<string, number>([
+  ["tposx", N.LN_CT_TblPPr_tblpX],
+  ["tposy", N.LN_CT_TblPPr_tblpY],
+  ["tdfrmtxtLeft", N.LN_CT_TblPPr_leftFromText],
+  ["tdfrmtxtRight", N.LN_CT_TblPPr_rightFromText],
+  ["tdfrmtxtTop", N.LN_CT_TblPPr_topFromText],
+  ["tdfrmtxtBottom", N.LN_CT_TblPPr_bottomFromText],
+]);
+
+/** Routes the original floating table numeric values into tblpPr on the current native row. @param name - Actual control. @param value - Signed RTF value. @param state - Current parser group. @returns Whether consumed. */
+export function dispatchFloatingTableValue(name: string, value: number, state: RtfState): boolean {
+  const attribute = floatingTableValues.get(name);
+  if (attribute === undefined) return false;
+  putNestedAttribute(state.tableRowSprms, N.LN_CT_TblPrBase_tblpPr, attribute, new RTFValue(value));
+  return true;
+}

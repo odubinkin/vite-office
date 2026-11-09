@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
     "localSymbols": [
-      "dispatchTableFlag"
+      "dispatchTableFlag",
+      "dispatchFloatingTableFlag"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::dispatchFlag"
@@ -15,7 +16,8 @@
     "preservedResponsibilities": [
       "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners.",
       "Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values.",
-      "Uses the original CLMGF/CLMRG group-owned horizontal merge sprm."
+      "Uses the original CLMGF/CLMRG group-owned horizontal merge sprm.",
+      "Routes the exact original floating table flag set to row properties."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -29,6 +31,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+          "marker": "dispatchFloatingTableFlag"
         }
       ],
       "upstream": [
@@ -43,6 +53,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "case RTFKeyword::CLMGF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFloatingTableFlag"
         }
       ]
     },

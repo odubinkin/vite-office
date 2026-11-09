@@ -1,4 +1,5 @@
 /** @fileoverview Native Writer text-frame element and graphic style export from txtparae.cxx. */
+import { exportFillProperties } from "../draw/fill-properties";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import type { XMLTextExportBlock } from "../table/XMLTableExport";
@@ -31,7 +32,7 @@ function percent(value: number | undefined): string | undefined {
 /** Emits the consumed native graphic style properties. @param frame - Original properties. @param styleName - Automatic style name. @returns ODF automatic style. */
 export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName: string): string {
   const { style } = frame;
-  const values =
+  let values =
     attribute(
       "style:horizontal-pos",
       exportFrameConstant(style.toggle ? "horizontalMirrored" : "horizontal", style.horizontal),
@@ -50,10 +51,24 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
       "style:number-wrapped-paragraphs",
       style.anchorOnly === undefined ? undefined : style.anchorOnly ? "1" : "no-limit",
     ) +
+    attribute("style:flow-with-text", style.followTextFlow?.toString()) +
+    attribute("loext:allow-overlap", style.allowOverlap?.toString()) +
+    attribute(
+      "draw:wrap-influence-on-position",
+      exportFrameConstant("wrapInfluence", style.wrapInfluence),
+    ) +
     length("fo:margin-left", style.marginLeft) +
     length("fo:margin-right", style.marginRight) +
     length("fo:margin-top", style.marginTop) +
     length("fo:margin-bottom", style.marginBottom);
+  for (const fill of exportFillProperties(style)) values += ` ${fill}`;
+  for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
+    const suffix = side.toLowerCase();
+    values +=
+      length(`fo:padding-${suffix}`, style[`padding${side}`]) +
+      attribute(`fo:border-${suffix}`, style[`border${side}`]) +
+      attribute(`style:border-line-width-${suffix}`, style[`borderLineWidth${side}`]);
+  }
   const parent = attribute("style:parent-style-name", frame.parentStyle || undefined);
   return `<style:style style:name="${styleName}" style:family="graphic"${parent}><style:graphic-properties${values}/></style:style>`;
 }
@@ -72,7 +87,8 @@ export function exportTextFrameElement(
     length("svg:width", frame.width) +
     length("svg:height", frame.height) +
     attribute("style:rel-width", percent(frame.relativeWidth)) +
-    attribute("style:rel-height", percent(frame.relativeHeight));
+    attribute("style:rel-height", percent(frame.relativeHeight)) +
+    attribute("loext:may-break-between-pages", frame.splitAllowed ? "true" : undefined);
   const minimum =
     length("fo:min-height", frame.minimumHeight) + length("fo:min-width", frame.minimumWidth);
   return `<draw:frame draw:style-name="${styleName}"${values}><draw:text-box${minimum}>${content}</draw:text-box></draw:frame>`;

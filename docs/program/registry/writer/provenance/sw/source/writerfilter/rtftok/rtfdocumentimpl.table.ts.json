@@ -19,7 +19,8 @@
       "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified.",
       "Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility.",
       "Runs original horizontal merges after completing cell and table property application on the actual table.",
-      "Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs."
+      "Uses the same original row and cell property owners for each connected table depth and keeps surrounding native paragraphs.",
+      "Separates native row groups at original TablePositionHandler comparison boundaries, retaining the final equal position's distance payload."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -37,6 +38,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
           "marker": "MaterializeRtfTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -55,6 +60,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "RTFBufferTypes::NestRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "bool bSamePosition"
         }
       ]
     },
