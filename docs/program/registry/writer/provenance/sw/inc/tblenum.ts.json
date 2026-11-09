@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/tblenum.ts",
+    "upstreamPath": "sw/inc/tblenum.hxx",
+    "localSymbols": [
+      "TableMergeErr"
+    ],
+    "upstreamSymbols": [
+      "TableMergeErr"
+    ],
+    "preservedResponsibilities": [
+      "Owns the original ordered table merge result enum."
+    ],
+    "omittedResponsibilities": [
+      "Other table enum families are outside this source slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/tblenum.ts",
+          "marker": "TableMergeErr"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/tblenum.hxx",
+          "marker": "TableMergeErr"
+        }
+      ]
+    }
+  }
+}

@@ -7,13 +7,18 @@
     "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
     "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
     "localSymbols": [
-      "ApplyVerticalMergeBorders"
+      "ApplyVerticalMergeBorders",
+      "HorizontallyMergedCell",
+      "CollectHorizontalMerge",
+      "ApplyHorizontalMerges"
     ],
     "upstreamSymbols": [
-      "DomainMapperTableHandler::endTableGetCellProperties"
+      "DomainMapperTableHandler::endTableGetCellProperties",
+      "DomainMapperTableHandler::endTable"
     ],
     "preservedResponsibilities": [
-      "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items."
+      "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
+      "Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389)."
     ],
     "omittedResponsibilities": [
       "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
@@ -27,12 +32,20 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "HorizontallyMergedCell"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "DomainMapperTableHandler::endTableGetCellProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "DomainMapperTableHandler::endTable"
         }
       ]
     }

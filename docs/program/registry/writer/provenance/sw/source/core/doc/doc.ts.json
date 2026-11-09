@@ -536,6 +536,14 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "MergeTable"
         }
       ],
       "upstream": [
@@ -894,6 +902,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/doclay.cxx",
           "marker": "SwDoc::GetTextDirection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "TableMergeErr SwDoc::MergeTable"
         }
       ]
     },
@@ -906,7 +918,8 @@
       "IsSquaredPageMode",
       "SetDefaultPageMode",
       "ForEachParaAtrTabStopItem",
-      "GetTextDirection"
+      "GetTextDirection",
+      "MergeTable"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
@@ -988,7 +1001,8 @@
       "S3HW1E HTML70 adds the actual ordinary FrameFormats table, original default-format push_back membership after initialization, GetFrameFormats and source positional FindFrameFormatByName. Native early frame-owned content/anchor index clearing precedes page descriptor teardown; actual history is disposed before this cleanup. Special and ordinary table teardown removes the separately owned default, explicitly deletes special formats, then runs both actual owning table destructors. Complete default/layout/node/document destruction remains unported/unverified; no fake factory/undo/modified-state provider is added. Existing public SetNumRuleMode scalar identity and browser constructor/font-ingress types move to the native doc.hxx header boundary and are re-exported unchanged from the old document entry. MakeFrameFormat and native generic create/delete undo, frame-pool factory/modified restoration, MakeFlySection, production HTML tables and RTF direction remain incomplete.",
       "S3HW1E HTML71 exposes the original generic SwFormat ChgFormat document argument contract without a parallel formatter or factory. The real generic format-create owner restores copied direct attributes through this entry under actual manager Undo/Redo recording suppression. Native frame factory/create-delete/broadcast/modified restoration, MakeFlySection and production table/RTF direction/final native filter/UI completion remain incomplete.",
       "S3HW1E HTML72 paragraph deletion delegates to the original docfmt owner, which records actual generic delete history before real collection removal/death and retains native default protection/nondefault next-loop boundaries. Public creation undo continues through actual recording suppression. This adds no fake frame factory, style pool, modified-state or deletion-result provider. Full native style-pool broadcast/conditional collection, frame factories/generic frame undo/modified restoration and final text-filter/UI completion remain unported/unverified.",
-      "S3HW1E HTML73: The actual SwDoc exposes the source layout-first direction query through doclay."
+      "S3HW1E HTML73: The actual SwDoc exposes the source layout-first direction query through doclay.",
+      "Delegates the actual selected cell merge to the original document table-operation owner."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",

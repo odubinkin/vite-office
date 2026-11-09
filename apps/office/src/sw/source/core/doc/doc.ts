@@ -57,6 +57,7 @@ import {
   SetSwRowsToRepeat,
   InsertSwTableColumns,
   InsertSwTableRows,
+  MergeTable,
 } from "../docnode/ndtbl";
 import {
   GetSwCursorRowSplit,
@@ -75,6 +76,7 @@ import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import type { SwUndoCursorState } from "../undo/undobj";
+import type { TableMergeErr } from "../../../inc/tblenum";
 import {
   InsertTable as InsertNativeTable,
   FindTableFormatByName,
@@ -551,6 +553,10 @@ export class SwDoc {
   /** Returns mutation state and notifications. @returns State manager. */
   public GetDocumentStateManager(): DocumentStateManager {
     return this.stateManager;
+  }
+  /** Applies the native cell merge to the actual selection. @param range - Original PaM. @returns Native merge result. */
+  public MergeTable(range: SwPaM): TableMergeErr {
+    return MergeTable(this, range);
   }
   /** Routes a model mutation to the state manager without making SwDoc a broadcaster. @param hint - Model delta. @returns Nothing. */
   public NotifyModelChange(hint: SwAtomicModelHint): void {

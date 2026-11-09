@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.table.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
-        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx"
       ],
-      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility.",
+      "justification": "S3HW1E HTML75: The existing atomic Writer RTF import replays actual buffered row/cell sprms through native TablePropertyMap and UNO format owners. No browser metadata model or synthetic direction values are used; arbitrary table buffering, layout and nested tables remain unverified. RTF90. Replays original buffered row/cell properties into the actual table manager, source row separators, native UNO merge groups and corresponding border responsibility. RTF91. Runs original horizontal merges after completing cell and table property application on the actual table.",
       "knownViolations": [],
       "localSymbols": [
         "ApplyRtfTableProperties",

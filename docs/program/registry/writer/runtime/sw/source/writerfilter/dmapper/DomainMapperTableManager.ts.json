@@ -20,7 +20,7 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
       ],
-      "justification": "S3HW1E HTML75: Real table, temporary row and cell PropertyMap owners consume native bidiVisual and textDirection modifiers, preserving supported/ignored values and table merge semantics. Full TableManager layout/position/style/nested-row orchestration remains unverified. RTF90. Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path.",
+      "justification": "S3HW1E HTML75: Real table, temporary row and cell PropertyMap owners consume native bidiVisual and textDirection modifiers, preserving supported/ignored values and table merge semantics. Full TableManager layout/position/style/nested-row orchestration remains unverified. RTF90. Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path. RTF91. Maps hMerge restart/continue to the native boolean horizontal merge property.",
       "knownViolations": [],
       "localSymbols": [
         "DomainMapperTableManager",

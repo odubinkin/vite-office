@@ -20,7 +20,7 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
       ],
-      "justification": "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners. RTF90. Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values.",
+      "justification": "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners. RTF90. Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values. RTF91. Uses the original CLMGF/CLMRG group-owned horizontal merge sprm.",
       "knownViolations": [],
       "localSymbols": [
         "dispatchTableFlag"

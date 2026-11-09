@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 501
+revision: 504
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:28:27.039Z"
+  updated_at: "2026-11-09T20:36:09.920Z"
   updated_by: "CODER"
-  note: "RTF90 checkpoint passes 130 scoped tests and static checks. Keep the parent task open for remaining native filter coverage."
-  attempts: 101
+  note: "RTF91 passes 150 scoped tests and source gates. Keep parent open for compound ranges and remaining format scenarios."
+  attempts: 102
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1621,8 +1624,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:36:09.920Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF91 passes 150 scoped tests and source gates. Keep parent open for compound ranges and remaining format scenarios."
+  -
+    type: "status"
+    at: "2026-11-09T20:36:18.613Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:28:34.159Z"
+doc_updated_at: "2026-11-09T20:36:18.613Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4367,6 +4383,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:36:09.920Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF91 passes 150 scoped tests and source gates. Keep parent open for compound ranges and remaining format scenarios.
+    Attempts: 102
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:36:08.684Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6227,6 +6273,17 @@ sections:
     - Tests import actual RTF bytes and reexport/reimport 3/-2/-1, observe a real transferred bottom border and covered numbering state, retain orphan and open-group-through-gap behavior (WRITER388), and verify strict one-versus-two-unit relative position selection after TRLEFT. Preliminary tests caught using JS strings instead of OUString for two UNO property names and an incorrect direct Any getter. Corrected to the real wrappers before the successful 20-test focused run. Current support is the represented one-grid-slot, top-level RTF row path; horizontal merge controls, unsupported nested input and other mapper families remain outside this verified block.
 
     Final scoped Writer verification passed: 130 tests in 8 files. Type checking, targeted lint and format, source provenance and registry, module boundaries, JSDoc, size, source tree, WhichId, and diff checks passed.
+
+    ### RTF91 — Same-row native horizontal cell merge
+
+    The CLMGF/CLMRG group sprms reach the native mapper-only hMerge property. The handler removes it before UNO cell application, collects source endpoint ranges and applies them in reverse. SwXTextTableCursor delegates to SwDoc and same-row CollectBoxSelection/PrepareMerge/NewMerge. The operation moves actual nonempty paragraph nodes, updates cursor selection, claims width and border items, preserves first explicit border lines at the mapper, and deletes redundant cell sections. Worker transfer preserves the ragged row and merged contents. RTF exporter emits one CELLX for the merged box. Corrected the cell paragraph terminator's spurious literal space after a grouped paragraph marker. WRITER389 records the source continuation across unmarked cells.
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtf-table-direction.test.ts rtfdocumentimpl.document.test.ts rtfexport.table-list.test.ts rtfexport.test.ts native-column-insertion.test.ts native-node-index-removal.test.ts native-import-table-errors.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`.
+    - Result: pass. Evidence: 150 tests in 9 files, rtf91-writer-final.log. Scope: native RTF import/export, cell cursor/node operations, transfer and existing UI. First focused test exposed a literal space after the grouped cell paragraph terminator. It was corrected to the pinned EndParagraph behavior and retested.
+    - Command: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, `npm run check:dependencies`, `npm run check:docs`, `npm run check:file-size`, `npm run check:source-tree`, `npm run check:writer-hintids`, `git diff --check`.
+    - Result: pass. Evidence: rtf91-typecheck.log and rtf91-static.log. Scope: Writer TypeScript and source gates.
+    - Command: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 runtime modules and 0 semantic violations, rtf91-registry-final.log. The SwDoc declaration and ndtbl implementation use distinct pinned files, recorded separately in the evidence.
+    - Residual scope: compound horizontal/vertical and cross-row selections, nested RTF buffers, and browser representation of nested/anchored raw Markdown HTML remain open. This is an import-only merge branch, with no new interactive merge or undo entry point. Full suite not scheduled at this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -8982,6 +9039,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:36:09.920Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF91 passes 150 scoped tests and source gates. Keep parent open for compound ranges and remaining format scenarios.
+Attempts: 102
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:36:08.684Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -10846,3 +10933,14 @@ S3HW1E HTML85 — LibreOffice locale dictionary ranges and native Writer Markdow
 - Tests import actual RTF bytes and reexport/reimport 3/-2/-1, observe a real transferred bottom border and covered numbering state, retain orphan and open-group-through-gap behavior (WRITER388), and verify strict one-versus-two-unit relative position selection after TRLEFT. Preliminary tests caught using JS strings instead of OUString for two UNO property names and an incorrect direct Any getter. Corrected to the real wrappers before the successful 20-test focused run. Current support is the represented one-grid-slot, top-level RTF row path; horizontal merge controls, unsupported nested input and other mapper families remain outside this verified block.
 
 Final scoped Writer verification passed: 130 tests in 8 files. Type checking, targeted lint and format, source provenance and registry, module boundaries, JSDoc, size, source tree, WhichId, and diff checks passed.
+
+### RTF91 — Same-row native horizontal cell merge
+
+The CLMGF/CLMRG group sprms reach the native mapper-only hMerge property. The handler removes it before UNO cell application, collects source endpoint ranges and applies them in reverse. SwXTextTableCursor delegates to SwDoc and same-row CollectBoxSelection/PrepareMerge/NewMerge. The operation moves actual nonempty paragraph nodes, updates cursor selection, claims width and border items, preserves first explicit border lines at the mapper, and deletes redundant cell sections. Worker transfer preserves the ragged row and merged contents. RTF exporter emits one CELLX for the merged box. Corrected the cell paragraph terminator's spurious literal space after a grouped paragraph marker. WRITER389 records the source continuation across unmarked cells.
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtf-table-direction.test.ts rtfdocumentimpl.document.test.ts rtfexport.table-list.test.ts rtfexport.test.ts native-column-insertion.test.ts native-node-index-removal.test.ts native-import-table-errors.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`.
+- Result: pass. Evidence: 150 tests in 9 files, rtf91-writer-final.log. Scope: native RTF import/export, cell cursor/node operations, transfer and existing UI. First focused test exposed a literal space after the grouped cell paragraph terminator. It was corrected to the pinned EndParagraph behavior and retested.
+- Command: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, `npm run check:dependencies`, `npm run check:docs`, `npm run check:file-size`, `npm run check:source-tree`, `npm run check:writer-hintids`, `git diff --check`.
+- Result: pass. Evidence: rtf91-typecheck.log and rtf91-static.log. Scope: Writer TypeScript and source gates.
+- Command: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 runtime modules and 0 semantic violations, rtf91-registry-final.log. The SwDoc declaration and ndtbl implementation use distinct pinned files, recorded separately in the evidence.
+- Residual scope: compound horizontal/vertical and cross-row selections, nested RTF buffers, and browser representation of nested/anchored raw Markdown HTML remain open. This is an import-only merge branch, with no new interactive merge or undo entry point. Full suite not scheduled at this checkpoint.

@@ -25,6 +25,53 @@ import { RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { TableMergeErr } from "../../../inc/tblenum";
+import { SwUnoTableCursor } from "./unocrsr";
+
+/** UNO table cursor over actual cell endpoints and the document's merge operation. */
+export class SwXTextTableCursor {
+  private readonly cursor: SwUnoTableCursor;
+
+  /** Constructs the cursor at the actual first cell. @param box - Connected Writer cell. @returns Native table cursor. */
+  constructor(box: SwTableBox) {
+    const position = new SwPosition(box.GetParagraphs()[0] as SwTextNode);
+    try {
+      this.cursor = new SwUnoTableCursor(position);
+    } finally {
+      position.Dispose();
+    }
+  }
+
+  /** Moves to the resolved cell within the current table. @param box - Connected target cell. @param expand - Whether to expand the selection. @returns Whether the cell was reached. */
+  gotoCell(box: SwTableBox, expand: boolean): boolean {
+    const point = this.cursor.GetPoint(),
+      target = box.GetParagraphs()[0];
+    if (!target || point.GetNode().FindTableNode() !== target.FindTableNode()) return false;
+    if (expand) this.cursor.SetMark();
+    else this.cursor.DeleteMark();
+    point.Assign(target, 0);
+    return true;
+  }
+
+  /** Original mergeRange delegates to the document and rebuilds the native selection. @returns Whether the range merged. */
+  mergeRange(): boolean {
+    this.cursor.NewTableSelection();
+    this.cursor.MakeBoxSels(this.cursor.GetSelRing());
+    const result = this.cursor.GetPoint().GetNode().GetDoc().MergeTable(this.cursor);
+    if (result === TableMergeErr.Ok)
+      for (let index = this.cursor.GetSelectedBoxesCount(); index-- > 0;)
+        this.cursor.DeleteBox(index);
+    this.cursor.NewTableSelection();
+    this.cursor.MakeBoxSels(this.cursor.GetSelRing());
+    return result === TableMergeErr.Ok;
+  }
+
+  /** Releases the owned native cursor and its registered range. @returns Nothing. */
+  dispose(): void {
+    this.cursor.Dispose();
+  }
+}
+
 /** Row property owner does not retain a separate row DTO. */
 export class SwXTextTableRow {
   /** Binds the represented native owner and its declared inputs. @param line - Original line input. @returns Nothing. */

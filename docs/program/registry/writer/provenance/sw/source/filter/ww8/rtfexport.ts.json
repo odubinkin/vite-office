@@ -45,7 +45,8 @@
       "Native export still emits the authored first-line item, including fi40000. The source-aligned reader now converts that positive value to zero through original ConversionHelper admission; rtfexport.table-list.test.ts retains the exact export assertion and now expects native import loss (WRITER276). These are bounded consumed filter contracts, not full module/ABI or current-slice completion claims; browser open/save/autosave/recovery deviations are unchanged.",
       "S3HW1E first-page export checkpoint: native IsFirstShared/ChgFirstShare use the existing SwPageDesc usage bits and retain other flags/copy behavior. Initial OutPageDescription emits TITLEPG for a distinct follow descriptor or an unshared selected page; later section output retains the original unshared-first flag independently of chain admission. The actual writerwordglue IsPlausableSingleWordSection now compares native first/follow frame items, effective Word LR margins including box distances/unscaled border width, full frame-size equality and no-header/footer distance glue. Chain admission retains both-side usage. This replaces the scalar browser geometry predicate and retains the pinned FirstMaster selection. Header/footer content/columns/layout service branches remain unrepresented or unverified. Native no-header/footer FirstIsShared setter has no target item set, so TITLEPG does not invent a persistent import flag in that profile (WRITER288). Full goal/ABI and remaining HTML/current-model audit are not complete; user requested a pause after this verified block.",
       "S3HW1E HTML73: The actual byte stream consumes the native direction path for text runs, sections, table rows and vertical cells; flow and page selection use existing real export contexts.",
-      "Writes the original RTF vertical merge flags for source master and covered row spans after cell direction."
+      "Writes the original RTF vertical merge flags for source master and covered row spans after cell direction.",
+      "Uses the source ungrouped-only separator after a cell paragraph terminator. Merged horizontal cells emit the native cumulative CELLX."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -221,6 +222,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::TableBidi"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::EndParagraph"
         }
       ]
     }

@@ -26,10 +26,13 @@ export class DomainMapperTableManager {
       }
       return true;
     }
-    if (id === N.LN_CT_TcPrBase_vMerge) {
+    if (id === N.LN_CT_TcPrBase_vMerge || id === N.LN_CT_TcPrBase_hMerge) {
       const item = new Any([value === N.LN_Value_ST_Merge_restart], "bool");
       try {
-        this.m_pCellProps.Insert(P.PROP_VERTICAL_MERGE, item);
+        this.m_pCellProps.Insert(
+          id === N.LN_CT_TcPrBase_vMerge ? P.PROP_VERTICAL_MERGE : P.PROP_HORIZONTAL_MERGE,
+          item,
+        );
       } finally {
         item.dispose();
       }

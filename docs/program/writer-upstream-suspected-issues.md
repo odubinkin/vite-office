@@ -3179,3 +3179,12 @@ without a merge property leaves the group open, so a continuation can
 join it after a gap. Preserve the group's signed cell-count sequence.
 Bottom-border selection still follows the separate contiguous-row scan
 in `DomainMapperTableHandler`.
+
+### WRITER389 — An ordinary cell does not end a horizontal merge range
+
+`DomainMapperTableHandler::endTableGetCellProperties` assigns each
+continuation to the most recently collected restart. It does not close
+that range at an unmarked cell. A continuation after a gap in the same
+row therefore includes the intermediate cell when the table cursor
+merges the endpoints. Preserve that range and the source rule that a
+restart with no continuation does not attempt a merge.

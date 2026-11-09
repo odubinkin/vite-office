@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/table/swnewtable.ts",
+    "upstreamPath": "sw/source/core/table/swnewtable.cxx",
+    "localSymbols": [
+      "CollectBoxSelection",
+      "PrepareMerge",
+      "NewMerge"
+    ],
+    "upstreamSymbols": [
+      "SwTable::CollectBoxSelection",
+      "SwTable::PrepareMerge",
+      "SwTable::NewMerge"
+    ],
+    "preservedResponsibilities": [
+      "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections."
+    ],
+    "omittedResponsibilities": [
+      "Cross-row rectangles, width-adjusted selections, combined row spans, old table models and interactive merge undo are outside this import branch."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/table/swnewtable.ts",
+          "marker": "CollectBoxSelection"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
+          "marker": "SwTable::CollectBoxSelection"
+        }
+      ]
+    }
+  }
+}

@@ -7,7 +7,12 @@ import {
   DomainMapperTableManager,
   GetTableGridSeparators,
 } from "../dmapper/DomainMapperTableManager";
-import { ApplyVerticalMergeBorders } from "../dmapper/DomainMapperTableHandler";
+import {
+  ApplyHorizontalMerges,
+  ApplyVerticalMergeBorders,
+  CollectHorizontalMerge,
+  type HorizontallyMergedCell,
+} from "../dmapper/DomainMapperTableHandler";
 import {
   ApplyVerticalMerges,
   CollectVerticalMerge,
@@ -39,6 +44,7 @@ function PrepareRtfTableGrid(row: RtfTableRow): number[] {
 export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableRow[]): void {
   const manager = new DomainMapperTableManager();
   const merges: VerticallyMergedCell[] = [];
+  const horizontalMerges: HorizontallyMergedCell[] = [];
   const mergeRows: (boolean | undefined)[][] = [];
   try {
     for (const [rowIndex, row] of rows.entries()) {
@@ -53,6 +59,7 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
           for (const [id, value] of source) manager.sprm(new RTFSprm(id, value));
         const cell = manager.takeCellProperties();
         try {
+          CollectHorizontalMerge(horizontalMerges, cell, rowIndex, cellIndex);
           const properties = cell.GetPropertyValues();
           if (properties.length !== 0) {
             const uno = new SwXCell(box);
@@ -88,6 +95,7 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
     const uno = new SwXTextTable(table);
     for (const property of tableProperties.GetPropertyValues())
       uno.setPropertyValue(property.Name, property.Value);
+    ApplyHorizontalMerges(table, horizontalMerges);
   } finally {
     manager.dispose();
   }

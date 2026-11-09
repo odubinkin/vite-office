@@ -18,9 +18,13 @@ export function dispatchTableFlag(name: string, state: RtfState): boolean {
     state.tableRowSprms.set(N.LN_CT_TblPrBase_bidiVisual, new RTFValue(name === "rtlrow" ? 1 : 0));
     return true;
   }
-  if (name === "clvmgf" || name === "clvmrg") {
-    const merge = name === "clvmgf" ? N.LN_Value_ST_Merge_restart : N.LN_Value_ST_Merge_continue;
-    state.tableCellSprms.set(N.LN_CT_TcPrBase_vMerge, new RTFValue(merge));
+  if (name === "clvmgf" || name === "clvmrg" || name === "clmgf" || name === "clmrg") {
+    const vertical = name === "clvmgf" || name === "clvmrg";
+    const restart = name === "clvmgf" || name === "clmgf";
+    state.tableCellSprms.set(
+      vertical ? N.LN_CT_TcPrBase_vMerge : N.LN_CT_TcPrBase_hMerge,
+      new RTFValue(restart ? N.LN_Value_ST_Merge_restart : N.LN_Value_ST_Merge_continue),
+    );
     return true;
   }
   const direction = cellDirections.get(name);

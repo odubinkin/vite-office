@@ -20,15 +20,19 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
       ],
-      "justification": "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
+      "justification": "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items. RTF91. Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389).",
       "knownViolations": [],
       "localSymbols": [
-        "ApplyVerticalMergeBorders"
+        "ApplyVerticalMergeBorders",
+        "HorizontallyMergedCell",
+        "CollectHorizontalMerge",
+        "ApplyHorizontalMerges"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
       "upstreamSymbols": [
-        "DomainMapperTableHandler::endTableGetCellProperties"
+        "DomainMapperTableHandler::endTableGetCellProperties",
+        "DomainMapperTableHandler::endTable"
       ]
     }
   }

@@ -31,8 +31,8 @@ import { SwTable } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SwPosition } from "../crsr/pam";
-import { SwCursor } from "../crsr/swcrsr";
+import { SwPosition, type SwPaM } from "../crsr/pam";
+import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
 import {
   SwUndoInsTable,
@@ -46,6 +46,30 @@ import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itab
 import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_BOX } from "../../../inc/hintids";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { TableMergeErr } from "../../../inc/tblenum";
+import { CollectBoxSelection, NewMerge, PrepareMerge } from "../table/swnewtable";
+
+/** Original document merge boundary for a same-row new-model selection. @param doc - Native document. @param pam - Actual cell selection. @returns Native merge result. */
+export function MergeTable(doc: SwDoc, pam: SwPaM): TableMergeErr {
+  const start = pam.Start().GetNode().GetTableBox(),
+    end = pam.End().GetNode().GetTableBox(),
+    table = pam.GetPoint().GetNode().FindTableNode()?.GetTable();
+  if (!start || !end || !table?.IsNewModel() || table.GetFrameFormat().GetDoc() !== doc)
+    return TableMergeErr.NoSelection;
+  const selection = CollectBoxSelection(table, start, end);
+  if (!selection) return TableMergeErr.NoSelection;
+  return doc.RunModelTransaction(
+    /** Moves the PaM off deleted boxes before native structural removal. @returns Successful merge. */ () => {
+      const master = PrepareMerge(selection);
+      pam.DeleteMark();
+      pam.GetPoint().Assign(master.GetParagraphs()[0] as SwTextNode, 0);
+      if (pam instanceof SwTableCursor) pam.NewTableSelection();
+      NewMerge(table, selection, master);
+      doc.GetDocumentStateManager().SetModified();
+      return TableMergeErr.Ok;
+    },
+  );
+}
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
   const count = requested & 0xffff,

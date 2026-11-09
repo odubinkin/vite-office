@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners.",
-      "Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values."
+      "Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values.",
+      "Uses the original CLMGF/CLMRG group-owned horizontal merge sprm."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -38,6 +39,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "case RTFKeyword::CLVMGF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::CLMGF:"
         }
       ]
     },

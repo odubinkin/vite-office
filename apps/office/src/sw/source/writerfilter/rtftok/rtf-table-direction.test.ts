@@ -48,6 +48,74 @@ function spans(document: SwDoc): number[][] {
   return result;
 }
 
+/** Reads the native per-row cell widths and paragraph boundaries. @param document - Writer document. @returns Ordered cell layout and text. */
+function cellContents(document: SwDoc) {
+  const rows = [];
+  for (const line of table(document).GetTabLines()) {
+    const cells = [];
+    for (const box of line.GetTabBoxes()) {
+      const paragraphs = [];
+      for (const paragraph of box.GetParagraphs()) paragraphs.push(paragraph.GetText());
+      cells.push([box.GetFrameFormat().GetFrameSize().GetWidth(), paragraphs]);
+    }
+    rows.push(cells);
+  }
+  return rows;
+}
+
+it("merges RTF horizontal groups in reverse order and reopens their exported CELLX widths", /** Native cell deletion retains rich paragraph content and leaves an ordinary ragged table. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmgf\clbrdrr\brdrs\brdrw15\cellx1000\clmrg\clbrdrr\brdrs\brdrw45\cellx1700` +
+      String.raw`\clmgf\cellx2500\clmrg\clbrdrb\brdrs\brdrw30\cellx4000\intbl first\cell {\*\bkmkstart Moved}{\*\bkmkend Moved}\b moved\b0\par second\cell third\cell\cell\row` +
+      String.raw`\trowd\cellx1000\cellx1700\cellx2500\cellx4000\intbl a\cell b\cell c\cell d\cell\row`,
+  );
+  const expected = [
+    [
+      [1700, ["first", "moved", "second"]],
+      [2300, ["third"]],
+    ],
+    [
+      [1000, ["a"]],
+      [700, ["b"]],
+      [800, ["c"]],
+      [1500, ["d"]],
+    ],
+  ];
+  expect(cellContents(document)).toEqual(expected);
+  const firstRow = table(document).GetTabLines()[0]?.GetTabBoxes();
+  assert(firstRow);
+  const first = firstRow[0];
+  assert(first);
+  expect(first.GetFrameFormat().GetBox().GetRight()?.GetOutWidth()).toBe(15);
+  expect(firstRow[1]?.GetFrameFormat().GetBox().GetBottom()?.GetOutWidth()).toBe(30);
+  expect(first.GetParagraphs()[1]?.GetTableBox()).toBe(first);
+  const mark = document.GetIDocumentMarkAccess().GetBookmarks()[0];
+  expect(mark?.GetMarkPos().GetNode()).toBe(first.GetParagraphs()[1]);
+  const transferred = decodeWriterDocument(encodeWriterDocument(document));
+  documents.push(transferred);
+  expect(cellContents(transferred)).toEqual(expected);
+  const output = RtfExport.WriteDocument(document);
+  const rtf = new TextDecoder().decode(output);
+  expect(rtf).not.toMatch(/\\clm(?:gf|rg)/u);
+  expect(rtf).toMatch(/\\b(?:\d+)? moved/u);
+  const reopened = new RtfDocumentImpl().ResolveBytes(output);
+  documents.push(reopened);
+  expect(cellContents(reopened)).toEqual(expected);
+});
+
+it("retains a horizontal merge across an unmarked cell and skips restart-only groups", /** The source collector keeps the most recent start coordinate until a continuation updates its endpoint. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\clmrg\cellx1000\clmgf\cellx2000\cellx3000\clmrg\cellx4000\clmgf\cellx5000\intbl a\cell b\cell c\cell d\cell e\cell\row`,
+  );
+  expect(cellContents(document)).toEqual([
+    [
+      [1000, ["a"]],
+      [3000, ["b", "c", "d"]],
+      [1000, ["e"]],
+    ],
+  ]);
+});
+
 it("converts native RTF vertical merge flags to signed boxes and writes the same controls", /** Verifies buffered cell sprms, UNO row-span setters, border selection and native reimport. @returns Nothing. */ () => {
   const document = read(
     String.raw`\trowd\cellx1000\clvmgf\clbrdrb\brdrs\brdrw20\cellx3000\intbl left\cell start\cell\row` +

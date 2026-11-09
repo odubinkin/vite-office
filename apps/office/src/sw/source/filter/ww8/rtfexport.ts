@@ -408,11 +408,14 @@ export class RtfExport extends MSWordExportBase {
             output += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
           }
           for (const box of boxes) {
-            for (const [paragraphIndex, paragraph] of box.GetParagraphs().entries()) {
-              if (paragraphIndex > 0)
-                output +=
-                  this.WriteParagraphEnd(box.GetParagraphs()[paragraphIndex - 1] as SwTextNode) +
-                  " ";
+            const paragraphs = box.GetParagraphs();
+            for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
+              if (paragraphIndex > 0) {
+                const terminator = this.WriteParagraphEnd(
+                  paragraphs[paragraphIndex - 1] as SwTextNode,
+                );
+                output += terminator === "\\par" ? terminator + " " : terminator;
+              }
               output += `\\pard\\intbl ${this.WriteParagraph(paragraph)}`;
             }
             output += "\\cell ";
