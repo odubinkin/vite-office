@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/rbbi_cache.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-script-attributes",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/rbbi_cache.ts",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
+        "vendor/icu-reference/source/common/rbbi_cache.cpp"
+      ],
+      "justification": "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DictionaryCache",
+        "BreakCache",
+        "populateDictionary",
+        "populateFollowing",
+        "populatePreceding",
+        "populateNear"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+      "upstreamSymbols": [
+        "RuleBasedBreakIterator::DictionaryCache::populateDictionary",
+        "RuleBasedBreakIterator::BreakCache::populateFollowing",
+        "RuleBasedBreakIterator::BreakCache::populatePreceding",
+        "RuleBasedBreakIterator::BreakCache::populateNear"
+      ]
+    }
+  }
+}

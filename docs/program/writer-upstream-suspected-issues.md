@@ -3085,3 +3085,19 @@ previous-Katakana flag also prevents trying the same heuristic at later
 positions inside that run. Preserve the original limit and entry
 condition. The compiled fixture compares nineteen- and twenty-character
 runs against native ICU.
+
+### WRITER377 — ICU unhandled engine replaces its script set
+
+`UnhandledEngine::handleCharacter` says it applies the entire script of
+an unhandled character. The called UnicodeSet property filter clears the
+old set before adding the new script. Keep only the most recently applied
+script in this engine. The iterator still checks its cached supported
+engines first.
+
+### WRITER378 — ICU cached next leaves the existing completion flag untouched
+
+The native inline `BreakCache::next` updates the current position and rule
+status on its fast path and leaves `fDone` untouched. The source comment in
+`following` describes the interaction with an earlier query that ran past
+the text. Preserve the explicit completion reset in `following` and the
+original fast-path behavior.

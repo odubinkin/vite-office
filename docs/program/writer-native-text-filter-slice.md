@@ -1918,3 +1918,16 @@ Native comparisons covered 6928 word/phrase cases and 112957 normalization
 inputs, including every scalar admitted by the Chinese/Japanese engine.
 The ICU dictionary factory, public boundary cache and Writer measurement
 path remain to be connected.
+
+### HTML84 — Packaged ICU word dictionaries and public boundary cache
+
+The ICU factory consumes five exact Dict resources, including the Khmer
+replacement pinned by LibreOffice. Rule-based boundaries now pass through
+the original dictionary cache, and the public iterator uses the 128-entry
+status ring and safe reverse table. Native comparisons cover sequential
+and arbitrary queries, surrogate offsets, repeated text replacement and
+circular refill. See WRITER377 and WRITER378 for source cache behavior.
+
+The native iterator accepts actual prepared resource bytes. Browser asset
+preparation, LibreOffice locale dispatch and the Writer measurement
+connection remain open.

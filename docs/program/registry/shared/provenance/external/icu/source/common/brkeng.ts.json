@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/brkeng.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/brkeng.cpp",
+    "localSymbols": [
+      "ICULanguageBreakFactory",
+      "UnhandledEngine",
+      "getEngineFor",
+      "loadDictionaryMatcherFor"
+    ],
+    "upstreamSymbols": [
+      "ICULanguageBreakFactory::loadEngineFor",
+      "ICULanguageBreakFactory::loadDictionaryMatcherFor",
+      "UnhandledEngine::handleCharacter"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
+    ],
+    "omittedResponsibilities": [
+      "LSTM data is absent from the pinned package. Optional external engines and browser asset preparation remain outside the native factory."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/brkeng.ts",
+          "marker": "ICULanguageBreakFactory"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.cpp",
+          "marker": "ICULanguageBreakFactory::loadEngineFor"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.cpp",
+          "marker": "ICULanguageBreakFactory::loadDictionaryMatcherFor"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.cpp",
+          "marker": "UnhandledEngine::handleCharacter"
+        }
+      ]
+    }
+  }
+}

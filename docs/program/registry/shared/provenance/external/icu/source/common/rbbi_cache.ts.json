@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/rbbi_cache.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+    "localSymbols": [
+      "DictionaryCache",
+      "BreakCache",
+      "populateDictionary",
+      "populateFollowing",
+      "populatePreceding",
+      "populateNear"
+    ],
+    "upstreamSymbols": [
+      "RuleBasedBreakIterator::DictionaryCache::populateDictionary",
+      "RuleBasedBreakIterator::BreakCache::populateFollowing",
+      "RuleBasedBreakIterator::BreakCache::populatePreceding",
+      "RuleBasedBreakIterator::BreakCache::populateNear"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
+    ],
+    "omittedResponsibilities": [
+      "Native OOM/allocator, non-contiguous/UTF8 UText and LibreOffice locale routing remain outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi_cache.ts",
+          "marker": "DictionaryCache"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+          "marker": "RuleBasedBreakIterator::DictionaryCache::populateDictionary"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+          "marker": "RuleBasedBreakIterator::BreakCache::populateFollowing"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+          "marker": "RuleBasedBreakIterator::BreakCache::populatePreceding"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+          "marker": "RuleBasedBreakIterator::BreakCache::populateNear"
+        }
+      ]
+    }
+  }
+}
