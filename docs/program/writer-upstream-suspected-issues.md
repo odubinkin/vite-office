@@ -3363,3 +3363,21 @@ wrapping. The pinned RTF fixtures also expect a PAGE in a frame to be
 lost and a SECT there to end a paragraph. Explicit PAGEBB is sent
 between two paragraph ends to retain the break before the frame.
 Preserve those distinctions in the original reader and mapper paths.
+
+### WRITER410 — An all-header RTF table can lose its headers without becoming unsplittable
+
+The shared table manager first replaces a prefix of eleven or more
+repeating rows with a zero header count. The table handler later
+compares the surviving count with the total row count. All-header
+tables with two to ten rows therefore become unsplittable, while
+larger all-header tables pass through that check with zero headers
+and keep their original split state. Preserve the order of both
+source decisions.
+
+### WRITER411 — The RTF auto row-height rule resolves to a minimum
+
+TRRH0 emits the string auto and a zero height. MeasureHandler only
+special-cases exact, so auto reaches the table row as SizeType.MIN.
+Its IsAutoHeight getter reports true only for variable height. The
+same measure conversion also returns zero for positive twip
+values at or above 32768. Retain these row property results.

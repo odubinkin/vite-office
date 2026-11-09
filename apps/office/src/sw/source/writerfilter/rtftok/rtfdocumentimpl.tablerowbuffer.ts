@@ -2,9 +2,10 @@
 import { MINLAY } from "../../../inc/swtypes";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { createRtfBorder } from "./rtfdocumentimpl.border";
+import { stringValue } from "./rtfdocumentimpl.character";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import type {
   RtfBlock,
   RtfCellBorder,
@@ -25,42 +26,28 @@ export class TableRowBuffer {
   readonly cell: RtfTableCellContent[] = [];
   readonly boundaries: number[] = [];
   readonly cellSprms: RTFSprms[] = [];
-  readonly verticals: (VertOrientation | undefined)[] = [];
   readonly borders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
-  nextCellVertical: VertOrientation | undefined;
   nextCellBorders = new Map<SvxBoxItemLine, RtfCellBorder>();
   activeBorder: RtfCellBorder | undefined;
   left = 0;
-  height = 0;
-  split = true;
-  header = false;
 
   /** Resets the row definition without discarding content already buffered. @returns Nothing. */
   ResetProperties(): void {
     this.boundaries.length = 0;
     for (const list of this.cellSprms.splice(0)) list.dispose();
-    this.verticals.length = 0;
     this.borders.length = 0;
-    this.nextCellVertical = undefined;
     this.nextCellBorders = new Map();
     this.activeBorder = undefined;
     this.left = 0;
-    this.height = 0;
-    this.split = true;
-    this.header = false;
   }
 
   /** Transfers the current row definition separately from its buffered content. @param state - Current group. @returns Native row definition. */
   TakeDefinition(state: RtfState): RtfTableRowDefinition {
     return {
-      header: this.header,
       boundaries: this.boundaries.splice(0),
       rowSprms: new RTFSprms(state.tableRowSprms),
       cellSprms: this.cellSprms.splice(0),
       left: this.left,
-      height: this.height,
-      split: this.split,
-      verticals: this.verticals.splice(0),
       borders: this.borders.splice(0),
     };
   }
@@ -71,7 +58,6 @@ export class TableRowBuffer {
     this.boundaries.splice(0, this.boundaries.length, ...definition.boundaries);
     for (const list of definition.cellSprms) this.cellSprms.push(new RTFSprms(list));
     this.left = definition.left;
-    this.verticals.splice(0, this.verticals.length, ...definition.verticals);
     this.borders.length = 0;
     for (const map of definition.borders) this.borders.push(new Map(map));
   }
@@ -257,9 +243,6 @@ export function DispatchTableControl(
       const restored = !active.boundaries.at(-1) && !!backup;
       if (restored) {
         active.RestoreCellDefinition(backup);
-        active.height = backup.height;
-        active.header = backup.header;
-        active.split = backup.split;
         state.tableRowSprms.dispose();
         state.tableRowSprms = new RTFSprms(backup.rowSprms);
       } else if (active.boundaries.length === 0 && text.m_PreviousTopLevelTableRow) {
@@ -302,24 +285,36 @@ export function DispatchTableControl(
     return true;
   }
   if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
-    row.nextCellVertical =
+    const alignment =
       name === "clvertalc"
-        ? VertOrientation.CENTER
+        ? N.LN_Value_ST_VerticalJc_center
         : name === "clvertalb"
-          ? VertOrientation.BOTTOM
-          : VertOrientation.TOP;
+          ? N.LN_Value_ST_VerticalJc_bottom
+          : N.LN_Value_ST_VerticalJc_top;
+    state.tableCellSprms.set(N.LN_CT_TcPrBase_vAlign, new RTFValue(alignment));
     return true;
   }
   if (name === "trrh") {
-    row.height = parameter ?? 0;
+    const height = parameter ?? 0;
+    putNestedAttribute(
+      state.tableRowSprms,
+      N.LN_CT_TrPrBase_trHeight,
+      N.LN_CT_Height_val,
+      new RTFValue(Math.abs(height) | 0),
+    );
+    putNestedAttribute(
+      state.tableRowSprms,
+      N.LN_CT_TrPrBase_trHeight,
+      N.LN_CT_Height_hRule,
+      stringValue(height < 0 ? "exact" : height > 0 ? "atLeast" : "auto"),
+    );
     return true;
   }
-  if (name === "trkeep") {
-    row.split = false;
-    return true;
-  }
-  if (name === "trhdr") {
-    row.header = true;
+  if (name === "trkeep" || name === "trhdr") {
+    state.tableRowSprms.set(
+      name === "trkeep" ? N.LN_CT_TrPrBase_cantSplit : N.LN_CT_TrPrBase_tblHeader,
+      new RTFValue(1),
+    );
     return true;
   }
   if (name === "trql" || name === "trqc" || name === "trqr") {
@@ -350,8 +345,6 @@ export function DispatchTableControl(
       row.cellSprms.push(new RTFSprms(state.tableCellSprms));
       state.tableCellSprms.dispose();
       state.tableCellSprms = new RTFSprms(text.m_aDefaultTableCellSprms);
-      row.verticals.push(row.nextCellVertical);
-      row.nextCellVertical = undefined;
       row.borders.push(row.nextCellBorders);
       row.nextCellBorders = new Map();
       row.activeBorder = undefined;

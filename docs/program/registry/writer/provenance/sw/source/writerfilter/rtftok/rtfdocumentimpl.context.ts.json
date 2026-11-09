@@ -59,7 +59,8 @@
       "Owns native shape group identity and paragraph-positioned shape events.",
       "Separates the original buffered table row definition from its ordered content.",
       "Keeps table padding in the original row and cell resource property owners.",
-      "Keeps a native frame-property owner on each original parser state."
+      "Keeps a native frame-property owner on each original parser state.",
+      "Stores native row flow and cell vertical alignment in the original resource property owners."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -232,6 +233,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "@fileoverview"
         }
       ],

@@ -14,7 +14,9 @@
       "cellProps",
       "resolvePositionSprm",
       "takeRowPosition",
-      "insertTableProps"
+      "insertTableProps",
+      "insertRowProps",
+      "takeRowProperties"
     ],
     "upstreamSymbols": [
       "DomainMapperTableManager::sprm",
@@ -26,7 +28,8 @@
       "Maps hMerge restart/continue to the native boolean horizontal merge property.",
       "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties.",
       "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position.",
-      "Resolves the original preferred-width and indent measures and preserves source grid fallback."
+      "Resolves the original preferred-width and indent measures and preserves source grid fallback.",
+      "Accumulates original row properties and the contiguous header prefix with its source limit."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -60,6 +63,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
           "marker": "resolvePositionSprm"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -82,6 +89,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "LN_CT_TblPrBase_tblW"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
         }
       ]
     }

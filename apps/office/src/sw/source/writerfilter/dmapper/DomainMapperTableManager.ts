@@ -17,6 +17,9 @@ export class DomainMapperTableManager {
   private readonly m_aTableProperties = new TablePropertyMap();
   private m_aTmpTableProperties = new TablePropertyMap();
   private m_pCellProps = new TablePropertyMap();
+  private m_pRowProps = new TablePropertyMap();
+  private m_nRow = 0;
+  private m_nHeaderRepeat = 0;
   private readonly m_pTablePropsHandler = new TablePropertiesHandler();
   private m_nTableWidth = 0;
   private m_pTmpPosition: TablePositionHandler | undefined;
@@ -81,6 +84,21 @@ export class DomainMapperTableManager {
       }
       return true;
     }
+    if (id === N.LN_CT_TrPrBase_tblHeader) {
+      const repeat = value > 0 && this.m_nHeaderRepeat === this.m_nRow;
+      if (repeat || (value === 0 && this.m_nRow === 0)) {
+        // Original ten-row limit handles headers that Word stops repeating at a page boundary.
+        const count = repeat && this.m_nHeaderRepeat < 10 ? this.m_nHeaderRepeat + 1 : 0;
+        const item = new Any([count], "sal_Int32");
+        try {
+          this.m_aTmpTableProperties.Insert(P.PROP_HEADER_ROW_COUNT, item);
+        } finally {
+          item.dispose();
+        }
+        this.m_nHeaderRepeat = count || -1;
+      } else this.m_nHeaderRepeat = -1;
+      return true;
+    }
     if (id === N.LN_CT_TblPrBase_bidiVisual) {
       const item = new Any([value ? WritingMode2.RL_TB : WritingMode2.LR_TB], "sal_Int16");
       try {
@@ -137,6 +155,18 @@ export class DomainMapperTableManager {
     this.m_aTmpTableProperties.InsertProps(properties);
   }
 
+  /** Inserts original row-level properties. @param properties - Borrowed row map. @returns Nothing. */
+  insertRowProps(properties: TablePropertyMap): void {
+    this.m_pRowProps.InsertProps(properties);
+  }
+
+  /** Transfers the current row map to the native row application boundary. @returns Owned row properties. */
+  takeRowProperties(): TablePropertyMap {
+    const properties = this.m_pRowProps;
+    this.m_pRowProps = new TablePropertyMap();
+    return properties;
+  }
+
   /** Accumulates row table properties with the source grid fallback. @param grid - Prepared RTF row grid, when present. @returns Nothing. */
   endOfRowAction(grid?: readonly number[]): void {
     const type: [number] = [SizeType.VARIABLE];
@@ -155,6 +185,7 @@ export class DomainMapperTableManager {
       }
     }
     this.m_nTableWidth = 0;
+    this.m_nRow++;
     this.m_aTableProperties.InsertProps(this.m_aTmpTableProperties);
     this.m_aTmpTableProperties.dispose();
     this.m_aTmpTableProperties = new TablePropertyMap();
@@ -176,6 +207,7 @@ export class DomainMapperTableManager {
   dispose(): void {
     this.m_pTmpPosition?.dispose();
     this.m_pCellProps.dispose();
+    this.m_pRowProps.dispose();
     this.m_aTmpTableProperties.dispose();
     this.m_aTableProperties.dispose();
   }

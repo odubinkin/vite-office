@@ -24,7 +24,8 @@
       "Separates native row groups at original TablePositionHandler comparison boundaries, retaining the final equal position's distance payload.",
       "Does not convert positioned rows in shape text into floating tables, following the original shape guard.",
       "Uses the original positive-column correction for the actual cell size and merge separators.",
-      "Emits the original default width and indent measures and uses native table and cell margin properties."
+      "Emits the original default width and indent measures and uses native table and cell margin properties.",
+      "Applies original row and table flow through the connected table handler and native UNO properties."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -49,6 +50,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -76,6 +81,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "!m_bIsInShape && pProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "tdf#88496/tdf#138020"
         }
       ]
     },

@@ -14,6 +14,7 @@ import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/Proper
 import { scalar, stringValue, illegal, unknown } from "./unocrsrhelper";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SwFrameSize } from "../../../inc/fmtfsize";
+import { MID_FRMSIZE_SIZE_TYPE } from "../../../inc/unomid";
 import {
   BorderLine,
   cppu_detail_getUnoType_BorderLine,
@@ -90,14 +91,27 @@ export class SwXTextTableRow {
   setPropertyValue(name: OUStringConstReference, value: Any): void {
     const n = text(name),
       format = this.line.ClaimFrameFormat();
-    if (n === "IsSplitAllowed")
-      format.SetFormatAttr(new SwFormatRowSplit(scalar(value, "bool") as boolean));
-    else if (n === "Height" || n === "IsAutoHeight") {
-      const size = this.line.GetFrameSize();
-      if (n === "Height")
-        size.SetHeight(Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)));
-      else size.SetHeightSizeType(scalar(value, "bool") ? SwFrameSize.Variable : SwFrameSize.Fixed);
-      format.SetFormatAttr(size);
+    if (n === "IsSplitAllowed") {
+      const split = new SwFormatRowSplit(scalar(value, "bool") as boolean);
+      try {
+        format.SetFormatAttr(split);
+      } finally {
+        split.Dispose();
+      }
+    } else if (n === "Height" || n === "IsAutoHeight" || n === "SizeType") {
+      const size = format.GetFrameSize().Clone();
+      try {
+        if (n === "Height")
+          size.SetHeight(
+            Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)),
+          );
+        else if (n === "IsAutoHeight")
+          size.SetHeightSizeType(scalar(value, "bool") ? SwFrameSize.Variable : SwFrameSize.Fixed);
+        else if (!size.PutValue(value, MID_FRMSIZE_SIZE_TYPE)) illegal("Invalid row SizeType.");
+        format.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
     } else unknown(n);
   }
 }
@@ -381,8 +395,12 @@ export function setCellProperty(box: SwTableBox, name: string, value: Any): bool
   }
   if (name === "VertOrient") {
     const item = box.GetVertOrient();
-    item.PutValue(scalar(value, "sal_Int16"), 0);
-    box.ClaimFrameFormat().SetFormatAttr(item);
+    try {
+      item.PutValue(scalar(value, "sal_Int16"), 0);
+      box.ClaimFrameFormat().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
     return true;
   }
   const members: Record<string, number> = {
@@ -413,12 +431,14 @@ export function setCellProperty(box: SwTableBox, name: string, value: Any): bool
 /** Reads native current row values in public units. @param line - Actual row. @param name - Native property name. @returns Typed Any. */
 export function getRowProperty(line: SwTableLine, name: string): Any {
   const result = new Any(),
-    size = line.GetFrameSize();
-  if (name === "IsSplitAllowed") result.insert([line.GetRowSplit().GetValue()], "bool");
+    format = line.GetFrameFormat(),
+    size = format.GetFrameSize();
+  if (name === "IsSplitAllowed") result.insert([format.GetRowSplit().GetValue()], "bool");
   else if (name === "Height")
     result.insert([Number(convertTwipToMm100(BigInt(size.GetHeight())))], "sal_Int32");
   else if (name === "IsAutoHeight")
-    result.insert([size.GetHeightSizeType() !== SwFrameSize.Fixed], "bool");
+    result.insert([size.GetHeightSizeType() === SwFrameSize.Variable], "bool");
+  else if (name === "SizeType") size.QueryValue(result, MID_FRMSIZE_SIZE_TYPE);
   else unknown(name);
   return result;
 }

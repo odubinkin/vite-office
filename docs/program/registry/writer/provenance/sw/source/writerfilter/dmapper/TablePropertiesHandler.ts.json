@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager.",
-      "Reuses the original CellMarginHandler for table and cell margin properties and maps table justification."
+      "Reuses the original CellMarginHandler for table and cell margin properties and maps table justification.",
+      "Resolves the original row height and split and cell vertical alignment into typed mapper properties."
     ],
     "omittedResponsibilities": [
       "The other table resource families and cell interop grab bag are outside this RTF brush path."
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -39,6 +44,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
           "marker": "LN_CT_TblPrBase_tblCellMar"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx",
+          "marker": "LN_CT_TrPrBase_trHeight"
         }
       ]
     }

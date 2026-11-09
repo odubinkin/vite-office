@@ -1,6 +1,4 @@
 /** @fileoverview Feeds buffered RTF row/cell sprms through actual Writer table mapper and UNO format owners. */
-import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import type { SwTable } from "../../core/table/swtable";
 import { SwXCell, SwXTextTable } from "../../core/unocore/unotbl";
 import {
@@ -10,6 +8,8 @@ import {
 import {
   ApplyHorizontalMerges,
   ApplyTableMeasures,
+  ApplyTableRowProperties,
+  FinalizeTableFlowProperties,
   ApplyTableMargins,
   ApplyVerticalMergeBorders,
   CollectHorizontalMerge,
@@ -21,11 +21,8 @@ import {
   type VerticallyMergedCell,
 } from "../../core/unocore/unotext";
 import { scalar, text } from "../../core/unocore/unocrsrhelper";
-import { PropertyIds as P } from "../dmapper/PropertyIds";
 import type { RtfDocumentImplContext, RtfTableRow } from "./rtfdocumentimpl.context";
 import type { SwDoc } from "../../core/doc/doc";
-import { SwFrameSize } from "../../../inc/fmtfsize";
-import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { createRtfBorderLine } from "./rtfdocumentimpl.border";
 import type { TablePositionHandler } from "../dmapper/TablePositionHandler";
 import { RTFSprm, RTFSprms } from "./rtfsprm";
@@ -81,12 +78,19 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
   const horizontalMerges: HorizontallyMergedCell[] = [];
   const mergeRows: (boolean | undefined)[][] = [];
   try {
-    for (const row of rows) {
+    for (const [index, row] of rows.entries()) {
       const rowProperties = PrepareTableRowProperties(row);
       try {
         for (const [id, value] of rowProperties) manager.sprm(new RTFSprm(id, value));
       } finally {
         rowProperties.dispose();
+      }
+      const resolved = manager.takeRowProperties();
+      try {
+        const line = table.GetTabLines()[index];
+        if (line) ApplyTableRowProperties(line, resolved);
+      } finally {
+        resolved.dispose();
       }
       manager.endOfRowAction(PrepareRtfTableGrid(row));
     }
@@ -128,12 +132,7 @@ export function ApplyRtfTableProperties(table: SwTable, rows: readonly RtfTableR
     }
     ApplyVerticalMergeBorders(table, mergeRows);
     ApplyVerticalMerges(merges);
-    const defaultDirection = new Any([WritingMode2.CONTEXT], "sal_Int16");
-    try {
-      tableProperties.Insert(P.PROP_WRITING_MODE, defaultDirection, false);
-    } finally {
-      defaultDirection.dispose();
-    }
+    FinalizeTableFlowProperties(table, tableProperties);
     ApplyTableMeasures(table, tableProperties);
     const uno = new SwXTextTable(table);
     for (const property of tableProperties.GetPropertyValues())
@@ -228,22 +227,9 @@ function MaterializeRtfTableGroup(
   for (const row of rows) {
     const widths = PrepareRtfTableGrid(row);
     const line = document.nodes.AppendTableRow(table, row.cells.length);
-    if (row.height !== 0) {
-      const size = line.GetFrameFormat().GetFrameSize().Clone();
-      size.SetHeight(Math.abs(row.height));
-      size.SetHeightSizeType(row.height < 0 ? SwFrameSize.Fixed : SwFrameSize.Minimum);
-      line.GetFrameFormat().SetFormatAttr(size);
-    }
-    if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
     for (const [index, cell] of row.cells.entries()) {
       // AppendTableRow created exactly row.cells.length boxes before this bounded iteration.
       const box = line.GetTabBoxes()[index] as ReturnType<typeof line.GetTabBoxes>[number];
-      const vertical = row.verticals[index];
-      if (vertical !== undefined) {
-        const item = box.GetVertOrient();
-        item.SetVertOrient(vertical);
-        box.ClaimFrameFormat().SetFormatAttr(item);
-      }
       const borders = row.borders[index];
       if (borders !== undefined && borders.size > 0) {
         const item = box.GetBox();
@@ -278,14 +264,4 @@ function MaterializeRtfTableGroup(
     }
   }
   ApplyRtfTableProperties(table, rows);
-  let repeatedRows = 0;
-  for (const row of rows) {
-    if (!row.header) break;
-    if (repeatedRows === 10) {
-      repeatedRows = 0;
-      break;
-    }
-    repeatedRows++;
-  }
-  table.SetRowsToRepeat(repeatedRows);
 }

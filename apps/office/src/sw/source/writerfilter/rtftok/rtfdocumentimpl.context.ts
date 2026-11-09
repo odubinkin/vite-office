@@ -5,7 +5,6 @@ import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { COL_AUTO, COL_BLACK, Color } from "../../../../tools/inc/color";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
@@ -213,12 +212,8 @@ export type RtfTableCellContent = RtfParagraph | RtfNestedTable;
 export interface RtfTableRowDefinition {
   readonly rowSprms: RTFSprms;
   readonly cellSprms: readonly RTFSprms[];
-  readonly header: boolean;
   readonly boundaries: readonly number[];
   readonly left: number;
-  readonly height: number;
-  readonly split: boolean;
-  readonly verticals: readonly (VertOrientation | undefined)[];
   readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
 }
 /** One replayable row with its definition and ordered cell content. */

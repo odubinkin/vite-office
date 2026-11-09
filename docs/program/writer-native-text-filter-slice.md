@@ -2292,3 +2292,20 @@ for RTF. The new tests cover the native properties, document marks,
 RTF reopen, and the pinned paragraph-frame regression fixtures.
 WRITER408 and WRITER409 record the position adjustment and the
 legacy wrapping and page-break behavior.
+
+### RTF107 — Row flow, row height and cell vertical alignment
+
+RTF row and cell resources carry the original header, split, height
+and vertical alignment properties through table definition snapshots.
+The table manager accumulates the contiguous header prefix. The
+table handler disables repetition and splitting for multirow
+all-header tables with a surviving header count. A single
+non-splittable row prevents splitting its table. The shared
+MeasureHandler and typed UNO row properties apply native height
+and size rules to the connected table row. Cell vertical alignment
+uses the original mapper value for each resource, including NONE
+for explicit top alignment.
+
+WRITER410 records the interaction between the ten-header limit and
+all-header finalization. WRITER411 records the original auto-height
+and metric overflow behavior.

@@ -5,15 +5,59 @@ import { SwXText } from "../../core/unocore/unotext";
 import type { TablePositionHandler } from "./TablePositionHandler";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
-import type { SwTable } from "../../core/table/swtable";
-import { SwXTextTableCursor } from "../../core/unocore/unotbl";
+import type { SwTable, SwTableLine } from "../../core/table/swtable";
+import { SwXTextTableCursor, SwXTextTableRow } from "../../core/unocore/unotbl";
 import { scalar, unicode } from "../../core/unocore/unocrsrhelper";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMapTarget as T, type TablePropertyMap } from "./PropertyMap";
+
+/** Applies the original row split default and native row properties. @param line - Connected Writer row. @param properties - Actual mapper row properties. @returns Nothing. */
+export function ApplyTableRowProperties(line: SwTableLine, properties: TablePropertyMap): void {
+  const split = new Any([true], "bool");
+  try {
+    properties.Insert(P.PROP_IS_SPLIT_ALLOWED, split, false);
+  } finally {
+    split.dispose();
+  }
+  const row = new SwXTextTableRow(line);
+  for (const property of properties.GetPropertyValues())
+    row.setPropertyValue(property.Name, property.Value);
+}
+
+/** Finalizes the original table header count, writing direction and table-level split property. @param table - Connected Writer table. @param properties - Accumulated native table properties. @returns Nothing. */
+export function FinalizeTableFlowProperties(table: SwTable, properties: TablePropertyMap): void {
+  const rows = table.GetTabLines();
+  const count = properties.getProperty(P.PROP_HEADER_ROW_COUNT)?.[1];
+  let allHeaders: boolean;
+  try {
+    allHeaders =
+      rows.length > 1 && count !== undefined && scalar(count, "sal_Int32") === rows.length;
+  } finally {
+    count?.dispose();
+  }
+  const zero = new Any([0], "sal_Int32");
+  const direction = new Any([WritingMode2.CONTEXT], "sal_Int16");
+  try {
+    properties.Insert(P.PROP_HEADER_ROW_COUNT, zero, allHeaders);
+    properties.Insert(P.PROP_WRITING_MODE, direction, false);
+  } finally {
+    direction.dispose();
+    zero.dispose();
+  }
+  if (allHeaders || (rows.length === 1 && !rows[0]?.GetFrameFormat().GetRowSplit().GetValue())) {
+    const split = new Any([false], "bool");
+    try {
+      properties.Insert(P.PROP_SPLIT, split);
+    } finally {
+      split.dispose();
+    }
+  }
+}
 
 /** Applies the source end-of-table width and relative-width properties through the existing UNO table owner. @param table - Actual converted table. @param properties - Accumulated native table properties. @returns Nothing. */
 export function ApplyTableMeasures(table: SwTable, properties: TablePropertyMap): void {
