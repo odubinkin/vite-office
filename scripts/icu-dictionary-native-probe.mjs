@@ -3,13 +3,20 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { observeDictionary, makeDictionaryFixture } from "./icu-dictionary-observe.ts";
+import { format, resolveConfig } from "prettier";
+import {
+  observeDictionary,
+  makeDictionaryFixture,
+  observeMatcher,
+} from "./icu-dictionary-observe.ts";
 import { UCharsTrie } from "../apps/office/src/external/icu/source/common/unicode/ucharstrie.ts";
 import { udata_cleanup } from "../apps/office/src/external/icu/source/common/udata.ts";
 import {
   udata_open,
   udata_setCommonData,
 } from "../apps/office/src/external/icu/source/common/unicode/udata.ts";
+
+import { loadDictionaryMatcherFor } from "../apps/office/src/external/icu/source/common/brkeng.ts";
 
 const source = resolve("vendor/icu-reference/source");
 const build = resolve("output/native/AQF9AG-icu-grego");
@@ -22,6 +29,7 @@ const cpp = String.raw`
 #include <memory>
 #include <string>
 #include <vector>
+#include "brkeng.h"
 #include "dictionarydata.h"
 #include "ubrkimpl.h"
 #include "unicode/bytestriebuilder.h"
@@ -32,6 +40,12 @@ const cpp = String.raw`
 
 using namespace std;
 using namespace icu;
+
+class WitnessFactory : public ICULanguageBreakFactory {
+public:
+    using ICULanguageBreakFactory::ICULanguageBreakFactory;
+    using ICULanguageBreakFactory::loadDictionaryMatcherFor;
+};
 
 void printUnitTrie(const UnicodeString &serialized) {
     cout << "U";
@@ -66,6 +80,7 @@ int main(int argc, char **argv) {
     if (argc != 2) return 2;
     u_setDataDirectory(argv[1]);
     UErrorCode status = U_ZERO_ERROR;
+    WitnessFactory factory(status);
     UCharsTrieBuilder ub(status);
     ub.add(UnicodeString(), 19, status)
       .add(u"a", 23, status).add(u"ab", 400001, status).add(u"abc", -17, status)
@@ -107,6 +122,13 @@ int main(int argc, char **argv) {
         unique_ptr<DictionaryMatcher> matcher;
         if (name == "U") matcher = make_unique<UCharsDictionaryMatcher>(serialized.getBuffer(), nullptr);
         else if (name == "B") matcher = make_unique<BytesDictionaryMatcher>(bytes.data(), DictionaryData::TRANSFORM_TYPE_OFFSET | 0x0e00, nullptr);
+        else if (name.front() == 'F') {
+            matcher.reset(factory.loadDictionaryMatcherFor(static_cast<UScriptCode>(stoi(name.substr(1)))));
+            if (!matcher) {
+                cout << "M\n";
+                continue;
+            }
+        }
         else matcher = openNative(name, status);
         if (!matcher || U_FAILURE(status)) {
             cerr << name << ": " << u_errorName(status) << '\n';
@@ -187,8 +209,31 @@ for (const [name, texts] of [
       cases.push({ name, text, start, max, limit, mask });
   }
 }
+const factoryCases = [];
+for (const [script, text] of [
+  [38, "ภาษาไทย"],
+  [24, "ພາສາລາວ"],
+  [28, "မြန်မာဘာသာ"],
+  [23, "ភាសាខ្មែរ"],
+  [17, "東京都"],
+  [20, "ひらがな"],
+  [22, "カタカナ"],
+  [18, "한글"],
+  [25, "Latin"],
+  [2, "عربي"],
+  [0, "?"],
+  [54, "ひらカナ"],
+]) {
+  for (const [start, max, limit, mask] of [
+    [0, 80, 4, 15],
+    [1, 4, 2, 15],
+    [0, 0, 0, 8],
+  ]) {
+    factoryCases.push({ name: "F" + script, script, text, start, max, limit, mask });
+  }
+}
 let input = "";
-for (const c of cases) {
+for (const c of [...cases, ...factoryCases]) {
   input += `${c.name} ${c.text.length} ${c.start} ${c.max} ${c.limit} ${c.mask} `;
   for (let i = 0; i < c.text.length; ++i) input += c.text.charCodeAt(i) + " ";
   input += "\n";
@@ -203,7 +248,8 @@ for (const line of native.trimEnd().split("\n")) {
   const fields = line.split(" ");
   rows[fields.shift()].push(fields.map(Number));
 }
-if (rows.M.length !== cases.length) throw new Error("Incomplete original matcher observations");
+if (rows.M.length !== cases.length + factoryCases.length)
+  throw new Error("Incomplete original matcher observations");
 const u = rows.U[0],
   b = rows.B[0];
 const trie = new UCharsTrie(new Uint16Array(u));
@@ -247,9 +293,22 @@ try {
 } finally {
   udata_cleanup();
 }
-writeFileSync(
-  "apps/office/src/external/icu/source/common/dictionarydata.native-observations.json",
-  JSON.stringify(
+const factory = [];
+try {
+  for (const [index, c] of factoryCases.entries()) {
+    const expected = rows.M[cases.length + index];
+    const actual = observeMatcher(loadDictionaryMatcherFor(c.script), c);
+    if (JSON.stringify(actual) !== JSON.stringify(expected))
+      throw new Error(JSON.stringify({ c, actual, expected }));
+    factory.push({ ...c, expected });
+  }
+} finally {
+  udata_cleanup();
+}
+for (const [file, artifact] of [
+  ["brkeng.native-observations.json", { icuVersion: "78.3", factory }],
+  [
+    "dictionarydata.native-observations.json",
     {
       icuVersion: "78.3",
       archiveSha256: createHash("sha256").update(archive).digest("hex"),
@@ -258,10 +317,15 @@ writeFileSync(
       traversal: rows.V[0],
       cases: portable,
     },
-    null,
-    2,
-  ) + "\n",
-);
+  ],
+]) {
+  const path = resolve("apps/office/src/external/icu/source/common", file);
+  const bytes = await format(JSON.stringify(artifact), {
+    ...(await resolveConfig(path)),
+    parser: "json",
+  });
+  writeFileSync(path, bytes);
+}
 console.log(
-  `Matched ${portable.length} builder cases and ${real} original archive cases across five dictionaries`,
+  `Matched ${portable.length} builder cases and ${real} original archive cases across five dictionaries and ${factory.length} original factory cases`,
 );

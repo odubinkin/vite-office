@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 212
+revision: 216
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T17:57:31.771Z"
+  updated_at: "2026-11-09T18:10:21.427Z"
   updated_by: "CODER"
-  note: "Verified 312 native matcher cases, 133 related tests, 197 CSV tests and Chromium acceptance. Dictionary resource and concrete segmentation engine integration remain."
-  attempts: 55
+  note: "Original ICU brkitr package and dictionary factory checkpoint validated against unchanged ICU, with 36 factory cases, 19,888 resource comparisons, 109 shared tests, 197 CSV tests on isolated rerun, and the browser flow. Concrete dictionary break engines, production formatter integration and multiline import remain in scope."
+  attempts: 56
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1208,8 +1211,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:10:21.427Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original ICU brkitr package and dictionary factory checkpoint validated against unchanged ICU, with 36 factory cases, 19,888 resource comparisons, 109 shared tests, 197 CSV tests on isolated rerun, and the browser flow. Concrete dictionary break engines, production formatter integration and multiline import remain in scope."
+  -
+    type: "status"
+    at: "2026-11-09T18:10:32.423Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T17:57:39.229Z"
+doc_updated_at: "2026-11-09T18:10:52.775Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -2879,6 +2895,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:10:21.427Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original ICU brkitr package and dictionary factory checkpoint validated against unchanged ICU, with 36 factory cases, 19,888 resource comparisons, 109 shared tests, 197 CSV tests on isolated rerun, and the browser flow. Concrete dictionary break engines, production formatter integration and multiline import remain in scope.
+    Attempts: 56
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:10:20.783Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4273,6 +4319,21 @@ sections:
     - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
       Result: pass. Evidence: production build and one Chromium import, ODS save and CSV export scenario.
     - Exact-path formatting and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary resource discovery and segmentation engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
+
+    ### Original ICU named break resources and dictionary factory selection
+
+    - Linked the pinned ICU `brkitr` data tree. The native raw exporter preserves all 16 resource bundles. Original gencmn packs 36 unchanged archive members into the generated common-data image. The managed image has a stable identity and can be registered again after ICU cleanup.
+    - Retained the original ICU resource cache key and alias context by both package path and resource name. The full default raw graph remains byte-for-byte identical. The original factory selects a dictionary using the ICU script short name and counted invariant filename, then opens the binary resource with udata and transfers ownership to the original matcher.
+    - Commands: node scripts/icu-locale-resources.mjs --check; node scripts/icu-locale-resources.mjs --brkitr --check; node scripts/icu-brkitr-package.mjs --check.
+      Result: pass. Evidence: 982 default bundles unchanged; 16 brkitr raw bundles; 36 brkitr binary files and a 3,820,832-byte native package.
+    - Commands: node_modules/.bin/tsx scripts/icu-dictionary-native-probe.mjs; node_modules/.bin/tsx scripts/icu-resource-bundle-native-probe.mjs.
+      Result: pass. Evidence: 36 actual ICU factory calls across 12 scripts, 144 original builder cases, 168 original archive cases across five dictionaries, and 19,888 existing ICU resource queries. A separate original CreateLSTMDataForScript witness returns U_MISSING_RESOURCE_ERROR for Thai, Lao, Burmese, and Khmer from the pinned archive. ICU's existing factory then takes the dictionary branch.
+    - Command: npm run test:shared -- src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/uresbund src/external/icu/source/common/uresdata.path.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts --maxWorkers=1.
+      Result: pass. Evidence: 109 tests in nine files, including named/default root identity and reopen after cleanup. The two new factory tests passed again after correcting a lint violation in the fixture access.
+    - Commands: npm run typecheck, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 4,441 JSDoc-checked sources, 1,992 provenance entries, 1,779 mapped entries, 1,991 boundary sources, 10,816 relative imports, 236 allowed edges, and 464 Calc commands. Changed-path ESLint passes. The first full lint run reported one forbidden non-null assertion in the new test. Removed it. The full lint rerun passed.
+    - Result: 197 focused CSV and file workflow tests across eight files pass on the isolated rerun. The initial concurrent run hit a waitFor failure in one dialog test. The production Vite build and the Chromium CSV import, ODS save and CSV export scenario both pass.
+    - This is a checkpoint in the existing AgentPlane task. No full test suite was due. Concrete dictionary break engines, the outer LibreOffice word service, the production formatter bridge, and multiline import remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -5951,6 +6012,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:10:21.427Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original ICU brkitr package and dictionary factory checkpoint validated against unchanged ICU, with 36 factory cases, 19,888 resource comparisons, 109 shared tests, 197 CSV tests on isolated rerun, and the browser flow. Concrete dictionary break engines, production formatter integration and multiline import remain in scope.
+Attempts: 56
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:10:20.783Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7349,3 +7440,18 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - Commands: ../../node_modules/.bin/vite build from apps/office and node_modules/.bin/playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/csv.spec.ts from the repository root.
   Result: pass. Evidence: production build and one Chromium import, ODS save and CSV export scenario.
 - Exact-path formatting and git diff --check pass. The checkpoint stages 18 implementation and evidence paths plus the task README. Same open AgentPlane task and below the tenth-task full-suite cadence. The goal remains active. Remaining integration includes dictionary resource discovery and segmentation engines, concrete iterator and LibreOffice word services, NatNum12 formatting and multiline EditEngine import.
+
+### Original ICU named break resources and dictionary factory selection
+
+- Linked the pinned ICU `brkitr` data tree. The native raw exporter preserves all 16 resource bundles. Original gencmn packs 36 unchanged archive members into the generated common-data image. The managed image has a stable identity and can be registered again after ICU cleanup.
+- Retained the original ICU resource cache key and alias context by both package path and resource name. The full default raw graph remains byte-for-byte identical. The original factory selects a dictionary using the ICU script short name and counted invariant filename, then opens the binary resource with udata and transfers ownership to the original matcher.
+- Commands: node scripts/icu-locale-resources.mjs --check; node scripts/icu-locale-resources.mjs --brkitr --check; node scripts/icu-brkitr-package.mjs --check.
+  Result: pass. Evidence: 982 default bundles unchanged; 16 brkitr raw bundles; 36 brkitr binary files and a 3,820,832-byte native package.
+- Commands: node_modules/.bin/tsx scripts/icu-dictionary-native-probe.mjs; node_modules/.bin/tsx scripts/icu-resource-bundle-native-probe.mjs.
+  Result: pass. Evidence: 36 actual ICU factory calls across 12 scripts, 144 original builder cases, 168 original archive cases across five dictionaries, and 19,888 existing ICU resource queries. A separate original CreateLSTMDataForScript witness returns U_MISSING_RESOURCE_ERROR for Thai, Lao, Burmese, and Khmer from the pinned archive. ICU's existing factory then takes the dictionary branch.
+- Command: npm run test:shared -- src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/uresbund src/external/icu/source/common/uresdata.path.test.ts src/external/icu/source/common/dictionarydata.native.test.ts src/external/icu/source/common/rbbi.owner.native.test.ts --maxWorkers=1.
+  Result: pass. Evidence: 109 tests in nine files, including named/default root identity and reopen after cleanup. The two new factory tests passed again after correcting a lint violation in the fixture access.
+- Commands: npm run typecheck, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 4,441 JSDoc-checked sources, 1,992 provenance entries, 1,779 mapped entries, 1,991 boundary sources, 10,816 relative imports, 236 allowed edges, and 464 Calc commands. Changed-path ESLint passes. The first full lint run reported one forbidden non-null assertion in the new test. Removed it. The full lint rerun passed.
+- Result: 197 focused CSV and file workflow tests across eight files pass on the isolated rerun. The initial concurrent run hit a waitFor failure in one dialog test. The production Vite build and the Chromium CSV import, ODS save and CSV export scenario both pass.
+- This is a checkpoint in the existing AgentPlane task. No full test suite was due. Concrete dictionary break engines, the outer LibreOffice word service, the production formatter bridge, and multiline import remain pending.

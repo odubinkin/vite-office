@@ -22,9 +22,11 @@
         "scripts/icu-resource-fallback-native-probe.mjs",
         "scripts/icu-locale-resources.mjs",
         "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
-        "scripts/icu-resource-bundle-native-probe.mjs"
+        "scripts/icu-resource-bundle-native-probe.mjs",
+        "apps/office/src/external/icu/source/data/in/icudt78l.brkitr.resources.json",
+        "apps/office/src/external/icu/source/common/brkeng.native.test.ts"
       ],
-      "justification": "Original res_load/res_unload default-package backend now uses only the complete native-exported raw graph for every982 top-level .res file, including zoneinfo64, langInfo and keyTypeData. The temporary legacy-root bridge is removed: public/raw reads share the same graph node and native pointer-group buffer identities, without a second resolved resource projection. Source raw aliases, exact table order, noFallback/pool flags, source status/reset/unload behavior and independent data handles are retained. The previous rich JSON exports remain native comparison/query fixtures only and have no runtime import. Native bundle/path differential witnesses verify complete raw resource contents, public result state, aliases and storage-related metadata.",
+      "justification": "Original res_load/res_unload default-package backend now uses only the complete native-exported raw graph for every982 top-level .res file, including zoneinfo64, langInfo and keyTypeData. The temporary legacy-root bridge is removed: public/raw reads share the same graph node and native pointer-group buffer identities, without a second resolved resource projection. Source raw aliases, exact table order, noFallback/pool flags, source status/reset/unload behavior and independent data handles are retained. The previous rich JSON exports remain native comparison/query fixtures only and have no runtime import. Native bundle/path differential witnesses verify complete raw resource contents, public result state, aliases and storage-related metadata. A second native raw resource graph carries all 16 bundles in the pinned brkitr tree with independent raw node and backing buffer identities. The default graph remains byte-for-byte unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "ResourceData",

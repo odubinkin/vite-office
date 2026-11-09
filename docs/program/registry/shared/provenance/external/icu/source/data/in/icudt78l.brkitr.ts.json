@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/data/in/icudt78l.brkitr.ts",
+    "upstreamPath": "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+    "localSymbols": [
+      "registerBrkitrCommonData"
+    ],
+    "upstreamSymbols": [
+      "createCommonDataFile"
+    ],
+    "preservedResponsibilities": [
+      "Registers the native CmnD brkitr data image created by original gencmn from 36 original archive members. The managed owner decodes the same bytes once and registers the address again after ICU cleanup."
+    ],
+    "omittedResponsibilities": [
+      "The binding packages only the break resource tree of the pinned archive."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/data/in/icudt78l.brkitr.ts",
+          "marker": "registerBrkitrCommonData"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/tools/gencmn/gencmn.c",
+          "marker": "createCommonDataFile"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/data/in/icudt78l.brkitr.ts",
+      "stackNecessity": "generated-resource-boundary",
+      "rationale": "The generated CmnD package is embedded as a managed byte array at the data registration boundary."
+    }
+  }
+}

@@ -1,4 +1,4 @@
-/** @fileoverview Exports every top-level default-package .res file from pinned ICU78.3 with raw aliases, nofallback/pool flags and shared immutable node/string/buffer storage. Native source APIs decode packed resources; this exporter never resolves locale/resource aliases or invents fallback data. */
+/** @fileoverview Exports default-package or brkitr .res files from pinned ICU78.3 with raw aliases, nofallback/pool flags and shared immutable node/string/buffer storage. Native source APIs decode packed resources; this exporter never resolves locale/resource aliases or invents fallback data. */
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -6,7 +6,12 @@ import { createHash } from "node:crypto";
 import { format, resolveConfig } from "prettier";
 const source = resolve("vendor/icu-reference/source"),
   build = resolve("output/native/AQF9AG-icu-grego"),
-  path = resolve("apps/office/src/external/icu/source/data/in/icudt78l.resources.json");
+  brkitr = process.argv.includes("--brkitr"),
+  path = resolve(
+    brkitr
+      ? "apps/office/src/external/icu/source/data/in/icudt78l.brkitr.resources.json"
+      : "apps/office/src/external/icu/source/data/in/icudt78l.resources.json",
+  );
 writeFileSync(
   `${build}/locale-resources-export.cc`,
   String.raw`
@@ -39,9 +44,9 @@ else if(type==URES_BINARY||type==URES_INT_VECTOR){int32_t n;const uint8_t*b=null
 else if(type==URES_ARRAY){auto a=value.getArray(e);check(e);out<<'[';for(int i=0;i<a.getSize();++i){if(i)out<<',';a.getValue(i,value);out<<node(data,value.getResource());}out<<']';}
 else if(type==URES_TABLE){auto t=value.getTable(e);check(e);std::vector<int>keys,children;for(int i=0;i<t.getSize();++i){const char*key=nullptr;t.getKeyAndValue(i,key,value);keys.push_back(stringID(wide(key)));children.push_back(node(data,value.getResource()));}out<<'[';for(size_t i=0;i<keys.size();++i){if(i)out<<',';out<<keys[i];}out<<"],[";for(size_t i=0;i<children.size();++i){if(i)out<<',';out<<children[i];}out<<']';}
 else{std::cerr<<"Unexpected raw resource type "<<int(type)<<'\n';std::exit(3);}out<<']';nodes[id]=out.str();return id;}
-int main(int argc,char**argv){if(argc!=3)return 1;u_setDataDirectory(argv[1]);std::ifstream f(argv[2],std::ios::binary);std::vector<char>bytes((std::istreambuf_iterator<char>(f)),{});auto*header=reinterpret_cast<const DataHeader*>(bytes.data());if(header->info.isBigEndian!=U_IS_BIG_ENDIAN||std::memcmp(header->info.dataFormat,"CmnD",4)!=0)return 4;auto*toc=reinterpret_cast<const UDataOffsetTOC*>(bytes.data()+udata_getHeaderSize(header));const char*base=reinterpret_cast<const char*>(toc);ResourceData pool{};UErrorCode e=U_ZERO_ERROR;res_load(&pool,nullptr,"pool",&e);check(e);std::vector<std::string>bundles;
-for(uint32_t i=0;i<toc->count;++i){std::string name=base+toc->entry[i].nameOffset;auto slash=name.find('/');if(slash==std::string::npos)continue;name=name.substr(slash+1);if(name.find('/')!=std::string::npos||name.size()<4||name.substr(name.size()-4)!=".res")continue;name.resize(name.size()-4);ResourceData data{};e=U_ZERO_ERROR;res_load(&data,nullptr,name.c_str(),&e);check(e);if(data.usesPoolBundle){const int32_t*indexes=pool.pRoot+1;if(data.pRoot[1+URES_INDEX_POOL_CHECKSUM]!=indexes[URES_INDEX_POOL_CHECKSUM])return 5;data.poolBundleKeys=reinterpret_cast<const char*>(indexes+(indexes[URES_INDEX_LENGTH]&255));data.poolBundleStrings=pool.p16BitUnits;}int root=node(data,data.rootRes);std::ostringstream bundle;quote(bundle,wide(name.c_str()));bundle<<":["<<root<<','<<int(data.noFallback)<<','<<int(data.usesPoolBundle)<<','<<int(data.isPoolBundle)<<']';bundles.push_back(bundle.str());res_unload(&data);}
-std::cout<<"{\"bundles\":{";for(size_t i=0;i<bundles.size();++i){if(i)std::cout<<',';std::cout<<bundles[i];}std::cout<<"},\"strings\":[";for(size_t i=0;i<strings.size();++i){if(i)std::cout<<',';quote(std::cout,strings[i]);}std::cout<<"],\"buffers\":[";for(size_t i=0;i<buffers.size();++i){if(i)std::cout<<',';std::cout<<buffers[i];}std::cout<<"],\"nodes\":[";for(size_t i=0;i<nodes.size();++i){if(i)std::cout<<',';std::cout<<nodes[i];}std::cout<<"]}\n";res_unload(&pool);}
+int main(int argc,char**argv){if(argc!=3 && argc!=4)return 1;const char*path=argc==4?argv[3]:nullptr;u_setDataDirectory(argv[1]);std::ifstream f(argv[2],std::ios::binary);std::vector<char>bytes((std::istreambuf_iterator<char>(f)),{});auto*header=reinterpret_cast<const DataHeader*>(bytes.data());if(header->info.isBigEndian!=U_IS_BIG_ENDIAN||std::memcmp(header->info.dataFormat,"CmnD",4)!=0)return 4;auto*toc=reinterpret_cast<const UDataOffsetTOC*>(bytes.data()+udata_getHeaderSize(header));const char*base=reinterpret_cast<const char*>(toc);ResourceData pool{};UErrorCode e=U_ZERO_ERROR;bool poolLoaded=false;std::vector<std::string>bundles;
+for(uint32_t i=0;i<toc->count;++i){std::string name=base+toc->entry[i].nameOffset;auto slash=name.find('/');if(slash==std::string::npos)continue;name=name.substr(slash+1);if(path){if(name.rfind("brkitr/",0)!=0)continue;name=name.substr(7);}if(name.find('/')!=std::string::npos||name.size()<4||name.substr(name.size()-4)!=".res")continue;name.resize(name.size()-4);ResourceData data{};e=U_ZERO_ERROR;res_load(&data,path,name.c_str(),&e);check(e);if(data.usesPoolBundle){if(!poolLoaded){res_load(&pool,path,"pool",&e);check(e);poolLoaded=true;}const int32_t*indexes=pool.pRoot+1;if(data.pRoot[1+URES_INDEX_POOL_CHECKSUM]!=indexes[URES_INDEX_POOL_CHECKSUM])return 5;data.poolBundleKeys=reinterpret_cast<const char*>(indexes+(indexes[URES_INDEX_LENGTH]&255));data.poolBundleStrings=pool.p16BitUnits;}int root=node(data,data.rootRes);std::ostringstream bundle;quote(bundle,wide(name.c_str()));bundle<<":["<<root<<','<<int(data.noFallback)<<','<<int(data.usesPoolBundle)<<','<<int(data.isPoolBundle)<<']';bundles.push_back(bundle.str());res_unload(&data);}
+std::cout<<"{\"bundles\":{";for(size_t i=0;i<bundles.size();++i){if(i)std::cout<<',';std::cout<<bundles[i];}std::cout<<"},\"strings\":[";for(size_t i=0;i<strings.size();++i){if(i)std::cout<<',';quote(std::cout,strings[i]);}std::cout<<"],\"buffers\":[";for(size_t i=0;i<buffers.size();++i){if(i)std::cout<<',';std::cout<<buffers[i];}std::cout<<"],\"nodes\":[";for(size_t i=0;i<nodes.size();++i){if(i)std::cout<<',';std::cout<<nodes[i];}std::cout<<"]}\n";if(poolLoaded)res_unload(&pool);}
 `,
 );
 execFileSync(
@@ -61,7 +66,7 @@ execFileSync(
 const resources = JSON.parse(
   execFileSync(
     `${build}/locale-resources-export`,
-    [`${source}/data/in`, `${source}/data/in/icudt78l.dat`],
+    [`${source}/data/in`, `${source}/data/in/icudt78l.dat`, ...(brkitr ? ["icudt78l-brkitr"] : [])],
     { encoding: "utf8", maxBuffer: 128 * 1024 * 1024 },
   ),
 );
@@ -71,8 +76,9 @@ const artifact = {
     dataSha256: createHash("sha256")
       .update(readFileSync(`${source}/data/in/icudt78l.dat`))
       .digest("hex"),
-    scope:
-      "Complete raw top-level default-package .res resources, original aliases retained, shared native storage projected as graph indexes",
+    scope: brkitr
+      ? "Complete raw brkitr .res resources, original aliases retained, shared native storage projected as graph indexes"
+      : "Complete raw top-level default-package .res resources, original aliases retained, shared native storage projected as graph indexes",
   },
   ...resources,
 };

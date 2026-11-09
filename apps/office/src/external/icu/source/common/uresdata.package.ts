@@ -1,6 +1,9 @@
-/** @fileoverview Pinned ICU78.3 res_load/res_unload logical default-package storage from uresdata.cpp. Native decoded raw resource graph preserves every top-level .res file, aliases, native table order, shared buffers and nofallback/pool metadata. Packed offsets, file handles, arbitrary external packages and allocator/ABI remain uncertified. */
+/** @fileoverview Pinned ICU78.3 res_load/res_unload logical linked-package storage from uresdata.cpp. Native decoded raw resource graph preserves every top-level .res file, aliases, native table order, shared buffers and nofallback/pool metadata. Packed offsets, file handles, arbitrary external packages and allocator/ABI remain uncertified. */
 import raw from "../data/in/icudt78l.resources.json" with { type: "json" };
+import brkitr from "../data/in/icudt78l.brkitr.resources.json" with { type: "json" };
 import type { Resource } from "./uresbund";
+import { U_ICUDATA_BRKITR } from "./ubrkimpl";
+import { U_ICUDATA_ALIAS } from "./unicode/udata";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 /** Actual immutable decoded package graph. Tuple indexes are a host projection of shared native resource storage, not substitute locale results. */
 interface PackageGraph {
@@ -9,10 +12,32 @@ interface PackageGraph {
   buffers: readonly (readonly number[])[];
   nodes: readonly (readonly [number, number | readonly number[], (readonly number[])?])[];
 }
-const graph = raw as unknown as PackageGraph;
-const nodes = new Map<number, Resource>();
-/** Original raw resource materialization over immutable mapped storage. @param id - Native-exported graph index. @returns Shared resource node. */
-function resource(id: number): Resource {
+/** Storage and raw node identities belong to a single linked package. */
+interface ResourcePackage {
+  graph: PackageGraph;
+  nodes: Map<number, Resource>;
+  identity: string;
+}
+const defaultPackage: ResourcePackage = {
+  graph: raw as unknown as PackageGraph,
+  nodes: new Map(),
+  identity: "default-package",
+};
+const brkitrPackage: ResourcePackage = {
+  graph: brkitr as unknown as PackageGraph,
+  nodes: new Map(),
+  identity: "brkitr-package",
+};
+
+/** Selects the linked package for the original narrow path. @param path - Original package name or null. @returns Linked package or null. */
+function linkedPackage(path: string | null): ResourcePackage | null {
+  if (path === null || path === U_ICUDATA_ALIAS) return defaultPackage;
+  if (path === U_ICUDATA_BRKITR || path === U_ICUDATA_ALIAS + "-brkitr") return brkitrPackage;
+  return null;
+}
+/** Original raw resource materialization over immutable mapped storage. @param owner - Selected linked package. @param id - Native-exported graph index. @returns Shared resource node. */
+function resource(owner: ResourcePackage, id: number): Resource {
+  const { graph, nodes, identity } = owner;
   const cached = nodes.get(id);
   if (cached !== undefined) return cached;
   const node = graph.nodes[id] as readonly [
@@ -28,11 +53,14 @@ function resource(id: number): Resource {
   else if (type === 1 || type === 14)
     result = {
       type,
-      storage: `default-package:${node[1]}`,
+      storage: `${identity}:${node[1]}`,
       value: graph.buffers[node[1] as number] as readonly number[],
     };
   else if (type === 8) {
-    const children = (node[1] as readonly number[]).map(resource),
+    const children = (node[1] as readonly number[]).map(
+        /** Materializes a child in the same package. @param child - Graph index. @returns Raw child. */
+        (child) => resource(owner, child),
+      ),
       aliasIndices: number[] = [];
     for (let i = 0; i < children.length; ++i) if (children[i]?.type === 3) aliasIndices.push(i);
     result = { type, aliasIndices, value: children };
@@ -45,7 +73,7 @@ function resource(id: number): Resource {
       aliasIndices: number[] = [],
       value: Record<string, Resource> = Object.create(null);
     for (let i = 0; i < keys.length; ++i) {
-      const child = resource(children[i] as number);
+      const child = resource(owner, children[i] as number);
       value[keys[i] as string] = child;
       if (child.type === 3) aliasIndices.push(i);
     }
@@ -63,9 +91,13 @@ export class ResourceData {
   usesPoolBundle = false;
   isPoolBundle = false;
 }
-/** Original default-package raw loader; it does not resolve %%ALIAS or locale fallback. @param out - Existing data owner. @param path - Default package. @param name - C resource name. @param status - Sticky status. @returns Nothing. */
-export function res_load(out: ResourceData, path: null, name: string, status: [number]): void {
-  void path;
+/** Original linked-package raw loader; it does not resolve %%ALIAS or locale fallback. @param out - Existing data owner. @param path - Package name or default null. @param name - C resource name. @param status - Sticky status. @returns Nothing. */
+export function res_load(
+  out: ResourceData,
+  path: string | null,
+  name: string,
+  status: [number],
+): void {
   out.data = null;
   out.rootRes = { type: 0, value: "" };
   out.noFallback = out.usesPoolBundle = out.isPoolBundle = false;
@@ -80,13 +112,14 @@ export function res_load(out: ResourceData, path: null, name: string, status: [n
     status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
-  if (!Object.hasOwn(graph.bundles, name)) {
+  const owner = linkedPackage(path);
+  if (owner === null || !Object.hasOwn(owner.graph.bundles, name)) {
     status[0] = E.U_FILE_ACCESS_ERROR;
     return;
   }
-  const tuple = graph.bundles[name] as readonly [number, number, number, number];
+  const tuple = owner.graph.bundles[name] as readonly [number, number, number, number];
   out.data = {};
-  out.rootRes = resource(tuple[0]);
+  out.rootRes = resource(owner, tuple[0]);
   out.noFallback = tuple[1] !== 0;
   out.usesPoolBundle = tuple[2] !== 0;
   out.isPoolBundle = tuple[3] !== 0;

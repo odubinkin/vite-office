@@ -19,12 +19,15 @@
         "apps/office/src/external/icu/source/common/brkeng.ts",
         "vendor/icu-reference/source/common/brkeng.cpp",
         "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
-        "apps/office/src/external/icu/source/common/dictionarydata.native-observations.json"
+        "apps/office/src/external/icu/source/common/dictionarydata.native-observations.json",
+        "apps/office/src/external/icu/source/common/brkeng.native.test.ts",
+        "apps/office/src/external/icu/source/common/brkeng.native-observations.json"
       ],
-      "justification": "Original binary dictionary dispatch and handle adoption/close within ICULanguageBreakFactory::loadDictionaryMatcherFor. Resource and script selection and concrete engines remain to be connected. The original native builder and archive witness compares 144 portable builder cases and 168 cases on the five real ICU dictionary files opened via udata. This is the matcher layer for the native dictionary break engines.",
+      "justification": "Original brkitr root lookup selects dictionaries by ICU script short name, converts the counted invariant filename and opens the native file before binary dispatch and matcher ownership transfer. Native comparisons cover 36 factory calls across 12 scripts, 144 portable builder cases and 168 cases across five archive dictionaries.",
       "knownViolations": [],
       "localSymbols": [
-        "openDictionaryMatcher"
+        "openDictionaryMatcher",
+        "loadDictionaryMatcherFor"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/icu-reference/source/common/brkeng.cpp",

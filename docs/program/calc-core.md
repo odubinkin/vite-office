@@ -4442,6 +4442,14 @@ capacity rules.
 
 The witness compares portable builder output and all five original archive
 dictionaries through the public ICU data loader. CALC-477 and CALC-478 record
-the retained byte transform and supplementary input behavior. Resource and
-script selection and concrete break-engine algorithms remain the next
-integration step.
+the retained byte transform and supplementary input behavior.
+
+The original break factory now looks up dictionary filenames in the linked
+`brkitr` root by ICU script short name and opens the selected binary file.
+The named tree retains original locale data and cache identity by package
+path and locale. Native gencmn packages the unchanged break resource files,
+including the five dictionaries. The native factory comparison covers 36
+calls across 12 scripts, including scripts without dictionaries. The pinned
+native archive returns `U_MISSING_RESOURCE_ERROR` for the Thai, Lao, Burmese,
+and Khmer LSTM models. The original factory then selects the dictionary
+engine. Concrete break-engine algorithms remain the next integration step.

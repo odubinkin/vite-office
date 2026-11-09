@@ -102,7 +102,7 @@ export function init_resb_resultFromContainer(
     status,
   );
 }
-/** Original alias parser/recursive lookup; named external-package branches are outside the immutable default-package payload domain. @param alias - Raw alias. @param key - Key. @param idx - Index. @param valid - Valid locale. @param containerPath - Borrowed container path. @param depth - Native depth. @param bundle - Result. @param status - Status. @returns Result/prior fill-in/null. */
+/** Original alias parser and recursive lookup across linked packages. @param alias - Raw alias. @param key - Key. @param idx - Index. @param valid - Valid locale. @param containerPath - Borrowed container path. @param depth - Native depth. @param bundle - Result. @param status - Status. @returns Result/prior fill-in/null. */
 export function getAliasTargetAsResourceBundle(
   alias: Extract<Resource, { type: 0 | 3 }>,
   key: string | null,
@@ -153,7 +153,7 @@ export function getAliasTargetAsResourceBundle(
   if (locale === null) data = valid;
   else {
     const local: [number] = [0];
-    mainRes = ures_openDirect(path as null, locale, local);
+    mainRes = ures_openDirect(path, locale, local);
     if (U_FAILURE(local[0])) {
       status[0] = local[0];
       return bundle;

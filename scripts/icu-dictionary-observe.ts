@@ -1,6 +1,9 @@
 /** @fileoverview Shared native dictionary replay driver over actual matcher and UText owners. */
 import { openDictionaryMatcher } from "../apps/office/src/external/icu/source/common/brkeng";
-import { DictionaryData } from "../apps/office/src/external/icu/source/common/dictionarydata";
+import {
+  DictionaryData,
+  type DictionaryMatcher,
+} from "../apps/office/src/external/icu/source/common/dictionarydata";
 import {
   UDataMemory,
   UDataMemory_init,
@@ -47,6 +50,12 @@ export function makeDictionaryFixture(kind: number, units: readonly number[]): U
 export function observeDictionary(file: UDataMemory, input: DictionaryCase): number[] {
   const matcher = openDictionaryMatcher(file);
   if (matcher === null) throw new Error("Native dictionary did not yield a matcher");
+  return observeMatcher(matcher, input);
+}
+
+/** Replays an original dictionary operation and closes the adopted matcher. @param matcher - Factory result. @param input - Case description. @returns Native-comparable row. */
+export function observeMatcher(matcher: DictionaryMatcher | null, input: DictionaryCase): number[] {
+  if (matcher === null) return [];
   const chars = new Uint16Array(input.text.length);
   for (let i = 0; i < chars.length; ++i) chars[i] = input.text.charCodeAt(i);
   const text = utext_openUChars(null, chars, chars.length, [0]) as OpenUText;
