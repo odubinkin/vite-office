@@ -13,7 +13,8 @@
       "LanguageBreakEngine"
     ],
     "preservedResponsibilities": [
-      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified."
+      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
+      "The shared engine query contract is now used by concrete dictionary and reject engines and the original iterator cache."
     ],
     "omittedResponsibilities": [
       "Concrete local dictionary engines, public iterator/data/provider construction and lifecycle, word/title/UNO installation, debug dumps and native allocation/RTTI/thread ABI are not certified."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/rbbi_cache.test.ts",
           "marker": "retains every native vector"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native engine identity"
         }
       ],
       "upstream": [

@@ -5,13 +5,33 @@ import {
   type DictionaryMatcher,
   UCharsDictionaryMatcher,
 } from "./dictionarydata";
+import type { LanguageBreakEngine } from "./brkeng.h";
+import {
+  BurmeseBreakEngine,
+  CjkBreakEngine,
+  type DictionaryBreakEngine,
+  KhmerBreakEngine,
+  LanguageType,
+  LaoBreakEngine,
+  ThaiBreakEngine,
+} from "./dictbe";
+import { openLSTMModel } from "./lstmbe";
 import { udata_close, udata_getMemory, udata_open } from "./unicode/udata";
 import type { UDataMemory } from "./udatamem.h";
 import { CharString } from "./charstr.h";
+import { uscript_getScript } from "./uchar";
 import { U_ICUDATA_BRKITR } from "./ubrkimpl";
 import { ures_open, ures_close } from "./uresbund.lifecycle";
 import { ures_getByKeyWithFallback, ures_getStringByKeyWithFallback } from "./uresbund";
-import { uscript_getShortName, type UScriptCode } from "./unicode/uscript";
+import { uscript_getShortName, UScriptCode } from "./unicode/uscript";
+import {
+  utext_current32,
+  utext_getNativeIndex,
+  utext_next32,
+  utext_setNativeIndex,
+  type UText,
+} from "./unicode/utext";
+import type { UVector32 } from "./uvectr32.h";
 import { U_FAILURE } from "./unicode/utypes";
 import { registerBrkitrCommonData } from "../data/in/icudt78l.brkitr";
 
@@ -81,4 +101,112 @@ export function loadDictionaryMatcherFor(script: UScriptCode): DictionaryMatcher
     status,
   );
   return file === null || U_FAILURE(status[0]) ? null : openDictionaryMatcher(file);
+}
+
+/** Original reject engine. Its UnicodeSet property projection represents the current script. */
+export class UnhandledEngine implements LanguageBreakEngine {
+  private fHandled = UScriptCode.USCRIPT_INVALID_CODE;
+
+  /** Original property-set membership, with no fallback before a script is selected. @param c - Input scalar. @param locale - Original unused locale. @returns Membership. */
+  handles(c: number, locale: string | null): boolean {
+    void locale;
+    return (
+      this.fHandled !== UScriptCode.USCRIPT_INVALID_CODE &&
+      uscript_getScript(c, [0]) === this.fHandled
+    );
+  }
+
+  /** Original applyIntPropertyValue replaces the property set with this script. @param c - Input code point. @returns Nothing. */
+  handleCharacter(c: number): void {
+    if (!this.handles(c, null)) this.fHandled = uscript_getScript(c, [0]);
+  }
+
+  /** Advances over the handled script without adding boundaries. @param text - Actual text. @param startPos - Range start. @param endPos - Range end. @param _foundBreaks - Original unused vector. @param _isPhraseBreaking - Original unused flag. @param status - Sticky status. @returns Zero. */
+  findBreaks(
+    text: UText,
+    startPos: number,
+    endPos: number,
+    _foundBreaks: UVector32,
+    _isPhraseBreaking: boolean,
+    status: [number],
+  ): number {
+    if (U_FAILURE(status[0])) return 0;
+    utext_setNativeIndex(text, startPos);
+    let c = utext_current32(text);
+    while ((utext_getNativeIndex(text) | 0) < endPos && this.handles(c, null)) {
+      utext_next32(text);
+      c = utext_current32(text);
+    }
+    return 0;
+  }
+}
+
+/** Original ICU break-engine owner and reverse-order search for the pinned data build. */
+export class ICULanguageBreakFactory {
+  private fEngines: DictionaryBreakEngine[] | null = null;
+
+  /** Returns a borrowed cached engine or adopts one from the original script dispatch. @param c - Input code point. @param locale - Requested locale. @returns Borrowed engine or null. */
+  getEngineFor(c: number, locale: string | null): LanguageBreakEngine | null {
+    const engines = (this.fEngines ??= []);
+    for (let i = engines.length - 1; i >= 0; --i) {
+      const engine = engines[i] as DictionaryBreakEngine;
+      if (engine.handles(c, locale)) return engine;
+    }
+    const engine = this.loadEngineFor(c, locale);
+    if (engine !== null) engines.push(engine);
+    return engine;
+  }
+
+  /** Releases all native matcher owners. @returns Nothing. */
+  dispose(): void {
+    if (this.fEngines !== null) {
+      for (const engine of this.fEngines) engine.dispose();
+      this.fEngines = null;
+    }
+  }
+
+  /** Original LSTM resource lookup followed by dictionary dispatch for the pinned data package. @param c - Input code point. @param locale - Original unused locale. @returns Owning engine or null. */
+  protected loadEngineFor(c: number, locale: string | null): DictionaryBreakEngine | null {
+    void locale;
+    const status: [number] = [0];
+    const script = uscript_getScript(c, status);
+    if (U_FAILURE(status[0])) return null;
+    // The pinned brkitr package contains no LSTM model bundles. The actual model
+    // lookup takes the native dictionary fallback path for every supported script.
+    ures_close(openLSTMModel(script, status));
+    status[0] = 0;
+    const dictionary = loadDictionaryMatcherFor(script);
+    if (dictionary === null) return null;
+    let engine: DictionaryBreakEngine;
+    switch (script) {
+      case UScriptCode.USCRIPT_THAI:
+        engine = new ThaiBreakEngine(dictionary, status);
+        break;
+      case UScriptCode.USCRIPT_LAO:
+        engine = new LaoBreakEngine(dictionary, status);
+        break;
+      case UScriptCode.USCRIPT_MYANMAR:
+        engine = new BurmeseBreakEngine(dictionary, status);
+        break;
+      case UScriptCode.USCRIPT_KHMER:
+        engine = new KhmerBreakEngine(dictionary, status);
+        break;
+      case UScriptCode.USCRIPT_HANGUL:
+        engine = new CjkBreakEngine(dictionary, LanguageType.kKorean, status);
+        break;
+      case UScriptCode.USCRIPT_HIRAGANA:
+      case UScriptCode.USCRIPT_KATAKANA:
+      case UScriptCode.USCRIPT_HAN:
+        engine = new CjkBreakEngine(dictionary, LanguageType.kChineseJapanese, status);
+        break;
+      default:
+        dictionary.dispose();
+        return null;
+    }
+    if (U_FAILURE(status[0])) {
+      engine.dispose();
+      return null;
+    }
+    return engine;
+  }
 }

@@ -3,7 +3,11 @@ import { afterAll, beforeAll, expect, it } from "vitest";
 import native from "./rbbi.owner.native-observations.json" with { type: "json" };
 import { OpenOffice_dat } from "../../../../i18npool/source/breakiterator/data/OpenOffice_dat";
 import { RuleBasedBreakIterator } from "./rbbi";
-import { udata_cleanup } from "./udata";
+import { ICULanguageBreakFactory, UnhandledEngine } from "./brkeng";
+import type { LanguageBreakEngine } from "./brkeng.h";
+import { openLSTMModel } from "./lstmbe";
+import { ucln_lib_cleanup } from "./ucln_cmn.h";
+import { ures_close } from "./uresbund";
 import { udata_open, udata_setAppData } from "./unicode/udata";
 import {
   UTextStorage,
@@ -16,14 +20,6 @@ import {
   utext_openUChars,
 } from "./unicode/utext";
 
-/** Concrete fixture for the rules and inputs whose native traversal uses no dictionary engine. */
-class IteratorFixture extends RuleBasedBreakIterator {
-  /** Fails if an input unexpectedly requires a dictionary. @returns Never. */
-  override getLanguageBreakEngine(): never {
-    throw new Error("Native rule replay reached a dictionary character");
-  }
-}
-
 beforeAll(
   /** Registers the original generated package through the actual public loader. @returns Nothing. */ () => {
     const status: [number] = [0];
@@ -34,7 +30,7 @@ beforeAll(
 
 afterAll(
   /** Releases the package cache. @returns Nothing. */ () => {
-    udata_cleanup();
+    ucln_lib_cleanup();
   },
 );
 
@@ -68,6 +64,89 @@ it("matches the original UChars storage and clone observations", /** Exercises o
   expect(rows).toEqual(native.utext);
 });
 
+it("matches native engine identity, script rejection and model admission", /** Exercises actual factory selection, LSTM resource status and the reject set. @returns Nothing. */ () => {
+  const factory = new ICULanguageBreakFactory();
+  const owners: LanguageBreakEngine[] = [];
+  try {
+    for (const [codepoint, expectedId, handles] of native.engines) {
+      const c = codepoint as number;
+      const engine = factory.getEngineFor(c, "");
+      let id = engine === null ? -1 : owners.indexOf(engine);
+      if (engine !== null && id < 0) {
+        id = owners.length;
+        owners.push(engine);
+      }
+      expect([id, Number(engine?.handles(c, "") ?? false)], String(c)).toEqual([
+        expectedId,
+        handles,
+      ]);
+    }
+    const reject = new UnhandledEngine();
+    for (const [codepoint, ...expected] of native.unhandled) {
+      reject.handleCharacter(codepoint as number);
+      expect([
+        Number(reject.handles(0x61, "")),
+        Number(reject.handles(0x31, "")),
+        Number(reject.handles(0x0e01, "")),
+        Number(reject.handles(-1, "")),
+      ]).toEqual(expected);
+    }
+    for (const [script, exists, expectedStatus] of native.models) {
+      const status: [number] = [0];
+      const model = openLSTMModel(script as number, status);
+      try {
+        expect([Number(model !== null), status[0]], String(script)).toEqual([
+          exists,
+          expectedStatus,
+        ]);
+      } finally {
+        ures_close(model);
+      }
+    }
+  } finally {
+    factory.dispose();
+  }
+});
+
+it("shares dictionary engines across iterators and recreates the factory after cleanup", /** Checks native common ownership and per-iterator fallback state. @returns Nothing. */ () => {
+  const status: [number] = [0];
+  const first = new RuleBasedBreakIterator(
+    udata_open("OpenOffice", "brk", "dict_word", status),
+    status,
+  );
+  const second = new RuleBasedBreakIterator(
+    udata_open("OpenOffice", "brk", "dict_word", status),
+    status,
+  );
+  let oldEngine: LanguageBreakEngine | null;
+  try {
+    oldEngine = first.getLanguageBreakEngine(0x0e01, "");
+    expect(oldEngine).not.toBeNull();
+    expect(second.getLanguageBreakEngine(0x0e02, "")).toBe(oldEngine);
+    expect(first.getLanguageBreakEngine(0x61, "")).not.toBe(
+      second.getLanguageBreakEngine(0x61, ""),
+    );
+    expect(status[0]).toBe(0);
+  } finally {
+    first.dispose();
+    second.dispose();
+  }
+  ucln_lib_cleanup();
+  udata_setAppData("OpenOffice", OpenOffice_dat, status);
+  const reopened = new RuleBasedBreakIterator(
+    udata_open("OpenOffice", "brk", "dict_word", status),
+    status,
+  );
+  try {
+    const newEngine = reopened.getLanguageBreakEngine(0x0e01, "");
+    expect(newEngine).not.toBeNull();
+    expect(newEngine).not.toBe(oldEngine);
+    expect(status[0]).toBe(0);
+  } finally {
+    reopened.dispose();
+  }
+});
+
 /** Executes a source public boundary query. @param owner - Rule iterator. @param op - Operation selector. @param arg - Native index or count. @returns Original result. */
 function run(owner: RuleBasedBreakIterator, op: string, arg: number): number {
   switch (op) {
@@ -98,7 +177,7 @@ for (const [index, c] of native.cases.entries()) {
     const memory = udata_open("OpenOffice", "brk", c.rule, status);
     expect(status[0]).toBe(0);
     expect(memory?.length).toBe(-1);
-    const iterator = new IteratorFixture(memory, status);
+    const iterator = new RuleBasedBreakIterator(memory, status);
     const chars = new Uint16Array(c.text.length + 1);
     for (let i = 0; i < c.text.length; ++i) chars[i] = c.text.charCodeAt(i);
     const source = utext_openUChars(new UTextStorage(), chars, c.text.length, status) as OpenUText;

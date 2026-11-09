@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/lstmbe.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/lstmbe.ts",
+        "vendor/icu-reference/source/common/lstmbe.cpp",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json"
+      ],
+      "justification": "The original LSTM script and brkitr model discovery preserves the key lookup, counted invariant name and direct bundle open. The pinned data has no model bundles, as verified through original CreateLSTMDataForScript, so the source factory falls through to dictionary engines.",
+      "knownViolations": [],
+      "localSymbols": [
+        "openLSTMModel"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/lstmbe.cpp",
+      "upstreamSymbols": [
+        "defaultLSTM",
+        "CreateLSTMDataForScript"
+      ]
+    }
+  }
+}

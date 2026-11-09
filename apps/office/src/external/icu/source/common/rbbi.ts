@@ -3,7 +3,10 @@ import { UTextStorage, type OpenUText, type UText } from "./unicode/utext";
 import { BreakCache, DictionaryCache, type RuleBasedBreakIteratorCacheOwner } from "./rbbi_cache.h";
 import { RBBIDataWrapper } from "./rbbidata";
 import type { UDataMemory } from "./udatamem.h";
+import { ICULanguageBreakFactory, UnhandledEngine } from "./brkeng";
 import type { LanguageBreakEngine } from "./brkeng.h";
+import { ECleanupCommonType, ucln_common_registerCleanup } from "./ucln_cmn.h";
+import { UInitOnce, umtx_initOnce } from "./umutex.h";
 import { Locale } from "./locid";
 import { LocaleBased } from "./locbased";
 import { ULocDataLocaleType } from "./unicode/uloc";
@@ -122,12 +125,49 @@ export function handleNext(this: RuleBasedBreakIteratorForwardState): number {
   return result;
 }
 
-/** Original UDataMemory-backed iterator and cache owner. The language engine lookup remains an abstract source dependency until dictionary factories are available. */
-export abstract class RuleBasedBreakIterator implements RuleBasedBreakIteratorCacheOwner {
+let gLanguageBreakFactories: ICULanguageBreakFactory[] | null = null;
+const gLanguageBreakFactoriesInitOnce = new UInitOnce();
+
+/** Original cleanup of the common factory owners. @returns True. */
+function rbbi_cleanup(): boolean {
+  if (gLanguageBreakFactories !== null) {
+    for (const factory of gLanguageBreakFactories) factory.dispose();
+    gLanguageBreakFactories = null;
+  }
+  gLanguageBreakFactoriesInitOnce.reset();
+  return true;
+}
+
+/** Original default ICU factory initialization in the build without a local service hook. @param status - Sticky status. @returns Nothing. */
+function initLanguageFactories(status: [number]): void {
+  if (!U_FAILURE(status[0])) gLanguageBreakFactories = [new ICULanguageBreakFactory()];
+  ucln_common_registerCleanup(ECleanupCommonType.UCLN_COMMON_RBBI, rbbi_cleanup);
+}
+
+/** Original shared language-factory lookup. @param c - Input code point. @param locale - Requested locale. @returns Borrowed engine or null. */
+function getLanguageBreakEngineFromFactory(
+  c: number,
+  locale: string | null,
+): LanguageBreakEngine | null {
+  const status: [number] = [0];
+  umtx_initOnce(gLanguageBreakFactoriesInitOnce, initLanguageFactories, status);
+  const factories = gLanguageBreakFactories;
+  if (U_FAILURE(status[0]) || factories === null) return null;
+  for (let i = factories.length - 1; i >= 0; --i) {
+    const engine = (factories[i] as ICULanguageBreakFactory).getEngineFor(c, locale);
+    if (engine !== null) return engine;
+  }
+  return null;
+}
+
+/** Original UDataMemory-backed iterator, rule cache and dictionary engine owner. */
+export class RuleBasedBreakIterator implements RuleBasedBreakIteratorCacheOwner {
   private readonly text = new UTextStorage();
   private data: RBBIDataWrapper | null = null;
   private breakCache: BreakCache | null = null;
   private dictionaryCache: DictionaryCache | null = null;
+  private fLanguageBreakEngines: LanguageBreakEngine[] | null = null;
+  private fUnhandledBreakEngine: UnhandledEngine | null = null;
   fErrorCode = 0;
   fPosition = 0;
   fRuleStatusIndex = 0;
@@ -168,11 +208,25 @@ export abstract class RuleBasedBreakIterator implements RuleBasedBreakIteratorCa
     return this.dictionaryCache as DictionaryCache;
   }
 
-  /** Source dictionary engine lookup contract. @param codepoint - Input scalar. @param locale - Requested locale ID. @returns Actual engine or null. */
-  abstract getLanguageBreakEngine(
-    codepoint: number,
-    locale: string | null,
-  ): LanguageBreakEngine | null;
+  /** Original iterator engine lookup, with a per-iterator last-priority reject engine. @param codepoint - Input scalar. @param locale - Requested locale ID. @returns Borrowed engine or null. */
+  getLanguageBreakEngine(codepoint: number, locale: string | null): LanguageBreakEngine | null {
+    const engines = (this.fLanguageBreakEngines ??= []);
+    for (let i = engines.length - 1; i >= 0; --i) {
+      const engine = engines[i] as LanguageBreakEngine;
+      if (engine.handles(codepoint, locale)) return engine;
+    }
+    const engine = getLanguageBreakEngineFromFactory(codepoint, locale);
+    if (engine !== null) {
+      engines.push(engine);
+      return engine;
+    }
+    if (this.fUnhandledBreakEngine === null) {
+      this.fUnhandledBreakEngine = new UnhandledEngine();
+      engines.unshift(this.fUnhandledBreakEngine);
+    }
+    this.fUnhandledBreakEngine.handleCharacter(codepoint);
+    return this.fUnhandledBreakEngine;
+  }
 
   /** A rule-data constructor inherits the original three root locale defaults. @param type - Locale selector. @param status - Sticky status. @returns Locale ID. */
   getLocaleID(type: number, status: [number]): string | null {
@@ -294,6 +348,8 @@ export abstract class RuleBasedBreakIterator implements RuleBasedBreakIteratorCa
     this.data = null;
     this.breakCache = null;
     this.dictionaryCache = null;
+    this.fLanguageBreakEngines = null;
+    this.fUnhandledBreakEngine = null;
     this.fLookAheadMatches = null;
   }
 }

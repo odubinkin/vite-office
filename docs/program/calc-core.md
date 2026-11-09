@@ -4484,3 +4484,17 @@ compares 712 native engine calls, all 1,114,112 code point values
 including isolated surrogate units, 100,170 normalization conformance
 inputs, and over 4,000 additional normalization sequences. Concrete iterator factory integration and the
 enclosing LibreOffice word and formatter services remain pending.
+
+### Native rule iterator dictionary factory
+
+The concrete rule iterator now uses the original shared ICU engine factory,
+its own borrowed engine stack, and its lowest-priority reject engine.
+Original LSTM resource discovery confirms the absence of model bundles in
+the pinned package and takes the source dictionary path. CALC-482 records
+the reject engine's replacement of its previous script set.
+
+The linked OpenOffice rule witness compares 88 public boundary sequences,
+including dictionary-marked Thai, Lao, Burmese, Khmer and CJK input,
+mixed scripts, and cache refill. It also compares factory engine identity
+and the LSTM model lookup statuses. The enclosing LibreOffice word and
+formatter services remain pending.

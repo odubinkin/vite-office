@@ -5189,3 +5189,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/icu-reference/source/common/dictbe.cpp`, `ThaiBreakEngine::divideUpDictionaryRange` and `LaoBreakEngine::divideUpDictionaryRange`.
 - The Thai implementation advances by four code points and exits when it reaches the range limit, including equality. The other three engines exit only for a range shorter than four native units. Original ICU returns no interior boundary for Thai `ดีดี`, returns a boundary at index 2 for Thai `ดีดีด`, and allows a boundary at index 2 for four-unit Lao `ດີມາ`.
 - Keep each comparison and its indexing unit. The replay includes all three cases.
+
+### CALC-482 — The reject engine replaces its previously handled script
+
+- Source `vendor/icu-reference/source/common/brkeng.cpp`, `UnhandledEngine::handleCharacter`, and `vendor/icu-reference/source/common/uniset_props.cpp`, `UnicodeSet::applyIntPropertyValue`.
+- The code applies the whole script property to the existing set. The operation replaces its contents. Original ICU handles Latin after admitting `a`, then handles Common and stops handling Latin after admitting `1`. Passing an invalid code point clears the previous set.
+- Keep the single current script and the original empty-set behavior. The replay compares those transitions through the actual reject engine.

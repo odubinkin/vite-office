@@ -8,18 +8,28 @@
     "upstreamPath": "vendor/icu-reference/source/common/brkeng.cpp",
     "localSymbols": [
       "openDictionaryMatcher",
-      "loadDictionaryMatcherFor"
+      "loadDictionaryMatcherFor",
+      "ICULanguageBreakFactory",
+      "UnhandledEngine",
+      "getEngineFor",
+      "loadEngineFor",
+      "handleCharacter"
     ],
     "upstreamSymbols": [
       "ICULanguageBreakFactory",
       "loadDictionaryMatcherFor",
-      "IX_STRING_TRIE_OFFSET"
+      "IX_STRING_TRIE_OFFSET",
+      "UnhandledEngine",
+      "getEngineFor",
+      "loadEngineFor",
+      "handleCharacter"
     ],
     "preservedResponsibilities": [
-      "Original brkitr root lookup selects dictionaries by ICU script short name, converts the counted invariant filename and opens the native file before binary dispatch and matcher ownership transfer. Native comparisons cover 36 factory calls across 12 scripts, 144 portable builder cases and 168 cases across five archive dictionaries."
+      "Original brkitr root lookup selects dictionaries by ICU script short name, converts the counted invariant filename and opens the native file before binary dispatch and matcher ownership transfer. Native comparisons cover 36 factory calls across 12 scripts, 144 portable builder cases and 168 cases across five archive dictionaries.",
+      "The source factory retains reverse engine search, original script selection, model bundle lookup, dictionary fallback and matcher adoption. The reject engine replaces the previous UnicodeSet property selection with the new script as in CALC-482. The pinned package has no LSTM models. Native tests compare resource statuses, engine identity and membership."
     ],
     "omittedResponsibilities": [
-      "Remaining trie reader APIs and concrete break engines are outside this checkpoint."
+      "External injected factories and the LSTM execution branch are outside the pinned resource package."
     ],
     "evidence": {
       "local": [
@@ -34,6 +44,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/brkeng.native.test.ts",
           "marker": "original script-selected dictionary"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native engine identity"
         }
       ],
       "upstream": [

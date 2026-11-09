@@ -19,9 +19,11 @@
         "apps/office/src/external/icu/source/common/brkeng.h.ts",
         "apps/office/src/external/icu/source/common/rbbi_cache.test.ts",
         "apps/office/src/external/icu/source/common/rbbi_cache.native-observations.json",
-        "vendor/icu-reference/source/common/brkeng.h"
+        "vendor/icu-reference/source/common/brkeng.h",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json"
       ],
-      "justification": "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
+      "justification": "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified. The shared engine query contract is now used by concrete dictionary and reject engines and the original iterator cache.",
       "knownViolations": [],
       "localSymbols": [
         "LanguageBreakEngine"

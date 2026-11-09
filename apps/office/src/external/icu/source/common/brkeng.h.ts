@@ -1,4 +1,4 @@
-/** @fileoverview Original LanguageBreakEngine consumed abstract contract. Concrete dictionaries/factories remain separate source owners; no default engine is provided. */
+/** @fileoverview Original LanguageBreakEngine consumed abstract contract. The default ICU factory and reject engine use the original brkeng.cpp boundary. */
 import type { UText } from "./unicode/utext";
 import type { UVector32 } from "./uvectr32.h";
 /** Original abstract engine queries used by the iterator and dictionary cache. */

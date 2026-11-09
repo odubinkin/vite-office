@@ -75,6 +75,9 @@ export abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     return result;
   }
 
+  /** Original virtual destructor releases the adopted matcher. @returns Nothing. */
+  abstract dispose(): void;
+
   /** Divides an already located dictionary run. @param text - Provider. @param rangeStart - Native start. @param rangeEnd - Native limit. @param foundBreaks - Output owner. @param isPhraseBreaking - Original phrase flag. @param status - Shared status. @returns Number of boundaries. */
   protected abstract divideUpDictionaryRange(
     text: UText,

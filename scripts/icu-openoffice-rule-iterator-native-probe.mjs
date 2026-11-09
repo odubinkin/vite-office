@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { format, resolveConfig } from "prettier";
 
 const icu = resolve("vendor/icu-reference/source");
 const lo = resolve("vendor/libreoffice-reference/i18npool");
@@ -65,6 +66,9 @@ const cpp = String.raw`
 #include <iostream>
 #include <string>
 #include <vector>
+#include "brkeng.h"
+#include "lstmbe.h"
+#include "unicode/putil.h"
 #include "unicode/rbbi.h"
 #include "unicode/udata.h"
 #include "unicode/utext.h"
@@ -116,9 +120,42 @@ void observeText() {
     UText *heap = utext_openUChars(nullptr, nullptr, 0, &status);
     cout << ' ' << heap->flags << ' ' << int(utext_close(heap) == nullptr) << ' ' << int(status) << '\n';
 }
-int main() {
+void observeEngines() {
+    UErrorCode status = U_ZERO_ERROR;
+    ICULanguageBreakFactory factory(status);
+    vector<const LanguageBreakEngine *> unique;
+    for (auto c : {0x61, 0x0e01, 0x0e02, 0x0e81, 0x1000, 0x1780, 0x6f22, 0x3042, 0x30a2, 0x30fc, 0xac00, 0x31, -1, 0x0e01}) {
+        auto engine = factory.getEngineFor(c, "");
+        int id = -1;
+        if (engine != nullptr) {
+            for (size_t i = 0; i < unique.size(); ++i) if (unique[i] == engine) id = int(i);
+            if (id < 0) {
+                id = int(unique.size());
+                unique.push_back(engine);
+            }
+        }
+        cout << "E " << c << ' ' << id << ' ' << int(engine != nullptr && engine->handles(c, "")) << '\n';
+    }
+    UnhandledEngine unhandled(status);
+    for (auto c : {0x61, 0x31, 0x0e01, 0x61, -1}) {
+        unhandled.handleCharacter(c);
+        cout << "U " << c << ' ' << int(unhandled.handles(0x61, "")) << ' '
+             << int(unhandled.handles(0x31, "")) << ' ' << int(unhandled.handles(0x0e01, ""))
+             << ' ' << int(unhandled.handles(-1, "")) << '\n';
+    }
+    for (auto script : {USCRIPT_THAI, USCRIPT_LAO, USCRIPT_MYANMAR, USCRIPT_KHMER, USCRIPT_HAN}) {
+        status = U_ZERO_ERROR;
+        auto model = CreateLSTMDataForScript(script, status);
+        cout << "M " << int(script) << ' ' << int(model != nullptr) << ' ' << int(status) << '\n';
+        DeleteLSTMData(model);
+    }
+}
+int main(int argc, char **argv) {
+    if (argc != 2) return 3;
+    u_setDataDirectory(argv[1]);
     emitPackage();
     observeText();
+    observeEngines();
     UErrorCode status = U_ZERO_ERROR;
     udata_setAppData("OpenOffice", OpenOffice_dat, &status);
     string name;
@@ -181,6 +218,12 @@ for (const rule of rules) {
     "a😀 b\0c",
     "École Привет العربية",
     "x y. ".repeat(160),
+    "ภาษาไทยภาษาไทย",
+    "ພາສາລາວປະເທດລາວ",
+    "မြန်မာဘာသာမင်္ဂလာပါ",
+    "ភាសាខ្មែរប្រទេសកម្ពុជា",
+    "東京都𠮷野家ｶﾞゟ漢字かなカナ",
+    "ภาษาไทย 𠮷野家 ខ្មែរ 한글 ".repeat(24),
   ]) {
     const operations = [
       ["F", 0],
@@ -215,15 +258,19 @@ for (const { rule, text, operations } of cases) {
   for (const [op, arg] of operations) input += `${op} ${arg} `;
   input += "\n";
 }
-const observations = execFileSync(resolve(root, "witness"), {
+const observations = execFileSync(resolve(root, "witness"), [resolve(icu, "data/in")], {
   input,
   encoding: "utf8",
   cwd: root,
   maxBuffer: 8 * 1024 * 1024,
+  timeout: 25000,
 });
 const linked = { header: "", entries: [] };
 let utext = [];
 const boundaries = [];
+const engines = [];
+const unhandled = [];
+const models = [];
 for (const line of observations.trimEnd().split("\n")) {
   const fields = line.split(" ");
   const kind = fields.shift();
@@ -232,8 +279,17 @@ for (const line of observations.trimEnd().split("\n")) {
     linked.entries.push([fields[0], Buffer.from(fields[1], "hex").toString("base64")]);
   if (kind === "T") utext = fields.map(Number);
   if (kind === "B") boundaries.push(fields.map(Number));
+  if (kind === "E") engines.push(fields.map(Number));
+  if (kind === "U") unhandled.push(fields.map(Number));
+  if (kind === "M") models.push(fields.map(Number));
 }
-if (boundaries.length !== cases.length || linked.entries.length !== rules.length)
+if (
+  boundaries.length !== cases.length ||
+  linked.entries.length !== rules.length ||
+  engines.length !== 14 ||
+  unhandled.length !== 5 ||
+  models.length !== 5
+)
   throw new Error("Incomplete native witness");
 /** Records the reference used for generation. @param path - Source or generated input. @returns SHA256. */
 function sha256(path) {
@@ -242,27 +298,39 @@ function sha256(path) {
 const asset = "apps/office/src/i18npool/source/breakiterator/data/OpenOffice_dat.json";
 const fixture = "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json";
 mkdirSync(resolve(asset, ".."), { recursive: true });
-writeFileSync(asset, JSON.stringify(linked, null, 2) + "\n");
-writeFileSync(
-  fixture,
-  JSON.stringify(
-    {
-      icuVersion: "78.3",
-      sources: {
-        "CustomTarget_breakiterator.mk": sha256(resolve(lo, "CustomTarget_breakiterator.mk")),
-        "gencmn.c": sha256(resolve(icu, "tools/gencmn/gencmn.c")),
-        "utext.cpp": sha256(resolve(icu, "common/utext.cpp")),
-        "rbbi.cpp": sha256(resolve(icu, "common/rbbi.cpp")),
-      },
-      linkedSha256: sha256(asset),
-      utext,
-      cases,
-      boundaries,
-    },
-    null,
-    2,
-  ) + "\n",
-);
+const assetBytes = await format(JSON.stringify(linked), {
+  ...(await resolveConfig(asset)),
+  parser: "json",
+});
+if (process.argv.includes("--check")) {
+  if (readFileSync(asset, "utf8") !== assetBytes) throw new Error("Pinned rule bytes differ");
+} else writeFileSync(asset, assetBytes);
+const witness = {
+  icuVersion: "78.3",
+  sources: {
+    "CustomTarget_breakiterator.mk": sha256(resolve(lo, "CustomTarget_breakiterator.mk")),
+    "gencmn.c": sha256(resolve(icu, "tools/gencmn/gencmn.c")),
+    "utext.cpp": sha256(resolve(icu, "common/utext.cpp")),
+    "rbbi.cpp": sha256(resolve(icu, "common/rbbi.cpp")),
+    "brkeng.cpp": sha256(resolve(icu, "common/brkeng.cpp")),
+    "lstmbe.cpp": sha256(resolve(icu, "common/lstmbe.cpp")),
+  },
+  linkedSha256: sha256(asset),
+  utext,
+  engines,
+  unhandled,
+  models,
+  cases,
+  boundaries,
+};
+const fixtureBytes = await format(JSON.stringify(witness), {
+  ...(await resolveConfig(fixture)),
+  parser: "json",
+});
+if (process.argv.includes("--check")) {
+  if (readFileSync(fixture, "utf8") !== fixtureBytes)
+    throw new Error("Pinned iterator replay differs");
+} else writeFileSync(fixture, fixtureBytes);
 console.log(
   `Exported ${linked.entries.length} linked rule symbols and ${cases.length} native boundary sequences`,
 );

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 224
+revision: 228
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:35:03.594Z"
+  updated_at: "2026-11-09T18:48:16.778Z"
   updated_by: "CODER"
-  note: "Original ICU NFKC loaded data and CJK dictionary engine validated on all code point values, 100,170 Unicode normalization corpus inputs, 4,116 targeted strings, 712 CJK calls and the focused shared and CSV browser suites. Factory registration, production formatter services and multiline CSV import remain in scope."
-  attempts: 58
+  note: "Concrete ICU RuleBasedBreakIterator factory validated on 88 original public traversal sequences, 14 shared factory identities, native model/reject behavior, 152 focused shared tests and the Chromium CSV workflow. Enclosing LibreOffice word and production formatter services and multiline CSV import remain in scope."
+  attempts: 59
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1256,8 +1259,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:48:16.778Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Concrete ICU RuleBasedBreakIterator factory validated on 88 original public traversal sequences, 14 shared factory identities, native model/reject behavior, 152 focused shared tests and the Chromium CSV workflow. Enclosing LibreOffice word and production formatter services and multiline CSV import remain in scope."
+  -
+    type: "status"
+    at: "2026-11-09T18:48:31.222Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:35:51.158Z"
+doc_updated_at: "2026-11-09T18:49:16.574Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3017,6 +3033,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:48:16.778Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Concrete ICU RuleBasedBreakIterator factory validated on 88 original public traversal sequences, 14 shared factory identities, native model/reject behavior, 152 focused shared tests and the Chromium CSV workflow. Enclosing LibreOffice word and production formatter services and multiline CSV import remain in scope.
+    Attempts: 59
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:48:13.361Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4450,6 +4496,20 @@ sections:
       Result: pass. Evidence: 4,454 JSDoc-checked sources, 1,999 provenance entries, 1,786 mapped entries, 1,998 boundary sources, 10,849 relative imports, 236 allowed edges, and 464 Calc commands. Full repository ESLint passes.
     - Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
     - This is a checkpoint in the existing AgentPlane task. No full test suite was due. Original iterator factory integration, the enclosing LibreOffice word and production formatter services, and multiline CSV import remain pending.
+
+    ### Concrete rule iterator dictionary engine selection
+
+    - Connected the original ICU engine factory, reverse-priority per-iterator engine stack, lowest-priority reject engine and common cleanup to the concrete RuleBasedBreakIterator. The factory shares concrete engines across live iterators and closes adopted matchers on cleanup.
+    - Preserved the original LSTM resource discovery and status. The original ICU witness confirms the pinned resource package has no Thai, Lao, Burmese or Khmer model bundles and reaches the dictionary branch. The LSTM inference path is outside the pinned data.
+    - CALC-482 records the native reject engine replacing its previous script instead of accumulating scripts. The original replay also confirms that an invalid code point clears the set.
+    - Command: node scripts/icu-openoffice-rule-iterator-native-probe.mjs --check.
+      Result: pass. Evidence: eight linked OpenOffice rule symbols remain byte-for-byte unchanged; 88 native public sequences and 3,432 result, cursor and rule-tag observations; 14 factory identity cases, five reject engine transitions, and five original LSTM model status calls.
+    - Command: npm run test:shared -- src/external/icu/source/common/rbbi src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.sea.native.test.ts src/external/icu/source/common/normalizer2.native.test.ts --maxWorkers=1.
+      Result: pass. Evidence: 152 tests across nine files. The broader replay uses the concrete owner and covers original dictionary-marked Thai, Lao, Burmese, Khmer, CJK and mixed text, forward/backward public queries, and cache refill.
+    - Result: the production Vite build and Chromium CSV import, ODS save and CSV export scenario pass. The focused Calc run passed 196 tests and timed out waiting for the file dialog to close in one test. That test passed in a separate targeted rerun.
+    - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+      Result: pass. Evidence: 4,455 JSDoc-checked sources, 2,000 provenance records, 1,787 mapped entries, 1,999 boundary sources, 10,863 relative imports, 236 allowed edges, and 464 Calc commands.
+    - This is a checkpoint in the existing AgentPlane task. No full suite was due. The enclosing LibreOffice word and title services, production formatter integration, and multiline CSV import remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -6218,6 +6278,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:48:16.778Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Concrete ICU RuleBasedBreakIterator factory validated on 88 original public traversal sequences, 14 shared factory identities, native model/reject behavior, 152 focused shared tests and the Chromium CSV workflow. Enclosing LibreOffice word and production formatter services and multiline CSV import remain in scope.
+Attempts: 59
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:48:13.361Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7655,3 +7745,17 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
   Result: pass. Evidence: 4,454 JSDoc-checked sources, 1,999 provenance entries, 1,786 mapped entries, 1,998 boundary sources, 10,849 relative imports, 236 allowed edges, and 464 Calc commands. Full repository ESLint passes.
 - Result: 197 focused Calc CSV and file workflow tests across eight files passed. The Vite production build and Chromium CSV import, ODS save and CSV export scenario also passed.
 - This is a checkpoint in the existing AgentPlane task. No full test suite was due. Original iterator factory integration, the enclosing LibreOffice word and production formatter services, and multiline CSV import remain pending.
+
+### Concrete rule iterator dictionary engine selection
+
+- Connected the original ICU engine factory, reverse-priority per-iterator engine stack, lowest-priority reject engine and common cleanup to the concrete RuleBasedBreakIterator. The factory shares concrete engines across live iterators and closes adopted matchers on cleanup.
+- Preserved the original LSTM resource discovery and status. The original ICU witness confirms the pinned resource package has no Thai, Lao, Burmese or Khmer model bundles and reaches the dictionary branch. The LSTM inference path is outside the pinned data.
+- CALC-482 records the native reject engine replacing its previous script instead of accumulating scripts. The original replay also confirms that an invalid code point clears the set.
+- Command: node scripts/icu-openoffice-rule-iterator-native-probe.mjs --check.
+  Result: pass. Evidence: eight linked OpenOffice rule symbols remain byte-for-byte unchanged; 88 native public sequences and 3,432 result, cursor and rule-tag observations; 14 factory identity cases, five reject engine transitions, and five original LSTM model status calls.
+- Command: npm run test:shared -- src/external/icu/source/common/rbbi src/external/icu/source/common/brkeng.native.test.ts src/external/icu/source/common/dictbe.cjk.native.test.ts src/external/icu/source/common/dictbe.sea.native.test.ts src/external/icu/source/common/normalizer2.native.test.ts --maxWorkers=1.
+  Result: pass. Evidence: 152 tests across nine files. The broader replay uses the concrete owner and covers original dictionary-marked Thai, Lao, Burmese, Khmer, CJK and mixed text, forward/backward public queries, and cache refill.
+- Result: the production Vite build and Chromium CSV import, ODS save and CSV export scenario pass. The focused Calc run passed 196 tests and timed out waiting for the file dialog to close in one test. That test passed in a separate targeted rerun.
+- Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc.
+  Result: pass. Evidence: 4,455 JSDoc-checked sources, 2,000 provenance records, 1,787 mapped entries, 1,999 boundary sources, 10,863 relative imports, 236 allowed edges, and 464 Calc commands.
+- This is a checkpoint in the existing AgentPlane task. No full suite was due. The enclosing LibreOffice word and title services, production formatter integration, and multiline CSV import remain pending.
