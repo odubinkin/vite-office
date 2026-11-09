@@ -1,6 +1,11 @@
 /** @fileoverview Writer import-time min/max font binding and anchored frame width inputs on actual model owners. */
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { afterEach, assert, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { afterEach, assert, beforeAll, expect, it } from "vitest";
+import {
+  ICULanguageBreakFactory,
+  type WordDictionaryName,
+} from "../../../../external/icu/source/common/brkeng";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
@@ -15,6 +20,8 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxScriptHintItem } from "../../../../editeng/source/items/textitem.modes";
+import { ScriptHintType } from "../../../../i18nutil/inc/scriptchangescanner";
 import {
   SvxFirstLineIndentItem,
   SvxIndentValue,
@@ -28,24 +35,53 @@ import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import { SwFormatSurround } from "../../../inc/fmtsrnd";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import {
+  CH_TXT_ATR_FIELDEND,
+  CH_TXT_ATR_FIELDSEP,
+  CH_TXT_ATR_FIELDSTART,
+  CH_TXT_ATR_FORMELEMENT,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_SCRIPT_HINT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
 } from "../../../inc/hintids";
 import { SwNodeRange } from "../../../inc/ndindex";
+import { g_pBreakIt } from "../bastyp/breakit";
 import type { SwTable } from "../table/swtable";
 import { SwHTMLTableLayout } from "../doc/htmltbl";
+import { SwHTMLTableLayoutColumn } from "../doc/htmltbl.column";
+import { SwHTMLTableLayoutCell, SwHTMLTableLayoutCnts } from "../doc/htmltbl.values";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SwDoc } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { CreateSwMeasurementFont, MeasureSwTextWidth } from "../txtnode/swfont";
 import { GetMinMaxNodeMetrics } from "./itratr.minmax";
 import { SwAttrIter } from "./itratr";
+import { SwScriptInfo } from "./porlay";
+
+/** Loads shipped ICU resources through the same factory used by the browser. @param name - Original resource name. @returns Native bytes. */
+function loadDictionary(name: WordDictionaryName): Uint8Array {
+  return readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
+}
+
+beforeAll(
+  /** Installs the real dictionary runtime for paragraph-width tests. @returns Nothing. */ () => {
+    g_pBreakIt.GetBreakIter().BindWordDictionaryFactory(
+      new ICULanguageBreakFactory({
+        thaidict: loadDictionary("thaidict"),
+        laodict: loadDictionary("laodict"),
+        burmesedict: loadDictionary("burmesedict"),
+        khmerdict: loadDictionary("khmerdict"),
+        cjdict: loadDictionary("cjdict"),
+      }),
+    );
+  },
+);
 
 const documents: SwDoc[] = [];
 afterEach(
@@ -195,8 +231,6 @@ class MeasuredTableLayout extends SwHTMLTableLayout {
     this.m_nMax = 740;
   }
 }
-import { SvxAdjust } from "../../../../editeng/inc/svxenum";
-
 it.each([true, false])(
   "reads the attached native layout when the fly table is at the beginning: %s",
   /** The first and last nested-table paths use actual start/end node identities. @param first - Whether the table is the first fly content. @returns Nothing. */ (
@@ -228,3 +262,233 @@ it.each([true, false])(
     });
   },
 );
+
+/** Creates a real document with a controllable physical-width boundary. @returns Document and measured ranges. */
+function measurementFixture() {
+  const measured: { text: string; height: number }[] = [];
+  const doc = new SwDoc({
+    defaultFontDevice: {
+      /** Lets the document choose its ordinary default font family. @returns Absent device override. */
+      getDefaultFont: () => undefined,
+      /** Records glyph ranges while supplying a stable width to the core calculation. @param font - Selected subfont. @param text - Original UTF-16 text. @param start - First code unit. @param length - Range length. @returns Width in twips. */
+      measureTextWidth: (font, text, start, length) => {
+        measured.push({ text: text.slice(start, start + length), height: font.heightTwips });
+        return 30 * length;
+      },
+    },
+  });
+  documents.push(doc);
+  return { doc, measured };
+}
+
+/** Reads the exact substring passed to the physical device. @param entry - Measured run. @returns Original substring. */
+function measuredText(entry: { text: string }): string {
+  return entry.text;
+}
+
+it("accumulates real word segments, hard blanks, hard hyphens and the widest row", /** Uses native controls, dictionary boundaries and the original twenty-twip addition. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const node = doc.paragraphs[0];
+  assert(node);
+  node.SetText("aa\u00a0bb\u2011c\taaaa\nx\u00ady");
+  expect(node.GetMinMaxSize(node.GetIndex())).toEqual({
+    minimum: 230,
+    maximum: 350,
+    absoluteMinimum: 230,
+  });
+  expect(measured.map(measuredText).join("")).toBe("aa\u00a0bb\u2011caaaaxy");
+  node.SetText("\u00a0\u2011");
+  expect(node.GetMinMaxSize(0)).toEqual({ minimum: 60, maximum: 60, absoluteMinimum: 60 });
+});
+
+it("uses actual script hints and native subfont changes across the same word", /** Applies a ranged character hint and checks the native script boundary and widths. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const node = doc.paragraphs[0];
+  assert(node);
+  node.SetText("a漢z");
+  node.SetAttr(new SvxFontHeightItem(280, 100, RES_CHRATR_CJK_FONTSIZE));
+  const set = new SfxItemSet(doc.GetAttrPool(), [[RES_CHRATR_SCRIPT_HINT, RES_CHRATR_SCRIPT_HINT]]);
+  set.Put(new SvxScriptHintItem(ScriptHintType.Ignore, RES_CHRATR_SCRIPT_HINT));
+  assert(node.InsertHint(new SwTextAttrEnd(new SwFormatAutoFormat(set), 1, 2)));
+  const scripts = new SwScriptInfo();
+  scripts.InitScriptInfo(node);
+  expect(scripts.ScriptType(1)).toBe(ScriptType.LATIN);
+  expect(scripts.NextScriptChg(0)).toBe(3);
+  expect(node.GetMinMaxSize(0).maximum).toBe(110);
+  expect(
+    measured.map(
+      /** Reads the selected subfont height. @param entry - Measured run. @returns Height in twips. */ (
+        entry,
+      ) => entry.height,
+    ),
+  ).toEqual([240, 240, 240]);
+});
+
+it("measures no field control marker and adds no margin for blank-only text", /** Exercises source GetNextAttr field delimiters and paragraph padding admission. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const node = doc.paragraphs[0];
+  assert(node);
+  node.SetText(
+    ` ${CH_TXT_ATR_FIELDSTART}${CH_TXT_ATR_FIELDSEP} ${CH_TXT_ATR_FIELDEND}${CH_TXT_ATR_FORMELEMENT}`,
+  );
+  expect(node.GetMinMaxSize(0)).toEqual({ minimum: 0, maximum: 60, absoluteMinimum: 0 });
+  expect(measured.map(measuredText)).toEqual([" ", " "]);
+});
+
+/** Builds a one-row layout on actual table boxes using their section pointers. @param table - Native table. @param count - Columns. @param width - Fixed table width. @returns Native layout with its column options initialized. */
+function measuredLayout(table: SwTable, count: number, width = 0) {
+  const layout = new SwHTMLTableLayout(
+    table,
+    1,
+    count,
+    false,
+    false,
+    width,
+    false,
+    0,
+    0,
+    0,
+    SvxAdjust.Left,
+    0,
+    0,
+    0,
+    0,
+    0,
+  );
+  for (let column = 0; column < count; ++column)
+    layout.SetColumn(new SwHTMLTableLayoutColumn(0, false, false), column);
+  table.SetHTMLTableLayout(layout);
+  return layout;
+}
+
+it("measures a shared span only once and recalculates actual cell text on the next pass", /** Verifies source content pass references and minimum-column skip in the live grid. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const nodes = doc.GetNodes();
+  const table = nodes.MakeTableNode("Span");
+  const box = nodes.AppendTableRow(table, 1).GetTabBoxes()[0];
+  assert(box);
+  const start = box.GetSttNd();
+  assert(start);
+  const text = nodes.at(start.GetIndex() + 1).GetTextNode();
+  assert(text);
+  text.SetText("aa bb");
+  const layout = measuredLayout(table, 2);
+  const contents = new SwHTMLTableLayoutCnts(null, null, false, null);
+  contents.SetTableBox(box);
+  layout.SetCell(new SwHTMLTableLayoutCell(contents, 1, 2, 0, false, false), 0, 0);
+  layout.SetCell(new SwHTMLTableLayoutCell(contents, 1, 1, 0, false, false), 0, 1);
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([80, 170]);
+  expect(contents.IsPass1Done(1)).toBe(true);
+  expect(measured.map(measuredText).join("")).toBe("aa bb");
+  text.SetText("aaaaa");
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([170, 170]);
+  expect(contents.IsPass1Done(2)).toBe(true);
+});
+
+it("compares new content against the wrapped native pass reference", /** Repeats WRITER381 on the real layout and then performs the first noncolliding pass. @returns Nothing. */ () => {
+  const { doc } = measurementFixture();
+  const nodes = doc.GetNodes();
+  const table = nodes.MakeTableNode("Pass reference");
+  const start = nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetSttNd();
+  assert(start);
+  const text = nodes.at(start.GetIndex() + 1).GetTextNode();
+  assert(text);
+  const layout = measuredLayout(table, 1);
+  const cell = new SwHTMLTableLayoutCell(null, 1, 1, 0, false, false);
+  layout.SetCell(cell, 0, 0);
+  for (let pass = 0; pass < 255; ++pass) layout.AutoLayoutPass1();
+  text.SetText("abc");
+  cell.SetContents(new SwHTMLTableLayoutCnts(start, null, false, null));
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([0, 0]);
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([110, 110]);
+});
+
+it("raises a fixed nested table to its absolute width and preserves paragraph NOBR", /** Verifies the independent paragraph and table maxima on linked original content. @returns Nothing. */ () => {
+  const { doc } = measurementFixture();
+  const nodes = doc.GetNodes();
+  const parent = nodes.MakeTableNode("Parent");
+  const child = nodes.MakeTableNode("Child");
+  const parentStart = nodes.AppendTableRow(parent, 1).GetTabBoxes()[0]?.GetSttNd();
+  const childStart = nodes.AppendTableRow(child, 1).GetTabBoxes()[0]?.GetSttNd();
+  assert(parentStart && childStart);
+  const parentText = nodes.at(parentStart.GetIndex() + 1).GetTextNode();
+  const childText = nodes.at(childStart.GetIndex() + 1).GetTextNode();
+  assert(parentText && childText);
+  parentText.SetText("aaaa bbbb");
+  childText.SetText("aaa");
+  const layout = measuredLayout(parent, 1);
+  const nested = measuredLayout(child, 1, 220);
+  nested.SetCell(
+    new SwHTMLTableLayoutCell(
+      new SwHTMLTableLayoutCnts(childStart, null, false, null),
+      1,
+      1,
+      0,
+      false,
+      false,
+    ),
+    0,
+    0,
+  );
+  const tail = new SwHTMLTableLayoutCnts(null, nested, false, null);
+  const head = new SwHTMLTableLayoutCnts(parentStart, null, true, tail);
+  layout.SetCell(new SwHTMLTableLayoutCell(head, 1, 1, 0, false, false), 0, 0);
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([290, 290]);
+  expect(tail.IsPass1Done(1)).toBe(true);
+  expect([nested.GetMin(), nested.GetMax()]).toEqual([110, 110]);
+  parentText.SetText("bb");
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([220, 220]);
+});
+
+it("walks a nested table node without remeasuring its boxes and follows a user style to PRE", /** Actual cell text, subtable sections and native style inheritance feed independent widths. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const nodes = doc.GetNodes();
+  const parent = nodes.MakeTableNode("Parent");
+  const parentStart = nodes.AppendTableRow(parent, 1).GetTabBoxes()[0]?.GetSttNd();
+  assert(parentStart);
+  const child = nodes.MakeTableNodeBefore(parentStart.EndOfSectionNode(), "Child", {});
+  const childStart = nodes.AppendTableRow(child, 1).GetTabBoxes()[0]?.GetSttNd();
+  assert(childStart);
+  const text = nodes.at(parentStart.GetIndex() + 1).GetTextNode();
+  const nestedText = nodes.at(childStart.GetIndex() + 1).GetTextNode();
+  assert(text && nestedText);
+  const pre = doc.GetTextFormatColl("preformatted-text");
+  text.ChgFormatColl(doc.MakeTextFormatColl("Inherited PRE", pre));
+  text.SetText("ab cd");
+  nestedText.SetText("abc");
+  const layout = measuredLayout(parent, 1);
+  const nested = measuredLayout(child, 1, 75);
+  nested.SetCell(
+    new SwHTMLTableLayoutCell(
+      new SwHTMLTableLayoutCnts(childStart, null, false, null),
+      1,
+      1,
+      0,
+      false,
+      false,
+    ),
+    0,
+    0,
+  );
+  layout.SetCell(
+    new SwHTMLTableLayoutCell(
+      new SwHTMLTableLayoutCnts(parentStart, null, false, null),
+      1,
+      1,
+      0,
+      false,
+      false,
+    ),
+    0,
+    0,
+  );
+  layout.AutoLayoutPass1();
+  expect([layout.GetMin(), layout.GetMax()]).toEqual([170, 170]);
+  expect(measured.map(measuredText).join("")).toBe("ab cdabc");
+});

@@ -10,6 +10,7 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import type { SwFrameFormat } from "../layout/atrfrm";
 import type { SwStartNode } from "../docnode/node";
+import { MeasurePass1Contents } from "./htmltbl.pass1";
 
 const USHRT_MAX = 65535;
 const MAX_TABWIDTH = USHRT_MAX - 2001;
@@ -309,6 +310,53 @@ export class SwHTMLTableLayout {
     }
     return space;
   }
+  /** Runs the original first pass against actual cell sections and nested layout owners. @returns Nothing. */
+  AutoLayoutPass1(): void {
+    this.m_nPass1Done = (this.m_nPass1Done + 1) & 255;
+    this.m_nMin = this.m_nMax = 0;
+    let fixRelative = false;
+    let constraints: SwHTMLTableLayoutConstraints | null = null;
+    for (let index = 0; index < this.m_nCols; ++index) {
+      const column = this.LayoutColumn(index);
+      column.ClearPass1Info(!this.HasColTags());
+      let minimumSpan = USHRT_MAX;
+      let skip = USHRT_MAX;
+      for (let row = 0; row < this.m_nRows; ++row) {
+        const cell = this.GetCell(row, index);
+        if (cell === null) throw new Error("assert(layout cell)");
+        const span = cell.GetColSpan();
+        const contents = cell.GetContents();
+        skip = Math.min(skip, span);
+        if (contents?.IsPass1Done(this.m_nPass1Done)) continue;
+        minimumSpan = Math.min(minimumSpan, span);
+        const { minimum, maximum, absoluteMinimum } = MeasurePass1Contents(
+          contents,
+          this.m_nPass1Done,
+        );
+        const constraint = this.AccumulatePass1CellWidths(
+          row,
+          index,
+          minimum,
+          maximum,
+          absoluteMinimum,
+        );
+        if (constraint !== null) {
+          if (constraints === null) constraints = constraint;
+          else constraints = constraints.InsertNext(constraint);
+        }
+      }
+      if (minimumSpan === 1) this.SetPass1ColumnWidths(index);
+      else if (minimumSpan !== USHRT_MAX) {
+        column.SetMinMax(MINLAY, MINLAY);
+        index += skip - 1;
+      }
+      this.m_nMin += column.GetMin();
+      this.m_nMax += column.GetMax();
+      if (column.IsRelWidthOption()) fixRelative = true;
+    }
+    this.FinishAutoLayoutPass1(constraints, fixRelative);
+  }
+
   /** Applies native cell wrapping, authored width and border policy to measured content. @param row - Native row. @param index - Native start column. @param minimum - Content minimum. @param maximum - Content maximum. @param absoluteMinimum - Absolute content minimum. @returns Constraint for a spanning cell, otherwise null after merging the column. */
   protected AccumulatePass1CellWidths(
     row: number,

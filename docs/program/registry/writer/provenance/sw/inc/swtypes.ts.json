@@ -8,7 +8,11 @@
       "GetTextAttrMode",
       "SetAttrMode",
       "PrepareHint",
-      "MINLAY"
+      "MINLAY",
+      "COMPLETE_STRING",
+      "CHAR_HARDBLANK",
+      "CHAR_HARDHYPHEN",
+      "CHAR_SOFTHYPHEN"
     ],
     "upstreamSymbols": [
       "GetTextAttrMode",
@@ -35,6 +39,14 @@
         {
           "path": "apps/office/src/sw/source/filter/html/svxcss1.border.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/swtypes.ts",
+          "marker": "COMPLETE_STRING"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -60,7 +72,8 @@
       "Iteration250 final scoped and global registry, source provenance/tree, routing and doctor gates passed; doctor has no errors and only prior hook/no-op warnings. Canonical evidence is recorded in task202610090803-7PRR3B; no whole-module parity promotion.",
       "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion.",
       "S3HW1E connects actual ID and no-HREF named targets to native queued point bookmarks. Filter-private RES_FLTR_BOOKMARK is174, with no document pool default. Actual HTMLAttr can retain a null table for unheaded queued marks; SetAttr_ uses exact original name/position deduplication, raw offset clamping and real DocumentMarkAccess name allocation. HTML ID/font/style consumers retain source option order. Native implicit target separator and Unambiguous decode selection preserve encoded name spelling; WRITER221 documents queue-boundary naming. Actual parser/Markdown/Worker/RTF tests cover this profile; language/direction/section/HREF and full filter parity remain open.",
-      "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed."
+      "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed.",
+      "Retains the original signed sentinel and hard/soft separators used by import-time paragraph measurement."
     ],
     "omittedResponsibilities": [
       "Only existing ranged pointer lookup contracts are covered;all other native obligations remain unverified."

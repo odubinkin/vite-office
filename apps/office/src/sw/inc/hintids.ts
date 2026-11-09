@@ -77,6 +77,8 @@ export const RES_CHRATR_CTL_WEIGHT = 31 as const;
 
 /** Character highlight/background, `RES_CHRATR_BEGIN + 41`. */
 export const RES_CHRATR_HIGHLIGHT = 42 as const;
+/** Script classification hint, `RES_CHRATR_BEGIN + 45`. */
+export const RES_CHRATR_SCRIPT_HINT = 46 as const;
 
 /** First WhichId after Writer character-format items. */
 export const RES_CHRATR_END = 49 as const;
@@ -89,6 +91,15 @@ export const RES_TXTATR_INETFMT = 54 as const;
 
 /** Native ranged character-style reference. */
 export const RES_TXTATR_CHARFMT = 55 as const;
+
+/** Original embedded input field delimiters. */
+export const CH_TXT_ATR_INPUTFIELDSTART = "\u0004";
+export const CH_TXT_ATR_INPUTFIELDEND = "\u0005";
+/** Original form element and field marker characters. */
+export const CH_TXT_ATR_FORMELEMENT = "\u0006";
+export const CH_TXT_ATR_FIELDSTART = "\u0007";
+export const CH_TXT_ATR_FIELDSEP = "\u0003";
+export const CH_TXT_ATR_FIELDEND = "\u0008";
 
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 67 as const;

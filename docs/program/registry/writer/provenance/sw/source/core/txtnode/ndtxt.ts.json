@@ -348,6 +348,14 @@
         {
           "path": "apps/office/src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+          "marker": "GetMinMaxSize"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -571,7 +579,8 @@
       "ReplaceText",
       "GetSpaceLeft",
       "SetAttr",
-      "GetLang"
+      "GetLang",
+      "GetMinMaxSize"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
@@ -626,7 +635,8 @@
       "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion.",
       "S3HW1E HTML38: original SwContentNode CanJoinNext/CanJoinPrev admission preserves native node-kind, terminal sentinel, strict GetSpaceLeft capacity and successful output assignment; the current graph has no transparent SwSectionNode owner to skip. Native SwTextNode JoinNext/JoinPrev retain the correct current owner and consume actual previous/next paragraph content via owned Cut fragments and registered index transfers. The established portable AppendTextNode/JoinTextNodes adapter retains its source for existing undo-node storage and remains a distinct copy contract; native consumers explicitly select transfer, without replacing or faking the document/hint graph. SplitNode explicitly assigns its supplied native position to the trailing start even for before affinity, preserving other marker affinity and the established trailing-node return. Clone construction is extracted only into the existing responsibility fragment; private hint/empty-list flags remain copied by their real owner. Native HTML CallParser double-split/final boundary joins and target attribute snapshots, automatic text/table layout, table token reading/insertion and final model/filter/UI reconciliation remain pending. No whole-module, C++ allocation/ABI or unrepresented structural/redline/physical lifetime certificate is claimed; browser file UI/autosave/recovery deviations remain unchanged.",
       "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
-      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified."
+      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified.",
+      "The native paragraph width member delegates to its original itratr.cxx responsibility using this actual node."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

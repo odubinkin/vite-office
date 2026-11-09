@@ -1943,3 +1943,20 @@ failures can be retried through the existing import flow. See WRITER379.
 
 Paragraph measurement and table materialization still need to consume
 the installed word service.
+
+### HTML86 — Paragraph measurement and first-pass HTML table traversal
+
+`SwTextNode::GetMinMaxSize` measures native attributed runs and dictionary
+words through the document's twip device. It uses the original
+layout-free script scan and preserves width behavior at hard and soft
+separators, field delimiters, and line and tab breaks. The first table
+layout pass walks actual cell sections, including nested table nodes and
+linked layouts, and feeds the existing column and spanning-cell policy.
+Inherited PRE and full-content NOBR affect paragraph widths. See WRITER380
+and WRITER381 for retained source details.
+
+The browser supplies glyph widths from its canvas device. Native drawing,
+point-hint expansion and full desktop font shaping are outside this
+measurement implementation. The remaining reader work concerns raw HTML
+tables embedded in Markdown. GitHub-style pipe tables already use
+Writer's direct Markdown table callbacks.

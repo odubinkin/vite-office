@@ -198,6 +198,8 @@ export enum SwPoolFormatId {
   UNKNOWN = 65535,
 }
 
+/** Original user-format bit tested directly by HTML paragraph width calculation. */
+export const USER_FMT = 1 << 15;
 /** Original user-format ID bits after removing group/non-collection markers. */
 export const POOL_IDUSER_FMT = 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
 /** Original native user-format predicate, including UNKNOWN and assigned user group IDs. @param id - Unsigned16 pool identity. @returns Whether user-defined. */

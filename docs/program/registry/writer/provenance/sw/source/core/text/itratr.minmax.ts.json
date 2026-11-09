@@ -8,17 +8,22 @@
     "upstreamPath": "sw/source/core/text/itratr.cxx",
     "localSymbols": [
       "GetMinMaxNodeMetrics",
-      "lcl_MinMaxNode"
+      "lcl_MinMaxNode",
+      "GetMinMaxSize",
+      "lcl_MinMaxString",
+      "SwMinMaxArgs"
     ],
     "upstreamSymbols": [
       "SwTextNode::GetMinMaxSize",
-      "lcl_MinMaxNode"
+      "lcl_MinMaxNode",
+      "lcl_MinMaxString",
+      "SwMinMaxArgs"
     ],
     "preservedResponsibilities": [
-      "Native anchored Writer fly contributions and preliminary width margins use actual paragraph list items, format anchors, content indices, and optional first/last native table layout. Through-wrap and asymmetric relation clamps are preserved. Dictionary-boundary and full text traversal, native drawing objects and source device parity remain unverified."
+      "Runs original dictionary word accumulation, separators, line/tab/field control branches and anchored widths over the actual unmerged Writer text node and selected script font. WRITER380 retains direct width without padding for hard separators alone. A deterministic width device gave 3010 identical native paragraph metrics against original source bodies and patched ICU."
     ],
     "omittedResponsibilities": [
-      "Full dictionary word rules, text accumulation, drawing metrics, filter wiring and platform parity remain unverified."
+      "Inline fly, footnote and field point-hint expansion, native drawing metrics, physical desktop glyph parity and production HTML reader wiring remain unverified."
     ],
     "evidence": {
       "local": [
@@ -29,12 +34,20 @@
         {
           "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+          "marker": "GetMinMaxSize"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
           "marker": "SwTextNode::GetMinMaxSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+          "marker": "lcl_MinMaxString"
         }
       ]
     },

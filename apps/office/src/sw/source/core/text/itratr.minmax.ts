@@ -1,4 +1,4 @@
-/** @fileoverview Original itratr.cxx paragraph offset and anchored Writer fly contributions to import-time text width. */
+/** @fileoverview Original itratr.cxx paragraph width and anchored Writer fly contributions during import. */
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwTableNode } from "../docnode/node";
 import type { SwFrameFormat } from "../layout/atrfrm";
@@ -6,12 +6,37 @@ import {
   resolveSwLeftMarginWithNum,
   resolveSwListFirstLineIndent,
 } from "../txtnode/ndtxt-list-indent";
-import { RES_FLYFRMFMT, RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import {
+  CH_TXT_ATR_FIELDEND,
+  CH_TXT_ATR_FIELDSEP,
+  CH_TXT_ATR_FIELDSTART,
+  CH_TXT_ATR_FORMELEMENT,
+  CH_TXT_ATR_INPUTFIELDEND,
+  CH_TXT_ATR_INPUTFIELDSTART,
+  RES_CHRATR_LANGUAGE,
+  RES_FLYFRMFMT,
+  RES_MARGIN_FIRSTLINE,
+} from "../../../inc/hintids";
+import {
+  CHAR_HARDBLANK,
+  CHAR_HARDHYPHEN,
+  CHAR_SOFTHYPHEN,
+  COMPLETE_STRING,
+} from "../../../inc/swtypes";
+import { DICTIONARY_WORD } from "../../../../offapi/com/sun/star/i18n/WordType";
+import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { getConfiguredSystemLanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
+import type { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import type { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
+import { GetWhichOfScript } from "../attr/hints";
+import { g_pBreakIt } from "../bastyp/breakit";
+import { MeasureSwTextWidth } from "../txtnode/swfont";
+import { SwAttrIter } from "./itratr";
+import { SwScriptInfo } from "./porlay";
 
 /** Native preliminary minimum, maximum, and common offset for the text-width calculation. */
 export interface SwMinMaxNodeMetrics {
@@ -119,4 +144,174 @@ export function GetMinMaxNodeMetrics(node: SwTextNode, index: number): SwMinMaxN
   args.rightRest -= args.rightDiff;
   if (args.rightRest < 0) args.maximum -= args.rightRest;
   return { minimum: args.minimum, maximum: args.maximum, margin: left + right };
+}
+
+/** Native paragraph width results used by the HTML filter. */
+export interface SwMinMaxSize {
+  readonly minimum: number;
+  readonly maximum: number;
+  readonly absoluteMinimum: number;
+}
+
+/** Original SwMinMaxArgs word and row accumulators for the represented text runs. */
+class SwMinMaxArgs {
+  minimum = 0;
+  absoluteMinimum = 0;
+  rowWidth = 0;
+  wordWidth = 0;
+  noLineBreak = COMPLETE_STRING;
+
+  /** Clears the running word without affecting the row. @returns Nothing. */
+  NewWord(): void {
+    this.wordWidth = 0;
+  }
+
+  /** Adds nonblank width to the current word and updates both minima. @param width - Measured width. @returns Nothing. */
+  AddWordWidth(width: number): void {
+    this.wordWidth += width;
+    this.absoluteMinimum = Math.max(this.absoluteMinimum, this.wordWidth);
+    // In the represented hint graph there is no inline fly contributing m_nWordAdd.
+    this.minimum = Math.max(this.minimum, this.wordWidth);
+  }
+}
+
+/** Measures segments of one attributed range up to the original dictionary word end. @param args - Active accumulators. @param measure - Active font and output device width query. @param language - Active subfont language. @param text - Actual UTF-16 paragraph. @param index - First position. @param end - Exclusive run end. @returns Whether a nonblank segment was measured. */
+function lcl_MinMaxString(
+  args: SwMinMaxArgs,
+  measure: (text: string, start: number, length: number) => number,
+  language: number,
+  text: string,
+  index: number,
+  end: number,
+): boolean {
+  let measured = false;
+  while (index < end) {
+    const blank = text[index] === " ";
+    const boundary = g_pBreakIt
+      .GetBreakIter()
+      .getWordBoundary(text, index, g_pBreakIt.GetLocale(language), DICTIONARY_WORD, true);
+    if (index <= boundary.startPos && index !== 0 && index - 1 !== args.noLineBreak) args.NewWord();
+    const stop = Math.min(boundary.endPos === index ? index + 1 : boundary.endPos, end);
+    const width = measure(text, index, stop - index);
+    args.rowWidth += width;
+    if (blank) args.NewWord();
+    else {
+      args.AddWordWidth(width);
+      measured = true;
+    }
+    index = stop;
+  }
+  return measured;
+}
+
+/** Original special controls that terminate the scan before measuring a regular string run. */
+const minMaxControls = new Set([
+  "\t",
+  "\n",
+  CHAR_HARDBLANK,
+  CHAR_HARDHYPHEN,
+  CHAR_SOFTHYPHEN,
+  CH_TXT_ATR_INPUTFIELDSTART,
+  CH_TXT_ATR_INPUTFIELDEND,
+  CH_TXT_ATR_FORMELEMENT,
+  CH_TXT_ATR_FIELDSTART,
+  CH_TXT_ATR_FIELDSEP,
+  CH_TXT_ATR_FIELDEND,
+]);
+
+/** Implements SwTextNode::GetMinMaxSize for the represented paragraph graph and twip output-device port. @param node - Actual text owner. @param nodeIndex - Original anchor scan index or zero. @returns Native paragraph width metrics. */
+export function GetMinMaxSize(node: SwTextNode, nodeIndex: number): SwMinMaxSize {
+  const frame = GetMinMaxNodeMetrics(node, nodeIndex);
+  const text = node.GetText();
+  const device = node.GetDoc().GetDefaultFontDevice();
+  const scripts = new SwScriptInfo();
+  scripts.InitScriptInfo(node);
+  const iterator = new SwAttrIter(node);
+  const attributes = iterator.GetAttrHandler();
+  const args = new SwMinMaxArgs();
+  let index = 0;
+  let script = scripts.ScriptType(0);
+  let maximum = 0;
+  let add = 0;
+
+  /** Measures using the script and attributes of the most recent seek. @param value - Source text. @param start - First UTF-16 unit. @param length - Unit count. @returns Width in twips. */
+  function measure(value: string, start: number, length: number): number {
+    return MeasureSwTextWidth(device, attributes, script, value, start, length);
+  }
+
+  /** Seeks both native formatting owners. @returns Nothing. */
+  function seek(): void {
+    iterator.Seek(index);
+    script = scripts.ScriptType(index);
+  }
+  seek();
+  while (index < text.length) {
+    const next = Math.min(iterator.GetNextAttr(), scripts.NextScriptChg(index));
+    let stop = index;
+    let control: string | undefined;
+    while (stop < next) {
+      const character = text[stop] as string;
+      if (minMaxControls.has(character)) {
+        control = character;
+        break;
+      }
+      ++stop;
+    }
+    if (index < stop) {
+      const languageItem = attributes.ReadItem(
+        GetWhichOfScript(RES_CHRATR_LANGUAGE, script),
+      ) as SvxLanguageItem;
+      const language = languageItem.GetLanguage();
+      if (
+        lcl_MinMaxString(
+          args,
+          measure,
+          language === LANGUAGE_SYSTEM ? getConfiguredSystemLanguage() : language,
+          text,
+          index,
+          stop,
+        )
+      )
+        add = 20;
+    }
+    index = stop;
+    seek();
+    switch (control) {
+      case "\n":
+        maximum = Math.max(maximum, args.rowWidth);
+        args.rowWidth = 0;
+        args.NewWord();
+        ++index;
+        seek();
+        break;
+      case "\t":
+        args.NewWord();
+        ++index;
+        seek();
+        break;
+      case CHAR_SOFTHYPHEN:
+        ++index;
+        break;
+      case CHAR_HARDBLANK:
+      case CHAR_HARDHYPHEN: {
+        const width = measure(control, 0, 1);
+        args.rowWidth += width;
+        args.AddWordWidth(width);
+        args.noLineBreak = index++;
+        break;
+      }
+      case undefined:
+        break;
+      default:
+        ++index;
+        seek();
+    }
+  }
+  const offset = frame.margin + add;
+  const minimum = Math.max(args.minimum + offset, frame.minimum);
+  return {
+    minimum,
+    absoluteMinimum: Math.max(args.absoluteMinimum + offset, frame.minimum),
+    maximum: Math.max(Math.max(maximum, args.rowWidth) + frame.maximum + offset, minimum),
+  };
 }

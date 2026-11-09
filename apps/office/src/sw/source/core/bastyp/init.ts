@@ -55,6 +55,7 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
+import { SvxScriptHintItem } from "../../../../editeng/source/items/textitem.modes";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -83,6 +84,7 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
+  RES_CHRATR_SCRIPT_HINT,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_WORDLINEMODE,
@@ -192,6 +194,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     add(new SvxColorItem(RES_CHRATR_COLOR));
     add(new SvxBrushItem(RES_CHRATR_HIGHLIGHT));
+    add(new SvxScriptHintItem(RES_CHRATR_SCRIPT_HINT));
     add(new SvxBrushItem(RES_BACKGROUND));
     add(new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST));
     add(new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP));

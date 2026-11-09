@@ -2,6 +2,7 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 import { GetTextNodeLanguage } from "./thints-language";
+import { GetMinMaxSize, type SwMinMaxSize } from "../text/itratr.minmax";
 import { InsertTextNodeHint } from "./thints-insert";
 import {
   SetTextNodeAttributes,
@@ -9,7 +10,7 @@ import {
   type TextAttributeOutput,
 } from "./thints-setattr";
 import { ResetTextNodeAttributes } from "./txtedt-reset";
-import type { SwFormatCharFormat } from "./fmtatr2";
+import type { SwFormatCharFormat, SwFormatINetFormat, WriterHyperlink } from "./fmtatr2";
 import { PrepareTextNodeReplacementHints, UpdateTextNodeReplacementIndices } from "./ndtxt-hints";
 import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
 import type { UpdateAttrHint } from "../../../inc/hints";
@@ -52,7 +53,6 @@ import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
-import type { WriterHyperlink } from "./fmtatr2";
 import {
   HandleResetAttrAtTextNode,
   HandleSetAttrAtTextNode,
@@ -71,7 +71,6 @@ import {
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
-import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwpHints } from "./ndhints";
 import {
   AppendTextNodeHints,
@@ -113,8 +112,6 @@ export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
 
 /**
  * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
- *
- * The compatibility `runs` accessor delegates to the separate immutable projection boundary.
  */
 export class SwTextNode extends SwContentNode {
   private mText: string;
@@ -147,7 +144,10 @@ export class SwTextNode extends SwContentNode {
   public GetText(): string {
     return this.mText;
   }
-
+  /** Original import-time paragraph width. @param index - Native anchor scan index or zero. @returns Native width metrics. */
+  public GetMinMaxSize(index: number): SwMinMaxSize {
+    return GetMinMaxSize(this, index);
+  }
   /** Reports whether a list style overrides paragraph indentation inherited from an ancestor style. @returns List precedence. */
   public DoesListGeometryWin(): boolean {
     return this.listGeometryWins;

@@ -3111,3 +3111,19 @@ direction. If the text has no qualifying character on either side, it
 returns the original position as both range endpoints. Preserve both cases.
 Native comparisons cover punctuation-only strings, surrogate interiors
 and positions at either edge of skipped text.
+
+### WRITER380 — Hard separators alone do not receive the paragraph width allowance
+
+`SwTextNode::GetMinMaxSize` adds 20 twips when `lcl_MinMaxString` reports
+a nonblank range. The nonbreaking space and nonbreaking hyphen branches
+increase both word minima and row width directly and leave this allowance
+unset. Preserve the distinction even when either separator is the entire
+paragraph.
+
+### WRITER381 — HTML table first-pass identity wraps at eight bits
+
+`SwHTMLTableLayout::AutoLayoutPass1` increments a `sal_uInt8` pass
+reference, and `SwHTMLTableLayoutCnts::IsPass1Done` compares only that
+value. A newly attached content object starts at zero, the same reference
+as a wrapped pass. Retain the original initial value, wrap and equality
+test.

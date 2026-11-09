@@ -1,5 +1,21 @@
-/** @fileoverview Native paragraph first-line inheritance and linked layout lines from porlay.hxx/cxx; full flags and formatting remain unrepresented. */
+/** @fileoverview Native line layout and import-time script changes from porlay.hxx/cxx. */
+import { SvxScriptHintItem } from "../../../../editeng/source/items/textitem.modes";
+import { getConfiguredSystemLanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
+import {
+  MakeDirectionChangeScanner,
+  MakeScriptChangeScanner,
+  ScriptHintProvider,
+  type ScriptChange,
+} from "../../../../i18nutil/inc/scriptchangescanner";
+import { GetI18NScriptTypeOfLanguage } from "../../../../svl/inc/languageoptions";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { RES_CHRATR_SCRIPT_HINT } from "../../../inc/hintids";
+import { COMPLETE_STRING } from "../../../inc/swtypes";
+import { GetWriterTextUnits } from "../bastyp/breakit";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import { CharFormat } from "./atrstck";
 import { SwLinePortion } from "./porlin";
+
 /** Original native layout line in a paragraph's linked chain. */
 export class SwLineLayout extends SwLinePortion {
   private m_pNext: SwLineLayout | undefined;
@@ -41,5 +57,61 @@ export class SwParaPortion extends SwLineLayout {
       line = line.GetNext();
     }
     return length;
+  }
+}
+
+/** Collects original paragraph and ranged script hints in native hint order. @param node - Actual text owner. @returns Scanner hint provider. */
+function lcl_FindScriptTypeHintSpans(node: SwTextNode): ScriptHintProvider {
+  const provider = new ScriptHintProvider();
+  const paragraph = node.GetSwAttrSet().GetItemIfSet(RES_CHRATR_SCRIPT_HINT, true);
+  if (paragraph instanceof SvxScriptHintItem) provider.SetParagraphLevelHint(paragraph.GetValue());
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    const item = CharFormat.GetItem(hint, RES_CHRATR_SCRIPT_HINT);
+    const start = hint.GetStart();
+    const end = hint.GetEnd();
+    if (item instanceof SvxScriptHintItem && end > start)
+      provider.AddHint(item.GetValue(), start, end);
+  }
+  return provider;
+}
+
+/** Owns the fresh, unmerged script-change array used by import without a text frame. */
+export class SwScriptInfo {
+  private readonly m_ScriptChanges: ScriptChange[] = [];
+
+  /** Scans a new unmerged paragraph using the layout-free initial LTR direction. @param node - Actual text owner. @returns Nothing. */
+  public InitScriptInfo(node: SwTextNode): void {
+    const units = GetWriterTextUnits(node.GetText());
+    const text = new OUString(units, units.length);
+    this.m_ScriptChanges.length = 0;
+    try {
+      const directions = MakeDirectionChangeScanner(text, 0);
+      const scripts = MakeScriptChangeScanner(
+        text,
+        GetI18NScriptTypeOfLanguage(getConfiguredSystemLanguage()),
+        directions,
+        lcl_FindScriptTypeHintSpans(node),
+      );
+      while (!scripts.AtEnd()) {
+        this.m_ScriptChanges.push(scripts.Peek());
+        scripts.Advance();
+      }
+    } finally {
+      text.dispose();
+    }
+  }
+
+  /** Returns the next native script range end. @param position - UTF-16 text offset. @returns Range end or COMPLETE_STRING. */
+  public NextScriptChg(position: number): number {
+    for (const change of this.m_ScriptChanges)
+      if (position < change.m_nEndIndex) return change.m_nEndIndex;
+    return COMPLETE_STRING;
+  }
+
+  /** Returns the native active script and application script fallback. @param position - UTF-16 text offset. @returns Original i18n script. */
+  public ScriptType(position: number): number {
+    for (const change of this.m_ScriptChanges)
+      if (position < change.m_nEndIndex) return change.m_nScriptType;
+    return GetI18NScriptTypeOfLanguage(getConfiguredSystemLanguage());
   }
 }

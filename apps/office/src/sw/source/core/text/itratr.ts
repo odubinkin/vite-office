@@ -1,5 +1,11 @@
 /** @fileoverview Represents native itratr.cxx hint traversal for one unmerged text node without a filter-run conversion. */
 import type { SwTextNode } from "../txtnode/ndtxt";
+import {
+  CH_TXT_ATR_FIELDEND,
+  CH_TXT_ATR_FIELDSEP,
+  CH_TXT_ATR_FIELDSTART,
+  CH_TXT_ATR_FORMELEMENT,
+} from "../../../inc/hintids";
 import { SwAttrHandler } from "./atrstck";
 
 /** Traverses actual native start/end maps and maintains character stacks for the current text position. */
@@ -55,7 +61,7 @@ export class SwAttrIter {
     this.m_nPosition = position;
   }
 
-  /** Finds the next nonignored start/end boundary in the represented native ranged families. Field/merged/redline breaks remain unrepresented. @returns UTF-16 offset or native node-length sentinel. */
+  /** Finds the next nonignored start/end boundary or field marker. @returns UTF-16 offset or native node-length sentinel. */
   public GetNextAttr(): number {
     let next = this.m_pTextNode.Len();
     const hints = this.m_pTextNode.GetpSwpHints();
@@ -73,6 +79,16 @@ export class SwAttrIter {
           next = Math.min(next, hint.GetAnyEnd());
           break;
         }
+      }
+    }
+    const text = this.m_pTextNode.GetText();
+    for (let position = this.m_nPosition; position < next; ++position) {
+      switch (text[position]) {
+        case CH_TXT_ATR_FORMELEMENT:
+        case CH_TXT_ATR_FIELDSTART:
+        case CH_TXT_ATR_FIELDSEP:
+        case CH_TXT_ATR_FIELDEND:
+          return position === this.m_nPosition ? position + 1 : position;
       }
     }
     return next;
