@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 237
+revision: 240
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T19:37:11.154Z"
+  updated_at: "2026-11-09T19:56:03.741Z"
   updated_by: "CODER"
-  note: "Verified checkpoint: production UNO components and original NatNum12 formatter output pass 1001 focused shared tests, 198 Calc CSV tests and the Chromium workflow. Continue with original multiline EditEngine construction and CSV import transfer."
-  attempts: 62
+  note: "Verified checkpoint: original edit-engine pool, application data language, UNO word service, edit undo recording and paragraph height pass focused shared, Calc CSV and Chromium checks. Continue with concrete EditEngine construction and original multiline object transfer."
+  attempts: 63
 commit: null
 comments:
   -
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue active CSV goal after source safe reverse/cache-consumed UText checkpoint; retained UI timing evidence and unchanged recheck pass; original service/multiline paths remain pending."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1320,8 +1323,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T19:56:03.741Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified checkpoint: original edit-engine pool, application data language, UNO word service, edit undo recording and paragraph height pass focused shared, Calc CSV and Chromium checks. Continue with concrete EditEngine construction and original multiline object transfer."
+  -
+    type: "status"
+    at: "2026-11-09T19:56:13.202Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T19:37:27.178Z"
+doc_updated_at: "2026-11-09T19:56:13.202Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -3201,6 +3217,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T19:56:03.741Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified checkpoint: original edit-engine pool, application data language, UNO word service, edit undo recording and paragraph height pass focused shared, Calc CSV and Chromium checks. Continue with concrete EditEngine construction and original multiline object transfer.
+    Attempts: 63
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:56:03.128Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4679,6 +4725,15 @@ sections:
     - The ScDocShell CSV regression exercises the real production registry, number format table, NativeNumberSupplier and NumberText library. Ordinary export writes the raw numeric amount and standard date representation. Displayed output matches the original title, currency, ordinal-day and no-keyword date cases. Focused Calc verification passed 198 tests, and the production Vite build and Chromium CSV import, ODS save and CSV export passed.
     - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-tree, npm run check:file-size, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc and python3 scripts/generate-locale-break-rules.py --check. Focused shared verification covers 1,001 tests and boundary tooling covers 49 tests. No full suite is due in this checkpoint of the same task.
     - The remaining in-scope CSV path is original multiline EditEngine construction and import transfer. Final CSV acceptance follows that path.
+
+    ### EditEngine prerequisites for multiline CSV
+
+    - ScPoolHelper and ScDocument now expose the actual lazy shared edit pool, using the original EditEngine factory and Map100thMM default. The engine's default-language getter uses the original lazy VCL application settings owner and its data LanguageTag. The configured UI language remains independently owned.
+    - Added the original generated BreakIterator context constructor and EditEngine's lazy acquired UNO service. Word selection uses the source cursor-side language and actual paragraph and character attributes. The deprecated getWordType contract retains its upstream constant zero.
+    - EditEngine delegates plain text, paragraph count, control state, default language and undo enablement through its original internal owner. The recording side of edit undo retains native action metadata and owned OUString labels. EditUndoManager active-view replay and other edit undo actions remain open.
+    - CalcHeight now uses actual lines, fixed spacing, stretching, visibility and the previous paragraph's validity. The targeted assertion exercises the original differing results before and after the previous portion becomes valid.
+    - Focused shared verification passed 65 tests, and the explicit bundled BreakIterator constructor and word query passed on rerun. Calc document and application-language verification passed 11 tests. The existing CSV slice passed 198 tests and the production Vite and Chromium CSV/ODS workflow passed. Typecheck, lint, formatting, documentation, source provenance, file-size, source tree, module boundaries, resource and shared/Calc inventory gates were checked.
+    - This checkpoint does not switch the CSV import path. The original concrete EditEngine and ScFieldEditEngine lifetime, deletion and style-notification members, and ScDocumentImport multiline object transfer remain open. The AgentPlane task and full-suite cadence are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -6567,6 +6622,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T19:56:03.741Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified checkpoint: original edit-engine pool, application data language, UNO word service, edit undo recording and paragraph height pass focused shared, Calc CSV and Chromium checks. Continue with concrete EditEngine construction and original multiline object transfer.
+Attempts: 63
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T19:56:03.128Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8049,3 +8134,12 @@ Same active Agentplane task, so no full-suite run under the user's one-per-ten-t
 - The ScDocShell CSV regression exercises the real production registry, number format table, NativeNumberSupplier and NumberText library. Ordinary export writes the raw numeric amount and standard date representation. Displayed output matches the original title, currency, ordinal-day and no-keyword date cases. Focused Calc verification passed 198 tests, and the production Vite build and Chromium CSV import, ODS save and CSV export passed.
 - Commands: npm run typecheck, npm run lint, npm run check:docs, npm run check:dependencies, npm run check:calc-resources, npm run check:source-tree, npm run check:file-size, npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc and python3 scripts/generate-locale-break-rules.py --check. Focused shared verification covers 1,001 tests and boundary tooling covers 49 tests. No full suite is due in this checkpoint of the same task.
 - The remaining in-scope CSV path is original multiline EditEngine construction and import transfer. Final CSV acceptance follows that path.
+
+### EditEngine prerequisites for multiline CSV
+
+- ScPoolHelper and ScDocument now expose the actual lazy shared edit pool, using the original EditEngine factory and Map100thMM default. The engine's default-language getter uses the original lazy VCL application settings owner and its data LanguageTag. The configured UI language remains independently owned.
+- Added the original generated BreakIterator context constructor and EditEngine's lazy acquired UNO service. Word selection uses the source cursor-side language and actual paragraph and character attributes. The deprecated getWordType contract retains its upstream constant zero.
+- EditEngine delegates plain text, paragraph count, control state, default language and undo enablement through its original internal owner. The recording side of edit undo retains native action metadata and owned OUString labels. EditUndoManager active-view replay and other edit undo actions remain open.
+- CalcHeight now uses actual lines, fixed spacing, stretching, visibility and the previous paragraph's validity. The targeted assertion exercises the original differing results before and after the previous portion becomes valid.
+- Focused shared verification passed 65 tests, and the explicit bundled BreakIterator constructor and word query passed on rerun. Calc document and application-language verification passed 11 tests. The existing CSV slice passed 198 tests and the production Vite and Chromium CSV/ODS workflow passed. Typecheck, lint, formatting, documentation, source provenance, file-size, source tree, module boundaries, resource and shared/Calc inventory gates were checked.
+- This checkpoint does not switch the CSV import path. The original concrete EditEngine and ScFieldEditEngine lifetime, deletion and style-notification members, and ScDocumentImport multiline object transfer remain open. The AgentPlane task and full-suite cadence are unchanged.

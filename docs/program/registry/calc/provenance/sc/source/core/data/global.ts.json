@@ -24,6 +24,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
           "marker": "original document fast path"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -34,6 +38,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx",
           "marker": "ScDocument::GetBreakIterator"
+        },
+        {
+          "path": "sc/source/core/data/global.cxx",
+          "marker": "GetEditDefaultLanguage"
+        },
+        {
+          "path": "vcl/source/app/svapp.cxx",
+          "marker": "Application::GetSettings"
         }
       ]
     },
@@ -44,8 +56,7 @@
       "bThreadedGroupCalcInProgress"
     ],
     "omittedResponsibilities": [
-      "Numeric UInt16 segment owners, conditional setters/sums, remaining ScGlobal services, ScMultiSel/document/column/UI consumers, native allocation/refcount/pointer lifetime, uninitialized or malformed iterator states, undefined arithmetic and full Calc parity remain unverified. Diagnostic ASCII text uses JavaScript strings; actual RTL string allocation and native diagnostic dump linkage are not certified. The original debug assertion is adapted to a fail-fast Error; native process abort, release builds and concurrent memory behavior are not represented.",
-      "ScPageHFItem UNO QueryValue/PutValue,XML diagnostics,full native presentation and physical shutdown bookkeeping remain unported or erased under GC. Calc style/helper/standard-style and EditEngine editing/layout services remain subsequent actual owners. Bounded acceptance passes528Calc tests and58related tests,with100percent Calc and changed-owner coverage,plus actual Chromium/Worker ownership and existing font/wrap/ODS regressions. No broad parity promotion."
+      "Other document-level editing, clipboard and rendering responsibilities remain outside this checkpoint."
     ],
     "preservedResponsibilities": [
       "Original mutable process-wide threaded-group calculation state initialized false, consumed by actual segment index readiness.",
@@ -54,7 +65,8 @@
       "TaskJT4A81 restores the original complete RowHeightContext six-input contract,independent PPTX/PPTY and zoom values,opaque borrowed device identity,zero/false defaults and UInt16 extra-height storage. ScScriptTypeData owns a lazy XBreakIterator reference per document. The original process-context creation dependency is an explicit borrowed host factory:the browser supplies the existing real BreakIteratorImpl;Calc core imports only the interface. Empty host references can be retried;the empty-string guard and source script loop are preserved. Calc existing font-selection UI now uses that document owner and ScGlobal office-UI-language fallback. Original address-only cached GetScriptType/SetScriptType traverse actual document/table/column CellTextAttr storage,retain UNKNOWN and do not synthesize missing metadata or columns(CALC238). Formatted-cell UpdateScriptType/GetRangeScriptType and actual GetNeededSize/EditEngine automatic wrapped-height layout remain unported. The existing Writer DOM Range algorithm is moved unchanged into shared VCL;Writer retains source node offsets,twip geometry and fallback policy. No browser document model,synthetic row heights or UNO/OutputDevice emulator is added. Full native device/font/ABI/layout and full UI parity remain unverified.",
       "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied.",
       "Original ScGlobal::GetErrorString branch selection is represented over resolved English STR_NO_REF_TABLE/STR_NO_ADDIN/STR_NO_MACRO/STR_ERROR_STR and error-symbol resource fields already admitted by this English browser build. Returns genuine owned OUString values. No native gettext/compiler symbol service is fabricated;localized resource selection and full native symbol-map owners remain unported.",
-      "AQF9AG exposes original getCharClass through the existing real shared system-locale field binding; no import-language classifier or fake service substitutes for the global classifier."
+      "AQF9AG exposes original getCharClass through the existing real shared system-locale field binding; no import-language classifier or fake service substitutes for the global classifier.",
+      "Original GetEditDefaultLanguage reads the data LanguageTag of the actual lazy VCL application settings."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/global.cxx",
@@ -62,7 +74,8 @@
       "ScGlobal::GetTransliteration",
       "ScGlobal::bThreadedGroupCalcInProgress",
       "ScGlobal::EETextObjEqual",
-      "ScGlobal::GetErrorString"
+      "ScGlobal::GetErrorString",
+      "ScGlobal::GetEditDefaultLanguage"
     ]
   }
 }

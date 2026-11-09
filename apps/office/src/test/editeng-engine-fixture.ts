@@ -29,7 +29,7 @@ import { ScalingParameters, EEHorizontalTextDirection } from "../editeng/inc/edi
 import type { SfxItemSet } from "../svl/source/items/itemset";
 import { LANGUAGE_DONTKNOW } from "../i18nlangtag/inc/lang";
 import { BreakIteratorImpl } from "../i18npool/source/breakiterator/breakiteratorImpl";
-import type { XBreakIterator } from "../offapi/com/sun/star/i18n/XBreakIterator";
+import type { XBreakIteratorService } from "../offapi/com/sun/star/i18n/XBreakIterator";
 import { unicode, text } from "../i18nlangtag/source/isolang/isolang.tables";
 
 /** Prepared native view dependency records calls and copies real selection/rectangle values; it is not a shipped window implementation. */
@@ -74,7 +74,7 @@ export class PreparedOuter extends EditEngine {
     return this.implementation;
   }
   /** Explicit prepared native label dependency for action tests. @param id - Source identifier. @returns Owned label. */
-  GetUndoComment(id: number): OUString {
+  override GetUndoComment(id: number): OUString {
     return unicode(`Prepared ${id}`);
   }
   /** Prepared underlying connection dependency, with actual document/portion values. @param left - Left index. @param backward - Expected source flag. @returns Actual joined position. */
@@ -161,7 +161,7 @@ export class PreparedEngine extends ImpEditEngine {
     );
   }
   /** Supplies the actual source script-query implementation as an explicit test dependency, without a service factory. @returns Real script service. */
-  ImplGetBreakIterator(): XBreakIterator {
+  override ImplGetBreakIterator(): XBreakIteratorService {
     return this.breakIterator;
   }
   /** Observes the actual original writing-direction initializer without replacing its output. @param paragraph - Actual source request. @returns Nothing. */
@@ -185,22 +185,22 @@ export class PreparedEngine extends ImpEditEngine {
     return new EditPaM(selection.Min());
   }
   /** Explicit prepared word-boundary result, with no inferred/heuristic boundary. @param selection - Source caret. @param wordType - Actual WordType. @returns Prepared actual selection. */
-  SelectWord(selection: EditSelection, wordType: number): EditSelection {
+  override SelectWord(selection: EditSelection, wordType: number): EditSelection {
     expect(wordType).toBe(DICTIONARY_WORD);
     expect(selection.HasRange()).toBe(false);
     if (!this.wordSelection) throw new Error("Prepare the source word boundary dependency.");
     return new EditSelection(this.wordSelection);
   }
   /** Records original compound undo entry; no manager behavior is fabricated. @param id - Actual source identifier. @returns Nothing. */
-  UndoActionStart(id: number): void {
+  override UndoActionStart(id: number): void {
     this.undoEvents.push(id);
   }
   /** Records original compound undo exit. @returns Nothing. */
-  UndoActionEnd(): void {
+  override UndoActionEnd(): void {
     this.undoEvents.push(-1);
   }
   /** Records ownership of actual concrete source actions. @param action - Actual source action. @param merge - Original omitted/default flag. @returns Nothing. */
-  InsertUndo(action: EditUndo, merge = false): void {
+  override InsertUndo(action: EditUndo, merge = false): void {
     expect(merge).toBe(false);
     this.actions.push(action);
   }
@@ -209,11 +209,11 @@ export class PreparedEngine extends ImpEditEngine {
     this.mbFuzzing = value;
   }
   /** Prepared history-reset dependency records the source call; full undo execution is outside this fixture. @returns Nothing. */
-  ResetUndoManager(): void {
+  override ResetUndoManager(): void {
     this.resets++;
   }
   /** Prepared measurement dependency only observes the requested actual next paragraph; no height is fabricated. @param portion - Actual next paragraph. @returns Nothing. */
-  CalcHeight(portion: ParaPortion): void {
+  override CalcHeight(portion: ParaPortion): void {
     this.heights.push(portion);
   }
   /** Prepared single-plain-line callee for lifecycle tests only; uses real document insertion/selection-update/notification bodies. This is not a production parser or multiline implementation. @param selection - Source collapsed selection. @param value - Explicit plain fixture text. @returns Actual inserted end. */
@@ -248,6 +248,7 @@ export class PreparedEngine extends ImpEditEngine {
   }
   /** Explicit fixture cleanup of real owned state and registrations. @returns Nothing. */
   dispose(): void {
+    this.mxBI.dispose();
     for (const action of this.actions) action.Dispose();
     this.pEmptyItemSet?.Dispose();
     this.pEmptyItemSet = null;

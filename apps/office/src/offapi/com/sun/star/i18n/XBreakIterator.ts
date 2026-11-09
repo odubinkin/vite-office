@@ -19,6 +19,8 @@ import type { Boundary } from "./Boundary";
 
 /** Original consumed UNO word service and existing script operations. */
 export interface XBreakIteratorService extends XInterface, XBreakIterator {
+  /** Original deprecated query returns zero for all inputs. @param text - Counted input. @param position - Native offset. @param locale - Native locale. @returns Zero. */
+  getWordType(text: OUStringConstReference, position: number, locale: LocaleConstReference): number;
   /** Original next-word boundary query. @param text - Input. @param position - Native offset. @param locale - Requested locale. @param wordType - Native word mode. @returns Boundary. */
   nextWord(
     text: OUStringConstReference,

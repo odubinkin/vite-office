@@ -8,20 +8,23 @@
     "upstreamPath": "editeng/source/editeng/editundo.cxx",
     "localSymbols": [
       "EditUndo",
-      "OutlinerViewShell"
+      "OutlinerViewShell",
+      "EditUndoManager"
     ],
     "upstreamSymbols": [
       "EditUndo::EditUndo",
       "EditUndo::GetId",
       "EditUndo::CanRepeat",
       "EditUndo::GetComment",
-      "EditUndo::GetViewShellId"
+      "EditUndo::GetViewShellId",
+      "EditUndoManager"
     ],
     "preservedResponsibilities": [
-      "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation."
+      "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation.",
+      "Original EditUndoManager selects the shared native-labelled SfxUndoManager storage specialization for recording and clearing."
     ],
     "omittedResponsibilities": [
-      "Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending."
+      "Active-view undo and redo execution, physical ABI and full source undo QA remain outside this checkpoint."
     ],
     "evidence": {
       "local": [
@@ -42,6 +45,14 @@
         {
           "path": "vendor/libreoffice-reference/include/editeng/editund2.hxx",
           "marker": "class EDITENG_DLLPUBLIC EditUndo"
+        },
+        {
+          "path": "editeng/source/editeng/editundo.cxx",
+          "marker": "EditUndoManager"
+        },
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "ResetUndoManager"
         }
       ]
     },

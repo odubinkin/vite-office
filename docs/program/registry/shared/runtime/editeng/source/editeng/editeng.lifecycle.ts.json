@@ -19,9 +19,11 @@
         "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts",
         "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
         "editeng/source/editeng/editeng.cxx",
-        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts"
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+        "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts#GetUndoComment",
+        "include/editeng/editrids.hrc"
       ],
-      "justification": "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory. Concrete EditEngine/ImpEditEngine constructor/resources, full parser/undo/layout/view/style-notification implementations and ScFieldEditEngine CSV admission remain unported. Abstract dependencies are mandatory, not default substitutes. Native diagnostic/thread/lifetime/ABI and full QA are uncertified. NatNum12 and final CSV audit remain pending. AQF9AG continuation: Original GetActiveView, CreateEditPaM, InsertText and DeleteSelection delegation bodies now target the actual source implementation. Localized GetUndoComment, ConnectContents and SplitContent remain mandatory abstract source declarations until their true implementation is bound; no label/deletion/connection/split provider is invented. AQF9AG object-creation continuation: Original public CreateSelection and three CreateTextObject overloads delegate to the same actual internal owner, preserve the paragraph-count default one, direct selection conversion and native EditTextObject base return contract. Actual creation does not admit an unported constructor, renderer or process service.",
+      "justification": "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory. Original GetActiveView, CreateEditPaM, InsertText and DeleteSelection delegation bodies now target the actual source implementation. Localized GetUndoComment, ConnectContents and SplitContent remain mandatory abstract source declarations until their true implementation is bound; no label/deletion/connection/split provider is invented. Original public CreateSelection and three CreateTextObject overloads delegate to the same actual internal owner, preserve the paragraph-count default one, direct selection conversion and native EditTextObject base return contract. Actual creation does not admit an unported constructor, renderer or process service. Original outer text/default-language/control/paragraph-count/undo methods delegate to the actual internal owner. Undo comment dispatch uses the source English strings. Concrete outer construction and other edit engine methods, view/layout and localized UI remain outside this checkpoint.",
       "knownViolations": [],
       "localSymbols": [
         "EditEngine"
@@ -38,7 +40,10 @@
         "EditEngine::InsertText",
         "EditEngine::DeleteSelection",
         "EditEngine::CreateSelection",
-        "EditEngine::CreateTextObject"
+        "EditEngine::CreateTextObject",
+        "EditEngine::SetText",
+        "EditEngine::SetDefaultLanguage",
+        "EditEngine::GetUndoComment"
       ]
     }
   }

@@ -76,6 +76,45 @@ export const EDITUNDO_INSERTCHARS = 106;
 /** Original compound text-insertion undo identifier. */
 export const EDITUNDO_INSERT = 111;
 
+/** Original removechars action identifier. */
+export const EDITUNDO_REMOVECHARS = 100;
+/** Original connectparas action identifier. */
+export const EDITUNDO_CONNECTPARAS = 101;
+/** Original moveparagraphs action identifier. */
+export const EDITUNDO_MOVEPARAGRAPHS = 103;
+/** Original insertfeature action identifier. */
+export const EDITUNDO_INSERTFEATURE = 104;
+/** Original delcontent action identifier. */
+export const EDITUNDO_DELCONTENT = 107;
+/** Original delete action identifier. */
+export const EDITUNDO_DELETE = 108;
+/** Original cut action identifier. */
+export const EDITUNDO_CUT = 109;
+/** Original paste action identifier. */
+export const EDITUNDO_PASTE = 110;
+/** Original moveparas action identifier. */
+export const EDITUNDO_MOVEPARAS = 113;
+/** Original paraattribs action identifier. */
+export const EDITUNDO_PARAATTRIBS = 114;
+/** Original attribs action identifier. */
+export const EDITUNDO_ATTRIBS = 115;
+/** Original draganddrop action identifier. */
+export const EDITUNDO_DRAGANDDROP = 116;
+/** Original read action identifier. */
+export const EDITUNDO_READ = 117;
+/** Original stylesheet action identifier. */
+export const EDITUNDO_STYLESHEET = 118;
+/** Original replaceall action identifier. */
+export const EDITUNDO_REPLACEALL = 119;
+/** Original resetattribs action identifier. */
+export const EDITUNDO_RESETATTRIBS = 121;
+/** Original indentblock action identifier. */
+export const EDITUNDO_INDENTBLOCK = 122;
+/** Original unindentblock action identifier. */
+export const EDITUNDO_UNINDENTBLOCK = 123;
+/** Original transliterate action identifier. */
+export const EDITUNDO_TRANSLITERATE = 125;
+
 /** Original default horizontal paragraph direction selector. */
 export enum EEHorizontalTextDirection {
   Default,

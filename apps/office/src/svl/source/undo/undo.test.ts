@@ -1,6 +1,7 @@
 /** @fileoverview Verifies Sfx action stacks, merging, compounds, save marks, redo branches, and limits. */
 
 import { describe, expect, it } from "vitest";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import {
   DEFAULT_MAX_UNDO_ACTION_COUNT,
   SfxListUndoAction,
@@ -318,4 +319,27 @@ it("clears native history levels only as each open list unwinds", /** Covers Cle
   manager.ClearAllLevels();
   expect(manager.GetUndoActionCount()).toBe(0);
   expect(manager.IsAtSavePosition()).toBe(false);
+});
+
+it("retains owned native list labels when a level clears its children", /** Verifies the edit-engine label and group metadata boundary. @returns Nothing. */ () => {
+  const comment = new OUString(Uint16Array.of(65), 1);
+  const repeat = new OUString();
+  const group = new SfxListUndoAction<unknown, OUString>(comment, repeat, 111, 47);
+  comment.dispose();
+  repeat.dispose();
+  try {
+    group.ClearActions();
+    const label = group.GetComment();
+    const repeatLabel = group.GetRepeatComment();
+    try {
+      expect(label.charAt(0)).toBe(65);
+      expect(repeatLabel?.isEmpty()).toBe(true);
+      expect([group.GetId(), group.GetViewShellId()]).toEqual([111, 47]);
+    } finally {
+      repeatLabel?.dispose();
+      label.dispose();
+    }
+  } finally {
+    group.Dispose();
+  }
 });

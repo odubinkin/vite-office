@@ -1,5 +1,6 @@
 /** @fileoverview Original global.cxx calculation state used by segment index readiness; other ScGlobal services remain separate unimplemented responsibilities. */
 import { getSystemCharClass } from "../../../../unotools/source/misc/syslocale";
+import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -144,6 +145,10 @@ export class ScGlobal {
       : script === ScriptType.COMPLEX
         ? SvtScriptType.COMPLEX
         : SvtScriptType.LATIN;
+  }
+  /** Original edit-engine default reads the application data-language tag. @returns Native language identifier. */
+  static GetEditDefaultLanguage(): number {
+    return GetSettings().GetLanguageTag().getLanguageType();
   }
   /** Original system-following number-format language,retained by native Init. */
   public static eLnge = LANGUAGE_SYSTEM;

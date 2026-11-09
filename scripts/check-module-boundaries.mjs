@@ -61,8 +61,7 @@ const allowedEdges = new Map([
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original implbase/queryinterface/weak use UNO/SAL; interfacecontainer4 uses o3tl/cow_wrapper.
-  // Original component_context.cxx includes comphelper/sequence.hxx.
+  // Original cppuhelper uses UNO/SAL, o3tl/cow_wrapper and comphelper/sequence.
   ["cppuhelper", new Set(["comphelper", "cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors.
@@ -83,7 +82,6 @@ const allowedEdges = new Map([
       "cppu",
       // Original impedit2.cxx includes unicode/ubidi.h; Library_editeng links icuuc and icu_headers.
       "external",
-      // Original langitem.hxx uses i18nlangtag/lang.h language values.
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
       "i18nutil",
@@ -95,6 +93,7 @@ const allowedEdges = new Map([
       "svl",
       "svtools",
       "tools",
+      "udkapi",
       "vcl",
       "xmloff",
     ]),
@@ -387,9 +386,9 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
-  // Native number.cxx SwDefBulletConfig owns a vcl::Font value, without a device/browser adapter.
   if (source === "sw/source/core/doc/number-bullet.ts" && target === "vcl/source/font/font")
     return false;
+  if (source === "sc/source/core/data/global.ts" && target === "vcl/source/app/svapp") return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.
   if (

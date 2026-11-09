@@ -5,6 +5,7 @@ import { ScPoolHelper } from "../inc/poolhelp";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { uppercase } from "../../../../unotools/inc/charclass";
+import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { ScDocument } from "./document";
 import { ScTable } from "../../../inc/table";
@@ -99,6 +100,13 @@ export function GetFormatTable(this: ScDocument): SvNumberFormatter {
   const helper = this["mxPoolHelper"];
   if (!helper) throw new Error("Document pool helper assertion");
   return helper.GetFormTable();
+}
+
+/** Original document accessor uses the shared pool helper. @param this - Actual document. @returns Borrowed edit-engine item pool. */
+export function GetEditEnginePool(this: ScDocument): SfxItemPool {
+  const helper = this["mxPoolHelper"];
+  if (!helper) throw new Error("Document pool helper assertion");
+  return helper.GetEditEnginePool();
 }
 
 /** Original actual cell-attribute resource helper,partitioned unchanged from the facade. @param this - Actual document. @returns Borrowed canonical helper. */

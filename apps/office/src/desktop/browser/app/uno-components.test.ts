@@ -11,6 +11,9 @@ import {
   BreakIterator_zh_TW,
 } from "../../../i18npool/source/breakiterator/breakiterator_cjk";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
+import { ANYWORD_IGNOREWHITESPACES } from "../../../offapi/com/sun/star/i18n/WordType";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { XNumberText } from "../../../offapi/com/sun/star/linguistic2/XNumberText";
 import { READONLY } from "../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import { XPropertySet } from "../../../udkapi/com/sun/star/beans/XPropertySet";
@@ -23,6 +26,21 @@ it("installs the original process context and the registered CJK word services",
   const context = getProcessComponentContext();
   const manager = context.operatorStar().getServiceManager();
   try {
+    const iterator = BreakIterator.create(context as Reference<XComponentContext>);
+    const value = unicode("word next");
+    const locale = new Locale();
+    try {
+      const service = iterator.operatorStar();
+      expect(service.getWordType(value, 0, locale)).toBe(0);
+      expect(service.nextWord(value, 0, locale, ANYWORD_IGNOREWHITESPACES)).toEqual({
+        startPos: 5,
+        endPos: 9,
+      });
+    } finally {
+      locale.dispose();
+      value.dispose();
+      iterator.dispose();
+    }
     const properties = new Reference<XPropertySet>(manager, UNO_QUERY, XPropertySet.static_type);
     const propertyName = unicode("DefaultContext");
     try {

@@ -8,7 +8,10 @@ import { ScGlobal } from "../../../inc/global";
 import { ScScriptTypeData } from "../inc/scrdata";
 import { SvtScriptType as S } from "../../../../svl/inc/languageoptions";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { setConfiguredSystemUILanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
+import {
+  setConfiguredSystemLanguage,
+  setConfiguredSystemUILanguage,
+} from "../../../../i18nlangtag/source/isolang/mslangid";
 import { LANGUAGE_SYSTEM, LANGUAGE_ENGLISH_US } from "../../../../i18nlangtag/inc/lang";
 it("retains all original scales,zoom,opaque device identity and independently accumulated UInt16 row heights", /** Checks original constructor/accessor contracts without a fake device implementation. @returns Nothing. */ () => {
   const device = { identity: "borrowed host device" },
@@ -82,6 +85,16 @@ it("uses the original office UI language for entirely weak text rather than the 
       expect(ScGlobal.GetDefaultScriptType()).toBe(script);
     }
   } finally {
+    setConfiguredSystemUILanguage(LANGUAGE_SYSTEM);
+  }
+});
+it("takes the original edit-engine default from the application data language", /** Separates the VCL data locale from the UI locale. @returns Nothing. */ () => {
+  setConfiguredSystemLanguage(0x0411);
+  setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
+  try {
+    expect(ScGlobal.GetEditDefaultLanguage()).toBe(0x0411);
+  } finally {
+    setConfiguredSystemLanguage(LANGUAGE_SYSTEM);
     setConfiguredSystemUILanguage(LANGUAGE_SYSTEM);
   }
 });

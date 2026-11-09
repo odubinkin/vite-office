@@ -18,12 +18,17 @@
       "evidence": [
         "apps/office/src/editeng/source/editeng/editund2.ts",
         "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
-        "vendor/libreoffice-reference/editeng/source/editeng/editundo.cxx"
+        "vendor/libreoffice-reference/editeng/source/editeng/editundo.cxx",
+        "apps/office/src/editeng/source/editeng/editund2.ts#EditUndoManager",
+        "editeng/source/editeng/editundo.cxx",
+        "editeng/source/editeng/impedit5.cxx"
       ],
-      "justification": "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation. Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending.",
+      "justification": "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation. Original EditUndoManager selects the shared native-labelled SfxUndoManager storage specialization for recording and clearing. Active-view undo and redo execution, physical ABI and full source undo QA remain outside this checkpoint.",
       "knownViolations": [],
       "localSymbols": [
-        "EditUndo"
+        "EditUndo",
+        "OutlinerViewShell",
+        "EditUndoManager"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "editeng/source/editeng/editundo.cxx",
@@ -32,7 +37,8 @@
         "EditUndo::GetId",
         "EditUndo::CanRepeat",
         "EditUndo::GetComment",
-        "EditUndo::GetViewShellId"
+        "EditUndo::GetViewShellId",
+        "EditUndoManager"
       ]
     }
   }

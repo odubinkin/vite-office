@@ -9,18 +9,22 @@
     "localSymbols": [
       "ImplSchedulerContext",
       "ImplSVData",
-      "ImplGetSVData"
+      "ImplGetSVData",
+      "ImplSVAppData"
     ],
     "upstreamSymbols": [
       "ImplSchedulerContext",
       "ImplSVData",
-      "ImplGetSVData"
+      "ImplGetSVData",
+      "ImplSVAppData",
+      "mxSettings"
     ],
     "preservedResponsibilities": [
-      "Task76 ports actual native VCL Task/Timer/Idle scheduling owners:original priority ordering/FIFO lists,record replacement on priority restart,one-shot/auto deletion flags,nullable callbacks,copy/assignment distinctions,original active timeout timestamp,deterministic default/lowest Idle wakeup,nested scheduler stack and release-profile deinitialization. Actual ImplSVData static identity and ImplSchedulerContext own the queues;JS GC releases deleted record links while preserving non-owning comparison identity. A browser SalTimer and monotonic clock replace SAL platform allocation. Isolated browser/Worker realms do not share native mutexes. Browser input admission queries the host capability where exposed;OS paint queues remain host-controlled. Uncaught task errors stop the realm scheduler and escape instead of native process abort. ProcessEventsToIdle,application/window/device services,thread transfer and native debug logging/draining are not bound. Full chart/document paste/history and AutoSum remain incomplete."
+      "Task76 ports actual native VCL Task/Timer/Idle scheduling owners:original priority ordering/FIFO lists,record replacement on priority restart,one-shot/auto deletion flags,nullable callbacks,copy/assignment distinctions,original active timeout timestamp,deterministic default/lowest Idle wakeup,nested scheduler stack and release-profile deinitialization. Actual ImplSVData static identity and ImplSchedulerContext own the queues;JS GC releases deleted record links while preserving non-owning comparison identity. A browser SalTimer and monotonic clock replace SAL platform allocation. Isolated browser/Worker realms do not share native mutexes. Browser input admission queries the host capability where exposed;OS paint queues remain host-controlled. Uncaught task errors stop the realm scheduler and escape instead of native process abort. ProcessEventsToIdle,application/window/device services,thread transfer and native debug logging/draining are not bound. Full chart/document paste/history and AutoSum remain incomplete.",
+      "Original ImplSVAppData carries its lazy settings member independently of the scheduler context."
     ],
     "omittedResponsibilities": [
-      "ProcessEventsToIdle,thread transfer/mutexes,full application/window/device owners,native debug logging/draining and process abort are not exposed as successful browser services. Full chart/paste/history/AutoSum acceptance remains incomplete."
+      "Other native application/window/device state remains outside the current slice."
     ],
     "evidence": {
       "local": [
@@ -31,12 +35,24 @@
         {
           "path": "apps/office/src/vcl/source/app/native-scheduler.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/vcl/inc/svdata.hxx",
           "marker": "ImplSchedulerContext"
+        },
+        {
+          "path": "vcl/inc/svdata.hxx",
+          "marker": "mxSettings"
+        },
+        {
+          "path": "vcl/source/app/svapp.cxx",
+          "marker": "Application::GetSettings"
         }
       ]
     }

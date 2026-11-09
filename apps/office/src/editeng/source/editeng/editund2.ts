@@ -1,7 +1,10 @@
 /** @fileoverview Original EditUndo base contract over the existing shared SfxUndoAction owner. Original GetComment returns an owned OUString; shared context entry points are explicit host call bindings; no alternate undo manager is supplied. */
-import { SfxUndoAction } from "../../../svl/source/undo/undo";
+import { SfxUndoAction, SfxUndoManager } from "../../../svl/source/undo/undo";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { EditEngine } from "./editeng.lifecycle";
+/** Original EditUndoManager storage and inherited action-recording contract. */
+export class EditUndoManager extends SfxUndoManager<unknown, OUString> {}
+
 /** Consumed original OutlinerViewShell declaration; no view-shell implementation/default is supplied. */
 export interface OutlinerViewShell {
   /** Original signed view-shell identity. @returns Actual identity. */

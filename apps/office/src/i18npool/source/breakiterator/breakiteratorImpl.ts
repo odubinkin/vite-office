@@ -187,6 +187,14 @@ export class BreakIteratorImpl
     }
   }
 
+  /** Original deprecated UNO method always returns zero. @param value - Unused counted input. @param pos - Unused offset. @param locale - Unused locale. @returns Zero. */
+  getWordType(value: OUStringConstReference, pos: number, locale: LocaleConstReference): number {
+    void value;
+    void pos;
+    void locale;
+    return 0;
+  }
+
   /** Original outer nextWord bounds, whitespace scan and mixed-script clamping. @param value - Counted input. @param start - Initial native offset. @param locale - Requested locale. @param type - Word mode. @returns Boundary. */
   nextWord(
     value: OUStringConstReference,

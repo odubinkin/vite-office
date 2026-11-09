@@ -25,7 +25,11 @@ import {
 import { EditUndoInsertChars, EditUndoSplitPara } from "./editundo";
 
 import { MisspellRange } from "../../inc/misspellrange";
-import { EE_FEATURE_TAB } from "../../inc/eeitem";
+import { EE_FEATURE_TAB, EE_PARA_SBL, EE_PARA_ULSPACE } from "../../inc/eeitem";
+import { EditLine } from "../../inc/EditLine";
+import { SvxLineSpacingItem } from "../../inc/lspcitem";
+import { SvxULSpaceItem } from "../../inc/ulspitem";
+import { CalcHeight } from "./impedit2.height";
 import { MAXCHARSINPARA } from "./impedit.constants";
 
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -658,5 +662,44 @@ it("captures the actual view-shell identity once and preserves null-engine actio
     orphan.Dispose();
     value.dispose();
     outer.implementation.dispose();
+  }
+});
+
+it("calculates native paragraph height with adjacent fixed line spacing", /** Exercises source spacing and the invalid previous-paragraph guard. @returns Nothing. */ () => {
+  const outer = new PreparedOuter();
+  const engine = outer.getImpl();
+  try {
+    engine.appendParagraph("next");
+    const previous = engine.GetParaPortions().getRef(0);
+    const current = engine.GetParaPortions().getRef(1);
+    for (const [portion, height, upper, lower, fixed] of [
+      [previous, 100, 0, 9, 20],
+      [current, 50, 6, 0, 12],
+    ] as const) {
+      const line = new EditLine();
+      line.SetHeight(height);
+      portion.GetLines().Append(line);
+      const items = (portion.GetNode() as ContentNode).GetContentAttribs().GetItems();
+      const spacing = new SvxULSpaceItem(upper, lower, EE_PARA_ULSPACE);
+      const fixedSpacing = new SvxLineSpacingItem(0, EE_PARA_SBL);
+      fixedSpacing.SetInterLineSpace(fixed);
+      try {
+        items.Put(spacing);
+        items.Put(fixedSpacing);
+      } finally {
+        fixedSpacing.Dispose();
+        spacing.Dispose();
+      }
+    }
+    CalcHeight(engine, previous);
+    CalcHeight(engine, current);
+    expect([previous.GetHeight(), current.GetHeight(), current.GetFirstLineOffset()]).toEqual([
+      109, 53, 3,
+    ]);
+    previous.SetValid();
+    CalcHeight(engine, current);
+    expect([current.GetHeight(), current.GetFirstLineOffset()]).toEqual([61, 11]);
+  } finally {
+    engine.dispose();
   }
 });

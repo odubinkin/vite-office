@@ -604,6 +604,10 @@ export class ScDocument {
   GetFormatTable(): SvNumberFormatter {
     return documen2.GetFormatTable.call(this);
   }
+  /** Original documen2 accessor for the shared edit-engine pool. @returns Borrowed edit-engine item pool. */
+  GetEditEnginePool(): ReturnType<typeof documen2.GetEditEnginePool> {
+    return documen2.GetEditEnginePool.call(this);
+  }
   /** Native clipboard mode query. @returns Mode flag. */
   IsClipboard(): boolean {
     return this.bIsClip;

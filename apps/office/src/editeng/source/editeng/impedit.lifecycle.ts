@@ -1,9 +1,15 @@
 /** @fileoverview Original ImpEditEngine lifecycle, selection conversion and notification member groups. Unported state/constructor/undo/layout members are mandatory abstract dependencies: this is not an instantiable engine or a production fallback. */
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 import { DuplicateHandling, SfxListener } from "../../../svl/source/notify/lstner";
 import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import type { SfxHint } from "../../../svl/inc/hint";
 import type { StyleSheetUser } from "../../../svl/inc/stylesheetuser";
-import type { EditDoc } from "../../inc/editdoc";
+import { GetScriptItemId, type EditDoc } from "../../inc/editdoc";
 import { ParaPortion, ScriptTypePosInfo, WritingDirectionInfo } from "../../inc/ParagraphPortion";
 import type { ParaPortionList } from "../../inc/ParagraphPortionList";
 import type { InternalEditStatus } from "./editstt2";
@@ -28,6 +34,7 @@ import {
   EE_FEATURE_TAB,
   EE_FEATURE_FIELD,
   EE_CHAR_SCRIPT_HINT,
+  EE_CHAR_LANGUAGE,
   EE_PARA_WRITINGDIR,
   EE_ITEMS_START,
   EE_ITEMS_END,
@@ -36,6 +43,7 @@ import {
 import type { EditCharAttribField } from "../../inc/editattr";
 import { SvxFrameDirectionItem } from "../../inc/frmdiritem";
 import { SvxFrameDirection } from "../../inc/frmdir";
+import type { SvxLanguageItem } from "../../inc/langitem";
 import type { SvxScriptHintItem } from "../../inc/scripthintitem";
 import type { TextRotation } from "../../inc/editobj";
 import type { EditTextObject } from "./editobj";
@@ -43,7 +51,7 @@ import { CreateTextObject as CreateTextObjectBody } from "./impedit4.textobject"
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
-import type { XBreakIterator } from "../../../offapi/com/sun/star/i18n/XBreakIterator";
+import type { XBreakIteratorService } from "../../../offapi/com/sun/star/i18n/XBreakIterator";
 import * as ScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
 import {
   SvtScriptType,
@@ -57,11 +65,16 @@ import {
   ScriptHintProvider,
 } from "../../../i18nutil/inc/scriptchangescanner";
 import { convertLineEnd, LINEEND_LF } from "../../../tools/inc/lineend";
-import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
+import {
+  ANY_WORD,
+  ANYWORD_IGNOREWHITESPACES,
+  DICTIONARY_WORD,
+} from "../../../offapi/com/sun/star/i18n/WordType";
+import { CalcHeight } from "./impedit2.height";
 import { PrepareInsertTextLine } from "./impedit2.text";
 import { LINE_SEP } from "./impedit.constants";
 import { EditUndoInsertChars, EditUndoSplitPara } from "./editundo";
-import type { EditUndo, OutlinerViewShell } from "./editund2";
+import { EditUndoManager, type EditUndo, type OutlinerViewShell } from "./editund2";
 import type { WrongList } from "../../inc/edtspell";
 import {
   ubidi_openSized,
@@ -107,8 +120,21 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract meDefaultHorizontalTextDirection: EEHorizontalTextDirection;
   protected abstract mpRefDev: object | null;
   protected abstract pEmptyItemSet: SfxItemSet | null;
-  /** Original mandatory cached BreakIterator service getter; no alternative factory/provider. @returns Actual source service. */
-  abstract ImplGetBreakIterator(): XBreakIterator;
+  protected readonly mxBI = new Reference<XBreakIteratorService>();
+  /** Original lazy context-based BreakIterator service acquisition. @returns Borrowed actual service. */
+  ImplGetBreakIterator(): XBreakIteratorService {
+    if (!this.mxBI.is()) {
+      const service = BreakIterator.create(
+        getProcessComponentContext() as Reference<XComponentContext>,
+      );
+      try {
+        this.mxBI.moveAssign(service);
+      } finally {
+        service.dispose();
+      }
+    }
+    return this.mxBI.operatorStar();
+  }
   /** Original raw ICU writing-direction initialization, including source error resets, fuzzing behavior and final LTR fallback. @param paragraph - Source index. @returns Nothing. */
   InitWritingDirections(paragraph: number): void {
     const portion = this.GetParaPortions().SafeGetObject(paragraph);
@@ -163,21 +189,124 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   abstract override Notify(broadcaster: SfxBroadcaster, hint: SfxHint): void;
   /** Original mandatory range-deletion dependency; no alternative deletion provider. @param selection - Source range. @returns Actual resulting position. */
   abstract ImpDeleteSelection(selection: EditSelection): EditPaM;
-  /** Original mandatory word-boundary service consumer. @param selection - Source caret/range. @param wordType - Original WordType. @returns Actual selected word. */
-  abstract SelectWord(selection: EditSelection, wordType: number): EditSelection;
-  /** Original compound undo entry, mandatory until the real undo owner is bound. @param id - Source action identifier. @returns Nothing. */
-  abstract UndoActionStart(id: number): void;
-  /** Original compound undo exit. @returns Nothing. */
-  abstract UndoActionEnd(): void;
-  /** Original actual undo-action ownership transfer. @param action - Owned source action. @param tryMerge - Source default false. @returns Nothing. */
-  abstract InsertUndo(action: EditUndo, tryMerge?: boolean): void;
-  /** Original undo-manager reset, with no default manager/provider. @returns Nothing. */
-  abstract ResetUndoManager(): void;
-  /** Original paragraph-height calculation dependency. @param portion - Actual next portion. @returns Nothing. */
-  abstract CalcHeight(portion: ParaPortion): void;
+  /** Original selected word honors the cursor-side locale and source endpoint preferences. @param selection - Source caret/range. @param wordType - Original WordType. @param acceptStart - Accept a cursor at the word start. @param acceptEnd - Accept a cursor at the word end. @returns Original resulting selection. */
+  SelectWord(
+    selection: EditSelection,
+    wordType = ANYWORD_IGNOREWHITESPACES,
+    acceptStart = true,
+    acceptEnd = false,
+  ): EditSelection {
+    const selected = new EditSelection(selection);
+    const cursor = selection.Max();
+    const node = cursor.GetNode() as ContentNode;
+    const pos = cursor.GetIndex();
+    const next = new EditPaM(cursor);
+    if (pos < node.Len()) next.SetIndex(pos + 1);
+    const locale = this.GetLocale(next);
+    try {
+      const iterator = this.ImplGetBreakIterator();
+      const input = node.GetString();
+      if (iterator.getWordType(input, pos, locale) === ANY_WORD) {
+        const boundary = iterator.getWordBoundary(
+          input,
+          pos,
+          locale,
+          wordType,
+          pos !== input.getLength(),
+        );
+        if (
+          (boundary.endPos > pos || (acceptEnd && boundary.endPos === pos)) &&
+          (boundary.startPos < pos || (acceptStart && boundary.startPos === pos))
+        ) {
+          selected.Min().SetIndex(boundary.startPos);
+          selected.Max().SetIndex(boundary.endPos);
+        }
+      }
+      return selected;
+    } finally {
+      locale.dispose();
+    }
+  }
+  /** Original character language prefers the matching hard attribute over the paragraph item. @param cursor - Actual paragraph position. @returns Owned locale. */
+  private GetLocale(cursor: EditPaM): Locale {
+    const node = cursor.GetNode() as ContentNode;
+    const script = FromI18NToSvtScriptType(this.GetI18NScriptType(cursor));
+    const which = GetScriptItemId(EE_CHAR_LANGUAGE, script);
+    const hard = node.GetCharAttribs().FindAttrib(which, cursor.GetIndex());
+    const item = (hard?.GetItem() ?? node.GetContentAttribs().GetItem(which)) as SvxLanguageItem;
+    const tag = new LanguageTag(item.GetLanguage());
+    try {
+      return new Locale(tag.getLocale());
+    } finally {
+      tag.dispose();
+    }
+  }
+  /** Original script lookup uses the first inclusive matching position and the application default for a zero script value. @param cursor - Actual paragraph position. @returns Source script. */
+  private GetI18NScriptType(cursor: EditPaM): number {
+    const node = cursor.GetNode() as ContentNode;
+    if (node.Len()) {
+      const paragraph = this.maEditDoc.GetPos(node);
+      const portion = this.maParaPortionList.SafeGetObject(paragraph);
+      if (portion !== null) {
+        const types = portion.getScriptTypePosInfos();
+        if (types.length === 0) this.InitScriptTypes(paragraph);
+        const pos = cursor.GetIndex();
+        for (const type of types) {
+          if (type.nStartPos <= pos && type.nEndPos >= pos) {
+            if (type.nScriptType) return type.nScriptType;
+            break;
+          }
+        }
+      }
+    }
+    return GetI18NScriptTypeOfLanguage(this.GetDefaultLanguage());
+  }
+  private mpUndoManager: EditUndoManager | null = null;
+
+  /** Original lazy undo manager. @returns Actual undo storage. */
+  private GetUndoManager(): EditUndoManager {
+    return (this.mpUndoManager ??= new EditUndoManager());
+  }
+
+  /** Original compound action entry is skipped while undo is disabled or executing. @param id - Source action identifier. @returns Nothing. */
+  UndoActionStart(id: number): void {
+    if (!this.IsUndoEnabled() || this.IsInUndo()) return;
+    const comment = this.mpEditEngine.GetUndoComment(id);
+    const repeat = new OUString();
+    const viewShell = this.mpEditEngine.GetActiveView()?.getImpl().GetViewShell();
+    try {
+      this.GetUndoManager().EnterListAction(comment, repeat, id, viewShell?.GetViewShellId() ?? -1);
+    } finally {
+      repeat.dispose();
+      comment.dispose();
+    }
+  }
+
+  /** Original compound action exit follows the same undo gate. @returns Nothing. */
+  UndoActionEnd(): void {
+    if (this.IsUndoEnabled() && !this.IsInUndo()) this.GetUndoManager().LeaveListAction();
+  }
+
+  /** Original undo-action ownership transfer with the supplied merge flag. @param action - Owned source action. @param tryMerge - Source default false. @returns Nothing. */
+  InsertUndo(action: EditUndo, tryMerge = false): void {
+    this.GetUndoManager().AddUndoAction(action, tryMerge);
+  }
+
+  /** Original reset clears an existing manager without creating one. @returns Nothing. */
+  ResetUndoManager(): void {
+    this.mpUndoManager?.Clear();
+  }
+  /** Original paragraph-height calculation. @param portion - Actual paragraph portion. @returns Nothing. */
+  CalcHeight(portion: ParaPortion): void {
+    CalcHeight(this, portion);
+  }
   /** Original raw default language. @returns Source language identity. */
   GetDefaultLanguage(): number {
     return this.meDefLanguage;
+  }
+  /** Original inline default-language assignment. @param language - Native language identifier. @returns Nothing. */
+  SetDefaultLanguage(language: number): void {
+    this.meDefLanguage = language;
   }
   /** Original raw default horizontal direction. @returns Source selector. */
   GetDefaultHorizontalTextDirection(): EEHorizontalTextDirection {

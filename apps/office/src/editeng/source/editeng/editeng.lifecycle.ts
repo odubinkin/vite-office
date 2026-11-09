@@ -1,14 +1,17 @@
 /** @fileoverview Original EditEngine notification member bodies, with mandatory actual implementation access and no concrete constructor admission. */
 import type { ImpEditEngine } from "./impedit.lifecycle";
+import * as EditData from "../../inc/editdata";
 import { EENotify, EENotifyType } from "../../inc/editdata";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CreatePool } from "./editeng";
 import type { EditPaM } from "../../inc/EditPaM";
 import { ESelection } from "../../inc/ESelection";
 import type { EditTextObject } from "./editobj";
 import type { EditSelection } from "../../inc/EditSelection";
 import type { EPaM } from "../../inc/EPaM";
-import type { OUString, OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { EditView } from "./impedit.lifecycle";
+import type { EEControlBits } from "../../inc/editstat";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 /** Source outer-owner member group; original concrete constructor/layout/other APIs remain mandatory before production instantiation. */
 export abstract class EditEngine {
@@ -34,8 +37,44 @@ export abstract class EditEngine {
   DeleteSelection(selection: EditSelection): EditPaM {
     return this.getImpl().ImpDeleteSelection(selection);
   }
-  /** Original unported localized undo-comment API; no default label provider. @param id - Source undo ID. @returns Owned source string. */
-  abstract GetUndoComment(id: number): OUString;
+  /** Original undo-comment dispatch over the bundled source English EditResId values. @param id - Source undo ID. @returns Owned source string. */
+  GetUndoComment(id: number): OUString {
+    switch (id) {
+      case EditData.EDITUNDO_REMOVECHARS:
+      case EditData.EDITUNDO_CONNECTPARAS:
+      case EditData.EDITUNDO_DELCONTENT:
+      case EditData.EDITUNDO_DELETE:
+      case EditData.EDITUNDO_CUT:
+        return unicode("Delete");
+      case EditData.EDITUNDO_MOVEPARAGRAPHS:
+      case EditData.EDITUNDO_MOVEPARAS:
+      case EditData.EDITUNDO_DRAGANDDROP:
+        return unicode("Move");
+      case EditData.EDITUNDO_INSERTFEATURE:
+      case EditData.EDITUNDO_SPLITPARA:
+      case EditData.EDITUNDO_INSERTCHARS:
+      case EditData.EDITUNDO_PASTE:
+      case EditData.EDITUNDO_INSERT:
+      case EditData.EDITUNDO_READ:
+        return unicode("Insert");
+      case EditData.EDITUNDO_REPLACEALL:
+        return unicode("Replace");
+      case EditData.EDITUNDO_ATTRIBS:
+      case EditData.EDITUNDO_PARAATTRIBS:
+        return unicode("Apply attributes");
+      case EditData.EDITUNDO_RESETATTRIBS:
+        return unicode("Reset attributes");
+      case EditData.EDITUNDO_STYLESHEET:
+        return unicode("Apply Styles");
+      case EditData.EDITUNDO_TRANSLITERATE:
+        return unicode("Change Case");
+      case EditData.EDITUNDO_INDENTBLOCK:
+      case EditData.EDITUNDO_UNINDENTBLOCK:
+        return unicode("Indent");
+      default:
+        return new OUString();
+    }
+  }
   /** Original unported paragraph-connection dependency. @param left - Left paragraph index. @param backward - Source direction flag. @returns Actual resulting position. */
   abstract ConnectContents(left: number, backward: boolean): EditPaM;
   /** Original unported paragraph-split dependency. @param paragraph - Paragraph index. @param position - Source split index. @returns Actual resulting position. */
@@ -43,6 +82,30 @@ export abstract class EditEngine {
   /** Original actual public selection conversion, without normalization. @param selection - Original public value. @returns Actual node selection. */
   CreateSelection(selection: ESelection): EditSelection {
     return this.getImpl().CreateSel(selection);
+  }
+  /** Original outer default-language assignment. @param language - Native language identifier. @returns Nothing. */
+  SetDefaultLanguage(language: number): void {
+    this.getImpl().SetDefaultLanguage(language);
+  }
+  /** Original paragraph count from the actual EditDoc. @returns Native count. */
+  GetParagraphCount(): number {
+    return this.getImpl().GetEditDoc().Count();
+  }
+  /** Original control-word read through the internal status owner. @returns Native control bits. */
+  GetControlWord(): EEControlBits {
+    return this.getImpl().GetStatus().GetControlWord()[0];
+  }
+  /** Original public undo flag dispatch. @param enabled - Native enable flag. @returns Nothing. */
+  EnableUndo(enabled: boolean): void {
+    this.getImpl().EnableUndo(enabled);
+  }
+  /** Original public undo flag read. @returns Native flag. */
+  IsUndoEnabled(): boolean {
+    return this.getImpl().IsUndoEnabled();
+  }
+  /** Original plain-text setter delegates to the actual internal engine. @param text - Counted original text. @returns Nothing. */
+  SetText(text: OUStringConstReference): void {
+    this.getImpl().SetText(text);
   }
   /** Original paragraph range with public default count one. @param paragraph - Source start. @param count - Original default one. @returns Actual object or source null. */
   CreateTextObject(paragraph: number, count?: number): EditTextObject | null;

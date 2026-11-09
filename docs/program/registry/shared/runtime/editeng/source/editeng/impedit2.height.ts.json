@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit2.height.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit2.height.ts#CalcHeight",
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "editeng/source/editeng/impedit2.cxx",
+        "editeng/source/editeng/impedit.hxx"
+      ],
+      "justification": "Original CalcHeight uses actual lines, stretching, paragraph spacing and neighboring paragraph cache validity. The original native numeric narrowing is retained. Full line formatting and native device integration remain outside this member group.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcHeight",
+        "calcExtraSpace",
+        "scaleYSpacingValue"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit2.cxx",
+      "upstreamSymbols": [
+        "ImpEditEngine::CalcHeight",
+        "lcl_CalcExtraSpace",
+        "scaleYSpacingValue"
+      ]
+    }
+  }
+}
