@@ -3218,3 +3218,20 @@ The pinned tokenizer classifies `rtf` as a destination.
 numeric parameter. The upstream horizontal-merge test even uses a
 bare RTF destination. Preserve admission for a present destination
 with an omitted or different version number.
+
+### WRITER394 — Markdown table separators belong only to exact text-node boundaries
+
+`OutMarkdown_SwTableNode` marks the first and last node positions of a
+cell. Only `OutMarkdown_SwTextNode` consumes those flags. A nested table
+that begins the outer cell owns a structural node at the marked start,
+so the outer opening pipe can be omitted. The nested table suppresses
+its own pipes and writes a space after each of its text nodes. Preserve
+both source behaviors.
+
+### WRITER395 — TXT table continuation compares coordinates across table boundaries
+
+`SwASCWriter::WriteTable` advances the text cursor and compares
+`SwTableBox::GetCoordinates` without testing the table identity.
+An inner cell can continue a paragraph run from the outer cell with
+the same coordinates, while a different inner coordinate can advance
+the outer column. Retain this traversal and its tab and line separators.

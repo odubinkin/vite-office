@@ -218,6 +218,40 @@ it("writes a source table separator even at the beginning of the body", /** Chec
   }
 });
 
+it.each([
+  [true, "Lead\n\n| Before Inner LeftRight After |\n| - |\n"],
+  [false, "Lead\n\nInner LeftRight After |\n| - |\n"],
+] as const)(
+  "writes nested Markdown table text with source boundary ownership, leading text present: %s",
+  /** The nested table suppresses its own pipes; a structural cell-start node does not emit the outer pipe. @param before - Whether the first cell node is text. @param expected - Exact source bytes. @returns Nothing. */ (
+    before,
+    expected,
+  ) => {
+    const doc = createWriterDocument();
+    try {
+      doc.paragraphs[0]?.SetText("Lead");
+      const outer = doc.nodes.MakeTableNode("Outer"),
+        cell = doc.nodes.AppendTableRow(outer, 1).GetTabBoxes()[0];
+      if (!cell) throw new Error("Missing outer cell.");
+      const initial = cell.GetParagraphs()[0];
+      if (!initial) throw new Error("Missing outer paragraph.");
+      initial.SetText(before ? "Before" : "After");
+      const inner = doc.nodes.MakeTableNodeBefore(
+        before ? cell.GetStartNode().EndOfSectionNode() : initial,
+        "Inner",
+        {},
+      );
+      const [left, right] = doc.nodes.AppendTableRow(inner, 2).GetTabBoxes();
+      left?.GetParagraphs()[0]?.SetText("Inner");
+      right?.GetParagraphs()[0]?.SetText("LeftRight");
+      if (before) doc.nodes.AppendTableCellParagraph(cell).SetText("After");
+      expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(doc))).toBe(expected);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+
 it("keeps one upstream Markdown hyperlink across differently formatted text runs", /** Checks keeps one upstream Markdown hyperlink across differently formatted text runs. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];

@@ -25,7 +25,7 @@ For every remaining kernel dependency, record the calling filter, the affected c
 | Paragraph upper/lower and contextual spacing, line spacing, keep-with-next, split and widow controls | Visual formatting omitted | Native paragraph and stylesheet items map spacing, keep/split/widow controls and `SvxLineSpacingItem` through `\\sl`/`\\slmult`: fixed, minimum and proportional rules round-trip; leading adds the selected script font's measured height | No equivalent simple syntax | Pinned `AttributeOutputBase::ParaWidows` deliberately omits the separate orphan count because Word shares one widow/orphan control. The source Word/RTF leading representation imports as minimum height, losing the original leading rule. Browser font measurement uses Canvas; physical `RenderContext::GetTextHeight` equivalence and headless leading export remain unverified. |
 | Explicit tab stops and default tab distance | Literal tab characters | Native `SvxTabStopItem` positions, alignment and leaders map through `\\tx` with source-relative export offset and absolute imported positions; `\\deftab` maps through the document pool user default | No format-level tab-stop definitions | Pinned writer and reader differ for hyphen and equals leaders (WRITER097); source behavior retained. Further tab/default differential cases remain to verify. |
 | Lists, numbering rules, levels, restarts and counted state | Visible labels through native ASCII path | Kind/level/identity, source-mapped `levelnfc` type, per-level start/bullet and `listtext`; uncounted paragraphs omit list controls  Native paragraph NumPr now covers style-only levels, direct rule precedence, missing-ID/body-level cancellation, signed indentation and original shared abstract IDs/startOverride. | Reader uses a document-owned rule across mixed nested list types, initializes the first format used at each level, fills unused levels on outer-list completion and marks list items counted; writer emits native labels and parent-prefix indentation | RTF paragraph restart value is not carried by the pinned upstream `ParaNumRule_Impl` path (WRITER096); some types share an `nfc` value. A later Markdown nested list with a different marker kind at an already-used level retains the first kind in pinned source (WRITER107). Further list semantics still require audit.  The native paragraph checkpoint closes the former scalar body-path gap; malformed/old-style and remaining producer/export audits stay open. RTF shared-identity loss on re-export is native (WRITER274). |
-| Table rows/cells and multiple cell paragraphs | Tab-separated rows | Native CELLX widths, row alignment/direction/height and split state, cell direction and vertical alignment, borders and padding, a contiguous header-row prefix, signed vertical spans, and horizontal/compound merges with original paragraph and mark ownership. Export writes merged horizontal widths as one CELLX and vertical spans as merge flags. | GFM table rows plus raw HTML through the native table reader. GFM export flattens multiple cell paragraphs. | Nested RTF table buffers round-trip through the native filter. Normal browser rendering, ODT storage and Worker transfer retain real nested tables. Anchored tables remain open. Pinned RTF export omits the represented header-row count even though import accepts `\trhdr` (WRITER100). |
+| Table rows/cells and multiple cell paragraphs | Native tab-separated row traversal, including coordinate-based continuations (WRITER395) | Native CELLX widths, row alignment/direction/height and split state, cell direction and vertical alignment, borders and padding, a contiguous header-row prefix, signed vertical spans, and horizontal/compound merges with original paragraph and mark ownership. Export writes merged horizontal widths as one CELLX and vertical spans as merge flags. | GFM table rows plus raw HTML through the native table reader. Markdown writes original node-owned pipe boundaries and flattens nested table text (WRITER394). | Nested RTF table buffers round-trip through the native filter. Normal browser rendering, ODT storage and Worker transfer retain real nested tables. Anchored tables remain open. Pinned RTF export omits the represented header-row count even though import accepts `\trhdr` (WRITER100). |
 | Bookmarks and soft page breaks | No structural text encoding | Point bookmarks map through `bkmkstart`/`bkmkend`. The RTF writer uses document-owned soft page positions to split a text node only when its follow page needs a distinct section, retaining character hints, hyperlinks and point marks at their source offsets. The pinned previous-page suppression can omit the section token for a later node (WRITER104). | No structural Markdown mapping | **Open:** compiled upstream differential behavior for the later-node suppression and deeper multi-page chains; table soft-break rows are outside the represented text-node path. |
 | Page descriptors and paragraph/page break items | No structural text encoding | The first page descriptor emits global paper dimensions, margins, landscape and first-section controls; import applies physical geometry through `SwDoc::ChgPageDesc`. Direct later paragraph/table page descriptors emit RTF sections, physical geometry and page-number restart, with source follow-page suppression. Later export combines a first/follow page chain only when its represented physical geometry matches, following `IsPlausableSingleWordSection`; otherwise it keeps the first page geometry. Later `\\sect`/`\\sectd` groups import physical geometry into document-owned `ConvertedN` page descriptors attached to the first block; global fields seed each reset. Direct page-before emits `\\pagebb`; incoming `\\page` and one-column `\\column` defer a `RES_BREAK` page-before item to the next paragraph or table, while an in-cell symbol is ignored | No structural Markdown mapping | **Open:** the pinned importer appears to discard the numeric `\\pgnstarts` value and map `\\pgnrestart` to 1 (WRITER103), preserved here. First-page/follow-page metadata beyond physical geometry, section types and page-style chains still need source comparison. Pinned RTF loses direct page-after/page-both without section metadata and column breaks in this one-column/default-setting model (WRITER099); no synthetic `\\page` is added on export. |
 
@@ -44,13 +44,11 @@ only an explicitly unknown encoding enters `SvStream::DetectEncoding()`.
 The browser default remains UTF-8, and the nondefault encoding option, ICU
 detector and full byte-stream differential behavior remain open (WRITER117).
 
-The Markdown reader currently implements only selected md4c callback outcomes, including
-backslash and whitespace hard breaks, soft breaks, thematic-line blocks, recognized
-entity omission and null-character omission. The
-upstream build uses md4c 0.5.3 (`external/md4c`, `download.lst`); its SHA-256-verified parser source is now available locally. Setext headings, indented code and multiline
-quotations were added to the local subset, but complete md4c syntax and
-callback parity are **not yet established**. Do not mark this slice complete
-from the existing round-trip tests alone.
+The Markdown reader uses the locally pinned md4c 0.5.3 TypeScript
+pipeline. Block and inline callback equivalence are checked against the
+vendored C parser below. Native Writer callback outcomes still follow
+the consuming format, including omission of recognized entity and null
+text callbacks (WRITER106) and the original HTML insertion behavior.
 
 The registry check covers repository inventory, not behavioral parity of these
 filters. Closure requires explicit tests of each applicable row against the
@@ -2085,3 +2083,20 @@ RTF and Markdown through the existing file dialog and reopen the resulting
 ODT from browser storage. They also verify the direct text, nested table
 and following text order in the editor. This checkpoint does not extend
 the anchored-fly layout or ODF anonymous subtable model.
+
+
+### RTF95: Native Markdown and TXT traversal of nested table text
+
+Markdown uses the original stack of table boundary records over actual
+document nodes. A top-level table writes its first separator, a nested
+table contributes text with space separators, and the outer row
+delimiter uses the first row's native paragraph alignment. Full body
+paragraph and run formatting uses the same path in a table cell.
+
+TXT uses the actual Writer text cursor, native one-based cell
+coordinates and the original tab/line separator rules. Matching
+coordinates across separate table owners are retained. Selected
+clipboard ranges keep their existing text-node path. WRITER394 and
+WRITER395 document the pinned nested-output behavior. Anchored table
+layout, ODT frame persistence and RTF floating positioning remain
+separate from this ordinary native table traversal.

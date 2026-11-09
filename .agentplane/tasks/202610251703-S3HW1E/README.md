@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 513
+revision: 516
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T21:03:59.301Z"
+  updated_at: "2026-11-09T21:09:48.792Z"
   updated_by: "CODER"
-  note: "RTF94 nested browser, ODF and Worker checks pass. Keep parent open for remaining native export and anchored table scenarios."
-  attempts: 105
+  note: "RTF95 native TXT and Markdown nested traversal checks pass. Keep parent open for table visual attributes and anchored layout."
+  attempts: 106
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1685,8 +1688,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T21:09:48.792Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF95 native TXT and Markdown nested traversal checks pass. Keep parent open for table visual attributes and anchored layout."
+  -
+    type: "status"
+    at: "2026-11-09T21:10:53.383Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T21:04:24.164Z"
+doc_updated_at: "2026-11-09T21:10:53.383Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4551,6 +4567,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T21:09:48.792Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF95 native TXT and Markdown nested traversal checks pass. Keep parent open for table visual attributes and anchored layout.
+    Attempts: 106
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:09:47.394Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6452,6 +6498,15 @@ sections:
     - Initial fresh fixture issues supplied neither the existing HTML table output device nor required shipped ICU dictionaries, and the mounted fixture looked for a body cell while the source row was a header. The corrected targeted rerun passed 4 scenarios; runtime behavior was unchanged for those corrections.
     - Type checking, ESLint, Prettier, source provenance, Writer/shared registries, module boundaries, JSDoc, file size, source tree, WhichId, and diff checks passed. Existing browser autosave policy and registered workflow deviations are preserved.
     - The source distinguishes real nested content tables and anonymous old-model sub-tables. This checkpoint preserves the regular nested content table. Anchored fly sections and the source TXT/Markdown nested-output audit remain open.
+
+    ### RTF95 — Original nested traversal for TXT and Markdown export
+
+    SwMDWriter scans native nodes and stacks the original table boundary maps. Exact text-node positions own pipe separators, nested levels emit spaces and normal formatting/list/quote/code paths apply in cells. SwASCWriter follows the actual SwPosition and compares original one-based SwTableBox coordinates, including across table owners. Exact-byte tests cover the native missing Markdown pipe when a child table owns the first node and the native cross-table TXT continuation/tab placement. WRITER394 and WRITER395 document both behaviors.
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ascii src/sw/source/filter/md docsh.test.ts WriterFileDialog.test.tsx native-content-box-registry.test.ts`. Result: pass. Evidence: 135 scoped tests in 14 files, rtf95-writer.log.
+    - Commands: scoped final ASCII/shell/file-dialog rerun and native ASCII/box ownership retest. Result: pass. Evidence: 55 tests in 3 files (rtf95-ascii-final.log), 30 tests in 2 files after replacing a lint-disallowed this alias with the same original line traversal (rtf95-coordinate-final.log). Tests overlap with the original scope.
+    - Commands: Writer TypeScript check, targeted ESLint/Prettier, dependency, JSDoc, size, source-tree, WhichId and diff checks. Result: pass. Source provenance and Writer inventory passed for 1986 runtime modules with zero semantic violations (rtf95-registry.log).
+    - Native table background and direction persistence plus anchored/floating table scenarios remain open. No full-suite run in this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -9327,6 +9382,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T21:09:48.792Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF95 native TXT and Markdown nested traversal checks pass. Keep parent open for table visual attributes and anchored layout.
+Attempts: 106
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T21:09:47.394Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11232,3 +11317,12 @@ Direct cell text and table sections now pass through normal xmloff table text im
 - Initial fresh fixture issues supplied neither the existing HTML table output device nor required shipped ICU dictionaries, and the mounted fixture looked for a body cell while the source row was a header. The corrected targeted rerun passed 4 scenarios; runtime behavior was unchanged for those corrections.
 - Type checking, ESLint, Prettier, source provenance, Writer/shared registries, module boundaries, JSDoc, file size, source tree, WhichId, and diff checks passed. Existing browser autosave policy and registered workflow deviations are preserved.
 - The source distinguishes real nested content tables and anonymous old-model sub-tables. This checkpoint preserves the regular nested content table. Anchored fly sections and the source TXT/Markdown nested-output audit remain open.
+
+### RTF95 — Original nested traversal for TXT and Markdown export
+
+SwMDWriter scans native nodes and stacks the original table boundary maps. Exact text-node positions own pipe separators, nested levels emit spaces and normal formatting/list/quote/code paths apply in cells. SwASCWriter follows the actual SwPosition and compares original one-based SwTableBox coordinates, including across table owners. Exact-byte tests cover the native missing Markdown pipe when a child table owns the first node and the native cross-table TXT continuation/tab placement. WRITER394 and WRITER395 document both behaviors.
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/filter/ascii src/sw/source/filter/md docsh.test.ts WriterFileDialog.test.tsx native-content-box-registry.test.ts`. Result: pass. Evidence: 135 scoped tests in 14 files, rtf95-writer.log.
+- Commands: scoped final ASCII/shell/file-dialog rerun and native ASCII/box ownership retest. Result: pass. Evidence: 55 tests in 3 files (rtf95-ascii-final.log), 30 tests in 2 files after replacing a lint-disallowed this alias with the same original line traversal (rtf95-coordinate-final.log). Tests overlap with the original scope.
+- Commands: Writer TypeScript check, targeted ESLint/Prettier, dependency, JSDoc, size, source-tree, WhichId and diff checks. Result: pass. Source provenance and Writer inventory passed for 1986 runtime modules with zero semantic violations (rtf95-registry.log).
+- Native table background and direction persistence plus anchored/floating table scenarios remain open. No full-suite run in this checkpoint.

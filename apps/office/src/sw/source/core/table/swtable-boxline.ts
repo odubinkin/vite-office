@@ -22,6 +22,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { Point } from "../../../../tools/inc/gen";
 import type { SwTable, SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
 
 /** Owns either one native content-cell section or anonymous nested lines. */
@@ -234,6 +235,22 @@ export class SwTableBox extends SwClient {
   public GetContentNodes(): readonly (SwTextNode | SwTableNode)[] {
     const start = this.GetStartNode();
     return start.GetNodes().GetSectionContent(start);
+  }
+  /** Original one-based cell coordinates, with anonymous lines resolved to their outermost box. @returns Native table position. */
+  public GetCoordinates(): Point {
+    const table = this.startNode?.FindTableNode()?.GetTable();
+    if (!table) return new Point();
+    let line = this.GetUpper(),
+      column = line?.GetTabBoxes().indexOf(this) ?? -1,
+      row = -1;
+    while (line) {
+      const upper = line.GetUpper();
+      row = (upper?.GetTabLines() ?? table.GetTabLines()).indexOf(line);
+      if (!upper) break;
+      line = upper.GetUpper();
+      column = line?.GetTabBoxes().indexOf(upper) ?? -1;
+    }
+    return new Point((column + 1) & 0xffff, (row + 1) & 0xffff);
   }
   /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */
   public GetParagraphs(): readonly SwTextNode[] {

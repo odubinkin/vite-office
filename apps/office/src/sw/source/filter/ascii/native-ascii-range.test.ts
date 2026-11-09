@@ -279,3 +279,20 @@ it("keeps paragraph breaks inside table cells separate from column tabs and row 
   expect(writer.GetLineEnd()).toBe("\n");
   expect(writer.WriteDocument(doc)).toBe("Body\nCell\nTail\tRight\n");
 });
+
+it("walks nested TXT cells by the source coordinates without comparing their table identities", /** Matching coordinates continue a cell across the nested boundary and different coordinates advance its columns. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  documents.push(doc);
+  doc.paragraphs[0]?.SetText("Lead");
+  const outer = doc.nodes.MakeTableNode("Outer"),
+    [left, right] = doc.nodes.AppendTableRow(outer, 2).GetTabBoxes();
+  assert(left && right);
+  left.GetParagraphs()[0]?.SetText("Before");
+  right.GetParagraphs()[0]?.SetText("Right");
+  const inner = doc.nodes.MakeTableNodeBefore(left.GetStartNode().EndOfSectionNode(), "Inner", {});
+  const [innerLeft, innerRight] = doc.nodes.AppendTableRow(inner, 2).GetTabBoxes();
+  innerLeft?.GetParagraphs()[0]?.SetText("InnerA");
+  innerRight?.GetParagraphs()[0]?.SetText("InnerB");
+  doc.nodes.AppendTableCellParagraph(left).SetText("After");
+  expect(new SwASCWriter().WriteDocument(doc)).toBe("Lead\nBefore\nInnerA\tInnerB\nAfter\tRight\n");
+});
