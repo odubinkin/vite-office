@@ -101,6 +101,10 @@ export function DispatchPageBreak(
     title.dispose();
   }
   if (synthetic) {
+    if (this["m_bWasInFrame"]) {
+      this["Dispatch"]({ kind: "control", name: "par" });
+      this["m_bWasInFrame"] = false;
+    }
     SectBreak.call(this, state);
     this["Dispatch"]({ kind: "control", name: "sbkpage" });
     if (this["m_aTextBuffer"].m_bNeedPar) this["Dispatch"]({ kind: "control", name: "par" });
@@ -114,7 +118,7 @@ export function DispatchPageBreak(
       this["checkNeedPap"](state);
       FlushDeferredPageBreak.call(this, state);
     }
-    this["m_aTextBuffer"].pendingPageBreak = true;
+    if (!state.frame.hasProperties()) this["m_aTextBuffer"].pendingPageBreak = true;
     this["m_aTextBuffer"].m_bNeedCr = true;
   }
 }
@@ -127,6 +131,11 @@ export function DispatchSectionControl(
 ): boolean {
   if (name === "sect") {
     this["m_bHadSect"] = true;
+    if (state.frame.hasProperties()) {
+      this["Dispatch"]({ kind: "control", name: "par" });
+      this["m_bIgnoreNextContSectBreak"] = false;
+      return true;
+    }
     if (this["m_bIgnoreNextContSectBreak"]) this["m_bIgnoreNextContSectBreak"] = false;
     else {
       if (this["m_aTextBuffer"].m_bNeedCr) this["m_aTextBuffer"].m_bNeedPar = true;

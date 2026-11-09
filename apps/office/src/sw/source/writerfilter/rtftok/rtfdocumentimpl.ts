@@ -89,8 +89,24 @@ export class RtfDocumentImpl {
   protected checkNeedPap(state: RtfState): void {
     if (!this.m_aTextBuffer.m_bNeedPap) return;
     this.m_aTextBuffer.m_bNeedPap = false;
-    this.m_aTextBuffer.m_aParagraphSprms.dispose();
-    this.m_aTextBuffer.m_aParagraphSprms = GetNumberingProperties.call(this, state.paragraphSprms);
+    const buffer = this.m_aTextBuffer;
+    const framed = !state.tableBuffer && state.frame.hasProperties();
+    const breakBefore = state.paragraphSprms.find(N.LN_CT_PPrBase_pageBreakBefore);
+    const guardBreak = framed && breakBefore.is();
+    breakBefore.dispose();
+    if (guardBreak) {
+      // The first PAR closes the previous context before PAGEBB is sent to the mapper.
+      buffer.m_aParagraphSprms.clear();
+      this.CommitParagraph(state, true, true);
+    }
+    buffer.m_aParagraphSprms.dispose();
+    buffer.m_aParagraphSprms = GetNumberingProperties.call(this, state.paragraphSprms);
+    if (guardBreak) {
+      // The second PAR carries the break outside the frame paragraph.
+      this.CommitParagraph(state, true, true);
+      buffer.m_aParagraphSprms.erase(N.LN_CT_PPrBase_pageBreakBefore);
+    }
+    if (framed) state.frame.getSprms(buffer.m_aParagraphSprms);
   }
   protected m_aTextBuffer = new RtfTextBuffer();
   protected readonly m_aTextBufferStack: RtfTextBuffer[] = [];
@@ -170,6 +186,7 @@ export class RtfDocumentImpl {
   protected readonly m_aDefaultSectionSprms = new RTFSprms();
   protected readonly m_aSectionSprms = new Map<number, RTFSprms>();
   protected m_bHadSect = false;
+  protected m_bWasInFrame = false;
   protected m_bNeedSect = false;
   protected m_bParAtEndOfSection = false;
   protected m_bIgnoreNextContSectBreak = false;
@@ -236,8 +253,11 @@ export class RtfDocumentImpl {
     return ApplyStyleDefinition.call(this, collection, definition, properties);
   }
 
-  /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing. */
-  protected ApplyParagraph(node: SwTextNode, paragraph: RtfParagraph): void {
+  /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. @returns Deferred native frame properties if present. */
+  protected ApplyParagraph(
+    node: SwTextNode,
+    paragraph: RtfParagraph,
+  ): ReturnType<typeof ApplyParagraph> {
     return ApplyParagraph.call(this, node, paragraph);
   }
 

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.frame.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+    "localSymbols": [
+      "MakeFrameProperties",
+      "ExecuteFrameConversion"
+    ],
+    "upstreamSymbols": [
+      "DomainMapper_Impl::MakeFrameProperties"
+    ],
+    "preservedResponsibilities": [
+      "Builds the represented direct frame properties, groups adjacent matching paragraphs and moves RTF borders to the native fly."
+    ],
+    "omittedResponsibilities": [
+      "Non-RTF style ancestry and overlap prevention are outside this RTF projection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.frame.ts",
+          "marker": "MakeFrameProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::MakeFrameProperties"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates deferred Writer frame property construction and native node range conversion from the general mapper implementation while preserving its original paragraph and table boundaries."
+    }
+  }
+}

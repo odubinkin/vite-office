@@ -7,13 +7,15 @@
     "localPath": "apps/office/src/sw/source/core/unocore/unotext.frame.ts",
     "upstreamPath": "sw/source/core/unocore/unotext.cxx",
     "localSymbols": [
-      "convertTableToSwTextFrame"
+      "convertTableToSwTextFrame",
+      "convertParagraphsToSwTextFrame"
     ],
     "upstreamSymbols": [
       "SwXText::convertToSwTextFrame"
     ],
     "preservedResponsibilities": [
-      "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor."
+      "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor.",
+      "Moves the connected paragraph range to a real fly section and retargets native anchors at its original boundary."
     ],
     "omittedResponsibilities": [
       "General rich text selection conversion, redlines, graphics and other UNO shape services remain outside this connected table route."
@@ -26,6 +28,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
           "marker": "@fileoverview"
         }
       ],

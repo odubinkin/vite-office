@@ -514,12 +514,12 @@ import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 
-/** Resolves the paragraph properties previously emitted by native checkNeedPap. Actual UNO setters retain full-paragraph character attributes on the node, including empty paragraphs. @param mapper - Native mapper. @param node - Current paragraph. @param sprms - Original emitted paragraph sprms. @returns Nothing. */
+/** Resolves the paragraph properties previously emitted by native checkNeedPap. Actual UNO setters retain full-paragraph character attributes on the node, including empty paragraphs. @param mapper - Native mapper. @param node - Current paragraph. @param sprms - Original emitted paragraph sprms. @returns Retained frame properties when present. */
 export function ApplyRtfParagraphProperties(
   mapper: DomainMapper,
   node: SwTextNode,
   sprms: RTFSprms,
-): void {
+): ReturnType<typeof MakeFrameProperties> | undefined {
   const attributes = new RTFSprms(),
     properties = new ReferencePointer<Properties>(new RTFReferenceProperties(attributes, sprms));
   attributes.dispose();
@@ -554,6 +554,7 @@ export function ApplyRtfParagraphProperties(
     } finally {
       paragraph.Release();
     }
+    return context.props().IsFrameMode() ? MakeFrameProperties(context.props()) : undefined;
   } finally {
     mapper.endParagraphGroup();
     range.Dispose();
@@ -617,5 +618,6 @@ import { PropertyIds as P } from "../dmapper/PropertyIds";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 
+import { MakeFrameProperties } from "../dmapper/DomainMapper_Impl.frame";
 import { ParagraphPropertyMap } from "../dmapper/PropertyMap";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";

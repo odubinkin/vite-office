@@ -19,12 +19,14 @@
         "apps/office/src/sw/source/core/unocore/unotext.frame.ts#convertTableToSwTextFrame",
         "vendor/libreoffice-reference/sw/source/core/unocore/unotext.cxx#SwXText::convertToSwTextFrame",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts"
       ],
-      "justification": "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor. General rich text selection conversion, redlines, graphics and other UNO shape services remain outside this connected table route.",
+      "justification": "Converts a complete native table with real positions to a splittable text fly, retaining actual nodes and the following paragraph anchor. General rich text selection conversion, redlines, graphics and other UNO shape services remain outside this connected table route. RTF106. Moves the connected paragraph range to a real fly section and retargets native anchors at its original boundary.",
       "knownViolations": [],
       "localSymbols": [
-        "convertTableToSwTextFrame"
+        "convertTableToSwTextFrame",
+        "convertParagraphsToSwTextFrame"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/unocore/unotext.cxx",

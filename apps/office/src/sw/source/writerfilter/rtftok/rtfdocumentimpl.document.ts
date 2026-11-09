@@ -39,6 +39,10 @@ import {
   type RtfParagraph,
   type RtfParagraphState,
 } from "./rtfdocumentimpl.context";
+import {
+  ExecuteFrameConversion,
+  type PendingParagraphFrame,
+} from "../dmapper/DomainMapper_Impl.frame";
 import { ResolveTextFrame } from "./rtfsdrimport";
 import { RtfSyntaxError } from "./rtftokenizer";
 import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
@@ -89,6 +93,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     mapper = new DomainMapper(model, SourceDocumentType.RTF);
   this["m_pMapperStream"] = mapper;
   const pendingTableFrames: PendingRtfTableFrame[] = [];
+  const pendingParagraphFrames: PendingParagraphFrame[] = [];
   let complete = false;
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
@@ -256,7 +261,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         const node = firstParagraph
           ? (document.paragraphs[0] as SwTextNode)
           : document.nodes.MakeTextNode();
-        this["ApplyParagraph"](node, block.paragraph);
+        const properties = this["ApplyParagraph"](node, block.paragraph);
+        if (properties) pendingParagraphFrames.push({ node, properties });
         if (
           startsSection &&
           sectionStyle !== undefined &&
@@ -305,6 +311,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     }
     for (const pending of pendingTableFrames)
       ConvertFloatingRtfTable(pending.table, pending.position);
+    ExecuteFrameConversion(pendingParagraphFrames);
     complete = true;
     return document;
   } finally {
@@ -332,11 +339,13 @@ function MaterializeTextFrames(
     if (!first) throw new Error("assert(RTF text frame initial paragraph)");
     const end = start.EndOfSectionNode();
     let available: SwTextNode | undefined = first;
+    const pending: PendingParagraphFrame[] = [];
     for (const block of shape.blocks ?? []) {
       if (block.kind === "paragraph") {
         const node =
           available ?? document.nodes.MakeTextNode(end, document.GetDfltTextFormatColl());
-        this["ApplyParagraph"](node, block.paragraph);
+        const properties = this["ApplyParagraph"](node, block.paragraph);
+        if (properties) pending.push({ node, properties });
         available = undefined;
       } else {
         const table = document.nodes.MakeTableNodeBefore(
@@ -349,6 +358,7 @@ function MaterializeTextFrames(
     }
     if (available && available.GetIndex() > start.GetIndex() + 1)
       document.nodes.RemoveNode(available.GetIndex(), 1, true);
+    ExecuteFrameConversion(pending);
   }
 }
 
@@ -406,12 +416,12 @@ export function ApplyStyleDefinition(
     collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
 }
 
-/** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
+/** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. @returns Deferred frame properties when present.  @param this - Original native owner shared by its implementation fragments. */
 export function ApplyParagraph(
   this: RtfDocumentImplContext,
   node: SwTextNode,
   paragraph: RtfParagraph,
-): void {
+): ReturnType<typeof ApplyRtfParagraphProperties> {
   const style =
     paragraph.state.styleIndex === undefined
       ? undefined
@@ -428,6 +438,7 @@ export function ApplyParagraph(
   if (paragraph.state.borders?.has("between"))
     node.SetAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
   this["previousParagraphs"].set(section, node);
+  let frame: ReturnType<typeof ApplyRtfParagraphProperties>;
   const propertyPointers: ReferencePointer<Properties>[] = [];
   try {
     const runs = paragraph.runs.map(
@@ -457,7 +468,7 @@ export function ApplyParagraph(
         .join(""),
     );
     if (paragraph.paragraphSprms)
-      ApplyRtfParagraphProperties(this["Mapper"](), node, paragraph.paragraphSprms);
+      frame = ApplyRtfParagraphProperties(this["Mapper"](), node, paragraph.paragraphSprms);
     const hints = new SwpHints(node.GetDoc().GetAttrPool());
     let offset = 0;
     for (const run of runs) {
@@ -518,6 +529,7 @@ export function ApplyParagraph(
     node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
   MaterializeTextFrames.call(this, node, paragraph);
+  return frame;
 }
 
 import type { SwCharFormat } from "../../../inc/charfmt";

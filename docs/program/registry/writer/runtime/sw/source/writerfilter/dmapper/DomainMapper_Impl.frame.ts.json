@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.frame.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.frame.ts#MakeFrameProperties",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::MakeFrameProperties",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts"
+      ],
+      "justification": "Builds the represented direct frame properties, groups adjacent matching paragraphs and moves RTF borders to the native fly. Non-RTF style ancestry and overlap prevention are outside this RTF projection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MakeFrameProperties",
+        "ExecuteFrameConversion"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+      "upstreamSymbols": [
+        "DomainMapper_Impl::MakeFrameProperties"
+      ]
+    }
+  }
+}

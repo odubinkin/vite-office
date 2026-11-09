@@ -8,7 +8,7 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import { XATTR_FILLCOLOR } from "../../../../svx/inc/xdef";
 import type { XFillColorItem } from "../../../../svx/inc/xflclit";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -17,6 +17,8 @@ import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import { SwFrameSize } from "../../../inc/fmtfsize";
+import { RES_BOX, RES_BREAK } from "../../../inc/hintids";
+import type { SfxInt16Item } from "../../../../svl/inc/intitem";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
@@ -175,3 +177,155 @@ it.skipIf(!existsSync(fixtureDirectory))(
     }
   },
 );
+
+it("converts contiguous legacy RTF frame paragraphs into one native fly and keeps their marks", /** Exercises ABSW, ABSH, anchor, wrap, position and native node movement. @returns Nothing. */ () => {
+  const source = read(
+    String.raw`{\rtf1 Before\par\pard\absw1800\absh-600\phcol\pvpg\posx250\posy299\wraparound\dfrmtxtx70\dfrmtxty30` +
+      String.raw`First{\*\bkmkstart Inside}{\*\bkmkend Inside}\par Second\par\pard After\par}`,
+  );
+  let reopened: SwDoc | undefined;
+  try {
+    expect(
+      source.paragraphs.map(
+        /** Reads remaining body paragraphs. @param node - Native owner. @returns Text. */
+        (node) => node.GetText(),
+      ),
+    ).toEqual(["Before", "After"]);
+    expect(source.GetSpzFrameFormats().size()).toBe(1);
+    const frame = source.GetSpzFrameFormats().GetFormat(0);
+    expect(frame.GetAnchor().GetAnchorId()).toBe(RndStdIds.FLY_AT_PARA);
+    expect(frame.GetAnchor().GetAnchorNode()).toBe(source.paragraphs[1]);
+    expect(frame.GetFrameSize().GetWidth()).toBe(1800);
+    expect(frame.GetFrameSize().GetHeight()).toBe(600);
+    expect(frame.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Fixed);
+    expect(frame.GetHoriOrient().GetPos()).toBe(250);
+    expect(frame.GetVertOrient().GetPos()).toBe(300);
+    expect(frame.GetVertOrient().GetRelationOrient()).toBe(RelOrientation.PAGE_FRAME);
+    expect(frame.GetSurround().GetSurround()).toBe(WrapTextMode.PARALLEL);
+    expect(frame.GetLRSpace().ResolveLeft()).toBe(70);
+    expect(frame.GetULSpace().GetUpper()).toBe(30);
+    reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(source));
+    for (const doc of [source, reopened]) {
+      const start = doc.GetSpzFrameFormats().GetFormat(0).GetContent().GetContentIdx()?.GetNode();
+      assert(start?.IsStartNode());
+      const [first, second] = doc.nodes.GetSectionContent(start);
+      expect(first?.GetTextNode()?.GetText()).toBe("First");
+      expect(second?.GetTextNode()?.GetText()).toBe("Second");
+      const mark = doc.GetIDocumentMarkAccess().GetBookmarks()[0];
+      expect(mark?.GetMarkPos().GetNode()).toBe(first);
+      expect(mark?.GetMarkPos().GetContentIndex()).toBe(5);
+    }
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("keeps legacy frame defaults and in-cell numeric sizing from creating a text fly", /** Mirrors the original frame-trigger exclusions and table guard. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1\pard\dxfrtext120\dfrmtxtx60\dfrmtxty80\wrapdefault\posxl\phcol\posyil\pvmrg Body\par` +
+      String.raw`\trowd\cellx1800\pard\intbl\absw1400\absh600\posx200\posy100 Cell\cell\row\pard Tail}`,
+  );
+  try {
+    expect(doc.GetSpzFrameFormats().size()).toBe(0);
+    expect(doc.paragraphs[0]?.GetText()).toBe("Body");
+    expect(
+      doc.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+    ).toBe("Cell");
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it.skipIf(!existsSync(fixtureDirectory))(
+  "keeps the pinned page-break-in-frame case on the original body paragraph",
+  /** Runs the actual LibreOffice regression fixture through the frame and section parser. @returns Nothing. */
+  () => {
+    const doc = new RtfDocumentImpl().ResolveBytes(
+      readFileSync(fixtureDirectory + "tdf158586_pageBreak0.rtf"),
+    );
+    try {
+      expect(doc.GetSpzFrameFormats().size()).toBe(1);
+      expect(doc.paragraphs).toHaveLength(1);
+      expect(doc.paragraphs[0]?.GetText()).toBe("First page");
+      expect(doc.GetSpzFrameFormats().GetFormat(0).GetAnchor().GetAnchorNode()).toBe(
+        doc.paragraphs[0],
+      );
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+
+it("moves legacy frame borders while keeping paragraph distances and an explicit page break outside", /** Checks the original two-PAR guard and border conversion. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1 Before\par\pard\absw1200\pagebb\brdrt\brdrs\brdrw15\brsp80 Inside\par\pard Tail}`,
+  );
+  try {
+    const frame = doc.GetSpzFrameFormats().GetFormat(0);
+    const start = frame.GetContent().GetContentIdx()?.GetNode();
+    assert(start?.IsStartNode());
+    const content = doc.nodes.GetSectionContent(start)[0]?.GetTextNode();
+    assert(content);
+    expect(content.GetText()).toBe("Inside");
+    expect((content.GetAttr(RES_BOX) as SvxBoxItem).GetLine(SvxBoxItemLine.TOP)).toBeUndefined();
+    expect((content.GetAttr(RES_BOX) as SvxBoxItem).GetDistance(SvxBoxItemLine.TOP)).toBe(80);
+    expect(frame.GetBox().GetLine(SvxBoxItemLine.TOP)?.GetWidth()).toBe(15);
+    expect(frame.GetBox().GetDistance(SvxBoxItemLine.TOP)).toBe(0);
+    expect(frame.GetFrameSize().GetWidth()).toBe(1200);
+    expect(
+      doc.paragraphs.map(
+        /** Reads body text outside the fly. @param node - Actual paragraph. @returns Native text. */
+        (node) => node.GetText(),
+      ),
+    ).toEqual(["Before", "", "", "Tail"]);
+    expect((doc.paragraphs[2]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+    expect((content.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it.skipIf(!existsSync(fixtureDirectory))(
+  "restores packed legacy fly orientation from the pinned group destination",
+  /** Tests the native FLYMAINCNT closure and PAGE_FRAME relations from fdo30983. @returns Nothing. */
+  () => {
+    const doc = new RtfDocumentImpl().ResolveBytes(readFileSync(fixtureDirectory + "fdo30983.rtf"));
+    try {
+      const frame = doc.GetSpzFrameFormats().GetFormat(0);
+      expect(frame.GetHoriOrient().GetRelationOrient()).toBe(RelOrientation.PAGE_FRAME);
+      expect(frame.GetVertOrient().GetRelationOrient()).toBe(RelOrientation.PAGE_FRAME);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+
+it("keeps a legacy paragraph frame inside the surrounding shape text scope", /** Verifies nested ownership through native RTF export. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1 Before{\shp{\*\shpinst\shpright1700\shpbottom800{\sp{\sn shapeType}{\sv 202}}` +
+      String.raw`{\shptxt\pard Outer\par\pard\absw800 Inner\par\pard Anchor\par}}}After}`,
+  );
+  let reopened: SwDoc | undefined;
+  try {
+    reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(doc));
+    for (const result of [doc, reopened]) {
+      expect(result.GetSpzFrameFormats().size()).toBe(2);
+      const outer = result.GetSpzFrameFormats().GetFormat(0);
+      const inner = result.GetSpzFrameFormats().GetFormat(1);
+      const start = outer.GetContent().GetContentIdx()?.GetNode();
+      assert(start?.IsStartNode());
+      const [first, anchor] = result.nodes.GetSectionContent(start);
+      expect(first?.GetTextNode()?.GetText()).toBe("Outer");
+      expect(anchor?.GetTextNode()?.GetText()).toBe("Anchor");
+      expect(inner.GetAnchor().GetAnchorNode()).toBe(anchor);
+      const innerStart = inner.GetContent().GetContentIdx()?.GetNode();
+      assert(innerStart?.IsStartNode());
+      expect(result.nodes.GetSectionContent(innerStart)[0]?.GetTextNode()?.GetText()).toBe("Inner");
+      expect(result.paragraphs[0]?.GetText()).toBe("BeforeAfter");
+    }
+  } finally {
+    reopened?.Dispose();
+    doc.Dispose();
+  }
+});

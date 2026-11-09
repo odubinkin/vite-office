@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.frame.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+    "localSymbols": [
+      "RTFFrame",
+      "DispatchFrameControl"
+    ],
+    "upstreamSymbols": [
+      "class RTFFrame"
+    ],
+    "preservedResponsibilities": [
+      "Owns native RTF frame properties, original trigger rules, and packed legacy flag and value dispatch."
+    ],
+    "omittedResponsibilities": [
+      "Legacy drawing object instructions are outside the native paragraph-frame state."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.frame.ts",
+          "marker": "RTFFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "class RTFFrame"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original RTFFrame class, ordered framePr projection and native legacy flag and value dispatch from the general RTF reader while keeping its group-owned state."
+    }
+  }
+}

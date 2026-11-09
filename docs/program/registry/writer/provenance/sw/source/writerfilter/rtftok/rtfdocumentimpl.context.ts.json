@@ -58,7 +58,8 @@
       "Copies the original group-owned RGB entry with automatic state until a native component is set.",
       "Owns native shape group identity and paragraph-positioned shape events.",
       "Separates the original buffered table row definition from its ordered content.",
-      "Keeps table padding in the original row and cell resource property owners."
+      "Keeps table padding in the original row and cell resource property owners.",
+      "Keeps a native frame-property owner on each original parser state."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -314,6 +315,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
           "marker": "struct TableRowDef"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "class RTFFrame"
         }
       ]
     },

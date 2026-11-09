@@ -55,7 +55,8 @@
       "Owns the original table-buffer stack with separate property snapshots at every materialized depth.",
       "Uses original automatic palette entry versus out-of-range RGB zero, without flattening the saved palette into string colors (WRITER397).",
       "Owns independent append buffers for shape and body text and restores the surrounding paragraph and table state after shape text.",
-      "Clears the running maximum row width when the active table ends."
+      "Clears the running maximum row width when the active table ends.",
+      "Sends frame properties after paragraph properties with the original explicit page-break guard."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -259,6 +260,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
           "marker": "RTFDocumentImpl::checkTableEnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFDocumentImpl::checkNeedPap"
         }
       ]
     }

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.frame.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.frame.ts#RTFFrame",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx#class RTFFrame",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts"
+      ],
+      "justification": "Owns native RTF frame properties, original trigger rules, and packed legacy flag and value dispatch. Legacy drawing object instructions are outside the native paragraph-frame state.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RTFFrame",
+        "DispatchFrameControl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+      "upstreamSymbols": [
+        "class RTFFrame"
+      ]
+    }
+  }
+}

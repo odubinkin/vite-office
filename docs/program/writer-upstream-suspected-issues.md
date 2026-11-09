@@ -3346,3 +3346,20 @@ affect padding without participating in that subtraction. The
 original table justification conversion maps TRQL to LEFT_AND_WIDTH,
 including when RTF was exported from a Writer table with NONE.
 Retain these reader and writer choices.
+
+### WRITER408 — Legacy RTF paragraph frames increment the vertical position
+
+The pinned POSY value handler clears vertical alignment and adds one
+twip before storing the position. POSY0 can therefore trigger a
+frame through a nonzero Y position, while POSY-1 leaves the default
+zero. Preserve the adjustment before conversion to the mapper's
+measure units.
+
+### WRITER409 — Legacy RTF frame wrapping and page breaks take different mapper paths
+
+The legacy WRAPTHROUGH control maps to dynamic wrapping. WRAPTIGHT
+falls through to no wrapping, while OVERLAY maps to through
+wrapping. The pinned RTF fixtures also expect a PAGE in a frame to be
+lost and a SECT there to end a paragraph. Explicit PAGEBB is sent
+between two paragraph ends to retain the break before the frame.
+Preserve those distinctions in the original reader and mapper paths.

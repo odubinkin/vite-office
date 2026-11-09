@@ -47,7 +47,8 @@
       "Delivers floating position modifiers to the same native group-owned table state.",
       "Recognizes and closes native shape destinations and uses the current text append context.",
       "Retains lexical row width-after state and allows a row without a repeated definition to keep the original table open.",
-      "Replays native width and margin properties and restores the source cell defaults at the nested property boundary."
+      "Replays native width and margin properties and restores the source cell defaults at the nested property boundary.",
+      "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -263,6 +264,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
           "marker": "m_aStates[i].setCurrentBuffer(nullptr)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+          "marker": "case RTFKeyword::FLYMAINCNT:"
         }
       ]
     },

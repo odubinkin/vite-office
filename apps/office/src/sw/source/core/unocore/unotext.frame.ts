@@ -1,4 +1,4 @@
-/** @fileoverview Native table-section conversion into an anchored text frame from unotext.cxx. */
+/** @fileoverview Native table and paragraph range conversion into anchored text frames from unotext.cxx. */
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
 import { aFrameFormatSetRange } from "../bastyp/init";
@@ -9,6 +9,7 @@ import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
 import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
@@ -23,6 +24,7 @@ import { SwPosition } from "../crsr/pam";
 import { MakeFlySection } from "../doc/doclay";
 import type { SwFlyFrameFormat } from "../layout/atrfrm";
 import type { SwTable } from "../table/swtable";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwXText } from "./unotext";
 import { unicode } from "./unocrsrhelper";
 
@@ -151,6 +153,58 @@ export function convertTableToSwTextFrame(
   } finally {
     set.Dispose();
     values.dispose();
+    position.Dispose();
+  }
+}
+
+/** Moves complete converted frame paragraphs while retaining their native nodes, positions and marks. @param first - First paragraph. @param last - Last paragraph. @param items - Original frame properties. @returns Connected text frame. */
+export function convertParagraphsToSwTextFrame(
+  first: SwTextNode,
+  last: SwTextNode,
+  items: SfxItemSet,
+): SwFlyFrameFormat {
+  const doc = first.GetDoc();
+  const nodes = first.GetNodes();
+  const boundary = nodes.at(last.GetIndex() + 1);
+  const anchor =
+    boundary.GetTextNode() ?? nodes.MakeTextNode(boundary, doc.GetDfltTextFormatColl());
+  const position = new SwPosition(anchor);
+  const range = new SwNodeRange(first, anchor);
+  const type = RndStdIds.FLY_AT_PARA;
+  try {
+    for (const format of doc.GetSpzFrameFormats()) {
+      const existing = format.GetAnchor();
+      const owner = existing.GetAnchorNode();
+      const offset = existing.GetAnchorContentOffset();
+      if (
+        (existing.GetAnchorId() === RndStdIds.FLY_AT_PARA && owner === first) ||
+        (existing.GetAnchorId() === RndStdIds.FLY_AT_CHAR &&
+          ((owner === first && offset === 0) || (owner === last && offset === last.Len())))
+      ) {
+        const moved = new SwFormatAnchor(existing);
+        try {
+          moved.SetAnchor(position);
+          format.SetFormatAttr(moved);
+        } finally {
+          moved.Dispose();
+        }
+      }
+    }
+    const page = first.GetpSwAttrSet()?.GetItemIfSet(RES_PAGEDESC, false);
+    if (page) {
+      anchor.SetAttr(page);
+      first.ResetAttr(RES_PAGEDESC);
+    }
+    const format = MakeFlySection(doc, type, position, items);
+    const section = format.GetContent().GetContentIdx()?.GetNode();
+    if (!section?.IsStartNode()) throw new Error("assert(converted Writer paragraph frame)");
+    const initial = nodes.at(section.GetIndex() + 1);
+    if (!nodes.MoveNodes(range, initial))
+      throw new Error("assert(complete Writer frame paragraphs)");
+    nodes.RemoveNode(initial.GetIndex(), 1, true);
+    return format;
+  } finally {
+    range.Dispose();
     position.Dispose();
   }
 }

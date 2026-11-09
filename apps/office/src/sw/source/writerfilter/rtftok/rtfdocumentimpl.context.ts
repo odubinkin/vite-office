@@ -1,4 +1,5 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
+import type { RTFFrame } from "./rtfdocumentimpl.frame";
 import type { RTFShape, RtfShapeAnchor } from "./rtfdocumentimpl.shape";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
@@ -94,6 +95,7 @@ export class RTFColorTableEntry {
 
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
+  frame: RTFFrame;
   shape: RTFShape | undefined;
   shapeRoot?: boolean;
   shapeTextRoot?: boolean;
@@ -112,6 +114,7 @@ export interface RtfState {
   destination:
     | "body"
     | "shape"
+    | "flymaincontent"
     | "shapeinstruction"
     | "shapeproperty"
     | "shapepropertyname"

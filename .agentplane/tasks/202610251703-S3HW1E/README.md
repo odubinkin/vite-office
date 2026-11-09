@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 546
+revision: 549
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T22:54:17.162Z"
+  updated_at: "2026-11-09T23:09:29.003Z"
   updated_by: "CODER"
-  note: "RTF105 verified native table width and padding with ODT persistence. Wider run reproduced one existing interactive-column history assertion on the unchanged baseline. Continue legacy RTF frame and current-model audit."
-  attempts: 116
+  note: "RTF106 legacy paragraph-frame path and 1,346 related Writer tests verified. Shared table header and single-row split finalization and final filter capability reconciliation remain."
+  attempts: 117
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1861,8 +1864,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T23:09:29.003Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF106 legacy paragraph-frame path and 1,346 related Writer tests verified. Shared table header and single-row split finalization and final filter capability reconciliation remain."
+  -
+    type: "status"
+    at: "2026-11-09T23:10:14.013Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T22:54:34.027Z"
+doc_updated_at: "2026-11-09T23:10:14.013Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -5057,6 +5073,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T23:09:29.003Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF106 legacy paragraph-frame path and 1,346 related Writer tests verified. Shared table header and single-row split finalization and final filter capability reconciliation remain.
+    Attempts: 117
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:09:28.390Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6993,6 +7039,8 @@ sections:
     RTF104 checkpoint. Native top-level row definitions are backed up before a malformed repeated TROWD, restored on an empty final CELLX, and borrowed for rows without their own definitions. PARD does not end the table by itself. The original ROW close clears saved group buffer references. The top-level running right edge and MINLAY threshold correct the final column, and prepareProperties width normalization reaches actual native cells. TRWWIDTHA writes a borderless final cell with previous character sizes and no paragraph spacing. WRITER405 preserves the ignored width-type control. The pinned tdf44986 fixture retains both cells through native RTF reopen. The Writer run passed 1065 tests in 50 files, and the final fixture run passed 70 tests in 4 files. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, file size, source tree, Which, source provenance, Writer registry and diff checks passed. The prior RTF103 wider related run also finished with 1174 tests in 144 files. Keep open for preferred table size, the original gap/indent properties and remaining current-model audit. No full-suite replay was due.
 
     RTF105 checkpoint. Native RTF table width, indent, justification, half-gap and cell padding now use actual resource groups, existing MeasureHandler/CellMarginHandler, table/cell property maps and real UNO table and cell owners. Default padding uses original first-border adjustment and cell overrides. Relative table size and column reference weights persist through native ODT and use the actual upper print width in layout. WRITER406 and WRITER407 retain the raw numeric percent-unit fallback, half-gap and TRQL mapping. Migrated the prior NONE assertion to source LEFT_AND_WIDTH. Focused amended verification passed 61 tests in 3 Writer files and shared passed 11 tests in 4 files. Wider related run passed 1157 of 1158 in 63 Writer files. The one failure, native-independent-column-insertion-history.test.ts at line 182, independently reproduces at HEAD 34ae325af with all changed production and test files reverted temporarily in the same checkout; evidence is rtf105-baseline-history.log. It expects a right border after an interactive column insertion before any filter operation. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, file size, tree, Which, source provenance, Writer/shared registry and diff checks passed. Next open current-model routes include the legacy RTF paragraph frame controls. No full-suite replay was due.
+
+    RTF106 legacy paragraph-frame checkpoint: original RTFFrame group properties, generated resource values, packed FLYMAINCNT, framePr in DomainMapper, effective-property grouping, deferred native paragraph transfer, marks, border transfer, separate shape text scope and original PAGE/SECT/PAGEBB paths are connected. Existing RTF fly export and nested shape ownership round-trip. The pinned fdo30983 and tdf158586 fixtures cover native relations and lost page break behavior. WRITER408 and WRITER409 record the vertical position adjustment and wrap/break distinctions. Targeted Writer suites: 1,346 tests in 79 files pass. TypeScript, changed-file ESLint and formatting, dependencies, JSDoc, source size/tree/hint identities, provenance and Writer parity registry pass. Full suite cadence is tied to AgentPlane tasks. The actual shared table handler still needs all-header-row and single non-splittable row finalization before the final filter capability review.
 id_source: "generated"
 ---
 ## Summary
@@ -10198,6 +10246,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T23:09:29.003Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF106 legacy paragraph-frame path and 1,346 related Writer tests verified. Shared table header and single-row split finalization and final filter capability reconciliation remain.
+Attempts: 117
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T23:09:28.390Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -12138,3 +12216,5 @@ RTF103 checkpoint. The native rectangular selection admits complete nested table
 RTF104 checkpoint. Native top-level row definitions are backed up before a malformed repeated TROWD, restored on an empty final CELLX, and borrowed for rows without their own definitions. PARD does not end the table by itself. The original ROW close clears saved group buffer references. The top-level running right edge and MINLAY threshold correct the final column, and prepareProperties width normalization reaches actual native cells. TRWWIDTHA writes a borderless final cell with previous character sizes and no paragraph spacing. WRITER405 preserves the ignored width-type control. The pinned tdf44986 fixture retains both cells through native RTF reopen. The Writer run passed 1065 tests in 50 files, and the final fixture run passed 70 tests in 4 files. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, file size, source tree, Which, source provenance, Writer registry and diff checks passed. The prior RTF103 wider related run also finished with 1174 tests in 144 files. Keep open for preferred table size, the original gap/indent properties and remaining current-model audit. No full-suite replay was due.
 
 RTF105 checkpoint. Native RTF table width, indent, justification, half-gap and cell padding now use actual resource groups, existing MeasureHandler/CellMarginHandler, table/cell property maps and real UNO table and cell owners. Default padding uses original first-border adjustment and cell overrides. Relative table size and column reference weights persist through native ODT and use the actual upper print width in layout. WRITER406 and WRITER407 retain the raw numeric percent-unit fallback, half-gap and TRQL mapping. Migrated the prior NONE assertion to source LEFT_AND_WIDTH. Focused amended verification passed 61 tests in 3 Writer files and shared passed 11 tests in 4 files. Wider related run passed 1157 of 1158 in 63 Writer files. The one failure, native-independent-column-insertion-history.test.ts at line 182, independently reproduces at HEAD 34ae325af with all changed production and test files reverted temporarily in the same checkout; evidence is rtf105-baseline-history.log. It expects a right border after an interactive column insertion before any filter operation. Typecheck, changed ESLint/Prettier, module boundaries, JSDoc, file size, tree, Which, source provenance, Writer/shared registry and diff checks passed. Next open current-model routes include the legacy RTF paragraph frame controls. No full-suite replay was due.
+
+RTF106 legacy paragraph-frame checkpoint: original RTFFrame group properties, generated resource values, packed FLYMAINCNT, framePr in DomainMapper, effective-property grouping, deferred native paragraph transfer, marks, border transfer, separate shape text scope and original PAGE/SECT/PAGEBB paths are connected. Existing RTF fly export and nested shape ownership round-trip. The pinned fdo30983 and tdf158586 fixtures cover native relations and lost page break behavior. WRITER408 and WRITER409 record the vertical position adjustment and wrap/break distinctions. Targeted Writer suites: 1,346 tests in 79 files pass. TypeScript, changed-file ESLint and formatting, dependencies, JSDoc, source size/tree/hint identities, provenance and Writer parity registry pass. Full suite cadence is tied to AgentPlane tasks. The actual shared table handler still needs all-header-row and single non-splittable row finalization before the final filter capability review.

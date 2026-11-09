@@ -32,7 +32,7 @@ import { PropertyIds as P } from "./PropertyIds";
 import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
 import { getEnumAsINT32 } from "../../../../comphelper/source/misc/types";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
-import { PropertyMap, SectionPropertyMap } from "./PropertyMap";
+import { ParagraphPropertiesPropertyMap, PropertyMap, SectionPropertyMap } from "./PropertyMap";
 import { DomainMapper_Impl, ContextType as C, PageMarElement as M } from "./DomainMapper_Impl";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
@@ -40,6 +40,7 @@ import {
   Locale,
   cppu_detail_getUnoType_Locale as localeType,
 } from "../../../../udkapi/com/sun/star/lang/Locale";
+import { ApplyFrameAttribute } from "./DomainMapper.frame";
 import { ThemeColorHandler } from "./ThemeColorHandler";
 
 /** Original underline token mapping, with unknown tokens retaining NONE. */
@@ -186,6 +187,11 @@ export class DomainMapper implements Properties {
     const context = this.impl.GetTopContext();
     if (!context) return;
     const n = value.getInt();
+    if (
+      context instanceof ParagraphPropertiesPropertyMap &&
+      ApplyFrameAttribute(context.props(), id, n)
+    )
+      return;
     switch (id) {
       case N.LN_CT_PageSz_w:
         this.CT_PageSz.w = PaperInfo.sloppyFitPageDimension(Number(convertTwipToMm100(BigInt(n))));
@@ -404,6 +410,10 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_CT_PPrBase_framePr:
+        if (context instanceof ParagraphPropertiesPropertyMap) context.props().SetFrameMode();
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
       case N.LN_EG_SectPrContents_type: {
         const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
         if (

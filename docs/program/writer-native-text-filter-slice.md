@@ -2273,3 +2273,22 @@ absolute width. Absolute ODF columns retain the existing physical
 measure when both forms are supplied on a fixed-width table.
 WRITER406 records the numeric RTF percent-unit mismatch.
 WRITER407 records the half-gap and table-justification behavior.
+
+### RTF106 — Legacy paragraph frames
+
+RTFFrame owns the original group-scoped frame controls and emits
+generated framePr properties in their native order. FLYMAINCNT
+returns packed alignment and relations to the parent group. DomainMapper
+maps frame attributes onto ParagraphProperties, and deferred conversion
+groups adjacent paragraphs by their effective frame properties after
+tables are connected. Whole native paragraph nodes and their marks
+move into the fly section. The existing text frame export consumes
+the connected fly and its own text scope.
+
+Frame creation follows the original default exclusions and table
+guard. Conversion moves uniform paragraph border lines to the frame,
+retains the paragraph distances, and uses zero frame border distance
+for RTF. The new tests cover the native properties, document marks,
+RTF reopen, and the pinned paragraph-frame regression fixtures.
+WRITER408 and WRITER409 record the position adjustment and the
+legacy wrapping and page-break behavior.

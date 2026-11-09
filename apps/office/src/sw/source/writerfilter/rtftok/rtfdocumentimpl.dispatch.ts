@@ -16,6 +16,7 @@ import {
   type RtfDocumentImplContext,
   type RtfState,
 } from "./rtfdocumentimpl.context";
+import { DispatchFrameControl, RTFFrame } from "./rtfdocumentimpl.frame";
 import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
@@ -43,6 +44,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     destinationText.setLength(0);
     this["states"].push({
       destination: previous?.destination ?? "body",
+      frame: new RTFFrame(previous?.frame),
       shape: previous?.shape,
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
@@ -112,6 +114,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     const previous = this["states"].pop();
     try {
       const parent = this["states"].at(-1);
+      if (previous) this["m_bWasInFrame"] = previous.frame.hasProperties();
+      if (parent && previous?.destination === "flymaincontent")
+        parent.frame = new RTFFrame(previous.frame);
       if (this["m_nResetBreakOnSectBreak"] !== RTFKeyword.invalid && previous && parent) {
         const type = previous.sectionSprms.find(N.LN_EG_SectPrContents_type);
         try {
@@ -261,11 +266,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     } else if (state.destination === "colortbl") this["ReadColorText"](value, state);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;
-    else if (state.destination === "body") this["AppendText"](value, state);
+    else if (state.destination === "body" || state.destination === "flymaincontent")
+      this["AppendText"](value, state);
     return;
   }
   if (token.name === "*") {
     state.starred = true;
+    return;
+  }
+  if (token.name === "flymaincnt" && state.destination !== "skip") {
+    state.destination = "flymaincontent";
+    state.starred = false;
     return;
   }
   if (DispatchShape.call(this, token.name, token.parameter, state)) return;
@@ -580,6 +591,7 @@ export function DispatchBodyControl(
   )
     return;
   if (DispatchTableControl.call(this, name, parameter, state)) return;
+  if (DispatchFrameControl.call(this, name, parameter ?? 0, state)) return;
   if (
     !this["m_aTextBufferStack"].length &&
     DispatchSectionControl.call(this, name, parameter, state)
@@ -591,11 +603,7 @@ export function DispatchBodyControl(
   }
   if (name === "pagebb") {
     if (!this["firstRun"])
-      state.paragraph = {
-        ...state.paragraph,
-        pageBreakBefore: true,
-        pageBreakBeforeSet: true,
-      };
+      state.paragraphSprms.set(N.LN_CT_PPrBase_pageBreakBefore, new RTFValue(1));
     return;
   }
   if (name === "page" || name === "column") {
@@ -690,6 +698,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "pard") {
+    state.frame = new RTFFrame();
     state.paragraphSprms.clear();
     this["m_aTextBuffer"].m_bNeedPap = true;
     state.paragraph = { ...DEFAULT_PARAGRAPH };
