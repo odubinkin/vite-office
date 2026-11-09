@@ -17,6 +17,8 @@ import {
   createDownloadFilename,
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
+import { Font } from "../../../vcl/source/font/font";
+import { measureBrowserTextWidth } from "../../../vcl/browser/text-width";
 import {
   createBrowserDefaultFontDevice,
   createDefaultFontLocale,
@@ -128,6 +130,19 @@ export function createWriterDocumentSession(
           } finally {
             locale.dispose();
           }
+        },
+        /** Measures actual text using the Writer output device. @param attributes - Selected native subfont fields. @param text - Native UTF16 string. @param start - Native start. @param length - Native length. @returns Width in twips. */
+        measureTextWidth(attributes, text, start, length) {
+          const font = new Font();
+          font.SetFamilyName(attributes.familyName);
+          font.SetStyleName(attributes.styleName);
+          font.SetFamily(attributes.family);
+          font.SetPitch(attributes.pitch);
+          font.SetCharSet(attributes.charset);
+          font.SetWeight(attributes.weight);
+          font.SetItalic(attributes.italic);
+          font.SetFontHeight(attributes.heightTwips);
+          return measureBrowserTextWidth(globalThis.document, font, text, start, length);
         },
         /** Binds AttrSetToLineHeight to the browser's physical font metrics.  @param family - Family. @param heightTwips - Height Twips. @returns The computed result. */
         measureTextHeight(family, heightTwips) {

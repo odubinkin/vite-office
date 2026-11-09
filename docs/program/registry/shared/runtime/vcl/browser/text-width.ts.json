@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/text-width.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/text-width.ts",
+        "vendor/libreoffice-reference/vcl/source/outdev/text.cxx#OutputDevice::GetTextWidth"
+      ],
+      "justification": "Measures the actual shaped Canvas width in twips for a native VCL font and UTF16 range. Browser font selection and shaping remain the actual platform boundary and are not native glyph-layout equivalence.",
+      "knownViolations": [],
+      "localSymbols": [
+        "measureBrowserTextWidth"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

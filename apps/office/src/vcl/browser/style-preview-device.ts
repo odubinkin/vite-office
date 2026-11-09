@@ -1,12 +1,13 @@
 /** @fileoverview Actual Canvas text device for source style preview algorithms; CSS descriptor projection follows native SVG export, while browser font metrics/shaping remain browser-owned. */
 import { Font, type ConstFont } from "../source/font/font";
 import { Rectangle, Size, type ReadonlySize, type ReadonlyPoint } from "../../tools/inc/gen";
-import { FontItalic, FontWeight, TextAlign } from "../../tools/inc/fontenum";
+import { FontItalic, TextAlign } from "../../tools/inc/fontenum";
 import { quoteFontFamily } from "./font-preview-device";
 import { Color } from "../../tools/inc/color";
 import { MapUnit, MapToO3tlLength } from "../../tools/inc/mapunit";
 import { Length, convert } from "../../o3tl/inc/unit_conversion";
 import { browserColor } from "./color";
+import { cssWeight } from "./font-family";
 
 /** Actual host paint state; undefined line color explicitly disables the native rectangle outline. */
 export interface BrowserStylePreviewPaintState {
@@ -42,30 +43,6 @@ export function stylePreviewLogicToCssPixel(size: ReadonlySize, unit: MapUnit): 
     return value < 0 ? Math.ceil(value - 0.5) : Math.floor(value + 0.5);
   }
   return new Size(pixel(size.Width()), pixel(size.Height()));
-}
-
-/** Original CSS weight projection from SVGAttributeWriter::SetFontAttr; SEMILIGHT and unknown values use400. @param weight - Actual stored weight. @returns CSS weight. */
-function cssWeight(weight: FontWeight): number {
-  switch (weight) {
-    case FontWeight.WEIGHT_THIN:
-      return 100;
-    case FontWeight.WEIGHT_ULTRALIGHT:
-      return 200;
-    case FontWeight.WEIGHT_LIGHT:
-      return 300;
-    case FontWeight.WEIGHT_MEDIUM:
-      return 500;
-    case FontWeight.WEIGHT_SEMIBOLD:
-      return 600;
-    case FontWeight.WEIGHT_BOLD:
-      return 700;
-    case FontWeight.WEIGHT_ULTRABOLD:
-      return 800;
-    case FontWeight.WEIGHT_BLACK:
-      return 900;
-    default:
-      return 400;
-  }
 }
 
 /** Real Canvas adapter for the consumed zero-average-width style-font path; this does not implement native font matching or EditEngine script analysis. */

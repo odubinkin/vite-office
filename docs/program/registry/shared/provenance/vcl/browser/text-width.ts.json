@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/vcl/browser/text-width.ts",
+    "rationale": "Measures the actual shaped Canvas width in twips for a native VCL font and UTF16 range. Browser font selection and shaping remain the actual platform boundary and are not native glyph-layout equivalence.",
+    "responsibilities": [
+      "Bind the Writer output device to native browser text measurement and preserve source twip and UTF16 contracts."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Canvas is the physical browser shaping and metric device."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/text-width.ts",
+          "marker": "measureBrowserTextWidth"
+        }
+      ]
+    }
+  }
+}

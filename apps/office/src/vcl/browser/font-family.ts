@@ -1,4 +1,5 @@
 /** @fileoverview Resolves browser fallback families without changing the native stored font name. */
+import { FontWeight } from "../../tools/inc/fontenum";
 
 /** Applies a generic-family fallback after the requested physical face. @param family - Requested font family. @param generic - ODF generic family. @returns Browser font-family value. */
 export function browserFontFamily(
@@ -41,4 +42,28 @@ export function decodeBrowserFontFamily(descriptor: string): string {
       );
     },
   );
+}
+
+/** Original CSS weight projection from SVGAttributeWriter::SetFontAttr; SEMILIGHT and unknown values use400. @param weight - Actual stored weight. @returns CSS weight. */
+export function cssWeight(weight: FontWeight): number {
+  switch (weight) {
+    case FontWeight.WEIGHT_THIN:
+      return 100;
+    case FontWeight.WEIGHT_ULTRALIGHT:
+      return 200;
+    case FontWeight.WEIGHT_LIGHT:
+      return 300;
+    case FontWeight.WEIGHT_MEDIUM:
+      return 500;
+    case FontWeight.WEIGHT_SEMIBOLD:
+      return 600;
+    case FontWeight.WEIGHT_BOLD:
+      return 700;
+    case FontWeight.WEIGHT_ULTRABOLD:
+      return 800;
+    case FontWeight.WEIGHT_BLACK:
+      return 900;
+    default:
+      return 400;
+  }
 }

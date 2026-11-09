@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+    "upstreamPath": "sw/source/core/text/itratr.cxx",
+    "localSymbols": [
+      "GetMinMaxNodeMetrics",
+      "lcl_MinMaxNode"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::GetMinMaxSize",
+      "lcl_MinMaxNode"
+    ],
+    "preservedResponsibilities": [
+      "Native anchored Writer fly contributions and preliminary width margins use actual paragraph list items, format anchors, content indices, and optional first/last native table layout. Through-wrap and asymmetric relation clamps are preserved. Dictionary-boundary and full text traversal, native drawing objects and source device parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full dictionary word rules, text accumulation, drawing metrics, filter wiring and platform parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+          "marker": "GetMinMaxNodeMetrics"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+          "marker": "SwTextNode::GetMinMaxSize"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+      "rationale": "Separates import text-width and anchored-format responsibility from the existing character-attribute iterator while retaining actual Writer owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

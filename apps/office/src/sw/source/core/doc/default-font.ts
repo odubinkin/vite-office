@@ -1,5 +1,7 @@
 /** @fileoverview Ports Writer's script/language default-font policy from DocumentStylePoolManager.cxx. */
 
+import type { FontFamily, FontItalic, FontPitch, FontWeight } from "../../../../tools/inc/fontenum";
+import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { DefaultFontType } from "../../../../unotools/inc/fontdefs";
 
 /** Writer scripts addressed by the three default-font item slots. */
@@ -7,6 +9,18 @@ export type WriterFontScript = "western" | "cjk" | "ctl";
 
 /** The Writer font classes requested from an injected output-device adapter. */
 export type WriterDefaultFontType = "text" | "heading" | "fixed";
+
+/** Native subfont fields carried to the document's injected output-device boundary. */
+export interface SwMeasurementFont {
+  readonly familyName: string;
+  readonly styleName: string;
+  readonly family: FontFamily;
+  readonly pitch: FontPitch;
+  readonly charset: rtl_TextEncoding;
+  readonly weight: FontWeight;
+  readonly italic: FontItalic;
+  readonly heightTwips: number;
+}
 
 /** Narrow output-device contract; browser font discovery remains in vcl/browser. */
 export interface DefaultFontDevice {
@@ -18,6 +32,8 @@ export interface DefaultFontDevice {
   ): string | undefined;
   /** Measures the selected physical font height in document twips for filter output. */
   measureTextHeight?(family: string, heightTwips: number): number;
+  /** Measures the selected physical font's shaped width in twips. */
+  measureTextWidth?(font: SwMeasurementFont, text: string, start: number, length: number): number;
 }
 
 const fallbackFamilies: Readonly<

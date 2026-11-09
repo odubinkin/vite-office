@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 459
+revision: 462
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T18:04:36.775Z"
+  updated_at: "2026-11-09T18:20:31.177Z"
   updated_by: "CODER"
-  note: "HTML76 checkpoint: 175 related tests across 13 suites and whole-app TypeScript plus source/style/Writer registry checks pass. Native pass two allocates widths and writes actual table, box and fly formats. First-pass measurement and production HTML table parsing and materialization remain pending."
-  attempts: 87
+  note: "HTML77 verified native anchored paragraph width inputs and physical output-device binding. Writer 122 focused tests, Shared 36, TypeScript, lint and architecture gates passed. Parent requires native dictionary boundaries, full HTML table first pass and production Markdown table import, plus final represented format parity audit."
+  attempts: 88
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1397,8 +1400,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T18:20:31.177Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML77 verified native anchored paragraph width inputs and physical output-device binding. Writer 122 focused tests, Shared 36, TypeScript, lint and architecture gates passed. Parent requires native dictionary boundaries, full HTML table first pass and production Markdown table import, plus final represented format parity audit."
+  -
+    type: "status"
+    at: "2026-11-09T18:20:37.667Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T18:05:02.315Z"
+doc_updated_at: "2026-11-09T18:20:37.667Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -3723,6 +3739,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T18:20:31.177Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML77 verified native anchored paragraph width inputs and physical output-device binding. Writer 122 focused tests, Shared 36, TypeScript, lint and architecture gates passed. Parent requires native dictionary boundaries, full HTML table first pass and production Markdown table import, plus final represented format parity audit.
+    Attempts: 88
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:20:30.548Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -5467,6 +5513,14 @@ sections:
     - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/doc/docnew.native-lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 175 tests passed across 13 suites. Final width test replay after adding a native start-node type check: 10 cases passed, already included in the total.
     - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1959 runtime modules), Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial lint identified a missing test tuple JSDoc and TypeScript required a section-start type guard; both were resolved. The initial terminal Verify Steps display closed the output pipe early; authoritative route and Verify Steps were reread to complete files before editing.
     - No full-project replay at this continuing parent checkpoint. Actual first-pass physical text measurement, first-pass aggregation, resize timers, production HTML table parser/materialization, and the complete original TXT/RTF/Markdown slice remain unverified.
+
+    S3HW1E HTML77 — Original anchored paragraph measurement inputs and physical width device binding.
+
+    - The original import-time paragraph width preparation uses real margins and the numbering rule plus original signed first-line indent. Anchored Writer fly formats use the real special-format registry, anchor and content indices, optional native table layout at the start or end of the fly, native frame width, spacing, orientation, relation and wrap. WRITER361 records the ordinary paragraph first-line substitution. WRITER362 records the source's asymmetric zero clamps. The separate drawing-object bounds owner is absent in the current slice.
+    - The active character-attribute stack supplies original script-specific family, size, weight, posture and proportional height fields to the existing injected document font device. The browser composition root builds a VCL Font and measures real Canvas text ranges in twips. Writer core remains independent of VCL browser code. Markdown open receives the existing device through the shell. No canvas/browser glyph comparison or full native text-width claim is made.
+    - The focused Writer run selected native min/max, attribute iteration, HTML widths, TXT range, Markdown reader/writer, RTF direction import/export, browser module and workflows. Nine suites and 121 of 122 tests passed before correcting the new test fixture. The temporary set had been disposed after transferring it to the automatic-style handle; the final replay of the changed suite passed all seven tests. Final Writer total is 122 unique tests across ten suites. The shared default-font and style-preview device run passed 36 tests across two suites. Final total 158 across 12. Evidence: html77-tests-ready.log, html77-hint-final.log and html77-shared-ready.log. No full-project run at this continuing parent checkpoint.
+    - Whole-app TypeScript, changed ESLint/Prettier, provenance (1961 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Boundary validation caught an initial core-to-VCL import and confirmed its removal after reuse of the injected capability.
+    - Source ICU dictionary word boundaries, complete GetMinMaxSize, first-pass HTML aggregation and production parser/materialization remain open. No production filter calls the new width query yet. Broad native TXT/RTF/Markdown model and UI parity remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -7802,6 +7856,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T18:20:31.177Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML77 verified native anchored paragraph width inputs and physical output-device binding. Writer 122 focused tests, Shared 36, TypeScript, lint and architecture gates passed. Parent requires native dictionary boundaries, full HTML table first pass and production Markdown table import, plus final represented format parity audit.
+Attempts: 88
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T18:20:30.548Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -9550,3 +9634,11 @@ S3HW1E HTML76 — Native HTML table second layout pass and width publication.
 - Command: from apps/office, ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/core/doc/htmltbl.native-widths.test.ts src/sw/source/filter/html/htmltab.values.test.ts src/sw/source/filter/html/htmltab.grid.test.ts src/sw/source/filter/html/htmltab.borders.test.ts src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts src/sw/source/core/doc/docnew.native-lifecycle.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/md/wrtmd.test.ts src/sw/source/filter/ww8/rtfexport.direction.test.ts src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts src/sw/browser/workflows/writer-workflows.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx. Result: 175 tests passed across 13 suites. Final width test replay after adding a native start-node type check: 10 cases passed, already included in the total.
 - Whole-app TypeScript, changed ESLint/Prettier, source provenance (1959 runtime modules), Writer registry (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Initial lint identified a missing test tuple JSDoc and TypeScript required a section-start type guard; both were resolved. The initial terminal Verify Steps display closed the output pipe early; authoritative route and Verify Steps were reread to complete files before editing.
 - No full-project replay at this continuing parent checkpoint. Actual first-pass physical text measurement, first-pass aggregation, resize timers, production HTML table parser/materialization, and the complete original TXT/RTF/Markdown slice remain unverified.
+
+S3HW1E HTML77 — Original anchored paragraph measurement inputs and physical width device binding.
+
+- The original import-time paragraph width preparation uses real margins and the numbering rule plus original signed first-line indent. Anchored Writer fly formats use the real special-format registry, anchor and content indices, optional native table layout at the start or end of the fly, native frame width, spacing, orientation, relation and wrap. WRITER361 records the ordinary paragraph first-line substitution. WRITER362 records the source's asymmetric zero clamps. The separate drawing-object bounds owner is absent in the current slice.
+- The active character-attribute stack supplies original script-specific family, size, weight, posture and proportional height fields to the existing injected document font device. The browser composition root builds a VCL Font and measures real Canvas text ranges in twips. Writer core remains independent of VCL browser code. Markdown open receives the existing device through the shell. No canvas/browser glyph comparison or full native text-width claim is made.
+- The focused Writer run selected native min/max, attribute iteration, HTML widths, TXT range, Markdown reader/writer, RTF direction import/export, browser module and workflows. Nine suites and 121 of 122 tests passed before correcting the new test fixture. The temporary set had been disposed after transferring it to the automatic-style handle; the final replay of the changed suite passed all seven tests. Final Writer total is 122 unique tests across ten suites. The shared default-font and style-preview device run passed 36 tests across two suites. Final total 158 across 12. Evidence: html77-tests-ready.log, html77-hint-final.log and html77-shared-ready.log. No full-project run at this continuing parent checkpoint.
+- Whole-app TypeScript, changed ESLint/Prettier, provenance (1961 runtime modules), Writer/Shared registries (zero semantic violations), module boundaries, JSDoc, file-size, source-tree, WhichId and diff checks passed. Boundary validation caught an initial core-to-VCL import and confirmed its removal after reuse of the injected capability.
+- Source ICU dictionary word boundaries, complete GetMinMaxSize, first-pass HTML aggregation and production parser/materialization remain open. No production filter calls the new width query yet. Broad native TXT/RTF/Markdown model and UI parity remain unverified.

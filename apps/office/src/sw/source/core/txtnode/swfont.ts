@@ -1,6 +1,15 @@
 /** @fileoverview Consumed horizontal SwSubFont::CalcEsc arithmetic from swfont.cxx; original font metrics are supplied by the platform device, not invented font services. */
-import { DFLT_ESC_AUTO_SUB, DFLT_ESC_AUTO_SUPER } from "../../../../editeng/inc/escapementitem";
-import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
+import {
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_AUTO_SUPER,
+  type SvxEscapementItem,
+} from "../../../../editeng/inc/escapementitem";
+import {
+  SvxFontHeightItem,
+  SvxFontItem,
+  type SvxWeightItem,
+  type SvxPostureItem,
+} from "../../../../editeng/source/items/textitem";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import {
   RES_CHRATR_CJK_FONT,
@@ -9,9 +18,59 @@ import {
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_WEIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_ESCAPEMENT,
 } from "../../../inc/hintids";
 import type { SwAttrSet } from "../attr/swatrset";
-import type { DefaultFontDevice } from "../doc/default-font";
+import type { DefaultFontDevice, SwMeasurementFont } from "../doc/default-font";
+
+import { GetWhichOfScript } from "../attr/hints";
+import type { SwAttrHandler } from "../text/atrstck";
+
+/** Binds the selected SwSubFont size and identity fields from actual Writer attribute stacks. @param attributes - Active native character attributes. @param script - Current native script. @returns Selected native font fields in twips. */
+export function CreateSwMeasurementFont(
+  attributes: SwAttrHandler,
+  script: number,
+): SwMeasurementFont {
+  const family = attributes.ReadItem(GetWhichOfScript(RES_CHRATR_FONT, script)) as SvxFontItem,
+    height = attributes.ReadItem(
+      GetWhichOfScript(RES_CHRATR_FONTSIZE, script),
+    ) as SvxFontHeightItem,
+    weight = attributes.ReadItem(GetWhichOfScript(RES_CHRATR_WEIGHT, script)) as SvxWeightItem,
+    posture = attributes.ReadItem(GetWhichOfScript(RES_CHRATR_POSTURE, script)) as SvxPostureItem,
+    escapement = attributes.ReadItem(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
+  return {
+    familyName: family.GetFamilyName(),
+    styleName: family.GetStyleName(),
+    family: family.GetFamily(),
+    pitch: family.GetPitch(),
+    charset: family.GetCharSet(),
+    weight: weight.GetWeight(),
+    italic: posture.GetPosture(),
+    heightTwips: Math.trunc((height.GetHeight() * escapement.GetProportionalHeight()) / 100),
+  };
+}
+
+/** Passes an actual attributed run and source UTF16 range to the physical width device. @param device - Document output device. @param attributes - Actual active attributes. @param script - Current native script. @param text - Original text. @param start - Source UTF16 start. @param length - Source UTF16 length. @returns Width in twips. */
+export function MeasureSwTextWidth(
+  device: DefaultFontDevice | undefined,
+  attributes: SwAttrHandler,
+  script: number,
+  text: string,
+  start: number,
+  length: number,
+): number {
+  const width = device?.measureTextWidth?.(
+    CreateSwMeasurementFont(attributes, script),
+    text,
+    start,
+    length,
+  );
+  if (width === undefined || !Number.isFinite(width) || width < 0)
+    throw new Error("Writer text width requires an actual output device.");
+  return Math.round(width);
+}
 
 /** Reads the actual script font through the default output device, as AttrSetToLineHeight does.  @param set - Set. @param script - Script. @param device - Device. @returns The number result. */
 export function AttrSetToLineHeight(

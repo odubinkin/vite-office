@@ -2943,3 +2943,20 @@ The represented 64-bit integral path retains that arithmetic and the later
 16-bit narrowing. This observation concerns the calculation on the supplied
 layout inputs. Reachability from a particular native HTML document and
 platform-width variants remain unverified.
+
+### WRITER361 — Import text-width measurement replaces the ordinary left margin with the first-line offset
+
+Pinned `SwTextNode::GetMinMaxSize` in `sw/source/core/text/itratr.cxx`
+replaces the accumulated left margin whenever `GetFirstLineOfsWithNum`
+returns false. That method returns false for a non-list paragraph even though
+it writes the actual first-line offset. The source can therefore measure an
+ordinary paragraph with the first-line value instead of its text-left margin.
+Preserve the replacement and the signed-short conversion.
+
+### WRITER362 — Anchored fly width measurement clamps different sides of zero
+
+Pinned `lcl_MinMaxNode` in `sw/source/core/text/itratr.cxx` clamps positive
+remaining right space for a non-FRAME right relation and negative remaining
+left space for a non-FRAME left relation. The original comparison is preserved
+on each side. Focused local tests use actual attached fly formats and preserve
+their source order.

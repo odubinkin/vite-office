@@ -1829,3 +1829,17 @@ Automatic text measurement, phase-one integration, parser dispatch and
 production table materialization are still required for inline HTML tables
 in Markdown. Broad module, behavior, contract and default statuses remain
 unverified.
+
+### HTML77 — Physical text width binding and anchored paragraph measurement inputs
+
+The existing Writer document device now carries a shaped width query in twips
+through the browser Canvas adapter. The actual character-attribute stack
+supplies script-specific family, style, weight, posture and proportional font
+height to the VCL font. Browser font selection and shaping are the platform
+boundary. The initial import width calculation preserves source first-line
+margin and anchored Writer fly contributions, including native layouts of
+tables at either edge of a fly. See WRITER361 and WRITER362.
+
+The source ICU dictionary rules, full paragraph accumulation and first-pass
+HTML table aggregation remain separate work. This checkpoint does not yet
+connect HTML table import to the Markdown parser.

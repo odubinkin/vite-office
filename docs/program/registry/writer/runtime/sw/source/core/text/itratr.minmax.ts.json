@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+        "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+        "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts"
+      ],
+      "justification": "Native anchored Writer fly contributions and preliminary width margins use actual paragraph list items, format anchors, content indices, and optional first/last native table layout. Through-wrap and asymmetric relation clamps are preserved. Dictionary-boundary and full text traversal, native drawing objects and source device parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetMinMaxNodeMetrics",
+        "lcl_MinMaxNode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/text/itratr.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::GetMinMaxSize",
+        "lcl_MinMaxNode"
+      ]
+    }
+  }
+}
