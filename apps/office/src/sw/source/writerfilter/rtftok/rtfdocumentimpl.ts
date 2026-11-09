@@ -1,6 +1,4 @@
 /** @fileoverview Maps RTF tokenizer events into native Writer nodes following rtftok/rtfdocumentimpl.cxx. */
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { SwStartNode } from "../../core/docnode/node";
@@ -13,7 +11,6 @@ import {
   equalCharacter,
   equalControls,
   type RtfBlock,
-  type RtfCellBorder,
   type RtfParagraph,
   type RtfParagraphState,
   type RtfRun,
@@ -24,6 +21,11 @@ import { DecodeBytes } from "./rtfdocumentimpl.decode";
 import { Dispatch, DispatchBodyControl } from "./rtfdocumentimpl.dispatch";
 import { ApplyParagraph, ApplyStyleDefinition, Finish } from "./rtfdocumentimpl.document";
 import { RtfTokenizer, type RtfToken } from "./rtftokenizer";
+import {
+  CollectParagraphSprms,
+  CollectTableRowSprms,
+  TableRowBuffer,
+} from "./rtfdocumentimpl.tablerowbuffer";
 
 /** Imports a represented RTF body without coupling the tokenizer to browser I/O. */
 export class RtfDocumentImpl {
@@ -124,23 +126,6 @@ export class RtfDocumentImpl {
   /** Releases actual run snapshots at the atomic reader lifetime boundary, including incomplete table buffers on parse failure. A temporary identity set follows shared references to the same parsed run, not a second resource registry. @returns Nothing. */
   protected ClearCharacterProperties(): void {
     const lists = new Set<RTFSprms>();
-    const paragraph =
-      /** Visits actual parsed paragraph owners. @param value - Paragraph. @returns Nothing. */ (
-        value: RtfParagraph,
-      ) => {
-        for (const run of value.runs) lists.add(run.characterSprms);
-        if (value.paragraphSprms) lists.add(value.paragraphSprms);
-        if (value.marker) lists.add(value.marker.characterSprms);
-      };
-    const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
-      values: readonly RtfTableRow[],
-    ) => {
-      for (const row of values) {
-        lists.add(row.rowSprms);
-        for (const list of row.cellSprms) lists.add(list);
-        for (const cell of row.cells) for (const value of cell) paragraph(value);
-      }
-    };
     for (const state of this.states) {
       state.destinationText.dispose();
       lists.add(state.characterSprms);
@@ -161,12 +146,10 @@ export class RtfDocumentImpl {
     lists.add(this.m_aDefaultCharacterSprms);
     for (const run of this.runs) lists.add(run.characterSprms);
     for (const block of this.blocks)
-      if (block.kind === "paragraph") paragraph(block.paragraph);
-      else rows(block.rows);
-    rows(this.tableRows);
-    for (const list of this.rowCellSprms.splice(0)) lists.add(list);
-    for (const cell of this.tableRow) for (const value of cell) paragraph(value);
-    for (const value of this.tableCell) paragraph(value);
+      if (block.kind === "paragraph") CollectParagraphSprms(lists, block.paragraph);
+      else CollectTableRowSprms(lists, block.rows);
+    CollectTableRowSprms(lists, this.tableRows);
+    for (const buffer of this.m_aTableBufferStack) buffer.CollectSprms(lists);
     lists.add(this.m_aListTableSprms);
     for (const table of this.m_aListTables) table.dispose();
     this.m_aListTables.length = 0;
@@ -181,8 +164,7 @@ export class RtfDocumentImpl {
     this.runs.length = 0;
     this.blocks.length = 0;
     this.tableRows.length = 0;
-    this.tableRow.length = 0;
-    this.tableCell.length = 0;
+    this.m_aTableBufferStack.splice(0, this.m_aTableBufferStack.length, new TableRowBuffer());
   }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
@@ -192,23 +174,11 @@ export class RtfDocumentImpl {
   protected sawHeader = false;
   protected terminatedParagraph = false;
   protected tableRows: RtfTableRow[] = [];
-  protected tableRow: RtfParagraph[][] = [];
-  protected tableCell: RtfParagraph[] = [];
-  protected rowBoundaries: number[] = [];
-  protected readonly rowCellSprms: RTFSprms[] = [];
-  protected rowAlignment: "left" | "center" | "right" = "left";
-  protected rowLeft = 0;
-  protected rowHeight = 0;
-  protected rowSplit = true;
-  protected rowHeader = false;
-  protected rowVerticals: (VertOrientation | undefined)[] = [];
-  protected nextCellVertical: VertOrientation | undefined;
-  protected rowBorders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
-  protected nextCellBorders = new Map<SvxBoxItemLine, RtfCellBorder>();
-  protected activeBorder: RtfCellBorder | undefined;
-  protected rowPaddings: Map<SvxBoxItemLine, number>[] = [];
-  protected nextCellPaddings = new Map<SvxBoxItemLine, number>();
-  protected rowDefaultPaddings = new Map<SvxBoxItemLine, number>();
+  protected readonly m_aTableBufferStack = [new TableRowBuffer()];
+  /** Borrows the active source table buffer for the current nesting depth. @returns Actual buffer. */
+  protected get tableBuffer(): TableRowBuffer {
+    return this.m_aTableBufferStack.at(-1) as TableRowBuffer;
+  }
   protected inTable = false;
   protected defaultTabStop = 720;
   protected firstRun = true;
@@ -374,7 +344,7 @@ export class RtfDocumentImpl {
       },
       marks: this.marks.splice(0),
     };
-    if (this.inTable) this.tableCell.push(paragraph);
+    if (this.inTable) this.tableBuffer.cell.push(paragraph);
     else {
       this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
     }

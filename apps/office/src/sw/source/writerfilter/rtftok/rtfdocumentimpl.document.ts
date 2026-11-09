@@ -1,19 +1,14 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
-import { ApplyRtfTableProperties } from "./rtfdocumentimpl.table";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { SwFrameSize } from "../../../inc/fmtfsize";
-import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BREAK,
   RES_BOX,
@@ -46,6 +41,7 @@ import {
 } from "./rtfdocumentimpl.context";
 import { RtfSyntaxError } from "./rtftokenizer";
 import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
+import { MaterializeRtfTable } from "./rtfdocumentimpl.table";
 
 /** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
 function paragraphBorderBox(
@@ -300,102 +296,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
             );
         if (block.pageBreakBefore)
           table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
-        const firstRow = block.rows[0];
-        if (firstRow !== undefined) {
-          const format = table.GetFrameFormat();
-          const orient = format.GetHoriOrient().Clone();
-          orient.SetHoriOrient(
-            firstRow.alignment === "center"
-              ? HoriOrientation.CENTER
-              : firstRow.alignment === "right"
-                ? HoriOrientation.RIGHT
-                : firstRow.left !== 0
-                  ? HoriOrientation.NONE
-                  : HoriOrientation.LEFT,
-          );
-          format.SetFormatAttr(orient);
-          if (firstRow.left !== 0) {
-            const lr = format.GetLRSpace().Clone();
-            lr.SetLeft(SvxIndentValue.twips(firstRow.left));
-            format.SetFormatAttr(lr);
-          }
-          if (firstRow.defaultPaddings.size > 0) {
-            const item = format.GetBox().Clone();
-            for (const [edge, value] of firstRow.defaultPaddings) item.SetDistance(value, edge);
-            format.SetFormatAttr(item);
-          }
-        }
-        const rightEdge = block.rows.reduce(
-          /** Computes the maximum result. @param maximum - Maximum. @param row - Row. @returns The computed result. */ (
-            maximum,
-            row,
-          ) => Math.max(maximum, (row.boundaries.at(-1) ?? 0) - row.left),
-          0,
-        );
-        if (rightEdge > 0) {
-          const size = table.GetFrameFormat().GetFrameSize().Clone();
-          size.SetWidth(rightEdge);
-          table.GetFrameFormat().SetFormatAttr(size);
-        }
-        for (const row of block.rows) {
-          const line = document.nodes.AppendTableRow(table, row.cells.length);
-          if (row.height !== 0) {
-            const size = line.GetFrameFormat().GetFrameSize().Clone();
-            size.SetHeight(Math.abs(row.height));
-            size.SetHeightSizeType(row.height < 0 ? SwFrameSize.Fixed : SwFrameSize.Minimum);
-            line.GetFrameFormat().SetFormatAttr(size);
-          }
-          if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
-          for (const [index, cell] of row.cells.entries()) {
-            // AppendTableRow created exactly row.cells.length boxes before this bounded iteration.
-            const box = line.GetTabBoxes()[index] as ReturnType<typeof line.GetTabBoxes>[number];
-            const vertical = row.verticals[index];
-            if (vertical !== undefined) {
-              const item = box.GetVertOrient();
-              item.SetVertOrient(vertical);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const borders = row.borders[index];
-            if (borders !== undefined && borders.size > 0) {
-              const item = box.GetBox();
-              for (const [edge, border] of borders)
-                item.SetLine(createRtfBorderLine(border, this["colors"]), edge);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const paddings = row.paddings[index];
-            if (row.defaultPaddings.size > 0 || (paddings !== undefined && paddings.size > 0)) {
-              const item = box.GetBox();
-              for (const [edge, value] of row.defaultPaddings) item.SetDistance(value, edge);
-              for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const right = row.boundaries[index];
-            const left = index === 0 ? row.left : row.boundaries[index - 1];
-            if (right !== undefined && left !== undefined && right > left) {
-              const size = box.GetFrameSize();
-              size.SetWidth(right - left);
-              box.SetFrameSize(size);
-            }
-            for (const [paragraphIndex, paragraph] of cell.entries()) {
-              const node =
-                paragraphIndex === 0
-                  ? (box.GetParagraphs()[0] as SwTextNode)
-                  : document.nodes.AppendTableCellParagraph(box);
-              this["ApplyParagraph"](node, paragraph);
-            }
-          }
-        }
-        ApplyRtfTableProperties(table, block.rows);
-        let repeatedRows = 0;
-        for (const row of block.rows) {
-          if (!row.header) break;
-          if (repeatedRows === 10) {
-            repeatedRows = 0;
-            break;
-          }
-          repeatedRows++;
-        }
-        table.SetRowsToRepeat(repeatedRows);
+        MaterializeRtfTable.call(this, document, table, block.rows);
       }
     }
     complete = true;

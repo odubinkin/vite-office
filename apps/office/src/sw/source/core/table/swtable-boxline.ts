@@ -1,6 +1,6 @@
 /** @fileoverview Owns original SwTableBox and SwTableLine classes from swtable.cxx, physically separated for the authored-file size limit. */
 import { FindPreviousBoxInLine, FindPreviousBoxInBox } from "../doc/tblrwcl";
-import type { SwTableBoxStartNode } from "../docnode/node";
+import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import { SwRowFrame, SwCellFrame } from "../layout/tabfrm";
 import { TableLineFormatChanged, TableBoxFormatChanged } from "../../../inc/hints";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -229,6 +229,11 @@ export class SwTableBox extends SwClient {
   /** Copies effective orientation for independent editing. @returns Complete item. */
   public GetVertOrient(): SwFormatVertOrient {
     return this.GetFrameFormat().GetVertOrient().Clone();
+  }
+  /** Traverses direct cell content in native node order, preserving nested table boundaries. @returns Direct paragraph and table nodes. */
+  public GetContentNodes(): readonly (SwTextNode | SwTableNode)[] {
+    const start = this.GetStartNode();
+    return start.GetNodes().GetSectionContent(start);
   }
   /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */
   public GetParagraphs(): readonly SwTextNode[] {

@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
     "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
     "localSymbols": [
-      "RtfDocumentImpl"
+      "RtfDocumentImpl",
+      "CommitParagraph"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::resolveSubstream"
@@ -49,7 +50,8 @@
       "S3HW1E section type/parity checkpoint: raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD use exact generated resource tokens and original paragraph sectPr wrapper. SectionPropertyMap preserves nextPage default, one-column nextColumn promotion, continuous orientation promotion and inherited page-style identity. Real metadata-driven even/odd style copies retain the native denylist, unrestricted/mirrored regular follow style, even-only mirrored margin swap and actual Converted name allocation. DomainMapper_Impl now retains the last top-level section map with genuine tools::SvRef, leaving nested maps out of that slot and releasing old maps only after replacement. Original page-section grid defaults, document DefaultPageMode and Standard Asian-height precedence are applied after styles are imported. Original first-run SettingsTable emission snapshots actual RTFReferenceTable/RTFReferenceProperties and delivers the consumed mirror-margin flag through native mapper callbacks; late flags do not mutate the emitted table. Actual RTF/UNO tests preserve continuous restart omission and grid defaults/export no-op (WRITER281-283). Remaining PAGE/terminal-SECT state and first/follow/title-page producer/export checks, plus HTML/current-model audits, prevent full goal completion. No whole-module/ABI confidence promotion; intentional browser file UI/autosave/recovery deviations remain unchanged.",
       "The broad section regression confirms source first-run gating for LANG-only streams: pending character/paragraph language stays unconsumed until ordinary text/PAR, while explicit empty PAR retains authored language. WRITER284 records the native distinction; the old same-language acceptance was migrated only after source control-flow inspection, with native re-export assertions retained.",
       "S3HW1E PAGE/section lifecycle checkpoint: exact pinned metadata distinguishes all 1823 known spellings from unknown controls, preserves native dispatch kinds/defaults and PAR aliases, and starts sections for recognized no-op handlers. Original needSect/needCr/needFinalPar/needPar, parAtEndOfSection, ignore-next-continuous and lazy break reset govern SECT, synthetic PAGE and root-pop. The existing atomic mapper binding preserves deferred-page paragraph phases, including zero-length utext first-run changes, without claiming a streaming mapper ABI. Required final table paragraphs follow the table. Literal tests plus unchanged cont-section-pagebreak.rtf preserve native empty paragraph/page-style expectations. Existing strict RTF1 lexical admission is retained. First/follow/title-page producer/export and HTML/current-model audits remain open; no broad semantic or ABI confidence promotion.",
-      "S3HW1E HTML75: Actual parsed row and cell sprm lists are released with their current/buffered owners including incomplete input."
+      "S3HW1E HTML75: Actual parsed row and cell sprm lists are released with their current/buffered owners including incomplete input.",
+      "Owns the original table-buffer stack with separate property snapshots at every materialized depth."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -167,6 +169,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+          "marker": "m_aTableBufferStack"
         }
       ],
       "upstream": [
@@ -221,6 +227,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "RTFKeyword::FROMAN"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "m_aTableBufferStack"
         }
       ]
     }

@@ -3202,3 +3202,19 @@ In `SwTable::CollectBoxSelection` the left-overlap branch compares the
 sum of a box's borders with twice the minimum boundary. The corresponding
 right-overlap branch compares that sum with the maximum boundary itself.
 Preserve both comparisons during ragged-row width correction.
+
+### WRITER392 — ITAP zero does not clear the active RTF table buffer
+
+Pinned `RTFDocumentImpl::dispatchTableValue` prepends the ITAP depth
+sprm, leaving the original INTBL sprm later in the paragraph map.
+Only a positive depth switches to the active table buffer through
+INTBL. Preserve the precedence and keep the active buffer at ITAP zero
+until the ordinary row or nested-row boundary closes it.
+
+### WRITER393 — The RTF destination does not check the version number
+
+The pinned tokenizer classifies `rtf` as a destination.
+`RTFDocumentImpl::dispatchDestination` accepts it without inspecting a
+numeric parameter. The upstream horizontal-merge test even uses a
+bare RTF destination. Preserve admission for a present destination
+with an omitted or different version number.

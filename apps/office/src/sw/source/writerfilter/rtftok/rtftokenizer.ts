@@ -19,6 +19,9 @@ export class RtfSyntaxError extends Error {
   }
 }
 
+/** Existing browser bound for parser nesting and materialized nested tables. */
+export const RTF_MAX_NESTING_DEPTH = 1024;
+
 /** Tokenizes one RTF byte stream without projecting it through HTML or browser DOM. */
 export class RtfTokenizer {
   private readonly source: Uint8Array;
@@ -72,7 +75,8 @@ export class RtfTokenizer {
       if (byte === 0x7b) {
         this.FlushText();
         this.depth++;
-        if (this.depth > 1024) throw new RtfSyntaxError("RTF group nesting is too deep.");
+        if (this.depth > RTF_MAX_NESTING_DEPTH)
+          throw new RtfSyntaxError("RTF group nesting is too deep.");
         this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) as number);
         this.groupFallback.push(this.fallback);
         this.Emit({ kind: "group-start" });

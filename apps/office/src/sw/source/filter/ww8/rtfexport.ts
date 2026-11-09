@@ -222,7 +222,7 @@ export class RtfExport extends MSWordExportBase {
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
         this.IndexColor(attributes.underlineColor);
     }
-    for (const block of blocks) {
+    for (const block of document.GetNodes().entries()) {
       if (!(block instanceof SwTableNode)) continue;
       for (const row of block.GetTable().GetTabLines())
         for (const cell of row.GetTabBoxes()) {
@@ -308,120 +308,7 @@ export class RtfExport extends MSWordExportBase {
       }
       this.m_pCurrentPageDesc = currentPage;
       if (block instanceof SwTableNode) {
-        for (const row of block.GetTable().GetTabLines()) {
-          const boxes = row.GetTabBoxes();
-          const tableFormat = block.GetTable().GetFrameFormat();
-          const rowFormat = row.GetFrameFormat();
-          const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
-          const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
-          output += "\\trowd";
-          if (orientation === HoriOrientation.CENTER) output += "\\trqc";
-          else if (orientation === HoriOrientation.RIGHT) output += "\\trqr";
-          else {
-            output += "\\trql";
-            if (
-              orientation === HoriOrientation.NONE ||
-              orientation === HoriOrientation.LEFT_AND_WIDTH
-            )
-              output += `\\trleft${tableLeft}`;
-          }
-          output +=
-            this.TrueFrameDirection(tableFormat) === SvxFrameDirection.Horizontal_RL_TB
-              ? "\\rtlrow"
-              : "\\ltrrow";
-          const rowSize = rowFormat.GetFrameSize();
-          if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
-            output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
-          if (!rowFormat.GetRowSplit().GetValue()) output += "\\trkeep";
-          const tableBox = tableFormat.GetBox();
-          for (const [edge, unitControl, valueControl] of [
-            [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
-            [SvxBoxItemLine.LEFT, "trpaddfl", "trpaddl"],
-            [SvxBoxItemLine.BOTTOM, "trpaddfb", "trpaddb"],
-            [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
-          ] as const)
-            output += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
-          const nativeWidths = boxes.map(
-            /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
-              box.GetFrameSize().GetWidth(),
-          );
-          const hasNativeWidths = nativeWidths.every(
-            /** Computes the width result. @param width - Width. @returns The computed result. */ (
-              width,
-            ) => width > 0,
-          );
-          const tableSize = tableFormat.GetFrameSize();
-          const tableWidth = tableSize.GetWidth();
-          // GetTablePageSize supplies SwWriteTable's target width; its base is
-          // the table frame width, not the sum of this row's cell widths.
-          let widthPercent = tableSize.GetWidthPercent();
-          if (orientation === HoriOrientation.FULL || orientation === HoriOrientation.NONE)
-            widthPercent = 100;
-          const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
-          const page = this.ResolvePageDescription(document, block).GetValue();
-          const pageWidth = page.width - page.leftMargin - page.rightMargin;
-          const targetWidth = relative
-            ? widthPercent === 0
-              ? pageWidth
-              : Math.trunc((pageWidth * widthPercent) / 100)
-            : tableWidth;
-          const widthRatio = hasNativeWidths && tableWidth > 0 ? targetWidth / tableWidth : 1;
-          let right = 0;
-          for (const [index, width] of nativeWidths.entries()) {
-            const box = boxes[index]?.GetFormat().box;
-            const format = boxes[index]?.GetFrameFormat();
-            if (box !== undefined)
-              for (const [edge, control] of [
-                [SvxBoxItemLine.TOP, "clbrdrt"],
-                [SvxBoxItemLine.LEFT, "clbrdrl"],
-                [SvxBoxItemLine.BOTTOM, "clbrdrb"],
-                [SvxBoxItemLine.RIGHT, "clbrdrr"],
-              ] as const)
-                output += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
-            if (box !== undefined)
-              for (const [edge, unitControl, valueControl] of [
-                [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
-                [SvxBoxItemLine.LEFT, "clpadft", "clpadt"],
-                [SvxBoxItemLine.BOTTOM, "clpadfb", "clpadb"],
-                [SvxBoxItemLine.RIGHT, "clpadfr", "clpadr"],
-              ] as const) {
-                const distance = box.GetDistance(edge);
-                if (distance > 0) output += `\\${unitControl}3\\${valueControl}${distance}`;
-              }
-            if (format !== undefined) {
-              const direction = this.TrueFrameDirection(format);
-              if (direction === SvxFrameDirection.Vertical_RL_TB) output += "\\cltxtbrl";
-              else if (direction === SvxFrameDirection.Vertical_LR_BT) output += "\\cltxbtlr";
-            }
-            const rowSpan = boxes[index]?.getRowSpan() ?? 1;
-            if (rowSpan > 1) output += "\\clvmgf";
-            else if (rowSpan < 1) output += "\\clvmrg";
-            const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
-            if (vertical !== undefined)
-              output +=
-                vertical === VertOrientation.CENTER
-                  ? "\\clvertalc"
-                  : vertical === VertOrientation.BOTTOM
-                    ? "\\clvertalb"
-                    : "\\clvertalt";
-            right += hasNativeWidths ? width : 1440;
-            output += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
-          }
-          for (const box of boxes) {
-            const paragraphs = box.GetParagraphs();
-            for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
-              if (paragraphIndex > 0) {
-                const terminator = this.WriteParagraphEnd(
-                  paragraphs[paragraphIndex - 1] as SwTextNode,
-                );
-                output += terminator === "\\par" ? terminator + " " : terminator;
-              }
-              output += `\\pard\\intbl ${this.WriteParagraph(paragraph)}`;
-            }
-            output += "\\cell ";
-          }
-          output += "\\row\n";
-        }
+        output += this.WriteTable(block, 1);
       } else {
         const result = this.WriteTextNode(document, block, currentPage, previousPageDesc);
         output += result.output;
@@ -434,6 +321,130 @@ export class RtfExport extends MSWordExportBase {
     output += "}";
     this.Strm().WriteOString(output);
     return this.Strm().GetData();
+  }
+
+  /** Writes native table definitions and interleaved nested table content in source depth order. @param block - Actual table node. @param depth - Original table depth. @returns RTF table bytes. */
+  private WriteTable(block: SwTableNode, depth: number): string {
+    let output = "";
+    for (const row of block.GetTable().GetTabLines()) {
+      const boxes = row.GetTabBoxes();
+      const tableFormat = block.GetTable().GetFrameFormat();
+      const rowFormat = row.GetFrameFormat();
+      const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
+      const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
+      let definition = "\\trowd";
+      if (orientation === HoriOrientation.CENTER) definition += "\\trqc";
+      else if (orientation === HoriOrientation.RIGHT) definition += "\\trqr";
+      else {
+        definition += "\\trql";
+        if (orientation === HoriOrientation.NONE || orientation === HoriOrientation.LEFT_AND_WIDTH)
+          definition += `\\trleft${tableLeft}`;
+      }
+      definition +=
+        this.TrueFrameDirection(tableFormat) === SvxFrameDirection.Horizontal_RL_TB
+          ? "\\rtlrow"
+          : "\\ltrrow";
+      const rowSize = rowFormat.GetFrameSize();
+      if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
+        definition += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
+      if (!rowFormat.GetRowSplit().GetValue()) definition += "\\trkeep";
+      const tableBox = tableFormat.GetBox();
+      for (const [edge, unitControl, valueControl] of [
+        [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
+        [SvxBoxItemLine.LEFT, "trpaddfl", "trpaddl"],
+        [SvxBoxItemLine.BOTTOM, "trpaddfb", "trpaddb"],
+        [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
+      ] as const)
+        definition += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
+      const nativeWidths = boxes.map(
+        /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
+          box.GetFrameSize().GetWidth(),
+      );
+      const hasNativeWidths = nativeWidths.every(
+        /** Computes the width result. @param width - Width. @returns The computed result. */ (
+          width,
+        ) => width > 0,
+      );
+      const tableSize = tableFormat.GetFrameSize();
+      const tableWidth = tableSize.GetWidth();
+      // GetTablePageSize supplies SwWriteTable's target width; its base is
+      // the table frame width, not the sum of this row's cell widths.
+      let widthPercent = tableSize.GetWidthPercent();
+      if (orientation === HoriOrientation.FULL || orientation === HoriOrientation.NONE)
+        widthPercent = 100;
+      const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
+      const page = this.ResolvePageDescription(this.m_rDoc, block).GetValue();
+      const pageWidth = page.width - page.leftMargin - page.rightMargin;
+      const targetWidth = relative
+        ? widthPercent === 0
+          ? pageWidth
+          : Math.trunc((pageWidth * widthPercent) / 100)
+        : tableWidth;
+      const widthRatio = hasNativeWidths && tableWidth > 0 ? targetWidth / tableWidth : 1;
+      let right = 0;
+      for (const [index, width] of nativeWidths.entries()) {
+        const box = boxes[index]?.GetFormat().box;
+        const format = boxes[index]?.GetFrameFormat();
+        if (box !== undefined)
+          for (const [edge, control] of [
+            [SvxBoxItemLine.TOP, "clbrdrt"],
+            [SvxBoxItemLine.LEFT, "clbrdrl"],
+            [SvxBoxItemLine.BOTTOM, "clbrdrb"],
+            [SvxBoxItemLine.RIGHT, "clbrdrr"],
+          ] as const)
+            definition += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
+        if (box !== undefined)
+          for (const [edge, unitControl, valueControl] of [
+            [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
+            [SvxBoxItemLine.LEFT, "clpadft", "clpadt"],
+            [SvxBoxItemLine.BOTTOM, "clpadfb", "clpadb"],
+            [SvxBoxItemLine.RIGHT, "clpadfr", "clpadr"],
+          ] as const) {
+            const distance = box.GetDistance(edge);
+            if (distance > 0) definition += `\\${unitControl}3\\${valueControl}${distance}`;
+          }
+        if (format !== undefined) {
+          const direction = this.TrueFrameDirection(format);
+          if (direction === SvxFrameDirection.Vertical_RL_TB) definition += "\\cltxtbrl";
+          else if (direction === SvxFrameDirection.Vertical_LR_BT) definition += "\\cltxbtlr";
+        }
+        const rowSpan = boxes[index]?.getRowSpan() ?? 1;
+        if (rowSpan > 1) definition += "\\clvmgf";
+        else if (rowSpan < 1) definition += "\\clvmrg";
+        const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
+        if (vertical !== undefined)
+          definition +=
+            vertical === VertOrientation.CENTER
+              ? "\\clvertalc"
+              : vertical === VertOrientation.BOTTOM
+                ? "\\clvertalb"
+                : "\\clvertalt";
+        right += hasNativeWidths ? width : 1440;
+        definition += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
+      }
+      if (depth === 1) output += definition;
+      for (const box of boxes) {
+        const content = box.GetContentNodes();
+        for (const [index, node] of content.entries()) {
+          if (node instanceof SwTableNode) output += this.WriteTable(node, depth + 1);
+          else {
+            output += "\\pard\\intbl";
+            if (depth > 1) output += `\\itap${depth}`;
+            output += " " + this.WriteParagraph(node);
+            if (index + 1 < content.length) {
+              const terminator = this.WriteParagraphEnd(node);
+              output += terminator === "\\par" ? terminator + " " : terminator;
+            }
+          }
+        }
+        output += depth === 1 ? "\\cell " : "\\nestcell ";
+      }
+      output +=
+        depth === 1
+          ? "\\row\n"
+          : "{\\*\\nesttableprops" + definition + "\\nestrow}{\\nonesttables\\par}";
+    }
+    return output;
   }
 
   /** Emits the first native page descriptor as global paper and first-section controls.  @param document - Document. @param firstBlock - First Block. @returns The string result. */

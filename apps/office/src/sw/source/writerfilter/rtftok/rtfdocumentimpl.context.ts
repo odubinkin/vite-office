@@ -11,6 +11,7 @@ import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import type { RtfDocumentImpl } from "./rtfdocumentimpl";
+import type { TableRowBuffer } from "./rtfdocumentimpl.tablerowbuffer";
 import { RTF_BORDER_STYLES, type RtfCellBorder } from "./rtfdocumentimpl.border";
 export type { RtfCellBorder } from "./rtfdocumentimpl.border";
 /** Paragraph properties represented by the current Writer model. */
@@ -60,12 +61,14 @@ export interface RtfState {
   sectionSprms: RTFSprms;
   tableRowSprms: RTFSprms;
   tableCellSprms: RTFSprms;
+  tableBuffer: TableRowBuffer | undefined;
   tableSprms: RTFSprms;
   tableAttributes: RTFSprms;
   listLevelEntries: RTFSprms;
   runType: RunType;
   destination:
     | "body"
+    | "nestedtableproperties"
     | "fonttbl"
     | "stylesheet"
     | "styleentry"
@@ -146,11 +149,19 @@ export type RtfBlock =
       section: number;
       pageBreakBefore: boolean;
     }>;
+/** One native nested-table sequence in the surrounding cell's buffer. */
+export interface RtfNestedTable {
+  readonly rows: RtfTableRow[];
+}
+
+/** Paragraph and nested-row events retain their relative cell order. */
+export type RtfTableCellContent = RtfParagraph | RtfNestedTable;
+
 /** One RTF table row with physical cell boundaries in twips. */
 export interface RtfTableRow {
   readonly rowSprms: RTFSprms;
   readonly cellSprms: readonly RTFSprms[];
-  readonly cells: readonly (readonly RtfParagraph[])[];
+  readonly cells: readonly (readonly RtfTableCellContent[])[];
   readonly header: boolean;
   readonly boundaries: readonly number[];
   readonly alignment: "left" | "center" | "right";

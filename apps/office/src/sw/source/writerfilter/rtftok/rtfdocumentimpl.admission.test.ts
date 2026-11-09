@@ -55,6 +55,22 @@ it("rejects missing headers and content outside a pretokenized root", /** Checks
   ).toThrow("RTF content is outside the root group");
 });
 
+it.each(["", "2"])(
+  "admits the original RTF destination with version suffix %j",
+  /** The native destination dispatch does not inspect a version parameter. @param suffix - Optional source suffix. @returns Nothing. */ (
+    suffix,
+  ) => {
+    const doc = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(`{\\rtf${suffix} Native}`),
+    );
+    try {
+      expect(doc.paragraphs[0]?.GetText()).toBe("Native");
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+
 it("admits an empty pretokenized text span without creating a spurious run", /** Checks the public token route's empty-text boundary. @returns Nothing. */ () => {
   const doc = new RtfDocumentImpl().Resolve([
     { kind: "group-start" },

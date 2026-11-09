@@ -194,6 +194,81 @@ it("hands the removed cell's side border to the surviving outside cell", /** Exe
   expect(cells?.[1]?.GetFrameFormat().GetBox().GetLeft()?.GetOutWidth()).toBe(27);
 });
 
+it("replays consecutive nested rows in the actual parent cell without consuming outer geometry", /** The original ITAP/NESTCELL/NESTROW buffer path retains interleaved content and independent cell properties. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\colortbl;\red201\green61\blue27;}\trowd\cltxtbrl\cellx3000\cellx5000\pard\intbl before\par` +
+      String.raw`\pard\itap2 inner1\nestcell{\*\nesttableprops\trowd\cltxbtlr\clbrdrt\brdrs\brdrw30\brdrcf1\cellx1100\nestrow}{\nonesttables\par ignored}` +
+      String.raw`\pard\itap2 inner2\nestcell{\*\nesttableprops\trowd\cellx1100\nestrow}` +
+      String.raw`\pard\itap0\intbl after\cell neighbor\cell\row`,
+  );
+  const bytes = RtfExport.WriteDocument(document);
+  const exported = new TextDecoder().decode(bytes);
+  expect(exported.match(/\\nestcell\b/gu)).toHaveLength(2);
+  expect(exported.match(/\\nestrow\b/gu)).toHaveLength(2);
+  expect(exported).toContain("{\\*\\nesttableprops\\trowd");
+  const reopened = new RtfDocumentImpl().ResolveBytes(bytes);
+  documents.push(reopened);
+  for (const model of [document, reopened]) {
+    const outer = table(model).GetTabLines()[0]?.GetTabBoxes()[0];
+    assert(outer);
+    const [before, nested, after] = outer.GetContentNodes();
+    expect(before?.GetTextNode()?.GetText()).toBe("before");
+    expect(after?.GetTextNode()?.GetText()).toBe("after");
+    assert(nested instanceof SwTableNode);
+    expect(nested.StartOfSectionNode()).toBe(outer.GetStartNode());
+    expect(nested.GetTable().GetTabLines()).toHaveLength(2);
+    const first = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0],
+      second = nested.GetTable().GetTabLines()[1]?.GetTabBoxes()[0];
+    expect(first?.GetFrameFormat().GetFrameDir().GetValue()).toBe(Direction.Vertical_LR_BT);
+    expect(first?.GetFrameFormat().GetFrameSize().GetWidth()).toBe(1100);
+    expect(first?.GetFrameFormat().GetBox().GetTop()?.GetColor().GetRed()).toBe(201);
+    expect(first?.GetParagraphs()[0]?.GetText()).toBe("inner1");
+    expect(second?.GetParagraphs()[0]?.GetText()).toBe("inner2");
+    expect(outer.GetFrameFormat().GetFrameSize().GetWidth()).toBe(3000);
+    expect(outer.GetFrameFormat().GetFrameDir().GetValue()).toBe(Direction.Vertical_RL_TB);
+    expect(table(model).GetTabLines()[0]?.GetTabBoxes()[1]?.GetParagraphs()[0]?.GetText()).toBe(
+      "neighbor",
+    );
+  }
+});
+
+it("replays an ITAP jump through all intermediate native table levels", /** The stack grows to the requested depth and each NESTROW returns only one level. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`\trowd\cellx4000\pard\itap3 deep\nestcell{\nesttableprops\trowd\cellx800\nestrow}` +
+      String.raw`\pard\itap2 middle\nestcell{\nesttableprops\trowd\cellx1600\nestrow}` +
+      String.raw`\pard\intbl outside\cell\row`,
+  );
+  const reopened = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
+  documents.push(reopened);
+  for (const model of [document, reopened]) {
+    const outer = table(model).GetTabLines()[0]?.GetTabBoxes()[0],
+      [middle, outside] = outer?.GetContentNodes() ?? [];
+    assert(middle instanceof SwTableNode);
+    expect(outside?.GetTextNode()?.GetText()).toBe("outside");
+    const [inner, text] =
+      middle.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetContentNodes() ?? [];
+    assert(inner instanceof SwTableNode);
+    expect(text?.GetTextNode()?.GetText()).toBe("middle");
+    expect(inner.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
+      "deep",
+    );
+  }
+});
+
+it("rejects a NESTROW with no corresponding table depth", /** The original nested row validates the active buffer before publishing an incomplete table. @returns Nothing. */ () => {
+  expect(
+    /** Imports an orphan nested row. @returns The resulting invalid document. */ () =>
+      read(String.raw`\trowd\cellx1000\intbl x\nestcell{\*\nesttableprops\trowd\nestrow}`),
+  ).toThrow("Mismatch between ITAP and NESTROW.");
+});
+
+it("uses the browser nesting bound for explicit RTF table depth", /** Applies the existing lexical safety limit before allocating row buffers. @returns Nothing. */ () => {
+  expect(
+    /** Imports an oversized logical table depth. @returns The resulting invalid document. */ () =>
+      read(String.raw`\itap2147483647`),
+  ).toThrow("RTF table nesting is too deep.");
+});
+
 it("converts native RTF vertical merge flags to signed boxes and writes the same controls", /** Verifies buffered cell sprms, UNO row-span setters, border selection and native reimport. @returns Nothing. */ () => {
   const document = read(
     String.raw`\trowd\cellx1000\clvmgf\clbrdrb\brdrs\brdrw20\cellx3000\intbl left\cell start\cell\row` +

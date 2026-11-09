@@ -189,15 +189,17 @@ export class SwNodes {
 
   /** Returns direct body paragraphs and tables in document order. @returns Ordered body blocks. */
   public getBodyContent(): readonly (SwTextNode | SwTableNode)[] {
-    const bodyStart = this.endOfContent.StartOfSectionNode();
-    return this.nodeArray
-      .slice(this.endOfRedlines.GetIndex() + 1, this.endOfContent.GetIndex())
-      .filter(
-        /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
-        (node): node is SwTextNode | SwTableNode =>
-          (node instanceof SwTextNode || node instanceof SwTableNode) &&
-          node.StartOfSectionNode() === bodyStart,
-      );
+    return this.GetSectionContent(this.endOfContent.StartOfSectionNode());
+  }
+
+  /** Reads the actual direct text and table nodes of a native section in order. @param section - Connected section. @returns Direct content owners. */
+  public GetSectionContent(section: SwStartNode): readonly (SwTextNode | SwTableNode)[] {
+    return this.nodeArray.slice(section.GetIndex() + 1, section.EndOfSectionIndex()).filter(
+      /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
+      (node): node is SwTextNode | SwTableNode =>
+        (node instanceof SwTextNode || node instanceof SwTableNode) &&
+        node.StartOfSectionNode() === section,
+    );
   }
 
   /** Inserts a table section after an optional body paragraph. @param name - Table identity. @param format - Physical table geometry. @param after - Optional body predecessor. @returns Canonical table. */

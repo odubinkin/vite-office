@@ -1,7 +1,6 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
 import {
@@ -13,11 +12,11 @@ import {
   RTF_UNDERLINE_STYLES,
   SKIPPED_DESTINATIONS,
   STYLE_PROPERTY_CONTROLS,
-  type RtfCellBorder,
   type RtfDocumentImplContext,
   type RtfState,
 } from "./rtfdocumentimpl.context";
 import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
+import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 
 /** Dispatches one lexical event under the current group state. @param token - Source event.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
@@ -42,6 +41,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       sectionSprms: new RTFSprms(previous?.sectionSprms),
       tableRowSprms: new RTFSprms(previous?.tableRowSprms),
       tableCellSprms: new RTFSprms(previous?.tableCellSprms),
+      tableBuffer: previous?.tableBuffer,
       tableSprms: new RTFSprms(previous?.tableSprms),
       tableAttributes: new RTFSprms(previous?.tableAttributes),
       listLevelEntries: new RTFSprms(previous?.listLevelEntries),
@@ -202,7 +202,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       if (symbol.controlType === RTFControlType.VALUE && token.parameter === undefined)
         token = { ...token, parameter: symbol.defValue };
       else if (
-        token.name !== "rtf" &&
         symbol.controlType !== RTFControlType.TOGGLE &&
         symbol.controlType !== RTFControlType.VALUE &&
         token.parameter !== undefined
@@ -258,7 +257,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (token.name === "rtf") {
-    this["sawHeader"] = token.parameter === 1;
+    if (state.destination !== "skip") this["sawHeader"] = true;
     return;
   }
   if (token.name === "margmirror" && state.destination !== "skip") {
@@ -315,6 +314,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (state.destination === "body" && (token.name === "bkmkstart" || token.name === "bkmkend")) {
     state.destination = token.name === "bkmkstart" ? "bookmarkstart" : "bookmarkend";
     state.bookmarkName = "";
+    state.starred = false;
+    return;
+  }
+  if (state.destination === "body" && token.name === "nesttableprops") {
+    state.destination = "nestedtableproperties";
+    state.starred = false;
+    state.tableCellSprms.clear();
+    return;
+  }
+  if (state.destination === "body" && token.name === "nonesttables") {
+    state.destination = "skip";
     state.starred = false;
     return;
   }
@@ -548,6 +558,7 @@ export function DispatchBodyControl(
     return;
   }
   if (dispatchTableFlag(name, state)) return;
+  if (DispatchTableControl.call(this, name, parameter, state)) return;
   if (DispatchSectionControl.call(this, name, parameter, state)) return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
@@ -564,66 +575,6 @@ export function DispatchBodyControl(
   }
   if (name === "page" || name === "column") {
     DispatchPageBreak.call(this, name, state);
-    return;
-  }
-  if (name === "trowd") {
-    this["m_bNeedPap"] = true;
-    this["inTable"] = true;
-    this["rowBoundaries"] = [];
-    state.tableRowSprms.clear();
-    for (const list of this["rowCellSprms"].splice(0)) list.dispose();
-    this["rowAlignment"] = "left";
-    this["rowLeft"] = 0;
-    this["rowHeight"] = 0;
-    this["rowSplit"] = true;
-    this["rowHeader"] = false;
-    this["rowVerticals"] = [];
-    this["nextCellVertical"] = undefined;
-    this["rowBorders"] = [];
-    this["nextCellBorders"] = new Map();
-    this["activeBorder"] = undefined;
-    this["rowPaddings"] = [];
-    this["nextCellPaddings"] = new Map();
-    this["rowDefaultPaddings"] = new Map();
-    return;
-  }
-  if (name === "trpaddt" || name === "trpaddl" || name === "trpaddb" || name === "trpaddr") {
-    const edge =
-      name === "trpaddt"
-        ? SvxBoxItemLine.TOP
-        : name === "trpaddl"
-          ? SvxBoxItemLine.LEFT
-          : name === "trpaddb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    this["rowDefaultPaddings"].set(edge, parameter ?? 0);
-    return;
-  }
-  if (name === "clpadl" || name === "clpadt" || name === "clpadb" || name === "clpadr") {
-    const edge =
-      name === "clpadl"
-        ? SvxBoxItemLine.TOP
-        : name === "clpadt"
-          ? SvxBoxItemLine.LEFT
-          : name === "clpadb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    this["nextCellPaddings"].set(edge, parameter ?? 0);
-    return;
-  }
-  if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
-    delete state.paragraphBorder;
-    const edge =
-      name === "clbrdrt"
-        ? SvxBoxItemLine.TOP
-        : name === "clbrdrl"
-          ? SvxBoxItemLine.LEFT
-          : name === "clbrdrb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    const border: RtfCellBorder = createRtfBorder();
-    this["nextCellBorders"].set(edge, border);
-    this["activeBorder"] = border;
     return;
   }
   if (["box", "brdrt", "brdrl", "brdrb", "brdrr", "brdrbtw"].includes(name)) {
@@ -676,8 +627,8 @@ export function DispatchBodyControl(
         borders.set(edge, border);
       }
       state.paragraph = { ...state.paragraph, borders };
-    } else if (this["activeBorder"] !== undefined)
-      dispatchRtfBorder(this["activeBorder"], name, parameter);
+    } else if (this["tableBuffer"].activeBorder !== undefined)
+      dispatchRtfBorder(this["tableBuffer"].activeBorder, name, parameter);
     else {
       // putBorderProperty with border state NONE clears all paragraph borders.
       const borders = new Map(state.paragraph.borders);
@@ -690,86 +641,6 @@ export function DispatchBodyControl(
         borders.set(side, createRtfBorder());
       state.paragraph = { ...state.paragraph, borders };
     }
-    return;
-  }
-  if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
-    this["nextCellVertical"] =
-      name === "clvertalc"
-        ? VertOrientation.CENTER
-        : name === "clvertalb"
-          ? VertOrientation.BOTTOM
-          : VertOrientation.TOP;
-    return;
-  }
-  if (name === "trrh") {
-    this["rowHeight"] = parameter ?? 0;
-    return;
-  }
-  if (name === "trkeep") {
-    this["rowSplit"] = false;
-    return;
-  }
-  if (name === "trhdr") {
-    this["rowHeader"] = true;
-    return;
-  }
-  if (name === "trql" || name === "trqc" || name === "trqr") {
-    this["rowAlignment"] = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
-    return;
-  }
-  if (name === "trleft") {
-    this["rowLeft"] = parameter ?? 0;
-    return;
-  }
-  if (name === "cellx") {
-    if (parameter !== undefined) {
-      this["rowBoundaries"].push(parameter);
-      this["rowCellSprms"].push(new RTFSprms(state.tableCellSprms));
-      state.tableCellSprms.clear();
-      this["rowVerticals"].push(this["nextCellVertical"]);
-      this["nextCellVertical"] = undefined;
-      this["rowBorders"].push(this["nextCellBorders"]);
-      this["nextCellBorders"] = new Map();
-      this["rowPaddings"].push(this["nextCellPaddings"]);
-      this["nextCellPaddings"] = new Map();
-      this["activeBorder"] = undefined;
-    }
-    return;
-  }
-  if (name === "intbl") {
-    this["inTable"] = true;
-    return;
-  }
-  if (name === "cell") {
-    if (this["runs"].length > 0 || this["tableCell"].length === 0) this["CommitParagraph"](state);
-    this["tableRow"].push(this["tableCell"].splice(0));
-    this["terminatedParagraph"] = true;
-    return;
-  }
-  if (name === "row") {
-    if (this["tableCell"].length > 0 || this["runs"].length > 0) {
-      if (this["runs"].length > 0) this["CommitParagraph"](state);
-      this["tableRow"].push(this["tableCell"].splice(0));
-    }
-    if (this["tableRow"].length > 0)
-      this["tableRows"].push({
-        cells: this["tableRow"].splice(0),
-        header: this["rowHeader"],
-        boundaries: this["rowBoundaries"].splice(0),
-        rowSprms: new RTFSprms(state.tableRowSprms),
-        cellSprms: this["rowCellSprms"].splice(0),
-        alignment: this["rowAlignment"],
-        left: this["rowLeft"],
-        height: this["rowHeight"],
-        split: this["rowSplit"],
-        verticals: this["rowVerticals"].splice(0),
-        borders: this["rowBorders"].splice(0),
-        paddings: this["rowPaddings"].splice(0),
-        defaultPaddings: this["rowDefaultPaddings"],
-      });
-    this["inTable"] = false;
-    this["m_bNeedFinalPar"] = true;
-    this["terminatedParagraph"] = true;
     return;
   }
   if (name === "par") {

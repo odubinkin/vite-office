@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 507
+revision: 510
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T20:43:05.914Z"
+  updated_at: "2026-11-09T20:53:24.131Z"
   updated_by: "CODER"
-  note: "RTF92 source and scoped tests pass after correcting the BRDRW28 fixture. Keep parent open for remaining table/filter scenarios."
-  attempts: 103
+  note: "RTF93 scoped verification passes. Keep parent open for browser preservation of nested sections and remaining format audits."
+  attempts: 104
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1653,8 +1656,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-09T20:53:24.131Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF93 scoped verification passes. Keep parent open for browser preservation of nested sections and remaining format audits."
+  -
+    type: "status"
+    at: "2026-11-09T20:53:49.231Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T20:43:16.138Z"
+doc_updated_at: "2026-11-09T20:53:49.231Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -4459,6 +4475,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-09T20:53:24.131Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF93 scoped verification passes. Keep parent open for browser preservation of nested sections and remaining format audits.
+    Attempts: 104
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:53:23.488Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -6340,6 +6386,16 @@ sections:
     - Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, dependency, JSDoc, size, source-tree, WhichId, and diff checks. Result: pass. Evidence: rtf92-typecheck.log and rtf92-static.log. Scope: affected Writer runtime and static invariants.
     - Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 modules and zero semantic violations, rtf92-registry.log.
     - Residual scope: nested RTF buffers and the browser view and storage of existing nested/anchored Markdown tables. Interactive merge undo is separate from native file import.
+
+    ### RTF93 — Native stacked row buffering and recursive table export
+
+    The original ITAP and INTBL sprms bind the active row buffer at depth. NESTCELL and NESTROW close and transfer independent native row definitions, remap group references, and preserve parent cell content order. NESTTABLEPROPS and NONESTTABLES preserve source destination selection. Native RTF export visits the actual interleaved content and emits NESTCELL and the nested row definition and compatibility group. Native three-level sections, nested border colors and text before/after the table round-trip through the actual RTF filter. WRITER392 records the zero-depth precedence. WRITER393 records the native RTF destination admission for an omitted or different numeric suffix.
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok rtfexport.table-list.test.ts rtfexport.test.ts swmd.html-table.test.ts native-node-index-removal.test.ts native-content-box-registry.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`. Result: pass. Evidence: 744 scenarios in 31 files, rtf93-writer.log. Scope: entire RTF tokenizer/mapping group and connected native table/filter/UI boundaries.
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtfdocumentimpl.admission.test.ts rtf-table-direction.test.ts`. Result: pass. Evidence: 50 tests in 2 files, rtf93-admission-final.log. Includes the 2 newly added bare/nondefault header scenarios.
+    - Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint/Prettier, `npm run check:dependencies`, `npm run check:docs`, `npm run check:file-size`, `npm run check:source-tree`, `npm run check:writer-hintids`, `git diff --check`. Result: pass. Evidence: rtf93-typecheck.log and rtf93-static.log.
+    - Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1986 runtime owners and zero semantic violations, rtf93-registry-verified.log. Registered the filename split and kept the source field as an evidence marker rather than a registry API declaration.
+    - The preexisting 1024-level browser parser bound also guards explicit ITAP allocation. Malformed nested row-definition restoration, anchored/floating RTF tables, and actual nested browser layout and ODT/Worker persistence remain open. Full-suite cadence does not apply to this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -9155,6 +9211,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-09T20:53:24.131Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF93 scoped verification passes. Keep parent open for browser preservation of nested sections and remaining format audits.
+Attempts: 104
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-09T20:53:23.488Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -11040,3 +11126,13 @@ The new-model selection uses the original logical endpoint rectangle, source mid
 - Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint and Prettier, dependency, JSDoc, size, source-tree, WhichId, and diff checks. Result: pass. Evidence: rtf92-typecheck.log and rtf92-static.log. Scope: affected Writer runtime and static invariants.
 - Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1985 modules and zero semantic violations, rtf92-registry.log.
 - Residual scope: nested RTF buffers and the browser view and storage of existing nested/anchored Markdown tables. Interactive merge undo is separate from native file import.
+
+### RTF93 — Native stacked row buffering and recursive table export
+
+The original ITAP and INTBL sprms bind the active row buffer at depth. NESTCELL and NESTROW close and transfer independent native row definitions, remap group references, and preserve parent cell content order. NESTTABLEPROPS and NONESTTABLES preserve source destination selection. Native RTF export visits the actual interleaved content and emits NESTCELL and the nested row definition and compatibility group. Native three-level sections, nested border colors and text before/after the table round-trip through the actual RTF filter. WRITER392 records the zero-depth precedence. WRITER393 records the native RTF destination admission for an omitted or different numeric suffix.
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 src/sw/source/writerfilter/rtftok rtfexport.table-list.test.ts rtfexport.test.ts swmd.html-table.test.ts native-node-index-removal.test.ts native-content-box-registry.test.ts odt-table-roundtrip.test.ts WriterFileDialog.test.tsx`. Result: pass. Evidence: 744 scenarios in 31 files, rtf93-writer.log. Scope: entire RTF tokenizer/mapping group and connected native table/filter/UI boundaries.
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.writer.config.ts --maxWorkers 2 rtfdocumentimpl.admission.test.ts rtf-table-direction.test.ts`. Result: pass. Evidence: 50 tests in 2 files, rtf93-admission-final.log. Includes the 2 newly added bare/nondefault header scenarios.
+- Commands: `npm run typecheck --workspace @vite-office/office`, targeted ESLint/Prettier, `npm run check:dependencies`, `npm run check:docs`, `npm run check:file-size`, `npm run check:source-tree`, `npm run check:writer-hintids`, `git diff --check`. Result: pass. Evidence: rtf93-typecheck.log and rtf93-static.log.
+- Commands: `npm run check:source-provenance && npm run inventory:parity:writer`. Result: pass. Evidence: 1986 runtime owners and zero semantic violations, rtf93-registry-verified.log. Registered the filename split and kept the source field as an evidence marker rather than a registry API declaration.
+- The preexisting 1024-level browser parser bound also guards explicit ITAP allocation. Malformed nested row-definition restoration, anchored/floating RTF tables, and actual nested browser layout and ODT/Worker persistence remain open. Full-suite cadence does not apply to this checkpoint.
