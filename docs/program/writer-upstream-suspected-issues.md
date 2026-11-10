@@ -3465,3 +3465,10 @@ Without object metadata this emits `![]()`. Equal image records
 at one offset collapse. An empty anchor paragraph bypasses the
 formatting loop, so its fly is omitted. Preserve these results
 for the current Writer text-frame model.
+
+### WRITER421 — A legacy title inside UPR has no fallback without UD
+
+The RTF reader in UPR dispatches only the nested UD destination.
+A TITLE destination in the legacy branch is skipped, including
+when the stream provides no Unicode alternative. The previously
+read title, if any, is retained. Preserve the source selection.

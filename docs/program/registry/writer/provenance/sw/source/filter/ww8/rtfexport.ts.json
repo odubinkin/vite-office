@@ -20,7 +20,8 @@
       "WriteTable",
       "WriteFloatingTables",
       "WriteTextFrame",
-      "WriteSectionLineNumbering"
+      "WriteSectionLineNumbering",
+      "WriteInfo"
     ],
     "upstreamSymbols": [
       "RtfExport::ExportDocument_Impl",
@@ -56,7 +57,8 @@
       "Writes the actual native splittable text-fly table contents at the owning anchor and uses the fly width fallback for relative row output.",
       "Emits ordinary text fly content with an independent table depth at the native paragraph or character position.",
       "Publishes active line numbering at the original initial and later section stream boundaries.",
-      "Indexes native paragraph and style fill and brush colors before writing the RTF palette."
+      "Indexes native paragraph and style fill and brush colors before writing the RTF palette.",
+      "Writes the native RTF INFO group and represented shell title through the original OutStringUpr."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -190,6 +192,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "pinned Unicode UPR title"
         }
       ],
       "upstream": [
@@ -288,6 +294,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
           "marker": "TextFrame or paragraph background solid fill."
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
+          "marker": "void RtfExport::WriteInfo"
         }
       ]
     }

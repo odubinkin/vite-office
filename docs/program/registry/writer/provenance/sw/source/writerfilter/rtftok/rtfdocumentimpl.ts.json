@@ -9,7 +9,8 @@
     "localSymbols": [
       "RtfDocumentImpl",
       "CommitParagraph",
-      "getColorTable"
+      "getColorTable",
+      "GetDocumentTitle"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::resolveSubstream"
@@ -57,7 +58,8 @@
       "Owns independent append buffers for shape and body text and restores the surrounding paragraph and table state after shape text.",
       "Clears the running maximum row width when the active table ends.",
       "Sends frame properties after paragraph properties with the original explicit page-break guard.",
-      "Keeps emitted native paragraph border resources with the existing paragraph property snapshot."
+      "Keeps emitted native paragraph border resources with the existing paragraph property snapshot.",
+      "Exposes the represented title to the document shell after a successful native read."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -195,6 +197,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "pinned Unicode UPR title"
         }
       ],
       "upstream": [
@@ -273,6 +279,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
           "marker": "void RTFDocumentImpl::checkNeedPap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "case Destination::TITLE"
         }
       ]
     }

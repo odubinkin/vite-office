@@ -201,6 +201,12 @@ export class RtfDocumentImpl {
     } else if (this.m_bNeedSect && !value) this.m_bNeedSect = false;
   }
   protected currentSection = 0;
+  protected documentTitle: string | undefined;
+
+  /** Reads the title committed by the native TITLE destination. @returns Imported title or no destination. */
+  public GetDocumentTitle(): string | undefined {
+    return this.documentTitle;
+  }
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
   public ResolveBytes(bytes: Uint8Array, options: SwDocOptions = {}): SwDoc {

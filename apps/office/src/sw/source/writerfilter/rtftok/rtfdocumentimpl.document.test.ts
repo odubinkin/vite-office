@@ -929,3 +929,38 @@ it.skipIf(!existsSync(repeatFixture))(
     }
   },
 );
+
+const unicodeTitleFixture =
+  "../../vendor/libreoffice-reference/sw/qa/extras/rtfexport/data/fdo61507.rtf";
+
+it.skipIf(!existsSync(unicodeTitleFixture))(
+  "imports the pinned Unicode UPR title without appending metadata to the body",
+  /** Verifies the original RTF fdo61507 expectations with actual title destination buffers. @returns Nothing. */ () => {
+    const reader = new RtfDocumentImpl();
+    const document = reader.ResolveBytes(readFileSync(unicodeTitleFixture));
+    try {
+      expect(reader.GetDocumentTitle()).toBe("ÉÁŐŰ∭");
+      expect(
+        document.paragraphs.map(
+          /** Borrows actual body text. @param node - Native body node. @returns Text. */ (node) =>
+            node.GetText(),
+        ),
+      ).toEqual(["Hello."]);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+it("does not apply the legacy title in UPR without a UD destination", /** Checks original non-UD destination skipping while preserving ordinary title text buffers. @returns Nothing. */ () => {
+  const reader = new RtfDocumentImpl();
+  const document = reader.ResolveBytes(
+    new TextEncoder().encode(String.raw`{\rtf1{\info{\title Current}{\upr{\title Legacy}}}Body}`),
+  );
+  try {
+    expect(reader.GetDocumentTitle()).toBe("Current");
+    expect(document.paragraphs[0]?.GetText()).toBe("Body");
+  } finally {
+    document.Dispose();
+  }
+});

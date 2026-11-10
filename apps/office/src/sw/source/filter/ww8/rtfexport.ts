@@ -7,7 +7,7 @@ import {
 } from "../../core/layout/flycnt";
 import { OutputFlyFrame } from "./rtfattributeoutput.frame";
 import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
-import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import { OutString, OutStringUpr } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
 import {
@@ -123,8 +123,8 @@ export class RtfExport extends MSWordExportBase {
     this.m_aFontHelper.m_bLoadAllFonts = true;
   }
 
-  /** Existing browser full-document bridge owns and releases the actual temporary selections around the source exporter. @param document - Actual document. @returns RTF bytes. */
-  static WriteDocument(document: SwDoc): Uint8Array {
+  /** Existing browser full-document bridge owns and releases the actual temporary selections around the source exporter. @param document - Actual document. @param title - Represented shell document title. @returns RTF bytes. */
+  static WriteDocument(document: SwDoc, title = ""): Uint8Array {
     const nodes = document.GetNodes().getTextNodes();
     const first = nodes[0] ?? document.GetNodes().GetEndOfContent();
     const last = nodes.at(-1) ?? first;
@@ -135,11 +135,19 @@ export class RtfExport extends MSWordExportBase {
     mark.Dispose();
     const exporter = new RtfExport(document, range, range);
     try {
-      return exporter.ExportDocument();
+      return exporter.ExportDocument(title);
     } finally {
       exporter.Dispose();
       range.Dispose();
     }
+  }
+
+  /** Writes the source INFO group and its represented Unicode title. @param title - Current document title. @returns Nothing. */
+  private WriteInfo(title: string): void {
+    this.Strm().WriteOString("{\\info");
+    if (title.length > 0)
+      this.Strm().WriteOString(OutStringUpr("\\title", title, this.GetCurrentEncoding()));
+    this.Strm().WriteChar("}");
   }
 
   private readonly m_aStyTable = new Map<number, string>();
@@ -200,8 +208,8 @@ export class RtfExport extends MSWordExportBase {
     this.m_eCurrentEncoding = encoding & 0xffff;
   }
 
-  /** Exports the complete represented document from the actual native owner. @returns RTF bytes. */
-  public ExportDocument(): Uint8Array {
+  /** Exports the complete represented document from the actual native owner. @param title - Represented document title. @returns RTF bytes. */
+  public ExportDocument(title = ""): Uint8Array {
     const document = this.m_rDoc;
     this.SetCurrentEncoding(this.GetDefaultEncoding());
     this.m_aFontHelper.InitFontTable(this);
@@ -307,6 +315,7 @@ export class RtfExport extends MSWordExportBase {
     let output = "";
     this.BuildNumbering();
     this.WriteNumbering();
+    this.WriteInfo(title);
     const defaultTabs = document
       .GetTextFormatColl("default")
       .GetAttrSet()

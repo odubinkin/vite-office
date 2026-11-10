@@ -171,6 +171,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
           } else properties.clear();
         }
       }
+      if (
+        previous?.destination === "title" &&
+        previous.currentDestinationText === previous.destinationText
+      ) {
+        const title = previous.destinationText.makeStringAndClear();
+        try {
+          this["documentTitle"] = text(title);
+        } finally {
+          title.dispose();
+        }
+      }
       if (previous?.destination === "bookmarkstart") {
         const name = previous.bookmarkName.trim();
         if (name.length > 0)
@@ -203,10 +214,19 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   }
   const state = this["states"].at(-1);
   if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
-  if (token.kind === "control" && state.destination !== "skip") {
+  if (state.destination === "skip") return;
+  if (token.kind === "control") {
     const symbol = getSymbolData(token.name);
     if (symbol) {
       this["setNeedSect"](true);
+      if (
+        state.destination === "upr" &&
+        symbol.controlType === RTFControlType.DESTINATION &&
+        symbol.index !== RTFKeyword.UD
+      ) {
+        state.destination = "skip";
+        return;
+      }
       if (symbol.index === RTFKeyword.PAR) token = { ...token, name: "par" };
       if (symbol.controlType === RTFControlType.VALUE && token.parameter === undefined)
         token = { ...token, parameter: symbol.defValue };
@@ -249,6 +269,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       state.bookmarkName += value;
     else if (state.destination === "leveltext") state.levelText += value;
     else if (
+      state.destination === "title" ||
       state.destination === "pntxta" ||
       state.destination === "pntxtb" ||
       state.destination === "shapepropertyname" ||
@@ -263,7 +284,12 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     } else if (state.destination === "colortbl") this["ReadColorText"](value, state);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;
-    else if (state.destination === "body" || state.destination === "flymaincontent")
+    else if (
+      state.destination === "body" ||
+      state.destination === "flymaincontent" ||
+      state.destination === "upr" ||
+      state.destination === "info"
+    )
       this["AppendText"](value, state);
     return;
   }
@@ -271,17 +297,28 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = true;
     return;
   }
-  if (token.name === "flymaincnt" && state.destination !== "skip") {
+  if (
+    token.name === "info" ||
+    token.name === "upr" ||
+    token.name === "title" ||
+    token.name === "ud"
+  ) {
+    state.destination = token.name === "ud" ? "body" : token.name;
+    state.currentDestinationText = state.destinationText;
+    state.starred = false;
+    return;
+  }
+  if (token.name === "flymaincnt") {
     state.destination = "flymaincontent";
     state.starred = false;
     return;
   }
   if (DispatchShape.call(this, token.name, token.parameter, state)) return;
   if (token.name === "rtf") {
-    if (state.destination !== "skip") this["sawHeader"] = true;
+    this["sawHeader"] = true;
     return;
   }
-  if (token.name === "margmirror" && state.destination !== "skip") {
+  if (token.name === "margmirror") {
     this["m_aSettingsTableSprms"].set(N.LN_CT_Settings_mirrorMargins, new RTFValue(1));
     return;
   }
@@ -364,11 +401,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (DispatchTextSymbol.call(this, token.name, state)) return;
   if (DispatchLegacyNumberingDestination(token.name, state)) return;
   if (token.name === "listid") state.currentListIndex = token.parameter ?? 0;
-  if (
-    state.destination !== "skip" &&
-    DispatchLegacyNumbering.call(this, token.name, token.parameter, state)
-  )
-    return;
+  if (DispatchLegacyNumbering.call(this, token.name, token.parameter, state)) return;
   if (state.destination === "stylesheet" && (token.name === "s" || token.name === "cs")) {
     state.starred = false;
     state.styleType = token.name === "cs" ? "character" : "paragraph";
@@ -532,7 +565,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (state.destination === "listtable" || state.destination === "listoverridetable") return;
-  if (state.destination === "skip") return;
+  if (state.destination === "title" || state.destination === "info") return;
   this["DispatchBodyControl"](token.name, token.parameter, state);
 }
 
@@ -813,7 +846,7 @@ import {
 } from "./rtfdocumentimpl.legacy-numbering";
 
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
-import { unicode } from "../../core/unocore/unocrsrhelper";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
 
 import { DispatchTextSymbol } from "./rtfdispatchsymbol";
 

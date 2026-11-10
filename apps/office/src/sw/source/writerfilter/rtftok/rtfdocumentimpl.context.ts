@@ -123,6 +123,9 @@ export interface RtfState {
     | "bookmarkstart"
     | "bookmarkend"
     | "colortbl"
+    | "info"
+    | "upr"
+    | "title"
     | "pn"
     | "pntxta"
     | "pntxtb"
@@ -267,8 +270,20 @@ export const DEFAULT_PARAGRAPH: RtfParagraphState = {
 };
 export const SKIPPED_DESTINATIONS = new Set([
   "stylesheet",
-  "info",
   "generator",
+  "author",
+  "operator",
+  "company",
+  "subject",
+  "keywords",
+  "doccomm",
+  "comment",
+  "creatim",
+  "revtim",
+  "printim",
+  "buptim",
+  "userprops",
+  "docvar",
   "pict",
   "object",
   "header",

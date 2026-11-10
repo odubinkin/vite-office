@@ -104,7 +104,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Serializes the live Writer model through the native RTF writer. @returns RTF bytes. */
   public SerializeRtf(): Uint8Array {
     this.EnsureOpen();
-    return RtfExport.WriteDocument(this.document);
+    return RtfExport.WriteDocument(this.document, this.GetTitle());
   }
 
   /** Serializes the live Writer model through the native Markdown writer. @returns UTF-8 Markdown bytes. */
@@ -149,14 +149,17 @@ export class SwDocShell extends SfxObjectShell {
   /** Reads an RTF candidate before atomically replacing the active model. @param bytes - Complete RTF stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
   public OpenRtf(bytes: Uint8Array, metadata: SfxObjectShellState, medium: SfxMediumInput): SwDoc {
     this.EnsureOpen();
-    const document = new RtfDocumentImpl().ResolveBytes(bytes, {
+    const reader = new RtfDocumentImpl();
+    const document = reader.ResolveBytes(bytes, {
       ...(this.defaultFontDevice === undefined
         ? {}
         : { defaultFontDevice: this.defaultFontDevice }),
       locale: this.defaultLocale,
     });
+    const title = reader.GetDocumentTitle();
     const state: SfxObjectShellState = Object.freeze({
       ...metadata,
+      title: title?.trim() ? title : metadata.title,
       isModified: false,
       lifecycle: "saved",
       recoveryGeneration: null,

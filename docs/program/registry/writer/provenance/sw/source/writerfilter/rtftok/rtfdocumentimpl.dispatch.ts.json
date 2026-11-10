@@ -51,7 +51,8 @@
       "Recognizes original legacy frame groups, transfers their properties at group pop and resets them at PARD.",
       "Sends the original palette shading resource and retains the zero-index exclusion.",
       "Applies border properties to the original lexical destination and current cell properties.",
-      "Retains border selector while PARD clears paragraph resources and preserves source group copying."
+      "Retains border selector while PARD clears paragraph resources and preserves source group copying.",
+      "Admits UD within UPR, isolates the skipped legacy destination and commits title text only at its owning group boundary."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -177,6 +178,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "pinned Unicode UPR title"
         }
       ],
       "upstream": [
@@ -291,6 +296,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
           "marker": "case RTFKeyword::PARD"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+          "marker": "special case"
         }
       ]
     },

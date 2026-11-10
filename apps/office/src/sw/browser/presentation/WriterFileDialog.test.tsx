@@ -214,40 +214,57 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     };
     expect(ArrayBuffer.isView(payload.data)).toBe(true);
     expect([payload.mediaType, payload.name]).toEqual(["application/rtf", "Draft.rtf"]);
-    expect(new TextDecoder().decode(payload.data)).toContain("RTF body");
+    const text = new TextDecoder().decode(payload.data);
+    expect(text).toContain("RTF body");
+    expect(text).toContain(String.raw`{\info{\upr{\title Draft}{\*\ud{\title Draft}}}}`);
     documentShell.Close();
   });
 
-  it("imports RTF through the native shell and persists the browser identity", /** Checks the existing Open flow with RTF content. @returns Completion. */ async () => {
-    const documentShell = shell();
-    const store = new IndexedDbWriterOdtStore("dialog-rtf-import", new IDBFactory());
-    const close = vi.fn();
-    render(
-      <WriterFileDialog
-        docShell={documentShell}
-        kind="open"
-        onClose={close}
-        services={services(store)}
-      />,
-    );
-    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
-    fireEvent.change(screen.getByLabelText("Browse"), {
-      target: { files: [new File(["{\\rtf1\\ansi Imported}"], "Imported.rtf")] },
-    });
-    await waitFor(
-      /** Waits for completed import. @returns Nothing. */ () =>
-        expect(close).toHaveBeenCalledOnce(),
-    );
-    expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
-    expect(
-      (await store.list()).map(
-        /** Checks imports RTF through the native shell and persists the browser identity. @param record - Record. @returns Test completion or assertion result. */ (
-          record,
-        ) => record.title,
-      ),
-    ).toEqual(["Imported"]);
-    documentShell.Close();
-  });
+  it.each([
+    ["", "Imported"],
+    [String.raw`{\info{\title  }}`, "Imported"],
+    [String.raw`{\info{\title Embedded title}}`, "Embedded title"],
+  ])(
+    "imports RTF through the native shell and persists the browser identity (%s)",
+    /** Checks the existing Open flow with RTF content. @param info - Optional RTF metadata group. @param title - Expected browser document title. @returns Completion. */ async (
+      info,
+      title,
+    ) => {
+      const documentShell = shell();
+      const store = new IndexedDbWriterOdtStore("dialog-rtf-import", new IDBFactory());
+      const close = vi.fn();
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([String.raw`{\rtf1\ansi ${info}Imported}`], "Imported.rtf")] },
+      });
+      await waitFor(
+        /** Waits for completed import. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
+      expect(
+        (await store.list()).map(
+          /** Checks imports RTF through the native shell and persists the browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+            record,
+          ) => record.title,
+        ),
+      ).toEqual([title]);
+      expect(documentShell.GetTitle()).toBe(title);
+      expect(documentShell.GetMedium().source).toMatchObject({
+        kind: "external",
+        reference: { name: "Imported.rtf" },
+      });
+      documentShell.Close();
+    },
+  );
 
   it("reopens a table-only floating RTF document through normal browser storage", /** Exercises the real Open path with no text outside the native table. @returns Completion. */ async () => {
     const documentShell = shell();

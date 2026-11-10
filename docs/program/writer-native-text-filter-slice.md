@@ -2389,3 +2389,20 @@ Ranged named character styles now pass their own direct items
 through the same Markdown formatting counters as autoformat
 items. A named parent alone does not add formatting to a child
 hint. Empty native autoformat handles have no effect.
+
+### RTF112 — Document title through the Writer shell
+
+The native RTF reader uses the original INFO, TITLE, UPR and UD
+destinations. The title commits only at its owning group boundary,
+after native text decoding and Unicode fallback handling. The
+pinned fdo61507.rtf fixture preserves its complete Unicode title
+without adding metadata to the body. WRITER421 records the
+legacy branch selection.
+
+The Writer shell uses its existing document title as the represented
+document property for RTF output. RtfExport writes the INFO group and
+uses OutStringUpr to supply the legacy and Unicode forms. An embedded
+nonblank title becomes the shell title on Open. A missing or blank
+title falls back to the browser file identity because shell document
+titles must be nonblank. The source medium and autosave workflow are
+retained.

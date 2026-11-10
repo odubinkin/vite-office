@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 567
+revision: 570
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-10T00:01:39.721Z"
+  updated_at: "2026-11-10T00:07:17.708Z"
   updated_by: "CODER"
-  note: "The represented Markdown export frame and character style checkpoint passes. The RTF represented document-title path and final scope review remain open."
-  attempts: 123
+  note: "RTF112 passes. The remaining current-model audit includes concrete compatibility setting preservation through browser reopen."
+  attempts: 124
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1973,8 +1976,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-10T00:07:17.708Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF112 passes. The remaining current-model audit includes concrete compatibility setting preservation through browser reopen."
+  -
+    type: "status"
+    at: "2026-11-10T00:07:44.080Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-10T00:02:03.231Z"
+doc_updated_at: "2026-11-10T00:07:44.080Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -5379,6 +5395,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-10T00:07:17.708Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF112 passes. The remaining current-model audit includes concrete compatibility setting preservation through browser reopen.
+    Attempts: 124
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-10T00:07:17.079Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -7343,6 +7389,12 @@ sections:
     - SwMDWriter consumes original anchored text-frame positions, including end-of-paragraph anchors. The represented empty image value is emitted between closing and opening formatting. Multiple equal records at one offset collapse and an empty paragraph omits the frame, as in WRITER420.
     - Named character hints add their style's direct items to the same formatting counters as autoformat hints. Empty native style handles have no effect. A native derived character style does not synthesize ancestor items in this path.
     - 115 focused tests across 12 files passed, including mounted Writer file dialogs, native TXT/Markdown and HTML-table import. Typecheck, scoped lint/format, JSDoc, dependency boundaries, file size, source tree, provenance and Writer registry passed.
+
+    ### RTF112 — Native document title and alternate destinations
+
+    - Native INFO and TITLE preserve the owning text buffer and original UPR/UD selection. The pinned fdo61507 fixture yields ÉÁŐŰ∭ as title and Hello. as the only body text. WRITER421 records the omitted legacy fallback.
+    - Native RtfExport::WriteInfo emits the represented title with OutStringUpr. The existing shell adopts nonblank embedded metadata or keeps the filename-derived title, preserving the browser's nonblank title invariant. The source File and normal browser persistence remain connected.
+    - Related Writer sweep: 1,125 passed across 55 files, including mounted import/export dialogs. Typecheck, scoped ESLint/Prettier, JSDoc, size, boundaries, source tree, hint IDs, provenance and Writer registry passed.
 id_source: "generated"
 ---
 ## Summary
@@ -10758,6 +10810,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-10T00:07:17.708Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF112 passes. The remaining current-model audit includes concrete compatibility setting preservation through browser reopen.
+Attempts: 124
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-10T00:07:17.079Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -12726,3 +12808,9 @@ RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live
 - SwMDWriter consumes original anchored text-frame positions, including end-of-paragraph anchors. The represented empty image value is emitted between closing and opening formatting. Multiple equal records at one offset collapse and an empty paragraph omits the frame, as in WRITER420.
 - Named character hints add their style's direct items to the same formatting counters as autoformat hints. Empty native style handles have no effect. A native derived character style does not synthesize ancestor items in this path.
 - 115 focused tests across 12 files passed, including mounted Writer file dialogs, native TXT/Markdown and HTML-table import. Typecheck, scoped lint/format, JSDoc, dependency boundaries, file size, source tree, provenance and Writer registry passed.
+
+### RTF112 — Native document title and alternate destinations
+
+- Native INFO and TITLE preserve the owning text buffer and original UPR/UD selection. The pinned fdo61507 fixture yields ÉÁŐŰ∭ as title and Hello. as the only body text. WRITER421 records the omitted legacy fallback.
+- Native RtfExport::WriteInfo emits the represented title with OutStringUpr. The existing shell adopts nonblank embedded metadata or keeps the filename-derived title, preserving the browser's nonblank title invariant. The source File and normal browser persistence remain connected.
+- Related Writer sweep: 1,125 passed across 55 files, including mounted import/export dialogs. Typecheck, scoped ESLint/Prettier, JSDoc, size, boundaries, source tree, hint IDs, provenance and Writer registry passed.

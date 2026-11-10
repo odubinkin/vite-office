@@ -63,7 +63,8 @@
       "Stores native row flow and cell vertical alignment in the original resource property owners.",
       "Admits native paragraph shading in the source style state.",
       "Keeps the cell border destination scoped to each original parser group.",
-      "Keeps the original border selector with the lexical parser group."
+      "Keeps the original border selector with the lexical parser group.",
+      "Admits the original title and Unicode alternate destinations in parser state."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -249,6 +250,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "pinned Unicode UPR title"
         }
       ],
       "upstream": [
@@ -347,6 +352,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
           "marker": "enum class RTFBorderState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchdestination.cxx",
+          "marker": "case RTFKeyword::TITLE"
         }
       ]
     },
