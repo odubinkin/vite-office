@@ -1,4 +1,6 @@
 /** @fileoverview Atomic Calc ODS shell replacement,confirmed save generations and real undo boundaries. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { expect, it, vi } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -15,10 +17,13 @@ import { ScDocument } from "../../../inc/document";
 import { ScXMLImportWrapper } from "../../filter/xml/xmlwrap";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocShell } from "./docsh";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 /** Builds valid replacement state. @param title - Title. @returns State. */
 function state(title = "Opened") {
   return createDocument({ id: crypto.randomUUID(), suiteId: "calc", title });
 }
+
+InitApplicationServiceManager(implementations);
 
 it("opens CSV through the text filter and exports the canonical cells without adopting the export medium", /** Checks opens CSV through the text filter and exports the canonical cells without adopting the export medium. @returns Test completion or assertion result. */ async () => {
   const shell = new ScDocShell();
@@ -481,3 +486,490 @@ it("loads candidates atomically,discards stale/cancelled imports and resets mode
   c.Close();
   await expect(closeOpen).rejects.toThrow(/cancelled|Closed/);
 });
+
+it.each([1, 20, 80, 85])(
+  "exports native input-line precision from actual display-format key %i",
+  /** CSV uses the existing ScCellFormat/context/formatter path rather than serializing a display-format approximation. @param key - Source integer, currency, scientific or fraction display key. @returns Nothing. */ (
+    key,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      pos = new ScAddress();
+    try {
+      document.SetValue(pos, 1.23456789);
+      document.SetNumberFormat(pos, key);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = false;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe("1.23456789\n");
+    } finally {
+      shell.Close();
+    }
+  },
+);
+
+it("exports native percent input text with its sign and full precision", /** Actual CSV path retains percent semantics through ScCellFormat and the real standard entry. @returns Nothing. */ () => {
+  const shell = new ScDocShell(),
+    document = shell.GetDocument(),
+    pos = new ScAddress();
+  try {
+    document.SetValue(pos, -0.123456789);
+    document.SetNumberFormat(
+      pos,
+      document.GetFormatTable().GetStandardFormat(SvNumFormatType.PERCENT),
+    );
+    const options = new ScImportOptions();
+    options.bSaveAsShown = false;
+    expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe("-12.3456789%\n");
+  } finally {
+    shell.Close();
+  }
+});
+
+it.each([
+  ['0;"negative";"zero"', -4, "negative\n"],
+  ['[RED]"prefix:"@', "value", "prefix:value\n"],
+  ["_M@", "value", "   value\n"],
+  ["*x@", "value", "value\n"],
+])(
+  "exports the original shown section for format %s",
+  /** Actual document attributes and shell display dispatch preserve literals, text tokens, spacing and the CSV fill flag. @param pattern - Format code. @param value - Actual numeric/string cell content. @param expected - Exported CSV. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      pos = new ScAddress(),
+      code = unicode(pattern),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0];
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      if (typeof value === "number") document.SetValue(pos, value);
+      else {
+        const input = unicode(value);
+        try {
+          document.SetTextCell(pos, input);
+        } finally {
+          input.dispose();
+        }
+      }
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["#,##0.00", 1234567.8, '"1,234,567.80"\n'],
+  ["0.00%", 0.123456, "12.35%\n"],
+  ["[$$-409]#,##0.00", 1234.5, '"$1,234.50"\n'],
+  ["0.0,,", 123456789, "123.5\n"],
+  ["0.00;[RED](0.00)", -1.234, "(1.23)\n"],
+])(
+  "exports original numeric display pattern %s",
+  /** Actual source numeric fill reaches CSV quoting and existing document formatting without a text-number proxy. @param pattern - Format code. @param value - Cell value. @param expected - Encoded CSV text. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["0.00E+00", 1234.56, "1.23E+03\n"],
+  ["##0.00E+00", 99.995, "100.00E+00\n"],
+  ["0.00E+00;(0.00E+00)", -1234.56, "(1.23E+03)\n"],
+  [".00E+00", 0.00012, "1.20E-03\n"],
+])(
+  "exports original scientific display pattern %s",
+  /** Existing document attributes and ScCellFormat display dispatch drive the CSV export without a scientific-string substitute. @param pattern - Source format. @param value - Numeric cell. @param expected - Native-behavior CSV. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["# ?/?", 1.5, "1 1/2\n"],
+  ["?/?", 1.5, "3/2\n"],
+  ["# ?/8", 1.1875, "1 1/8\n"],
+  ["# #/#", -4294967296, "-4294967296\n"],
+])(
+  "exports original fraction display pattern %s",
+  /** The actual numeric cell and compiled attribute use the original fraction producer through ScCellFormat and CSV. @param pattern - Source format. @param value - Numeric content. @param expected - CSV output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["HH:MM:SS.00", 59.99999 / 86400, "00:00:59.99\n"],
+  ["[HH]:MM:SS", -1.5, "-36:00:00\n"],
+  ["HH:MM AM/PM", 0.75, "06:00 PM\n"],
+  ["HH:MM:SS", -0.25, "18:00:00\n"],
+])(
+  "exports original time display pattern %s",
+  /** The actual numeric cell and compiled attribute use the original time producer through ScCellFormat and CSV. @param pattern - Source format. @param value - Numeric content. @param expected - CSV output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["YYYY-MM-DD", 2, "1900-01-01\n", true],
+  ["YYYY/MM/DD", 2, "01/01/1900\n", false],
+  ["YYYY-MM-DD HH:MM:SS", -0.25, "1899-12-29 18:00:00\n", true],
+  ["DDD, MMM D, YYYY", 2, '"Mon, Jan 1, 1900"\n', true],
+])(
+  "exports the original date producer for %s",
+  /** Real date attributes choose display or original input-line editing formats before CSV quoting. @param pattern - Actual format. @param value - Serial. @param expected - CSV bytes. @param shown - Source save-as-shown option. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+    shown,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      pos = new ScAddress(),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0];
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = shown;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+import { ScAsciiOptions } from "../dbgui/asciiopt";
+it("imports a recognized ISO date and exports it through its actual date format", /** Original recognition, setAutoInput attributes, calendar producer and shell CSV output run together without a formatted-text cell. @returns Test completion. */ async () => {
+  const shell = new ScDocShell(),
+    bytes = new TextEncoder().encode("2024-02-29\n"),
+    options = new ScAsciiOptions();
+  options.eLang = 0x409;
+  options.bDetectSpecialNumber = true;
+  try {
+    await shell.Open(bytes, state("Recognized CSV date"), {
+      kind: "input",
+      name: "date.csv",
+      filterId: ScDocShell.CSV_FILTER_NAME,
+      mediaType: ScDocShell.CSV_MEDIA_TYPE,
+      filterOptions: options.WriteToString(),
+      source: { kind: "external", reference: bytes },
+    });
+    expect(shell.GetDocument().GetValue(new ScAddress())).toBe(45351);
+    const output = new ScImportOptions();
+    output.bSaveAsShown = true;
+    expect(new TextDecoder().decode(shell.AsciiSave(output))).toBe("2024-02-29\n");
+    output.bSaveAsShown = false;
+    expect(new TextDecoder().decode(shell.AsciiSave(output))).toBe("2024-02-29\n");
+  } finally {
+    shell.Close();
+  }
+});
+
+it.each([
+  ["[RED]BOOLEAN", 0, "FALSE\n"],
+  ['BOOLEAN"!"', 1, "TRUE!\n"],
+  ['"x"BOOLEAN', NaN, "xTRUE\n"],
+])(
+  "exports the original custom logical format %s",
+  /** Actual document formatting reaches the logical token producer before CSV serialization. @param pattern - Format code. @param value - Number. @param expected - CSV output. @returns Nothing. */ (
+    pattern,
+    value,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      document = shell.GetDocument(),
+      formatter = document.GetFormatTable(),
+      code = unicode(pattern),
+      key: [number] = [0],
+      type: [number] = [0],
+      check: [number] = [0],
+      pos = new ScAddress();
+    try {
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x409,
+      );
+      expect(check[0]).toBe(0);
+      document.SetValue(pos, value);
+      document.SetNumberFormat(pos, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["[NatNum1]YYYY-MM-DD", "二〇二四-一-一\n"],
+  ["[NatNum3]YYYY-MM-DD", "２０２４-０１-０１\n"],
+  ["[NatNum1]YYYY-MM-DD HH:MM:SS.00", "二〇二四-一-一 〇〇:〇〇:〇〇.〇〇\n"],
+])(
+  "exports recognized CSV dates using original native fields in %s",
+  /** Real text filter recognition creates the numeric date and format attribute; compiling a native display format changes only that attribute before source CSV export. @param pattern - Original display code. @param expected - Source output. @returns Test completion. */ async (
+    pattern,
+    expected,
+  ) => {
+    const shell = new ScDocShell(),
+      bytes = new TextEncoder().encode("2024-01-01\n"),
+      input = new ScAsciiOptions(),
+      code = unicode(pattern);
+    input.eLang = 0x409;
+    input.bDetectSpecialNumber = true;
+    try {
+      await shell.Open(bytes, state("Native CSV date"), {
+        kind: "input",
+        name: "native.csv",
+        filterId: ScDocShell.CSV_FILTER_NAME,
+        mediaType: ScDocShell.CSV_MEDIA_TYPE,
+        filterOptions: input.WriteToString(),
+        source: { kind: "external", reference: bytes },
+      });
+      const document = shell.GetDocument(),
+        formatter = document.GetFormatTable(),
+        key: [number] = [0],
+        check: [number] = [0],
+        type: [number] = [0],
+        position = new ScAddress();
+      expect(document.GetValue(position)).toBe(45292);
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x411,
+      );
+      expect(check[0]).toBe(0);
+      document.SetNumberFormat(position, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(expected);
+      expect(document.GetValue(position)).toBe(45292);
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);
+
+it.each([
+  ["12.5", "[NatNum3]0.00", "１２．５０\n", "12.5\n"],
+  ["0.125", "[NatNum3]0.00%", "１２．５０%\n", "12.5%\n"],
+  ["1.5", "[NatNum3]0 00/00", "１ 0１/0２\n", "1.5\n"],
+  ["12345", "[NatNum3]0.00E+00", "1.23E+04\n", "12345\n"],
+])(
+  "exports recognized CSV number %s through source native pattern %s",
+  /** Real text import retains numeric storage and actual format attributes; CSV display versus input-line paths preserve source conversion placement. @param source - Input field. @param pattern - Original format. @param shown - Source display export. @param edited - Source input-line export. @returns Test completion. */ async (
+    source,
+    pattern,
+    shown,
+    edited,
+  ) => {
+    const shell = new ScDocShell(),
+      bytes = new TextEncoder().encode(source + "\n"),
+      input = new ScAsciiOptions(),
+      code = unicode(pattern);
+    input.eLang = 0x409;
+    try {
+      await shell.Open(bytes, state("Native CSV number"), {
+        kind: "input",
+        name: "native-number.csv",
+        filterId: ScDocShell.CSV_FILTER_NAME,
+        mediaType: ScDocShell.CSV_MEDIA_TYPE,
+        filterOptions: input.WriteToString(),
+        source: { kind: "external", reference: bytes },
+      });
+      const document = shell.GetDocument(),
+        formatter = document.GetFormatTable(),
+        key: [number] = [0],
+        check: [number] = [0],
+        type: [number] = [0],
+        position = new ScAddress();
+      expect(document.GetValue(position)).toBe(Number(source));
+      formatter["m_aFormatData"].PutEntry(
+        formatter["m_aCurrentLanguage"],
+        formatter.GetNatNum(),
+        code,
+        check,
+        type,
+        key,
+        0x411,
+      );
+      expect(check[0]).toBe(0);
+      document.SetNumberFormat(position, key[0]);
+      const options = new ScImportOptions();
+      options.bSaveAsShown = true;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(shown);
+      options.bSaveAsShown = false;
+      expect(new TextDecoder().decode(shell.AsciiSave(options))).toBe(edited);
+      expect(document.GetValue(position)).toBe(Number(source));
+    } finally {
+      code.dispose();
+      shell.Close();
+    }
+  },
+);

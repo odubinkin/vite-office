@@ -7,7 +7,7 @@
     "localPath": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.ts",
     "upstreamPath": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
     "localSymbols": [
-      "loadDictionaryWordRule"
+      "openRule"
     ],
     "upstreamSymbols": [
       "loadICUBreakIterator"
@@ -22,7 +22,7 @@
       "local": [
         {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.ts",
-          "marker": "loadDictionaryWordRule"
+          "marker": "openRule"
         },
         {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts",

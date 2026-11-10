@@ -25,7 +25,8 @@
       "GetNumForInfoScannedType",
       "IsInQuote",
       "GetQuoteEnd",
-      "ImpGetNumberOutput"
+      "GetFormatPrecision",
+      "ImpGetOutputInputLine"
     ],
     "upstreamSymbols": [
       "SvNumberformat::GetOutputString",
@@ -48,7 +49,10 @@
       "SvNumberformat::HasStringNegativeSign",
       "SvNumberformat::ImpGetNumForStringElementCount",
       "SvNumberformat::StripNewCurrencyDelimiters",
-      "ImpGetNumberOutput"
+      "ImpGetNumberOutput",
+      "SvNumberformat::ImpGetTimeOutput",
+      "SvNumberformat::ImpGetDateOutput",
+      "SvNumberformat::ImpGetDateTimeOutput"
     ],
     "preservedResponsibilities": [
       "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
@@ -69,10 +73,23 @@
       "AQF9AG connects original automatic-currency delimiter stripping during ImpInsertFormat, preserving NF_CURRENCY_1000DEC2_CCC exclusion and compiling through the actual normal constructor. The prior local unsupported-currency exception is removed; complete builtin initialization remains pending.",
       "AQF9AG now invokes the complete original builtin-generation sequence from the formatter constructor, including both additional-format passes. SvNumberformat stores/copies the source additional-builtin flag; General last-insert metadata advances according to real successful locale insertions. The earlier General-only helper remains an isolated source initialization fragment used by existing focused tests, not the production initializer. Full native initializer differential closure and CSV recognition/output remain pending.",
       "AQF9AG adds original IsIso8601 section/token query for edit-format selection over actual compiled subformats.",
-      "581KM2 integration repair: original GetOutputString NUMBER dispatch and ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer production now use actual compiled subformat tokens, SAL corrected rounding and F conversion, backwards 0/#/? fill, color selection and rounded-zero sign suppression. Admission requires one DIGIT token, no conditions/grouping/scaling/decimals, NatNum0 and finite input; other output productions remain explicitly unimplemented. Real public formatter tests cover the compiled builtin0 pattern, padding, optional/blank digits, excess digits, half rounding and negative zero. This fixes the existing Calc borrowed-cell format1 test without changing its expected output. No independent compiled-native differential, full numeric/date/currency/scientific output or native ABI/parity claim is made."
+      "581KM2 integration repair: original GetOutputString NUMBER dispatch and ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer production now use actual compiled subformat tokens, SAL corrected rounding and F conversion, backwards 0/#/? fill, color selection and rounded-zero sign suppression. Admission requires one DIGIT token, no conditions/grouping/scaling/decimals, NatNum0 and finite input; other output productions remain explicitly unimplemented. Real public formatter tests cover the compiled builtin0 pattern, padding, optional/blank digits, excess digits, half rounding and negative zero. This fixes the existing Calc borrowed-cell format1 test without changing its expected output. No independent compiled-native differential, full numeric/date/currency/scientific output or native ABI/parity claim is made.",
+      "AQF9AG adds original inline GetFormatPrecision and the complete ImpGetOutputInputLine percent/zero/automatic conversion over real SAL output. The original bStandard input-precision fast path precedes nonstandard dispatch; percent scaling retains the strict 1.7E306 source threshold and ASCII percent suffix. Full display families and full native format-output differential verification remain pending.",
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced.",
+      "AQF9AG adds original finite scientific/engineering ImpGetScientificOutput and shared ImpNumberFill. RTL E conversion, exponent zero removal and 0/?/# padding, sign tokens, mutable token/digit cursors, engineering remainder normalization and rounded-up mantissa compensation follow the source. Existing decimal/integer fill is reused. Real-owner tests preserve CALC-395 signed-zero output and CALC-396 zero-integer-placeholder magnitude behavior. This remains the admitted path without complete native-number modifiers; dedicated full native wrapper differential and other display families remain pending.",
+      "AQF9AG now routes actual finite FRACTION sections to the original fraction producer and reuses ImpNumberFill/ImpNumberFillWithThousands across source-responsibility fragments. Other unimplemented producers/contracts remain explicit; no fake fraction strings or NativeNumber fallback is introduced.",
+      "AQF9AG removes the scalar precision/decimal/scanner output projection: numeric GetOutputString now accepts the actual NativeNumberWrapper and SvNFLanguageData as upstream does; text retains its original signature and default star flag. Current precision, locale separator and Boolean keywords are read from the supplied owner rather than construction scanner state. Real-owner tests vary the current language/precision independently of the entry constructor scanner. This contract restoration does not claim completed NativeNumber or date/time producers.",
+      "Original finite TIME output dispatch now reaches the actual time fragment for incomplete native metadata, including standard and custom selected sections, while source input-line/section/color handling remains with this owner. Date/datetime and complete native-number modifiers remain unfinished; no fallback strings or CSV unsupported-option policy is introduced.",
+      "Finite DATE/DATETIME sections with incomplete mode0 metadata dispatch to the original date fragment; actual standard/custom section and current owner contracts remain here. Nonzero/complete native modifiers still require their unfinished producers, with no CSV option rejection or alternate formatted-text path. Date/time output and calendar switching have real-owner coverage; full native display closure remains unproven.",
+      "The source DATE range check also handles NaN/positive/negative infinity as #FMT, so these inputs are not screened out by the finite numeric-producer admission. The exact Boolean fast path uses original C++ double truth value!=0, preserving TRUE for NaN instead of JavaScript false truthiness.",
+      "Selected LOGICAL sections now dispatch to original ImpGetLogicalOutput for incomplete native metadata; original fast Boolean and section-color contracts remain with this owner. No CSV option validation or substitute cell-text path is added.",
+      "Original DATE/DATETIME/TIME/LOGICAL producers now receive the actual native wrapper and modes0..11 are admitted to their connected source conversion paths. DATE calendar field mapping and integer/padding/logical conversion retain their separate source placements. Ordinary numeric/scientific/fraction native producer forwarding and mode12 remain required before CSV completion.",
+      "Numeric dispatch now invokes original number/scientific/fraction producer fragments on the actual entry owner with original value/index/star/native/current/output arguments. General fallback and numeric TEXT output use original member-owner Standard helpers, while actual standard unlimited and input-line branches preserve their source native-conversion bypass. The raw formatStandardNumber helper no longer substitutes for the native-aware General path. Modes0..11 are connected; mode12, remaining CSV multiline/acceptance and full source-native ABI remain incomplete.",
+      "Original GetOutputString selects standard and custom subformats in source order, invokes the appropriate real producer including NatNum12, and leaves an empty output on the native switch default."
     ],
     "omittedResponsibilities": [
-      "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
+      "Native allocator and complete upstream formatter QA remain outside this checkpoint."
     ],
     "evidence": {
       "local": [
@@ -99,6 +116,34 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.integer-output.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.number.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.ts",
+          "marker": "GetTimeOutput"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -141,6 +186,30 @@
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
           "marker": "ImpNumberFillWithThousands"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "GetFormatPrecision"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetTimeOutput"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetDateOutput"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetDateTimeOutput"
+        },
+        {
+          "path": "svl/source/numbers/zformat.cxx",
+          "marker": "GetOutputString"
+        },
+        {
+          "path": "sc/source/ui/docshell/docsh.cxx",
+          "marker": "ScCellFormat::GetString"
         }
       ]
     }

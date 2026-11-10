@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/ParagraphPortionList.ts",
+    "upstreamPath": "editeng/inc/ParagraphPortionList.hxx",
+    "localSymbols": [
+      "ParaPortionList"
+    ],
+    "upstreamSymbols": [
+      "ParaPortionList"
+    ],
+    "preservedResponsibilities": [
+      "Original header declaration reexports the actual editdoc.cxx owner without a second model or layout provider."
+    ],
+    "omittedResponsibilities": [
+      "ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/ParagraphPortionList.ts",
+          "marker": "ParaPortionList"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/ParagraphPortionList.hxx",
+          "marker": "ParaPortionList"
+        }
+      ]
+    }
+  }
+}

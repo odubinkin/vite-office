@@ -6,13 +6,61 @@
     "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
     "status": "mapped",
     "upstreamPath": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
-    "localSymbols": ["NativeNumberSupplierService"],
-    "upstreamSymbols": ["NativeNumberSupplierService::getNativeNumberString", "NativeToAscii", "NativeToAscii_numberMaker", "getLanguageNumber"],
-    "preservedResponsibilities": ["Task AQF9AG maps the source NATNUM0 path, language gate, source number-character tables, multiplier recursion and output offsets."],
-    "omittedResponsibilities": ["NATNUM1 through NATNUM12 and UNO service construction remain outside the represented path."],
+    "localSymbols": [
+      "NativeNumberSupplierService",
+      "NativeNumberMode",
+      "Casings"
+    ],
+    "upstreamSymbols": [
+      "NativeNumberSupplierService::getNativeNumberString",
+      "NativeNumberSupplierService::isValidNatNumImpl",
+      "NativeToAscii",
+      "NativeToAscii_numberMaker",
+      "getLanguageNumber",
+      "NativeNumberSupplierService::getNativeNumberStringParams",
+      "Casings"
+    ],
+    "preservedResponsibilities": [
+      "Original modes0..11 supplier dispatch, validity and unknown-locale identity gates, per-instance Locale with source shared mutable DecimalChar/SeparatorChar refresh, character/CJK/alphabetic producers and offsets. Unconsumed XML and character service methods remain outside this slice. Scalar helper comparisons are not full native service/SAL/UNO ABI certification.",
+      "Original XNativeNumberSupplier2 getNativeNumberStringParams delegates to the shared conversion entry with offsets absent and actual parameter view. Modes0..11 ignore parameters exactly as the original non12 branches do.",
+      "Original NatNum12 path uses NumberText and the process-context CharacterClassification, with source literal matching, exact delimiter, lazy case service, remembered casing locale, and the English title transformations. Tests invoke the real component constructors with an explicit test registry."
+    ],
+    "omittedResponsibilities": [
+      "Production process bootstrap, formatter integration, other native supplier interface methods and complete native service or ABI verification remain outside this slice."
+    ],
     "evidence": {
-      "local": [{"path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts", "marker": "class NativeNumberSupplierService"}, {"path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.test.ts", "marker": "upstream language gate"}],
-      "upstream": [{"path": "i18npool/source/nativenumber/nativenumbersupplier.cxx", "marker": "NativeToAscii(const OUString&"}, {"path": "i18npool/source/nativenumber/data/numberchar.h", "marker": "NumberChar[][10]"}]
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
+          "marker": "NativeNumberSupplierService"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.output.test.ts",
+          "marker": "nativeCases"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+          "marker": "getNativeNumberString"
+        },
+        {
+          "path": "i18npool/source/nativenumber/data/numberchar.h",
+          "marker": "NumberChar[][10]"
+        },
+        {
+          "path": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+          "marker": "Casings"
+        },
+        {
+          "path": "sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_spell_out_numbering"
+        }
+      ]
     }
   }
 }

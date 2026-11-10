@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.transliterate-date.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "impTransliterateImpl",
+      "impTransliterate"
+    ],
+    "upstreamSymbols": [
+      "impTransliterateImpl",
+      "impTransliterate"
+    ],
+    "preservedResponsibilities": [
+      "Original SvNumberformat date-keyword impTransliterateImpl/inline impTransliterate preserve no-equals whole-argument forwarding, case-sensitive localized keyword lookup, preceding ASCII comma/space only, first accepted assignment, comma termination, untrimmed UTF16/NUL arguments and incomplete-modifier bypass. Modifier language selects conversion Locale independently of the current keyword language. Actual NativeNumberWrapper/formatter tests execute mode3 and observe arguments while live. This prepares the source date-field call boundary; NatNum12 output dispatch, full NumberText/casing/service installation and complete native formatter parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete NatNum12 output callers, NumberText/casing/word services/application bootstrap and native formatter/UNO/allocator ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.transliterate-date.ts",
+          "marker": "impTransliterateImpl"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.transliterate-date.test.ts",
+          "marker": "preserves source keyword selection"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::impTransliterateImpl"
+        },
+        {
+          "path": "include/svl/zformat.hxx",
+          "marker": "OUString static impTransliterate"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.transliterate-date.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original date-keyword member overload family from the free string/buffer overload family, retaining the original static function bodies and actual native metadata/language/service owners. Declaration-owner installation remains pending with its original date-output callers."
+    }
+  }
+}

@@ -48,3 +48,34 @@ export function concatSequences<T>(
     throw error;
   }
 }
+
+/** Original mapKeysToSequence template copies map keys through actual C++ assignment into the real Sequence. The explicit specialization binds T/sizeof only. @param Element - Actual declared sequence specialization. @param map - Original key/value map. @returns Owned key sequence in the map's unspecified iteration order. */
+export function mapKeysToSequence<T, V>(
+  Element: SequenceConstructor<T>,
+  map: ReadonlyMap<T, V>,
+): Sequence<T> {
+  const result = new Element(map.size | 0);
+  try {
+    const target = result.getArray() as SequenceElements,
+      type = getTypeFavourUnsigned(
+        Element.ElementType,
+      ).getTypeLibType() as typelib_TypeDescriptionReference;
+    let offset = 0;
+    for (const key of map.keys()) {
+      uno_type_assignData(
+        target.get(offset),
+        type,
+        key,
+        type,
+        cpp_queryInterface,
+        cpp_acquire,
+        cpp_release,
+      );
+      offset += Element.ElementSize;
+    }
+    return result;
+  } catch (error) {
+    result.dispose();
+    throw error;
+  }
+}

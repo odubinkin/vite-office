@@ -10,3 +10,4 @@ export const LINEEND_CR = LineEnd.LINEEND_CR;
 export const LINEEND_LF = LineEnd.LINEEND_LF;
 /** Original unscoped enumerator. */
 export const LINEEND_CRLF = LineEnd.LINEEND_CRLF;
+export { convertLineEnd } from "../source/stream/stream.lineend";

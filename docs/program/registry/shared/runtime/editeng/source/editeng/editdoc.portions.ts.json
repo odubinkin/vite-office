@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editdoc.portions.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editdoc.portions.ts",
+        "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+        "editeng/source/editeng/editdoc.cxx"
+      ],
+      "justification": "Actual paragraph portion with real owning line/text lists, nonowning ContentNode, script/bidi vectors and source default/invalidation/visibility/repaint state. Exact insertion/deletion accumulation, positive-difference fallback, short-return narrowing and ordered suffix line correction are preserved. Actual paragraph portion vector retains source ownership transfer, cached reverse lookup, bounds, cumulative visible heights and strict greater-than paragraph search. Original private engine-only height writes and formatted layout production remain unported. ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParaPortion",
+        "ParaPortionList"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editdoc.cxx",
+      "upstreamSymbols": [
+        "ParaPortion::MarkInvalid",
+        "ParaPortion::MarkSelectionInvalid",
+        "ParaPortion::CorrectValuesBehindLastFormattedLine",
+        "ParaPortionList::GetPos",
+        "ParaPortionList::FindParagraph"
+      ]
+    }
+  }
+}

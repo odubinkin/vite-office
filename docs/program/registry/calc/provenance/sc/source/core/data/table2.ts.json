@@ -23,7 +23,8 @@
       "RemoveFlags",
       "ApplyPatternIfNumberformatIncompatible",
       "StartListeners",
-      "SetNumberFormat"
+      "SetNumberFormat",
+      "SetString"
     ],
     "upstreamSymbols": [
       "ScTable::CopyFromClip",
@@ -37,7 +38,9 @@
       "ScTable::RemoveFlags",
       "ScTable::ApplyPatternIfNumberformatIncompatible",
       "ScTable::StartListeners",
-      "ScTable::SetNumberFormat"
+      "ScTable::SetNumberFormat",
+      "ScTable::SetString",
+      "ScTable::SetEditText"
     ],
     "preservedResponsibilities": [
       "Task76 general-copy progress ports original CopyCellsFromClipHandler and CopyTextAttrsFromClipHandler with real typed source blocks,two content/metadata passes,independent native cursor values,context writeback and foreign string re-interning. ScColumn scalar/hinted SetValue/SetRawString/SetFormulaCell overloads retain native defaults,return contracts,broadcast controls and actual group/listener owners. Table2 CopyFromClip validates/clamps the destination and dispatches actual source columns;CONTENTS preserves destination patterns and geometry. ParseBlock now represents its actual container-event template and borrowed node fields;bounded ProcessFormula dispatches real formula pointers and separate non-formula spans. Original column/table/document SetDirtyFromClip,rectangular individual/area BroadcastCells and deferred BroadcastAction use existing bulk owners and actual subscriptions;cached formula results are dirtied only in completion. Matrix,foreign-pool formulas,number-format inheritance,full formatter/notes/edit/drawing services,group-compute cache invalidation and shell/UNO stream notifications remain unrepresented. Native general document/reference orchestration,paste undo/redo and EnterBlock/UI acceptance remain pending;this is not full task76 acceptance or full parity.",
@@ -52,7 +55,8 @@
       "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
       "AQF9AG ports ScTable::StartListeners: null ColumnSet visits every allocated column; a present set visits sorted recorded columns only for matching sheets and skips negative/unallocated coordinates. It forwards the original all flag without substituting range-listening behavior.",
       "AQF9AG ports original single-cell SetNumberFormat document/table/column dispatch and pooled ATTR_VALUE_FORMAT application for CSV date and text recognition. Table validation, absent-sheet behavior and temporary SfxUInt32Item lifetime are retained. Native threaded-group calculation is not represented in this single-threaded owner; no substitute state is introduced.",
-      "B8TCAE source-contract regression: Actual table boundary calls with invalid row/column positions retain caller edit-text ownership and do not allocate columns. No production algorithm or private state is replaced."
+      "B8TCAE source-contract regression: Actual table boundary calls with invalid row/column positions retain caller edit-text ownership and do not allocate columns. No production algorithm or private state is replaced.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "omittedResponsibilities": [
       "Range-dependent conditional-format visual entry families and their deduplication predicate,foreign style-pool copying,names/database/outline/sparkline/caption owners and complete table services remain unported. Full document paste/history/EnterBlock and AutoSum acceptance remain pending."
@@ -106,6 +110,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/table-edit-boundaries.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -156,6 +164,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::SetNumberFormat"
+        },
+        {
+          "path": "sc/source/core/data/table2.cxx",
+          "marker": "ScTable::SetString"
         }
       ]
     }

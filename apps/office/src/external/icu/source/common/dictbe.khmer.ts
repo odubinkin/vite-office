@@ -1,12 +1,46 @@
 /** @fileoverview ICU78.3 Khmer word engine with LibreOffice's pinned dictionary and cluster-scan patch. */
-import {
-  DictionaryBreakEngine,
-  dictionaryNativeIndex,
-  dictionarySetContains,
-  nextDictionaryIndex,
-} from "./dictbe";
 import type { DictionaryMatcher } from "./dictionarydata";
+import { DictionaryBreakEngine } from "./dictbe";
+import {
+  utext_close,
+  utext_getNativeIndex,
+  utext_next32,
+  utext_openUChars,
+  utext_setNativeIndex,
+  type UText,
+  type OpenUText,
+} from "./unicode/utext";
+import { UnicodeSet } from "./uniset";
+import type { UVector32 } from "./uvectr32.h";
 import sets from "./dictbe.khmer.sets.json" with { type: "json" };
+
+/** Reads native UTF16 at a clipped position, backing up from the trail of a surrogate pair. @param text - Source. @param index - Requested native position. @returns Aligned index. */
+function dictionaryNativeIndex(text: string, index: number): number {
+  const position = Math.max(0, Math.min(index, text.length));
+  const unit = text.charCodeAt(position),
+    previous = text.charCodeAt(position - 1);
+  return unit >= 0xdc00 && unit <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff
+    ? position - 1
+    : position;
+}
+
+/** Advances after the next original UTF16 scalar, retaining isolated surrogate units. @param text - Source. @param index - Native position. @returns Next position or unchanged end. */
+function nextDictionaryIndex(text: string, index: number): number {
+  const code = text.codePointAt(index);
+  return code === undefined ? index : index + (code > 0xffff ? 2 : 1);
+}
+
+/** Tests a native UnicodeSet projected as sorted inclusive range pairs. @param ranges - Original property ranges. @param code - Candidate scalar. @returns Membership. */
+function dictionarySetContains(ranges: readonly number[], code: number): boolean {
+  let low = 0,
+    high = ranges.length / 2;
+  while (low < high) {
+    const middle = (low + high) >> 1;
+    if ((ranges[2 * middle + 1] as number) < code) low = middle + 1;
+    else high = middle;
+  }
+  return low < ranges.length / 2 && (ranges[2 * low] as number) <= code;
+}
 
 const ZWSP = 0x200b;
 const WJ = 0x2060;
@@ -214,16 +248,18 @@ function tentativeBoundaries(
   const best = new Int32Array(size + 1).fill(INFINITY_COST),
     previous = new Int32Array(size + 1).fill(INFINITY_COST);
   best[0] = 0;
-  const lengths = new Array<number>(MAX_WORD_SIZE).fill(0),
-    values = new Array<number>(MAX_WORD_SIZE).fill(0);
+  const lengths = new Int32Array(MAX_WORD_SIZE),
+    values = new Int32Array(MAX_WORD_SIZE);
+  const units = new Uint16Array(text.length);
+  for (let i = 0; i < units.length; ++i) units[i] = text.charCodeAt(i);
+  const provider = utext_openUChars(null, units, units.length, [0]) as OpenUText;
   let candidateSize = MAX_WORD_SIZE;
   for (let i = 0; i < size; ++i) {
     if (best[i] === INFINITY_COST) continue;
-    const index = start + i,
-      position: [number] = [dictionaryNativeIndex(text, index)];
+    const index = start + i;
+    utext_setNativeIndex(provider, index);
     let count = dictionary.matches(
-      text,
-      position,
+      provider,
       size - i,
       MAX_WORD_SIZE,
       null,
@@ -283,18 +319,49 @@ function tentativeBoundaries(
     i = Math.abs(i);
     boundaries.push(i);
   }
+  utext_close(provider);
   return boundaries;
 }
 
 /** Original Khmer engine registered with the LibreOffice replacement dictionary. */
-export class KhmerBreakEngine extends DictionaryBreakEngine {
+export class LibreOfficeKhmerBreakEngine extends DictionaryBreakEngine {
   /** Binds the actual Khmer dictionary. @param dictionary - Native patched Khmer matcher. @returns Engine. */
   constructor(private readonly dictionary: DictionaryMatcher) {
-    super(sets.khmerWord);
+    super(new UnicodeSet(sets.khmerWord.map((bound, index) => bound + (index % 2))));
+  }
+
+  /** Releases the adopted LibreOffice dictionary. @returns Nothing. */
+  dispose(): void {
+    this.dictionary.dispose();
+  }
+
+  /** Binds the managed UTF-16 snapshot to the original cluster scans. @param provider - Native text provider. @param rangeStart - Handled start. @param rangeEnd - Handled end. @param foundBreaks - Actual output stack. @param phrase - Unused by the original Khmer engine. @param status - Sticky status. @returns Number of new boundaries. */
+  protected divideUpDictionaryRange(
+    provider: UText,
+    rangeStart: number,
+    rangeEnd: number,
+    foundBreaks: UVector32,
+    phrase: boolean,
+    status: [number],
+  ): number {
+    void phrase;
+    const original = utext_getNativeIndex(provider);
+    utext_setNativeIndex(provider, 0);
+    let text = "";
+    try {
+      for (let code = utext_next32(provider); code >= 0; code = utext_next32(provider))
+        text += String.fromCodePoint(code);
+    } finally {
+      utext_setNativeIndex(provider, original);
+    }
+    const breaks: number[] = [];
+    const count = this.divideKhmerRange(text, [original], rangeStart, rangeEnd, breaks);
+    for (const boundary of breaks) foundBreaks.push(boundary, status);
+    return count;
   }
 
   /** Applies the original Khmer no-break windows and weighted segmentation. @param text - UTF16 source. @param position - Native cursor. @param rangeStart - Handled range start. @param rangeEnd - Handled range end. @param foundBreaks - Native output stack. @returns Original number of appended boundaries. */
-  protected divideUpDictionaryRange(
+  private divideKhmerRange(
     text: string,
     position: [number],
     rangeStart: number,

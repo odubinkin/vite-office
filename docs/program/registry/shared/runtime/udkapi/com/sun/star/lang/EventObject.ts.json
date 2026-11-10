@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
         "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
-        "udkapi/com/sun/star/lang/EventObject.idl"
+        "udkapi/com/sun/star/lang/EventObject.idl",
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts"
       ],
-      "justification": "Original generated default/copy/member constructors, assignment, stable Source Reference, equality and destruction use actual shared Reference/Any/Sequence compound ownership. The compiler address adapter aliases the sole original pointer field without acquiring/releasing or supplying a second pointer/type/default provider. Real Any/Sequence copies retain the component until all owners are destroyed. Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "justification": "Original generated default/copy/member constructors, assignment, stable Source Reference, equality and destruction use actual shared Reference/Any/Sequence compound ownership. The compiler address adapter aliases the sole original pointer field without acquiring/releasing or supplying a second pointer/type/default provider. Real Any/Sequence copies retain the component until all owners are destroyed. Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified. AQF9AG process-context continuation: Actual sole Source address at offset0 keeps its existing typed return contract. An erased-address overload permits original PropertyChangeEvent inherited compound dispatch for other declared member types. This is host type syntax only: emitted base member address/lifetime behavior is unchanged, existing Source get(0)[0] acceptance remains intact.",
       "knownViolations": [],
       "localSymbols": [
         "EventObject",

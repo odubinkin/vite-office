@@ -1,11 +1,16 @@
 /** @fileoverview Differential witnesses from unchanged ICU78.3 handleNext on native LibreOffice dictionary rules. */
-import { expect, it } from "vitest";
-import { RuleBasedBreakIterator } from "../../../external/icu/source/common/rbbi";
+import { assert, expect, it } from "vitest";
+import {
+  type OpenUText,
+  utext_close,
+  utext_openUChars,
+} from "../../../external/icu/source/common/unicode/utext";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ucptrie_openFromBinary } from "../../../external/icu/source/common/ucptrie";
 import { UErrorCode } from "../../../external/icu/source/common/unicode/utypes";
-import { loadDictionaryWordRule, type DictionaryWordRule } from "./breakiterator_unicode.rules";
+import { openRule, registerOpenOfficeRules } from "./breakiterator_unicode.rules";
 
-const names: readonly DictionaryWordRule[] = ["dict_word", "dict_word_hu", "dict_word_prepostdash"];
+const names = ["dict_word", "dict_word_hu", "dict_word_prepostdash"];
 
 // Each native witness records boundary:largest-status:dictionary-count before dictionary refinement.
 const native: readonly (readonly [string, string, string, string])[] = [
@@ -138,27 +143,31 @@ const native: readonly (readonly [string, string, string, string])[] = [
 
 for (const [index, rule] of names.entries())
   it(`matches native ICU forward candidates and statuses for ${rule}`, /** Compares the actual compiled table and category trie to the original ICU loop. @returns Nothing. */ () => {
-    const data = loadDictionaryWordRule(rule);
-    expect(loadDictionaryWordRule(rule)).toBe(data);
+    const status: [number] = [0];
+    registerOpenOfficeRules(status);
+    const iterator = openRule(rule, status);
+    assert(iterator);
     for (const entry of native) {
-      const iterator = new RuleBasedBreakIterator(data, entry[0]);
+      const value = unicode(entry[0]);
+      const provider = utext_openUChars(null, value.getStr(), value.getLength(), status);
+      assert(provider);
+      iterator.setText(provider as OpenUText, status);
       const actual: string[] = [];
       for (let position = iterator.handleNext(); position !== -1; position = iterator.handleNext())
-        actual.push(`${position}:${iterator.getRuleStatus()}:${iterator.getDictionaryCharCount()}`);
+        actual.push(`${position}:${iterator.getRuleStatus()}:${iterator.fDictionaryCharCount}`);
+      utext_close(provider);
+      value.dispose();
       expect(actual.join(","), JSON.stringify(entry[0])).toBe(entry[index + 1]);
     }
+    iterator.dispose();
   });
 
 it("preserves native Tri3 sticky errors and leaves the length output untouched on rejection", /** Uses the original binary loader's status boundary. @returns Nothing. */ () => {
   const length: [number] = [123],
     status: [number] = [UErrorCode.U_ZERO_ERROR];
-  expect(
-    ucptrie_openFromBinary(0, -1, new DataView(new ArrayBuffer(16)), length, status),
-  ).toBeNull();
+  expect(ucptrie_openFromBinary(0, -1, new Uint8Array(16), 16, length, status)).toBeNull();
   expect(status[0]).toBe(UErrorCode.U_INVALID_FORMAT_ERROR);
   expect(length[0]).toBe(123);
-  expect(
-    ucptrie_openFromBinary(0, -1, new DataView(new ArrayBuffer(0)), length, status),
-  ).toBeNull();
+  expect(ucptrie_openFromBinary(0, -1, new Uint8Array(0), 0, length, status)).toBeNull();
   expect(status[0]).toBe(UErrorCode.U_INVALID_FORMAT_ERROR);
 });

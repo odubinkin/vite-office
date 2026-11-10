@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4bdd6ec4-885f-4291-befb-1adc79822e00",
+    "capabilityId": "CAP-4bdd6ec4-885f-4291-befb-1adc79822e00",
+    "suite": "shared",
+    "subsystem": "uno-mapping",
+    "type": "model",
+    "maturity": "implemented",
+    "capability": "Original resolved public UNO mapping ownership and mapped context construction",
+    "assertions": [
+      "Preserve original public pointer/value Mapping ownership and descriptor/Type forwarding overloads through the real C callback and typelib owners.",
+      "Compare all initialized native public-wrapper lifetime/direct/Type stream bytes with normal and ASan/UBSan originals.",
+      "Preserve original invoked context callee delegate adoption, count branches, forwarding listener ownership, UNO-only construction catch and mapped result publication."
+    ],
+    "gaps": [
+      "Environment/name lookup constructors, deprecated bridge helpers, purpose/current environment stack, complete public context factory and application ServiceManager bootstrap remain incomplete.",
+      "Full native component_context.cxx differential and physical ABI/allocator/concurrency/leak/noexcept termination/full consumer QA remain unverified.",
+      "Upstream unotest Embind BridgeTest is contextual consuming QA requiring complete environment/bridge/service bootstrap, not a direct portable QA port or readiness claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/uno/mapping.hxx",
+          "marker": "class Mapping"
+        },
+        {
+          "path": "cppuhelper/source/component_context.cxx",
+          "marker": "s_createComponentContext_v"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unotest/source/embindtest/embindtest.cxx",
+          "marker": "class BridgeTest"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/uno/mapping.hxx",
+          "marker": "Maps an interface"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/mapping.hxx.ts",
+          "marker": "Mapping"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/component_context.ts",
+          "marker": "s_createComponentContext_v"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/mapping.hxx.test.ts",
+          "marker": "matches complete original public Mapping"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/component_context-callee.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Public UNO mapping and invoked context construction"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original public uno::Mapping already-resolved pointer/default/copy/move constructors, pointer/copy/move assignment, destruction, clear/get/is and both return-pointer/inout interface-description/Type overload families. Actual C mapping callbacks, Type and typelib danger-get/release owners are reused. Preserve acquire-before-release publication, release-before-clear publication, pointer self-assignment traffic, self-move clearing, null return temporary and unresolved-Type output retention. Whole unchanged header over genuine full desktop dependencies supplies normal-ASan/UBSan identical complete ownership/direct/Type streams. Descriptor/name/environment lookup constructors and deprecated bridge helpers remain unported; physical ABI/allocator/threads/noexcept termination, full module/consumer QA and full CSV readiness remain unverified. No mapping or environment provider is synthesized."
+    },
+    "scopeLimitations": [
+      "Original public uno::Mapping already-resolved pointer/default/copy/move constructors, pointer/copy/move assignment, destruction, clear/get/is and both return-pointer/inout interface-description/Type overload families. Actual C mapping callbacks, Type and typelib danger-get/release owners are reused. Preserve acquire-before-release publication, release-before-clear publication, pointer self-assignment traffic, self-move clearing, null return temporary and unresolved-Type output retention. Whole unchanged header over genuine full desktop dependencies supplies normal-ASan/UBSan identical complete ownership/direct/Type streams. Descriptor/name/environment lookup constructors and deprecated bridge helpers remain unported; physical ABI/allocator/threads/noexcept termination, full module/consumer QA and full CSV readiness remain unverified. No mapping or environment provider is synthesized."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "resolved-public-mapping-and-invoked-context-construction"
+  }
+}

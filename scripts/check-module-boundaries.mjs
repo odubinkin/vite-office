@@ -20,6 +20,7 @@ const moduleNames = [
   "cppu",
   "cppuhelper",
   "cui",
+  "desktop",
   "docmodel",
   "editeng",
   "external",
@@ -29,6 +30,7 @@ const moduleNames = [
   "i18nlangtag",
   "i18npool",
   "i18nutil",
+  "lingucomponent",
   "o3tl",
   "offapi",
   "oox",
@@ -52,22 +54,23 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
-  // Original attributelist.hxx/cxx also owns actual OUString values.
-  // Original OFOPXMLHelper uses the native SAX parser/writer services.
-  // Original interfacecontainer3.hxx owns its vector through o3tl::cow_wrapper.
+  // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.
+  // Original OFOPXMLHelper uses SAX; interfacecontainer3.hxx uses o3tl::cow_wrapper.
   // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.
   ["comphelper", new Set(["cppu", "cppuhelper", "o3tl", "offapi", "sal", "sax", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
-  ["cppuhelper", new Set(["cppu", "sal", "udkapi"])],
+  // Original cppuhelper uses UNO/SAL, o3tl/cow_wrapper and comphelper/sequence.
+  ["cppuhelper", new Set(["comphelper", "cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
-  // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
-  // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
-  // Original UnoComplexColor.hxx includes cppuhelper/implbase and offapi XComplexColor;
-  // Library_docmodel links cppuhelper/cppu for actual component references.
+  // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors.
+  [
+    "desktop",
+    new Set(["comphelper", "cppu", "cppuhelper", "i18npool", "lingucomponent", "udkapi"]),
+  ],
+  // Original justifyitem/frmitems use UNO values, table/style enums and Tools/o3tl units.
+  // Original UnoComplexColor uses implbase and XComplexColor; Library_docmodel links CPPU/cppuhelper.
   ["docmodel", new Set(["tools", "o3tl", "cppu", "cppuhelper", "offapi"])],
   // Original xmlcnitm.hxx includes xmloff/xmlcnimp.hxx; Library_editeng links xo.
   [
@@ -77,9 +80,8 @@ const allowedEdges = new Map([
       "comphelper",
       "docmodel",
       "cppu",
-      // Original textitem.cxx includes com/sun/star/lang/Locale.hpp for language member transport.
-      "udkapi",
-      // Original langitem.hxx uses i18nlangtag/lang.h language values.
+      // Original impedit2.cxx includes unicode/ubidi.h; Library_editeng links icuuc and icu_headers.
+      "external",
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
       "i18nutil",
@@ -91,6 +93,7 @@ const allowedEdges = new Map([
       "svl",
       "svtools",
       "tools",
+      "udkapi",
       "vcl",
       "xmloff",
     ]),
@@ -107,16 +110,34 @@ const allowedEdges = new Map([
   ["framework", new Set(["sfx2", "svl"])],
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
-  // Native Library_i18nlangtag.mk uses liblangtag; languagetag.cxx includes langtag.h.
+  // Original languagetag.cxx includes liblangtag/langtag.h; Library_i18nlangtag links liblangtag and ICU.
   ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
-  // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
-  // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
+  // Original i18npool uses LanguageTag/MsLangId/Locale values and links CPPU/cppuhelper for UNO services.
+  // Original numberformatcode uses UNO Sequence, NumberFormatCode, FormatElement and SAL/locale values.
   // Native Library_i18npool links ICU i18n/common; calendar_gregorian uses its real Calendar/TimeZone factories.
-  ["i18npool", new Set(["cppu", "external", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
+  // Original nativenumbersupplier.cxx uses comphelper/processfactory.hxx; Library_i18npool links comphelper.
+  [
+    "i18npool",
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "external",
+      "i18nlangtag",
+      "i18nutil",
+      "offapi",
+      "sal",
+      "udkapi",
+    ]),
+  ],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
+  // Original Library_numbertext links cppu/cppuhelper/i18nlangtag/SAL and libnumbertext, using SDK interfaces.
+  [
+    "lingucomponent",
+    new Set(["cppu", "cppuhelper", "external", "i18nlangtag", "offapi", "sal", "udkapi"]),
+  ],
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
   // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
@@ -141,11 +162,11 @@ const allowedEdges = new Map([
   // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
   ["stoc", new Set()],
 
-  // Original converter.cxx uses comphelper::date and published util::DateTime;
-  // Library_sax links comphelper and uses the SDK API.
   [
     "sc",
     new Set([
+      // Original scerrors.hxx includes comphelper/errcode.hxx; Library_sc links comphelper.
+      "comphelper",
       // Native richstring.cxx includes oox/helper/attributelist.hxx; Library_scfilt.mk links oox.
       "oox",
       // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.
@@ -182,23 +203,13 @@ const allowedEdges = new Map([
   // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
   // Library_sfx.mk links SAL; objstor.cxx takes rtl_TextEncoding directly.
   // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
-  // Library_sfx links cppu/cppuhelper and uses the SDK API.
   // Original SfxBaseModel listener containers use comphelper and published document/util SDK listeners.
-  // Native sfxhtml.cxx includes o3tl/string_view.hxx; sfxhtml.hxx includes i18nlangtag/lang.h.
+  // Native sfxhtml uses lang.h and o3tl/string_view.hxx.
   [
     "sfx2",
-    new Set([
-      "comphelper",
-      "cppu",
-      "cppuhelper",
-      "i18nlangtag",
-      "o3tl",
-      "offapi",
-      "sal",
-      "svl",
-      "tools",
-      "udkapi",
-    ]),
+    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "svl", "tools", "udkapi"])
+      .add("i18nlangtag")
+      .add("o3tl"),
   ],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
@@ -355,9 +366,9 @@ const allowedEdges = new Map([
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
-  // Original stream.cxx includes rtl/string.hxx and rtl/ustring.hxx for text conversion.
+  // Original stream.cxx uses RTL text conversion and unicode/ucsdet.h; Library_tl links ICU.
   // time.hxx/datetime.hxx consume published util::Time/DateTime; Library_tl uses the SDK API.
-  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal", "offapi"])],
+  ["tools", new Set(["o3tl", "cppu", "comphelper", "external", "sal", "offapi"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.
@@ -377,9 +388,9 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
-  // Native number.cxx SwDefBulletConfig owns a vcl::Font value, without a device/browser adapter.
   if (source === "sw/source/core/doc/number-bullet.ts" && target === "vcl/source/font/font")
     return false;
+  if (source === "sc/source/core/data/global.ts" && target === "vcl/source/app/svapp") return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.
   if (
@@ -428,6 +439,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/uno/")) return "writer-model-api";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("desktop/source/")) return "upstream-mechanism";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
     return "upstream-mechanism";
   if (portablePath.startsWith("docmodel/inc/")) return "upstream-mechanism";
@@ -914,7 +926,9 @@ for (const sourceFile of runtimeSources) {
       relativeSource.split(path.sep).join("/"),
       relativeTarget.split(path.sep).join("/"),
       sourceText,
-      relativeSource.split(path.sep).join("/") === "sax/source/expatwrap/xml2utf.ts" &&
+      ["sax/source/expatwrap/xml2utf.ts", "cppuhelper/source/component_context.ts"].includes(
+        relativeSource.split(path.sep).join("/"),
+      ) &&
         relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") === "comphelper/inc/sequence"
         ? fs.readFileSync(path.resolve(sourceRoot, "comphelper/inc/sequence.ts"), "utf8")
         : "",

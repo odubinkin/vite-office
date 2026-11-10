@@ -1,6 +1,7 @@
 /** @fileoverview Pinned SfxObjectShell CSV separator detection over the native stream reader. */
 import { expect, it, vi } from "vitest";
 import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
+import { Time } from "../../../tools/source/datetime/ttime";
 import { SvStream } from "../../../tools/source/stream/stream";
 import { SfxObjectShell } from "./objsh";
 
@@ -25,7 +26,7 @@ it("defaults missing quote delimiters, skips blank lines and carries multiline q
 });
 
 it("rewinds the original stream when the source detection time budget is exhausted", /** Checks the native 500ms deadline without making the test wait for a wall-clock timeout. @returns Nothing. */ () => {
-  const clock = vi.spyOn(Date, "now").mockReturnValueOnce(0).mockReturnValue(500);
+  const clock = vi.spyOn(Time, "GetSystemTicks").mockReturnValueOnce(0n).mockReturnValue(500n);
   try {
     expect(detect("a,b\nc,d\n")).toEqual(["", 0]);
   } finally {

@@ -17,7 +17,11 @@
       "lt_tag_get_string_with_filter",
       "lt_tag_get_string",
       "lt_tag_truncate",
-      "lt_tag_compare"
+      "lt_tag_compare",
+      "lt_tag_get_language",
+      "lt_tag_get_script",
+      "lt_tag_get_region",
+      "lt_tag_get_variants"
     ],
     "upstreamSymbols": [
       "lt_tag_new",
@@ -25,10 +29,12 @@
       "lt_tag_copy",
       "lt_tag_get_string_with_filter",
       "lt_tag_truncate",
-      "lt_tag_compare"
+      "lt_tag_compare",
+      "DEFUNC_GET_SUBTAG"
     ],
     "preservedResponsibilities": [
-      "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+      "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion.",
+      "AQF9AG adds original borrowed language/script/region/variants getters with null-owner guard; managed empty variants correspond to a null native list. Native subtag field boundaries are retained for LanguageTag component consumers."
     ],
     "omittedResponsibilities": [
       "Wildcard range matching,POSIX locale conversion,likely-subtag maximization,full liblangtag API and enclosing LibreOffice LanguageTag are outside this complete normal-parser scope. Physical allocation/error-stack/refcounts/XML/service/module-loader/debug printing are erased,not simulated. Source-only unreachable pinned-data branches are justified by complete immutable-table tests."

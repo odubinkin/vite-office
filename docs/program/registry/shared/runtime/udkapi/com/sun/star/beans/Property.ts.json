@@ -18,9 +18,13 @@
       "evidence": [
         "apps/office/src/udkapi/com/sun/star/beans/Property.ts",
         "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
-        "apps/office/src/svl/source/items/itemprop.test.ts"
+        "apps/office/src/svl/source/items/itemprop.test.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/Property.ts#Property",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "udkapi/com/sun/star/beans/Property.idl",
+        "cppuhelper/source/servicemanager.cxx"
       ],
-      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Generated Name/Handle/Type/Attributes value and compound type metadata. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
+      "justification": "Generated Name/Handle/Type/Attributes value and compound type metadata. The original implicit destructor now releases the owned type and name used by ServiceManager::getDefaultContextProperty. Complete native binary ABI and other property service consumers remain outside this checkpoint.",
       "knownViolations": [],
       "localSymbols": [
         "cppu_detail_getUnoType_Property",
@@ -29,7 +33,8 @@
       "sourceResponsibility": "aligned",
       "upstreamFile": "udkapi/com/sun/star/beans/Property.idl",
       "upstreamSymbols": [
-        "Property"
+        "Property",
+        "Attributes"
       ]
     }
   }

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/linguistic2/NumberText.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/linguistic2/NumberText.ts",
+        "apps/office/src/offapi/com/sun/star/linguistic2/NumberText.test.ts",
+        "offapi/com/sun/star/linguistic2/NumberText.idl"
+      ],
+      "justification": "Original cppumaker service default constructor normal context/manager path: exact service request, owned temporary manager/root/query references, UNO_QUERY followed by missing-interface DeploymentException, unchanged RuntimeException/non-UNO propagation and checked-Exception wrapping with exact prefix/message and original caller Context. Caught checked values and local references are destroyed in source order. Source compile-time static-constructor-environment macros are not selected. Prepared test contexts/managers are explicit enclosing boundaries, not production replacements; successful creation invokes the actual NumberText component factory and library. General bootstrap/context/manager integration remains unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NumberText",
+        "failsToSupply"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/linguistic2/NumberText.idl",
+      "upstreamSymbols": [
+        "NumberText",
+        "XNumberText"
+      ]
+    }
+  }
+}

@@ -21,12 +21,13 @@
         "apps/office/src/external/icu/source/common/dictbe.khmer.sets.json",
         "vendor/icu-reference/source/common/dictbe.cpp",
         "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
-        "vendor/libreoffice-reference/external/icu/khmerdict.dict"
+        "vendor/libreoffice-reference/external/icu/khmerdict.dict",
+        "apps/office/src/external/icu/source/data/brkitr/khmerdict.dict.json"
       ],
       "justification": "S3HW1E HTML82: patched KhmerBreakEngine retains original ICU UnicodeSet properties, cloned UTF16 scans with separate counters, inhibitor windows, dictionary weight minimization, candidate vector logical size and original output gates. Native cursor/boundary traces match 2842 real-dictionary inputs plus 45 compiled fixture witnesses. See WRITER372–375.",
       "knownViolations": [],
       "localSymbols": [
-        "KhmerBreakEngine",
+        "LibreOfficeKhmerBreakEngine",
         "scanBeforeStart",
         "scanAfterEnd",
         "scanBackClusters",

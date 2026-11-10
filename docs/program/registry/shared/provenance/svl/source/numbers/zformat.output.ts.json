@@ -1,0 +1,67 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.output.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "InsertBlanks",
+      "appendStarFillChar",
+      "ImpCheckCondition",
+      "GetSubformatIndex",
+      "IsFirstSubformatRealNegative",
+      "GetStringOutput",
+      "GetLiteralOutput",
+      "GetLogicalOutput"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::InsertBlanks",
+      "lcl_appendStarFillChar",
+      "SvNumberformat::ImpCheckCondition",
+      "SvNumberformat::GetSubformatIndex",
+      "SvNumberformat::GetOutputString",
+      "SvNumberformat::ImpGetLogicalOutput"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "Original ImpGetLogicalOutput is connected for incomplete native metadata: only BOOLEAN and STRING tokens emit content, star tokens are ignored and the fill result remains false. C++ double truth value!=0 includes NaN as true. Actual compiled/color and styled CSV tests cover this producer. Complete native-number transliteration remains unported.",
+      "Original logical token output now performs final whole-buffer impTransliterate with the selected section metadata and actual native wrapper. Source-only BOOLEAN/STRING emission and ignored star behavior remain unchanged. Modes0..11 are connected; mode12 remains unported."
+    ],
+    "omittedResponsibilities": [
+      "Full display families/native ABI and full native output differential remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.ts",
+          "marker": "GetSubformatIndex"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetSubformatIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "IsFirstSubformatRealNegative"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetLogicalOutput"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.output.ts",
+      "rationale": "Split original format output by shared token/section responsibility while keeping the original compiled-entry owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

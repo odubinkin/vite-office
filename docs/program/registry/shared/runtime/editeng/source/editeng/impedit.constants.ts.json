@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit.constants.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit.constants.ts",
+        "apps/office/src/editeng/source/editeng/native-insert-text-line.test.ts",
+        "editeng/source/editeng/impedit.hxx"
+      ],
+      "justification": "Original MAXCHARSINPARA arithmetic uses actual source CHARPOSGROW16 and retains bound16367. Original LF unit is unchanged; constants are separated from the unported enclosing engine declaration. Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MAXCHARSINPARA",
+        "LINE_SEP"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit.hxx",
+      "upstreamSymbols": [
+        "MAXCHARSINPARA",
+        "LINE_SEP"
+      ]
+    }
+  }
+}

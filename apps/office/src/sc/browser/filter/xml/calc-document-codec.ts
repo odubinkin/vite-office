@@ -102,7 +102,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         else {
           /* Keep the genuine owned-value alternative visible to source mapping. */
         }
-        const value = edit.GetText();
+        const engine = document.GetEditEngine();
+        engine.SetText(edit);
+        const value = engine.GetText();
         try {
           sheet.cells.push([col[0], row[0], "edit", text(value)]);
         } finally {

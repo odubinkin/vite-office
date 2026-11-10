@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/tools/source/stream/stream.lineend.ts",
+    "upstreamPath": "tools/source/stream/stream.cxx",
+    "localSymbols": [
+      "convertLineEnd"
+    ],
+    "upstreamSymbols": [
+      "tmpl_convertLineEnd",
+      "convertLineEnd"
+    ],
+    "preservedResponsibilities": [
+      "Original Unicode two-pass line-end template uses actual SAL OUString/OUStringBuffer, opposite CRLF/LFCR pair collapse, raw UTF16 preservation and unchanged source-data sharing. Original trailing bare CR conversion-detection omission remains (CALC-430). Only Unicode overload required by this CSV path is ported; no byte-string buffer or source behavior is substituted."
+    ],
+    "omittedResponsibilities": [
+      "Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/stream/stream.lineend.ts",
+          "marker": "convertLineEnd"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/native-lineend.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "tmpl_convertLineEnd"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/tools/source/stream/stream.lineend.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Consumed original line normalization/constants/text-capacity member group is separated from unrelated stream I/O and enclosing engine/layout/undo/view responsibilities under the unchanged source-file budget; no alternate engine or callback protocol is supplied."
+    }
+  }
+}

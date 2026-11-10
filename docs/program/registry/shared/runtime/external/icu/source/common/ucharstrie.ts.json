@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "number-formatting",
     "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,18 +18,23 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/external/icu/source/common/ucharstrie.ts",
-        "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
         "vendor/icu-reference/source/common/ucharstrie.cpp",
+        "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+        "apps/office/src/external/icu/source/common/dictionarydata.native-observations.json",
         "vendor/icu-reference/source/common/unicode/ucharstrie.h"
       ],
-      "justification": "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370.",
+      "justification": "Original UCharsTrie matching over the serialized UTF-16 units, including split and linear branches, signed final and intermediate values, stopped and reset states, and unit/codepoint entrypoints. The original native builder and archive witness compares 144 portable builder cases and 168 cases on the five real ICU dictionary files opened via udata. This is the matcher layer for the native dictionary break engines. The integrated build shares the ICU provider, rule data and resource dispatch with Writer, including the LibreOffice Khmer patch where selected.",
       "knownViolations": [],
       "localSymbols": [
         "UCharsTrie"
       ],
-      "sourceResponsibility": "unverified",
+      "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/icu-reference/source/common/ucharstrie.cpp",
       "upstreamSymbols": [
+        "UCharsTrie",
+        "branchNext",
+        "nextImpl",
+        "firstForCodePoint",
         "UCharsTrie::next",
         "UCharsTrie::branchNext"
       ]

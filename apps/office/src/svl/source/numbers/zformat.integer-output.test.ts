@@ -41,7 +41,14 @@ it.each([
       );
     try {
       expect(check[0]).toBe(0);
-      entry.GetOutputString(input, out, color, 10, 46, scanner);
+      scanner.GetCurrentLanguageData().ChangeStandardPrec(10);
+      entry.GetOutputString(
+        input,
+        out,
+        color,
+        formatter.GetNatNum(),
+        scanner.GetCurrentLanguageData(),
+      );
       expect(text(out)).toBe(expected);
       expect(color[0]).toBeNull();
     } finally {

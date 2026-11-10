@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/inc/interfacecontainer4.ts",
+    "upstreamPath": "cppuhelper/inc/interfacecontainer4.hxx",
+    "localSymbols": [
+      "OInterfaceContainerHelper4",
+      "OInterfaceIteratorHelper4",
+      "InterfaceContainerConstructor"
+    ],
+    "upstreamSymbols": [
+      "OInterfaceContainerHelper4",
+      "OInterfaceIteratorHelper4",
+      "forEach",
+      "disposeAndClear",
+      "removeInterface"
+    ],
+    "preservedResponsibilities": [
+      "Original internal source4 container/iterator uses real Reference/cow_wrapper with exact per-template DEFAULT. It is not a call to the comphelper3 container. Preserves duplicate references, pointer-first/root-identity removal, shallow reverse snapshots, independent getElements copies, source make_unique BEFORE forEach snapshot, per-callback copied reference, DisposedException Context removal rules and source swallowed foreign Contexts. disposeAndClear resets the live wrapper to DEFAULT without allocating a replacement vector, invokes reverse callbacks swallowing only RuntimeException and destroys the iterator before native lock reacquisition. Native synchronization-token parameters are erased without constructing a fake guard. Explicit native move operations are not exposed by this consumed binding."
+    ],
+    "omittedResponsibilities": [
+      "Concrete ComponentContext/ServiceManager, public createComponentContext environment/mapping orchestration, production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/interfacecontainer4.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/interfacecontainer4.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/compbase2.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/inc/interfacecontainer4.hxx",
+          "marker": "OInterfaceContainerHelper4"
+        }
+      ]
+    }
+  }
+}

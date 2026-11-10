@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/source/app/svapp.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-scheduler",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/source/app/svapp.ts#GetSettings",
+        "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+        "vcl/source/app/svapp.cxx",
+        "vcl/source/app/settings.cxx"
+      ],
+      "justification": "The process AppData owner initializes its original AllSettings member lazily on the first settings query. Unconsumed native settings-listener and window notification responsibilities remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetSettings"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vcl/source/app/svapp.cxx",
+      "upstreamSymbols": [
+        "Application::GetSettings",
+        "InitSettings"
+      ]
+    }
+  }
+}

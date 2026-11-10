@@ -163,11 +163,14 @@ export class CalendarImpl {
   }
   /** Original source-order calendar IDs. @param locale - Locale. @returns Owned names. */
   getAllCalendars(locale: LocaleConstReference): OUString[] {
-    return getLocaleCalendars(locale).map(
-      /** Original owned-name conversion. @param item - Locale calendar row. @returns Name. */ (
-        item,
-      ) => unicode(item.id),
-    );
+    const names: OUString[] = [];
+    try {
+      for (const item of getLocaleCalendars(locale)) names.push(unicode(item.id));
+      return names;
+    } catch (error) {
+      for (const name of names) name.dispose();
+      throw error;
+    }
   }
   /** Original forwarding. @returns Owned ID. */
   getUniqueID(): OUString {
@@ -180,6 +183,14 @@ export class CalendarImpl {
   /** Original forwarding. @returns UTC days. */
   getDateTime(): number {
     return this.calendar("getDateTime").getDateTime();
+  }
+  /** Original native-mode display forwarding. @param code - Display code. @param native - Original signed16 native mode. @returns Owned text. */
+  getDisplayString(code: number, native: number): OUString {
+    return this.calendar("getDisplayString").getDisplayString(code, native);
+  }
+  /** Original display-name forwarding preserves the no-calendar RuntimeException. @param category - Display category. @param index - Item index. @param nameType - Name selector. @returns Owned name. */
+  getDisplayName(category: number, index: number, nameType: number): OUString {
+    return this.calendar("getDisplayName").getDisplayName(category, index, nameType);
   }
   /** Original forwarding. @param days - Local days. @returns Nothing. */
   setLocalDateTime(days: number): void {

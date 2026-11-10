@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/putil.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/putil.h",
+    "localSymbols": [
+      "U_FILE_SEP_CHAR",
+      "U_FILE_ALT_SEP_CHAR",
+      "U_PATH_SEP_CHAR"
+    ],
+    "upstreamSymbols": [
+      "U_FILE_SEP_CHAR",
+      "U_FILE_ALT_SEP_CHAR",
+      "U_PATH_SEP_CHAR"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 CharString now uses its actual single header-owned MaybeStackArray<char,40> byte storage and CPP-defined methods, preserving counted/NUL inputs, status guards, source growth hints, writable append-buffer commits, self-append reallocation, signed64 decimal output, invariant conversion, counted search, extraction/termination, move/copy/alias ownership and pinned POSIX separators. Empty-piece copy preserves the stale first byte (CALC-470); owning orphanOrClone reports the input length even when it differs from capacity (CALC-471). 819 sequences/2416 complete initialized snapshots match unchanged original library methods and header templates, with private visibility opened only for observation. StringPiece NUL length uses its original CPP responsibility; default/counted/borrowed fields remain in its header owner. Nullable zero-count invariant inputs preserve native no-read behavior. Managed byte storage does not certify physical allocation failure/free/stack ABI, uninitialized tails, moved-from contents, unreadable/overlapping spans or invalidated borrows. This prerequisite does not implement udata_open/path/file orchestration, package/iterator/engine/service installation, NatNum12 output, multiline import or final CSV acceptance.",
+      "Original ICU78.3 UDataPathIterator now uses actual CharString fields, borrowed byte pointers and original item-directory precedence, separator/empty-segment iteration, explicit four-byte file matching, package-stub truncation, dat skipping and long suffix joining. putil now owns original data/timezone directory once records, copied NUL storage, status overloads, getter/setter order and represented directory cleanup. Browser processes have no OS environment namespace or installed native archive directory; the original absent-input branches apply, without changing UDATA_DEFAULT_ACCESS or selecting MAP_NONE. 752 sequences/5524 complete initialized snapshots match unchanged udata.cpp/putil.cpp methods and actual statics; native source is compiled without installation-directory defines and the two environment variables are absent in the child. Private visibility only exposes fields for observation; no method, mapper, allocator or provider is substituted. Native allocation failure/free/thread/physical ABI, uninitialized spans, invalidated borrows and unported OS locale/TZ-search cleanup fields are not certified. Actual udata_open/path-to-mapper/common-data orchestration, production package/iterator/engine/service installation, NatNum12 output, multiline EditEngine import and final CSV acceptance remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed byte specialization and pinned POSIX constants are represented. Native allocator/free/stack/thread/physical ABI, uninitialized tails, moved-from payload, invalidated borrows and undefined spans are not certified. General element specializations and unconsumed public APIs are not fabricated. udata_open and production service/CSV integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/putil.ts",
+          "marker": "U_FILE_SEP_CHAR"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/charstr.native.test.ts",
+          "marker": "retains original CharString"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.paths.native.test.ts",
+          "marker": "retains original directory"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/putil.h",
+          "marker": "U_FILE_SEP_CHAR"
+        }
+      ]
+    }
+  }
+}

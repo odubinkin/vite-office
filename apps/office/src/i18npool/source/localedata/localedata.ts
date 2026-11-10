@@ -1,5 +1,6 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -13,7 +14,8 @@ import {
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import breakIteratorRules from "./data/break-iterator-rules.json" with { type: "json" };
+import breakRules from "./data/break-rules.json" with { type: "json" };
+import hangingCharacters from "./data/hanging-characters.json" with { type: "json" };
 import calendars from "./data/calendars.json" with { type: "json" };
 import currencies from "./data/currencies.json" with { type: "json" };
 import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
@@ -27,6 +29,10 @@ import numeric from "./data/numeric-separators.json" with { type: "json" };
 import reservedWords from "./data/reserved-words.json" with { type: "json" };
 import timeFields from "./data/time-fields.json" with { type: "json" };
 import transliterations from "./data/transliterations.json" with { type: "json" };
+/** Original ordered LC_MISC rules after resolving generator refs. */
+const breakRuleResources = new Map<string, readonly string[]>(Object.entries(breakRules));
+const hangingResources = new Map<string, string>(Object.entries(hangingCharacters));
+
 /** Original Sequence<OUString> value specialization. */
 const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
 /** Original compiled Sequence<FormatElement> specialization over the real generated compound type. */
@@ -158,13 +164,6 @@ function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap
   return values.get("en_US") as T;
 }
 
-const breakRuleResources = new Map<string, readonly string[]>(Object.entries(breakIteratorRules));
-
-/** Borrows the five source LocaleNode break rule names after the original locale-data fallback. @param locale - Native locale. @returns Original ordered rule names. */
-export function getLocaleDataBreakIteratorRules(locale: LocaleConstReference): readonly string[] {
-  return getLocaleDataField(locale, breakRuleResources);
-}
-
 /** Original LC_INFO fields projected from LCInfoNode/getLanguageCountryInfo;this is not a fabricated UNO LanguageCountryInfo value/ABI. */
 export interface LocaleLanguageCountryInfo {
   Language: string;
@@ -185,7 +184,7 @@ const timeResources = new Map<
   { timeSeparator: string; time100SecSeparator: string; timeAM: string; timePM: string }
 >(Object.entries(timeFields));
 /** Generated LC_MISC TRUE_WORD/FALSE_WORD fields after native ref and missing-field fallback. */
-const reservedResources = new Map<string, { trueWord: string; falseWord: string }>(
+const reservedResources = new Map<string, (typeof reservedWords)["en_US"]>(
   Object.entries(reservedWords),
 );
 /** Actual loaded LC_INFO fields use the same native service resolution as other fields;the caller receives its own value projection. @param locale - Original requested locale. @returns Loaded locale identity fields. */
@@ -289,6 +288,24 @@ export function getLocaleTimeAM(locale: LocaleConstReference): string {
 export function getLocaleTimePM(locale: LocaleConstReference): string {
   return getLocaleDataField(locale, timeResources).timePM;
 }
+/** Original getReservedWord ordered scalar data projection after native LC_MISC ref/default resolution. @param locale - Requested locale. @returns Original12 words. */
+export function getLocaleReservedWords(locale: LocaleConstReference): readonly string[] {
+  const row = getLocaleDataField(locale, reservedResources);
+  return [
+    row.trueWord,
+    row.falseWord,
+    row.quarter1Word,
+    row.quarter2Word,
+    row.quarter3Word,
+    row.quarter4Word,
+    row.aboveWord,
+    row.belowWord,
+    row.quarter1Abbreviation,
+    row.quarter2Abbreviation,
+    row.quarter3Abbreviation,
+    row.quarter4Abbreviation,
+  ];
+}
 /** Original reservedWords TRUE_WORD slot. @param locale - Requested locale. @returns Loaded native word. */
 export function getLocaleTrueWord(locale: LocaleConstReference): string {
   return getLocaleDataField(locale, reservedResources).trueWord;
@@ -373,11 +390,10 @@ export function getLocaleThousandSeparator(locale: LocaleConstReference): string
   );
 }
 
-/** Original getTransliterations field resource binding with native fallback and real Sequence string values;not a whole LocaleData service facade. @param locale - Prepared native locale. @returns Owned ordered module-name sequence. */
-export function getLocaleTransliterations(
-  locale: LocaleConstReference,
+/** Builds an owned source Sequence<OUString> from the original generated string array. @param names - Actual generated values. @returns Owned sequence. */
+function makeStringSequence(
+  names: readonly string[],
 ): Sequence<ReturnType<OUString["getDataAddress"]>> {
-  const names = getLocaleDataField(locale, transliterationResources);
   const values: OUString[] = [],
     cells = new Map<number, ReturnType<OUString["getDataAddress"]>>();
   try {
@@ -390,4 +406,53 @@ export function getLocaleTransliterations(
   } finally {
     for (const value of values) value.dispose();
   }
+}
+
+/** Original getBreakIteratorRules through the registered locale and ref fallback. @param locale - Actual requested locale. @returns Owned ordered rule names. */
+export function getBreakIteratorRules(
+  locale: LocaleConstReference,
+): Sequence<ReturnType<OUString["getDataAddress"]>> {
+  return makeStringSequence(getLocaleDataField(locale, breakRuleResources));
+}
+
+/** Original getTransliterations field resource binding with native fallback and real Sequence string values. @param locale - Prepared native locale. @returns Owned ordered module-name sequence. */
+export function getLocaleTransliterations(
+  locale: LocaleConstReference,
+): Sequence<ReturnType<OUString["getDataAddress"]>> {
+  return makeStringSequence(getLocaleDataField(locale, transliterationResources));
+}
+
+/** Original LocaleDataImpl primary service suffix. @param locale - Actual UNO locale. @returns Primary suffix. */
+export function getFirstLocaleServiceName(locale: LocaleConstReference): string {
+  const language = text(locale.Language);
+  if (language === "qlt") return text(locale.Variant).replaceAll("-", "_");
+  return locale.Country.isEmpty() ? language : language + "_" + text(locale.Country);
+}
+
+/** Original LocaleDataImpl fallback suffixes, excluding the primary suffix. @param locale - Actual UNO locale. @returns Ordered fallback suffixes. */
+export function getFallbackLocaleServiceNames(locale: LocaleConstReference): string[] {
+  const language = text(locale.Language);
+  if (language === "qlt") {
+    const tag = new LanguageTag(locale);
+    try {
+      return tag.getFallbackStrings(false).map(
+        /** Converts the source BCP47 spelling to a service suffix. @param fallback - Fallback language tag. @returns Native service spelling. */
+        (fallback) => {
+          try {
+            return text(fallback).replaceAll("-", "_");
+          } finally {
+            fallback.dispose();
+          }
+        },
+      );
+    } finally {
+      tag.dispose();
+    }
+  }
+  return locale.Country.isEmpty() ? [] : [language];
+}
+
+/** Original third LC_MISC forbidden-character field. @param locale - Requested locale. @returns Owned hanging-character string. */
+export function getHangingCharacters(locale: LocaleConstReference): OUString {
+  return unicode(getLocaleDataField(locale, hangingResources));
 }

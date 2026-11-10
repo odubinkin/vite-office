@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.transliterate.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.transliterate.ts",
+        "apps/office/src/svl/source/numbers/zformat.date.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.time.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.transliterate-date.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.transliterate.ts#impTransliterate",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "svl/source/numbers/zformat.cxx"
+      ],
+      "justification": "Original free impTransliterateImpl and complete-modifier string/buffer overloads use actual NatNum metadata, source ID-to-Locale conversion and NativeNumberWrapper parameters. Buffer input borrows its actual shared pointer field before assigning the returned result. No fabricated LanguageTag/provider is introduced. Full LanguageTag wrapper/cache and native UNO/SAL ABI remain unverified; represented callers admit modes0..11 and mode12 NumberText is pending. Original SvNumberformat date-keyword impTransliterateImpl/inline impTransliterate preserve no-equals whole-argument forwarding, case-sensitive localized keyword lookup, preceding ASCII comma/space only, first accepted assignment, comma termination, untrimmed UTF16/NUL arguments and incomplete-modifier bypass. Modifier language selects conversion Locale independently of the current keyword language. Actual NativeNumberWrapper/formatter tests execute mode3 and observe arguments while live. This prepares the source date-field call boundary; NatNum12 output dispatch, full NumberText/casing/service installation and complete native formatter parity remain unverified. Original whole-output native-number conversion now receives mode 12 from the real numeric, logical and time producers. Full upstream formatter QA and physical native ABI remain outside this checkpoint.",
+      "knownViolations": [],
+      "localSymbols": [
+        "impTransliterateImpl",
+        "impTransliterate"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "impTransliterateImpl",
+        "impTransliterate"
+      ]
+    }
+  }
+}

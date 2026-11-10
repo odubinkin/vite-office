@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editund2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editund2.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "vendor/libreoffice-reference/editeng/source/editeng/editundo.cxx",
+        "apps/office/src/editeng/source/editeng/editund2.ts#EditUndoManager",
+        "editeng/source/editeng/editundo.cxx",
+        "editeng/source/editeng/impedit5.cxx"
+      ],
+      "justification": "Original abstract EditUndo captures unsigned16 ID, actual engine pointer and current active view-shell identity or minus-one default, rejects repeat and returns original owned OUString comment or empty owned value. Actual existing SfxUndoAction inheritance is retained with an erased comment-value type parameter; source parameterless Undo/Redo bind existing context entry points. No source comment conversion, default shell, label provider or manager is introduced. Consumed OutlinerViewShell declaration has no implementation. Original EditUndoManager selects the shared native-labelled SfxUndoManager storage specialization for recording and clearing. Active-view undo and redo execution, physical ABI and full source undo QA remain outside this checkpoint.",
+      "knownViolations": [],
+      "localSymbols": [
+        "EditUndo",
+        "OutlinerViewShell",
+        "EditUndoManager"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editundo.cxx",
+      "upstreamSymbols": [
+        "EditUndo::EditUndo",
+        "EditUndo::GetId",
+        "EditUndo::CanRepeat",
+        "EditUndo::GetComment",
+        "EditUndo::GetViewShellId",
+        "EditUndoManager"
+      ]
+    }
+  }
+}

@@ -1,94 +1,63 @@
-/** @fileoverview Native CJK and Korean boundary witnesses for compiled ICU78.3 dictionary data. */
-import { assert, expect, it } from "vitest";
-import { CjkBreakEngine, CjkLanguageType } from "./dictbe.cjk";
-import { openDictionaryMatcher } from "./dictionarydata";
-import { normalizeCjkInput } from "./normalizer2impl.cjk";
+/** @fileoverview Native differential replay of original CJK dictionary boundaries and provider effects. */
+import { expect, it } from "vitest";
+import { loadDictionaryMatcherFor } from "./brkeng";
+import { CjkBreakEngine, LanguageType } from "./dictbe";
+import native from "./dictbe.cjk.native-observations.json" with { type: "json" };
+import { UScriptCode } from "./unicode/uscript";
+import {
+  type OpenUText,
+  utext_close,
+  utext_getNativeIndex,
+  utext_openUChars,
+  utext_openUnicodeString,
+  utext_setNativeIndex,
+} from "./unicode/utext";
+import { UnicodeString } from "./unistr";
+import { UVector32 } from "./uvectr32.h";
 
-const bytes =
-  "IADaJxQAAAAAAAIARGljdAEAAAAAAAAAAAAAAAAAAAAgAAAA6gAAAOoAAADqAAAACQAAAAAAAAAAAAAAAAAAABMAZlsxAAGsFwABrB6Aba0IAACuCoBc1QcAQNgwAADcBYAwALTFKIDBB22tAgAArhSAMAm0xWSAZlsIAOVlCQBxZwwAXnlQgACsD4AwAB91eIBwCixnMAWeihSAMACsTnEZJ1lmW/SBrDAaAKwwCgCzMAsAyDCQgS1OCwAnWTAAZltugDAcqzBngHBAkAHIMG6AwQf9VhSAh2WwBZ6KSohLMA0AZzAOAGowHoBrMAqAqzAwAL8w8SWrMMowvoBwBWowQYAwAFkwKIA=";
-const fixtures: readonly (readonly [
-  "cj" | "ko",
-  readonly (readonly [string, number, number, string, string])[],
-])[] = [
-  [
-    "cj",
-    [
-      ["", 0, 0, "0:0", "0:0"],
-      ["中文語日本語", 0, 6, "6:2,2,3", "6:2,2,3"],
-      ["東京大学", 0, 4, "4:1,2", "4:1,2"],
-      ["東京大学学生", 0, 6, "6:2,2,4", "6:2,2,4"],
-      ["ｶﾞｶ", 0, 3, "3:0", "3:0"],
-      ["ガカカタカナ", 0, 6, "6:1,2", "6:0"],
-      ["カタカナカタカナカタカナカタカナカタカナ", 0, 20, "20:4,4,8,12,16", "20:0"],
-      ["カタカナカタカナカタカナカタカナカタカ", 0, 19, "19:5,4,8,12,16,18", "19:0"],
-      ["ﾊﾟｶﾞ", 0, 4, "4:1,2", "4:0"],
-      ["ヿ神コト", 0, 4, "4:2,1,2", "4:2,1,2"],
-      ["𠀀中文𠀀", 0, 6, "6:2,2,4", "6:2,2,4"],
-      ["「中文日本語」", 0, 7, "0:0", "0:0"],
-      ["中文日本語42", 0, 7, "5:1,2", "5:2,2,5"],
-      ["中文日本語!", 0, 6, "5:1,2", "5:1,2"],
-      ["日本語かなです", 0, 7, "7:3,3,4,5", "7:0"],
-      ["日本語かなに", 0, 6, "6:3,3,4,5", "6:0"],
-      ["日本語𖿰中国", 0, 7, "7:2,3,5", "7:2,3,5"],
-      ["😀中文日本語", 0, 7, "0:0", "0:0"],
-      ["カタカナ。ひらがな", 0, 9, "4:0", "4:0"],
-      ["」東京大学42", 1, 5, "5:1,3", "5:3,1,3,5"],
-      ["😀東京大学日本語!", 2, 10, "9:2,4,6", "9:2,4,6"],
-      ["「ｶﾞヿ中文語」", 1, 7, "7:3,3,4,6", "7:2,4,6"],
-    ],
-  ],
-  [
-    "ko",
-    [
-      ["", 0, 0, "0:0", "0:0"],
-      ["한글", 0, 2, "2:0", "2:0"],
-      ["한글한국어", 0, 5, "5:2,2,3", "5:2,2,3"],
-      ["가각가각", 0, 4, "4:3,1,2,3", "4:3,1,2,3"],
-      ["가각😀한글", 0, 6, "2:1,1", "2:1,1"],
-      ["한글을입력", 0, 5, "5:0", "5:0"],
-      ["국어한국어", 0, 5, "5:2,2,3", "5:2,2,3"],
-      ["한국어!", 0, 4, "3:1,1", "3:1,1"],
-      ["한국어42", 0, 5, "3:1,1", "3:2,1,3"],
-      ["한글」", 0, 3, "2:0", "2:0"],
-      ["한국어中文", 0, 5, "3:1,1", "3:2,1,3"],
-      ["」한글42", 1, 3, "3:0", "3:2,1,3"],
-      ["😀한글한국어", 2, 7, "7:2,4,5", "7:2,4,5"],
-    ],
-  ],
-];
+/** Opens the original counted, deferred or UnicodeString provider. @param text - Actual UTF-16 text. @param provider - Native witness provider selector. @returns Prepared provider. */
+function openText(text: string, provider: number): OpenUText {
+  if (provider === 2)
+    return utext_openUnicodeString(null, new UnicodeString(text, text.length), [0]) as OpenUText;
+  const units = new Uint16Array(text.length + 1);
+  for (let i = 0; i < text.length; ++i) units[i] = text.charCodeAt(i);
+  return utext_openUChars(null, units, provider === 1 ? -1 : text.length, [0]) as OpenUText;
+}
 
-for (const [language, cases] of fixtures)
-  it(`matches native ${language} word and phrase segmentation`, /** Uses actual gendict bytes and compares native UTF16 position, count and boundaries. @returns Nothing. */ () => {
-    const dictionary = openDictionaryMatcher(
-      Uint8Array.from(
-        atob(bytes),
-        /** Reads the packed ICU byte. @param unit - Binary character. @returns Unsigned byte. */ (
-          unit,
-        ) => unit.charCodeAt(0),
-      ),
-    );
-    assert(dictionary);
-    const engine = new CjkBreakEngine(
-      dictionary,
-      language === "ko" ? CjkLanguageType.kKorean : CjkLanguageType.kChineseJapanese,
-    );
-    for (const [text, start, end, word, phrase] of cases) {
-      for (const flag of [false, true]) {
-        const cursor: [number] = [0],
-          boundaries: number[] = [];
-        const count = engine.findBreaks(text, cursor, start, end, boundaries, flag, [0]);
-        expect(
-          [`${cursor[0]}:${count}`, ...boundaries].join(","),
-          JSON.stringify([text, start, end, flag]),
-        ).toBe(flag ? phrase : word);
+for (const type of [LanguageType.kChineseJapanese, LanguageType.kKorean]) {
+  it(`matches original CJK dictionary mode ${type}`, /** Replays the actual normalizer, matcher, resource and text providers. @returns Nothing. */ () => {
+    const matcher = loadDictionaryMatcherFor(UScriptCode.USCRIPT_HAN);
+    if (matcher === null) throw new Error("Missing CJK dictionary");
+    const initialization: [number] = [0];
+    const engine = new CjkBreakEngine(matcher, type, initialization);
+    try {
+      expect(initialization[0]).toBe(0);
+      for (const c of native.cases) {
+        if (c.type !== type) continue;
+        const text = openText(c.text, c.provider);
+        try {
+          utext_setNativeIndex(text, c.position);
+          const props = text.providerProperties;
+          const found = new UVector32([0]);
+          found.setMaxCapacity(c.capacity);
+          if (c.preset >= 0) found.push(c.preset, [0]);
+          const status: [number] = [c.status];
+          const count = engine.findBreaks(text, c.start, c.end, found, c.phrase !== 0, status);
+          const actual = [
+            count,
+            status[0],
+            utext_getNativeIndex(text),
+            props,
+            found.size(),
+            ...(found.getBuffer()?.slice(0, found.size()) ?? []),
+          ];
+          expect(actual, JSON.stringify(c)).toEqual(c.expected);
+        } finally {
+          utext_close(text);
+        }
       }
+    } finally {
+      engine.dispose();
     }
   });
-
-it("preserves source UTF16 chunk starts after compatibility composition and expansion", /** Compares NFKC narrowing, expansion and supplementary codepoint positions. @returns Nothing. */ () => {
-  expect(normalizeCjkInput("xｶﾞ神ヿ𠀀y", 1, 7)).toEqual({
-    text: "ガ神コト𠀀",
-    sourceOffsets: [1, 3, 4, 4, 5, 7],
-  });
-  expect(normalizeCjkInput("東京𠀀", 0, 4)).toEqual({ text: "東京𠀀" });
-});
+}

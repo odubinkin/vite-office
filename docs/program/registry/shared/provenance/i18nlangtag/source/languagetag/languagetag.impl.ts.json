@@ -15,10 +15,12 @@
       "LanguageTagImpl::synCanonicalize",
       "LanguageTagImpl::convertLocaleToLang",
       "LanguageTagImpl::getLanguage",
-      "LanguageTagImpl::isIsoODF"
+      "LanguageTagImpl::isIsoODF",
+      "LanguageTagImpl"
     ],
     "preservedResponsibilities": [
-      "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified."
+      "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified.",
+      "Actual implementation constructor, copy assignment and destruction bind original field, canonicalization, ISO, Locale/ID and fallback member groups to the real lazy known-set and dynamic registration. Native C liblangtag storage layout and thread ABI are erased."
     ],
     "omittedResponsibilities": [
       "POSIX rtl_Locale/glibc APIs, native ABI and physical ownership/lifetime machinery; no full-library parity claim."
@@ -42,6 +44,10 @@
         {
           "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
           "marker": "class"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl"
         }
       ]
     },

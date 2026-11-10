@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/csrucode.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/csrucode.cpp",
+    "localSymbols": [
+      "CharsetRecog_UTF_16_BE",
+      "CharsetRecog_UTF_16_LE",
+      "CharsetRecog_UTF_32_BE",
+      "CharsetRecog_UTF_32_LE"
+    ],
+    "upstreamSymbols": [
+      "CharsetRecog_UTF_16_BE::match",
+      "CharsetRecog_UTF_16_LE::match",
+      "CharsetRecog_UTF_32::match"
+    ],
+    "preservedResponsibilities": [
+      "Original endian variants preserve UTF-16 byte limits, BOM precedence and UTF-32 validity, including the source CALC-489 cutoff."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrucode.ts",
+          "marker": "CharsetRecog_UTF_32"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/csrucode.cpp",
+          "marker": "match"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

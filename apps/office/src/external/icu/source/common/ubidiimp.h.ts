@@ -1,4 +1,4 @@
-/** @fileoverview Consumed ICU78.3 default-resolver direction constants and value records; native allocation,ownership,reordering options and inverse modes are not emulated. */
+/** @fileoverview Consumed ICU78.3 default-resolver constants, value records and actual paragraph-owner fields. JS owns storage; native ABI, other reordering options and inverse modes are not exposed. */
 // Copyright Unicode, Inc. and others. Unicode License V3: https://www.unicode.org/license.txt
 export const L = 0,
   R = 1,
@@ -53,4 +53,36 @@ export interface BidiState {
   flags: number;
   isolateCount: number;
   readonly isolates: { stateImp: number; state: number; start1: number; startON: number }[];
+}
+
+/** Original run record. Storage capacity uses array elements rather than native byte offsets. */
+export interface Run {
+  logicalStart: number;
+  visualLimit: number;
+  insertRemove: number;
+}
+/** Consumed original UBiDi paragraph owner. Only default reordering, explicit initial 0/1 and null external levels are exposed. JS owns arrays; fixed preallocation limits retain the source failure behavior. */
+export class UBiDi implements BidiState {
+  pParaBiDi: UBiDi | null = null;
+  text = "";
+  length = 0;
+  originalLength = 0;
+  resultLength = 0;
+  paraLevel: 0 | 1 = 0;
+  direction = 0;
+  trailingWSStart = 0;
+  dirProps: number[] = [];
+  levels: number[] = [];
+  paras: BidiState["paras"] = [];
+  flags = 0;
+  isolateCount = 0;
+  isolates: BidiState["isolates"] = [];
+  dirPropsMemory: number[] | null = null;
+  levelsMemory: number[] | null = null;
+  runsMemory: Run[] | null = null;
+  readonly simpleRuns: Run[] = [{ logicalStart: 0, visualLimit: 0, insertRemove: 0 }];
+  runs: Run[] = [];
+  runCount = 0;
+  mayAllocateText = false;
+  mayAllocateRuns = false;
 }

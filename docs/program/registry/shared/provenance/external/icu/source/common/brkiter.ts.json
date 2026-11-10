@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/brkiter.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/brkiter.cpp",
+    "localSymbols": [
+      "createWordInstance"
+    ],
+    "upstreamSymbols": [
+      "createWordInstance",
+      "buildInstance"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU stock word construction opens the requested brkitr locale without default-locale fallback, follows the boundaries word resource, opens the original binary rules and retains requested/valid/actual metadata."
+    ],
+    "omittedResponsibilities": [
+      "The ICU service registration and other iterator modes are outside the consumed word path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/brkiter.ts",
+          "marker": "function createWordInstance"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/brkiter.cpp",
+          "marker": "createWordInstance"
+        }
+      ]
+    }
+  }
+}

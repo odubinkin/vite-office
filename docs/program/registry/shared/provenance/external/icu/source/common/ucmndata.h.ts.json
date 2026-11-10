@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/ucmndata.h",
+    "localSymbols": [
+      "MappedData",
+      "DataHeader",
+      "commonDataFuncs",
+      "UDataOffsetTOCEntry",
+      "UDataOffsetTOC",
+      "COMMON_DATA_NAME"
+    ],
+    "upstreamSymbols": [
+      "MappedData",
+      "DataHeader",
+      "commonDataFuncs",
+      "UDataOffsetTOCEntry",
+      "UDataOffsetTOC",
+      "COMMON_DATA_NAME"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. The prior descriptor checkpoint kept file mapping outside its scope. The prior descriptor checkpoint preceded the application-data and TOC integration. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified.",
+      "Original ICU78.3 ucmndata keeps separate offset and pointer prefix binary searches, first/last prefix priming, unsigned byte comparison, original count/length/status behavior and CmnD/ToCP dispatch. udata_checkCommonData retains source header/major checks, early incoming-error return and close on invalid data, without new size/sort/content validation. The actual LibreOffice Makefile generates ToCP with gencmn -S, genccode and genbrk; its C pointer relocations bind direct managed name/data references at exact table addresses. DataHeader carries this platform relocation binding, and normalization preserves it when advancing the original alignment double. No callback/provider table, CmnD-only conversion or fake loader is introduced. Original native generator outputs and unchanged checker/dispatch compare 1938 complete input/output/header traces, including 144-byte copyright-bearing CmnD headers, static pointer alignment prefixes, null/empty/one-entry/unsorted tables, negative entry lengths, incoming errors and ignored lookup statuses. Raw native pointer ABI, unreadable/unbound pointer spans, physical allocation/mapping and full udata application-cache/open, iterator/engine/service installation remain unverified.",
+      "The public ICU loader uses original package and tree naming, individual-file and common-package dispatch, acceptance, sticky statuses and descriptor ownership. UDATA_DEFAULT_ACCESS retains FILES_FIRST. The POSIX mapping contract binds a synchronous host reader at the mapping boundary, with independent managed byte storage per open. The browser has no ambient synchronous filesystem reader. Original native comparisons cover all four policies, named and linked ICU data, package extension, timezone override and status/callback admission. Production OpenOffice package installation and iterator/service consumers remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Native OS mmap, concurrent filesystem changes, allocation failures, and undefined native inputs remain outside the managed host binding. Production OpenOffice package installation and iterator/service consumers remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+          "marker": "MappedData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+          "marker": "retains complete native"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ucmndata.native.test.ts",
+          "marker": "retains original common-data"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.open.native.test.ts",
+          "marker": "matches original public open case"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ucmndata.h",
+          "marker": "MappedData"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/ucmndata.h",
+          "marker": "COMMON_DATA_NAME"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Retains the original header discriminator so browser ESM distinguishes the source declaration/layout owner from its implementation module; no loader or implementation responsibility is moved into a header."
+    }
+  }
+}

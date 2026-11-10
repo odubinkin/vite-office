@@ -82,10 +82,10 @@ export function ures_copyResb(
   }
   return target;
 }
-/** Original source open mode and canonicalization before entry dispatch. @param bundle - Fill-in/null. @param path - Default package. @param localeID - C name/null default. @param openType - Native mode. @param status - Status. @returns Owner/null. */
+/** Original source open mode and canonicalization before entry dispatch. @param bundle - Fill-in/null. @param path - Package name or default null. @param localeID - C name/null default. @param openType - Native mode. @param status - Status. @returns Owner/null. */
 export function ures_openWithType(
   bundle: UResourceBundle | null,
-  path: null,
+  path: string | null,
   localeID: string | null,
   openType: UResOpenType,
   status: [number],
@@ -129,9 +129,9 @@ export function ures_openWithType(
   bundle.fIndex = -1;
   return bundle;
 }
-/** Original default/parent/root open. @param path - Default package. @param localeID - Locale/default. @param status - Status. @returns Owner/null. */
+/** Original default/parent/root open. @param path - Package name or default null. @param localeID - Locale/default. @param status - Status. @returns Owner/null. */
 export function ures_open(
-  path: null,
+  path: string | null,
   localeID: string | null,
   status: [number],
 ): UResourceBundle | null {
@@ -143,26 +143,26 @@ export function ures_open(
     status,
   );
 }
-/** Original parent/root open without the default-locale step. @param path - Default package. @param localeID - Locale/default. @param status - Status. @returns Owner/null. */
+/** Original parent/root open without the default-locale step. @param path - Package name or default null. @param localeID - Locale/default. @param status - Status. @returns Owner/null. */
 export function ures_openNoDefault(
-  path: null,
+  path: string | null,
   localeID: string | null,
   status: [number],
 ): UResourceBundle | null {
   return ures_openWithType(null, path, localeID, UResOpenType.URES_OPEN_LOCALE_ROOT, status);
 }
-/** Original unnormalized direct open still builds the source alias/parent entry state. @param path - Default package. @param localeID - Filename/default. @param status - Status. @returns Owner/null. */
+/** Original unnormalized direct open still builds the source alias/parent entry state. @param path - Package name or default null. @param localeID - Filename/default. @param status - Status. @returns Owner/null. */
 export function ures_openDirect(
-  path: null,
+  path: string | null,
   localeID: string | null,
   status: [number],
 ): UResourceBundle | null {
   return ures_openWithType(null, path, localeID, UResOpenType.URES_OPEN_DIRECT, status);
 }
-/** Original reusable open ignores the return value and preserves fill-in on entry-open failure. @param bundle - Fill-in. @param path - Default package. @param localeID - Locale/default. @param status - Status. @returns Nothing. */
+/** Original reusable open ignores the return value and preserves fill-in on entry-open failure. @param bundle - Fill-in. @param path - Package name or default null. @param localeID - Locale/default. @param status - Status. @returns Nothing. */
 export function ures_openFillIn(
   bundle: UResourceBundle | null,
-  path: null,
+  path: string | null,
   localeID: string | null,
   status: [number],
 ): void {

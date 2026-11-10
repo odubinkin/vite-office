@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/convertgb18030.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/convertgb18030.ts#ImplConvertGb18030ToUnicode",
+        "apps/office/src/sal/textenc/cjk.test.ts",
+        "apps/office/src/sal/textenc/cjk.native.json",
+        "scripts/sal-cjk-native-probe.mjs",
+        "sal/textenc/convertgb18030.cxx",
+        "apps/office/src/sal/textenc/convertgb18030.tables.json",
+        "scripts/generate-sal-cjk-converters.py"
+      ],
+      "justification": "The original GB18030-2000 state machine, four-byte linear and gap tables, surrogate tracking, bad-input statuses, consumed units and capacity checks are retained. Complete native SAL ABI, invalid memory access and unrelated encodings remain outside the verified converter slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplConvertGb18030ToUnicode",
+        "ImplConvertUnicodeToGb18030",
+        "ImplCreateGb18030ToUnicodeContext",
+        "ImplResetGb18030ToUnicodeContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/convertgb18030.cxx",
+      "upstreamSymbols": [
+        "ImplConvertGb18030ToUnicode",
+        "ImplConvertUnicodeToGb18030",
+        "ImplCreateGb18030ToUnicodeContext",
+        "ImplResetGb18030ToUnicodeContext"
+      ]
+    }
+  }
+}

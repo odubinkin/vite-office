@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/unicode/ubidi.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/unicode/ubidi.ts",
+        "apps/office/src/external/icu/source/common/ubidiln.test.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-directions.test.ts",
+        "vendor/icu-reference/source/common/unicode/ubidi.h"
+      ],
+      "justification": "Original consumed C API header binding reexports the single actual owner/member implementation. The source parameter contract remains explicit through a typed host binding for default fixed0-or1/null-external-level paragraph calls. There is no second state owner, API fallback or runtime rejection for unported modes; unconsumed mode setters are not exposed. Only default reordering, fixed initial paragraph level0/1, null external levels and paragraph owners are admitted. Other ICU modes, external levels, contexts, line construction, allocator exhaustion/native allocation/ABI, invalid pointers and concurrent buffer mutation are not certified. Actual EditEngine constructor/process services and ScFieldEditEngine/DocImport CSV admission remain pending; no complete engine or CSV readiness is claimed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/unicode/ubidi.h",
+      "upstreamSymbols": [
+        "UBiDi",
+        "ubidi_openSized",
+        "ubidi_setPara",
+        "ubidi_close",
+        "ubidi_getLevels",
+        "ubidi_countRuns",
+        "ubidi_getLogicalRun"
+      ]
+    }
+  }
+}

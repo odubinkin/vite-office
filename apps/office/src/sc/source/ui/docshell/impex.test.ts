@@ -1,4 +1,6 @@
 /** @fileoverview CSV stream conversion using actual Calc document cells. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it } from "vitest";
 import { LANGUAGE_GERMAN } from "../../../../i18nlangtag/inc/lang";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -16,6 +18,8 @@ import { CellType } from "../../../inc/global";
 import { readOdsDocument, writeOdsDocument } from "../../filter/xml/xmlwrap";
 import { SC_COL_SKIP, SC_COL_STANDARD, SC_COL_TEXT, ScAsciiOptions } from "../dbgui/asciiopt";
 import { ReadCsvLine, ScImportExport } from "./impex";
+
+InitApplicationServiceManager(implementations);
 
 it.each([",", "\t", ";", " "])(
   "retries ReadCsvLine with the detected %j separator before joining quoted lines",

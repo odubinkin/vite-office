@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/udkapi/com/sun/star/uno/XComponentContext.ts",
+    "upstreamPath": "udkapi/com/sun/star/uno/XComponentContext.idl",
+    "localSymbols": [
+      "XComponentContext",
+      "getValueByName",
+      "getServiceManager",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XComponentContext",
+      "getValueByName",
+      "getServiceManager"
+    ],
+    "preservedResponsibilities": [
+      "Original complete XComponentContext IDL method contract and normal static interface type binding, without a substitute context, service manager, value registry or runtime behavior."
+    ],
+    "omittedResponsibilities": [
+      "Complete original native component-context/service-manager, NatNum12 casing/formatter/CSV integration and native ABI/thread behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/uno/XComponentContext.ts",
+          "marker": "XComponentContext"
+        },
+        {
+          "path": "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+          "marker": "NumberText"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/uno/XComponentContext.idl",
+          "marker": "XComponentContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        }
+      ]
+    }
+  }
+}

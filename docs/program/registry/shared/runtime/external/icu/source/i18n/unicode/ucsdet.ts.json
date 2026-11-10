@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/unicode/ucsdet.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/unicode/ucsdet.ts#ucsdet_open",
+        "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+        "vendor/icu-reference/source/i18n/unicode/ucsdet.h",
+        "vendor/icu-reference/source/i18n/csdetect.cpp"
+      ],
+      "justification": "Public declaration facade exposes the actual pinned C charset detector functions. Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UCharsetDetector",
+        "UCharsetMatch"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/i18n/unicode/ucsdet.h",
+      "upstreamSymbols": [
+        "ucsdet_open",
+        "ucsdet_detectAll",
+        "ucsdet_getName",
+        "UCharsetDetector",
+        "UCharsetMatch"
+      ]
+    }
+  }
+}

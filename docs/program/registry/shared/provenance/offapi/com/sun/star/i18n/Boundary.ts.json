@@ -15,13 +15,18 @@
       "endPos"
     ],
     "preservedResponsibilities": [
+      "Original Boundary compound carries the same two signed UTF-16 offsets for word service results.",
       "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
     ],
     "omittedResponsibilities": [
-      "Other UNO word modes, grapheme and line operations, and binary UNO ABI remain outside this Writer dictionary path."
+      "Full compound typelib construction is outside the consumed direct word query."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
+          "marker": "interface Boundary"
+        },
         {
           "path": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
           "marker": "Boundary"
@@ -32,6 +37,10 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+          "marker": "long startPos"
+        },
         {
           "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
           "marker": "Boundary"

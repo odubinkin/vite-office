@@ -702,7 +702,7 @@ async function main(): Promise<void> {
     /** Reads a local path or resolves an upstream-relative path beneath the pinned checkout. @param path - Declared evidence path. @returns UTF-8 source text. */
     function readPath(path): Promise<string> {
       const repositoryPath =
-        path.startsWith("apps/") || path.startsWith("vendor/")
+        path.startsWith("apps/") || path.startsWith("vendor/") || path.startsWith("third_party/")
           ? path
           : `vendor/libreoffice-reference/${path}`;
       return readFile(resolve(repositoryRoot, repositoryPath), "utf8");

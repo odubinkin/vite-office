@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "number-formatting",
     "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,8 +18,14 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/external/icu/source/common/brkeng.ts",
-        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
         "vendor/icu-reference/source/common/brkeng.cpp",
+        "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+        "apps/office/src/external/icu/source/common/dictionarydata.native-observations.json",
+        "apps/office/src/external/icu/source/common/brkeng.native.test.ts",
+        "apps/office/src/external/icu/source/common/brkeng.native-observations.json",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbi.owner.native-observations.json",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
         "scripts/writer-native-word-dictionaries.mjs",
         "apps/office/src/external/icu/source/data/brkitr/thaidict.dict",
         "apps/office/src/external/icu/source/data/brkitr/laodict.dict",
@@ -26,17 +33,27 @@
         "apps/office/src/external/icu/source/data/brkitr/khmerdict.dict",
         "apps/office/src/external/icu/source/data/brkitr/cjdict.dict"
       ],
-      "justification": "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378.",
+      "justification": "Original brkitr root lookup selects dictionaries by ICU script short name, converts the counted invariant filename and opens the native file before binary dispatch and matcher ownership transfer. Native comparisons cover 36 factory calls across 12 scripts, 144 portable builder cases and 168 cases across five archive dictionaries. The source factory retains reverse engine search, original script selection, model bundle lookup, dictionary fallback and matcher adoption. The reject engine replaces the previous UnicodeSet property selection with the new script as in CALC-482. The pinned package has no LSTM models. Native tests compare resource statuses, engine identity and membership. The integrated build shares the ICU provider, rule data and resource dispatch with Writer, including the LibreOffice Khmer patch where selected.",
       "knownViolations": [],
       "localSymbols": [
+        "openDictionaryMatcher",
+        "loadDictionaryMatcherFor",
         "ICULanguageBreakFactory",
         "UnhandledEngine",
         "getEngineFor",
-        "loadDictionaryMatcherFor"
+        "loadEngineFor",
+        "handleCharacter"
       ],
-      "sourceResponsibility": "unverified",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/icu-reference/source/common/brkeng.cpp",
       "upstreamSymbols": [
+        "ICULanguageBreakFactory",
+        "loadDictionaryMatcherFor",
+        "IX_STRING_TRIE_OFFSET",
+        "UnhandledEngine",
+        "getEngineFor",
+        "loadEngineFor",
+        "handleCharacter",
         "ICULanguageBreakFactory::loadEngineFor",
         "ICULanguageBreakFactory::loadDictionaryMatcherFor",
         "UnhandledEngine::handleCharacter"

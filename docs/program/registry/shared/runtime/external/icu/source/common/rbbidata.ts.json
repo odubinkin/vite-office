@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "number-formatting",
     "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,17 +18,22 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/external/icu/source/common/rbbidata.ts",
+        "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+        "apps/office/src/external/icu/source/common/rbbidata.native-observations.json",
+        "vendor/icu-reference/source/common/rbbidata.cpp",
+        "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+        "apps/office/src/external/icu/source/common/udatamem.native-observations.json",
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts"
       ],
-      "justification": "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified.",
+      "justification": "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified. The integrated build shares the ICU provider, rule data and resource dispatch with Writer, including the LibreOffice Khmer patch where selected.",
       "knownViolations": [],
       "localSymbols": [
-        "RBBIDataWrapper",
-        "RBBIStateTable"
+        "RBBIDataWrapper"
       ],
-      "sourceResponsibility": "unverified",
+      "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/icu-reference/source/common/rbbidata.cpp",
       "upstreamSymbols": [
+        "RBBIDataWrapper",
         "RBBIDataWrapper::init"
       ]
     }

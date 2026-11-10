@@ -396,13 +396,16 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     expect(scanner.GetStandardPrec()).toBe(2);
     scanner.ChangeStandardPrec(65535);
     expect(scanner.GetStandardPrec()).toBe(65535);
+    current.ChangeStandardPrec(65535);
     expect(
-      /** Calls actual unmarked entry. @returns Native return or explicit unported error. */ () =>
-        entry.GetOutputString(1, out, [null], scanner.GetStandardPrec(), 44),
-    ).toThrow(/nonstandard/);
+      entry.GetOutputString(1, out, [null], scanner.getColorCallback().GetNatNum(), current),
+    ).toBe(false);
+    expect(text(out)).toBe("1");
     entry.SetStandard();
     const color: [Color | null] = [new Color(0x123456)];
-    expect(entry.GetOutputString(0.125, out, color, scanner.GetStandardPrec(), 44)).toBe(false);
+    expect(
+      entry.GetOutputString(0.125, out, color, scanner.getColorCallback().GetNatNum(), current),
+    ).toBe(false);
     expect(color[0]).toBeNull();
     expect(text(out)).toBe("0,125");
     const copy = new SvNumberformat(entry),
@@ -411,7 +414,15 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
       code.clear();
       scanner.Reset();
       for (const value of [copy, exchanged]) {
-        expect(value.GetOutputString(1e-10, out, [null], 65535, 44)).toBe(false);
+        expect(
+          value.GetOutputString(
+            1e-10,
+            out,
+            [null],
+            scanner.getColorCallback().GetNatNum(),
+            current,
+          ),
+        ).toBe(false);
         expect(text(out)).toBe("1E-10");
         expect(text(value.GetFormatstring())).toBe("Standard");
       }

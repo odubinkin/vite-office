@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/ucmndata.h.ts",
+        "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+        "apps/office/src/external/icu/source/common/udatamem.native-observations.json",
+        "vendor/icu-reference/source/common/ucmndata.h",
+        "apps/office/src/external/icu/source/common/ucmndata.native.test.ts",
+        "apps/office/src/external/icu/source/common/ucmndata.native-observations.json",
+        "apps/office/src/external/icu/source/common/udata.open.native.test.ts",
+        "apps/office/src/external/icu/source/common/udata.open.native-observations.json"
+      ],
+      "justification": "Original ICU78.3 ucmndata keeps separate offset and pointer prefix binary searches, first/last prefix priming, unsigned byte comparison, original count/length/status behavior and CmnD/ToCP dispatch. udata_checkCommonData retains source header/major checks, early incoming-error return and close on invalid data, without new size/sort/content validation. The actual LibreOffice Makefile generates ToCP with gencmn -S, genccode and genbrk; its C pointer relocations bind direct managed name/data references at exact table addresses. DataHeader carries this platform relocation binding, and normalization preserves it when advancing the original alignment double. No callback/provider table, CmnD-only conversion or fake loader is introduced. Original native generator outputs and unchanged checker/dispatch compare 1938 complete input/output/header traces, including 144-byte copyright-bearing CmnD headers, static pointer alignment prefixes, null/empty/one-entry/unsorted tables, negative entry lengths, incoming errors and ignored lookup statuses. Raw native pointer ABI, unreadable/unbound pointer spans, physical allocation/mapping and full udata application-cache/open, iterator/engine/service installation remain unverified. The public ICU loader uses original package and tree naming, individual-file and common-package dispatch, acceptance, sticky statuses and descriptor ownership. UDATA_DEFAULT_ACCESS retains FILES_FIRST. The POSIX mapping contract binds a synchronous host reader at the mapping boundary, with independent managed byte storage per open. The browser has no ambient synchronous filesystem reader. Original native comparisons cover all four policies, named and linked ICU data, package extension, timezone override and status/callback admission. Production OpenOffice package installation and iterator/service consumers remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MappedData",
+        "DataHeader",
+        "commonDataFuncs",
+        "UDataOffsetTOCEntry",
+        "UDataOffsetTOC",
+        "COMMON_DATA_NAME"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/icu-reference/source/common/ucmndata.h",
+      "upstreamSymbols": [
+        "MappedData",
+        "DataHeader",
+        "commonDataFuncs",
+        "UDataOffsetTOCEntry",
+        "UDataOffsetTOC",
+        "COMMON_DATA_NAME"
+      ]
+    }
+  }
+}

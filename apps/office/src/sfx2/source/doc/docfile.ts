@@ -2,6 +2,8 @@
  * @fileoverview Defines the bounded browser document-medium persistence contract at the LibreOffice `sfx2/source/doc/docfile.cxx` ownership boundary without selecting a browser persistence API.
  */
 
+import { ErrCodeMsg } from "../../../comphelper/inc/errcode";
+
 /** Identifies the storage-neutral medium role associated with a document shell. */
 export type SfxMediumKind = "export" | "input" | "primary" | "untitled";
 
@@ -79,6 +81,8 @@ export class SfxMedium {
   /** Native filter options carried by the medium item set. */
   readonly filterOptions?: string;
   private open = true;
+  private m_eError = new ErrCodeMsg();
+  private m_eWarningError = new ErrCodeMsg();
 
   /** Creates one explicit medium identity. @param input - Validated medium route. @returns Nothing. */
   public constructor(input: SfxMediumInput) {
@@ -100,6 +104,37 @@ export class SfxMedium {
     if (input.filterId !== undefined) this.filterId = input.filterId;
     if (input.filterOptions !== undefined) this.filterOptions = input.filterOptions;
     if (input.mediaType !== undefined) this.mediaType = input.mediaType;
+  }
+
+  /** Keeps the first medium diagnostic, allowing an error to replace a warning. @param error - Source diagnostic. @returns Nothing. */
+  public SetError(error: ErrCodeMsg): void {
+    if (!this.m_eError.IsSet() || (this.m_eError.IsWarning() && error.IsError()))
+      this.m_eError = error;
+  }
+
+  /** Returns the original medium diagnostic. @returns Retained diagnostic. */
+  public GetErrorCode(): ErrCodeMsg {
+    return this.m_eError;
+  }
+
+  /** Projects the medium diagnostic without warnings. @returns Error or zero. */
+  public GetErrorIgnoreWarning(): ErrCodeMsg {
+    return this.GetErrorCode().IgnoreWarning();
+  }
+
+  /** Returns the warning accepted by the outer load operation. @returns Retained load warning. */
+  public GetWarningError(): ErrCodeMsg {
+    return this.m_eWarningError;
+  }
+
+  /** Stores the source load warning separately from transient conversion errors. @param warning - Accepted warning. @returns Nothing. */
+  public SetWarningError(warning: ErrCodeMsg): void {
+    this.m_eWarningError = warning;
+  }
+
+  /** Clears the medium's diagnostic. @returns Nothing. */
+  public ResetError(): void {
+    this.m_eError = new ErrCodeMsg();
   }
 
   /** Returns the current operation record without replacing medium identity. @returns Current operation. */

@@ -101,7 +101,11 @@
       "LANGUAGE_TIBETAN",
       "LANGUAGE_TIGRIGNA_ETHIOPIA",
       "LANGUAGE_NF_SYSTEM_TIME",
-      "LANGUAGE_NF_SYSTEM_DATE"
+      "LANGUAGE_NF_SYSTEM_DATE",
+      "LANGUAGE_ON_THE_FLY_START",
+      "LANGUAGE_ON_THE_FLY_END",
+      "LANGUAGE_ON_THE_FLY_SUB_START",
+      "LANGUAGE_ON_THE_FLY_SUB_END"
     ],
     "preservedResponsibilities": [
       "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
@@ -112,7 +116,8 @@
       "Adds exact original LANGUAGE_* identities used by all scanner keyword-override families and Thai T. The native scanner witness uses unchanged lang.h macro declarations across 52 requested language IDs.",
       "AQF9AG adds pinned Chinese/simplified alias, Japanese and Korean language identities consumed by native-number format tables.",
       "AQF9AG adds only pinned language identities consumed by the original extended locale calendar/numeral map and the original NF_SYSTEM_TIME/DATE substitutions.",
-      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion."
+      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion.",
+      "Original dynamic primary/sublanguage ranges consumed by actual LanguageTag registration."
     ],
     "omittedResponsibilities": [
       "Other named lang.h constants,full LanguageTag/system-language resolution,localized presentation and complete Calc model/UI/ODS remain pending. Task187 separately implements actual ordered mapping tables and private Conversion owners;native ABI/memory machinery is erased."

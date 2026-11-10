@@ -1,0 +1,113 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/udata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/udata.cpp",
+    "localSymbols": [
+      "gCommonDataCache",
+      "gCommonDataCacheInitOnce",
+      "gCommonICUDataArray",
+      "gHaveTriedToLoadCommonData",
+      "udata_cleanup",
+      "findBasename",
+      "DataCacheElement_deleter",
+      "udata_initHashTable",
+      "udata_getHashTable",
+      "udata_findCachedData",
+      "udata_cacheDataItem",
+      "udata_setAppData",
+      "samePathAddress",
+      "pathCompare",
+      "UDataPathIterator",
+      "gDataFileAccess",
+      "narrowBytes",
+      "narrowString",
+      "setCommonICUData",
+      "udata_setCommonData",
+      "openCommonData",
+      "extendICUData",
+      "checkDataItem",
+      "doLoadFromIndividualFiles",
+      "doLoadFromCommonData",
+      "isTimeZoneFile",
+      "doOpenChoice",
+      "udata_open",
+      "udata_openChoice",
+      "udata_setFileAccess"
+    ],
+    "upstreamSymbols": [
+      "DataCacheElement",
+      "gCommonDataCache",
+      "gCommonDataCacheInitOnce",
+      "gCommonICUDataArray",
+      "gHaveTriedToLoadCommonData",
+      "udata_cleanup",
+      "findBasename",
+      "DataCacheElement_deleter",
+      "udata_initHashTable",
+      "udata_getHashTable",
+      "udata_findCachedData",
+      "udata_cacheDataItem",
+      "udata_setAppData",
+      "UDataPathIterator",
+      "gDataFileAccess",
+      "setCommonICUData",
+      "udata_setCommonData",
+      "openCommonData",
+      "extendICUData",
+      "checkDataItem",
+      "doLoadFromIndividualFiles",
+      "doLoadFromCommonData",
+      "isTimeZoneFile",
+      "doOpenChoice",
+      "udata_open",
+      "udata_openChoice",
+      "udata_setFileAccess"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 application-data registration uses actual UHashtable string keys, original basename insertion/normal lookup and full-path duplicate check (CALC-467), copied destination-owned descriptors, original statuses and ordered cleanup. UInitOnce retains source state0/1/2, cached error publication and state-only reset, including mixed-overload stale-error behavior (CALC-468). The existing UnifiedCache singleton now uses original once initialization and registration-before-construction cleanup instead of an ad hoc null check. Original header enums and cleanup library/common order are retained; compile-time array bounds29/8 are folded to avoid ESM header declaration cycles and checked against native declarations. Native comparison includes unchanged udata.cpp/unifiedcache.cpp and observes actual static records plus initialized once fields with private visibility opened only for observation. 92 process-ordered sequences/902 full cache/once/cleanup/hash snapshots match, including all represented live hash slots/keys/descriptor ownership, replacement, rehash, NUL/byte keys, warnings/errors, cleanup callbacks and singleton recreation. ESM exports expose actual internal records/read-only bindings for observation; no source method, allocator, provider or mutex is replaced. Synchronous JS realm storage binds logical mutex/wait boundaries as in the existing UnifiedCache; native concurrency/wait/wakeup/mutex destruction, allocation-failure/free/physical ABI, automatic/full heap/tracing cleanup and a public u_cleanup are not certified or substituted. Source allocation-failure adoption concern CALC-469 is documented without a recovery patch. The original cache checkpoint preceded public loading.",
+      "Original ICU78.3 UDataPathIterator now uses actual CharString fields, borrowed byte pointers and original item-directory precedence, separator/empty-segment iteration, explicit four-byte file matching, package-stub truncation, dat skipping and long suffix joining. putil now owns original data/timezone directory once records, copied NUL storage, status overloads, getter/setter order and represented directory cleanup. Browser processes have no OS environment namespace or installed native archive directory; the original absent-input branches apply, without changing UDATA_DEFAULT_ACCESS or selecting MAP_NONE. 752 sequences/5524 complete initialized snapshots match unchanged udata.cpp/putil.cpp methods and actual statics; native source is compiled without installation-directory defines and the two environment variables are absent in the child. Private visibility only exposes fields for observation; no method, mapper, allocator or provider is substituted. Native allocation failure/free/thread/physical ABI, uninitialized spans, invalidated borrows and unported OS locale/TZ-search cleanup fields are not certified. The directory and path checkpoint preceded integration with the public loader.",
+      "The public ICU loader uses original package and tree naming, individual-file and common-package dispatch, acceptance, sticky statuses and descriptor ownership. UDATA_DEFAULT_ACCESS retains FILES_FIRST. The POSIX mapping contract binds a synchronous host reader at the mapping boundary, with independent managed byte storage per open. The browser has no ambient synchronous filesystem reader. Original native comparisons cover all four policies, named and linked ICU data, package extension, timezone override and status/callback admission. Production OpenOffice package installation and iterator/service consumers remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Native OS mmap, concurrent filesystem changes, allocation failures, and undefined native inputs remain outside the managed host binding. Production OpenOffice package installation and iterator/service consumers remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.ts",
+          "marker": "DataCacheElement"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.native.test.ts",
+          "marker": "retains original app-data process"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.paths.native.test.ts",
+          "marker": "retains original directory"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.open.native.test.ts",
+          "marker": "matches original public open case"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/udata.cpp",
+          "marker": "DataCacheElement"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/udata.cpp",
+          "marker": "UDataPathIterator"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/udata.cpp",
+          "marker": "gDataFileAccess"
+        }
+      ]
+    }
+  }
+}

@@ -8,6 +8,26 @@ import { ScMergeAttr } from "../../../inc/attrib";
 import type { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScColumn } from "../../../inc/column";
 import type { StartListeningContext } from "../../../inc/listenercontext";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { ScSetStringParam } from "../../../inc/stringutil";
+/** Original SetString validates both coordinates and forwards the document convention to the actual column. @param this - Sheet. @param col - Column. @param row - Row. @param tab - Source sheet parameter. @param value - Input. @param parameter - Optional source policy. @returns Whether parsing overwrote the format. */
+export function SetString(
+  this: ScTable,
+  col: number,
+  row: number,
+  tab: number,
+  value: OUStringConstReference,
+  parameter: ScSetStringParam | null = null,
+): boolean {
+  if (!this.GetDoc().ValidColRow(col, row)) return false;
+  return this.CreateColumnIfNotExists(col).SetString(
+    row,
+    tab,
+    value,
+    this.GetDoc().GetAddressConvention(),
+    parameter,
+  );
+}
 
 /** Original table2 StartListeners visits all allocated columns or the source context's selected subset. @param this - Sheet. @param context - Listening context. @param all - Include every formula. @returns Nothing. */
 export function StartListeners(this: ScTable, context: StartListeningContext, all: boolean): void {
@@ -48,10 +68,19 @@ export function GetCellArea(this: ScTable, endCol: [number], endRow: [number]): 
     ) => !column.IsEmptyData(),
   );
 }
-/** Stores an owned EditEngine cell object at a valid position. @param this - Table. @param col - Column. @param row - Row. @param value - Object. @returns Nothing. */
-export function SetEditText(this: ScTable, col: number, row: number, value: EditTextObject): void {
-  if (this["rDocument"].ValidColRow(col, row))
-    this.CreateColumnIfNotExists(col).SetEditText(row, value);
+/** Original owned edit-cell setter destroys rejected arguments and accepts null at valid coordinates. @param this - Table. @param col - Column. @param row - Row. @param value - Transferred nullable object. @returns Whether coordinates are valid. */
+export function SetEditText(
+  this: ScTable,
+  col: number,
+  row: number,
+  value: EditTextObject | null,
+): boolean {
+  if (!this.GetDoc().ValidColRow(col, row)) {
+    value?.dispose();
+    return false;
+  }
+  this.CreateColumnIfNotExists(col).SetEditText(row, value);
+  return true;
 }
 /** Writes a shared string at a valid cell. @param this - Table. @param col - Column. @param row - Row. @param value - Shared string. @returns Nothing. */
 export function SetRawString(

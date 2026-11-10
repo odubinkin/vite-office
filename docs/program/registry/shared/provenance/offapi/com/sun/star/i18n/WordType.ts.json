@@ -5,7 +5,7 @@
     "classification": "upstream-mechanism",
     "status": "mapped",
     "localPath": "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
-    "upstreamPath": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+    "upstreamPath": "offapi/com/sun/star/i18n/WordType.idl",
     "localSymbols": [
       "ANY_WORD",
       "ANYWORD_IGNOREWHITESPACES",
@@ -19,16 +19,21 @@
       "WORD_COUNT"
     ],
     "preservedResponsibilities": [
+      "Original four published short WordType constants retain exact values0..3. No boundary service or word heuristic is supplied.",
       "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
     ],
     "omittedResponsibilities": [
-      "Other UNO word modes, grapheme and line operations, and binary UNO ABI remain outside this Writer dictionary path."
+      "Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
           "marker": "ANY_WORD"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
         },
         {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",

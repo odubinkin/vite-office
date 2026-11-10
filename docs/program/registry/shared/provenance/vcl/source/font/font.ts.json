@@ -78,7 +78,9 @@
       "TaskNF91KY adds original Font copy assignment by sharing existing immutable mpImplFont state while preserving the recipient Font member identity. Later mutations retain independent value behavior;no COW lifetime manager is fabricated. Actual SvxBulletItem SetFont consumes this original assignment operation.",
       "Task6764KT adds source stored Font weight and italic with original WEIGHT_DONTKNOW/ITALIC_NONE defaults, const no-config getters, guarded setters, copy/assignment and represented EqualIgnoreColor participation. Browser metadata records transport both values as an optional complete pair so pre-face records restore actual native defaults; malformed groups fail before mutation. Actual Writer numbering and structured-clone document transport retain nondefault values. MaybeAskConfig, physical face selection and popup/style drawing remain pending; no broad parity promotion or native lifetime machinery.",
       "Task6764KT represents original Font outline/shadow,underline/overline,strikeout,relief and emphasis fields with exact ImplFont false/NONE defaults,guarded assignment,immutable native-value copies and represented EqualIgnoreColor comparison. No C++ object lifetime or allocator behavior is emulated. Unrepresented Font language/configuration,device matching and full decoration rendering remain pending.",
-      "RTF font-table prerequisite: complete FontNameAttr shipped fields and native getMapName ordered leading/trailing/exception, first weight/width and all type heuristics now feed Font::GetFamilyTypeMaybeAskConfig/GetPitchMaybeAskConfig. AskConfig preserves normalized/full then shortened lookup, configured-type then heuristic family precedence, fixed-pitch admission, unknown-only heuristic weight/width, copied one-shot lookup flag and source const versus nonconst getter behavior. Font width and config flag remain excluded from equality. Source resources are extracted from pinned VCL.xcu; component configuration-provider/runtime override and physical renderer services remain unported. Compiled unchanged getMapName/helpers/tables over explicit UTF16 carriers match 4095 input/inout cases under ASan/UBSan; no full SAL, AskConfig or VCL ABI claim. WRITER189-192 preserve source anomalies. No module/filter parity promotion."
+      "RTF font-table prerequisite: complete FontNameAttr shipped fields and native getMapName ordered leading/trailing/exception, first weight/width and all type heuristics now feed Font::GetFamilyTypeMaybeAskConfig/GetPitchMaybeAskConfig. AskConfig preserves normalized/full then shortened lookup, configured-type then heuristic family precedence, fixed-pitch admission, unknown-only heuristic weight/width, copied one-shot lookup flag and source const versus nonconst getter behavior. Font width and config flag remain excluded from equality. Source resources are extracted from pinned VCL.xcu; component configuration-provider/runtime override and physical renderer services remain unported. Compiled unchanged getMapName/helpers/tables over explicit UTF16 carriers match 4095 input/inout cases under ASan/UBSan; no full SAL, AskConfig or VCL ABI claim. WRITER189-192 preserve source anomalies. No module/filter parity promotion.",
+      "Original stored LanguageTag now supplies Font language UNKNOWN default, guarded SetLanguage/GetLanguage(false) and LanguageTag equality in represented-field comparison. Existing immutable metadata value ownership is retained; remaining native Font fields/COW ABI/rendering are not certified.",
+      "Original stored orientation/vertical, FontSpecific default kerning flags, signed16 fixed spacing, word-line flag, optical-sizing flag and ordered aggregate Variation vector now participate in represented value comparison and guarded setters. Axes are copied, without sorting/deduplication or NaN normalization. Original cow_wrapper shared-object shortcut is retained by Font.Equals, including shared NaN vectors; independent NaN vectors remain unequal. Native physical COW/reference validity and unrepresented font fields/device rendering remain uncertified."
     ],
     "status": "mapped",
     "upstreamPath": "vcl/source/font/font.cxx",
@@ -86,7 +88,17 @@
       "Font::Font",
       "Font::SetFamilyName",
       "Font::GetFamilyName",
-      "Font::operator="
+      "Font::operator=",
+      "Font::SetLanguage",
+      "Font::GetLanguage",
+      "Font::SetOrientation",
+      "Font::SetVertical",
+      "Font::SetKerning",
+      "Font::SetFixKerning",
+      "Font::SetWordLineMode",
+      "Font::SetOpticalSizing",
+      "Font::SetVariations",
+      "Font::operator=="
     ]
   },
   "legacyOrder": 289

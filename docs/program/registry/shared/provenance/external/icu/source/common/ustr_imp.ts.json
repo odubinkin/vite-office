@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/ustr_imp.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/ustr_imp.h",
+    "localSymbols": [
+      "ustr_hashCharsN"
+    ],
+    "upstreamSymbols": [
+      "ustr_hashCharsN"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 application-data registration uses actual UHashtable string keys, original basename insertion/normal lookup and full-path duplicate check (CALC-467), copied destination-owned descriptors, original statuses and ordered cleanup. UInitOnce retains source state0/1/2, cached error publication and state-only reset, including mixed-overload stale-error behavior (CALC-468). The existing UnifiedCache singleton now uses original once initialization and registration-before-construction cleanup instead of an ad hoc null check. Original header enums and cleanup library/common order are retained; compile-time array bounds29/8 are folded to avoid ESM header declaration cycles and checked against native declarations. Native comparison includes unchanged udata.cpp/unifiedcache.cpp and observes actual static records plus initialized once fields with private visibility opened only for observation. 92 process-ordered sequences/902 full cache/once/cleanup/hash snapshots match, including all represented live hash slots/keys/descriptor ownership, replacement, rehash, NUL/byte keys, warnings/errors, cleanup callbacks and singleton recreation. ESM exports expose actual internal records/read-only bindings for observation; no source method, allocator, provider or mutex is replaced. Synchronous JS realm storage binds logical mutex/wait boundaries as in the existing UnifiedCache; native concurrency/wait/wakeup/mutex destruction, allocation-failure/free/physical ABI, automatic/full heap/tracing cleanup and a public u_cleanup are not certified or substituted. Source allocation-failure adoption concern CALC-469 is documented without a recovery patch. Real udata_open/path/file orchestration, production package/iterator/engine/service installation and final CSV integration remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Native thread/condition/mutex/allocator/free/physical ABI and automatic/full heap/tracing cleanup are outside the managed binding. udata_open and actual package/iterator/engine/service installation remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ustr_imp.ts",
+          "marker": "ustr_hashCharsN"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udata.native.test.ts",
+          "marker": "retains original app-data process"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ustr_imp.h",
+          "marker": "ustr_hashCharsN"
+        }
+      ]
+    }
+  }
+}

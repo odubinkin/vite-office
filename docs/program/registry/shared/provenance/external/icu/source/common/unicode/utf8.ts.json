@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/utf8.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/utf8.h",
+    "localSymbols": [
+      "U8_LEAD3_T1_BITS",
+      "U8_LEAD4_T1_BITS",
+      "U8_IS_SINGLE",
+      "U8_IS_VALID_LEAD3_AND_T1",
+      "U8_IS_VALID_LEAD4_AND_T1"
+    ],
+    "upstreamSymbols": [
+      "U8_LEAD3_T1_BITS",
+      "U8_LEAD4_T1_BITS",
+      "U8_IS_SINGLE",
+      "U8_IS_VALID_LEAD3_AND_T1",
+      "U8_IS_VALID_LEAD4_AND_T1"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 utf8_nextCharSafeBody preserves strict modes, noncharacter/surrogate rules and partial-byte consumption. Original u_strFromUTF8WithSub/u_strFromUTF8 retain the optimized counted loop, NUL loop, partial supplementary writes, full preflight, substitution policy, untouched output arguments on failure and source termination/status order. Native comparison covers 402855 complete calls, including 393216 live pair-matrix calls and 9639 retained scanner/converter/termination calls. This is the required UTF8 rule-string prerequisite; complete UnicodeString writable-buffer allocation, RBBIDataWrapper/iterator construction and word/title/service installation remain pending. No host decoder or alternate conversion policy is supplied. Unreadable native spans, overlapping storage and allocator/ABI remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete writable UnicodeString ownership and RBBIDataWrapper/iterator/service construction, other UTF conversion APIs, allocator/ABI, unreadable spans and overlapping storage remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/utf8.ts",
+          "marker": "U8_LEAD3_T1_BITS"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ustrtrns.native.test.ts",
+          "marker": "retains original ICU"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/utf8.h",
+          "marker": "U8_LEAD3_T1_BITS"
+        }
+      ]
+    }
+  }
+}

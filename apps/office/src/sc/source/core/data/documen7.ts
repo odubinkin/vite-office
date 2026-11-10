@@ -12,7 +12,6 @@ import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScCloneFlags } from "../../../inc/global";
 import { DelayDeletingBroadcasters } from "../../../inc/scopetools";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
@@ -36,9 +35,7 @@ import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { CellType, HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
-import { MapUnit } from "../../../../tools/inc/mapunit";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScStringUtil, ScSetStringParam } from "../../../inc/stringutil";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -903,43 +900,26 @@ export function AddCondFormatData(
   this.FetchTable(tab)?.AddCondFormatData(ranges, index);
 }
 
-/** Original literal SetTextCell routes multiline content into an EditEngine object. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
+/** Original SetTextCell uses the document editor for multiline content and text-input policy for single-line content. @param this - Actual document. @param position - Cell. @param value - Literal text. @param parameter - Optional original input policy. @returns Nothing. */
 export function SetTextCell(
   this: ScDocument,
   position: ScAddress,
   value: OUStringConstReference,
+  parameter: ScSetStringParam | null = null,
 ): void {
   const table = this.FetchTable(position.Tab());
-  if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
-  const literal = text(value);
-  if (/[\r\n]/.test(literal)) {
-    const edit = new EditTextObjectImpl(
-      null,
-      MapUnit.Map100thMM,
-      false,
-      TextRotation.NONE,
-      SvtScriptType.LATIN,
-    );
-    for (const line of literal.split(/\r\n|\r|\n/)) {
-      const paragraph = unicode(line);
-      try {
-        edit.CreateAndInsertContent().SetText(paragraph);
-      } finally {
-        paragraph.dispose();
-      }
-    }
-    table.SetEditText(position.Col(), position.Row(), edit);
+  if (!table) return;
+  if (ScStringUtil.isMultiline(value)) {
+    const engine = this.GetEditEngine();
+    engine.SetTextCurrentDefaults(value);
+    table.SetEditText(position.Col(), position.Row(), engine.CreateTextObject());
     return;
   }
-  if (!value.getLength()) {
-    table.SetEmptyCell(position.Col(), position.Row());
-    return;
-  }
-  const shared = this["mpCellStringPool"].intern(value);
-  try {
-    table.SetRawString(position.Col(), position.Row(), shared);
-  } finally {
-    shared.dispose();
+  if (parameter) table.SetString(position.Col(), position.Row(), position.Tab(), value, parameter);
+  else {
+    const textInput = new ScSetStringParam();
+    textInput.setTextInput();
+    table.SetString(position.Col(), position.Row(), position.Tab(), value, textInput);
   }
 }
 

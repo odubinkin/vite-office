@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/editstat.ts",
+    "upstreamPath": "include/editeng/editstat.hxx",
+    "localSymbols": [
+      "EEControlBits",
+      "EVControlBits",
+      "EditStatusFlags",
+      "SpellCallbackCommand",
+      "SetFlags",
+      "EditStatus"
+    ],
+    "upstreamSymbols": [
+      "EEControlBits",
+      "EVControlBits",
+      "EditStatusFlags",
+      "SpellCallbackCommand",
+      "SetFlags",
+      "EditStatus"
+    ],
+    "preservedResponsibilities": [
+      "Original independent flag families, mutable protected status/control word lvalues, zero defaults, value copies/assignment and status-only Clear. Original EV SetFlags mutations retain source bit operations without a separate control policy store. Engine constructor control defaults are not substituted for the value-owner NONE default. SpellCallbackInfo is not supplied by a placeholder."
+    ],
+    "omittedResponsibilities": [
+      "Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/editstat.ts",
+          "marker": "EEControlBits"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-edit-status.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/editstat.hxx",
+          "marker": "EEControlBits"
+        }
+      ]
+    }
+  }
+}

@@ -15,6 +15,8 @@ import {
   XMultiServiceFactory,
   getCppuType as factoryType,
 } from "../../../../../udkapi/com/sun/star/lang/XMultiServiceFactory";
+import type { XMultiComponentFactory } from "../../../../../udkapi/com/sun/star/lang/XMultiComponentFactory";
+import type { rtl_uStringSlot } from "../../../../../sal/inc/rtl/ustring.h";
 import type { XComponent } from "../../../../../udkapi/com/sun/star/lang/XComponent";
 import type { PropertyValue } from "../../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type { Reference } from "../../../../../cppu/inc/com/sun/star/uno/Reference";
@@ -143,6 +145,9 @@ it("retains source component/descriptor/factory argument and result types withou
     Reference<XInterface>
   >();
   expectTypeOf<ReturnType<XMultiServiceFactory["getAvailableServiceNames"]>>().toEqualTypeOf<
-    Sequence<OUString>
+    Sequence<rtl_uStringSlot>
+  >();
+  expectTypeOf<ReturnType<XMultiServiceFactory["getAvailableServiceNames"]>>().toEqualTypeOf<
+    ReturnType<XMultiComponentFactory["getAvailableServiceNames"]>
   >();
 });

@@ -1,11 +1,12 @@
-/** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+/** @fileoverview Original represented column storage, parsed input, owned edit/formula cells and broadcasting member groups; full construction, compute caches and note/sparkline services remain incomplete. */
+import { SetDirtyOnRangeHandler } from "./column.dirty";
 import {
   SetElementsToEmpty1,
   ParseBlock,
   ProcessBlock,
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
-import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
+import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import * as column2 from "./column2";
 import * as column3 from "./column3";
 import * as columnInput from "./column3.input";
@@ -684,7 +685,7 @@ export class ScColumn extends ScColumnData {
     if (broadcast) this.BroadcastNewCell(row);
   }
   /** Inserts the actual owned edit object into the native edit-text block. @param row - Row. @param value - Transferred owner. @returns Nothing. */
-  SetEditText(row: number, value: EditTextObject): void {
+  SetEditText(row: number, value: EditTextObject | null): void {
     column3.SetEditText.call(this, row, value);
   }
   /** Borrows a stored edit object. @param row - Row. @returns Owner or null. */
@@ -794,6 +795,20 @@ export class ScColumn extends ScColumnData {
   /** Original string parser operating on an actual owning cell value. @param args - Native cell,row,tab,string,convention and policy. @returns Whether number format changed. */
   ParseString(...args: Parameters<typeof columnInput.ParseString>): boolean {
     return columnInput.ParseString.apply(this, args);
+  }
+  /** Original parse-and-adopt string setter. @param args - Source row, sheet, text, convention and optional policy. @returns Number-format overwrite flag. */
+  SetString(...args: Parameters<typeof columnInput.SetString>): boolean {
+    return columnInput.SetString.apply(this, args);
+  }
+  /** Original content-only deletion retains text metadata. @param row - Source-valid row. @param broadcast - Source default true. @returns Nothing. */
+  DeleteContent(row: number, broadcast = true): void {
+    columnInput.DeleteContent.call(this, row, broadcast);
+  }
+  /** Original single-cell formula-group listener teardown. @param args - Context, row and optional boundary output. @returns Nothing. */
+  EndListeningIntersectedGroup(
+    ...args: Parameters<typeof column4.EndListeningIntersectedGroup>
+  ): void {
+    column4.EndListeningIntersectedGroup.apply(this, args);
   }
   /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
   GetCellValue(row: number): ScRefCellValue {
@@ -941,29 +956,6 @@ export class ScColumn extends ScColumnData {
     this.maCellTextAttrs.set_empty(row, row);
     this.StartListeningUnshared(rows);
     this.Broadcast(row);
-  }
-}
-
-/** Original SetDirtyOnRangeHandler owns compact non-formula changed spans. */
-class SetDirtyOnRangeHandler {
-  private readonly maValueRanges: SingleColumnSpanSet;
-  /** Borrows the actual column and limits. @param column - Native owner. @returns Handler. */
-  constructor(private readonly column: ScColumn) {
-    this.maValueRanges = new SingleColumnSpanSet(column.GetDoc().GetSheetLimits());
-  }
-  /** Native non-formula dispatch excludes empty blocks. @param type - Store type. @param first - First row. @param length - Count. @returns Nothing. */
-  other(type: number, first: number, length: number): void {
-    if (type !== element_type_empty) this.maValueRanges.set(first, first + length - 1, true);
-  }
-  /** Transfers compact native true spans for the original post-insert broadcast. @param spans - Document operation owner. @returns Nothing. */
-  fillBroadcastSpans(spans: ColumnSpanSet): void {
-    spans.set(
-      this.column.GetDoc(),
-      this.column.GetTab(),
-      this.column.GetCol(),
-      this.maValueRanges,
-      true,
-    );
   }
 }
 

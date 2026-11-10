@@ -6,6 +6,7 @@ import {
   type rtl_TextEncoding,
 } from "../../../sal/inc/rtl/textenc";
 import { OStringToOUString, OUStringToOString } from "../../../sal/rtl/ustring-convert";
+import { detectEncoding } from "./stream.encoding";
 
 /** Source stream encoding, byte position and line-reading contract used by Calc's text filter. */
 export class SvStream {
@@ -29,6 +30,15 @@ export class SvStream {
   /** Original stream encoding assignment after the source's BOM probe.  @param encoding - Encoding. @returns Nothing. */
   SetStreamEncoding(encoding: rtl_TextEncoding): void {
     this.encoding = encoding;
+  }
+
+  /** Source counted byte read and short-read EOF for the memory stream. @param output - Destination byte span. @returns Bytes copied. */
+  ReadBytes(output: Uint8Array): number {
+    const available = this.bytes.subarray(this.position, this.position + output.length);
+    output.set(available);
+    this.position += available.length;
+    if (available.length < output.length) this.endOfFile = true;
+    return available.length;
   }
 
   /** Source WriteBytes for the in-memory output stream. @param bytes - Raw output bytes. @returns Written byte count. */
@@ -148,6 +158,22 @@ export class SvStream {
       return;
     }
     this.position = oldPosition;
+  }
+
+  /** Original encoding detection consumes a known BOM or rewinds after a bounded ICU sample. @param maxBytes - Source sample bound, default 4096. @returns Nothing. */
+  DetectEncoding(maxBytes = 4096): void {
+    const original = this.Tell();
+    this.SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW);
+    this.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
+    if (!this.good() || this.GetStreamEncoding() !== RTL_TEXTENCODING_DONTKNOW) return;
+    const bytes = new Uint8Array(maxBytes);
+    const length = this.ReadBytes(bytes);
+    this.Seek(original);
+    const detected = detectEncoding(bytes, length);
+    if (detected) {
+      this.SetStreamEncoding(detected.encoding);
+      if (detected.encoding === RTL_TEXTENCODING_UNICODE) this.bigEndian = detected.bigEndian;
+    }
   }
 
   /** Native Tell byte offset. @returns Offset. */

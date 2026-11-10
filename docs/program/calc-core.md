@@ -4002,3 +4002,552 @@ All9cold/order/hot original interface streams match and the7interface owners
 reach raw100 coverage. Wrapped payload and final task validation are in progress.
 Concrete property-value container/WeakImplHelper/Sfx model/view-data/settings.xml
 services and full native ABI/thread/resource/consumer QA remain unported.
+
+## Public UNO mapping and invoked context construction
+
+The public `uno::Mapping` wrapper now preserves the original resolved-pointer
+and value ownership operations and interface-description/Type forwarding
+overloads. It remains distinct from the private mapping owner in `lbmap.cxx`.
+The `.hxx.ts` module discriminator preserves the original C header versus C++
+inline wrapper boundary. Complete normal and ASan/UBSan C++ streams cover
+ownership, direct mapping, unresolved Type output retention and callback
+exceptions. The last path preserves the skipped description release recorded
+as CALC-458.
+
+The original `s_createComponentContext_v` callee consumes the mapped delegate,
+creates the actual context for positive entry counts, attaches its actual
+disposal forwarder, catches UNO construction/listener exceptions and maps the
+result through the real public wrapper. Tests verify ownership, count branches,
+delegated disposal, output publication and exception boundaries. Full native
+context-owner differential and the upstream Embind `BridgeTest` consumer remain
+unverified. Environment/name lookup constructors, current/source environment
+orchestration and application ServiceManager installation are still incomplete;
+this is not a public context factory or full CSV readiness claim.
+
+## Public UNO environment value ownership
+
+The public `uno::Environment` resolved-pointer/default/copy/move ownership
+family now uses the existing real C environment callbacks. Unlike Mapping,
+pointer and copy assignment skip identical pointers. Clear releases before
+publishing null, and self-move releases and clears. `getTypeName` returns an
+owned exact Unicode/NUL descriptor; `getContext` returns the original borrowed
+pointer without assigning an address or converting its identity.
+
+Complete normal and ASan/UBSan native ownership/accessor streams use the
+original default environment's strong/weak callbacks and descriptor destruction.
+The `.hxx.ts` discriminator preserves the C record versus C++ inline wrapper
+module boundary. Descriptor/current lookup, invocation/purpose-stack methods,
+actual environment factory/binding installation and the public application
+bootstrap remain incomplete. No full CSV readiness is inferred from these
+value-owner checks.
+
+## Parsed string input and cell-value transfer
+
+`ScDocument::SetString` now follows the original table/column path: tear down an
+intersected shared formula group's listeners, parse once, then release the
+actual cell value with its selected listening mode. Single-line `SetTextCell`
+uses the supplied policy or original `setTextInput` defaults, including the
+Text-format rule for numeric-looking literals. Content-only empty input keeps
+the original text attributes.
+
+Cell-value string commit/release uses `SetString` with text policy, preserving
+newline-bearing string variants instead of promoting them through `SetTextCell`.
+Edit release transfers the exact object. Rejected document/table edit arguments
+are destroyed, and null edit arguments retain the source valid-coordinate
+no-op behavior. Tests use actual stores, formats, formulas and listeners.
+The existing formula-group compute cache remains unrepresented; no replacement
+cache callback is supplied. Original multiline EditEngine construction and
+full native module/cache/allocator/thread QA remain incomplete or unverified.
+
+## Date-field native-number parameters
+
+The original SvNumberformat date-keyword transliteration overloads now select
+arguments from the actual current-language keyword table. Matching retains
+source case, comma/space boundaries, first accepted assignment and untrimmed
+UTF16 arguments. Modifier language still controls the native-number Locale.
+The original free buffer implementation also retains the buffer until a
+conversion result returns successfully. Focused tests execute actual formatter
+and NativeNumberWrapper owners; argument observation copies borrowed values
+before their source temporaries are released.
+
+This supplies the original field-conversion boundary. It does not enable
+NatNum12 date output: original NumberText/casing/word service installation and
+spellout call placement remain pending. No complete native module claim.
+
+## Original ICU binary trie loading for word rules
+
+The consumed ICU UCPTrie module now includes original binary construction. It
+borrows the actual aligned serialized storage, validates the original signature,
+options, requested type/width and sizes, and preserves status/output precedence.
+The native witness uses ICU's mutable trie builder and serializer, with both
+trie types and all value widths. It directly compares 6,684,684 scalar values
+and records original descriptor/error observations; browser unit tests retain
+those fixtures and shared-storage checks.
+
+This prepares the original RBBI data dependency required by LibreOffice's custom
+word rules. Rule-data wrappers, boundary caches, dictionary engines and title
+service/bootstrap remain pending. Managed descriptor allocation does not claim
+native OOM/free ABI parity. No segmentation heuristic or substitute service is
+introduced.
+
+## Original forward rule boundaries
+
+The ICU forward RBBI method now consumes original compiled state tables and
+frozen tries. It retains source acceptance/lookahead ordering, dictionary counts,
+status/position/end fields and forced progress. Original UText native-index and
+forward codepoint operations, plus UChars access, retain explicit/NUL lengths,
+deferred 32-unit scanning and surrogate boundaries. No public iterator/provider
+factory is substituted: full construction, backward/public caches, dictionaries
+and the LibreOffice word/title/service callers remain pending.
+
+A native witness uses actual ICU libraries and compiles eight original
+LibreOffice rule files, plus lookahead and 16-bit-table cases. A visibility-only
+header token permits calling the original private method; native bodies and
+providers are unchanged. It matches 2,450 forward states and 1,220 UText states.
+Fixtures encode UTF16 as code-unit arrays, preserving lone surrogates through
+the JSON import path. No complete allocator/ABI or CSV readiness claim.
+
+## Safe reverse rule scans and cache-consumed text queries
+
+The original private `handleSafePrevious` now uses the native reverse table
+and frozen trie. It returns a safe restart point while retaining the iterator's
+position/status/end/dictionary fields. This point is an input to the original
+boundary cache, whose public behavior remains pending.
+
+Original UText current/backward queries, previous-native-index lookup and
+provider length operations retain surrogate handling, transient/restored cursor
+operations and deferred NUL-length scanning. Native comparison adds 2,450 safe
+reverse observations and extends all 1,220 text sequences while retaining the
+existing forward observations. No alternate word-boundary algorithm is added.
+Full data/provider/iterator construction, caches, dictionary engines and the
+LibreOffice word/title/service callers remain incomplete.
+
+
+### Original RBBI boundary caches and UVector32
+
+The source-owned `UVector32`, `BreakCache` and `DictionaryCache` operational
+methods now retain the original storage/status/cursor behavior. Cache filling
+uses the source thresholds (15 near, 30 backup, four native units for the
+single-codepoint check, six readahead/eviction entries) and the 128-entry ring.
+Original engine and locale calls remain mandatory iterator-owner contracts;
+no substitute engine or iterator factory is installed.
+
+The original ICU78.3 native witness compares 82 vector states and 1002 logical
+cache/consumed-owner snapshots. It checks full live logical buffers before
+writing compact replay fingerprints. Native engines prepare dictionary inputs;
+local lookup/refill tests consume those observations without fake engine
+callbacks. Local dictionary population also covers non-dictionary input and
+the short-range return. This does not certify concrete local dictionary engines
+or general dictionary population integration.
+
+Concrete engines, public iterator/data/provider construction and lifecycle,
+word/title/UNO installation, debug dumps, native allocator/RTTI/thread ABI and
+the remaining NatNum12 wiring are still pending. These cache results do not
+establish complete native CSV support. Source quirks CALC-461 through CALC-465
+are retained and documented separately.
+
+
+### Original ICU UTF8 conversion for binary rule ownership
+
+The binary rule wrapper constructs its rule string with
+`UnicodeString::fromUTF8(StringPiece(...))`. Its required original scanner and
+conversion APIs are now present: `utf8_nextCharSafeBody`,
+`u_strFromUTF8WithSub`, `u_strFromUTF8` and `u_terminateUChars`, together with the
+original lead/trail bit vectors and validity macros. The port retains the
+counted fast loop, NUL loop, partial supplementary write, preflight, source
+substitution/error policy and output/status publication order. It supplies no
+host decoder or alternative malformed-input policy.
+
+The original ICU78.3 native witness compares 402855 complete calls: 393216 live
+pair-matrix calls plus 9639 retained scanner/converter/termination calls. Replay
+compares every initialized destination cell, return pointer identity/nullness,
+output lengths, substitution counts, status and scanner cursor. Inputs cover
+counted and NUL spans, strict/lenient/obsolete scanner modes, noncharacters,
+surrogates, invalid/truncated sequences, supplementary substitutions, incoming
+warnings/errors, optional outputs, argument guards and source termination.
+
+The original writable UnicodeString buffer protocol and allocation, complete
+RBBIDataWrapper/iterator construction, concrete engines and word/title/UNO
+installation are still pending. This prerequisite does not substitute for a
+binary-rule owner or complete native CSV support. Native allocator/ABI and
+unreadable spans, overlapping storage are outside the witness.
+
+
+### CSV closure audit and actual raw binary-rule owner
+
+The CSV paths are traced from the pinned source callers and the browser file
+workflow.
+
+| CSV path | Current source boundary | Evidence or open work |
+| --- | --- | --- |
+| Displayed numbers | `ScDocShell` calls `ScCellFormat::GetString`. The formatter and actual process UNO services supply NatNum12 through the numeric, logical, date and time paths. | Focused displayed export covers spellout, currency and ordinal dates, including the original DATE keyword gate. |
+| Capitalize and title | The production process context supplies NumberText, the classifier and registered Unicode and CJK word iterators. The bundled ICU rule data uses the original application-data lookup. | Scoped native ICU witnesses and actual browser service construction cover the consumed call chain. |
+| Quoted and multiline input | `ScDocument` owns a lazy `ScFieldEditEngine` over the original item pool. The literal and standard CSV branches preserve separate predicates and transfer owned objects through `ScDocumentImport::setEditCell`. | Tests inspect stored tab features, blank paragraphs and cached column writes. The text-object metric is Map100thMM. Device layout and Asian layout settings are outside this no-view text path. |
+| Rich-text export | `AsciiSave` loads the object into the same document editor and requests expanded text, as in the pinned implementation. | Export tests cover exact LF and tab bytes and URL, sheet and title field values. Chromium exercises CSV import, browser ODS persistence and CSV download. |
+| Explicit encoding detection | `ScAsciiOptions::ReadFromString` uses `SvStream::DetectEncoding` for token `DETECT`. The source checks BOM, then asks ICU's charset detector to classify up to 4096 bytes. | The original ICU 78.3 recognizers and ordering are verified against 76,524 native inputs and 177,745 ranked matches. Focused shell tests cover BOM-less Windows-1251 and the distinction between absent and present-empty import options. |
+| Detected SAL encodings | The original stream table can select Big5, GB18030 and ISO-2022-CN. | All three use the original SAL converter dispatch in both directions. The native probe compares 1,811,484 decode samples and 2,293,663 defined encode samples for bytes or UTF-16 units, status and consumption. The Calc shell tests auto-detect and export all three. CALC-490 through CALC-493 record source bounds and streaming behavior. |
+| Import diagnostics | `ScDocShell::ConvertFrom` selects row, column, then cell overflow and the outer `SfxBaseModel` load retains the warning on the medium. | Tests exercise the real importer, the packed codes, replacement by a later open, and the original invalid numbered sheet export error. |
+
+Fresh UnicodeString::fromUTF8 needs an owned converted value in the existing
+managed UTF16 storage binding. It does not require exporting a replacement
+public writable-buffer/alias/allocator API. The real counted/default/null
+StringPiece, original ICU converter and source working capacity now produce
+that value. Native comparison covers all 65536 byte pairs and 213 retained
+counted/null/long value cases. This narrows an incorrectly assumed prerequisite,
+not the required CSV behavior or the original service/data-loading path.
+
+The actual RBBIDataHeader and raw owning/borrowed RBBIDataWrapper constructors
+now bind original header/table/trie/status views and owned source strings.
+Initialization/error/version/width order, pointer/full-byte equality, signed
+hash and reference transitions remain source-defined. 189 complete native
+traces compare all represented initialized fields and arrays, including an
+embedded allocation, malformed header/trie, accepted minor version, 32-bit trie
+rejection and failed-init counter behavior (CALC-466). Full rows compare live;
+replay retains SHA256 rather than duplicating large immutable table rows.
+Native visibility is exposed only to observe private fields. Native scratch
+cleanup occurs after all observations and is not a source-method replacement.
+
+The UDataMemory constructor/loader is still required and unimplemented here;
+no raw-data substitute is installed in its production path. Public iterator,
+concrete engines and service installation remain pending. Managed raw-data
+release drops owned references without claiming native allocator/COW/thread/
+physical ABI or defined access after final release. No CSV completion or broad
+module parity is promoted by this prerequisite block.
+
+
+### Actual UDataMemory descriptor and data-handle rule construction
+
+Original `udatamem.cpp` now owns descriptor initialization, assignment preserving
+its destination heap flag, status-guarded creation, normalization, setters,
+raw/payload/known-length queries and close. Original binary `DataHeader` and
+`UDataInfo` views remain separate header owners. Size queries retain the source
+raw endian-byte comparison and swap rule; normalization checks only the first
+magic and otherwise advances one double, without a signature search.
+
+`RBBIDataWrapper(UDataMemory*, ...)` now consumes that actual descriptor. It uses
+the original unswapped header-size field and selective endian/charset/format/
+major-version checks. It does not introduce checks for the generic magic,
+info size, UChar size or data version. Adoption follows raw initialization even
+when it reports an error. Final release closes the adopted descriptor; existing
+failed-init reference behavior (CALC-466) remains unchanged.
+
+The genuine ICU78.3 comparison matches 196608 complete header rows and 743 full
+initialized descriptor/constructor traces, including native POSIX file mapping
+and close, borrowed/heap descriptors, alignment prefixes, swapped and invalid
+endian markers, negative/unknown lengths, warnings/errors and malformed rules.
+Full rows compare live; replay stores full-row fingerprints. The native mapper
+clears its output descriptor before mapping, including its heap flag; the test
+projection retains this original preparation. No local file mapper is supplied.
+Managed close drops owned byte references and follows native pointer clearing;
+physical OS munmap, allocation failure, thread/physical ABI and access after
+heap close are outside this binding.
+
+This completes the descriptor and rule-owner constructor prerequisite, not
+`udata_open` or application-data/container lookup. Original TOC formats and
+lookup, public iterator/provider construction, concrete dictionary engines,
+word/title and production service installation, NatNum12 output wiring,
+multiline EditEngine import and final CSV acceptance remain required. No broad
+parity or complete CSV readiness is inferred from the helper observations.
+
+
+### Original common-data TOC formats and dispatch
+
+`ucmndata` now retains both original table formats, independent prefix binary
+searches, first/last priming, unsigned-byte comparisons, count/length output
+rules, checker dispatch installation and failure close. It does not sort input
+entries or add size/content/status guards absent from the source. A lookup miss
+leaves length untouched; callbacks ignore incoming errors; the last offset
+entry and every pointer entry have unknown length. Null TOCs retain the source
+header-return fallback without changing length.
+
+The real LibreOffice `CustomTarget_breakiterator.mk` uses `gencmn -S`, producing
+`ToCP`, not `CmnD`. Original `genbrk`, `genccode` and `gencmn` now build the eight
+pinned LibreOffice rules into both actual native formats for comparison. The
+static pointer table references original generated symbols with their alignment
+double prefix. In ESM, direct name/data references bind those relocated pointer
+fields at exact byte addresses. `DataHeader` retains a platform relocation map;
+normalization preserves it when advancing eight bytes. This is managed pointer
+storage, not a replacement table provider or a conversion to offset tables.
+Raw pointer ABI and unreadable/unbound pointer spans are not certified.
+
+1938 complete native checker/dispatch/lookup traces match, including all original
+names and their prefixes, misses, NUL tails, non-ASCII query bytes, incoming
+warnings/errors, null/empty/one-entry/unsorted tables, relocation offsets and
+negative lengths. The binary generator emits a 144-byte copyright-bearing
+header for this CmnD package; the owner reads its actual size. The test harness
+initially assumed 32 and was corrected using that original header. Production
+size queries were already source-defined.
+
+`udata_setAppData` caching, `udata_open` orchestration and actual application
+package installation remain incomplete. These real table functions do not
+replace those callers. Iterator/provider/engine construction, word/title and
+production services, NatNum12 output, multiline import and final CSV acceptance
+remain mandatory; no complete CSV or broad semantic parity is claimed.
+
+The original public application-data API also confirms the full-path versus
+basename duplicate-key behavior documented as CALC-467. Native statuses
+0,0,-127 are retained as native-only observations, not evidence of a local
+application-cache implementation. The later cache port must preserve this
+lookup/insertion asymmetry.
+
+The common-data checker binds the table address without reading its pointer
+entries. Empty pointer tables can therefore be validated, counted and searched
+from raw bytes with no relocation map. Nonempty tables can also be validated
+and counted while their entry pointers remain opaque. Entry relocations are
+required only when the original lookup dereferences an actual entry. The native
+witness includes both cases; no eager binding requirement is imposed.
+
+
+### Original application-data cache, once records and ordered cleanup
+
+`udata_setAppData` now follows the actual descriptor/checker/cache path. The
+cache uses the original UHashtable, string-byte hash/comparison, copied owned
+descriptors and keys, basename lookup/insertion and full-path duplicate lookup.
+It retains the native warning/error and replacement behavior (CALC-467), without
+an extra Map cache, image-validation shortcut or replacement loader.
+
+Consumed `UInitOnce` plain/status inline overloads and pre/post states retain
+zero/one/two publication, cached failures, warning behavior and state-only reset.
+CALC-468 records the original mixed-overload stale error. Cleanup declarations
+keep original enum order; the real registry dispatches libraries before common
+callbacks and clears slots after calls. Native compile-time bounds29/8 are
+folded in ESM to avoid reading a header enum during its declaration cycle.
+No no-op lock API or replacement public u_cleanup is supplied. Synchronous
+realm execution binds logical synchronization, as for existing UnifiedCache;
+native mutex/wait/wakeup/thread/allocator/free/physical ABI and full automatic
+heap/tracing cleanup are outside this evidence.
+
+The prior UnifiedCache singleton null check has been replaced by its original
+module-owned UInitOnce and cleanup registration before construction. Actual
+cache cleanup resets its once record before deleting the cache. Physical native
+mutex/condition-variable construction/destruction remains unclaimed.
+
+The original native witness includes unchanged udata.cpp/unifiedcache.cpp to
+observe their actual static records. Private visibility is opened only for
+initialized once-field observations; no function, allocator, mutex or provider
+is replaced. 92 process-ordered sequences with902 full snapshots match actual
+cache slots/keys/descriptor ownership, replacement/rehash, null/NUL/byte keys,
+statuses, cleanup callback order and singleton recreation. Original reset does
+not clear stored error, so the comparator retains process state across scenario
+cleanup rather than silently resetting that private field. CALC-469 records a
+source-only allocation-failure adoption concern without a recovery change.
+
+Production package installation and udata_open's actual path/file/common-data
+orchestration remain pending. Registration/cache helpers do not replace that
+API. Public iterator/provider/engine construction, word/title/production
+services, NatNum12 output, multiline import and final CSV acceptance remain
+required; no complete native CSV or broad semantic parity is claimed.
+
+The pinned public udata.h sets UDATA_DEFAULT_ACCESS to UDATA_FILES_FIRST.
+Registration does not change that default. The forthcoming open path must
+retain its individual-file attempt before common-data fallback; a cached-data
+shortcut or a switch to packages-only access is not the original algorithm.
+
+### CSV loader byte-string ownership prerequisite
+
+The original ICU78.3 CharString now has its single header-owned byte buffer and
+CPP-defined methods, with the consumed MaybeStackArray byte specialization.
+Counted/NUL constructors, signed-char queries, copy/move/alias transitions,
+original growth hints, writable append-buffer commit, self-append reallocation,
+int64 decimal output, invariant conversion, extraction/termination and POSIX
+separator operations retain source contracts. StringPiece keeps its borrowed
+header fields; its NUL length computation belongs to stringpiece.cpp. Nullable
+zero-count invariant conversion performs no read, as the original does.
+
+The unchanged native library/template comparison matches819 sequences and2416
+complete initialized snapshots. No production allocator/provider is replaced;
+private visibility is opened only to observe fields. CALC-470 records stale
+first-byte behavior after empty piece-copy; CALC-471 records owning orphan's
+length-based capacity output. Both remain unchanged. Native allocation failure,
+physical free/stack/thread ABI, uninitialized tails, moved-from payloads,
+undefined spans and invalidated borrows are outside this managed byte evidence.
+
+This is the actual byte owner needed by udata_open's path iterator, not a
+replacement loader. The original default remains UDATA_FILES_FIRST. Data
+directory initialization and actual path/file/common-data orchestration,
+production package/iterator/engine/service construction, NatNum12 output,
+multiline EditEngine import and final CSV acceptance remain required.
+
+### CSV loader directory ownership and original path iteration
+
+Original putil now owns actual data/timezone directory records, copied NUL
+bytes, initialization/cleanup and getter/setter status order. Browser OS
+environment and native installed-archive directory inputs are absent; the
+original absent-input fallback applies. No file-access flag or mapper is
+changed. The original timezone setter still initializes before replacing the
+value. Cleanup resets once state while retaining its stored error as source.
+Unported OS locale/TZ-search caches are not fabricated.
+
+UDataPathIterator is implemented in its original udata.cpp responsibility over
+actual CharString fields and borrowed byte pointers. Item-directory precedence,
+empty path segments, explicit file matching, package-directory removal, dat
+skipping and long suffix separators retain original order. No JS path parser,
+filename normalization, guessed data directory or replacement file search is
+used. CALC-472 records the source-only null-package/uninitialized-scan concern;
+no workaround or undefined-input parity claim is added.
+
+The unchanged original udata.cpp/putil.cpp witness matches752 sequences and5524
+complete initialized snapshots, including real module statics and byte-owner
+capacity/ownership. Native compilation has no installation-directory defines;
+the child has no ICU_DATA/ICU_TIMEZONE_FILES_DIR, reproducing browser inputs.
+Private visibility only permits observation. Native allocator/free/thread ABI,
+uninitialized spans and invalidated borrows are excluded.
+
+Actual udata_open/file-mapper/common-data orchestration, production package and
+iterator/provider/engine/service installation, NatNum12 output, multiline
+EditEngine import and final CSV acceptance remain required. FILES_FIRST stays
+the original default; this block does not select MAP_NONE or skip file attempts.
+
+### ICU public data opening for break rules
+
+The original public ICU loading path now connects package and tree naming,
+`UDataPathIterator`, individual file mappings, common-data cache and TOC lookup,
+application acceptance, and `UDataMemory` ownership. The original FILES_FIRST
+default, alternate policies, linked empty stub, common package extension and
+timezone directory overrides share the original status flow. CALC-473 through
+CALC-475 record source interactions between file rejection, the file access
+setting and nullable type.
+
+The POSIX mapping boundary receives file bytes through a synchronous host
+reader. A mapping owns independent managed bytes. Browser startup has no ambient
+synchronous filesystem reader. The app can supply linked common data and
+registered application packages through the original public APIs. The
+production OpenOffice rule package and iterator consumers are the next
+integration point for the CSV formatting paths.
+
+### Linked OpenOffice rule data and ICU iterator ownership
+
+The OpenOffice rule package now carries the original generated ToCP table and
+all eight linked rule allocations. The native witness follows the LibreOffice
+make target through genbrk, genccode and gencmn and reads the linked C symbol.
+The browser binds native pointer slots to the actual names and aligned rule
+bytes. Registration and lookup use the public ICU data loader.
+
+The rule iterator owns the actual UDataMemory wrapper, UChars provider and
+boundary caches. The new public operations preserve native index clamping,
+UTF-16 surrogate positioning, cursor and rule status. The UChars binding
+retains the original open, clone and close behavior, including the deep clone
+chunk pointer recorded in CALC-476. The comparison covers 40 traversal
+sequences across all eight rules, with Unicode, embedded NUL and cache refill
+cases. The production iterator still requires the dictionary engine factory
+and the enclosing LibreOffice word service.
+
+### Native dictionary trie matching
+
+The original ICU UTF-16 trie reader and both dictionary matchers now consume
+the serialized trie data reached through a real `UDataMemory` handle. The
+break-engine loader's binary dispatch chooses the native trie format and
+passes ownership to the matcher. Match results include both source indexing
+units and Unicode codepoint lengths, with the native prefix and output
+capacity rules.
+
+The witness compares portable builder output and all five original archive
+dictionaries through the public ICU data loader. CALC-477 and CALC-478 record
+the retained byte transform and supplementary input behavior.
+
+The original break factory now looks up dictionary filenames in the linked
+`brkitr` root by ICU script short name and opens the selected binary file.
+The named tree retains original locale data and cache identity by package
+path and locale. Native gencmn packages the unchanged break resource files,
+including the five dictionaries. The native factory comparison covers 36
+calls across 12 scripts, including scripts without dictionaries. The pinned
+native archive returns `U_MISSING_RESOURCE_ERROR` for the Thai, Lao, Burmese,
+and Khmer LSTM models. The original factory then selects the dictionary
+engine. Concrete break-engine algorithms remain the next integration step.
+
+### Native Southeast Asian dictionary breaks
+
+The ICU dictionary span owner and `PossibleWord` candidate cache now drive
+Thai, Lao, Burmese and Khmer boundary selection. The four constructors use
+the exact UnicodeSet inversion lists exported from the original compiled
+constructors. Thai retains the separate code-point minimum span and suffix
+rules. The source lookahead, native indices, prefix handling and status
+propagation are retained by the dictionary algorithms.
+
+The native comparison includes 390 engine calls and 245 UText code-point
+moves across range limits, combining marks, vector capacity errors and
+unpaired surrogates. CALC-480 and CALC-481 record the retained vector count
+and Thai minimum-span edge cases. CJK normalization and dictionary breaking,
+factory registration and the enclosing LibreOffice service remain pending.
+
+### Native NFKC and CJK dictionary breaks
+
+The original ICU format-5 `nfkc.nrm` data opens through `udata_openChoice`.
+The loaded FAST16 trie and mapping and composition units drive counted
+UTF-16 normalization, normalized-state queries and composition boundaries.
+The NFKC singleton retains the native initialization and cleanup contracts.
+
+The original non-ML CJK engine uses that normalizer to recover native
+indices after expansion and to account for supplementary input. It uses
+the original dictionary costs, Katakana run limits, Japanese extensions
+from the linked `brkitr` resource, and phrase boundary rules. The replay
+compares 712 native engine calls, all 1,114,112 code point values
+including isolated surrogate units, 100,170 normalization conformance
+inputs, and over 4,000 additional normalization sequences. Concrete iterator factory integration and the
+enclosing LibreOffice word and formatter services remain pending.
+
+### Native rule iterator dictionary factory
+
+The concrete rule iterator now uses the original shared ICU engine factory,
+its own borrowed engine stack, and its lowest-priority reject engine.
+Original LSTM resource discovery confirms the absence of model bundles in
+the pinned package and takes the source dictionary path. CALC-482 records
+the reject engine's replacement of its previous script set.
+
+The linked OpenOffice rule witness compares 88 public boundary sequences,
+including dictionary-marked Thai, Lao, Burmese, Khmer and CJK input,
+mixed scripts, and cache refill. It also compares factory engine identity
+and the LSTM model lookup statuses. The enclosing LibreOffice word and
+formatter services remain pending.
+
+### Original LibreOffice Unicode word boundaries
+
+The Unicode word implementation now selects LibreOffice rules through the
+original locale, language, and rule-only cache keys. The locale table
+retains all five LC_MISC values for each of the 284 registered locales and
+returns the original owned string sequence. The stock ICU branch loads
+the original `brkitr` word rule and preserves requested, valid and actual
+locale identities.
+
+The original next, previous and directional boundary method bodies were
+compiled against native ICU with the source-selected rules and counted
+UTF-16 input. The replay covers 2,020 calls over 68 sequences and checks
+the ICU whitespace and alphanumeric data over all code points. CALC-483
+records the lower-level previous-word offset contract. The enclosing
+LibreOffice locale dispatcher and production title service remain pending.
+
+### LibreOffice word dispatch, character classification and NatNum12 modifiers
+
+`BreakIteratorImpl` now uses the component context to resolve locale services,
+including the traditional-Chinese fallback for Hong Kong and Macau. Its
+original bounds checks, directional whitespace selection and Asian-script
+sentinel surround the Unicode word methods. `CharacterClassificationImpl`
+reuses the Unicode default and dispatches through the original ordered locale
+service suffixes.
+
+`cclass_Unicode::toTitle` uses word starts and the original single UTF-16 unit
+case mapping. The tests replay the upstream casing assertions and check the
+typed runtime exception from a multi-unit mapping (CALC-484). The NatNum12
+supplier calls NumberText and the classifier through the process context. It
+retains all four modifier keywords, the English title transformations and the
+original remembered casing locale (CALC-485). Tests exercise the upstream
+English Calc examples through the real component constructors and NumberText
+library, with an explicit test service registry. The next section covers the
+production service installation and Calc formatter call sites.
+
+### Production NatNum12 output in Calc CSV
+
+The browser entrypoint installs the bundled UNO implementations before mounting
+either application. The original CPPU service manager resolves service and
+implementation names, and its actual component context owns the original
+service-manager singleton entry. The browser binds the selected component
+metadata to linked constructors. The native desktop loader and the unconsumed
+registries are outside this browser binding.
+
+The formatter's standard and custom switches call the original output
+producers. Their native number paths now reach NatNum12. DATE applies the
+source per-keyword conversion to the original fields after calendar display
+and year padding. DATETIME uses its existing calendar and clock field paths.
+The source switch's default leaves the result empty. The displayed CSV tests
+exercise numbers, monetary amounts and dates through the production service
+registrations. The multiline edit-engine import path remains open.

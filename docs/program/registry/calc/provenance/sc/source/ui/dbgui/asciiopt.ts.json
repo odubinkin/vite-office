@@ -14,10 +14,11 @@
     ],
     "preservedResponsibilities": [
       "Task AQF9AG maps ScAsciiOptions CSV option parsing to the existing Calc document and file-dialog path. Numeric option tokens use the source o3tl::toInt32 prefix, overflow and narrowing behavior; source defaults, delimiter weighting and surplus-token tolerance are represented. ScImportExport::SetExtOptions copies ScAsciiOptions and its column metadata as the native owned value does. Full formatter-driven date/currency classification, rich edit-text, the native options dialog and the complete text filter remain incomplete and are not claimed as parity.",
-      "Task AQF9AG preserves UTF-16 code-unit separator serialization and forwards DETECT separators to SfxObjectShell::DetectCsvSeparators with the source stream. BOM probing covers the first phase of source encoding detection; ICU charset guessing remains unrepresented."
+      "Task AQF9AG preserves UTF-16 code-unit separator serialization and forwards DETECT separators to SfxObjectShell::DetectCsvSeparators with the source stream. BOM probing covers the first phase of source encoding detection; ICU charset guessing remains unrepresented.",
+      "A present empty option string preserves earlier positional fields while applying the original missing-boolean defaults. The DETECT token invokes the actual source stream encoding detector."
     ],
     "omittedResponsibilities": [
-      "Full LibreOffice text filter, rich edit text, locale formatter, encoding conversion and UI option dialog are not yet ported."
+      "Browser transport chooses whether to supply a filter options item at the existing shell boundary."
     ],
     "evidence": {
       "local": [
@@ -28,12 +29,24 @@
         {
           "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.test.ts",
           "marker": "ScAsciiOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/dbgui/asciiopt.cxx",
           "marker": "ScAsciiOptions::ReadFromString"
+        },
+        {
+          "path": "sc/source/ui/dbgui/asciiopt.cxx",
+          "marker": "ReadFromString"
+        },
+        {
+          "path": "tools/source/stream/stream.cxx",
+          "marker": "SvStream::DetectEncoding"
         }
       ]
     }

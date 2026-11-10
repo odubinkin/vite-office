@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagIDFactory",
+      "getKnowns"
+    ],
+    "upstreamSymbols": [
+      "getKnowns"
+    ],
+    "preservedResponsibilities": [
+      "Original static known-tag-set initialization over the complete real MsLangId.getDefinedLanguagetags vector, constructing from each raw numeric ID rather than its BCP47 text, requesting full vectors, retaining every definition visit/alias/duplicate, exact case-sensitive membership, one-time successful publication and retry after a failed initializer. Actual Unicode definition values and temporary tags are released on normal/exception paths. The actual original numeric LanguageTag constructor remains a required binding; fixture-supplied vectors are not a completed native known-set membership witness.",
+      "The actual LanguageTag numeric constructor now supplies the required production binding; the real full definition vector initializes the known set successfully in owner tests. Complete NumberText/CSV integration and native physical static-guard/thread ABI remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ vector/shared_ptr/static-guard/thread ABI and complete NumberText/CSV service integration are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.ts",
+          "marker": "getKnowns"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.test.ts",
+          "marker": "getKnowns"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "getKnowns"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.knowns.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original fallback/static-initializer responsibilities are separated from existing field/canonicalization groups while retaining mandatory original constructor bindings."
+    }
+  }
+}

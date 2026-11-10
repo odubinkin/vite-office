@@ -1,4 +1,6 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it, vi } from "vitest";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -11,6 +13,8 @@ import type { ScDocumentPool } from "../../core/data/docpool";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+InitApplicationServiceManager(implementations);
+
 it("opens exported actual document bytes,edits and reloads formula results and literal text", /** No alternate workbook model participates. @returns Completion. */ async () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Data & <😀>"));

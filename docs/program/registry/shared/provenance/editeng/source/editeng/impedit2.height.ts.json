@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit2.height.ts",
+    "upstreamPath": "editeng/source/editeng/impedit2.cxx",
+    "localSymbols": [
+      "CalcHeight",
+      "calcExtraSpace",
+      "scaleYSpacingValue"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::CalcHeight",
+      "lcl_CalcExtraSpace",
+      "scaleYSpacingValue"
+    ],
+    "preservedResponsibilities": [
+      "Original CalcHeight uses actual lines, stretching, paragraph spacing and neighboring paragraph cache validity. The original native numeric narrowing is retained."
+    ],
+    "omittedResponsibilities": [
+      "Full line formatting and native device integration remain outside this member group."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.height.ts",
+          "marker": "CalcHeight"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "scaleYSpacingValue"
+        },
+        {
+          "path": "editeng/source/editeng/impedit.hxx",
+          "marker": "scaleYSpacingValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit2.height.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original paragraph-height member group is extracted from impedit2.cxx to keep independent edit-engine responsibilities within the source-file budget."
+    }
+  }
+}

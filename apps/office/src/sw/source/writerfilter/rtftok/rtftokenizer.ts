@@ -238,7 +238,7 @@ function isDigit(byte: number | undefined): boolean {
   return byte !== undefined && byte >= 48 && byte <= 57;
 }
 
-import controlWordData from "./rtftokenizer.controlwords.json";
+import controlWordData from "./rtftokenizer.controlwords.json" with { type: "json" };
 import type { RTFKeyword } from "./rtfcontrolwords";
 /** Original control-word dispatch kind order. */
 export enum RTFControlType {

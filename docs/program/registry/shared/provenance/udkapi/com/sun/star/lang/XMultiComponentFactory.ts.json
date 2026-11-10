@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/udkapi/com/sun/star/lang/XMultiComponentFactory.ts",
+    "upstreamPath": "udkapi/com/sun/star/lang/XMultiComponentFactory.idl",
+    "localSymbols": [
+      "XMultiComponentFactory",
+      "createInstanceWithContext",
+      "createInstanceWithArgumentsAndContext",
+      "getAvailableServiceNames",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XMultiComponentFactory",
+      "createInstanceWithContext",
+      "createInstanceWithArgumentsAndContext",
+      "getAvailableServiceNames"
+    ],
+    "preservedResponsibilities": [
+      "Original complete XMultiComponentFactory IDL method contract and normal static interface type binding. Unicode name sequences retain actual addressed string transport. No factory manager implementation or production service registry is fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Complete original native component-context/service-manager, NatNum12 casing/formatter/CSV integration and native ABI/thread behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XMultiComponentFactory.ts",
+          "marker": "XMultiComponentFactory"
+        },
+        {
+          "path": "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+          "marker": "NumberText"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/lang/XMultiComponentFactory.idl",
+          "marker": "XMultiComponentFactory"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        }
+      ]
+    }
+  }
+}

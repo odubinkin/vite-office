@@ -1,19 +1,18 @@
 /** @fileoverview Native LibreOffice dictionary boundary witnesses using original ICU packaged rules. */
-import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
-import {
-  ICULanguageBreakFactory,
-  type WordDictionaryName,
-} from "../../../external/icu/source/common/brkeng";
-import { LanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag.value";
+import { implementations } from "../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import type { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text as fromUnicode, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
-import { getLocaleDataBreakIteratorRules } from "../localedata/localedata";
-import { BreakIteratorImpl } from "./breakiteratorImpl";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { getBreakIteratorRules } from "../localedata/localedata";
 
-/** Loads a genuine shipped ICU dictionary. @param name - Resource identity. @returns Native bytes. */
-function load(name: WordDictionaryName): Uint8Array {
-  return readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
-}
+InitApplicationServiceManager(implementations);
 
 const cases = [
   "",
@@ -69,49 +68,46 @@ const fixtures: readonly (readonly [string, readonly string[]])[] = [
 
 for (const [language, expected] of fixtures)
   it(`matches native ${language} dictionary ranges in both directions`, /** Includes suffix skipping, surrogate offsets and whitespace-only ranges. @returns Nothing. */ () => {
-    const service = new BreakIteratorImpl();
-    service.BindWordDictionaryFactory(
-      new ICULanguageBreakFactory({
-        thaidict: load("thaidict"),
-        laodict: load("laodict"),
-        burmesedict: load("burmesedict"),
-        khmerdict: load("khmerdict"),
-        cjdict: load("cjdict"),
-      }),
+    const service = BreakIterator.create(
+      getProcessComponentContext() as Reference<XComponentContext>,
     );
-    const locale = new LanguageTag(language).getLocale();
+    const tag = new LanguageTag(language);
+    const locale = tag.getLocale();
     for (const [index, text] of cases.entries()) {
       const result: string[] = [];
+      const value = unicode(text);
       for (let offset = -1; offset <= text.length + 1; ++offset)
         for (const forward of [false, true]) {
-          const { startPos, endPos } = service.getWordBoundary(
-            text,
-            offset,
-            locale,
-            DICTIONARY_WORD,
-            forward,
-          );
+          const { startPos, endPos } = service
+            .operatorStar()
+            .getWordBoundary(value, offset, locale, DICTIONARY_WORD, forward);
           result.push(`${startPos}:${endPos}`);
         }
+      value.dispose();
       expect(result.join(","), JSON.stringify(text)).toBe(expected[index]);
     }
+    tag.dispose();
+    service.dispose();
   });
 
+/** Reads the original LocaleData sequence as strings. @param id - Language tag. @returns Source rules. */
+function readRules(id: string): string[] {
+  const tag = new LanguageTag(id);
+  const rules = getBreakIteratorRules(tag.getLocale());
+  try {
+    const values: string[] = [];
+    for (let i = 0; i < rules.getLength(); ++i)
+      values.push(fromUnicode(OUString.unacquired(rules.operatorIndex(i))));
+    return values;
+  } finally {
+    tag.dispose();
+    rules.dispose();
+  }
+}
+
 it("reads actual inherited locale rule arrays with the original fallback", /** Verifies locale resource ownership independent of ICU segmentation. @returns Nothing. */ () => {
-  expect(getLocaleDataBreakIteratorRules(new LanguageTag("de-AT").getLocale())[1]).toBe(
-    "dict_word_prepostdash",
-  );
-  expect(getLocaleDataBreakIteratorRules(new LanguageTag("nl-BE").getLocale())[1]).toBe(
-    "dict_word_prepostdash",
-  );
-  expect(getLocaleDataBreakIteratorRules(new LanguageTag("sv-FI").getLocale())[1]).toBe(
-    "dict_word_prepostdash",
-  );
-  expect(getLocaleDataBreakIteratorRules(new LanguageTag("en-US").getLocale())).toEqual([
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
+  expect(readRules("de-AT")[1]).toBe("dict_word_prepostdash");
+  expect(readRules("nl-BE")[1]).toBe("dict_word_prepostdash");
+  expect(readRules("sv-FI")[1]).toBe("dict_word_prepostdash");
+  expect(readRules("en-US")).toEqual(["", "", "", "", ""]);
 });

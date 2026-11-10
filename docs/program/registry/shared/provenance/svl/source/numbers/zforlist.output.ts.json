@@ -8,14 +8,18 @@
     "upstreamPath": "svl/source/numbers/zforlist.cxx",
     "localSymbols": [
       "GetOutputString",
-      "GetInputLineString"
+      "GetInputLineString",
+      "GetFormatterOutputString"
     ],
     "upstreamSymbols": [
       "SvNFEngine::GetOutputString",
-      "SvNFEngine::GetInputLineString"
+      "SvNFEngine::GetInputLineString",
+      "SvNumberFormatter::GetOutputString"
     ],
     "preservedResponsibilities": [
-      "AQF9AG moves the existing engine output/input-line bodies unchanged into their source output responsibility fragment to keep the main class source below the hard size limit. The actual SvNFEngine namespace reexports these same functions. Existing General/Boolean/Text output and input-line precision lifetimes remain represented; nonstandard output and complete filter/edit-format behavior remain incomplete, with no broad parity promotion."
+      "AQF9AG now ports original GetInputLineString substitution/real-key tracking, ALL first-section type, numeric-category precision, filtering/edit-format selection, forced-system-locale argument, fractional TIME precision and #FMT fallback to actual General. Public forwarding supplies the real NativeNumberWrapper and Accessor. The source output formatter remains the owner; unported display families are not approximated. Real-owner tests cover integer/currency/scientific/fraction input precision, mixed-section type and CSV export. Complete formatted output and full native wrapper differential verification remain pending.",
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Remaining date/time/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "AQF9AG restores the distinct source engine overload contracts: numeric receives the actual NativeNumberWrapper/Accessor and invokes ImpSubstituteEntry before missing-key General fallback; text does not substitute. The public formatter passes its original owners and writable policy; input-line conversion passes the same actual native/current-language owners to entries. Sparse real-owner tests cover a missing system-substitution target and unchanged text behavior. Complete native/date/time display and native wrapper ABI closure remain pending."
     ],
     "omittedResponsibilities": [
       "Complete table initialization, formatted export/CSV caller closure and full native constructor/service/ABI equivalence remain unverified."
@@ -25,6 +29,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforlist.output.ts",
           "marker": "GetOutputString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

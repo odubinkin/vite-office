@@ -11,13 +11,16 @@
       "RBBIStateTable"
     ],
     "upstreamSymbols": [
+      "RBBIDataWrapper",
       "RBBIDataWrapper::init"
     ],
     "preservedResponsibilities": [
+      "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified.",
+      "Original ICU78.3 UDataMemory storage/init/assignment/normalization/known-length/raw/payload queries and close retain native field order and destination heap ownership. Actual binary header and UDataInfo views preserve byte layout, endian marker comparison and swapped sizes. RBBIDataWrapper now consumes the real UDataMemory constructor, preserving its selective header checks and post-init adoption even on error. Original native comparison matches 196608 complete header rows and 743 full descriptor/constructor traces. Native mapping cases call original POSIX uprv_mapFile; managed close releases owned byte references and preserves pointer-clearing order. No local file mapper, TOC provider or replacement loader is installed. Application-data/TOC lookup, public iterators/engines, word/title/service and NatNum12 installation remain pending. Native OS munmap, allocation failure, physical ABI/thread effects and heap access after close are unverified.",
       "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified."
     ],
     "omittedResponsibilities": [
-      "Native dictionary engines, reverse cache traversal, full public BreakIterator behavior and non-pinned break resources remain outside this checkpoint."
+      "Application-data/TOC loader, public iterator/engine/service installation and native allocation/COW/thread/physical ABI are not certified."
     ],
     "evidence": {
       "local": [
@@ -26,11 +29,23 @@
           "marker": "RBBIDataWrapper"
         },
         {
+          "path": "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+          "marker": "retains complete native"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/udatamem.native.test.ts",
+          "marker": "retains complete native"
+        },
+        {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts",
           "marker": "@fileoverview"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbidata.cpp",
+          "marker": "RBBIDataWrapper"
+        },
         {
           "path": "vendor/icu-reference/source/common/rbbidata.cpp",
           "marker": "RBBIDataWrapper::init"

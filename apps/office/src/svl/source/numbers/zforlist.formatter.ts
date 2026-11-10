@@ -35,6 +35,7 @@ import { type SvNumberformatConstReference } from "./zformat";
 
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 
+import { GetFormatterOutputString } from "./zforlist.output";
 import { NfCurrencyEntry } from "./zforlist.currency-entry";
 import { SvNFLanguageData, SvNFFormatData, SvNFEngine } from "./zforlist";
 /** Original process-wide source currency tables: ordinary entries start with SYSTEM, legacy-only entries are separate. */
@@ -252,6 +253,7 @@ export class SvNumberFormatter {
       this.m_aFormatData.dispose();
       current.dispose();
       this.mapper.dispose();
+      this.m_xNatNum.dispose();
       throw error;
     }
   }
@@ -482,39 +484,20 @@ export class SvNumberFormatter {
   GetNoZero(): boolean {
     return this.m_aFormatData.GetNoZero();
   }
-  /** Original numeric/string output forwarding for admitted standard entries. Star formatting is unconsumed because these entries contain no STAR token. @param value - Actual numeric/string overload. @param key - Native format key. @param output - Actual mutable string. @param color - Actual output pointer. @param _useStarFormat - Original defaultfalse flag. @returns Nothing. */
-  GetOutputString(
-    value: number | OUStringConstReference,
-    key: number,
-    output: OUString,
-    color: [Color | null],
-    _useStarFormat = false,
-  ): void {
-    // The admitted standard streams have no STAR token; explicitly erase this unconsumed source flag.
-    void _useStarFormat;
-    SvNFEngine.GetOutputString(
-      this.m_aCurrentLanguage,
-      this.m_aFormatData,
-      value,
-      key,
-      output,
-      color,
-    );
+  /** Original numeric/string output forwarding with actual language/native owners and writable policy. @param args - Original value, key, output, color and default-false fill flag. @returns Nothing. */
+  GetOutputString(...args: Parameters<typeof GetFormatterOutputString>): void {
+    GetFormatterOutputString.call(this, ...args);
   }
-  /** Original GetInputLineString for the admitted General format: temporarily select input-line precision, format through the actual entry, then restore scanner precision. The source's edit-format and locale-switch branches are identity operations for this entry. @param value - Numeric cell value. @param key - Actual format key. @param _filtering - Source filtering flag. @param _forceSystemLocale - Source locale flag. @returns Owned input string. */
+  /** Original public input-line forwarding with the actual native-number owner and writable accessor. @param args - Value, display format key and original filtering/system-locale flags. @returns Owned input string. */
   GetInputLineString(
-    value: number,
-    key: number,
-    _filtering = false,
-    _forceSystemLocale = false,
+    ...args: [value: number, key: number, filtering?: boolean, forceSystemLocale?: boolean]
   ): OUString {
     return SvNFEngine.GetInputLineString(
       this.m_aCurrentLanguage,
       this.m_aFormatData,
-      value,
-      key,
-      _filtering,
-      _forceSystemLocale,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      ...args,
     );
   }
   /** Original owned table entries are destroyed before language/scanner/provider owners. Unrepresented global registry/mutex services have no fake lifetime hooks. @returns Nothing. */
@@ -522,5 +505,6 @@ export class SvNumberFormatter {
     this.m_aFormatData.dispose();
     this.m_aCurrentLanguage.dispose();
     this.mapper.dispose();
+    this.m_xNatNum.dispose();
   }
 }

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/o3tl/inc/sprintf.ts",
+    "status": "mapped",
+    "upstreamPath": "include/o3tl/sprintf.hxx",
+    "localSymbols": [
+      "sprintfIntegral"
+    ],
+    "upstreamSymbols": [
+      "sprintf",
+      "std::snprintf"
+    ],
+    "preservedResponsibilities": [
+      "Consumed %.f binding for finite integral doubles supplied by fraction output preserves exact binary64 integer digits, signed zero, C snprintf buffer-prefix/terminator behavior and the original post-write checked assertion. Native C snprintf fixtures compare the buffer/count/assertion condition. Generic printf formats, nonintegral formatting and native abort/ABI behavior are not represented or claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full native parser/display/ABI and broad template/C printf equivalence are unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/o3tl/inc/sprintf.ts",
+          "marker": "sprintfIntegral"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/sprintf.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/sprintf.hxx",
+          "marker": "sprintf"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/sprintf.hxx",
+          "marker": "std::snprintf"
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { ResourceData } from "./uresdata.package";
 /** Original logical entry fields from uresimp.h. Native short-name buffer/hash addresses are immutable-string/Map projections. */
 export class UResourceDataEntry {
   fName = "";
-  readonly fPath: null = null;
+  fPath: string | null = null;
   readonly fData = new ResourceData();
   fParent: UResourceDataEntry | null = null;
   fAlias: UResourceDataEntry | null = null;

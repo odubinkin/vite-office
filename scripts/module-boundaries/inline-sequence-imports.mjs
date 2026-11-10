@@ -1,5 +1,15 @@
-/** @fileoverview Recognizes the one original inline comphelper/sequence.hxx dependency without admitting a SAX/Comphelper service cycle. */
+/** @fileoverview Recognizes exact original inline comphelper/sequence.hxx callers without admitting SAX/Comphelper or Cppuhelper/Comphelper service cycles. */
 import ts from "typescript";
+const callers = new Map([
+  [
+    "sax/source/expatwrap/xml2utf.ts",
+    { path: "../../../comphelper/inc/sequence", names: ["concatSequences"] },
+  ],
+  [
+    "cppuhelper/source/component_context.ts",
+    { path: "../../comphelper/inc/sequence", names: ["mapKeysToSequence"] },
+  ],
+]);
 const cppuBindings = new Map([
   ["../../cppu/inc/unotype", ["getTypeFavourUnsigned"]],
   ["../../cppu/inc/uno/data", ["uno_type_assignData"]],
@@ -32,18 +42,15 @@ function namedImport(statement, names) {
 }
 /** Admits the original pure template owner with only its existing CPPU assignment/type dependencies and no runtime initialization. @param source - Source-relative importer. @param target - Source-relative resolved target. @param importer - Actual caller source. @param contents - Actual inline owner. @returns Proven inline-header dependency. */
 export function isOriginalInlineSequenceImport(source, target, importer, contents) {
-  if (
-    source !== "sax/source/expatwrap/xml2utf.ts" ||
-    target.replace(/\.ts$/u, "") !== "comphelper/inc/sequence"
-  )
-    return false;
+  const binding = callers.get(source);
+  if (!binding || target.replace(/\.ts$/u, "") !== "comphelper/inc/sequence") return false;
   const options = [ts.ScriptTarget.Latest, true, ts.ScriptKind.TS],
     file = ts.createSourceFile("sequence.ts", contents, ...options),
     caller = ts.createSourceFile("xml2utf.ts", importer, ...options);
   if (file.parseDiagnostics.length || caller.parseDiagnostics.length || !file.statements.length)
     return false;
-  let functions = 0,
-    valid = true;
+  const functions = new Set();
+  let valid = true;
   const imports = new Set();
   for (const statement of file.statements) {
     if (ts.isImportDeclaration(statement) && ts.isStringLiteral(statement.moduleSpecifier)) {
@@ -57,10 +64,12 @@ export function isOriginalInlineSequenceImport(source, target, importer, content
       }
     } else if (
       ts.isFunctionDeclaration(statement) &&
-      statement.name?.text === "concatSequences" &&
+      statement.name &&
+      ["concatSequences", "mapKeysToSequence"].includes(statement.name.text) &&
+      !functions.has(statement.name.text) &&
       statement.body
     ) {
-      functions++;
+      functions.add(statement.name.text);
     } else return false;
   }
   /** Rejects deferred loading and reexport paths in every function body as well. @param node - Parsed syntax. @returns Nothing. */
@@ -81,13 +90,13 @@ export function isOriginalInlineSequenceImport(source, target, importer, content
     ) =>
       ts.isImportDeclaration(statement) &&
       ts.isStringLiteral(statement.moduleSpecifier) &&
-      statement.moduleSpecifier.text === "../../../comphelper/inc/sequence",
+      statement.moduleSpecifier.text === binding.path,
   );
   return (
     valid &&
-    functions === 1 &&
+    functions.size === 2 &&
     imports.size === cppuBindings.size &&
     matches.length === 1 &&
-    namedImport(matches[0], ["concatSequences"])
+    namedImport(matches[0], binding.names)
   );
 }

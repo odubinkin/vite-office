@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "number-formatting",
     "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,15 +18,17 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
-        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
-        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl"
+        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native.test.ts",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json",
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts"
       ],
-      "justification": "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
+      "justification": "Original Boundary compound carries the same two signed UTF-16 offsets for word service results.",
       "knownViolations": [],
       "localSymbols": [
         "Boundary"
       ],
-      "sourceResponsibility": "unverified",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
       "upstreamSymbols": [
         "Boundary",

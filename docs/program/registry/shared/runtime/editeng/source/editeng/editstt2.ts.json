@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editstt2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editstt2.ts",
+        "apps/office/src/editeng/source/editeng/native-edit-status.test.ts",
+        "editeng/source/editeng/editstt2.hxx"
+      ],
+      "justification": "Complete original internal control predicates and flag enable/disable, including stacked/one-char composite, auto-page, URL/non-URL fields and original inherited NONE defaults. No engine/status timer, app provider or constructor facade is invented. Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InternalEditStatus"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editstt2.hxx",
+      "upstreamSymbols": [
+        "InternalEditStatus",
+        "TurnOnFlags",
+        "OneCharPerLine",
+        "IsSingleLine"
+      ]
+    }
+  }
+}

@@ -9,14 +9,12 @@ import {
   type NumberFormatCodeAddress,
 } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-
 import type { DateConstReference } from "../../../tools/source/datetime/tdate";
 import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import * as Policy from "./zforlist.policy";
 import * as Edit from "./zforlist.edit";
 import * as Standard from "./zforlist.standard";
 import { IsNumberFormat } from "./zforlist.recognition";
-
 import { GetLangDecimalSep } from "./zforlist.language";
 import {
   ImpGenerateCL,
@@ -218,6 +216,22 @@ export class SvNFLanguageData {
       symbol.assign(data.getCurrSymbol());
       abbreviation.assign(data.getCurrBankSymbol());
     }
+  }
+  /** Original current scanner TRUE keyword. @returns Borrowed keyword. */
+  GetTrueString(): OUStringConstReference {
+    return this.GetFormatScanner().GetTrueString();
+  }
+  /** Original current scanner FALSE keyword. @returns Borrowed keyword. */
+  GetFalseString(): OUStringConstReference {
+    return this.GetFormatScanner().GetFalseString();
+  }
+  /** Original current scanner keyword table. @returns Borrowed keyword table. */
+  GetKeywords(): readonly OUStringConstReference[] {
+    return this.GetFormatScanner().GetKeywords();
+  }
+  /** Original current scanner compatibility abbreviation. @returns Borrowed abbreviation. */
+  GetCurAbbrev(): OUStringConstReference {
+    return this.GetFormatScanner().GetCurAbbrev();
   }
   /** Original initial language remains unchanged after ChangeIntl. @returns Original uint16 language. */
   GetIniLanguage(): number {

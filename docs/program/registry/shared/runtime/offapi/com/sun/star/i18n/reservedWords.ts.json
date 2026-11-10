@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/reservedWords.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/reservedWords.ts"
+      ],
+      "justification": "Original reservedWords12 slot constants consumed by real calendar quarter display and original generated data. Full UNO constant ABI remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TRUE_WORD",
+        "QUARTER1_WORD",
+        "QUARTER1_ABBREVIATION",
+        "COUNT"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/i18n/reservedWords.idl",
+      "upstreamSymbols": [
+        "TRUE_WORD",
+        "QUARTER1_WORD",
+        "QUARTER1_ABBREVIATION",
+        "COUNT"
+      ]
+    }
+  }
+}

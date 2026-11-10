@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/editdoc.attributes.ts",
+    "upstreamPath": "editeng/source/editeng/editdoc.cxx",
+    "localSymbols": [
+      "InsertAttrib"
+    ],
+    "upstreamSymbols": [
+      "EditDoc::InsertAttrib",
+      "EditDoc::InsertAttribInSelection"
+    ],
+    "preservedResponsibilities": [
+      "The native non-YRS insertion retains empty-range precedence, source-range trimming, splits and adjacent equivalent item expansion."
+    ],
+    "omittedResponsibilities": [
+      "YRS synchronization, interactive spell-check disablement and general selection attribute removal remain outside the document text slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editdoc.attributes.ts",
+          "marker": "InsertAttrib"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/editdoc.cxx",
+          "marker": "InsertAttribInSelection"
+        },
+        {
+          "path": "editeng/source/editeng/ContentNode.cxx",
+          "marker": "InsertAttrib"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/editdoc.attributes.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The edit-document character attribute manipulation is kept with its native owner in a separate responsibility file."
+    }
+  }
+}

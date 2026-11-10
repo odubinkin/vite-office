@@ -522,3 +522,29 @@ it("retains native holder copy/self-assignment and move-swap behavior with nulla
   moved.Dispose();
   empty.Dispose();
 });
+
+import { SfxUInt32Item } from "../../../../svl/inc/intitem";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { LANGUAGE_GERMAN } from "../../../../i18nlangtag/inc/lang";
+import { NfIndexTableOffset } from "../../../../svl/inc/zforlist";
+it("maps builtin number formats through both original formatter and context overloads", /** Real pooled language/number items preserve the null-formatter guard and actual generated locale block. @returns Nothing. */ () => {
+  const document = new ScDocument(),
+    pattern = new ScPatternAttr(document.getCellAttributeHelper()),
+    key = new SfxUInt32Item(146, 1),
+    language = new SvxLanguageItem(LANGUAGE_GERMAN, 147);
+  try {
+    pattern.ItemSetPut(key);
+    pattern.ItemSetPut(language);
+    const formatter = document.GetFormatTable(),
+      expected = formatter.GetFormatIndex(NfIndexTableOffset.NF_NUMBER_INT, LANGUAGE_GERMAN);
+    expect(pattern.GetNumberFormat(null)).toBe(1);
+    expect(pattern.GetNumberFormat(formatter)).toBe(expected);
+    expect(pattern.GetNumberFormat(document.GetNonThreadedContext())).toBe(expected);
+    expect(formatter.GetEntry(expected)).not.toBeNull();
+  } finally {
+    key.Dispose();
+    language.Dispose();
+    pattern.Dispose();
+    document.DisposeAttributes();
+  }
+});

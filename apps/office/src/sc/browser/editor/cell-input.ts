@@ -6,6 +6,7 @@ import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
 import type { ScAddress } from "../../inc/address";
 import { CellType } from "../../inc/global";
+import { ScCellFormat } from "../../source/core/tool/cellform";
 import { ScStringUtil } from "../../inc/stringutil";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -103,7 +104,7 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   const edit = content.getEditText();
   let value: string;
   if (edit) {
-    const source = edit.GetText();
+    const source = ScCellFormat.GetOutputString(doc, pos, content);
     try {
       value = text(source);
     } finally {
@@ -139,7 +140,7 @@ export function cellPresentation(
     if (formula) return { text: text(formula.GetString().getString()), alignment: "left" };
     const edit = ref.getEditText();
     if (edit) {
-      const value = edit.GetText();
+      const value = ScCellFormat.GetOutputString(doc, pos, ref);
       try {
         return { text: text(value), alignment: "left" };
       } finally {

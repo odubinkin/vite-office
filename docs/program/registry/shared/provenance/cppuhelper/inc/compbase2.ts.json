@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/inc/compbase2.ts",
+    "upstreamPath": "cppuhelper/inc/compbase2.hxx",
+    "localSymbols": [
+      "WeakComponentImplHelperBase2",
+      "WeakComponentImplHelper2",
+      "WeakComponentImplHelperConstructor"
+    ],
+    "upstreamSymbols": [
+      "WeakComponentImplHelperBase2",
+      "WeakComponentImplHelper2",
+      "dispose",
+      "getTypes",
+      "getImplementationId"
+    ],
+    "preservedResponsibilities": [
+      "Original weak/component base and template share one actual OWeakObject receiver and the original UnoImplBase m_bDisposed=false virtual-base field. Base copy is not exposed, matching the native mutex base. Preserves flag-before-hook, exact empty default hook, real event Source ownership, reverse listener notification, silent late registration, disposed check Context, no implicit notification at destruction and qualified root/component/weak queries. The protected disposing(unique_lock&) overload is explicitly named disposingComponent in the host so public UNO disposing(EventObject) remains a distinct virtual method; no callback provider or overload heuristic is introduced. Template class_data includes original Ifc.../XTypeProvider getters without eager evaluation. getTypes uses its independent successful-once static COW sequence in XWeak/XComponent/XTypeProvider/Ifc... order, shared across derived classes of the same specialization; actual initializer-list Type copies/destruction use existing Type/Sequence owners. Empty implementation ID and qualified forwarding bodies retain source defaults. CALC-448/449 preserve failure/late-listener behavior. Native final noexcept disposal termination is outside certified browser behavior (CALC-450), without a swallowed error/success replacement."
+    ],
+    "omittedResponsibilities": [
+      "Public createComponentContext environment/mapping orchestration, concrete ServiceManager and production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/compbase2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/compbase2.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/interfacecontainer4.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/inc/compbase2.hxx",
+          "marker": "WeakComponentImplHelperBase2"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cppuhelper/source/compbase.cxx",
+          "marker": "WeakComponentImplHelperBase2::dispose"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cppuhelper/inc/unoimplbase.hxx",
+          "marker": "m_bDisposed = false"
+        }
+      ]
+    }
+  }
+}

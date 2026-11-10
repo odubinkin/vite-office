@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/uno/XComponentContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "numbertext-service-integration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/uno/XComponentContext.ts",
+        "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+        "udkapi/com/sun/star/uno/XComponentContext.idl"
+      ],
+      "justification": "Original complete XComponentContext IDL method contract and normal static interface type binding, without a substitute context, service manager, value registry or runtime behavior.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XComponentContext",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/uno/XComponentContext.idl",
+      "upstreamSymbols": [
+        "XComponentContext",
+        "getValueByName",
+        "getServiceManager"
+      ]
+    }
+  }
+}

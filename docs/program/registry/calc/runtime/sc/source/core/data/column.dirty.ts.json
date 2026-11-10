@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/column.dirty.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "scalar-document-editing",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/column.dirty.ts",
+        "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+        "sc/source/core/data/column.cxx"
+      ],
+      "justification": "Original SetDirtyOnRangeHandler is moved unchanged from the ScColumn declaration module into a responsibility fragment to keep that source owner within the existing file-size gate. It still borrows the same actual column, owns the same SingleColumnSpanSet, excludes empty blocks and fills the same original broadcast spans. No duplicate state or algorithm is introduced. Existing clipboard/group/broadcast tests cover callers; native physical allocation and complete column/consumer QA remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetDirtyOnRangeHandler"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/data/column.cxx",
+      "upstreamSymbols": [
+        "SetDirtyOnRangeHandler",
+        "fillBroadcastSpans"
+      ]
+    }
+  }
+}

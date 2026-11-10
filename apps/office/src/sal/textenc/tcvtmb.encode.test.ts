@@ -185,12 +185,16 @@ it("retains compiled original forward/reverse convergence and its exact native e
           consumed,
         );
         if (status[0] || count !== 1) continue;
-        const output = dbcs(
-          [text[0] as number],
-          F.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
-          3,
-          descriptor.data,
-        );
+        ++checked;
+        const value = text[0] as number;
+        const reverse = descriptor.data.mpToDBCSHighTab[value >>> 8];
+        assert(reverse);
+        if (undefinedEntry(reverse, value & 255)) {
+          const key = `${encoding}:undefined-read`;
+          divergences[key] = (divergences[key] ?? 0) + 1;
+          continue;
+        }
+        const output = dbcs([value], F.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR, 3, descriptor.data);
         const restored = new Uint16Array(2),
           info: [number] = [0];
         const length = ImplDBCSToUnicode(
@@ -208,7 +212,6 @@ it("retains compiled original forward/reverse convergence and its exact native e
           const key = `${encoding}:${output.info ? "unmappable" : "alias"}`;
           divergences[key] = (divergences[key] ?? 0) + 1;
         }
-        ++checked;
       }
     }
   }

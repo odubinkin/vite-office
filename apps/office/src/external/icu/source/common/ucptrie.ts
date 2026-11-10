@@ -1,89 +1,89 @@
-/** @fileoverview Original ICU78.3 serialized UCPTrie construction and scalar read. */
+/** @fileoverview Original ICU78.3 frozen UCPTrie binary construction, scalar reads and small-index algorithm; range/UTF iterators remain unported. */
 import type { UCPTrie } from "./unicode/ucptrie";
-import { UErrorCode, U_FAILURE } from "./unicode/utypes";
-/** Opens native Tri3 bytes. Portable byte reads stand in for native typed pointers. @param type - Required type or ANY. @param valueWidth - Required width or ANY. @param bytes - Aligned source buffer. @param actualLength - Optional consumed-length reference. @param status - Sticky source status. @returns Trie or null. */
+import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
+/** Original frozen-trie width query. @param trie - Actual descriptor. @returns Original width enum. */
+export function ucptrie_getValueWidth(trie: UCPTrie): number {
+  return trie.valueWidth;
+}
+/** Original binary loader borrows its aligned serialized backing storage. Physical allocation of the small trie descriptor is managed by JavaScript. @param type - Requested trie type or ANY. @param valueWidth - Requested width or ANY. @param data - Actual readable binary allocation. @param length - Source byte length. @param actualLength - Optional output, untouched on failure. @param status - Original in/out error code. @returns Frozen trie or null. */
 export function ucptrie_openFromBinary(
   type: number,
   valueWidth: number,
-  bytes: DataView,
+  data: Uint8Array,
+  length: number,
   actualLength: [number] | null,
   status: [number],
 ): UCPTrie | null {
   if (U_FAILURE(status[0])) return null;
   if (
-    bytes.byteLength <= 0 ||
-    bytes.byteOffset % 4 !== 0 ||
+    length <= 0 ||
+    (data.byteOffset & 3) !== 0 ||
     type < -1 ||
     type > 1 ||
     valueWidth < -1 ||
     valueWidth > 2
   ) {
-    status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
     return null;
   }
-  if (bytes.byteLength < 16 || bytes.getUint32(0, true) !== 0x54726933) {
-    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+  if (length < 16) {
+    status[0] = E.U_INVALID_FORMAT_ERROR;
     return null;
   }
-  const options = bytes.getUint16(4, true),
+  const header32 = new Uint32Array(data.buffer, data.byteOffset, 1),
+    header16 = new Uint16Array(data.buffer, data.byteOffset, 8);
+  if (header32[0] !== 0x54726933) {
+    status[0] = E.U_INVALID_FORMAT_ERROR;
+    return null;
+  }
+  const options = header16[2] as number,
     actualType = (options >> 6) & 3,
     actualWidth = options & 7;
-  if (
-    actualType > 1 ||
-    actualWidth > 2 ||
-    (options & 0x38) !== 0 ||
-    (type !== -1 && type !== actualType) ||
-    (valueWidth !== -1 && valueWidth !== actualWidth)
-  ) {
-    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+  if (actualType > 1 || actualWidth > 2 || (options & 0x38) !== 0) {
+    status[0] = E.U_INVALID_FORMAT_ERROR;
     return null;
   }
-  const indexLength = bytes.getUint16(6, true),
-    dataLength = ((options & 0xf000) << 4) | bytes.getUint16(8, true),
-    index3NullOffset = bytes.getUint16(10, true),
-    dataNullOffset = ((options & 0xf00) << 8) | bytes.getUint16(12, true),
-    highStart = bytes.getUint16(14, true) << 9,
-    dataStart = 16 + indexLength * 2,
-    valueBytes = actualWidth === 0 ? 2 : actualWidth === 1 ? 4 : 1,
-    length = dataStart + dataLength * valueBytes;
-  if (bytes.byteLength < length) {
-    status[0] = UErrorCode.U_INVALID_FORMAT_ERROR;
+  if (type < 0) type = actualType;
+  if (valueWidth < 0) valueWidth = actualWidth;
+  if (type !== actualType || valueWidth !== actualWidth) {
+    status[0] = E.U_INVALID_FORMAT_ERROR;
     return null;
   }
-
-  const index = new Uint16Array(indexLength);
-  for (let i = 0; i < indexLength; ++i) index[i] = bytes.getUint16(16 + i * 2, true);
-  const data =
-    actualWidth === 0
-      ? new Uint16Array(dataLength)
-      : actualWidth === 1
-        ? new Uint32Array(dataLength)
-        : new Uint8Array(dataLength);
-  for (let i = 0; i < dataLength; ++i) {
-    const offset = dataStart + i * valueBytes;
-    data[i] =
-      actualWidth === 0
-        ? bytes.getUint16(offset, true)
-        : actualWidth === 1
-          ? bytes.getUint32(offset, true)
-          : bytes.getUint8(offset);
+  const indexLength = header16[3] as number,
+    dataLength = ((options & 0xf000) << 4) | (header16[4] as number),
+    dataNullOffset = ((options & 0xf00) << 8) | (header16[6] as number),
+    highStart = (header16[7] as number) << 9,
+    size = 16 + indexLength * 2 + dataLength * (valueWidth === 0 ? 2 : valueWidth === 1 ? 4 : 1);
+  if (length < size) {
+    status[0] = E.U_INVALID_FORMAT_ERROR;
+    return null;
   }
-  if (actualLength !== null) actualLength[0] = length;
-  return {
+  const index = new Uint16Array(data.buffer, data.byteOffset + 16, indexLength),
+    offset = data.byteOffset + 16 + indexLength * 2,
+    values =
+      valueWidth === 0
+        ? new Uint16Array(data.buffer, offset, dataLength)
+        : valueWidth === 1
+          ? new Uint32Array(data.buffer, offset, dataLength)
+          : new Uint8Array(data.buffer, offset, dataLength),
+    nullOffset = dataNullOffset >= dataLength ? dataLength - 2 : dataNullOffset;
+  const trie: UCPTrie = {
     index,
-    data,
+    data: values,
     indexLength,
     dataLength,
     highStart,
     shifted12HighStart: (highStart + 0xfff) >> 12,
-    type: actualType,
-    valueWidth: actualWidth,
+    type,
+    valueWidth,
     reserved32: 0,
     reserved16: 0,
-    index3NullOffset,
+    index3NullOffset: header16[5] as number,
     dataNullOffset,
-    nullValue: data[dataNullOffset < dataLength ? dataNullOffset : dataLength - 2] as number,
+    nullValue: values[nullOffset] as number,
   };
+  if (actualLength !== null) actualLength[0] = size;
+  return trie;
 }
 /** Original ICU small-index lookup,including 18-bit groups. @param trie - Properly initialized frozen trie. @param c - Native code point below highStart. @returns Data offset. */
 export function ucptrie_internalSmallIndex(trie: UCPTrie, c: number): number {

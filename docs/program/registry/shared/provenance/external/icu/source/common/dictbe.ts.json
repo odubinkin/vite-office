@@ -7,14 +7,32 @@
     "localPath": "apps/office/src/external/icu/source/common/dictbe.ts",
     "upstreamPath": "vendor/icu-reference/source/common/dictbe.cpp",
     "localSymbols": [
+      "DictionaryBreakEngine",
       "PossibleWord",
+      "ThaiBreakEngine",
+      "LaoBreakEngine",
+      "BurmeseBreakEngine",
+      "KhmerBreakEngine",
+      "CjkBreakEngine",
+      "LanguageType",
+      "getKatakanaCost",
+      "isKatakana",
       "candidates",
       "acceptMarked",
       "backUp",
-      "DictionaryBreakEngine",
       "findBreaks"
     ],
     "upstreamSymbols": [
+      "DictionaryBreakEngine",
+      "PossibleWord",
+      "ThaiBreakEngine",
+      "LaoBreakEngine",
+      "BurmeseBreakEngine",
+      "KhmerBreakEngine",
+      "CjkBreakEngine",
+      "LanguageType",
+      "getKatakanaCost",
+      "isKatakana",
       "PossibleWord::candidates",
       "PossibleWord::acceptMarked",
       "PossibleWord::backUp",
@@ -22,15 +40,30 @@
       "DictionaryBreakEngine::findBreaks"
     ],
     "preservedResponsibilities": [
+      "The original dictionary span, PossibleWord candidate cache, adopted matcher ownership and Southeast Asian algorithms are preserved. The equivalent Lao, Burmese and Khmer loops share a single implementation with Thai retaining its original minimum-span and suffix branches. Constructor character sets are the unchanged native UnicodeSet bounds generated from the actual pinned ICU constructors.",
+      "The non-ML CJK engine now retains source dynamic-programming costs, supplementary and normalized native-index mapping, dictionary fallback, original Japanese extensions, and phrase boundary filtering. Native replay covers 712 original CJK calls across counted, deferred and UnicodeString providers.",
+      "The factory now adopts all concrete dictionary engines and disposes their matchers through the original ownership boundary.",
       "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370.",
       "S3HW1E HTML81: the original DictionaryBreakEngine cursor/span and ICU Thai, Lao and Burmese engines preserve native candidate slots, three-word lookahead, resynchronization, script-specific combining mark sets, Thai suffixes and final stack semantics. Source and TS cursor/breaks matched on 4250 real-dictionary inputs plus 48 fixture witnesses. WRITER371 records the unequal four-character admission boundary.",
       "S3HW1E HTML82: patched KhmerBreakEngine retains original ICU UnicodeSet properties, cloned UTF16 scans with separate counters, inhibitor windows, dictionary weight minimization, candidate vector logical size and original output gates. Native cursor/boundary traces match 2842 real-dictionary inputs plus 45 compiled fixture witnesses. See WRITER372–375."
     ],
     "omittedResponsibilities": [
-      "The language-specific break-engine scans and DictionaryCache are pending."
+      "Constructor heap allocation and physical ICU ABI are outside the managed port."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.ts",
+          "marker": "class DictionaryBreakEngine"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+          "marker": "matches original CJK dictionary mode"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native engine identity"
+        },
         {
           "path": "apps/office/src/external/icu/source/common/dictbe.ts",
           "marker": "PossibleWord"
@@ -49,6 +82,10 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "PossibleWord"
+        },
         {
           "path": "vendor/icu-reference/source/common/dictbe.cpp",
           "marker": "PossibleWord::candidates"

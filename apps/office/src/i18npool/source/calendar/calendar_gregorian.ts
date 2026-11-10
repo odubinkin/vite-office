@@ -1,4 +1,5 @@
-/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display/native-number formatting is a separate unconsumed responsibility. */
+/** @fileoverview Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display-name selection uses original locale resources; display strings use the original field/name/era and native-number mapping rules, including the source NatNum12 whole-field bypass. */
+import { NativeNumberSupplierService } from "../nativenumber/nativenumbersupplier";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Locale as ICULocale } from "../../../external/icu/source/common/locid";
 import { U_SUCCESS } from "../../../external/icu/source/common/unicode/utypes";
@@ -7,6 +8,10 @@ import { createInstance } from "../../../external/icu/source/i18n/calendar.facto
 import { createTimeZone } from "../../../external/icu/source/i18n/timezone.create";
 import { UnicodeString } from "../../../external/icu/source/common/unistr";
 import { UCalendarDateFields as F } from "../../../external/icu/source/i18n/unicode/ucal";
+import * as Display from "../../../offapi/com/sun/star/i18n/CalendarDisplayCode";
+import * as Reserved from "../../../offapi/com/sun/star/i18n/reservedWords";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import * as D from "../../../offapi/com/sun/star/i18n/CalendarDisplayIndex";
 import * as C from "../../../offapi/com/sun/star/i18n/CalendarFieldIndex";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { round } from "../../../sal/inc/rtl/math";
@@ -14,14 +19,81 @@ import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.table
 import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import {
   getLocaleCalendars,
+  getLocaleTimeAM,
+  getLocaleTimePM,
+  getLocaleReservedWords,
   type LocaleCalendarData,
   type LocaleCalendarItemData,
 } from "../localedata/localedata";
-/** Original Era fields consumed by temporal mapping. Display flags are not consumed here. */
+/** Source decimal %02 integer display for the unsigned16 calendar values. @param value - Calendar value. @param minimum - Minimum width. @returns Owned text. */
+function displayInteger(value: number, minimum: number): OUString {
+  const text = new OUString(OUString.number(value));
+  if (text.getLength() >= minimum) return text;
+  let buffer: OUStringBuffer | undefined;
+  try {
+    buffer = new OUStringBuffer();
+    for (let index = 0; index < minimum - text.getLength(); ++index)
+      buffer.append(Uint16Array.of(48));
+    buffer.append(text);
+    return buffer.makeStringAndClear();
+  } finally {
+    buffer?.dispose();
+    text.dispose();
+  }
+}
+/** Native temporary cleanup covers right-operand evaluation and buffer construction. @param first - Owned first value. @param produceSecond - Original right-operand evaluation. @returns Combined owner. */
+function combineDisplay(first: OUString, produceSecond: () => OUString): OUString {
+  let second: OUString | undefined, buffer: OUStringBuffer | undefined;
+  try {
+    second = produceSecond();
+    buffer = new OUStringBuffer();
+    buffer.append(first).append(second);
+    return buffer.makeStringAndClear();
+  } finally {
+    buffer?.dispose();
+    second?.dispose();
+    first.dispose();
+  }
+}
+/** Original NatNumForCalendar changes Asian number modes by calendar field and original (unshortened) year value. @param locale - Loaded source locale. @param code - Display code. @param mode - Native signed16 mode. @param value - Original unsigned16 field, with source month increment. @returns Mapped source mode. */
+function NatNumForCalendar(
+  locale: LocaleConstReference,
+  code: number,
+  mode: number,
+  value: number,
+): number {
+  const short =
+    ((code === Display.SHORT_YEAR || code === Display.LONG_YEAR) && value >= 100) ||
+    code === Display.SHORT_QUARTER ||
+    code === Display.LONG_QUARTER;
+  const language = text(locale.Language),
+    chinese = language === "zh",
+    japanese = language === "ja",
+    korean = language === "ko";
+  if (chinese || japanese || korean) {
+    switch (mode) {
+      case 1:
+        if (!short) mode = japanese ? 4 : 7;
+        break;
+      case 2:
+        if (!short) mode = japanese ? 5 : 8;
+        break;
+      case 3:
+        break;
+      case 4:
+        return korean ? (short ? 9 : 11) : 0;
+      default:
+        return 0;
+    }
+  }
+  return mode;
+}
+/** Original Era fields consumed by temporal mapping. Display flags retain original aggregate initialization. */
 export interface Era {
   readonly year: number;
   readonly month: number;
   readonly day: number;
+  readonly flags?: number;
 }
 /** Original signed16 scalar boundary. @param value - Input. @returns Signed16 value. */
 function int16(value: number): number {
@@ -57,6 +129,7 @@ export class Calendar_gregorian {
   protected readonly fieldSetValue = new Int16Array(C.FIELD_COUNT2);
   protected fieldSet = 0;
   protected readonly aLocale = new Locale();
+  private readonly mxNatNum = new NativeNumberSupplierService();
   protected aCalendar: Omit<LocaleCalendarData, "minimumDays"> & { minimumDays: number } = {
     id: "",
     isDefault: false,
@@ -79,6 +152,7 @@ export class Calendar_gregorian {
   /** Original locale member destruction; actual ICU objects are garbage-collected after the service owner is released. @returns Nothing. */
   dispose(): void {
     this.aLocale.dispose();
+    this.mxNatNum.dispose();
   }
   /** Original load first materializes fields, then copies locale/calendar data and installs week settings. @param id - Calendar ID. @param locale - Locale. @returns Nothing. */
   loadCalendar(id: OUStringConstReference, locale: LocaleConstReference): void {
@@ -103,6 +177,206 @@ export class Calendar_gregorian {
   /** Original unique ID is the loaded data ID, even when CalendarImpl used its Gregorian-service fallback. @returns Owned ID. */
   getUniqueID(): OUString {
     return unicode(this.aCalendar.id);
+  }
+  /** Original display-name selection, including AM/PM ignoring nameType and YEAR returning empty. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Signed16 abbreviated/full/narrow selector. @returns Owned display name. */
+  getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    displayIndex = int16(displayIndex);
+    index = int16(index);
+    nameType = int16(nameType);
+    if (displayIndex === D.AM_PM) {
+      if (index === 0) return unicode(getLocaleTimeAM(this.aLocale));
+      if (index === 1) return unicode(getLocaleTimePM(this.aLocale));
+      throw new RuntimeException();
+    }
+    if (displayIndex === D.YEAR) return new OUString();
+    let items: readonly LocaleCalendarItemData[];
+    switch (displayIndex) {
+      case D.DAY:
+        items = this.aCalendar.days;
+        break;
+      case D.MONTH:
+        items = this.aCalendar.months;
+        break;
+      case D.GENITIVE_MONTH:
+        items = this.aCalendar.genitiveMonths;
+        break;
+      case D.PARTITIVE_MONTH:
+        items = this.aCalendar.partitiveMonths;
+        break;
+      case D.ERA:
+        items = this.aCalendar.eras;
+        break;
+      default:
+        throw new RuntimeException();
+    }
+    if (index >= items.length) throw new RuntimeException();
+    if (nameType !== 0 && nameType !== 1 && (nameType !== 2 || displayIndex === D.ERA))
+      throw new RuntimeException();
+    // Source Sequence operator[] checks the lower bound when the selected name dereferences the item.
+    if (index < 0) throw new Error("Sequence index assertion");
+    const item = items[index] as LocaleCalendarItemData;
+    return unicode(nameType === 0 ? item.abbreviated : nameType === 1 ? item.full : item.narrow);
+  }
+  /** Original display entry point. @param code - Signed32 display code. @param native - Original signed16 native mode. @returns Owned text. */
+  getDisplayString(code: number, native: number): OUString {
+    return this.getDisplayStringImpl(code, native, false);
+  }
+  /** Original display-code to field/name/numeric formatting, including native modes and source era combinations. @param code - Signed32 display code. @param native - Original signed16 native mode. @param eraMode - Combined era/year context. @returns Owned text. */
+  protected getDisplayStringImpl(code: number, native: number, eraMode: boolean): OUString {
+    code |= 0;
+    native = int16(native);
+    let field = C.AM_PM;
+    switch (code) {
+      case Display.SHORT_DAY:
+      case Display.LONG_DAY:
+        field = C.DAY_OF_MONTH;
+        break;
+      case Display.SHORT_DAY_NAME:
+      case Display.LONG_DAY_NAME:
+      case Display.NARROW_DAY_NAME:
+        field = C.DAY_OF_WEEK;
+        break;
+      case Display.SHORT_MONTH:
+      case Display.LONG_MONTH:
+      case Display.SHORT_MONTH_NAME:
+      case Display.LONG_MONTH_NAME:
+      case Display.NARROW_MONTH_NAME:
+      case Display.SHORT_GENITIVE_MONTH_NAME:
+      case Display.LONG_GENITIVE_MONTH_NAME:
+      case Display.NARROW_GENITIVE_MONTH_NAME:
+      case Display.SHORT_PARTITIVE_MONTH_NAME:
+      case Display.LONG_PARTITIVE_MONTH_NAME:
+      case Display.NARROW_PARTITIVE_MONTH_NAME:
+      case Display.SHORT_QUARTER:
+      case Display.LONG_QUARTER:
+        field = C.MONTH;
+        break;
+      case Display.SHORT_YEAR:
+      case Display.LONG_YEAR:
+      case Display.SHORT_YEAR_AND_ERA:
+      case Display.LONG_YEAR_AND_ERA:
+        field = C.YEAR;
+        break;
+      case Display.SHORT_ERA:
+      case Display.LONG_ERA:
+        field = C.ERA;
+        break;
+    }
+    const value = this.getValue(field) & 65535;
+    if (code === Display.SHORT_QUARTER || code === Display.LONG_QUARTER) {
+      let quarter = Math.trunc(value / 3);
+      if (quarter > 3) quarter = 3;
+      quarter +=
+        code === Display.SHORT_QUARTER ? Reserved.QUARTER1_ABBREVIATION : Reserved.QUARTER1_WORD;
+      return this.nativeDisplay(
+        unicode(getLocaleReservedWords(this.aLocale)[quarter] as string),
+        code,
+        native,
+        value,
+      );
+    }
+    switch (code) {
+      case Display.SHORT_MONTH:
+        return this.nativeDisplay(
+          new OUString(OUString.number(value + 1)),
+          code,
+          native,
+          value + 1,
+        );
+      case Display.SHORT_DAY:
+        return this.nativeDisplay(new OUString(OUString.number(value)), code, native, value);
+      case Display.LONG_YEAR:
+        return this.nativeDisplay(
+          displayInteger(value, this.aCalendar.id === "gengou" ? 2 : 0),
+          code,
+          native,
+          value,
+        );
+      case Display.LONG_MONTH:
+        return this.nativeDisplay(displayInteger(value + 1, 2), code, native, value + 1);
+      case Display.SHORT_YEAR:
+        return this.nativeDisplay(
+          value < 100 ||
+            eraMode ||
+            (this.eraArray !== null && (((this.eraArray[0] as Era).flags ?? 0) & 1) !== 0)
+            ? new OUString(OUString.number(value))
+            : displayInteger(value % 100, 2),
+          code,
+          native,
+          value,
+        );
+      case Display.LONG_DAY:
+        return this.nativeDisplay(displayInteger(value, 2), code, native, value);
+      case Display.SHORT_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 0);
+      case Display.LONG_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 1);
+      case Display.NARROW_DAY_NAME:
+        return this.getDisplayName(D.DAY, value, 2);
+      case Display.SHORT_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 0);
+      case Display.LONG_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 1);
+      case Display.NARROW_MONTH_NAME:
+        return this.getDisplayName(D.MONTH, value, 2);
+      case Display.SHORT_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 0);
+      case Display.LONG_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 1);
+      case Display.NARROW_GENITIVE_MONTH_NAME:
+        return this.getDisplayName(D.GENITIVE_MONTH, value, 2);
+      case Display.SHORT_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 0);
+      case Display.LONG_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 1);
+      case Display.NARROW_PARTITIVE_MONTH_NAME:
+        return this.getDisplayName(D.PARTITIVE_MONTH, value, 2);
+      case Display.SHORT_ERA:
+        return this.getDisplayName(D.ERA, value, 0);
+      case Display.LONG_ERA:
+        return this.getDisplayName(D.ERA, value, 1);
+      case Display.SHORT_YEAR_AND_ERA:
+      case Display.LONG_YEAR_AND_ERA:
+        return combineDisplay(
+          this.getDisplayStringImpl(
+            code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
+            native,
+            true,
+          ),
+          /** Evaluates the original right operand under left-temporary cleanup. @returns Owned right value. */ () =>
+            this.getDisplayStringImpl(
+              code === Display.SHORT_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
+              native,
+              true,
+            ),
+        );
+      default:
+        throw new RuntimeException();
+    }
+  }
+  /** Original final numeric/quarter conversion; name and combined branches return before reaching it. The passed owner binds the original local aOUStr lifetime. @param valueString - Owned original aOUStr. @param code - Display code. @param native - Original mode. @param value - Original field. @returns Owned result. */
+  private nativeDisplay(
+    valueString: OUString,
+    code: number,
+    native: number,
+    value: number,
+  ): OUString {
+    if (native <= 0 || native === 12) return valueString;
+    try {
+      if (
+        this.eraArray === gengou_eraArray &&
+        value === 1 &&
+        (code === Display.SHORT_YEAR || code === Display.LONG_YEAR) &&
+        (native === 1 || native === 2)
+      )
+        return unicode("元");
+      const mapped = NatNumForCalendar(this.aLocale, code, native, value);
+      return mapped > 0
+        ? this.mxNatNum.getNativeNumberString(valueString, this.aLocale, mapped)
+        : new OUString(valueString);
+    } finally {
+      valueString.dispose();
+    }
   }
   /** Original milliseconds conversion uses RTL corrected round before ICU setTime. @param days - UTC days since1970. @returns Nothing. */
   setDateTime(days: number): void {
@@ -329,9 +603,9 @@ const gengou_eraArray: readonly Era[] = [
   { year: 2019, month: 5, day: 1 },
   { year: 0, month: 0, day: 0 },
 ];
-/** Original ROC temporal era data; display flags belong to the display responsibility. */
+/** Original ROC era data, including forced-long-year display flag. */
 const ROC_eraArray: readonly Era[] = [
-  { year: 1912, month: 1, day: 1 },
+  { year: 1912, month: 1, day: 1, flags: 1 },
   { year: 0, month: 0, day: 0 },
 ];
 /** Original Dangi solar-era data (distinct from ICU's lunisolar Dangi class). */
@@ -375,6 +649,28 @@ export class Calendar_buddhist extends Calendar_gregorian {
     super(buddhist_eraArray);
     this.cCalendar = "com.sun.star.i18n.Calendar_buddhist";
   }
+  /** Original Buddhist era/year ordering retains its historical short/long code selection. @param code - Display code. @param native - Represented native mode0. @returns Owned text. */
+  override getDisplayString(code: number, native: number): OUString {
+    code |= 0;
+    if (
+      (code === Display.LONG_YEAR_AND_ERA || code === Display.SHORT_YEAR_AND_ERA) &&
+      this.getValue(C.ERA) === 0
+    )
+      return combineDisplay(
+        this.getDisplayStringImpl(
+          code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_YEAR : Display.LONG_YEAR,
+          native,
+          true,
+        ),
+        /** Evaluates the original right operand under left-temporary cleanup. @returns Owned right value. */ () =>
+          this.getDisplayStringImpl(
+            code === Display.LONG_YEAR_AND_ERA ? Display.SHORT_ERA : Display.LONG_ERA,
+            native,
+            true,
+          ),
+      );
+    return super.getDisplayString(code, native);
+  }
 }
 /** Original Hanja service uses the Gregorian temporal implementation. */
 export class Calendar_hanja extends Calendar_gregorian {
@@ -383,6 +679,22 @@ export class Calendar_hanja extends Calendar_gregorian {
     super();
     this.cCalendar = "com.sun.star.i18n.Calendar_hanja";
   }
+  /** Original Hanja AM/PM names come from Japanese locale data. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Name selector. @returns Owned name. */
+  override getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    if (int16(displayIndex) !== D.AM_PM) return super.getDisplayName(displayIndex, index, nameType);
+    const language = unicode("ja"),
+      empty = new OUString(),
+      locale = new Locale(language, empty, empty);
+    try {
+      if (int16(index) === 0) return unicode(getLocaleTimeAM(locale));
+      if (int16(index) === 1) return unicode(getLocaleTimePM(locale));
+      throw new RuntimeException();
+    } finally {
+      locale.dispose();
+      empty.dispose();
+      language.dispose();
+    }
+  }
 }
 /** Original Hanja weekday-name specialization shares the Gregorian temporal implementation. */
 export class Calendar_hanja_yoil extends Calendar_gregorian {
@@ -390,5 +702,21 @@ export class Calendar_hanja_yoil extends Calendar_gregorian {
   constructor() {
     super();
     this.cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
+  }
+  /** Original Hanja AM/PM names come from Japanese locale data. @param displayIndex - Signed16 category. @param index - Signed16 item index. @param nameType - Name selector. @returns Owned name. */
+  override getDisplayName(displayIndex: number, index: number, nameType: number): OUString {
+    if (int16(displayIndex) !== D.AM_PM) return super.getDisplayName(displayIndex, index, nameType);
+    const language = unicode("ja"),
+      empty = new OUString(),
+      locale = new Locale(language, empty, empty);
+    try {
+      if (int16(index) === 0) return unicode(getLocaleTimeAM(locale));
+      if (int16(index) === 1) return unicode(getLocaleTimePM(locale));
+      throw new RuntimeException();
+    } finally {
+      locale.dispose();
+      empty.dispose();
+      language.dispose();
+    }
   }
 }

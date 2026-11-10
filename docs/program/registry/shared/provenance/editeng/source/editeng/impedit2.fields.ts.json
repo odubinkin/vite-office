@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit2.fields.ts",
+    "upstreamPath": "editeng/source/editeng/impedit2.cxx",
+    "localSymbols": [
+      "UpdateFields"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::UpdateFields"
+    ],
+    "preservedResponsibilities": [
+      "The engine resets and recalculates field values using its outer virtual field evaluator and marks changed paragraph portions invalid."
+    ],
+    "omittedResponsibilities": [
+      "Application-dependent field shading and visited-link colors remain outside no-layout text expansion."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.fields.ts",
+          "marker": "UpdateFields"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "UpdateFields"
+        },
+        {
+          "path": "editeng/source/editeng/editeng.cxx",
+          "marker": "EditEngine::CalcFieldValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit2.fields.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The source field-update member is split from the lifecycle and text insertion responsibilities."
+    }
+  }
+}

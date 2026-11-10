@@ -1,10 +1,7 @@
 /** @fileoverview Raw HTML table import through the native Markdown and Writer HTML filter entry points. */
-import { readFileSync } from "node:fs";
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it } from "vitest";
-import {
-  ICULanguageBreakFactory,
-  type WordDictionaryName,
-} from "../../../../external/icu/source/common/brkeng";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwDoc } from "../../core/doc/doc";
 import {
@@ -26,10 +23,7 @@ import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 
-/** Loads original shipped ICU dictionary bytes. @param name - Native dictionary. @returns Exact resource. */
-function loadDictionary(name: WordDictionaryName): Uint8Array {
-  return readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
-}
+InitApplicationServiceManager(implementations);
 
 /** Opens UTF-8 Markdown through the same shell route as the file dialog. @param source - Authored input. @returns Actual installed document and its owner. */
 function open(source: string) {
@@ -52,17 +46,10 @@ function open(source: string) {
     source: { kind: "external", reference: {} },
   } as const;
   const shell = new SwDocShell(seed, state, medium);
-  const dictionaries = new ICULanguageBreakFactory({
-    thaidict: loadDictionary("thaidict"),
-    laodict: loadDictionary("laodict"),
-    burmesedict: loadDictionary("burmesedict"),
-    khmerdict: loadDictionary("khmerdict"),
-    cjdict: loadDictionary("cjdict"),
-  });
   try {
     return {
       shell,
-      doc: shell.OpenMarkdown(new TextEncoder().encode(source), state, medium, dictionaries),
+      doc: shell.OpenMarkdown(new TextEncoder().encode(source), state, medium),
     };
   } catch (error) {
     shell.Close();

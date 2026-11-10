@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "csv-native-service-and-edit-admission",
     "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,10 +18,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
-        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
-        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl"
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts"
       ],
-      "justification": "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
+      "justification": "Original four published short WordType constants retain exact values0..3. No boundary service or word heuristic is supplied. Concrete EditEngine/ImpEditEngine constructor/resources, source undo-manager/list integration, general deletion/word-boundary/layout/view/style-notification implementations and ScFieldEditEngine/DocImport CSV admission remain unported and mandatory. Prepared dependencies exist only in tests. Full native thread/lifetime/allocator/ABI and QA parity are unverified. NatNum12 and final CSV audit remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "ANY_WORD",
@@ -28,8 +30,8 @@
         "DICTIONARY_WORD",
         "WORD_COUNT"
       ],
-      "sourceResponsibility": "unverified",
-      "upstreamFile": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/i18n/WordType.idl",
       "upstreamSymbols": [
         "ANY_WORD",
         "ANYWORD_IGNOREWHITESPACES",

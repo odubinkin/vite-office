@@ -1,6 +1,12 @@
-/** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
+/** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; Source native-number modes0..11 are connected to numeric and date/time producers; mode12 remains unported. */
+import * as Output from "./zformat.output";
+import { GetDateOutput, GetDateTimeOutput } from "./zformat.date";
+import { GetTimeOutput } from "./zformat.time";
+import { GetFractionOutput } from "./zformat.fraction";
+import { GetNumberOutput, GetScientificOutput, ImpGetOutputStandard } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
+import type { SvNFLanguageData } from "./zforlist";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { approxEqual, round } from "../../../sal/inc/rtl/math";
 import {
@@ -46,7 +52,7 @@ function output(value: number, format: Format, precision: number, decimal: numbe
   return result;
 }
 
-/** Original standard NUMBER branches of GetOutputString,ImpGetOutputInputLine,ImpGetOutputStandard and ImpGetOutputStdToPrecision. Precision and decimal are the actual scanner/language fields;this does not fabricate a SvNumberFormatter service or parsed format entry. The admitted native NatNum0 requires no transliteration. @param value - Binary64 input. @param precision - Native uint16 standard precision. @param decimal - Original locale decimal sal_Unicode. @returns Owned native formatted string. */
+/** Original standard NUMBER branches of GetOutputString,ImpGetOutputInputLine,ImpGetOutputStandard and ImpGetOutputStdToPrecision. Precision and decimal are the actual scanner/language fields;this does not fabricate a SvNumberFormatter service or parsed format entry. This raw conversion helper does not apply native-number conversion; actual General output uses the original member-owner helpers. @param value - Binary64 input. @param precision - Native uint16 standard precision. @param decimal - Original locale decimal sal_Unicode. @returns Owned native formatted string. */
 export function formatStandardNumber(value: number, precision: number, decimal: number): OUString {
   precision &= 65535;
   if (precision === INPUTSTRING_PRECISION) {
@@ -347,6 +353,16 @@ export class SvNumberformat {
   GetType(): number {
     return this.eType;
   }
+  /** Original public numeric-section selector. @param value - Cell value. @returns Numeric section index. */
+  GetSubformatIndex(value: number): number {
+    return Output.GetSubformatIndex.call(this, value);
+  }
+  /** Original first-section negative-condition predicate. @returns Whether section zero is negative. */
+  IsFirstSubformatRealNegative(): boolean {
+    return Output.IsFirstSubformatRealNegative.call(this);
+  }
+  /** Original fixed blank-width insertion. */
+  static readonly InsertBlanks = Output.InsertBlanks;
   /** Source condition test for whether the second subformat denotes negative values. @returns Real-negative status. */
   IsSecondSubformatRealNegative(): boolean {
     return (
@@ -433,6 +449,10 @@ export class SvNumberformat {
         );
     }
     return false;
+  }
+  /** Original inline decimal precision query on the compiled subformat. @param index - Native uint16 subformat, zero by default. @returns Decimal digit count. */
+  GetFormatPrecision(index = 0): number {
+    return (this.NumFor[index & 65535] as ImpSvNumFor).Info().nCntPost;
   }
   /** Source scanned type of one compiled subformat. @param subformat - Native section. @returns Scanned type or UNDEFINED. */
   GetNumForInfoScannedType(subformat: number): number {
@@ -660,136 +680,158 @@ export class SvNumberformat {
     color: [Color | null],
     star?: boolean,
   ): void;
-  /** Original standard NUMBER, LOGICAL and TEXT numeric output. @param value - Binary64 input. @param output - Actual mutable output. @param color - Original output color pointer. @param precision - Native current standard precision. @param decimal - Original first decimal unit. @param scanner - Current language's format scanner for Boolean keywords. @returns Whether star-fill occurred. */
+  /** Original numeric entry output receives the actual native-number and current-language owners. @param value - Binary64 input. @param output - Mutable output. @param color - Color pointer. @param native - Native-number owner. @param current - Current language state. @param star - Original fill flag. @returns Whether star-fill occurred. */
   GetOutputString(
     value: number,
     output: OUString,
     color: [Color | null],
-    precision: number,
-    decimal: number,
-    scanner?: ImpSvNumberformatScan,
+    native: NativeNumberWrapper,
+    current: SvNFLanguageData,
+    star?: boolean,
   ): boolean;
-  /** Implements Get Output String. @param value - Value. @param output - Output. @param color - Color. @param precisionOrStar - Precision Or Star. @param decimal - Decimal. @param scanner - Scanner. @returns The boolean | void result. */ GetOutputString(
+  /** Binds original text/numeric overloads without projecting language state into scalar arguments. Native modifiers are owned by the selected subformat. @param value - Numeric or text input. @param output - Mutable output. @param color - Color pointer. @param nativeOrStar - Native owner or text fill flag. @param current - Numeric current-language owner. @param star - Numeric fill flag. @returns Numeric fill result or nothing. */
+  GetOutputString(
     value: number | OUStringConstReference,
     output: OUString,
     color: [Color | null],
-    precisionOrStar: number | boolean = false,
-    decimal = 0,
-    scanner?: ImpSvNumberformatScan,
+    nativeOrStar: NativeNumberWrapper | boolean = false,
+    current?: SvNFLanguageData,
+    star = false,
   ): boolean | void {
     if (typeof value !== "number") {
-      const index = this.IsTextFormat()
-        ? 0
-        : (this.NumFor[3] as ImpSvNumFor).GetCount() > 0
-          ? 3
-          : -1;
-      if (index < 0) {
-        color[0] = null;
-        return;
-      }
-      color[0] = null;
-      const section = this.NumFor[index] as ImpSvNumFor;
-      const info = section.Info();
-      const buffer = new OUStringBuffer();
-      try {
-        if (info.eScannedType === SvNumFormatType.TEXT)
-          for (let token = 0; token < section.GetCount(); token++) {
-            const kind = info.nTypeArray[token];
-            if (kind === NfKeywordIndex.GENERAL || kind === NfSymbolType.DEL) buffer.append(value);
-            else if (kind !== NfSymbolType.STAR && kind !== NfSymbolType.BLANK)
-              buffer.append(info.sStrArray[token] as OUString);
-          }
-        const result = buffer.makeStringAndClear();
-        try {
-          output.assign(result);
-        } finally {
-          result.dispose();
-        }
-      } finally {
-        buffer.dispose();
-      }
-      void precisionOrStar;
+      Output.GetStringOutput.call(this, value, output, color, nativeOrStar as boolean);
       return;
     }
-    const precision = precisionOrStar as number;
+    const native = nativeOrStar as NativeNumberWrapper,
+      language = current as SvNFLanguageData,
+      precision = language.GetStandardPrec(),
+      decimal = language.GetNumDecimalSep().getStr()[0] as number;
     output.clear();
     color[0] = null;
     if (
-      this.eType === SvNumFormatType.LOGICAL &&
-      scanner &&
-      this.sFormatstring.equals(scanner.GetBooleanString())
+      this.eType & SvNumFormatType.LOGICAL &&
+      this.sFormatstring.equals(
+        language.GetKeywords()[NfKeywordIndex.BOOLEAN] as OUStringConstReference,
+      )
     ) {
-      output.assign(value ? scanner.GetTrueString() : scanner.GetFalseString());
+      output.assign(value !== 0 ? language.GetTrueString() : language.GetFalseString());
       return false;
     }
-    const section = this.NumFor[0] as ImpSvNumFor,
-      info = section.Info();
-    // Original nonstandard NUMBER dispatch, restricted to the represented ungrouped integer digit production.
-    if (
-      this.GetMaskedType() === SvNumFormatType.NUMBER &&
-      this.eOp1 === 0 &&
-      this.eOp2 === 0 &&
-      section.GetCount() === 1 &&
-      info.nTypeArray[0] === NfSymbolType.DIGIT &&
-      info.nCntPost === 0 &&
-      info.nThousand === 0 &&
-      !info.bThousand &&
-      section.GetNatNum().GetNatNum() === 0 &&
-      Number.isFinite(value)
-    ) {
-      color[0] = section.GetColor();
-      this.ImpGetNumberOutput(value, section, output);
+    if (this.eType & SvNumFormatType.TEXT) {
+      ImpGetOutputStandard.call(this, value, output, native, language);
       return false;
     }
+    if (this.bStandard) {
+      if ((precision & 65535) === INPUTSTRING_PRECISION) {
+        this.ImpGetOutputInputLine(value, output, language);
+        return false;
+      }
+      const first = this.NumFor[0] as ImpSvNumFor;
+      switch (this.eType) {
+        case SvNumFormatType.NUMBER:
+          if (precision === UNLIMITED_PRECISION) {
+            const result = formatStandardNumber(value, precision, decimal);
+            try {
+              output.assign(result);
+            } finally {
+              result.dispose();
+            }
+          } else ImpGetOutputStandard.call(this, value, output, native, language);
+          return false;
+        case SvNumFormatType.DATE:
+          return GetDateOutput(value, first, native, language, output, star);
+        case SvNumFormatType.TIME:
+          return GetTimeOutput(value, 0, first, native, language, output, star);
+        case SvNumFormatType.DATETIME:
+          return GetDateTimeOutput(value, first, native, language, output, star);
+      }
+    }
+    const index = this.GetSubformatIndex(value);
     if (
-      this.eType !== SvNumFormatType.TEXT &&
-      (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
+      value < 0 &&
+      ((index === 0 && this.IsFirstSubformatRealNegative()) ||
+        (index === 1 && this.IsSecondSubformatRealNegative()))
     )
-      throw new Error("SvNumberformat nonstandard output is not implemented");
-    const result = formatStandardNumber(
-      value,
-      this.eType === SvNumFormatType.TEXT ? Math.min(precision & 65535, 300) : precision,
-      decimal,
-    );
+      value = -value;
+    const section = this.NumFor[index] as ImpSvNumFor;
+    const type = section.Info().eScannedType;
+    color[0] = section.GetColor();
+    if (section.GetCount() === 0) {
+      if (type !== SvNumFormatType.EMPTY)
+        ImpGetOutputStandard.call(this, value, output, native, language);
+      return false;
+    }
+    switch (type) {
+      case SvNumFormatType.TEXT:
+      case SvNumFormatType.DEFINED:
+        return Output.GetLiteralOutput(section, output, star);
+      case SvNumFormatType.DATE:
+        return GetDateOutput(value, section, native, language, output, star);
+      case SvNumFormatType.TIME:
+        return GetTimeOutput(value, index, section, native, language, output, star);
+      case SvNumFormatType.DATETIME:
+        return GetDateTimeOutput(value, section, native, language, output, star);
+      case SvNumFormatType.NUMBER:
+      case SvNumFormatType.PERCENT:
+      case SvNumFormatType.CURRENCY:
+        return GetNumberOutput.call(this, value, index, star, native, language, output);
+      case SvNumFormatType.LOGICAL:
+        return Output.GetLogicalOutput(value, section, native, language, output);
+      case SvNumFormatType.FRACTION:
+        return GetFractionOutput.call(this, value, index, star, native, language, output);
+      case SvNumFormatType.SCIENTIFIC:
+        return GetScientificOutput.call(this, value, index, star, native, language, output);
+      default:
+        return false;
+    }
+  }
+  /** Original ImpGetOutputInputLine uses automatic precision and percent scaling below the native overflow threshold. @param value - Binary64 input. @param outputString - Actual output. @param current - Actual current-language owner. @returns Nothing. */
+  private ImpGetOutputInputLine(
+    value: number,
+    outputString: OUString,
+    current: SvNFLanguageData,
+  ): void {
+    const decimal = current.GetNumDecimalSep().getStr()[0] as number;
+    let modified = false;
+    if (this.eType & SvNumFormatType.PERCENT && Math.abs(value) < 1.7e306) {
+      if (value === 0) {
+        const zeroPercent = new OUString(Uint16Array.of(48, 37), 2);
+        try {
+          outputString.assign(zeroPercent);
+        } finally {
+          zeroPercent.dispose();
+        }
+        return;
+      }
+      value *= 100;
+      modified = true;
+    }
+    const result =
+      value === 0
+        ? zero()
+        : output(
+            value,
+            Format.rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces.rtl_math_DecimalPlaces_Max,
+            decimal,
+          );
     try {
-      output.assign(result);
+      if (this.eType & SvNumFormatType.PERCENT && modified) {
+        const buffer = new OUStringBuffer();
+        try {
+          buffer.append(result).append(Uint16Array.of(37));
+          const percent = buffer.makeStringAndClear();
+          try {
+            outputString.assign(percent);
+          } finally {
+            percent.dispose();
+          }
+        } finally {
+          buffer.dispose();
+        }
+      } else outputString.assign(result);
     } finally {
       result.dispose();
-    }
-    return false;
-  }
-  /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one ungrouped digit token, no conditions, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @returns Nothing. */
-  private ImpGetNumberOutput(value: number, section: ImpSvNumFor, outputString: OUString): void {
-    let sign = value < 0;
-    value = round(Math.abs(value), 0);
-    const buffer = new OUStringBuffer();
-    try {
-      if (value !== 0) {
-        const digits = output(value, Format.rtl_math_StringFormat_F, 0, 46);
-        try {
-          buffer.append(digits);
-        } finally {
-          digits.dispose();
-        }
-        buffer.stripStart(48);
-      }
-      if (buffer.isEmpty()) sign = false;
-      let position = buffer.getLength();
-      const pattern = section.Info().sStrArray[0] as OUString;
-      for (let index = pattern.getLength() - 1; index >= 0; --index) {
-        if (position > 0) --position;
-        else if (pattern.getStr()[index] === 48) buffer.insertChar(0, 48);
-        else if (pattern.getStr()[index] === 63) buffer.insertChar(0, 0x2007);
-      }
-      if (sign) buffer.insertChar(0, 45);
-      const result = buffer.makeStringAndClear();
-      try {
-        outputString.assign(result);
-      } finally {
-        result.dispose();
-      }
-    } finally {
-      buffer.dispose();
     }
   }
   /** Original compiled entry member destruction. @returns Nothing. */
@@ -824,4 +866,7 @@ export type SvNumberformatConstReference = Pick<
   | "IsNegativeWithoutSign"
   | "IsNumForStringElementCountEqual"
   | "GetNumForInfoScannedType"
+  | "GetFormatPrecision"
+  | "GetSubformatIndex"
+  | "IsFirstSubformatRealNegative"
 >;

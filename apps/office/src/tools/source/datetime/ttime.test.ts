@@ -49,3 +49,26 @@ it("converts signed elapsed time and retains the signed32 millisecond result wid
   expect(value.GetTimeInDays()).toBe(-90061000000001 / 86400000000000);
   expect(new Time(1000, 0).GetMSFromTime()).toBe(-694967296);
 });
+
+it.each([
+  [0, 2, [0, 0, 0, 0]],
+  [-0.25, 2, [18, 0, 0, 0]],
+  [1.5, 2, [12, 0, 0, 0]],
+  [59.99999 / 86400, 2, [0, 0, 59, 0.99]],
+  [0.9999 / 86400, 2, [0, 0, 0, 0.99]],
+  [1 + 1e-15, 2, [0, 0, 0, 0]],
+])(
+  "extracts the original clock from %s at precision %s",
+  /** Source approximate-floor and truncated fractional carry operate through the actual RTL arithmetic owner. @param days - Serial value. @param precision - Fraction precision. @param expected - Original clock fields. @returns Nothing. */ (
+    days,
+    precision,
+    expected,
+  ) => {
+    const hour: [number] = [0],
+      minute: [number] = [0],
+      second: [number] = [0],
+      fraction: [number] = [0];
+    Time.GetClock(days, hour, minute, second, fraction, precision);
+    expect([hour[0], minute[0], second[0], fraction[0]]).toEqual(expected);
+  },
+);

@@ -278,9 +278,11 @@ export class ScXMLExport {
       value = ' office:value-type="string"';
       const edit = cell.getEditText();
       if (edit) {
+        const engine = this.document.GetEditEngine();
+        engine.SetText(edit);
         const paragraphs: string[] = [];
         for (let i = 0; i < edit.GetParagraphCount(); i++) {
-          const part = edit.GetText(i);
+          const part = engine.GetParagraphText(i);
           try {
             paragraphs.push(`<text:p>${exportText(text(part))}</text:p>`);
           } finally {

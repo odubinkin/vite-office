@@ -17,7 +17,12 @@
       "GetCalendar",
       "GetTransliteration",
       "IsDecimalSep",
-      "GetCompatibilityCurrency"
+      "GetCompatibilityCurrency",
+      "SvNumberFormatter",
+      "GetCurAbbrev",
+      "GetKeywords",
+      "GetTrueString",
+      "GetFalseString"
     ],
     "upstreamSymbols": [
       "SvNFFormatData::ImpGetFormatCodeIndex",
@@ -55,7 +60,11 @@
       "SvNumberFormatter::GetUserDefColor",
       "SvNumberFormatter::GetNatNum",
       "SvNumberFormatter::IsLocaleInstalled",
-      "SvNFLanguageData::GetLangDecimalSep"
+      "SvNFLanguageData::GetLangDecimalSep",
+      "SvNFLanguageData::GetCurAbbrev",
+      "SvNFLanguageData::GetKeywords",
+      "SvNFLanguageData::GetTrueString",
+      "SvNFLanguageData::GetFalseString"
     ],
     "preservedResponsibilities": [
       "Task AQF9AG ports static SvNumberFormatter::ExpandTwoDigitYear and its language/formatter instance forwarding for input-scanner year fragments; complete input classification remains unported.",
@@ -81,7 +90,12 @@
       "AQF9AG restores public standard/builtin selection and IsNumberFormat through the complete original accessor/policy, actual locale-block generation, actual currency-default insertion and existing input scanner. Currency values are declared in zforlist.currency-entry.ts and reexported here. Text and English CSV branches now consume these public document-formatter contracts; original explicit-date and auto-input callers remain pending.",
       "AQF9AG exposes original GetEditFormat, GetFormatForLanguageIfBuiltIn and GetEvalDateFormat consumed by ParseString, forwarding to actual engine/policy owners.",
       "B8TCAE adds source-contract evidence: A real generated table lazily selects/inserts the system currency format using actual currency strings, scanner and constructor. Repeated lookup retains the same nonempty currency entry identity and key. Existing native comparisons remain; these added assertions do not establish full native ABI or complete application parity.",
-      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged."
+      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged.",
+      "AQF9AG public GetInputLineString now forwards the actual native-number owner and writable Accessor along with the original filtering and force-system-locale flags to the complete engine selection responsibility. Full output-family/native closure remains pending.",
+      "AQF9AG ports original numeric-section condition selection and first-negative predicate, fixed character-width blanks, source star escape tokens and literal/text output. Public formatter and engine preserve the star flag and text color; numeric output uses the selected section and original negative-section sign normalization, including the existing exact integer production. Empty sections and custom TEXT flags retain original behavior. Complete decimal/grouping/date/time/scientific/fraction/native-digit display producers and dedicated full native output differential closure remain pending.",
+      "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced.",
+      "AQF9AG restores numeric output forwarding of the actual NativeNumberWrapper and writable Accessor, retains the text overload without those arguments, and adds the original SvNFLanguageData GetKeywords/GetTrueString/GetFalseString scanner forwards. The output method body remains a source responsibility fragment to keep the owning facade below its size budget. Native-number producers, date/time display and complete native output ABI verification remain unfinished.",
+      "Original formatter value-member destruction now releases the on-demand native-number wrapper both during constructor unwinding and normal destruction, after owned formatter/language work. Native locale cache and supplier lifetime remain with their original owners."
     ],
     "omittedResponsibilities": [
       "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."
@@ -122,6 +136,14 @@
         },
         {
           "path": "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.number.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -177,6 +199,22 @@
         {
           "path": "svl/source/numbers/zforlist.cxx",
           "marker": "SvNFLanguageData::IsDecimalSep"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetCurAbbrev"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetKeywords"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetTrueString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetFalseString"
         }
       ]
     }

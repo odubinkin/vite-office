@@ -1,0 +1,36 @@
+/** @fileoverview Original editattr.hxx consumed range/feature declaration boundary. */
+export {
+  EditCharAttrib,
+  EditCharAttribTab,
+  EditCharAttribLineBreak,
+  CH_FEATURE,
+  EditCharAttribFont,
+  EditCharAttribItalic,
+  EditCharAttribWeight,
+  EditCharAttribUnderline,
+  EditCharAttribOverline,
+  EditCharAttribFontHeight,
+  EditCharAttribFontWidth,
+  EditCharAttribStrikeout,
+  EditCharAttribCaseMap,
+  EditCharAttribColor,
+  EditCharAttribBackgroundColor,
+  EditCharAttribLanguage,
+  EditCharAttribRuby,
+  EditCharAttribScriptHint,
+  EditCharAttribShadow,
+  EditCharAttribEscapement,
+  EditCharAttribOutline,
+  EditCharAttribPairKerning,
+  EditCharAttribKerning,
+  EditCharAttribWordLineMode,
+  EditCharAttribEmphasisMark,
+  EditCharAttribRelief,
+  EditCharAttribOpticalSizing,
+  EditCharAttribFontVariations,
+  EditCharAttribGrabBag,
+  EditCharAttribField,
+} from "../source/editeng/editattr";
+
+/** Original GetMetric selector for the pool's default metric. */
+export const DEF_METRIC = 0;

@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 uresbund.cpp default-package entry cache, alias-file loading, distinct requested-file search and existing-parent inheritance. U_USE_USRDATA is0 in the pinned source build. Raw resources/flags come from the complete native package; native mutex/OOM/raw allocation/layout and external packages remain uncertified. */
+/** @fileoverview Original ICU78.3 uresbund.cpp package/name entry cache, alias-file loading, distinct requested-file search and existing-parent inheritance. U_USE_USRDATA is0 in the pinned source build. Raw resources/flags come from the complete native package; native mutex/OOM/raw allocation/layout and external packages remain uncertified. */
 /* eslint-disable no-useless-assignment -- Preserve the original entryOpen initialization and assertion/finish bookkeeping. */
 import { type ResourceData, res_load, res_unload } from "./uresdata.package";
 import { UResourceDataEntry } from "./uresimp";
@@ -34,10 +34,10 @@ function metadata(data: ResourceData, key: string): Resource | null {
 function initCache(status: [number]): void {
   if (!U_FAILURE(status[0]) && cache === null) cache = new Map();
 }
-/** Original raw entry open and %%ALIAS dereference; parent chains are deliberately not loaded here. Requires the original initialized-cache precondition. @param localeID - C filename/null default. @param path - Default package. @param status - Status. @returns Referenced final alias target/null. */
+/** Original raw entry open and %%ALIAS dereference; parent chains are deliberately not loaded here. Requires the original initialized-cache precondition. @param localeID - C filename/null default. @param path - Package name or default null. @param status - Status. @returns Referenced final alias target/null. */
 export function init_entry(
   localeID: string | null,
-  path: null,
+  path: string | null,
   status: [number],
 ): UResourceDataEntry | null {
   if (U_FAILURE(status[0])) return null;
@@ -48,10 +48,13 @@ export function init_entry(
         ? "root"
         : cstring(localeID);
   const entries = cache as Map<string, UResourceDataEntry>;
-  let r = entries.get(name);
+  if (path !== null) path = cstring(path);
+  const key = JSON.stringify([name, path]);
+  let r = entries.get(key);
   if (r === undefined) {
     r = new UResourceDataEntry();
     r.fName = name;
+    r.fPath = path;
     res_load(r.fData, path, name, status);
     if (U_FAILURE(status[0])) {
       /* istanbul ignore if -- B8TCAE-P01: proven synchronous fixed-package backend invariant; see the resource-entry domain audit. */
@@ -77,9 +80,9 @@ export function init_entry(
           r.fAlias = init_entry(invariantName(alias.value), path, status);
       }
     }
-    const old = entries.get(name);
+    const old = entries.get(key);
     /* istanbul ignore else -- B8TCAE-P04: proven synchronous fixed-package backend invariant; see the resource-entry domain audit. */
-    if (old === undefined) entries.set(name, r);
+    if (old === undefined) entries.set(key, r);
     else {
       free_entry(r);
       r = old;
@@ -90,8 +93,8 @@ export function init_entry(
   if (r.fBogus !== 0 && !U_FAILURE(status[0])) status[0] = r.fBogus;
   return r;
 }
-/** Original pool entry validation; pool checksum/address binding was validated during native raw export. @param path - Default package. @param status - Status. @returns Referenced pool/null. */
-function getPoolEntry(path: null, status: [number]): UResourceDataEntry | null {
+/** Original pool entry validation; pool checksum/address binding was validated during native raw export. @param path - Package name or default null. @param status - Status. @returns Referenced pool/null. */
+function getPoolEntry(path: string | null, status: [number]): UResourceDataEntry | null {
   const pool = init_entry("pool", path, status);
   /* istanbul ignore if -- B8TCAE-P05: proven synchronous fixed-package backend invariant; see the resource-entry domain audit. */
   if (!U_FAILURE(status[0]) && (pool === null || pool.fBogus !== 0 || !pool.fData.isPoolBundle))
@@ -101,9 +104,9 @@ function getPoolEntry(path: null, status: [number]): UResourceDataEntry | null {
   }
   return pool;
 }
-/** Original missing-file search. Successful files return their chopped inheritance name; missing files use getParentLocaleID and ignore cached parent lines. @param path - Default package. @param name - Mutable C filename. @param defaultLocale - Default name. @param openType - Source mode. @param isRoot - Output. @param foundParent - Output. @param isDefault - Output prefix test. @param status - Status. @returns Referenced real entry/null. */
+/** Original missing-file search. Successful files return their chopped inheritance name; missing files use getParentLocaleID and ignore cached parent lines. @param path - Package name or default null. @param name - Mutable C filename. @param defaultLocale - Default name. @param openType - Source mode. @param isRoot - Output. @param foundParent - Output. @param isDefault - Output prefix test. @param status - Status. @returns Referenced real entry/null. */
 export function findFirstExisting(
-  path: null,
+  path: string | null,
   name: [string],
   defaultLocale: string,
   openType: UResOpenType,
@@ -189,9 +192,9 @@ function insertRootBundle(current: [UResourceDataEntry], status: [number]): bool
   current[0] = next as UResourceDataEntry;
   return true;
 }
-/** Original fallback entry open. Caller supplies the original already-canonicalized locale from ures_openWithType. Native temporary filename truncates to156 bytes. @param path - Default package. @param localeID - C base name. @param openType - Non-direct source mode. @param status - Status. @returns Entry/null. */
+/** Original fallback entry open. Caller supplies the original already-canonicalized locale from ures_openWithType. Native temporary filename truncates to156 bytes. @param path - Package name or default null. @param localeID - C base name. @param openType - Non-direct source mode. @param status - Status. @returns Entry/null. */
 export function entryOpen(
-  path: null,
+  path: string | null,
   localeID: string,
   openType: UResOpenType.URES_OPEN_LOCALE_DEFAULT_ROOT | UResOpenType.URES_OPEN_LOCALE_ROOT,
   status: [number],
@@ -336,9 +339,9 @@ export function entryOpen(
   /* istanbul ignore next -- B8TCAE-P17: every admitted backend path returns through the nonfailed-status arm above. */
   return null;
 }
-/** Original exact-name open, which still attaches an inheritance chain unless noFallback is set. @param path - Default package. @param localeID - Exact C filename/null. @param status - Status. @returns Entry/null. */
+/** Original exact-name open, which still attaches an inheritance chain unless noFallback is set. @param path - Package name or default null. @param localeID - Exact C filename/null. @param status - Status. @returns Entry/null. */
 export function entryOpenDirect(
-  path: null,
+  path: string | null,
   localeID: string | null,
   status: [number],
 ): UResourceDataEntry | null {

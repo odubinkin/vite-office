@@ -166,6 +166,13 @@ export class LanguageTag {
     return this;
   }
 
+  /** Releases the value's own locale and tag string. The semantic implementation is shared. @returns Nothing. */
+  dispose(): void {
+    this.#state.maLocale.dispose();
+    this.#state.maBcp47.dispose();
+    this.#state.mpImpl = null;
+  }
+
   /** Queries source system origin,not the resolved ID. @returns Origin flag. */
   isSystemLocale(): boolean {
     return this.#state.mbSystemLocale;

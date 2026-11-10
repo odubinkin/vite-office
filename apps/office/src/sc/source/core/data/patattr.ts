@@ -35,7 +35,7 @@ import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LANGUAGE_SYSTEM, type LanguageType } from "../../../../i18nlangtag/inc/lang";
 import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
 import type { ScDocument } from "../../../inc/document";
-import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { ScGlobal } from "../../../inc/global";
 /** Original automatic-font color modes from patattr.hxx,co-located with the represented native owner. */
 export enum ScAutoFontColorMode {
@@ -595,13 +595,15 @@ export class ScPatternAttr {
     }
     return this.mxLanguageType;
   }
-  /** Original formatter/context default-format branches. Nondefault language conversion remains unported. @param context - Actual interpreter context,formatter or native null formatter. @returns Effective format key. */
+  /** Original formatter/context key remapping through the actual builtin-language policy. @param context - Actual interpreter context,formatter or native null formatter. @returns Effective format key. */
   GetNumberFormat(context: ScInterpreterContext | SvNumberFormatter | null): number {
     const key = this.GetNumberFormatKey(),
       language = this.GetLanguageType();
     if ((key < SV_COUNTRY_LANGUAGE_OFFSET && language === LANGUAGE_SYSTEM) || context === null)
       return key;
-    throw new Error("Number-format language conversion is not implemented");
+    return context instanceof ScInterpreterContext
+      ? context.NFGetFormatForLanguageIfBuiltIn(key, language)
+      : context.GetFormatForLanguageIfBuiltIn(key, language);
   }
   /** Invalidates actual represented derived values;visibility/hash services remain unported. @returns Nothing. */
   InvalidateCaches(): void {

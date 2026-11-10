@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.locale-id.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagLocaleToLangState",
+      "convertLocaleToLang"
+    ],
+    "upstreamSymbols": [
+      "LanguageTagImpl::convertLocaleToLang"
+    ],
+    "preservedResponsibilities": [
+      "Original convertLocaleToLang full branch order over genuine MsLangId tables: system resolution, legacy-name remap with Locale/BCP47 refresh, optional valid-only on-the-fly dispatch, actual language fallback/primary-ID suggestion, English last-resort suppression and final initialized-ID flag. Original registration remains an explicit required enclosing owner method, never a production no-op or fabricated ID allocator. Its returned ImplPtr is unused by the source call.",
+      "The original ignored registerOnTheFly return still destroys its shared_ptr at the full-expression boundary; the managed return is explicitly disposed. The actual public value/registry now supplies this required method; complete NumberText/CSV service integration remains pending."
+    ],
+    "omittedResponsibilities": [
+      "Native memory/XML/data-ref/diagnostic ABI and complete NumberText/CSV service forwarding remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.locale-id.ts",
+          "marker": "convertLocaleToLang"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.test.ts",
+          "marker": "class Owner"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLocaleToLang"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.locale-id.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private canonicalization and conversion members are split into explicit source responsibility groups while retaining actual owner dependencies rather than inventing a public LanguageTag facade."
+    }
+  }
+}

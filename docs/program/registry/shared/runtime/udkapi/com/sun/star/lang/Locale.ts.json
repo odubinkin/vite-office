@@ -16,8 +16,6 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/udkapi/com/sun/star/lang/Locale.ts#Locale",
-        "apps/office/src/udkapi/com/sun/star/lang/Locale.test.ts#retains all IDL fields and default empty string owners",
         "udkapi/com/sun/star/lang/Locale.idl#Locale",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-language.test.ts",
         "apps/office/src/editeng/source/items/native-language-locale.test.ts"

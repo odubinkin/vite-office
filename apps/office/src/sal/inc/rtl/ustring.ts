@@ -1,4 +1,5 @@
 /** @fileoverview Original internal OUString literal, lifetime and reference contracts from include/rtl/ustring.hxx. */
+import { OUStringBuffer } from "./ustrbuf";
 import {
   rtl_uString_acquire,
   rtl_uString_assign,
@@ -25,6 +26,7 @@ import {
   rtl_uString_newConcat,
   rtl_uString_newConcatUtf16L,
   rtl_uString_newReplaceStrAt,
+  rtl_uString_newReplaceStrAtUtf16L,
   rtl_uString_newReplaceAllFromIndexUtf16LUtf16L,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
@@ -38,9 +40,16 @@ import {
   RTL_USTR_MAX_VALUEOFINT64,
   RTL_USTR_MAX_VALUEOFDOUBLE,
   rtl_string2UString,
+  rtl_convertStringToUString,
   OSTRING_TO_OUSTRING_CVTFLAGS,
 } from "./ustring.h";
 import type { rtl_TextEncoding } from "./textenc";
+import { RTL_TEXTENCODING_UTF8 } from "./textenc";
+import {
+  RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR,
+  RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR,
+  RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+} from "./textcvt.h";
 import { rtl_math_doubleToUString, rtl_math_StringFormat } from "./math.h";
 import { SAL_NO_ACQUIRE } from "../types";
 import { ConstCharArrayDetector } from "./stringutils";
@@ -103,6 +112,25 @@ export type OUStringConstReference = Readonly<
 
 /** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
 export class OUString {
+  /** Original fromUtf8 counted byte-view conversion and strict error flags; the original debug0 build ignores the success assertion. @param source - Complete UTF8 byte view, including embedded zeros. @returns Owned converted string, retaining original partial-output behavior on malformed bytes. */
+  static fromUtf8(source: Uint8Array): OUString {
+    const target = new OUString();
+    try {
+      rtl_convertStringToUString(
+        target.slot,
+        source,
+        source.length,
+        RTL_TEXTENCODING_UTF8,
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+          RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+          RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+      );
+      return target;
+    } catch (error) {
+      target.dispose();
+      throw error;
+    }
+  }
   /** Original NUL-terminated signed32 query, with native radix and overflow rules. @param radix - Original default decimal radix. @returns Signed32 or zero. */
   public toInt32(radix = 10): number {
     return rtl_ustr_toInt32(this.pData.buffer, radix);
@@ -286,8 +314,9 @@ export class OUString {
     return result;
   }
 
-  /** Original reinterpret reference over a caller's pointer field, with stable JS view identity and no constructor/acquire/release. @param slot - Live field storage. @returns Live const view following pointer replacement. */
-  static unacquired(slot: rtl_uStringSlot): OUStringConstReference {
+  /** Original reinterpret reference over a caller's pointer field, with stable JS view identity and no constructor/acquire/release. @param source - Live pointer field or original friend OUStringBuffer owner. @returns Live const view following pointer replacement. */
+  static unacquired(source: rtl_uStringSlot | OUStringBuffer): OUStringConstReference {
+    const slot = source instanceof OUStringBuffer ? source["data"] : source;
     let reference = OUString.references.get(slot);
     if (reference === undefined) {
       const view = Object.create(OUString.prototype) as OUString;
@@ -323,10 +352,24 @@ export class OUString {
     result.slot = slot;
     return result;
   }
-  /** Original replaceAt with an owned-string operand returns a new no-acquire owner from the C replacement operation. @param index - Native signed32 offset. @param count - Native signed32 removal length. @param replacement - Native borrowed operand. @returns Owned result. */
-  replaceAt(index: number, count: number, replacement: OUStringConstReference): OUString {
+  /** Original owned-string and std::u16string_view replaceAt overloads return a no-acquire owner through their respective original C functions. @param index - Native signed32 offset. @param count - Native signed32 removal length. @param replacement - Original counted borrowed string or exact logical UTF16 view. @returns Owned result. */
+  replaceAt(
+    index: number,
+    count: number,
+    replacement: OUStringConstReference | Uint16Array,
+  ): OUString {
     const slot: rtl_uStringSlot = [null];
-    rtl_uString_newReplaceStrAt(slot, this.pData, index, count, replacement.pData as rtl_uString);
+    if (replacement instanceof Uint16Array)
+      rtl_uString_newReplaceStrAtUtf16L(
+        slot,
+        this.pData,
+        index,
+        count,
+        replacement,
+        replacement.length,
+      );
+    else
+      rtl_uString_newReplaceStrAt(slot, this.pData, index, count, replacement.pData as rtl_uString);
     const result = Object.create(OUString.prototype) as OUString;
     result.slot = slot;
     return result;

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-environment",
+    "capabilityIds": [
+      "CAP-4d54c428-e81a-432b-b9a2-ecfc2bf40546"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+        "apps/office/src/cppu/inc/uno/environment.hxx.test.ts",
+        "include/uno/environment.hxx"
+      ],
+      "justification": "Original public uno::Environment resolved-pointer/default/copy/move ownership, pointer/copy/move assignment, destruction, clear/get/is and owned getTypeName/borrowed getContext accessors. Actual C environment callbacks and OUString owners are reused. Pointer/copy assignment skips identical pointers; differing pointers acquire new before releasing old and publishing. Clear releases before null publication; self-move releases and clears. Type-name returns own exact Unicode/NUL descriptor references, while context is passed through without address synthesis or identity conversion. Whole original environment.hxx plus unchanged lbenv.cxx and real DefaultEnvironment callbacks supply complete normal-ASan/UBSan identical ownership/accessor streams. Enclosing input records are not production environment constructors/providers. Descriptor/current lookup, invoke/enter/isValid purpose-stack APIs, public bootstrap/application installation, physical ABI/allocator/concurrency/noexcept termination/leaks and full upstream consumer QA remain incomplete or unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Environment"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/uno/environment.hxx",
+      "upstreamSymbols": [
+        "Environment",
+        "Environment::clear",
+        "Environment::operator ="
+      ]
+    }
+  }
+}

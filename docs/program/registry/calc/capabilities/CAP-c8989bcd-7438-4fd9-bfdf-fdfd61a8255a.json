@@ -9,7 +9,8 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed."
+      "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -74,12 +75,20 @@
         {
           "path": "apps/office/src/sc/inc/column.ts",
           "marker": "ScColumn"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/column.dirty.ts",
+          "marker": "SetDirtyOnRangeHandler"
         }
       ],
       "tests": [
         {
           "path": "apps/office/src/sc/source/core/data/document.scalar.test.ts",
           "marker": "creates sheets and edits real numeric/string"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [

@@ -10,19 +10,22 @@
       "DeleteBeforeCopyFromClip",
       "CopyOneCellFromClip",
       "IsMerged",
-      "EndListeningIntersectedGroups"
+      "EndListeningIntersectedGroups",
+      "EndListeningIntersectedGroup"
     ],
     "upstreamSymbols": [
       "ScTable::DeleteBeforeCopyFromClip",
       "ScTable::CopyOneCellFromClip",
       "ScTable::IsMerged",
-      "ScTable::EndListeningIntersectedGroups"
+      "ScTable::EndListeningIntersectedGroups",
+      "ScTable::EndListeningIntersectedGroup"
     ],
     "preservedResponsibilities": [
       "Task76 pre-paste deletion progress ports SingleColumnSpanSet set/getSpans/swap/empty and the ColumnSpanSet single-column overload;native DeleteCells captures actual formula group extents before shared-context teardown and explicit broadcaster purge,then splits top/bottom boundaries and empties real typed stores in reverse span order. Original document10/table7/column4 pre-deletion cycles sparse source tabs and columns,visits allocated destinations only,and defers broadcasts/listener restoration to CopyFromClipContext. Default CONTENTS preserves destination patterns. Native toSpanArray is reused. Selective date/number deletion requires the unported formatter;skip-empty,nondefault flags and absent rich-edit/note/sparkline stores remain explicit. CellStorageModified formula-group compute cache and stream-valid notifications are unrepresented rather than simulated. Full document copy/paste/reference completion,paste Undo/Redo,EnterBlock and browser acceptance remain pending;this is not task76 completion or full parity. These additions supersede only earlier omissions of these specific pre-deletion/span/listener methods;unconsumed overloads and broader parity remain unverified.",
       "Task76 adds original table7 CopyOneCellFromClip over prepared actual single-row context values,with native modulo column repetition and existing native column bulk formula-group cloning. Whole-row paste copies original nonhidden source height across the destination range but changes the ManualSize bit only at its first row (CALC-263). GetOriginalHeight preserves native invalid/absent-height fallback. Optional actual row/flag owners are respected. Context admission remains default CONTENTS;conditional formats/drawings and document-level single-row script/format preparation remain unrepresented. Native document CopyFromClip,paste history and EnterBlock/AutoSum are still pending;no whole-module parity promotion.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
-      "Original allocated-column EndListeningIntersectedGroups validates native bounds and dispatches to real column4 owners without inventing columns."
+      "Original allocated-column EndListeningIntersectedGroups validates native bounds and dispatches to real column4 owners without inventing columns.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "omittedResponsibilities": [
       "Complete CopyFromClip,CopyOneCellFromClip,stream-valid shell notifications,protected/conditional attribute mutation and nondefault paste services remain outside this pre-deletion foundation."
@@ -48,6 +51,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
           "marker": "restores actual boundary group"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -62,6 +69,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
           "marker": "ScTable::IsMerged"
+        },
+        {
+          "path": "sc/source/core/data/table7.cxx",
+          "marker": "ScTable::EndListeningIntersectedGroup"
         }
       ]
     }

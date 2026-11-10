@@ -291,3 +291,38 @@ it("uses default search/strip arguments and preserves the buffer after invalid s
     value.dispose();
   }
 });
+
+it("strips only matching trailing UTF16 units and returns the original removed count", /** The source stripEnd default is ASCII space and truncates the actual buffer owner. @returns Nothing. */ () => {
+  const buffer = new OUStringBuffer();
+  try {
+    buffer.append(Uint16Array.of(48, 65, 48, 48, 32, 32));
+    expect(buffer.stripEnd()).toBe(2);
+    expect(buffer.stripEnd(48)).toBe(2);
+    expect([...buffer.view()]).toEqual([48, 65]);
+    expect(buffer.stripEnd(48)).toBe(0);
+    expect(buffer.stripEnd(65)).toBe(1);
+    expect(buffer.stripEnd(48)).toBe(1);
+    expect(buffer.stripEnd()).toBe(0);
+  } finally {
+    buffer.dispose();
+  }
+});
+
+it("borrows the original buffer pointer field without acquire and follows replacement", /** Original OUString::unacquired(const OUStringBuffer&) is a reinterpret reference to pData, not a snapshot or copied string. @returns Nothing. */ () => {
+  const owner = new OUStringBuffer(Uint16Array.of(65, 0, 66));
+  try {
+    const original = owner["data"][0] as rtl_uString,
+      count = original.refCount,
+      borrowed = OUString.unacquired(owner);
+    expect(borrowed.pData).toBe(original);
+    expect(original.refCount).toBe(count);
+    expect(OUString.unacquired(owner)).toBe(borrowed);
+    owner.ensureCapacity(128);
+    expect(borrowed.pData).toBe(owner["data"][0]);
+    expect(borrowed.pData).not.toBe(original);
+    expect(Array.from(borrowed.getStr().subarray(0, borrowed.getLength()))).toEqual([65, 0, 66]);
+    expect((borrowed.pData as rtl_uString).refCount).toBe(1);
+  } finally {
+    owner.dispose();
+  }
+});

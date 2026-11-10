@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/normalizer2impl.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/normalizer2impl.cpp",
+    "localSymbols": [
+      "Normalizer2Impl",
+      "compose",
+      "decomposeShort",
+      "recompose",
+      "combine"
+    ],
+    "upstreamSymbols": [
+      "Normalizer2Impl",
+      "compose",
+      "decomposeShort",
+      "recompose",
+      "combine"
+    ],
+    "preservedResponsibilities": [
+      "The counted UTF-16 non-contiguous composition path uses the original Nrm2 format-5 FAST trie, decomposition mappings and composition tuples. The original fast and slow paths retain canonical ordering, Jamo behavior, and the normalized-state check. A native witness compares all code points, official normalization columns and targeted strings."
+    ],
+    "omittedResponsibilities": [
+      "Other normalization modes, UTF-8, FCD, append, ABI and allocation behavior are outside the consumed CJK path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/normalizer2impl.ts",
+          "marker": "class Normalizer2Impl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/normalizer2impl.cpp",
+          "marker": "Normalizer2Impl"
+        }
+      ]
+    }
+  }
+}

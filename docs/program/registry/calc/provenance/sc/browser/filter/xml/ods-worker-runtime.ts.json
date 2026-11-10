@@ -8,13 +8,18 @@
         {
           "marker": "processOdsWorkerRequest",
           "path": "apps/office/src/sc/browser/filter/xml/ods-worker-runtime.ts"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/ods-worker-runtime.ts",
+          "marker": "document.Dispose"
         }
       ]
     },
     "localPath": "apps/office/src/sc/browser/filter/xml/ods-worker-runtime.ts",
     "rationale": "Runs native Calc ODS/XML filters on worker messages and transfers document records while disposing temporary native models. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
     "responsibilities": [
-      "Runs native Calc ODS/XML filters on worker messages and transfers document records while disposing temporary native models."
+      "Runs native Calc ODS/XML filters on worker messages and transfers document records while disposing temporary native models.",
+      "Destroys temporary model owners with their native document destructor after filter requests."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

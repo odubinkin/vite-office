@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/charstr.h.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/charstr.h",
+    "localSymbols": [
+      "CharString"
+    ],
+    "upstreamSymbols": [
+      "CharString",
+      "buffer",
+      "len"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 CharString now uses its actual single header-owned MaybeStackArray<char,40> byte storage and CPP-defined methods, preserving counted/NUL inputs, status guards, source growth hints, writable append-buffer commits, self-append reallocation, signed64 decimal output, invariant conversion, counted search, extraction/termination, move/copy/alias ownership and pinned POSIX separators. Empty-piece copy preserves the stale first byte (CALC-470); owning orphanOrClone reports the input length even when it differs from capacity (CALC-471). 819 sequences/2416 complete initialized snapshots match unchanged original library methods and header templates, with private visibility opened only for observation. StringPiece NUL length uses its original CPP responsibility; default/counted/borrowed fields remain in its header owner. Nullable zero-count invariant inputs preserve native no-read behavior. Managed byte storage does not certify physical allocation failure/free/stack ABI, uninitialized tails, moved-from contents, unreadable/overlapping spans or invalidated borrows. This prerequisite does not implement udata_open/path/file orchestration, package/iterator/engine/service installation, NatNum12 output, multiline import or final CSV acceptance."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed byte specialization and pinned POSIX constants are represented. Native allocator/free/stack/thread/physical ABI, uninitialized tails, moved-from payload, invalidated borrows and undefined spans are not certified. General element specializations and unconsumed public APIs are not fabricated. udata_open and production service/CSV integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/charstr.h.ts",
+          "marker": "CharString"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/charstr.native.test.ts",
+          "marker": "retains original CharString"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/charstr.h",
+          "marker": "CharString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/charstr.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Retains the original header discriminator for the inline/field owner while ESM distinguishes the original CPP method module. The wrapper delegates CPP-defined operations over the same actual owner."
+    }
+  }
+}

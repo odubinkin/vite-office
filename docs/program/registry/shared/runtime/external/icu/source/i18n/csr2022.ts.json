@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/csr2022.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/csr2022.ts#match_2022",
+        "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+        "vendor/icu-reference/source/i18n/csr2022.cpp",
+        "vendor/icu-reference/source/i18n/csdetect.cpp",
+        "scripts/generate-icu-charset-tables.py"
+      ],
+      "justification": "Original JP, KR and CN escape tables and bounded score math use the prepared source bytes and count shifts exactly. Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CharsetRecog_2022JP",
+        "CharsetRecog_2022KR",
+        "CharsetRecog_2022CN"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/i18n/csr2022.cpp",
+      "upstreamSymbols": [
+        "CharsetRecog_2022::match_2022"
+      ]
+    }
+  }
+}

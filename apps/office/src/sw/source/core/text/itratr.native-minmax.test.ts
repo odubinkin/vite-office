@@ -1,11 +1,8 @@
 /** @fileoverview Writer import-time min/max font binding and anchored frame width inputs on actual model owners. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { readFileSync } from "node:fs";
-import { afterEach, assert, beforeAll, expect, it } from "vitest";
-import {
-  ICULanguageBreakFactory,
-  type WordDictionaryName,
-} from "../../../../external/icu/source/common/brkeng";
+import { afterEach, assert, expect, it } from "vitest";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
@@ -50,7 +47,6 @@ import {
   RES_MARGIN_TEXTLEFT,
 } from "../../../inc/hintids";
 import { SwNodeRange } from "../../../inc/ndindex";
-import { g_pBreakIt } from "../bastyp/breakit";
 import type { SwTable } from "../table/swtable";
 import { SwHTMLTableLayout } from "../doc/htmltbl";
 import { SwHTMLTableLayoutColumn } from "../doc/htmltbl.column";
@@ -64,24 +60,7 @@ import { GetMinMaxNodeMetrics } from "./itratr.minmax";
 import { SwAttrIter } from "./itratr";
 import { SwScriptInfo } from "./porlay";
 
-/** Loads shipped ICU resources through the same factory used by the browser. @param name - Original resource name. @returns Native bytes. */
-function loadDictionary(name: WordDictionaryName): Uint8Array {
-  return readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
-}
-
-beforeAll(
-  /** Installs the real dictionary runtime for paragraph-width tests. @returns Nothing. */ () => {
-    g_pBreakIt.GetBreakIter().BindWordDictionaryFactory(
-      new ICULanguageBreakFactory({
-        thaidict: loadDictionary("thaidict"),
-        laodict: loadDictionary("laodict"),
-        burmesedict: loadDictionary("burmesedict"),
-        khmerdict: loadDictionary("khmerdict"),
-        cjdict: loadDictionary("cjdict"),
-      }),
-    );
-  },
-);
+InitApplicationServiceManager(implementations);
 
 const documents: SwDoc[] = [];
 afterEach(

@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/lang/WrappedTargetRuntimeException.idl",
+    "localSymbols": [
+      "WrappedTargetRuntimeException",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "WrappedTargetRuntimeException",
+      "RuntimeException",
+      "TargetException"
+    ],
+    "preservedResponsibilities": [
+      "Original generated exception extends RuntimeException with the owned target Any and real derived-type registration."
+    ],
+    "omittedResponsibilities": [
+      "General caught-exception bridge and physical native ABI remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+          "marker": "WrappedTargetRuntimeException"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/lang/WrappedTargetRuntimeException.idl",
+          "marker": "TargetException"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void ExceptionType::dumpComprehensiveGetCppuType"
+        }
+      ]
+    }
+  }
+}

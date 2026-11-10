@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/desktop/source/app/appinit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-component-context",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165",
+      "CAP-4bdd6ec4-885f-4291-befb-1adc79822e00"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/desktop/source/app/appinit.ts#InitApplicationServiceManager",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "desktop/source/app/appinit.cxx",
+        "cppuhelper/source/defaultbootstrap.cxx"
+      ],
+      "justification": "Original Desktop initialization queries XMultiServiceFactory from the actual initial context's service manager and publishes it through comphelper. Desktop OS configuration, scripting setup, UCB and other desktop startup stages remain outside the consumed initialization slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InitApplicationServiceManager"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "desktop/source/app/appinit.cxx",
+      "upstreamSymbols": [
+        "InitApplicationServiceManager",
+        "defaultBootstrap_InitialComponentContext",
+        "setProcessServiceFactory"
+      ]
+    }
+  }
+}

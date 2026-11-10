@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/registerservices/registerservices.ts",
+    "upstreamPath": "i18npool/source/registerservices/registerservices.cxx",
+    "localSymbols": [
+      "i18npool_BreakIterator_ja_get_implementation",
+      "i18npool_BreakIterator_ko_get_implementation",
+      "i18npool_BreakIterator_zh_get_implementation",
+      "i18npool_BreakIterator_zh_TW_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "BreakIterator_ja",
+      "BreakIterator_ko",
+      "BreakIterator_zh",
+      "BreakIterator_zh_TW",
+      "IMPL_UNO_CONSTRUCTOR"
+    ],
+    "preservedResponsibilities": [
+      "The original four macro-generated acquired constructors allocate the actual locale-specific break iterators."
+    ],
+    "omittedResponsibilities": [
+      "Other i18npool constructor registrations and native library linkage remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/registerservices/registerservices.ts",
+          "marker": "i18npool_BreakIterator_zh_TW_get_implementation"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/registerservices/registerservices.cxx",
+          "marker": "IMPL_UNO_CONSTRUCTOR"
+        },
+        {
+          "path": "i18npool/util/i18npool.component",
+          "marker": "i18npool_BreakIterator_ja_get_implementation"
+        }
+      ]
+    }
+  }
+}

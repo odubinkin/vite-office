@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
+    "localSymbols": [
+      "READONLY"
+    ],
+    "upstreamSymbols": [
+      "PropertyAttribute",
+      "READONLY"
+    ],
+    "preservedResponsibilities": [
+      "Original READONLY flag and value consumed by the default-context property descriptor."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed flags remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts",
+          "marker": "READONLY"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
+          "marker": "READONLY"
+        },
+        {
+          "path": "cppuhelper/source/servicemanager.cxx",
+          "marker": "getDefaultContextProperty"
+        }
+      ]
+    }
+  }
+}

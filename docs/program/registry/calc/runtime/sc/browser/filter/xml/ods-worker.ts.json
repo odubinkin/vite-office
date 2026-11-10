@@ -16,12 +16,13 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sc/browser/filter/xml/ods-worker.ts#scope"
+        "apps/office/src/sc/browser/filter/xml/ods-worker.ts#bindOdsWorker",
+        "apps/office/src/calc-ods-worker.ts"
       ],
       "justification": "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
       "knownViolations": [],
       "localSymbols": [
-        "scope"
+        "bindOdsWorker"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

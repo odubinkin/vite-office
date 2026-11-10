@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import {
   RTL_TEXTENCODING_DONTKNOW,
+  RTL_TEXTENCODING_ISO_8859_1,
   RTL_TEXTENCODING_MS_1252,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
@@ -116,3 +117,44 @@ it("writes raw string views including NUL and high bytes without Unicode recodin
   expect(stream.WriteChar(0x180).WriteChar("}").WriteNumberAsString(-32768)).toBe(stream);
   expect([...stream.GetData()]).toEqual([65, 0, 255, 233, 128, 125, 45, 51, 50, 55, 54, 56]);
 });
+
+it("detects bounded no-BOM input, rewinds and leaves an unmapped first match unknown", /** Checks the actual ICU classifier and source name mapping. @returns Nothing. */ () => {
+  const latin = new SvStream(
+    new TextEncoder().encode("xName,Value\n日本語の文章"),
+    RTL_TEXTENCODING_UTF8,
+  );
+  latin.Seek(1);
+  latin.DetectEncoding(11);
+  expect(latin.Tell()).toBe(1);
+  expect(latin.good()).toBe(true);
+  expect(latin.GetStreamEncoding()).toBe(RTL_TEXTENCODING_ISO_8859_1);
+  expect(latin.ReadUniOrByteStringLine()).toBe("Name,Value");
+
+  const utf32 = new SvStream(
+    Buffer.from(
+      "0000004e000000610000006d000000650000002c00000056000000610000006c00000075000000650000000a",
+      "hex",
+    ),
+    RTL_TEXTENCODING_UTF8,
+  );
+  utf32.DetectEncoding();
+  expect(utf32.GetStreamEncoding()).toBe(RTL_TEXTENCODING_DONTKNOW);
+  expect(utf32.Tell()).toBe(0);
+  expect(utf32.good()).toBe(true);
+});
+
+it.each([
+  "4e0061006d0065002c00560061006c00750065000a00",
+  "004e0061006d0065002c00560061006c00750065000a",
+])(
+  "detects and reads UTF-16 in its selected no-BOM byte order",
+  /** Checks the source endian installation after an ICU match. @param hex - Raw native bytes. @returns Nothing. */ (
+    hex,
+  ) => {
+    const stream = new SvStream(Buffer.from(hex, "hex"), RTL_TEXTENCODING_DONTKNOW);
+    stream.DetectEncoding();
+    expect(stream.GetStreamEncoding()).toBe(RTL_TEXTENCODING_UNICODE);
+    expect(stream.Tell()).toBe(0);
+    expect(stream.ReadUniOrByteStringLine()).toBe("Name,Value");
+  },
+);

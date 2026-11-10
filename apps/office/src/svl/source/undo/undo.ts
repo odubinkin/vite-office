@@ -3,13 +3,15 @@
  * with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention.
  */
 
+import { OUString } from "../../../sal/inc/rtl/ustring";
+
 /** Matches LibreOffice's default top-level SfxUndoManager action capacity. */
 export const DEFAULT_MAX_UNDO_ACTION_COUNT = 20;
 
 /** Opaque history boundary captured before an asynchronous primary-medium write begins. */
 export interface SfxUndoSavePosition {
   /** Action immediately before the captured boundary, absent for the history root. */
-  readonly actionBefore?: SfxUndoAction<unknown>;
+  readonly actionBefore?: SfxUndoAction<unknown, unknown>;
   /** History-root revision used to reject boundaries invalidated by trimming or clearing. */
   readonly historyRootRevision: number;
   /** Zero-based action cursor at the captured boundary. */
@@ -17,7 +19,7 @@ export interface SfxUndoSavePosition {
 }
 
 /** Base class for one reversible operation retained by SfxUndoManager. */
-export abstract class SfxUndoAction<Context> {
+export abstract class SfxUndoAction<Context, Comment = string> {
   /** Reverts this action against the supplied document context. @param context - Active undo context. @returns Nothing. */
   public abstract UndoWithContext(context: Context): void;
 
@@ -25,10 +27,10 @@ export abstract class SfxUndoAction<Context> {
   public abstract RedoWithContext(context: Context): void;
 
   /** Returns the human-readable action label. @returns Command label. */
-  public abstract GetComment(): string;
+  public abstract GetComment(): Comment;
 
   /** Tries to absorb an immediately following compatible action. @param nextAction - Newer action candidate. @returns True when this action absorbed the candidate. */
-  public Merge(nextAction: SfxUndoAction<Context>): boolean {
+  public Merge(nextAction: SfxUndoAction<Context, Comment>): boolean {
     void nextAction;
     return false;
   }
@@ -43,17 +45,45 @@ export abstract class SfxUndoAction<Context> {
 }
 
 /** Composite action whose children undo in reverse order and redo in forward order. */
-export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
-  private readonly actions: SfxUndoAction<Context>[] = [];
+export class SfxListUndoAction<
+  Context,
+  Comment extends string | OUString = string,
+> extends SfxUndoAction<Context, Comment> {
+  private readonly actions: SfxUndoAction<Context, Comment>[] = [];
 
-  /** Creates one compound action. @param comment - User-visible command label. @returns Nothing. */
-  public constructor(private readonly comment: string) {
+  private readonly comment: Comment;
+  private readonly repeatComment: Comment | undefined;
+  /** Creates one compound action. @param comment - User-visible command label. @param repeatComment - Native repeat label when supplied. @param id - Native action identifier. @param viewShellId - View shell identifier. @returns Nothing. */
+  public constructor(
+    comment: Comment,
+    repeatComment?: Comment,
+    private readonly id = 0,
+    private readonly viewShellId = -1,
+  ) {
     super();
-    if (comment.trim().length === 0) throw new Error("Undo action comment must not be blank.");
+    if (typeof comment === "string" && comment.trim().length === 0)
+      throw new Error("Undo action comment must not be blank.");
+    this.comment = comment instanceof OUString ? (new OUString(comment) as Comment) : comment;
+    this.repeatComment =
+      repeatComment instanceof OUString ? (new OUString(repeatComment) as Comment) : repeatComment;
+  }
+  /** Original compound undo identity. @returns Native action identifier. */
+  public GetId(): number {
+    return this.id;
+  }
+  /** Original originating view shell. @returns View shell identifier. */
+  public GetViewShellId(): number {
+    return this.viewShellId;
+  }
+  /** Original repeat label by value. @returns Owned native label or existing omitted string-lane value. */
+  public GetRepeatComment(): Comment | undefined {
+    return this.repeatComment instanceof OUString
+      ? (new OUString(this.repeatComment) as Comment)
+      : this.repeatComment;
   }
 
   /** Adds or merges one child action. @param action - Child operation. @param tryMerge - Whether the current child may absorb it. @returns Nothing. */
-  public AddAction(action: SfxUndoAction<Context>, tryMerge = false): void {
+  public AddAction(action: SfxUndoAction<Context, Comment>, tryMerge = false): void {
     const current = this.actions[this.actions.length - 1];
     if (tryMerge && current?.Merge(action) === true) {
       action.Dispose();
@@ -68,14 +98,14 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
   }
 
   /** Original inherited SfxUndoArray child access,using native forward storage order. Caller supplies an existing index. @param index - Child storage index. @returns Actual child action. */
-  public GetUndoAction(index: number): SfxUndoAction<Context> {
-    return this.actions[index] as SfxUndoAction<Context>;
+  public GetUndoAction(index: number): SfxUndoAction<Context, Comment> {
+    return this.actions[index] as SfxUndoAction<Context, Comment>;
   }
 
   /** Reverts children in reverse execution order. @param context - Active undo context. @returns Nothing. */
   public override UndoWithContext(context: Context): void {
     for (let index = this.actions.length - 1; index >= 0; index -= 1)
-      (this.actions[index] as SfxUndoAction<Context>).UndoWithContext(context);
+      (this.actions[index] as SfxUndoAction<Context, Comment>).UndoWithContext(context);
   }
 
   /** Reapplies children in original execution order. @param context - Active redo context. @returns Nothing. */
@@ -84,8 +114,10 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
   }
 
   /** Returns the compound command label. @returns Command label. */
-  public override GetComment(): string {
-    return this.comment;
+  public override GetComment(): Comment {
+    return this.comment instanceof OUString
+      ? (new OUString(this.comment) as Comment)
+      : this.comment;
   }
 
   /** Sums retained child payloads. @returns Approximate payload units. */
@@ -97,19 +129,25 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
     );
   }
 
-  /** Releases child payloads when the compound action leaves history. @returns Nothing. */
-  public override Dispose(): void {
+  /** Clears the current level while preserving its compound action and label. @returns Nothing. */
+  public ClearActions(): void {
     for (const action of this.actions) action.Dispose();
     this.actions.length = 0;
+  }
+  /** Releases child payloads and the original owned label when the compound action leaves history. @returns Nothing. */
+  public override Dispose(): void {
+    this.ClearActions();
+    if (this.repeatComment instanceof OUString) this.repeatComment.dispose();
+    if (this.comment instanceof OUString) this.comment.dispose();
   }
 }
 
 /** Action-based undo manager following LibreOffice's single array plus current-action cursor model. */
-export class SfxUndoManager<Context> {
-  private readonly actions: SfxUndoAction<Context>[] = [];
+export class SfxUndoManager<Context, Comment extends string | OUString = string> {
+  private readonly actions: SfxUndoAction<Context, Comment>[] = [];
   private currentAction = 0;
   private mbClearUntilTopLevel = false;
-  private readonly listActions: SfxListUndoAction<Context>[] = [];
+  private readonly listActions: SfxListUndoAction<Context, Comment>[] = [];
   private mergeAllowed = false;
   private savePosition: number | undefined = 0;
   private historyRootRevision = 0;
@@ -120,7 +158,7 @@ export class SfxUndoManager<Context> {
   }
 
   /** Records one already-executed action, optionally merging it with the current top action. @param action - Reversible operation. @param tryMerge - Whether compatible immediate grouping is allowed. @returns Nothing. */
-  public AddUndoAction(action: SfxUndoAction<Context>, tryMerge = false): void {
+  public AddUndoAction(action: SfxUndoAction<Context, Comment>, tryMerge = false): void {
     const listAction = this.listActions[this.listActions.length - 1];
     if (listAction !== undefined) {
       listAction.AddAction(action, tryMerge);
@@ -148,7 +186,7 @@ export class SfxUndoManager<Context> {
   /** Reverts the current top action. @param context - Active document context. @returns True when an action ran. */
   public Undo(context: Context): boolean {
     if (this.IsInListAction() || this.currentAction === 0) return false;
-    const action = this.actions[this.currentAction - 1] as SfxUndoAction<Context>;
+    const action = this.actions[this.currentAction - 1] as SfxUndoAction<Context, Comment>;
     this.currentAction -= 1;
     this.mergeAllowed = false;
     try {
@@ -163,16 +201,23 @@ export class SfxUndoManager<Context> {
   /** Reapplies the next redo action. @param context - Active document context. @returns True when an action ran. */
   public Redo(context: Context): boolean {
     if (this.IsInListAction() || this.currentAction >= this.actions.length) return false;
-    const action = this.actions[this.currentAction] as SfxUndoAction<Context>;
+    const action = this.actions[this.currentAction] as SfxUndoAction<Context, Comment>;
     action.RedoWithContext(context);
     this.currentAction += 1;
     this.mergeAllowed = false;
     return true;
   }
 
-  /** Begins a nested compound action. @param comment - User-visible label. @returns Nothing. */
-  public EnterListAction(comment: string): void {
-    this.listActions.push(new SfxListUndoAction(comment));
+  /** Begins a nested compound action. @param comment - User-visible label. @param repeatComment - Original repeat label. @param id - Native action identifier. @param viewShellId - Native view shell identifier. @returns Nothing. */
+  public EnterListAction(
+    comment: Comment,
+    repeatComment?: Comment,
+    id = 0,
+    viewShellId = -1,
+  ): void {
+    this.listActions.push(
+      new SfxListUndoAction<Context, Comment>(comment, repeatComment, id, viewShellId),
+    );
   }
 
   /** Closes the current compound action and records it in its parent or the top-level stack. @returns Number of child actions. */
@@ -215,12 +260,12 @@ export class SfxUndoManager<Context> {
   }
 
   /** Returns an undo action counted from the stack top. @param offset - Zero-based distance from top. @returns Matching action, when present. */
-  public GetUndoAction(offset = 0): SfxUndoAction<Context> | undefined {
+  public GetUndoAction(offset = 0): SfxUndoAction<Context, Comment> | undefined {
     return this.actions[this.currentAction - 1 - offset];
   }
 
   /** Returns a redo action counted from the next action. @param offset - Zero-based distance from next. @returns Matching action, when present. */
-  public GetRedoAction(offset = 0): SfxUndoAction<Context> | undefined {
+  public GetRedoAction(offset = 0): SfxUndoAction<Context, Comment> | undefined {
     return this.actions[this.currentAction + offset];
   }
 
@@ -244,7 +289,9 @@ export class SfxUndoManager<Context> {
     return Object.freeze({
       ...(this.currentAction === 0
         ? {}
-        : { actionBefore: this.actions[this.currentAction - 1] as SfxUndoAction<unknown> }),
+        : {
+            actionBefore: this.actions[this.currentAction - 1] as SfxUndoAction<unknown, unknown>,
+          }),
       historyRootRevision: this.historyRootRevision,
       position: this.currentAction,
     });
@@ -303,7 +350,7 @@ export class SfxUndoManager<Context> {
     this.ClearSavePosition();
     const current = this.listActions[this.listActions.length - 1];
     if (current !== undefined) {
-      current.Dispose();
+      current.ClearActions();
       this.mbClearUntilTopLevel = true;
     } else {
       this.Clear();

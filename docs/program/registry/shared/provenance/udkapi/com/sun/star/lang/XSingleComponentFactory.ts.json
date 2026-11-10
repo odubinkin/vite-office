@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/udkapi/com/sun/star/lang/XSingleComponentFactory.ts",
+    "upstreamPath": "udkapi/com/sun/star/lang/XSingleComponentFactory.idl",
+    "localSymbols": [
+      "XSingleComponentFactory",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XSingleComponentFactory",
+      "createInstanceWithContext",
+      "createInstanceWithArgumentsAndContext"
+    ],
+    "preservedResponsibilities": [
+      "Complete original XSingleComponentFactory IDL method signatures retain actual context/Any/Sequence/Reference owners and cppumaker normal static/getCppuType/UnoType interface registration with implicit XInterface root. The declaration supplies no service/factory implementation or synthesized optional method. It is consumed by original ComponentContext query dispatch; broad comprehensive method reflection and physical ABI are not promoted."
+    ],
+    "omittedResponsibilities": [
+      "Public createComponentContext current/source Environment and Mapping orchestration, default environment engine, bridge/purpose-stack creation, concrete ServiceManager/application installation, EditEngine/VCL/Sfx/DocImport and full NatNum12/formatter CSV admission remain incomplete. Native physical pointer ABI, unordered bucket permutation, allocator exhaustion, threading, mutex scopes, shutdown and noexcept process termination remain uncertified. No complete module or CSV readiness is promoted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XSingleComponentFactory.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/component_context.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/lang/XSingleComponentFactory.idl",
+          "marker": "XSingleComponentFactory"
+        }
+      ]
+    }
+  }
+}

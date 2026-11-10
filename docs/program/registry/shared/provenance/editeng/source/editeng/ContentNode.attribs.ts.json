@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/ContentNode.attribs.ts",
+    "upstreamPath": "editeng/source/editeng/ContentNode.cxx",
+    "localSymbols": [
+      "CharAttribList"
+    ],
+    "upstreamSymbols": [
+      "CharAttribList",
+      "CharAttribList::OptimizeRanges",
+      "CharAttribList::HasBoundingAttrib",
+      "CharAttribList::FindFeature",
+      "GetDefFont"
+    ],
+    "preservedResponsibilities": [
+      "Original owning attribute vector and empty flag, insertion ordering, reverse closed/half-open lookup, forward next/empty/feature scans, overlap/bounding predicates, erase/destruction, DeleteEmptyAttribs and one-pass OptimizeRanges. Source reverse early termination and first-candidate merge break are preserved and documented as CALC-424/425. Original start comparator is retained without certifying unspecified native equal-key sort order. Default-font/cache, ContentNode/EditDoc/ImpEditEngine/engine/view/layout integration remain separate; this is a consumed source member group, not a completed text engine or literal-array facade.",
+      "Actual stable default SvxFont member and original member initialization order are now preserved in CharAttribList; enclosing font recalculation/layout and document integration remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete CSV multiline engine, NatNum12 casing/formatter and process-context service integration remain incomplete. Native layout/memory/thread/ABI and full original QA are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/ContentNode.attribs.ts",
+          "marker": "CharAttribList"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
+          "marker": "CharAttribList"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/ContentNode.cxx",
+          "marker": "CharAttribList"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/ContentNode.attribs.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original attribute-list storage/range responsibilities are separated from ContentNode text/font/style and engine/layout responsibilities under the unchanged source-file budget."
+    }
+  }
+}

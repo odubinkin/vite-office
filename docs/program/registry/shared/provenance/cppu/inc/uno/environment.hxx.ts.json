@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+    "status": "mapped",
+    "upstreamPath": "include/uno/environment.hxx",
+    "localSymbols": [
+      "Environment"
+    ],
+    "upstreamSymbols": [
+      "Environment",
+      "Environment::clear",
+      "Environment::operator ="
+    ],
+    "preservedResponsibilities": [
+      "Original public uno::Environment resolved-pointer/default/copy/move ownership, pointer/copy/move assignment, destruction, clear/get/is and owned getTypeName/borrowed getContext accessors. Actual C environment callbacks and OUString owners are reused. Pointer/copy assignment skips identical pointers; differing pointers acquire new before releasing old and publishing. Clear releases before null publication; self-move releases and clears. Type-name returns own exact Unicode/NUL descriptor references, while context is passed through without address synthesis or identity conversion. Whole original environment.hxx plus unchanged lbenv.cxx and real DefaultEnvironment callbacks supply complete normal-ASan/UBSan identical ownership/accessor streams. Enclosing input records are not production environment constructors/providers. Descriptor/current lookup, invoke/enter/isValid purpose-stack APIs, public bootstrap/application installation, physical ABI/allocator/concurrency/noexcept termination/leaks and full upstream consumer QA remain incomplete or unverified."
+    ],
+    "omittedResponsibilities": [
+      "Descriptor/current environment lookup, invocation/purpose stack and validity wrappers; actual environment factory/binding bootstrap, physical pointer/ABI/allocator/concurrency/noexcept termination/leaks and full upstream consumers."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+          "marker": "Environment"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/uno/environment.hxx.test.ts",
+          "marker": "matches complete original public Environment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/uno/environment.hxx",
+          "marker": "Environment::clear"
+        },
+        {
+          "path": "include/uno/environment.hxx",
+          "marker": "Environment::operator ="
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/inc/uno/environment.hxx.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Original include/uno/environment.h C records and include/uno/environment.hxx public inline C++ wrapper have the same normalized stem and distinct ownership. The existing environment.ts represents environment.h. Keeping the original .hxx discriminator before .ts preserves their separate ESM module identities and source responsibilities."
+    }
+  }
+}

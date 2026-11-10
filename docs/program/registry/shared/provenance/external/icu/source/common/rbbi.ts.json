@@ -7,14 +7,29 @@
     "localPath": "apps/office/src/external/icu/source/common/rbbi.ts",
     "upstreamPath": "vendor/icu-reference/source/common/rbbi.cpp",
     "localSymbols": [
-      "RuleBasedBreakIterator",
       "handleNext",
       "handleSafePrevious",
+      "RuleBasedBreakIterator",
+      "getLanguageBreakEngine",
+      "getLanguageBreakEngineFromFactory",
+      "initLanguageFactories",
+      "rbbi_cleanup",
+      "setLocaleIDs",
       "following",
       "preceding",
       "isBoundary"
     ],
     "upstreamSymbols": [
+      "handleNext",
+      "handleSafePrevious",
+      "RuleBasedBreakIterator",
+      "setText",
+      "getUText",
+      "isBoundary",
+      "getLanguageBreakEngine",
+      "getLanguageBreakEngineFromFactory",
+      "initLanguageFactories",
+      "rbbi_cleanup",
       "RuleBasedBreakIterator::handleNext",
       "RuleBasedBreakIterator::handleSafePrevious",
       "RuleBasedBreakIterator::following",
@@ -22,14 +37,43 @@
       "RuleBasedBreakIterator::isBoundary"
     ],
     "preservedResponsibilities": [
+      "Original ICU78.3 handleNext state transitions, unconditional/lookahead acceptance order, dictionary-character count, status/position/end mutations and forced-progress fallback are represented over actual prepared fields. Native compiled LibreOffice word/line rules and custom lookahead/16-bit-table witnesses match 2,450 forward states. Consumed UText native-index/next32 and complete ucstrTextAccess preserve deferred 32-unit chunks, codepoint alignment, lone surrogates and explicit/NUL lengths; 1,220 native states match. Native test access changes private visibility only, without replacing headers/methods/providers. The forward checkpoint preceded the actual rule-owner integration.",
+      "Original handleSafePrevious consumes the actual reverse table/trie, normalizes the source position and returns a safe restart point while retaining iterator position/status/end/dictionary fields. Native original method comparison covers 2,450 reverse states in addition to the retained 2,450 forward states. Added original utext_previous32, utext_current32, utext_getPreviousNativeIndex, utext_nativeLength and ucstrTextLength, preserving provider transitions, transient/restored cursor operations, lone surrogates and deferred length. All 1,220 native UText sequences retain earlier forward assertions and now compare full current/backward/length mutations. The safe reverse checkpoint tested raw restart points.",
+      "Original linked OpenOffice rule data uses the real generated ToCP name and padded rule symbols. The UDataMemory-backed iterator owns the actual rule wrapper, UChars provider, break cache and dictionary cache, and drives public boundary queries through the original cache and rule methods. UText setup, close, indexed access and shallow/deep cloning retain source ownership and cursor behavior, including CALC-476. Forty native boundary sequences across all eight generated rules match initialized public results, cursor and rule status. Dictionary factory lookup remains an abstract dependency of the concrete production iterator. General native allocation failure, obsolete CharacterIterator adapters and ICU provider ABI are outside the implemented UChars binding.",
+      "The concrete iterator now uses the original shared factory and reverse-priority per-iterator borrowed cache. Its owned reject engine is installed at lowest priority. Original common cleanup releases factories and allows reinitialization. Public native replay covers 88 sequences, including actual dictionary-marked runs across the compiled OpenOffice rules.",
+      "The stock ICU word resource constructor sets original requested, valid and actual locale owners. The raw LibreOffice rule constructor retains the three native root defaults.",
       "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified.",
       "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
     ],
     "omittedResponsibilities": [
-      "Alternate UText providers, external language factories and Writer/UNO dispatch remain outside the current packaged word query."
+      "The enclosing LibreOffice word and title services remain pending. External service hooks, unconsumed UText providers, legacy CharacterIterator APIs, physical allocation and concurrency remain outside the represented contracts."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.ts",
+          "marker": "handleNext"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.forward.test.ts",
+          "marker": "matches original forward mutations"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.reverse.test.ts",
+          "marker": "retains native safe reverse state"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native linked iterator sequence"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native engine identity"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native.test.ts",
+          "marker": "matches the original LibreOffice Unicode word methods"
+        },
         {
           "path": "apps/office/src/external/icu/source/common/rbbi.ts",
           "marker": "RuleBasedBreakIterator"
@@ -44,6 +88,18 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbi.cpp",
+          "marker": "handleNext"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbi.cpp",
+          "marker": "handleSafePrevious"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbi.cpp",
+          "marker": "RuleBasedBreakIterator"
+        },
         {
           "path": "vendor/icu-reference/source/common/rbbi.cpp",
           "marker": "RuleBasedBreakIterator::handleNext"

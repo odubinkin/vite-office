@@ -2,7 +2,10 @@
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CalendarImpl } from "../../../i18npool/source/calendar/calendarImpl";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
-import type { LocaleCalendarItem } from "../../../i18npool/source/localedata/localedata";
+import type {
+  LocaleCalendarItem,
+  LocaleCalendarData,
+} from "../../../i18npool/source/localedata/localedata";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { DateTime, type DateTimeConstReference } from "../../../tools/source/datetime/datetime";
@@ -40,7 +43,7 @@ export class CalendarWrapper {
     this.setLocalDateTime(DateTime.Sub(value, this.aEpochStart));
   }
   /** Original default-calendar load; only UNO exceptions are swallowed. @param locale - Locale. @param utc - Whether to request UTC. @returns Nothing. */
-  loadDefaultCalendar(locale: LocaleConstReference, utc = false): void {
+  loadDefaultCalendar(locale: LocaleConstReference, utc = true): void {
     const zone = utc ? unicode("UTC") : new OUString();
     try {
       this.xC.loadDefaultCalendarTZ(locale, zone);
@@ -52,7 +55,7 @@ export class CalendarWrapper {
     }
   }
   /** Original explicit-calendar load. @param id - Calendar ID. @param locale - Locale. @param utc - Whether to request UTC. @returns Nothing. */
-  loadCalendar(id: OUStringConstReference, locale: LocaleConstReference, utc = false): void {
+  loadCalendar(id: OUStringConstReference, locale: LocaleConstReference, utc = true): void {
     const zone = utc ? unicode("UTC") : new OUString();
     try {
       this.xC.loadCalendarTZ(id, locale, zone);
@@ -72,6 +75,46 @@ export class CalendarWrapper {
       error.dispose();
     }
     return new OUString();
+  }
+  /** Original display-name forwarding catches UNO exceptions and returns empty. @param category - Display category. @param index - Item index. @param nameType - Name selector. @returns Owned name or empty. */
+  getDisplayName(category: number, index: number, nameType: number): OUString {
+    try {
+      return this.xC.getDisplayName(category, index, nameType);
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+    return new OUString();
+  }
+  /** Original native-mode display forwarding. @param code - Display code. @param native - Original signed16 native mode. @returns Owned display text. */
+  getDisplayString(code: number, native: number): OUString {
+    try {
+      return this.xC.getDisplayString(code, native);
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+    return new OUString();
+  }
+  /** Original loaded Calendar2 data projection and UNO exception default. @returns Actual loaded fields or default value. */
+  getLoadedCalendar(): LocaleCalendarData {
+    try {
+      return this.xC.getLoadedCalendar2();
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+    return {
+      id: "",
+      isDefault: false,
+      startOfWeek: "",
+      minimumDays: 0,
+      days: [],
+      months: [],
+      genitiveMonths: [],
+      partitiveMonths: [],
+      eras: [],
+    };
   }
   /** Original getAllCalendars forwarding and UNO exception default. @param locale - Source argument. @returns Source result. */
   getAllCalendars(locale: LocaleConstReference): OUString[] {

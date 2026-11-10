@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+        "apps/office/src/test/editeng-engine-fixture.ts",
+        "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx",
+        "apps/office/src/editeng/source/editeng/impedit4.textobject.ts#SetTextObject",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "editeng/source/editeng/impedit4.cxx",
+        "editeng/source/editeng/impedit2.cxx"
+      ],
+      "justification": "Original private ImpEditEngine::CreateTextObject member-body extraction operates only the actual receiver and existing EditDoc, selection, pool, content, attributes, styles, WrongList, ParaPortion, TextPortion and EditLine owners. It preserves by-value selection adjustment, global whole-paragraph eligibility, actual DEF_METRIC/orientation/script metadata, destination-pool copies, empty-paragraph attributes, clipping, spell cloning, source cache conjunction and unsigned16 count narrowing, TextPortion copy/EditLine Clone behavior and exception cleanup. No second engine/state object, synthetic line model, default provider or renderer is introduced. CALC-439/440 preserve source narrowing and zero-count range behavior. The source no-view replacement and insertion preserve paragraph defaults, actual character features, source metric conversion, field refresh and text orientation. Full style-pool lookup, layout cache replay and interactive insertion remain outside the document editor slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CreateTextObject",
+        "SetTextObject",
+        "InsertTextObject"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit4.cxx",
+      "upstreamSymbols": [
+        "ImpEditEngine::CreateTextObject",
+        "ImpEditEngine::SetText",
+        "ImpEditEngine::InsertTextObject"
+      ]
+    }
+  }
+}

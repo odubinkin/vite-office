@@ -1,16 +1,12 @@
 /** @fileoverview Native HTMLTable MakeTable over actual import cell sections and Writer formats. */
-import { readFileSync } from "node:fs";
-import { assert, beforeAll, expect, it } from "vitest";
-import {
-  ICULanguageBreakFactory,
-  type WordDictionaryName,
-} from "../../../../external/icu/source/common/brkeng";
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
+import { assert, expect, it } from "vitest";
 import { SvxAdjust as A } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation as H } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation as V } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
-import { g_pBreakIt } from "../../core/bastyp/breakit";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { SwHTMLParser } from "./swhtml";
 import { SvStream } from "../../../../tools/source/stream/stream";
@@ -25,24 +21,7 @@ import { RES_BACKGROUND, RES_BOXATR_FORMAT, RES_BOXATR_VALUE } from "../../../in
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SwTableBoxNumFormat, SwTableBoxValue } from "../../core/attr/cellatr";
 
-/** Loads a genuine ICU resource. @param name - Original dictionary name. @returns Pinned binary bytes. */
-function loadDictionary(name: WordDictionaryName): Uint8Array {
-  return readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
-}
-
-beforeAll(
-  /** Installs the native boundary service used by the actual width pass. @returns Nothing. */ () => {
-    g_pBreakIt.GetBreakIter().BindWordDictionaryFactory(
-      new ICULanguageBreakFactory({
-        thaidict: loadDictionary("thaidict"),
-        laodict: loadDictionary("laodict"),
-        burmesedict: loadDictionary("burmesedict"),
-        khmerdict: loadDictionary("khmerdict"),
-        cjdict: loadDictionary("cjdict"),
-      }),
-    );
-  },
-);
+InitApplicationServiceManager(implementations);
 
 /** Creates one native bootstrap cell and an actual import cursor. @param options - Authored native table options. @returns Connected test owners. */
 function fixture(options: readonly HTMLOption[] = []) {

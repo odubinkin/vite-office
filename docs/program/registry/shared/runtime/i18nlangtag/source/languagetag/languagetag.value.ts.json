@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "language-tag-value-fallback",
     "capabilityIds": [
-      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
+      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42",
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -21,7 +22,8 @@
         "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
         "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
         "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
-        "docs/program/writer-native-text-filter-slice.md"
+        "docs/program/writer-native-text-filter-slice.md",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
       ],
       "justification": "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified.",
       "knownViolations": [],
@@ -38,7 +40,11 @@
         "LanguageTag::getLanguageType",
         "LanguageTag::getIsoLanguageScriptCountry",
         "LanguageTag::makeFallback",
-        "LanguageTag::isValidBcp47"
+        "LanguageTag::isValidBcp47",
+        "LanguageTag",
+        "getLanguageAndScript",
+        "LanguageTag::operator==",
+        "LanguageTag::operator!="
       ]
     }
   }

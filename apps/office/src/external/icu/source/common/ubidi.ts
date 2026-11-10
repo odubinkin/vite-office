@@ -1,6 +1,8 @@
 /** @fileoverview Extracted ICU78.3 ubidi_setPara default-mode fixed-LTR/RTL,null-external-level path. Original explicit/implicit/bracket/whitespace decisions are retained;JS owns storage and lifetime. Other ICU bidi modes are not exposed by this slice. */
 // Copyright Unicode, Inc. and others. Unicode License V3: https://www.unicode.org/license.txt
 import * as D from "./ubidiimp.h";
+import { UErrorCode, U_FAILURE } from "./unicode/utypes";
+import { ubidi_getLevels } from "./ubidiln";
 import {
   L,
   R,
@@ -753,27 +755,19 @@ function adjustWSLevels(bidi: D.BidiState): void {
     }
   }
 }
-/** Consumed ubidi_setPara path:default reordering,fixed initial0/1,no external levels,context or callbacks. Returns the actual per-UTF16 levels used by LO's direction scanner;allocation/service APIs and visual reordering are not exposed. @param text - Actual UTF16 text,including embedded NUL. @param paraLevel - Explicit initial direction from the owning paragraph. @returns Resolved levels. */
+/** Consumed fixed-direction adapter uses the actual owner/setPara/getLevels path. Empty input retains the existing scanner adapter's empty result. @param text - Actual UTF16 text, including embedded NUL. @param paraLevel - Explicit initial direction. @returns Resolved source levels. */
 export function resolveDefaultBidiLevels(text: string, paraLevel: 0 | 1): readonly number[] {
   if (text.length === 0) return [];
-  const bidi: D.BidiState = {
-    text,
-    paraLevel,
-    dirProps: [],
-    levels: Array<number>(text.length).fill(0),
-    paras: [{ limit: 0, level: paraLevel }],
-    flags: 0,
-    isolateCount: 0,
-    isolates: [],
-  };
-  getDirProps(bidi);
-  const direction = resolveExplicitLevels(bidi);
-  bidi.isolateCount = -1;
-  if (direction !== 2)
-    return bidi.levels.fill(direction === 0 ? (paraLevel + 1) & ~1 : paraLevel | 1);
-  resolveImplicitRuns(bidi);
-  adjustWSLevels(bidi);
-  return bidi.levels;
+  const error: [number] = [UErrorCode.U_ZERO_ERROR],
+    bidi = ubidi_openSized(text.length, 0, error) as D.UBiDi,
+    units = new Uint16Array(text.length);
+  for (let index = 0; index < text.length; index++) units[index] = text.charCodeAt(index);
+  try {
+    ubidi_setPara(bidi, units, units.length, paraLevel, null, error);
+    return (ubidi_getLevels(bidi, error) as readonly number[]).slice(0, text.length);
+  } finally {
+    ubidi_close(bidi);
+  }
 }
 
 /** Original default-table same-level-run dispatch extracted from ubidi_setPara. A valid nonempty initialized native state is required. The public consumed wrapper fixes initial0/1 and null external levels;direct internal tests also retain branches for externally prepared native states that this wrapper cannot construct. @param bidi - Initialized source state. @returns Nothing. */
@@ -812,4 +806,102 @@ export function resolveImplicitRuns(bidi: BidiState): void {
       }
     } while (limit < length);
   }
+}
+
+/** Original owner allocation and fixed/dynamic capacity policy, with JS array storage instead of native malloc. Native allocator exhaustion is outside this binding. @param maxLength - Original text preallocation, zero permits growth. @param maxRunCount - Original run preallocation, zero permits growth. @param error - Original optional in/out status. @returns Original owner or null on argument/status failure. */
+export function ubidi_openSized(
+  maxLength: number,
+  maxRunCount: number,
+  error: [number] | null,
+): D.UBiDi | null {
+  if (!error || U_FAILURE(error[0])) return null;
+  if (maxLength < 0 || maxRunCount < 0) {
+    error[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+    return null;
+  }
+  const bidi = new D.UBiDi();
+  if (maxLength > 0) {
+    bidi.dirPropsMemory = Array<number>(maxLength).fill(0);
+    bidi.levelsMemory = Array<number>(maxLength).fill(0);
+  } else bidi.mayAllocateText = true;
+  if (maxRunCount > 1) bidi.runsMemory = Array<D.Run>(maxRunCount);
+  else if (maxRunCount === 0) bidi.mayAllocateRuns = true;
+  return bidi;
+}
+/** Original default-mode setPara orchestration over the same actual resolver state. The host signature restricts mode/external-level choices to the source path consumed by EditEngine. Counted views must satisfy the native readable-buffer precondition. @param bidi - Original owner. @param text - Original UTF16 pointer view. @param length - Original count, or -1 for NUL termination. @param paraLevel - Explicit initial direction. @param _embeddingLevels - Original null external-level pointer. @param error - Original optional in/out status. @returns Nothing. */
+export function ubidi_setPara(
+  bidi: D.UBiDi | null,
+  text: Uint16Array | null,
+  length: number,
+  paraLevel: 0 | 1,
+  _embeddingLevels: null,
+  error: [number] | null,
+): void {
+  if (!error || U_FAILURE(error[0])) return;
+  if (!bidi || !text || length < -1) {
+    error[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+  if (length === -1) {
+    length = 0;
+    while (length < text.length && text[length] !== 0) ++length;
+  }
+  bidi.pParaBiDi = null;
+  bidi.text = "";
+  for (let index = 0; index < length; index++)
+    bidi.text += String.fromCharCode(text[index] as number);
+  bidi.length = bidi.originalLength = bidi.resultLength = length;
+  bidi.paraLevel = paraLevel;
+  bidi.direction = paraLevel & 1;
+  bidi.dirProps = [];
+  bidi.levels = [];
+  bidi.runs = [];
+  bidi.paras = [{ limit: 0, level: paraLevel }];
+  if (!length) {
+    bidi.flags = D.DIRPROP_FLAG(paraLevel & 1);
+    bidi.runCount = 0;
+    bidi.paras = [];
+    bidi.pParaBiDi = bidi;
+    return;
+  }
+  bidi.runCount = -1;
+  if (!bidi.dirPropsMemory || length > bidi.dirPropsMemory.length) {
+    if (!bidi.mayAllocateText) {
+      error[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
+      return;
+    }
+    bidi.dirPropsMemory = Array<number>(length).fill(0);
+  }
+  bidi.dirProps = bidi.dirPropsMemory;
+  getDirProps(bidi);
+  bidi.trailingWSStart = length;
+  if (!bidi.levelsMemory || length > bidi.levelsMemory.length) {
+    if (!bidi.mayAllocateText) {
+      error[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
+      return;
+    }
+    bidi.levelsMemory = Array<number>(length).fill(0);
+  }
+  bidi.levels = bidi.levelsMemory;
+  bidi.direction = resolveExplicitLevels(bidi);
+  bidi.isolateCount = -1;
+  if (bidi.direction !== 2) bidi.trailingWSStart = 0;
+  else {
+    resolveImplicitRuns(bidi);
+    adjustWSLevels(bidi);
+  }
+  bidi.pParaBiDi = bidi;
+}
+/** Original close invalidates the paragraph marker and releases owned storage. Reusing freed native objects is outside the source contract. @param bidi - Original owner or null. @returns Nothing. */
+export function ubidi_close(bidi: D.UBiDi | null): void {
+  if (!bidi) return;
+  bidi.pParaBiDi = null;
+  bidi.dirPropsMemory = bidi.levelsMemory = null;
+  bidi.runsMemory = null;
+  bidi.dirProps = [];
+  bidi.levels = [];
+  bidi.runs = [];
+  bidi.paras = [];
+  bidi.isolates = [];
+  bidi.text = "";
 }

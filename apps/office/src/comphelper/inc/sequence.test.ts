@@ -59,3 +59,28 @@ it("retains actual OUString field ownership across element copy assignment and d
     a.dispose();
   }
 });
+it("copies original map keys into owned native sequences without modifying source keys", /** Actual Unicode field addresses prove key ownership rather than a host array return. @returns Nothing. */ async () => {
+  const { mapKeysToSequence } = await import("./sequence"),
+    Strings = Sequence.specialize<rtl_uStringSlot>("OUString", 8),
+    a = new OUString(Uint16Array.of(65, 0, 937), 3),
+    b = new OUString(Uint16Array.of(66), 1),
+    keys = new Map([
+      [a.getDataAddress(), 1],
+      [b.getDataAddress(), 2],
+    ]),
+    result = mapKeysToSequence(Strings, keys);
+  try {
+    expect(result.getLength()).toBe(2);
+    expect(result.operatorIndex(0)[0]).toBe(a.pData);
+    expect(result.operatorIndex(1)[0]).toBe(b.pData);
+    expect(a.pData.refCount).toBe(2);
+    expect(b.pData.refCount).toBe(2);
+  } finally {
+    result.dispose();
+    b.dispose();
+    a.dispose();
+  }
+  const empty = mapKeysToSequence(Strings, new Map<rtl_uStringSlot, number>());
+  expect(empty.hasElements()).toBe(false);
+  empty.dispose();
+});

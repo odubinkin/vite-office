@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/uno/mapping.hxx.ts",
+    "status": "mapped",
+    "upstreamPath": "include/uno/mapping.hxx",
+    "localSymbols": [
+      "Mapping"
+    ],
+    "upstreamSymbols": [
+      "Mapping",
+      "Mapping::clear",
+      "Mapping::mapInterface"
+    ],
+    "preservedResponsibilities": [
+      "Original public uno::Mapping already-resolved pointer/default/copy/move constructors, pointer/copy/move assignment, destruction, clear/get/is and both return-pointer/inout interface-description/Type overload families. Actual C mapping callbacks, Type and typelib danger-get/release owners are reused. Preserve acquire-before-release publication, release-before-clear publication, pointer self-assignment traffic, self-move clearing, null return temporary and unresolved-Type output retention. Whole unchanged header over genuine full desktop dependencies supplies normal-ASan/UBSan identical complete ownership/direct/Type streams. Descriptor/name/environment lookup constructors and deprecated bridge helpers remain unported; physical ABI/allocator/threads/noexcept termination, full module/consumer QA and full CSV readiness remain unverified. No mapping or environment provider is synthesized."
+    ],
+    "omittedResponsibilities": [
+      "Environment/name lookup constructors, mapToCpp/mapToUno deprecated helpers and full environment/bridge/bootstrap/application consumers; physical ABI/allocator/concurrency/leaks/noexcept termination and complete upstream QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/mapping.hxx.ts",
+          "marker": "Mapping"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/uno/mapping.hxx.test.ts",
+          "marker": "matches complete original public Mapping"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/uno/mapping.hxx",
+          "marker": "Mapping::mapInterface"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/inc/uno/mapping.hxx.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Original include/uno/mapping.h C records and include/uno/mapping.hxx public inline C++ wrapper share a normalized stem but remain distinct source owners. The existing mapping.ts module represents mapping.h; preserving the .hxx discriminator before .ts gives the public wrapper a separate ESM identity and retains the upstream C-record versus C++-wrapper boundary."
+    }
+  }
+}

@@ -15,7 +15,10 @@
       "compare",
       "getBuffer",
       "remove",
-      "char32At"
+      "char32At",
+      "fromUTF8",
+      "moveIndex32",
+      "countChar32"
     ],
     "upstreamSymbols": [
       "UnicodeString::UnicodeString",
@@ -23,11 +26,16 @@
       "UnicodeString::setToBogus",
       "UnicodeString::doCompare",
       "UnicodeString::remove",
-      "UnicodeString::char32At"
+      "UnicodeString::char32At",
+      "UnicodeString::fromUTF8",
+      "moveIndex32",
+      "countChar32"
     ],
     "preservedResponsibilities": [
       "AQF9AG ports consumed UnicodeString owned UTF-16 constructors/copy/bogus/scalar/equality and whole-value append/operator+ projection for timezone rule names. Append preserves a bogus receiver and ignores empty/bogus source text; concat constructs a fresh owner and appends both, so a bogus zero-length prefix does not propagate to the result. IDs, lone surrogate/NUL units and name copies retain exact code units. JS immutable strings/GC project owned value state without native buffers, aliases, capacity, allocation failure, COW/refcounts or ABI guarantees. Native scalar identity and actual transition-name probes plus unit tests cover the stated value slice. Source whole-string compare and const getBuffer now preserve bogus ordering, UTF16 code-unit order and borrowed embedded-NUL spans. Native system-ID lookup and canonical-cache comparisons cover their consumed uses; writable buffer/capacity/native ownership APIs remain unported.",
-      "Consumed remove clears bogus state, and char32At follows source U16_GET to decode pairs from either lead or trail positions. UTF16 input spans and source integer parsing retain CALC-315 instead of advancing by code point."
+      "Consumed remove clears bogus state, and char32At follows source U16_GET to decode pairs from either lead or trail positions. UTF16 input spans and source integer parsing retain CALC-315 instead of advancing by code point.",
+      "Original raw RBBIDataWrapper constructors now create actual borrowed header/table/trie/status views and owned rule strings, preserving initialization/error/version/width order, byte equality/hash, same-owner references and failed-init counter behavior. Native comparison matches 189 full initialized-field/array/reference/equality traces, including adopted/borrowed/embedded storage and 8/16/32-bit trie paths. Fresh UnicodeString::fromUTF8 uses the actual ICU converter and the existing managed UTF16 value binding; 65536 byte-pair values and 213 counted/null/long values match the original class. No public writable-buffer/alias allocator API, replacement UDataMemory owner, iterator or engine factory is supplied. Actual UDataMemory construction/loader, public iterator/engines and word/title/UNO/NatNum12 installation remain pending; native allocation/deletion/COW/thread/physical ABI and use after final release remain unverified.",
+      "Source UnicodeString counted code-point movement and count preserve UTF-16 limits and supplementary stepping used by CjkBreakEngine."
     ],
     "omittedResponsibilities": [
       "Complete system/IANA/locale/service integration and native allocation/concurrency/ABI remain unverified."
@@ -41,6 +49,14 @@
         {
           "path": "apps/office/src/external/icu/source/i18n/simpletz.test.ts",
           "marker": "native byte-weekday acceptance"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbidata.native.test.ts",
+          "marker": "retains complete native"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.cjk.native.test.ts",
+          "marker": "matches original CJK dictionary mode"
         }
       ],
       "upstream": [

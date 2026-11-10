@@ -12,12 +12,24 @@
         {
           "path": "apps/office/src/svl/source/undo/undo.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "marker": "SfxUndoAction",
           "path": "vendor/libreoffice-reference/svl/source/undo/undo.cxx"
+        },
+        {
+          "path": "svl/source/undo/undo.cxx",
+          "marker": "SfxUndoManager"
+        },
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "EnterListAction"
         }
       ]
     },
@@ -31,12 +43,14 @@
       "ClearAllLevels"
     ],
     "omittedResponsibilities": [
-      "Upstream obligations outside SfxUndoAction, SfxListUndoAction, SfxUndoManager, SfxRepeatTarget::~SfxRepeatTarget and the bounded DEFAULT_MAX_UNDO_ACTION_COUNT, SfxUndoAction, SfxListUndoAction contract remain intentionally omitted."
+      "Complete native undo manager ABI and view-specific execution remain outside the current slice."
     ],
     "preservedResponsibilities": [
       "Implements the document-facing Sfx undo manager with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention.",
       "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced.",
-      "Native ClearAllLevels clears the currently open list payload immediately and keeps mbClearUntilTopLevel until each parent unwinds through LeaveListAction. The root history and save mark are cleared at the top, without a fake physical history owner. Existing ordinary Clear and browser save-token contracts remain distinct. Targeted nested-level tests cover return counts and a subsequent independent group."
+      "Native ClearAllLevels clears the currently open list payload immediately and keeps mbClearUntilTopLevel until each parent unwinds through LeaveListAction. The root history and save mark are cleared at the top, without a fake physical history owner. Existing ordinary Clear and browser save-token contracts remain distinct. Targeted nested-level tests cover return counts and a subsequent independent group.",
+      "SfxUndoAction gains only an erased Comment type parameter, defaulting to existing string bindings. Actual EditUndo can therefore inherit this same owner and retain native owned OUString GetComment contract without a parallel base class, text conversion or changes to emitted shared undo runtime. This does not port or certify the remaining shared manager divergence/guards or admit EditUndoManager.",
+      "The original list-action storage also carries owned OUString labels, repeat comment, native action ID and view shell ID. Clearing children leaves the level and its native labels intact. Existing browser text-labelled history uses its original defaults."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/undo/undo.cxx",

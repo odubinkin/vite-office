@@ -1,4 +1,5 @@
 /** @fileoverview Packages pinned ICU dictionary bytes with LibreOffice's Khmer replacement. */
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -27,4 +28,18 @@ for (const name of ["thaidict", "laodict", "burmesedict", "khmerdict", "cjdict"]
     if (!bytes.equals(readFileSync(output)))
       throw new Error(`Pinned ICU dictionary differs for ${name}`);
   } else writeFileSync(output, bytes);
+  if (name === "khmerdict") {
+    const bundled =
+      JSON.stringify(
+        {
+          dataSha256: createHash("sha256").update(bytes).digest("hex"),
+          data: bytes.toString("base64"),
+        },
+        null,
+        2,
+      ) + "\n";
+    if (mode !== "--check") writeFileSync(output + ".json", bundled);
+    else if (bundled !== readFileSync(output + ".json", "utf8"))
+      throw new Error("Bundled LibreOffice Khmer dictionary differs");
+  }
 }

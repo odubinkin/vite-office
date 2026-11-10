@@ -1,10 +1,26 @@
-/** @fileoverview Original lbenv.cxx ObjectEntry registration owner and type equality; actual shared strings/typelib/environment records are reused. Full environment engine and physical vector/hash/ABI/thread behavior remain separate. */
+/** @fileoverview Original lbenv.cxx ObjectEntry and EnvironmentsData registration owners, type equality and public environment enumeration. Actual shared strings/typelib/C callback records are reused. Default environment creation, purpose/bridge engines and physical vector/hash/ABI/thread behavior remain separate. */
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { rtl_ustr_compare } from "../../../sal/rtl/ustring";
-import type { uno_ExtEnvironment, uno_freeProxyFunc } from "../../inc/uno/environment";
+import type {
+  uno_ExtEnvironment,
+  uno_freeProxyFunc,
+  uno_Environment,
+  uno_memAlloc,
+} from "../../inc/uno/environment";
 import type { typelib_InterfaceTypeDescription as I } from "../../inc/typelib/typedescription";
-import { typelib_typedescription_acquire } from "../../inc/typelib/typedescription";
+import {
+  typelib_typedescription_acquire,
+  typelib_typedescription_release,
+} from "../../inc/typelib/typedescription";
+import {
+  rtl_uString_acquire,
+  rtl_uString_release,
+  type rtl_uString,
+  type rtl_uStringSlot,
+} from "../../../sal/inc/rtl/ustring.h";
+import { StringConcat } from "../../../sal/inc/rtl/stringconcat";
+import { osl_atomic_increment, osl_atomic_decrement } from "../../../sal/inc/osl/interlck";
 /** Original pointer-or-length-and-terminated-name equality. @param first - Borrowed description. @param second - Borrowed description. @returns Original equality. */
 export function td_equals(first: I, second: I): boolean {
   return (
@@ -171,5 +187,405 @@ export class ObjectEntry {
         if (td_equals(current, type)) return entry;
     }
     return null;
+  }
+}
+
+/** Borrowed compiler view of the original DefaultEnvironment registration maps. It supplies no constructor, environment factory, thread stack or language-binding callbacks. */
+export type DefaultEnvironmentRegistration = ObjectEntryEnvironment & {
+  aOId2ObjectMap: Map<OUString, ObjectEntry | null>;
+};
+/** Borrowed original DefaultEnvironment count fields use actual addressed signed32 storage. No constructor or binding initialization is supplied by this projection. */
+export type DefaultEnvironmentLifetime = DefaultEnvironmentRegistration & {
+  /** Original strong-reference count address. */ nRef: Int32Array;
+  /** Original weak-reference count address. */ nWeakRef: Int32Array;
+};
+/** Original native derived-to-embedded-base cast, without adding a second ownership record. @param env - Original embedded base. @returns Containing record. */
+function defaultEnvironment(env: uno_Environment): DefaultEnvironmentLifetime {
+  return env.pExtEnv as DefaultEnvironmentLifetime;
+}
+/** Original destructor body followed by reverse trivial-map member destruction; pointed-to ObjectEntry objects are not deleted by native pointer-map destruction. @param env - Original environment at its last weak release. @returns Nothing. */
+function deleteDefaultEnvironment(env: uno_Environment): void {
+  rtl_uString_release(env.pTypeName as rtl_uString);
+  const that = defaultEnvironment(env);
+  for (const name of that.aOId2ObjectMap.keys()) name.dispose();
+  that.aOId2ObjectMap.clear();
+  that.aPtr2ObjectMap.clear();
+}
+/** Original strong acquisition increments weak ownership before strong ownership. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_acquire(env: uno_Environment): void {
+  const that = defaultEnvironment(env);
+  osl_atomic_increment(that.nWeakRef);
+  osl_atomic_increment(that.nRef);
+}
+/** Original last-strong callback runs before weak decrement and possible native destruction; debug-only leftover-entry diagnostics do not change the source release behavior. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_release(env: uno_Environment): void {
+  const that = defaultEnvironment(env);
+  if (!osl_atomic_decrement(that.nRef)) {
+    if (env.environmentDisposing) env.environmentDisposing(env);
+  }
+  if (!osl_atomic_decrement(that.nWeakRef)) deleteDefaultEnvironment(env);
+}
+/** Original weak acquisition does not affect the strong count. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_acquireWeak(env: uno_Environment): void {
+  osl_atomic_increment(defaultEnvironment(env).nWeakRef);
+}
+/** Original final weak release invokes the real destructor body and native member destruction. @param env - Actual original embedded base. @returns Nothing. */
+export function defenv_releaseWeak(env: uno_Environment): void {
+  if (!osl_atomic_decrement(defaultEnvironment(env).nWeakRef)) deleteDefaultEnvironment(env);
+}
+/** Original hardening releases/nulls the old output before the shutdown guard and rejects dead environments by resetting the tentative strong increment. @param output - Actual inout strong pointer. @param env - Borrowed weak environment. @returns Nothing. */
+export function defenv_harden(output: [uno_Environment | null], env: uno_Environment): void {
+  if (output[0]) {
+    (output[0].release as NonNullable<uno_Environment["release"]>)(output[0]);
+    output[0] = null;
+  }
+  if (theEnvironmentsData().isDisposing) return;
+  const that = defaultEnvironment(env);
+  if (osl_atomic_increment(that.nRef) === 1) {
+    that.nRef[0] = 0;
+    return;
+  }
+  osl_atomic_increment(that.nWeakRef);
+  output[0] = env;
+}
+/** Complete original no-op dispose body; environmentDisposing belongs only to the last strong release. @param env - Unconsumed original argument. @returns Nothing. */
+export function defenv_dispose(env: uno_Environment): void {
+  void env;
+}
+/** Original unordered-map lookup over the actual owned Unicode keys. Native bucket order/capacity are not represented. @param map - Actual source OID map. @param oid - Borrowed exact identifier. @returns Matching owned key or undefined. */
+function objectKey(
+  map: ReadonlyMap<OUString, ObjectEntry | null>,
+  oid: OUStringConstReference,
+): OUString | undefined {
+  for (const candidate of map.keys()) if (candidate.equals(oid)) return candidate;
+  return undefined;
+}
+/** Original registerInterface body keeps the dummy insertion, object/interface counts and acquire-release-publish replacement order. @param env - Actual borrowed extended environment with original maps. @param output - Original inout pointer. @param oid - Borrowed identifier. @param type - Actual description. @returns Nothing. */
+export function defenv_registerInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  oid: rtl_uString,
+  type: I,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]);
+  const key = objectKey(that.aOId2ObjectMap, name);
+  if (key === undefined) {
+    const owned = new OUString(name);
+    that.aOId2ObjectMap.set(owned, null);
+    const entry = new ObjectEntry(name);
+    that.aOId2ObjectMap.set(owned, entry);
+    ++entry.nRef;
+    entry.append(that, output[0], type, null);
+  } else {
+    const entry = that.aOId2ObjectMap.get(key) as ObjectEntry;
+    ++entry.nRef;
+    const found = entry.find(type);
+    if (found) {
+      found.refCount = (found.refCount + 1) | 0;
+      if (found.pInterface !== output[0]) {
+        const pointer = found.pInterface;
+        (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(env, pointer);
+        (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(
+          env,
+          output[0],
+        );
+        output[0] = pointer;
+      }
+    } else entry.append(that, output[0], type, null);
+  }
+}
+/** Original proxy registration distinguishes re-registration of the same proxy from exchanging a different pointer, and marks mixed objects only from the original first entry. @param env - Actual borrowed environment. @param output - Original inout proxy. @param free - Original proxy destruction callback. @param oid - Borrowed identifier. @param type - Actual description. @returns Nothing. */
+export function defenv_registerProxyInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  free: uno_freeProxyFunc,
+  oid: rtl_uString,
+  type: I,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]);
+  const key = objectKey(that.aOId2ObjectMap, name);
+  if (key === undefined) {
+    const owned = new OUString(name);
+    that.aOId2ObjectMap.set(owned, null);
+    const entry = new ObjectEntry(name);
+    that.aOId2ObjectMap.set(owned, entry);
+    ++entry.nRef;
+    entry.append(that, output[0], type, free);
+  } else {
+    const entry = that.aOId2ObjectMap.get(key) as ObjectEntry;
+    entry.mixedObject = Boolean(
+      Number(entry.mixedObject) |
+      Number(
+        entry.aInterfaces.length !== 0 &&
+          (entry.aInterfaces[0] as InterfaceEntry).fpFreeProxy === null,
+      ),
+    );
+    ++entry.nRef;
+    const found = entry.find(type);
+    if (found) {
+      if (found.pInterface === output[0]) found.refCount = (found.refCount + 1) | 0;
+      else {
+        const pointer = found.pInterface;
+        (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(env, pointer);
+        --entry.nRef;
+        free(env, output[0]);
+        output[0] = pointer;
+      }
+    } else entry.append(that, output[0], type, free);
+  }
+}
+/** Complete original revoke callee. The outer defenv_revokeInterface must still invoke it through the actual environment stack; this function does not substitute direct invocation for that missing public orchestration. @param args - Original valid advancing va_list cursor with environment and interface. @returns Nothing. */
+export function s_stub_defenv_revokeInterface(args: Iterator<unknown>): void {
+  const env = args.next().value as uno_ExtEnvironment,
+    pointer = args.next().value,
+    that = env as DefaultEnvironmentRegistration;
+  const object = that.aPtr2ObjectMap.get(pointer) as ObjectEntry;
+  --object.nRef;
+  if (object.nRef === 0) {
+    const key = objectKey(that.aOId2ObjectMap, object.oid);
+    if (key !== undefined) {
+      that.aOId2ObjectMap.delete(key);
+      key.dispose();
+    }
+    for (let index = object.aInterfaces.length; index--;)
+      that.aPtr2ObjectMap.delete((object.aInterfaces[index] as InterfaceEntry).pInterface);
+    for (let index = object.aInterfaces.length; index--;) {
+      const entry = object.aInterfaces[index] as InterfaceEntry;
+      typelib_typedescription_release(entry.pTypeDescr.aBase);
+      if (entry.fpFreeProxy) entry.fpFreeProxy(env, entry.pInterface);
+      else
+        (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(
+          env,
+          entry.pInterface,
+        );
+    }
+    object.dispose();
+  } else if (object.mixedObject) {
+    const index = object.find(pointer, 1);
+    if (index > 0) {
+      const entry = object.aInterfaces[index] as InterfaceEntry;
+      if (entry.fpFreeProxy !== null) {
+        entry.refCount = (entry.refCount - 1) | 0;
+        if (entry.refCount === 0) {
+          const free = entry.fpFreeProxy,
+            description = entry.pTypeDescr.aBase;
+          object.aInterfaces.splice(index, 1);
+          if (object.find(pointer, index) < 0) that.aPtr2ObjectMap.delete(pointer);
+          typelib_typedescription_release(description);
+          free(env, pointer);
+        }
+      }
+    }
+  }
+}
+/** Original identifier query releases/nulls the output before map lookup and invokes the actual installed computation callback only for an absent pointer. @param env - Actual borrowed environment. @param output - Original string pointer field. @param pointer - Non-null source interface. @returns Nothing. */
+export function defenv_getObjectIdentifier(
+  env: uno_ExtEnvironment,
+  output: rtl_uStringSlot,
+  pointer: unknown,
+): void {
+  if (output[0]) {
+    rtl_uString_release(output[0]);
+    output[0] = null;
+  }
+  const object = (env as DefaultEnvironmentRegistration).aPtr2ObjectMap.get(pointer);
+  if (object === undefined)
+    (env.computeObjectIdentifier as NonNullable<uno_ExtEnvironment["computeObjectIdentifier"]>)(
+      env,
+      output,
+      pointer,
+    );
+  else {
+    rtl_uString_acquire(object.oid.pData);
+    output[0] = object.oid.pData;
+  }
+}
+/** Original registered-interface query releases/nulls its previous result before exact OID and original type/base lookup. @param env - Actual borrowed environment. @param output - Original inout pointer. @param oid - Borrowed exact identifier. @param type - Actual demanded description. @returns Nothing. */
+export function defenv_getRegisteredInterface(
+  env: uno_ExtEnvironment,
+  output: [unknown],
+  oid: rtl_uString,
+  type: I,
+): void {
+  if (output[0]) {
+    (env.releaseInterface as NonNullable<uno_ExtEnvironment["releaseInterface"]>)(env, output[0]);
+    output[0] = null;
+  }
+  const that = env as DefaultEnvironmentRegistration,
+    name = OUString.unacquired([oid]),
+    key = objectKey(that.aOId2ObjectMap, name);
+  if (key !== undefined) {
+    const entry = (that.aOId2ObjectMap.get(key) as ObjectEntry).find(type);
+    if (entry) {
+      (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(
+        env,
+        entry.pInterface,
+      );
+      output[0] = entry.pInterface;
+    }
+  }
+}
+/** Original complete-vector query allocates even for zero entries, acquires every distinct pointer and publishes array/count only after iteration. @param env - Actual borrowed environment. @param output - Original output array pointer. @param length - Original signed32 count. @param allocate - Actual caller allocation callback. @returns Nothing. */
+export function defenv_getRegisteredInterfaces(
+  env: uno_ExtEnvironment,
+  output: [unknown[] | null],
+  length: [number],
+  allocate: uno_memAlloc,
+): void {
+  const that = env as DefaultEnvironmentRegistration,
+    count = that.aPtr2ObjectMap.size | 0,
+    pointers = allocate(count * 8) as unknown[];
+  let index = 0;
+  for (const pointer of that.aPtr2ObjectMap.keys()) {
+    pointers[index] = pointer;
+    (env.acquireInterface as NonNullable<uno_ExtEnvironment["acquireInterface"]>)(
+      env,
+      pointers[index],
+    );
+    ++index;
+  }
+  output[0] = pointers;
+  length[0] = count;
+}
+
+/** Original void* context represented by its actual caller-provided address; physical object addresses are not synthesized. */
+export type EnvironmentContextAddress = number | bigint | null;
+/** Original context-decimal-plus-descriptor key, including its lack of a separator. @param descriptor - Borrowed exact descriptor. @param context - Actual native pointer address. @returns Owned key. */
+function key(descriptor: OUStringConstReference, context: EnvironmentContextAddress): OUString {
+  const number = new OUString(
+    OUString.number(BigInt.asIntN(64, context === null ? 0n : BigInt(context))),
+  );
+  try {
+    return new OUString(new StringConcat(number, descriptor));
+  } finally {
+    number.dispose();
+  }
+}
+/** Original unordered-map find binding uses value equality of actual owned OUString keys; native bucket allocation/iteration order are not represented. @param map - Original map. @param name - Borrowed key. @returns Actual matching key or undefined. */
+function find(
+  map: ReadonlyMap<OUString, uno_Environment>,
+  name: OUStringConstReference,
+): OUString | undefined {
+  for (const candidate of map.keys()) if (candidate.equals(name)) return candidate;
+  return undefined;
+}
+/** Complete original weak environment registry owner. It does not manufacture environments or callbacks. */
+export class EnvironmentsData {
+  readonly aName2EnvMap = new Map<OUString, uno_Environment>();
+  isDisposing = false;
+  /** Original destructor marks shutdown, hardens before releasing the registry weak ref and disposes/releases each surviving environment. @returns Nothing. */
+  dispose(): void {
+    this.isDisposing = true;
+    try {
+      for (const weak of this.aName2EnvMap.values()) {
+        const hard: [uno_Environment | null] = [null];
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(hard, weak);
+        (weak.releaseWeak as NonNullable<uno_Environment["releaseWeak"]>)(weak);
+        if (hard[0]) {
+          (hard[0].dispose as NonNullable<uno_Environment["dispose"]>)(hard[0]);
+          (hard[0].release as NonNullable<uno_Environment["release"]>)(hard[0]);
+        }
+      }
+    } finally {
+      for (const name of this.aName2EnvMap.keys()) name.dispose();
+      this.aName2EnvMap.clear();
+    }
+  }
+  /** Original releases and nulls the output before lookup/hardening. @param output - Actual inout environment. @param descriptor - Exact environment descriptor. @param context - Native pointer address. @returns Nothing. */
+  getEnvironment(
+    output: [uno_Environment | null],
+    descriptor: OUStringConstReference,
+    context: EnvironmentContextAddress,
+  ): void {
+    if (output[0]) {
+      (output[0].release as NonNullable<uno_Environment["release"]>)(output[0]);
+      output[0] = null;
+    }
+    const name = key(descriptor, context);
+    try {
+      const found = find(this.aName2EnvMap, name);
+      if (found !== undefined) {
+        const weak = this.aName2EnvMap.get(found) as uno_Environment;
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(output, weak);
+      }
+    } finally {
+      name.dispose();
+    }
+  }
+  /** Original insert/acquireWeak, live duplicate substitution or dead duplicate replacement order. @param output - Actual non-null inout environment. @returns Nothing. */
+  registerEnvironment(output: [uno_Environment | null]): void {
+    const env = output[0] as uno_Environment,
+      name = key(
+        OUString.unacquired([env.pTypeName as rtl_uString]),
+        env.pContext as EnvironmentContextAddress,
+      );
+    try {
+      const found = find(this.aName2EnvMap, name);
+      if (found === undefined) {
+        (env.acquireWeak as NonNullable<uno_Environment["acquireWeak"]>)(env);
+        this.aName2EnvMap.set(new OUString(name), env);
+      } else {
+        const hard: [uno_Environment | null] = [null],
+          weak = this.aName2EnvMap.get(found) as uno_Environment;
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(hard, weak);
+        if (hard[0]) {
+          (env.release as NonNullable<uno_Environment["release"]>)(env);
+          output[0] = hard[0];
+        } else {
+          (weak.releaseWeak as NonNullable<uno_Environment["releaseWeak"]>)(weak);
+          (env.acquireWeak as NonNullable<uno_Environment["acquireWeak"]>)(env);
+          this.aName2EnvMap.set(found, env);
+        }
+      }
+    } finally {
+      name.dispose();
+    }
+  }
+  /** Original exact descriptor filter, successful hardening count and caller allocation only for nonempty results. @param output - Actual output array. @param length - Original signed32 count. @param allocate - Original caller allocation function. @param descriptor - Exact descriptor;empty selects all. @returns Nothing. */
+  getRegisteredEnvironments(
+    output: [uno_Environment[] | null],
+    length: [number],
+    allocate: uno_memAlloc,
+    descriptor: OUStringConstReference,
+  ): void {
+    const found = new Array<uno_Environment | null>(this.aName2EnvMap.size);
+    let count = 0;
+    for (const weak of this.aName2EnvMap.values()) {
+      if (
+        descriptor.getLength() === 0 ||
+        descriptor.equals(OUString.unacquired([weak.pTypeName as rtl_uString]))
+      ) {
+        const slot: [uno_Environment | null] = [null];
+        (weak.harden as NonNullable<uno_Environment["harden"]>)(slot, weak);
+        found[count] = slot[0];
+        if (found[count]) ++count;
+      }
+    }
+    length[0] = count;
+    if (count) {
+      output[0] = allocate(8 * count) as uno_Environment[];
+      while (count--) output[0][count] = found[count] as uno_Environment;
+    } else output[0] = null;
+  }
+}
+let singleton: EnvironmentsData | undefined;
+/** Original function-static weak registry, initialized on first use. @returns Same actual registry. */
+export function theEnvironmentsData(): EnvironmentsData {
+  return (singleton ??= new EnvironmentsData());
+}
+/** Original public registry enumeration body; native mutex/noexcept ABI are erased, not replaced by an empty provider. @param output - Output array pointer. @param length - Output count. @param allocate - Actual caller allocator. @param descriptor - Optional exact descriptor;null selects all. @returns Nothing. */
+export function uno_getRegisteredEnvironments(
+  output: [uno_Environment[] | null],
+  length: [number],
+  allocate: uno_memAlloc,
+  descriptor: rtl_uString | null,
+): void {
+  const name = descriptor === null ? new OUString() : new OUString(descriptor);
+  try {
+    theEnvironmentsData().getRegisteredEnvironments(output, length, allocate, name);
+  } finally {
+    name.dispose();
   }
 }

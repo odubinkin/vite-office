@@ -7,7 +7,7 @@
     "localPath": "apps/office/src/external/icu/source/common/dictbe.khmer.ts",
     "upstreamPath": "vendor/icu-reference/source/common/dictbe.cpp",
     "localSymbols": [
-      "KhmerBreakEngine",
+      "LibreOfficeKhmerBreakEngine",
       "scanBeforeStart",
       "scanAfterEnd",
       "scanBackClusters",
@@ -27,7 +27,7 @@
       "local": [
         {
           "path": "apps/office/src/external/icu/source/common/dictbe.khmer.ts",
-          "marker": "KhmerBreakEngine"
+          "marker": "LibreOfficeKhmerBreakEngine"
         },
         {
           "path": "apps/office/src/external/icu/source/common/dictbe.khmer.native.test.ts",

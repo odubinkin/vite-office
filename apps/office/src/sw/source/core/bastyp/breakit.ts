@@ -1,4 +1,9 @@
 /** @fileoverview Native SwBreakIt script queries from breakit.cxx over pinned ICU and BreakIteratorImpl. Native language tags supply locales for the represented dictionary word path. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+import { BreakIterator } from "../../../../offapi/com/sun/star/i18n/BreakIterator";
+import type { XBreakIteratorService } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
+import type { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XComponentContext } from "../../../../udkapi/com/sun/star/uno/XComponentContext";
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { u_charType } from "../../../../external/icu/source/common/uchar";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
@@ -15,6 +20,7 @@ export function GetWriterTextUnits(text: string): Uint16Array {
 /** Native script owner; the core module binding supplies the process instance at Writer initialization. */
 export class SwBreakIt {
   private readonly m_xBreak = new BreakIteratorImpl();
+  private wordBreak: Reference<XBreakIteratorService> | undefined;
   private m_xLanguageTag: LanguageTag | undefined;
   /** Original cached LanguageTag locale for one native language type. @param language - Native language ID. @returns Borrowed native locale. */
   public GetLocale(language: number): LocaleConstReference {
@@ -26,6 +32,13 @@ export class SwBreakIt {
   /** Borrows the real represented native break service. @returns Shared service. */
   public GetBreakIter(): BreakIteratorImpl {
     return this.m_xBreak;
+  }
+  /** Lazily borrows the original process word-break service. @returns Locale-dispatching word iterator. */
+  public GetWordBreakIter(): XBreakIteratorService {
+    this.wordBreak ??= BreakIterator.create(
+      getProcessComponentContext() as Reference<XComponentContext>,
+    );
+    return this.wordBreak.operatorStar();
   }
   /** Original weak-run resolution, next-mark preference and application language fallback. @param text - Logical native text. @param position - Native UTF16 position. @returns Native i18n script. */
   public GetRealScriptOfText(text: string, position: number): number {

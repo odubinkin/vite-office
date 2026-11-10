@@ -11,6 +11,7 @@ export const UErrorCode = {
   U_INTERNAL_PROGRAM_ERROR: 5,
   U_MEMORY_ALLOCATION_ERROR: 7,
   U_INDEX_OUTOFBOUNDS_ERROR: 8,
+  U_INVALID_CHAR_FOUND: 10,
   U_BUFFER_OVERFLOW_ERROR: 15,
   U_UNSUPPORTED_ERROR: 16,
   U_RESOURCE_TYPE_MISMATCH: 17,
@@ -23,6 +24,7 @@ export const UErrorCode = {
 export type UErrorCode = number;
 /** Original double UTC milliseconds from 1 January 1970. */
 export type UDate = number;
+export const U_ICUDATA_NAME = "icudt78l";
 export const U_MILLIS_PER_DAY = 86400000;
 /** Original warnings count as success. @param status - ICU status. @returns Success. */
 export function U_SUCCESS(status: UErrorCode): boolean {

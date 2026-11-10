@@ -1,21 +1,23 @@
-/** @fileoverview Native LibreOffice dictionary Brk resources compiled by ICU78.3 genbrk. */
-import { RBBIDataWrapper } from "../../../external/icu/source/common/rbbidata";
-import data from "./data/dict-word.brk.json" with { type: "json" };
+/** @fileoverview Original ICU registration and loading for LibreOffice's compiled word-rule package. */
+import { ICULanguageBreakFactory } from "../../../external/icu/source/common/brkeng";
+import { RuleBasedBreakIterator } from "../../../external/icu/source/common/rbbi";
+import { udata_open, udata_setAppData } from "../../../external/icu/source/common/unicode/udata";
+import { U_FAILURE } from "../../../external/icu/source/common/unicode/utypes";
+import { OpenOffice_dat } from "./data/OpenOffice_dat";
 
-/** Resource names used by BreakIterator_Unicode::loadICUBreakIterator. */
-export type DictionaryWordRule = keyof typeof data;
+const dictionaries = new ICULanguageBreakFactory(true);
 
-const rules = new Map<DictionaryWordRule, RBBIDataWrapper>();
+/** Registers the original LibreOffice rule package. @param status - Sticky ICU status. @returns Nothing. */
+export function registerOpenOfficeRules(status: [number]): void {
+  udata_setAppData("OpenOffice", OpenOffice_dat, status);
+}
 
-/** Borrows immutable compiled ICU data for the native rule name. @param name - Original resource name. @returns Loaded rule data. */
-export function loadDictionaryWordRule(name: DictionaryWordRule): RBBIDataWrapper {
-  let rule = rules.get(name);
-  if (rule === undefined) {
-    const raw = atob(data[name]),
-      bytes = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; ++i) bytes[i] = raw.charCodeAt(i);
-    rule = new RBBIDataWrapper(bytes);
-    rules.set(name, rule);
-  }
-  return rule;
+/** Opens the named LibreOffice rule and retains its actual rule handle. @param rule - Rule member. @param status - Sticky status. @returns Owned iterator or null. */
+export function openRule(rule: string, status: [number]): RuleBasedBreakIterator | null {
+  const data = udata_open("OpenOffice", "brk", rule, status);
+  if (data === null || U_FAILURE(status[0])) return null;
+  const iterator = new RuleBasedBreakIterator(data, status, dictionaries);
+  if (!U_FAILURE(status[0])) return iterator;
+  iterator.dispose();
+  return null;
 }

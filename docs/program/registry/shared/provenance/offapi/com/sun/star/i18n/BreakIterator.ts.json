@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/BreakIterator.ts",
+    "upstreamPath": "offapi/com/sun/star/i18n/BreakIterator.idl",
+    "localSymbols": [
+      "BreakIterator",
+      "failsToSupply"
+    ],
+    "upstreamSymbols": [
+      "BreakIterator",
+      "XBreakIterator"
+    ],
+    "preservedResponsibilities": [
+      "Original generated context constructor queries the actual break iterator service and applies the source failure and ownership rules."
+    ],
+    "omittedResponsibilities": [
+      "Compile-time native static environment bindings remain outside this host slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/BreakIterator.ts",
+          "marker": "BreakIterator"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/i18n/BreakIterator.idl",
+          "marker": "XBreakIterator"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "ServiceType::dumpHppFile"
+        }
+      ]
+    }
+  }
+}

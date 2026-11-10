@@ -19,6 +19,7 @@ export default tseslint.config(
       "**/playwright-report/**",
       "**/test-results/**",
       "vendor/**",
+      "third_party/libnumbertext-js/**",
       "output/playwright/**",
     ],
   },

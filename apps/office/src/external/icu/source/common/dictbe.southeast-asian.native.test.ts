@@ -1,7 +1,16 @@
 /** @fileoverview Native ICU78.3 Southeast Asian engine witnesses with compiled gendict dictionaries. */
 import { assert, expect, it } from "vitest";
-import { openDictionaryMatcher } from "./dictionarydata";
-import { ThaiBreakEngine, LaoBreakEngine, BurmeseBreakEngine } from "./dictbe.southeast-asian";
+import { openDictionaryMatcher } from "./brkeng";
+import { openEncodedDictionary } from "../../../../../../../scripts/icu-dictionary-observe";
+import {
+  type OpenUText,
+  utext_close,
+  utext_getNativeIndex,
+  utext_openUChars,
+} from "./unicode/utext";
+import { UVector32 } from "./uvectr32.h";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ThaiBreakEngine, LaoBreakEngine, BurmeseBreakEngine } from "./dictbe";
 import { UErrorCode } from "./unicode/utypes";
 
 const engines = { th: ThaiBreakEngine, lo: LaoBreakEngine, my: BurmeseBreakEngine };
@@ -78,44 +87,55 @@ const fixtures: readonly (readonly [
   ],
 ];
 
+/** Opens the actual counted UTF-16 provider for a fixture. @param value - Input fixture. @returns Open provider. */
+function openText(value: string) {
+  const text = unicode(value);
+  const provider = utext_openUChars(null, text.getStr(), text.getLength(), [0]);
+  text.dispose();
+  assert(provider);
+  return provider as OpenUText;
+}
+
 /** Opens the actual gendict resource for a native engine. @param encoded - Original packed Dict bytes. @returns Native dictionary. */
 function dictionary(encoded: string) {
-  const raw = atob(encoded),
-    bytes = new Uint8Array(raw.length);
-  for (let i = 0; i < raw.length; ++i) bytes[i] = raw.charCodeAt(i);
-  const result = openDictionaryMatcher(bytes);
+  const result = openDictionaryMatcher(openEncodedDictionary(encoded));
   assert(result);
   return result;
 }
 
 for (const [language, encoded, examples] of fixtures)
   it(`matches ICU ${language} scan, cursor and breaks over native dictionary bytes`, /** Covers source short-run admission, lookahead, resynchronization, marks and suffixes. @returns Nothing. */ () => {
-    const engine = new engines[language](dictionary(encoded));
+    const engine = new engines[language](dictionary(encoded), [0]);
     for (const [text, native] of examples) {
-      const cursor: [number] = [0],
-        breaks: number[] = [];
-      const count = engine.findBreaks(text, cursor, 0, text.length, breaks, false, [0]);
-      expect([`${cursor[0]}:${count}`, ...breaks].join(","), text).toBe(native);
+      const provider = openText(text);
+      const breaks = new UVector32([0]);
+      const count = engine.findBreaks(provider, 0, text.length, breaks, false, [0]);
+      const result = [`${utext_getNativeIndex(provider)}:${count}`];
+      for (let i = 0; i < breaks.size(); ++i) result.push(String(breaks.elementAti(i)));
+      utext_close(provider);
+      expect(result.join(","), text).toBe(native);
     }
+    engine.dispose();
   });
 
 it("starts at the requested native offset and preserves earlier stack entries and sticky errors", /** Checks a genuine Thai span inside mixed text. @returns Nothing. */ () => {
   const sample = fixtures[0];
   assert(sample);
-  const engine = new ThaiBreakEngine(dictionary(sample[1]));
+  const engine = new ThaiBreakEngine(dictionary(sample[1]), [0]);
   expect(engine.handles(0x0e01, "en")).toBe(true);
   expect(engine.handles(0x20, "th")).toBe(false);
-  const text = "😀ภาษาไทย x",
-    cursor: [number] = [0],
-    breaks = [1];
-  expect(engine.findBreaks(text, cursor, 2, text.length, breaks, true, [0])).toBe(1);
-  expect(breaks).toEqual([1, 6]);
-  expect(cursor[0]).toBe(9);
+  const text = "😀ภาษาไทย x";
+  const provider = openText(text);
+  const breaks = new UVector32([0]);
+  breaks.push(1, [0]);
+  expect(engine.findBreaks(provider, 2, text.length, breaks, true, [0])).toBe(1);
+  expect([breaks.elementAti(0), breaks.elementAti(1)]).toEqual([1, 6]);
+  expect(utext_getNativeIndex(provider)).toBe(9);
   expect(
-    engine.findBreaks(text, cursor, 2, text.length, breaks, false, [
-      UErrorCode.U_INVALID_STATE_ERROR,
-    ]),
+    engine.findBreaks(provider, 2, text.length, breaks, false, [UErrorCode.U_INVALID_STATE_ERROR]),
   ).toBe(0);
-  expect(cursor[0]).toBe(9);
-  expect(breaks).toEqual([1, 6]);
+  expect(utext_getNativeIndex(provider)).toBe(9);
+  expect([breaks.elementAti(0), breaks.elementAti(1)]).toEqual([1, 6]);
+  utext_close(provider);
+  engine.dispose();
 });

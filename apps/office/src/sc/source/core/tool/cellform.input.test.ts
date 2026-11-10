@@ -1,12 +1,10 @@
 /** @fileoverview Native input-line formatting preserves owned text and original formula/error dispatch. */
-import { assert, expect, it, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import { SvNumFormatType } from "../../../../svl/inc/zforlist";
-import { SvNumberformat } from "../../../../svl/source/numbers/zformat";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import { Color } from "../../../../tools/inc/color";
 import { ScAddress } from "../../../inc/address";
@@ -160,19 +158,34 @@ it("formats numeric and string formulas while keeping empty or erroneous input r
   }
 });
 
-it("propagates native formatter failure after resetting the color output", /** Checks the existing numeric formatting boundary for an unrepresented output format. @returns Nothing. */ () => {
-  const doc = new ScDocument();
+it("formats actual native currency after resetting the color output", /** Actual compiled currency replaces the former synthetic General/CURRENCY mismatch and incomplete-output expectation. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    code = unicode("[$$-409]0.00");
   try {
-    const entry = doc.GetFormatTable().GetEntry(0) as SvNumberformat | null;
-    assert(entry);
-    entry.SetType(SvNumFormatType.CURRENCY);
-    const color: [Color | null] = [new Color(0x123456)];
-    expect(
-      /** Runs original display formatting through the actual interpreter context. @returns No output. */ () =>
-        ScCellFormat.GetString(new ScRefCellValue(1), 0, color, null, doc),
-    ).toThrow("SvNumberformat nonstandard output is not implemented");
+    const formatter = doc.GetFormatTable(),
+      check: [number] = [0],
+      type: [number] = [0],
+      key: [number] = [0];
+    formatter["m_aFormatData"].PutEntry(
+      formatter["m_aCurrentLanguage"],
+      formatter.GetNatNum(),
+      code,
+      check,
+      type,
+      key,
+      0x409,
+    );
+    expect(check[0]).toBe(0);
+    const color: [Color | null] = [new Color(0x123456)],
+      output = ScCellFormat.GetString(new ScRefCellValue(1), key[0], color, null, doc);
+    try {
+      expect(text(output)).toBe("$1.00");
+    } finally {
+      output.dispose();
+    }
     expect(color[0]).toBeNull();
   } finally {
+    code.dispose();
     doc.Dispose();
   }
 });

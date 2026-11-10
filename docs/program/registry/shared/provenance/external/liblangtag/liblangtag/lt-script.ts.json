@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/liblangtag/liblangtag/lt-script.ts",
+    "upstreamPath": "vendor/liblangtag-reference/liblangtag/lt-script.c",
+    "localSymbols": [
+      "lt_script_get_tag"
+    ],
+    "upstreamSymbols": [
+      "lt_script_get_tag"
+    ],
+    "preservedResponsibilities": [
+      "Original lt_script_get_tag null-owner guard and borrowed tag field return through the existing immutable registered-subtag representation. Other native subtag fields, reference ownership, allocation and diagnostics remain outside this bounded accessor."
+    ],
+    "omittedResponsibilities": [
+      "Physical subtag allocation/refcount, database owners and other unconsumed APIs."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-script.ts",
+          "marker": "lt_script_get_tag"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-script.c",
+          "marker": "lt_script_get_tag"
+        }
+      ]
+    }
+  }
+}

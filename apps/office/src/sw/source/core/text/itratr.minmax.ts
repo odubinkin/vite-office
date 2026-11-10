@@ -1,4 +1,6 @@
 /** @fileoverview Original itratr.cxx paragraph width and anchored Writer fly contributions during import. */
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwTableNode } from "../docnode/node";
 import type { SwFrameFormat } from "../layout/atrfrm";
@@ -175,12 +177,13 @@ class SwMinMaxArgs {
   }
 }
 
-/** Measures segments of one attributed range up to the original dictionary word end. @param args - Active accumulators. @param measure - Active font and output device width query. @param language - Active subfont language. @param text - Actual UTF-16 paragraph. @param index - First position. @param end - Exclusive run end. @returns Whether a nonblank segment was measured. */
+/** Measures segments of one attributed range up to the original dictionary word end. @param args - Active accumulators. @param measure - Active font and output device width query. @param language - Active subfont language. @param text - Actual UTF-16 paragraph. @param value - Counted native view. @param index - First position. @param end - Exclusive run end. @returns Whether a nonblank segment was measured. */
 function lcl_MinMaxString(
   args: SwMinMaxArgs,
   measure: (text: string, start: number, length: number) => number,
   language: number,
   text: string,
+  value: OUStringConstReference,
   index: number,
   end: number,
 ): boolean {
@@ -188,8 +191,8 @@ function lcl_MinMaxString(
   while (index < end) {
     const blank = text[index] === " ";
     const boundary = g_pBreakIt
-      .GetBreakIter()
-      .getWordBoundary(text, index, g_pBreakIt.GetLocale(language), DICTIONARY_WORD, true);
+      .GetWordBreakIter()
+      .getWordBoundary(value, index, g_pBreakIt.GetLocale(language), DICTIONARY_WORD, true);
     if (index <= boundary.startPos && index !== 0 && index - 1 !== args.noLineBreak) args.NewWord();
     const stop = Math.min(boundary.endPos === index ? index + 1 : boundary.endPos, end);
     const width = measure(text, index, stop - index);
@@ -245,67 +248,73 @@ export function GetMinMaxSize(node: SwTextNode, nodeIndex: number): SwMinMaxSize
     script = scripts.ScriptType(index);
   }
   seek();
-  while (index < text.length) {
-    const next = Math.min(iterator.GetNextAttr(), scripts.NextScriptChg(index));
-    let stop = index;
-    let control: string | undefined;
-    while (stop < next) {
-      const character = text[stop] as string;
-      if (minMaxControls.has(character)) {
-        control = character;
-        break;
+  const value = unicode(text);
+  try {
+    while (index < text.length) {
+      const next = Math.min(iterator.GetNextAttr(), scripts.NextScriptChg(index));
+      let stop = index;
+      let control: string | undefined;
+      while (stop < next) {
+        const character = text[stop] as string;
+        if (minMaxControls.has(character)) {
+          control = character;
+          break;
+        }
+        ++stop;
       }
-      ++stop;
-    }
-    if (index < stop) {
-      const languageItem = attributes.ReadItem(
-        GetWhichOfScript(RES_CHRATR_LANGUAGE, script),
-      ) as SvxLanguageItem;
-      const language = languageItem.GetLanguage();
-      if (
-        lcl_MinMaxString(
-          args,
-          measure,
-          language === LANGUAGE_SYSTEM ? getConfiguredSystemLanguage() : language,
-          text,
-          index,
-          stop,
+      if (index < stop) {
+        const languageItem = attributes.ReadItem(
+          GetWhichOfScript(RES_CHRATR_LANGUAGE, script),
+        ) as SvxLanguageItem;
+        const language = languageItem.GetLanguage();
+        if (
+          lcl_MinMaxString(
+            args,
+            measure,
+            language === LANGUAGE_SYSTEM ? getConfiguredSystemLanguage() : language,
+            text,
+            value,
+            index,
+            stop,
+          )
         )
-      )
-        add = 20;
-    }
-    index = stop;
-    seek();
-    switch (control) {
-      case "\n":
-        maximum = Math.max(maximum, args.rowWidth);
-        args.rowWidth = 0;
-        args.NewWord();
-        ++index;
-        seek();
-        break;
-      case "\t":
-        args.NewWord();
-        ++index;
-        seek();
-        break;
-      case CHAR_SOFTHYPHEN:
-        ++index;
-        break;
-      case CHAR_HARDBLANK:
-      case CHAR_HARDHYPHEN: {
-        const width = measure(control, 0, 1);
-        args.rowWidth += width;
-        args.AddWordWidth(width);
-        args.noLineBreak = index++;
-        break;
+          add = 20;
       }
-      case undefined:
-        break;
-      default:
-        ++index;
-        seek();
+      index = stop;
+      seek();
+      switch (control) {
+        case "\n":
+          maximum = Math.max(maximum, args.rowWidth);
+          args.rowWidth = 0;
+          args.NewWord();
+          ++index;
+          seek();
+          break;
+        case "\t":
+          args.NewWord();
+          ++index;
+          seek();
+          break;
+        case CHAR_SOFTHYPHEN:
+          ++index;
+          break;
+        case CHAR_HARDBLANK:
+        case CHAR_HARDHYPHEN: {
+          const width = measure(control, 0, 1);
+          args.rowWidth += width;
+          args.AddWordWidth(width);
+          args.noLineBreak = index++;
+          break;
+        }
+        case undefined:
+          break;
+        default:
+          ++index;
+          seek();
+      }
     }
+  } finally {
+    value.dispose();
   }
   const offset = frame.margin + add;
   const minimum = Math.max(args.minimum + offset, frame.minimum);

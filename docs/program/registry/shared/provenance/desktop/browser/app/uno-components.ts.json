@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+          "marker": "implementations"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ]
+    },
+    "localPath": "apps/office/src/desktop/browser/app/uno-components.ts",
+    "rationale": "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners.",
+    "responsibilities": [
+      "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Static browser imports replace the host registry and shared-library loader for the bundled components."
+    },
+    "status": "local-only"
+  }
+}

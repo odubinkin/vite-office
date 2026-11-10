@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/editundo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/editundo.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "vendor/libreoffice-reference/editeng/source/editeng/editundo.cxx",
+        "apps/office/src/editeng/source/editeng/editundo.ts#EditUndoSetParaAttribs",
+        "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+        "editeng/source/editeng/editundo.cxx",
+        "editeng/source/editeng/impedit5.cxx"
+      ],
+      "justification": "Actual inserted-character and paragraph-split action constructors/Undo/Redo/Merge retain owned SAL text/position values, unsigned16 split narrowing, source outer engine calls, active-view selection timing, original stored-length redo selection and type/paragraph/adjacency-only merge. Native destruction binds existing shared Dispose for owned SAL values. No deletion/split/connect/view implementation is fabricated; those source dependencies remain mandatory. Paragraph attribute undo owns the source and replacement item sets and restores the original paragraph-end selection. Other edit undo families and interactive undo execution remain outside the document text-object slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "EditUndoInsertChars",
+        "EditUndoSplitPara",
+        "EditUndoSetParaAttribs"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/editundo.cxx",
+      "upstreamSymbols": [
+        "EditUndoInsertChars::EditUndoInsertChars",
+        "EditUndoInsertChars::Undo",
+        "EditUndoInsertChars::Redo",
+        "EditUndoInsertChars::Merge",
+        "EditUndoSplitPara::EditUndoSplitPara",
+        "EditUndoSplitPara::Undo",
+        "EditUndoSplitPara::Redo",
+        "EditUndoSetParaAttribs"
+      ]
+    }
+  }
+}

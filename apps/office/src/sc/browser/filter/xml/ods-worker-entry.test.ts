@@ -17,7 +17,7 @@ it("posts XML, transferable bytes and normalized failures with the original requ
   const post = vi.fn();
   vi.stubGlobal("postMessage", post);
   vi.stubGlobal("onmessage", null);
-  await import("./ods-worker");
+  await import("../../../../calc-ods-worker");
   const handler = globalThis.onmessage as (event: MessageEvent) => Promise<void>;
   const results = [{ format: "xml", files: {} }, new ArrayBuffer(2)];
   for (const result of results) {

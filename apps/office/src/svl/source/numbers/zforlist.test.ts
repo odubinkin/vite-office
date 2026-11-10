@@ -1,6 +1,6 @@
 /** @fileoverview Native selection/default policies over actual generated compound values and shared UNO COW. */
 import { createNumberFormatLanguage } from "../../../test/number-format-language";
-import { expect, it, vi } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -357,7 +357,16 @@ it("generates actual standard NUMBER entry through the mapper,scanner and owning
     expect(entry.GetLastInsertKey()).toBe(100);
     expect(values.table.ImpGetCLOffset(0x10407)).toBe(0);
     expect(values.table.ImpGetCLOffset(0x0409)).toBe(10000);
-    expect(entry.GetOutputString(12.5, out, [null], 65535, 44)).toBe(false);
+    values.scanner.GetCurrentLanguageData().ChangeStandardPrec(65535);
+    expect(
+      entry.GetOutputString(
+        12.5,
+        out,
+        [null],
+        values.scanner.getColorCallback().GetNatNum(),
+        values.scanner.GetCurrentLanguageData(),
+      ),
+    ).toBe(false);
     expect(text(out)).toBe("12,5");
     entry.SetComment(comment);
     const copy = new SvNumberformat(entry);
@@ -550,8 +559,8 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
         1.25,
         out,
         [null],
-        current.GetStandardPrec(),
-        current.GetNumDecimalSep().getStr()[0] as number,
+        current.GetFormatScanner().getColorCallback().GetNatNum(),
+        current,
       );
       expect(text(out)).toBe("1.25");
     } finally {
@@ -708,7 +717,16 @@ it("keeps real engine fallback and separately represented input/format null-date
   try {
     expect(
       /** An absent required format0 is an invalid source state. @returns Nothing. */ () =>
-        SvNFEngine.GetOutputString(current, values.table, 1, 0, out, color),
+        SvNFEngine.GetOutputString(
+          current,
+          values.table,
+          current.GetFormatScanner().getColorCallback().GetNatNum(),
+          SvNFEngine.GetRWPolicy(values.table),
+          1,
+          0,
+          out,
+          color,
+        ),
     ).toThrow(/absent/);
     expect(
       /** Rejects missing text-format fallback before producing output. @returns Nothing. */ () =>
@@ -716,7 +734,14 @@ it("keeps real engine fallback and separately represented input/format null-date
     ).toThrow("Required native standard text format is absent");
     expect(
       /** Rejects missing numeric fallback in input-line conversion. @returns No owned output. */ () =>
-        SvNFEngine.GetInputLineString(current, values.table, 1, 404),
+        SvNFEngine.GetInputLineString(
+          current,
+          values.table,
+          current.GetFormatScanner().getColorCallback().GetNatNum(),
+          SvNFEngine.GetRWPolicy(values.table),
+          1,
+          404,
+        ),
     ).toThrow("Required native standard format0 is absent");
     generateStandardNumberFormat(
       values.table,
@@ -727,17 +752,41 @@ it("keeps real engine fallback and separately represented input/format null-date
       values.decimal,
       0,
     );
-    SvNFEngine.GetOutputString(current, values.table, 1.2345, 404, out, color);
+    SvNFEngine.GetOutputString(
+      current,
+      values.table,
+      current.GetFormatScanner().getColorCallback().GetNatNum(),
+      SvNFEngine.GetRWPolicy(values.table),
+      1.2345,
+      404,
+      out,
+      color,
+    );
     expect(text(out)).toBe("1,23");
     const entry = values.table.GetEntry(0) as SvNumberformat;
     entry.SetType(2);
     SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color);
     expect(text(out)).toBe("literal");
     const precision = current.GetStandardPrec();
-    expect(
-      /** Exercises temporary output cleanup on an unrepresented numeric type. @returns No owned output. */ () =>
-        SvNFEngine.GetInputLineString(current, values.table, 1.2345, 0),
-    ).toThrow("SvNumberformat nonstandard output is not implemented");
+    const info = entry["NumFor"][0]?.Info();
+    assert(info);
+    const scannedType = info.eScannedType;
+    info.eScannedType = SvNumFormatType.ALL;
+    const input = SvNFEngine.GetInputLineString(
+      current,
+      values.table,
+      current.GetFormatScanner().getColorCallback().GetNatNum(),
+      SvNFEngine.GetRWPolicy(values.table),
+      1.2345,
+      0,
+      true,
+    );
+    try {
+      expect(text(input)).toBe("");
+    } finally {
+      input.dispose();
+      info.eScannedType = scannedType;
+    }
     expect(current.GetStandardPrec()).toBe(precision);
     entry.SetType(16);
     SvNFEngine.ChangeNullDate(current, 32, 2, 1999);
@@ -770,6 +819,162 @@ it("compiles actual locale automatic currency codes and retains the bank-symbol 
       }
     }
   } finally {
+    values.dispose();
+  }
+});
+
+it.each([
+  [1, 1.23456789, false, "1,23456789"],
+  [1, 1.5, true, "2"],
+  [20, 12.3456789, false, "12,3456789"],
+  [80, 0.0000123456789, false, "0,0000123456789"],
+  [85, 1.23456789, false, "1,23456789"],
+  [99, 1, false, "WAHR"],
+  [100, 1.23456789, false, "1,23"],
+  [9999, 1.23456789, false, "1,23456789"],
+])(
+  "uses source input-line selection for key %i, value %s and filtering %s",
+  /** Observes actual German compiled entries and precision restoration through the public formatter. @param key - Source display key. @param value - Cell value. @param filtering - Original keep-format flag. @param expected - Source-derived input text. @returns Nothing. */ (
+    key,
+    value,
+    filtering,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x407);
+    try {
+      const input = formatter.GetInputLineString(value, key, filtering);
+      try {
+        expect(text(input)).toBe(expected);
+      } finally {
+        input.dispose();
+      }
+      expect(formatter.GetStandardPrec()).toBe(2);
+    } finally {
+      formatter.dispose();
+    }
+  },
+);
+
+it("retains mixed-section first-type selection and original fractional precision queries", /** Actual constructor produces mixed format sections; editing selects the first type rather than evaluating sign conditions. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x409),
+    current = formatter["m_aCurrentLanguage"],
+    table = formatter["m_aFormatData"],
+    code = unicode("0;YYYY-MM-DD"),
+    check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0];
+  try {
+    expect(table.PutEntry(current, formatter.GetNatNum(), code, check, type, key, 0x409)).toBe(
+      true,
+    );
+    expect(check[0]).toBe(0);
+    expect(table.GetEntry(key[0])?.GetMaskedType()).toBe(SvNumFormatType.ALL);
+    expect(table.GetEntry(key[0])?.GetNumForInfoScannedType(0)).toBe(SvNumFormatType.NUMBER);
+    const result = formatter.GetInputLineString(-1.23456789, key[0]);
+    try {
+      expect(text(result)).toBe("-1.23456789");
+    } finally {
+      result.dispose();
+    }
+    expect(table.GetEntry(74)?.GetFormatPrecision()).toBe(3);
+    expect(table.GetEntry(1)?.GetFormatPrecision()).toBe(0);
+    expect(formatter.GetStandardPrec()).toBe(2);
+  } finally {
+    code.dispose();
+    formatter.dispose();
+  }
+});
+
+it.each([
+  [0, "0%"],
+  [-0, "0%"],
+  [0.125, "12,5%"],
+  [-0.125, "-12,5%"],
+  [1.23456789, "123,456789%"],
+  [1.7e306, "1,7E+306"],
+  [-1.7e306, "-1,7E+306"],
+])(
+  "retains source standard-percent input-line scaling for %s",
+  /** Native standard entry bypasses display rounding only at input-line precision, retaining the strict overflow threshold. @param value - Cell value. @param expected - Source-derived output. @returns Nothing. */ (
+    value,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(0x407);
+    try {
+      const key = formatter.GetStandardFormat(SvNumFormatType.PERCENT),
+        result = formatter.GetInputLineString(value, key);
+      try {
+        expect(text(result)).toBe(expected);
+      } finally {
+        result.dispose();
+      }
+      expect(formatter.GetStandardPrec()).toBe(2);
+    } finally {
+      formatter.dispose();
+    }
+  },
+);
+
+it("uses the system edit locale only when filtering does not retain the original format", /** Real locale blocks and current-language state observe both flags without a formatter or accessor substitute. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x407),
+    current = formatter["m_aCurrentLanguage"];
+  try {
+    const systemKey = formatter.GetStandardIndex(0),
+      systemInput = formatter.GetInputLineString(1.23456789, systemKey),
+      forced = formatter.GetInputLineString(1.23456789, 0, false, true);
+    try {
+      expect(text(forced)).toBe(text(systemInput));
+    } finally {
+      forced.dispose();
+      systemInput.dispose();
+    }
+    const filtered = formatter.GetInputLineString(1.23456789, 0, true, true);
+    try {
+      expect(text(filtered)).toBe("1,23456789");
+      expect(current.fields.ActLnge[0]).toBe(0x407);
+    } finally {
+      filtered.dispose();
+    }
+    expect(formatter.GetStandardPrec()).toBe(2);
+  } finally {
+    formatter.dispose();
+  }
+});
+
+it("uses General when readonly system substitution has no target and leaves text unsubstituted", /** A real sparse table has General/Boolean/Text and a compiled system-time entry, but no system time target. All entries, scanners and policies are actual source owners. @returns Nothing. */ () => {
+  const values = tableValues(),
+    current = values.scanner.GetCurrentLanguageData(),
+    native = current.GetFormatScanner().getColorCallback().GetNatNum(),
+    code = unicode("[$-F400]HH:MM"),
+    input = unicode("literal"),
+    output = unicode("previous"),
+    check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0],
+    color: [Color | null] = [null];
+  try {
+    generateStandardNumberFormat(
+      values.table,
+      values.mapper,
+      values.locale,
+      values.scanner,
+      [0],
+      values.decimal,
+      0,
+    );
+    values.table.PutEntry(current, native, code, check, type, key, 0);
+    expect(check[0]).toBe(0);
+    expect(values.table.GetEntry(key[0])?.IsSystemTimeFormat()).toBe(true);
+    const policy = SvNFEngine.GetROPolicy(values.table, new Map());
+    SvNFEngine.GetOutputString(current, values.table, native, policy, 1.25, key[0], output, color);
+    expect(text(output)).toBe("1.25");
+    SvNFEngine.GetOutputString(current, values.table, input, key[0], output, color);
+    expect(text(output)).toBe("literal");
+    expect(color[0]).toBeNull();
+  } finally {
+    output.dispose();
+    input.dispose();
+    code.dispose();
     values.dispose();
   }
 });

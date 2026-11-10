@@ -7,24 +7,52 @@
     "localPath": "apps/office/src/external/icu/source/common/brkeng.ts",
     "upstreamPath": "vendor/icu-reference/source/common/brkeng.cpp",
     "localSymbols": [
+      "openDictionaryMatcher",
+      "loadDictionaryMatcherFor",
       "ICULanguageBreakFactory",
       "UnhandledEngine",
       "getEngineFor",
-      "loadDictionaryMatcherFor"
+      "loadEngineFor",
+      "handleCharacter"
     ],
     "upstreamSymbols": [
+      "ICULanguageBreakFactory",
+      "loadDictionaryMatcherFor",
+      "IX_STRING_TRIE_OFFSET",
+      "UnhandledEngine",
+      "getEngineFor",
+      "loadEngineFor",
+      "handleCharacter",
       "ICULanguageBreakFactory::loadEngineFor",
       "ICULanguageBreakFactory::loadDictionaryMatcherFor",
       "UnhandledEngine::handleCharacter"
     ],
     "preservedResponsibilities": [
+      "Original brkitr root lookup selects dictionaries by ICU script short name, converts the counted invariant filename and opens the native file before binary dispatch and matcher ownership transfer. Native comparisons cover 36 factory calls across 12 scripts, 144 portable builder cases and 168 cases across five archive dictionaries.",
+      "The source factory retains reverse engine search, original script selection, model bundle lookup, dictionary fallback and matcher adoption. The reject engine replaces the previous UnicodeSet property selection with the new script as in CALC-482. The pinned package has no LSTM models. Native tests compare resource statuses, engine identity and membership.",
       "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
     ],
     "omittedResponsibilities": [
-      "LSTM data is absent from the pinned package. Optional external engines and browser asset preparation remain outside the native factory."
+      "External injected factories and the LSTM execution branch are outside the pinned resource package."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/brkeng.ts",
+          "marker": "openDictionaryMatcher"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+          "marker": "matches original dictionary outputs"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/brkeng.native.test.ts",
+          "marker": "original script-selected dictionary"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.owner.native.test.ts",
+          "marker": "matches native engine identity"
+        },
         {
           "path": "apps/office/src/external/icu/source/common/brkeng.ts",
           "marker": "ICULanguageBreakFactory"
@@ -35,6 +63,10 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/brkeng.cpp",
+          "marker": "loadDictionaryMatcherFor"
+        },
         {
           "path": "vendor/icu-reference/source/common/brkeng.cpp",
           "marker": "ICULanguageBreakFactory::loadEngineFor"

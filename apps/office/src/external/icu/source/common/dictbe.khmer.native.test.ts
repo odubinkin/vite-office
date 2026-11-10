@@ -1,7 +1,25 @@
 /** @fileoverview Native witnesses for LibreOffice's patched ICU78.3 Khmer engine. */
 import { assert, expect, it } from "vitest";
-import { KhmerBreakEngine } from "./dictbe.khmer";
-import { openDictionaryMatcher } from "./dictionarydata";
+import { LibreOfficeKhmerBreakEngine } from "./dictbe.khmer";
+import { openDictionaryMatcher } from "./brkeng";
+import { openEncodedDictionary } from "../../../../../../../scripts/icu-dictionary-observe";
+import {
+  type OpenUText,
+  utext_close,
+  utext_getNativeIndex,
+  utext_openUChars,
+} from "./unicode/utext";
+import { UVector32 } from "./uvectr32.h";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+
+/** Opens the actual counted UTF-16 provider for a fixture. @param value - Input fixture. @returns Open provider. */
+function openText(value: string) {
+  const text = unicode(value);
+  const provider = utext_openUChars(null, text.getStr(), text.getLength(), [0]);
+  text.dispose();
+  assert(provider);
+  return provider as OpenUText;
+}
 
 const encoded =
   "IADaJxQAAAAAAAIARGljdAEAAAAAAAAAAAAAAAAAAAAgAAAAuAAAALgAAAC4AAAACAAAAIAXAAEAAAAAAAAAAAgXSRc8GFwaaB9sIhMAUh8ao1ASNh82on0UAVIYQhqkLBBXpXIUEzsfUh+jQRFAE3ECNjA9QEASHBdFmREbNkQSGkATpSwTH1IPOE8ATgF+E5gUFFIaEUEfoqoWABhSFjsHNqWGAwAyAZkYNlI+EAJxol8QAKNGFFIWOwc2o0YBASxSEhhCGj+iXxABo1oBNig3EARDEAR1";
@@ -54,21 +72,17 @@ const fixtures: readonly (readonly [string, number, number, string])[] = [
 ];
 
 it("matches the patched native Khmer cursor and weighted word boundaries", /** Uses the original ICU gendict bytes and observed patched native results. @returns Nothing. */ () => {
-  const bytes = Uint8Array.from(
-    atob(encoded),
-    /** Reads the original packed byte. @param character - Binary unit. @returns Byte. */ (
-      character,
-    ) => character.charCodeAt(0),
-  );
-  const matcher = openDictionaryMatcher(bytes);
+  const matcher = openDictionaryMatcher(openEncodedDictionary(encoded));
   assert(matcher);
-  const engine = new KhmerBreakEngine(matcher);
+  const engine = new LibreOfficeKhmerBreakEngine(matcher);
   for (const [text, start, end, expected] of fixtures) {
-    const cursor: [number] = [0],
-      breaks: number[] = [];
-    const count = engine.findBreaks(text, cursor, start, end, breaks, false, [0]);
-    expect([`${cursor[0]}:${count}`, ...breaks].join(","), JSON.stringify([text, start, end])).toBe(
-      expected,
-    );
+    const provider = openText(text);
+    const breaks = new UVector32([0]);
+    const count = engine.findBreaks(provider, start, end, breaks, false, [0]);
+    const result = [`${utext_getNativeIndex(provider)}:${count}`];
+    for (let i = 0; i < breaks.size(); ++i) result.push(String(breaks.elementAti(i)));
+    utext_close(provider);
+    expect(result.join(","), JSON.stringify([text, start, end])).toBe(expected);
   }
+  engine.dispose();
 });

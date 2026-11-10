@@ -7,24 +7,37 @@
     "localPath": "apps/office/src/external/icu/source/common/dictionarydata.ts",
     "upstreamPath": "vendor/icu-reference/source/common/dictionarydata.cpp",
     "localSymbols": [
+      "DictionaryData",
       "DictionaryMatcher",
       "UCharsDictionaryMatcher",
-      "BytesDictionaryMatcher",
-      "openDictionaryMatcher"
+      "BytesDictionaryMatcher"
     ],
     "upstreamSymbols": [
+      "DictionaryData",
+      "UCharsDictionaryMatcher",
+      "BytesDictionaryMatcher",
+      "matches",
       "UCharsDictionaryMatcher::matches",
       "BytesDictionaryMatcher::matches",
       "BytesDictionaryMatcher::transform"
     ],
     "preservedResponsibilities": [
+      "Original dictionary indexes, byte transform and matcher handle owners. Native and codepoint lengths, optional outputs, capacity, prefix and consumed cursor follow the original loops. CALC-477 and CALC-478 record retained upstream behavior. The original native builder and archive witness compares 144 portable builder cases and 168 cases on the five real ICU dictionary files opened via udata. This is the matcher layer for the native dictionary break engines.",
       "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370."
     ],
     "omittedResponsibilities": [
-      "ICU resource selection and per-language engine segmentation remain unported."
+      "Remaining trie reader APIs, dictionary resource discovery, and concrete break engines are outside this checkpoint."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.ts",
+          "marker": "DictionaryData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+          "marker": "matches original dictionary outputs"
+        },
         {
           "path": "apps/office/src/external/icu/source/common/dictionarydata.ts",
           "marker": "DictionaryMatcher"
@@ -35,6 +48,10 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictionarydata.cpp",
+          "marker": "UCharsDictionaryMatcher"
+        },
         {
           "path": "vendor/icu-reference/source/common/dictionarydata.cpp",
           "marker": "UCharsDictionaryMatcher::matches"

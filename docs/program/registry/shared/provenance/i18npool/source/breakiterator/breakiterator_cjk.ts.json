@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/breakiterator/breakiterator_cjk.ts",
+    "upstreamPath": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+    "localSymbols": [
+      "BreakIterator_CJK",
+      "BreakIterator_zh",
+      "BreakIterator_zh_TW",
+      "BreakIterator_ja",
+      "BreakIterator_ko"
+    ],
+    "upstreamSymbols": [
+      "BreakIterator_CJK::BreakIterator_CJK",
+      "BreakIterator_zh::BreakIterator_zh",
+      "BreakIterator_zh_TW::BreakIterator_zh_TW",
+      "BreakIterator_ja::BreakIterator_ja",
+      "BreakIterator_ko::BreakIterator_ko"
+    ],
+    "preservedResponsibilities": [
+      "Original registered CJK word-service subclasses preserve source names, inherited Unicode word methods and the locale-specific hanging characters initialized by each native constructor."
+    ],
+    "omittedResponsibilities": [
+      "CJK line-breaking and unused iterator operations remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_cjk.ts",
+          "marker": "BreakIterator_ko"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+          "marker": "BreakIterator_ko"
+        },
+        {
+          "path": "i18npool/util/i18npool.component",
+          "marker": "com.sun.star.i18n.BreakIterator_zh_TW"
+        }
+      ]
+    }
+  }
+}

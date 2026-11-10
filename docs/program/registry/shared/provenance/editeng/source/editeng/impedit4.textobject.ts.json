@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+    "upstreamPath": "editeng/source/editeng/impedit4.cxx",
+    "localSymbols": [
+      "CreateTextObject",
+      "SetTextObject",
+      "InsertTextObject"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::CreateTextObject",
+      "ImpEditEngine::SetText",
+      "ImpEditEngine::InsertTextObject"
+    ],
+    "preservedResponsibilities": [
+      "Original private ImpEditEngine::CreateTextObject member-body extraction operates only the actual receiver and existing EditDoc, selection, pool, content, attributes, styles, WrongList, ParaPortion, TextPortion and EditLine owners. It preserves by-value selection adjustment, global whole-paragraph eligibility, actual DEF_METRIC/orientation/script metadata, destination-pool copies, empty-paragraph attributes, clipping, spell cloning, source cache conjunction and unsigned16 count narrowing, TextPortion copy/EditLine Clone behavior and exception cleanup. No second engine/state object, synthetic line model, default provider or renderer is introduced. CALC-439/440 preserve source narrowing and zero-count range behavior.",
+      "The source no-view replacement and insertion preserve paragraph defaults, actual character features, source metric conversion, field refresh and text orientation."
+    ],
+    "omittedResponsibilities": [
+      "Full style-pool lookup, layout cache replay and interactive insertion remain outside the document editor slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+          "marker": "CreateTextObject"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/test/editeng-engine-fixture.ts",
+          "marker": "class PreparedEngine"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx",
+          "marker": "ImpEditEngine::CreateTextObject"
+        },
+        {
+          "path": "editeng/source/editeng/impedit4.cxx",
+          "marker": "InsertTextObject"
+        },
+        {
+          "path": "editeng/source/editeng/impedit2.cxx",
+          "marker": "ImpFastInsertText"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit4.textobject.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original member body is extracted under its original impedit4 source group and called by the same source owner. As with existing editobj.sections member groups, the explicit receiver erases only host member/file syntax, without a second owner, provider or state model."
+    }
+  }
+}

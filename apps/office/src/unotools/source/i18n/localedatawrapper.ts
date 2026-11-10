@@ -1,4 +1,5 @@
 /** @fileoverview Source LocaleDataWrapper measurement,numeric/date and loaded-Locale field projections over actual locale resources;no complete wrapper service is fabricated. */
+import type { DateConstReference } from "../../../tools/source/datetime/tdate";
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -502,6 +503,22 @@ export class LocaleDataWrapper {
   /** Original borrowed cached date acceptance sequence, including generated edit-date patterns. @returns Wrapper-owned patterns. */
   getDateAcceptancePatterns(): readonly OUString[] {
     return this.dateAcceptancePatterns;
+  }
+  /** Original locale-ordered short date with two-digit day and month and a four-digit year. @param date - Native date. @returns Owned locale date text. */
+  getDate(date: DateConstReference): OUString {
+    const day = String(date.GetDay()).padStart(2, "0");
+    const month = String(date.GetMonth()).padStart(2, "0");
+    const rawYear = date.GetYear();
+    const year = (rawYear < 0 ? "-" : "") + String(Math.abs(rawYear)).padStart(4, "0");
+    const sep = getLocaleDateSeparator(this.myLocale);
+    switch (this.getDateOrder()) {
+      case DateOrder.DMY:
+        return unicode(day + sep + month + sep + year);
+      case DateOrder.MDY:
+        return unicode(month + sep + day + sep + year);
+      default:
+        return unicode(year + sep + month + sep + day);
+    }
   }
   /** Original cached short date order. @returns DateOrder. */
   getDateOrder(): DateOrder {

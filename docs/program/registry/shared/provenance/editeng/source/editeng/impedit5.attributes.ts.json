@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit5.attributes.ts",
+    "upstreamPath": "editeng/source/editeng/impedit5.cxx",
+    "localSymbols": [
+      "SetParaAttribs"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::SetParaAttribs"
+    ],
+    "preservedResponsibilities": [
+      "Paragraph defaults use the original pool conversion for undo, actual item-set mutation, spelling invalidation and paragraph notification order."
+    ],
+    "omittedResponsibilities": [
+      "Interactive view formatting remains outside the document text-object slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit5.attributes.ts",
+          "marker": "SetParaAttribs"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "SetParaAttribs"
+        },
+        {
+          "path": "editeng/source/editeng/editundo.cxx",
+          "marker": "EditUndoSetParaAttribs"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit5.attributes.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original paragraph attribute member is split from the lifecycle owner to retain the source-file budget."
+    }
+  }
+}

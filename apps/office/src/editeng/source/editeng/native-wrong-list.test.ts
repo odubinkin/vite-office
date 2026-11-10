@@ -1,5 +1,7 @@
 /** @fileoverview Stored misspelling values and unsigned64 transformations from pinned edtspell.cxx; no spell service is fabricated. */
 import { expect, it } from "vitest";
+import { EditDoc } from "../../inc/editdoc";
+import type { ContentNode } from "../../inc/ContentNode";
 import { WrongList } from "../../inc/edtspell";
 import { MisspellRange, MisspellRanges } from "../../inc/misspellrange";
 const MAX = (1n << 64n) - 1n;
@@ -226,4 +228,40 @@ it("deletes, truncates and shifts ranges through each native overlap case", /** 
   ]);
   several.TextDeleted(5n, 4n);
   expect(ranges(several)).toEqual([[6n, 8n]]);
+});
+
+it("clears overlaps with the source strict bounds and skips only spaces/features at a retained tail", /** Actual ContentNode text determines retained-tail adjustment; tabs and generic Unicode whitespace are not substituted for spaces. @returns Nothing. */ () => {
+  const doc = new EditDoc(),
+    node = doc.Clear().GetNode() as ContentNode,
+    value = list([
+      [0n, 1n],
+      [0n, 3n],
+      [1n, 8n],
+      [8n, 9n],
+    ]);
+  node.Append(Uint16Array.of(97, 98, 32, 1, 32, 99, 9, 122, 122));
+  try {
+    value.ClearWrongs(1n, 2n, node);
+    expect(ranges(value)).toEqual([
+      [0n, 1n],
+      [5n, 3n],
+      [5n, 8n],
+      [8n, 9n],
+    ]);
+    value.ClearWrongs(5n, 6n, node);
+    expect(ranges(value)).toEqual([
+      [0n, 1n],
+      [5n, 3n],
+      [6n, 8n],
+      [8n, 9n],
+    ]);
+    value.ClearWrongs(6n, 8n, node);
+    expect(ranges(value)).toEqual([
+      [0n, 1n],
+      [5n, 3n],
+      [8n, 9n],
+    ]);
+  } finally {
+    doc.dispose();
+  }
 });

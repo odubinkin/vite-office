@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/lingucomponent/source/numbertext/numbertext.ts",
+    "upstreamPath": "lingucomponent/source/numbertext/numbertext.cxx",
+    "localSymbols": [
+      "NumberText_Impl",
+      "lingucomponent_NumberText_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "NumberText_Impl",
+      "lingucomponent_NumberText_get_implementation",
+      "getNumberText",
+      "getAvailableLanguages"
+    ],
+    "preservedResponsibilities": [
+      "Actual NumberText_Impl extends the original ordered WeakImplHelper<XNumberText,XServiceInfo> specialization, retains initialization-before-path-setup ordering, per-instance Numbertext module cache and LanguageTag Locale constructor plus language/country/script getter order. Key construction is language-script-country, followed by original ASCII conversion and source non-Windows SAL UTF8 input/output boundaries. Missing-file input and no-match empty remain distinct. Original empty getAvailableLanguages TODO, exact implementation/service names, shared supportsService helper and acquired constructor return are preserved. Installation-path configuration binds to the accepted packaged library root instead of native SvtPathOptions/OS filesystem; no dynamic native deployment, mutex/thread ABI, full service-manager or supplier integration is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete original native component-context/service-manager, NatNum12 casing/formatter/CSV integration and native ABI/thread behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/lingucomponent/source/numbertext/numbertext.ts",
+          "marker": "NumberText_Impl"
+        },
+        {
+          "path": "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+          "marker": "NumberText"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/lingucomponent/source/numbertext/numbertext.cxx",
+          "marker": "NumberText_Impl"
+        }
+      ]
+    }
+  }
+}

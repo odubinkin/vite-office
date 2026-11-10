@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.ts",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagFallbackOwner",
+      "LanguageTagFallbackValue",
+      "LanguageTagStringFactory",
+      "getFallbackStrings"
+    ],
+    "upstreamSymbols": [
+      "LanguageTag::getFallbackStrings"
+    ],
+    "preservedResponsibilities": [
+      "Original complete ISO fallback decision branches and full/non-full vectors over the original getter/ISO member protocol, with the existing exact non-ISO component kernel reused without duplicating its ordering rules. Preserve Chinese legacy forms, Serbo-Croatian/Pali, all Kurdish branches including missing ku-country default, exact Catalan string constructor/full-vector call, nested duplicate candidates and owned field/temporary cleanup. The actual original LanguageTag string constructor is a required binding, not a guessed parser or replacement class. No script/ISO inference is used in the ISO member path."
+    ],
+    "omittedResponsibilities": [
+      "Actual enclosing LanguageTag constructors/shared implementation registration and physical C++ vector/shared_ptr/static-guard/thread ABI are not implemented by this member fragment. Required constructor bindings have no empty, heuristic or throwing production substitutes."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.ts",
+          "marker": "getFallbackStrings"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.test.ts",
+          "marker": "getFallbackStrings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag::getFallbackStrings"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.fallback.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original fallback/static-initializer responsibilities are separated from existing field/canonicalization groups while retaining mandatory original constructor bindings."
+    }
+  }
+}

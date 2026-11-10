@@ -10,14 +10,19 @@
       "UCharsTrie"
     ],
     "upstreamSymbols": [
+      "UCharsTrie",
+      "branchNext",
+      "nextImpl",
+      "firstForCodePoint",
       "UCharsTrie::next",
       "UCharsTrie::branchNext"
     ],
     "preservedResponsibilities": [
+      "Original UCharsTrie matching over the serialized UTF-16 units, including split and linear branches, signed final and intermediate values, stopped and reset states, and unit/codepoint entrypoints. The original native builder and archive witness compares 144 portable builder cases and 168 cases on the five real ICU dictionary files opened via udata. This is the matcher layer for the native dictionary break engines.",
       "S3HW1E HTML80: native Dict resources retain the byte and UTF16 trie formats, cursor and output behavior. The LibreOffice Khmer patch retains the post-transition ignore test and minimum scalar cutoff. Original PossibleWord retains offset-keyed lookup and marked-candidate selection. Native patched matcher results agreed on 54 fixed input/fixture pairs and 2500 inputs across the actual ICU and LibreOffice dictionaries. See WRITER367–370."
     ],
     "omittedResponsibilities": [
-      "UCharsTrie builder, iterators and general non-matcher queries remain outside this checkpoint."
+      "Remaining trie reader APIs, dictionary resource discovery, and concrete break engines are outside this checkpoint."
     ],
     "evidence": {
       "local": [
@@ -27,10 +32,18 @@
         },
         {
           "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
+          "marker": "matches original dictionary outputs"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictionarydata.native.test.ts",
           "marker": "@fileoverview"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ucharstrie.cpp",
+          "marker": "branchNext"
+        },
         {
           "path": "vendor/icu-reference/source/common/ucharstrie.cpp",
           "marker": "UCharsTrie::next"

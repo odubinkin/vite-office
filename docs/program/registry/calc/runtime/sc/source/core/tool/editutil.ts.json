@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/editutil.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-4dc9be05-d644-4470-af83-b28d4da3de3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/editutil.ts#SetTextCurrentDefaults",
+        "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+        "sc/source/core/tool/editutil.cxx",
+        "sc/source/core/data/documen2.cxx",
+        "apps/office/src/sc/source/core/tool/editutil.ts#GetCellFieldValue",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "sc/source/ui/docshell/docsh.cxx"
+      ],
+      "justification": "The Calc document editor applies the actual edit language, field-marking control flags and original default-item and literal-text operations. The Calc document editor expands rich text through the original owner and resolves supported field classes using native URL, date, sheet and shell values. Extended-time field producers, document metadata outside the existing shell title and field colors remain outside this working slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScEditEngineDefaulter",
+        "ScFieldEditEngine",
+        "GetCellFieldValue"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/editutil.cxx",
+      "upstreamSymbols": [
+        "ScEditEngineDefaulter::SetTextCurrentDefaults",
+        "ScEditEngineDefaulter::ApplyDefaults",
+        "ScFieldEditEngine::ScFieldEditEngine",
+        "ScEditUtil::GetCellFieldValue",
+        "ScFieldEditEngine::CalcFieldValue"
+      ]
+    }
+  }
+}

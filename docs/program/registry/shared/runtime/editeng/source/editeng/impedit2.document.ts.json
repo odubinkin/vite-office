@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit2.document.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit2.document.ts#DocumentImpEditEngine",
+        "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
+        "editeng/source/editeng/impedit2.cxx",
+        "editeng/source/editeng/impedit3.cxx",
+        "apps/office/src/editeng/source/editeng/impedit2.document.ts#SetTextObject",
+        "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "editeng/source/editeng/impedit4.cxx"
+      ],
+      "justification": "The document-only engine constructs the actual EditDoc, paragraph portion and edit status, and installs the original paragraph callbacks and document modification link. The document engine exposes source rich-text insertion and field-refresh operations using the same actual EditDoc as literal import. The no-layout document scope omits interactive view formatting, device output, style notifications and selection-range editing.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentImpEditEngine"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit2.cxx",
+      "upstreamSymbols": [
+        "ImpEditEngine::ImpEditEngine",
+        "ImpEditEngine::Dispose",
+        "ImpEditEngine::UpdateFields"
+      ]
+    }
+  }
+}

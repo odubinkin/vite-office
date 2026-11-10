@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/source/component_context.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-component-context",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165",
+      "CAP-4bdd6ec4-885f-4291-befb-1adc79822e00"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/source/component_context.ts",
+        "apps/office/src/cppuhelper/source/component_context.test.ts",
+        "cppuhelper/source/component_context.cxx",
+        "apps/office/src/cppuhelper/source/component_context-callee.test.ts"
+      ],
+      "justification": "Original internal ComponentContext constructor, all XComponentContext/XNameContainer/XNameReplace/XNameAccess/XElementAccess methods, exact duplicate/emplace and lazy initialization paths, actual new/legacy factory queries, scalar/sequence/empty args, runtime versus checked UNO exception clauses, callback relookup/losing-instance disposal and typed-null caching use existing Any/Reference/Sequence/OUString owners. Exact _root/delegate fallback, manager wrapper service and DefaultContext patch retain original actual receiver/refcount lifetime. Actual const OUString key fields are owned addressed slots, with value-key lookup lowering std::unordered_map without a host hash heuristic; key enumeration uses original comphelper mapKeysToSequence. getElementType returns the original owned VOID Type copy. Constructor/member destruction and explicit disposal preserve manager/access/type-manager order, service-manager prefix skip, lazy release, no disposed guard on value APIs and actual registered Java environment disposal without an added source-absent release. Actual DisposingForwarder registers/retains/disposes/clears the target through the real listener helper. Static source ASCII strings and native byte/array allocation are explicit compiler bindings, not context/environment/service providers. The internal class is real, but the public context environment/mapping factory is not replaced by direct construction in application code. Public createComponentContext current/source Environment and Mapping orchestration, default environment engine, bridge/purpose-stack creation, concrete ServiceManager/application installation, EditEngine/VCL/Sfx/DocImport and full NatNum12/formatter CSV admission remain incomplete. Native physical pointer ABI, unordered bucket permutation, allocator exhaustion, threading, mutex scopes, shutdown and noexcept process termination remain uncertified. No complete module or CSV readiness is promoted. Original invoked s_createComponentContext_v consumes the mapped delegate through SAL_NO_ACQUIRE, creates actual ComponentContext only for positive counts, attaches the actual DisposingForwarder, catches only UNO Exception around construction/listening, moves the delegate for nonpositive counts, and maps the actual XComponentContext Type before publishing the outer output. Mapping exceptions remain outside the construction catch; local real references unwind in original order. Focused tests use actual context/weak/listener/Any/Type/public Mapping owners with explicit enclosing delegate/C mapping input, not production service/environment replacements. Full native context TU differential and public current/source Environment/Mapping orchestration/application installation remain unverified/incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ComponentContext",
+        "DisposingForwarder",
+        "s_createComponentContext_v"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cppuhelper/source/component_context.cxx",
+      "upstreamSymbols": [
+        "ComponentContext",
+        "DisposingForwarder",
+        "lookupMap",
+        "try_dispose",
+        "getValueByName",
+        "getServiceManager",
+        "s_createComponentContext_v"
+      ]
+    }
+  }
+}

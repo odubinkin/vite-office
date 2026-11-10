@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/editattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/editattr.ts",
+        "apps/office/src/editeng/source/editeng/native-edit-char-attrib.test.ts",
+        "editeng/inc/editattr.hxx",
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts"
+      ],
+      "justification": "Original consumed attribute declarations re-export their actual source owners. No duplicate range/item or engine implementation is defined by this header boundary. Concrete attribute constructor/value owners, including EditCharAttribField, are reexported from their original source boundary. AQF9AG object-creation continuation: Original DEF_METRIC0 macro is now available for default pool metric queries without a guessed Which ID.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DEF_METRIC"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/inc/editattr.hxx",
+      "upstreamSymbols": [
+        "EditCharAttrib",
+        "EditCharAttribTab",
+        "EditCharAttribLineBreak",
+        "CH_FEATURE",
+        "EditCharAttribField",
+        "DEF_METRIC"
+      ]
+    }
+  }
+}

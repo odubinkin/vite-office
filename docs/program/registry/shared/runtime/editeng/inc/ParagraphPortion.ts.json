@@ -20,17 +20,20 @@
         "apps/office/src/editeng/inc/ParagraphPortion.ts#ScriptTypePosInfo",
         "apps/office/src/editeng/source/editeng/impedit2.script.test.ts#@fileoverview"
       ],
-      "justification": "Task6764KT Original ScriptTypePosInfo constructor/data fields and original vector alias only;paragraph storage,layout and initialization are not represented by a fake ParagraphPortion class. Focused source tests use explicit initialized script data,not an ICU bidi-analysis certificate. Native source script-position data flows into original CheckScript requests without an independent style store. ICU direction construction and live row integration remain pending;no broad parity promotion.",
+      "justification": "Task6764KT Original ScriptTypePosInfo constructor/data fields and original vector alias only;paragraph storage,layout and initialization are not represented by a fake ParagraphPortion class. Focused source tests use explicit initialized script data,not an ICU bidi-analysis certificate. Native source script-position data flows into original CheckScript requests without an independent style store. ICU direction construction and live row integration remain pending;no broad parity promotion. Original WritingDirectionInfo aggregate/vector and ParaPortion declaration now accompany ScriptTypePosInfo, binding the actual source paragraph owner. Earlier unported paragraph-storage wording is superseded for this consumed owner group. ImpEditEngine layout/analysis initialization remains pending; no broad parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "ScriptTypePosInfo",
-        "ScriptTypePosInfos"
+        "ScriptTypePosInfos",
+        "WritingDirectionInfo"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "editeng/inc/ParagraphPortion.hxx",
       "upstreamSymbols": [
         "ScriptTypePosInfo",
-        "ScriptTypePosInfos"
+        "ScriptTypePosInfos",
+        "WritingDirectionInfo",
+        "ParaPortion"
       ]
     }
   }

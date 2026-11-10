@@ -11,3 +11,6 @@ package-lock.json
 playwright-report/
 test-results/
 vendor/
+
+# Byte-exact upstream dependency and its package wrapper.
+third_party/libnumbertext-js

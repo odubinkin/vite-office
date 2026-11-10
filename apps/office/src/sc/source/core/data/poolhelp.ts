@@ -1,4 +1,7 @@
-/** @fileoverview Native ScPoolHelper intrusive lifetime and General formatter ownership/options from poolhelp.cxx;number-color/edit-engine and physical pool shutdown services remain unported. */
+/** @fileoverview Native ScPoolHelper intrusive lifetime and General formatter ownership/options from poolhelp.cxx;native edit-engine pool metrics and laziness are retained. */
+import { CreatePool } from "../../../../editeng/inc/editeng";
+import type { SfxItemPool } from "../../../../svl/source/items/itempool";
+import { MapUnit } from "../../../../tools/inc/mapunit";
 import { SimpleReferenceObject } from "../../../../salhelper/source/simplereferenceobject";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
@@ -12,6 +15,7 @@ import type { ScDocument } from "../../../inc/document";
 export class ScPoolHelper extends SimpleReferenceObject {
   private readonly aOpt = new ScDocOptions();
   private pFormTable: SvNumberFormatter | null = null;
+  private mpEditEnginePool: SfxItemPool | null = null;
   private readonly pDocPool = new ScDocumentPool();
   private readonly mxStylePool: ScStyleSheetPool;
   /** Allocates document and style pools in native order. @param source - Actual source document. @returns Helper. */
@@ -26,6 +30,15 @@ export class ScPoolHelper extends SimpleReferenceObject {
   /** Borrows the actual style pool. @returns Pool. */
   GetStylePool(): ScStyleSheetPool {
     return this.mxStylePool;
+  }
+  /** Original lazy document edit pool with the native hundredth-millimetre default. @returns Borrowed edit-engine item pool. */
+  GetEditEnginePool(): SfxItemPool {
+    if (this.mpEditEnginePool === null) {
+      const pool = CreatePool();
+      pool.SetDefaultMetric(MapUnit.Map100thMM);
+      this.mpEditEnginePool = pool;
+    }
+    return this.mpEditEnginePool;
   }
   /** Original lazy actual formatter instance. Unsupported pattern/color/edit-engine services remain explicit boundaries;no fake formatter or callback is installed. @returns Borrowed owned formatter. */
   GetFormTable(): SvNumberFormatter {
@@ -63,8 +76,9 @@ export class ScPoolHelper extends SimpleReferenceObject {
   SourceDocumentGone(): void {
     this.mxStylePool.SetDocument(null);
   }
-  /** Original represented destructor destroys the owned formatter before releasing remaining shared-resource state. Style/item-pool physical shutdown and edit-engine services remain unported. @returns Nothing. */
+  /** Original represented destructor destroys the owned formatter before releasing remaining shared-resource state. GC reclaims the released pool after its remaining value owners finish. @returns Nothing. */
   protected override destroy(): void {
+    this.mpEditEnginePool = null;
     this.pFormTable?.dispose();
     this.pFormTable = null;
     super.destroy();

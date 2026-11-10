@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/source/servicemanager.ts",
+    "upstreamPath": "cppuhelper/source/servicemanager.cxx",
+    "localSymbols": [
+      "ServiceManager",
+      "Data",
+      "Implementation"
+    ],
+    "upstreamSymbols": [
+      "ServiceManager::findServiceImplementation",
+      "ServiceManager::createInstanceWithContext",
+      "ServiceManager::getPropertyValue",
+      "ServiceManager::getPropertyByName"
+    ],
+    "preservedResponsibilities": [
+      "Original constructor-backed ServiceManager retains ordered service lists, implementation-name lookup, acquired constructor references, optional XInitialization and the DefaultContext property and listener behavior."
+    ],
+    "omittedResponsibilities": [
+      "Original dynamically loaded registries, external factory and singleton management, native threading and physical UNO ABI remain outside the bundled constructor slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/source/servicemanager.ts",
+          "marker": "Implementation"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/source/servicemanager.cxx",
+          "marker": "getPropertyByName"
+        },
+        {
+          "path": "cppuhelper/source/defaultbootstrap.cxx",
+          "marker": "smgr->setContext"
+        }
+      ]
+    }
+  }
+}

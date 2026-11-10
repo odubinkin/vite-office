@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/stream/stream.lineend.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/stream/stream.lineend.ts",
+        "apps/office/src/tools/source/stream/native-lineend.test.ts",
+        "tools/source/stream/stream.cxx"
+      ],
+      "justification": "Original Unicode two-pass line-end template uses actual SAL OUString/OUStringBuffer, opposite CRLF/LFCR pair collapse, raw UTF16 preservation and unchanged source-data sharing. Original trailing bare CR conversion-detection omission remains (CALC-430). Only Unicode overload required by this CSV path is ported; no byte-string buffer or source behavior is substituted. Enclosing ImpEditEngine/ScFieldEditEngine constructor, undo/view/listener/notification ownership and CSV admission remain incomplete. Byte convertLineEnd, SpellCallbackInfo and full native ABI/thread/lifetime/QA are not certified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "convertLineEnd"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "tools/source/stream/stream.cxx",
+      "upstreamSymbols": [
+        "tmpl_convertLineEnd",
+        "convertLineEnd"
+      ]
+    }
+  }
+}

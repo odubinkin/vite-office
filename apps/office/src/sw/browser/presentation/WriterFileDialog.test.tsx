@@ -1,13 +1,10 @@
 /** @fileoverview Verifies accessible Writer Open and Export dialog states. */
 
-import { readFileSync } from "node:fs";
-import {
-  ICULanguageBreakFactory,
-  type WordDictionaryName,
-} from "../../../external/icu/source/common/brkeng";
 import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
 import { g_pBreakIt } from "../../source/core/bastyp/breakit";
-import { prepareWriterWordDictionaries } from "../filter/word-dictionaries";
+import { implementations } from "../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { assert, describe, expect, it, vi } from "vitest";
@@ -23,6 +20,8 @@ import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-
 import type { WriterSessionServices } from "../workflows/writer-workflows";
 import { openBrowserWriterDocument } from "../workflows/writer-odt-io";
 import { WriterFileDialog } from "./WriterFileDialog";
+
+InitApplicationServiceManager(implementations);
 
 /** Creates a Writer shell for dialog behavior. @param measure - Supplies the device used by native HTML tables. @returns Active shell. */
 function shell(measure = false): SwDocShell {
@@ -342,28 +341,13 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
       const documentShell = shell(extension === "md");
       const store = new IndexedDbWriterOdtStore(`dialog-nested-${extension}`, new IDBFactory());
       const close = vi.fn();
-      const read =
-        /** Reads one pinned dictionary asset. @param name - Native dictionary. @returns Bytes. */ (
-          name: WordDictionaryName,
-        ) => readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
       try {
         render(
           <WriterFileDialog
             docShell={documentShell}
             kind="open"
             onClose={close}
-            services={{
-              ...services(store),
-              prepareWordDictionaries:
-                /** Provides the shipped ICU assets to the real Markdown import. @returns Prepared native factory. */ async () =>
-                  new ICULanguageBreakFactory({
-                    thaidict: read("thaidict"),
-                    laodict: read("laodict"),
-                    burmesedict: read("burmesedict"),
-                    khmerdict: read("khmerdict"),
-                    cjdict: read("cjdict"),
-                  }),
-            }}
+            services={services(store)}
           />,
         );
         fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
@@ -452,30 +436,16 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     const documentShell = shell(true);
     const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
     const close = vi.fn();
-    let rejectOnce = true;
-    const fetchDictionary = vi.fn(
-      /** Serves the actual built-in binary assets. @param url - Browser asset URL. @returns Response. */ async (
-        url: URL,
-      ) => {
-        if (rejectOnce) {
-          rejectOnce = false;
-          return new Response(null, { status: 503 });
-        }
-        const name = url.pathname.split("/").at(-1);
-        return new Response(
-          new Uint8Array(readFileSync(`src/external/icu/source/data/brkitr/${name}`)),
-        );
-      },
-    );
+    const fetchDictionary = vi.fn();
     vi.stubGlobal("fetch", fetchDictionary);
+    const sample = unicode("ภาษาไทย");
     try {
-      await expect(prepareWriterWordDictionaries()).rejects.toThrow("could not be loaded");
       render(
         <WriterFileDialog
           docShell={documentShell}
           kind="open"
           onClose={close}
-          services={{ ...services(store), prepareWordDictionaries: prepareWriterWordDictionaries }}
+          services={services(store)}
         />,
       );
       fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
@@ -514,13 +484,14 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
           ) => record.title,
         ),
       ).toEqual(["Imported"]);
-      expect(fetchDictionary).toHaveBeenCalledTimes(10);
+      expect(fetchDictionary).not.toHaveBeenCalled();
       expect(
         g_pBreakIt
-          .GetBreakIter()
-          .getWordBoundary("ภาษาไทย", 0, g_pBreakIt.GetLocale(0x041e), DICTIONARY_WORD, true),
+          .GetWordBreakIter()
+          .getWordBoundary(sample, 0, g_pBreakIt.GetLocale(0x041e), DICTIONARY_WORD, true),
       ).toEqual({ startPos: 0, endPos: 4 });
     } finally {
+      sample.dispose();
       vi.unstubAllGlobals();
       documentShell.Close();
     }

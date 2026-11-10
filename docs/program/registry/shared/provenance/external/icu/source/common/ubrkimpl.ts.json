@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/ubrkimpl.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/ubrkimpl.h",
+    "localSymbols": [
+      "U_ICUDATA_BRKITR"
+    ],
+    "upstreamSymbols": [
+      "U_ICUDATA_BRKITR"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the internal ICU break resource package name derived from the pinned data name."
+    ],
+    "omittedResponsibilities": [
+      "The other declarations from the native header are outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ubrkimpl.ts",
+          "marker": "U_ICUDATA_BRKITR"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ubrkimpl.h",
+          "marker": "U_ICUDATA_BRKITR"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/editdoc.metric.ts",
+    "upstreamPath": "editeng/source/editeng/editdoc.cxx",
+    "localSymbols": [
+      "ConvertItem",
+      "ConvertAndPutItems"
+    ],
+    "upstreamSymbols": [
+      "ConvertItem",
+      "ConvertAndPutItems"
+    ],
+    "preservedResponsibilities": [
+      "Rich-text transfer applies native length conversion to paragraph spacing, tab stops and font heights and copies items through source slot IDs."
+    ],
+    "omittedResponsibilities": [
+      "Physical native item pointer ownership remains with the existing item pool binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editdoc.metric.ts",
+          "marker": "ConvertItem"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "editeng/source/editeng/editdoc.cxx",
+          "marker": "ConvertAndPutItems"
+        },
+        {
+          "path": "vcl/source/outdev/map.cxx",
+          "marker": "OutputDevice::LogicToLogic"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/editdoc.metric.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native edit-document metric conversion is kept in a dedicated member group. This isolates the source responsibility and preserves the per-file size budget."
+    }
+  }
+}

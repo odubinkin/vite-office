@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/EditPaM.ts",
+    "upstreamPath": "editeng/inc/EditPaM.hxx",
+    "localSymbols": [
+      "EditPaM"
+    ],
+    "upstreamSymbols": [
+      "EditPaM",
+      "GetNode",
+      "GetIndex"
+    ],
+    "preservedResponsibilities": [
+      "Original nonowning ContentNode/index value, stable scalar state, copy/assignment/equality and exact operator! null-pointer AND zero-index predicate. No synthetic paragraph number or node ownership."
+    ],
+    "omittedResponsibilities": [
+      "Complete EditDoc/ImpEditEngine/ScFieldEditEngine CSV integration and NatNum12 formatter/casing integration remain pending. Native layout, lifetime/thread/ABI and complete original QA are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/EditPaM.ts",
+          "marker": "EditPaM"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-edit-positions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/EditPaM.hxx",
+          "marker": "EditPaM"
+        }
+      ]
+    }
+  }
+}

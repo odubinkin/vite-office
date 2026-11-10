@@ -4660,3 +4660,619 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Pinned ICU78.3 `source/i18n/indiancal.cpp:203–213` first normalizes every signed32 month outside0..11 with `ClockMath::floorDivide(month,12,&month)`, returning early on year overflow. It then tests `month==12` to select January.
 - Both admitted paths leave month in0..11. The later equality is contradictory for the original integer domain, so its true alternative cannot execute. This looks like a stale normalization branch; no incorrect ordinary date result has been established, because the surviving `month+1` maps the normalized value correctly. The source behavior remains intact.
 - I01 uses the standing human authorization to exclude only that zero-hit true alternative. The guard, both values, overflow handling, arithmetic and100% thresholds remain. Real original native-hook observations continue to test the calendar owner; no invented month provider, private field mutation or altered floor-division implementation is used.
+
+### CALC-394 — A conditional second number section suppresses a negative sign even without a negative bound
+
+- Pinned source: `svl/source/numbers/zformat.cxx`, `SvNumberformat::GetSubformatIndex`, numeric `GetOutputString` section normalization and `ImpGetNumberOutput` (around2475..2500,2612..2622,4424..4430); `include/svl/zformat.hxx`, `IsSecondSubformatRealNegative`.
+- Actual local public reproduction: compile `[>2]0;0` through real SvNFFormatData::PutEntry, then output numeric-4 through SvNumberFormatter::GetOutputString. The first condition is false, the second absent condition returns-1, and section1 is selected. The value remains negative because the first bound is2 and IsSecondSubformatRealNegative is false. ImpGetNumberOutput nevertheless takes the absolute value and sets bSign only for section0, producing `4`.
+- Suspicion: the display can erase a negative sign in a section selected by an arbitrary positive bound, rather than a conventional negative-number section. The separate source predicate recognizes that this is not a real-negative section, yet does not control ImpGetNumberOutput's sign decision. No universal correction is inferred.
+- Evidence boundary: pinned-source control-flow/sign derivation and real local formatter compilation/output in `zformat.output.test.ts`; dedicated complete native number-output/UNO differential execution remains pending. Preserve the source-selected section, normalization predicates and section-index sign rule. Do not add a minus sign based on an inferred intended condition.
+
+### CALC-395 — Scientific output preserves negative zero while ordinary number output normalizes it
+
+- Pinned source: `svl/source/numbers/zformat.cxx`, `SvNumberformat::ImpGetScientificOutput` around2694..2843, contrasted with `ImpGetNumberOutput` around4424..4436 and standard NUMBER output around2543ff.
+- Scientific output tests only `fNumber < 0.0` before passing the value to the real RTL E converter. Negative zero fails that comparison and retains its sign bit; the exponent/mantissa fill preserves the converter's minus. Ordinary number output explicitly handles `std::signbit` or suppresses a rounded zero sign.
+- Actual public local reproduction: compiled `0.00E+00` with input-0 produces `-0.00E+00`; input+0 produces `0.00E+00`. Real formatter/scanner/SAL owners are used. No private format or converter field is replaced.
+- Suspicion: output families disagree about displaying the sign of zero despite explicit suppression in ordinary-number branches. Evidence is original-source control flow and actual local public output, not a newly compiled complete native scientific/UNO wrapper comparison. Preserve the scientific comparison and output; do not reuse the ordinary-number normalization here.
+
+### CALC-396 — Scientific formats without integer placeholders can shift the displayed value by a power of ten
+
+- Pinned source: `svl/source/numbers/zforscan.cxx` FinalScan around2904ff admits a SCIENTIFIC format when the total mantissa placeholder count and exponent placeholder count are nonzero; it does not require an integer placeholder. `SvNumberformat::ImpGetScientificOutput` in zformat.cxx around2742..2779 sets rescale=-1 for nCntPre==0, subtracts it from the exponent, formats the mantissa again, then removes E without shifting its decimal according to that change. Existing decimal fill uses the converted mantissa's position.
+- Actual public local reproduction: compile `.00E+00` and format0.00012. The first E exponent is-4. The forced rescale makes the displayed exponent-3, while the remaining converted digits fill as `1.20`, yielding `1.20E-03` instead of a representation with the original magnitude. No heuristic repair, fabricated token or counter injection is involved.
+- Suspicion: an admitted display format changes magnitude rather than only precision. The source has a specific nCntPre==0 branch, so rejecting the format or forcing a leading placeholder would also alter its contract. Evidence is original admission/rescaling/fill control flow and local actual-owner integration, not a dedicated complete native scientific formatter/UNO differential run. Preserve the admitted format and result and retain the regression in zformat.number.test.ts.
+
+### CALC-397 — Fraction output checks the positive integer limit before converting negative input to a magnitude
+
+- Pinned `svl/source/numbers/zformat.cxx`, `ImpGetFractionOutput` around2947..2963 computes fNum=floor(fNumber), tests fNum>D_MAX_U_INT32, then calls ImpGetFractionElements, which takes the magnitude and replaces fNum.
+- Actual local public output with compiled `# #/#` is `#FMT` for+4294967296 and `-4294967296` for-4294967296. The same magnitude therefore crosses the native display limit in only one direction. No private format mutation or alternate value conversion is used.
+- Suspicion: the upper-bound check appears to be intended for the absolute whole part, but its source position admits large negatives. Still larger negative magnitudes can reach the source's fixed100-byte o3tl::sprintf integer buffer and its checked assertion instead of this early error result. The native primitive witness confirms snprintf's truncated-prefix/assertion condition; a full native format-wrapper assertion/abort execution is not claimed.
+- Preserve the check order and source outputs. Do not move fabs ahead of the guard, make the limit symmetric or replace it with a new CSV validation. Evidence: original control flow, actual local public output and the bounded native fraction-element/printf-primitive witness, not complete native parser/display/UNO equivalence.
+
+### CALC-398 — Fraction output's printf whole part retains negative zero despite its final sign-suppression comment
+
+- Pinned zformat.cxx ImpGetFractionElements preserves floor(-0) as the whole part because fNumber<0 is false; ImpGetFractionOutput then calls o3tl::sprintf(aBuf,"%.f",fNum). Native snprintf preserves the sign and produces `-0`. The final bSign/nonzero check suppresses only an independently added minus, leaving the one already present in sStr.
+- Actual local public reproduction: compiled `# #/#` with input-0 yields `-0`;+0 follows the same optional fraction hiding without a negative sign. This is a separate path from CALC-395's scientific RTL E conversion.
+- The unchanged original fraction-element body agrees on the whole-part negative-zero bits in the native witness; the primitive witness checks actual C snprintf(-0). Full native public format construction/fill/UNO execution remains outside that comparison. Preserve the source sign tests, printf result and digit fill; do not normalize the whole part or strip this minus.
+
+
+### CALC-399 — Calendar display-name negative item index reaches checked Sequence access
+
+- Source: `i18npool/source/calendar/calendar_gregorian.cxx`, `Calendar_gregorian::getDisplayName`; `include/com/sun/star/uno/Sequence.hxx`, const `operator[]`.
+- Observation: DAY/MONTH/GENITIVE_MONTH/PARTITIVE_MONTH/ERA check only `idx >= length`. With a valid name type, negative idx reaches the source Sequence lower-bound assertion rather than RuntimeException. Invalid name types still throw RuntimeException before item dereference. CalendarWrapper catches UNO exceptions only, so the binding's checked assertion propagates.
+- Preserve the original check order and existing local checked Sequence diagnostic. Do not add a lower-bound RuntimeException or swallow the assertion. Full native release-build undefined out-of-bounds behavior is not certified by these source-derived tests.
+
+### CALC-400 — Elapsed hours with AM/PM are reduced by twelve only once
+
+- Source: `svl/source/numbers/zformat.cxx`, `SvNumberformat::ImpGetTimeOutput`.
+- Observation: elapsed `[HH]` can exceed24 hours. The common AM/PM branch changes a positive hour greater than12 by subtracting12 once; it does not reduce modulo24. Thus the admitted `[HH]:MM AM/PM` pattern displays serial1.5 as `24:00 PM`.
+- Preserve this source behavior and the real compiled-pattern regression. Do not add modulo-day normalization to elapsed hours. This observation is source-derived and covered through local public formatter output; a full unchanged native display-wrapper comparison is not claimed.
+
+
+### CALC-401 — Proleptic tools dates are displayed through the default hybrid Gregorian calendar
+
+- Source: `svl/source/numbers/zformat.cxx`, `lcl_getValidDate`/`ImpGetDateOutput`; `i18npool/source/calendar/calendar_gregorian.cxx`, `init`; ICU `gregocal.cpp` constructor/default cutover.
+- Observation: range/epoch arithmetic uses proleptic `tools::Date`, while the calendar provider creates ICU Gregorian without replacing its historical1582 cutover. A serial derived from tools date1 January1CE is displayed as `0001-01-03`; the corresponding1BCE serial displays `-0001-01-03` in mode0.
+- Preserve the source arithmetic, provider initialization and cutover. Do not insert a proleptic-calendar override or date adjustment. These examples are source-derived and covered by real-owner output tests; complete unchanged native formatter-wrapper comparison is not claimed.
+
+### CALC-402 — Implicit era tokens can select a non-Gregorian calendar in an English locale
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpIsOtherCalendar`, `SwitchToOtherCalendar`, `ImpGetDateOutput`.
+- Observation: an implicit G/era token triggers selection of the first locale calendar other than Gregorian, without a Japanese-only language gate. en_US lists the Jewish calendar, so `YYYY G` combines the Gregorian YYYY path with the Jewish era name; a1BCE tools serial produces `1 CE` in the represented source path.
+- Preserve token-order detection, source locale calendar order and temporary Gregorian switches for YYYY/DDD. Do not infer another calendar from the requested era token or language. Local real-owner tests cover the result and final calendar-ID restoration; complete native wrapper comparison remains pending.
+
+### CALC-403 — Buddhist before-era combined display reverses abbreviated and full era selection
+
+- Source: `i18npool/source/calendar/calendar_gregorian.cxx`, `Calendar_buddhist::getDisplayString`.
+- Observation: when ERA==0, LONG_YEAR_AND_ERA selects SHORT_YEAR then SHORT_ERA; SHORT_YEAR_AND_ERA selects LONG_YEAR then LONG_ERA. This reverses the abbreviated/full era-name choice suggested by the display codes. The combined eraMode retains full numeric years for both paths.
+- Preserve this exact branch and ordering. Do not swap the source short/long calls. Complete native display/service ABI verification remains unproven.
+
+
+### CALC-404 — Calendar milliseconds can advance the displayed date while clock fields stay before midnight
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput`; `i18npool/source/calendar/calendar_gregorian.cxx`, `setLocalDateTime`; `tools/source/datetime/ttime.cxx`, `GetClock`.
+- Observation: the calendar date uses corrected rounding to integer milliseconds, while the clock path retains source second/fraction truncation and datetime's separate first rounding. Serial2.999999999 displays date `1900-01-02`; the date+clock pattern `YYYY-MM-DD HH:MM:SS.00` displays `1900-01-02 23:59:59.99` in the represented source path.
+- Preserve those separate source conversions. Do not force the calendar to truncate or replace the clock with calendar milliseconds. Source-derived real-owner tests retain both outputs; complete native display-wrapper comparison remains pending.
+
+
+### CALC-405 — NativeNumberChar NATNUM0 returns a digit ordinal as the character value
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `NativeNumberSupplierService::getNativeNumberChar`.
+- Observation: the NATNUM0 branch searches each NumberChar row and returns `j`, not `NUMBER_ZERO+j`. A recognized zero therefore returns UTF16 unit0 rather than ASCII48; one returns unit1 rather than ASCII49.
+- Preserve the source return contract when this currently unported character API is connected. Do not correct it to an ASCII code point. This finding is source-derived; a native character-service comparison is not claimed by the current string-only implementation.
+
+### CALC-406 — NatNum3 validation accepts a locale whose conversion still returns identity
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `isValidNatNumImpl`, `getNativeNumberString`, `getNativeNumberChar`.
+- Observation: NATNUM3 validation returns true independently of language. Both conversion paths subsequently return the original input if getLanguageNumber returns-1, before their full-width conversion switch. Thus validation alone does not imply full-width conversion for an unlisted language such as en.
+- Preserve both validation and conversion gates. Do not infer full-width output for all locales from the validation result. Real supplier tests now preserve this validity/identity distinction for en_US. The complete native service-wrapper comparison is still pending.
+
+### CALC-407 — Per-instance locale cache controls writes to shared punctuation arrays
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getNativeNumberString`; `i18npool/inc/nativenumbersupplier.hxx`, `aLocale`; `i18npool/source/nativenumber/data/numberchar.h`, mutable static DecimalChar/SeparatorChar.
+- Observation: punctuation array updates occur only when the service instance's cached aLocale differs from the requested locale, but the arrays are shared across instances. Another instance can change the shared half/full-width entries while the first instance still sees its own locale unchanged and skips the refresh. NativeToAscii also reads the current shared arrays and uses their half-width entries as output punctuation.
+- Preserve the source shared storage and per-instance refresh predicate when the remaining modes are ported. Do not normalize punctuation per call or replace the arrays with independent locale maps. Real supplier tests now preserve the ja_JP/fa_IR inter-instance state sequence, including NatNum0 returning the current shared decimal separator. A complete multi-instance native service witness remains pending.
+
+### CALC-408 — Raw C string growth overwrites its destination before asserting allocation success
+
+- Source: `sal/rtl/strtmpl.hxx`, `newFromStr_WithLength`/`stringbuffer_ensureCapacity`.
+- Observation: newFromStr_WithLength saves pOrg, replaces *ppThis with Alloc's result, then asserts nonnull before copying and releasing pOrg. A null allocation during growth leaves the destination null and reaches a fatal native assertion; it is not a recoverable std::bad_alloc path with ordinary C++ RAII unwinding. The local checked-assertion representation can consequently encounter another assertion when a caller disposes that invalidated buffer.
+- Preserve the original C mutation/assert/release order. Do not add destination rollback or reinterpret this fatal path as ordinary exception cleanup. Constructor/defined-exception lifetime tests are bounded separately from full native OOM/abort behavior.
+
+
+### CALC-409 — Hebrew digit-count admission permits signed64 overflow before the20-digit limit
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, `getHebrewNativeNumberString`.
+- Observation: the count guard rejects the20th digit, but19-digit values can exceed SAL_MAX_INT64. The source `value = value * 10 + (ch - NUMBER_ZERO)` then exceeds signed64's defined arithmetic domain. The Cyrillic branch rejects the8th digit and does not encounter this range issue.
+- Preserve the original count/prefix/suffix logic for defined values. Do not add a19-digit rejection, saturation or invented two's-complement wrap rule. Native signed overflow remains outside parity certification; the comparison corpus ends at9223372036854775807 for19-digit values. No sanitizer or complete service behavior is claimed for larger inputs.
+
+
+### CALC-410 — Native year padding can shrink after its width decision
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetDateOutput`/`ImpGetDateTimeOutput` YYYY branches and original `impTransliterate`/`ImpGetNatNumString`; `i18npool/source/calendar/calendar_gregorian.cxx`, `NatNumForCalendar`.
+- Observation: YYYY decides to prepend4-minus-calendar-year-length ASCII zeros, transliterates only that padding buffer, then appends the already-rendered year. It does not recheck width after transliteration. For Japanese calendar mode4, NatNumForCalendar returns0 for calendar fields, while the separate zero-prefix conversion uses the actual mode4 metadata and collapses `000` to `〇`. An early year1 therefore displays `〇1` under `[NatNum4]YYYY`, with fewer than4 characters and mixed zero/ASCII digits.
+- Preserve the original width decision, separate conversion and append order. Do not pad again, blanket-convert the final date or reinterpret calendar mode4 as general-number mode4. Real formatter tests retain this source-derived result; prior unchanged native-number scalar comparisons cover the zero-collapse kernel, not a complete native date formatter-wrapper ABI.
+
+
+### CALC-411 — Scientific display has no final native-number conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetScientificOutput`, `ImpDecimalFill`, `ImpNumberFill`.
+- Observation: scientific mantissa/exponent start with original RTL ASCII digits, pass through token filling and are appended without a final impTransliterate. Native metadata only reaches nested General token handling. Consequently `[NatNum3]0.00E+00` for12345 retains `1.23E+04` in Japanese, unlike ordinary `[NatNum3]0.00`.
+- Preserve that absent conversion; do not apply a generic output transliteration wrapper. Actual compiled-entry tests retain the source-derived result. A complete unchanged native scientific formatter-wrapper comparison is not claimed.
+
+### CALC-412 — General exponent threshold bypasses its native conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetOutputStandard`, `ImpGetOutputStdToPrecision`, standard NUMBER branch in `GetOutputString`.
+- Observation: ImpGetOutputStandard returns original E2 output directly above absolute1e15. Its fixed-point branch instead invokes ImpGetOutputStdToPrecision, which converts using NumFor0 metadata. A genuine standard NUMBER entry with Japanese NatNum3 and precision2 therefore emits ASCII `1.23E+16` for1.234e16. A nonstandard numeric format containing Standard subsequently applies its separate final selected-section conversion and emits `１．２３E+１６`.
+- Preserve both source branches and the later ordinary-number conversion. Do not insert conversion in the exponent shortcut, or reinterpret the precision's UNLIMITED/INPUTSTRING sentinels as General's clamped fixed precision. Actual builtin/table/metadata tests cover these source-derived outcomes; full native formatter-wrapper equivalence remains unverified.
+
+### CALC-413 — Normal fractional-second output keeps a pre-conversion digit counter
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetFractionOfSecondString`, DIGIT loops in `ImpGetTimeOutput`/`ImpGetDateTimeOutput`.
+- Observation: both helper branches convert the fractional buffer, but only the minimum-input-line branch then resets nFractionDecimals to the converted length. Normal display retains requested decimal count, and its caller stops at that count as well as buffer length. Hebrew NatNum2 converts125 to the four-unit `קכ״ה`; normal SS.000 displays `00.קכ״`, while the input-line-minimum branch displays `00.קכ״ה`.
+- Preserve the distinct counter update and original bounds. Do not extend normal display to the full native string or leave the fraction unconverted. The prior local ASCII-fraction behavior was a missing call and has been corrected. Source-derived real formatter tests retain both results; full unchanged native date/time wrapper comparison is not claimed.
+
+### CALC-414 — Fraction fill can add ASCII zeroes after native-number conversion
+
+- Source: `svl/source/numbers/zformat.cxx`, `ImpGetFractionOutput`, `ImpIntToString`/`ImpGetNatNumString`, `ImpNumberFill`.
+- Observation: numerator/denominator and integral text are converted before token filling, which can insert ASCII0 for mandatory zero placeholders. There is no final whole-fraction conversion. Japanese `[NatNum3]0 00/00` for1.5 therefore emits `１ 0１/0２`, with mixed-width zeroes; its separate sign is also inserted after native conversion.
+- Preserve the source order and literal code units; do not normalize the late zeroes or the sign. Actual compiled-entry and CSV shown-output cases retain this behavior. Full native fraction display-wrapper ABI is not claimed by these source-derived cases.
+
+### CALC-415 — NatNum12 casing uses the supplier's cached locale
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, NATNUM12 capitalization branch and later non12 locale-refresh branch.
+- Observation: NumberText conversion receives rLocale, but subsequent CharacterClassification toTitle/toUpper/toLower calls receive the member aLocale. The NATNUM12 branch executes before the non12 branch that refreshes aLocale, so a fresh supplier retains its default locale, and a reused supplier may retain an earlier different locale.
+- Preserve that original receiver/locale distinction when mode12 is connected. Do not silently replace aLocale with rLocale as a correction. This is source-derived; NumberText/casing remains unported and no complete native mode12 witness is claimed.
+
+### CALC-416 — Official Soros.js is not behaviorally identical to the C++ interpreter
+
+- Source: libnumbertext1.0.11 `src/Soros.js` at f29639e7623a6dc6803995176621b06fafe10f4f versus `src/Soros.cxx` in the SHA-256-pinned LibreOffice source archive; dependency identities and notices are in `third_party/libnumbertext-js`.
+- Observation: an unchanged native C++ comparison across12,412 inputs found12,405 equal outputs and7 differences. Italian ordinal1 yields `$1primo` in JS and `primo` in C++; Marathi ordinal1/21 are nonempty only in JS; Romanian USD1.25 has a leading space only in JS; Ukrainian0.25/1.25 use `пʼят` in JS versus `пʼять` in C++; Italian help reflects the same ordinal difference. JS also lacks the C++250-level recursion guard. The tested corpus is bounded, not a complete difference inventory.
+- User-approved exception,2026-10-30: use the official JS library as-is and connect through package.json rather than port or repair its interpreter. The private npm file dependency retains the exact official JS body with packaging declarations/export only. Preserve these JS behaviors; do not describe them as C++ parity. All other LibreOffice CSV/core contracts remain subject to the original upstream requirement.
+
+### CALC-417 — The simple LanguageTag component cache discards numeric region output
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, `cacheSimpleLSCV`, `getRegionFromLangtag`, `getCountry`.
+- Observation: simpleExtract returns a separate numeric aRegion for shapes such as es-419, but cacheSimpleLSCV copies only aCountry to maCachedCountry. With no mpImplLangtag, getRegionFromLangtag returns that same country cache, so this branch loses the numeric region even for the raw region getter. With an actual liblangtag owner, the raw region getter returns419 while the country getter clears it using isIsoCountry.
+- Preserve both source branches and the all-four cache flags. Tests use explicit prepared private states and an actual parsed es-Latn-419 liblangtag owner; they do not certify the enclosing LanguageTag canonicalizer/registration path or claim all public callers select the same branch.
+
+### CALC-418 — Native lowercase preserves dotted capital I outside Turkish/Azeri
+
+- Source: `i18nutil/source/utility/casefolding.cxx`, mapping_0130 and getConditionalValue; `i18npool/source/characterclassification/cclass_unicode.cxx`, toLower.
+- Observation: the original conditional mapping returns U+0130 unchanged unless the locale language is exactly tr or az. cclass_Unicode uses this mapping for its ToLower operation, so English Iİ becomes iİ, while tr/az produce ıi. Generic Unicode/JavaScript lowercase would instead expand the English dotted I to i plus combining dot.
+- Preserve the original initialized mapping and locale decision, including the source range context and lifetime chain. The existing unchanged-native getValue/conditional fixture and new actual classifier tests cover these responsibilities; a complete native CharacterClassification/UNO wrapper ABI is not claimed.
+
+### CALC-419 — Failed LanguageTag parsing does not gate component or ISO queries
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, canonicalize/synCanonicalize, getLanguageFromLangtag and isIsoLocale; liblangtag lt_tag_parse mutates its parsed owner before a later token failure.
+- Observation: canonicalize returns whether the spelling changed, independently of validity. For the prepared EN-1! member state, structural casing changes the spelling to en-1!, then parsing fails with DECISION_NO validity while retaining an allocated tag with the parsed primary language en. Subsequent component getters consult that tag without a validity predicate; synCanonicalize skips reparsing once the tag exists. The ISO Locale query can consequently return true from language/region/length shape while validity is false.
+- Preserve the original state separation and partial parsed-owner reads, without clearing the tag, revalidating cached queries or converting the changed flag into a success flag. Member tests exercise actual liblangtag/table owners; public LanguageTag constructor/registration and native wrapper equivalence remain unverified. The related numeric-region simple-cache branch (CALC-417) also retains ISO Locale true for es-419 in this source member path.
+
+### CALC-420 — ISO ku with an unlisted country omits language-only fallback
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, ISO branch of LanguageTag::getFallbackStrings.
+- Observation: the ku branch handles TR/SY and IQ/IR only, without an else that appends the language. If the ISO owner supplies ku/US, includeFull=true yields only ku-US and includeFull=false yields an empty vector. The usual language-only ku fallback is absent.
+- Preserve the exact branch rather than supplying a generic ku candidate. Tests use explicit original getter/ISO values to cover the member branch; complete constructor/canonicalization/registration selection and native public wrapper behavior are not certified by these prepared-owner cases.
+
+### CALC-421 — Legacy Catalan fallback can include the full tag and duplicates
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, ISO ca/XV branch and non-ISO ca-ES-valencia branch.
+- Observation: the ISO legacy branch constructs ca-ES-valencia and always requests getFallbackStrings(true), irrespective of its own includeFull flag. The nested vector includes ca-XV as an alternate. Therefore the source ISO branch can return ca-XV even with includeFull=false, and include it twice with includeFull=true.
+- Preserve the original nested true argument, vector order, duplicates and temporary destruction. Do not deduplicate this fallback vector or interpret includeFull as a final filter. Only getKnowns separately deduplicates by its original unordered set. Member fixtures select this exact ISO branch explicitly; complete public constructor/registration behavior remains unverified.
+
+### CALC-422 — NatNum12 can duplicate a suffix when a scanned minus has no digits
+
+- Source: `i18npool/source/nativenumber/nativenumbersupplier.cxx`, anonymous `getNumberText` prefix scan, count-zero selection and final suffix append.
+- Observation: a leading ASCII minus advances the scan without incrementing the digit/decimal count. If the next unit stops scanning, count remains zero, so the helper submits the entire original input to NumberText and uses that whole input on an empty conversion. It then also appends the original suffix because the scan offset is nonzero. English `-January` therefore becomes `-JanuaryJanuary` with the installed interpreter's no-match result.
+- Preserve the original scan/count distinction, whole-input fallback and nonzero-offset suffix append. Do not require a digit after minus, discard the sign or suppress the suffix to repair this outcome. The actual production member group and NumberText component are tested together; this is source-derived evidence, not an unchanged native UNO-service differential witness. The full NatNum12 supplier/casing/process-context path is still pending.
+
+### CALC-423 — SAL UTF8 encoding consumes a non-trailing unit after a high surrogate
+
+- Source: `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` source increment, pending-high-surrogate branch and `bad_input`; consumed by the non-Windows `NumberText_Impl::getNumberText` input conversion.
+- Observation: after retaining a high surrogate, the loop consumes the next source unit before checking whether it is a low surrogate. A non-low unit goes to the invalid-input handler without being retried independently. With the original OUString-to-OString default flags, `A` + U+D800 + `B` encodes as `A?`, losing `B`; the existing SAL wrapper regression and actual NumberText missing-language path retain that outcome. A final unmatched high surrogate follows the separate end-of-input flag behavior.
+- Preserve the actual SAL conversion and flags at the NumberText boundary. Do not bypass them with TextEncoder, normalize malformed UTF16, or reprocess the following unit as a correction. This is source-derived evidence plus existing production SAL/component tests; no new unchanged native NumberText/UNO differential execution is claimed.
+
+### CALC-424 — EditEngine bounding-attribute lookup can stop before an earlier matching endpoint
+
+- Source: `editeng/source/editeng/ContentNode.cxx`, `CharAttribList::HasBoundingAttrib` and `InsertAttrib`.
+- Observation: attributes are ordered by start position, but reverse bounding lookup immediately returns false if the current attribute ends before the requested boundary. Earlier attributes may extend farther. With a color range `[0,10]` followed by a background-color range `[5,6]`, querying boundary10 returns false without inspecting the first range's matching endpoint.
+- Preserve this source scan and early return. Do not replace it with a complete endpoint search or sort the list by ends. Actual pooled attribute/range tests retain the outcome; unchanged native full EditEngine execution is not claimed.
+
+### CALC-425 — One OptimizeRanges pass can leave adjacent equal ranges unmerged
+
+- Source: `editeng/source/editeng/ContentNode.cxx`, `CharAttribList::OptimizeRanges`.
+- Observation: after finding an adjacent range with the same Which, the inner loop breaks whether or not its item equals the current item. A successful merge does not restart the search for the expanded range. Three equal adjacent ranges `[0,1]`, `[1,2]`, `[2,3]` therefore become `[0,2]`, `[2,3]` after one call.
+- Preserve the first-candidate break and outer iteration. Do not repeatedly merge to a fixed point, or continue past a different item at a matching Which/boundary. Source-derived tests use actual EditEngine pools, color items and owned attributes; native equal-key sort/layout/ABI behavior and complete engine integration remain unverified.
+
+### CALC-426 — LanguageTag equality can change after numeric-ID initialization
+
+- Source: `i18nlangtag/source/languagetag/languagetag.cxx`, `LanguageTag::operator==`.
+- Observation: two tags with initialized language IDs compare IDs and SYSTEM origin. Otherwise they compare unresolved BCP47 strings. A raw `en-us` tag and numeric English-US tag therefore compare unequal before the raw tag initializes its ID, and equal after `getLanguageType()` initializes that same ID. The first comparison does not canonicalize raw case.
+- Preserve branch order, cache state and unresolved string comparison; do not normalize strings or force ID initialization in equality. Source-derived LanguageTag tests retain this outcome. Unchanged native whole-service differential execution is not claimed.
+
+### CALC-427 — Copying an EditCharAttribField does not retain its feature flag
+
+- Source: `editeng/source/editeng/editattr.cxx`, the two `EditCharAttribField` constructors.
+- Observation: the pool/item/position constructor calls `SetFeature(true)`. The field-copy constructor constructs the base range directly and copies expanded text and optional colors/line style, but never sets the feature flag. The copy consequently reports `IsFeature() == false` and `IsExpandable() == true`, even though its item Which remains EE_FEATURE_FIELD. Derived equality compares only text and optionals and can still report equality with the source field.
+- Preserve both constructors and equality. Do not copy all base flags or set the feature flag as a correction. Actual pooled field-owner tests cover this difference; rendering and complete native EditEngine execution remain unverified.
+
+### CALC-428 — Repeated positive paragraph invalidation can use the inserted length as a position
+
+- Source: `editeng/source/editeng/editdoc.cxx`, `ParaPortion::MarkInvalid` fallback after its adjacent insertion/deletion branches.
+- Observation: for a nonnegative difference, the fallback computes the minimum of the previous invalid start and `nDiff`, rather than `nStart`. After valid state, `MarkInvalid(100,2)`, `MarkInvalid(102,3)`, `MarkInvalid(200,1)` leaves the invalid start at1 and clears simple invalidation. This differs from taking the earliest affected position100.
+- Preserve branch order and the difference operand exactly; do not replace it with the start or add a positional heuristic. Tests exercise actual paragraph owners and retained analysis vectors. This is source-derived evidence, not a complete native engine differential certificate.
+
+### CALC-429 — EditLine Clone omits punctuation and kashida state that other copy paths handle differently
+
+- Source: `editeng/source/editeng/EditLine.cxx`, `EditLine::Clone`; `editeng/inc/EditLine.hxx`, copy constructor and assignment.
+- Observation: Clone copies positions, endpoints and geometry but leaves kashida positions empty, hanging-punctuation false and invalid true. The copy constructor instead copies endpoints and hanging punctuation while resetting geometry and both vectors. Assignment copies only the four endpoints and leaves recipient flags/geometry/vectors unchanged. A generic fieldwise clone would therefore change source behavior.
+- Preserve all three original member sets; do not fill the omitted Clone fields as a correction. Actual owner tests distinguish the three operations. Whether all callers intentionally depend on these differences needs upstream investigation; full layout/render execution remains unverified.
+
+### CALC-430 — convertLineEnd can leave a trailing bare CR unchanged when CRLF is requested
+
+- Source: `tools/source/stream/stream.cxx`, `tmpl_convertLineEnd` conversion-detection pass.
+- Observation: a CR only triggers CRLF conversion when a following unit exists and is not LF. A final CR therefore does not set bConvert. If all earlier breaks already are CRLF, `A` + CRLF + `B` + CR is returned unchanged, sharing original string data. If another break elsewhere triggers conversion, the second pass does convert that final CR to CRLF.
+- Preserve the complete first-pass predicates and unchanged-value return. Do not normalize the trailing CR independently or replace both passes with a regex. Actual SAL string/buffer fixtures cover both outcomes; unchanged native whole-stream differential execution is not claimed.
+
+### CALC-431 — ImpInsertText capacity preparation can exceed the bound or split a supplementary character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` backward84-offset capacity search and `iterateCodePoints` category switch.
+- Observation: with12 available UTF16 units and11 ASCII letters followed by a supplementary symbol and another unit, the last examined high surrogate decodes the symbol and selects its next UTF16 position13. The retained line then exceeds the available bound by one unit. A supplementary letter at that same position follows the letter branch instead; absent another breakpoint, the original12-unit limit retains only its high surrogate. The loop scans UTF16 offsets backward and does not correct the final limit to a code-point boundary.
+- Preserve source category decisions, next-position selection and raw substring copy. Do not clamp the symbol result or add a surrogate-preserving fallback. Tests use actual document positions, SAL iteration/copy and pinned Unicode classification. Enclosing native engine execution remains unverified.
+
+### CALC-432 — A hyphen in the last available unit is not kept with its following number
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` hyphen-minus capacity branch.
+- Observation: the comment says to keep a hyphen with a number to its right, but that branch additionally requires the position after the hyphen to be strictly below nMaxNewChars. If a hyphen occupies the final available unit, the condition is false and the retained line ends after the hyphen, leaving the number for the following paragraph. One unit earlier, decimal/letter/other-number categories move the break before the hyphen.
+- Preserve the strict inequality and category switch. Do not special-case the final-unit hyphen to satisfy the comment. Source-derived fixtures distinguish all three number categories and the last-unit case; this is not a full native engine certificate.
+
+### CALC-433 — Normal EditView selections are not updated by UpdateSelectionsDelete
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::UpdateSelectionsDelete`.
+- Observation: the regular-view conversion/update block is disabled by `#if 0`. The source FIXME explains that CreateESel needs already-deleted nodes, while calling it before deletion would assign wrong nodes. The active non-YRS loop merely marks its view/deleted values unused; only the separate YRS peer-cursor branch, when enabled, calls UpdatePosDelete.
+- Preserve this disabled regular-view path for the current non-YRS member group. Do not silently repair cursors, reinterpret pointer positions or enable the FIXME code. Tests retain unchanged prepared view selections and unchanged caller deletion values; actual full view/peer-cursor implementations remain unported.
+
+### CALC-434 — SetText restores the undo-enable flag only on normal completion
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::SetText`.
+- Observation: after RemoveText, the source saves IsUndoEnabled, calls EnableUndo(false), invokes ImpInsertText, updates views and finally restores the saved flag. There is no scope guard or catch/finally restoration. An exception from the insertion dependency after undo is disabled leaves that mode disabled and skips final view updates/restoration.
+- Preserve this control flow; do not add a restoration finally as a correctness improvement. A lifecycle caller fixture supplies an explicit failing mandatory callee and verifies propagated identity, empty reset document and disabled undo. This is source-derived caller evidence, not a native full-engine exception/allocator certificate.
+
+### CALC-435 — ClearWrongs can advance a retained start beyond its own end
+
+- Source: `editeng/source/editeng/edtspell.cxx`, `WrongList::ClearWrongs`.
+- Observation: an overlapping range that extends beyond nEnd has its start set to nEnd, then advanced over literal spaces and feature markers while below the paragraph length. The loop never checks that range's mnEnd. A short retained tail followed by spaces/features can therefore become a start-greater-than-end range. DbgIsBuggy only participates in a warning after mutation.
+- Preserve the paragraph-length condition and space/feature predicate without clipping to mnEnd, dropping the resulting range or treating tabs/other whitespace as spaces. An actual ContentNode fixture verifies the inverted retained range and unchanged strict overlap bounds.
+
+### CALC-436 — Paragraph splitting copies misspell ranges without removing their left-hand originals
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertParaBreak`.
+- Observation: ranges whose start is strictly greater than the split index are copied to the new paragraph and rebased. The source does not erase or rebase their original entries in the left paragraph. A range beginning exactly at the split is neither copied nor truncated. Only a range strictly crossing the split is truncated on the left.
+- Preserve these strict comparisons and both stored lists. Do not replace the loop with a partition, erase copied entries or move exact-boundary ranges. Tests execute actual document splitting and range/list owners; they do not certify the complete spelling service.
+
+### CALC-437 — Multiline insertion reuses its initial character index for later paragraph invalidation
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText`.
+- Observation: aCurPaM is copied once before the line loop. The non-spelling path calls the current paragraph portion's MarkInvalid with aCurPaM.GetIndex for every line, including lines after a paragraph break. An insertion beginning at index3 therefore invalidates a later one-character paragraph with start3. The spelling branch similarly retains its initially selected word boundary.
+- Preserve the original position lifetime and call arguments rather than resetting the invalidation index to zero after a break. A fixture observes calls on actual ParaPortion instances while verifying the actual resulting paragraphs. Full layout/spelling consequences remain outside the current constructor/admission proof.
+
+### CALC-438 — Capacity retry cannot advance when the paragraph-count limit prevents a split
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::ImpInsertText` capacity branch and `ImpEditEngine::ImpInsertParaBreak` paragraph-count guard.
+- Observation: when the current paragraph already has MAXCHARSINPARA units, the capacity branch retains an empty line and changes nEnd to nStart-1 so the caller retries the same input after a split. At EE_PARA_MAX paragraphs, however, ImpInsertParaBreak returns the original position without splitting. The caller then assigns nStart=nEnd+1, leaving both input offset and remaining paragraph capacity unchanged. These conditions compose into a non-progressing insertion loop.
+- Preserve the original retry arithmetic and paragraph-limit return; do not introduce an iteration cap, truncation or alternate error. Existing source-derived fixtures separately exercise zero-capacity retry and the unchanged caret at the paragraph limit. This composition is a static control-flow finding: a full-limit native document and the non-terminating loop are not executed or certified by the tests.
+
+### CALC-439 — Formatted text-object caches narrow paragraph portion and line counts to unsigned16
+
+- Source: `editeng/source/editeng/impedit4.cxx`, `ImpEditEngine::CreateTextObject` formatted-cache branch.
+- Observation: source TextPortionList/EditLineList counts are assigned to sal_uInt16 before copying. At65536 entries the copying count becomes zero even though the source vectors retain all entries. Eligibility previously uses the wider text-portion total, so a cache may be created while omitting those payloads.
+- Preserve each unsigned16 assignment and original eligibility order. Source-owner fixtures with65536 zero-length portions/lines verify the narrowed copying loops; this is prepared value-state evidence, not a full native layout/admission certificate.
+
+### CALC-440 — A zero paragraph count can select a paragraph boundary rather than no text
+
+- Source: `editeng/source/editeng/impedit4.cxx`, `ImpEditEngine::CreateTextObject(sal_Int32,sal_Int32)`.
+- Observation: the function obtains its end node at nPara+nParas-1 without rejecting zero counts. For nPara1/nParas0 both node1 and node0 exist; the constructed reverse selection is adjusted by the downstream creator and copies the boundary between them as two empty paragraphs. At nPara0/nParas0 the end lookup is null and the function returns null instead.
+- Preserve the pointer tests and selection construction. Do not add a nonpositive-count guard or normalize the request to an empty object. Native debug diagnostics are outside the fixture; actual document/object owners reproduce the source return/selection path.
+
+### CALC-441 — Script-hint initialization stops when hints have a gap
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` script-hint loop.
+- Observation: the first hint uses FindNextAttrib, but subsequent hints use FindAttribRightOpen at the previous hint's end. A later hint starting after that position is not found. Adjacent hints are found, while a gap ends traversal even when another hint remains in the source vector.
+- Preserve the different lookup calls. Tests use actual weak spaces: a later Complex hint affects the result when adjacent, and is ignored across a gap. ASCII dots are a source compatibility LATIN class and therefore cannot witness the weak-character hint behavior; no classifier change is appropriate.
+
+### CALC-442 — Field-script replacement retains only one UTF16 unit of a selected supplementary character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` field-value replacement.
+- Observation: script queries inspect field text at UTF16 offsets, but replacement always uses subView(offset,1). A field containing supplementary CJK U+20000 selects its high surrogate as the replacement for the feature marker. The subsequent scanner sees that lone unit and, with an English default, produces LATIN rather than the field's ASIAN class.
+- Preserve the one-unit view and subsequent scanner path. Do not expand replacement to a complete code point or override the resulting script mask. Actual SAL counted-view replacement, field owners, script queries and scanners reproduce this outcome while leaving original field text intact.
+
+### CALC-443 — A later strong field character can override an already non-Latin first character
+
+- Source: `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::InitScriptTypes` field-value loop.
+- Observation: the comment describes preferring a later CJK/CTL character when the first character is LATIN. The actual condition has no initial-LATIN check: any later ASIAN or COMPLEX character replaces the current representative and ends the loop. A CJK-first/Arabic-second field therefore becomes COMPLEX; the reversed order becomes ASIAN.
+- Preserve the condition and first matching later-character break. Tests execute both orders through actual field/SAL/script owners; no extra first-character preference is introduced.
+
+### CALC-444 — Column width has a signed32 multiplication before the wider subtraction
+
+- Source: `editeng/source/editeng/impedit3.cxx`, `ImpEditEngine::GetColumnWidth`, and source field declarations in `impedit.hxx`.
+- Observation: mnColumnSpacing is sal_Int32 and mnColumns is sal_Int16. The product mnColumnSpacing*(mnColumns-1) is evaluated after integral promotion at signed32 width before subtraction from tools::Long. Extreme spacing/count combinations can overflow that intermediate despite a wider paper-width type.
+- Preserve expression order and signed integral division for the native defined domain. Do not invent wrapping, saturation or an error for native undefined arithmetic. Fixtures cover ordinary positive/negative available widths and integral zero; overflowing native expressions, compiler-specific overflow flags and physical64-bit coordinate extremes are not certified.
+
+### CALC-445 — ICU run-capacity failure can leave a successful error status
+
+- Source: pinned ICU78.3 `source/common/ubidiln.cpp`, `ubidi_getRuns` and `ubidi_countRuns`; consumed by `ImpEditEngine::InitWritingDirections` in LibreOffice `editeng/source/editeng/impedit2.cxx`.
+- Observation: failure of `getRunsMemory` returns false without assigning the error code. `ubidi_countRuns` ignores that boolean, checks only the unchanged status and returns the still-negative run count. The compiled original reports count=-1/status=0 for the three-run text U+0061 U+05D0 U+0062 with fixed run capacities one or two; capacity three reports count=3/status=0.
+- Preserve the return/status pair. EditEngine keeps its original count>0 check and final LTR fallback; no new exception or error status is invented. Native allocator exhaustion and calling getLogicalRun after failed run materialization are not certified.
+
+### CALC-446 — Replacing the process service factory does not replace the cached process component context
+
+- Source: `comphelper/source/processfactory/processfactory.cxx`, `setProcessServiceFactory` and `getProcessComponentContext`.
+- Observation: the setter replaces LocalProcessFactory.xProcessFactory, while the context getter initializes a separate function-local static const Reference on its first successful call. Later factory replacement or clearing changes getProcessServiceFactory but leaves getProcessComponentContext returning the first context. Failed initialization is retried rather than caching the error or null.
+- Preserve the independent caches and successful-once initialization. Tests observe factory replacement, direct DefaultContext queries and the unchanged cached context; no invalidation heuristic or reset hook is added.
+
+### CALC-447 — getComponentContext's nullable header return comment disagrees with its failure path
+
+- Source: `include/comphelper/processfactory.hxx` return documentation and `comphelper/source/processfactory/processfactory.cxx`, `getComponentContext`.
+- Observation: the public header says the return may be null, but the implementation throws DeploymentException when the XPropertySet query is empty or the exact DefaultContext value does not query to XComponentContext. UnknownPropertyException is translated to a different DeploymentException; other exceptions propagate.
+- Preserve implementation behavior and original exception messages/Context ownership. A missing property/interface/context never becomes a null-return fallback in the port.
+
+### CALC-448 — Component base disposal can remain marked complete after its hook fails
+
+- Source: `cppuhelper/source/compbase.cxx`, `WeakComponentImplHelperBase2::dispose`.
+- Observation: m_bDisposed is set before the virtual disposing hook. If that non-noexcept base hook throws, the flag stays true and listener disposal is skipped; a later base dispose call returns without retrying either step.
+- Preserve the flag/hook/event order and lack of rollback. Tests use the original non-noexcept base path and observe the same failure object, one hook call and no later notifications. The template's separate noexcept boundary is documented in CALC-450.
+
+### CALC-449 — Component helper ignores a late listener despite XComponent's documented callback
+
+- Source: `cppuhelper/source/compbase.cxx`, `WeakComponentImplHelperBase2::addEventListener`, versus `udkapi/com/sun/star/lang/XComponent.idl`.
+- Observation: XComponent documents a disposing callback when a listener registers after disposal. This helper instead returns immediately when m_bDisposed is true, without retaining or notifying that listener.
+- Preserve the implementation return. Tests cover both late registration and reentrant registration while reverse snapshot notifications are in progress; no immediate callback is added.
+
+### CALC-450 — The component template's noexcept disposal can turn hook failures into native termination
+
+- Source: `cppuhelper/inc/compbase2.hxx`, `WeakComponentImplHelper2::dispose`, and its base call in `cppuhelper/source/compbase.cxx`.
+- Observation: the final template override is noexcept but forwards to a base method that can propagate a derived hook failure. On the native C++ boundary such escape terminates the process, unlike the direct non-noexcept base call in CALC-448.
+- Keep the original forwarding body and do not add a success fallback or exception-swallowing guard. Native process termination/noexcept ABI behavior is not represented or certified by the browser member binding; tests do not execute a fatal template path or claim it is an ordinary recoverable native exception.
+
+### CALC-451 — Environment registry keys concatenate pointer decimals and descriptors without a separator
+
+- Source: `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::getEnvironment` and `registerEnvironment`.
+- Observation: the key is the decimal signed pointer address followed directly by the descriptor. Distinct pairs such as address 1/descriptor `23` and address 12/descriptor `3` collide. No delimiter or structured pair is used.
+- Preserve concatenation and duplicate substitution. The host binding accepts explicit native pointer addresses and never guesses addresses from object identities; tests preserve the collision and signed pointer-width conversion.
+
+### CALC-452 — Context disposal does not release hardened Java environment references
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::disposing`, and `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::getRegisteredEnvironments`.
+- Observation: registry enumeration hardens each matching environment. Context disposal calls each Java environment's dispose callback and frees the pointer-array storage, without calling release on those hardened references.
+- Preserve the missing release. Tests populate the actual weak registry and observe harden/dispose with no added release; an empty Java-environment provider is not used.
+
+### CALC-453 — Duplicate manager inputs can disagree with the stored context value
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::ComponentContext`.
+- Observation: every exact service-manager input is extracted into m_xSMgr, while m_map.emplace retains the first value for duplicate keys. getServiceManager can therefore return the later manager while getValueByName of the manager singleton returns the first.
+- Preserve extraction-before-emplace and first-key retention. Tests verify both actual manager identities.
+
+### CALC-454 — Context getByName returns a void value for a missing name
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::getByName`, versus `udkapi/com/sun/star/container/XNameAccess.idl`.
+- Observation: the context delegates directly to getValueByName, whose absent local/delegate result can be a void Any, instead of throwing the IDL-documented NoSuchElementException.
+- Preserve this return and exact delegate behavior. Missing remove/replace still throw the original NoSuchElementException with the actual context.
+
+### CALC-455 — Context value APIs remain usable after component disposal
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext` named-value methods.
+- Observation: named insertion/removal/replacement/lookup do not check the inherited disposed flag. After disposal clears the map, insertion can populate it again; another component dispose returns immediately because the flag is already set.
+- Preserve the absence of a guard. Tests insert and query after actual disposal; no implicit second disposal or source-absent error is introduced.
+
+### CALC-456 — Context disposal skips every key beginning with the manager singleton name
+
+- Source: `cppuhelper/source/component_context.cxx`, `ComponentContext::disposing`.
+- Observation: when m_xSMgr exists, the per-entry disposal loop skips names that start with the manager singleton, including longer unrelated names, rather than only the exact manager key.
+- Preserve the prefix predicate and later map destruction. Tests verify that a component under a longer matching key is released without an added explicit dispose call.
+
+### CALC-457 — Registry shutdown prevents default-environment hardening before explicit disposal
+
+- Source: `cppu/source/uno/lbenv.cxx`, `EnvironmentsData::~EnvironmentsData` and `defenv_harden`.
+- Observation: the registry destructor first sets `isDisposing = true`, then tries to harden each weak environment before calling its explicit dispose callback. The default environment's harden callback returns immediately when the same registry flag is true, so these entries cannot reach that explicit dispose path. Other environment implementations may use different harden callbacks.
+- Preserve the flag assignment, guard and callback order. The original native lifetime replay verifies shutdown hardening releases/nulls an old output but neither increments the target counts nor returns the target. No extra dispose call is introduced.
+
+### CALC-458 — Public Type mapping skips description release when its callback throws
+
+- Source: `include/uno/mapping.hxx`, `Mapping::mapInterface(void **, void *, Type const &)`.
+- Observation: after `TYPELIB_DANGER_GET`, the wrapper invokes the supplied mapping callback and only then calls `TYPELIB_DANGER_RELEASE`. There is no unwind guard. An exception from that callback bypasses the matching release of a genuinely weak interface description; the inout pointer remains unchanged if the callback did not publish a value.
+- Preserve this order and exception propagation. The complete original native throwing-callback stream confirms the retained description count in both normal and ASan/UBSan builds. The portable wrapper deliberately adds no `finally` release, and the context-construction callee does not suppress exceptions from result mapping.
+
+### CALC-459 — ICU forward rules accept lookahead before recording the current slash position
+
+- Source: `vendor/icu-reference/source/common/rbbi.cpp`, templated `RuleBasedBreakIterator::handleNext`, comment referencing ICU-20837.
+- Observation: the accepting-state check reads `fLookAheadMatches` before the same row's `fLookAhead` position is recorded. Upstream explicitly notes that reversing these checks would support hard-break rules without following context, but also causes line-break test failures. This is an upstream-documented suspected defect; the port does not independently assert a repair or a complete reproducer.
+- Preserve the check order and original state mutations. Native tests compare the original private method on compiled LibreOffice rules and a lookahead rule. No eager recording or guessed hard-break behavior is added.
+
+### CALC-460 — ICU safe reverse null check follows a dereference of the same data pointer
+
+- Source: `vendor/icu-reference/source/common/rbbi.cpp`, `RuleBasedBreakIterator::handleSafePrevious` dispatcher and templated body.
+- Observation: the method reads `fData->fReverseTable` before its later `fData == nullptr` guard. The guard therefore cannot protect that earlier access. This is a source-order observation, not a claim about a defined result for invalid null iterator data.
+- Preserve the dereference/check order and normal valid-data behavior. Native tests exercise real initialized iterator data; the port adds no earlier guard, fallback boundary or synthetic null-data result.
+
+
+### CALC-461 — UVector32 capacity fast path ignores an existing failure status
+
+- Source: `vendor/icu-reference/source/common/uvectr32.h`, `ensureCapacity` and `addElement`; `uvectr32.cpp`, `_init` and `expandCapacity`.
+- Observation: sufficient existing capacity returns true without examining the incoming error status, so callers can append despite an existing failure. Growth does examine that status. Initialization also allocates with an incoming error. Original native vector traces confirm the capacity/status behavior.
+- Preserve the branch order and mutations; do not introduce an unconditional early failure guard.
+
+### CALC-462 — UVector32 removal lacks an upper index bound
+
+- Source: `vendor/icu-reference/source/common/uvectr32.cpp`, `UVector32::removeElementAt`.
+- Observation: any nonnegative index decrements the count even when it is beyond the used range. Removing from an empty vector can make the count negative. The native witness observes these scalar effects without reading invalid elements.
+- Preserve the source check and count change. Do not add an upper-bound guard or claim defined behavior for subsequent invalid memory access.
+
+### CALC-463 — UVector32 popFrame subtracts the frame size twice for its returned pointer
+
+- Source: `vendor/icu-reference/source/common/uvectr32.h`, `UVector32::popFrame`.
+- Observation: after subtracting size from count, the return expression is `elements + count - size`. With original count seven and size two, the new count is five but the returned offset is three. Native valid-span traces confirm the returned offset.
+- Preserve this offset and count order. The witness does not certify pointer results outside the allocated buffer.
+
+### CALC-464 — DictionaryCache preceding can miss once because of its prior cursor
+
+- Source: `vendor/icu-reference/source/common/rbbi_cache.cpp`, `DictionaryCache::preceding`.
+- Observation: cursor zero causes a false return and resets the cursor to minus one before the general search. For a valid interior request, repeating the same request can then find the preceding entry. Native dictionary traces reproduce this state dependence and unchanged output arguments on the miss.
+- Preserve the cursor branch and lookup order. This is an internal cache miss observation, not evidence of an incorrect public word boundary.
+
+### CALC-465 — Cached BreakCache next retains the iterator done flag
+
+- Source: `vendor/icu-reference/source/common/rbbi_cache.h`, inline `BreakCache::next`; `rbbi_cache.cpp`, `BreakCache::following`.
+- Observation: the cached next path updates position/status without clearing `fDone`. The source following implementation clears it explicitly and comments on the interaction. Native private-cache traces retain the flag behavior.
+- Preserve the private next path and following compensation. Do not infer a public iterator defect from direct private-cache calls.
+
+
+### CALC-466 — Failed rule-data initialization can miss the normal reference-release deletion path
+
+- Source: `vendor/icu-reference/source/common/rbbidata.cpp`, `init0`, `init`, `removeReference`; `common/rbbi.cpp`, constructors and `RuleBasedBreakIterator::~RuleBasedBreakIterator`.
+- Observation: the wrapper counter starts at zero and becomes one only at the end of successful initialization. Bad magic/version/trie or rejected trie width can return with zero. The normal removeReference then decrements to minus one and does not enter its zero/deletion branch. The enclosing iterator assigns the new wrapper before checking status and its destructor calls removeReference for nonnull fData. This suggests a failure-cleanup leak; it is not a measured general allocator/thread/ABI leak certificate.
+- Native raw-wrapper traces observe zero after failure and minus one after the unchanged release body, including partial initialized fields. Test-only scratch cleanup resets the failed counter after all observations solely to run the genuine native destructor safely; this is not a production repair or alternate provider.
+- Preserve the late counter assignment, unconditional decrement and deletion test. Do not initialize the production counter early, clamp it or replace the error path with a guessed recovery.
+
+
+### CALC-467 — Application-data cache duplicate lookup uses a different key from insertion
+
+- Source: `vendor/icu-reference/source/common/udata.cpp`, `findBasename`, `udata_findCachedData` and `udata_cacheDataItem`.
+- Observation: cache insertion copies `findBasename(path)` into `newElement->name` and uses that name as the hash key. Normal cached lookup also uses the basename. However, the duplicate check inside `udata_cacheDataItem` calls `uhash_get(htable, path)` with the original full path. A path containing a directory can therefore miss an existing basename key and reach `uhash_put` instead of the existing-item/default-warning branch. The unchanged native public udata_setAppData confirms statuses 0, 0 and -127 for folder/OpenOffice, folder/OpenOffice and OpenOffice in one fresh process. Evidence is duplicateCacheStatuses in ucmndata.native-observations.json and the original-API witness in scripts/icu-common-data-native-probe.mjs. No general public file-loading defect or allocator consequence is claimed.
+- Preserve the original full-path duplicate lookup, basename insertion/normal lookup and resulting replacement/status behavior when connecting application-data caching. Do not normalize the duplicate key as a cleanup or heuristic fix. The local application-cache implementation now preserves this asymmetry and is compared with the unchanged original; full udata_open integration remains pending.
+
+
+### CALC-468 — UInitOnce reset retains a failed status across a plain initializer
+
+- Source: `vendor/icu-reference/source/common/umutex.h`, `UInitOnce::reset` and plain/status `umtx_initOnce` overloads.
+- Observation: reset writes only state zero. After a status initializer records error 7, reset followed by a successful plain initializer reaches completed state two without changing the stored error. A later status-bearing call returns that old error 7 without running its initializer. Original native fields and callback/status traces confirm this mixed-overload sequence; this does not establish an error in the application-cache caller, which consistently uses the status overload.
+- Preserve reset's state-only write, the plain overload's unchanged error and the status overload's cached-failure publication. Do not clear the error during reset or add an overload-specific recovery. Evidence: `scripts/icu-appdata-native-probe.mjs`, retained once sequences in `udata.native-observations.json`, and the focused native transcript `output/native/AQF9AG-libnumbertext/appdata-once-stale.log`.
+
+
+### CALC-469 — App-data insertion failure appears to free an already adopted cache element again
+
+- Source: `vendor/icu-reference/source/common/udata.cpp`, `udata_initHashTable`, `DataCacheElement_deleter` and `udata_cacheDataItem`; `common/uhash.cpp`, `_uhash_put` error branch and `HASH_DELETE_KEY_VALUE`.
+- Observation: the data cache installs DataCacheElement_deleter as its hash value deleter. On a hash insertion failure, _uhash_put adopts and deletes the supplied value even on failure; that deleter closes/frees the item, name and record. The caller's subsequent failure branch then dereferences/frees newElement->name/newElement->item/newElement again. This suggests use-after-free/double-free in the native allocation-failure path. Evidence is source inspection only; allocation failure was not injected, and no general runtime/allocator defect certificate is claimed.
+- Preserve source adoption/deleter, status and branch order; do not disable the deleter, hide insertion errors or install a guessed success/recovery path. Managed storage erases physical free; native allocator-failure/free ABI remains outside the current port evidence.
+
+### CALC-470 — Empty StringPiece copy can leave CharString without a terminating NUL at its logical end
+
+- Source: `vendor/icu-reference/source/common/charstr.cpp`, `CharString::copyFrom(StringPiece)`, `append` and `cloneData`; `charstr.h` documents a stored terminating NUL.
+- Observation: piece-copy sets len to zero and calls append. Appending zero bytes does not write buffer[0]. Starting with abc, copying an empty piece leaves length zero and first byte a; cloneData copies that one stale byte. Owner-copy copies len+1 bytes and preserves it, while the explicit copy constructor initializes its own NUL and appends zero bytes. The unchanged native library confirms these distinct paths in charstr.native-observations.json. This is a bounded string-contract concern, not evidence of a CSV failure.
+- Preserve the source writes, copy-overload distinction and clone bytes. Do not substitute clear() or force a terminator as a cleanup.
+
+### CALC-471 — Owning MaybeStackArray orphan reports the requested length as actual capacity
+
+- Source: `vendor/icu-reference/source/common/cmemory.h`, `MaybeStackArray::orphanOrClone` and its resultCapacity documentation.
+- Observation: the owning branch transfers ptr without modifying length; the common tail assigns resultCapacity=length. Thus a real allocation of capacity64 orphaned with length5 reports5; a negative length is also returned on the owning branch. The non-owning branch instead returns null for nonpositive length and clamps positive length to capacity before cloning. The original native template confirms the fields and pointer transfer, including length greater than capacity; the witness reads only the initialized in-bounds prefix. This may reflect a logical length convention despite the documented actual-capacity output; no caller memory violation is established.
+- Preserve both branches and the exact output assignment. Do not report allocation capacity or add an owning-branch clamp/argument error.
+
+### CALC-472 — A null path-iterator package can reach an uninitialized NUL scan
+
+- Source: `vendor/icu-reference/source/common/udata.cpp`, `UDataPathIterator` constructor and `next`; `charstr.h` initializes only byte zero of an empty CharString.
+- Observation: a null pkg leaves packageStub empty. The ordinary-directory branch of next still calls append(packageStub.data()+1, packageStub.length()-1), passing length -1 and a pointer beyond the initialized NUL. CharString::append then uses strlen on potentially uninitialized stack bytes. The usual open callers pass nonnull package strings; this is a source-only precondition/contract concern, not evidence of a failure in those callers. The native witness does not read or compare this undefined/uninitialized span.
+- Preserve the exact append arguments and branches. Do not clamp the negative length, silently omit the append or invent an empty-package fallback. Keep undefined/uninitialized spans outside native parity claims.
+
+### CALC-473 — A rejected individual data file can suppress the registered package fallback
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `doLoadFromIndividualFiles`, `doLoadFromCommonData` and `openCommonData`.
+- Individual file rejection writes `U_INVALID_FORMAT_ERROR` to the shared nonfatal status. The later FILES_FIRST package lookup passes that same status to `openCommonData`, whose incoming failure guard returns before the named cache lookup. Original ICU reproduces this with both invalid file magic and a rejecting acceptance callback when a valid OpenOffice item is registered.
+- Preserve the shared status and the package lookup guard. A later valid individual file can still succeed because each individual attempt uses the distinct fatal status.
+
+### CALC-474 — NO_FILES can still open a named common package from disk
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `doOpenChoice`, `doLoadFromCommonData` and `openCommonData`.
+- The NO_FILES branch passes an empty data directory to the common loader. That parameter is unused and named package discovery calls `u_getDataDirectory()` again. Original ICU loads an unregistered OpenOffice.dat from that directory under NO_FILES. The timezone override also precedes file-access policy dispatch.
+- Preserve that dispatch and named package discovery. The public loader replay exercises the original disk package and timezone cases.
+
+### CALC-475 — Timezone recognition can pass a nullable type to strcmp
+
+- Source `vendor/icu-reference/source/common/udata.cpp`, `isTimeZoneFile` and its caller in `doOpenChoice`. The public declaration permits null type in `unicode/udata.h`.
+- ICU data requests enter the timezone classifier, which compares type against res with no null check. With a null type the C++ call has undefined behavior. The managed comparison treats null as unequal and otherwise preserves the four exact resource names and the original classification order.
+
+### CALC-476 — A deep UChars clone can keep reading from the original chunk
+
+- Source `vendor/icu-reference/source/common/utext.cpp`, `shallowTextClone` and `ucstrTextClone`.
+- The deep clone copies text into a new allocation and replaces `context`. The existing `chunkContents` pointer still refers to the original allocation. The original witness mutates the first input code unit after cloning. Indexed access sees the mutation even though the cloned context contains the original value.
+- Preserve the original context and chunk pointer assignments. The rule iterator requests a shallow read-only clone.
+
+### CALC-477 — An out-of-range dictionary transform can reach the joiner key
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, `BytesDictionaryMatcher::transform` and `matches`, and `BytesTrie::first` / `next`.
+- Offset mode maps a zero-width joiner to 0xFF and an out-of-range scalar to -1. The byte reader accepts signed byte inputs and adds 0x100 to -1. The original witness confirms that a serialized 0xFF key can match an unrelated out-of-range scalar, with that scalar's native UTF-16 length. This test uses an original builder to expose the interaction directly.
+- Preserve the original transform and signed-byte admission.
+
+### CALC-478 — The UChars dictionary matcher passes a scalar to unit traversal
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, `UCharsDictionaryMatcher::matches`, and `vendor/icu-reference/source/common/ucharstrie.cpp`.
+- The matcher reads a Unicode codepoint from UText and calls the trie unit entrypoints. A supplementary codepoint fails to match a key stored as its two UTF-16 units. The original builder witness confirms that the same key is reachable through the separate codepoint entrypoint.
+- Keep the source unit entrypoints in the matcher and the original cursor and prefix changes on rejection.
+
+### CALC-479 — The matcher checks maximum native length after recording a value
+
+- Source `vendor/icu-reference/source/common/dictionarydata.cpp`, both `matches` implementations.
+- Each loop consumes a codepoint, traverses the trie, and records its value before checking the native length limit. In the original builder witness, an input starting with a serialized one-unit word returns that match even with a maximum length of zero.
+- Preserve the limit check after traversal and output. The replay compares both the written match and the resulting cursor.
+
+### CALC-480 — Dictionary break count can include a failed vector insertion
+
+- Source `vendor/icu-reference/source/common/dictbe.cpp`, the four Southeast Asian `divideUpDictionaryRange` implementations and `vendor/icu-reference/source/common/uvectr32.cpp`.
+- The word count advances before the break is pushed onto the vector. In original ICU, a Thai range containing `ภาษาไทย` with a capacity-one break vector returns two while the vector contains one boundary and the status is `U_BUFFER_OVERFLOW_ERROR`.
+- The same mismatch occurs in `CjkBreakEngine::divideUpDictionaryRange`. For `東京都に行く` with a capacity-one vector, original ICU returns four and the vector contains one boundary with `U_BUFFER_OVERFLOW_ERROR`.
+- Preserve the returned count, partial vector and failure status. The native replay checks all three.
+
+### CALC-481 — The Thai minimum-span equality skips a dictionary run
+
+- Source `vendor/icu-reference/source/common/dictbe.cpp`, `ThaiBreakEngine::divideUpDictionaryRange` and `LaoBreakEngine::divideUpDictionaryRange`.
+- The Thai implementation advances by four code points and exits when it reaches the range limit, including equality. The other three engines exit only for a range shorter than four native units. Original ICU returns no interior boundary for Thai `ดีดี`, returns a boundary at index 2 for Thai `ดีดีด`, and allows a boundary at index 2 for four-unit Lao `ດີມາ`.
+- Keep each comparison and its indexing unit. The replay includes all three cases.
+
+### CALC-482 — The reject engine replaces its previously handled script
+
+- Source `vendor/icu-reference/source/common/brkeng.cpp`, `UnhandledEngine::handleCharacter`, and `vendor/icu-reference/source/common/uniset_props.cpp`, `UnicodeSet::applyIntPropertyValue`.
+- The code applies the whole script property to the existing set. The operation replaces its contents. Original ICU handles Latin after admitting `a`, then handles Common and stops handling Latin after admitting `1`. Passing an invalid code point clears the previous set.
+- Keep the single current script and the original empty-set behavior. The replay compares those transitions through the actual reject engine.
+
+### CALC-483 — The Unicode word implementation can inspect an end offset
+
+- Source `vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx`, `BreakIterator_Unicode::previousWord`, and `include/o3tl/string_view.hxx`, `iterateCodePoints`.
+- A direct call beyond the end can get the text length back from ICU's `preceding`. In the two whitespace-skipping modes, the method then passes that offset to the code-point reader, which requires an index strictly below the length.
+- Keep the original Unicode implementation and the separate bounds policy of the outer `BreakIteratorImpl::previousWord`, which handles such requests before delegation.
+
+### CALC-484 — Character classification title conversion rejects some ligatures
+
+- Source `vendor/libreoffice-reference/i18npool/source/characterclassification/cclass_unicode.cxx`, `cclass_Unicode::toTitle`, and `i18npool/source/transliteration/transliteration_body.cxx`, `Transliteration_body::transliterateChar2Char`.
+- The title loop allocates one output unit per input unit and asks for a single-unit mapping at a word start. The original table supplies three units for U+FB03. The scalar method throws `MultipleCharsOutputException` and the classifier wraps it in a `WrappedTargetRuntimeException` with the typed target Any.
+- Keep the single-unit mapping, exception identity and wrapper. The regression case starts a word with U+FB03.
+
+### CALC-485 — NatNum12 capitalization uses the supplier's remembered locale
+
+- Source `vendor/libreoffice-reference/i18npool/source/nativenumber/nativenumbersupplier.cxx`, `NativeNumberSupplierService::getNativeNumberString`.
+- NumberText receives the requested locale. The casing calls receive the supplier's `aLocale` member, which starts empty and is updated by the other native-number paths that refresh the shared punctuation tables. The English title branch tests the requested locale.
+- Keep the original locale arguments and update points.
+
+### CALC-486 — Charset detection can score malformed UTF-8 as a positive match
+
+- Source `vendor/icu-reference/source/i18n/csrutf8.cpp`, `CharsetRecog_UTF8::match`.
+- The recognizer checks the bit patterns and counts trailing bytes. It assigns UTF-8 confidence 80 to the overlong sequence `C0 AF`. It assigns confidence 15 to the incomplete sequence `E2 82` because reaching the end does not increment the invalid count.
+- Preserve recognition scores independently of the actual converter's validity policy.
+
+### CALC-487 — The GB18030 recognizer accepts trail byte 0x7F
+
+- Source `vendor/icu-reference/source/i18n/csrmbcs.cpp`, `CharsetRecog_gb_18030::nextChar`.
+- The second trail range starts at decimal 80. It overlaps the preceding range and accepts `0x7F`. Original ICU ranks GB18030 at confidence 10 for ten `81 7F` pairs.
+- Preserve the exact decimal bound in charset scoring. The actual text converter retains its own byte validity checks.
+
+### CALC-488 — Charset detection also tests the IBM recognizers registered as disabled
+
+- Source `vendor/icu-reference/source/i18n/csdetect.cpp`, `initRecognizers` and `CharsetDetector::detectAll`.
+- The registry marks all four IBM420 and IBM424 entries disabled by default. The detection loop still calls every matcher. The original result for `01 B8` includes `IBM420_ltr` with confidence 75.
+- Preserve the complete source scan and the original stable ordering. LibreOffice's stream layer maps only its selected names after ICU ranking.
+
+### CALC-489 — The UTF-32 recognizer excludes the maximum Unicode scalar
+
+- Source `vendor/icu-reference/source/i18n/csrucode.cpp`, `CharsetRecog_UTF_32::match`.
+- The score treats values greater than or equal to U+10FFFF as invalid. A single UTF-32BE unit `00 10 FF FF` therefore produces no UTF-32BE match, even though U+10FFFF is representable as a Unicode scalar value.
+- Preserve the strict source cutoff and leave scalar conversion to the separate converter.
+
+### CALC-490 — Big5 reverse table describes more entries than it owns
+
+- Source `vendor/libreoffice-reference/sal/textenc/tcvttcn6.tab`, `aBIG5DBCSHighTab`, and `sal/textenc/tcvttcn2.tab`, `aImplUniToDBCSTab_BIG5_8B`.
+- The U+8B page accepts low bytes through FF, while the array has 160 entries. U+8BA0 through U+8BFF therefore index beyond the original array.
+- Preserve the table interval and original entries. The native comparison classifies the 96 out-of-bounds requests by actual array extent and compares only defined accesses.
+
+### CALC-491 — ISO-2022-CN inherits a GB2312 reverse-table overread
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertiso2022cn.cxx`, `ImplIso2022CnTranslateTo2312`, and `sal/textenc/tcvtscn6.tab`, `aGB2312DBCSHighTab`.
+- The reverse lookup reads one unit beyond `aImplUniToDBCSTab_GB_98` for U+98E9 with the initial designator. The unchanged native encoder reproduces a global-buffer-overflow under AddressSanitizer.
+- Preserve the table and lookup order. The native comparison excludes that undefined read from the byte digest.
+
+### CALC-492 — Streaming decoders retain an already-adjusted input index after a full buffer
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx`, `ImplConvertGb18030ToUnicode`, and `sal/textenc/convertiso2022cn.cxx`, `ImplConvertIso2022CnToUnicode`.
+- The GB18030 decoder multiplies its partial index before checking output space and saves the result when the final byte remains unconsumed. The ISO-2022-CN decoder adds 0x80 to the GB2312 row before the same check. Retrying the unconsumed byte can apply the arithmetic again and change the mapping or cause an out-of-bounds read.
+- Keep the mutation order and consumed-input boundary. The GB18030 supplementary case `90 30 81 30` with one output unit retains index 189000 after consuming three bytes. Retrying `30` with two output units yields the undefined multibyte replacement.
+
+### CALC-493 — Two SAL encoders retain an unmatched high surrogate on flush
+
+- Source `vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx`, `ImplConvertUnicodeToGb18030`, and `sal/textenc/convertiso2022cn.cxx`, `ImplConvertUnicodeToIso2022Cn`.
+- With `FLUSH` set, a final unmatched high surrogate sets `SRCBUFFERTOSMALL` and remains in the context. Without `FLUSH`, the original path applies the invalid-input policy and clears the surrogate if that policy can finish.
+- Keep the condition and resulting state. The native comparison includes all single surrogate units.

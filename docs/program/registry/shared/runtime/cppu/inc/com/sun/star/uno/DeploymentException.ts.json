@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/uno/DeploymentException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/uno/DeploymentException.ts",
+        "apps/office/src/offapi/com/sun/star/linguistic2/NumberText.test.ts",
+        "udkapi/com/sun/star/uno/DeploymentException.idl"
+      ],
+      "justification": "Original generated DeploymentException value and cached type initializer retain RuntimeException inheritance, explicit-constructor base/type order, implicit copy/move semantics and shared Message/Context ownership. No JavaScript Error substitute is used. Native ABI/exception marshalling and independently generated/compiled SDK differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DeploymentException",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/uno/DeploymentException.idl",
+      "upstreamSymbols": [
+        "DeploymentException",
+        "RuntimeException"
+      ]
+    }
+  }
+}

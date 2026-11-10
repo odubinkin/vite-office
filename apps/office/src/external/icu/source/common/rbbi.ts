@@ -1,211 +1,371 @@
-/** @fileoverview Original ICU78.3 RuleBasedBreakIterator state machines and public UTF16 word boundary operations. */
-import type { RBBIDataWrapper } from "./rbbidata";
+/** @fileoverview Original ICU78.3 rule-data iterator ownership, public boundary operations and forward/safe reverse state machines. */
+import { UTextStorage, type OpenUText, type UText } from "./unicode/utext";
+import { BreakCache, DictionaryCache, type RuleBasedBreakIteratorCacheOwner } from "./rbbi_cache.h";
+import { RBBIDataWrapper } from "./rbbidata";
+import type { UDataMemory } from "./udatamem.h";
+import { ICULanguageBreakFactory, UnhandledEngine } from "./brkeng";
+import type { LanguageBreakEngine } from "./brkeng.h";
+import { ECleanupCommonType, ucln_common_registerCleanup } from "./ucln_cmn.h";
+import { UInitOnce, umtx_initOnce } from "./umutex.h";
+import { Locale } from "./locid";
+import { LocaleBased } from "./locbased";
+import { ULocDataLocaleType } from "./unicode/uloc";
+import { U_FAILURE } from "./unicode/utypes";
+import {
+  utext_getNativeIndex,
+  utext_setNativeIndex,
+  utext_next32,
+  utext_previous32,
+  utext_openUChars,
+  utext_close,
+  utext_clone,
+  utext_char32At,
+  utext_nativeLength,
+} from "./utext";
 import { ucptrie_get } from "./ucptrie";
-import { dictionaryNativeIndex } from "./dictbe";
-import type { ICULanguageBreakFactory } from "./brkeng";
-import { BreakCache, DictionaryCache, type BreakBoundary } from "./rbbi_cache";
-
-/** Raw native DFA candidate and its dictionary admission count. */
-export interface RuleBreakCandidate extends BreakBoundary {
-  readonly dictionaryCount: number;
+import { RBBI_BOF_REQUIRED, type RBBIForwardData, type RBBIReverseData } from "./rbbidata.h";
+/** Original fields consumed by the private safe reverse method. */
+export interface RuleBasedBreakIteratorReverseState {
+  fText: UText;
+  fData: RBBIReverseData;
+}
+/** Original safe reverse method locates a safe restart point without changing iterator position/status/end fields. @param this - Actual prepared iterator fields. @param fromPosition - Original native UTF16 position. @returns Safe restart point or DONE. */
+export function handleSafePrevious(
+  this: RuleBasedBreakIteratorReverseState,
+  fromPosition: number,
+): number {
+  const table = this.fData.fReverseTable;
+  utext_setNativeIndex(this.fText, fromPosition);
+  // Preserve source ordering: fData was already dereferenced before this null check.
+  if (this.fData === null || utext_getNativeIndex(this.fText) === 0) return -1;
+  let c = utext_previous32(this.fText),
+    state = 1;
+  const data = table.fTableData,
+    rowLength = table.fRowLen / data.BYTES_PER_ELEMENT;
+  let row = rowLength * state;
+  for (; c !== -1; c = utext_previous32(this.fText)) {
+    const category = ucptrie_get(this.fData.fTrie, c);
+    state = data[row + 3 + category] as number;
+    row = rowLength * state;
+    if (state === 0) break;
+  }
+  return utext_getNativeIndex(this.fText);
+}
+/** Original fields consumed and mutated by the private forward method; no substitute iterator state owner or factory. */
+export interface RuleBasedBreakIteratorForwardState {
+  fText: UText;
+  fData: RBBIForwardData;
+  fPosition: number;
+  fRuleStatusIndex: number;
+  fDictionaryCharCount: number;
+  fDone: boolean;
+  fLookAheadMatches: Int32Array | null;
+}
+/** Original forward state machine; generic typed row views erase only the source template instantiation. @param this - Actual prepared iterator fields. @returns Following raw rule boundary or UBRK_DONE. */
+export function handleNext(this: RuleBasedBreakIteratorForwardState): number {
+  const table = this.fData.fForwardTable,
+    data = table.fTableData,
+    rowLength = table.fRowLen / data.BYTES_PER_ELEMENT,
+    initial = this.fPosition;
+  this.fRuleStatusIndex = 0;
+  this.fDictionaryCharCount = 0;
+  utext_setNativeIndex(this.fText, initial);
+  let result = initial,
+    c = utext_next32(this.fText);
+  if (c === -1) {
+    this.fDone = true;
+    return -1;
+  }
+  let state = 1,
+    row = rowLength * state,
+    category = 0,
+    mode = 1;
+  if (table.fFlags & RBBI_BOF_REQUIRED) {
+    category = 2;
+    mode = 0;
+  }
+  for (;;) {
+    if (c === -1) {
+      if (mode === 2) break;
+      mode = 2;
+      category = 1;
+    }
+    if (mode === 1) {
+      category = ucptrie_get(this.fData.fTrie, c);
+      this.fDictionaryCharCount += Number(category >= table.fDictCategoriesStart);
+    }
+    state = data[row + 3 + category] as number;
+    row = rowLength * state;
+    const accepting = data[row] as number;
+    if (accepting === 1) {
+      if (mode !== 0) result = utext_getNativeIndex(this.fText);
+      this.fRuleStatusIndex = data[row + 2] as number;
+    } else if (accepting > 1) {
+      const ahead = (this.fLookAheadMatches as Int32Array)[accepting] as number;
+      if (ahead >= 0) {
+        this.fRuleStatusIndex = data[row + 2] as number;
+        this.fPosition = ahead;
+        return ahead;
+      }
+    }
+    const rule = data[row + 1] as number;
+    // Preserve ICU-20837: accept completed lookahead before recording this row's slash position.
+    if (rule > 1) (this.fLookAheadMatches as Int32Array)[rule] = utext_getNativeIndex(this.fText);
+    if (state === 0) break;
+    if (mode === 1) c = utext_next32(this.fText);
+    else if (mode === 0) mode = 1;
+  }
+  if (result === initial) {
+    utext_setNativeIndex(this.fText, initial);
+    utext_next32(this.fText);
+    result = utext_getNativeIndex(this.fText);
+    this.fRuleStatusIndex = 0;
+  }
+  this.fPosition = result;
+  return result;
 }
 
-/** Original rule owner and its public boundary cache. */
-export class RuleBasedBreakIterator {
-  private fPosition = 0;
-  private fRuleStatusIndex = 0;
-  private fDictionaryCharCount = 0;
-  private readonly fLookAheadMatches: Int32Array;
-  private readonly cache: BreakCache;
+let gLanguageBreakFactories: ICULanguageBreakFactory[] | null = null;
+const gLanguageBreakFactoriesInitOnce = new UInitOnce();
 
-  /** Owns the forward iterator state for one immutable UTF16 input. @param fData - Native compiled rules. @param text - UTF16 input. @param factory - Actual prepared word dictionaries for public refinement. @param locale - ICU requested locale. @param phrase - Native phrase selector. @returns Iterator. */
+/** Original cleanup of the common factory owners. @returns True. */
+function rbbi_cleanup(): boolean {
+  if (gLanguageBreakFactories !== null) {
+    for (const factory of gLanguageBreakFactories) factory.dispose();
+    gLanguageBreakFactories = null;
+  }
+  gLanguageBreakFactoriesInitOnce.reset();
+  return true;
+}
+
+/** Original default ICU factory initialization in the build without a local service hook. @param status - Sticky status. @returns Nothing. */
+function initLanguageFactories(status: [number]): void {
+  if (!U_FAILURE(status[0])) gLanguageBreakFactories = [new ICULanguageBreakFactory()];
+  ucln_common_registerCleanup(ECleanupCommonType.UCLN_COMMON_RBBI, rbbi_cleanup);
+}
+
+/** Original shared language-factory lookup. @param c - Input code point. @param locale - Requested locale. @returns Borrowed engine or null. */
+function getLanguageBreakEngineFromFactory(
+  c: number,
+  locale: string | null,
+): LanguageBreakEngine | null {
+  const status: [number] = [0];
+  umtx_initOnce(gLanguageBreakFactoriesInitOnce, initLanguageFactories, status);
+  const factories = gLanguageBreakFactories;
+  if (U_FAILURE(status[0]) || factories === null) return null;
+  for (let i = factories.length - 1; i >= 0; --i) {
+    const engine = (factories[i] as ICULanguageBreakFactory).getEngineFor(c, locale);
+    if (engine !== null) return engine;
+  }
+  return null;
+}
+
+/** Original UDataMemory-backed iterator, rule cache and dictionary engine owner. */
+export class RuleBasedBreakIterator implements RuleBasedBreakIteratorCacheOwner {
+  private readonly text = new UTextStorage();
+  private data: RBBIDataWrapper | null = null;
+  private breakCache: BreakCache | null = null;
+  private dictionaryCache: DictionaryCache | null = null;
+  private fLanguageBreakEngines: LanguageBreakEngine[] | null = null;
+  private fUnhandledBreakEngine: UnhandledEngine | null = null;
+  private requestLocale = Locale.getRoot();
+  private validLocale = Locale.getRoot();
+  private actualLocale = Locale.getRoot();
+  fErrorCode = 0;
+  fPosition = 0;
+  fRuleStatusIndex = 0;
+  fDone = false;
+  fDictionaryCharCount = 0;
+  fLookAheadMatches: Int32Array | null = null;
+  fIsPhraseBreaking = false;
+
+  /** Original common initialization followed by adoption of the passed rule handle. @param memory - Actual opened rule handle. @param status - Sticky status. @param dictionaryFactory - Rule-package dictionary variant when provided. @returns Iterator owner. */
   constructor(
-    private readonly fData: RBBIDataWrapper,
-    private text: string,
-    factory?: ICULanguageBreakFactory,
-    locale = "",
-    phrase = false,
+    memory: UDataMemory | null,
+    status: [number],
+    private readonly dictionaryFactory?: ICULanguageBreakFactory,
   ) {
-    this.fLookAheadMatches = new Int32Array(fData.fForwardTable.fLookAheadResultsSize).fill(-1);
-    this.cache = new BreakCache(
-      this,
-      text,
-      new DictionaryCache(text, fData, factory, locale, phrase),
-    );
+    utext_openUChars(this.text, null, 0, status);
+    const dictionaryCache = new DictionaryCache(this, status);
+    const breakCache = new BreakCache(this, status);
+    if (U_FAILURE(status[0])) this.fErrorCode = status[0];
+    else {
+      this.dictionaryCache = dictionaryCache;
+      this.breakCache = breakCache;
+    }
+
+    this.data = new RBBIDataWrapper(memory, status);
+    if (U_FAILURE(status[0])) return;
+    const size = this.fData.fForwardTable.fLookAheadResultsSize;
+    if (size > 0) this.fLookAheadMatches = new Int32Array(size);
   }
 
-  /** Changes the native UTF16 input and resets its break caches. @param text - New source text. @returns Nothing. */
-  setText(text: string): void {
-    this.text = text;
-    this.cache.setText(text);
+  /** Borrowed provider after successful initialization. @returns Actual text. */
+  get fText(): OpenUText {
+    return this.text as OpenUText;
+  }
+
+  /** Borrowed rule wrapper after successful initialization. @returns Actual rule fields. */
+  get fData(): RBBIDataWrapper & RBBIForwardData & RBBIReverseData {
+    return this.data as RBBIDataWrapper & RBBIForwardData & RBBIReverseData;
+  }
+
+  /** Borrowed dictionary cache after successful initialization. @returns Actual cache. */
+  get fDictionaryCache(): DictionaryCache {
+    return this.dictionaryCache as DictionaryCache;
+  }
+
+  /** Original iterator engine lookup, with a per-iterator last-priority reject engine. @param codepoint - Input scalar. @param locale - Requested locale ID. @returns Borrowed engine or null. */
+  getLanguageBreakEngine(codepoint: number, locale: string | null): LanguageBreakEngine | null {
+    const engines = (this.fLanguageBreakEngines ??= []);
+    for (let i = engines.length - 1; i >= 0; --i) {
+      const engine = engines[i] as LanguageBreakEngine;
+      if (engine.handles(codepoint, locale)) return engine;
+    }
+    const engine =
+      this.dictionaryFactory === undefined
+        ? getLanguageBreakEngineFromFactory(codepoint, locale)
+        : this.dictionaryFactory.getEngineFor(codepoint, locale);
+    if (engine !== null) {
+      engines.push(engine);
+      return engine;
+    }
+    if (this.fUnhandledBreakEngine === null) {
+      this.fUnhandledBreakEngine = new UnhandledEngine();
+      engines.unshift(this.fUnhandledBreakEngine);
+    }
+    this.fUnhandledBreakEngine.handleCharacter(codepoint);
+    return this.fUnhandledBreakEngine;
+  }
+
+  /** Publishes the original locale identities selected by the ICU resource constructor. @param requested - Original request. @param valid - Selected locale resource. @param actual - Actual rule locale. @returns Nothing. */
+  setLocaleIDs(requested: Locale, valid: Locale, actual: Locale): void {
+    this.requestLocale = new Locale(requested);
+    this.validLocale = new Locale(valid);
+    this.actualLocale = new Locale(actual);
+  }
+
+  /** Original three root defaults and locale lookup after resource construction. @param type - Locale selector. @param status - Sticky status. @returns Locale ID. */
+  getLocaleID(type: number, status: [number]): string | null {
+    if (U_FAILURE(status[0])) return null;
+    if (type === ULocDataLocaleType.ULOC_REQUESTED_LOCALE) return this.requestLocale.getName();
+    return LocaleBased.getLocaleID(this.validLocale, this.actualLocale, type, status);
+  }
+
+  /** Original rule forward dispatch over this owner. @returns Boundary or DONE. */
+  handleNext(): number {
+    return handleNext.call(this);
+  }
+
+  /** Original safe reverse dispatch over this owner. @param position - Starting native index. @returns Restart point or DONE. */
+  handleSafePrevious(position: number): number {
+    return handleSafePrevious.call(this, position);
+  }
+
+  /** Original UText setter for the rule iteration API. @param text - Open input provider. @param status - Sticky status. @returns Nothing. */
+  setText(text: OpenUText, status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    (this.breakCache as BreakCache).reset();
+    this.fDictionaryCache.reset();
+    utext_clone(this.text, text, false, true, status);
     this.first();
   }
 
-  /** Selects the beginning of the native UTF16 text. @returns Position zero. */
+  /** Original borrowed-text clone. @param fillIn - Destination or null. @param status - Sticky status. @returns Cloned provider. */
+  getUText(fillIn: UTextStorage | null, status: [number]): UTextStorage | null {
+    return utext_clone(fillIn, this.fText, false, true, status);
+  }
+
+  /** Original beginning boundary and current-state publication. @returns Zero. */
   first(): number {
-    this.cache.seek(0);
-    this.cache.done = false;
-    return this.publish();
+    const cache = this.breakCache as BreakCache;
+    if (!cache.seek(0)) cache.populateNear(0, [0]);
+    cache.current();
+    return 0;
   }
 
-  /** Selects the end of the native UTF16 text. @returns Native end position. */
+  /** Original end boundary with isBoundary side effects. @returns End offset. */
   last(): number {
-    this.isBoundary(this.text.length);
-    return this.text.length;
+    const position = utext_nativeLength(this.fText);
+    this.isBoundary(position);
+    return position;
   }
 
-  /** Returns the selected public position even after DONE. @returns Native boundary. */
+  /** Original iteration position. @returns Current boundary offset. */
   current(): number {
     return this.fPosition;
   }
 
-  /** Advances the original number of cached public boundaries. @param count - Signed steps. @returns Native position or DONE. */
-  next(count = 1): number {
-    let result = this.current();
-    for (; count > 0 && result !== -1; --count) {
-      this.cache.next();
-      result = this.publish();
+  /** Original forward or counted movement. @param count - Signed movement count when present. @returns Boundary or DONE. */
+  next(count?: number): number {
+    if (count === undefined) {
+      (this.breakCache as BreakCache).next();
+      return this.fDone ? -1 : this.fPosition;
     }
-    for (; count < 0 && result !== -1; ++count) result = this.previous();
+    if (count === 0) return this.current();
+    let result = 0;
+    if (count > 0) {
+      for (; count > 0 && result !== -1; --count) result = this.next();
+    } else {
+      for (; count < 0 && result !== -1; ++count) result = this.previous();
+    }
     return result;
   }
 
-  /** Moves to the preceding cached boundary. @returns Native position or DONE. */
+  /** Original preceding movement from the current boundary. @returns Boundary or DONE. */
   previous(): number {
-    this.cache.previous();
-    return this.publish();
+    (this.breakCache as BreakCache).previous([0]);
+    return this.fDone ? -1 : this.fPosition;
   }
 
-  /** Selects the first boundary after the supplied native offset. @param offset - UTF16 offset. @returns Native position or DONE. */
-  following(offset: number): number {
-    if (offset < 0) return this.first();
-    this.cache.seek(dictionaryNativeIndex(this.text, offset));
-    this.cache.done = false;
-    return this.next();
+  /** Original following query, normalizing input to a codepoint start. @param position - Native index. @returns Boundary or DONE. */
+  following(position: number): number {
+    if (position < 0) return this.first();
+    utext_setNativeIndex(this.fText, position);
+    (this.breakCache as BreakCache).following(utext_getNativeIndex(this.fText), [0]);
+    return this.fDone ? -1 : this.fPosition;
   }
 
-  /** Selects the last boundary before the supplied native offset. @param offset - UTF16 offset. @returns Native position or DONE. */
-  preceding(offset: number): number {
-    if (offset > this.text.length) return this.last();
-    const position = dictionaryNativeIndex(this.text, offset);
-    this.cache.seek(position);
-    if (this.cache.boundary().position === position) return this.previous();
-    this.cache.done = false;
-    return this.publish();
+  /** Original preceding query and end clamping. @param position - Native index. @returns Boundary or DONE. */
+  preceding(position: number): number {
+    if (position > utext_nativeLength(this.fText)) return this.last();
+    utext_setNativeIndex(this.fText, position);
+    (this.breakCache as BreakCache).preceding(utext_getNativeIndex(this.fText), [0]);
+    return this.fDone ? -1 : this.fPosition;
   }
 
-  /** Tests the exact source offset and positions the iterator at or after it. @param offset - UTF16 offset. @returns Whether the original offset was a boundary. */
-  isBoundary(offset: number): boolean {
-    if (offset < 0) {
+  /** Original boundary predicate with cursor advancement. @param position - Native index. @returns Whether the original position is a boundary. */
+  isBoundary(position: number): boolean {
+    if (position < 0) {
       this.first();
       return false;
     }
-    this.cache.seek(dictionaryNativeIndex(this.text, offset));
-    this.cache.done = false;
-    if (this.publish() === offset) return true;
-    this.next();
-    return false;
-  }
-
-  /** Publishes the original cache's cursor and rule status. @returns Native position or DONE. */
-  private publish(): number {
-    const boundary = this.cache.boundary();
-    this.fPosition = boundary.position;
-    this.fRuleStatusIndex = boundary.status;
-    return this.cache.done ? -1 : boundary.position;
-  }
-
-  /** Runs the native forward DFA from a cache-owned boundary. @param position - Native start. @returns Candidate, status and dictionary count. */
-  handleNextFrom(position: number): RuleBreakCandidate {
-    this.fPosition = position;
-    const end = this.handleNext();
-    return {
-      position: end,
-      status: this.fRuleStatusIndex,
-      dictionaryCount: this.fDictionaryCharCount,
-    };
-  }
-
-  /** Uses the compiled safe reverse table to choose a restart offset. @param from - Native starting offset. @returns Safe position or DONE. */
-  handleSafePrevious(from: number): number {
-    let position = dictionaryNativeIndex(this.text, from);
-    if (position === 0) return -1;
-    let state = 1;
-    while (position > 0) {
-      position = dictionaryNativeIndex(this.text, position - 1);
-      const category = ucptrie_get(this.fData.fTrie, this.text.codePointAt(position) as number);
-      state = this.fData.fReverseTable.row(state, 3 + category);
-      if (state === 0) break;
-    }
-    return position;
-  }
-
-  /** Native handleNext before dictionary refinement or public break caching. @returns Next candidate boundary, or -1 at the end. */
-  handleNext(): number {
-    this.fRuleStatusIndex = 0;
-    this.fDictionaryCharCount = 0;
-    const initial = this.fPosition;
-    let position = initial;
-    let code = this.text.codePointAt(position);
-    if (code === undefined) return -1;
-    position += code > 0xffff ? 2 : 1;
-    const first = position;
-    const table = this.fData.fForwardTable;
-    let state = 1,
-      category = 0,
-      result = initial,
-      mode = 0;
-    if (table.fFlags & 2) {
-      category = 2;
-      mode = 1;
-    }
-
-    for (;;) {
-      if (code === undefined) {
-        if (mode === 2) break;
-        mode = 2;
-        category = 1;
-      }
-      if (mode === 0 && code !== undefined) {
-        category = ucptrie_get(this.fData.fTrie, code);
-        if (category >= table.fDictCategoriesStart) ++this.fDictionaryCharCount;
-      }
-      state = table.row(state, 3 + category);
-      const accepting = table.row(state, 0);
-      if (accepting === 1) {
-        if (mode !== 1) result = position;
-        this.fRuleStatusIndex = table.row(state, 2);
-      } else if (accepting > 1) {
-        const lookAhead = this.fLookAheadMatches[accepting] as number;
-        if (lookAhead >= 0) {
-          this.fRuleStatusIndex = table.row(state, 2);
-          this.fPosition = lookAhead;
-          return lookAhead;
-        }
-      }
-      const rule = table.row(state, 1);
-      if (rule > 1) this.fLookAheadMatches[rule] = position;
-      if (!state) break;
-      if (mode === 0) {
-        code = this.text.codePointAt(position);
-        if (code !== undefined) position += code > 0xffff ? 2 : 1;
-      } else if (mode === 1) mode = 0;
-    }
-    if (result === initial) {
-      result = first;
-      this.fRuleStatusIndex = 0;
-    }
-    this.fPosition = result;
+    utext_setNativeIndex(this.fText, position);
+    const adjusted = utext_getNativeIndex(this.fText);
+    const cache = this.breakCache as BreakCache;
+    let result = false;
+    if (cache.seek(adjusted) || cache.populateNear(adjusted, [0]))
+      result = cache.current() === position;
+    if (result && adjusted < position && utext_char32At(this.fText, position) === -1) return false;
+    if (!result) this.next();
     return result;
   }
 
-  /** Borrows the dictionary-character admission from the latest rule-machine run. @returns Native count. */
-  getDictionaryCharCount(): number {
-    return this.fDictionaryCharCount;
+  /** Original largest rule tag for the current boundary. @returns Rule tag. */
+  getRuleStatus(): number {
+    const table = this.fData.fRuleStatusTable as Int32Array;
+    return table[this.fRuleStatusIndex + (table[this.fRuleStatusIndex] as number)] as number;
   }
 
-  /** Borrows the status selected by the latest rule-machine run. @returns Largest matching rule status. */
-  getRuleStatus(): number {
-    return this.fData.getRuleStatus(this.fRuleStatusIndex);
+  /** Original destructor order for the represented text, rule and cache ownership. @returns Nothing. */
+  dispose(): void {
+    utext_close(this.text);
+    this.data?.removeReference();
+    this.data = null;
+    this.breakCache = null;
+    this.dictionaryCache = null;
+    this.fLanguageBreakEngines = null;
+    this.fUnhandledBreakEngine = null;
+    this.fLookAheadMatches = null;
   }
 }

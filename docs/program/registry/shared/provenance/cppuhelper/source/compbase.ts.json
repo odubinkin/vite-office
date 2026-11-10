@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/source/compbase.ts",
+    "upstreamPath": "cppuhelper/source/compbase.cxx",
+    "localSymbols": [
+      "WeakComponentImplHelper_query"
+    ],
+    "upstreamSymbols": [
+      "WeakComponentImplHelper_query",
+      "checkInterface",
+      "queryDeepNoXInterface",
+      "recursivelyFindType"
+    ],
+    "preservedResponsibilities": [
+      "Original compbase-specific direct/deep interface lookup retains non-interface rejection, literal root shortcut, pointer-or-name type equality, source multiple-base traversal/offset arithmetic and actual danger-get/release/error messages. It reuses the original shared type_entries.hxx implementation through existing getTypeEntries, while the final qualified fallback is the actual WeakComponentImplHelperBase2, retaining XComponent as well as weak/root interfaces. Original compbase static helpers are implemented in their original source group, not replaced with the weak-only helper. Physical compiler casts map to the same logical receiver, with no inferred interface/default/query provider."
+    ],
+    "omittedResponsibilities": [
+      "Concrete ComponentContext/ServiceManager, public createComponentContext environment/mapping orchestration, production process-factory installation, EditEngine/VCL/Sfx construction and ScFieldEditEngine/DocImport CSV admission remain incomplete. NatNum12 casing/supplier/formatter and final CSV audit remain pending. Native mutex/lock/destructor interleavings, physical ABI/pointer adjustment, allocator exhaustion, static shutdown and noexcept process termination are not certified. No fake context, manager, mutex or default service is supplied; no whole-module or CSV readiness is promoted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/source/compbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/compbase2.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/source/compbase.cxx",
+          "marker": "WeakComponentImplHelper_query"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cppuhelper/source/type_entries.hxx",
+          "marker": "getTypeEntries"
+        }
+      ]
+    }
+  }
+}

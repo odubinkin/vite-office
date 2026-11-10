@@ -302,8 +302,6 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
-    expect(isForbiddenModuleEdge("editeng", "udkapi")).toBe(false);
-    expect(isForbiddenModuleEdge("udkapi", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
     expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "xmloff")).toBe(false);
@@ -474,8 +472,10 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
 });
 
-it("permits the editeng vcl font dependency while retaining reverse and browser gates", /** Verifies the local font dependency contract independently of upstream source availability. @returns Nothing. */ () => {
+it("permits the editeng VCL font and ICU bidi dependencies while retaining reverse and browser gates", /** Verifies original Library_editeng dependency direction independently of upstream source availability. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("editeng", "vcl")).toBe(false);
+  expect(isForbiddenModuleEdge("editeng", "external")).toBe(false);
+  expect(isForbiddenModuleEdge("external", "editeng")).toBe(true);
   expect(isForbiddenModuleEdge("vcl", "editeng")).toBe(true);
   expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
   expect(
@@ -503,11 +503,12 @@ it("retains actual mutual SAL and o3tl string-header owners without application 
 });
 
 it("permits original cppuhelper UNO and SAL owners while retaining application and browser gates", /** Protects original helper ownership, without reverse or application-layer permission. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "sal", "udkapi"])
+  for (const dependency of ["comphelper", "cppu", "o3tl", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(false);
   for (const dependency of ["sc", "sw", "framework", "vcl", "svl"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(true);
   expect(isForbiddenModuleEdge("cppu", "cppuhelper")).toBe(true);
+  expect(isForbiddenModuleEdge("o3tl", "cppuhelper")).toBe(true);
   expect(getRuntimeOwnershipLayer("cppuhelper/source/supportsservice.ts")).toBe(
     "upstream-mechanism",
   );
@@ -733,7 +734,6 @@ it("keeps primitive language identities below Editeng and browser owners", /** N
   expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "external")).toBe(false);
-  expect(isForbiddenModuleEdge("external", "i18nlangtag")).toBe(true);
   for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
   expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");
@@ -775,7 +775,7 @@ it("keeps native numeric locale resources below tab items and application/browse
   for (const owner of ["i18npool", "unotools"])
     for (const app of ["sc", "sw", "framework"])
       expect(isForbiddenModuleEdge(owner, app)).toBe(true);
-  for (const owner of ["i18nlangtag", "udkapi", "cppu", "offapi"]) {
+  for (const owner of ["comphelper", "i18nlangtag", "udkapi", "cppu", "offapi"]) {
     expect(isForbiddenModuleEdge("i18npool", owner)).toBe(false);
     expect(isForbiddenModuleEdge(owner, "i18npool")).toBe(true);
   }

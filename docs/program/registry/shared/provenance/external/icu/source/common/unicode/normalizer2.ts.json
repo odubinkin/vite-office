@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/normalizer2.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/normalizer2.h",
+    "localSymbols": [
+      "Normalizer2"
+    ],
+    "upstreamSymbols": [
+      "Normalizer2",
+      "normalize",
+      "isNormalized",
+      "hasBoundaryBefore",
+      "getNFKCInstance"
+    ],
+    "preservedResponsibilities": [
+      "The original counted Normalizer2 API binds UnicodeString source, mutable destination, sticky status, and the NFKC composition instance used by CjkBreakEngine."
+    ],
+    "omittedResponsibilities": [
+      "Other modes and normalization operations are outside the consumed path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/normalizer2.ts",
+          "marker": "interface Normalizer2"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/normalizer2.h",
+          "marker": "Normalizer2"
+        }
+      ]
+    }
+  }
+}

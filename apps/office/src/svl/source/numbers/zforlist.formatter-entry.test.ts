@@ -9,6 +9,7 @@ it("retains the same canonical formatter class identity and original insertion/d
   expect(SvNumberFormatter).toBe(SplitOwner);
   const formatter = new SvNumberFormatter(0x409),
     code = unicode('0.00000" html44"'),
+    output = unicode(""),
     check: [number] = [0],
     type: [number] = [0],
     key: [number] = [999999];
@@ -25,7 +26,10 @@ it("retains the same canonical formatter class identity and original insertion/d
     expect(formatter.PutEntry(code, check, type, key)).toBe(false);
     expect(key[0]).toBe(original);
     expect(formatter.GetEntry(key[0])).toBe(entry);
+    formatter.GetOutputString(1.25, key[0], output, [null]);
+    expect(text(output)).toBe("1.25000 html44");
   } finally {
+    output.dispose();
     code.dispose();
     formatter.dispose();
   }

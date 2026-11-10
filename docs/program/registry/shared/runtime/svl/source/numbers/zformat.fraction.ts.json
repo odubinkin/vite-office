@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.fraction.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.fraction.ts",
+        "apps/office/src/svl/source/numbers/zformat.fraction.test.ts",
+        "scripts/calc-fraction-elements-native-probe.mjs",
+        "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
+        "apps/office/src/sc/source/ui/docshell/docsh.test.ts"
+      ],
+      "justification": "Original finite fraction output consumes actual compiled token strings and existing shared numeric fill. Continued/forced denominators retain strict tie comparisons, collateral fractions, original signed64 operation widths, binary64 whole/fraction outputs, carry, improper-fraction limit, hide/mandatory fields and left-aligned denominator blanks. Selected and first native modifiers remain subject to the existing dormant-transliteration admission. CALC-397/CALC-398 source limit/sign behavior is retained. The unchanged native fraction-element body matches5362 scalar cases in three clang modes with no UBSan errors in those cases; this is not full parser/display/UNO or undefined-overflow certification. Original fraction output now binds the actual format owner/index and converts integral text, numerator and denominator before the original token fill stages, using actual native metadata/wrapper. Later ASCII placeholder zeros, blanks, slash and leading minus retain source placement; no final blanket conversion is added. Construction unwinds previously created buffer/format owners if a subsequent constructor throws. Modes0..11 supersede the prior dormant-native-only limitation; full native formatter/UNO ABI and mode12 remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetFractionOutput",
+        "ImpGetFractionElements",
+        "GetDenominatorString",
+        "GetNumeratorString",
+        "GetFractionIntegerString"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "SvNumberformat::ImpGetFractionOutput",
+        "SvNumberformat::ImpGetFractionElements",
+        "lcl_GetDenominatorString",
+        "lcl_GetNumeratorString",
+        "lcl_GetFractionIntegerString"
+      ]
+    }
+  }
+}

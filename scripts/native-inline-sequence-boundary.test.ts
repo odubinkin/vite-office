@@ -34,3 +34,27 @@ it("rejects alias/default/namespace/extra/dynamic imports and executable or non-
   ])
     expect(check(source, target, caller, value)).toBe(false);
 });
+it("admits only the actual ComponentContext map-key template binding", /** Original inline sequence.hxx does not create a Cppuhelper/Comphelper service cycle. @returns Nothing. */ () => {
+  const source = "cppuhelper/source/component_context.ts",
+    actual = readFileSync("apps/office/src/" + source, "utf8"),
+    caller = 'import { mapKeysToSequence } from "../../comphelper/inc/sequence";';
+  expect(check(source, target, actual, body)).toBe(true);
+  expect(check(source, target, caller, body)).toBe(true);
+  for (const value of [
+    caller.replace("mapKeysToSequence", "concatSequences"),
+    caller.replace("mapKeysToSequence", "mapKeysToSequence as other"),
+    caller.replace("mapKeysToSequence", "mapKeysToSequence, concatSequences"),
+    caller + '\nimport("service");',
+  ])
+    expect(check(source, target, value, body)).toBe(false);
+  expect(check("cppuhelper/source/other.ts", target, caller, body)).toBe(false);
+  expect(check(source, target, caller, body + "\nconst manager = createService();")).toBe(false);
+  expect(
+    check(
+      source,
+      target,
+      caller,
+      body.replace("export function mapKeysToSequence", "export function other"),
+    ),
+  ).toBe(false);
+});

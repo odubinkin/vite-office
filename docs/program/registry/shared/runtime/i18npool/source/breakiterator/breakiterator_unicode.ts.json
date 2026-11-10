@@ -6,8 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "font-script-attributes",
+    "subsystem": "number-formatting",
     "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a",
       "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
@@ -17,21 +18,35 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
-        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
-        "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx"
+        "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native.test.ts",
+        "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json",
+        "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+        "i18npool/qa/cppunit/test_characterclassification.cxx",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts"
       ],
-      "justification": "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
+      "justification": "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences. Original Unicode component exposes its own implementation name and acquired constructor through the enclosing word service interface. The original Unicode implementation-name member supplies the inherited implementation identity for the actual registered CJK subclasses. CJK line breaking and unused iterator operations remain outside this slice. The integrated build shares the ICU provider, rule data and resource dispatch with Writer, including the LibreOffice Khmer patch where selected.",
       "knownViolations": [],
       "localSymbols": [
         "BreakIterator_Unicode",
         "loadICUBreakIterator",
-        "getWordBoundary"
+        "nextWord",
+        "previousWord",
+        "getWordBoundary",
+        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
       ],
-      "sourceResponsibility": "unverified",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
       "upstreamSymbols": [
+        "BreakIterator_Unicode",
         "loadICUBreakIterator",
-        "getWordBoundary"
+        "nextWord",
+        "previousWord",
+        "getWordBoundary",
+        "com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
+        "BreakIterator_Unicode::getImplementationName"
       ]
     }
   }

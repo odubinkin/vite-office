@@ -18,9 +18,11 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sfx2/source/doc/docfile.ts#SfxMedium",
-        "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SfxMedium()"
+        "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SfxMedium()",
+        "apps/office/src/sfx2/source/doc/objsh.test.ts",
+        "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SetWarningError"
       ],
-      "justification": "The bounded browser medium now preserves object identity and owns load/save/filter operation state; native stream and UCB mechanics remain explicitly excluded.",
+      "justification": "The bounded browser medium now preserves object identity and owns load/save/filter operation state; native stream and UCB mechanics remain explicitly excluded. The medium has an independent transient diagnostic and retained load warning. It preserves source first-diagnostic and error replacement rules; resetting transient state preserves the accepted warning.",
       "knownViolations": [],
       "localSymbols": [
         "SfxMedium",
@@ -29,7 +31,12 @@
         "SfxMediumSource",
         "SfxMediumDestination",
         "SfxMediumOperation",
-        "acquireSfxMedium"
+        "acquireSfxMedium",
+        "SetError",
+        "GetErrorCode",
+        "SetWarningError",
+        "GetWarningError",
+        "ResetError"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sfx2/source/doc/docfile.cxx",
@@ -39,7 +46,12 @@
         "SfxMedium::GetOrigURL",
         "SfxMedium::SetName",
         "SfxMedium::IsReadOnly",
-        "SfxMedium::Transfer_Impl"
+        "SfxMedium::Transfer_Impl",
+        "SfxMedium::SetError",
+        "SfxMedium::GetErrorCode",
+        "SfxMedium::SetWarningError",
+        "SfxMedium::GetWarningError",
+        "SfxMedium::ResetError"
       ]
     }
   }

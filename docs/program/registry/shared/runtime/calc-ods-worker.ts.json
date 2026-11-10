@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/calc-ods-worker.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "composition",
+    "capabilityIds": [],
+    "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/calc-ods-worker.ts#InitApplicationServiceManager",
+        "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts"
+      ],
+      "justification": "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

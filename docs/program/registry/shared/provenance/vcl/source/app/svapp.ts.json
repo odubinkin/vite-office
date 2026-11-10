@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/source/app/svapp.ts",
+    "status": "mapped",
+    "upstreamPath": "vcl/source/app/svapp.cxx",
+    "localSymbols": [
+      "GetSettings"
+    ],
+    "upstreamSymbols": [
+      "Application::GetSettings",
+      "InitSettings"
+    ],
+    "preservedResponsibilities": [
+      "The process AppData owner initializes its original AllSettings member lazily on the first settings query."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native settings-listener and window notification responsibilities remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/app/svapp.ts",
+          "marker": "GetSettings"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vcl/source/app/svapp.cxx",
+          "marker": "InitSettings"
+        },
+        {
+          "path": "vcl/source/app/settings.cxx",
+          "marker": "AllSettings::GetLanguageTag"
+        }
+      ]
+    }
+  }
+}

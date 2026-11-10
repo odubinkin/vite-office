@@ -15,10 +15,11 @@
       "Attributes"
     ],
     "preservedResponsibilities": [
-      "Generated Name/Handle/Type/Attributes value and compound type metadata."
+      "Generated Name/Handle/Type/Attributes value and compound type metadata.",
+      "The original implicit destructor now releases the owned type and name used by ServiceManager::getDefaultContextProperty."
     ],
     "omittedResponsibilities": [
-      "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+      "Complete native binary ABI and other property service consumers remain outside this checkpoint."
     ],
     "evidence": {
       "local": [
@@ -33,12 +34,24 @@
         {
           "path": "apps/office/src/svl/source/items/itemprop.test.ts",
           "marker": "copies native property metadata"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "udkapi/com/sun/star/beans/Property.idl",
           "marker": "Property"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/Property.idl",
+          "marker": "Attributes"
+        },
+        {
+          "path": "cppuhelper/source/servicemanager.cxx",
+          "marker": "getDefaultContextProperty"
         }
       ]
     }

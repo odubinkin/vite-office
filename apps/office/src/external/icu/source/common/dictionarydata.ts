@@ -1,154 +1,180 @@
-/** @fileoverview ICU78.3 dictionary matchers with the pinned LibreOffice Khmer matcher patch. */
-import { BytesTrie } from "./bytestrie";
-import { UCharsTrie } from "./ucharstrie";
-import { USTRINGTRIE_HAS_VALUE, UStringTrieResult } from "./unicode/ustringtrie";
+/** @fileoverview Original ICU78.3 dictionary indexes and UText matchers for byte and UTF-16 serialized tries. */
+import { BytesTrie } from "./unicode/bytestrie";
+import { UCharsTrie } from "./unicode/ucharstrie";
+import { UStringTrieResult as Result, USTRINGTRIE_HAS_VALUE } from "./unicode/ustringtrie";
+import { type UText, utext_getNativeIndex, utext_next32 } from "./unicode/utext";
+import { udata_close } from "./unicode/udata";
+import type { UnicodeSet } from "./uniset";
+import type { UDataMemory } from "./udatamem.h";
 
-const TRIE_TYPE_BYTES = 0;
-const TRIE_TYPE_UCHARS = 1;
-const TRANSFORM_TYPE_OFFSET = 0x1000000;
+export const DictionaryData = {
+  TRIE_TYPE_BYTES: 0,
+  TRIE_TYPE_UCHARS: 1,
+  TRIE_TYPE_MASK: 7,
+  TRIE_HAS_VALUES: 8,
+  TRANSFORM_NONE: 0,
+  TRANSFORM_TYPE_OFFSET: 0x1000000,
+  TRANSFORM_TYPE_MASK: 0x7f000000,
+  TRANSFORM_OFFSET_MASK: 0x1fffff,
+  IX_STRING_TRIE_OFFSET: 0,
+  IX_RESERVED1_OFFSET: 1,
+  IX_RESERVED2_OFFSET: 2,
+  IX_TOTAL_SIZE: 3,
+  IX_TRIE_TYPE: 4,
+  IX_TRANSFORM: 5,
+  IX_RESERVED6: 6,
+  IX_RESERVED7: 7,
+  IX_COUNT: 8,
+} as const;
 
-/** Membership operation consumed from the original optional UnicodeSet. */
-export interface DictionaryIgnoreSet {
-  /** Tests a Unicode scalar. @param code - Unicode code point. @returns Whether present. */
-  contains(code: number): boolean;
-}
-
-/** Original dictionary matcher contract. The cursor binds the native UText UTF16 index. */
+/** Original abstract dictionary ownership and matching contract. */
 export abstract class DictionaryMatcher {
-  /** Original trie format discriminator. @returns Native type. */
-  abstract getType(): number;
-
-  /** Creates an independent reader over borrowed native storage. @returns A fresh trie cursor. */
-  protected abstract trie(): BytesTrie | UCharsTrie;
-
-  /** Maps the source scalar to the trie alphabet. @param code - Native code point. @returns Original trie input. */
-  protected transform(code: number): number {
-    return code;
-  }
-
-  /** Consumes native text and fills optional matching-word arrays in increasing length order. @param text - Immutable UTF16 text. @param position - Native text cursor. @param maxLength - Maximum UTF16 extent. @param limit - Output capacity. @param lengths - UTF16 word lengths. @param cpLengths - Scalar word lengths. @param values - Dictionary values. @param prefix - Optional scalar prefix result. @param ignoreSet - LibreOffice's optional ignore set. @param minLength - LibreOffice's minimum scalar length. @returns Count of stored matches. */
-  matches(
-    text: string,
-    position: [number],
+  /** Original match loop contract. @param text - Input provider at the starting index. @param maxLength - Maximum native length. @param limit - Capacity of output arrays. @param lengths - Native lengths. @param cpLengths - Codepoint lengths. @param values - Word values. @param prefix - Consumed codepoint count. @param ignoreSet - LibreOffice patch optional ignored code points. @param minLength - LibreOffice patch minimum candidate code point length. @returns Number of written matches. */
+  abstract matches(
+    text: UText,
     maxLength: number,
     limit: number,
-    lengths: number[] | null,
-    cpLengths: number[] | null,
-    values: number[] | null,
+    lengths: Int32Array | null,
+    cpLengths: Int32Array | null,
+    values: Int32Array | null,
     prefix: [number] | null,
-    ignoreSet: DictionaryIgnoreSet | null = null,
-    minLength = 0,
-  ): number {
-    const trie = this.trie(),
-      start = position[0];
-    let count = 0,
-      codePointsMatched = 0;
-    for (
-      let code = text.codePointAt(position[0]);
-      code !== undefined;
-      code = text.codePointAt(position[0])
-    ) {
-      position[0] += code > 0xffff ? 2 : 1;
-      const unit = this.transform(code),
-        result = codePointsMatched === 0 ? trie.first(unit) : trie.next(unit),
-        length = position[0] - start;
-      ++codePointsMatched;
-      if (ignoreSet?.contains(code)) continue;
-      if (USTRINGTRIE_HAS_VALUE(result)) {
-        if (codePointsMatched < minLength) continue;
-        if (count < limit) {
-          if (values !== null) values[count] = trie.getValue();
-          if (lengths !== null) lengths[count] = length;
-          if (cpLengths !== null) cpLengths[count] = codePointsMatched;
-          ++count;
-        }
-        if (result === UStringTrieResult.USTRINGTRIE_FINAL_VALUE) break;
-      } else if (result === UStringTrieResult.USTRINGTRIE_NO_MATCH) break;
-      if (length >= maxLength) break;
-    }
-    if (prefix !== null) prefix[0] = codePointsMatched;
-    return count;
-  }
+    ignoreSet?: Pick<UnicodeSet, "contains"> | null,
+    minLength?: number,
+  ): number;
+
+  /** Original serialized trie kind. @returns Type. */
+  abstract getType(): number;
+
+  /** Original destructor closes the adopted data handle. @returns Nothing. */
+  abstract dispose(): void;
 }
 
-/** Original byte dictionary and offset transform. */
-export class BytesDictionaryMatcher extends DictionaryMatcher {
-  /** Retains immutable native dictionary storage. @param bytes - Original trie bytes. @param transformConstant - Native transform flags and offset. @returns Matcher. */
+/** Original UTF-16 trie dictionary. */
+export class UCharsDictionaryMatcher extends DictionaryMatcher {
+  /** Adopts the handle behind borrowed trie data. @param characters - Serialized UCharsTrie. @param file - Open data handle. @returns Matcher. */
   constructor(
-    private readonly bytes: Uint8Array,
-    private readonly transformConstant: number,
+    private readonly characters: Uint16Array,
+    private readonly file: UDataMemory,
   ) {
     super();
   }
 
-  /** Original format identity. @returns Byte trie type. */
+  /** Original direct-unit traversal with native and codepoint length accounting. @param text - Input provider. @param maxLength - Maximum native length. @param limit - Maximum written matches. @param lengths - Native lengths. @param cpLengths - Codepoint lengths. @param values - Word values. @param prefix - Consumed codepoint count. @param ignoreSet - LibreOffice patch optional ignored code points. @param minLength - LibreOffice patch minimum candidate code point length. @returns Number of written matches. */
+  matches(
+    text: UText,
+    maxLength: number,
+    limit: number,
+    lengths: Int32Array | null,
+    cpLengths: Int32Array | null,
+    values: Int32Array | null,
+    prefix: [number] | null,
+    ignoreSet: Pick<UnicodeSet, "contains"> | null = null,
+    minLength = 0,
+  ): number {
+    const trie = new UCharsTrie(this.characters);
+    const start = utext_getNativeIndex(text);
+    let wordCount = 0;
+    let codePointsMatched = 0;
+    for (let c = utext_next32(text); c >= 0; c = utext_next32(text)) {
+      const result = codePointsMatched === 0 ? trie.first(c) : trie.next(c);
+      const lengthMatched = utext_getNativeIndex(text) - start;
+      ++codePointsMatched;
+      if (ignoreSet?.contains(c)) continue;
+      if (USTRINGTRIE_HAS_VALUE(result)) {
+        if (codePointsMatched < minLength) continue;
+        if (wordCount < limit) {
+          if (values !== null) values[wordCount] = trie.getValue();
+          if (lengths !== null) lengths[wordCount] = lengthMatched;
+          if (cpLengths !== null) cpLengths[wordCount] = codePointsMatched;
+          ++wordCount;
+        }
+        if (result === Result.USTRINGTRIE_FINAL_VALUE) break;
+      } else if (result === Result.USTRINGTRIE_NO_MATCH) break;
+      if (lengthMatched >= maxLength) break;
+    }
+    if (prefix !== null) prefix[0] = codePointsMatched;
+    return wordCount;
+  }
+
+  /** Original UTF-16 type. @returns Type. */
   getType(): number {
-    return TRIE_TYPE_BYTES;
+    return DictionaryData.TRIE_TYPE_UCHARS;
   }
 
-  /** Borrows a fresh byte trie cursor. @returns Trie. */
-  protected trie(): BytesTrie {
-    return new BytesTrie(this.bytes);
-  }
-
-  /** Applies the original direct or offset transform and ZWJ/ZWNJ exceptions. @param code - Unicode code point. @returns Native trie input. */
-  protected override transform(code: number): number {
-    if ((this.transformConstant & 0x7f000000) !== TRANSFORM_TYPE_OFFSET) return code;
-    if (code === 0x200d) return 0xff;
-    if (code === 0x200c) return 0xfe;
-    const delta = code - (this.transformConstant & 0x1fffff);
-    return delta < 0 || delta > 0xfd ? -1 : delta;
+  /** Releases the adopted data handle. @returns Nothing. */
+  dispose(): void {
+    udata_close(this.file);
   }
 }
 
-/** Original UTF16 dictionary. The source passes scalars to the single-unit trie methods. */
-export class UCharsDictionaryMatcher extends DictionaryMatcher {
-  /** Retains the native serialized dictionary. @param chars - Original trie units. @returns Matcher. */
-  constructor(private readonly chars: Uint16Array) {
+/** Original byte-trie dictionary with script offset transformation. */
+export class BytesDictionaryMatcher extends DictionaryMatcher {
+  /** Adopts the handle behind the borrowed trie bytes. @param characters - Serialized BytesTrie. @param transformConstant - Unmasked file transform. @param file - Open data handle. @returns Matcher. */
+  constructor(
+    private readonly characters: Uint8Array,
+    private readonly transformConstant: number,
+    private readonly file: UDataMemory,
+  ) {
     super();
   }
 
-  /** Original format identity. @returns UTF16 trie type. */
+  /** Original transformation with joiner and nonjoiner values. @param c - Codepoint. @returns Trie input. */
+  private transform(c: number): number {
+    const data = DictionaryData;
+    if ((this.transformConstant & data.TRANSFORM_TYPE_MASK) === data.TRANSFORM_TYPE_OFFSET) {
+      if (c === 0x200d) return 0xff;
+      if (c === 0x200c) return 0xfe;
+      const delta = c - (this.transformConstant & data.TRANSFORM_OFFSET_MASK);
+      return delta < 0 || delta > 0xfd ? -1 : delta;
+    }
+    return c;
+  }
+
+  /** Original transformed byte traversal with native and codepoint length accounting. @param text - Input provider. @param maxLength - Maximum native length. @param limit - Maximum written matches. @param lengths - Native lengths. @param cpLengths - Codepoint lengths. @param values - Word values. @param prefix - Consumed codepoint count. @param ignoreSet - LibreOffice patch optional ignored code points. @param minLength - LibreOffice patch minimum candidate code point length. @returns Number of written matches. */
+  matches(
+    text: UText,
+    maxLength: number,
+    limit: number,
+    lengths: Int32Array | null,
+    cpLengths: Int32Array | null,
+    values: Int32Array | null,
+    prefix: [number] | null,
+    ignoreSet: Pick<UnicodeSet, "contains"> | null = null,
+    minLength = 0,
+  ): number {
+    const trie = new BytesTrie(this.characters);
+    const start = utext_getNativeIndex(text);
+    let wordCount = 0;
+    let codePointsMatched = 0;
+    for (let c = utext_next32(text); c >= 0; c = utext_next32(text)) {
+      const input = this.transform(c);
+      const result = codePointsMatched === 0 ? trie.first(input) : trie.next(input);
+      const lengthMatched = utext_getNativeIndex(text) - start;
+      ++codePointsMatched;
+      if (ignoreSet?.contains(c)) continue;
+      if (USTRINGTRIE_HAS_VALUE(result)) {
+        if (codePointsMatched < minLength) continue;
+        if (wordCount < limit) {
+          if (values !== null) values[wordCount] = trie.getValue();
+          if (lengths !== null) lengths[wordCount] = lengthMatched;
+          if (cpLengths !== null) cpLengths[wordCount] = codePointsMatched;
+          ++wordCount;
+        }
+        if (result === Result.USTRINGTRIE_FINAL_VALUE) break;
+      } else if (result === Result.USTRINGTRIE_NO_MATCH) break;
+      if (lengthMatched >= maxLength) break;
+    }
+    if (prefix !== null) prefix[0] = codePointsMatched;
+    return wordCount;
+  }
+
+  /** Original byte type. @returns Type. */
   getType(): number {
-    return TRIE_TYPE_UCHARS;
+    return DictionaryData.TRIE_TYPE_BYTES;
   }
 
-  /** Borrows a fresh UTF16 trie cursor. @returns Trie. */
-  protected trie(): UCharsTrie {
-    return new UCharsTrie(this.chars);
+  /** Releases the adopted data handle. @returns Nothing. */
+  dispose(): void {
+    udata_close(this.file);
   }
-}
-
-/** Opens a selected original packaged Dict resource after ICU resource lookup. @param bytes - Complete native data item. @returns Typed matcher or null for an unsupported trie type. */
-export function openDictionaryMatcher(bytes: Uint8Array): DictionaryMatcher | null {
-  const file = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  if (
-    file.byteLength < 24 ||
-    file.getUint8(2) !== 0xda ||
-    file.getUint8(3) !== 0x27 ||
-    file.getUint8(8) !== 0 ||
-    file.getUint32(12, false) !== 0x44696374 ||
-    file.getUint8(16) !== 1
-  )
-    throw new Error("Invalid ICU Dict resource.");
-  const header = file.getUint16(0, true);
-  if (header < 24 || header + 32 > file.byteLength) throw new Error("Invalid ICU Dict header.");
-  const offset = file.getInt32(header, true),
-    reserved = file.getInt32(header + 4, true),
-    size = file.getInt32(header + 12, true),
-    type = file.getInt32(header + 16, true) & 7;
-  if (offset < 32 || reserved <= offset || reserved > size || header + size > file.byteLength)
-    throw new Error("Invalid ICU Dict trie extent.");
-  const start = header + offset,
-    limit = header + reserved;
-  if (type === TRIE_TYPE_BYTES)
-    return new BytesDictionaryMatcher(
-      bytes.subarray(start, limit),
-      file.getInt32(header + 20, true),
-    );
-  if (type !== TRIE_TYPE_UCHARS) return null;
-  if ((limit - start) & 1) throw new Error("Invalid ICU Dict UTF16 extent.");
-  const chars = new Uint16Array((limit - start) / 2);
-  for (let i = 0; i < chars.length; ++i) chars[i] = file.getUint16(start + 2 * i, true);
-  return new UCharsDictionaryMatcher(chars);
 }

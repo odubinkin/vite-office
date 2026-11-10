@@ -1,4 +1,6 @@
 /** @fileoverview Actual Calc worker protocol success, failure, timeout and stale-callback boundaries. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { afterEach, expect, it, vi } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DEFAULT_ZIP_FILE_LIMITS } from "../../../../package/source/zipapi/ZipFile";
@@ -49,6 +51,8 @@ function model(): ScDocument {
   doc.SetValue(new ScAddress(), 7);
   return doc;
 }
+InitApplicationServiceManager(implementations);
+
 it("transfers edit-text cells through the browser worker document record", /** Checks transfers edit-text cells through the browser worker document record. @returns Test completion or assertion result. */ () => {
   const doc = model(),
     pos = new ScAddress(1, 0, 0);

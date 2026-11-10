@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/stream/stream.encoding.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/stream/stream.cxx",
+    "localSymbols": [
+      "detectEncoding",
+      "mapEncodings"
+    ],
+    "upstreamSymbols": [
+      "SvStream::DetectEncoding",
+      "mapEncodings"
+    ],
+    "preservedResponsibilities": [
+      "LibreOffice maps exactly the supported name of ICU's first result. An unmapped first match leaves the stream unknown, without choosing a lower-ranked candidate."
+    ],
+    "omittedResponsibilities": [
+      "The caller owns stream sampling and byte order. Device errors and native allocator behavior are outside this memory-stream binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/stream/stream.encoding.ts",
+          "marker": "detectEncoding"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/stream.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "tools/source/stream/stream.cxx",
+          "marker": "mapEncodings"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/ucsdet.cpp",
+          "marker": "ucsdet_getName"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/tools/source/stream/stream.encoding.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original static ICU name mapping and detector scope are kept separate from in-memory stream storage and the existing line and byte operations."
+    }
+  }
+}

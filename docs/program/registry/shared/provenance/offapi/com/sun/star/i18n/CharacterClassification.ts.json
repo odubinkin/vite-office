@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/CharacterClassification.ts",
+    "upstreamPath": "offapi/com/sun/star/i18n/CharacterClassification.idl",
+    "localSymbols": [
+      "CharacterClassification",
+      "failsToSupply"
+    ],
+    "upstreamSymbols": [
+      "CharacterClassification",
+      "XCharacterClassification"
+    ],
+    "preservedResponsibilities": [
+      "Original generated normal default constructor uses the actual context service manager, UNO_QUERY and the source DeploymentException contract."
+    ],
+    "omittedResponsibilities": [
+      "Compile-time static constructor environment and production component registration remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/CharacterClassification.ts",
+          "marker": "failsToSupply"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/i18n/CharacterClassification.idl",
+          "marker": "XCharacterClassification"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "ServiceType::dumpHppFile"
+        }
+      ]
+    }
+  }
+}

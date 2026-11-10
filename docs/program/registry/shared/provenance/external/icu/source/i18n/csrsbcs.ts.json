@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/icu/source/i18n/csrsbcs.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/icu-reference/source/i18n/csrsbcs.cpp",
+    "localSymbols": [
+      "NGramParser",
+      "NGramParser_IBM420",
+      "CharsetRecog_sbcs"
+    ],
+    "upstreamSymbols": [
+      "NGramParser::parse",
+      "NGramParser_IBM420::parseCharacters"
+    ],
+    "preservedResponsibilities": [
+      "The original SBCS registry uses exact byte maps and 64-entry models, source three-byte rolling lookup, C1 aliases, first-language ties and IBM shaping."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed charset enumeration, actual converter output, physical native ABI and allocation failure remain outside this CSV detection slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrsbcs.ts",
+          "marker": "NGramParser"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/ucsdet.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/csrsbcs.tables.json",
+          "marker": "sourceSha256"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/csrsbcs.cpp",
+          "marker": "parseCharacters"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/csdetect.cpp",
+          "marker": "detectAll"
+        }
+      ]
+    }
+  }
+}

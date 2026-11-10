@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "csv-native-service-and-edit-admission",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit.ts",
+        "apps/office/src/editeng/source/editeng/native-engine-lifecycle.test.ts",
+        "editeng/source/editeng/impedit.hxx"
+      ],
+      "justification": "Original internal declaration boundary reexports the actual abstract lifecycle owner and erased consumed view declarations. No instantiable engine/window/model or default provider is defined by this header. Concrete EditEngine/ImpEditEngine constructor/resources, full parser/undo/layout/view/style-notification implementations and ScFieldEditEngine CSV admission remain unported. Abstract dependencies are mandatory, not default substitutes. Native diagnostic/thread/lifetime/ABI and full QA are uncertified. NatNum12 and final CSV audit remain pending.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit.hxx",
+      "upstreamSymbols": [
+        "ImpEditEngine",
+        "EditView",
+        "ImpEditView"
+      ]
+    }
+  }
+}

@@ -17,18 +17,23 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/column3.input.ts",
-        "apps/office/src/sc/source/core/data/column3.input.test.ts"
+        "apps/office/src/sc/source/core/data/column3.input.test.ts",
+        "apps/office/src/sc/source/core/data/document-string-input.test.ts"
       ],
-      "justification": "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics. Full native differential, ABI and broader CSV output acceptance remain pending.",
+      "justification": "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics. Full native differential, ABI and broader CSV output acceptance remain pending. Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
       "knownViolations": [],
       "localSymbols": [
-        "ParseString"
+        "ParseString",
+        "SetString",
+        "DeleteContent"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/column3.cxx",
       "upstreamSymbols": [
         "ScColumn::ParseString",
-        "applyTextNumFormat"
+        "applyTextNumFormat",
+        "ScColumn::SetString",
+        "ScColumn::DeleteContent"
       ]
     }
   }

@@ -303,7 +303,9 @@ export async function validateRegistryEvidence(
       path,
     ) =>
       readText(
-        path.startsWith("apps/") || path.startsWith("vendor/") ? path : `${upstreamRoot}/${path}`,
+        path.startsWith("apps/") || path.startsWith("vendor/") || path.startsWith("third_party/")
+          ? path
+          : `${upstreamRoot}/${path}`,
       ),
   );
   const invariants = parseRegistryInvariants(views["docs/program/parity/upstream-invariants.json"]);

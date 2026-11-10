@@ -19,7 +19,8 @@
     "preservedResponsibilities": [
       "Task AQF9AG ports the source OnDemandCharClass two-slot cache: matching locales reuse their classifier, an unseen locale replaces the slot opposite the current one, and GetCharClass borrows the selected classifier. Prepared Locale values stand for source LanguageTag/service construction; full LanguageTag and UNO provider ABI are still unported.",
       "Task AQF9AG adds the source lazy IGNORE_CASE transliteration owner, locale invalidation and stable borrowed GetTransliteration accessor over the native transliteration module.",
-      "AQF9AG adds original on-demand NativeNumberWrapper emplace and same-owner get lifetime. Component-context lookup remains bound through the existing actual wrapper/provider path; no stand-in service/context is supplied."
+      "AQF9AG adds original on-demand NativeNumberWrapper emplace and same-owner get lifetime. Component-context lookup remains bound through the existing actual wrapper/provider path; no stand-in service/context is supplied.",
+      "Original optional native-number wrapper member destruction releases the instantiated wrapper; lazy same-instance get semantics remain unchanged."
     ],
     "omittedResponsibilities": [
       "Full LanguageTag identity and UNO context construction remain outside this represented cache."

@@ -1,93 +1,310 @@
-/** @fileoverview Original LibreOffice Unicode dictionary rule selection and word-boundary queries. */
-import type { ICULanguageBreakFactory } from "../../../external/icu/source/common/brkeng";
-import { RuleBasedBreakIterator } from "../../../external/icu/source/common/rbbi";
-import { text as localeString } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { decomposeCanonicalLanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag";
+/** @fileoverview Original BreakIterator_Unicode word rules, cache keys and counted UTF-16 boundary operations. */
+import { acquire } from "../../../cppuhelper/inc/weak";
+import type { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import type { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
+import { createWordInstance } from "../../../external/icu/source/common/brkiter";
+import type { RuleBasedBreakIterator } from "../../../external/icu/source/common/rbbi";
+import { u_isUWhiteSpace, u_isWhitespace } from "../../../external/icu/source/common/unicode/uchar";
+import {
+  UTextStorage,
+  type OpenUText,
+  utext_openUChars,
+} from "../../../external/icu/source/common/unicode/utext";
+import { UErrorCode as E, U_FAILURE } from "../../../external/icu/source/common/unicode/utypes";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { getIcuLocale } from "../../../i18nlangtag/source/languagetag/languagetagicu";
 import type { Boundary } from "../../../offapi/com/sun/star/i18n/Boundary";
+import {
+  ANY_WORD,
+  ANYWORD_IGNOREWHITESPACES,
+  DICTIONARY_WORD,
+  WORD_COUNT,
+} from "../../../offapi/com/sun/star/i18n/WordType";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
-import { getLocaleDataBreakIteratorRules } from "../localedata/localedata";
-import { loadDictionaryWordRule, type DictionaryWordRule } from "./breakiterator_unicode.rules";
+import { getBreakIteratorRules } from "../localedata/localedata";
+import { BreakIteratorImpl } from "./breakiteratorImpl";
+import { openRule, registerOpenOfficeRules } from "./breakiterator_unicode.rules";
 
-/** Native Unicode service shared by the locale-specific dictionary-word paths. */
-export class BreakIterator_Unicode {
-  private readonly cache = new Map<string, { iterator: RuleBasedBreakIterator; text: string }>();
-  private lastLocale = "";
-  private lastKey = "";
-  private lastRule: DictionaryWordRule = "dict_word";
+const LOAD_WORD_BREAKITERATOR = 1;
+const DONE = -1;
 
-  /** Binds actual native word dictionaries. @param factory - Prepared ICU language factory. @returns Service. */
-  constructor(private readonly factory: ICULanguageBreakFactory) {}
+/** Original cache value retains the iterator, UText and the text backing storage. */
+class BI_ValueData {
+  readonly mpUt = new UTextStorage();
+  readonly maICUText = new OUString();
 
-  /** Applies the original ICU word boundary, direction and DONE handling. @param text - Native UTF16 text. @param position - Original offset. @param locale - Native locale. @param direction - Forward or backward. @returns Native word range. */
-  getWordBoundary(
-    text: string,
-    position: number,
+  /** Receives the actual rule iterator. @param mpBreakIterator - Original owner. @returns Cache value. */
+  constructor(readonly mpBreakIterator: RuleBasedBreakIterator) {}
+}
+
+/** Original per-slot selected key and shared cache value. */
+interface BI_Data {
+  maBIMapKey: string;
+  mpValue: BI_ValueData | null;
+}
+
+// Native thread_local state is shared by BreakIterator_Unicode instances in this realm.
+const theBIMap = new Map<string, BI_ValueData>();
+
+/** Original empty per-word-type cache slot. @returns A distinct slot. */
+function emptySlot(): BI_Data {
+  return { maBIMapKey: "", mpValue: null };
+}
+
+/** Original runtime exception transport with the ICU status name. @param operation - Source failure message. @param status - ICU status. @returns Exception. */
+function icuError(operation: string, status: number): RuntimeException {
+  let name = "U_UNKNOWN_ERROR";
+  for (const [key, value] of Object.entries(E)) {
+    if (value === status) {
+      name = key;
+      break;
+    }
+  }
+  const message = unicode(operation + " " + name);
+  const context = new Reference();
+  try {
+    return new RuntimeException(message, context);
+  } finally {
+    context.dispose();
+    message.dispose();
+  }
+}
+
+/** Original ICU whitespace predicates for next/previous word. @param textValue - Counted source. @param pos - Position selected by ICU. @param wordType - Original WordType. @returns Whether the selected break starts with whitespace. */
+function whitespaceAt(textValue: OUStringConstReference, pos: number, wordType: number): boolean {
+  if (wordType !== ANYWORD_IGNOREWHITESPACES && wordType !== DICTIONARY_WORD) return false;
+  const c = textValue.iterateCodePoints([pos], 0);
+  return wordType === ANYWORD_IGNOREWHITESPACES ? u_isUWhiteSpace(c) : u_isWhitespace(c);
+}
+
+/** Original Unicode implementation of the consumed word service. */
+export class BreakIterator_Unicode extends BreakIteratorImpl {
+  private readonly words = [emptySlot(), emptySlot(), emptySlot(), emptySlot()];
+  protected readonly cBreakIterator = unicode("com.sun.star.i18n.BreakIterator_Unicode");
+
+  /** Original concrete implementation identity. @returns Owned name. */
+  override getImplementationName(): OUString {
+    return new OUString(this.cBreakIterator);
+  }
+
+  /** Releases the original implementation-name member. @returns Nothing. */
+  protected override destroy(): void {
+    this.cBreakIterator.dispose();
+    super.destroy();
+  }
+
+  /** Original locale/rule cache selection and text adoption for word operations. @param locale - Requested locale. @param wordType - Original WordType. @param value - Actual input string. @returns Current ICU iterator. */
+  private loadICUBreakIterator(
     locale: LocaleConstReference,
+    wordType: number,
+    value: OUStringConstReference,
+  ): RuleBasedBreakIterator {
+    let breakType = 0;
+    let rule: string | null = null;
+    switch (wordType) {
+      case ANY_WORD:
+        break;
+      case ANYWORD_IGNOREWHITESPACES:
+        rule = "edit_word";
+        break;
+      case DICTIONARY_WORD:
+        breakType = 1;
+        rule = "dict_word";
+        break;
+      case WORD_COUNT:
+        breakType = 2;
+        rule = "count_word";
+        break;
+    }
+    const slot = this.words[wordType] as BI_Data;
+    const langtag = LanguageTag.convertToBcp47(locale);
+    let languageTag: string;
+    try {
+      languageTag = text(langtag);
+    } finally {
+      langtag.dispose();
+    }
+    const key = `${languageTag};${rule ?? ""};${breakType};${LOAD_WORD_BREAKITERATOR};${wordType}`;
+    let newBreak = false;
+    if (slot.maBIMapKey !== key || slot.mpValue === null) {
+      let cached = theBIMap.get(key);
+      if (cached === undefined && rule !== null)
+        cached = this.loadRule(locale, languageTag, rule, breakType);
+      if (cached === undefined) {
+        const localeTypeKey = `${languageTag};;;${LOAD_WORD_BREAKITERATOR}`;
+        cached = theBIMap.get(localeTypeKey);
+        if (cached === undefined) {
+          const tag = new LanguageTag(locale);
+          const status: [number] = [0];
+          let iterator: RuleBasedBreakIterator | null;
+          try {
+            iterator = createWordInstance(getIcuLocale(tag), status);
+          } finally {
+            tag.dispose();
+          }
+          if (iterator === null || U_FAILURE(status[0]))
+            throw icuError("Failed to create ICU BreakIterator: error", status[0]);
+          cached = new BI_ValueData(iterator);
+          theBIMap.set(localeTypeKey, cached);
+        }
+      }
+      theBIMap.set(key, cached);
+      slot.maBIMapKey = key;
+      slot.mpValue = cached;
+      newBreak = true;
+    }
+    const current = slot.mpValue;
+    if (newBreak || current.maICUText.pData !== value.pData) {
+      const status: [number] = [0];
+      const provider = utext_openUChars(current.mpUt, value.getStr(), value.getLength(), status);
+      if (provider === null || U_FAILURE(status[0]))
+        throw icuError("utext_openUChars returned error", status[0]);
+      current.mpBreakIterator.setText(provider as OpenUText, status);
+      if (U_FAILURE(status[0]))
+        throw icuError("Failed to set text for ICU BreakIterator: error", status[0]);
+      current.maICUText.assign(value);
+    }
+    return current.mpBreakIterator;
+  }
+
+  /** Original locale override, language rule and general LibreOffice rule search. @param locale - Requested locale. @param languageTag - Native global key prefix. @param rule - Base rule. @param breakType - Locale rule index. @returns Shared cached rule when present. */
+  private loadRule(
+    locale: LocaleConstReference,
+    languageTag: string,
+    rule: string,
+    breakType: number,
+  ): BI_ValueData | undefined {
+    const localeRules = getBreakIteratorRules(locale);
+    let override = "";
+    try {
+      if (localeRules.getLength() > breakType)
+        override = text(OUString.unacquired(localeRules.operatorIndex(breakType)));
+    } finally {
+      localeRules.dispose();
+    }
+    const status: [number] = [0];
+    registerOpenOfficeRules(status);
+    if (U_FAILURE(status[0])) throw icuError("udata_setAppData returned error", status[0]);
+
+    if (override !== "") {
+      const ruleTypeKey = `${languageTag};${rule};${breakType}`;
+      const cached = theBIMap.get(ruleTypeKey);
+      if (cached !== undefined) return cached;
+      const iterator = openRule(override, status);
+      if (iterator === null) return undefined;
+      const value = new BI_ValueData(iterator);
+      theBIMap.set(ruleTypeKey, value);
+      return value;
+    }
+
+    const tag = new LanguageTag(locale);
+    let language: string;
+    try {
+      const value = tag.getLanguage();
+      try {
+        language = text(value);
+      } finally {
+        value.dispose();
+      }
+    } finally {
+      tag.dispose();
+    }
+    const ruleKey = `${language};${rule}`;
+    const languageRule = theBIMap.get(ruleKey);
+    if (languageRule !== undefined) return languageRule;
+    status[0] = 0;
+    const localized = openRule(`${rule}_${language}`, status);
+    if (localized !== null) {
+      const value = new BI_ValueData(localized);
+      theBIMap.set(ruleKey, value);
+      return value;
+    }
+
+    const ruleOnlyKey = `;${rule}`;
+    const generic = theBIMap.get(ruleOnlyKey);
+    if (generic !== undefined) return generic;
+    status[0] = 0;
+    const iterator = openRule(rule, status);
+    if (iterator === null) return undefined;
+    const value = new BI_ValueData(iterator);
+    theBIMap.set(ruleOnlyKey, value);
+    return value;
+  }
+
+  /** Original nextWord behavior, including the single whitespace boundary skip. @param value - Actual text. @param start - Native position. @param locale - Requested locale. @param wordType - Word type. @returns Original boundary. */
+  override nextWord(
+    value: OUStringConstReference,
+    start: number,
+    locale: LocaleConstReference,
+    wordType: number,
+  ): Boundary {
+    const bi = this.loadICUBreakIterator(locale, wordType, value);
+    let startPos = bi.following(start);
+    if (startPos >= value.getLength() || startPos === DONE) return { startPos, endPos: startPos };
+    if (whitespaceAt(value, startPos, wordType)) startPos = bi.following(startPos);
+    const endPos = bi.following(startPos);
+    return { startPos, endPos: endPos === DONE ? startPos : endPos };
+  }
+
+  /** Original previousWord behavior. @param value - Actual text. @param start - Native position. @param locale - Requested locale. @param wordType - Word type. @returns Original boundary. */
+  override previousWord(
+    value: OUStringConstReference,
+    start: number,
+    locale: LocaleConstReference,
+    wordType: number,
+  ): Boundary {
+    const bi = this.loadICUBreakIterator(locale, wordType, value);
+    let startPos = bi.preceding(start);
+    if (startPos < 0) return { startPos, endPos: startPos };
+    if (whitespaceAt(value, startPos, wordType)) startPos = bi.preceding(startPos);
+    const endPos = bi.following(startPos);
+    return { startPos, endPos: endPos === DONE ? startPos : endPos };
+  }
+
+  /** Original word-boundary method and directional endpoint behavior. @param value - Actual text. @param pos - Native position. @param locale - Requested locale. @param wordType - Word type. @param direction - Forward preference. @returns Original boundary. */
+  override getWordBoundary(
+    value: OUStringConstReference,
+    pos: number,
+    locale: LocaleConstReference,
+    wordType: number,
     direction: boolean,
   ): Boundary {
-    const iterator = this.loadICUBreakIterator(text, locale);
-    let startPos: number, endPos: number;
-    if (iterator.isBoundary(position)) {
-      startPos = endPos = position;
-      if ((direction || position === 0) && position < text.length)
-        endPos = iterator.following(position);
-      else startPos = iterator.preceding(position);
-    } else if (position <= 0) {
+    const bi = this.loadICUBreakIterator(locale, wordType, value);
+    const len = value.getLength();
+    let startPos: number;
+    let endPos: number;
+    if (bi.isBoundary(pos)) {
+      startPos = endPos = pos;
+      if ((direction || pos === 0) && pos < len) endPos = bi.following(pos);
+      else startPos = bi.preceding(pos);
+    } else if (pos <= 0) {
       startPos = 0;
-      endPos = text.length ? iterator.following(0) : 0;
-    } else if (position >= text.length) {
-      startPos = iterator.preceding(text.length);
-      endPos = text.length;
+      endPos = len === 0 ? 0 : bi.following(0);
+    } else if (pos >= len) {
+      startPos = bi.preceding(len);
+      endPos = len;
     } else {
-      startPos = iterator.preceding(position);
-      endPos = iterator.following(position);
+      startPos = bi.preceding(pos);
+      endPos = bi.following(pos);
     }
-    if (startPos === -1) startPos = endPos;
-    else if (endPos === -1) endPos = startPos;
+    if (startPos === DONE) startPos = endPos;
+    else if (endPos === DONE) endPos = startPos;
     return { startPos, endPos };
   }
+}
 
-  /** Looks up explicit, language-specific and original default word rules in order. @param text - Native text. @param locale - Native requested locale. @returns Cached original rule iterator. */
-  private loadICUBreakIterator(text: string, locale: LocaleConstReference): RuleBasedBreakIterator {
-    const language = localeString(locale.Language),
-      country = localeString(locale.Country),
-      variant = localeString(locale.Variant),
-      localeKey = `${language};${country};${variant}`;
-    if (localeKey !== this.lastLocale) {
-      const override = getLocaleDataBreakIteratorRules(locale)[1];
-      if (override) {
-        if (
-          override !== "dict_word" &&
-          override !== "dict_word_hu" &&
-          override !== "dict_word_prepostdash"
-        )
-          throw new Error(`Unexpected native dictionary word rule: ${override}`);
-        this.lastRule = override;
-        this.lastKey = `${localeKey};dict_word;1`;
-      } else {
-        const actualLanguage =
-          language === "qlt" ? decomposeCanonicalLanguageTag(variant).language : language;
-        const localized = actualLanguage === "hu";
-        this.lastRule = localized ? "dict_word_hu" : "dict_word";
-        this.lastKey = localized ? "hu;dict_word" : ";dict_word";
-      }
-      this.lastLocale = localeKey;
-    }
-    let entry = this.cache.get(this.lastKey);
-    if (entry === undefined) {
-      entry = {
-        iterator: new RuleBasedBreakIterator(
-          loadDictionaryWordRule(this.lastRule),
-          text,
-          this.factory,
-        ),
-        text,
-      };
-      this.cache.set(this.lastKey, entry);
-    } else if (entry.text !== text) {
-      entry.iterator.setText(text);
-      entry.text = text;
-    }
-    return entry.iterator;
-  }
+/** Original context-independent Unicode service constructor. @param context - Original unused context. @param arguments_ - Original unused arguments. @returns Acquired component. */
+export function com_sun_star_i18n_BreakIterator_Unicode_get_implementation(
+  context: XComponentContext | null,
+  arguments_: Sequence<Any>,
+): XInterface {
+  void context;
+  void arguments_;
+  return acquire(new BreakIterator_Unicode());
 }

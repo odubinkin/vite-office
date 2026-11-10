@@ -7,14 +7,19 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/column3.cxx",
     "localSymbols": [
-      "ParseString"
+      "ParseString",
+      "SetString",
+      "DeleteContent"
     ],
     "upstreamSymbols": [
       "ScColumn::ParseString",
-      "applyTextNumFormat"
+      "applyTextNumFormat",
+      "ScColumn::SetString",
+      "ScColumn::DeleteContent"
     ],
     "preservedResponsibilities": [
-      "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics."
+      "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics.",
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
     ],
     "omittedResponsibilities": [
       "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
@@ -24,12 +29,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/column3.input.ts",
           "marker": "ParseString"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
           "marker": "ScColumn::ParseString"
+        },
+        {
+          "path": "sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::SetString"
         }
       ]
     },

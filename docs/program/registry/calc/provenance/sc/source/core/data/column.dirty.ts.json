@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/column.dirty.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/column.cxx",
+    "localSymbols": [
+      "SetDirtyOnRangeHandler"
+    ],
+    "upstreamSymbols": [
+      "SetDirtyOnRangeHandler",
+      "fillBroadcastSpans"
+    ],
+    "preservedResponsibilities": [
+      "Original SetDirtyOnRangeHandler is moved unchanged from the ScColumn declaration module into a responsibility fragment to keep that source owner within the existing file-size gate. It still borrows the same actual column, owns the same SingleColumnSpanSet, excludes empty blocks and fills the same original broadcast spans. No duplicate state or algorithm is introduced. Existing clipboard/group/broadcast tests cover callers; native physical allocation and complete column/consumer QA remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full column field/constructor/cache/thread/allocator and upstream consumer QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column.dirty.ts",
+          "marker": "SetDirtyOnRangeHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/data/column.cxx",
+          "marker": "SetDirtyOnRangeHandler"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/column.dirty.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original column.cxx private dirty-span functor from the same ScColumn class binding without changing its owner or state, keeping the existing file-size budget while adding the original string-input members."
+    }
+  }
+}

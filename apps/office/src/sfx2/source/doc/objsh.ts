@@ -3,6 +3,7 @@
  * `include/sfx2/objsh.hxx` and `sfx2/source/doc/objmisc.cxx`.
  */
 
+import { ErrCodeMsg } from "../../../comphelper/inc/errcode";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
 import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
@@ -71,6 +72,7 @@ export class SfxObjectShell extends SfxBroadcaster {
   }
   private m_nMapUnit = MapUnit.Map100thMM;
   private closed = false;
+  private lErr = new ErrCodeMsg();
   private contentGeneration: number;
   private hasSavePosition: boolean;
   private id: string;
@@ -138,6 +140,27 @@ export class SfxObjectShell extends SfxBroadcaster {
   /** Returns the stable current medium. @returns Medium descriptor. */
   public GetMedium(): SfxMedium {
     return this.medium;
+  }
+
+  /** Keeps the first shell diagnostic, allowing an error to replace a warning. @param error - Source diagnostic. @returns Nothing. */
+  public SetError(error: ErrCodeMsg): void {
+    if (!this.lErr.IsSet() || (this.lErr.IsWarning() && error.IsError())) this.lErr = error;
+  }
+
+  /** Returns the shell diagnostic or borrows the medium diagnostic. @returns Retained diagnostic. */
+  public GetErrorCode(): ErrCodeMsg {
+    return this.lErr.IsSet() ? this.lErr : this.GetMedium().GetErrorCode();
+  }
+
+  /** Projects the current diagnostic without warnings. @returns Error or zero. */
+  public GetErrorIgnoreWarning(): ErrCodeMsg {
+    return this.GetErrorCode().IgnoreWarning();
+  }
+
+  /** Clears the shell and current medium diagnostic owners. @returns Nothing. */
+  public ResetError(): void {
+    this.lErr = new ErrCodeMsg();
+    this.GetMedium().ResetError();
   }
 
   /** Rejects commands and persistence after shell closure. @returns Nothing for an open shell. */

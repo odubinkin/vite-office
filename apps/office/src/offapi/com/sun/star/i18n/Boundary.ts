@@ -1,6 +1,5 @@
-/** @fileoverview Original word boundary fields from Boundary.idl in logical UTF16 units. */
-/** Native inclusive start and exclusive end. */
+/** @fileoverview Consumed Boundary IDL compound with two signed UTF-16 offsets. */
 export interface Boundary {
-  readonly startPos: number;
-  readonly endPos: number;
+  startPos: number;
+  endPos: number;
 }

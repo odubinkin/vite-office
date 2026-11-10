@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/CalendarDisplayIndex.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/CalendarDisplayIndex.ts"
+      ],
+      "justification": "Original CalendarDisplayIndex signed16 constant values consumed by actual calendar display-name calls. Full UNO constant type/ABI certification remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AM_PM",
+        "DAY",
+        "MONTH",
+        "YEAR",
+        "ERA",
+        "GENITIVE_MONTH",
+        "PARTITIVE_MONTH"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/i18n/CalendarDisplayIndex.idl",
+      "upstreamSymbols": [
+        "AM_PM",
+        "DAY",
+        "MONTH",
+        "YEAR",
+        "ERA",
+        "GENITIVE_MONTH",
+        "PARTITIVE_MONTH"
+      ]
+    }
+  }
+}

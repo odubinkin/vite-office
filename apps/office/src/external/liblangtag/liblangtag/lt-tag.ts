@@ -166,3 +166,23 @@ export function lt_tag_compare(v1: Tag, v2: Tag): boolean {
   if (v2.privateuse) same = lt_strlower(v1.privateuse) === lt_strlower(v2.privateuse) && same;
   return same;
 }
+
+/** Original DEFUNC_GET_SUBTAG(language) borrowed getter, retaining the null-owner guard. @param tag - Original logical owner or null. @returns Borrowed subtag or null. */
+export function lt_tag_get_language(tag: Tag | null): RegistryEntry | null {
+  return tag?.language ?? null;
+}
+
+/** Original DEFUNC_GET_SUBTAG(script) borrowed getter, retaining the null-owner guard. @param tag - Original logical owner or null. @returns Borrowed subtag or null. */
+export function lt_tag_get_script(tag: Tag | null): RegistryEntry | null {
+  return tag?.script ?? null;
+}
+
+/** Original DEFUNC_GET_SUBTAG(region) borrowed getter, retaining the null-owner guard. @param tag - Original logical owner or null. @returns Borrowed subtag or null. */
+export function lt_tag_get_region(tag: Tag | null): RegistryEntry | null {
+  return tag?.region ?? null;
+}
+
+/** Original variants-list getter; the managed empty array represents a null native list. @param tag - Original logical owner or null. @returns Borrowed nonempty list or null. */
+export function lt_tag_get_variants(tag: Tag | null): readonly RegistryEntry[] | null {
+  return tag && tag.variants.length !== 0 ? tag.variants : null;
+}

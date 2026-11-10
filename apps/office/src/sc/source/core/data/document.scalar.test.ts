@@ -1,11 +1,16 @@
 /** @fileoverview First real document/sheet/column scalar editing integration,without a second grid model. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { MAXCOL, MAXROW, SC_TAB_APPEND, ScAddress } from "../../../inc/address";
+import { MapUnit } from "../../../../tools/inc/mapunit";
 import { ScColumn } from "../../../inc/column";
 import { ScDocument } from "../../../inc/document";
 import { CellType } from "../../../inc/global";
+
+InitApplicationServiceManager(implementations);
 
 it("creates sheets and edits real numeric/string column blocks through the public document", /** Exercises replacements,clear,empty text and shared-string copy isolation. @returns Nothing. */ () => {
   const doc = new ScDocument(),
@@ -120,4 +125,18 @@ it("reuses the real shared pool for literal strings and preserves empty-string c
   column.Delete(2);
   expect(column.GetValue(2)).toBe(0);
   expect(column.GetSharedString(2).getLength()).toBe(0);
+});
+
+it("reuses a document edit pool with the original hundredth-millimetre metric", /** Checks the lazy ScPoolHelper member and distinct documents. @returns Nothing. */ () => {
+  const left = new ScDocument();
+  const right = new ScDocument();
+  try {
+    const pool = left.GetEditEnginePool();
+    expect(left.GetEditEnginePool()).toBe(pool);
+    expect(right.GetEditEnginePool()).not.toBe(pool);
+    expect(pool.GetMetric(0)).toBe(MapUnit.Map100thMM);
+  } finally {
+    right.Dispose();
+    left.Dispose();
+  }
 });

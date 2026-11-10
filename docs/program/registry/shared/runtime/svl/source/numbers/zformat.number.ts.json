@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.number.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.number.ts",
+        "apps/office/src/svl/source/numbers/zformat.number.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
+        "apps/office/src/sc/source/ui/docshell/docsh.test.ts"
+      ],
+      "justification": "AQF9AG ports the complete finite number/percent/currency arithmetic, corrected RTL rounding, decimal placeholder/literal fill, locale grouping and scaling path for actual compiled subformats without complete native-number modifiers. All counts, source overflow/underflow thresholds, strict percent limit, signed-zero suppression, General/CCC, star and blank behavior follow the pinned source. The former digit-only integer shortcut is removed. Native-modifier output and nonfinite ordinary-number cast domains remain outside this admitted branch; no synthetic format, text-number replacement or approximate locale output is introduced. AQF9AG adds original finite scientific/engineering ImpGetScientificOutput and shared ImpNumberFill. RTL E conversion, exponent zero removal and 0/?/# padding, sign tokens, mutable token/digit cursors, engineering remainder normalization and rounded-up mantissa compensation follow the source. Existing decimal/integer fill is reused. Real-owner tests preserve CALC-395 signed-zero output and CALC-396 zero-integer-placeholder magnitude behavior. This remains the admitted path without complete native-number modifiers; dedicated full native wrapper differential and other display families remain pending. AQF9AG now routes actual finite FRACTION sections to the original fraction producer and reuses ImpNumberFill/ImpNumberFillWithThousands across source-responsibility fragments. Other unimplemented producers/contracts remain explicit; no fake fraction strings or NativeNumber fallback is introduced. Original numeric/scientific/fill fragments now bind the actual SvNumberformat this owner and selected index, retaining the first-section metadata required by General. Original ImpGetOutputStandard/ImpGetOutputStdToPrecision now perform clamped fixed conversion, negative-zero suppression and first-section native conversion, preserving the >1e15 exponent branch without that conversion. Ordinary number/percent/currency applies final selected-section native conversion; scientific intentionally has no invented final conversion. Scientific buffer construction now unwinds the earlier owner on later constructor failure. This supersedes the prior dormant-native-only limitation for modes0..11; mode12 and complete native wrapper/ABI acceptance remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetNumberOutput",
+        "GetScientificOutput",
+        "ImpNumberFill",
+        "ImpGetOutputStandard",
+        "ImpGetOutputStdToPrecision",
+        "ImpNumberFillWithThousands"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "SvNumberformat::ImpGetNumberOutput",
+        "SvNumberformat::ImpDecimalFill",
+        "SvNumberformat::ImpNumberFillWithThousands",
+        "SvNumberformat::ImpDigitFill",
+        "GetPrecExp",
+        "SvNumberformat::ImpGetScientificOutput",
+        "SvNumberformat::ImpNumberFill",
+        "SvNumberformat::ImpGetOutputStandard",
+        "SvNumberformat::ImpGetOutputStdToPrecision"
+      ]
+    }
+  }
+}

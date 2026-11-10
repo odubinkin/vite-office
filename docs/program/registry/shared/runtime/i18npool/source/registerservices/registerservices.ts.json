@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/registerservices/registerservices.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-1d2bd1a4-d7ae-49f3-9257-d9b1c8a3d04a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/registerservices/registerservices.ts#i18npool_BreakIterator_zh_TW_get_implementation",
+        "apps/office/src/desktop/browser/app/uno-components.test.ts",
+        "i18npool/source/registerservices/registerservices.cxx",
+        "i18npool/util/i18npool.component"
+      ],
+      "justification": "The original four macro-generated acquired constructors allocate the actual locale-specific break iterators. Other i18npool constructor registrations and native library linkage remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "i18npool_BreakIterator_ja_get_implementation",
+        "i18npool_BreakIterator_ko_get_implementation",
+        "i18npool_BreakIterator_zh_get_implementation",
+        "i18npool_BreakIterator_zh_TW_get_implementation"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18npool/source/registerservices/registerservices.cxx",
+      "upstreamSymbols": [
+        "BreakIterator_ja",
+        "BreakIterator_ko",
+        "BreakIterator_zh",
+        "BreakIterator_zh_TW",
+        "IMPL_UNO_CONSTRUCTOR"
+      ]
+    }
+  }
+}

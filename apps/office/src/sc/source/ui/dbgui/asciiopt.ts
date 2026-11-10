@@ -1,10 +1,6 @@
 /** @fileoverview Calc CSV filter options from sc/source/ui/dbgui/asciiopt.cxx and asciiopt.hxx. */
 import { toInt32 } from "../../../../o3tl/inc/string_view";
-import {
-  RTL_TEXTENCODING_DONTKNOW,
-  RTL_TEXTENCODING_UTF8,
-  type rtl_TextEncoding,
-} from "../../../../sal/inc/rtl/textenc";
+import { RTL_TEXTENCODING_UTF8, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
 import type { SvStream } from "../../../../tools/source/stream/stream";
 import { ScGlobal } from "../../../inc/global";
@@ -51,19 +47,19 @@ export class ScAsciiOptions {
 
   /** Reads the versioned native filter-options string and uses the source stream for separator detection when supplied. @param value - Comma-token options. @param stream - Optional source byte stream. @returns Nothing. */
   ReadFromString(value: string, stream?: SvStream): void {
-    if (!value) return;
-    // split() creates dense tokens; each indexed read below is admitted by a length check.
-    const tokens = value.split(",");
-    const field = tokens[0] as string;
-    this.bFixedLen = field === "FIX";
-    this.bMergeFieldSeps = false;
-    if (field !== "DETECT")
-      this.aFieldSeps = this.bFixedLen ? "" : ScAsciiOptions.DecodeSeps(field, this);
+    const tokens = value ? value.split(",") : [];
+    const field = tokens[0];
+    if (field !== undefined) {
+      this.bFixedLen = field === "FIX";
+      this.bMergeFieldSeps = false;
+      if (field !== "DETECT")
+        this.aFieldSeps = this.bFixedLen ? "" : ScAsciiOptions.DecodeSeps(field, this);
+    }
     if (tokens.length > 1) this.cTextSep = String.fromCharCode(toInt32(tokens[1] as string));
     if (tokens.length > 2) {
       if (tokens[2] === "DETECT") {
         if (stream) {
-          stream.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
+          stream.DetectEncoding();
           this.eCharSet = stream.GetStreamEncoding();
         }
       } else this.eCharSet = ScGlobal.GetCharsetValue(tokens[2] as string);

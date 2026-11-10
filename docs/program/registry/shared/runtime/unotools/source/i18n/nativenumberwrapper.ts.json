@@ -7,19 +7,31 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "number-format-input",
-    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "B",
-      "evidence": ["apps/office/src/unotools/source/i18n/nativenumberwrapper.ts#NativeNumberWrapper", "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.test.ts", "unotools/source/i18n/nativenumberwrapper.cxx#NativeNumberWrapper::getNativeNumberString"],
-      "justification": "Task AQF9AG maps the source wrapper's NATNUM0 forwarding and UNO-only exception fallback to the represented native supplier.",
+      "evidence": [
+        "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts#NativeNumberWrapper",
+        "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.test.ts",
+        "unotools/source/i18n/nativenumberwrapper.cxx#NativeNumberWrapper::getNativeNumberString",
+        "apps/office/src/unotools/source/i18n/native-wrapper-failures.test.ts"
+      ],
+      "justification": "Task AQF9AG maps the source wrapper's NATNUM0 forwarding and UNO-only exception fallback to the represented native supplier. Original modes0..11 and parameter-overload forwarding now reach the actual supplier. UNO exceptions return an empty string and their original caught-owner lifetime is released; unexpected host exceptions propagate. Actual owned supplier value state is released on wrapper destruction. Supersedes the former NATNUM0-only forwarding limitation; mode12 and complete native service/context ABI remain unported.",
       "knownViolations": [],
-      "localSymbols": ["NativeNumberWrapper"],
+      "localSymbols": [
+        "NativeNumberWrapper"
+      ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "unotools/source/i18n/nativenumberwrapper.cxx",
-      "upstreamSymbols": ["NativeNumberWrapper::getNativeNumberString"]
+      "upstreamSymbols": [
+        "NativeNumberWrapper::getNativeNumberString",
+        "NativeNumberWrapper::getNativeNumberStringParams"
+      ]
     }
   }
 }

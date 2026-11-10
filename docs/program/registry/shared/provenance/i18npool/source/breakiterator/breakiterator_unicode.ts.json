@@ -9,20 +9,43 @@
     "localSymbols": [
       "BreakIterator_Unicode",
       "loadICUBreakIterator",
-      "getWordBoundary"
+      "nextWord",
+      "previousWord",
+      "getWordBoundary",
+      "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
     ],
     "upstreamSymbols": [
+      "BreakIterator_Unicode",
       "loadICUBreakIterator",
-      "getWordBoundary"
+      "nextWord",
+      "previousWord",
+      "getWordBoundary",
+      "com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
+      "BreakIterator_Unicode::getImplementationName"
     ],
     "preservedResponsibilities": [
+      "Original locale, language, rule-only and stock ICU cache keys share actual rule iterator owners. The word methods preserve counted UText, source pointer identity, direction, native whitespace distinctions and endpoint behavior. The original method bodies compile against native ICU for 2,020 boundary operations over 68 sequences.",
+      "Original Unicode component exposes its own implementation name and acquired constructor through the enclosing word service interface.",
+      "The original Unicode implementation-name member supplies the inherited implementation identity for the actual registered CJK subclasses.",
       "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
     ],
     "omittedResponsibilities": [
-      "Other UNO word modes, grapheme and line operations, and binary UNO ABI remain outside this Writer dictionary path."
+      "CJK line breaking and unused iterator operations remain outside this slice."
     ],
     "evidence": {
       "local": [
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
+          "marker": "class BreakIterator_Unicode"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        },
         {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.ts",
           "marker": "BreakIterator_Unicode"
@@ -33,6 +56,26 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "BreakIterator_Unicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "com_sun_star_i18n_BreakIterator_Unicode_get_implementation"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTitleCase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "getImplementationName"
+        },
+        {
+          "path": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+          "marker": "BreakIterator_zh_TW::BreakIterator_zh_TW"
+        },
         {
           "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
           "marker": "loadICUBreakIterator"

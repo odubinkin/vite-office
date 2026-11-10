@@ -1,369 +1,448 @@
-/** @fileoverview Original ICU78.3 dictionary and circular break caches for the contiguous UTF16 word iterator. */
-import type { RuleBasedBreakIterator } from "./rbbi";
-import type { RBBIDataWrapper } from "./rbbidata";
-import { UnhandledEngine, type ICULanguageBreakFactory, type LanguageBreakEngine } from "./brkeng";
-import { dictionaryNativeIndex, nextDictionaryIndex } from "./dictbe";
+/** @fileoverview Original ICU78.3 RBBI dictionary and circular boundary caches. Exact source thresholds, refill strategy and statuses are retained; actual iterator/engine owners must satisfy the source contract. */
+import { UVector32 } from "./uvectr32.h";
+import { UErrorCode, U_FAILURE, U_SUCCESS } from "./unicode/utypes";
+import { ULocDataLocaleType } from "./unicode/uloc";
+import {
+  utext_setNativeIndex,
+  utext_getNativeIndex,
+  utext_next32,
+  utext_current32,
+  utext_getPreviousNativeIndex,
+  utext_nativeLength,
+} from "./utext";
 import { ucptrie_get } from "./ucptrie";
-import { U_FAILURE } from "./unicode/utypes";
-
-/** Native break position with its status-table index. */
-export interface BreakBoundary {
-  readonly position: number;
-  readonly status: number;
+import {
+  UpdatePositionValues as Update,
+  type RuleBasedBreakIteratorCacheOwner,
+} from "./rbbi_cache.h";
+/** Source unreachable macro projects to a JavaScript trap; valid cache invariants exclude this path. @returns Never. */
+function unreachable(): never {
+  throw new Error("UPRV_UNREACHABLE_EXIT");
 }
-
-/** Original dictionary refinement and per-iterator language engine lookup. */
+/** Original dictionary cache owns boundary storage separately from the main circular cache. */
 export class DictionaryCache {
-  private breaks: number[] = [];
-  private positionInCache = -1;
-  private start = 0;
-  private limit = 0;
-  private firstStatus = 0;
-  private otherStatus = 0;
-  private readonly unhandled = new UnhandledEngine();
-  private readonly engines: LanguageBreakEngine[] = [this.unhandled];
-
-  /** Binds the original immutable text, rule data and native factory. @param text - Source. @param data - Compiled ICU rules. @param factory - Prepared native data factory. @param locale - Requested locale. @param phrase - Original phrase selector. @returns Cache. */
+  readonly fBreaks: UVector32;
+  fPositionInCache = -1;
+  fStart = 0;
+  fLimit = 0;
+  fFirstRuleStatusIndex = 0;
+  fOtherRuleStatusIndex = 0;
+  /** Original constructor. @param fBI - Actual iterator owner. @param status - Shared status. @returns Cache. */
   constructor(
-    private text: string,
-    private readonly data: RBBIDataWrapper,
-    private readonly factory: ICULanguageBreakFactory | undefined,
-    private readonly locale: string,
-    private readonly phrase: boolean,
-  ) {}
-
-  /** Changes the native input and clears boundaries while retaining loaded language engines. @param text - New UTF16 input. @returns Nothing. */
-  setText(text: string): void {
-    this.text = text;
-    this.reset();
+    public fBI: RuleBasedBreakIteratorCacheOwner,
+    status: [number],
+  ) {
+    this.fBreaks = new UVector32(status);
   }
-
-  /** Clears native dictionary range, boundary list and status references. @returns Nothing. */
-  private reset(): void {
-    this.breaks = [];
-    this.positionInCache = -1;
-    this.start = this.limit = this.firstStatus = this.otherStatus = 0;
+  /** Original reset clears fields and logical vector length. @returns Nothing. */
+  reset(): void {
+    this.fPositionInCache = -1;
+    this.fStart = this.fLimit = this.fFirstRuleStatusIndex = this.fOtherRuleStatusIndex = 0;
+    this.fBreaks.removeAllElements();
   }
-
-  /** Subdivides a source DFA boundary pair using registered dictionary engines. @param from - Initial boundary. @param to - Following rule boundary. @returns Nothing. */
-  populateDictionary(from: BreakBoundary, to: BreakBoundary): void {
-    if (to.position - from.position <= 1) return;
-    this.reset();
-    this.firstStatus = from.status;
-    this.otherStatus = to.status;
-    const cursor: [number] = [from.position],
-      status: [number] = [0];
-    const dictStart = this.data.fForwardTable.fDictCategoriesStart;
-    let found = 0;
-    while (!U_FAILURE(status[0]) && cursor[0] < to.position) {
-      const code = this.text.codePointAt(cursor[0]) as number;
-      if (ucptrie_get(this.data.fTrie, code) < dictStart) {
-        cursor[0] = nextDictionaryIndex(this.text, cursor[0]);
-        continue;
-      }
-      const before = cursor[0];
-      found += this.getLanguageBreakEngine(code).findBreaks(
-        this.text,
-        cursor,
-        before,
-        to.position,
-        this.breaks,
-        this.phrase,
-        status,
-      );
-      if (!U_FAILURE(status[0]) && cursor[0] <= before)
-        throw new Error("ICU dictionary engine did not consume its selected character.");
+  /** Original sequential/random following lookup preserves output arguments on failure. @param from - Source position. @param result - Output boundary. @param statusIndex - Output rule status. @returns Found. */
+  following(from: number, result: [number], statusIndex: [number]): boolean {
+    if (from >= this.fLimit || from < this.fStart) {
+      this.fPositionInCache = -1;
+      return false;
     }
-    if (found > 0) {
-      if (from.position < (this.breaks[0] as number)) this.breaks.unshift(from.position);
-      if (to.position > (this.breaks.at(-1) as number)) this.breaks.push(to.position);
-      this.positionInCache = 0;
-      this.start = this.breaks[0] as number;
-      this.limit = this.breaks.at(-1) as number;
-    }
-  }
-
-  /** Returns the next cached dictionary boundary and its inherited status. @param from - Native position. @returns Following boundary or null. */
-  following(from: number): BreakBoundary | null {
-    if (from >= this.limit || from < this.start) {
-      this.positionInCache = -1;
-      return null;
-    }
-    if (this.positionInCache >= 0 && this.breaks[this.positionInCache] === from)
-      ++this.positionInCache;
-    else {
-      this.positionInCache = 0;
-      while ((this.breaks[this.positionInCache] as number) <= from) ++this.positionInCache;
-    }
-    const position = this.breaks[this.positionInCache];
-    if (position === undefined) {
-      this.positionInCache = -1;
-      return null;
-    }
-    return { position, status: this.otherStatus };
-  }
-
-  /** Returns the original preceding dictionary boundary. @param from - Native position. @returns Preceding boundary or null. */
-  preceding(from: number): BreakBoundary | null {
-    if (from <= this.start || from > this.limit) {
-      this.positionInCache = -1;
-      return null;
-    }
-    if (from === this.limit) this.positionInCache = this.breaks.length - 1;
-    if (this.positionInCache > 0 && this.breaks[this.positionInCache] === from)
-      --this.positionInCache;
-    else if (this.positionInCache === 0) {
-      this.positionInCache = -1;
-      return null;
-    } else {
-      this.positionInCache = this.breaks.length - 1;
-      while ((this.breaks[this.positionInCache] as number) >= from) --this.positionInCache;
-    }
-    const position = this.breaks[this.positionInCache] as number;
-    return { position, status: position === this.start ? this.firstStatus : this.otherStatus };
-  }
-
-  /** Reuses iterator-local engines before consulting the shared ICU factory. @param code - Current scalar. @returns Actual or unhandled engine. */
-  private getLanguageBreakEngine(code: number): LanguageBreakEngine {
-    for (let i = this.engines.length - 1; i >= 0; --i) {
-      const engine = this.engines[i] as LanguageBreakEngine;
-      if (engine.handles(code, this.locale)) return engine;
-    }
-    if (this.factory === undefined)
-      throw new Error("ICU word dictionaries have not been prepared.");
-    const engine = this.factory.getEngineFor(code, this.locale);
-    if (engine !== null) {
-      this.engines.push(engine);
-      return engine;
-    }
-    this.unhandled.handleCharacter(code);
-    return this.unhandled;
-  }
-}
-
-const CACHE_SIZE = 128;
-const CACHE_MASK = CACHE_SIZE - 1;
-const CACHE_NEAR = 15;
-const DONE = -1;
-
-/** Original circular boundary cache and safe-reverse refill algorithm. */
-export class BreakCache {
-  private readonly boundaries = new Int32Array(CACHE_SIZE);
-  private readonly statuses = new Uint16Array(CACHE_SIZE);
-  private startIndex = 0;
-  private endIndex = 0;
-  private index = 0;
-  done = false;
-
-  /** Shares the actual rule iterator and dictionary cache. @param owner - Native rule iterator. @param text - Contiguous UTF16 input. @param dictionary - Native dictionary cache. @returns Cache. */
-  constructor(
-    private readonly owner: Pick<RuleBasedBreakIterator, "handleNextFrom" | "handleSafePrevious">,
-    private text: string,
-    private readonly dictionary: DictionaryCache,
-  ) {}
-
-  /** Resets both original caches for a new UTF16 input. @param text - New native input. @returns Nothing. */
-  setText(text: string): void {
-    this.text = text;
-    this.reset({ position: 0, status: 0 });
-    this.dictionary.setText(text);
-  }
-
-  /** Borrows the selected boundary without changing completion state. @returns Current native boundary. */
-  boundary(): BreakBoundary {
-    return this.at(this.index);
-  }
-
-  /** Moves one boundary forward, refilling when necessary. @returns Nothing. */
-  next(): void {
-    if (this.index === this.endIndex) this.done = !this.populateFollowing();
-    else this.index = (this.index + 1) & CACHE_MASK;
-  }
-
-  /** Moves one boundary backward, refilling when necessary. @returns Nothing. */
-  previous(): void {
-    const initial = this.index;
-    if (this.index === this.startIndex) this.populatePreceding();
-    else this.index = (this.index - 1) & CACHE_MASK;
-    this.done = this.index === initial;
-  }
-
-  /** Selects the exact or preceding boundary for a clipped, scalar-aligned offset. @param position - Native offset. @returns Nothing. */
-  seek(position: number): void {
-    const start = this.boundaries[this.startIndex] as number,
-      end = this.boundaries[this.endIndex] as number;
-    if (position < start || position > end) {
-      this.populateNear(position);
-      return;
-    }
-    if (position === start) this.index = this.startIndex;
-    else if (position === end) this.index = this.endIndex;
-    else {
-      let low = this.startIndex,
-        high = this.endIndex;
-      while (low !== high) {
-        const probe = ((low + high + (low > high ? CACHE_SIZE : 0)) >> 1) & CACHE_MASK;
-        if ((this.boundaries[probe] as number) > position) high = probe;
-        else low = (probe + 1) & CACHE_MASK;
-      }
-      this.index = (high - 1) & CACHE_MASK;
-    }
-  }
-
-  /** Reads a cached native boundary. @param index - Ring index. @returns Position and status. */
-  private at(index: number): BreakBoundary {
-    return { position: this.boundaries[index] as number, status: this.statuses[index] as number };
-  }
-
-  /** Resets the circular cache around a known boundary. @param value - Source boundary. @returns Nothing. */
-  private reset(value: BreakBoundary): void {
-    this.startIndex = this.endIndex = this.index = 0;
-    this.boundaries[0] = value.position;
-    this.statuses[0] = value.status;
-  }
-
-  /** Finds the first known rule boundary after a safe reverse location. @param safe - Safe native position. @returns Rule candidate. */
-  private afterSafe(safe: number): BreakBoundary {
-    let result = this.owner.handleNextFrom(safe);
     if (
-      result.position !== DONE &&
-      result.position <= safe + 4 &&
-      dictionaryNativeIndex(this.text, result.position - 1) === safe
-    )
-      result = this.owner.handleNextFrom(result.position);
-    return result;
-  }
-
-  /** Repositions using the original native safe-point and cache locality rules. @param position - Requested native offset. @returns Nothing. */
-  private populateNear(position: number): void {
-    const start = this.boundaries[this.startIndex] as number,
-      end = this.boundaries[this.endIndex] as number;
-    if (!(position > start - CACHE_NEAR && position < end + CACHE_NEAR)) {
-      if (position <= CACHE_NEAR) this.reset({ position: 0, status: 0 });
-      else {
-        const safe = this.owner.handleSafePrevious(position);
-        if (!(end < position && end >= safe - CACHE_NEAR)) {
-          if (safe < CACHE_NEAR) {
-            if (start > position + CACHE_NEAR) this.reset({ position: 0, status: 0 });
-          } else {
-            const boundary = this.afterSafe(safe);
-            this.reset(
-              boundary.position === DONE
-                ? { position: this.text.length, status: boundary.status }
-                : boundary,
-            );
-          }
-        }
+      this.fPositionInCache >= 0 &&
+      this.fPositionInCache < this.fBreaks.size() &&
+      this.fBreaks.elementAti(this.fPositionInCache) === from
+    ) {
+      if (++this.fPositionInCache >= this.fBreaks.size()) {
+        this.fPositionInCache = -1;
+        return false;
       }
-    }
-    if ((this.boundaries[this.endIndex] as number) < position) {
-      while ((this.boundaries[this.endIndex] as number) < position) {
-        if (!this.populateFollowing())
-          throw new Error("ICU break cache could not reach the requested offset.");
-      }
-      this.index = this.endIndex;
-      while (this.boundary().position > position) this.previous();
-    } else if ((this.boundaries[this.startIndex] as number) > position) {
-      while ((this.boundaries[this.startIndex] as number) > position) this.populatePreceding();
-      this.index = this.startIndex;
-      while (this.boundary().position < position) this.next();
-      if (this.boundary().position > position) this.previous();
-    }
-  }
-
-  /** Appends the next native boundary and original six plain-rule lookahead entries. @returns Whether appended. */
-  private populateFollowing(): boolean {
-    const from = this.at(this.endIndex);
-    let refined = this.dictionary.following(from.position);
-    if (refined !== null) {
-      this.addFollowing(refined, true);
+      result[0] = this.fBreaks.elementAti(this.fPositionInCache);
+      statusIndex[0] = this.fOtherRuleStatusIndex;
       return true;
     }
-    let candidate = this.owner.handleNextFrom(from.position);
-    if (candidate.position === DONE) return false;
-    if (candidate.dictionaryCount > 0) {
-      this.dictionary.populateDictionary(from, candidate);
-      refined = this.dictionary.following(from.position);
-      if (refined !== null) {
-        this.addFollowing(refined, true);
+    for (
+      this.fPositionInCache = 0;
+      this.fPositionInCache < this.fBreaks.size();
+      ++this.fPositionInCache
+    ) {
+      const r = this.fBreaks.elementAti(this.fPositionInCache);
+      if (r > from) {
+        result[0] = r;
+        statusIndex[0] = this.fOtherRuleStatusIndex;
         return true;
       }
     }
-    this.addFollowing(candidate, true);
-    for (let i = 0; i < 6; ++i) {
-      candidate = this.owner.handleNextFrom(candidate.position);
-      if (candidate.position === DONE || candidate.dictionaryCount > 0) break;
-      this.addFollowing(candidate, false);
+    return unreachable();
+  }
+  /** Original preceding lookup selects the first boundary's distinct status. @param from - Source position. @param result - Output boundary. @param statusIndex - Output rule status. @returns Found. */
+  preceding(from: number, result: [number], statusIndex: [number]): boolean {
+    if (from <= this.fStart || from > this.fLimit) {
+      this.fPositionInCache = -1;
+      return false;
+    }
+    if (from === this.fLimit) this.fPositionInCache = this.fBreaks.size() - 1;
+    if (
+      this.fPositionInCache > 0 &&
+      this.fPositionInCache < this.fBreaks.size() &&
+      this.fBreaks.elementAti(this.fPositionInCache) === from
+    ) {
+      const r = this.fBreaks.elementAti(--this.fPositionInCache);
+      result[0] = r;
+      statusIndex[0] = r === this.fStart ? this.fFirstRuleStatusIndex : this.fOtherRuleStatusIndex;
+      return true;
+    }
+    if (this.fPositionInCache === 0) {
+      this.fPositionInCache = -1;
+      return false;
+    }
+    for (
+      this.fPositionInCache = this.fBreaks.size() - 1;
+      this.fPositionInCache >= 0;
+      --this.fPositionInCache
+    ) {
+      const r = this.fBreaks.elementAti(this.fPositionInCache);
+      if (r < from) {
+        result[0] = r;
+        statusIndex[0] =
+          r === this.fStart ? this.fFirstRuleStatusIndex : this.fOtherRuleStatusIndex;
+        return true;
+      }
+    }
+    return unreachable();
+  }
+  /** Original engine consumer; actual language engines are supplied only by the real iterator owner. @param start - Range start. @param end - Range end. @param first - First-boundary status. @param other - Remaining status. @returns Nothing. */
+  populateDictionary(start: number, end: number, first: number, other: number): void {
+    if (end - start <= 1) return;
+    this.reset();
+    this.fFirstRuleStatusIndex = first;
+    this.fOtherRuleStatusIndex = other;
+    const bi = this.fBI,
+      text = bi.fText,
+      status: [number] = [UErrorCode.U_ZERO_ERROR];
+    let found = 0,
+      current: number;
+    utext_setNativeIndex(text, start);
+    let c = utext_current32(text),
+      category = ucptrie_get(bi.fData.fTrie, c);
+    const dictStart = bi.fData.fForwardTable.fDictCategoriesStart;
+    while (U_SUCCESS(status[0])) {
+      while ((current = utext_getNativeIndex(text)) < end && category < dictStart) {
+        utext_next32(text);
+        c = utext_current32(text);
+        category = ucptrie_get(bi.fData.fTrie, c);
+      }
+      if (current >= end) break;
+      const engine = bi.getLanguageBreakEngine(
+        c,
+        bi.getLocaleID(ULocDataLocaleType.ULOC_REQUESTED_LOCALE, status),
+      );
+      if (engine !== null)
+        found += engine.findBreaks(text, current, end, this.fBreaks, bi.fIsPhraseBreaking, status);
+      c = utext_current32(text);
+      category = ucptrie_get(bi.fData.fTrie, c);
+    }
+    if (found > 0) {
+      if (start < this.fBreaks.elementAti(0)) this.fBreaks.insertElementAt(start, 0, status);
+      if (end > this.fBreaks.peeki()) this.fBreaks.push(end, status);
+      this.fPositionInCache = 0;
+      this.fStart = this.fBreaks.elementAti(0);
+      this.fLimit = this.fBreaks.peeki();
+    }
+  }
+}
+/** Original128-slot circular cache with separate logical/cache/iterator positions. */
+export class BreakCache {
+  private fStartBufIdx = 0;
+  private fEndBufIdx = 0;
+  private fTextIdx = 0;
+  private fBufIdx = 0;
+  private readonly fBoundaries = new Int32Array(128);
+  private readonly fStatuses = new Uint16Array(128);
+  private readonly fSideBuffer: UVector32;
+  /** Original constructor initializes the side buffer then resets the cache even with incoming status failure. @param fBI - Actual owner. @param status - Shared status. @returns Cache. */
+  constructor(
+    private fBI: RuleBasedBreakIteratorCacheOwner,
+    status: [number],
+  ) {
+    this.fSideBuffer = new UVector32(status);
+    this.reset();
+  }
+  /** Original circular index masking. @param index - Signed index. @returns Wrapped index. */
+  private static modChunkSize(index: number): number {
+    return index & 127;
+  }
+  /** Original cache reset does not publish into the iterator. @param position - Starting boundary. @param status - Rule status. @returns Nothing. */
+  reset(position = 0, status = 0): void {
+    this.fStartBufIdx = this.fEndBufIdx = this.fBufIdx = 0;
+    this.fTextIdx = position;
+    this.fBoundaries[0] = position;
+    this.fStatuses[0] = status;
+  }
+  /** Original current publication clears done. @returns Current boundary. */
+  current(): number {
+    this.fBI.fPosition = this.fTextIdx;
+    this.fBI.fRuleStatusIndex = this.fStatuses[this.fBufIdx] as number;
+    this.fBI.fDone = false;
+    return this.fTextIdx;
+  }
+  /** Original inline fast path deliberately leaves done untouched. @returns Nothing. */
+  next(): void {
+    if (this.fBufIdx === this.fEndBufIdx) this.nextOL();
+    else {
+      this.fBufIdx = BreakCache.modChunkSize(this.fBufIdx + 1);
+      this.fTextIdx = this.fBI.fPosition = this.fBoundaries[this.fBufIdx] as number;
+      this.fBI.fRuleStatusIndex = this.fStatuses[this.fBufIdx] as number;
+    }
+  }
+  /** Original refill path publishes done from populateFollowing. @returns Nothing. */
+  nextOL(): void {
+    this.fBI.fDone = !this.populateFollowing();
+    this.fBI.fPosition = this.fTextIdx;
+    this.fBI.fRuleStatusIndex = this.fStatuses[this.fBufIdx] as number;
+  }
+  /** Original previous refill/fast path. @param status - Shared status. @returns Nothing. */
+  previous(status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    const initial = this.fBufIdx;
+    if (this.fBufIdx === this.fStartBufIdx) this.populatePreceding(status);
+    else {
+      this.fBufIdx = BreakCache.modChunkSize(this.fBufIdx - 1);
+      this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+    }
+    this.fBI.fDone = this.fBufIdx === initial;
+    this.fBI.fPosition = this.fTextIdx;
+    this.fBI.fRuleStatusIndex = this.fStatuses[this.fBufIdx] as number;
+  }
+  /** Original following composition. @param start - Pinned native position. @param status - Shared status. @returns Nothing. */
+  following(start: number, status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    if (start === this.fTextIdx || this.seek(start) || this.populateNear(start, status)) {
+      this.fBI.fDone = false;
+      this.next();
+    }
+  }
+  /** Original preceding composition. @param start - Pinned native position. @param status - Shared status. @returns Nothing. */
+  preceding(start: number, status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    if (start === this.fTextIdx || this.seek(start) || this.populateNear(start, status)) {
+      if (start === this.fTextIdx) this.previous(status);
+      else this.current();
+    }
+  }
+  /** Original wrapped binary search leaves the cache on the boundary at or before input. @param position - Pinned source position. @returns In cached range. */
+  seek(position: number): boolean {
+    if (
+      position < (this.fBoundaries[this.fStartBufIdx] as number) ||
+      position > (this.fBoundaries[this.fEndBufIdx] as number)
+    )
+      return false;
+    if (position === this.fBoundaries[this.fStartBufIdx]) {
+      this.fBufIdx = this.fStartBufIdx;
+      this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+      return true;
+    }
+    if (position === this.fBoundaries[this.fEndBufIdx]) {
+      this.fBufIdx = this.fEndBufIdx;
+      this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+      return true;
+    }
+    let min = this.fStartBufIdx,
+      max = this.fEndBufIdx;
+    while (min !== max) {
+      let probe = Math.trunc((min + max + (min > max ? 128 : 0)) / 2);
+      probe = BreakCache.modChunkSize(probe);
+      if ((this.fBoundaries[probe] as number) > position) max = probe;
+      else min = BreakCache.modChunkSize(probe + 1);
+    }
+    this.fBufIdx = BreakCache.modChunkSize(max - 1);
+    this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+    return true;
+  }
+  /** Original source-near refill strategy;15/4 are the pinned ICU constants. @param position - Pinned native index. @param status - Shared status. @returns Success. */
+  populateNear(position: number, status: [number]): boolean {
+    if (U_FAILURE(status[0])) return false;
+    let boundary = -1,
+      ruleStatus = 0,
+      retain = false;
+    if (
+      position > (this.fBoundaries[this.fStartBufIdx] as number) - 15 &&
+      position < (this.fBoundaries[this.fEndBufIdx] as number) + 15
+    )
+      retain = true;
+    else if (position <= 15) boundary = 0;
+    else {
+      const backup = this.fBI.handleSafePrevious(position);
+      if (
+        (this.fBoundaries[this.fEndBufIdx] as number) < position &&
+        (this.fBoundaries[this.fEndBufIdx] as number) >= backup - 15
+      )
+        retain = true;
+      else if (backup < 15) {
+        boundary = 0;
+        retain = (this.fBoundaries[this.fStartBufIdx] as number) <= position + 15;
+      } else {
+        this.fBI.fPosition = backup;
+        boundary = this.fBI.handleNext();
+        if (boundary !== -1 && boundary <= backup + 4) {
+          utext_setNativeIndex(this.fBI.fText, boundary);
+          if (backup === utext_getPreviousNativeIndex(this.fBI.fText))
+            boundary = this.fBI.handleNext();
+        }
+        if (boundary === -1) boundary = utext_nativeLength(this.fBI.fText);
+        ruleStatus = this.fBI.fRuleStatusIndex;
+      }
+    }
+    if (!retain) this.reset(boundary, ruleStatus);
+    if ((this.fBoundaries[this.fEndBufIdx] as number) < position) {
+      while ((this.fBoundaries[this.fEndBufIdx] as number) < position)
+        if (!this.populateFollowing()) unreachable();
+      this.fBufIdx = this.fEndBufIdx;
+      this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+      while (this.fTextIdx > position) this.previous(status);
+      return true;
+    }
+    if ((this.fBoundaries[this.fStartBufIdx] as number) > position) {
+      while ((this.fBoundaries[this.fStartBufIdx] as number) > position)
+        this.populatePreceding(status);
+      this.fBufIdx = this.fStartBufIdx;
+      this.fTextIdx = this.fBoundaries[this.fBufIdx] as number;
+      while (this.fTextIdx < position) this.next();
+      if (this.fTextIdx > position) this.previous(status);
+      return true;
     }
     return true;
   }
-
-  /** Refills preceding boundaries by finding a safe point and scanning forward to the current ring. @returns Nothing. */
-  private populatePreceding(): void {
-    const from = this.boundaries[this.startIndex] as number;
-    if (from === 0) return;
-    const refined = this.dictionary.preceding(from);
-    if (refined !== null) {
-      this.addPreceding(refined, true);
-      return;
+  /** Original following refill reuses dictionary boundaries and reads at most6extra non-dictionary segments. @returns Added boundary. */
+  populateFollowing(): boolean {
+    const from = this.fBoundaries[this.fEndBufIdx] as number,
+      fromStatus = this.fStatuses[this.fEndBufIdx] as number,
+      position: [number] = [0],
+      ruleStatus: [number] = [0];
+    if (this.fBI.fDictionaryCache.following(from, position, ruleStatus)) {
+      this.addFollowing(position[0], ruleStatus[0], Update.UpdateCachePosition);
+      return true;
     }
-    let safe = from,
-      boundary: BreakBoundary;
+    this.fBI.fPosition = from;
+    position[0] = this.fBI.handleNext();
+    if (position[0] === -1) return false;
+    ruleStatus[0] = this.fBI.fRuleStatusIndex;
+    if (this.fBI.fDictionaryCharCount > 0) {
+      this.fBI.fDictionaryCache.populateDictionary(from, position[0], fromStatus, ruleStatus[0]);
+      if (this.fBI.fDictionaryCache.following(from, position, ruleStatus)) {
+        this.addFollowing(position[0], ruleStatus[0], Update.UpdateCachePosition);
+        return true;
+      }
+    }
+    this.addFollowing(position[0], ruleStatus[0], Update.UpdateCachePosition);
+    for (let count = 0; count < 6; ++count) {
+      position[0] = this.fBI.handleNext();
+      if (position[0] === -1 || this.fBI.fDictionaryCharCount > 0) break;
+      this.addFollowing(position[0], this.fBI.fRuleStatusIndex, Update.RetainCachePosition);
+    }
+    return true;
+  }
+  /** Original preceding refill buffers interleaved dictionary/rule boundaries before inserting them backwards. @param status - Shared status. @returns Added boundary. */
+  populatePreceding(status: [number]): boolean {
+    if (U_FAILURE(status[0])) return false;
+    const from = this.fBoundaries[this.fStartBufIdx] as number;
+    if (from === 0) return false;
+    const position: [number] = [0],
+      positionStatus: [number] = [0];
+    if (this.fBI.fDictionaryCache.preceding(from, position, positionStatus)) {
+      this.addPreceding(position[0], positionStatus[0], Update.UpdateCachePosition);
+      return true;
+    }
+    let backup = from;
     do {
-      safe -= 30;
-      safe = safe <= 0 ? 0 : this.owner.handleSafePrevious(safe);
-      boundary = safe <= 0 ? { position: 0, status: 0 } : this.afterSafe(safe);
-    } while (boundary.position >= from);
-
-    const side: BreakBoundary[] = [boundary];
+      backup -= 30;
+      if (backup <= 0) backup = 0;
+      else backup = this.fBI.handleSafePrevious(backup);
+      if (backup === -1 || backup === 0) {
+        position[0] = 0;
+        positionStatus[0] = 0;
+      } else {
+        this.fBI.fPosition = backup;
+        position[0] = this.fBI.handleNext();
+        if (position[0] <= backup + 4) {
+          utext_setNativeIndex(this.fBI.fText, position[0]);
+          if (backup === utext_getPreviousNativeIndex(this.fBI.fText))
+            position[0] = this.fBI.handleNext();
+        }
+        positionStatus[0] = this.fBI.fRuleStatusIndex;
+      }
+    } while (position[0] >= from);
+    this.fSideBuffer.removeAllElements();
+    this.fSideBuffer.addElement(position[0], status);
+    this.fSideBuffer.addElement(positionStatus[0], status);
     do {
-      let previous = boundary;
-      const candidate = this.owner.handleNextFrom(previous.position);
-      boundary = candidate;
-      if (boundary.position === DONE) break;
-      let usedDictionary = false;
-      if (candidate.dictionaryCount > 0) {
-        this.dictionary.populateDictionary(previous, candidate);
-        for (;;) {
-          const next = this.dictionary.following(previous.position);
-          if (next === null) break;
-          usedDictionary = true;
-          boundary = next;
-          if (boundary.position >= from) break;
-          side.push(boundary);
-          previous = boundary;
+      const previous = (this.fBI.fPosition = position[0]),
+        previousStatus = positionStatus[0];
+      position[0] = this.fBI.handleNext();
+      positionStatus[0] = this.fBI.fRuleStatusIndex;
+      if (position[0] === -1) break;
+      let handled = false;
+      if (this.fBI.fDictionaryCharCount !== 0) {
+        const end = position[0];
+        this.fBI.fDictionaryCache.populateDictionary(
+          previous,
+          end,
+          previousStatus,
+          positionStatus[0],
+        );
+        let dictionaryPrevious = previous;
+        while (this.fBI.fDictionaryCache.following(dictionaryPrevious, position, positionStatus)) {
+          handled = true;
+          if (position[0] >= from) break;
+          this.fSideBuffer.addElement(position[0], status);
+          this.fSideBuffer.addElement(positionStatus[0], status);
+          dictionaryPrevious = position[0];
         }
       }
-      if (!usedDictionary && boundary.position < from) side.push(boundary);
-    } while (boundary.position < from);
-
-    const closest = side.pop() as BreakBoundary;
-    this.addPreceding(closest, true);
-    for (let next = side.pop(); next !== undefined; next = side.pop())
-      if (!this.addPreceding(next, false)) break;
-  }
-
-  /** Adds a following native boundary, evicting the source six-entry block. @param value - Boundary. @param update - Whether to move the cursor. @returns Nothing. */
-  private addFollowing(value: BreakBoundary, update: boolean): void {
-    const index = (this.endIndex + 1) & CACHE_MASK;
-    if (index === this.startIndex) this.startIndex = (this.startIndex + 6) & CACHE_MASK;
-    this.boundaries[index] = value.position;
-    this.statuses[index] = value.status;
-    this.endIndex = index;
-    if (update) this.index = index;
-  }
-
-  /** Prepends a native boundary when doing so retains the requested cursor. @param value - Boundary. @param update - Whether to move the cursor. @returns Whether inserted. */
-  private addPreceding(value: BreakBoundary, update: boolean): boolean {
-    const index = (this.startIndex - 1) & CACHE_MASK;
-    if (index === this.endIndex) {
-      if (this.index === this.endIndex && !update) return false;
-      this.endIndex = (this.endIndex - 1) & CACHE_MASK;
+      if (!handled && position[0] < from) {
+        this.fSideBuffer.addElement(position[0], status);
+        this.fSideBuffer.addElement(positionStatus[0], status);
+      }
+    } while (position[0] < from);
+    let success = false;
+    if (!this.fSideBuffer.isEmpty()) {
+      positionStatus[0] = this.fSideBuffer.popi();
+      position[0] = this.fSideBuffer.popi();
+      this.addPreceding(position[0], positionStatus[0], Update.UpdateCachePosition);
+      success = true;
     }
-    this.boundaries[index] = value.position;
-    this.statuses[index] = value.status;
-    this.startIndex = index;
-    if (update) this.index = index;
+    while (!this.fSideBuffer.isEmpty()) {
+      positionStatus[0] = this.fSideBuffer.popi();
+      position[0] = this.fSideBuffer.popi();
+      if (!this.addPreceding(position[0], positionStatus[0], Update.RetainCachePosition)) break;
+    }
+    return success;
+  }
+  /** Original append drops6old entries on a full ring. @param position - New boundary. @param status - Rule status. @param update - Position policy. @returns Nothing. */
+  addFollowing(position: number, status: number, update: Update): void {
+    const index = BreakCache.modChunkSize(this.fEndBufIdx + 1);
+    if (index === this.fStartBufIdx)
+      this.fStartBufIdx = BreakCache.modChunkSize(this.fStartBufIdx + 6);
+    this.fBoundaries[index] = position;
+    this.fStatuses[index] = status;
+    this.fEndBufIdx = index;
+    if (update === Update.UpdateCachePosition) {
+      this.fBufIdx = index;
+      this.fTextIdx = position;
+    }
+  }
+  /** Original prepend can refuse insertion to retain the current cache slot. @param position - New boundary. @param status - Rule status. @param update - Position policy. @returns Success. */
+  addPreceding(position: number, status: number, update: Update): boolean {
+    const index = BreakCache.modChunkSize(this.fStartBufIdx - 1);
+    if (index === this.fEndBufIdx) {
+      if (this.fBufIdx === this.fEndBufIdx && update === Update.RetainCachePosition) return false;
+      this.fEndBufIdx = BreakCache.modChunkSize(this.fEndBufIdx - 1);
+    }
+    this.fBoundaries[index] = position;
+    this.fStatuses[index] = status;
+    this.fStartBufIdx = index;
+    if (update === Update.UpdateCachePosition) {
+      this.fBufIdx = index;
+      this.fTextIdx = position;
+    }
     return true;
   }
 }

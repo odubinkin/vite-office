@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/lingucomponent/source/numbertext/numbertext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "numbertext-service-integration",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/lingucomponent/source/numbertext/numbertext.ts",
+        "apps/office/src/lingucomponent/source/numbertext/numbertext.test.ts",
+        "lingucomponent/source/numbertext/numbertext.cxx"
+      ],
+      "justification": "Actual NumberText_Impl extends the original ordered WeakImplHelper<XNumberText,XServiceInfo> specialization, retains initialization-before-path-setup ordering, per-instance Numbertext module cache and LanguageTag Locale constructor plus language/country/script getter order. Key construction is language-script-country, followed by original ASCII conversion and source non-Windows SAL UTF8 input/output boundaries. Missing-file input and no-match empty remain distinct. Original empty getAvailableLanguages TODO, exact implementation/service names, shared supportsService helper and acquired constructor return are preserved. Installation-path configuration binds to the accepted packaged library root instead of native SvtPathOptions/OS filesystem; no dynamic native deployment, mutex/thread ABI, full service-manager or supplier integration is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NumberText_Impl",
+        "lingucomponent_NumberText_get_implementation"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "lingucomponent/source/numbertext/numbertext.cxx",
+      "upstreamSymbols": [
+        "NumberText_Impl",
+        "lingucomponent_NumberText_get_implementation",
+        "getNumberText",
+        "getAvailableLanguages"
+      ]
+    }
+  }
+}

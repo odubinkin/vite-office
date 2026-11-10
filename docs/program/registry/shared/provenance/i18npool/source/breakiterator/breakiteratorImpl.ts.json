@@ -9,27 +9,31 @@
     "localSymbols": [
       "BreakIteratorImpl",
       "beginOfScript",
-      "getWordBoundary",
-      "BindWordDictionaryFactory"
+      "skipSpace",
+      "com_sun_star_i18n_BreakIterator_get_implementation",
+      "getWordBoundary"
     ],
     "upstreamSymbols": [
       "getScriptClass",
       "getScriptType",
       "endOfScript",
       "beginOfScript",
+      "BreakIteratorImpl::getLocaleSpecificBreakIterator",
+      "BreakIteratorImpl::nextWord",
+      "BreakIteratorImpl::previousWord",
+      "BreakIteratorImpl::getWordBoundary",
+      "BreakIteratorImpl::getWordType",
       "getWordBoundary"
     ],
     "preservedResponsibilities": [
       "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
       "Original beginOfScript performs exact-class backward UTF16 traversal without absorbing weak characters and retains source low-surrogate offset behavior.",
+      "Original outer word methods use the whitespace scans and bounds/sentinel rules around the locale dispatch. The service manager receives the original ordered suffixes and successful services are reused by the original partial and full locale cache keys.",
+      "The original deprecated getWordType always returns zero before EditEngine's actual word-boundary call.",
       "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
     ],
     "omittedResponsibilities": [
-      "Full native formatted-cell script cache,UNO/service factory graph,device metrics and rich/wrapped/rotated/merged layout remain unported.",
-      "Browser Local Font Access supplies names rather than native metric classifications;native missing-metric defaults and known symbol-recode availability are retained without guessing.",
-      "Full Writer SetAttr/rich script command behavior and complete native document/filter/UI parity remain unverified;the family path fixes represented native item loss.",
-      "Calc named-style inheritance,embedded font resources and the complete shared paragraph property mapper remain unported;unsupported values are diagnosed.",
-      "Full document/layout/UI and named-style parity remain unverified beyond the consumed font slice."
+      "Unconsumed other interface operations remain outside this slice."
     ],
     "evidence": {
       "local": [
@@ -46,6 +50,14 @@
           "marker": "@fileoverview"
         },
         {
+          "path": "apps/office/src/i18npool/source/characterclassification/characterclassificationImpl.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
+          "marker": "it("
+        },
+        {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
           "marker": "@fileoverview"
         }
@@ -54,6 +66,22 @@
         {
           "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
           "marker": "getScriptClass"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
+          "marker": "getWordBoundary"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTitleCase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
+          "marker": "getWordType"
+        },
+        {
+          "path": "offapi/com/sun/star/i18n/XBreakIterator.idl",
+          "marker": "It returns 0 always."
         }
       ]
     }

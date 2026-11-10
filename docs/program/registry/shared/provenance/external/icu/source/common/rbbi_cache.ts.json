@@ -15,16 +15,19 @@
       "populateNear"
     ],
     "upstreamSymbols": [
+      "DictionaryCache",
+      "BreakCache",
       "RuleBasedBreakIterator::DictionaryCache::populateDictionary",
       "RuleBasedBreakIterator::BreakCache::populateFollowing",
       "RuleBasedBreakIterator::BreakCache::populatePreceding",
       "RuleBasedBreakIterator::BreakCache::populateNear"
     ],
     "preservedResponsibilities": [
+      "Original ICU78.3 UVector32 and RBBI cache operational methods preserve source status, cursor, ring-buffer, refill and dictionary lookup order. Native comparison matches 82 vector states and 1002 logical cache/consumed-owner snapshots, using original native engines for prepared dictionary input. Concrete local engine installation, public iterator/data/provider construction and lifecycle, word/title/UNO integration, debug dumps and allocator/RTTI/thread ABI remain unverified.",
       "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
     ],
     "omittedResponsibilities": [
-      "Native OOM/allocator, non-contiguous/UTF8 UText and LibreOffice locale routing remain outside this checkpoint."
+      "Concrete local dictionary engines, public iterator/data/provider construction and lifecycle, word/title/UNO installation, debug dumps and native allocation/RTTI/thread ABI are not certified."
     ],
     "evidence": {
       "local": [
@@ -33,11 +36,19 @@
           "marker": "DictionaryCache"
         },
         {
+          "path": "apps/office/src/external/icu/source/common/rbbi_cache.test.ts",
+          "marker": "retains every native vector"
+        },
+        {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
           "marker": "@fileoverview"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
+          "marker": "DictionaryCache"
+        },
         {
           "path": "vendor/icu-reference/source/common/rbbi_cache.cpp",
           "marker": "RuleBasedBreakIterator::DictionaryCache::populateDictionary"

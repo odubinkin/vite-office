@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/editdoc.portions.ts",
+    "upstreamPath": "editeng/source/editeng/editdoc.cxx",
+    "localSymbols": [
+      "ParaPortion",
+      "ParaPortionList"
+    ],
+    "upstreamSymbols": [
+      "ParaPortion::MarkInvalid",
+      "ParaPortion::MarkSelectionInvalid",
+      "ParaPortion::CorrectValuesBehindLastFormattedLine",
+      "ParaPortionList::GetPos",
+      "ParaPortionList::FindParagraph"
+    ],
+    "preservedResponsibilities": [
+      "Actual paragraph portion with real owning line/text lists, nonowning ContentNode, script/bidi vectors and source default/invalidation/visibility/repaint state. Exact insertion/deletion accumulation, positive-difference fallback, short-return narrowing and ordered suffix line correction are preserved. Actual paragraph portion vector retains source ownership transfer, cached reverse lookup, bounds, cumulative visible heights and strict greater-than paragraph search. Original private engine-only height writes and formatted layout production remain unported."
+    ],
+    "omittedResponsibilities": [
+      "ImpEditEngine parsing/undo/view/layout and ScFieldEditEngine CSV admission remain incomplete. Native device measurements, private friend-engine height writes, physical lifetime/thread/ABI and full original QA are not certified. NatNum12 and final CSV audit remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editdoc.portions.ts",
+          "marker": "ParaPortion"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-paragraph-portions.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/editdoc.cxx",
+          "marker": "ParaPortion::MarkInvalid"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/editdoc.portions.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original paragraph-portion ownership and range/geometry algorithms are grouped separately from EditDoc document/font/item construction under the unchanged source-file budget."
+    }
+  }
+}

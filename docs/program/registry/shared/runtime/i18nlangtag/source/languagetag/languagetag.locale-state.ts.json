@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.locale-state.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-canonicalization",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.locale-state.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonicalize.test.ts",
+        "i18nlangtag/source/languagetag/languagetag.cxx"
+      ],
+      "justification": "Original BCP47-to-Locale/ID transitions use actual component/ISO member groups, retaining ISO raw region versus qlt country/full variant, system ID handling, Locale-before-ID ordering and source on-the-fly policy. Enclosing registry/public LanguageTag ownership remains pending. Public LanguageTag/native ABI and complete NumberText/NatNum12 integration are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "convertBcp47ToLocale",
+        "convertBcp47ToLang"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTagImpl::convertBcp47ToLocale",
+        "LanguageTagImpl::convertBcp47ToLang"
+      ]
+    }
+  }
+}

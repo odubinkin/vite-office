@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertySet.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-process-context-contracts",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertySet.ts",
+        "apps/office/src/comphelper/source/processfactory/processfactory.test.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts",
+        "udkapi/com/sun/star/beans/XPropertySet.idl"
+      ],
+      "justification": "Complete original XPropertySet IDL method declarations and cppumaker-normal cached static type identity use actual Reference/Any/Sequence/value owners. XPropertySet retains all7 methods, XPropertySetInfo all3, and property/veto listeners retain the actual XEventListener direct base and exact PropertyChangeEvent input. No concrete property/listener behavior, subscription defaults or service provider is manufactured. Source query/base identity is exercised through actual WeakImplHelper. Production ComponentContext/ServiceManager and application process-factory installation, full EditEngine construction/VCL/Sfx resources, BreakIterator/CharacterClassification service admission, NatNum12 supplier/casing/formatter and final CSV integration remain incomplete. No synthetic context/manager is supplied. Native mutex/thread/reentrant-static initialization/destructor behavior, ABI/pointer UB and allocator exhaustion are not certified. Full reflection and unconsumed services remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XPropertySet",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/beans/XPropertySet.idl",
+      "upstreamSymbols": [
+        "XPropertySet",
+        "getPropertySetInfo",
+        "setPropertyValue",
+        "getPropertyValue",
+        "addPropertyChangeListener",
+        "removePropertyChangeListener",
+        "addVetoableChangeListener",
+        "removeVetoableChangeListener"
+      ]
+    }
+  }
+}

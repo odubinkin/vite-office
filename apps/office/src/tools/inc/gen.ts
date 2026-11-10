@@ -234,6 +234,35 @@ export class Rectangle {
   public TopLeft(): Point {
     return new Point(this.mnLeft, this.mnTop);
   }
+  /** Original implicit rectangle value assignment. @param source - Actual source value. @returns This rectangle. */
+  public assign(source: Rectangle): this {
+    this.mnLeft = source.mnLeft;
+    this.mnTop = source.mnTop;
+    this.mnRight = source.mnRight;
+    this.mnBottom = source.mnBottom;
+    return this;
+  }
+  /** Original per-axis normalization, preserving empty-axis sentinels. @returns Nothing. */
+  public Normalize(): void {
+    if (this.mnRight < this.mnLeft && !this.IsWidthEmpty())
+      [this.mnLeft, this.mnRight] = [this.mnRight, this.mnLeft];
+    if (this.mnBottom < this.mnTop && !this.IsHeightEmpty())
+      [this.mnTop, this.mnBottom] = [this.mnBottom, this.mnTop];
+  }
+  /** Original normalized closed-edge intersection and default-empty reset. Empty receivers remain unchanged before inspecting the operand. @param other - Actual const source rectangle. @returns Receiver, as the original template wrapper. */
+  public Intersection(other: Rectangle): this {
+    if (this.IsEmpty()) return this;
+    if (other.IsEmpty()) return this.assign(new Rectangle());
+    const temporary = new Rectangle(other);
+    this.Normalize();
+    temporary.Normalize();
+    this.mnLeft = Math.max(this.mnLeft, temporary.mnLeft);
+    this.mnRight = Math.min(this.mnRight, temporary.mnRight);
+    this.mnTop = Math.max(this.mnTop, temporary.mnTop);
+    this.mnBottom = Math.min(this.mnBottom, temporary.mnBottom);
+    if (this.mnRight < this.mnLeft || this.mnBottom < this.mnTop) this.assign(new Rectangle());
+    return this;
+  }
   /** Original union ignores empty operands,assigns into an empty receiver and otherwise normalizes all four raw edges. @param other - Actual rectangle. @returns Receiver,as the native template wrapper. */
   public Union(other: Rectangle): this {
     if (other.IsEmpty()) return this;

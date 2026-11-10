@@ -1,4 +1,5 @@
-/** @fileoverview Original frozen UCPTrie fields for scalar reads; binary construction and range/UTF iterators remain unported. */
+/** @fileoverview Original frozen UCPTrie fields and binary/scalar API; range/UTF iterators remain unported. */
+export { ucptrie_openFromBinary, ucptrie_get, ucptrie_getValueWidth } from "../ucptrie";
 /** Original trie type selector. */
 export enum UCPTrieType {
   UCPTRIE_TYPE_ANY = -1,

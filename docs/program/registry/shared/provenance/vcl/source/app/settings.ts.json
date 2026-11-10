@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/source/app/settings.ts",
+    "status": "mapped",
+    "upstreamPath": "vcl/source/app/settings.cxx",
+    "localSymbols": [
+      "AllSettings"
+    ],
+    "upstreamSymbols": [
+      "AllSettings::GetLanguageTag",
+      "ImplAllSettingsData"
+    ],
+    "preservedResponsibilities": [
+      "The consumed application data-language field is initialized from the real system locale and retained as an owned LanguageTag."
+    ],
+    "omittedResponsibilities": [
+      "Other settings fields, dynamic native locale notification, fuzzing and LibreOfficeKit overrides remain outside this browser slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/app/settings.ts",
+          "marker": "AllSettings"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vcl/source/app/settings.cxx",
+          "marker": "ImplAllSettingsData"
+        },
+        {
+          "path": "sc/source/core/data/global.cxx",
+          "marker": "ScGlobal::GetEditDefaultLanguage"
+        }
+      ]
+    }
+  }
+}

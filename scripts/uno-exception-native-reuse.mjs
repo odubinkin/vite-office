@@ -39,8 +39,9 @@ export function reuseExceptionNative(target, base, fixture, options = {}) {
       throw Error("Changed ICU input " + path);
   if (hash(readFileSync(base + "/driver.cpp")) !== witness.driverHash)
     throw Error("Changed original witness caller");
+  const positiveTerminalCommands = 211 + 2 * Object.keys(witness.captures).length;
   if (
-    previous.commands.length !== 219 ||
+    previous.commands.length !== positiveTerminalCommands ||
     previous.commands.some(
       /** Checks every actual terminal command. @param command - Original command. @returns Invalid completion. */ (
         command,
@@ -115,7 +116,7 @@ export function reuseExceptionNative(target, base, fixture, options = {}) {
       path: base,
       manifestHash: hash(text),
       originalUnitsPerVariant: 101,
-      positiveTerminalCommands: 219,
+      positiveTerminalCommands,
       artifactHashes,
       featureProbes: previous.featureProbes,
       loaderProbe: previous.loaderProbe,

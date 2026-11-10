@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.alphabetic.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+    "localSymbols": [
+      "getHebrewNativeNumberString",
+      "getCyrillicNativeNumberString"
+    ],
+    "upstreamSymbols": [
+      "getHebrewNativeNumberString",
+      "makeHebrewNumber",
+      "getCyrillicNativeNumberString",
+      "makeCyrillicNumber"
+    ],
+    "preservedResponsibilities": [
+      "Original Hebrew/Cyrillic digit-count admission, prefix scanning, suffix retention, thousand groups,15/16 and teen substitutions, geresh/gershayim/titlo, and unchanged offsets. Native signed64 overflow is outside parity certification; no wrap, saturation or extra rejection is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Mode12 NumberText, native allocator/UNO/service ABI and native signed-overflow behavior are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.alphabetic.ts",
+          "marker": "getHebrewNativeNumberString"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.output.test.ts",
+          "marker": "nativeCases"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+          "marker": "getHebrewNativeNumberString"
+        },
+        {
+          "path": "i18npool/source/nativenumber/data/numberchar.h",
+          "marker": "NumberChar[][10]"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.alphabetic.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original native-number translation unit by the original conversion responsibility; shared mutable arrays and actual supplier locale ownership remain connected."
+    }
+  }
+}

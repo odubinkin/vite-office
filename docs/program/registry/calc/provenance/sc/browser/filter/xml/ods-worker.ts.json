@@ -6,15 +6,16 @@
     "evidence": {
       "local": [
         {
-          "marker": "scope",
-          "path": "apps/office/src/sc/browser/filter/xml/ods-worker.ts"
+          "path": "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
+          "marker": "bindOdsWorker"
         }
       ]
     },
     "localPath": "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
     "rationale": "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
     "responsibilities": [
-      "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers."
+      "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers.",
+      "Installs the message handler when the worker composition root has initialized the process services."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

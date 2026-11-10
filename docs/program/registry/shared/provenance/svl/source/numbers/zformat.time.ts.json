@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.time.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "GetTimeOutput",
+      "ImpGetNatNumString",
+      "ImpGetFractionOfSecondString"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpGetTimeOutput",
+      "SvNumberformat::ImpGetFractionOfSecondString",
+      "SvNumberformat::ImpGetNatNumString"
+    ],
+    "preservedResponsibilities": [
+      "Original finite wall-clock and elapsed-time output with actual tools::Time::GetClock, real compiled tokens and current calendar names. Preserves native uint widths, precision7 input-line minimum, duration uint32 limit, distinct truncation/rounding, sign rules, AM/PM and original fill return. Complete native-number modifiers and date/datetime output remain unfinished; scalar GetClock native comparison does not certify full format display/UNO ABI.",
+      "Shared original integer-padding and fractional-second responsibilities are now exported under original method names for the date/datetime fragment. Their admitted incomplete-native metadata behavior and source rounding remain unchanged.",
+      "Original integer padding and clock-output temporary owners now begin cleanup scopes before later buffer constructors. Only constructed buffers are disposed; successful source formatting and original C allocation guards remain unchanged. Normal-output/early-constructor allocation tests are bounded, not full native OOM certification.",
+      "Original ImpGetNatNumString now accepts actual metadata/value/minimum/native wrapper arguments and performs source padding before original impTransliterate. TIME converts each integer field; fractions, separators, literals and elapsed minus retain original untranslated placement. Supersedes the former incomplete-native-only producer limitation for modes0..11. Mode12 remains unported.",
+      "Corrects the preceding block's omitted source ImpGetFractionOfSecondString conversion: fractional-second buffers are transliterated in both source branches, with input-line minimum digits updating the decimal counter only after conversion. Normal display retains its requested counter and original returned-buffer-length bound, including Hebrew conversion truncation. The prior statement that fractional digits remain ASCII was a local implementation error, not an upstream contract. Source buffer/scanner/native wrapper owners remain actual; mode12 and full native wrapper ABI are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete native full display/service/ABI verification remains unproven."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "GetTimeOutput"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "ImpGetNatNumString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.ts",
+          "marker": "ImpGetFractionOfSecondString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.time.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.native-number.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.output-allocation.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetTimeOutput"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetNatNumString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpGetFractionOfSecondString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.time.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original large zformat translation unit by time-output responsibility, retaining actual compiled token and language/calendar owners."
+    }
+  }
+}
