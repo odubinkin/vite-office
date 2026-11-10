@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-settings.ts",
+    "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
+    "localSymbols": [
+      "exportSettingsXml"
+    ],
+    "upstreamSymbols": [
+      "SwXMLExport::GetConfigurationSettings"
+    ],
+    "preservedResponsibilities": [
+      "Exports the represented native Writer configuration vector through xmloff."
+    ],
+    "omittedResponsibilities": [
+      "View settings, document-specific properties and settings outside the represented Writer service are unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-settings.ts",
+          "marker": "exportSettingsXml"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
+          "marker": "SwXMLExport::GetConfigurationSettings"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-settings.ts",
+      "rationale": "The configuration settings responsibility of xmlexp.cxx is split from content and styles in TypeScript because the existing Writer XML export owner is at the authored source size boundary.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

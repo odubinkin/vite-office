@@ -243,7 +243,11 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
       );
       fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
       fireEvent.change(screen.getByLabelText("Browse"), {
-        target: { files: [new File([String.raw`{\rtf1\ansi ${info}Imported}`], "Imported.rtf")] },
+        target: {
+          files: [
+            new File([String.raw`{\rtf1\ansi ${info}\li720\tx1440 Imported}`], "Imported.rtf"),
+          ],
+        },
       });
       await waitFor(
         /** Waits for completed import. @returns Nothing. */ () =>
@@ -262,6 +266,11 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
         kind: "external",
         reference: { name: "Imported.rtf" },
       });
+      await openBrowserWriterDocument(documentShell, store, documentShell.GetDocumentState().id);
+      expect(
+        documentShell.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT"),
+      ).toBe(false);
+      expect(new TextDecoder().decode(documentShell.SerializeRtf())).toContain("\\tx1440");
       documentShell.Close();
     },
   );

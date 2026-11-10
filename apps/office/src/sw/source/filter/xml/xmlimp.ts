@@ -1,4 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
+import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type {
   XMLTextFrameAttributes,
   XMLTextFrameStyle,
@@ -81,6 +83,7 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
   const roots: Readonly<Record<string, XMLToken>> = {
     "document-content": XMLToken.OFFICE_DOCUMENT_CONTENT,
     "document-meta": XMLToken.OFFICE_DOCUMENT_META,
+    "document-settings": XMLToken.OFFICE_DOCUMENT_SETTINGS,
     "document-styles": XMLToken.OFFICE_DOCUMENT_STYLES,
   };
   const expected = roots[expectedRoot];
@@ -107,7 +110,10 @@ export function importWriterXml(
   contentXml: string | undefined,
   metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
-  options: OdfXmlParseOptions & { readonly defaultFontDevice?: DefaultFontDevice } = {},
+  options: OdfXmlParseOptions & {
+    readonly defaultFontDevice?: DefaultFontDevice;
+    readonly settingsXml?: string;
+  } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
   if (metaXml !== undefined) {
@@ -126,6 +132,8 @@ export function importWriterXml(
   );
   xmlImport.document.SetInReading(true);
   try {
+    if (options.settingsXml !== undefined)
+      xmlImport.parse(options.settingsXml, XMLToken.OFFICE_DOCUMENT_SETTINGS, options);
     if (stylesXml !== undefined) {
       xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
       xmlImport.finishNamedStyles();
@@ -240,7 +248,9 @@ class SwXMLImport
         ? "styles.xml"
         : expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT
           ? "content.xml"
-          : "meta.xml";
+          : expectedRoot === XMLToken.OFFICE_DOCUMENT_SETTINGS
+            ? "settings.xml"
+            : "meta.xml";
     const onDiagnostic = options.onDiagnostic;
     parseOdfXmlStream(xml, this, {
       ...options,
@@ -262,6 +272,11 @@ class SwXMLImport
     if (element !== this.expectedRoot) return null;
     attributes.assertOnly([XMLToken.OFFICE_VERSION], "document root");
     return new SwXMLDocContext(this, element);
+  }
+
+  /** Applies the native Writer configuration settings vector through the document service. @param properties - Native input. @returns Nothing. */
+  public SetConfigurationSettings(properties: readonly PropertyValue[]): void {
+    this.model.createDocumentSettings().setConfigurationSettings(properties);
   }
 
   /** Rejects unknown document roots. @returns Null. */
@@ -655,6 +670,12 @@ class SwXMLDocContext extends SvXMLImportContext {
     if (element === XMLToken.OFFICE_META && this.root === XMLToken.OFFICE_DOCUMENT_META) {
       attributes.assertOnly([], "metadata");
       return new XMLMetaContext(this.xmlImport);
+    }
+    if (element === XMLToken.OFFICE_SETTINGS && this.root === XMLToken.OFFICE_DOCUMENT_SETTINGS) {
+      return new XMLDocumentSettingsContext(
+        /** Applies the original native configuration properties. @param properties - Borrowed properties. @returns Nothing. */
+        (properties) => this.xmlImport.SetConfigurationSettings(properties),
+      );
     }
     if (ignoredDocumentChildren.has(element)) return new SvXMLIgnoreContext();
     return null;

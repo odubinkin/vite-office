@@ -25,7 +25,7 @@ import {
 } from "../../../../editeng/inc/escapementitem";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
-import { stringAny, text } from "../../core/unocore/unocrsrhelper";
+import { stringAny, text, unicode } from "../../core/unocore/unocrsrhelper";
 import type { Id, Properties, Reference, Sprm, Value } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
@@ -85,12 +85,30 @@ const highlights = [
 export class DomainMapper implements Properties {
   readonly impl: DomainMapper_Impl;
   private readonly CT_PageSz = { w: 0, h: 0, orient: false };
-  /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @param documentType - Original explicit source format. @returns Mapper. */
+  /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @param documentType - Original explicit source format. @param insertMode - Whether importing into an existing document. @returns Mapper. */
   constructor(
     readonly model: SwXTextDocument,
     documentType: SourceDocumentType,
+    insertMode = false,
   ) {
     this.impl = new DomainMapper_Impl(this, model, documentType);
+    if (!insertMode) {
+      const settings = model.createDocumentSettings();
+      for (const [property, flag] of [
+        ["TabsRelativeToIndent", false],
+        ["TabAtLeftIndentForParagraphsInList", true],
+        ["IgnoreTabsAndBlanksForLineCalculation", true],
+      ] as const) {
+        const name = unicode(property);
+        const value = new Any(flag);
+        try {
+          settings.setPropertyValue(name, value);
+        } finally {
+          name.dispose();
+          value.dispose();
+        }
+      }
+    }
   }
   /** Original list context push forwards the actual level owner. @param properties - Native level map. @returns Nothing. */
   PushListProperties(properties: PropertyMap): void {

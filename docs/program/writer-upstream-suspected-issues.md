@@ -3472,3 +3472,17 @@ The RTF reader in UPR dispatches only the nested UD destination.
 A TITLE destination in the legacy branch is skipped, including
 when the stream provides no Unicode alternative. The previously
 read title, if any, is retained. Preserve the source selection.
+
+### WRITER422 — ODF settings accept only the literal true token for a true boolean
+
+XMLConfigItemContext compares the complete character buffer with
+XML_TRUE. Other boolean lexical forms, including 1 and text with
+surrounding spaces, produce false. Preserve that behavior in the
+represented configuration-settings stream.
+
+### WRITER423 — RTF export omits the Writer page text grid
+
+The pinned RtfAttributeOutput::FormatTextGrid logs a TODO and emits
+no control. The pinned RTF tokenizer also recognizes the section
+grid flags without a corresponding dispatch handler. Preserve the
+lack of a portable grid mapping.

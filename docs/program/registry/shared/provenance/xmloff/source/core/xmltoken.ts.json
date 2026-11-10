@@ -144,6 +144,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -258,6 +262,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
           "marker": "XML_REL_COLUMN_WIDTH"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_DOCUMENT_SETTINGS"
         }
       ]
     },
@@ -298,7 +306,8 @@
       "Recognizes native frame, text-box, geometry, graphic property and anchor tokens.",
       "Recognizes the original ODF fly split, overlap, flow and wrap influence attributes.",
       "Admits the original relative size relation extension tokens.",
-      "Recognizes the original relative column-width token."
+      "Recognizes the original relative column-width token.",
+      "Adds the original document-settings and config-item vocabulary without moving existing token identities."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

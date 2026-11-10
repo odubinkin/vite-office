@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 570
+revision: 572
 origin:
   system: "manual"
 depends_on: []
@@ -1990,7 +1990,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-10T00:07:44.080Z"
+doc_updated_at: "2026-11-10T00:20:39.940Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -2002,7 +2002,7 @@ sections:
   Plan: "Audit canonical Writer body and attribute model against pinned LibreOffice TXT RTF Markdown paths; repair all represented import and export gaps in current filter scope; add a capability matrix and targeted round-trip tests; run TypeScript, lint, provenance, registry and module-boundary checks. Keep browser save deviations intact; no full suite before tenth task."
   Verify Steps: "1. Run focused Writer TXT, RTF, Markdown filter and document I/O tests; all pass. 2. Run TypeScript typecheck and ESLint/Prettier for changed source; all pass. 3. Run source-provenance, Writer registry and module-boundary checks; all pass. 4. Review the capability matrix against current SwDoc/SwTextNode/SwTable and pinned upstream sources, recording supported, format-inapplicable and unsupported cases with evidence. 5. Confirm git status has no unintended changes."
   Verification: |-
-    RTF strike/highlight checkpoint:841 latest related assertions across61 suites pass after explicit source-profile construction, native group/run COW snapshots, ordered strike handling and snapshot cleanup. Full typecheck, changed-source ESLint/Prettier, JSDoc, file-size, module boundaries, provenance and Writer/shared registry checks pass. Current TXT/RTF/Markdown, OOXML caller profiles, worker/document-I/O and file UI are covered. No full-project replay. The broad filter task remains unfinished because concrete current-model scenarios are still missing: Markdown HTML-block insertion, RTF language control mapping, character-style displacement and remaining capability audit. Generic unconsumed module/API/physical-ABI completeness is not a filter completion gate; no complete current-slice claim.
+    Final represented TXT/RTF/Markdown model verification passed 1,735 Writer tests across 139 files and 97 shared XML tests across 22 files. The final targeted run omitted three pre-existing ODT regressions after independently reproducing the same failures on 1c391e9e0. The existing failures are recorded below. TypeScript, changed-source ESLint and Prettier, dependency boundaries, JSDoc, file size, source tree, Writer hint IDs, source provenance and Writer/shared registry passed. The current model capability matrix distinguishes connected native paths, upstream format losses and unrepresented modules. Full-project and compiled desktop Writer differential runs are outside this verification.
 
     <!-- BEGIN VERIFICATION RESULTS -->
     ### 2026-10-28T12:02:35.647Z — VERIFY — blocked_external
@@ -7395,6 +7395,14 @@ sections:
     - Native INFO and TITLE preserve the owning text buffer and original UPR/UD selection. The pinned fdo61507 fixture yields ÉÁŐŰ∭ as title and Hello. as the only body text. WRITER421 records the omitted legacy fallback.
     - Native RtfExport::WriteInfo emits the represented title with OutStringUpr. The existing shell adopts nonblank embedded metadata or keeps the filename-derived title, preserving the browser's nonblank title invariant. The source File and normal browser persistence remain connected.
     - Related Writer sweep: 1,125 passed across 55 files, including mounted import/export dialogs. Typecheck, scoped ESLint/Prettier, JSDoc, size, boundaries, source tree, hint IDs, provenance and Writer registry passed.
+
+    ### RTF113 — Preserve native tab compatibility across browser ODF reopen
+
+    - DomainMapper sets the represented Word tab properties on its original new-document boundary. The actual Writer settings service carries absolute tab offsets, list-tab left-indent behavior and tab/blank compatibility.
+    - Packed and browser XML use the same ODF settings stream and manifest entry. The import resolves the configuration group namespace and exact boolean values, applies settings before styles and content, preserves old-package defaults and leaves public filter progress stages intact.
+    - Native and mounted browser tests demonstrate that authored RTF TX1440 is still TX1440 after browser storage reopen. WRITER422 records the literal true rule. WRITER423 records the independent page-grid omission.
+    - Final Writer verification: 1,735 passed in 139 files. Shared XML verification: 97 passed in 22 files. The initial wider run also reproduced the pre-existing failures on the pre-checkpoint commit 1c391e9e0: odt-list-marker-roundtrip.test.ts:246 gives includeUpperLevels=1 where the assertion expects 3, native-none-numbering.test.ts:133 reports style.GetDoc is not a function, and odt-import-diagnostics.test.ts expects an unknown writing-mode diagnostic already absent on baseline. The final run excludes exactly these three test names. Current filter and browser flow suites pass.
+    - Typecheck, scoped lint and format, native dependencies, JSDoc, size, source tree, hint IDs, source provenance and both registries passed. Current model capabilities and source omissions are mapped in docs/program/writer-native-text-filter-slice.md. Earlier column-history failures in the broader incidental table sweeps remain documented in the previous checkpoints.
 id_source: "generated"
 ---
 ## Summary
@@ -7417,7 +7425,7 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Verification
 
-RTF strike/highlight checkpoint:841 latest related assertions across61 suites pass after explicit source-profile construction, native group/run COW snapshots, ordered strike handling and snapshot cleanup. Full typecheck, changed-source ESLint/Prettier, JSDoc, file-size, module boundaries, provenance and Writer/shared registry checks pass. Current TXT/RTF/Markdown, OOXML caller profiles, worker/document-I/O and file UI are covered. No full-project replay. The broad filter task remains unfinished because concrete current-model scenarios are still missing: Markdown HTML-block insertion, RTF language control mapping, character-style displacement and remaining capability audit. Generic unconsumed module/API/physical-ABI completeness is not a filter completion gate; no complete current-slice claim.
+Final represented TXT/RTF/Markdown model verification passed 1,735 Writer tests across 139 files and 97 shared XML tests across 22 files. The final targeted run omitted three pre-existing ODT regressions after independently reproducing the same failures on 1c391e9e0. The existing failures are recorded below. TypeScript, changed-source ESLint and Prettier, dependency boundaries, JSDoc, file size, source tree, Writer hint IDs, source provenance and Writer/shared registry passed. The current model capability matrix distinguishes connected native paths, upstream format losses and unrepresented modules. Full-project and compiled desktop Writer differential runs are outside this verification.
 
 <!-- BEGIN VERIFICATION RESULTS -->
 ### 2026-10-28T12:02:35.647Z — VERIFY — blocked_external
@@ -12814,3 +12822,11 @@ RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live
 - Native INFO and TITLE preserve the owning text buffer and original UPR/UD selection. The pinned fdo61507 fixture yields ÉÁŐŰ∭ as title and Hello. as the only body text. WRITER421 records the omitted legacy fallback.
 - Native RtfExport::WriteInfo emits the represented title with OutStringUpr. The existing shell adopts nonblank embedded metadata or keeps the filename-derived title, preserving the browser's nonblank title invariant. The source File and normal browser persistence remain connected.
 - Related Writer sweep: 1,125 passed across 55 files, including mounted import/export dialogs. Typecheck, scoped ESLint/Prettier, JSDoc, size, boundaries, source tree, hint IDs, provenance and Writer registry passed.
+
+### RTF113 — Preserve native tab compatibility across browser ODF reopen
+
+- DomainMapper sets the represented Word tab properties on its original new-document boundary. The actual Writer settings service carries absolute tab offsets, list-tab left-indent behavior and tab/blank compatibility.
+- Packed and browser XML use the same ODF settings stream and manifest entry. The import resolves the configuration group namespace and exact boolean values, applies settings before styles and content, preserves old-package defaults and leaves public filter progress stages intact.
+- Native and mounted browser tests demonstrate that authored RTF TX1440 is still TX1440 after browser storage reopen. WRITER422 records the literal true rule. WRITER423 records the independent page-grid omission.
+- Final Writer verification: 1,735 passed in 139 files. Shared XML verification: 97 passed in 22 files. The initial wider run also reproduced the pre-existing failures on the pre-checkpoint commit 1c391e9e0: odt-list-marker-roundtrip.test.ts:246 gives includeUpperLevels=1 where the assertion expects 3, native-none-numbering.test.ts:133 reports style.GetDoc is not a function, and odt-import-diagnostics.test.ts expects an unknown writing-mode diagnostic already absent on baseline. The final run excludes exactly these three test names. Current filter and browser flow suites pass.
+- Typecheck, scoped lint and format, native dependencies, JSDoc, size, source tree, hint IDs, source provenance and both registries passed. Current model capabilities and source omissions are mapped in docs/program/writer-native-text-filter-slice.md. Earlier column-history failures in the broader incidental table sweeps remain documented in the previous checkpoints.

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
+    "upstreamPath": "xmloff/source/core/SettingsExportHelper.cxx",
+    "localSymbols": [
+      "exportConfigurationSettings"
+    ],
+    "upstreamSymbols": [
+      "XMLSettingsExportHelper::exportBool"
+    ],
+    "preservedResponsibilities": [
+      "Emits the original named boolean configuration item from the represented PropertyValue vector."
+    ],
+    "omittedResponsibilities": [
+      "Other UNO setting types and separate view/document settings are unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
+          "marker": "exportConfigurationSettings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx",
+          "marker": "XMLSettingsExportHelper::exportBool"
+        }
+      ]
+    }
+  }
+}

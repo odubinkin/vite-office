@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts#SwXDocumentSettings",
+        "vendor/libreoffice-reference/sw/source/uibase/uno/SwXDocumentSettings.cxx#SwXDocumentSettings::_setSingleValue",
+        "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values. Other document-settings service properties, UNO introspection and print/view settings are unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwXDocumentSettings"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/uno/SwXDocumentSettings.cxx",
+      "upstreamSymbols": [
+        "SwXDocumentSettings::_setSingleValue"
+      ]
+    }
+  }
+}

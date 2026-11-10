@@ -71,8 +71,6 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       number,
       { name: string; numOffset?: number; continuous: boolean }
     >();
-    // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
-    document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
     const defaultTabs = (
       document.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem
     ).Clone();

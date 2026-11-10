@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts",
+    "upstreamPath": "sw/source/uibase/uno/SwXDocumentSettings.cxx",
+    "localSymbols": [
+      "SwXDocumentSettings"
+    ],
+    "upstreamSymbols": [
+      "SwXDocumentSettings::_setSingleValue"
+    ],
+    "preservedResponsibilities": [
+      "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values."
+    ],
+    "omittedResponsibilities": [
+      "Other document-settings service properties, UNO introspection and print/view settings are unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts",
+          "marker": "SwXDocumentSettings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uno/SwXDocumentSettings.cxx",
+          "marker": "SwXDocumentSettings::_setSingleValue"
+        }
+      ]
+    }
+  }
+}

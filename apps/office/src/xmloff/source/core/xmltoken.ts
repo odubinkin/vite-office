@@ -2,6 +2,8 @@
 
 /** ODF namespace URIs understood by the bounded Writer filter. */
 export const ODF_NAMESPACES = {
+  config: "urn:oasis:names:tc:opendocument:xmlns:config:1.0",
+  ooo: "http://openoffice.org/2004/office",
   draw: "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",
   of: "urn:oasis:names:tc:opendocument:xmlns:of:1.2",
   dc: "http://purl.org/dc/elements/1.1/",
@@ -300,6 +302,11 @@ export enum XMLToken {
   STYLE_FLOW_WITH_TEXT,
   DRAW_FLOW_WITH_TEXT,
   DRAW_WRAP_INFLUENCE_ON_POSITION,
+  OFFICE_DOCUMENT_SETTINGS,
+  CONFIG_ITEM_SET,
+  CONFIG_ITEM,
+  CONFIG_NAME,
+  CONFIG_TYPE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -348,6 +355,11 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "diagonal-bl-tr", XMLToken.STYLE_DIAGONAL_BL_TR],
   [ODF_NAMESPACES.style, "diagonal-bl-tr-width", XMLToken.STYLE_DIAGONAL_BL_TR_WIDTH],
   [ODF_NAMESPACES.style, "diagonal-bl-tr-widths", XMLToken.STYLE_DIAGONAL_BL_TR_WIDTHS],
+  [ODF_NAMESPACES.office, "document-settings", XMLToken.OFFICE_DOCUMENT_SETTINGS],
+  [ODF_NAMESPACES.config, "config-item-set", XMLToken.CONFIG_ITEM_SET],
+  [ODF_NAMESPACES.config, "config-item", XMLToken.CONFIG_ITEM],
+  [ODF_NAMESPACES.config, "name", XMLToken.CONFIG_NAME],
+  [ODF_NAMESPACES.config, "type", XMLToken.CONFIG_TYPE],
   [ODF_NAMESPACES.office, "document-styles", XMLToken.OFFICE_DOCUMENT_STYLES],
   [ODF_NAMESPACES.office, "document-content", XMLToken.OFFICE_DOCUMENT_CONTENT],
   [ODF_NAMESPACES.office, "document-meta", XMLToken.OFFICE_DOCUMENT_META],

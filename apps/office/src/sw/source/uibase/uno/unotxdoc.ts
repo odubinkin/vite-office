@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwXTextDocument text/style/service suppliers from pinned sw/source/uibase/uno/unotxdoc.cxx. No browser/shell lifecycle state enters SwDoc. */
+import { SwXDocumentSettings } from "./SwXDocumentSettings";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
 import { SwUnoTextDocumentPropertyMap, createPropertySetInfo } from "../../core/unocore/unomap";
@@ -61,6 +62,10 @@ export class SwXTextDocument {
     const mode: [boolean] = [false];
     value.extract(mode, "bool");
     doc.SetDefaultPageMode(mode[0]);
+  }
+  /** Supplies the represented document Settings service over the native manager. @returns Native settings owner. */
+  createDocumentSettings(): SwXDocumentSettings {
+    return new SwXDocumentSettings(this.GetDoc());
   }
   /** Borrows the native parent text owner. @returns The represented native operation result. */
   getText(): SwXText {

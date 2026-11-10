@@ -11,6 +11,7 @@ import { packXmlPackage } from "../../../../package/source/zippackage/xml-packag
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { SwDoc } from "../../core/doc/doc";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
+import { exportSettingsXml } from "./xmlexp-settings";
 
 /** Maximum complete STORE-only ODT produced by the browser filter. */
 export const ODT_EXPORT_BYTE_LIMIT = 64 * 1024 * 1024;
@@ -72,6 +73,7 @@ export class SwXMLWriter {
     output.putNextEntry("content.xml", exportContentXml(document, control.isCancelled));
     checkpoint(control, "metadata");
     output.putNextEntry("meta.xml", exportMetaXml(metadata.title, document.GetLocale()));
+    output.putNextEntry("settings.xml", exportSettingsXml(document));
     for (const font of fonts) {
       if (font.bytes === undefined)
         throw new Error(`ODF embedded font bytes are missing: ${font.path}`);
@@ -113,6 +115,7 @@ function createWriterManifestXml(fonts: readonly string[]): string {
     ["/", ODT_MIMETYPE],
     ["content.xml", "text/xml"],
     ["styles.xml", "text/xml"],
+    ["settings.xml", "text/xml"],
     ["meta.xml", "text/xml"],
     ...fonts.map(
       /** Writer font media type. @param path - Path. @returns Entry. */ (path) =>

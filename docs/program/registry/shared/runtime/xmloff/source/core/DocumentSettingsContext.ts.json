@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/DocumentSettingsContext.ts#XMLDocumentSettingsContext",
+        "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx#XMLDocumentSettingsContext::createFastChildContext",
+        "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Resolves the original namespace-qualified ODF configuration set and converts represented boolean values through native PropertyValue. View and document-specific setting groups, nested maps and nonboolean values are unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLDocumentSettingsContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/core/DocumentSettingsContext.cxx",
+      "upstreamSymbols": [
+        "XMLDocumentSettingsContext::createFastChildContext"
+      ]
+    }
+  }
+}

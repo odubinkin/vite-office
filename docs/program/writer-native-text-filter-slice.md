@@ -12,6 +12,32 @@ Completion means faithful TXT export and RTF/Markdown import/export for the curr
 
 For every remaining kernel dependency, record the calling filter, the affected current-model capability and the behavior that fails without that dependency. Historical prerequisite checkpoints below are evidence and implementation history, not an automatically expanding list of filter completion gates.
 
+## Current model verification
+
+The following map describes the current executable paths. The detailed
+checkpoints below preserve implementation history and individual source
+losses. Source comparison and selected native fixtures cover the represented
+paths. A compiled desktop Writer differential, arbitrary malformed inputs,
+and the unrepresented modules listed below have separate verification scope.
+
+| Current owner or scenario | Connected paths and evidence |
+| --- | --- |
+| Shell and browser file operations | The mounted `WriterFileDialog.test.tsx` invokes TXT, RTF and Markdown export and RTF/Markdown Open through `SwDocShell`. Tests cover native byte output, successful document replacement, failed candidate admission, browser storage, nested/anchored tables and retained tab geometry after RTF reopen. |
+| Native text, breaks, ranges and numbering labels | `native-ascii-range.test.ts` covers full documents, ranges, paragraph ends, native labels, nested table coordinates and the first fly case. `rtftokenizer.test.ts`, `rtf-text-symbol.test.ts` and the encoding suites cover RTF group and Unicode handling. The pinned md4c callback comparisons and `swmd.callbacks.integration.test.ts` exercise actual Markdown text callbacks. |
+| Character and paragraph items and styles | RTF character, language, font-table, marker, position, border and shading suites cover represented direct and styled items, automatic/associated state, and authored resets. `wrtmd.test.ts` exercises native paragraph items, named and automatic hints, code, links and formatting order. Raw Markdown HTML applies the supported native text and CSS properties. TXT emits visible text and labels. |
+| Lists and outline | RTF numbering, list-label, list-style, override and paragraph-numbering tests exercise style ancestry, labels and native levels. `mdnum.test.ts` and `swmd.test.ts` cover Markdown list creation and transitions. Native numbering has the documented RTF restart and shared-identity losses. |
+| Tables and text flies | RTF table-direction, geometry, floating-table and text-frame tests cover cell/row properties, nested and compound merges and anchored content. `swmd.html-table.test.ts`, `wrtmd.test.ts` and `native-ascii-range.test.ts` cover the native Markdown and TXT representations. Markdown's empty image output and nested table flattening follow WRITER420 and WRITER394. |
+| Page descriptors, flow and marks | RTF first-page, section, break, direction and line-numbering tests cover represented page geometry, follow-page and restart decisions, hard and soft breaks, point bookmarks and paragraph flow. TXT and Markdown omit structural page/mark metadata. RTF page text grid is a source omission (WRITER423). |
+| Document properties and compatibility | RTF INFO carries the represented title through native Unicode alternatives. The pinned fdo61507 fixture and mounted file dialog exercise decoded title and filename fallback. The RTF absolute-tab and list compatibility settings reach the native browser ODF stream, verified by `native-rtf-tab-settings-roundtrip.test.ts`. |
+
+The model boundary excludes graphic and OLE nodes, inline graphic hints,
+content controls, ranged bookmarks, Writer fields and redlines, footnote and
+header/footer bodies, named document sections, and desktop layout and filter
+services beyond the current portable model. Where the upstream format has
+no representation or drops data, the corresponding native behavior remains
+part of the audited path. Browser-specific file identity, UTF-8 text download,
+autosave and recovery policy remain at their existing application boundaries.
+
 | Current native model capability | TXT export | RTF import/export | Markdown import/export | Closure status |
 | --- | --- | --- | --- | --- |
 | Body paragraphs, Unicode, hard line breaks | `SwASCWriter` and `OutASC_SwTextNode` | `RtfTokenizer`, `RtfDocumentImpl`, `RtfExport`; hex CR/LF each dispatch a paragraph in body text, and Unicode fallback skips characters while preserving intervening control words and the parent group's fallback state. Signed `\uc` and its bare default follow source. Raw ANSI bytes reach the document parser, where group-scoped `\ansicpg`/`\cpg`, selected-font `\fcharset`, default-font `\plain`, and the pinned font-name suffix precedence select decoding. The live parser callback preserves Shift-JIS trailing backslashes and braces as encoded text. ASCII, ISO-8859-1–9/15, KOI8-R/U, IBM 437/737/775/850/852/855/857/860–866/869, Windows-874, Windows-1250–1258 and Apple Roman/Central European/Croatian/Cyrillic/Greek/Icelandic/Romanian/Turkish/Ukrainian use pinned SAL tables; MS-932/936/949/950, JOHAB/MS-1361, EUC-CN/KR and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese use pinned SAL DBCS lead/trail tables and each source aggregate’s EUDC setting; EUC-JP uses its separate pinned SAL JIS-0208/JIS-0212, SS2 and SS3 converter; ISO-2022-JP/KR code pages 50220/50225 use pinned SAL state machines and source-owned JIS/KS tables; ISCII Devanagari uses its pinned stateful map and nukta/halant combinations; UTF-7 code page 65000 uses the pinned SAL Base64-shift decoder, including its disabled context restore; UTF-8 code page 65001 uses the pinned SAL streaming decoder, including its default BOM and malformed-input behavior; OStringToOUString flags map undefined single bytes to U+F100–U+F1FF and flush incomplete UTF-8; missing SAL converters use the pinned byte-to-U+00xx dummy fallback, including Apple Arabic/Hebrew code pages 10004/10005 and unknown code pages; Symbol uses the pinned private-use converter | `SwMarkdownParser`, `SwMDWriter`; recognized HTML entities and null characters follow the pinned no-insertion callbacks, while escaped forms and code text remain visible | Targeted coverage exists. **Open:** the full byte/code-page matrix and compiled upstream differential behavior remain unverified. Apple Arabic/Hebrew are explicitly unimplemented in pinned SAL (WRITER115). Pinned negative `\uc` can suppress later text (WRITER108), while Markdown entity callbacks discard recognized text (WRITER106). |
@@ -2406,3 +2432,19 @@ nonblank title becomes the shell title on Open. A missing or blank
 title falls back to the browser file identity because shell document
 titles must be nonblank. The source medium and autosave workflow are
 retained.
+
+### RTF113 — Tab compatibility settings survive native browser reopen
+
+New RTF documents initialize the represented Word compatibility
+properties through DomainMapper and the native Writer settings
+owner. Explicit RTF tab stops remain absolute. The list tab setting
+uses the paragraph left indent. The document also retains the
+source tab/blank compatibility flag.
+
+The ODF package stores these properties in settings.xml under the
+original namespace-qualified configuration-settings group. Packed
+and unpacked browser ODF use the same stream. The reader restores the
+properties before named styles and body text. An older package with
+no settings stream keeps its native defaults. WRITER422 records the
+source boolean token rule. WRITER423 records the independent native
+RTF page grid omission.
