@@ -1,4 +1,5 @@
 /** @fileoverview SwXTextRange's consumed text-range contract from pinned unoobj2.cxx, over registered canonical positions. */
+import { UnoCursorPointer } from "../../../inc/unocrsr";
 import type { UnoMark } from "../crsr/bookmark";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwDoc } from "../doc/doc";
@@ -29,6 +30,7 @@ export class SwXTextRange {
   private disposed = false;
   private readonly mark: UnoMark | undefined;
   private readonly document: SwDoc;
+  private readonly cursorPointer: UnoCursorPointer | undefined;
   /** Binds the represented native owner and its declared inputs. @param range - Registered canonical range. @param parent - Borrowed parent text owner. @param ownMark - Original ownMark input. @returns Nothing. */
   constructor(
     range: SwPaM,
@@ -36,7 +38,23 @@ export class SwXTextRange {
     ownMark = true,
   ) {
     this.document = parent.GetDoc();
-    this.pam = new SwPaM(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined);
+    if (ownMark)
+      this.pam = new SwPaM(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined);
+    else {
+      const held = this.document.CreateUnoCursor(range.GetPoint());
+      try {
+        this.cursorPointer = new UnoCursorPointer(held);
+        const cursor = held.get();
+        if (!cursor) throw new Error("assert(created UNO cursor)");
+        this.pam = cursor;
+        if (range.HasMark()) {
+          cursor.SetMark();
+          cursor.GetMark().Assign(range.GetMark().GetNode(), range.GetMark().GetContentIndex());
+        }
+      } finally {
+        held.reset();
+      }
+    }
     this.pam.Start().nContent.SetAffinity("after");
     this.pam.End().nContent.SetAffinity("before");
     this.mark = ownMark
@@ -46,6 +64,7 @@ export class SwXTextRange {
   /** Checks both document and containing text ownership before exposing positions. @returns The represented native operation result. */
   GetPaM(): SwPaM {
     if (this.disposed) invalid("Text range is disposed");
+    if (this.cursorPointer && !this.cursorPointer.get()) invalid("UNO cursor is invalid");
     if (this.mark && !this.mark.GetPositions(this.pam)) invalid("UNO range mark is disposed");
     const nodes = this.parent.GetDoc().GetNodes().entries();
     if (!nodes.includes(this.pam.Start().GetNode()) || !nodes.includes(this.pam.End().GetNode()))
@@ -56,7 +75,11 @@ export class SwXTextRange {
   SetPositions(range: SwPaM): void {
     if (this.mark) {
       if (!this.mark.SetPositions(range)) invalid("UNO range mark is disposed");
-    } else this.pam.Assign(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined);
+    } else {
+      if (this.disposed || (this.cursorPointer && !this.cursorPointer.get()))
+        invalid("UNO cursor is invalid");
+      this.pam.Assign(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined);
+    }
   }
   /** Borrows the owning canonical document. @returns The represented native operation result. */
   GetDoc(): SwDoc {
@@ -157,7 +180,8 @@ export class SwXTextRange {
     if (!this.disposed) {
       this.disposed = true;
       if (this.mark) this.document.GetIDocumentMarkAccess().DeleteUnoMark(this.mark);
-      this.pam.Dispose();
+      if (this.cursorPointer) this.cursorPointer.Dispose();
+      else this.pam.Dispose();
     }
   }
 }

@@ -1,5 +1,8 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import { SwUndoTextFormatCollDelete } from "../undo/SwUndoFmt";
+import { SwFlyFrameFormat, type SwFrameFormat } from "../layout/atrfrm";
+import type { SwFormat } from "../attr/format";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { BroadcastingModify } from "../../../inc/calbck";
@@ -11,6 +14,7 @@ import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import {
   isDrawingLayerAttribute,
   RES_CHRATR_BEGIN,
+  RES_TXTATR_AUTOFMT,
   RES_TXTATR_END,
   RES_PARATR_BEGIN,
   RES_PARATR_LIST_END,
@@ -24,7 +28,6 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
-import { MakeTextAttr } from "../txtnode/thints";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -218,23 +221,17 @@ export function InsertPoolItem(
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
     if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
     else if (item instanceof SwFormatINetFormat) node.InsertItem(item, start, end, mode);
-    else if (item instanceof SwFormatAutoFormat) node.InsertItem(item, start, end, mode);
-    else if (
-      item.Which() < RES_CHRATR_END &&
-      start !== end &&
-      ((mode & SetAttrMode.NOFORMATATTR) !== 0 ||
-        start !== 0 ||
-        end !== node.Len() ||
-        node
-          .GetpSwpHints()
-          ?.entries()
-          .some(
-            /** Native whole-paragraph SetAttr retains hints when a character style is present. @param hint - Actual hint. @returns Named character owner. */
-            (hint) => hint.IsCharFormatAttr(),
-          ))
-    )
-      node.InsertHint(MakeTextAttr(document, item, start, end), mode);
-    else node.SetAttr(item);
+    else if (item instanceof SwFormatAutoFormat && item.Which() === RES_TXTATR_AUTOFMT)
+      node.InsertItem(item, start, end, mode);
+    else if (item.Which() >= RES_CHRATR_BEGIN && item.Which() < RES_CHRATR_END) {
+      const set = new SfxItemSet(document.GetAttrPool(), [[item.Which(), item.Which()]]);
+      try {
+        set.Put(item);
+        node.SetAttr(set, start, end, mode);
+      } finally {
+        set.Dispose();
+      }
+    } else node.SetAttr(item);
   }
 }
 
@@ -295,7 +292,7 @@ export function CopyTextColl(document: SwDoc, source: SwTextFormatColl): SwTextF
 }
 
 /** Original ChgFormat stores explicit INVALID markers for newly introduced identities before the format mutation. @param document - Owning document. @param format - Represented paragraph collection. @param set - Incoming set. @returns Nothing. */
-export function ChgFormat(document: SwDoc, format: SwTextFormatColl, set: SfxItemSet): void {
+export function ChgFormat(document: SwDoc, format: SwFormat, set: SfxItemSet): void {
   if (document.GetUndoManager().DoesUndo()) {
     const added = new SfxItemSet(set);
     added.Differentiate(format.GetAttrSet());
@@ -448,4 +445,36 @@ export function CopyCharFormat(doc: SwDoc, source: SwCharFormat): SwCharFormat {
   for (const item of source.GetAttrSet().entries()) format.SetFormatAttr(item);
   format.SetPoolFormatId(source.GetPoolFormatId());
   return format;
+}
+
+/** Original source factory registers the real fly format before publishing modified state. @param doc - Actual document. @param name - Native name. @param parent - Actual inherited frame format. @returns Registered fly format. */
+export function MakeFlyFrameFormat(
+  doc: SwDoc,
+  name: string,
+  parent: SwFrameFormat | undefined,
+): SwFlyFrameFormat {
+  const format = new SwFlyFrameFormat(doc.GetAttrPool(), name, parent);
+  doc.GetSpzFrameFormats().push_back(format);
+  doc.GetDocumentStateManager().SetModified();
+  return format;
+}
+
+/** Original SwDoc frame-name lookup deliberately uses positional SwFormatsBase::FindFormatByName rather than the collection's composite type/name index. @param document - Actual document. @param name - Requested native name. @returns First ordinary frame by insertion order or absent. */
+export function FindFrameFormatByName(document: SwDoc, name: string): SwFrameFormat | undefined {
+  return document.GetFrameFormats().FindFormatByName(name) as SwFrameFormat | undefined;
+}
+
+/** Original represented paragraph deletion: never delete default, append real delete history before removal, correct nondefault next links and destroy before existing host notification. Native conditional-collection and stylesheet-pool broadcasting remain unported. @param document - Actual document. @param collection - Actual owned style. @returns Nothing. */
+export function DelTextFormatColl(document: SwDoc, collection: SwTextFormatColl): void {
+  if (collection === document.GetDfltTextFormatColl()) return;
+  if (!document.GetTextFormatColls().includes(collection))
+    throw new Error("assert(document-owned paragraph collection)");
+  if (document.GetUndoManager().DoesUndo())
+    document.GetUndoManager().AddUndoAction(new SwUndoTextFormatCollDelete(collection, document));
+  document.getIDocumentStylePoolAccess().RemoveTextFormatColl(collection);
+  for (const owner of document.GetTextFormatColls().slice(1))
+    if (owner.GetNextTextFormatColl() === collection) owner.SetNextTextFormatColl(owner);
+  const name = collection.GetName();
+  collection.DisposeModify();
+  document.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
 }

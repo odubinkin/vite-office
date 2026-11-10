@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.language.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.language.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-language.test.ts",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#case Destination::SHAPETEXT:"
+      ],
+      "justification": "S3HW1E connects native RTF lang/alang/langfe through saved RTFParserState run types, LanguageTag numeric-to-BCP47 conversion, real nested RTFSprms, DomainMapper Locale properties, typed UNO Locale transport and original SvxLanguageItem conversion. LANG-before-text paragraph properties are captured at checkNeedPap emission with owned snapshots, preserving nested-group and later-run order; plain/paragraph resets and empty paragraphs are tested. Source-derived pseudo character runs split actual export at script/bidi boundaries and feed RTLAndCJKState; for this direction-less Writer paragraph profile the caller explicitly supplies the pinned Environment pool default, not guessed text/locale direction. Native single-empty-run output omits braces. Deflang/adeflang zero-child nesting remains as upstream (WRITER251). Actual mixed-script and Markdown/Worker/RTF round-trips pass. Generic layout-direction/frame owners, fields and full RTF/OOXML/ABI parity are not claimed; all broad parity confidence remains unverified. RTF102. The text language state contributes to the current body or shape text append scope.",
+      "knownViolations": [],
+      "localSymbols": [
+        "dispatchLanguageValue"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::dispatchCharacterAttributeValue",
+        "RTFDocumentImpl::dispatchValue"
+      ]
+    }
+  }
+}

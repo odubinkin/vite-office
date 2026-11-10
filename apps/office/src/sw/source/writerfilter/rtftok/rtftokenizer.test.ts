@@ -12,12 +12,15 @@ it("retains nested group boundaries and signed control parameters", /** Checks t
     JSON.stringify([
       { kind: "group-start" },
       { kind: "control", name: "rtf", parameter: 1 },
+      { kind: "character-source", firstByte: 65, lastByte: 123 },
       { kind: "ansi-bytes", value: Uint8Array.of(65) },
       { kind: "group-start" },
       { kind: "control", name: "b" },
+      { kind: "character-source", firstByte: 66, lastByte: 125 },
       { kind: "ansi-bytes", value: new TextEncoder().encode("Bold") },
       { kind: "group-end" },
       { kind: "control", name: "li", parameter: -240 },
+      { kind: "character-source", firstByte: 66, lastByte: 125 },
       { kind: "ansi-bytes", value: Uint8Array.of(66) },
       { kind: "group-end" },
     ]),
@@ -26,12 +29,14 @@ it("retains nested group boundaries and signed control parameters", /** Checks t
 
 it("decodes Unicode and skips the configured ANSI fallback width", /** Checks native uc/u lexical ownership. @returns Nothing. */ () => {
   expect(tokenize("{\\rtf1\\uc2\\u1046?? \\uc1\\u233?}")).toContainEqual({
-    kind: "text",
-    value: "Ж",
+    kind: "control",
+    name: "u",
+    parameter: 1046,
   });
   expect(tokenize("{\\rtf1\\uc2\\u1046?? \\uc1\\u233?}")).toContainEqual({
-    kind: "text",
-    value: "é",
+    kind: "control",
+    name: "u",
+    parameter: 233,
   });
 });
 
@@ -46,9 +51,11 @@ it("keeps control words while a Unicode fallback character remains pending", /**
   expect(tokenize(String.raw`{\rtf1 A\u233\par?B}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
+    { kind: "character-source", firstByte: 65, lastByte: 92 },
     { kind: "ansi-bytes", value: Uint8Array.of(65) },
-    { kind: "text", value: "é" },
+    { kind: "control", name: "u", parameter: 233 },
     { kind: "control", name: "par" },
+    { kind: "character-source", firstByte: 66, lastByte: 125 },
     { kind: "ansi-bytes", value: Uint8Array.of(66) },
     { kind: "group-end" },
   ]);
@@ -59,12 +66,22 @@ it("restores the parent Unicode fallback count after an RTF group", /** Checks r
     .filter(
       /** Checks restores the parent Unicode fallback count after an RTF group. @param token - Token. @returns Test completion or assertion result. */ (
         token,
-      ) => token.kind === "text" || token.kind === "ansi-bytes",
+      ) =>
+        token.kind === "text" ||
+        token.kind === "ansi-bytes" ||
+        (token.kind === "control" && token.name === "u"),
     )
     .map(
       /** Checks restores the parent Unicode fallback count after an RTF group. @param token - Token. @returns Test completion or assertion result. */ (
         token,
-      ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+      ) =>
+        token.kind === "text"
+          ? token.value
+          : token.kind === "control"
+            ? String.fromCharCode(token.parameter ?? 0)
+            : token.kind === "ansi-bytes"
+              ? new TextDecoder().decode(token.value)
+              : "",
     )
     .join("");
   expect(text).toBe("éX");
@@ -76,12 +93,22 @@ it("retains the pinned signed Unicode fallback width and bare uc default", /** C
       .filter(
         /** Checks é. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => token.kind === "text" || token.kind === "ansi-bytes",
+        ) =>
+          token.kind === "text" ||
+          token.kind === "ansi-bytes" ||
+          (token.kind === "control" && token.name === "u"),
       )
       .map(
         /** Checks é. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+        ) =>
+          token.kind === "text"
+            ? token.value
+            : token.kind === "control"
+              ? String.fromCharCode(token.parameter ?? 0)
+              : token.kind === "ansi-bytes"
+                ? new TextDecoder().decode(token.value)
+                : "",
       )
       .join(""),
   ).toBe("é");
@@ -90,12 +117,22 @@ it("retains the pinned signed Unicode fallback width and bare uc default", /** C
       .filter(
         /** Checks éX. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => token.kind === "text" || token.kind === "ansi-bytes",
+        ) =>
+          token.kind === "text" ||
+          token.kind === "ansi-bytes" ||
+          (token.kind === "control" && token.name === "u"),
       )
       .map(
         /** Checks éX. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+        ) =>
+          token.kind === "text"
+            ? token.value
+            : token.kind === "control"
+              ? String.fromCharCode(token.parameter ?? 0)
+              : token.kind === "ansi-bytes"
+                ? new TextDecoder().decode(token.value)
+                : "",
       )
       .join(""),
   ).toBe("éX");
@@ -104,12 +141,22 @@ it("retains the pinned signed Unicode fallback width and bare uc default", /** C
       .filter(
         /** Checks ?X. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => token.kind === "text" || token.kind === "ansi-bytes",
+        ) =>
+          token.kind === "text" ||
+          token.kind === "ansi-bytes" ||
+          (token.kind === "control" && token.name === "u"),
       )
       .map(
         /** Checks ?X. @param token - Token. @returns Test completion or assertion result. */ (
           token,
-        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+        ) =>
+          token.kind === "text"
+            ? token.value
+            : token.kind === "control"
+              ? String.fromCharCode(token.parameter ?? 0)
+              : token.kind === "ansi-bytes"
+                ? new TextDecoder().decode(token.value)
+                : "",
       )
       .join(""),
   ).toBe("?X");
@@ -119,9 +166,13 @@ it("keeps each escaped hex CR and LF for destination-aware paragraph dispatch", 
   expect(tokenize(String.raw`{\rtf1 A\'0d\'0aB}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
+    { kind: "character-source", firstByte: 65, lastByte: 92 },
+    { kind: "character-source", firstByte: 13, lastByte: 13 },
     { kind: "ansi-bytes", value: Uint8Array.of(65) },
     { kind: "hex-break", value: "\r" },
+    { kind: "character-source", firstByte: 10, lastByte: 10 },
     { kind: "hex-break", value: "\n" },
+    { kind: "character-source", firstByte: 66, lastByte: 125 },
     { kind: "ansi-bytes", value: Uint8Array.of(66) },
     { kind: "group-end" },
   ]);
@@ -178,7 +229,8 @@ it("consumes an escaped nonletter as the Unicode fallback unit", /** Checks lexi
   expect(tokenize(String.raw`{\rtf1\uc1\u233\~X}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
-    { kind: "text", value: "é" },
+    { kind: "control", name: "u", parameter: 233 },
+    { kind: "character-source", firstByte: 88, lastByte: 125 },
     { kind: "ansi-bytes", value: Uint8Array.of(88) },
     { kind: "group-end" },
   ]);
@@ -208,15 +260,34 @@ it.each([32768, -32769])(
     width,
   ) => {
     const source = "{\\rtf1\\uc" + width + "\\u233?X}";
-    expect(tokenize(source)).toContainEqual({ kind: "text", value: "é" });
+    expect(tokenize(source)).toContainEqual({ kind: "control", name: "u", parameter: 233 });
     expect(tokenize(source)).toContainEqual({ kind: "ansi-bytes", value: Uint8Array.of(88) });
   },
 );
 
 it("uses zero for a Unicode control without a numeric argument", /** Checks the lexical default while preserving following input. @returns Nothing. */ () => {
-  expect(tokenize(String.raw`{\rtf1\u?X}`)).toContainEqual({ kind: "text", value: "\0" });
+  expect(tokenize(String.raw`{\rtf1\u?X}`)).toContainEqual({
+    kind: "control",
+    name: "u",
+    parameter: 0,
+  });
   expect(tokenize(String.raw`{\rtf1\u?X}`)).toContainEqual({
     kind: "ansi-bytes",
     value: Uint8Array.of(88),
   });
+});
+
+it("keeps the first collected Shift-JIS trail after a skipped lead in resolveChars origin", /** Source positions use the collected first byte independently of the raw run's original lead. @returns Nothing. */ () => {
+  const prefix = new TextEncoder().encode(String.raw`{\rtf1\u233`),
+    events: RtfToken[] = [];
+  new RtfTokenizer(Uint8Array.from([...prefix, 0x82, 0x3b, 0x7d])).Parse(
+    /** Collects original source and decoded events. @param event - Lexical event. @returns Nothing. */ (
+      event,
+    ) => {
+      events.push(event);
+    },
+    /** Source active encoding. @returns Shift-JIS. */ () => 932,
+  );
+  expect(events).toContainEqual({ kind: "character-source", firstByte: 59, lastByte: 125 });
+  expect(events).toContainEqual({ kind: "ansi-bytes", value: Uint8Array.of(59) });
 });

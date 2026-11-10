@@ -1,4 +1,9 @@
 /** @fileoverview Owns external fragment and plain-text reads over SwReader native selected-cell rings. */
+import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RES_LR_SPACE, RES_UL_SPACE, RES_BOX } from "../../../inc/hintids";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPosition, type SwPaM } from "../../core/crsr/pam";
@@ -151,4 +156,19 @@ function advancePosition(
   for (const point of points)
     if (point.node === position.node && point.offset <= position.offset) offset += length;
   return { node: position.node, offset };
+}
+
+/** Original Reader::ResetFrameFormatAttrs source responsibility; only LR/UL/box items are replaced, never the entire frame set. @param items - Actual frame set. @returns Nothing. */
+export function ResetFrameFormatAttrs(items: SfxItemSet): void {
+  for (const item of [
+    new SvxLRSpaceItem(RES_LR_SPACE),
+    new SvxULSpaceItem(RES_UL_SPACE),
+    new SvxBoxItem(RES_BOX),
+  ]) {
+    try {
+      items.Put(item);
+    } finally {
+      item.Dispose();
+    }
+  }
 }

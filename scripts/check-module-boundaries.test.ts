@@ -302,6 +302,8 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
+    expect(isForbiddenModuleEdge("editeng", "udkapi")).toBe(false);
+    expect(isForbiddenModuleEdge("udkapi", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
     expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "xmloff")).toBe(false);
@@ -730,6 +732,8 @@ it("keeps primitive language identities below Editeng and browser owners", /** N
   expect(isForbiddenModuleEdge("sc", "i18nlangtag")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nlangtag", "external")).toBe(false);
+  expect(isForbiddenModuleEdge("external", "i18nlangtag")).toBe(true);
   for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
   expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");

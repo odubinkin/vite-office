@@ -27,3 +27,6 @@ export const SID_ATTR_TABLE_RIGHT_SPACE = 21762 as const;
 export const FN_SET_SUPER_SCRIPT = 20411 as const;
 /** Native FN_FORMAT +12, explicit SfxBoolItem request. */
 export const FN_SET_SUB_SCRIPT = 20412 as const;
+
+/** Native ListAutoFormat UNO dispatch, FN_EXTRA2(22200) +11; not a pooled Which. */
+export const FN_UNO_PARA_NUM_AUTO_FORMAT = 22211 as const;

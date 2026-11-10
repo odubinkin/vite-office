@@ -1,11 +1,20 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
 
 import { SwFrameFormat } from "./atrfrm";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  RES_LR_SPACE,
+  RES_FRM_SIZE,
+  RES_UL_SPACE,
+  RES_BOX,
+  RES_BACKGROUND,
+} from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { BroadcastingModify } from "../../../inc/calbck";
 import type { SwFindNearestNode } from "../../../inc/hints";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { PaperInfo } from "../../../../i18nutil/inc/paper";
 import { SvxPaperInfo } from "../../../../editeng/inc/paperinf";
 import { preparePlatformLocale } from "../../../../i18nlangtag/source/isolang/insys.locale";
@@ -83,7 +92,11 @@ export class SwPageDesc extends BroadcastingModify {
           undefined,
           original ? (original.DerivedFrom() as SwFrameFormat | undefined) : parent,
         );
-        if (original) result.SetFormatAttrSet(original.GetAttrSet());
+        if (original) {
+          result.SetFormatAttrSet(original.GetAttrSet());
+          result.SetPoolFormatId(original.GetPoolFormatId());
+          result.SetAuto(original.IsAuto());
+        }
         return result;
       };
     this.m_Master = frame(typeof source === "string" ? undefined : source.GetMaster());
@@ -94,6 +107,35 @@ export class SwPageDesc extends BroadcastingModify {
     if (typeof source !== "string") {
       this.m_IsLandscape = source.m_IsLandscape;
       this.m_eUse = source.m_eUse;
+    }
+  }
+  /** Original descriptor pool identity is owned by the master format. @returns Native ID. */
+  GetPoolFormatId(): SwPoolFormatId {
+    return this.m_Master.GetPoolFormatId();
+  }
+  /** Original master-owned pool identity mutation. @param id - Native ID. @returns Nothing. */
+  SetPoolFormatId(id: SwPoolFormatId): void {
+    this.m_Master.SetPoolFormatId(id);
+  }
+  /** Original Mirror changes only left margins and copies the native represented effective frame items; drawing fills and text grid are not added to its source list. @returns Nothing. */
+  Mirror(): void {
+    const margin = new SvxLRSpaceItem(RES_LR_SPACE),
+      source = this.m_Master.GetLRSpace(),
+      items = new SfxItemSet(
+        this.m_Master.GetAttrSet().GetPool(),
+        this.m_Master.GetAttrSet().GetRanges(),
+      );
+    margin.SetLeft(source.GetRight());
+    margin.SetRight(source.GetLeft());
+    margin.SetRightGutterMargin(source.GetGutterMargin());
+    try {
+      items.Put(margin);
+      for (const which of [RES_FRM_SIZE, RES_UL_SPACE, RES_BOX, RES_BACKGROUND])
+        items.Put(this.m_Master.GetAttrSet().Get(which));
+      this.m_Left.SetFormatAttrSet(items);
+    } finally {
+      items.Dispose();
+      margin.Dispose();
     }
   }
   /** Native master format. @returns Frame. */ GetMaster(): SwFrameFormat {
@@ -143,6 +185,15 @@ export class SwPageDesc extends BroadcastingModify {
   }
   /** Original follow pointer. @returns Descriptor. */ GetFollow(): SwPageDesc {
     return this.m_pFollow;
+  }
+  /** Original first header/footer sharing bit, independent of page-side usage. @returns Sharing flag. */
+  IsFirstShared(): boolean {
+    return Boolean(this.m_eUse & UseOnPage.FirstShare);
+  }
+  /** Original first-page sharing mutation preserves every other use flag. @param value - Sharing flag. @returns Nothing. */
+  ChgFirstShare(value: boolean): void {
+    if (value) this.m_eUse |= UseOnPage.FirstShare;
+    else this.m_eUse &= UseOnPage.NoFirstShare;
   }
   /** Original complete page usage bits. @returns Flags. */ ReadUseOn(): UseOnPage {
     return this.m_eUse;
@@ -200,7 +251,7 @@ export class SwPageDesc extends BroadcastingModify {
       frame.SetFormatAttr(ul);
     }
   }
-  /** Existing document-copy binding rebases self-follow after native copy construction, as MakePageDesc does. @returns Clone. */ Clone(): SwPageDesc {
+  /** Existing browser value-copy binding rebases self-follow after native copy construction; native MakePageDesc uses the original constructor directly. @returns Clone. */ Clone(): SwPageDesc {
     const copy = new SwPageDesc(this);
     if (this.m_pFollow === this) copy.SetFollow(null);
     return copy;

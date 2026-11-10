@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmltab.read.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmltab.read.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.caption-reader.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "S3HW1E HTML55: original fresh BuildTable construction block now reads actual lexer options, applies CSS both-auto-margin parent centering, preserves explicit ALIGN and reverse STYLE precedence, inserts the real table-ID bookmark and installs the actual registered HTMLTable on the parser. Original caption begin/end blocks save actual attributes/context/numbering/position, construct the real caption section, open native centered adjustment, preserve source any-bottom duplicate ALIGN behavior, close local contexts, strip trailing linefeeds/paragraphs, append the required empty top-level paragraph, apply deferred attributes, restore stacks/numbering and finally restore the saved point. Native CSS1 length enum values0/1/2/3 replace an unnamed source constant at the new table consumer. Existing body/inline/UTF8 producers and native document nodes are used, without another parser, table model, token provider, layout result or measurement. These are explicit source construction/lifecycle responsibility fragments, not the completed BuildTable/BuildTableCaption token loops: recursive table/cell/row/caption orchestration, native pending-device stack (current streams are synchronous), node-range caption placement, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required. Whole module/default/contract/behavior/ABI parity remains unverified; browser file/autosave/recovery deviations stay unchanged. HTML88. The fresh-table construction is used by the production lexer loop and releases its temporary CSS item set after selection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CreateHTMLTable"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmltab.cxx",
+      "upstreamSymbols": [
+        "BuildTable"
+      ]
+    }
+  }
+}

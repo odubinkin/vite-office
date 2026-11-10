@@ -55,6 +55,22 @@ it("rejects missing headers and content outside a pretokenized root", /** Checks
   ).toThrow("RTF content is outside the root group");
 });
 
+it.each(["", "2"])(
+  "admits the original RTF destination with version suffix %j",
+  /** The native destination dispatch does not inspect a version parameter. @param suffix - Optional source suffix. @returns Nothing. */ (
+    suffix,
+  ) => {
+    const doc = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(`{\\rtf${suffix} Native}`),
+    );
+    try {
+      expect(doc.paragraphs[0]?.GetText()).toBe("Native");
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+
 it("admits an empty pretokenized text span without creating a spurious run", /** Checks the public token route's empty-text boundary. @returns Nothing. */ () => {
   const doc = new RtfDocumentImpl().Resolve([
     { kind: "group-start" },
@@ -95,7 +111,9 @@ it("keeps escaped CR and LF inside list level text and ignores unrelated destina
     const paragraph = doc.paragraphs[0];
     assert(paragraph);
     expect(paragraph.GetText()).toBe("Item");
-    expect(paragraph.GetNumRule()?.Get(0).GetBulletChar()).toBe(0x2a);
+    // Native LEVELTEXT consumes the declared one UTF16 unit; it does not scan ahead for a printable glyph.
+    expect(paragraph.GetNumRule()?.Get(0).GetBulletChar()).toBe(0x0d);
+    expect(paragraph.GetNumRule()?.Get(0).GetListFormat()).toBe("\r");
     expect(projectWriterTextRuns(paragraph)[0]?.attributes).toMatchObject({
       bold: false,
       italic: false,
@@ -126,14 +144,32 @@ it("retains nested style identities and discards empty bookmark names", /** Chec
   }
 });
 
-it("uses the native ANSI default for zero codepages and unknown font or charset metadata", /** Checks meaningful recovery of the Euro byte and automatic color. @returns Nothing. */ () => {
+it("uses the native ANSI default and RGB zero for unknown color indices", /** Checks recovery of the Euro byte and the original palette fallback. @returns Nothing. */ () => {
   const source = String.raw`{\rtf1\ansicpg0\cpg0\fcharset0\fcharset999\f9999\cf9999\ulc0\'80}`;
   const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
   try {
     const paragraph = doc.paragraphs[0];
     assert(paragraph);
     expect(paragraph.GetText()).toBe("€");
-    expect(projectWriterTextRuns(paragraph)[0]?.attributes.color).toBe("auto");
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes.color).toBe("#000000");
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("keeps the group's original RGB components and reads an explicit palette index zero", /** An inner color entry consumes its own saved state and an empty entry stays automatic. @returns Nothing. */ () => {
+  const source = String.raw`{\rtf1{\colortbl\red20{\green128;};;}\cf0 A\cf1 B\cf2 C}`;
+  const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
+  try {
+    const paragraph = doc.paragraphs[0];
+    assert(paragraph);
+    expect(
+      projectWriterTextRuns(paragraph).map(
+        /** Reads the imported native color at each run. @param run - Native text projection. @returns Color. */ (
+          run,
+        ) => run.attributes.color,
+      ),
+    ).toEqual(["#148000", "#140000", "auto"]);
   } finally {
     doc.Dispose();
   }

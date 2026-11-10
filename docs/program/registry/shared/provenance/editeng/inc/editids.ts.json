@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.border.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -36,6 +40,10 @@
         {
           "path": "include/editeng/editids.hrc",
           "marker": "SID_ATTR_CHAR_AUTOKERN"
+        },
+        {
+          "path": "include/editeng/editids.hrc",
+          "marker": "SID_ATTR_BORDER_OUTER"
         }
       ]
     },
@@ -59,7 +67,9 @@
       "V4DQJW adds original native slots10011 and10067 for word-only decoration and automatic pair kerning, without renumbering existing slots.",
       "Adds original Latin/CJK/CTL language slot identities from editids.hrc.",
       "S3HW1E adds source slot constants consumed by the native CSS item receiver. Missing current-model item families remain absent; no new native value owner or model capability is implied.",
-      "S3HW1E adds source SID_ATTR_BRUSH slot10001 for the already represented paragraph brush consumed by native CSS; no new value owner or model family is introduced."
+      "S3HW1E adds source SID_ATTR_BRUSH slot10001 for the already represented paragraph brush consumed by native CSS; no new value owner or model family is introduced.",
+      "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed.",
+      "S3HW1E HTML33: original CSS1 pagination property table and first-expression admission now produce native pending before/after enums and current-core split/widow/orphan items through actual registered slots10039/10040/10041. AUTO/AVOID split selection, uint8 count upper bound, fractional truncation, invalid-declaration retention and six-hex scanner priority are preserved. Real grammar, pending copy/Merge/Clear and Markdown-to-Worker integration are tested. The existing SfxBoolItem/SfxInt16Item core representation/defaults and unrelated ingress are unchanged; this is not certification of unrepresented editeng subclasses. SetFormatBreak, left/right page-style ownership and raw HTML table parsing remain pending; no full filter or module/ABI completion is claimed."
     ],
     "omittedResponsibilities": [
       "Full native component and framework services remain unported;no whole-component parity claim."

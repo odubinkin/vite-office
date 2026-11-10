@@ -3,13 +3,14 @@
  */
 
 import {
+  RES_TXTFMTCOLL,
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
   WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import type { SwNumRuleItem } from "../para/paratr";
+import { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -33,14 +34,15 @@ export type WriterParagraphStyle = string;
 
 /** Named Writer format collection; unlike SwFormat it is not automatic. */
 export class SwFormatColl extends SwFormat {
-  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @param ranges - Original admitted style ranges. @returns Nothing. */
+  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @param ranges - Original admitted style ranges. @param formatWhich - Native collection identity. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,
     name: string,
     parent?: SwFormatColl,
     ranges: WhichRangesContainer = WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
+    formatWhich = RES_TXTFMTCOLL,
   ) {
-    super(pool, name, ranges, parent);
+    super(pool, name, ranges, parent, formatWhich);
     this.SetAuto(false);
   }
 }
@@ -85,6 +87,13 @@ export class SwTextFormatColl extends SwFormatColl {
       throw new Error("Writer outline level is outside 0-9.");
     this.mbAssignedToOutlineStyle = true;
     this.SetAttrOutlineLevel(level + 1);
+    for (const child of new SwIterator(SwTextFormatColl, this)) {
+      if (child.IsAssignedToListLevelOfOutlineStyle()) continue;
+      if (child.GetAttrSet().GetItemState(RES_PARATR_NUMRULE, false) === SfxItemState.DEFAULT)
+        child.SetFormatAttr(new SwNumRuleItem(""));
+      if (child.GetAttrSet().GetItemState(RES_PARATR_OUTLINELEVEL, false) === SfxItemState.DEFAULT)
+        child.SetAttrOutlineLevel(0);
+    }
   }
 
   /** Reports assignment to the outline rule. @returns Assignment flag. */
@@ -182,3 +191,5 @@ function GetNumRuleForParagraphStyle(collection: SwTextFormatColl): SwNumRule | 
     ? collection.GetDoc().FindNumRulePtr(item.GetValue())
     : undefined;
 }
+
+import { SwIterator } from "../../../inc/calbck";

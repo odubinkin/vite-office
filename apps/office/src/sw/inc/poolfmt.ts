@@ -10,9 +10,33 @@ export const POOLGRP_NOCOLLID = 1 << 10;
 export const COLL_GET_RANGE_BITS = 15 << 11;
 /** Original character-format group value. */
 export const POOLGRP_CHARFMT = POOLGRP_NOCOLLID;
+/** Original frame-format group value. */
+export const POOLGRP_FRAMEFMT = (1 << 11) + POOLGRP_NOCOLLID;
 
 /** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
+  /** Original frame pool start. */ FRM_BEGIN = 3072,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values -- Native FRM_BEGIN/FRM_FRAME share the pinned source identity.
+  /** Original Frame style. */ FRM_FRAME = 3072,
+  /** Original Graphics style. */ FRM_GRAPHIC = 3073,
+  /** Original OLE style. */ FRM_OLE = 3074,
+  /** Original Formula style. */ FRM_FORMEL = 3075,
+  /** Original Marginalia style. */ FRM_MARGINAL = 3076,
+  /** Original Watermark style. */ FRM_WATERSIGN = 3077,
+  /** Original Labels style. */ FRM_LABEL = 3078,
+  /** Original Inline Heading style. */ FRM_INLINE_HEADING = 3079,
+  /** Original exclusive frame pool end. */ FRM_END = 3080,
+
+  /** Original page group start, POOLGRP_NOCOLLID + (2 << 11). */
+  PAGE_STANDARD = 5120,
+  /** Original first page pool identity. */
+  PAGE_FIRST = 5121,
+  /** Original left page pool identity. */
+  PAGE_LEFT = 5122,
+  /** Original right page pool identity. */
+  PAGE_RIGHT = 5123,
+  /** Original HTML page pool identity. */
+  PAGE_HTML = 5126,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_BULLET_LEVEL1 = 4118,
   /** Original paragraph pool identity consumed by Word style mapping. */
@@ -55,6 +79,12 @@ export enum SwPoolFormatId {
   COLL_HTML_BLOCKQUOTE = 12288,
   /** Native HTML preformatted paragraph style. */
   COLL_HTML_PRE = 12289,
+  /** Original native horizontal-rule pool identity. */
+  COLL_HTML_HR = 12290,
+  /** Original HTML definition description pool identity. */
+  COLL_HTML_DD = 12291,
+  /** Original HTML definition term pool identity. */
+  COLL_HTML_DT = 12292,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_HEADLINE1 = 10244,
   /** Original paragraph pool identity consumed by Word style mapping. */
@@ -81,6 +111,10 @@ export enum SwPoolFormatId {
   COLL_SIGNATURE = 2054,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_STANDARD = 2048,
+  /** Original table-body paragraph pool identity. */
+  COLL_TABLE = 6151,
+  /** Original table-heading paragraph pool identity. */
+  COLL_TABLE_HDLN = 6152,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_TEXT = 2049,
   /** Original paragraph pool identity consumed by Word style mapping. */
@@ -164,6 +198,8 @@ export enum SwPoolFormatId {
   UNKNOWN = 65535,
 }
 
+/** Original user-format bit tested directly by HTML paragraph width calculation. */
+export const USER_FMT = 1 << 15;
 /** Original user-format ID bits after removing group/non-collection markers. */
 export const POOL_IDUSER_FMT = 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
 /** Original native user-format predicate, including UNKNOWN and assigned user group IDs. @param id - Unsigned16 pool identity. @returns Whether user-defined. */
@@ -442,13 +478,18 @@ export function getWriterAvailableParagraphStyleDefinition(
   );
 }
 
-/** Resolves exposed pool styles and source-backed internal table/sender collections. @param id - Pool style identity. @returns Materializable definition. */
+/** Resolves exposed pool styles and source-backed internal table/frame/sender collections. @param id - Pool style identity. @returns Materializable definition. */
 export function getWriterMaterializedParagraphStyleDefinition(
   id: string,
 ): WriterParagraphStyleDefinition | undefined {
   return (
     getWriterAvailableParagraphStyleDefinition(id) ??
-    (id === "table-contents" || id === "table-heading" || id === "sender"
+    (id === "table-contents" ||
+    id === "table-heading" ||
+    id === "frame-contents" ||
+    id === "sender" ||
+    id === "list-contents" ||
+    id === "list-heading"
       ? getWriterParagraphStyleDefinition(id)
       : undefined)
   );

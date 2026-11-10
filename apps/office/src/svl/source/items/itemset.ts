@@ -353,6 +353,17 @@ export class SfxItemSet {
     this.DisableOrInvalidateItem_ForWhichID(true, which);
   }
 
+  /** Original identity-only intersection retains local values for every identity present in the other set, including invalid/disabled entries; inherited values do not count. @param set - Native identity source. @returns Nothing. */
+  public Intersect(set: SfxItemSet): void {
+    if (this.Count() === 0 || this === set) return;
+    if (set.Count() === 0) {
+      this.ClearItem();
+      return;
+    }
+    for (const which of this.poolItemMap.keys())
+      if (!set.poolItemMap.has(which)) this.ClearItem(which);
+  }
+
   /** Removes all local identities present in another native set, including INVALID and DISABLED entries. @param set - Identity source. @returns Nothing. */
   public Differentiate(set: SfxItemSet): void {
     if (this.Count() === 0 || set.Count() === 0) return;

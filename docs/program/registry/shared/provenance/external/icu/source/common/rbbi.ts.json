@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/rbbi.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/rbbi.cpp",
+    "localSymbols": [
+      "RuleBasedBreakIterator",
+      "handleNext",
+      "handleSafePrevious",
+      "following",
+      "preceding",
+      "isBoundary"
+    ],
+    "upstreamSymbols": [
+      "RuleBasedBreakIterator::handleNext",
+      "RuleBasedBreakIterator::handleSafePrevious",
+      "RuleBasedBreakIterator::following",
+      "RuleBasedBreakIterator::preceding",
+      "RuleBasedBreakIterator::isBoundary"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified.",
+      "S3HW1E HTML84: original ICU dictionary factory, per-iterator reject engine and dictionary refinement, circular boundary/status cache, reverse-safe refills and public contiguous UTF16 word queries. Native ICU with the pinned LibreOffice Khmer patch and packaged resources matched all 11124 input/mode runs and 152712 public query outcomes. See WRITER377–378."
+    ],
+    "omittedResponsibilities": [
+      "Alternate UText providers, external language factories and Writer/UNO dispatch remain outside the current packaged word query."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbi.ts",
+          "marker": "RuleBasedBreakIterator"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.cache.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbi.cpp",
+          "marker": "RuleBasedBreakIterator::handleNext"
+        }
+      ]
+    }
+  }
+}

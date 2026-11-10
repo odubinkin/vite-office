@@ -18,20 +18,23 @@
       "evidence": [
         "apps/office/src/sw/source/core/bastyp/breakit.ts",
         "apps/office/src/sw/source/core/bastyp/breakit.test.ts",
-        "vendor/libreoffice-reference/sw/source/core/bastyp/breakit.cxx"
+        "vendor/libreoffice-reference/sw/source/core/bastyp/breakit.cxx",
+        "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts"
       ],
-      "justification": "Original real-script weak-run and next-mark selection, raw UTF16 end adjustment, native backward/forward script services and all-script masks. Application data language borrows the existing configured-language boundary; process lifetime binds through module initialization. Native UNO BreakIterator factory, LanguageTag locale/forbidden caches, word/grapheme services and native startup/shutdown ownership remain unported. This is not a complete SwBreakIt or Application settings certificate.",
+      "justification": "Original real-script weak-run and next-mark selection, raw UTF16 end adjustment, native backward/forward script services and all-script masks. Application data language borrows the existing configured-language boundary; process lifetime binds through module initialization. Native UNO BreakIterator factory, LanguageTag locale/forbidden caches, word/grapheme services and native startup/shutdown ownership remain unported. This is not a complete SwBreakIt or Application settings certificate. S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import.",
       "knownViolations": [],
       "localSymbols": [
         "SwBreakIt",
         "GetWriterTextUnits",
-        "g_pBreakIt"
+        "g_pBreakIt",
+        "GetLocale"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/bastyp/breakit.cxx",
       "upstreamSymbols": [
         "SwBreakIt::GetRealScriptOfText",
-        "SwBreakIt::GetAllScriptsOfText"
+        "SwBreakIt::GetAllScriptsOfText",
+        "GetLocale_"
       ]
     }
   }

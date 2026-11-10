@@ -36,6 +36,30 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.block-boundaries.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.definitions.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.table-styles.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-frame.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/poolfmt.ts",
+          "marker": "USER_FMT"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -70,6 +94,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
           "marker": "case SwPoolFormatId::COLL_SEND_ADDRESS:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "case SwPoolFormatId::FRM_FRAME:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+          "marker": "aFrameFormatSetRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx",
+          "marker": "case SwPoolFormatId::COLL_FRAME:"
         }
       ]
     },
@@ -80,7 +116,8 @@
       "getWriterParagraphStyleDefinition",
       "getWriterParagraphStyleId",
       "getWriterStyleIdFromOdfName",
-      "SwPoolFormatId"
+      "SwPoolFormatId",
+      "USER_FMT"
     ],
     "omittedResponsibilities": [
       "Conditional styles, localized UI-name resources, user-defined styles, and complete native style attribute initialization remain outside the browser slice."
@@ -94,7 +131,13 @@
       "S3HW1E ports POOL_IDUSER_FMT and IsPoolUserFormat exact group-mask predicate. UNKNOWN is a user format; zero is not.",
       "S3HW1E Word style/cache integration: MSWordStyles now consumes the actual MSWordExportBase, appends non-default character formats before non-reserved paragraph formats and keeps source4091 limits, reserved heading slots, character self-next, identity lookup and builtin-first ASCII name disambiguation across both families. Native GetWWId and all91 original English names replace the partial paragraph-name map; consumed paragraph pool enum identities are admitted from the pinned header. Actual concrete exporters implement the native ExportFormat virtual. MSWordExportBase character GetId uses the actual initialized style table. Source GetSlot(null) selects the first empty reserved entry (WRITER201), not an invented missing sentinel. RTF style framing/colors/buffer flushing use native StartStyles/StartStyle/EndStyle/EndStyles, and InsStyle/GetStyle keep first-inserted property-only entries. Existing StyleDefinition string sinks bind EndStyle with explicit drained properties; full native OutputFormat/item-buffer contracts remain unverified. Full typed SwFormat auto-update state is not admitted; document export passes its represented native defaultfalse. The current core lacks native hidden default paragraph collection0, so the existing Standard-first logical paragraph table binding is retained and not certified as source ownership equivalence. Footnote materialization, list-style true branch, linked style graph, full OutColorTable collectors, character style importer and paragraph numbering dispatcher/restart integration remain explicit obligations. Unchanged compiled native style helpers plus original enums/operators match all65536 pool IDs,91 names and null slots1/10 under ASan/UBSan, with a scalar SwFormat/vector-entry carrier only; this is not complete Writer/style ABI or whole-module certification.",
       "Adds original COLL_HTML_BLOCKQUOTE=12288 and COLL_HTML_PRE=12289 identities consumed by native HTML block contexts; existing pool data, style objects and default values remain the owners.",
-      "B8TCAE fixes the existing ADDRESS import path that selected Sender metadata but failed its materialization gate. Sender is admitted only as an internal collection, retaining its original Standard parent/follow identity. The original DocumentStylePoolManager.cxx1005 HTML branch creates all-script italic; the ordinary branch creates3pt lower spacing; both disable line counting. No extra user-facing style is exposed. Real byte-stream block, mixed-script native item-range and existing Worker codec regressions verify address/block transitions, style identity and all3 posture/weight slots. Western-only browser character projection is not used as an oracle for CJK/CTL source items. No full HTML/native ABI parity or semantic status promotion is claimed."
+      "B8TCAE fixes the existing ADDRESS import path that selected Sender metadata but failed its materialization gate. Sender is admitted only as an internal collection, retaining its original Standard parent/follow identity. The original DocumentStylePoolManager.cxx1005 HTML branch creates all-script italic; the ordinary branch creates3pt lower spacing; both disable line counting. No extra user-facing style is exposed. Real byte-stream block, mixed-script native item-range and existing Worker codec regressions verify address/block transitions, style identity and all3 posture/weight slots. Western-only browser character projection is not used as an oracle for CJK/CTL source items. No full HTML/native ABI parity or semantic status promotion is claimed.",
+      "S3HW1E definition-list and nested-style checkpoint: native DL/DT/DD transitions consume the existing HTML contexts and unsigned definition depth, preserve implicit-list EndPara cleanup, mixed numbered-list spacing, current-DD-sensitive nested margins and explicit close behavior. Original HTML_DD/HTML_DT IDs12291/12292 are materialized as internal List Contents/List Heading collections with direct567/0twip left items, Standard parents and DT-to-DD follow identity; public available-style admission is unchanged. Original SetTextCollAttrs now retains displaced direct styles through owned hard item sets, Differentiate, PRE priority, nearest fallback context and native DD-minus-DT/DT-zero margin arithmetic. Shared GetAttrTabEntry/InsertParaAttrs use real registered Which IDs and original heads; InsertAttrs no longer maintains an incomplete duplicate map. Empty-paragraph script attribute loss and unsigned margin wrap are retained (WRITER292/293). Tests use real HTML/Markdown/documents/Worker and original public parser operations; no private-state or operation-result forging. Generated CSS class derivation, target insertion snapshots, stylesheet composition, raw HTML tables and full native reader ABI remain unverified or pending. No intentional browser file UI/autosave/recovery changes or full-goal promotion.",
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified.",
+      "Retains the original single-bit test used by HTML paragraph width selection when following a style to PRE.",
+      "Admits native Frame contents to internal collection materialization with source Standard parent and unchanged item defaults."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/poolfmt.cxx",

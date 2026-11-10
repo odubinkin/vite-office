@@ -1,5 +1,6 @@
 /** @fileoverview Additional native document regression cases. */
 /** @fileoverview RTF document import through native Writer paragraph and text hint owners. */
+import { existsSync, readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -369,7 +370,8 @@ it("materializes a later RTF page section before its first table", /** Checks ma
     expect(table?.GetTable().GetFrameFormat().GetAttrSet().Get(RES_PAGEDESC)).toMatchObject({
       name: "Converted1",
     });
-    expect(document.FindPageDesc("Converted1")?.GetValue().width).toBe(13000);
+    // Native pgSz snaps 22931mm100 to the first standard dimension22900 before UNO insertion.
+    expect(document.FindPageDesc("Converted1")?.GetValue().width).toBe(12983);
   } finally {
     document.Dispose();
   }
@@ -538,7 +540,7 @@ it("maps per-cell RTF vertical alignment before each cellx boundary", /** Checks
               box,
             ) => box.GetVertOrient().GetVertOrient(),
           ),
-      ).toEqual([VertOrientation.TOP, VertOrientation.BOTTOM]);
+      ).toEqual([VertOrientation.NONE, VertOrientation.BOTTOM]);
   } finally {
     document.Dispose();
   }
@@ -863,6 +865,101 @@ it("imports source HYPERLINK URL, target, name and fragment field switches", /**
       url: "https://example.test",
       name: "Link Name",
     });
+  } finally {
+    document.Dispose();
+  }
+});
+
+it.each([
+  [String.raw`\trhdr`, 1, 1, true],
+  [String.raw`\trhdr`, 2, 0, false],
+  [String.raw`\trhdr`, 11, 0, true],
+  [String.raw`\trkeep`, 1, 0, false],
+  [String.raw`\trkeep`, 2, 0, true],
+] as const)(
+  "applies native table flow for %s across %i rows",
+  /** Checks the native repeated row and table split rules. @param control - Row control. @param count - Number of identical rows. @param repeat - Expected repeating rows. @param tableSplit - Expected table split. @returns Nothing. */
+  (control, count, repeat, tableSplit) => {
+    const row = String.raw`\trowd${control}\cellx1200\intbl Cell\cell\row`;
+    const document = read(String.raw`{\rtf1${row.repeat(count)}}`);
+    try {
+      const table = document.GetTables()[0];
+      expect(table?.GetTabLines()).toHaveLength(count);
+      expect(table?.GetRowsToRepeat()).toBe(repeat);
+      expect(table?.GetFormat().layoutSplit ?? true).toBe(tableSplit);
+      expect(table?.GetTabLines()[0]?.GetRowSplit().GetValue()).toBe(
+        control !== String.raw`\trkeep`,
+      );
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+it.each([
+  [-480, 480, SwFrameSize.Fixed],
+  [0, 0, SwFrameSize.Minimum],
+  [32768, 0, SwFrameSize.Minimum],
+] as const)(
+  "maps authored RTF row height %i through MeasureHandler and the native SizeType property",
+  /** Checks explicit exact, auto and metric overflow modes. @param value - Source twips. @param height - Actual twips. @param type - Native row size rule. @returns Nothing. */
+  (value, height, type) => {
+    const document = read(String.raw`{\rtf1\trowd\trrh${value}\cellx1500\intbl Cell\cell\row}`);
+    try {
+      const size = document.GetTables()[0]?.GetTabLines()[0]?.GetFrameSize();
+      expect(size?.GetHeight()).toBe(height);
+      expect(size?.GetHeightSizeType()).toBe(type);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+const repeatFixture =
+  "../../vendor/libreoffice-reference/sw/qa/extras/rtfimport/data/tblrepeat.rtf";
+it.skipIf(!existsSync(repeatFixture))(
+  "retains the three repeating header rows from the pinned RTF regression",
+  /** Verifies the original tdf#118465 count using its actual bytes. @returns Nothing. */
+  () => {
+    const document = new RtfDocumentImpl().ResolveBytes(readFileSync(repeatFixture));
+    try {
+      expect(document.GetTables()[0]?.GetRowsToRepeat()).toBe(3);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+const unicodeTitleFixture =
+  "../../vendor/libreoffice-reference/sw/qa/extras/rtfexport/data/fdo61507.rtf";
+
+it.skipIf(!existsSync(unicodeTitleFixture))(
+  "imports the pinned Unicode UPR title without appending metadata to the body",
+  /** Verifies the original RTF fdo61507 expectations with actual title destination buffers. @returns Nothing. */ () => {
+    const reader = new RtfDocumentImpl();
+    const document = reader.ResolveBytes(readFileSync(unicodeTitleFixture));
+    try {
+      expect(reader.GetDocumentTitle()).toBe("ÉÁŐŰ∭");
+      expect(
+        document.paragraphs.map(
+          /** Borrows actual body text. @param node - Native body node. @returns Text. */ (node) =>
+            node.GetText(),
+        ),
+      ).toEqual(["Hello."]);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+it("does not apply the legacy title in UPR without a UD destination", /** Checks original non-UD destination skipping while preserving ordinary title text buffers. @returns Nothing. */ () => {
+  const reader = new RtfDocumentImpl();
+  const document = reader.ResolveBytes(
+    new TextEncoder().encode(String.raw`{\rtf1{\info{\title Current}{\upr{\title Legacy}}}Body}`),
+  );
+  try {
+    expect(reader.GetDocumentTitle()).toBe("Current");
+    expect(document.paragraphs[0]?.GetText()).toBe("Body");
   } finally {
     document.Dispose();
   }

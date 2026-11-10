@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/svxcss1.border-info.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/svxcss1.border-info.ts",
+        "apps/office/src/sw/source/filter/html/svxcss1.border.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx",
+        "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.hxx"
+      ],
+      "justification": "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxCSS1BorderInfo"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/svxcss1.cxx",
+      "upstreamSymbols": [
+        "SvxCSS1BorderInfo::SetBorderLine"
+      ]
+    }
+  }
+}

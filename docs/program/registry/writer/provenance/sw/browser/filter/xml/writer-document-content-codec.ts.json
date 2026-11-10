@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
+          "marker": "encodeWriterTableSteps"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
+    "responsibilities": [
+      "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}

@@ -2,9 +2,13 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
+import type { SwMoveFnCollection } from "../inc/pamtyp";
+export type { SwMoveFnCollection } from "../inc/pamtyp";
+import { fnMoveForward, fnMoveBackward, fnParaStart, fnParaEnd } from "./paminit";
+export { fnMoveForward, fnMoveBackward, fnParaStart, fnParaEnd } from "./paminit";
 import { goNext, goPrevious } from "../docnode/nodes.navigation";
 import { Ring } from "../../../inc/ring";
-import { SwContentNode, type SwNode } from "../docnode/node";
+import { SwContentNode, SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
@@ -13,18 +17,32 @@ import {
   type SwContentIndexOwnerKind,
 } from "../bastyp/index";
 
-/** Tracks a node through structural array changes by retaining its object identity. */
+/** Native node index registers with its actual node and follows original RemoveNode correction as well as insertion/movement identity. */
 export class SwNodeIndex {
   private node: SwNode;
+  private readonly reference = new WeakRef(this);
 
   /**
    * Creates an index for an existing node or one current array offset.
-   * @param nodeOrNodes - Existing node or owning node array.
-   * @param index - Optional current offset in nodeOrNodes.
+   * @param nodeOrNodes - Existing node, copied native index or owning node array.
+   * @param index - Native relative node/index offset or absolute array offset, default0.
    * @returns Nothing; initializes this index.
    */
-  public constructor(nodeOrNodes: SwNode | SwNodes, index?: number) {
-    this.node = index === undefined ? (nodeOrNodes as SwNode) : (nodeOrNodes as SwNodes).at(index);
+  public constructor(nodeOrNodes: SwNode | SwNodes | SwNodeIndex, index = 0) {
+    this.node = SwNodeIndex.ResolveNode(nodeOrNodes, index);
+    this.node.RegisterNodeIndex(this.reference);
+  }
+  /** Original node/array/copy overloads resolve the same actual node before registration. @param origin - Native node, node array or copied index. @param offset - Original relative offset for node/index, absolute for array. @returns Actual node. */
+  private static ResolveNode(origin: SwNode | SwNodes | SwNodeIndex, offset: number): SwNode {
+    if (origin instanceof SwNodeIndex)
+      return offset ? origin.GetNodes().at(origin.GetIndex() + offset) : origin.GetNode();
+    if (origin instanceof SwNode)
+      return offset ? origin.GetNodes().at(origin.GetIndex() + offset) : origin;
+    return origin.at(offset);
+  }
+  /** Original owning array is resolved from the current actual node. @returns Borrowed node array. */
+  public GetNodes(): SwNodes {
+    return this.node.GetNodes();
   }
 
   /** Returns the current node array offset. @returns Current array offset. */
@@ -37,9 +55,18 @@ export class SwNodeIndex {
     return this.node;
   }
 
-  /** Reassigns this registered-style index to another node. @param node - New indexed node. @returns Nothing. */
-  public Assign(node: SwNode): void {
+  /** Original node/index/array assignment unlinks before registering the resolved target. @param origin - New native node, copied index or node array. @param offset - Relative node/index or absolute array offset. @returns This original index by reference. */
+  public Assign(origin: SwNode | SwNodes | SwNodeIndex, offset = 0): this {
+    const node = SwNodeIndex.ResolveNode(origin, offset);
+    if (node === this.node) return this;
+    this.node.DeRegisterNodeIndex(this.reference);
     this.node = node;
+    this.node.RegisterNodeIndex(this.reference);
+    return this;
+  }
+  /** Original index destructor unlinks only this borrowed index, never its node. @returns Nothing. */
+  public Dispose(): void {
+    this.node.DeRegisterNodeIndex(this.reference);
   }
 }
 
@@ -48,36 +75,54 @@ export class SwPosition {
   public readonly nNode: SwNodeIndex;
   public readonly nContent: SwContentIndex;
 
+  /** Original copy constructor retains raw node/content bindings, owner category and affinity. @param source - Actual source position. @returns Position. */
+  public constructor(source: SwPosition);
+  /** Existing original node-based position binding. @param node - Actual node. @param nContent - UTF16 offset. @param ownerKind - Host owner category. @param affinity - Host boundary affinity. @returns Position. */
+  public constructor(
+    node: SwNode,
+    nContent?: number,
+    ownerKind?: SwContentIndexOwnerKind,
+    affinity?: SwContentIndexAffinity,
+  );
   /**
    * Creates a native position on a content or structural node.
-   * @param node - Positioned native node.
+   * @param nodeOrSource - Positioned native node or original position copied by value.
    * @param nContent - UTF-16 offset inside node.
    * @param ownerKind - Registered owner category.
    * @param affinity - Boundary affinity.
    * @returns Nothing; initializes this position.
    */
   public constructor(
-    node: SwNode,
+    nodeOrSource: SwNode | SwPosition,
     nContent = 0,
-    ownerKind: SwContentIndexOwnerKind = "cursor",
-    affinity: SwContentIndexAffinity = "after",
+    ownerKind?: SwContentIndexOwnerKind,
+    affinity?: SwContentIndexAffinity,
   ) {
+    const source = nodeOrSource instanceof SwPosition ? nodeOrSource : undefined,
+      node = source ? source.GetNode() : (nodeOrSource as SwNode);
+    if (source) nContent = source.GetContentIndex();
     if (
       !Number.isInteger(nContent) ||
       nContent < 0 ||
-      nContent > (node instanceof SwContentNode ? node.Len() : 0)
+      nContent >
+        (source
+          ? (source.nContent.GetContentNode()?.Len() ?? 0)
+          : node instanceof SwContentNode
+            ? node.Len()
+            : 0)
     )
       throw new Error("SwPosition content offset is outside its node.");
     this.nNode = new SwNodeIndex(node);
     this.nContent = new SwContentIndex(
-      node instanceof SwContentNode ? node : undefined,
+      source ? source.nContent.GetContentNode() : node instanceof SwContentNode ? node : undefined,
       nContent,
-      ownerKind,
-      affinity,
+      ownerKind ?? source?.nContent.GetOwnerKind() ?? "cursor",
+      affinity ?? source?.nContent.GetAffinity() ?? "after",
       /** Keeps the paired SwNodeIndex synchronized when structural operations transfer this content index. @param nextNode - New content node. @returns Nothing. */ (
         nextNode,
       ) => this.nNode.Assign(nextNode),
     );
+    if (source) this.nNode.Assign(source.nNode);
   }
 
   /** Returns the current node array offset. @returns Current node offset. */
@@ -114,10 +159,25 @@ export class SwPosition {
     );
   }
 
-  /** Reassigns both node and registered content index. @param node - Destination native node. @param offset - Destination offset. @returns Nothing. */
-  public Assign(node: SwNode, offset = 0): void {
-    this.nContent.Assign(node instanceof SwContentNode ? node : undefined, offset);
-    this.nNode.Assign(node);
+  /** Original value-copy assignment preserves raw node/content binding, including unregistered paragraph anchors. @param source - Actual source position. @returns This original position. */
+  public Assign(source: SwPosition): this;
+  /** Original node-based assignment binds the content index to that actual content node. @param node - Actual node. @param offset - Original content offset. @returns Nothing. */
+  public Assign(node: SwNode, offset?: number): void;
+  /** Dispatches original copy/node forms without changing the target's logical owner role. @param nodeOrSource - Actual node or position value. @param offset - Node-form offset. @returns This for copy assignment, nothing for node assignment. */
+  public Assign(nodeOrSource: SwNode | SwPosition, offset = 0): this | void {
+    if (nodeOrSource instanceof SwPosition) {
+      const node = nodeOrSource.GetNode(),
+        owner = nodeOrSource.nContent.GetContentNode(),
+        content = nodeOrSource.GetContentIndex(),
+        affinity = nodeOrSource.nContent.GetAffinity();
+      this.nNode.Assign(node);
+      this.nContent.Assign(owner, content);
+      this.nNode.Assign(node);
+      this.nContent.SetAffinity(affinity);
+      return this;
+    }
+    this.nContent.Assign(nodeOrSource instanceof SwContentNode ? nodeOrSource : undefined, offset);
+    this.nNode.Assign(nodeOrSource);
   }
 
   /** Changes the bounded position owner category. @param ownerKind - New owner kind. @returns Nothing. */
@@ -128,22 +188,26 @@ export class SwPosition {
   /** Explicitly unregisters the content position. @returns Nothing. */
   public Dispose(): void {
     this.nContent.Dispose();
+    this.nNode.Dispose();
   }
 
   /** Creates an independent registered position on the same node. @param ownerKind - Optional owner override. @returns Cloned position. */
   public clone(ownerKind = this.nContent.GetOwnerKind()): SwPosition {
-    return new SwPosition(
-      this.GetNode(),
-      this.GetContentIndex(),
-      ownerKind,
-      this.nContent.GetAffinity(),
-    );
+    const copy = new SwPosition(this);
+    copy.SetOwnerKind(ownerKind);
+    return copy;
   }
 }
 
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
 export class SwPaM extends Ring<SwPaM> {
   private inFrontOfLabel = false;
+  /** Original SwPaM::Move invokes the selected strategy before clearing label affinity; mark and physical bound identities are retained. @param fnMove - Original movement collection, default forward. @param fnGo - Original strategy, default content-character movement. @returns Strategy result. */
+  public Move(fnMove: SwMoveFnCollection = fnMoveForward, fnGo: SwGoInDoc = GoInContent): boolean {
+    const result = fnGo(this, fnMove);
+    this.inFrontOfLabel = false;
+    return result;
+  }
   /** Reads native list-label cursor affinity. @returns Label position state. */
   public IsInFrontOfLabel(): boolean {
     return this.inFrontOfLabel;
@@ -152,23 +216,24 @@ export class SwPaM extends Ring<SwPaM> {
   public SetInFrontOfLabel_(value: boolean): void {
     this.inFrontOfLabel = value;
   }
-  private point: SwPosition;
-  private mark: SwPosition | undefined;
-
-  /**
-   * Creates a collapsed position or an explicit mark-to-point selection.
-   * @param point - Moving point endpoint.
-   * @param mark - Optional fixed mark endpoint.
-   * @param ring - Optional existing circular selection owner.
-   * @returns Nothing; initializes this range.
-   */
+  private readonly m_Bound1: SwPosition;
+  private readonly m_Bound2: SwPosition;
+  private m_pPoint: SwPosition;
+  private m_pMark: SwPosition;
+  /** Native physical bounds and pointer aliases; the existing point-first TypeScript binding translates the original two-position argument order without changing callers. The unused single-position bound starts at document node0. @param point - Actual moving endpoint. @param mark - Optional actual fixed endpoint. @param ring - Original selection ring. @returns Native range owner. */
   public constructor(point: SwPosition, mark?: SwPosition, ring?: SwPaM) {
     super(ring);
-    this.point = point.clone();
-    this.mark = undefined;
-    this.Assign(point, mark);
+    if (mark && mark.GetNode().GetNodes() !== point.GetNode().GetNodes())
+      throw new Error("SwPaM endpoints belong to different documents.");
+    this.m_Bound1 = (mark ?? point).clone(mark ? "mark" : "cursor");
+    this.m_Bound2 = mark ? point.clone("cursor") : new SwPosition(point.GetNode().GetNodes().at(0));
+    this.m_pPoint = mark ? this.m_Bound2 : this.m_Bound1;
+    this.m_pMark = mark ? this.m_Bound1 : this.m_pPoint;
   }
-
+  /** Original physical bound query is independent from Point/Mark orientation and active selection. @param one - First physical bound, default true. @returns Same actual owned bound. */
+  public GetBound(one = true): SwPosition {
+    return one ? this.m_Bound1 : this.m_Bound2;
+  }
   /** Returns the next native range in the circular selection. @returns Next owner. */
   public GetNext(): SwPaM {
     return this.GetNextInRing();
@@ -181,79 +246,82 @@ export class SwPaM extends Ring<SwPaM> {
   public IsMultiSelection(): boolean {
     return !this.unique();
   }
-  /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
-  public Assign(point: SwPosition, mark?: SwPosition): void {
-    const nextPoint = point.clone();
-    nextPoint.SetOwnerKind("cursor");
-    const nextMark = mark?.clone("mark");
-    if (nextMark !== undefined && nextMark.GetNode().GetNodes() !== nextPoint.GetNode().GetNodes())
+  /** Existing position-pair binding for native value assignment retains both physical positions. Copies protect aliases supplied by existing atomic replacement callers; no replacement PaM/position owner is installed. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns This native range. */
+  public Assign(point: SwPosition, mark?: SwPosition): this {
+    if (mark && mark.GetNode().GetNodes() !== point.GetNode().GetNodes())
       throw new Error("SwPaM endpoints belong to different documents.");
-    this.point?.Dispose();
-    this.mark?.Dispose();
-    this.point = nextPoint;
-    this.mark = nextMark;
+    const nextPoint = point.clone(),
+      nextMark = mark?.clone();
+    try {
+      this.m_pPoint.Assign(nextPoint.GetNode(), nextPoint.GetContentIndex());
+      this.m_pPoint.SetOwnerKind("cursor");
+      this.m_pPoint.nContent.SetAffinity(nextPoint.nContent.GetAffinity());
+      if (nextMark) {
+        this.SetMark();
+        this.m_pMark.Assign(nextMark.GetNode(), nextMark.GetContentIndex());
+        this.m_pMark.nContent.SetAffinity(nextMark.nContent.GetAffinity());
+      } else this.DeleteMark();
+      return this;
+    } finally {
+      nextPoint.Dispose();
+      nextMark?.Dispose();
+    }
   }
-
-  /** Returns the moving point endpoint. @returns Point position. */
+  /** Returns the original moving pointer alias. @returns Borrowed point. */
   public GetPoint(): SwPosition {
-    return this.point;
+    return this.m_pPoint;
   }
-
-  /** Returns the fixed mark, or point for a collapsed selection. @returns Mark or point position. */
+  /** Returns the original mark alias, equal to point while unmarked. @returns Borrowed mark. */
   public GetMark(): SwPosition {
-    return this.mark ?? this.point;
+    return this.m_pMark;
   }
-
-  /** Reports whether mark is distinct from point. @returns True when the range owns a mark. */
+  /** Original selection presence tests pointer identity, not coordinates. @returns Whether the two pointer aliases differ. */
   public HasMark(): boolean {
-    return this.mark !== undefined;
+    return this.m_pPoint !== this.m_pMark;
   }
-
-  /** Exchanges actual point and mark owners as native SwPaM::Exchange does. @returns Nothing. */
+  /** Original Exchange swaps pointer aliases, never the owned bounds. @returns Nothing. */
   public Exchange(): void {
-    if (this.mark !== undefined) [this.point, this.mark] = [this.mark, this.point];
+    if (this.HasMark()) [this.m_pPoint, this.m_pMark] = [this.m_pMark, this.m_pPoint];
   }
-
-  /** Native Normalize changes endpoint orientation without changing the selection extent. @param bPointFirst - Keep point before mark when true, after mark otherwise. @returns Nothing. */
-  public Normalize(bPointFirst: boolean): void {
+  /** Original Normalize default keeps Point first. @param pointFirst - Native ordering, default true. @returns Nothing. */
+  public Normalize(pointFirst = true): void {
     if (
-      this.HasMark() &&
-      ((bPointFirst && this.point.compare(this.GetMark()) > 0) ||
-        (!bPointFirst && this.point.compare(this.GetMark()) < 0))
+      (pointFirst && this.m_pPoint.compare(this.m_pMark) > 0) ||
+      (!pointFirst && this.m_pPoint.compare(this.m_pMark) < 0)
     )
       this.Exchange();
   }
-
-  /** Sets mark to the current point. @returns Nothing. */
+  /** Original SetMark reuses the opposite physical bound and copies Point every time. @returns Nothing. */
   public SetMark(): void {
-    this.mark?.Dispose();
-    this.mark = this.point.clone("mark");
+    this.m_pMark = this.m_pPoint === this.m_Bound1 ? this.m_Bound2 : this.m_Bound1;
+    this.m_pMark.Assign(this.m_pPoint.GetNode(), this.m_pPoint.GetContentIndex());
+    this.m_pMark.SetOwnerKind("mark");
+    this.m_pMark.nContent.SetAffinity(this.m_pPoint.nContent.GetAffinity());
   }
-
-  /** Removes mark while retaining point. @returns Nothing. */
+  /** Original DeleteMark parks the formerly active mark at document node0, then aliases Point. An already unmarked range leaves its inactive bound untouched. @returns Nothing. */
   public DeleteMark(): void {
-    this.mark?.Dispose();
-    this.mark = undefined;
+    if (this.HasMark()) {
+      this.m_pMark.Assign(this.m_pPoint.GetNode().GetNodes().at(0));
+      this.m_pMark = this.m_pPoint;
+    }
   }
-
-  /** Unregisters both persistent PaM endpoints. @returns Nothing. */
+  /** Original destruction releases both physical bounds independently from pointer aliases. @returns Nothing. */
   public Dispose(): void {
     this.unlink();
-    this.point.Dispose();
-    this.mark?.Dispose();
-    this.mark = undefined;
+    this.m_Bound1.Dispose();
+    this.m_Bound2.Dispose();
   }
-
-  /** Returns the earlier endpoint irrespective of selection direction. @returns Ordered start position. */
+  /** Original start query selects Point on an equal-coordinate tie. @returns Actual selected endpoint. */
   public Start(): SwPosition {
-    const mark = this.GetMark();
-    return mark.compare(this.point) <= 0 ? mark : this.point;
+    return this.m_pPoint.compare(this.m_pMark) <= 0 ? this.m_pPoint : this.m_pMark;
   }
-
-  /** Returns the later endpoint irrespective of selection direction. @returns Ordered end position. */
+  /** Original end query selects Mark on an equal-coordinate tie. @returns Actual selected endpoint. */
   public End(): SwPosition {
-    const mark = this.GetMark();
-    return mark.compare(this.point) <= 0 ? this.point : mark;
+    return this.m_pPoint.compare(this.m_pMark) > 0 ? this.m_pPoint : this.m_pMark;
+  }
+  /** Original ordered pair retains the actual endpoint identities. @returns Borrowed start/end pair. */
+  public StartEnd(): readonly [SwPosition, SwPosition] {
+    return [this.Start(), this.End()];
   }
 }
 
@@ -389,15 +457,83 @@ function GoAdjacentPos(
   check: boolean,
 ): SwContentNode | undefined {
   const index = new SwNodeIndex(position.GetNode());
-  const node = direction > 0 ? goNext(index) : goPrevious(index, false);
-  if (node !== undefined) {
-    if (
-      check &&
-      Math.abs(node.GetIndex() - position.GetNodeIndex()) !== 1 &&
-      !CheckNodesRange(position.GetNode(), node, true)
-    )
-      return undefined;
-    position.Assign(node, 0);
+  try {
+    const node = direction > 0 ? goNext(index) : goPrevious(index, false);
+    if (node !== undefined) {
+      index.Assign(node);
+      if (
+        check &&
+        Math.abs(node.GetIndex() - position.GetNodeIndex()) !== 1 &&
+        !CheckNodesRange(position.GetNode(), node, true)
+      )
+        return undefined;
+      position.Assign(node, 0);
+    }
+    return node;
+  } finally {
+    index.Dispose();
   }
-  return node;
+}
+
+/** Original movement strategy signature. */
+export type SwGoInDoc = (range: SwPaM, movement: SwMoveFnCollection) => boolean;
+/** Original GoNext dispatch to a real content node, with structural nodes returning false. @param node - Actual node. @param index - Actual index. @param mode - Native Chars. @returns Move result. */
+export function GoNext(node: SwNode, index: SwContentIndex, mode: 0): boolean {
+  return node instanceof SwContentNode && node.GoNext(index, mode);
+}
+/** Original GoPrevious dispatch to a real content node. @param node - Actual node. @param index - Actual index. @param mode - Native Chars. @returns Move result. */
+export function GoPrevious(node: SwNode, index: SwContentIndex, mode: 0): boolean {
+  return node instanceof SwContentNode && node.GoPrevious(index, mode);
+}
+/** Original GoInNode chooses beginning/end only after checked actual node movement. @param range - Actual range. @param movement - Original direction collection. @returns Whether moved. */
+export function GoInNode(range: SwPaM, movement: SwMoveFnCollection): boolean {
+  const node = movement.fnPos(range.GetPoint(), true);
+  if (node) range.GetPoint().SetContent(movement === fnMoveForward ? 0 : node.Len());
+  return node !== undefined;
+}
+/** Original default GoInContent tries one Chars move before crossing a checked node boundary. @param range - Actual range. @param movement - Original direction collection. @returns Whether moved. */
+export function GoInContent(range: SwPaM, movement: SwMoveFnCollection): boolean {
+  return (
+    movement.fnNd(range.GetPoint().GetNode(), range.GetPoint().nContent, 0) ||
+    GoInNode(range, movement)
+  );
+}
+/** Original previous-paragraph strategy always moves backward, then uses the requested edge alias. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoPrevPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
+  if (!range.Move(fnMoveBackward, GoInNode)) return false;
+  const node = range.GetPoint().GetNode();
+  if (!(node instanceof SwContentNode))
+    throw new Error("assert(paragraph movement reaches content)");
+  range.GetPoint().SetContent(edge === fnMoveForward ? 0 : node.Len());
+  return true;
+}
+/** Original next-paragraph strategy always moves forward, then chooses the requested edge. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoNextPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
+  if (!range.Move(fnMoveForward, GoInNode)) return false;
+  const node = range.GetPoint().GetNode();
+  if (!(node instanceof SwContentNode))
+    throw new Error("assert(paragraph movement reaches content)");
+  range.GetPoint().SetContent(edge === fnMoveForward ? 0 : node.Len());
+  return true;
+}
+/** Original current-paragraph strategy goes to its edge, then crosses to the previous start or following end when already there. @param range - Actual range. @param edge - Original paragraph start/end alias. @returns Whether moved. */
+export function GoCurrPara(range: SwPaM, edge: SwMoveFnCollection): boolean {
+  const point = range.GetPoint(),
+    node = point.GetNode();
+  if (node instanceof SwContentNode) {
+    const offset = edge === fnMoveForward ? 0 : node.Len();
+    if (point.GetContentIndex() !== offset) {
+      point.SetContent(offset);
+      return true;
+    }
+  }
+  const next =
+    edge === fnParaStart
+      ? GoPreviousPos(point, true)
+      : edge === fnParaEnd
+        ? GoNextPos(point, true)
+        : undefined;
+  if (!next) return false;
+  point.SetContent(edge === fnMoveForward ? 0 : next.Len());
+  return true;
 }

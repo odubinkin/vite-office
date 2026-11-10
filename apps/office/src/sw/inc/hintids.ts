@@ -77,6 +77,8 @@ export const RES_CHRATR_CTL_WEIGHT = 31 as const;
 
 /** Character highlight/background, `RES_CHRATR_BEGIN + 41`. */
 export const RES_CHRATR_HIGHLIGHT = 42 as const;
+/** Script classification hint, `RES_CHRATR_BEGIN + 45`. */
+export const RES_CHRATR_SCRIPT_HINT = 46 as const;
 
 /** First WhichId after Writer character-format items. */
 export const RES_CHRATR_END = 49 as const;
@@ -89,6 +91,15 @@ export const RES_TXTATR_INETFMT = 54 as const;
 
 /** Native ranged character-style reference. */
 export const RES_TXTATR_CHARFMT = 55 as const;
+
+/** Original embedded input field delimiters. */
+export const CH_TXT_ATR_INPUTFIELDSTART = "\u0004";
+export const CH_TXT_ATR_INPUTFIELDEND = "\u0005";
+/** Original form element and field marker characters. */
+export const CH_TXT_ATR_FORMELEMENT = "\u0006";
+export const CH_TXT_ATR_FIELDSTART = "\u0007";
+export const CH_TXT_ATR_FIELDSEP = "\u0003";
+export const CH_TXT_ATR_FIELDEND = "\u0008";
 
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 67 as const;
@@ -131,9 +142,19 @@ export const RES_PARATR_LIST_RESTARTVALUE = 89 as const;
 
 /** Paragraph counted-in-list flag. */
 export const RES_PARATR_LIST_ISCOUNTED = 90 as const;
+/** Native paragraph-marker/list automatic style handle. */
+export const RES_PARATR_LIST_AUTOFMT = 91 as const;
+
+/** Original frame fill order, RES_FRMATR_BEGIN +0. */
+export const RES_FILL_ORDER = 92 as const;
 
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
 export const RES_FRM_SIZE = 93 as const;
+
+/** Original frame wrap item, RES_FRMATR_BEGIN +19. */
+export const RES_SURROUND = 111 as const;
+/** Original owning anchor item, RES_FRMATR_BEGIN +22. */
+export const RES_ANCHOR = 114 as const;
 
 /** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
 export const RES_VERT_ORIENT = 112 as const;
@@ -176,6 +197,9 @@ export const RES_KEEP = 120 as const;
 /** Paragraph line-number participation, matching `RES_LINENUMBER`. */
 export const RES_LINENUMBER = 126 as const;
 
+/** Native frame/paragraph direction, RES_FRMATR_BEGIN +38. */
+export const RES_FRAMEDIR = 130 as const;
+
 /** Table adjacent-border merging, RES_FRMATR_BEGIN + 43. */
 export const RES_COLLAPSING_BORDERS = 135 as const;
 
@@ -183,6 +207,12 @@ export const RES_COLLAPSING_BORDERS = 135 as const;
 export const RES_LAYOUT_SPLIT = 123 as const;
 /** Native row split attribute, RES_FRMATR_BEGIN +40. */
 export const RES_ROW_SPLIT = 132 as const;
+/** Native splittable fly item, RES_FRMATR_BEGIN +41. */
+export const RES_FLY_SPLIT = 133 as const;
+/** Native frame containment item, RES_FRMATR_BEGIN +42. */
+export const RES_FOLLOW_TEXT_FLOW = 134 as const;
+/** Native wrap influence and overlap item, RES_FRMATR_BEGIN +44. */
+export const RES_WRAP_INFLUENCE_ON_OBJPOS = 136 as const;
 
 /** Native cell formula identity; concrete calculation remains unimplemented. */
 export const RES_BOXATR_FORMULA = 161 as const;
@@ -212,7 +242,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER],
   [RES_PARATR_OUTLINELEVEL, RES_PARATR_OUTLINELEVEL],
-  [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
+  [RES_PARATR_LIST_ID, RES_PARATR_LIST_AUTOFMT],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_LR_SPACE, RES_LR_SPACE],
   [RES_UL_SPACE, RES_UL_SPACE],
@@ -221,6 +251,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
+  [RES_FRAMEDIR, RES_FRAMEDIR],
   [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
   [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
   [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
@@ -258,6 +289,7 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
+  [RES_FRAMEDIR, RES_FRAMEDIR],
   [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
   [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
   [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
@@ -324,6 +356,28 @@ export const RES_UNKNOWNATR_BEGIN = 163 as const;
 
 /** Original RES_UNKNOWNATR_END range boundary from hintids.hxx. */
 export const RES_UNKNOWNATR_END = 164 as const;
+
+/** Original format identities follow the pool attribute boundary. */
+export const RES_FMT_BEGIN = RES_UNKNOWNATR_END;
+/** Original character format identity. */
+export const RES_CHRFMT = RES_FMT_BEGIN;
+/** Original frame format identity. */
+export const RES_FRMFMT = RES_FMT_BEGIN + 1;
+/** Original fly frame format identity. */
+export const RES_FLYFRMFMT = RES_FMT_BEGIN + 2;
+/** Original text collection identity. */
+export const RES_TXTFMTCOLL = RES_FMT_BEGIN + 3;
+/** Original graphic collection identity. */
+export const RES_GRFFMTCOLL = RES_FMT_BEGIN + 4;
+/** Original drawing frame format identity. */
+export const RES_DRAWFRMFMT = RES_FMT_BEGIN + 5;
+/** Original conditional text collection identity. */
+export const RES_CONDTXTFMTCOLL = RES_FMT_BEGIN + 6;
+/** Original exclusive format identity bound. */
+export const RES_FMT_END = RES_FMT_BEGIN + 7;
+
+/** Original frame opacity identity, RES_FRMATR_BEGIN +17. */
+export const RES_OPAQUE = 109 as const;
 
 /** Original frame protection identity, RES_FRMATR_BEGIN +18. */
 export const RES_PROTECT = 110 as const;

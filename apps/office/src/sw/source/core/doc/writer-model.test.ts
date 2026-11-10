@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the LibreOffice-shaped Writer node graph, model positions, selections, hints, and content-operation ownership. */
+import { StylePool } from "../../../../svl/source/items/stylepool";
 import { FontWeight } from "../../../../tools/inc/fontenum";
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -402,19 +403,12 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(first.format.GetStyleHandle()).toBeInstanceOf(SfxItemSet);
     expect(first.format.Clone()).not.toBe(first.format);
     expect(first.format.Clone().equals(first.format)).toBe(true);
-    expect(first.format.QueryValue()).toEqual([
-      { value: 8, which: RES_CHRATR_WEIGHT },
-      { value: 8, which: 26 },
-      { value: 8, which: 31 },
-    ]);
+    expect(first.format.QueryValue()).toBe(StylePool.nameOf(first.format.GetStyleHandle()));
     expect(first.format.equals(createSwFormatAutoFormat(pool, italic))).toBe(false);
     expect(first.format.equals(new SfxInt16Item(RES_TXTATR_AUTOFMT, 1))).toBe(false);
-    expect(
-      throwing(
-        /** Creates an auto-format item with another WhichId. @returns Invalid item. */ () =>
-          new SwFormatAutoFormat(first.format.GetStyleHandle(), 52),
-      ),
-    ).toThrow("WhichId is invalid");
+    const otherWhich = new SwFormatAutoFormat(first.format.GetStyleHandle(), 52);
+    expect(otherWhich.Which()).toBe(52);
+    otherWhich.Dispose();
     expect(
       projectWriterCharacterAttributes(new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES)),
     ).toEqual(plain);

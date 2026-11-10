@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/htmltbl.pass1.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/htmltbl.pass1.ts",
+          "marker": "MeasurePass1Contents"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/htmltbl.cxx",
+          "marker": "SwHTMLTableLayout::AutoLayoutPass1"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/htmltbl.cxx",
+    "localSymbols": [
+      "MeasurePass1Contents",
+      "lcl_GetMinMaxSize"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLTableLayout::AutoLayoutPass1",
+      "lcl_GetMinMaxSize"
+    ],
+    "preservedResponsibilities": [
+      "Walks actual linked layout content, Writer text nodes and nested table section owners with the original PRE/NOBR and nested fixed-width clamping rules."
+    ],
+    "omittedResponsibilities": [
+      "Production HTML table parser materialization and unsupported Writer content-owner families remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/htmltbl.pass1.ts",
+      "rationale": "Separates original first-pass content traversal from column constraint and allocation responsibility while retaining the existing table owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

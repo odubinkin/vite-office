@@ -1,4 +1,12 @@
 /** @fileoverview Declares consumed character and paragraph slots from native editids.hrc. */
+/** Original paragraph split permission slot, SID_SVX_START +39. */
+export const SID_ATTR_PARA_SPLIT = 10039 as const;
+/** Original paragraph orphan count slot, SID_SVX_START +40. */
+export const SID_ATTR_PARA_ORPHANS = 10040 as const;
+/** Original paragraph widow count slot, SID_SVX_START +41. */
+export const SID_ATTR_PARA_WIDOWS = 10041 as const;
+/** Original outer border item slot, SID_SVX_START +24. */
+export const SID_ATTR_BORDER_OUTER = 10024 as const;
 /** Native paragraph upper/lower spacing slot, SID_SVX_START +42. */
 export const SID_ATTR_PARA_ULSPACE = 10042 as const;
 /** Native combined paragraph indent slot, SID_SVX_START +43. */

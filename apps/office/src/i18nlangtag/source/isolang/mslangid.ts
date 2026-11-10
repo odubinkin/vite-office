@@ -1,7 +1,10 @@
 /** @fileoverview Original MsLangId configured/system/UI scalar state and public Locale wrappers over genuine table conversion and the platform binding. */
+import { getOnTheFlyScriptType, isOnTheFlyID } from "../languagetag/languagetag.registry";
+import { ScriptType } from "../languagetag/languagetag.state";
 import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import {
   LanguageType,
+  primary,
   LANGUAGE_SYSTEM,
   LANGUAGE_SYSTEM_DEFAULT,
   LANGUAGE_PROCESS_OR_USER_DEFAULT,
@@ -88,4 +91,39 @@ export function getConfiguredSystemLocale(): Locale | null {
   return nConfiguredSystemLanguage === LANGUAGE_SYSTEM
     ? null
     : convertLanguageToLocale(LANGUAGE_SYSTEM, false);
+}
+
+const rtlPrimaryLanguages = new Set([
+  0x0001, // LANGUAGE_ARABIC_SAUDI_ARABIA
+  0x000d, // LANGUAGE_HEBREW
+  0x003d, // LANGUAGE_YIDDISH
+  0x0020, // LANGUAGE_URDU_PAKISTAN
+  0x0029, // LANGUAGE_FARSI
+  0x0060, // LANGUAGE_KASHMIRI
+  0x0059, // LANGUAGE_SINDHI
+  0x0080, // LANGUAGE_UIGHUR_CHINA
+  0x0268, // LANGUAGE_USER_KYRGYZ_CHINA
+  0x0286, // LANGUAGE_USER_NKO
+  0x02b0, // LANGUAGE_USER_SARAIKI
+]);
+const rtlLanguages = new Set([
+  0x1226, // LANGUAGE_USER_KURDISH_IRAN
+  0x0e26, // LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ
+  0x0492, // LANGUAGE_KURDISH_ARABIC_IRAQ
+  0x7c92, // LANGUAGE_KURDISH_ARABIC_LSO
+  0x8492, // LANGUAGE_USER_KURDISH_SOUTHERN_IRAN
+  0x8092, // LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ
+  0x800e, // LANGUAGE_USER_HUNGARIAN_ROVAS
+  0x803e, // LANGUAGE_USER_MALAY_ARABIC_MALAYSIA
+  0x06b1, // LANGUAGE_USER_ROHINGYA_HANIFI
+  0x843e, // LANGUAGE_USER_MALAY_ARABIC_BRUNEI
+]);
+/** Original right-to-left classifier over native language identities and registered on-the-fly tags. @param language - Native LanguageType. @returns Whether the source treats it as right to left. */
+export function isRightToLeft(language: number): boolean {
+  language = LanguageType(language);
+  return (
+    rtlPrimaryLanguages.has(primary(language)) ||
+    rtlLanguages.has(language) ||
+    (isOnTheFlyID(language) && getOnTheFlyScriptType(language) === ScriptType.RTL)
+  );
 }

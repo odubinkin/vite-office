@@ -14,7 +14,7 @@ import type {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { WRITER_LIST_WHICH_RANGES } from "../doc/list";
+import { WRITER_LIST_WHICH_RANGES, type SwList } from "../doc/list";
 import { getWriterNumFormatBullet, SvxNumType } from "../doc/number";
 import { SwTextFormatColl } from "../doc/fmtcol";
 import { ListLevelIndents } from "../para/paratr";
@@ -242,4 +242,22 @@ export function UpdateSwTextNodeOutlineLevel(
     : 10;
   if (level !== 10 && level !== -1 && setListLevel) node.SetAttrListLevel(level);
   node.GetNodes().UpdateOutlineNode(node);
+}
+
+/** Original HasMarkedLabel body remains on the same actual text/list owners at this existing responsibility split. @param node - Actual native paragraph. @returns Whether its actual list level is marked. */
+export function HasSwTextNodeMarkedLabel(node: SwTextNode): boolean {
+  if (!node.IsInList()) return false;
+  const list = node.GetDoc().GetDocumentListsManager().GetListByName(node.GetListId());
+  return list?.IsListLevelMarked(node.GetActualListLevel()) ?? false;
+}
+
+/** Existing FindList body shares the actual text-node list owner across the source-size split. @param node - Actual content owner. @returns Existing or newly created document list, or absent without rule/ID. */
+export function FindTextNodeList(node: SwTextNode): SwList | undefined {
+  const id = node.GetListId();
+  if (id.length === 0) return undefined;
+  const lists = node.GetDoc().GetDocumentListsManager();
+  const existing = lists.GetListByName(id);
+  if (existing !== undefined) return existing;
+  const rule = node.GetNumRule();
+  return rule === undefined ? undefined : lists.CreateList(rule.GetName(), id);
 }

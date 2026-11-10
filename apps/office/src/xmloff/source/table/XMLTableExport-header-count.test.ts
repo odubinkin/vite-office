@@ -18,7 +18,7 @@ it("exports all ordinary cells when a legacy repeat flag omits the numeric heade
       format: { repeatHeaderRows: true },
       columnWidths: [3000],
       softPageBreakRows: [],
-      rows: [{ format: {}, cells: [{ format: {}, paragraphs: [paragraph] }] }],
+      rows: [{ format: {}, cells: [{ format: {}, content: [{ kind: "paragraph", paragraph }] }] }],
     };
   const result = exportTextParagraphs({
     paragraphs:
@@ -37,5 +37,5 @@ it("exports all ordinary cells when a legacy repeat flag omits the numeric heade
   expect(result.body).not.toContain("table:table-header-rows");
   expect(result.automaticStyles).toContain('style:family="table-row"');
   expect(table.format).toEqual({ repeatHeaderRows: true });
-  expect(table.rows[0]?.cells[0]?.paragraphs[0]).toBe(paragraph);
+  expect(table.rows[0]?.cells[0]?.content[0]).toEqual({ kind: "paragraph", paragraph });
 });

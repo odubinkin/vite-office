@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+    "upstreamPath": "sw/source/core/text/itratr.cxx",
+    "localSymbols": [
+      "GetMinMaxNodeMetrics",
+      "lcl_MinMaxNode",
+      "GetMinMaxSize",
+      "lcl_MinMaxString",
+      "SwMinMaxArgs"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::GetMinMaxSize",
+      "lcl_MinMaxNode",
+      "lcl_MinMaxString",
+      "SwMinMaxArgs"
+    ],
+    "preservedResponsibilities": [
+      "Runs original dictionary word accumulation, separators, line/tab/field control branches and anchored widths over the actual unmerged Writer text node and selected script font. WRITER380 retains direct width without padding for hard separators alone. A deterministic width device gave 3010 identical native paragraph metrics against original source bodies and patched ICU."
+    ],
+    "omittedResponsibilities": [
+      "Inline fly, footnote and field point-hint expansion, native drawing metrics, physical desktop glyph parity and production HTML reader wiring remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+          "marker": "GetMinMaxNodeMetrics"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+          "marker": "GetMinMaxSize"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+          "marker": "SwTextNode::GetMinMaxSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+          "marker": "lcl_MinMaxString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+      "rationale": "Separates import text-width and anchored-format responsibility from the existing character-attribute iterator while retaining actual Writer owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

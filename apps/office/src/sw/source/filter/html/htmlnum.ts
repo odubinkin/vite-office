@@ -63,3 +63,14 @@ export class SwHTMLNumRuleInfo {
     this.m_aNumStarts.fill(0xffff);
   }
 }
+
+/** Original integral default list margin in twips. */
+export const HTML_NUMBER_BULLET_MARGINLEFT = Math.round((125 * 1440) / 254);
+/** Original default negative first-line offset. */
+export const HTML_NUMBER_BULLET_INDENT = -Math.round((5 * 1440) / 25.4);
+/** Native legacy HTML bullet glyphs deliberately differ from the default Unicode bullet. */
+export const HTML_BULLETCHAR_DISC = 0xe008;
+/** Native circle glyph. */
+export const HTML_BULLETCHAR_CIRCLE = 0xe009;
+/** Native square glyph. */
+export const HTML_BULLETCHAR_SQUARE = 0xe00b;

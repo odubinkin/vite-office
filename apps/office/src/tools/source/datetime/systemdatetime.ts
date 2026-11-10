@@ -1,9 +1,15 @@
-/** @fileoverview Original GetSystemDateTime date-output branch. The browser host supplies system_clock/localtime through numeric Date construction and local field getters; text date parsing and calendar arithmetic are not delegated to it. Native nanosecond time output is not exposed by this binding. */
-/** Original local date packing after a successful platform clock conversion. @param date - Packed signed32 date output. @param time - Unrequested native time output. @returns Whether the host conversion succeeded. */
-export function GetSystemDateTime(date: [number], time: null): boolean {
-  void time;
+/** @fileoverview Native optional local date/time outputs. The browser clock supplies local fields and millisecond precision; native platform nanosecond precision/ABI is unverified. */
+/** Packs both requested outputs from one successful host clock sample, preserving outputs on failure. @param date - Optional native signed32 date output. @param time - Optional native signed64 clock output. @returns Whether platform conversion succeeded. */
+export function GetSystemDateTime(date: [number] | null, time: [bigint] | null): boolean {
   const local = new globalThis.Date(globalThis.Date.now());
   if (Number.isNaN(local.getTime())) return false;
-  date[0] = (local.getFullYear() * 10000 + (local.getMonth() + 1) * 100 + local.getDate()) | 0;
+  if (date)
+    date[0] = (local.getFullYear() * 10000 + (local.getMonth() + 1) * 100 + local.getDate()) | 0;
+  if (time)
+    time[0] =
+      BigInt(local.getHours()) * 10000000000000n +
+      BigInt(local.getMinutes()) * 100000000000n +
+      BigInt(local.getSeconds()) * 1000000000n +
+      BigInt(local.getMilliseconds()) * 1000000n;
   return true;
 }

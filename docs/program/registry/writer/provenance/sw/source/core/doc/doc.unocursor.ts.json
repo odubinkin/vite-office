@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.unocursor.ts",
+          "marker": "CreateUnoCursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unocrsr.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/doc.cxx",
+          "marker": "CreateUnoCursor"
+        },
+        {
+          "path": "sw/inc/doc.hxx",
+          "marker": "mvUnoCursorTable"
+        },
+        {
+          "path": "sw/source/core/doc/docnew.cxx",
+          "marker": "UnoCursorHint"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/doc.unocursor.ts",
+    "localSymbols": [
+      "CreateUnoCursor",
+      "cleanupUnoCursorTable",
+      "NotifyUnoCursorsOnDocDestruction"
+    ],
+    "omittedResponsibilities": [
+      "Wider SwUnoCursor SavePos/IsSelOvr, physical-layout table selection production and whole standard-library/ABI behavior are not claimed. Global absolute correction and section deletion remain incomplete."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML51: SwDoc creates actual ordinary/table UNO cursors, retains only weak control blocks and locks a real strong value across each destruction hint broadcast. UnoCursorPointer uses the existing native SfxListener/SfxBroadcaster identities and source subscription order; the native text cursor API owns this pointer and rejects access after invalidation. Original flags, readonly availability, separate table selection ring and whole-ring destruction are preserved. Concrete cursor-specific shared/weak value carriers reify deterministic C++ ownership; no alternate document/selection model or generic standard-library ABI is claimed. Global PaMCorrAbs edit-shell traversal, section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required. Whole-module contracts/defaults/behavior remain unverified."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/doc.cxx",
+    "upstreamSymbols": [
+      "CreateUnoCursor"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/doc.unocursor.ts",
+      "rationale": "Original SwDoc cursor factory, weak-table cleanup and destruction notification are split from doc.cxx/doc.hxx/docnew.cxx under the mandatory 1000-line SwDoc limit; actual document and native cursor owners remain unchanged.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

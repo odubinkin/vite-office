@@ -24,13 +24,15 @@ import {
   SvxRightMarginItem,
   SvxFirstLineIndentItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { XFillColorItem } from "../../../../svx/inc/xflclit";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import { XATTR_FILLCOLOR, XATTR_FILLSTYLE } from "../../../../svx/inc/xdef";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_TEXTLEFT,
   RES_MARGIN_RIGHT,
   RES_UL_SPACE,
-  RES_BACKGROUND,
 } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
@@ -55,8 +57,8 @@ afterEach(
     for (const doc of docs.splice(0)) doc.Dispose();
   },
 );
-/** Reads HTML into the same blank paragraph insertion profile used by Markdown. @param html - Native UTF16 source. @param doc - Optional actual insertion document. @returns Actual document. */
-function html(html: string, doc = new SwDoc()): SwDoc {
+/** Reads HTML through the native filter. @param html - Native UTF16 source. @param doc - Actual destination document. @param newDocument - Native new-document flag. @returns Actual document. */
+function html(html: string, doc = new SwDoc(), newDocument = false): SwDoc {
   docs.push(doc);
   const node = doc.paragraphs[0];
   assert(node);
@@ -67,6 +69,9 @@ function html(html: string, doc = new SwDoc()): SwDoc {
     doc,
     pam,
     new SvStream(OUStringToOString(html, RTL_TEXTENCODING_UTF8), RTL_TEXTENCODING_UTF8),
+    "",
+    "",
+    newDocument,
   );
   try {
     expect(parser.CallParser()).toBe(SvParserState.Accepted);
@@ -86,6 +91,7 @@ it("maps native paragraphs, whitespace, entities and hard line breaks", /** Orig
   expect(text(html("<p>  A   B&nbsp; &amp; C<br>D</p><p>E</p>"))).toEqual([
     "A B\u00a0 & C\nD",
     "E",
+    "",
   ]);
 });
 it("retains nested inline ownership across paragraph boundaries", /** Deferred heads split real text ranges without leaking after closing tags. @returns Nothing. */ () => {
@@ -167,13 +173,13 @@ it("splits native Western CJK and CTL bold attributes by actual UTF16 script ran
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 it("uses native heading, quotation and preformatted paragraph pools", /** Closing a mismatched heading still finds the last native heading context. @returns Nothing. */ () => {
   const doc = html("<h2>Heading</h6><blockquote>Quote</blockquote><pre>A  B\nC</pre>");
-  expect(text(doc)).toEqual(["Heading", "Quote", "A  B", "C"]);
+  expect(text(doc)).toEqual(["Heading", "Quote", "A  B", "C", ""]);
   expect(
     doc.paragraphs.map(
       /** Reads source pool identity. @param node - Node. @returns Style ID. */ (node) =>
         node.GetTextFormatColl().id,
     ),
-  ).toEqual(["heading-2", "quotations", "preformatted-text", "preformatted-text"]);
+  ).toEqual(["heading-2", "quotations", "preformatted-text", "preformatted-text", "default"]);
 });
 it("imports ordinary Markdown HTML blocks through the native reader and real worker codec", /** This is the production path that previously threw before returning a document. @returns Nothing. */ () => {
   const doc = new MarkdownReader().Read(
@@ -201,7 +207,7 @@ it("ignores native title script style and comment content without a browser DOM"
         "<title>title</title><script>ignored <b>code</b></script><!-- comment --><style>p{color:red}</style><p>body</p>",
       ),
     ),
-  ).toEqual(["body"]);
+  ).toEqual(["body", ""]);
 });
 
 import { unicode } from "../../core/unocore/unocrsrhelper";
@@ -315,7 +321,7 @@ it("preserves the native buffered-inline-HTML effect on a later raw block", /** 
     OUStringToOString("start <b>x\n\n<div>y</div>", RTL_TEXTENCODING_UTF8),
   );
   docs.push(doc);
-  expect(text(doc)).toEqual(["start x", "y"]);
+  expect(text(doc)).toEqual(["start x", "y", ""]);
   expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
   expect(projectWriterTextRuns(doc.paragraphs[1])[0]?.attributes.bold).toBe(true);
 });
@@ -356,13 +362,13 @@ it("retains explicit paragraph alignment, native duplicate-option precedence and
   const doc = html(
     '<p align="LEFT" align="right">left</p><center><p>center</p></center><p align="justify">justified</p>',
   );
-  expect(text(doc)).toEqual(["left", "center", "justified"]);
+  expect(text(doc)).toEqual(["left", "center", "justified", ""]);
   expect(
     doc.paragraphs.map(
       /** Reads actual paragraph adjustment. @param node - Node. @returns Alignment. */ (node) =>
         node.GetParagraphAlignment(),
     ),
-  ).toEqual(["left", "center", "justify"]);
+  ).toEqual(["left", "center", "justify", "left"]);
   const first = doc.paragraphs[0];
   assert(first);
   const item = new SvxAdjustItem(SvxAdjust.Block, RES_PARATR_ADJUST);
@@ -627,11 +633,11 @@ it("applies existing direct font items to headings and block-style contexts", /*
         node,
       ) => node.GetTextFormatColl().id,
     ),
-  ).toEqual(["heading-2", "quotations"]);
+  ).toEqual(["heading-2", "quotations", "default"]);
 });
 it("consumes native white-space flags only at paragraph open", /** NewPara enables preservation and EndPara restores the source default. @returns Nothing. */ () => {
   const doc = html('<p style="white-space: pre">  A   B</p><p>  C   D</p>');
-  expect(text(doc)).toEqual(["  A   B", "C D"]);
+  expect(text(doc)).toEqual(["  A   B", "C D", ""]);
 });
 it("imports native FONT face/color/size and restores inherited text", /** Legacy attributes use existing native option conversion and actual item heads. @returns Nothing. */ () => {
   const doc = html('<font face="  Example Font , , Other Font  " color="red" size="5">A</font>B');
@@ -847,6 +853,8 @@ it("retains source legacy font-head wiring independently of CSS insertion", /** 
 it("imports native paragraph margins, first-line indent and background color", /** CSS declarations become original paragraph items without browser layout parsing. @returns Nothing. */ () => {
   const doc = html(
       '<p style="margin: 1pt 2pt 3pt 4pt; text-indent: -2pt; background-color: red">A</p><p>B</p>',
+      new SwDoc(),
+      true,
     ),
     node = doc.paragraphs[0];
   assert(node);
@@ -858,9 +866,9 @@ it("imports native paragraph margins, first-line indent and background color", /
   const spacing = node.GetAttr(RES_UL_SPACE);
   assert(spacing instanceof SvxULSpaceItem);
   expect([spacing.GetUpper(), spacing.GetLower()]).toEqual([20, 60]);
-  const brush = node.GetAttr(RES_BACKGROUND);
-  assert(brush instanceof SvxBrushItem);
-  expect(brush.GetColor().toUInt32()).toBe(0xff0000);
+  const fill = node.GetAttr(XATTR_FILLCOLOR);
+  assert(fill instanceof XFillColorItem);
+  expect(fill.GetColorValue().toUInt32()).toBe(0xff0000);
   expect(doc.paragraphs[1]?.GetParagraphTextLeftMargin()).toBe(0);
 });
 it("accumulates native nested margins and clamps negative contributions at zero", /** Context flags retain signed contributions separately from unsigned margin items. @returns Nothing. */ () => {
@@ -900,27 +908,36 @@ it("retains native margin shorthand partial application and ignored bare zero", 
   assert(spacing instanceof SvxULSpaceItem);
   expect([spacing.GetUpper(), spacing.GetLower()]).toEqual([20, 60]);
 });
-it("restores native paragraph background and keeps text highlight separate", /** Paragraph brush and character highlight are distinct source Which families. @returns Nothing. */ () => {
-  const doc = html('<p style="background-color: blue; background-color: transparent">A</p>');
-  const brush = doc.paragraphs[0]?.GetAttr(RES_BACKGROUND);
-  assert(brush instanceof SvxBrushItem);
-  expect(brush.GetColor().toUInt32() >>> 24).toBe(255);
+it("restores native paragraph background and keeps text highlight separate", /** Paragraph drawing fill and character highlight are distinct source Which families. @returns Nothing. */ () => {
+  const doc = html(
+    '<p style="background-color: blue; background-color: transparent">A</p>',
+    new SwDoc(),
+    true,
+  );
+  const fill = doc.paragraphs[0]?.GetAttr(XATTR_FILLSTYLE);
+  assert(fill instanceof XFillStyleItem);
+  expect(fill.GetValue()).toBe(FillStyle.NONE);
   expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.highlight).toBeUndefined();
 });
 it("transports actual Markdown paragraph layout and brush through Worker snapshots", /** Production Markdown HTML insertion uses existing native items and the existing codec. @returns Nothing. */ () => {
   const doc = new MarkdownReader().Read(
     OUStringToOString(
-      '<p style="margin-left: 12pt; margin-bottom: 4pt; background-color: #123456">A</p>',
+      '<p>Before</p><p style="margin-left: 12pt; margin-bottom: 4pt; background-color: #123456">A</p><p>After</p>',
       RTL_TEXTENCODING_UTF8,
     ),
   );
   docs.push(doc);
   const restored = decodeWriterDocument(encodeWriterDocument(doc));
   docs.push(restored);
-  expect(restored.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(240);
-  const brush = restored.paragraphs[0]?.GetAttr(RES_BACKGROUND);
-  assert(brush instanceof SvxBrushItem);
-  expect(brush.GetColor().toUInt32()).toBe(0x123456);
+  const paragraph = restored.paragraphs.find(
+    /** Locates the original unjoined content paragraph. @param node - Native text node. @returns Whether the paragraph is A. */
+    (node) => node.GetText() === "A",
+  );
+  assert(paragraph);
+  expect(paragraph.GetParagraphTextLeftMargin()).toBe(240);
+  const fill = paragraph.GetAttr(XATTR_FILLCOLOR);
+  assert(fill instanceof XFillColorItem);
+  expect(fill.GetColorValue().toUInt32()).toBe(0x123456);
 });
 
 it("retains native inherited automatic first-line state when CSS changes other margins", /** SetTextCollAttrs copies the style items before adjusting their metric fields. @returns Nothing. */ () => {
@@ -946,5 +963,5 @@ it("retains source text-indent length clamping versus pixel signed narrowing", /
       ) =>
         (node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
     ),
-  ).toEqual([32767, -20536]);
+  ).toEqual([32767, -20536, 0]);
 });

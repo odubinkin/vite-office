@@ -320,10 +320,98 @@ export class PropertyMap extends SvRefBase {
   }
 }
 
+/** Original start-page parity selector. */
+export enum PageBreakType {
+  Even,
+  Odd,
+  Both,
+}
 /** Native section property owner. The current admission supplies page defaults, actual style attachment and property application; section finalization is ported on this same owner. */
 export class SectionPropertyMap extends PropertyMap {
   private readonly m_sPageStyleName = new OUString();
   private m_aPageStyle: SwXPageStyle | null = null;
+  private m_nLeftMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nRightMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nTopMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nBottomMargin = Number(convert(1n, Length.in, Length.mm100));
+  protected m_nPageNumber = -1;
+  protected m_nBreakType = -1;
+  protected m_nLnnMod = 0;
+  protected m_nLnc: number = NS_ooxml.LN_Value_ST_LineNumberRestart_newPage;
+  protected m_ndxaLnn = 0;
+  /** Stores the original section line interval. @param value - Native interval. @returns Nothing. */
+  SetLnnMod(value: number): void {
+    this.m_nLnnMod = value;
+  }
+  /** Stores the original section restart control. @param value - Native restart token. @returns Nothing. */
+  SetLnc(value: number): void {
+    this.m_nLnc = value;
+  }
+  /** Stores the original section line-number distance. @param value - Native twips. @returns Nothing. */
+  SetdxaLnn(value: number): void {
+    this.m_ndxaLnn = value;
+  }
+
+  /** Original stored break type. @param value - Generated section token. @returns Nothing. */
+  SetBreakType(value: number): void {
+    this.m_nBreakType = value;
+  }
+  /** Original continuous section page-style inheritance/finalization. @param mapper - Actual mapper. @returns Nothing. */
+  InheritOrFinalizePageStyles(mapper: DomainMapper_Impl): void {
+    const previous = mapper.GetLastSectionContext();
+    if (previous && this.m_sPageStyleName.getLength() === 0)
+      this.m_sPageStyleName.assign(previous.GetPageStyleName());
+    else {
+      this.HandleMarginsHeaderFooter(mapper);
+      this.GetPageStyle(mapper);
+      this.ApplyProperties_(this.m_aPageStyle);
+    }
+  }
+  /** Original parity style deep copy over native property metadata. @param mapper - Actual mapper. @param type - Native parity. @returns Nothing. */
+  CreateEvenOddPageStyleCopy(mapper: DomainMapper_Impl, type: PageBreakType): void {
+    CreateEvenOddPageStyleCopy.call(this, mapper, type);
+  }
+  /** Original consumed one-column/no-header section finalization, with atomic range attachment owned by the importer. @param mapper - Actual mapper. @returns Nothing. */
+  CloseSectionGroup(mapper: DomainMapper_Impl): void {
+    CloseSectionGroup.call(this, mapper);
+  }
+  /** Original deferred page restart. @param value - Native number. @returns Nothing. */
+  SetPageNumber(value: number): void {
+    this.m_nPageNumber = value;
+  }
+  /** Original left margin storage. @param value - mm100. @returns Nothing. */
+  SetLeftMargin(value: number): void {
+    this.m_nLeftMargin = value;
+  }
+  /** Original right margin storage. @param value - mm100. @returns Nothing. */
+  SetRightMargin(value: number): void {
+    this.m_nRightMargin = value;
+  }
+  /** Original no-header body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
+  SetTopMargin(value: number): void {
+    this.m_nTopMargin = Math.abs(value);
+  }
+  /** Original no-footer body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
+  SetBottomMargin(value: number): void {
+    this.m_nBottomMargin = Math.abs(value);
+  }
+  /** Original consumed no-header/no-footer margin phase. This model has no header/footer content owners. @param mapper - Original mapper parameter. @returns Nothing. */
+  HandleMarginsHeaderFooter(mapper: DomainMapper_Impl): void {
+    void mapper;
+    for (const [id, value] of [
+      [P.PROP_LEFT_MARGIN, this.m_nLeftMargin],
+      [P.PROP_RIGHT_MARGIN, this.m_nRightMargin],
+      [P.PROP_TOP_MARGIN, Math.max(this.m_nTopMargin, 0)],
+      [P.PROP_BOTTOM_MARGIN, Math.max(this.m_nBottomMargin, 0)],
+    ] as const) {
+      const any = new Any([value], "sal_Int32");
+      try {
+        this.Insert(id, any);
+      } finally {
+        any.dispose();
+      }
+    }
+  }
   /** Original consumed constructor defaults use Letter independently of the browser document locale. @param m_bIsFirstSection - Original first-section flag. @returns Section map. */
   constructor(private readonly m_bIsFirstSection: boolean) {
     super();
@@ -822,3 +910,5 @@ export class TablePropertyMap extends PropertyMap {
     }
   }
 }
+
+import { CreateEvenOddPageStyleCopy, CloseSectionGroup } from "./PropertyMap.section";

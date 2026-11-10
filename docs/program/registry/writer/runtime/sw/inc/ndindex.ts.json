@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/ndindex.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/ndindex.ts",
+        "apps/office/src/sw/inc/ndindex.native.test.ts",
+        "apps/office/src/sw/source/core/docnode/native-section-down.test.ts",
+        "vendor/libreoffice-reference/sw/inc/ndindex.hxx"
+      ],
+      "justification": "S3HW1E HTML67: actual SwNodeRange value constructors own two existing native SwNodeIndex members, retain original absolute/relative defaults including end0, do not normalize endpoints, copy independently, assign contained index values in place and destroy end before start. The ndindex header owner reexports the same existing index class without a second index/registry. SwNodes::SectionDown now wraps actual existing nodes through original positional InsertNode, opposing EndNode/StartNode deletion, registered-index correction and native private static SectionUpDown stack repair. Matching ends/parent identities are repaired by the original forward walk until its stack empties at or beyond the completion boundary; ancestor continuation and traversal past the bound are retained. Genuine nested section/table/box/format/content and cursor owners survive wrapping. WRITER348 records original output endpoint ambiguity, including reversed output after both opposing boundaries are deleted; no endpoint sorting or matching-end substitute is introduced. This is actual structural wrapping needed by MakeFlySection_, not a fake fly-format/section result provider. Pure InsertNode retains native raw-array insertion without invented document-modified/undo publication; existing source host removal notifications remain unchanged. Full SectionUp/general Delete/native node-array/RTTI/ABI completion, MakeFlySection/style-pool/name/inline-fly/contact/layout/undo owners, recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed current-slice format/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations and WRITER347 general style-rename gap remain unchanged. No broad semantic/default/contract/source-responsibility status is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwNodeRange"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/ndindex.hxx",
+      "upstreamSymbols": [
+        "SwNodeRange",
+        "aStart",
+        "aEnd"
+      ]
+    }
+  }
+}

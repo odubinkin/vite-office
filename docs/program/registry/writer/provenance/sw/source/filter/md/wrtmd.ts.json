@@ -7,17 +7,29 @@
     "localPath": "apps/office/src/sw/source/filter/md/wrtmd.ts",
     "upstreamPath": "sw/source/filter/md/wrtmd.cxx",
     "localSymbols": [
-      "SwMDWriter"
+      "SwMDWriter",
+      "OutMarkdown_SwTextNode",
+      "OutMarkdown_SwTableNode",
+      "SwMDCellInfo",
+      "SwMDTableInfo",
+      "CollectFlys"
     ],
     "upstreamSymbols": [
-      "SwMDWriter::WriteStream"
+      "SwMDWriter::WriteStream",
+      "SwMDWriter::Out_SwDoc",
+      "OutMarkdown_SwTableNode",
+      "OutMarkdown_SwTextNode",
+      "SwMDWriter::CollectFlys"
     ],
     "preservedResponsibilities": [
       "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source per-node paragraph and table separators, source numbering labels and parent-prefix indentation, source neighboring-style fence decisions for preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions.",
-      "Final UTF-8 byte conversion uses the native SAL OUStringToOString wrapper rather than host TextEncoder. Stream write-fragment boundaries and complete Writer export graph parity remain unverified."
+      "Final UTF-8 byte conversion uses the native SAL OUStringToOString wrapper rather than host TextEncoder. Stream write-fragment boundaries and complete Writer export graph parity remain unverified.",
+      "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
+      "Uses a source metadata stack keyed by actual Writer node index to emit top-level pipe boundaries and nested-cell spaces (WRITER394).",
+      "Uses native anchor positions and source empty image records for represented text flies, and applies direct named character style items through the original formatting counters."
     ],
     "omittedResponsibilities": [
-      "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
+      "Graphic and OLE content, inline image hints, content controls, unrepresented document properties and desktop filter options remain outside the current exporter verification."
     ],
     "evidence": {
       "local": [
@@ -40,6 +52,26 @@
         {
           "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
           "marker": "serializes the style item set when a paragraph has no direct item set"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts",
+          "marker": "GetParagraphMarkerProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.ts",
+          "marker": "OutMarkdown_SwTextNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "writes anchored text flys"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "direct item set of a native named character style"
         }
       ],
       "upstream": [
@@ -62,6 +94,26 @@
         {
           "path": "vendor/libreoffice-reference/sw/inc/node.hxx",
           "marker": "SwContentNode::GetSwAttrSet() const"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "SwMDWriter::Out_SwDoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.hxx",
+          "marker": "struct SwMDTableInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "SwMDWriter::CollectFlys"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "ApplyFlyFrameFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "case RES_TXTATR_CHARFMT"
         }
       ]
     }

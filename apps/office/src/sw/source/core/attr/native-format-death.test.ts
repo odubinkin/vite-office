@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original Writer clients and inherited item sets move before native format destruction. */
+import { RES_TXTFMTCOLL } from "../../../inc/hintids";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFormat } from "./format";
@@ -93,9 +94,13 @@ it("dying parent reparents every original Writer client before the exact borrowe
 
 it("parentless format death clears the direct page descriptor through the base method before dependent teardown", /** Checks native root cleanup and flag without virtual reset substitution. @returns Nothing. */ () => {
   const doc = new SwDoc(),
-    root = new SwFormat(doc.GetAttrPool(), "Independent dying root", [
-      [RES_PAGEDESC, RES_PAGEDESC],
-    ]),
+    root = new SwFormat(
+      doc.GetAttrPool(),
+      "Independent dying root",
+      [[RES_PAGEDESC, RES_PAGEDESC]],
+      undefined,
+      RES_TXTFMTCOLL,
+    ),
     client = new SwClient();
   root.SetFormatAttr(new SwFormatPageDesc("First Page", 4));
   client.RegisterToModify(root);
@@ -115,7 +120,7 @@ it("parentless format death clears the direct page descriptor through the base m
   }
 });
 
-it("a format without Writer clients skips native death preparation and keeps direct attributes even with an Svt observer", /** Checks independent observer lifetime and original no-client flag. @returns Nothing. */ () => {
+it("a format without Writer clients skips death preparation but still destroys its attribute member", /** Checks independent observer lifetime and original no-client flag. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     root = new SwFrameFormat(doc.GetAttrPool(), "Unobserved Writer root", [
       [RES_PAGEDESC, RES_PAGEDESC],
@@ -123,13 +128,18 @@ it("a format without Writer clients skips native death preparation and keeps dir
     observer = new SvtListener<SwModelHint>();
   root.SetFormatAttr(new SwFormatPageDesc("First Page"));
   observer.StartListening(root.GetNotifier());
+  const reset = vi.spyOn(root, "ResetFormatAttr"),
+    disposed = vi.spyOn(root.GetAttrSet(), "Dispose");
   try {
     expect(root.HasWriterListeners()).toBe(false);
-    root.DisposeModify();
-    expect(root.IsFormatInDTOR()).toBe(false);
     expect(root.GetAttrSet().Count()).toBe(1);
+    root.DisposeModify();
+    expect(reset).not.toHaveBeenCalled();
+    expect(disposed).toHaveBeenCalledTimes(1);
     expect(observer.HasBroadcaster()).toBe(false);
   } finally {
+    reset.mockRestore();
+    disposed.mockRestore();
     observer.Dispose();
     doc.Dispose();
   }

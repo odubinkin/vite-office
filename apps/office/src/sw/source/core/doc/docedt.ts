@@ -39,10 +39,6 @@ export function sw_JoinText(range: SwPaM, joinPrev: boolean): boolean {
     if (breaks.Count() !== 0) last.SetAttr(breaks);
   }
   first.FormatToTextAttr(last);
-  // JoinPrev is selected only when the first paragraph became empty. The existing
-  // portable zero-length CopyAttr boundary is explicit until native CutImpl is ported.
-  last.ReplaceRange(0, 0, first.CaptureTextFragment(0, 0));
-  first.MoveAllContentIndicesTo(last);
-  nodes.removeTextNode(first);
+  last.JoinPrev();
   return true;
 }

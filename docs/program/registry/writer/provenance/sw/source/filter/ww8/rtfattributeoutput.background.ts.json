@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "FormatBackground",
+      "FormatParagraphFill",
+      "TableBackgroundColor",
+      "IndexParagraphBackgrounds"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::FormatBackground"
+    ],
+    "preservedResponsibilities": [
+      "Writes represented opaque paragraph shading and selects native table and palette colors."
+    ],
+    "omittedResponsibilities": [
+      "Image and gradient paragraph backgrounds have no represented fill payload."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts",
+          "marker": "FormatBackground"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::FormatBackground"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.background.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original RTF background callbacks and palette readers from the main attribute output file while retaining the native paragraph, table and shared brush owners."
+    }
+  }
+}

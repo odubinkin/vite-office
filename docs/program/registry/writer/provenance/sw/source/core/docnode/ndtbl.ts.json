@@ -128,6 +128,42 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-global-absolute-correction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-insertion-contract.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-construction-formats.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.margin-context.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-node-matrix.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-section-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "MergeTable"
         }
       ],
       "upstream": [
@@ -190,6 +226,42 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
           "marker": "HandleTableHeadlineChange"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "lcl_SetDfltBoxAttr"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "lcl_CreateDfltBoxFormat"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwNodes::InsertTable"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "lcl_transferTableBreaks"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::GetUniqueTableName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::SwTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableLines::~SwTableLines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/tblrwcl.cxx",
+          "marker": "SwTableLine::FindPreviousBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwDoc::MergeTable"
         }
       ]
     },
@@ -202,7 +274,14 @@
       "InsertSwTableRows",
       "SetSwRowsToRepeat",
       "SetSwTabCols",
-      "TextToTableNodes"
+      "TextToTableNodes",
+      "lcl_SetDfltBoxAttr",
+      "lcl_CreateDfltBoxFormat",
+      "InsertTableNodes",
+      "lcl_transferTableBreaks",
+      "GetUniqueTableName",
+      "SwInsertRowsColsArgs",
+      "MergeTable"
     ],
     "omittedResponsibilities": [
       "Complete native ndtbl graph mutation, vertical/RTL/merged/nested/protected/split-row and full parity remain unverified."
@@ -220,13 +299,28 @@
       "39YNA1 normalizes native print width with the original effective complete SwFormatFrameSize clone and width-only SetFormatAttr before original table attribute history; removes scalar table.GetFormat/SetFormat and summed-width guessing, as pinned ndtbl.cxx2871..2922. Other native table items and direct/inherited states remain original.",
       "39YNA1 verified88related files/572latest passing cases including9fresh; final full ndtbl.ts actual Istanbul163lines/179statements/22functions/95branches all100%,current SHA25653e16e7e7ad756d093c59c5d20eadb6bbb0455569952e08f03dbda1573465be6,identical complete maps,zero negatives. Original full frame-size/other item values/direct-inherited states and parent owners survive normalization and3real UndoRedo cycles; mounted Columns/ResetCancel and actual ODT width/columns/direct attributes pass. Two old fixture files receive4precise source-backed operations;627others byte unchanged. Existing generic empty scalar history/inherited parent export, source shadow/vertical/full-layout remain incomplete. Correction9of10; broad goal active.",
       "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
-      "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged."
+      "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged.",
+      "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required.",
+      "S3HW1E HTML56: SwDoc::InsertTable now forwards the required fifth horizontal orientation and original null-autoformat/column-position/called-from-shell/new-model/final-name argument order. Flat construction preserves source column-count admission (NONE requires one extra endpoint), source direction, direct page attributes and shell-only paragraph adjustment; SwTable stores the source model flag. The actual document records numeric insertion history; undo destroys native table frames, corrects marks and global cursor rings to EndOfPostIts, transfers live table page attributes and deletes the actual section. Redo requires an actual edit shell, uses original false/true flag defaults and restores the saved name separately (WRITER338); the existing browser initial-operation bridge retains first-execution shell semantics and cell-style adjuncts without pretending they are SwTableAutoFormat. Markdown supplies native FULL. Regression evidence is scoped to admitted flat tables and actual document/shell ownership. Non-null native autoformat, redlines, DDE, full old-model algorithms, recursive HTML table construction/layout, RTF direction export and final format/UI audit remain unverified or required. Whole module contract/default/behavior statuses remain unverified; browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML57: native InsertTable now constructs actual shared row formats, the original four default-border variants and shared borderless box formats; per-column position widths clone only an already registered owner. Source HTML_MODE selects actual gray double borders, ordinary documents black solid borders, each with55twip distances. Original SwFormatFillOrder and92 WhichId are registered in the actual static item package/pool; default TOP_DOWN differs from explicit insertion LEFT_TO_RIGHT, and inline native SwAttrSet/SwFormat getters use the real item. Obsolete uniform all-edge insertion helper is removed. GetMarginsFromContext is moved to its existing htmlcss1 responsibility and numbering-aware resolution uses actual source contexts/rules with the original uint16/short narrowing and depth clamp (WRITER339). Actual parser/core/filter/UI owners remain; no fabricated frame, layout, font metric or whole reader result is introduced. Whole module/native API/ABI/lifetime behavior remains unverified. First-cell context orchestration, recursive HTML table grammar/materialization/layout, RTF direction export and final format/UI audit remain required; browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML58: original static SwNodes::InsertTable now forwards to its actual ndtbl.cxx node-matrix responsibility InsertTableNodes. Zero boxes return null without mutation; zero lines create one body row; supplied headline/body collections transition using the original repetition condition. Actual table/cell/text/end nodes retain their real enclosing section, including extra/caption and genuine existing cell boundaries. The seven native propagation identities (adjustment, Latin/CJK/CTL font families and heights) copy only effective SET source items when the selected cell collection has no effective SET value; direct or inherited collection values win, defaults and other source items do not propagate. SwDoc consumes this actual matrix before page-attribute transfer and builds its original shared line/box formats over those existing sections instead of rebuilding text sections and unconditionally overwriting adjustment. The old independent browser empty-table builder is explicitly named MakeTableNodeBefore and migrated in real XML/RTF and test consumers; it no longer masquerades as the native static InsertTable API. The existing bound SwTable/early frame bootstrap remains a representation difference requiring further native constructor/lifetime audit; no raw/default table or nullable frame contract is certified by these node-matrix tests. Full native module/API/ABI/default/lifetime behavior remains unverified. First-cell context/floating/section orchestration, recursive table grammar, caption placement/materialization/layout/real text measurement, RTF direction export and final format/UI audit remain required. Browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML59: native InsertTable now admits connected text in actual sections/cells, returns original null for the inserts/footnote node interval before any undo or mutation, and exposes that nullable result through SwDoc and current MDTable pointer contracts. New SwNode.GetTableBox resolves actual enclosing cell ownership. Original tblrwcl.cxx base-line/leaf predecessor algorithms live in their source responsibility, including null-search leaf identity, row-local mode and empty previous rows; actual owning lines are resolved from the real current flat graph, with no alternate owner list. Anonymous nested-line boxes and their original upper hierarchy are not represented or certified. Nested break transfer now copies parent direct page/break items only at the source first-paragraph/first-cell boundary, retains parent items (WRITER340), and does not move following paragraph items for a nested insertion. Existing used-format lookup includes actual table owners in every section instead of only direct body UI blocks. GetUniqueTableName uses the native bitmap and actual o3tl integer suffix conversion (WRITER341), retaining the current English used-format profile; mail merge, localization and unused/default native format-registry owners are not represented or certified. Production history/Markdown consumers retain nullable inputs without inventing a fallback table; native admitted valid pointers remain actual owners. Whole native module/API/ABI/default/lifetime parity is unverified. Structural nontext admission, default SwTable/early-frame bootstrap, full anonymous/nested table rendering/materialization/layout, first-cell HTML orchestration/grammar, RTF direction export, MDTable parser registration/lifetime and final format/UI audit remain required. Browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML61: real SwTableBox anonymous construction preserves a null start node and does not turn reserve capacities into child lines or dummy content. Original borrowed GetUpper/SetUpper pointers and owned nested GetTabLines vectors are represented, with explicit TypeScript vector mutation bridges binding actual owners. GetSttNd is nullable; existing required-leaf convenience boundaries assert an actual start rather than inventing one. The original tblrwcl predecessor algorithm now ascends through actual upper boxes/rows, descends last nested rows/boxes and preserves the source overTableLines flag, including its parent-ascent behavior when false and empty preceding-row recursion. Actual table/box member vectors and line destructor responsibilities own recursive model deletion; node deletion removes live frame clients separately and invokes each actual model destructor once. The existing table section-index graph query now visits actual descendants; native layout-first/sorted-content-box registry lookup is not certified. Core sorted-content registration/removal, complete default table/format lifetime, document destructor orchestration, native recursive HTML first-cell/grammar/materialization/layout and RTF direction remain unverified. Actual DeleteTable is used to test destruction; SwDoc.Dispose currently tears down the notification graph without routing all node-owned table destructors, so this checkpoint does not claim whole document teardown parity. Save/open/autosave/recovery exceptions are unchanged.",
+      "S3HW1E HTML69 retains the existing document InsertRow/InsertCol optional arguments and true/true/count1 wrapper defaults through a shared type-only SwInsertRowsColsArgs declaration at the existing ndtbl argument-contract boundary. Native operations, history and notification bodies are unchanged; this frees source-owner space for actual mail-merge state without moving private fields or inventing a new state provider.",
+      "Applies the same-row new-model branch, repositions the registered cursor before deletion and publishes modified state.",
+      "Delegates physical compound rectangles to the original new-table selection, preparation and deletion mechanisms."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/ndtbl.cxx",
     "upstreamSymbols": [
       "SwDoc::GetTabRows",
-      "SwDoc::SetTabRows"
+      "SwDoc::SetTabRows",
+      "lcl_SetDfltBoxAttr",
+      "lcl_CreateDfltBoxFormat",
+      "SwNodes::InsertTable",
+      "lcl_transferTableBreaks",
+      "SwDoc::GetUniqueTableName",
+      "SwDoc::MergeTable"
     ]
   },
   "legacyOrder": 176

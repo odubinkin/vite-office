@@ -44,6 +44,30 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/pam-selection.test.ts",
           "marker": "global section"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-node-index-removal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-absolute-position-correction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/mdtab.lifecycle.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-forward-content-move.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-directional-content-move.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtanchr-surround.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -82,6 +106,58 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
           "marker": "startOfGlobalSection"
+        },
+        {
+          "path": "sw/inc/ndindex.hxx",
+          "marker": "void RegisterIndex()"
+        },
+        {
+          "path": "sw/inc/pam.hxx",
+          "marker": "SwPosition& GetBound"
+        },
+        {
+          "path": "sw/source/core/crsr/pam.cxx",
+          "marker": "void SwPaM::SetMark()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "bool SwPaM::Move"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx",
+          "marker": "SwContentNode::GoNext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "BreakIterator_Unicode::nextCharacters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "GoInNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+          "marker": "GoCurrPara"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx",
+          "marker": "SwContentNode::GoPrevious"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+          "marker": "SwNode::GetTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatAnchor::SwFormatAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatSurround::SwFormatSurround"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/format.cxx",
+          "marker": "SwFormat::~SwFormat"
         }
       ]
     },
@@ -113,7 +189,13 @@
       "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections.",
       "Leaf4586BY adds the actual consumed bChk=false content-node movement of GoNextPos/GoPreviousPos, both assigning content offset zero. These are real node moves across represented content sections; checked movement and full native range validation are not claimed.",
       "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion.",
-      "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch."
+      "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch.",
+      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
+      "The same native index owner also consumes original array/node/copy constructor overloads, relative positive/negative offsets, array absolute offsets, default0, GetNodes and node/index/array Assign overloads. Same-node assignment preserves the existing registration; cross-document native pointer assignment binds only the supplied new node. Source evidence is original ndindex.hxx, with independent real-array removal tests; unsupported arithmetic/comparison/Ring API families are not claimed.",
+      "S3HW1E HTML50: actual SwPaM owns original permanent m_Bound1/m_Bound2 positions and Point/Mark aliases. A single-position constructor initializes the inactive bound at node0; SetMark reuses the opposite physical bound, Exchange swaps aliases, DeleteMark parks only a formerly active mark at node0, Assign retains physical owners, Normalize keeps original default true, and Start/End retain Point/Mark equality ties. The existing point-first TypeScript argument binding is preserved for callers rather than reinterpreting source parameter order. Original lcl_PosCorrAbs uses inclusive comparisons and value assignment; lcl_PaMCorrAbs visits both physical bounds without short circuit, including an inactive bound. Native GetCorrPosition retains a content endpoint when available and otherwise chooses the actual structural/content successor of End, with no nearest-paragraph fallback. Original SwContentIndex GetContentNode is nullable for a valid unattached/structural position; the old disposed-only throw/freed-owner fixture is removed in favor of genuine unowned-index validation. Actual document, node, index, PaM and caption owners are used without private parser/result injection, alternate selection state or a fabricated global cursor provider. Global PaMCorrAbs edit-shell/UNO-cursor traversal, actual DeleteSection/DelNodes composition, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; whole module/API/ABI/native lifetime parity remains unverified and browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML60: real Markdown table cursors register a borrowed parser pointer and deregister on explicit source destruction; replacing the active cursor registers the new owner before releasing the old one. EndTable executes the original forward default-character PaM movement, AM_SPACE append and cursor release order, retaining the extra body paragraph (WRITER343). The extracted forward Chars path uses the real SAL OUString code-point primitive from the original non-SKIPCELL Unicode branch, then actual GoNextPos/CheckNodesRange at node boundaries, retaining mark and clearing label affinity even on failure. This does not implement or certify the complete movement function-table, locale/grapheme/word/hidden-content service. Original parser defaults are blockQuoteDepth=-1 and noParSpace=true; outer quote exit restores body style. Popped unique-owned span items and remaining parser items are explicitly disposed before borrowed caller document/cursor owners. Real md4c rejection in a footnote section preserves the nullable table precondition (WRITER342), without claiming native crash reachability. Whole parser reference counting, paste reader, native table/HTML materialization/layout/grammar, RTF direction and final format/UI audit remain unverified; intentional save/open/autosave/recovery behavior is unchanged.",
+      "S3HW1E HTML63: actual SwPaM.Move dispatches the native selected strategy and only then clears label affinity; Markdown EndTable now calls this entry with the actual forward collection instead of the extracted free forward helper. Native default Chars content movement lives on SwContentNode GoNext/GoPrevious over real registered content indices and the original SAL Unicode non-SKIPCELL code-point primitive; real SwNode.GetTextNode preserves the inline nullable type getter. GoInContent and GoInNode preserve checked actual node movement, default forward and backward-end positioning. Temporary node indices are reassigned and disposed with original scope ownership. Original GoPrevPara/GoNextPara/GoCurrPara and forward/start/backward/end alias identity are represented, retaining point/mark identities and original at-edge crossing. Movement types and directional bindings live in native pamtyp/paminit responsibilities; no dummy function slots or ICU providers are supplied. This is the currently consumed fnNd/fnPos, Chars nonhidden/noncell profile only: the other six collection slots, full Cells/grapheme/hidden/search/document/section movement and locale/ICU services remain unrepresented/unverified. Whole module/API/ABI/default parity, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Intentional browser save/open/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML64: native anchor/wrap prerequisites for the HTML first-table context now use real SwFormatAnchor/SwFormatSurround items, original RndStdIds/TextContentAnchorType identities, RES_ANCHOR114 and RES_SURROUND111, actual module-global static defaults, document-pool registration and typed inherited frame getters. Anchor owns an optional real copied SwPosition, is nonshareable, allocates a new uint32 order on construction/copy or changed assignment, excludes order from equality, detaches content binding for paragraph/fly anchors and preserves original raw type/page setter behavior. SwPosition now has the original copy form and clone preserves raw node/content bindings, owner category and affinity instead of reattaching a node-only anchor to text. Surround retains PARALLEL/three-false defaults and independent flags through real copy/equality/pooling. SwFormat releases its owned attribute-set member after dependent reparenting and before base modify teardown; this is needed for real owning anchor-position destruction. This is native state/default/position ownership, not completed UNO frame/property conversion, localized presentation, serialized anchor-position restoration, special-frame registry/factory/sections or fly layout. Those absent services are not simulated or certified. HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Save/open/autosave/recovery deviations are unchanged. HTML64 follow-up preserves the actual engaged optional-position identity on anchor copy assignment, using native raw SwPosition value assignment, and preserves SetAnchor destroy-before-copy replacement order. WRITER345 records the potential source self-alias hazard without asserting a defined compiled result or native reachability."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",

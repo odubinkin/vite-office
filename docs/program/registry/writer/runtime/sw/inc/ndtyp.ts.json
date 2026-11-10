@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/ndtyp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/ndtyp.ts",
+        "apps/office/src/sw/source/core/docnode/native-text-section.test.ts",
+        "vendor/libreoffice-reference/sw/inc/ndtyp.hxx"
+      ],
+      "justification": "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwStartNodeType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/ndtyp.hxx",
+      "upstreamSymbols": [
+        "SwStartNodeType"
+      ]
+    }
+  }
+}

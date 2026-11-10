@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/table/swnewtable.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/table/swnewtable.ts",
+        "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/table/swnewtable.cxx#SwTable::PrepareMerge"
+      ],
+      "justification": "Moves original paragraph nodes, applies native merged width and outside edges, and deletes redundant same-row cell sections. RTF92. Extends the physical rectangle across row spans, corrects overlapping logical widths, moves visible content, shares native formats and adjusts row spans while deleting wholly covered lines (WRITER391). RTF103. Moves the full selected native cell interval including nested table sections and original descendant marks.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CollectBoxSelection",
+        "PrepareMerge",
+        "NewMerge",
+        "FindStartOfRowSpan",
+        "PrepareDelBox"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/table/swnewtable.cxx",
+      "upstreamSymbols": [
+        "SwTable::CollectBoxSelection",
+        "SwTable::PrepareMerge",
+        "SwTable::NewMerge",
+        "SwTableBox::FindStartOfRowSpan",
+        "SwTable::PrepareDelBoxes"
+      ]
+    }
+  }
+}

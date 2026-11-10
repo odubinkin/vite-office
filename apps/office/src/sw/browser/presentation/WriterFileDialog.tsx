@@ -82,7 +82,8 @@ export function WriterFileDialog({
                 source: { kind: "external", reference: file },
               },
             );
-          else if (/\.(md|markdown)$/i.test(file.name))
+          else if (/\.(md|markdown)$/i.test(file.name)) {
+            const dictionaries = await services.prepareWordDictionaries?.();
             docShell.OpenMarkdown(
               bytes,
               createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
@@ -93,8 +94,9 @@ export function WriterFileDialog({
                 mediaType: "text/markdown;charset=utf-8",
                 source: { kind: "external", reference: file },
               },
+              dictionaries,
             );
-          else
+          } else
             await docShell.Open(
               bytes,
               createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),

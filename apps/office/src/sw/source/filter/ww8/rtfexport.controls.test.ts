@@ -158,8 +158,8 @@ it.each([
       const imported = new RtfDocumentImpl().ResolveBytes(bytes);
       try {
         const canonical = new Map<SvxNumType, SvxNumType>([
-          [SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N, SvxNumType.SVX_NUM_CHARS_UPPER_LETTER],
-          [SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N, SvxNumType.SVX_NUM_CHARS_LOWER_LETTER],
+          [SvxNumType.SVX_NUM_CHARS_UPPER_LETTER, SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N],
+          [SvxNumType.SVX_NUM_CHARS_LOWER_LETTER, SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N],
           [SvxNumType.SVX_NUM_HANGUL_CIRCLED_SYLLABLE_KO, SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO],
           [SvxNumType.SVX_NUM_HANGUL_CIRCLED_JAMO_KO, SvxNumType.SVX_NUM_HANGUL_JAMO_KO],
           [SvxNumType.SVX_NUM_BITMAP, SvxNumType.SVX_NUM_CHAR_SPECIAL],

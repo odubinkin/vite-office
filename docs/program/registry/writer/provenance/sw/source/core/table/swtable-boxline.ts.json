@@ -12,6 +12,46 @@
         {
           "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
           "marker": "SwTableLine"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-section-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/tblrwcl.ts",
+          "marker": "FindPreviousBoxInLine"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-content-box-registry.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.make.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "getRowSpan"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "GetContentNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "GetCoordinates"
         }
       ],
       "upstream": [
@@ -22,25 +62,68 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
           "marker": "SwTableLine::SwTableLine"
+        },
+        {
+          "path": "sw/inc/swtable.hxx",
+          "marker": "GetSttNd"
+        },
+        {
+          "path": "sw/source/core/doc/tblrwcl.cxx",
+          "marker": "SwTableLine::FindPreviousBox"
+        },
+        {
+          "path": "sw/source/core/doc/tblrwcl.cxx",
+          "marker": "SwTableBox::FindPreviousBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableLines::~SwTableLines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/tblrwcl.cxx",
+          "marker": "SwTableLine::FindPreviousBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::GetSttIdx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::GetCoordinates"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
     "localSymbols": [
       "SwTableBox",
-      "SwTableLine"
+      "SwTableLine",
+      "getRowSpan",
+      "setRowSpan",
+      "IsEmpty",
+      "GetContentNodes",
+      "GetCoordinates"
     ],
     "omittedResponsibilities": [
       "Full LibreOffice table features, nested/merged cells, formula/redline/copy/Repeat and full native model/layout/VCL parity remain unverified."
     ],
     "preservedResponsibilities": [
-      "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894."
+      "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894.",
+      "S3HW1E HTML36: native HTMLTableCnts paragraph-section chains, HTMLTableCell/Row/Column value owners and original SwHTMLTableLayoutCnts/Cell/Column value families now retain real SwStartNode/SwTableBox/SwFrameFormat and shared brush/box identities. Original protection selective resets, row expand/shrink span updates, width-family merge differences, six borrowed format slots, output-reference writes, lazy cached content layout and uint8 pass references are preserved. Actual current core cell sections and pooled formats are used in tests, with no fake table/document/layout or computed width substitution. Native SwTableBox.GetSttNd is exposed on its existing section owner; the established GetStartNode binding delegates to it. Paragraph-content constructor variants are represented; nested table and merged core box ownership are absent from the current SwTableBox slice, and nested-table constructor variants are not silently substituted. Main HTMLTable grid/token reader/BuildTable, automatic text/layout passes, insertion boundary snapshots and final model/UI audit remain pending. Broader native module/API/ABI/64-bit metric-domain certification is not claimed; file UI/autosave/recovery deviations are preserved.",
+      "S3HW1E HTML59: native InsertTable now admits connected text in actual sections/cells, returns original null for the inserts/footnote node interval before any undo or mutation, and exposes that nullable result through SwDoc and current MDTable pointer contracts. New SwNode.GetTableBox resolves actual enclosing cell ownership. Original tblrwcl.cxx base-line/leaf predecessor algorithms live in their source responsibility, including null-search leaf identity, row-local mode and empty previous rows; actual owning lines are resolved from the real current flat graph, with no alternate owner list. Anonymous nested-line boxes and their original upper hierarchy are not represented or certified. Nested break transfer now copies parent direct page/break items only at the source first-paragraph/first-cell boundary, retains parent items (WRITER340), and does not move following paragraph items for a nested insertion. Existing used-format lookup includes actual table owners in every section instead of only direct body UI blocks. GetUniqueTableName uses the native bitmap and actual o3tl integer suffix conversion (WRITER341), retaining the current English used-format profile; mail merge, localization and unused/default native format-registry owners are not represented or certified. Production history/Markdown consumers retain nullable inputs without inventing a fallback table; native admitted valid pointers remain actual owners. Whole native module/API/ABI/default/lifetime parity is unverified. Structural nontext admission, default SwTable/early-frame bootstrap, full anonymous/nested table rendering/materialization/layout, first-cell HTML orchestration/grammar, RTF direction export, MDTable parser registration/lifetime and final format/UI audit remain required. Browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML61: real SwTableBox anonymous construction preserves a null start node and does not turn reserve capacities into child lines or dummy content. Original borrowed GetUpper/SetUpper pointers and owned nested GetTabLines vectors are represented, with explicit TypeScript vector mutation bridges binding actual owners. GetSttNd is nullable; existing required-leaf convenience boundaries assert an actual start rather than inventing one. The original tblrwcl predecessor algorithm now ascends through actual upper boxes/rows, descends last nested rows/boxes and preserves the source overTableLines flag, including its parent-ascent behavior when false and empty preceding-row recursion. Actual table/box member vectors and line destructor responsibilities own recursive model deletion; node deletion removes live frame clients separately and invokes each actual model destructor once. The existing table section-index graph query now visits actual descendants; native layout-first/sorted-content-box registry lookup is not certified. Core sorted-content registration/removal, complete default table/format lifetime, document destructor orchestration, native recursive HTML first-cell/grammar/materialization/layout and RTF direction remain unverified. Actual DeleteTable is used to test destruction; SwDoc.Dispose currently tears down the notification graph without routing all node-owned table destructors, so this checkpoint does not claim whole document teardown parity. Save/open/autosave/recovery exceptions are unchanged.",
+      "S3HW1E HTML62: content-box construction registers the actual pointer in SwTableSortBoxes before row publication; anonymous boxes stay out of the registry. The native o3tl pointer-vector specialization is represented by the existing SortedVector and stable opaque JS object-pointer order, not node-offset sorting or a native-address claim. Actual section indices are read at lookup time. RemoveFromTable erases only this pointer and nulls the start; GetSttIdx returns zero without a content start. Table destruction clears all registered starts and the non-owning pointer vector before model-owned rows/boxes are destroyed. GetTableBox now executes the original next-content/nested-table scan, first SwFrame registration and upward cell climb, then reverse pointer-registry lookup; the HTML61 recursive graph fallback is removed. IsTableComplex uses actual content-box upper-row/anonymous-box identities. SwIterator class-type admission no longer requires a public constructor: the real protected SwFrame class selector is accepted through prototype/hasInstance, with unchanged runtime dynamic filtering. Native default unbound-table/format bootstrap, exact C++ address/ABI, document teardown, full HTML recursive production/materialization/layout, RTF direction and final format/UI completeness remain unverified. Browser save/open/autosave/recovery exceptions are unchanged.",
+      "Owns the signed native row span, default 1, including negative covered values. The represented single-text-node empty test preserves the source double-marker behavior from WRITER384. Broader nested emptiness, browser projection/transport, row-span editing and full original table parity remain unverified.",
+      "Projects original direct text and table nodes from the actual cell section, preserving nested table boundaries.",
+      "Provides original one-based logical coordinates and climbs anonymous line owners for the native ASCII continuation test."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/table/swtable.cxx",
     "upstreamSymbols": [
       "SwTableBox::SwTableBox",
-      "SwTableLine::SwTableLine"
+      "SwTableLine::SwTableLine",
+      "SwTableBox::setRowSpan",
+      "SwTableBox::IsEmpty",
+      "SwTableBox::GetCoordinates"
     ],
     "filenameDivergence": {
       "localPath": "apps/office/src/sw/source/core/table/swtable-boxline.ts",

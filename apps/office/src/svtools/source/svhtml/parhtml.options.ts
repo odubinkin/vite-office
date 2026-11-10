@@ -1,8 +1,29 @@
 /** @fileoverview Native HTMLOption values and mutable GetOptions/UnescapeToken scanners from parhtml.cxx. */
+import { HTMLTableFrame as F, HTMLTableRules as R } from "../../inc/parhtml";
 import { HtmlOptionId } from "../../inc/htmltokn";
 import { Color } from "../../../tools/inc/color";
 import { toInt } from "../../../sal/rtl/strtmpl";
 import { GetHTMLColor, GetHTMLOption, htmlAsciiLower } from "./htmlkywd";
+/** Original module-owned table-frame option aliases from parhtml.cxx. */
+const aTableFrameOptEnums: readonly (readonly [string, F])[] = [
+  ["void", F.Void],
+  ["above", F.Above],
+  ["below", F.Below],
+  ["hsides", F.HSides],
+  ["lhs", F.LHS],
+  ["rhs", F.RHS],
+  ["vsides", F.VSides],
+  ["box", F.Box],
+  ["border", F.Box],
+];
+/** Original module-owned inner-rule option aliases from parhtml.cxx. */
+const aTableRulesOptEnums: readonly (readonly [string, R])[] = [
+  ["none", R.NONE],
+  ["groups", R.Groups],
+  ["rows", R.Rows],
+  ["cols", R.Cols],
+  ["all", R.All],
+];
 /** Native HTML whitespace and printable predicates. @param code - UTF-16 unit. @returns Printable. */
 function printable(code: number): boolean {
   return code >= 32 && code !== 127;
@@ -89,14 +110,40 @@ export class HTMLOption {
     color.SetGreen((value >>> 8) & 255);
     color.SetBlue(value & 255);
   }
-  /** Native case-insensitive enum table lookup; absent sentinel is represented by array end. @param entries - Native name/value pairs. @param fallback - Native default zero or explicit value. @returns Selected value. */
+  /** Original enum lookup with zero/explicit fallback. @param entries - Native name/value pairs. @param fallback - Original default. @returns Selected value. */
+  public GetEnum<T extends number>(entries: readonly (readonly [string, T])[], fallback?: T): T;
+  /** Original bool/output enum lookup preserves the output on failure. @param output - Native mutable enum reference. @param entries - Original table. @returns Match. */
   public GetEnum<T extends number>(
+    output: [T],
     entries: readonly (readonly [string, T])[],
-    fallback: T = 0 as T,
-  ): T {
+  ): boolean;
+  /** Binds both native template overloads without normalizing whitespace or touching output on failure. @param entriesOrOutput - Table or enum reference. @param fallbackOrEntries - Default or table. @returns Original selected enum or success flag. */
+  public GetEnum<T extends number>(
+    entriesOrOutput: readonly (readonly [string, T])[] | [T],
+    fallbackOrEntries: T | readonly (readonly [string, T])[] = 0 as T,
+  ): T | boolean {
+    const output = typeof fallbackOrEntries !== "number";
+    const entries = output
+      ? fallbackOrEntries
+      : (entriesOrOutput as readonly (readonly [string, T])[]);
     const name = htmlAsciiLower(this.aValue);
-    for (const [key, value] of entries) if (name === htmlAsciiLower(key)) return value;
-    return fallback;
+    for (const [key, value] of entries)
+      if (name === htmlAsciiLower(key)) {
+        if (output) {
+          (entriesOrOutput as [T])[0] = value;
+          return true;
+        }
+        return value;
+      }
+    return output ? false : (fallbackOrEntries as T);
+  }
+  /** Original table-frame enum aliases and zero fallback. @returns Native frame. */
+  public GetTableFrame(): F {
+    return this.GetEnum(aTableFrameOptEnums);
+  }
+  /** Original inner-rule enum aliases and zero fallback. @returns Native rules. */
+  public GetTableRules(): R {
+    return this.GetEnum(aTableRulesOptEnums);
   }
 }
 /** Native mutable token/option cache view shared with the lexer. */

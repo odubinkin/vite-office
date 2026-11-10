@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmltab.cell-save.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmltab.cell-save.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.cell-save.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged. HTML88. The optional tracked NOBR close endpoint is released when overwritten or when the original production cell save is destroyed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CellSaveStruct",
+        "SourceDispose"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmltab.cxx",
+      "upstreamSymbols": [
+        "CellSaveStruct"
+      ]
+    }
+  }
+}

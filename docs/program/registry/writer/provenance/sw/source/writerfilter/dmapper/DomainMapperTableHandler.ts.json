@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+    "localSymbols": [
+      "ApplyVerticalMergeBorders",
+      "HorizontallyMergedCell",
+      "CollectHorizontalMerge",
+      "ApplyHorizontalMerges",
+      "ConvertFloatingRtfTable",
+      "ApplyTableMeasures",
+      "ApplyTableMargins",
+      "ApplyTableRowProperties",
+      "FinalizeTableFlowProperties"
+    ],
+    "upstreamSymbols": [
+      "DomainMapperTableHandler::endTableGetCellProperties",
+      "DomainMapperTableHandler::endTable"
+    ],
+    "preservedResponsibilities": [
+      "Applies original final contiguous continuation bottom-border selection to the actual master box using the default current RTF grid and native frame items.",
+      "Extracts mapper-only horizontal merges, applies the ranges in reverse order and restores explicit first-cell border lines (WRITER389).",
+      "Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion.",
+      "Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment.",
+      "Finalizes the original repeating header count, all-header and single-row split behavior, and row split default.",
+      "Applies the resolved first-cell border width to native table spacing, indent and original floating placement."
+    ],
+    "omittedResponsibilities": [
+      "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "ApplyVerticalMergeBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "HorizontallyMergedCell"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "ConvertFloatingRtfTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "DomainMapperTableHandler::endTableGetCellProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "DomainMapperTableHandler::endTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "A text frame created for floating tables is always allowed to split"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "lcl_adjustBorderDistance"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "tdf#88496/tdf#138020"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "lcl_DecrementHoriOrientPosition"
+        }
+      ]
+    }
+  }
+}

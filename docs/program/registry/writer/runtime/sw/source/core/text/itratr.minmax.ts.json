@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/text/itratr.minmax.ts",
+        "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+        "apps/office/src/sw/source/core/text/itratr.native-minmax.test.ts"
+      ],
+      "justification": "HTML86. Runs original dictionary word accumulation, separators, line/tab/field control branches and anchored widths over the actual unmerged Writer text node and selected script font. WRITER380 retains direct width without padding for hard separators alone. A deterministic width device gave 3010 identical native paragraph metrics against original source bodies and patched ICU. Drawing metrics, unsupported point hints, physical desktop glyph parity and production HTML reader wiring remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetMinMaxNodeMetrics",
+        "lcl_MinMaxNode",
+        "GetMinMaxSize",
+        "lcl_MinMaxString",
+        "SwMinMaxArgs"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/text/itratr.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::GetMinMaxSize",
+        "lcl_MinMaxNode",
+        "lcl_MinMaxString",
+        "SwMinMaxArgs"
+      ]
+    }
+  }
+}

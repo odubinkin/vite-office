@@ -36,6 +36,13 @@ export const aItemIds = {
   nDirection: 0,
   nLineSpacing: 0,
   nBrush: 0,
+  nBox: 0,
+  nFormatSplit: 0,
+  nWidows: 0,
+  nOrphans: 0,
+  nLanguage: 0,
+  nLanguageCJK: 0,
+  nLanguageCTL: 0,
 };
 /** Native consumed property receiver; no DOM or browser CSS cascade is substituted. */
 export class SvxCSS1Parser extends CSS1Parser {
@@ -83,6 +90,13 @@ export class SvxCSS1Parser extends CSS1Parser {
       nDirection: S.SID_ATTR_FRAMEDIRECTION,
       nLineSpacing: S.SID_ATTR_PARA_LINESPACE,
       nBrush: S.SID_ATTR_BRUSH,
+      nBox: S.SID_ATTR_BORDER_OUTER,
+      nFormatSplit: S.SID_ATTR_PARA_SPLIT,
+      nWidows: S.SID_ATTR_PARA_WIDOWS,
+      nOrphans: S.SID_ATTR_PARA_ORPHANS,
+      nLanguage: S.SID_ATTR_CHAR_LANGUAGE,
+      nLanguageCJK: S.SID_ATTR_CHAR_CJK_LANGUAGE,
+      nLanguageCTL: S.SID_ATTR_CHAR_CTL_LANGUAGE,
     };
     for (const key of Object.keys(slots) as (keyof typeof slots)[]) {
       aItemIds[key] = pool.GetTrueWhichIDFromSlotID(slots[key], false);

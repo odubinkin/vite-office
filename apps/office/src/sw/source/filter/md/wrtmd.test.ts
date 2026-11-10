@@ -1,5 +1,7 @@
 /** @fileoverview Verifies native Writer Markdown output and represented round trips. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { FontWeight, FontItalic, FontStrikeout } from "../../../../tools/inc/fontenum";
@@ -8,12 +10,18 @@ import {
   RES_CHRATR_WEIGHT,
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_POSTURE,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
 } from "../../../inc/hintids";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { createWriterDocument } from "../../core/doc/doc";
+import { SwPosition } from "../../core/crsr/pam";
+import { MakeFlySection } from "../../core/doc/doclay";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
@@ -206,7 +214,7 @@ it("writes a source table separator even at the beginning of the body", /** Chec
   const source = createWriterDocument();
   const initial = source.paragraphs[0];
   if (initial === undefined) throw new Error("Missing body paragraph.");
-  const table = source.nodes.InsertTable(initial, "First table", {});
+  const table = source.nodes.MakeTableNodeBefore(initial, "First table", {});
   const row = source.nodes.AppendTableRow(table, 1);
   row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Value");
   try {
@@ -217,6 +225,40 @@ it("writes a source table separator even at the beginning of the body", /** Chec
     source.Dispose();
   }
 });
+
+it.each([
+  [true, "Lead\n\n| Before Inner LeftRight After |\n| - |\n"],
+  [false, "Lead\n\nInner LeftRight After |\n| - |\n"],
+] as const)(
+  "writes nested Markdown table text with source boundary ownership, leading text present: %s",
+  /** The nested table suppresses its own pipes; a structural cell-start node does not emit the outer pipe. @param before - Whether the first cell node is text. @param expected - Exact source bytes. @returns Nothing. */ (
+    before,
+    expected,
+  ) => {
+    const doc = createWriterDocument();
+    try {
+      doc.paragraphs[0]?.SetText("Lead");
+      const outer = doc.nodes.MakeTableNode("Outer"),
+        cell = doc.nodes.AppendTableRow(outer, 1).GetTabBoxes()[0];
+      if (!cell) throw new Error("Missing outer cell.");
+      const initial = cell.GetParagraphs()[0];
+      if (!initial) throw new Error("Missing outer paragraph.");
+      initial.SetText(before ? "Before" : "After");
+      const inner = doc.nodes.MakeTableNodeBefore(
+        before ? cell.GetStartNode().EndOfSectionNode() : initial,
+        "Inner",
+        {},
+      );
+      const [left, right] = doc.nodes.AppendTableRow(inner, 2).GetTabBoxes();
+      left?.GetParagraphs()[0]?.SetText("Inner");
+      right?.GetParagraphs()[0]?.SetText("LeftRight");
+      if (before) doc.nodes.AppendTableCellParagraph(cell).SetText("After");
+      expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(doc))).toBe(expected);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
 
 it("keeps one upstream Markdown hyperlink across differently formatted text runs", /** Checks keeps one upstream Markdown hyperlink across differently formatted text runs. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
@@ -376,5 +418,65 @@ it("uses native numbering labels and parent-prefix width for nested Markdown ite
   } finally {
     imported?.Dispose();
     source.Dispose();
+  }
+});
+
+it("writes anchored text flys as the source empty images at native character boundaries", /** Checks native paragraph and character positions, same-offset deduplication, delimiter order and the empty-paragraph guard. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const body = document.paragraphs[0];
+  assert(body);
+  const empty = document.nodes.MakeTextNode("");
+  const items = new SfxItemSet(document.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+  try {
+    body.SetText("AB");
+    body.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    for (const [node, type, offset] of [
+      [body, RndStdIds.FLY_AT_PARA, 0],
+      [body, RndStdIds.FLY_AT_CHAR, 1],
+      [body, RndStdIds.FLY_AT_CHAR, 1],
+      [body, RndStdIds.FLY_AT_CHAR, 2],
+      [empty, RndStdIds.FLY_AT_PARA, 0],
+    ] as const) {
+      const position = new SwPosition(node, offset);
+      const anchor = new SwFormatAnchor(type);
+      try {
+        anchor.SetAnchor(position);
+        items.Put(anchor);
+        const frame = MakeFlySection(document, type, position, items);
+        expect(frame.GetAnchor().GetAnchorId()).toBe(type);
+        expect(frame.GetAnchor().GetAnchorContentOffset()).toBe(offset);
+        const start = frame.GetContent().GetContentIdx()?.GetNode();
+        assert(start?.IsStartNode());
+        const content = document.nodes.GetSectionContent(start)[0]?.GetTextNode();
+        assert(content);
+        content.SetText("Frame body");
+      } finally {
+        anchor.Dispose();
+        position.Dispose();
+      }
+    }
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(document))).toBe(
+      "![]()**A![]()B**![]()\n\n",
+    );
+  } finally {
+    items.Dispose();
+    document.Dispose();
+  }
+});
+
+it("emits the direct item set of a native named character style", /** The source CHARFMT handler visits the style's direct items over each hint range. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const node = document.paragraphs[0];
+  assert(node);
+  try {
+    const parent = document.MakeCharFormat("Bold parent", document.GetDfltCharFormat());
+    parent.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    const child = document.MakeCharFormat("Italic child", parent);
+    child.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    node.SetText("ABC");
+    node.InsertItem(new SwFormatCharFormat(child), 1, 2);
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(document))).toBe("A*B*C\n");
+  } finally {
+    document.Dispose();
   }
 });

@@ -10,6 +10,8 @@ import {
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SwFormatPageDesc } from "../../../source/core/attr/fmtpdsc";
 import { encodeWriterFrameItem, decodeWriterFrameItem } from "./writer-frame-item-codec";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { encodeNativeBoxItem, decodeNativeBoxItem } from "./writer-box-item-codec";
 import { encodePageDesc, decodePageDesc } from "./page-desc-codec";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
@@ -31,7 +33,22 @@ import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import { SwAttrPool } from "../../../source/core/attr/swatrset";
+import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
+import { SwFormatCharFormat } from "../../../source/core/txtnode/fmtatr2";
+import {
+  encodeCharacterStyleReference,
+  decodeCharacterStyleReference,
+} from "./writer-character-style-codec";
+import {
+  RES_TXTATR_AUTOFMT,
+  RES_PARATR_LIST_AUTOFMT,
+  RES_TXTATR_CHARFMT,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import {
@@ -136,6 +153,43 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  if (item instanceof SwFormatAutoFormat) {
+    const handle = item.GetStyleHandle();
+    return {
+      which: item.Which(),
+      value: {
+        kind: "writer-auto-format",
+        ...(handle
+          ? {
+              items: encodeSfxItemSet(handle).map(
+                /** Plain records belong to the browser transfer boundary. @param item - Native encoded item. @returns Recursive cloneable record. */ (
+                  item,
+                ) => ({ which: item.which, value: item.value }),
+              ),
+            }
+          : {}),
+      },
+    };
+  }
+  if (item instanceof SwFormatCharFormat) {
+    const style = item.GetCharFormat();
+    const index = style ? encodeCharacterStyleReference(style.GetDoc(), style) : undefined;
+    return {
+      which: item.Which(),
+      value: { kind: "writer-char-format", ...(index === undefined ? {} : { index }) },
+    };
+  }
+  if (item instanceof SvxBoxItem) {
+    const native = encodeNativeBoxItem(item);
+    // SfxPoolItem values deliberately exclude null; absent native edges are
+    // omitted here while the independent table-box record keeps its old shape.
+    const lines: Record<string, Exclude<(typeof native.lines)[number], null>> = {};
+    for (const [edge, line] of native.lines.entries())
+      if (line !== null) lines[String(edge)] = line;
+    const value = { kind: "svx-box", ...native, lines };
+    if (!isSfxPoolItemValue(value)) throw new Error("SvxBoxItem is not persistence-safe.");
+    return { which: item.Which(), value };
+  }
   const fill = encodeFillItem(item);
   if (fill !== null) return fill;
   const frame = encodeWriterFrameItem(item);
@@ -261,6 +315,97 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  if (snapshot.which === RES_TXTATR_AUTOFMT || snapshot.which === RES_PARATR_LIST_AUTOFMT) {
+    const value = snapshot.value;
+    if (
+      typeof value !== "object" ||
+      value === null ||
+      Array.isArray(value) ||
+      !("kind" in value) ||
+      value.kind !== "writer-auto-format"
+    )
+      throw new Error("Writer automatic format snapshot is invalid.");
+    const item = new SwFormatAutoFormat(snapshot.which);
+    if ("items" in value) {
+      if (!Array.isArray(value.items)) throw new Error("Writer automatic style items are invalid.");
+      const set = new SfxItemSet(pool, [
+        ...WRITER_CHARACTER_WHICH_RANGES,
+        [RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT],
+      ]);
+      try {
+        decodeSfxItemSet(set, value.items as readonly SfxPoolItemSnapshot[]);
+        if (pool instanceof SwAttrPool) {
+          const handle = pool
+            .GetDoc()
+            .GetIStyleAccess()
+            .getAutomaticStyle(set, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+          try {
+            item.SetStyleHandle(handle);
+          } finally {
+            releaseStyleHandle(handle);
+            set.Dispose();
+          }
+        } else item.SetStyleHandle(set);
+        return item;
+      } catch (error) {
+        set.Dispose();
+        item.Dispose();
+        throw error;
+      }
+    }
+    return item;
+  }
+  if (snapshot.which === RES_TXTATR_CHARFMT) {
+    const value = snapshot.value;
+    if (
+      typeof value !== "object" ||
+      value === null ||
+      Array.isArray(value) ||
+      !("kind" in value) ||
+      value.kind !== "writer-char-format"
+    )
+      throw new Error("Writer character format snapshot is invalid.");
+    if (!("index" in value)) return new SwFormatCharFormat();
+    if (!(pool instanceof SwAttrPool) || typeof value.index !== "number")
+      throw new Error("Writer character style owner is invalid.");
+    return new SwFormatCharFormat(decodeCharacterStyleReference(pool.GetDoc(), value.index));
+  }
+  const box = snapshot.value;
+  if (
+    typeof box === "object" &&
+    box !== null &&
+    !Array.isArray(box) &&
+    "kind" in box &&
+    box.kind === "svx-box"
+  ) {
+    if (
+      !("which" in box) ||
+      box.which !== snapshot.which ||
+      !(pool.GetPoolDefaultItem(snapshot.which) instanceof SvxBoxItem)
+    )
+      throw new Error("Native box Which is invalid.");
+    const lines = "lines" in box ? box.lines : undefined;
+    if (
+      typeof lines !== "object" ||
+      lines === null ||
+      Array.isArray(lines) ||
+      Object.getPrototypeOf(lines) !== Object.prototype ||
+      Object.entries(lines).some(
+        /** Rejects non-native edges and malformed present values. @param entry - Wire edge/value. @returns Whether invalid. */
+        ([edge, line]) =>
+          !/^[0-3]$/.test(edge) || typeof line !== "object" || line === null || Array.isArray(line),
+      )
+    )
+      throw new Error("Native box edges are invalid.");
+    const edges = lines as Record<string, unknown>;
+    return decodeNativeBoxItem({
+      ...box,
+      lines: [0, 1, 2, 3].map(
+        /** Restores only the fixed native optional-pointer slots. @param edge - Side. @returns Native line record or absent marker. */
+        (edge) => (Object.hasOwn(edges, String(edge)) ? edges[String(edge)] : null),
+      ),
+    });
+  }
   const fill = decodeFillItem(snapshot);
   if (fill !== null) return fill;
   const color = decodeNativeColorItem(pool, snapshot);

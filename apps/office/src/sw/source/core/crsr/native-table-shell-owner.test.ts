@@ -123,13 +123,12 @@ it("rejects invalid row counts and foreign owners without history or node mutati
     expect(f.doc.InsertRow(f.last.GetTabBoxes(), 1.5)).toBe(false);
     expect(f.doc.InsertRow(other.last.GetTabBoxes())).toBe(false);
     expect(
-      f.doc.InsertRow([
+      /** Rejects the original constructor's absent-table precondition before producing a fabricated content box. @returns Nothing. */ () =>
         new SwTableBox(
           f.doc.MakeTableBoxFormat(),
           required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode,
         ),
-      ]),
-    ).toBe(false);
+    ).toThrow("content box belongs to a table");
     expect(f.doc.InsertRow(f.first.GetTabBoxes(), 65536)).toBe(false);
     expect(
       f.doc.InsertRow([required(f.last.GetTabBoxes()[0]), required(other.first.GetTabBoxes()[0])]),

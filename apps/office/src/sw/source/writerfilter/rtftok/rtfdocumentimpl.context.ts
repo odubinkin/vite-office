@@ -1,28 +1,23 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
+import type { RTFFrame } from "./rtfdocumentimpl.frame";
+import type { RTFShape, RtfShapeAnchor } from "./rtfdocumentimpl.shape";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxLineSpaceRule, SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
+import { COL_AUTO, COL_BLACK, Color } from "../../../../tools/inc/color";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
-import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import type { RtfDocumentImpl } from "./rtfdocumentimpl";
-import { RTF_BORDER_STYLES, type RtfCellBorder } from "./rtfdocumentimpl.border";
-export type { RtfCellBorder } from "./rtfdocumentimpl.border";
+import type { TableRowBuffer } from "./rtfdocumentimpl.tablerowbuffer";
+import { RTF_BORDER_STYLES, type RTFBorderState } from "./rtfdocumentimpl.border";
 /** Paragraph properties represented by the current Writer model. */
 export interface RtfParagraphState {
-  borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfCellBorder>>;
   alignment: WriterParagraphAlignment;
   distributeLastLine: boolean;
-  left: number;
-  right: number;
-  firstLine: number;
   before: number;
   after: number;
   contextual: boolean;
@@ -36,9 +31,6 @@ export interface RtfParagraphState {
   lineSpace: number;
   lineMulti: number;
   alignmentSet?: boolean;
-  leftSet?: boolean;
-  rightSet?: boolean;
-  firstLineSet?: boolean;
   beforeSet?: boolean;
   afterSet?: boolean;
   contextualSet?: boolean;
@@ -49,26 +41,103 @@ export interface RtfParagraphState {
   pageBreakBeforeSet?: boolean;
   lineSpacingSet?: boolean;
   styleIndex?: number;
-  listOverride?: number;
-  listLevel: number;
 }
+/** Original RTFParserState run-type order, saved/restored with the group. */
+export enum RunType {
+  NONE,
+  LOCH,
+  HICH,
+  DBCH,
+  LTRCH_RTLCH_1,
+  LTRCH_RTLCH_2,
+  RTLCH_LTRCH_1,
+  RTLCH_LTRCH_2,
+}
+
+/** Original color table entry remains automatic until the first component is set. */
+export class RTFColorTableEntry {
+  private m_bAuto: boolean;
+  private readonly color: Color;
+
+  /** Copies the saved group color entry or starts the original automatic entry. @param source - Optional copied entry. @returns Color entry. */
+  constructor(source?: RTFColorTableEntry) {
+    this.m_bAuto = source?.m_bAuto ?? true;
+    this.color = new Color(source?.color ?? COL_BLACK);
+  }
+
+  /** Sets the native red component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetRed(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetRed(value);
+  }
+
+  /** Sets the native green component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetGreen(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetGreen(value);
+  }
+
+  /** Sets the native blue component and marks the entry explicit. @param value - Original byte input. @returns Nothing. */
+  SetBlue(value: number): void {
+    this.m_bAuto = false;
+    this.color.SetBlue(value);
+  }
+
+  /** Returns the original automatic sentinel or authored RGB color. @returns Native color. */
+  GetColor(): Readonly<Color> {
+    return this.m_bAuto ? COL_AUTO : this.color;
+  }
+}
+
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
+  frame: RTFFrame;
+  borderState: RTFBorderState;
+  shape: RTFShape | undefined;
+  shapeRoot?: boolean;
+  shapeTextRoot?: boolean;
   characterSprms: RTFSprms;
+  paragraphSprms: RTFSprms;
+  sectionSprms: RTFSprms;
+  tableRowSprms: RTFSprms;
+  tableCellSprms: RTFSprms;
+  tableBuffer: TableRowBuffer | undefined;
+  tableRowWidthAfter: number;
+  currentColor: RTFColorTableEntry;
+  tableSprms: RTFSprms;
+  tableAttributes: RTFSprms;
+  listLevelEntries: RTFSprms;
+  runType: RunType;
   destination:
     | "body"
+    | "shape"
+    | "flymaincontent"
+    | "shapeinstruction"
+    | "shapeproperty"
+    | "shapepropertyname"
+    | "shapepropertyvalue"
+    | "nestedtableproperties"
     | "fonttbl"
     | "stylesheet"
     | "styleentry"
     | "bookmarkstart"
     | "bookmarkend"
     | "colortbl"
+    | "info"
+    | "upr"
+    | "title"
+    | "pn"
+    | "pntxta"
+    | "pntxtb"
     | "listtable"
     | "list"
     | "listlevel"
+    | "listname"
     | "leveltext"
+    | "levelnumbers"
     | "listoverridetable"
     | "listoverride"
+    | "lfolevel"
     | "field"
     | "fldinst"
     | "skip";
@@ -81,7 +150,6 @@ export interface RtfState {
   currentCodepage: number;
   fontCodepage?: number;
   colorIndex: number;
-  paragraphBorder?: SvxBoxItemLine | "between" | "box";
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
@@ -97,9 +165,19 @@ export interface RtfState {
   characterControls: Set<string>;
   bookmarkName: string;
   levelText: string;
+  levelNumbers: number[];
+  levelNumbersValid: boolean;
+  listLevelNum: number;
+  currentListIndex: number;
+  currentListOverrideIndex: number;
+  destinationText: OUStringBuffer;
+  currentDestinationText: OUStringBuffer | null;
 }
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
+  readonly paragraphSprms?: RTFSprms;
+  readonly frames?: readonly RtfShapeAnchor[];
+  readonly marker?: RtfRun;
   readonly runs: readonly RtfRun[];
   readonly state: RtfParagraphState;
   readonly marks: readonly Readonly<{ name: string; offset: number }>[];
@@ -122,23 +200,24 @@ export type RtfBlock =
       section: number;
       pageBreakBefore: boolean;
     }>;
-/** The represented physical subset of a tokenizer section-property group. */
-export type RtfSectionPage = Partial<{
-  -readonly [K in Exclude<keyof WriterPageDescriptorValue, "name">]: WriterPageDescriptorValue[K];
-}>;
-/** One RTF table row with physical cell boundaries in twips. */
-export interface RtfTableRow {
-  readonly cells: readonly (readonly RtfParagraph[])[];
-  readonly header: boolean;
+/** One native nested-table sequence in the surrounding cell's buffer. */
+export interface RtfNestedTable {
+  readonly rows: RtfTableRow[];
+}
+
+/** Paragraph and nested-row events retain their relative cell order. */
+export type RtfTableCellContent = RtfParagraph | RtfNestedTable;
+
+/** Original buffered row definition with physical cell boundaries in twips. */
+export interface RtfTableRowDefinition {
+  readonly rowSprms: RTFSprms;
+  readonly cellSprms: readonly RTFSprms[];
   readonly boundaries: readonly number[];
-  readonly alignment: "left" | "center" | "right";
   readonly left: number;
-  readonly height: number;
-  readonly split: boolean;
-  readonly verticals: readonly (VertOrientation | undefined)[];
-  readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
-  readonly paddings: readonly ReadonlyMap<SvxBoxItemLine, number>[];
-  readonly defaultPaddings: ReadonlyMap<SvxBoxItemLine, number>;
+}
+/** One replayable row with its definition and ordered cell content. */
+export interface RtfTableRow extends RtfTableRowDefinition {
+  readonly cells: readonly (readonly RtfTableCellContent[])[];
 }
 export const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   bold: false,
@@ -176,9 +255,6 @@ export function hasRtfUnderlineControl(controls: ReadonlySet<string>): boolean {
 export const DEFAULT_PARAGRAPH: RtfParagraphState = {
   alignment: "left",
   distributeLastLine: false,
-  left: 0,
-  right: 0,
-  firstLine: 0,
   before: 0,
   after: 0,
   contextual: false,
@@ -191,12 +267,23 @@ export const DEFAULT_PARAGRAPH: RtfParagraphState = {
   pageBreakBefore: false,
   lineSpace: 240,
   lineMulti: 0,
-  listLevel: 0,
 };
 export const SKIPPED_DESTINATIONS = new Set([
   "stylesheet",
-  "info",
   "generator",
+  "author",
+  "operator",
+  "company",
+  "subject",
+  "keywords",
+  "doccomm",
+  "comment",
+  "creatim",
+  "revtim",
+  "printim",
+  "buptim",
+  "userprops",
+  "docvar",
   "pict",
   "object",
   "header",
@@ -215,13 +302,31 @@ export const SKIPPED_DESTINATIONS = new Set([
   "xmlnstbl",
 ]);
 export const STYLE_PROPERTY_CONTROLS = new Set([
+  "ltrpar",
+  "rtlpar",
+  "outlinelevel",
+  "ls",
+  "ilvl",
+  "lang",
+  "alang",
+  "langfe",
+  "loch",
+  "hich",
+  "dbch",
+  "rtlch",
+  "ltrch",
+  "deflang",
+  "adeflang",
   "kerning",
+  "cbpat",
   "box",
   "brdrt",
   "brdrl",
   "brdrb",
   "brdrr",
   "brdrbtw",
+  "chbrdr",
+  "brdrsh",
   "brdrw",
   "brdrcf",
   "brsp",
@@ -270,6 +375,9 @@ export const STYLE_PROPERTY_CONTROLS = new Set([
   "slmult",
 ]);
 export const CHARACTER_PROPERTY_CONTROLS = new Set([
+  "lang",
+  "alang",
+  "langfe",
   "kerning",
   "b",
   "i",
@@ -406,63 +514,6 @@ export function parseRtfHyperlinkInstruction(instruction: string): WriterHyperli
     ...(name.length === 0 ? {} : { name }),
   };
 }
-/** Resolves RTF list level formats accepted by the current native numbering model.  @param value - Value. @returns The SvxNumType result. */
-export function fromRtfNfc(value: number): SvxNumType {
-  switch (value) {
-    case 1:
-      return SvxNumType.SVX_NUM_ROMAN_UPPER;
-    case 2:
-      return SvxNumType.SVX_NUM_ROMAN_LOWER;
-    case 3:
-      return SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
-    case 4:
-      return SvxNumType.SVX_NUM_CHARS_LOWER_LETTER;
-    case 14:
-      return SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC;
-    case 18:
-      return SvxNumType.SVX_NUM_CIRCLE_NUMBER;
-    case 35:
-      return SvxNumType.SVX_NUM_NUMBER_LOWER_ZH;
-    case 38:
-      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH;
-    case 34:
-      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW;
-    case 30:
-      return SvxNumType.SVX_NUM_TIAN_GAN_ZH;
-    case 31:
-      return SvxNumType.SVX_NUM_DI_ZI_ZH;
-    case 16:
-      return SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA;
-    case 20:
-      return SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA;
-    case 12:
-      return SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA;
-    case 21:
-      return SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA;
-    case 13:
-      return SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA;
-    case 24:
-      return SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO;
-    case 25:
-      return SvxNumType.SVX_NUM_HANGUL_JAMO_KO;
-    case 42:
-      return SvxNumType.SVX_NUM_NUMBER_HANGUL_KO;
-    case 41:
-      return NumberingType.NUMBER_DIGITAL_KO as SvxNumType;
-    case 44:
-      return NumberingType.NUMBER_DIGITAL2_KO as SvxNumType;
-    case 43:
-      return NumberingType.NUMBER_LEGAL_KO as SvxNumType;
-    case 23:
-      return SvxNumType.SVX_NUM_CHAR_SPECIAL;
-    case 255:
-      return SvxNumType.SVX_NUM_NUMBER_NONE;
-    case 22:
-      return SvxNumType.SVX_NUM_ARABIC_ZERO;
-    default:
-      return SvxNumType.SVX_NUM_ARABIC;
-  }
-}
 /** Original native owner used by its out-of-class implementation fragments; no state is copied. */
 export type RtfDocumentImplContext = RtfDocumentImpl;
 
@@ -482,3 +533,5 @@ export interface RtfStyleDefinition {
 }
 
 import type { RTFSprms } from "./rtfsprm";
+
+import type { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";

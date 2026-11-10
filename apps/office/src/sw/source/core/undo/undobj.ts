@@ -3,10 +3,11 @@
  * to the shared SwUndo/SwUndRng infrastructure in pinned LibreOffice undobj.cxx.
  */
 
+import { SwRewriter } from "./SwRewriter";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
-import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
@@ -257,9 +258,24 @@ export interface SwUndoRedoContext {
 
 /** Writer action base that brackets its model payload with complete cursor states. */
 export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
+  protected m_bCacheComment = true;
+  protected maComment: string | undefined;
   private readonly before: SwUndoCursorRange | undefined;
   private after: SwUndoCursorRange | undefined;
 
+  /** Original section-index removal sends native cursors to the PostIts sentinel before section deletion. @param doc - Actual document. @param startNode - Original section start. @param endNode - Optional explicit inclusive end. @returns Nothing. */
+  protected static RemoveIdxFromSection(doc: SwDoc, startNode: number, endNode?: number): void {
+    const start = new SwNodeIndex(doc.GetNodes(), startNode),
+      end = new SwNodeIndex(doc.GetNodes(), endNode ?? start.GetNode().EndOfSectionIndex()),
+      target = new SwPosition(doc.GetNodes().GetEndOfPostIts());
+    try {
+      (doc.constructor as typeof SwDoc).CorrAbs(start, end, target, true);
+    } finally {
+      target.Dispose();
+      end.Dispose();
+      start.Dispose();
+    }
+  }
   /** Creates a Writer undo action. @param comment - User-visible label. @param before - Cursor state before execution. @param after - Cursor state after execution. @returns Nothing. */
   protected constructor(
     private readonly comment: string,
@@ -301,9 +317,17 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
     this.finalRedo(context);
   }
 
-  /** Returns the user-visible Writer command label. @returns Action label. */
+  /** Original default undo rewriter owns an empty value vector. @returns Actual rule owner. */
+  protected GetRewriter(): SwRewriter {
+    return new SwRewriter();
+  }
+  /** Original default cache applies the actual action rewriter to the currently bound English resource template. Native resource-id/localization/view-shell metadata remain outside this existing host label boundary. @returns Action label. */
   public override GetComment(): string {
-    return this.comment;
+    if (this.m_bCacheComment) {
+      this.maComment ??= this.GetRewriter().Apply(this.comment);
+      return this.maComment;
+    }
+    return this.GetRewriter().Apply(this.comment);
   }
 
   /** Replaces the post-command cursor after compatible action grouping. @param state - New grouped endpoint. @returns Nothing. */

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/SettingsExportHelper.ts#exportConfigurationSettings",
+        "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportBool",
+        "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Emits the original named boolean configuration item from the represented PropertyValue vector. Other UNO setting types and separate view/document settings are unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportConfigurationSettings"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/core/SettingsExportHelper.cxx",
+      "upstreamSymbols": [
+        "XMLSettingsExportHelper::exportBool"
+      ]
+    }
+  }
+}

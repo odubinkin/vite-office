@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.frame.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+    "localSymbols": [
+      "ApplyFrameAttribute"
+    ],
+    "upstreamSymbols": [
+      "case NS_ooxml::LN_CT_FramePr_hAnchor:"
+    ],
+    "preservedResponsibilities": [
+      "Maps native framePr attribute values, source orientation and wrap, and the original distance conversion."
+    ],
+    "omittedResponsibilities": [
+      "Paragraph drop-cap resolution is a distinct source responsibility."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.frame.ts",
+          "marker": "ApplyFrameAttribute"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_CT_FramePr_hAnchor:"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the native paragraph-frame attribute branch from the general mapper attribute switch while retaining the original ParagraphProperties owner and generated values."
+    }
+  }
+}

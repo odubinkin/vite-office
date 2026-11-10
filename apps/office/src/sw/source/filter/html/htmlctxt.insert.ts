@@ -1,7 +1,7 @@
 /** @fileoverview Native consumed InsertAttrs context margins, spacing and deferred item insertion from htmlctxt.cxx. */
 import type { SwHTMLParser } from "./swhtml";
 import { HTMLAttrContext } from "./htmlctxt";
-import { NewAttr, type HTMLAttrHead } from "./swhtml.attr";
+import { NewAttr, InsertAttrAtPoint, type HTMLAttrHead } from "./swhtml.attr";
 import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -22,6 +22,7 @@ export function InsertAttrs(
   context: HTMLAttrContext,
   charLevel: boolean,
 ): void {
+  if (!charLevel) parser.m_pCSS1Parser.SetFormatBreak(items, info);
   const oldLeft: [number] = [0],
     oldRight: [number] = [0],
     oldIndent: [number] = [0];
@@ -62,29 +63,6 @@ export function InsertAttrs(
       item.Dispose();
     }
   }
-  const heads = new Map<number, HTMLAttrHead>([
-    [H.RES_CHRATR_WEIGHT, tab.pBold],
-    [H.RES_CHRATR_CJK_WEIGHT, tab.pBoldCJK],
-    [H.RES_CHRATR_CTL_WEIGHT, tab.pBoldCTL],
-    [H.RES_CHRATR_POSTURE, tab.pItalic],
-    [H.RES_CHRATR_CJK_POSTURE, tab.pItalicCJK],
-    [H.RES_CHRATR_CTL_POSTURE, tab.pItalicCTL],
-    [H.RES_CHRATR_FONTSIZE, tab.pFontHeight],
-    [H.RES_CHRATR_CJK_FONTSIZE, tab.pFontHeightCJK],
-    [H.RES_CHRATR_CTL_FONTSIZE, tab.pFontHeightCTL],
-    [H.RES_CHRATR_FONT, tab.pFont],
-    [H.RES_CHRATR_CJK_FONT, tab.pFontCJK],
-    [H.RES_CHRATR_CTL_FONT, tab.pFontCTL],
-    [H.RES_PARATR_LINESPACING, tab.pLineSpacing],
-    [H.RES_CHRATR_UNDERLINE, tab.pUnderline],
-    [H.RES_CHRATR_COLOR, tab.pFontColor],
-    [H.RES_CHRATR_CROSSEDOUT, tab.pStrike],
-    [H.RES_PARATR_ADJUST, tab.pAdjust],
-    [H.RES_MARGIN_FIRSTLINE, tab.pFirstLineIndent],
-    [H.RES_MARGIN_TEXTLEFT, tab.pTextLeftMargin],
-    [H.RES_MARGIN_RIGHT, tab.pRightMargin],
-    [H.RES_UL_SPACE, tab.pULSpace],
-  ]);
   for (const item of items.entries()) {
     if (item instanceof SvxFontHeightItem && item.GetProp() !== 100) continue;
     if (item instanceof SvxULSpaceItem && (!info.m_bTopMargin || !info.m_bBottomMargin)) {
@@ -103,13 +81,37 @@ export function InsertAttrs(
       continue;
     }
     if (item.Which() === H.RES_BACKGROUND) {
-      // The current model owns paragraph RES_BACKGROUND but has no native
-      // RES_CHRATR_BACKGROUND. Do not substitute the distinct highlight item.
+      // The pending paragraph brush becomes drawing fill in SetAttr_.
       if (!charLevel) parser.InsertAttr(tab.pBrush, item, context);
       continue;
     }
-    const head = heads.get(item.Which());
+    if (item.Which() === H.RES_BOX) {
+      // Native character-level conversion requires RES_CHRATR_BOX, which this core
+      // does not own. A paragraph box is not a substitute for that character item.
+      if (!charLevel) parser.InsertAttr(tab.pBox, item, context);
+      continue;
+    }
+    const head = GetAttrTabEntry(parser, item.Which());
     if (head) parser.InsertAttr(head, item, context);
   }
   if (info.m_aId) parser.InsertBookmark(info.m_aId);
+}
+
+import { GetAttrTabEntry } from "./htmlcss1.attr";
+
+/** Original InsertAttr overload dispatch across htmlctxt.cxx/swhtml.cxx responsibility fragments; context and point attributes retain their original ownership. @param parser - Actual importer. @param headOrItem - Native head or item. @param itemOrAtStart - Item or queue-front selector. @param context - Actual context for head form. @returns Nothing. */
+export function InsertAttr(
+  parser: SwHTMLParser,
+  headOrItem: HTMLAttrHead | SfxPoolItem,
+  itemOrAtStart: SfxPoolItem | boolean,
+  context?: HTMLAttrContext,
+): void {
+  if (typeof itemOrAtStart === "boolean")
+    InsertAttrAtPoint(parser, headOrItem as SfxPoolItem, itemOrAtStart);
+  else {
+    if (!context) throw new Error("assert(HTML attribute context)");
+    const head = headOrItem as HTMLAttrHead;
+    if (NewAttr(parser, parser.m_xAttrTab, head, itemOrAtStart) && head[0])
+      context.GetAttrs().push(head[0]);
+  }
 }

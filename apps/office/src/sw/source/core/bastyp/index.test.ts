@@ -50,9 +50,7 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     node.UnregisterContentIndex(index);
     expect(node.HasAnyContentIndex()).toBe(false);
     index.Dispose();
-    expect(
-      /** Reads a disposed index node. @returns Invalid result. */ () => index.GetContentNode(),
-    ).toThrow("disposed");
+    document.Dispose();
   });
 
   it("updates live owner kinds at insertion and deletion boundaries" /** Covers upstream Default and Negative update modes plus deterministic affinity. @returns Nothing. */, function updatesTextBoundaries(): void {
@@ -161,4 +159,22 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     expect(lastPosition.GetNode()).toBe(first);
     expect(lastPosition.GetContentIndex()).toBe(first.Len());
   });
+});
+
+it("retains the original valid nullable owner for an unattached content index", /** This is source nullability, not a disposed-object query. @returns Nothing. */ () => {
+  const document = createIndexFixture(),
+    node = document.paragraphs[0] as SwTextNode,
+    index = new SwContentIndex(undefined);
+  try {
+    expect(index.GetContentNode()).toBeUndefined();
+    expect(index.GetIndex()).toBe(0);
+    expect(index.Assign(node, 2)).toBe(index);
+    expect(index.GetContentNode()).toBe(node);
+    expect(index.Assign(undefined, 0)).toBe(index);
+    expect(index.GetContentNode()).toBeUndefined();
+    expect(node.HasAnyContentIndex()).toBe(false);
+  } finally {
+    index.Dispose();
+    document.Dispose();
+  }
 });

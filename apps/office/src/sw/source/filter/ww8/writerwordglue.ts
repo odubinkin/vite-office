@@ -7,6 +7,7 @@ import { GetExtendedTextEncoding } from "../../../../tools/inc/tenccvt";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { GetWhichOfScript } from "../../core/attr/hints";
+import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { CharRunEntry, type CharRuns } from "../inc/msfilter";
 import {
@@ -88,7 +89,16 @@ export class IfBeforeStart {
     return entry.mnEndPos < this.mnStart;
   }
 }
-/** Field-specific GetPseudoCharRuns body binding over genuine node fonts, BreakIteratorImpl and existing ICU default-mode levels. The upstream one-argument public entry point is not implemented by this helper. The native SwDoc.GetTextDirection result is an explicit required field binding until the layout-direction API is ported; it is never guessed from text/locale. No global break service or opaque UBiDi owner is fabricated. @param node - Actual text node. @param textDirection - Actual native paragraph-direction result supplied by the caller. @returns Original owned run records. */
+/** Native public run producer over the document's physical direction query. @param node - Actual text node. @returns Original owned run records. */
+export function GetPseudoCharRuns(node: SwTextNode): CharRuns {
+  const position = new SwPosition(node);
+  try {
+    return getPseudoCharRunsForDirection(node, node.GetDoc().GetTextDirection(position));
+  } finally {
+    position.Dispose();
+  }
+}
+/** Field-level run calculation over native node fonts, script breaks and default-mode bidi levels. @param node - Actual text node. @param textDirection - Resolved native paragraph direction. @returns Original owned run records. */
 export function getPseudoCharRunsForDirection(
   node: SwTextNode,
   textDirection: SvxFrameDirection,
@@ -214,4 +224,46 @@ export function rtl_TextEncodingToWinCharsetRTF(
     result = 0x01;
   }
   return result;
+}
+
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+/** Original effective Word side margins include box padding and unscaled border width. @param frame - Actual frame owner. @returns Native cloned LR item. */
+function lcl_getWordLRSpace(frame: SwFrameFormat): ReturnType<SwFrameFormat["GetLRSpace"]> {
+  const lr = frame.GetLRSpace().Clone(),
+    box = frame.GetBox();
+  lr.SetLeft(
+    SvxIndentValue.twips(
+      lr.ResolveLeft() + box.GetDistance(SvxBoxItemLine.LEFT) + (box.GetLeft()?.GetWidth() ?? 0),
+    ),
+  );
+  lr.SetRight(
+    SvxIndentValue.twips(
+      lr.ResolveRight() + box.GetDistance(SvxBoxItemLine.RIGHT) + (box.GetRight()?.GetWidth() ?? 0),
+    ),
+  );
+  return lr;
+}
+/** Consumed original header/footer distance glue. The current model has no header/footer content owners, so both native presence branches are false. */
+export class HdFtDistanceGlue {
+  private readonly m_DyaTop: number;
+  private readonly m_DyaBottom: number;
+  /** Original no-header/footer distance construction includes box line space even without a border. @param frame - Actual frame. @returns Distance glue. */
+  constructor(frame: SwFrameFormat) {
+    const box = frame.GetBox(),
+      ul = frame.GetULSpace();
+    this.m_DyaTop = box.CalcLineSpace(SvxBoxItemLine.TOP, true) + ul.GetUpper();
+    this.m_DyaBottom = box.CalcLineSpace(SvxBoxItemLine.BOTTOM, true) + ul.GetLower();
+  }
+  /** Original equality for the represented both-without-header/footer profile. @param other - Original other distances. @returns Whether both physical distances match. */
+  StrictEqualTopBottom(other: HdFtDistanceGlue): boolean {
+    return this.m_DyaTop === other.m_DyaTop && this.m_DyaBottom === other.m_DyaBottom;
+  }
+}
+/** Original single-Word-section admission on actual native frame items; column sets are absent in the current model. @param title - Actual selected first-page frame. @param follow - Actual follow master. @returns Whether one Word section can represent them. */
+export function IsPlausableSingleWordSection(title: SwFrameFormat, follow: SwFrameFormat): boolean {
+  if (!lcl_getWordLRSpace(title).equals(lcl_getWordLRSpace(follow))) return false;
+  if (!title.GetFrameSize().equals(follow.GetFrameSize())) return false;
+  return new HdFtDistanceGlue(title).StrictEqualTopBottom(new HdFtDistanceGlue(follow));
 }

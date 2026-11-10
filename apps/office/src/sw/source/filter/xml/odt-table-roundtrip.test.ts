@@ -8,7 +8,7 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -25,6 +25,30 @@ import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
+import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
+
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { Color } from "../../../../tools/inc/color";
+import { RES_BACKGROUND } from "../../../inc/hintids";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+
+/** Reads a direct table brush with presence and packed color. @param format - Actual frame owner. @returns Native color. */
+function frameColor(format: SwFrameFormat): Color | undefined {
+  return (
+    format.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined
+  )?.GetColor();
+}
+
+/** Sets an authored native frame brush. @param format - Actual frame owner. @param color - Native color. @returns Nothing. */
+function setFrameColor(format: SwFrameFormat, color: Color): void {
+  const brush = new SvxBrushItem(color, RES_BACKGROUND);
+  try {
+    format.SetFormatAttr(brush);
+  } finally {
+    brush.Dispose();
+  }
+}
 
 /** Reads an exact upstream ODT copied from the pinned LibreOffice checkout. @returns Fixture bytes. */
 function upstreamTableOdt(): Uint8Array {
@@ -74,6 +98,91 @@ function tableShape(document: ReturnType<typeof createWriterDocument>) {
 }
 
 describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("preserves real nested RTF sections through ODF XML and Worker transfer", /** The cell owns ordered text/table/text, including the inner cell format and bookmark. @returns Completion. */ async () => {
+    const source = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(
+        String.raw`{\rtf1 Lead\par\trowd\cellx3000\pard\intbl before\par` +
+          String.raw`\pard\itap2 {\*\bkmkstart Inner}{\*\bkmkend Inner}inside\nestcell` +
+          String.raw`{\*\nesttableprops\trowd\clbrdrt\brdrs\brdrw30\cellx1200\nestrow}\pard\intbl after\cell\row}`,
+      ),
+    );
+    const metadata = { title: "Nested table" };
+    const bytes = writeOdtDocument(source, metadata);
+    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    expect(xml.match(/<table:table table:name=/gu)).toHaveLength(2);
+    expect(xml).toContain('style:name="T2.C1"');
+    const odt = (await readOdtDocument(bytes, metadata)).document;
+    const transferred = decodeWriterDocument(encodeWriterDocument(odt));
+    try {
+      for (const document of [source, odt, transferred]) {
+        const outer = document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0];
+        const [before, nested, after] = outer?.GetContentNodes() ?? [];
+        assert(outer && nested instanceof SwTableNode);
+        expect(before?.GetTextNode()?.GetText()).toBe("before");
+        expect(after?.GetTextNode()?.GetText()).toBe("after");
+        expect(nested.StartOfSectionNode()).toBe(outer.GetStartNode());
+        const inner = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+        expect(inner?.GetFrameFormat().GetFrameSize().GetWidth()).toBe(1200);
+        expect(inner?.GetFrameFormat().GetBox().GetTop()?.GetOutWidth()).toBe(30);
+        expect(inner?.GetParagraphs()[0]?.GetText()).toBe("inside");
+        expect(document.GetIDocumentMarkAccess().GetBookmarks()[0]?.GetMarkPos().GetNode()).toBe(
+          inner?.GetParagraphs()[0],
+        );
+      }
+    } finally {
+      transferred.Dispose();
+      odt.Dispose();
+      source.Dispose();
+    }
+  });
+
+  it("keeps native RTF table directions and brush ownership across Worker and ODT", /** Exercises the original table, row and cell property maps. @returns Completion. */ async () => {
+    const source = new RtfDocumentImpl().ResolveBytes(
+      new TextEncoder().encode(
+        String.raw`{\rtf1{\colortbl;\red200\green100\blue40;}Lead\par\trowd\rtlrow\clcbpat1\cltxbtlr\cellx1500\cellx3000\intbl first\cell second\cell\row}`,
+      ),
+    );
+    const table = source.GetTables()[0],
+      row = table?.GetTabLines()[0];
+    assert(table && row);
+    const translucent = new Color(0x5588bb);
+    translucent.SetAlpha(64);
+    setFrameColor(table.GetFrameFormat(), new Color(0xabcdef));
+    setFrameColor(row.GetFrameFormat(), translucent);
+    const worker = decodeWriterDocument(encodeWriterDocument(source));
+    const metadata = { title: "Native table visuals" };
+    const bytes = writeOdtDocument(worker, metadata);
+    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const odt = (await readOdtDocument(bytes, metadata)).document;
+    try {
+      expect(xml).toContain('fo:background-color="#abcdef" style:writing-mode="rl-tb"');
+      expect(xml).toContain('fo:background-color="#c86428" loext:writing-mode="bt-lr"');
+      expect(xml).toContain('fo:background-color="transparent"');
+      for (const doc of [source, worker, odt]) {
+        const actual = doc.GetTables()[0],
+          line = actual?.GetTabLines()[0];
+        const [cell, unpainted] = line?.GetTabBoxes() ?? [];
+        assert(actual && line && cell && unpainted);
+        expect(frameColor(actual.GetFrameFormat())?.toUInt32()).toBe(0xabcdef);
+        expect(frameColor(line.GetFrameFormat())?.GetAlpha()).toBe(doc === odt ? 0 : 64);
+        if (doc !== odt)
+          expect(frameColor(line.GetFrameFormat())?.toUInt32()).toBe(translucent.toUInt32());
+        expect(frameColor(cell.GetFrameFormat())?.toUInt32()).toBe(0xc86428);
+        expect(frameColor(unpainted.GetFrameFormat())).toBeUndefined();
+        expect(actual.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          SvxFrameDirection.Horizontal_RL_TB,
+        );
+        expect(cell.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          SvxFrameDirection.Vertical_LR_BT,
+        );
+      }
+    } finally {
+      odt.Dispose();
+      worker.Dispose();
+      source.Dispose();
+    }
+  });
+
   it("round trips a table whose only row is a repeated header", /** Checks repeated header export and import. @returns Nothing. */ async () => {
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Headings", {
@@ -386,14 +495,17 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           "<table:table-column/><table:table-row><table:table-cell><table:table-row/></table:table-cell></table:table-row>",
         ),
     ).not.toThrow();
-    for (const unsupported of ["<table:table/>", "<text:section/>"])
+    for (const [unsupported, message] of [
+      ["<table:table/>", "table name"],
+      ["<text:section/>", "Unsupported ODF table cell section"],
+    ] as const)
       expect(
         /** Preserves explicit rejection for native cell features not implemented here. @returns Nothing. */ () =>
           open(
             tableProps('style:width="1cm"'),
             `<table:table-column/><table:table-row><table:table-cell>${unsupported}</table:table-cell></table:table-row>`,
           ),
-      ).toThrow("Unsupported ODF table cell section or nested table");
+      ).toThrow(message);
     const invalidFamily = new FastAttributeList([
       {
         name: "style:name",

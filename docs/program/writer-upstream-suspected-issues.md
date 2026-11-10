@@ -1473,12 +1473,11 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: the helper creates a local ComplexColor, assigns the last retained theme type, and appends tint/shade transformations, but never inserts or returns that value. Only the six first border-line values are inserted into the supplied map. The interop grab bag can preserve the theme lexeme separately. Later import stages may compensate, so native document/rendering impact remains unverified.
 - Preservation: retain the local construction and its lack of output; do not silently add complex-color properties. Tests keep six actual BorderLine2 map properties with theme/tint/shade input and verify the separate interop data. The standalone BorderHandler::getComplexColor continues returning its actual native value through its distinct contract.
 
-### WRITER153 — table-border parameters carry over across sibling edges
+### WRITER153 — Resolved false positive: Markdown quotation depth starts at minus one
 
-- Source: pinned `sw/source/writerfilter/dmapper/BorderHandler.cxx`, `BorderHandler::lcl_sprm`, compared with `TDefTableHandler::localResolve`.
-- Observation: the table-border handler neither resets current width/type/color before resolving a new side nor requires nested properties before materializing a supported side. A later side missing attributes can inherit the preceding side's parameters; a null-property side is still marked filled. The cell-border handler instead resets width/type/color and ignores null-property children. Whether valid producers exercise missing/default attributes in a way that causes visible differences remains unverified.
-- Preservation: retain the distinct table and cell algorithms. Actual native resource tests keep table width/color carryover and null-reference materialization, cell per-child resets and first-vector-element precedence. Strict/Transitional ZIP tests retain independently specified table/cell borders. Do not unify the two handlers or insert local per-side defaults into BorderHandler.
-
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::EndBlockQuote`, restores Text Body only when `m_nBlockQuoteDepth == 0`, then decrements the depth. The declaration in `swmd.hxx` initializes the depth to -1.
+- Correction (HTML60): the original observation assumed an initial depth of zero and incorrectly attributed quotation-style leakage to upstream. Entering the usual outer quote increments -1 to zero, so its exit restores Text Body before decrementing back to -1. The previous local default of zero was a porting error, not an upstream defect. Actual nested quote and md4c document regressions now cover the corrected constructor state and style restoration.
+- Preservation: retain the exact -1 default and test/decrement order. This entry records the withdrawn suspicion; no workaround for upstream is justified.
 
 ### WRITER154 — track-change dates retain local clock fields and an unknown timezone
 
@@ -1677,7 +1676,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Parser::GetNextToken`, numeric and identifier branches.
 - Observation: six hexadecimal characters become `CSS1_HEXCOLOR` even when the grammar expects an identifier. A selector such as `.abcdef` cannot take the normal class branch; subsequent tokens can be interpreted as a new selector during recovery. This is a source-level trace, not compiled Writer evidence.
-- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order.
+- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order. Numeric evidence added in HTML32: padding:999999pt starts with a HEXCOLOR token and does not set padding;70000pt enters the actual LENGTH path. Keep both behaviors, rather than normalizing six-digit numeric input.
 
 ### WRITER161 — Empty CSS strings enter the scanner's unconditional first append
 
@@ -2236,3 +2235,1254 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached origina
 - Original `md4c.c` lines3118..3126 and3169..3175 assign a successfully recognized code/HTML span closing offset and call `md_lookup_line` directly to advance the current paragraph line. The original caller assumes that this lookup succeeds; it has no absent-line recovery contract.
 - Both recognizers operate on a suffix of the same nonempty immutable paragraph line array and bound a successful closing offset by that suffix. The lookup uses the full covering paragraph and maps gaps to the following line. Under that synchronous source ownership contract, a valid matched offset cannot fall beyond the last line.
 - The local binding retains separate defensive throws for absent code-span and HTML-span lines. The user independently approved M04/M05 for those exact guards. Exact runtime-token/remapped-counter comparison excludes only two zero-hit throws and two zero-hit alternatives, retaining all3 functions and every other source position. A fresh1999-case corpus covers all167 statements,149 alternatives,3 functions and155 lines for this owner. Existing matched/multiline/failed span tests execute genuine public parser owners; no private marks, corrupted line arrays or invalid native pointer dereferences are introduced. This records a native caller precondition, not a newly confirmed ordinary-input Writer failure.
+
+### WRITER250 — Short numeric-region Locale depends on registry initialization order
+
+- Source: pinned `i18nlangtag/source/languagetag/languagetag.cxx`, `LanguageTagImpl::cacheSimpleLSCV`, `getRegionFromLangtag`, `isIsoLocale`, `LanguageTag::registerImpl` and `getKnowns`.
+- Observation: the simple cache stores country and discards the separately extracted numeric region. Without an external parser, `getRegionFromLangtag` returns that country cache. A fresh string-origin `es-419` can therefore become the ISO Locale `(es, "", "")` with suggested primary ID 10. If `getKnowns` initializes numeric owners first, the existing ID 22538 owner retains its non-ISO decision from qlt conversion; a later `es-419` uses `(qlt, "", es-419)`, ID 22538. Upstream QA observes the latter after earlier initialization.
+- Resolution: preserve both source paths and registry side effects. Do not prime the registry artificially or change the cache to retain numeric regions. Isolated managed tests exercise both paths; this finding is source-derived, not an executed native differential. The earlier deferred snapshot called this CALC-184; this is its active Writer consumer record.
+
+### WRITER251 — Default RTF language controls retain zero-child nesting
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, `RTFDocumentImpl::dispatchValue`, DEFLANG/ADEFLANG branches. The function initializes `nSprm=0`; these branches do not assign it. DEFLANG nests the BCP47 value under `LN_EG_RPrBase_lang` with child ID 0. ADEFLANG instead uses parent `LN_CT_Language_bidi`, also with child ID 0. This differs from LANG/ALANG/LANGFE and does not select the mapper's normal language attributes.
+- Resolution: preserve both malformed property trees and normal LANG handling. Do not silently replace zero with `LN_CT_Language_val` or fix ADEFLANG's parent. Tests inspect the actual owned property trees before normal insertion. This is source-derived evidence, not an executed full native import oracle.
+
+### WRITER252 — HICH language import targets CTL despite Western export properties
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, MoveProperties, emits Western associated properties after HICH. Pinned `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, dispatchCharacterAttributeValue, instead routes LANG/ALANG under RunType::HICH to `LN_CT_Language_bidi`. For `\rtlch\alang1025\ltrch\hich\alang1031` the later HICH value therefore replaces the earlier CTL language with 1031.
+- Resolution: preserve native associated output order and native HICH dispatch. Do not remap HICH language to Western to repair inactive-script metadata. Actual script/bidi run splitting is required to preserve the language used by each visible script; it does not imply that every inactive-script property on every run survives a round-trip unchanged. The literal native control sequence is covered by managed import tests; this is source-derived evidence, not an executed full native round-trip oracle.
+
+
+### WRITER253 — ListAutoFormat public read/state/default/reset are asymmetric
+
+- Pinned source: `sw/source/core/unocore/unocrsrhelper.cxx`, `GetParaListAutoFormat` and `getCursorPropertyValue`; `sw/source/core/unocore/unoobj.cxx`, ListAutoFormat setter and virtual property default/reset routing.
+- Observation: the setter stores `RES_PARATR_LIST_AUTOFMT` on ordinary paragraphs too, and the internal getter can read its handle. The public cursor getter returns the sequence only when the point paragraph `IsInList()`. A property-state query remains DIRECT_VALUE even without a list/handle; its default is VOID and resetting the virtual property leaves the handle unchanged.
+- Resolution: preserve this asymmetry rather than hiding marker formatting in a separate local property or making reset clear it. Actual typed NamedValue input, real handle ownership and ordinary paragraph cursor calls reproduce the represented behavior. This is pinned-source plus managed-owner evidence, not a compiled full native UNO differential.
+
+### WRITER254 — Any terminal non-character-style hint suppresses paragraph marker fallback
+
+- Pinned source: `sw/source/filter/ww8/wrtw8nds.cxx`, `MSWordExportBase::OutputTextNode` paragraph-marker collection (lines3284–3337).
+- Observation: a zero-length hint at paragraph end sets `bCharFormatOnly=false` whenever its Which differs from `RES_TXTATR_CHARFMT`, even when the collector does not copy that hint. In particular a terminal internet hint suppresses direct paragraph character formatting while contributing no marker item. Only a character-style hint preserves paragraph-direct fallback.
+- Resolution: keep the exact selection/order. Real terminal internet, automatic and named-style attributes test the three branches and precedence. This is source/control-flow and actual managed-owner evidence; it does not certify all terminal attribute types or compiled Writer output.
+
+
+### WRITER255 — HICH chooses Western font but complex size and toggles
+
+- Pinned source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, F/AF and `dispatchCharacterSprmValue`; `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `dispatchToggle`.
+- Observation: under HICH, F/AF selects `LN_CT_Fonts_ascii`, whereas FS/AFS selects `szCs`, B/AB selects `bCs`, and I/AI selects `iCs`. Under DBCH, the font is `eastAsia` but size/toggles use ordinary `sz`/`b`/`i`; DomainMapper applies those ordinary properties to Western and Asian items. Together with associated Western export properties after HICH, this can overwrite inactive complex-script formatting, like the language behavior in WRITER252.
+- Resolution: preserve the distinct native selectors, not a single generalized script-slot rule or a rule based on the A prefix. Literal controls across all eight original RunType states are tested through actual Writer items and ranges. This is source-derived plus managed-owner evidence; full compiled native round-trip behavior is not certified.
+
+
+### WRITER256 — RTF font-table metadata is deliberately lost before document font application
+
+- Pinned source: `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx`, FNIL/FROMAN/FSWISS/FMODERN/FSCRIPT/FDECOR/FTECH/FBIDI branches; `rtfdispatchvalue.cxx`, FPRQ/FCHARSET; `rtfdocumentimpl.cxx`, handleFontTableEntry; `sw/source/writerfilter/dmapper/FontTable.cxx`, lcl_attribute/lcl_sprm; `DomainMapper.cxx`, Fonts_ascii/eastAsia/cs.
+- Observation: the RTF family flags simply break with an old TODO claiming CT_Font_family is ignored, although the current FontTable receiver handles roman/swiss. Thus those family tokens never reach it. FPRQ emits a pitch attribute, but every recognized pitch branch in FontTable does nothing. FCHARSET changes the byte decoder and intentionally does not emit font-table charset information. DomainMapper only projects symbol charset from a FontEntry when that entry actually has symbol encoding, so the RTF reader's decoder-only charset does not supply that document property. StyleName is not produced by this path either.
+- Resolution: preserve these losses. Do not turn family flags into family properties, force Symbol/document charset from FCHARSET, or synthesize pitch/style metadata to improve round-trip fidelity. Eight family flags, three pitches and eighteen charsets across all three font slots are exercised with real parser/document/item owners; all represented metadata remains at its script pool default while the chosen family name is applied. This is source/control-flow and managed-owner evidence; it is not a full compiled font-table/service differential.
+
+
+### WRITER257 — Numbering CharStyleName fallback assumes a DocShell after finding a document
+
+- Pinned source: `sw/source/core/unocore/unosett.cxx`, SwXNumberingRules::SetPropertiesToNumFormat, CharStyleName branch (lines1808–1847).
+- Observation: after choosing pLocalDoc from DocShell or pDoc, a nonempty name first queries FindCharFormatByName. If missing, the branch immediately dereferences pLocalDoc->GetDocShell()->GetStyleSheetPool() without a separate shell check. Other numbering font-name handling does check for an available shell. Thus an unknown name on a shell-less document is outside this branch's valid source domain; it is not evidence that the style should be silently created by a local shortcut.
+- Resolution: the native list importer creates the actual ListLabel style before assigning CharStyleName, so the consuming path uses the existing-style branch. The current no-DocShell binding asserts that precondition for an unknown nonempty name; no desktop fallback, native crash behavior or exception-message parity is certified. This is source/precondition evidence, not an executed compiled null-dereference oracle. Existing styles, empty-name reset, source pointer ownership and programmatic-name conversion are preserved.
+
+
+### WRITER258 — Numbering level-text regex rewrites only the first digit of percent10
+
+- Pinned source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, ListsManager::lcl_attribute, CT_LevelText_val branch. After soft-hyphen normalization and UTF8 conversion, the expression `(%\\d)` replaces each match with `$1%`.
+- Observation: literal level text `%10` becomes `%1%0`, not `%10%`. This is relevant to evaluating the represented tenth-level format, but the observation alone does not establish that ordinary RTF input produces this exact unescaped placeholder.
+- Resolution: preserve the original single-digit regex and strict OUString UTF8 conversions. A real ListLevel/DomainMapper and native resource container verify the literal receiver outcome together with soft hyphen and non-BMP text. Full tenth-level parser/export production and compiled native behavior remain separate audit obligations; no broader failure is asserted.
+
+### WRITER259 — Numbering start visitation persists across list managers
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListsManager::lcl_sprm` (pinned baseline).
+- Observation: the function-static `bIsStartVisited` starts false once per process. A start modifier sets it true; a numbering-format modifier sets start zero only while it remains false. It is not reset for the next definition or document.
+- Impact: whether an otherwise absent start becomes explicitly present can depend on an earlier list/import, particularly for overrides generated without defaults.
+- Local behavior: retain the module-lifetime flag and original assignments. Do not make it per-level or reset it to improve apparent consistency. Full override consumers remain under audit.
+
+### WRITER260 — Explicit levellegal zero still enables legal numbering
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, `RTFDocumentImpl::dispatchTableSprmValue`; `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::SetValue`.
+- Observation: the reader stores the supplied numeric `levellegal` value, but `ListLevel::SetValue` sets `m_bIsLegal = true` based only on the modifier identity.
+- Impact: `\levellegal0` produces `LevelIsLegal=true`, just like the bare control.
+- Local behavior: retain presence semantics through native rule assignment and Worker transport. Covered by `rtf-numbering.test.ts`.
+
+### WRITER261 — Bullet materialization truncates supplementary symbols to one UTF16 unit
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties`; `sw/source/core/unocore/unosett.cxx`, `SwXNumberingRules::SetPropertiesToNumFormat`.
+- Observation: a nonempty bullet text is copied with `copy(0, 1)`, independently of Unicode scalar boundaries. A supplementary symbol therefore reaches the numbering setter as a lone high surrogate; the setter consumes that one-unit string.
+- Impact: the stored bullet value can differ from the intact supplementary symbol retained in `ListFormat`; strict re-export conversion may encounter invalid UTF16.
+- Local behavior: retain the one-unit copy and native code-point admission. Do not silently repair or preserve the complete scalar in BulletChar. Covered by `rtf-numbering.test.ts`; no complete malformed-Unicode re-export parity claim is made.
+
+### WRITER262 — Empty bullet producer uses a character Any while its consumer extracts a string
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties`; `sw/source/core/unocore/unosett.cxx`, `SwXNumberingRules::SetPropertiesToNumFormat`.
+- Observation: the empty case emits `Any(sal_Unicode(0))`. The BulletChar setter performs an unchecked extraction into a default-empty `OUString` and then sets a zero bullet when that string is empty.
+- Impact: the producer/consumer type mismatch achieves the zero bullet through failed extraction rather than a matching string type; other non-string values also reach the same empty-string fallback.
+- Local behavior: keep the original character Any and unchecked string extraction/default behavior, rather than converting characters into strings or rejecting the consumed empty case.
+
+### WRITER263 — LEVELNUMBERS ordinary text stores the read-loop terminator
+
+- Source: `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `RTFDocumentImpl::resolveChars`.
+- Observation: LEVELNUMBERS checks `aStr.toChar() != ';'`, then appends `sal_Int32(ch)`. In normal mode `ch` is the delimiter which ended the run and was rewound; in hex mode it is the single decoded signed char. The branch also does not apply the earlier hex fallback skip guard.
+- Impact: literal position bytes and equivalent hex escapes need not produce the same position vector; skipped hex fallback can still contribute a position. Reinterpreting all decoded destination text as positions changes native behavior.
+- Local behavior: preserve resolveChars source events separately from decoded text and keep the signed Unicode control parameter. Tests distinguish source-origin positions, ASCII termination and invalidating Unicode semicolons. The signed-char profile follows the pinned source's default signed-char build; no cross-platform ABI certification is claimed.
+
+### WRITER264 — RTF list override flags do not produce paragraph start overrides
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx`; `sw/source/writerfilter/dmapper/NumberingManager.cxx`.
+- Observation: `listoverridestartat` and `listoverrideformat` are recognized keywords but have no active dispatch cases; `listoverridecount` is explicitly ignored. `levelstartat` emits ordinary `CT_Lvl_start`, including in LFOLEVEL, rather than `CT_NumLvl_startOverride`.
+- Impact: an LFO start updates the concrete format's StartWith through ordinary numeric merging. It does not reach the DomainMapper paragraph restart branch which consumes GetStartOverride, even when listoverridestartat is present.
+- Local behavior: preserve ignored flags/count and ordinary starts; do not synthesize ParaIsNumberingRestart or NumberingStartValue from these flags. Covered by `rtf-list-overrides.test.ts`.
+
+### WRITER265 — Concrete label character properties merge into an unused temporary
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListDef::CreateNumberingRules`.
+- Observation: the abstract character sequence is passed as the source to lcl_mergeProperties and the concrete character sequence as the destination. Style creation subsequently consumes the unchanged abstract sequence, while the merged concrete temporary is discarded.
+- Impact: concrete bold/italic/script-font character overrides do not reach the generated ListLabel style. Numeric BulletFontName and explicit concrete ListFormat still have their separate override paths.
+- Local behavior: retain the source/destination direction and unused temporary, with owned sequence cleanup. Do not correct the merge direction. Covered through actual character styles and concrete bullet-font assignment.
+
+### WRITER266 — A concrete LISTTAB follower cannot reset an abstract space/nothing follower
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::GetLevelProperties` and `ListDef::GetMergedPropertyValues`.
+- Observation: concrete numeric collection uses bDefaults=false. A following character equal to LISTTAB is omitted even if SetValue explicitly assigned it, so it does not replace an abstract LabelFollowedBy property during the subsequent name merge.
+- Impact: explicit concrete levelfollow0 leaves an abstract space or nothing follower active; omission differs from an explicit typed LabelFollowedBy=LISTTAB call to the final numbering setter.
+- Local behavior: retain the omission and merge order. Covered by `rtf-list-overrides.test.ts`.
+
+### WRITER267 — Geometry-only concrete levels are classified as stub overrides
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListLevel::SetValue`, `ListsManager::lcl_attribute`, `ListDef::GetMergedPropertyValues`.
+- Observation: HasValues tracks calls to SetValue. Indent attributes insert directly into PropertyMap, while text and character properties also do not set that flag. Numeric merging requires HasValues in addition to a nonempty property sequence.
+- Impact: an explicit geometry-only concrete level does not override abstract indentation. An otherwise ineffective numeric SetValue call, such as legacy or negative start, can admit the same geometry into the merge. Explicit concrete text still follows its separate presence check.
+- Local behavior: preserve the native flag boundary and the separate numeric, text and character paths. Tests compare actual typed numeric property vectors before and after a SetValue visit.
+
+### WRITER268 — An inherited LISTLEVEL destination advances its parent's level counter
+
+- Source: `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx`, `RTFDocumentImpl::pushState`, `afterPopState` and LEVELNUMBERS before-pop handling.
+- Observation: a plain nested group copies LISTLEVEL as its destination. Closing it takes the LISTLEVEL after-pop branch and increments the parent's listLevelNum even though no new listlevel keyword occurred. Later LEVELNUMBERS uses that modified counter when generating placeholders.
+- Impact: a nested formatting group before level text can change a first-level placeholder from percent1 to percent2; the child level entry remains separate from the enclosing level's table modifiers.
+- Local behavior: retain copied destinations, original counter mutation and placeholder equation. Covered by `rtf-list-overrides.test.ts`; do not normalize nesting into a flat level descriptor.
+
+### WRITER269 — AddParaProperties treats property indices as booleans
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `lcl_findProperty` and `ListLevel::AddParaProperties`.
+- Observation: lcl_findProperty returns an index or minus one. AddParaProperties assigns that integer directly to bool instead of comparing it with minus one. A property at index zero becomes false, while an absent property becomes true.
+- Impact: when both geometry properties are absent, the method returns without adding paragraph margins. A geometry property at index zero can instead receive a duplicate property copied from the paragraph style; later sequential setters/merging can give the appended value priority.
+- Local behavior: preserve index-zero and minus-one conversion, the early return, names and append order. Tests query actual owned PropertyValue vectors for absent/default and duplicate cases. Do not repair the checks to conventional presence tests.
+
+
+### WRITER270 — Outline assignment can remove another numbering rule's name index
+
+- Source: `sw/source/core/doc/number.cxx`, `SwNumRule::operator=` and `SwNumRule::SetName`; `sw/source/core/doc/docnum.cxx`, `SwDoc::SetOutlineNumRule`.
+- Observation: assignment copies the incoming name without updating the retained recipient map pointer. SetOutlineNumRule then calls SetName("Outline"), which erases the incoming name from that map before registering Outline. It does not check which rule owns the erased entry.
+- Impact: assigning a differently named registered donor leaves the donor in the rule table while its name lookup disappears; default-list style references also follow the original rename callback. Ordinary chapter-service calls copy Outline itself and do not trigger this case.
+- Local behavior: preserve assignment, map erasure and callback order. `chapter-numbering.test.ts` verifies persistent outline identity and the donor table/index disagreement. Do not repair the map based on owner identity.
+
+### WRITER271 — List-level validation deliberately leaves the property vector stale
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `DomainMapper_Impl::ValidateListLevel`.
+- Observation: when another paragraph style has claimed a list level, validation sets StyleSheetPropertyMap list-level metadata to WW_OUTLINE_MAX (9). The existing PROP_NUMBERING_LEVEL property is not changed; the source explicitly warns about the disagreement.
+- Impact: metadata lookup reports body level9 while consumers of the original property vector still read the previous level. A direct paragraph NumberingLevel continues to take precedence.
+- Local behavior: retain first-claim ownership and update only the metadata. `numbering-style-postprocess.test.ts` verifies both results on actual property owners.
+
+### WRITER272 — Chapter selection narrows an ID before comparing it with full-width IDs
+
+- Source: `sw/source/writerfilter/dmapper/NumberingManager.cxx`, `ListsManager::CreateNumberingRules` and `ListDef::CreateNumberingRules`.
+- Observation: the selected concrete ID is stored in sal_Int16, while ListDef retains its full-width ID. Rule creation compares GetId() against the narrowed selection.
+- Impact: a suitable concrete ID65540 becomes4, so that candidate creates WWNum65540 instead of Outline; a separate ID4 can compare equal to the selection. This differs from ordinary low-range IDs.
+- Local behavior: preserve signed16 selection and full-width comparison. `numbering-style-postprocess.test.ts` verifies weight6 and the resulting ordinary style for ID65540.
+
+
+### WRITER273 — No-numbering margin lookup treats absent list metadata as a list
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `lcl_GetPropertyFromParaStyleSheetNoNum`.
+- Observation: the first matching margin is rejected when GetListId() converts to true. The absent metadata sentinel is minus1, which also converts to true; only zero passes this check.
+- Impact: a style with no list metadata can stop margin lookup with an empty Any instead of contributing its margin or continuing to its parent. The numId0/no-definition recovery phase can consequently insert unsigned zero margins.
+- Local behavior: preserve the truth test, first-match stop, native unsigned-zero fallback and self-parent guard. `paragraph-numbering.test.ts` compares otherwise identical metadata minus1 and zero.
+
+### WRITER274 — RTF export does not preserve shared SwList identity across different rules
+
+- Source: `sw/source/filter/ww8/ww8atr.cxx`, `AttributeOutputBase::ParaNumRule`; `wrtw8num.cxx`, `AbstractNumberingDefinitions` and `NumberingDefinitions`.
+- Observation: shared-list/abstract-rule remapping is guarded by GetExportFormat()==DOCX, with an upstream FIXME. RTF follows the ordinary one-numbering-rule to one-abstract-definition path, regardless of a shared paragraph ListId.
+- Impact: RTF import can join different concrete definitions through one abstract list, but native RTF re-export separates their abstract definitions. Reopening that export gives distinct list identities even though the original imported paragraphs shared one.
+- Local behavior: retain the RTF path and the format-specific DOCX guard. `rtf-paragraph-numbering.test.ts` verifies shared imported IDs and distinct IDs after RTF re-export, plus retained numbering and paragraph level. Do not introduce a synthetic RTF identity extension.
+
+### WRITER275 — Body-level9 cancellation depends on resolving a stylesheet entry
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper.cxx`, LN_CT_NumPr_ilvl; `DomainMapper_Impl.cxx`, `finishParagraph`.
+- Observation: ilvl9 is initially admitted as native level9. Its conversion to no numbering sits inside the finishParagraph block guarded by a resolved paragraph-style entry. When that entry is absent, the conversion is skipped.
+- Impact: the same direct ilvl9 produces an unnumbered paragraph with a resolved source paragraph style, but can remain the tenth native numbering level without that entry.
+- Local behavior: retain the entry guard, original level range and cancellation sequence. `rtf-paragraph-numbering.test.ts` exercises both paths. Do not manufacture a default style entry or unconditionally reinterpret level9.
+
+
+### WRITER276 — RTF exports wide positive indentation that its native importer turns into zero
+
+- Source: `sw/source/filter/ww8/rtfattributeoutput.cxx`, `FormatFirstLineIndent`; `sw/source/writerfilter/dmapper/DomainMapper.cxx`, LN_CT_Ind_firstLine; `ConversionHelper.cxx`, `convertTwipToMm100_Limited`.
+- Observation: export writes the full authored first-line item, such as fi40000. Import calls the limited conversion helper, which returns zero for positive twips at or above32768; negative values are not subject to the same ceiling. The source comment attributes this to legacy MSO handling.
+- Impact: a positive wide indentation can export intact and return as zero on native re-import. An equally wide negative value follows the signed conversion instead. This is an intentional source compatibility rule, not a confirmed upstream defect.
+- Local behavior: preserve raw item export and original asymmetric import admission. `rtfexport.table-list.test.ts` verifies fi40000 emission and zero re-import; `rtf-paragraph-numbering.test.ts` pins32767,32768 and minus40000. Do not restore the former scalar import bypass to make the roundtrip lossless.
+
+### WRITER277 — Legacy PN fixed IDs can reuse an earlier definition or collide with modern lists
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx`, PNLVLBODY/PNLVLBLT; `rtfdocumentimpl.cxx`, PARAGRAPHNUMBERING after-pop; `dmapper/NumberingManager.cxx`, GetList/GetAbstractList.
+- Observation: old paragraph numbering always uses ID2 for body numbering and ID1 for bullets. Each PN group emits another abstract/concrete definition, while native mapper lookup retains the first matching ID.
+- Impact: a later pnstart can create another unused style without changing the numbering used by its paragraph. A modern concrete list with the same ID can also remain the rule used by a later PN paragraph, despite the new PN definition.
+- Local behavior: preserve fixed IDs, independent table callbacks, first-match lookup and unused style allocation. `rtf-legacy-numbering.test.ts` covers repeated PN starts and modern/legacy ID2 collision. Do not allocate synthetic unique IDs or paragraph restarts.
+
+### WRITER278 — Registered legacy PN switches have no native dispatch handler
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, PNUCRM/PNLCRM/PNFS registrations; `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx` and `rtfdocumentimpl.cxx` dispatch implementations.
+- Observation: pnucrm, pnlcrm and pnfs are known tokenizer spellings but have no implementation in those native dispatch switches. The consumed legacy format handler implements pndec, while the numbering writer's default fallback remains Arabic when no format was assigned.
+- Impact: Roman-numbering switches can leave Arabic numbering active, and pnfs does not assign the requested label height. This is a native implementation omission, not evidence that the local core lacks Roman numbering or font-height support.
+- Local behavior: preserve these no-ops. Tests verify Arabic numbering and unchanged native label height against the same PN definition without the switch. Do not implement additional semantics merely to make old PN more feature-complete than upstream.
+
+### WRITER279 — LINE uses direct singleChar emission even inside PN text destinations
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, the early LINE branch; `rtfdocumentimpl.cxx`, `singleChar` and PN text after-pop handling.
+- Observation: ordinary text symbols call destination-aware text(), but LINE calls singleChar with runProps=true. That operation emits directly to the mapper/current buffer and does not call checkNeedPap.
+- Impact: a LINE inside a PN prefix can become visible body text while surrounding prefix characters remain in the numbering pattern. Paragraph properties emitted after PN must still apply to that run.
+- Local behavior: preserve separate text() versus singleChar paths. The atomic adapter snapshots the direct LINE run without prematurely capturing paragraph properties. `rtf-text-symbol.test.ts` verifies a body LF, an AB prefix pattern and the final PN numbering rule. Do not redirect LINE into the PN text buffer for consistency with TAB.
+
+### WRITER280 — LINE alone does not initialize the RTF first-run section
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, early LINE dispatch; `rtfdocumentimpl.cxx`, singleChar, runProps, setNeedSect and root-pop finalization.
+- Observation: LINE calls singleChar with runProps=true; neither singleChar nor runProps calls checkFirstRun. setNeedSect ignores pre-first-run requests in the ordinary one-column/non-table profile, and root-pop section finalization is guarded by !m_bFirstRun.
+- Impact: a stream containing paper geometry and a lone LINE can insert a body LF without applying its pending section geometry. Adding ordinary text after LINE invokes checkFirstRun and causes that geometry to be applied. This follows the inspected source control flow; it is not a compiled desktop ABI claim.
+- Local behavior: preserve the direct LINE run and native first-run guard; do not initialize the section from LINE for consistency with ordinary text. `rtf-section-properties.test.ts` compares a LINE-only stream with the same stream followed by ordinary text and verifies actual page geometry and body text.
+
+### WRITER281 — Continuous sections can retain a requested page restart without applying it
+
+- Source: `sw/source/writerfilter/dmapper/PropertyMap.cxx`, continuous branch of CloseSectionGroup; `rtfdispatchflag.cxx`, PGNRESTART.
+- Observation: page-number assignment in the continuous branch is under the fallback for changed header/footer linkage. With the original all-linked defaults, a first continuous section only attaches its style name; later continuous sections inherit that name. Neither branch applies m_nPageNumber to a range.
+- Impact: a requested restart can be dropped even though it exists in the native section properties. The only-section final continuous type is erased by RTF sectBreak, so the same request then reaches ordinary page-section assignment and survives.
+- Local behavior: preserve both paths. Actual RTF fixtures compare an explicit continuous section followed by SECT with an only-section continuous stream, checking the real SwFormatPageDesc offset. Do not add a compensating restart outside the native branch.
+
+### WRITER282 — Default section grid line count precedes the item's minimum-height clamp
+
+- Source: `sw/source/writerfilter/dmapper/PropertyMap.cxx`, section defaults and CloseSectionGroup grid calculation; `sw/source/core/layout/atrfrm.cxx`, SwTextGridItem::PutValue.
+- Observation: the default section grid pitch is1mm100, so the Letter page with one-inch body margins computes22860 lines. Applying GridBaseHeight then converts units and clamps to100twips in the item, while the previously computed line count stays22860.
+- Impact: stored line count and effective base height describe different pitches. The default grid mode is NONE, so this observation does not by itself establish a visible layout bug.
+- Local behavior: keep original calculation, property ordering and item clamp. Actual section tests verify22860 lines and100twip base height, plus the original ten-point default/Standard Asian-height preference for base width. Do not recalculate line count after item insertion.
+
+### WRITER283 — The native RTF writer does not emit represented text-grid properties
+
+- Source: `sw/source/filter/ww8/rtfattributeoutput.cxx`, FormatTextGrid.
+- Observation: FormatTextGrid contains an explicit TODO/logging body and emits no RTF controls.
+- Impact: authored native grid mode and dimensions can be lost on native RTF export/import; the reader applies its own section defaults. Existing core grid support does not imply RTF syntax support in this pinned writer.
+- Local behavior: retain the export no-op. A real document with LinesAndChars and800twip base height re-imports with NONE and the original100twip item-clamped default. Do not invent RTF grid controls to force lossless output.
+
+### WRITER284 — Language-only input stays pending without an initial native run
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`, dispatchCharacterAttributeValue LANG branch; `rtfdocumentimpl.cxx`, text/checkFirstRun and guarded root-pop finalization.
+- Observation: LANG writes character sprms and, while needPap is true, paragraph sprms, but does not initialize the first run. Root-pop finalization is guarded by !m_bFirstRun. Ordinary body text or an explicit PAR initializes the run and emits those properties.
+- Impact: a language-only empty stream can retain the document's initial language rather than its authored LANG value; adding PAR applies the language to the empty paragraph. The former local test incorrectly promised the same authored language for both forms.
+- Local behavior: preserve the native guard and pending-property ownership. `rtf-language.test.ts` checks initial LANGUAGE_DONTKNOW for control-only input, German for explicit empty PAR, and both outcomes after native export/import. Do not initialize a run solely to retain formatting-only input.
+
+
+### WRITER285 — A recognized no-op after terminal SECT can create another section
+
+- Source: `sw/source/writerfilter/rtftok/rtftokenizer.cxx`, dispatchKeyword; `rtfdispatchflag.cxx`, `rtfdispatchvalue.cxx`, `rtfdispatchsymbol.cxx`, `rtfdispatchdestination.cxx` and `rtfdocumentimpl.cxx`, dispatch entry points and setNeedSect/root-pop.
+- Observation: recognized commands enter a dispatcher that calls setNeedSect(true) before its switch. This includes registered commands without a handled case, such as PNFS. Unknown spellings return in the tokenizer without reaching that operation.
+- Impact: a registered no-op after terminal SECT can cause another final section/page style; an unknown word at the same location does not. This follows source control flow rather than an intentional new format feature.
+- Local behavior: preserve the distinction with the complete native metadata table. `rtf-break-state.test.ts` checks PNFS, known section/character flags and unknown words, including grouped suffixes. Do not classify commands by their local visible effects.
+
+### WRITER286 — A deferred trailing PAGE does not force a page-break paragraph
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, PAGE; `rtfdocumentimpl.cxx`, root-pop; `dmapper/DomainMapper.cxx`, lcl_utext newline and non-newline paths.
+- Observation: PAGE defers a break in the mapper. With the original SplitPgBreakAndParaMark=false profile, PAR does not consume it. Non-newline text consumes it, but root-pop alone need not provide such text.
+- Impact: a final PAGE can leave the deferred break unused rather than creating another paragraph with PAGE_BEFORE. This is a source-level finding, not a compiled desktop pagination claim.
+- Local behavior: preserve the deferred lifecycle. Tests distinguish trailing PAGE from leading, consecutive and PAGE-PAR-text cases. Do not add a synthetic final page-break paragraph to make the input appear more regular.
+
+### WRITER287 — Continuous PAGE retains an empty styled paragraph despite upstream uncertainty
+
+- Source: `sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx`, PAGE/SECT; `sw/qa/extras/rtfimport/rtfimport.cxx`, testContSectionPageBreak and its unchanged fixture.
+- Observation: the upstream test explicitly questions the ideal paragraph count between SECOND and THIRD but asserts an empty third paragraph carrying PageDescName, followed by THIRD without a direct break/style and a final empty paragraph.
+- Impact: removing the apparently redundant empty paragraph changes the pinned native regression contract.
+- Local behavior: preserve the asserted sequence and native synthetic section/reset logic. Both a required standalone literal case and the unchanged upstream fixture check the actual model. No alternative paragraph normalization is applied.
+
+
+### WRITER288 — FirstIsShared has no setter target without header/footer item sets
+
+- Source: `sw/source/core/unocore/unostyle.cxx`, lcl_GetHeaderFooterItem and SwXPageStyle property setter; `sw/source/writerfilter/dmapper/PropertyMap.cxx`, setHeaderFooterProperties; `sw/source/filter/ww8/rtfexport.cxx`, OutPageDescription.
+- Observation: the FirstIsShared setter searches for an existing header or footer set. When neither exists, its shared-first case does not create either set or write the core sharing flag. The getter can likewise return an empty Any. Export independently reads SwPageDesc::IsFirstShared and can emit TITLEPG without a follow chain.
+- Impact: in the represented no-header/footer profile, an authored unshared-first bit can emit TITLEPG and return to the ordinary shared default after import. This is a conditional source-control-flow finding, not a claim about every desktop document with inactive headers.
+- Local behavior: preserve export of the original bit and do not introduce a direct TITLEPG-to-core-bit bypass on import. `rtfexport.first-page.test.ts` verifies this loss alongside initial/later emission, actual frame-item chain admission, side restrictions and independent sharing flags. Full header/footer services remain outside the represented model.
+
+
+### WRITER289 — Ordered TYPE=1 can cancel installation of a fresh HTML level format
+
+- Source: `sw/source/filter/html/htmlnumreader.cxx`, NewNumberBulletList TYPE switch and bChangeNumFormat checks.
+- Observation: new-level defaults first set bChangeNumFormat=true, but ordered TYPE resets it to false for any first character other than A/a/I/i, including the ordinary-looking value1. Without START or CSS setting it again, the new default format is not copied into the rule.
+- Impact: fallback numbering can still look Arabic while the explicit level format and label character style remain absent; outer-close completion also has no reference level to copy.
+- Local behavior: retain the flag overwrite. `swhtml.numbering.integration.test.ts` checks absent explicit level/character style and Arabic fallback for TYPE=1. Do not treat1 as an additional recognized TYPE branch.
+
+### WRITER290 — HTML CSS bullet keywords do not necessarily change an ordered list's numbering type
+
+- Source: `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_list_style_type; `htmlnumreader.cxx`, new-level CSS application.
+- Observation: the CSS parser sets independent numbering and bullet flags. The list reader applies the numbering type only for m_bNumbering and the glyph only for m_bBullet.
+- Impact: an OL with list-style-type:disc can retain Arabic numbering while storing the legacy disc glyph. The glyph is present in the format but does not itself force bullet numbering.
+- Local behavior: retain both independent assignments. Tests inspect the actual native numbering type and glyph; do not reinterpret CSS using browser list rendering.
+
+### WRITER291 — Folded whitespace after LI can remain in the preceding item text
+
+- Source: `sw/source/filter/html/swhtml.cxx`, TEXTTOKEN/CDATA and AppendTextNode; `htmlnumreader.cxx`, EndNumberBulletListItem.
+- Observation: explicit LI close ends attributes without immediately appending a paragraph. A subsequent folded newline-space token is inserted after the item text; the next item then appends. AppendTextNode strips trailing hard line feeds, not ordinary spaces.
+- Impact: the native underlying paragraph string can contain a trailing space even though visual layout may hide it. A Markdown raw-HTML block follows the same reader path.
+- Local behavior: preserve the actual space in HTML and transported Markdown paragraphs. Tests use exact strings instead of trimming input or output to conceal the native state.
+
+
+### WRITER292 — Empty-paragraph script filtering can discard displaced style attributes
+
+- Source: `sw/source/filter/html/swhtml.cxx`, SetTextCollAttrs and EndAttr; `htmlcss1.cxx`, InsertParaAttrs; `i18npool/source/breakiterator/breakiteratorImpl.cxx`, getScriptType.
+- Observation: displaced block-style items are converted to LikePara attributes. EndAttr(false) still performs script-dependent filtering on their current empty range. The break iterator returns WEAK outside an empty string, which matches none of the Western/CJK/CTL posture families; LikePara does not bypass this optimization.
+- Impact: an outer HTML-mode ADDRESS can lose its italic posture when an inner definition style replaces it on an empty paragraph. Non-script items such as underline can still survive the original hard-attribution path. This is a source-control-flow finding, not compiled desktop certification.
+- Local behavior: retain the source filtering and document the loss. Real document tests compare ADDRESS posture loss with retained authored underline on the same nested definition structure; do not force the empty script family to Latin or postpone filtering to make the result look consistent.
+
+### WRITER293 — Definition-list margin subtraction can wrap to a large unsigned indent
+
+- Source: `sw/source/filter/html/swhtml.cxx`, SetTextCollAttrs DD/DT margin phase; `DocumentStylePoolManager.cxx`, HTML_DD/HTML_DT defaults.
+- Observation: DD subtracts the DT style's margin, then explicitly narrows that signed difference to sal_uInt16 before adding it to the unsigned context margin. DT itself contributes zero extra margin even when its source style has been edited.
+- Impact: default DD567twips with an authored DT700twips produces65403twips after narrowing, rather than a negative offset or a zero clamp. This need not establish a visible layout defect in every document.
+- Local behavior: retain source subtraction and narrowing. Tests inspect actual node items for ordinary567/0 defaults, edited600-minus100 and right80-minus30 cases, nested accumulation and the negative wrap. Do not clamp it using browser CSS expectations.
+
+
+### WRITER294 — CSS border shorthand gives zero and one pixel a hairline
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx versus ParseCSS1_border_xxx_width.
+- Observation: shorthand uses the literal1twip branch whenever pixel width is not greater than1, including0 and negative values. The separate width handler converts integer pixels normally. Thus border:0px solid and border:1px solid produce1twip, whereas border:solid;border-width:0px clears the line and explicit1px width gives15twips in the consumed96DPI profile.
+- Preservation: retain the distinct source handlers and their admission/narrowing. Actual HTML tests inspect original box lines; no browser CSS normalization is applied. This is source-derived evidence, not compiled upstream certification.
+
+### WRITER295 — CSS padding saturation feeds a signed box distance
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_padding_xxx/SetBoxItem; include/editeng/boxitem.hxx, signed sal_Int16 SetDistance.
+- Observation: CSS pending padding saturates at65534 and is compared against minimum28 before calling the signed16box setter. A valid LENGTH70000pt saturates to65534, becomes-2 in the real box, and ordinary GetDistance suppresses that negative value to0. Six-digit999999pt is a different scanner case (WRITER160).
+- Preservation: retain both unsigned CSS admission and signed native storage/read policy. Tests inspect raw and ordinary values; Worker transport must preserve the raw native value rather than repair or re-quantize it.
+
+### WRITER296 — Border shorthand without color retains a preceding border color
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx bColor branch.
+- Observation: width/style are assigned for every selected side, while aColor is replaced only if an accepted color expression occurred. A preceding border-color:red followed by border:solid retains red instead of resetting the side's color through the shorthand.
+- Preservation: keep that conditional assignment and source pending-value copies. Real HTML tests verify the retained red native line. Do not substitute browser shorthand reset semantics.
+
+
+### WRITER297 — Unitless zero is not admitted as CSS padding or border width
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_padding_xxx and ParseCSS1_border_xxx_width.
+- Observation: NUMBER has no admitted length branch. After padding:3pt, padding:0 leaves60twips pending, whereas padding:0px sets zero and the eventual border minimum produces28. In the width-only handler, an unrecognized NUMBER still assigns the default medium named width, so border:3pt solid;border-width:0 produces10twips rather than no line.
+- Preservation: retain original token admission and nontransactional width defaults. Do not add a CSS-spec unitless-zero normalization; tests inspect actual HTML paragraph items.
+
+
+### WRITER298 — An absolute border width can collide with the unset sentinel
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_border_xxx/ParseCSS1_border_xxx_width and SvxCSS1BorderInfo::SetBorderLine.
+- Observation: GetULength is narrowed to unsigned16, whose65535value also denotes an unset absolute width. A source-level trace of border:3276.75pt solid gives65535twips, then selects the medium named fallback (10twips) instead of that absolute value. This is a defined scalar/source-control-flow finding, not a compiled desktop observation.
+- Preservation: retain the original sentinel and named fallback. Do not replace it with an optional value or clamp the parsed width to a different maximum to force a CSS-spec result.
+
+
+### WRITER299 — CSS pagination accepts only the first expression, with no positive count minimum
+
+- Source: sw/source/filter/html/svxcss1.cxx, ParseCSS1_page_break_xxx, ParseCSS1_widows and ParseCSS1_orphans.
+- Observation: the handlers inspect only the first expression. For example, page-break-inside:avoid trailing writes split=false and widows:3 trailing writes3. Widow/orphan NUMBER values accept zero, truncate fractional values, and clamp only values above255; a CSS-spec minimum or whole-expression validity check is absent. The existing scanner's six-hex priority still precedes numeric admission (WRITER160).
+- Preservation: retain first-expression admission, zero/fractional values and upper-bound handling. Tests exercise defined source conversion cases, including -0.5, whose truncated value is0. Negative floating values whose truncated value is outside uint8 are not treated as a portable upstream result or a desktop certificate; no claim of defined C++ behavior is made for them.
+
+
+### WRITER300 — CSS after:auto does not erase a before result already computed
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::SetFormatBreak.
+- Observation: before:always assigns PageBefore; after:auto sets write flags but does not reset that enum, so the resulting break remains PageBefore. Before:left followed by after:auto still writes the left page pointer, plus break=NONE and keep=false. The source's return value is bSetBreak: a left/right page reference alone returns false despite an item write.
+- Preservation: retain both switch order and field/write-flag distinctions; do not replace them with independent normalized before/after properties.
+
+### WRITER301 — HTML page copy changes requested left/right usage to All
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::GetPageDesc; sw/source/core/doc/DocumentStylePoolManager.cxx, GetPageDescFromPool; sw/source/core/doc/docfmt.cxx, SwDoc::CopyPageDesc.
+- Observation: pool creation makes the mutually following Left/Right pair with native side flags. The HTML parser then copies the HTML page's complete use flags onto only the requested page. A requested left becomes All while its right companion remains Right; requested right behaves symmetrically. CopyPageDesc(false) preserves the requested pool ID but still copies use flags.
+- Preservation: keep the original order of pool materialization, HTML frame copy and subsequent follow rewiring, without correcting the side flag to match the CSS keyword.
+
+### WRITER302 — CopyPageDesc skips follow mutation for a self-following source
+
+- Source: sw/source/core/doc/docfmt.cxx, SwDoc::CopyPageDesc.
+- Observation: only a non-self source follow enters the copy/lookup branch. Copying a self-following source into a target already following another page leaves that target follow unchanged. Other source fields and four independent frame item sets are still copied.
+- Preservation: do not make self-follow an unconditional target reset. Cross-document non-self follow graphs use destination names and retain native recursive materialization.
+
+### WRITER303 — Native page copies retain the original source follow pointer
+
+- Source: sw/source/core/layout/pagedesc.cxx, SwPageDesc copy constructor; sw/source/core/doc/docdesc.cxx, SwDoc::MakePageDesc.
+- Observation: native copy construction copies m_pFollow directly, including a source's self-pointer. MakePageDesc then changes the name and resets pool identity for a new name, without rebasing that pointer to the new owner. The prior local MakePageDesc incorrectly used a browser Clone helper that rebased self-follow.
+- Preservation: native MakePageDesc now uses the original constructor; the explicit browser value-copy Clone helper remains separate. Do not normalize a copied native source follow.
+
+### WRITER304 — ChgPageDesc mutates supplied frames and copies a selective page table
+
+- Source: sw/source/core/doc/docdesc.cxx, SwDoc::ChgPageDesc and lcl_DescSetAttr.
+- Observation: despite the const source reference, ChgPageDesc changes its left/first frame attributes before transferring them into the registered target. The page table excludes RES_BACKGROUND and RES_HEADER_FOOTER_EAT_SPACING and does not copy arbitrary paragraph attributes; drawing fill attributes participate separately. Mirroring constructs a fresh LR item, swaps margin measures and writes the original gutter into the right gutter.
+- Preservation: retain source-frame mutations, selective copy/reset behavior, pool ID propagation and original margin operations. Do not flatten this native change into the existing browser geometry setter or a blanket item-set copy.
+
+
+### WRITER305 — An empty first inline declaration prevents later declarations
+
+- Source: sw/source/filter/html/parcss1.cxx, CSS1Parser::ParseStyleOption.
+- Observation: after the initial ParseDeclaration, a missing expression returns from ParseStyleOption immediately. For page-break-before:;page-break-after:always the after declaration is never processed. This first-declaration branch differs from the later declaration loop's recovery behavior.
+- Preservation: retain the original early return. Tests for an absent before/after property omit that declaration; a separate regression checks the actual empty-first-declaration behavior rather than normalizing it.
+
+
+### WRITER306 — Table FRAME/RULES are discarded without a nonzero BORDER option
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableOptions::HTMLTableOptions.
+- Observation: explicit FRAME/RULES normally take precedence over border-derived defaults, regardless of their order. The final constructor branch nevertheless replaces both with Void/NONE when nBorder is0 or65535, including the initial unset sentinel. A table with FRAME=box RULES=all but no BORDER therefore retains no visible frame/rules in these options; explicit BORDER=65535 has the same effect.
+- Preservation: keep the final source branch and sentinel distinction. Do not infer an implied BORDER from FRAME/RULES or normalize explicit65535 into a different width.
+
+### WRITER307 — Table width is narrowed before percent clamping and COLS fallback
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableOptions::HTMLTableOptions.
+- Observation: numeric WIDTH is first narrowed to uint16, then the presence of any percent sign in its source string sets the percent flag and only values above100 are clamped. WIDTH=65536% thus becomes0%, while65537% becomes1%. If COLS is nonzero and the narrowed width is0, the final constructor branch substitutes100% even for an explicit zero width.
+- Preservation: retain GetNumber conversion, narrowing, percent detection and final COLS fallback in their source order; do not clamp the original number before narrowing or distinguish absent width from explicit zero.
+
+
+### WRITER308 — HTML cell replacement/protection retains prior width and metadata
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableCell::Set and SetProtected; sw/inc/htmltbl.hxx, SwHTMLTableLayoutCell::SetProtected.
+- Observation: Set assigns content/span/format/value/wrapping flags but does not reset m_nWidth or m_bRelWidth. SetProtected clears contents and resets spans, clones only the shared background brush, and keeps box/numeric/width/orientation/no-wrap/covered fields. The corresponding layout-cell protection also keeps width/percent/no-wrap options. A reused or protected cell can therefore expose earlier width metadata despite losing its content.
+- Preservation: retain these selective writes and original shared/independent identities. Do not replace protection or Set with a fresh default cell. This is a source-state finding, not a confirmed desktop defect.
+
+### WRITER309 — HTML content layout caching does not follow late source-chain mutations
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableCnts::Add, SetNoBreak, SetTableBox and CreateLayoutInfo.
+- Observation: CreateLayoutInfo recursively constructs the next content first, then caches its own layout reference once. Later Add or SetNoBreak do not invalidate those cached next links/no-break flags. SetTableBox checks that layout already exists; before construction it has no effect in release control flow, with a diagnostic in the source.
+- Preservation: keep the original build-order behavior and borrowed actual section/box references. Tests distinguish cached layout links from later source chain links without private state writes. Late mutations are outside the normal build order; no desktop reproduction or debug assertion certificate is claimed.
+
+### WRITER310 — HTML row span maintenance treats protected cells as contentless
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTableRow::Expand and Shrink; HTMLTable::CloseRow uses the same content-presence condition.
+- Observation: a protected cell reports IsUsed=true but has no contents. Shrink walks trailing cells while GetContents is null, so it can change a protected cell's column span away from the1 assigned by SetProtected. Expand(oneCell=true) assigns decreasing spans only to newly appended cells; earlier cells retain their values.
+- Preservation: retain the original GetContents condition and span update order. Do not substitute IsUsed or normalize the whole row on resize; actual cell/section tests preserve the source state transitions.
+
+
+### WRITER311 — Table layout reconstruction and content layout caching have different lifetimes
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::CreateLayoutInfo and HTMLTableCnts::CreateLayoutInfo.
+- Observation: the table method replaces m_xLayoutInfo on every call, whereas the content method constructs its next content first, then its nested table, and caches the resulting layout exactly once. A repeated outer-table layout creation therefore reuses cell-content layouts, including their originally captured nested layout, even when the nested table's latest layout pointer has changed.
+- Preservation: retain the two different cache contracts and next-first construction order. Do not globally memoize tables or invalidate source content caches; normal construction order controls these references. This is a source-state observation, not a desktop defect reproduction.
+
+### WRITER312 — Empty fixed-column tables can finish with zero columns
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::CloseTable and CreateLayoutInfo; BuildTable context admission.
+- Observation: CloseTable first adds missing rows/columns, then trims columns to m_nFilledColumns. For an empty table with a nonzero initial COLS, filled columns remain zero, so the final trim removes all columns after the fallback row was created. CreateLayoutInfo assumes column zero exists; normal BuildTable does not materialize a table without its context.
+- Preservation: keep the original fallback/trim order and caller admission. Do not synthesize a populated cell to repair this source edge case or treat invalid native vector access as a defined result; the TypeScript binding asserts the nonempty-layout precondition.
+
+### WRITER313 — Opposite-side spacing tests the current column's left border
+
+- Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayout::GetLeftCellSpace and GetRightCellSpace.
+- Observation: an interior cell's right minimum spacing tests GetColumn(nCol)->HasLeftBorder(), rather than the next column's border. The left calculation can also add MIN_BORDER_DIST for a spanning cell reaching the table's right border even without its own left border. These conditions are asymmetric with simple geometric edge lookup.
+- Preservation: retain current-column/span tests and uint16 assignment narrowing. Do not substitute a next-column lookup or a uniform border/padding rule; source-backed tests cover both border-aware and Netscape-only accounting.
+
+
+### WRITER314 — Paragraph join admission excludes an exact remaining-capacity fit
+
+- Source: sw/source/core/docnode/node.cxx, lcl_CheckMaxLength and SwContentNode::CanJoinNext/CanJoinPrev; SwTextNode::GetSpaceLeft.
+- Observation: text joins require preceding.GetSpaceLeft() > following.Len(), rather than greater-or-equal. GetSpaceLeft already reserves two signed32 positions, so an exact fit in that reported remaining space is still rejected. Both directions use preceding capacity and leave the supplied output unchanged on failure; successful position output is assigned to the other node at offset zero.
+- Preservation: retain the strict comparison and output timing. The current text-only graph has no transparent SwSectionNode family to skip; no synthetic section owner is introduced. The capacity boundary is source-reviewed, without allocating multi-gigabyte test strings or replacing real node lengths with mocks.
+
+### WRITER315 — HTML table constraints use an OR condition rather than lexicographic ordering
+
+- Source: sw/source/core/doc/htmltbl.cxx, SwHTMLTableLayoutConstraints::InsertNext.
+- Observation: traversal stops when either an existing row is greater than the new row or its column is greater than the new column. Thus an existing row0/column5 constraint can be placed after an incoming row1/column2 constraint. This is not ordinary row-then-column lexicographic ordering despite the later pass's line-by-line commentary.
+- Preservation: retain the original OR condition when porting the pending constraint owner and first layout pass. Do not silently substitute a comparator or sorted array with lexicographic semantics. This is a source-state finding; table constraint/pass implementation and desktop reproduction are not claimed here.
+
+### WRITER316 — Existing-document HTML insertion can retain an empty suffix paragraph
+
+- Source: sw/source/filter/html/swhtml.cxx, SwHTMLParser::CallParser and Continue.
+- Observation: existing-document mode splits twice at the target cursor. After a closing block leaves a zero-offset paragraph, Continue joins that paragraph into the original suffix using suffix.JoinPrev; it does not apply the new-document trailing-node removal branch. Inserting a single block into an initially empty target can therefore retain an original empty suffix paragraph.
+- Preservation: retain the separate insertion/new-document paths and original surviving suffix owner. Do not restore the previous section-EOF-only deletion shortcut. Actual graph tests distinguish the two modes; this is a source-state observation, without a compiled desktop defect claim.
+
+### WRITER317 — HTML mark lookup scans primary positions in a vector sorted by range starts
+
+- Source: sw/source/filter/html/htmlgrin.cxx, SwHTMLParser::HasCurrentParaBookmarks; sw/source/core/doc/docbm.cxx, mark ordering; sw/source/core/crsr/bookmark.cxx, MarkBase and UnoMark constructors.
+- Observation: all marks are sorted by GetMarkStart, but the HTML lookup compares GetMarkPos and stops on the first later node. An expanded UNO mark retains the input primary/other orientation. If its range starts before the current paragraph but its primary position is later, early termination can hide a subsequent mark whose primary position is on the current paragraph.
+- Preservation: retain the original primary-position comparison and early break, including UNO marks in the actual all-mark vector. Do not substitute range-start comparisons or the user-visible bookmark catalog. Tests use real oriented UNO ranges and real bookmarks; no compiled desktop reproduction is claimed.
+
+### WRITER318 — Empty HTML insertion prefixes retain their list level during the first join
+
+- Source: sw/source/filter/html/swhtml.cxx, Continue prefix repair; sw/source/core/txtnode/ndtxt.cxx, JoinNext and CutImpl hard-item transfer.
+- Observation: an empty original prefix adopts the first imported paragraph collection and joins its text. CutImpl copies the source hard paragraph items but explicitly excludes RES_PARATR_LIST_LEVEL. Thus a deeply nested first list paragraph can retain the insertion prefix level zero even though the imported source had a clamped deeper level. A preceding imported body paragraph avoids this first-join case.
+- Preservation: retain original collection/join ordering and list-level exclusion. Keep separate real imports testing level clamping after a body paragraph and first-paragraph level retention. Do not silently copy the excluded item or rewrite list nesting. This is a source-state observation, not a compiled desktop defect reproduction.
+
+### WRITER319 — Nested-table background inheritance does not clear an earlier inherited brush
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::InheritBorders and SetBorders.
+- Observation: InheritBorders replaces its inherited background only if a parent source brush is found. A later call with no qualifying brush leaves the previous clone intact. SetBorders also skips a nested table whose BordersSet flag is already true, so repeating the outer operation after changing an outer background does not refresh that nested inheritance.
+- Preservation: retain conditional cloning and the source completion guard. Do not clear or refresh nested inherited brushes on repeated calls. Real parent/child grid tests distinguish own and inherited brushes and retain actual object identity; no desktop defect reproduction is claimed.
+
+### WRITER320 — RULES rows and columns also admit group separators on the opposite axis
+
+- Source: sw/source/filter/html/htmltab.cxx, HTMLTable::SetBorders.
+- Observation: RULES=rows still creates a vertical border after a column group, and RULES=cols still creates a horizontal border after a row group. RULES=groups uses both group conditions. The source tests the opposite-axis group boundary in addition to the ordinary rows/columns rule.
+- Preservation: retain the exact OR conditions and end-of-group ownership. Do not interpret rows/cols as excluding all opposite-axis separators. Actual column-group tests cover rows/cols/groups distinctions; row-side source ordering is retained for the pending box-format consumer. This is a source-state observation without a compiled desktop defect claim.
+
+### WRITER321 — Table-tag style completion can precede the existence of any matching CSS entry
+
+- Source: sw/source/filter/html/htmlcss1.cxx, SwCSS1Parser::SetTableTextColl; swcss1.hxx, SetTDTagStyles/SetTHTagStyles/SetDelayedStyles.
+- Observation: the TD/TH completion flag is set even when neither the tag nor tag-P map entry exists. A matching entry added later is therefore ignored by subsequent one-shot calls, including terminal SetDelayedStyles. Existing entries also remain one-shot after later map changes.
+- Preservation: retain lazy collection materialization, unconditional completion and original TH/TD/A terminal order. Do not invalidate the completion flag on map insertion or replay the cascade. Tests use real parsed declaration sets, original InsertTag/GetTag operations and actual pooled paragraph styles; no private flags or stylesheet producer are fabricated. This is a source-state observation, not a compiled desktop defect reproduction.
+
+### WRITER322 — Empty-cell section construction assigns two-point fonts through only one overload
+
+- Source: sw/source/filter/html/htmltab.cxx, the two SwHTMLParser::InsertTableSection overloads.
+- Observation: the predecessor-start overload selects the table-body collection and explicitly applies font height40twips (2pt) at100percent to Western, CJK and CTL on the first paragraph. The pool-ID overload changes the requested collection without these direct height items. MakeTableLine uses the predecessor overload when creating missing or covered cell contents, so the small height may be intentional for empty cells, despite resembling a missing zero or a default-font inconsistency.
+- Preservation: retain the overload distinction and exact40twip values when connecting the pending section consumers. Do not normalize them to ordinary table font height or400twips. This is source review evidence; the parser section consumers and a compiled desktop comparison are not claimed in this checkpoint.
+
+### WRITER323 — A completed table with no enclosing table remains the section-insertion target
+
+- Source: sw/source/filter/html/htmltab.cxx, the pool-ID SwHTMLParser::InsertTableSection overload.
+- Observation: when the current table already has an HTML layout, the do/while searches enclosing tables. If no outer table exists, the last table variable still refers to that completed current table; a new section is inserted before its end. The finished-layout marker alone does not cause failure or require a different insertion target.
+- Preservation: retain the do/while assignments and same-table fallback. Do not reject the table solely because its layout exists or manufacture an outer table. Tests assign a real layout reference and inspect actual new section ownership; no desktop defect reproduction is claimed.
+
+### WRITER324 — Column percentage syntax is treated as absolute width while only an asterisk selects relative width
+
+- Source: sw/source/filter/html/htmltab.cxx, SwHTMLParser::BuildTableColGroup group/COL width options and HTMLTable::InsertCol.
+- Observation: WIDTH reads a uint16 numeric prefix and selects relative width only when the original string contains an asterisk. Thus50percent becomes an absolute50pixel column option, converted to750twips;3asterisk remains relative3. The table WIDTH option has a separate percent path, so the two option owners differ.
+- Preservation: retain numeric narrowing, asterisk detection and the native column conversion. Do not route a percent sign through the relative-column flag or table percent-width parser. Actual byte-stream column tests cover these families; no compiled desktop defect claim is made.
+
+### WRITER325 — Zero SPAN differs between an empty COLGROUP and a COL
+
+- Source: sw/source/filter/html/htmltab.cxx, BuildTableColGroup, TableColGrpSaveStruct::CloseColGroup, HTMLTable::CloseColGroup and InsertCol.
+- Observation: SPAN is narrowed to uint16 before values above256 are replaced by1. A zero empty-group span bypasses column insertion, whereas a zero COL span reaches InsertCol and becomes1. Consequently65536 also becomes zero before these different downstream rules. Any child COL sets the saved group span to zero to suppress extra group columns.
+- Preservation: retain the narrowing/limit order and separate close/insert rules. Do not globally clamp every span to at least1. Tests use actual lexer options and native column owners, including the source zero-column layout admission boundary; full table materialization remains pending.
+
+### WRITER326 — Table-section font protection wraps at uint16 depth while context protection does not
+
+- Source: sw/source/filter/html/swhtml.hxx, m_nBaseFontStMin/m_nFontStMin/m_nFontStHeadStart; htmltab.cxx, SectionSaveStruct constructor/Restore; swhtml.cxx, NewHeading/EndFontAttr.
+- Observation: font-stack sizes are assigned to uint16 lower bounds, whereas context-stack bounds are size_t. At65536 open font entries a section freezes the font bound at0 but protects all65536 contexts. A font closer cannot pop its protected context yet still pops a font entry; Restore truncates the font stack at the wrapped bound. This appears capable of losing outer font-stack state for extremely deep input.
+- Preservation: retain uint16 narrowing and independent font/context bounds, including the heading font-stack start width. Do not clamp or widen the original counters. The focused regression builds the actual deep stack through65536 native NewFontAttr calls, then observes original save/close/restore operations. It does not certify complete table token orchestration or pending-device behavior.
+
+### WRITER327 — A cell SDVAL without SDNUM publishes a present numeric value of zero
+
+- Source: sw/source/filter/html/htmltab.cxx, CellSaveStruct constructor and InsertCell.
+- Observation: SDVAL sets the independent has-value flag and retains its text, but conversion runs only when SDNUM was also present. With SDVAL42 alone the initialized numeric value0 is published with has-value true and has-number-format false. This appears capable of discarding a supplied value while marking a different value as present.
+- Preservation: retain independent flags, zero initialization and the SDNUM-only conversion gate. Do not infer a format, parse SDVAL independently or clear its presence flag. The focused real-byte-stream cell case observes the original grid flags/value and confirms no document formatter was constructed.
+
+### WRITER328 — HTML table numeric options ignore recognition and format-insertion failure
+
+- Source: sfx2/source/bastyp/sfxhtml.cxx, SfxHTMLParser::GetTableDataOptionsValNum; svl/source/numbers/zforfind.cxx, ImpSvNumberInputScan::IsNumberFormat.
+- Observation: the helper ignores numeric recognition success and both format insertion results/error positions. Failed normal numeric recognition yields0; an explicitly empty format suffix reaches PutEntry's early failure and key reset0, while the supplied format-language output is retained. The helper still returns the numeric value and does not reject the cell.
+- Preservation: retain source status erasure and output assignment order. Do not add validation failure, a replacement format key or a separate number parser. Focused helper cases consume the actual formatter/scanner/table, including invalid numeric input, empty suffix and independent parse/display locales. This does not certify unrepresented input-device/desktop profiles.
+
+### WRITER329 — Zero cell width discards the percentage-width selector
+
+- Source: sw/source/filter/html/htmltab.cxx, CellSaveStruct width parsing and HTMLTable::InsertCell.
+- Observation: WIDTH is narrowed to uint16 before the percent clamp, but InsertCell only assigns the width and its relative selector when numeric width is nonzero. Thus65536percent narrows to0 and publishes width0 with percent false, whereas65537percent publishes width1 with percent true. The option's percent syntax is lost in the zero case.
+- Preservation: retain the narrowing, percentage clamp and conditional grid assignment. Do not independently publish the percentage flag for zero width or replace the original guard. Focused actual-byte-stream cases observe the original intermediate layout option fields.
+
+### WRITER330 — Ordinary RTF paragraph direction output collapses vertical modes to LTRPAR
+
+- Source: sw/source/filter/ww8/rtfattributeoutput.cxx, RtfAttributeOutput::FormatFrameDirection.
+- Observation: page-description output handles vertical RL_TB through stextflow1 and RTF fly syntax has separate txflTextFlow properties. After those branches, ordinary paragraph output emits RTLPAR only for Horizontal_RL_TB and LTRPAR for every other resolved mode, including vertical modes. This appears lossy for an explicitly vertical paragraph item.
+- Preservation: retain the original context branches and final horizontal token choice when connecting direction export. Do not manufacture a vertical paragraph control or treat all non-LTR modes as RTL. This finding is pinned source-review evidence; HTML45 implements import/typed property flow and does not yet claim the RTF export/default-direction owner or rendered layout profile.
+
+### WRITER331 — table attribute split tests unequal raw offsets rather than increasing ranges
+
+Pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::SplitAttrTab(shared_ptr<HTMLAttrTable>, bool)`, clones a same-paragraph range whenever the raw start content differs from the end content. It does not require start < end. Moving the actual cursor behind an open attribute therefore queues an inverted raw range before resetting the original owner at the new position. This may look like a missing increasing-range check; preserve the original comparison and let the existing deferred consumer decide admission. The HTML46 native-state regression retains start4/end2 and reopened start2. This observation does not assert a confirmed upstream defect.
+
+### WRITER332 — standalone CutText append leaves preexisting destination-end indices in place
+
+Pinned `sw/source/core/txtnode/ndtxt.cxx`, three-argument `SwTextNode::CutText`, constructs an append boundary and calls `CutImpl(..., false)`. Consequently the destination text grows while registered indices at its former end do not advance; source indices instead receive the original negative update. This may look like stale destination cursor/bookmark positions if the operation is confused with a join or ordinary insertion. Preserve the original distinction: joins perform their own source-position relocation. The HTML47 regression observes destination index6 while text grows from6to10, and source indices0/2/4 remain on their original node at0. This is an observation of a potentially surprising contract, not a confirmed upstream defect.
+
+### WRITER333 — selected paragraph ends include a mark at the nominal upper boundary
+
+Pinned `sw/source/core/doc/docbm.cxx`, `lcl_Lower`, ordinarily uses a strict content upper bound, but explicitly returns true when the requested end content is the end text node's length. A collapsed bookmark exactly at that paragraph end is therefore included, while the same mark at an interior selected end is excluded. This may look like inconsistent half-open range handling; preserve the source exception. Native HTML49 tests compare selected2..4 and2..6 on six-character text, including both regular bookmarks and internal UNO marks. This is not a confirmed upstream defect.
+
+### WRITER334 — expulsion can preserve an expanded UNO mark with equal endpoints
+
+Pinned `docbm.cxx`, `lcl_FindExpelPosition`/`lcl_FixCorrectedMark`, falls back to the other endpoint when no neighboring content is available. The fix clears the other position only for a cross-cell selection; equal positions in the same context are not enough. `sw/inc/IMark.hxx` defines IsExpanded by presence of its second position, so the result can remain expanded with equal coordinates. This may look like a missing empty-range collapse. Preserve it; HTML49 authors actual extra/body endpoints across fixed-section boundaries and retains the equal-position expanded result. This is not a confirmed upstream defect.
+
+### WRITER335 — absolute PaM correction can report a change only to an inactive bound
+
+Pinned `sw/source/core/doc/doccorr.cxx`, `lcl_PaMCorrAbs`, processes both `GetBound()` and `GetBound(false)` regardless of HasMark. `sw/inc/pam.hxx` exposes those permanent physical positions independently of Point/Mark aliases. Consequently an unmarked PaM whose inactive bound lies in the closed correction interval can return true even when its active Point is outside and unchanged. This may look like an incorrect changed result. Preserve both evaluations and the return value; the HTML50 native-public-operation regression retains that exact case. Global edit-shell/UNO-cursor traversal and notification consumers are not certified by the primitive test, and this is not a confirmed upstream defect. HTML52 extends evidence to the actual UNO notification consumer: an inactive-bound-only match sets changed, while the pre-correction active Point and target have different fixed sections, so UnoCursorHint invalidates the pointer even though the active Point remains unchanged. Preserve the hint as well as the primitive result. The full global edit-shell traversal and production deletion composition remain uncertified.
+
+### WRITER336 — UnoCursorPointer reset starts a duplicate subscription for the same cursor
+
+Pinned `sw/inc/unocrsr.hxx`, `sw::UnoCursorPointer::reset`, calls StartListening(pNew->m_aNotifier) before EndListening(m_pCursor->m_aNotifier). If pNew and m_pCursor refer to the same cursor, the initial subscription violates SfxListener default DuplicateHandling::Unexpected before the old subscription ends. Copy assignment instead ends the old subscription first. This looks surprising for a shared-owner reset operation but is not a confirmed upstream defect: callers may exclude same-owner resets. Preserve source ordering and duplicate-subscription preconditions. The native cursor regression exercises this case without adding a self-reset shortcut or changing SfxListener. Wider debug/release assertion and ABI behavior is not certified.
+
+### WRITER337 — Any bottom ALIGN wins in duplicate caption attributes
+
+Pinned `sw/source/filter/html/htmltab.cxx`, `SwHTMLParser::BuildTableCaption`, initializes bTop=true and scans all options in reverse. It sets bTop=false on every case-insensitive ALIGN=bottom and never sets it true for ALIGN=top. Consequently either ordering of duplicate top/bottom attributes yields a bottom caption, rather than the ordinary reverse-scan first-attribute precedence used by table STYLE. This may look inconsistent, but is not a confirmed upstream defect. Preserve the one-way flag update. The real lexer/caption-lifecycle regressions cover bottom/top and top/bottom duplicate orders and uppercase BOTTOM without replacing option or parser state. Whole recursive table/caption grammar and native differential behavior are not certified by this component evidence.
+
+### WRITER338 — Table insertion redo drops the original shell and model flags
+
+Pinned `sw/source/core/undo/untbl.cxx`, `SwUndoInsTable::RedoImpl`, calls `SwDoc::InsertTable` with arguments only through the saved column vector. The original `bCalledFromShell` and `bNewModel` arguments are not stored by the undo action, so reconstruction uses the declaration defaults false and true. A first insertion using the old table model is therefore recreated with the new model; shell paragraph adjustment propagation also differs on redo. The saved table name is restored separately with SetFormatName after construction. This looks surprising for undo/redo but is not a confirmed upstream defect. Preserve the omitted flags and separate rename, and keep the browser's existing initial-operation bridge distinct from redo. Native table insertion regressions cover model reset and the live page-attribute transfer; whole old-model table algorithms and non-null table autoformat are not certified.
+
+### WRITER339 — Numbering-aware HTML margins retain narrowing overflow
+
+Pinned `sw/source/filter/html/htmlcss1.cxx`, `SwHTMLParser::GetMarginsFromContextWithNumberBullet`, adds GetAbsLSpace to a sal_uInt16 output and assigns GetFirstLineOffset to a short output. Both statements carry source TODO overflow comments. Large context/list spacing can therefore wrap the left margin and narrow the signed first-line indent rather than saturating either output. This is source-acknowledged surprising behavior, not a verified upstream defect for the admitted document domain. Preserve both conversions and the depth-to-MAXLEVEL clamp. Actual parser/context/rule regressions cover a wrapped left margin, signed indent narrowing and excessive list depths; no safer widened-margin replacement is used.
+
+### WRITER340 — Nested table break transfer deliberately leaves the parent's items set
+
+Pinned `sw/source/core/docnode/ndtbl.cxx`, lcl_transferTableBreaks, copies direct RES_PAGEDESC and RES_BREAK from a containing table when insertion is before the first paragraph of its first cell. Both corresponding ResetFormatAttr calls are commented out; the page-descriptor comment says TODO: not transferred back on table delete. This duplicates the break/page attributes on parent and nested table instead of transferring ownership. Preserve both copies and the original first-paragraph/first-cell guards. Actual document/box regressions verify parent items remain and that nested insertion does not instead move the following paragraph's own page attributes. This is source-acknowledged surprising behavior, not a confirmed defect or certification of whole nested-table rendering.
+
+### WRITER341 — Default table naming reserves numbers from noncanonical suffixes
+
+Pinned `sw/source/core/docnode/ndtbl.cxx`, SwDoc::GetUniqueTableName, tests only the localized default prefix and converts the remaining suffix with o3tl::toInt32 before setting its bitmap. Leading zeros, an explicit plus and trailing nonnumeric text can therefore reserve the same number as a canonical name, even when that exact canonical table name does not exist. Preserve native integer conversion and byte-flag selection rather than adding a strict-digit check. Actual table regressions exercise Table01, Table+1 and Table1tail, and crossing the first bitmap byte. This may look surprising for first-unused naming but is not a confirmed upstream defect; mail merge, localization and unused/default native format owners remain outside this evidence profile.
+
+### WRITER342 — Markdown table callbacks retain an unchecked nullable table result
+
+Pinned `sw/source/filter/md/mdtab.cxx`, SwMarkdownParser::StartTable, stores the pointer returned by SwDoc::InsertTable without a null check. StartCell subsequently dereferences MDTable::GetTable. The document constructor explicitly returns null for positions in the inserts/footnote interval (`sw/source/core/docnode/ndtbl.cxx`). If a parser is supplied such a position and reaches a table callback, these contracts appear to permit a null dereference. This is a source-based suspected issue, not a confirmed reachable upstream crash: reader/caller constraints may exclude the state. Preserve the nullable stored pointer and the requirement for an actual table at StartCell; do not fabricate an empty table or silently accept a rejected insertion. The current pointer regression proves null initialization/assignment, not whole reader reachability or native crash behavior.
+
+### WRITER343 — Markdown table end retains the existing trailing paragraph and appends another
+
+Pinned `sw/source/filter/md/mdtab.cxx`, SwMarkdownParser::EndTable, first moves the actual PaM forward from the final cell and then unconditionally calls AppendTextNode(AM_SPACE) before resetting its table owner. SwDoc::InsertTable leaves the original insertion paragraph after the table, so the ordinary new-document path retains that paragraph and appends a further paragraph for following content. The new-document Markdown reader has no EndPaste cleanup. This may produce an extra empty paragraph around a table; it is not a confirmed upstream defect. Preserve actual movement, append, spacing and release order, rather than consuming the original paragraph to normalize the output. Regression evidence uses real md4c/document callbacks; whole insertion-mode reader/paste behavior is not certified.
+
+
+### WRITER344 — Content-box index lookup can return another table's layout box
+
+Pinned `sw/source/core/table/swtable.cxx`, `SwTable::GetTableBox(SwNodeOffset)`, scans this document from the supplied index plus one and returns the first content/table frame's containing cell without checking that the cell belongs to the queried table. Only the no-cell fallback searches this table's own content-pointer registry. An index from another table in the same document can therefore yield no box without layout and that other table's box with layout. Preserve the original scan, first-frame ascent and return; do not add an ownership check to normalize the two branches. This is a source-based suspected asymmetry, not a confirmed reachable compiled Writer defect: caller contracts may require the index to name a content cell of the queried table. The translated regression uses real same-document tables, actual registered content/table/cell frames and both layout states; no frame/result provider is replaced.
+
+
+### WRITER345 — Anchor replacement has a potential optional-position self-alias hazard
+
+Pinned `sw/source/core/layout/atrfrm.cxx`, `SwFormatAnchor::SetAnchor`, validates its position argument and then calls `m_oContentAnchor.emplace(*pPos)`. The public GetContentAnchor getter can return the existing contained position. If that pointer is passed back to SetAnchor on the same item, replacement destroys the existing optional position before constructing the new copy from the supplied reference. This is a source-based suspected self-alias/lifetime hazard, not a compiled Writer reproduction or a claim of a defined native result; caller constraints may exclude the input. Preserve the original destroy/reconstruct order for valid distinct input positions rather than converting replacement to in-place assignment or copying ahead of destruction. The translated normal-case regression observes real owner disposal before new position construction; native self-alias reachability and undefined-behavior details are not certified.
+
+### WRITER346 — FrameFormats default insertion skips the list back-reference
+
+Pinned `sw/inc/frameformats.hxx`, `FrameFormats::newDefault(const value_type&)`, inserts directly through `GetByPos().push_front`, whereas `push_back` first assigns the format's `m_ffList`. A fresh default can therefore be found in container storage while `ContainsFormat` returns false, and virtual frame rename does not dispatch through that collection. Existing-position relocation also leaves the back-reference unchanged. This is a source-based suspected inconsistency, not a confirmed compiled upstream defect or assertion about reachable document setup. Preserve the original distinction; actual format/container tests cover insertion, relocation and membership without manufacturing a format provider.
+
+### WRITER347 — Base format rename builds its old-name field after assigning the new name
+
+Pinned `sw/source/core/attr/format.cxx`, `SwFormat::SetFormatName`, first assigns `m_aFormatName = rNewName` and then constructs `sw::NameChanged(m_aFormatName, rNewName)` when broadcasting. Both fields therefore contain the new name, and the represented original SwFormat/SwModify notification filters discard NameChanged. By contrast, registered `SwFrameFormat::SetFormatName` constructs the hint before collection rename and broadcasts it directly through `GetNotifier()`. This looks inconsistent for name observers; no compiled native reproduction or broader accessibility behavior is certified. Preserve both source branches and their distinct dispatch channels when porting the full rename route. The registered special-frame branch now retains actual old/new payload behavior. The pre-existing general base-setter browser inheritance notification is still a local divergence: removing it in isolation breaks the current style selector update path, because native SwDoc::RenameFormat, rename undo and BroadcastStyleOperation are not implemented. That separate route must be migrated together before base setter behavior can be certified; this prerequisite checkpoint does not claim it.
+
+### WRITER348 — SectionDown output endpoints depend on deleted boundary sentinels
+
+Pinned `sw/source/core/docnode/nodes.cxx`, `SwNodes::SectionDown`, decrements `aEnd`, optionally deletes that StartNode through `DelNodes`, then decrements the corrected `aEnd` again. The shared `SectionUpDown` scan continues until its start stack empties at or beyond that boundary; it does not retarget `aEnd` to the matching final EndNode. Consequently, when the trailing StartNode is removed, the returned endpoint can refer to preceding content rather than the result's section end. If an initial EndNode and that trailing StartNode are both removed, native index correction can leave `aStart` after `aEnd`, while the actual section graph is consistently rebuilt. This is a source-derived suspected endpoint-contract ambiguity, not a confirmed compiled upstream defect or proof that a user-visible caller relies on the output as a normalized interval. Preserve both DelNodes corrections, the final decrement and the continuing stack walk; do not sort or repair the returned range. Actual node/index/section fixtures cover these branches without supplying fake mutation results or constructing a fly-format provider.
+
+### WRITER349 — Formula frame-pool defaults repeat the same vertical item write
+
+Pinned `sw/source/core/doc/DocumentStylePoolManager.cxx`, `DocumentStylePoolManager::GetFormatFromPool`, shares the FRM_FORMEL/FRM_INLINE_HEADING branch. It first inserts CHAR_CENTER/FRAME vertical orientation for both styles, then the Formula-only else branch inserts that identical vertical item again. This looks like a redundant retained write, not a confirmed functional defect; no compiled upstream notification, allocation or performance effect is claimed. Preserve both source Put operations. The native default-set consumer keeps the ordinary one-item-per-Which final value; it does not add an invented second attribute or remove the repeated source operation.
+
+### WRITER350 — DateTimeToOUString appends Z without converting local fields to UTC
+
+Pinned `tools/source/datetime/datetimeutils.cxx`, `DateTimeToStringImpl`, keeps the UTC conversion commented out and serializes the supplied date/time fields with a trailing `Z`. `sw/source/core/doc/doclay.cxx`, `lcl_GetUniqueFlyName`, passes `DateTime(DateTime::SYSTEM)` for mail-merge names, so this source path labels local system fields with that suffix. Preserve the original fields, omitted fractions and suffix in our serializer and native name allocation. This is a source-observed semantic suspicion; no compiled LibreOffice differential, uniqueness defect or platform precision equivalence is asserted.
+
+### WRITER351 — Frame-format create undo reads the retained format pointer during recreation
+
+Pinned `sw/source/core/undo/SwUndoFmt.cxx`, `SwUndoFormatCreate::UndoImpl`, saves the item set/pool-range bits/auto flag and calls the virtual `Delete()` without clearing `m_pNew`. The frame subtype's `Delete()` calls `SwDoc::DelFrameFormat`, whose ordinary-format branch in `sw/source/core/doc/docfmt.cxx` erases and deletes the format. Later `SwUndoFrameFormatCreate::Create` passes `m_pNew->IsAuto()` to `MakeFrameFormat`, before the base redo replaces `m_pNew`; the base already retains `m_bAuto` separately. This appears to read a stale native pointer. Record and preserve the source contract when that undo responsibility is implemented, rather than silently substituting a saved boolean. This is source inspection only: no compiled native UAF, allocator reuse or observable redo outcome is asserted. The undo/factory responsibility is still unported in our current slice.
+
+### WRITER352 — Format-create undo does not retain auto-update-on-direct-format
+
+Pinned `sw/source/core/undo/SwUndoFmt.cxx`, `SwUndoFormatCreate::UndoImpl`/`RedoImpl`, retains the direct item set, pool range bits and `IsAuto()` but never reads or restores `IsAutoUpdateOnDirectFormat()`. The independent bit is initialized to false by the regular `SwFormat` constructor in `sw/source/core/attr/format.cxx`; the paragraph create subtype recreates through the regular constructor. Thus a true independent auto-update bit is not retained across this source create-history cycle, while ordinary `IsAuto()` is restored. Preserve this omission in the generic owner; do not add another captured flag to repair it. The actual local paragraph history test retains the original false result. This is source-backed behavior/suspicion, not compiled LibreOffice differential evidence or a claim about every UI/style-family workflow.
+
+### WRITER353 — Generic paragraph create/delete history does not retain its follow-style pointer
+
+Pinned `sw/source/core/undo/SwUndoFmt.cxx` generic create/delete owners retain direct item sets, names, parent names, range bits and IsAuto, with no paragraph follow-style pointer/name. Their paragraph subtypes recreate through `MakeTextFormatColl`. The regular `SwTextFormatColl` constructor in `sw/source/core/doc/fmtcol.cxx` initializes `mpNextTextFormatColl = this`; `sw/inc/fmtcol.hxx` stores this relationship outside the item set. Consequently the source recreation path retains the new self-follow default instead of an old explicit follow style. Preserve that omission in both actual local history paths rather than adding a private follow snapshot. Source-backed local tests cover a real nondefault parent/follow style; this is not compiled LibreOffice differential evidence or a claim about every composite UI history workflow.
+
+WRITER352 extension (HTML72): the generic delete owner has the same independent auto-update-on-direct-format omission as the generic create owner. Its eager snapshot stores IsAuto and direct items, and its regular recreation retains the original false independent auto-update default. The local delete-history test preserves this result without an extra captured flag or native compiled/out-of-domain outcome claim.
+
+### WRITER354 — Generic delete history assumes a nonnull derived parent
+
+Pinned `sw/source/core/undo/SwUndoFmt.cxx`, `SwUndoFormatDelete` constructor, dereferences `_pOld->DerivedFrom()` to obtain its name without checking null. The regular `SwFormat` constructor in `sw/source/core/attr/format.cxx` explicitly accepts a null parent, and `SwDoc::MakeTextFormatColl` in `sw/source/core/doc/docfmt.cxx` forwards that pointer unchanged. Document deletion protects its particular default collection but does not itself check every nondefault format's derived parent before constructing delete history. If a nondefault parentless format reaches that recording-enabled path, the source assumes a parent that the constructor graph need not supply. Preserve the precondition; do not synthesize a default/empty parent or claim a defined native exception/success outcome for that input. The host port rejects the missing-parent precondition and releases its partially constructed value set. This is a conditional source-level suspicion, not proof that a normal LibreOffice UI workflow reaches it or compiled-native crash evidence.
+
+WRITER330 extension (HTML73): the actual RTF byte writer now exercises the
+ordinary paragraph callback. A direct Vertical_LR_BT item emits LTRPAR and
+reimport produces Horizontal_LR_TB. Vertical section and table-cell controls
+use their original separate dispatch. This is source-backed local evidence.
+
+### WRITER355 — Environment fly direction depends on an acyclic anchor chain
+
+Pinned `SwDoc::GetTextDirection` in `sw/source/core/doc/doclay.cxx` and
+`MSWordExportBase::TrueFrameDirection` in `sw/source/filter/ww8/wrtw8nds.cxx`
+walk from an Environment fly format to its anchor node's owning fly format.
+They stop at an explicit direction, an at-page anchor, or an absent owner.
+Neither loop checks for a repeated format. A cycle of Environment fly anchors
+would leave neither loop a terminating condition. Preserve the original walk
+and the expectation of an acyclic model. This observation concerns the loop
+contract and makes no claim that the native UI can construct such a cycle.
+
+### WRITER356 — Section grid size treats horizontal RTL as a width-based mode
+
+Pinned `SectionPropertyMap::CloseSectionGroup` in
+`sw/source/writerfilter/dmapper/PropertyMap.cxx` selects usable page height
+only when WritingMode is exactly LR_TB. Every other value selects usable page
+width, including RL_TB, which the native DomainMapper can insert for section
+BiDi. Preserve this comparison rather than switching it to a vertical-mode
+test. The RTF STEXTFLOW path exercises the vertical width case. The horizontal
+RTL observation is source-level.
+
+### WRITER357 — RTF section BiDi flags publish raw values to paragraph sprms
+
+Pinned `RTFDocumentImpl::dispatchFlag` in
+`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` inserts LTRSECT/RTLSECT
+as raw 0/1 under `LN_EG_SectPrContents_textDirection` in the paragraph sprms
+and resets associated run type. The native mapper's textDirection switch
+instead recognizes generated TextDirection identities, as sent by STEXTFLOW.
+Both raw values reach its default LR_TB branch. Preserve the original sprm
+owner, value, and mapper fallback. This is not evidence of an identical
+outcome in every native section-layout context.
+
+### WRITER358 — Hidden UNO cell direction applies Environment when conversion fails
+
+Pinned `SwXCell::setPropertyValue` in `sw/source/core/unocore/unotbl.cxx`
+handles the hidden FRMDirection property with a fresh Environment item.
+It ignores the boolean result of PutValue and applies that item to the
+current box format without ClaimFrameFormat. An invalid Any therefore
+replaces the previous direction with Environment. Preserve the original
+conversion and direct-format behavior. The local test exercises the invalid
+Any result on an actual imported cell.
+
+### WRITER359 — HTML table maximum-width expansion drops per-column rounding remainders
+
+Pinned `SwHTMLTableLayout::AutoLayoutPass2` in
+`sw/source/core/doc/htmltbl.cxx` independently truncates each column in the
+ordinary maximum-width branch. Unlike the constrained and mixed-width
+branches, it does not assign the remaining twips to the last column. The
+calculated table width can therefore differ from the sum of the actual column
+widths. Preserve the branch's independent truncation. The local layout test
+uses a 302-twip table with three equal maxima and observes 100 twips per column.
+
+### WRITER360 — HTML table minimum constraint subtracts an absolute baseline from a relative width
+
+In the same source method, the constrained nested-width branch subtracts the
+absolute content-and-border baseline from the relative table width in
+`sal_uLong`. If the relative width is smaller, the subtraction wraps.
+The represented 64-bit integral path retains that arithmetic and the later
+16-bit narrowing. This observation concerns the calculation on the supplied
+layout inputs. Reachability from a particular native HTML document and
+platform-width variants remain unverified.
+
+### WRITER361 — Import text-width measurement replaces the ordinary left margin with the first-line offset
+
+Pinned `SwTextNode::GetMinMaxSize` in `sw/source/core/text/itratr.cxx`
+replaces the accumulated left margin whenever `GetFirstLineOfsWithNum`
+returns false. That method returns false for a non-list paragraph even though
+it writes the actual first-line offset. The source can therefore measure an
+ordinary paragraph with the first-line value instead of its text-left margin.
+Preserve the replacement and the signed-short conversion.
+
+### WRITER362 — Anchored fly width measurement clamps different sides of zero
+
+Pinned `lcl_MinMaxNode` in `sw/source/core/text/itratr.cxx` clamps positive
+remaining right space for a non-FRAME right relation and negative remaining
+left space for a non-FRAME left relation. The original comparison is preserved
+on each side. Focused local tests use actual attached fly formats and preserve
+their source order.
+
+### WRITER363 — HTML spanning-cell constraints are not ordered lexicographically
+
+Pinned `SwHTMLTableLayoutConstraints::InsertNext` in
+`sw/source/core/doc/htmltbl.cxx` stops on either a greater row or a greater
+column. A constraint in a later row can consequently be inserted before one
+in an earlier row if its column is smaller. Preserve this condition because
+successive constraints operate on column widths already changed by the
+preceding constraints.
+
+### WRITER364 — HTML spanning-cell maxima discard fractional remainders
+
+Pinned `SwHTMLTableLayout::AutoLayoutPass1` assigns the remainder of a
+proportional minimum increase to the last spanned column. The maximum increase
+instead truncates each share independently. The sum of maximum widths can
+therefore fall short of the constraint. The local regression preserves a
+210-twip constraint with a 209-twip result.
+
+### WRITER365 — HTML inferred percentages include ineligible fixed columns in the denominator
+
+The same first pass uses the maximum of all non-percent columns when it
+distributes unclaimed percentages, including fixed-width columns. It only
+assigns percentages to nonempty columns with no authored width, and it
+independently truncates each share. Preserve the source denominator and
+assignment conditions. The local regression retains an inferred 45% from
+60 unclaimed points when a fixed column occupies one quarter of the
+denominator.
+
+### WRITER366 — ICU tests completion before storing a lookahead position
+
+Pinned ICU 78.3 `RuleBasedBreakIterator::handleNext` in
+`vendor/icu-reference/source/common/rbbi.cpp` checks the accepting row before
+recording the current position for a lookahead rule. The source comment
+describes the effect on hard breaks with no following context and notes
+line-break test failures when reversing the checks (ICU-20837). Preserve
+the ordering. All three compiled LibreOffice dictionary word tables have
+zero lookahead slots, so this observation does not establish a discrepancy
+for their word boundaries.
+
+### WRITER367 — ICU UTF16 dictionary matcher feeds supplementary scalars to single-unit lookup
+
+Pinned `UCharsDictionaryMatcher::matches` in
+`vendor/icu-reference/source/common/dictionarydata.cpp` reads a scalar from
+`UText` and passes it to `UCharsTrie::first` or `next`. Those methods only
+match a single UTF-16 unit. Preserve this path. A native gendict fixture
+containing U+20000 consumes both units and reports a one-scalar prefix with
+no dictionary word for that input.
+
+### WRITER368 — LibreOffice Khmer patch ignores results after advancing the trie
+
+The pinned `external/icu/icu4c-khmerbreakengine.patch.1` tests its
+`ignoreSet` after advancing the trie and counting the code point. Its early
+continuation also bypasses the stop and maximum-length checks for that unit.
+The minimum-length continuation occurs before the final-value stop. Preserve
+this order for both trie formats.
+
+### WRITER369 — ICU dictionary offset transform can treat out-of-range input as ZWJ
+
+Pinned `BytesDictionaryMatcher::transform` returns U_SENTINEL (-1) for a
+scalar outside its offset alphabet. `BytesTrie::first` and `next` add 256
+to negative inputs, so this sentinel enters the same trie branch as the
+ZWJ transform (255). Preserve the two native operations. The compiled
+byte-dictionary fixture reports the same match for Thai letter KO KAI
+followed by U+0061 and by U+200D.
+
+### WRITER370 — PossibleWord reuses candidates when only the starting offset matches
+
+Pinned `PossibleWord::candidates` caches by the original native offset.
+The pinned LibreOffice patch adds an ignore set and minimum length to the
+query without adding them to the cache key. Range-end changes also leave
+the cache eligible. Preserve the original cache condition. The local test
+reuses the same slot and observes a previously selected candidate after
+the range end shrinks.
+
+### WRITER371 — Thai and Lao/Burmese admit different four-character spans
+
+Pinned ICU 78.3 `ThaiBreakEngine::divideUpDictionaryRange` moves four code
+points and returns when the resulting position reaches the range end.
+`LaoBreakEngine` and `BurmeseBreakEngine` compare the span length in code
+units with four and return only if it is smaller. Preserve the exact
+comparison and unit on each path. Native gendict fixtures cover spans of
+three, four and five script characters.
+
+### WRITER372 — Patched Khmer cluster scans track cursor and offset separately
+
+The pinned LibreOffice ICU patch advances the cursor through ignored joiners
+without advancing the parallel cluster counter on those paths.
+`scanAfterEnd` also takes the scalar returned by the advancing operation,
+which is the character at the old position. Preserve the cursor movements
+and independent counter changes. The native comparison covers joiners,
+adjacent punctuation and nonzero UTF-16 subranges.
+
+### WRITER373 — Patched Khmer inhibitor scan rechecks the old scalar
+
+In the same patch, `DictionaryBreakEngine::scanWJ` keeps the scalar that
+triggered the cluster scan. It tests that scalar again after the scan.
+Because the enclosing branch already admitted ZWSP or WJ, the check always
+continues there. The port preserves the continuation and the original
+updated scan position without rereading the character.
+
+### WRITER374 — Patched Khmer candidate vectors retain a reduced logical size
+
+The Khmer weighted segmentation removes candidates immediately before marks.
+The native UVector32 size shrinks, but later dictionary matches still write
+through the raw twenty-entry buffers. Subsequent vector reads continue to
+use the reduced logical size. Preserve both the raw capacity and the logical
+size. The boundary result is compared against the compiled patch.
+
+### WRITER375 — Patched Khmer compares the word/line bitmask with a scalar break type
+
+The Khmer constructor stores the combined word and line bits in `fTypes`.
+Its boundary conditions compare that combined value numerically with
+`UBRK_LINE`. The resulting branches apply the same checks on the compiled
+Khmer engine regardless of the caller's phrase flag. The port keeps the
+effective conditions for the fixed Khmer constructor.
+
+### WRITER376 — The Katakana group heuristic excludes exactly twenty characters
+
+Pinned ICU 78.3 `CjkBreakEngine::divideUpDictionaryRange` grows a Katakana
+group to its limit of twenty. It considers the group as a weighted
+candidate only while its length is strictly below that limit. The
+previous-Katakana flag also prevents trying the same heuristic at later
+positions inside that run. Preserve the original limit and entry
+condition. The compiled fixture compares nineteen- and twenty-character
+runs against native ICU.
+
+### WRITER377 — ICU unhandled engine replaces its script set
+
+`UnhandledEngine::handleCharacter` says it applies the entire script of
+an unhandled character. The called UnicodeSet property filter clears the
+old set before adding the new script. Keep only the most recently applied
+script in this engine. The iterator still checks its cached supported
+engines first.
+
+### WRITER378 — ICU cached next leaves the existing completion flag untouched
+
+The native inline `BreakCache::next` updates the current position and rule
+status on its fast path and leaves `fDone` untouched. The source comment in
+`following` describes the interaction with an earlier query that ran past
+the text. Preserve the explicit completion reset in `following` and the
+original fast-path behavior.
+
+### WRITER379 — LibreOffice dictionary range direction can override the caller's flag
+
+Pinned `BreakIteratorImpl::getWordBoundary` examines both sides of the
+requested position. If a dictionary character is already on the requested
+edge of a gap, the source can select that edge regardless of the supplied
+direction. If the text has no qualifying character on either side, it
+returns the original position as both range endpoints. Preserve both cases.
+Native comparisons cover punctuation-only strings, surrogate interiors
+and positions at either edge of skipped text.
+
+### WRITER380 — Hard separators alone do not receive the paragraph width allowance
+
+`SwTextNode::GetMinMaxSize` adds 20 twips when `lcl_MinMaxString` reports
+a nonblank range. The nonbreaking space and nonbreaking hyphen branches
+increase both word minima and row width directly and leave this allowance
+unset. Preserve the distinction even when either separator is the entire
+paragraph.
+
+### WRITER381 — HTML table first-pass identity wraps at eight bits
+
+`SwHTMLTableLayout::AutoLayoutPass1` increments a `sal_uInt8` pass
+reference, and `SwHTMLTableLayoutCnts::IsPass1Done` compares only that
+value. A newly attached content object starts at zero, the same reference
+as a wrapped pass. Retain the original initial value, wrap and equality
+test.
+
+### WRITER382 — HTML MakeTable returns after layout when the child has no SwTable
+
+Pinned `HTMLTable::MakeTable` takes an optional upper box and is called
+with that box for intermediate nested tables. First-cell initialization
+binds a core `SwTable` only for the outer table. `MakeTable` calculates
+the child layout, then returns on a null core table before adding rows to
+the upper box. Retain that source branch.
+
+### WRITER383 — HTML leaf format uses the table's right border flag on every cell
+
+`HTMLTable::FixFrameFormat` tests the table-wide right border flag
+without checking the cell's ending column. The left edge uses its
+column's flag. Preserve the original per-box right-edge assignment.
+
+### WRITER384 — Two field marker characters count as an empty Writer cell
+
+For a single text node with exactly two U+0001 characters,
+`SwTableBox::IsEmpty` returns true. The source records this as
+compatibility behavior for imported OOXML cells. HTML numeric format
+publication uses the same test, including its marker-only case.
+
+### WRITER385 — A fresh nested HTML reader replaces the current table identity
+
+`SwHTMLParser::BuildTable` replaces `m_xTable` on fresh entry, even when
+called recursively from a cell. First-cell initialization uses pointer
+equality to identify a top table. In the fresh recursive case it creates
+an actual table section and the caller restores the previous identity
+after the recursive parse. Keep both the replacement and restoration.
+
+### WRITER386 — The default fly width constant occupies the height field
+
+Without an effective frame-size item, `SwDoc::MakeFlySection_` passes
+`0, DEF_FLY_WIDTH` as width and height to the variable-size constructor.
+Preserve the literal argument order. HTML tables supply their own size
+item before that fallback.
+
+### WRITER387 — Covered ODF cell styles depend on a compatibility flag
+
+`SwXMLExport::ExportTableLine` writes the covered box's style so its
+border can be recovered. `SwXMLTableContext::InsertCoveredCell` applies
+that style only with `TABLE_ROW_KEEP`. Keep the inherited spanning-cell
+style in the represented default import profile.
+
+### WRITER388 — An ordinary row does not close an open vertical merge group
+
+`lcl_ApplyCellProperties` in `unotext.cxx` closes earlier groups only
+when a new merge starts at a similar left position. An ordinary row
+without a merge property leaves the group open, so a continuation can
+join it after a gap. Preserve the group's signed cell-count sequence.
+Bottom-border selection still follows the separate contiguous-row scan
+in `DomainMapperTableHandler`.
+
+### WRITER389 — An ordinary cell does not end a horizontal merge range
+
+`DomainMapperTableHandler::endTableGetCellProperties` assigns each
+continuation to the most recently collected restart. It does not close
+that range at an unmarked cell. A continuation after a gap in the same
+row therefore includes the intermediate cell when the table cursor
+merges the endpoints. Preserve that range and the source rule that a
+restart with no continuation does not attempt a merge.
+
+### WRITER390 — The preceding cell's top edge can prevent bottom-border handoff
+
+`lcl_SaveUpperLowerBorder` checks the predecessor's bottom edge when
+considering transfer to the next row, then checks the predecessor's
+top edge when considering transfer to the predecessor's bottom edge.
+Keep the source's different edge tests.
+
+### WRITER391 — The right-overlap branch uses a different sum threshold
+
+In `SwTable::CollectBoxSelection` the left-overlap branch compares the
+sum of a box's borders with twice the minimum boundary. The corresponding
+right-overlap branch compares that sum with the maximum boundary itself.
+Preserve both comparisons during ragged-row width correction.
+
+### WRITER392 — ITAP zero does not clear the active RTF table buffer
+
+Pinned `RTFDocumentImpl::dispatchTableValue` prepends the ITAP depth
+sprm, leaving the original INTBL sprm later in the paragraph map.
+Only a positive depth switches to the active table buffer through
+INTBL. Preserve the precedence and keep the active buffer at ITAP zero
+until the ordinary row or nested-row boundary closes it.
+
+### WRITER393 — The RTF destination does not check the version number
+
+The pinned tokenizer classifies `rtf` as a destination.
+`RTFDocumentImpl::dispatchDestination` accepts it without inspecting a
+numeric parameter. The upstream horizontal-merge test even uses a
+bare RTF destination. Preserve admission for a present destination
+with an omitted or different version number.
+
+### WRITER394 — Markdown table separators belong only to exact text-node boundaries
+
+`OutMarkdown_SwTableNode` marks the first and last node positions of a
+cell. Only `OutMarkdown_SwTextNode` consumes those flags. A nested table
+that begins the outer cell owns a structural node at the marked start,
+so the outer opening pipe can be omitted. The nested table suppresses
+its own pipes and writes a space after each of its text nodes. Preserve
+both source behaviors.
+
+### WRITER395 — TXT table continuation compares coordinates across table boundaries
+
+`SwASCWriter::WriteTable` advances the text cursor and compares
+`SwTableBox::GetCoordinates` without testing the table identity.
+An inner cell can continue a paragraph run from the outer cell with
+the same coordinates, while a different inner coordinate can advance
+the outer column. Retain this traversal and its tab and line separators.
+
+### WRITER396 — RTF registers cell foreground controls without a value consumer
+
+The tokenizer recognizes CLCFPAT and CLCFPATRAW. The pinned value
+dispatcher has no case for either control, so a cell shade uses the
+default automatic foreground through `CellColorHandler` even if one
+of these controls appears. Keep that source behavior.
+
+### WRITER397 — An out-of-range RTF palette index resolves to opaque black
+
+`RTFDocumentImpl::getColorTable` returns color zero when an index is
+absent. A present palette entry with no RGB components instead returns
+`COL_AUTO`. Preserve the distinction in character and cell color
+consumers, including an authored color at index zero.
+
+### WRITER398 — ODF table backgrounds flatten any nonopaque brush to transparent
+
+The `MID_BACK_COLOR` path in `SvXMLExportItemMapper::QueryXMLValue`
+writes `transparent` whenever the brush color has any transparency.
+On import the matching path sets alpha to zero on the existing brush.
+An ODT save and reopen therefore loses a partially transparent
+table, row or cell fill. Preserve the pinned ODF behavior and retain
+the original packed value in native Worker transfer.
+
+### WRITER399 — TXT switches to the first frame only for a single empty body paragraph
+
+When the full-document PaM selects exactly one empty body text node,
+`SwASCWriter::WriteStream` uses the section of the first registered
+special format. It neither searches subsequent formats nor appends
+their contents. The new selection ends at the structural section end,
+so the last frame paragraph retains its separator. Preserve these
+conditions and keep ordinary TXT selection on the original range.
+
+### WRITER400 — ODF text frames reopen variable height as a minimum height
+
+`XMLTextParagraphExport::addTextFrameAttributes` writes zero
+`fo:min-height` for a variable-height text frame without relative
+height. `XMLTextFrameContext_Impl::Create` sees the minimum-height
+attribute and sets `SizeType::MIN`, even though the dimension is zero.
+Keep the resulting minimum sizing type on reopen.
+
+### WRITER401 — RTF floating-table left and top controls are emitted without an import consumer
+
+`RtfAttributeOutput::TablePositioning` writes TPOSXL for left and
+TPOSYT for top. Both words are registered in the tokenizer, but
+`RTFDocumentImpl::dispatchFloatingTableFlag` only consumes the center
+and right horizontal specifications and center and bottom vertical
+specifications. With an otherwise positioned row, the left and top
+words leave the corresponding imported orientation at NONE. Preserve
+the source writer and reader behavior.
+
+### WRITER402 — RTF ordinary text frames export padding and wrap details the reader does not restore
+
+`RtfAttributeOutput::FormatBox` emits the four dxText/dyText padding
+properties. `RTFSdrImport::getTextFrameDefaults` sets the new-style
+Writer text frame to 254 mm100 at the sides and 127 mm100 at the top
+and bottom. `RTFSdrImport::resolve` does not consume the emitted
+padding properties. `RTFDocumentImpl::dispatchValue` records SHPWRK
+and tight wrap in character drawing properties, while the text-frame
+service gets its Surround from RTFShape's coarser wrap value. A
+dynamic frame written with SHPWR2/SHPWRK3 therefore reopens as
+parallel. Preserve both asymmetries.
+
+### WRITER403 — RTF ordinary text-frame automatic height reopens as fixed
+
+`RTFSdrImport::applyProperty` consumes fFitShapeToText and enables
+minimum height when its value is one. The ordinary Writer text-box
+branch of `RtfAttributeOutput::OutputFlyFrame_Impl` writes height
+geometry and relative sizing properties without that flag. The new
+RTF text frame uses the fixed default on reopen. Preserve the
+original producer and consumer.
+
+### WRITER404 — A leading nested table can redirect an outer RTF horizontal merge
+
+The pinned `SwXTextTableCursor` starts at a cell's section start and
+uses GoInNode, which walks to the first content node. When the cell
+starts with a nested table, this can be a paragraph in the nested
+table. `SwCursor::GotoTableBox` looks up the next cell name in the
+table containing that paragraph. If the nested table also has that
+name, the mapper's outer cell merge can merge the nested cells and
+leave the outer row intact. Preserve the original lookup scope for
+the flat new-table model and keep this separate from moves of whole
+nested sections selected through their outer cell paragraphs.
+
+### WRITER405 — RTF grid-after uses the width value without its unit control
+
+The tokenizer knows both TRWWIDTHA and TRFTSWIDTHA.
+`RTFDocumentImpl::dispatchValue` stores TRWWIDTHA without consulting
+TRFTSWIDTHA, and the ROW handler adds a borderless filler cell for
+each positive stored width as a twip value. Preserve the original
+interpretation even when the width-type control specifies another unit.
+
+### WRITER406 — RTF's numeric percent width misses the mapper's percent branch
+
+`RTFDocumentImpl::dispatchTableValue` stores TRFTSWIDTH as the raw
+RTF number. `MeasureHandler::getMeasureValue` accepts the numeric
+value 3 as an absolute twip unit. `DomainMapperTableManager::sprm`
+checks the separate generated OOXML percent resource identifier for
+relative sizing. The ordinary numeric RTF percent value 2 therefore
+falls back to the cell grid. Preserve the original unit distinction.
+
+### WRITER407 — RTF treats the half-gap as padding and reopens left alignment with a width
+
+The pinned TRGAPH handler explicitly notes that it writes a half-gap
+as left and right cell padding. It uses the TblCellMar left resource
+identifier, while the table-indent subtraction checks the distinct
+TcMar left identifier used by TRPADDL. The half-gap can therefore
+affect padding without participating in that subtraction. The
+original table justification conversion maps TRQL to LEFT_AND_WIDTH,
+including when RTF was exported from a Writer table with NONE.
+Retain these reader and writer choices.
+
+### WRITER408 — Legacy RTF paragraph frames increment the vertical position
+
+The pinned POSY value handler clears vertical alignment and adds one
+twip before storing the position. POSY0 can therefore trigger a
+frame through a nonzero Y position, while POSY-1 leaves the default
+zero. Preserve the adjustment before conversion to the mapper's
+measure units.
+
+### WRITER409 — Legacy RTF frame wrapping and page breaks take different mapper paths
+
+The legacy WRAPTHROUGH control maps to dynamic wrapping. WRAPTIGHT
+falls through to no wrapping, while OVERLAY maps to through
+wrapping. The pinned RTF fixtures also expect a PAGE in a frame to be
+lost and a SECT there to end a paragraph. Explicit PAGEBB is sent
+between two paragraph ends to retain the break before the frame.
+Preserve those distinctions in the original reader and mapper paths.
+
+### WRITER410 — An all-header RTF table can lose its headers without becoming unsplittable
+
+The shared table manager first replaces a prefix of eleven or more
+repeating rows with a zero header count. The table handler later
+compares the surviving count with the total row count. All-header
+tables with two to ten rows therefore become unsplittable, while
+larger all-header tables pass through that check with zero headers
+and keep their original split state. Preserve the order of both
+source decisions.
+
+### WRITER411 — The RTF auto row-height rule resolves to a minimum
+
+TRRH0 emits the string auto and a zero height. MeasureHandler only
+special-cases exact, so auto reaches the table row as SizeType.MIN.
+Its IsAutoHeight getter reports true only for variable height. The
+same measure conversion also returns zero for positive twip
+values at or above 32768. Retain these row property results.
+
+### WRITER412 — RTF paragraph line-number exclusion clears the section distance
+
+The exporter writes NOLINE for a paragraph excluded from the line
+count. The reader dispatches NOLINE by erasing the distance from
+the section line-number properties. It leaves the paragraph's count
+item alone. The mapper can therefore use the default distance and
+count the paragraph on reopen. Keep the reader and writer behaviors.
+
+### WRITER413 — Later RTF line numbering can precede the section break
+
+The RTF attribute writer emits the line-number controls to its
+stream even while StartSection holds SECT and SECTD in the
+section-break buffer. A section transition buffered by a preceding
+text node can therefore write the new line-number controls into
+the preceding section. Preserve the order of the stream and
+the buffered section controls.
+
+### WRITER414 — RTF cannot clear an earlier paragraph shading with CBPAT0
+
+The paragraph CBPAT value handler omits index zero, so a later
+CBPAT0 does not clear an earlier nonzero shading value in the
+same paragraph. The writer emits CBPAT only for a fully opaque
+brush, so an explicit transparent drawing fill has no equivalent
+output through this path. Preserve the original import and export
+admission rules.
+
+### WRITER415 — An HTML insertion join can drop the first paragraph's drawing fill
+
+The HTML filter converts pending paragraph brushes into drawing
+fill items. In insertion mode it joins the first imported text
+node with the destination prefix. CutImpl copies complete
+paragraph properties only through Writer's HINT_END, below
+the drawing fill range. The first paragraph can lose that fill
+at the join, including when Markdown invokes the HTML filter.
+Retain the source range and join behavior.
+
+### WRITER416 — RTF cell borders retain the first repeated edge
+
+The cell border flag appends each edge as a separate modifier.
+TDefTableHandler collects those modifiers in order and inserts the
+first result for each side. A later definition of the same side
+does not replace the earlier one. The handler initializes width
+to zero. ConvertBorderWidthFromWord interprets that value as the
+0.75 pt default when a single line is specified without a size.
+Preserve the source append, selection and conversion order.
+
+### WRITER417 — RTF row border words have no corresponding flag handler
+
+The pinned tokenizer recognizes TRBRDRT, TRBRDRL, TRBRDRB,
+TRBRDRR, TRBRDRH and TRBRDRV. The reader has no row-border
+dispatch case for these tokens. Cell border flags do reach the
+mapper. Preserve the reader's admitted control set.
+
+### WRITER418 — RTF BOX attributes can survive a nested group's pop
+
+BOX stores the same RTFValue at four direct paragraph edge IDs.
+The later attribute setter uses read lookup. A child group that
+updates an inherited BOX value therefore changes the shared
+attributes, even though the parser restores the parent's
+selector and resource list when the child ends. An edge declared
+by the child uses a write lookup and can have its own owner.
+Preserve both source operations.
+
+### WRITER419 — RTF BOX and explicit edges compete in resource order
+
+BOX inserts top-level edge modifiers. Explicit BRDRT, BRDRL,
+BRDRB, BRDRR and BRDRBTW append beneath pBdr. When both
+representations target a side, the later top-level resource
+wins. Appending a side to an earlier pBdr does not move that
+parent after an already-inserted BOX. PARD clears paragraph
+resources but retains the border selector. Preserve this order
+and the original fallback when the selected border parent is
+missing.
+
+### WRITER420 — Markdown writes a text fly as an empty image
+
+SwMDWriter places anchored flies into the native text positions.
+ApplyFlyFrameFormat only fills the graphic URL for graphic and
+OLE content, but still inserts an image record for a text fly.
+Without object metadata this emits `![]()`. Equal image records
+at one offset collapse. An empty anchor paragraph bypasses the
+formatting loop, so its fly is omitted. Preserve these results
+for the current Writer text-frame model.
+
+### WRITER421 — A legacy title inside UPR has no fallback without UD
+
+The RTF reader in UPR dispatches only the nested UD destination.
+A TITLE destination in the legacy branch is skipped, including
+when the stream provides no Unicode alternative. The previously
+read title, if any, is retained. Preserve the source selection.
+
+### WRITER422 — ODF settings accept only the literal true token for a true boolean
+
+XMLConfigItemContext compares the complete character buffer with
+XML_TRUE. Other boolean lexical forms, including 1 and text with
+surrounding spaces, produce false. Preserve that behavior in the
+represented configuration-settings stream.
+
+### WRITER423 — RTF export omits the Writer page text grid
+
+The pinned RtfAttributeOutput::FormatTextGrid logs a TODO and emits
+no control. The pinned RTF tokenizer also recognizes the section
+grid flags without a corresponding dispatch handler. Preserve the
+lack of a portable grid mapping.

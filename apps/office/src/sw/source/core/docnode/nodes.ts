@@ -1,17 +1,22 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { InsertTableNodes, TextToTableNodes } from "./ndtbl";
+import type { SwAttrSet } from "../attr/swatrset";
+import { RES_PAGEDESC } from "../../../inc/hintids";
+import { SwStartNodeType } from "../../../inc/ndtyp";
+import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
-import type { SwNodeIndex, SwPosition } from "../crsr/pam";
-import { TextToTableNodes } from "./ndtbl";
+import { SwNodeIndex, CheckNodesRange, type SwPosition } from "../crsr/pam";
+import type { SwNodeRange } from "../../../inc/ndindex";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import {
-  type SwContentNode,
+  SwContentNode,
   SwEndNode,
   SwStartNode,
   SwTableBoxStartNode,
@@ -49,6 +54,19 @@ export class SwNodes {
   private readonly endOfAutotext: SwEndNode;
   private readonly endOfRedlines: SwEndNode;
   private readonly endOfContent: SwEndNode;
+
+  /** Original static ndtbl.cxx node-matrix phase. Existing table/frame bootstrap remains the current model representation; this operation constructs actual sections without substituting a box/line graph. @param where - Actual insertion boundary. @param boxes - Native uint16 cell count. @param content - Body collection. @param lines - Native uint16 row count, zero creates one content row. @param repeat - Native repeat count. @param headline - Optional header collection. @param attrs - Optional source paragraph attributes. @returns Actual table node, or null for zero boxes. */
+  public static InsertTable(
+    where: SwNode,
+    boxes: number,
+    content: SwTextFormatColl,
+    lines: number,
+    repeat: number,
+    headline: SwTextFormatColl | null,
+    attrs: SwAttrSet | null,
+  ): SwTableNode | null {
+    return InsertTableNodes(where, boxes, content, lines, repeat, headline, attrs);
+  }
 
   /** Creates LibreOffice's five fixed node sections in their canonical order. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
@@ -171,15 +189,17 @@ export class SwNodes {
 
   /** Returns direct body paragraphs and tables in document order. @returns Ordered body blocks. */
   public getBodyContent(): readonly (SwTextNode | SwTableNode)[] {
-    const bodyStart = this.endOfContent.StartOfSectionNode();
-    return this.nodeArray
-      .slice(this.endOfRedlines.GetIndex() + 1, this.endOfContent.GetIndex())
-      .filter(
-        /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
-        (node): node is SwTextNode | SwTableNode =>
-          (node instanceof SwTextNode || node instanceof SwTableNode) &&
-          node.StartOfSectionNode() === bodyStart,
-      );
+    return this.GetSectionContent(this.endOfContent.StartOfSectionNode());
+  }
+
+  /** Reads the actual direct text and table nodes of a native section in order. @param section - Connected section. @returns Direct content owners. */
+  public GetSectionContent(section: SwStartNode): readonly (SwTextNode | SwTableNode)[] {
+    return this.nodeArray.slice(section.GetIndex() + 1, section.EndOfSectionIndex()).filter(
+      /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
+      (node): node is SwTextNode | SwTableNode =>
+        (node instanceof SwTextNode || node instanceof SwTableNode) &&
+        node.StartOfSectionNode() === section,
+    );
   }
 
   /** Inserts a table section after an optional body paragraph. @param name - Table identity. @param format - Physical table geometry. @param after - Optional body predecessor. @returns Canonical table. */
@@ -193,16 +213,20 @@ export class SwNodes {
     );
   }
 
-  /** Inserts a table section immediately before a connected body paragraph like ndtbl.cxx. @param position - Actual insertion node. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
-  public InsertTable(position: SwTextNode, name: string, format: SwTableFormat): SwTable {
-    if (!this.getTextNodes().includes(position))
-      throw new Error("Writer insertion requires a connected body paragraph.");
+  /** Existing browser table-builder bootstrap inserts an actual empty graph before a connected node; native SwNodes::InsertTable is the separate static matrix entry point. @param position - Actual insertion boundary. @param name - Table name. @param format - Builder attributes. @returns Connected table. */
+  public MakeTableNodeBefore(position: SwNode, name: string, format: SwTableFormat): SwTable {
+    if (position.GetNodes() !== this || this.indexOf(position) < 0)
+      throw new Error("Writer table builder requires a connected insertion boundary.");
     return this.MakeTableNodeAt(position.GetIndex(), name, format);
   }
 
   /** Constructs actual start/end owners at the requested native array boundary. @param index - Array boundary. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
   private MakeTableNodeAt(index: number, name: string, format: SwTableFormat): SwTable {
-    const node = new SwTableNode(this, this.endOfContent.StartOfSectionNode());
+    const previous = index ? this.at(index - 1) : null;
+    let parent = previous instanceof SwStartNode ? previous : previous?.StartOfSectionNode();
+    if (previous instanceof SwEndNode) parent = parent?.StartOfSectionNode();
+    if (!parent) throw new Error("assert(table insertion has a containing section)");
+    const node = new SwTableNode(this, parent);
     const end = new SwEndNode(this, node);
     node.setEndOfSection(end);
     this.nodeArray.splice(index, 0, node, end);
@@ -225,23 +249,8 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
-    writerClients0: for (const client of new SwIterator(
-      SwClient,
-      tableNode.GetTable().GetFrameFormat(),
-    )) {
-      if (client instanceof SwTabFrame && client.GetTable() === tableNode.GetTable())
-        client.DestroyImpl();
-      continue writerClients0;
-    }
-    for (const row of tableNode.GetTable().GetTabLines()) {
-      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
-        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
-        continue writerClients1;
-      }
-      for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
-      row.Dispose();
-    }
-    tableNode.GetTable().Dispose();
+    this.CorrectNodeIndices(index, end - index + 1);
+    this.DestroyTableNode(tableNode);
     this.nodeArray.splice(index, end - index + 1);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
@@ -402,6 +411,7 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    this.CorrectNodeIndices(index, section.nodes.length);
     this.nodeArray.splice(index, section.nodes.length);
     line.RemoveBox(section.box);
     this.DestroyTableBox(section.box);
@@ -468,6 +478,7 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
+    this.CorrectNodeIndices(index, section.nodes.length);
     this.nodeArray.splice(index, section.nodes.length);
     table.RemoveLine(section.line);
     writerClients2: for (const client of new SwIterator(SwClient, section.line.GetFrameFormat())) {
@@ -475,35 +486,263 @@ export class SwNodes {
         client.DestroyImpl();
       continue writerClients2;
     }
-    for (const box of section.line.GetTabBoxes()) this.DestroyTableBox(box);
+    for (const box of section.line.GetTabBoxes()) this.DestroyTableBoxFrames(box);
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
-  /** Removes actual cell layout clients before releasing the original model box. @param box - Deleted native cell. @returns Nothing. */
-  private DestroyTableBox(box: SwTableBox): void {
-    writerClients3: for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+  /** Removes nested and content-cell layout clients before model-owned vectors destroy their actual children. @param box - Original model box. @returns Nothing. */
+  private DestroyTableBoxFrames(box: SwTableBox): void {
+    for (const line of box.GetTabLines()) {
+      for (const client of new SwIterator(SwClient, line.GetFrameFormat()))
+        if (client instanceof SwRowFrame && client.GetTabLine() === line) client.DestroyImpl();
+      for (const child of line.GetTabBoxes()) this.DestroyTableBoxFrames(child);
+    }
+    for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
       if (client instanceof SwCellFrame && client.GetTabBox() === box) {
         if (client.GetUpper() !== undefined) client.RemoveFromLayout();
         client.DestroyImpl();
       }
-      continue writerClients3;
     }
+  }
+  /** Removes actual cell layout clients before releasing one erased model box. @param box - Deleted native cell. @returns Nothing. */
+  private DestroyTableBox(box: SwTableBox): void {
+    this.DestroyTableBoxFrames(box);
     box.Dispose();
   }
 
+  /** Existing complete table destructor responsibility shared by source node deletion and table history deletion. @param node - Actual table start. @returns Nothing. */
+  private DestroyTableNode(node: SwTableNode): void {
+    writerClients0: for (const client of new SwIterator(
+      SwClient,
+      node.GetTable().GetFrameFormat(),
+    )) {
+      if (client instanceof SwTabFrame && client.GetTable() === node.GetTable())
+        client.DestroyImpl();
+      continue writerClients0;
+    }
+    for (const row of node.GetTable().GetTabLines()) {
+      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
+        continue writerClients1;
+      }
+      for (const box of row.GetTabBoxes()) this.DestroyTableBoxFrames(box);
+    }
+    node.GetTable().Dispose();
+  }
+  /** Original DelNodes outline/frame phase, including the whole-array destructor branch which retains the five fixed sentinel pairs. @param start - Actual native start index. @param count - Original positive node count. @returns Nothing. */
+  public DelNodes(start: SwNodeIndex, count = 1): void {
+    const index = start.GetIndex();
+    if (index === 0 && count === this.endOfContent.GetIndex() + 1) {
+      for (const end of [
+        this.endOfContent,
+        this.endOfPostIts,
+        this.endOfInserts,
+        this.endOfAutotext,
+        this.endOfRedlines,
+      ]) {
+        const first = end.StartOfSectionNode().GetIndex() + 1;
+        if (first !== end.GetIndex()) this.RemoveNode(first, end.GetIndex() - first, true);
+      }
+      return;
+    }
+    for (const node of this.nodeArray.slice(index, index + count)) {
+      if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+      if (node instanceof SwContentNode) {
+        node.InvalidateNumRule();
+        node.DelFrames();
+      }
+    }
+    this.RemoveNode(index, count, true);
+  }
+  /** Original RemoveNode removes list membership before correcting all borrowed node indices, then destroys actual nodes backwards before the array erase. Fly-as-character/redline/transparent-section families are absent from this current model. @param index - First node offset. @param count - Original positive count. @param destroy - Delete native owners rather than detach them. @returns Nothing. */
+  public RemoveNode(index: number, count: number, destroy: boolean): void {
+    if (!Number.isInteger(count) || count < 1 || index < 0 || index + count >= this.Count())
+      throw new Error("assert(valid RemoveNode range with a surviving successor)");
+    const removed = this.nodeArray.slice(index, index + count);
+    for (const node of removed) if (node instanceof SwTextNode) node.RemoveFromList();
+    this.CorrectNodeIndices(index, count);
+    if (destroy)
+      for (let i = removed.length; i;) {
+        const node = removed[--i];
+        if (!node) continue;
+        if (node instanceof SwTextNode) {
+          node.GetpSwpHints()?.Dispose();
+          node.DelFrames();
+          if (node.IsOutline()) node.UpdateOutlineState();
+          node.ResetAttr(RES_PAGEDESC);
+        }
+        if (node instanceof SwTableNode) this.DestroyTableNode(node);
+        node.DisposeContentIndexRegistry();
+        node.DisposeModify();
+      }
+    this.nodeArray.splice(index, count);
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
+  }
+
+  /** Original BigPtrArray InsertNode overloads insert an actual detached entry without substituting a section operation. @param node - Actual node owned by this array. @param position - Native index or absolute offset. @returns Nothing. */
+  private InsertNode(node: SwNode, position: SwNodeIndex | number): void {
+    const index = typeof position === "number" ? position : position.GetIndex();
+    if (
+      node.GetNodes() !== this ||
+      this.indexOfOrUndefined(node) !== undefined ||
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index > this.Count()
+    )
+      throw new Error("assert(valid detached InsertNode entry and position)");
+    this.nodeArray.splice(index, 0, node);
+  }
+  /** Original SectionDown wraps the existing range, deletes opposing boundary sentinels when required and preserves source endpoint updates. @param range - Actual in/out node range. @param type - Original structural start tag. @returns Nothing. */
+  public SectionDown(range: SwNodeRange, type = SwStartNodeType.SwNormalStartNode): void {
+    if (
+      range.aStart.GetIndex() >= range.aEnd.GetIndex() ||
+      range.aEnd.GetIndex() >= this.Count() ||
+      !CheckNodesRange(range.aStart.GetNode(), range.aEnd.GetNode(), false)
+    )
+      return;
+    const current = range.aStart.GetNode();
+    const temporary = new SwNodeIndex(current.StartOfSectionNode());
+    try {
+      if (current instanceof SwEndNode) this.DelNodes(range.aStart);
+      else {
+        const previous = this.at(range.aStart.GetIndex() - 1);
+        let parent = previous instanceof SwStartNode ? previous : previous.StartOfSectionNode();
+        if (previous instanceof SwEndNode) parent = parent.StartOfSectionNode();
+        const start = new SwStartNode(this, parent, type);
+        this.InsertNode(start, range.aStart);
+        range.aStart.Assign(start);
+        temporary.Assign(range.aStart);
+      }
+      range.aEnd.Assign(range.aEnd, -1);
+      if (range.aEnd.GetNode() instanceof SwStartNode) this.DelNodes(range.aEnd);
+      else {
+        range.aEnd.Assign(range.aEnd, 1);
+        const start = range.aStart.GetNode();
+        if (!(start instanceof SwStartNode)) throw new Error("assert(SectionDown start boundary)");
+        const end = new SwEndNode(this, start);
+        this.InsertNode(end, range.aEnd);
+        start.setEndOfSection(end);
+      }
+      range.aEnd.Assign(range.aEnd, -1);
+      SwNodes.SectionUpDown(temporary, range.aEnd);
+    } finally {
+      temporary.Dispose();
+    }
+  }
+  /** Original shared forward stack walk repairs parents and matching ends until the stack empties at/beyond the supplied boundary, not merely until that index. @param start - Actual starting section index. @param end - Actual lower completion boundary. @returns Nothing. */
+  private static SectionUpDown(start: SwNodeIndex, end: SwNodeIndex): void {
+    const first = start.GetNode();
+    if (!(first instanceof SwStartNode)) throw new Error("assert(SectionUpDown section start)");
+    const stack: SwStartNode[] = [first],
+      current = new SwNodeIndex(start, 1);
+    try {
+      for (;;) {
+        const node = current.GetNode(),
+          parent = stack.at(-1);
+        if (!parent) throw new Error("assert(SectionUpDown nonempty start stack)");
+        node.SetStartOfSection(parent);
+        if (node instanceof SwStartNode) stack.push(node);
+        else if (node instanceof SwEndNode) {
+          parent.setEndOfSection(node);
+          stack.pop();
+          if (stack.length !== 0) {
+            current.Assign(current, 1);
+            continue;
+          } else if (current.GetIndex() < end.GetIndex())
+            stack.unshift(parent.StartOfSectionNode());
+          else break;
+        }
+        current.Assign(current, 1);
+      }
+    } finally {
+      current.Dispose();
+    }
+  }
+
+  /** Original MakeTextSection inserts start/end first, then creates the initial text node immediately before that new end. Structural tags do not create unrelated frame/header/footnote objects. @param where - Actual insertion boundary. @param type - Original section tag. @param coll - Actual document collection. @returns Connected section start. */
+  public MakeTextSection(
+    where: SwNode,
+    type: SwStartNodeType,
+    coll: SwTextFormatColl,
+  ): SwStartNode {
+    if (where.GetNodes() !== this || coll.GetDoc() !== this.document)
+      throw new Error("Text section owners belong to another document");
+    const index = where.GetIndex();
+    const previous = index ? this.at(index - 1) : null;
+    let parent = previous instanceof SwStartNode ? previous : previous?.StartOfSectionNode();
+    if (previous instanceof SwEndNode) parent = parent?.StartOfSectionNode();
+    const start =
+      type === SwStartNodeType.SwTableBoxStartNode
+        ? new SwTableBoxStartNode(this, parent)
+        : new SwStartNode(this, parent, type);
+    const end = new SwEndNode(this, start);
+    start.setEndOfSection(end);
+    this.nodeArray.splice(index, 0, start, end);
+    this.MakeTextNode(this.at(where.GetIndex() - 1), coll);
+    return start;
+  }
   /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */
-  public MakeTextNode(text = ""): SwTextNode {
+  public MakeTextNode(text?: string): SwTextNode;
+  /** Original positioned native text construction. @param where - Insertion boundary. @param coll - Actual document style. @returns Connected text owner. */
+  public MakeTextNode(where: SwNode, coll: SwTextFormatColl): SwTextNode;
+  /** Shares original native text ownership between the existing body-text boundary and positioned construction. @param textOrWhere - Body text or native boundary. @param coll - Original native collection. @returns Actual connected paragraph. */
+  public MakeTextNode(textOrWhere: string | SwNode = "", coll?: SwTextFormatColl): SwTextNode {
+    const where = typeof textOrWhere === "string" ? this.endOfContent : textOrWhere;
+    if (where.GetNodes() !== this || (coll && coll.GetDoc() !== this.document))
+      throw new Error("Text node owners belong to another document");
     const node = new SwTextNode(
       this,
-      this.endOfContent.StartOfSectionNode(),
-      this.document.GetDfltTextFormatColl(),
-      text,
+      where.StartOfSectionNode(),
+      coll ?? this.document.GetDfltTextFormatColl(),
+      typeof textOrWhere === "string" ? textOrWhere : "",
     );
-    this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
+    this.nodeArray.splice(where.GetIndex(), 0, node);
     this.InsertOutlineNode(node);
     this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
     return node;
+  }
+
+  /** Moves the represented contiguous range of text and complete table sections to a connected destination, retaining actual node and content indices. @param range - Source half-open interval. @param destination - Existing node before which to insert. @returns Whether the range was moved. */
+  public MoveNodes(range: SwNodeRange, destination: SwNode): boolean {
+    if (
+      destination.GetNodes() !== this ||
+      range.aStart.GetNode().GetNodes() !== this ||
+      range.aEnd.GetNode().GetNodes() !== this
+    )
+      return false;
+    const first = range.aStart.GetIndex();
+    const last = range.aEnd.GetIndex();
+    const target = destination.GetIndex();
+    if (first >= last || (first <= target && target <= last)) return false;
+    const moved = this.nodeArray.slice(first, last);
+    const children: (SwTextNode | SwTableNode)[] = [];
+    const section = range.aStart.GetNode().StartOfSectionNode();
+    const parent = destination.StartOfSectionNode();
+    for (let index = first; index < last;) {
+      const node = this.at(index);
+      if (node.StartOfSectionNode() !== section) return false;
+      if (node instanceof SwTableNode) {
+        const end = node.EndOfSectionNode().GetIndex();
+        if (end >= last) return false;
+        index = end + 1;
+      } else if (node instanceof SwTextNode) index++;
+      else return false;
+      children.push(node);
+    }
+    for (const node of moved) if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+    const insertion = target > last ? target - moved.length : target;
+    if (target > last) this.nodeArray.copyWithin(first, last, target);
+    else this.nodeArray.copyWithin(target + moved.length, target, first);
+    for (const [offset, node] of moved.entries()) this.nodeArray[insertion + offset] = node;
+    for (const node of children) node.SetStartOfSection(parent);
+    for (const node of moved) if (node instanceof SwTextNode) this.InsertOutlineNode(node);
+    this.document.NotifyModelChange({ index: first, kind: "node-removed" });
+    this.document.NotifyModelChange({
+      index: insertion,
+      kind: "node-inserted",
+    });
+    return true;
   }
 
   /** Inserts one prepared text node after an existing node,including the actual body start sentinel during undo. @param source - Existing predecessor. @param node - Prepared new node. @returns Nothing. */
@@ -519,6 +758,11 @@ export class SwNodes {
     });
   }
 
+  /** Original RemoveNode borrowed-index phase for represented complete removals. Content cursors are corrected separately by the existing source operation before node-only indices are assigned to the first following structural/content node. @param start - First removed array offset. @param count - Actual removed node count. @returns Nothing. */
+  private CorrectNodeIndices(start: number, count: number): void {
+    const target = this.at(start + count);
+    for (const node of this.nodeArray.slice(start, start + count)) node.MoveNodeIndicesTo(target);
+  }
   /** Removes one connected text node while retaining its section's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
   public removeTextNode(node: SwTextNode): void {
     if (node.GetNodes() !== this) throw new Error("SwTextNode belongs to another SwNodes array.");
@@ -537,6 +781,7 @@ export class SwNodes {
     const nodeIndex = node.GetIndex();
     this.m_aOutlineNodes.erase(node);
     node.RemoveFromList();
+    this.CorrectNodeIndices(nodeIndex, 1);
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
@@ -551,6 +796,7 @@ export class SwNodes {
     this.m_aOutlineNodes.erase(node);
     node.MoveAllContentIndicesTo(replacement);
     node.RemoveFromList();
+    node.MoveNodeIndicesTo(replacement);
     this.nodeArray[index] = replacement;
     replacement.AddToList();
     this.InsertOutlineNode(replacement);

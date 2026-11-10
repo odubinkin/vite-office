@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/fmtwrapinfluenceonobjpos.ts",
+    "upstreamPath": "sw/inc/fmtwrapinfluenceonobjpos.hxx",
+    "localSymbols": [
+      "SwFormatWrapInfluenceOnObjPos",
+      "GetAllowOverlap",
+      "SetAllowOverlap"
+    ],
+    "upstreamSymbols": [
+      "class SW_DLLPUBLIC SwFormatWrapInfluenceOnObjPos"
+    ],
+    "preservedResponsibilities": [
+      "Preserves original wrap influence, overlap and positioning offset state, defaults, clone and typed UNO member conversion."
+    ],
+    "omittedResponsibilities": [
+      "Full native object collision and layout scheduling are outside the item owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtwrapinfluenceonobjpos.ts",
+          "marker": "SwFormatWrapInfluenceOnObjPos"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtwrapinfluenceonobjpos.hxx",
+          "marker": "class SW_DLLPUBLIC SwFormatWrapInfluenceOnObjPos"
+        }
+      ]
+    }
+  }
+}

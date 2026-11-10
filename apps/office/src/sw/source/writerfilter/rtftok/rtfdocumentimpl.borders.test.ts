@@ -41,16 +41,56 @@ it("imports paragraph borders with source width and point-distance quantization"
   }
 });
 
-it("applies box controls to all four borders and restores group-scoped paragraph borders", /** Checks uniform boxes and independent inherited group state. @returns Nothing. */ () => {
+it("keeps writes through inherited BOX values and restores the parent border destination", /** Source read lookups mutate the shared RTFValue even when the current group is popped. @returns Nothing. */ () => {
   const document = read(
     String.raw`{\rtf1{\pard\box\brdrs\brdrw30\brsp45 {\brdrw80} One\par}\pard Two}`,
   );
   try {
     for (const edge of [Edge.TOP, Edge.LEFT, Edge.BOTTOM, Edge.RIGHT]) {
-      expect(box(document).GetLine(edge)?.GetWidth()).toBe(30);
+      expect(box(document).GetLine(edge)?.GetWidth()).toBe(80);
       expect(box(document).GetDistance(edge)).toBe(40);
       expect(box(document, 1).GetLine(edge)).toBeUndefined();
     }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("resolves top-level BOX and nested edge modifiers in first insertion order", /** BOX edges are direct paragraph modifiers while BRDRT appends below pBdr. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\rtf1\brdrt\brdrs\brdrw20\box\brdrs\brdrw30\brdrt\brdrdash\brdrw40 First\par\pard\box\brdrs\brdrw30\brdrt\brdrdash\brdrw40 Second}`,
+  );
+  try {
+    expect(box(document).GetTop()?.GetBorderLineStyle()).toBe(Style.SOLID);
+    expect(box(document).GetTop()?.GetWidth()).toBe(30);
+    expect(box(document, 1).GetTop()?.GetBorderLineStyle()).toBe(Style.DASHED);
+    expect(box(document, 1).GetTop()?.GetWidth()).toBe(40);
+    expect(box(document, 1).GetBottom()?.GetWidth()).toBe(30);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps character and page border controls on their own resource owners", /** Neither CHBRDR nor PGBRDR may modify an active paragraph edge. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\rtf1\brdrb\brdrs\brdrw30\chbrdr\brdrdash\brdrw50\pgbrdrt\brdrdb\brdrw80 Text}`,
+  );
+  try {
+    expect(box(document).GetBottom()?.GetBorderLineStyle()).toBe(Style.SOLID);
+    expect(box(document).GetBottom()?.GetWidth()).toBe(30);
+    expect(box(document).GetTop()).toBeUndefined();
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps the border selector across PARD without clearing the newly selected style", /** The bare BRDRNONE writes to the outer paragraph resources when its selected parent is absent. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\rtf1{\stylesheet{\s1\brdrb\brdrs\brdrw40 Bordered;}}\brdrt\brdrs First\par\pard\s1\brdrnone Inherited}`,
+  );
+  try {
+    expect(box(document).GetTop()?.GetWidth()).toBe(15);
+    expect(box(document, 1).GetBottom()?.GetWidth()).toBe(40);
   } finally {
     document.Dispose();
   }

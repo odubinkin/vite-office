@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/dictbe.khmer.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/dictbe.cpp",
+    "localSymbols": [
+      "KhmerBreakEngine",
+      "scanBeforeStart",
+      "scanAfterEnd",
+      "scanBackClusters",
+      "scanFwdClusters",
+      "scanWJ"
+    ],
+    "upstreamSymbols": [
+      "KhmerBreakEngine::divideUpDictionaryRange"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML82: patched KhmerBreakEngine retains original ICU UnicodeSet properties, cloned UTF16 scans with separate counters, inhibitor windows, dictionary weight minimization, candidate vector logical size and original output gates. Native cursor/boundary traces match 2842 real-dictionary inputs plus 45 compiled fixture witnesses. See WRITER372–375."
+    ],
+    "omittedResponsibilities": [
+      "Runtime dictionary asset registration, CJK, public DictionaryCache and Writer measurement are outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.khmer.ts",
+          "marker": "KhmerBreakEngine"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.khmer.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/dictbe.khmer.sets.json",
+          "marker": "khmerWord"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/dictbe.cpp",
+          "marker": "KhmerBreakEngine::divideUpDictionaryRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "fDictionary->matches(text, numCodePts - i"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "DictionaryBreakEngine::scanBeforeStart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "DictionaryBreakEngine::scanAfterEnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "DictionaryBreakEngine::scanBackClusters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "DictionaryBreakEngine::scanFwdClusters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+          "marker": "DictionaryBreakEngine::scanWJ"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/dictbe.khmer.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original dictbe.cpp Khmer engine and the Khmer-only cluster-scan patch share one source responsibility fragment."
+    }
+  }
+}

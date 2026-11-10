@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwXTextDocument text/style/service suppliers from pinned sw/source/uibase/uno/unotxdoc.cxx. No browser/shell lifecycle state enters SwDoc. */
+import { SwXDocumentSettings } from "./SwXDocumentSettings";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
 import { SwUnoTextDocumentPropertyMap, createPropertySetInfo } from "../../core/unocore/unomap";
@@ -9,7 +10,11 @@ import { SwXBookmark } from "../../core/unocore/unobkm";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwXText } from "../../core/unocore/unotext";
 import { SwXStyleFamilies, SwXStyle, SwXPageStyle } from "../../core/unocore/unostyle";
-import { SwXNumberingRules, SwXLineNumberingProperties } from "../../core/unocore/unosett";
+import {
+  SwXNumberingRules,
+  SwXLineNumberingProperties,
+  SwXChapterNumbering,
+} from "../../core/unocore/unosett";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
 import { invalid } from "../../core/unocore/unocrsrhelper";
@@ -17,6 +22,7 @@ import { invalid } from "../../core/unocore/unocrsrhelper";
 export class SwXTextDocument {
   private readonly body: SwXText;
   private valid = true;
+  private chapterNumbering: SwXChapterNumbering | undefined;
   /** Binds the represented native owner and its declared inputs. @param doc - Canonical document owner. @returns Nothing. */
   constructor(private readonly doc: SwDoc) {
     this.body = new SwXText(doc);
@@ -57,10 +63,19 @@ export class SwXTextDocument {
     value.extract(mode, "bool");
     doc.SetDefaultPageMode(mode[0]);
   }
+  /** Supplies the represented document Settings service over the native manager. @returns Native settings owner. */
+  createDocumentSettings(): SwXDocumentSettings {
+    return new SwXDocumentSettings(this.GetDoc());
+  }
   /** Borrows the native parent text owner. @returns The represented native operation result. */
   getText(): SwXText {
     this.GetDoc();
     return this.body;
+  }
+  /** Original cached chapter-numbering supplier borrows the document outline owner. @returns Native service. */
+  getChapterNumberingRules(): SwXChapterNumbering {
+    this.GetDoc();
+    return (this.chapterNumbering ??= new SwXChapterNumbering(this.GetDoc()));
   }
   /** Supplies the document-owned line numbering property interface. @returns Actual native property owner. */
   getLineNumberingProperties(): SwXLineNumberingProperties {
@@ -81,6 +96,10 @@ export class SwXTextDocument {
   /** Original character-style service descriptor over the actual document owner. @returns Detached character style. */
   createCharacterStyle(): SwXStyle {
     return new SwXStyle(this.GetDoc(), "CharacterStyles");
+  }
+  /** Original typed numbering-style factory over the actual document. @returns Detached numbering descriptor. */
+  createNumberingStyle(): SwXStyle {
+    return new SwXStyle(this.GetDoc(), "NumberingStyles");
   }
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(name: OUStringConstReference): SwXStyle | SwXNumberingRules | SwXBookmark {
@@ -107,6 +126,8 @@ export class SwXTextDocument {
   dispose(): void {
     if (this.valid) {
       this.body.dispose();
+      this.chapterNumbering?.release();
+      this.chapterNumbering = undefined;
       this.valid = false;
     }
   }

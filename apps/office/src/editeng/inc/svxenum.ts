@@ -175,3 +175,15 @@ export enum SvxAdjust {
   End,
   LAST = 7,
 }
+
+/** Original page/column break values, also stored in Writer's current signed16 break binding. */
+export enum SvxBreak {
+  NONE = 0,
+  ColumnBefore = 1,
+  ColumnAfter = 2,
+  ColumnBoth = 3,
+  PageBefore = 4,
+  PageAfter = 5,
+  PageBoth = 6,
+  End = 7,
+}

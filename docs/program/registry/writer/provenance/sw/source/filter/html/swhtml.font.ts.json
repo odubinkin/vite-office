@@ -14,6 +14,22 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-writing-mode.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.direction.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -39,7 +55,9 @@
     "preservedResponsibilities": [
       "Native consumed NewBasefontAttr/EndBasefontAttr/NewFontAttr/EndFontAttr operate over actual parser stacks and contexts, seven configured heights, base-relative signed-size arithmetic, heading-start sizing, native option color and no-DocShell family metadata. Legacy direct and style-seeded branches retain original script head wiring, zero-size stack entries and independent unmatched-closer pops (WRITER215-217). Actual model, selected Western/CJK/CTL ranges, parser state and real Markdown/Worker tests cover consumed behavior. ID/bookmark/language/direction, table stack minima transitions and device font-list branches remain unported where not yet consumed; whole HTML/filter and compiled upstream parity remain unverified.",
       "S3HW1E connects consumed native margin/indent/spacing/background-color properties and restores the original inline-versus-block selector in InsertAttrs. Actual nearest context lookups and paragraph style margin contributions feed existing attribute heads, with original queued paragraph invalidation and negative/unsigned arithmetic. Block background survives Worker/UI transport; inline background has no current model owner and is not fabricated. Native source quirks are documented as WRITER218/219. Broader style-graph, positioning, background images, border/language/link/list/table and remaining RTF behavior remain open; no whole-module promotion.",
-      "S3HW1E connects actual ID and no-HREF named targets to native queued point bookmarks. Filter-private RES_FLTR_BOOKMARK is174, with no document pool default. Actual HTMLAttr can retain a null table for unheaded queued marks; SetAttr_ uses exact original name/position deduplication, raw offset clamping and real DocumentMarkAccess name allocation. HTML ID/font/style consumers retain source option order. Native implicit target separator and Unambiguous decode selection preserve encoded name spelling; WRITER221 documents queue-boundary naming. Actual parser/Markdown/Worker/RTF tests cover this profile; language/direction/section/HREF and full filter parity remain open."
+      "S3HW1E connects actual ID and no-HREF named targets to native queued point bookmarks. Filter-private RES_FLTR_BOOKMARK is174, with no document pool default. Actual HTMLAttr can retain a null table for unheaded queued marks; SetAttr_ uses exact original name/position deduplication, raw offset clamping and real DocumentMarkAccess name allocation. HTML ID/font/style consumers retain source option order. Native implicit target separator and Unambiguous decode selection preserve encoded name spelling; WRITER221 documents queue-boundary naming. Actual parser/Markdown/Worker/RTF tests cover this profile; language/direction/section/HREF and full filter parity remain open.",
+      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion.",
+      "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Full native HTMLReader, not-consumed desktop/font-list producers and other filter families are not certified."

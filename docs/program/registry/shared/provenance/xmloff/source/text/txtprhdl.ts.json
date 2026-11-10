@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/txtprhdl.ts",
+    "upstreamPath": "xmloff/source/text/txtprhdl.cxx",
+    "localSymbols": [
+      "importFrameConstant",
+      "exportFrameConstant"
+    ],
+    "upstreamSymbols": [
+      "pXML_HoriRel_Enum"
+    ],
+    "preservedResponsibilities": [
+      "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values.",
+      "Adds the original wrap-influence mode map used by graphic frame styles."
+    ],
+    "omittedResponsibilities": [
+      "Property handlers for text-frame types and other text properties outside this slice are not represented here."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprhdl.ts",
+          "marker": "importFrameConstant"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "persists native Markdown tables"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "anchored Markdown"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
+          "marker": "pXML_HoriRel_Enum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
+          "marker": "pXML_WrapInfluenceOnPosition_Enum"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 302
+}

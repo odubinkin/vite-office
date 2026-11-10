@@ -1,5 +1,11 @@
 /** @fileoverview Consumed DomainMapper_Impl property-context and body text-append ownership; all text mutations use existing native SwXText APIs. */
 import type { DomainMapper } from "./DomainMapper";
+import type { SwStartNode } from "../../core/docnode/node";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -7,11 +13,21 @@ import type { SwXText } from "../../core/unocore/unotext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
 import { PropertyMap, SectionPropertyMap, ParagraphPropertyMap } from "./PropertyMap";
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  NamedValue,
+  cppu_detail_getUnoType_NamedValue as namedType,
+} from "../../../../udkapi/com/sun/star/beans/NamedValue";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { listAutoFormatType } from "../../core/unocore/unoobj-listautofmt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { text } from "../../core/unocore/unocrsrhelper";
-import { PropertyIds as P, isCharacterProperty } from "./PropertyIds";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
+import { PropertyIds as P, getPropertyName, isCharacterProperty } from "./PropertyIds";
 import { StyleSheetTable, type StyleSheetEntry } from "./StyleSheetTable";
+import { NS_ooxml } from "../inc/ooxml/resourceids";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { LineNumberPosition } from "../../../inc/lineinfo";
 
 /** Original ContextType declaration order. */
 export enum ContextType {
@@ -21,28 +37,213 @@ export enum ContextType {
   CONTEXT_STYLESHEET = 3,
   CONTEXT_LIST = 4,
 }
+/** Original page-margin element order. */
+export enum PageMarElement {
+  PAGE_MAR_TOP,
+  PAGE_MAR_RIGHT,
+  PAGE_MAR_BOTTOM,
+  PAGE_MAR_LEFT,
+  PAGE_MAR_HEADER,
+  PAGE_MAR_FOOTER,
+  PAGE_MAR_GUTTER,
+}
+/** Original mapper page-margin defaults in mm100. */
+export class PageMar {
+  top = Number(convertTwipToMm100(1440n));
+  right = Number(convertTwipToMm100(1440n));
+  bottom = this.top;
+  left = this.right;
+  header = Number(convertTwipToMm100(720n));
+  footer = this.header;
+  gutter = 0;
+}
 /** A native context entry borrows supplied style maps and owns maps created by PushProperties. */
 interface Context {
   readonly type: ContextType;
   readonly properties: PropertyMap;
   readonly owned: boolean;
+  readonly sectionReference?: SvRef<SectionPropertyMap>;
+}
+
+/** Original mapper-wide line-number settings passed across section property groups. */
+interface LineNumberSettings {
+  readonly nDistance: number;
+  readonly nInterval: number;
+  readonly bRestartAtEachPage: boolean;
 }
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
 export class DomainMapper_Impl {
+  private readonly m_pSettingsTable: SettingsTable;
+  /** Original document settings owner. @returns Actual table. */
+  GetSettingsTable(): SettingsTable {
+    return this.m_pSettingsTable;
+  }
+  private readonly m_pLastSectionContext = new SvRef<SectionPropertyMap>();
+  private m_bParaSectpr = false;
+  /** Borrows the original last top-level section context. @returns Previous section or null. */
+  GetLastSectionContext(): SectionPropertyMap | null {
+    return this.m_pLastSectionContext.get();
+  }
+  /** Original paragraph sectPr context flag. @param value - Flag. @returns Nothing. */
+  SetParaSectpr(value: boolean): void {
+    this.m_bParaSectpr = value;
+  }
+  /** Original paragraph sectPr context flag. @returns Flag. */
+  GetParaSectpr(): boolean {
+    return this.m_bParaSectpr;
+  }
+  private m_aPageMargins = new PageMar();
+  /** Original pgMar reset, independent of previous section or document geometry. @returns Nothing. */
+  InitPageMargins(): void {
+    this.m_aPageMargins = new PageMar();
+  }
+  /** Original borrowed margin values. @returns Actual current fields. */
+  GetPageMargins(): Readonly<PageMar> {
+    return this.m_aPageMargins;
+  }
+  /** Original limited twip conversion and selected margin assignment. @param element - Native field selector. @param value - Twips. @returns Nothing. */
+  SetPageMarginTwip(element: PageMarElement, value: number): void {
+    const name = (["top", "right", "bottom", "left", "header", "footer", "gutter"] as const)[
+      element
+    ];
+    if (name !== undefined) this.m_aPageMargins[name] = convertTwipToMm100_Limited(value);
+  }
+  private m_aLineNumberSettings: LineNumberSettings = {
+    nDistance: -1,
+    nInterval: 0,
+    bRestartAtEachPage: true,
+  };
+  private m_bLineNumberingSet = false;
+  /** Reads the native mapper-wide line-number settings. @returns Current immutable settings. */
+  GetLineNumberSettings(): LineNumberSettings {
+    return this.m_aLineNumberSettings;
+  }
+  /** Saves the updated global settings while retaining the active section properties. @param settings - Original line-number settings. @returns Nothing. */
+  SetLineNumberSettings(settings: LineNumberSettings): void {
+    this.m_aLineNumberSettings = settings;
+  }
+  /** Applies the original line number properties to their native document service in source order. @param values - Typed property and value tuples. @returns Nothing. */
+  private ApplyLineNumberProperties(
+    values: readonly (readonly [P, number | boolean, "bool" | "sal_Int16" | "sal_Int32"])[],
+  ): void {
+    const properties = this.GetTextDocument().getLineNumberingProperties();
+    try {
+      for (const [property, value, type] of values) {
+        const item = new Any([value], type);
+        try {
+          properties.setPropertyValue(getPropertyName(property), item);
+        } finally {
+          item.dispose();
+        }
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+    }
+  }
+  /** Publishes each actual lnNumType group through the original global document property owner. @param section - Actual section context when available. @returns Nothing. */
+  ApplyLineNumberSettings(section?: SectionPropertyMap): void {
+    const { nInterval, nDistance, bRestartAtEachPage } = this.GetLineNumberSettings();
+    if (!nInterval) {
+      this.ApplyLineNumberProperties([[P.PROP_IS_ON, false, "bool"]]);
+      return;
+    }
+    this.ApplyLineNumberProperties([
+      [P.PROP_IS_ON, true, "bool"],
+      [P.PROP_INTERVAL, (nInterval << 16) >> 16, "sal_Int16"],
+      [P.PROP_DISTANCE, nDistance === -1 ? 500 : nDistance, "sal_Int32"],
+      [P.PROP_RESTART_AT_EACH_PAGE, bRestartAtEachPage, "bool"],
+    ]);
+    if (nDistance === -1) section?.SetdxaLnn(283);
+  }
+  /** Finalizes source section line numbering and the imported header and footer style count flags. @param interval - Section interval. @param restart - Original restart token. @param distance - Section twips. @returns Nothing. */
+  SetLineNumbering(interval: number, restart: number, distance: number): void {
+    if (!this.m_bLineNumberingSet)
+      this.ApplyLineNumberProperties([
+        [P.PROP_IS_ON, true, "bool"],
+        [P.PROP_COUNT_EMPTY_LINES, true, "bool"],
+        [P.PROP_COUNT_LINES_IN_FRAMES, false, "bool"],
+        [P.PROP_INTERVAL, (interval << 16) >> 16, "sal_Int16"],
+        [P.PROP_DISTANCE, convertTwipToMm100_Limited(distance), "sal_Int32"],
+        [P.PROP_NUMBER_POSITION, LineNumberPosition.Left, "sal_Int16"],
+        [
+          P.PROP_RESTART_AT_EACH_PAGE,
+          restart === NS_ooxml.LN_Value_ST_LineNumberRestart_newPage,
+          "bool",
+        ],
+      ]);
+    this.m_bLineNumberingSet = true;
+    const family = unicode("ParagraphStyles");
+    try {
+      const styles = this.model.getStyleFamilies().getByName(family);
+      for (const name of ["Header", "Footer"]) {
+        const entry = this.GetStyleSheetTable().FindStyleSheetByISTD(name);
+        if (!entry?.m_pProperties) continue;
+        const key = unicode(name);
+        try {
+          if (!styles.hasByName(key)) continue;
+          const style = styles.getStyleByName(key);
+          const counted = new Any(entry.m_pProperties.props().GetListId() >= 0);
+          try {
+            style.setPropertyValue(getPropertyName(P.PROP_PARA_LINE_NUMBER_COUNT), counted);
+          } finally {
+            counted.dispose();
+            style.dispose();
+          }
+        } finally {
+          key.dispose();
+        }
+      }
+    } finally {
+      family.dispose();
+    }
+  }
   private m_bIsFirstSection = true;
   private m_xPageStyles: SwXStyleFamily | undefined;
   private m_xNextUnusedPageStyleNo: number | undefined;
   private readonly contexts: Context[] = [];
   private readonly body: SwXText;
   private appendedParagraph = false;
-  private readonly styleSheetTable = new StyleSheetTable();
+  private readonly styleSheetTable = new StyleSheetTable(this);
   private defaultParaStyleName = "";
   private currentParaStyleName = "";
   private inStyleSheetImport = false;
   private m_bInDocDefaultsImport = false;
   /** Represented body stream; substream producers extend the original stack when consumed. */
   private readonly m_StreamStateStack = [{ deferredCharacterProperties: new Map<number, Any>() }];
+  private readonly m_aRtfParagraphs = new Map<SwStartNode, SwTextNode>();
+  private m_pRtfPreviousParagraph: SwTextNode | undefined;
+
+  /** Selects the previous paragraph in the current materialized text stream. @param node - Current RTF paragraph. @returns Nothing. */
+  SetRtfParagraphNode(node: SwTextNode): void {
+    const section = node.StartOfSectionNode();
+    this.m_pRtfPreviousParagraph = this.m_aRtfParagraphs.get(section);
+    this.m_aRtfParagraphs.set(section, node);
+  }
+
+  /** Implements the source previous-paragraph bottom-edge removal for consecutive between borders. @returns Whether the current border can become a top edge. */
+  handlePreviousParagraphBorderInBetween(): boolean {
+    const node = this.m_pRtfPreviousParagraph;
+    if (!node || this.IsStyleSheetImport()) return false;
+    const paragraph = new SwXParagraph(node, this.body);
+    const connect = paragraph.getPropertyValue(getPropertyName(P.PROP_PARA_CONNECT_BORDERS));
+    try {
+      const flag: [boolean] = [true];
+      connect.extract(flag, "bool");
+      if (flag[0]) return false;
+      const empty = new Any(new BorderLine2(), cppu_detail_getUnoType_BorderLine2);
+      try {
+        paragraph.setPropertyValue(getPropertyName(P.PROP_BOTTOM_BORDER), empty);
+      } finally {
+        empty.dispose();
+      }
+      return true;
+    } finally {
+      connect.dispose();
+      paragraph.Release();
+    }
+  }
   /** Borrows actual Writer model/text interfaces. @param m_rDMapper - Original mapper callback owner. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @returns Mapper state. */
   constructor(
     private readonly m_rDMapper: DomainMapper,
@@ -50,10 +251,77 @@ export class DomainMapper_Impl {
     private readonly m_eDocumentType: SourceDocumentType,
   ) {
     this.body = model.getText();
+    this.m_pSettingsTable = new SettingsTable(m_rDMapper);
   }
   /** Original document-default phase. @param value - Import phase. @returns Nothing. */
   SetDocDefaultsImport(value: boolean): void {
     this.m_bInDocDefaultsImport = value;
+  }
+  private m_pListTable: ListsManager | undefined;
+  private m_bInNumberingImport = false;
+  private readonly m_aListOverrideApplied = new Set<number>();
+  private m_bInAnyTableImport = false;
+  /** Original lazy numbering manager belongs to this import owner. @returns Actual manager. */
+  GetListTable(): ListsManager {
+    return (this.m_pListTable ??= new ListsManager(this.m_rDMapper));
+  }
+  /** Original list-style query uses the actual concrete definition. @param id - Concrete ID. @returns Owned native name. */
+  GetListStyleName(id: number): OUString {
+    return unicode(this.GetListTable().GetList(id)?.GetStyleName() ?? "");
+  }
+  /** Original direct/style metadata level lookup. @param entry - Native style. @param paragraph - Optional direct context. @returns Signed level. */
+  GetListLevel(entry: StyleSheetEntry | null, paragraph?: ParagraphPropertyMap): number {
+    return GetListLevel.call(this, entry, paragraph);
+  }
+  /** Original style-level conflict validation. @param id - Native identifier. @returns Nothing. */
+  ValidateListLevel(id: string): void {
+    ValidateListLevel.call(this, id);
+  }
+  /** Original numbering phase before applying a paragraph property vector. @param properties - Native paragraph map. @param remove - Original removal flag. @param noNumbering - Original cancellation flag. @returns Original finish locals. */
+  PrepareParagraphNumbering(
+    properties: ParagraphPropertyMap | null,
+    remove = false,
+    noNumbering = false,
+  ): ParagraphNumbering {
+    return PrepareParagraphNumbering.call(this, properties, remove, noNumbering);
+  }
+  /** Original numbering phase after creation/property application. @param paragraph - Actual paragraph API. @param properties - Native paragraph map. @param numbering - Original locals. @returns Nothing. */
+  FinishParagraphNumbering(
+    paragraph: SwXParagraph,
+    properties: ParagraphPropertyMap | null,
+    numbering: ParagraphNumbering,
+  ): void {
+    FinishParagraphNumbering.call(
+      this,
+      paragraph,
+      properties,
+      numbering,
+      this.m_aListOverrideApplied,
+    );
+  }
+  /** Native named numbering-style property lookup. @param id - Concrete list. @param level - Original index. @param property - Native name. @returns Signed32 result. */
+  getNumberingProperty(id: number, level: number, property: string): number {
+    return getNumberingProperty.call(this, id, level, property);
+  }
+  /** Native property lookup on the directly applied numbering service and level in the top context. @param property - Native name. @returns Signed32 value or zero. */
+  getCurrentNumberingProperty(property: string): number {
+    return getCurrentNumberingProperty.call(this, property);
+  }
+  /** Original numbering-table phase. @param value - Phase state. @returns Nothing. */
+  SetNumberingImport(value: boolean): void {
+    this.m_bInNumberingImport = value;
+  }
+  /** Native numbering phase query. @returns Phase state. */
+  IsNumberingImport(): boolean {
+    return this.m_bInNumberingImport;
+  }
+  /** Original any-resource-table phase. @param value - Phase state. @returns Nothing. */
+  SetAnyTableImport(value: boolean): void {
+    this.m_bInAnyTableImport = value;
+  }
+  /** Native any-table phase query. @returns Phase state. */
+  IsAnyTableImport(): boolean {
+    return this.m_bInAnyTableImport;
   }
   /** Original document-default query. @returns Import phase. */
   IsDocDefaultsImport(): boolean {
@@ -124,6 +392,36 @@ export class DomainMapper_Impl {
     for (let index = 0; index < name.length; ++index) units[index] = name.charCodeAt(index);
     return new OUString(units, units.length);
   }
+  private m_xCharacterStyles: SwXStyleFamily | undefined;
+  private m_xNextUnusedCharacterStyleNo: number | undefined;
+  /** Original lazy actual character-style family. @returns Borrowed family. */
+  GetCharacterStyles(): SwXStyleFamily {
+    return (this.m_xCharacterStyles ??= this.model.getStyleFamilies().GetCharacterStyles());
+  }
+  /** Original scan-once ListLabel suffix allocator, including signed prefix parsing. @returns Owned name. */
+  GetUnusedCharacterStyleName(): OUString {
+    if (this.m_xNextUnusedCharacterStyleNo === undefined) {
+      let maximum = 0;
+      for (const name of this.GetCharacterStyles().getElementNames())
+        if (name.startsWith("ListLabel ")) {
+          const suffix = name.slice(10),
+            units = new Uint16Array(suffix.length);
+          for (let index = 0; index < suffix.length; ++index)
+            units[index] = suffix.charCodeAt(index);
+          const value = toInt32(units);
+          if (value > 0 && value > maximum) maximum = value;
+        }
+      this.m_xNextUnusedCharacterStyleNo = maximum + 1;
+    }
+    const name = "ListLabel " + this.m_xNextUnusedCharacterStyleNo++;
+    const units = new Uint16Array(name.length);
+    for (let index = 0; index < name.length; ++index) units[index] = name.charCodeAt(index);
+    return new OUString(units, units.length);
+  }
+  /** Original list context borrows the supplied native level map. @param properties - Actual level. @returns Nothing. */
+  PushListProperties(properties: PropertyMap): void {
+    this.contexts.push({ type: ContextType.CONTEXT_LIST, properties, owned: false });
+  }
   /** Original context creation. @param type - Context type. @returns New map. */
   PushProperties(type: ContextType): PropertyMap {
     const properties =
@@ -133,7 +431,14 @@ export class DomainMapper_Impl {
           ? new ParagraphPropertyMap()
           : new PropertyMap();
     if (type === ContextType.CONTEXT_SECTION) this.m_bIsFirstSection = false;
-    this.contexts.push({ type, properties, owned: true });
+    this.contexts.push({
+      type,
+      properties,
+      owned: true,
+      ...(properties instanceof SectionPropertyMap
+        ? { sectionReference: new SvRef(properties) }
+        : {}),
+    });
     return properties;
   }
   /** Original style context retains the shared supplied map. @param properties - Shared map. @returns Nothing. */
@@ -145,8 +450,21 @@ export class DomainMapper_Impl {
     const current = this.contexts.at(-1);
     if (!current || current.type !== type)
       throw new Error("DomainMapper context nesting is invalid.");
+    if (
+      type === ContextType.CONTEXT_SECTION &&
+      this.contexts.filter(
+        /** Counts the original section stack independently of paragraph/run contexts. @param entry - Actual stack entry. @returns Whether a section. */ (
+          entry,
+        ) => entry.type === ContextType.CONTEXT_SECTION,
+      ).length === 1
+    ) {
+      if (!(current.properties instanceof SectionPropertyMap))
+        throw new Error("assert(SectionPropertyMap)");
+      this.m_pLastSectionContext.assign(current.properties);
+    }
     this.contexts.pop();
-    if (current.owned) current.properties.dispose();
+    if (current.sectionReference) current.sectionReference.clear();
+    else if (current.owned) current.properties.dispose();
   }
   /** Original nullable current map. @returns Map or null. */ GetTopContext(): PropertyMap | null {
     return this.contexts.at(-1)?.properties ?? null;
@@ -286,11 +604,81 @@ export class DomainMapper_Impl {
     const range = this.body.appendTextPortion(value, properties?.GetPropertyValues() ?? []);
     range.dispose();
   }
+  /** Native finishParagraph extracts Char-prefixed values into ListAutoFormat while retaining the original direct properties. The caller owns this value vector. @param properties - Actual paragraph context. @returns Owned generated values. */
+  GetParagraphPropertyValues(properties: PropertyMap | null): PropertyValue[] {
+    const result = (properties?.GetPropertyValues() ?? []).map(
+      /** Native vector copy owns its fields. @param value - Map value. @returns Independent copy. */ (
+        value,
+      ) => new PropertyValue(value),
+    );
+    const chars: NamedValue[] = [];
+    try {
+      for (const value of result)
+        if (text(value.Name).startsWith("Char"))
+          chars.push(new NamedValue(value.Name, value.Value));
+      if (chars.length) {
+        const Values = Sequence.specialize<NamedValue>(namedType, 32);
+        const sequence = new Values(
+          new Map(
+            chars.map(
+              /** Native compound element addresses. @param value - Value. @param index - Index. @returns Address pair. */ (
+                value,
+                index,
+              ) => [index * 32, value],
+            ),
+          ),
+          chars.length,
+        );
+        const name = new OUString(
+          Uint16Array.from(
+            "ListAutoFormat",
+            /** Native ASCII unit. @param c - Character. @returns Unit. */ (c) => c.charCodeAt(0),
+          ),
+          14,
+        );
+        try {
+          const value = new Any(sequence.getAddress(), listAutoFormatType);
+          try {
+            result.push(new PropertyValue(name, 0, value, 0));
+          } finally {
+            value.dispose();
+          }
+        } finally {
+          name.dispose();
+          sequence.dispose();
+        }
+      }
+      return result;
+    } catch (error) {
+      for (const value of result) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+      throw error;
+    } finally {
+      for (const value of chars) value.dispose();
+    }
+  }
+
   /** Finishes the actual paragraph through XParagraphAppend, preserving style-first property order. @param properties - Paragraph map. @returns Nothing. */
   finishParagraph(properties: PropertyMap | null): void {
-    const paragraph = this.body.finishParagraph(properties?.GetPropertyValues() ?? []);
-    paragraph.Release();
-    this.appendedParagraph = true;
+    const context = properties instanceof ParagraphPropertyMap ? properties : null,
+      numbering = this.PrepareParagraphNumbering(context),
+      values = this.GetParagraphPropertyValues(properties);
+    try {
+      const paragraph = this.body.finishParagraph(values);
+      try {
+        this.FinishParagraphNumbering(paragraph, context, numbering);
+      } finally {
+        paragraph.Release();
+      }
+      this.appendedParagraph = true;
+    } finally {
+      for (const value of values) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+    }
   }
   /** Original body trailing-paragraph deletion uses XComponent paragraph disposal rather than merging formatting into its predecessor. @returns Nothing. */
   RemoveLastParagraph(): void {
@@ -308,13 +696,39 @@ export class DomainMapper_Impl {
   dispose(): void {
     while (this.contexts.length) {
       const context = this.contexts.pop() as Context;
-      if (context.owned) context.properties.dispose();
+      if (context.sectionReference) context.sectionReference.clear();
+      else if (context.owned) context.properties.dispose();
     }
     for (const stream of this.m_StreamStateStack)
       for (const value of stream.deferredCharacterProperties.values()) value.dispose();
     this.m_StreamStateStack.length = 0;
+    this.m_aRtfParagraphs.clear();
+    this.m_pRtfPreviousParagraph = undefined;
+    this.m_pLastSectionContext.clear();
+    this.m_pListTable?.dispose();
+    this.m_pListTable = undefined;
     this.styleSheetTable.dispose();
   }
 }
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+import { ListsManager } from "./NumberingManager";
+
+import { GetListLevel, ValidateListLevel } from "./DomainMapper_Impl.numbering";
+
+import {
+  PrepareParagraphNumbering,
+  FinishParagraphNumbering,
+  getNumberingProperty,
+  getCurrentNumberingProperty,
+  type ParagraphNumbering,
+} from "./DomainMapper_Impl.paragraph-numbering";
+
+import { convertTwipToMm100_Limited } from "./ConversionHelper";
+
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+
+import { SvRef } from "../../../../tools/inc/ref";
+
+import { SettingsTable } from "./SettingsTable";

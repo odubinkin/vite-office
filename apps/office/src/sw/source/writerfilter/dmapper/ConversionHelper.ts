@@ -1,6 +1,7 @@
 /** @fileoverview Consumed original ConversionHelper twip-to-mm100 admission rules; shared integral and floating unit owners perform the actual conversion. */
 import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { getToken, toInt32 } from "../../../../o3tl/inc/string_view";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import {
@@ -25,6 +26,19 @@ export function convertTwipToMm100_LimitedRoundUp(twips: number): number {
 export function convertTwipToMm100_LimitedUnsigned(twips: number): number {
   twips |= 0;
   return twips < 0 ? 0 : convertTwipToMm100_Limited(twips);
+}
+
+/** Converts original table justification, defaulting to left and width. @param value - Original OOXML justification. @returns Native horizontal orientation. */
+export function convertTableJustification(value: number): HoriOrientation {
+  switch (value) {
+    case N.LN_Value_ST_Jc_center:
+      return HoriOrientation.CENTER;
+    case N.LN_Value_ST_Jc_right:
+    case N.LN_Value_ST_Jc_end:
+      return HoriOrientation.RIGHT;
+    default:
+      return HoriOrientation.LEFT_AND_WIDTH;
+  }
 }
 
 /** Original OOXML border-style-to-Word bridge; unsupported identifiers fall back to Word0. @param token - Native resource identity. @returns Word style number. */
@@ -476,3 +490,68 @@ export function ConvertDateStringToDateTime(value: Uint16Array): DateTime {
   if (index[0] !== -1) result.Seconds = toInt32(time.subarray(index[0])) & 0xffff;
   return result;
 }
+
+/** Original complete represented ConvertNumberingType switch mapping; unmatched values use its caller-supplied default. */
+const numberingTypes = new Map<number, number>([
+  [N.LN_Value_ST_NumberFormat_decimal, NumberingType.ARABIC],
+  [N.LN_Value_ST_NumberFormat_upperRoman, NumberingType.ROMAN_UPPER],
+  [N.LN_Value_ST_NumberFormat_lowerRoman, NumberingType.ROMAN_LOWER],
+  [N.LN_Value_ST_NumberFormat_ordinal, NumberingType.TEXT_NUMBER],
+  [N.LN_Value_ST_NumberFormat_bullet, NumberingType.CHAR_SPECIAL],
+  [N.LN_Value_ST_NumberFormat_none, NumberingType.NUMBER_NONE],
+  [N.LN_Value_ST_NumberFormat_upperLetter, NumberingType.CHARS_UPPER_LETTER_N],
+  [N.LN_Value_ST_NumberFormat_lowerLetter, NumberingType.CHARS_LOWER_LETTER_N],
+  [N.LN_Value_ST_NumberFormat_iroha, NumberingType.IROHA_HALFWIDTH_JA],
+  [N.LN_Value_ST_NumberFormat_irohaFullWidth, NumberingType.IROHA_FULLWIDTH_JA],
+  [N.LN_Value_ST_NumberFormat_aiueo, NumberingType.AIU_HALFWIDTH_JA],
+  [N.LN_Value_ST_NumberFormat_aiueoFullWidth, NumberingType.AIU_FULLWIDTH_JA],
+  [N.LN_Value_ST_NumberFormat_hebrew2, NumberingType.CHARS_HEBREW],
+  [N.LN_Value_ST_NumberFormat_thaiLetters, NumberingType.CHARS_THAI],
+  [N.LN_Value_ST_NumberFormat_russianLower, NumberingType.CHARS_CYRILLIC_LOWER_LETTER_RU],
+  [N.LN_Value_ST_NumberFormat_russianUpper, NumberingType.CHARS_CYRILLIC_UPPER_LETTER_RU],
+  [N.LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese, NumberingType.CIRCLE_NUMBER],
+  [N.LN_Value_ST_NumberFormat_decimalEnclosedCircle, NumberingType.CIRCLE_NUMBER],
+  [N.LN_Value_ST_NumberFormat_ideographEnclosedCircle, NumberingType.CIRCLE_NUMBER],
+  [N.LN_Value_ST_NumberFormat_ideographTraditional, NumberingType.TIAN_GAN_ZH],
+  [N.LN_Value_ST_NumberFormat_ideographZodiac, NumberingType.DI_ZI_ZH],
+  [N.LN_Value_ST_NumberFormat_ganada, NumberingType.HANGUL_SYLLABLE_KO],
+  [N.LN_Value_ST_NumberFormat_chosung, NumberingType.HANGUL_JAMO_KO],
+  [N.LN_Value_ST_NumberFormat_koreanLegal, NumberingType.NUMBER_LEGAL_KO],
+  [N.LN_Value_ST_NumberFormat_koreanDigital, NumberingType.NUMBER_DIGITAL_KO],
+  [N.LN_Value_ST_NumberFormat_koreanCounting, NumberingType.NUMBER_HANGUL_KO],
+  [N.LN_Value_ST_NumberFormat_koreanDigital2, NumberingType.NUMBER_DIGITAL2_KO],
+  [N.LN_Value_ST_NumberFormat_ideographLegalTraditional, NumberingType.NUMBER_UPPER_ZH_TW],
+  [N.LN_Value_ST_NumberFormat_arabicAlpha, NumberingType.CHARS_ARABIC],
+  [N.LN_Value_ST_NumberFormat_arabicAbjad, NumberingType.CHARS_ARABIC_ABJAD],
+  [N.LN_Value_ST_NumberFormat_hindiVowels, NumberingType.CHARS_NEPALI],
+  [N.LN_Value_ST_NumberFormat_japaneseLegal, NumberingType.NUMBER_TRADITIONAL_JA],
+  [N.LN_Value_ST_NumberFormat_chineseCounting, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_japaneseCounting, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_taiwaneseCounting, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_taiwaneseCountingThousand, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_ideographDigital, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_chineseCountingThousand, NumberingType.NUMBER_LOWER_ZH],
+  [N.LN_Value_ST_NumberFormat_chineseLegalSimplified, NumberingType.NUMBER_UPPER_ZH],
+  [N.LN_Value_ST_NumberFormat_hebrew1, NumberingType.NUMBER_HEBREW],
+  [N.LN_Value_ST_NumberFormat_decimalFullWidth, NumberingType.FULLWIDTH_ARABIC],
+  [N.LN_Value_ST_NumberFormat_decimalFullWidth2, NumberingType.FULLWIDTH_ARABIC],
+  [N.LN_Value_ST_NumberFormat_cardinalText, NumberingType.TEXT_CARDINAL],
+  [N.LN_Value_ST_NumberFormat_ordinalText, NumberingType.TEXT_ORDINAL],
+  [N.LN_Value_ST_NumberFormat_chicago, NumberingType.SYMBOL_CHICAGO],
+  [N.LN_Value_ST_NumberFormat_decimalZero, NumberingType.ARABIC_ZERO],
+]);
+/** Original OOXML-to-UNO numbering conversion. @param format - Original resource identity. @param defaultType - Native default. @returns Original signed16 type. */
+export function ConvertNumberingType(
+  format: number,
+  defaultType: number = NumberingType.ARABIC,
+): number {
+  return numberingTypes.get(format) ?? defaultType;
+}
+/** Original three admitted custom decimal padding descriptions. @param format - Native description. @returns Numbering type or minus one. */
+export function ConvertCustomNumberFormat(format: string): number {
+  if (format === "001, 002, 003, ...") return NumberingType.ARABIC_ZERO3;
+  if (format === "0001, 0002, 0003, ...") return NumberingType.ARABIC_ZERO4;
+  if (format === "00001, 00002, 00003, ...") return NumberingType.ARABIC_ZERO5;
+  return -1;
+}
+import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";

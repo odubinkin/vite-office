@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/layout/fly.ts",
+    "upstreamPath": "sw/source/core/layout/fly.cxx",
+    "localSymbols": [
+      "CalcFlyRelativeSize"
+    ],
+    "upstreamSymbols": [
+      "SwFlyFrame::CalcRel"
+    ],
+    "preservedResponsibilities": [
+      "Uses original relative dimensions and synchronized-size arithmetic against native page and upper print extents."
+    ],
+    "omittedResponsibilities": [
+      "Browser device integration uses the paged branch. Browse mode, native desktop shell, and unrepresented frame shape classes remain outside this path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/fly.ts",
+          "marker": "CalcFlyRelativeSize"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "mounts and edits the native anchored table"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/fly.cxx",
+          "marker": "SwFlyFrame::CalcRel"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 193
+}

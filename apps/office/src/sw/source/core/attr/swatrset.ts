@@ -1,6 +1,28 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { XATTR_FILLSTYLE } from "../../../../svx/inc/xdef";
+import { getSvxBrushItemFromSourceSet } from "../../../../svx/source/unodraw/unobrushitemhelper";
+import { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import {
+  RES_FLY_SPLIT,
+  RES_FOLLOW_TEXT_FLOW,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
+import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import { RES_OPAQUE } from "../../../inc/hintids";
+import type { SwFormatContent } from "../../../inc/fmtcntnt";
+import { RES_CNTNT } from "../../../inc/hintids";
+import type { SwFormatAnchor } from "../../../inc/fmtanchr";
+import type { SwFormatSurround } from "../../../inc/fmtsrnd";
+import { RES_ANCHOR, RES_SURROUND } from "../../../inc/hintids";
+
+import { SwFormatFillOrder } from "../../../inc/fmtfordr";
+import { RES_FILL_ORDER } from "../../../inc/hintids";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LanguageType } from "../../../../i18nlangtag/inc/lang";
 
@@ -130,6 +152,23 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    register(RES_OPAQUE);
+    register(RES_CNTNT);
+    register(RES_ANCHOR);
+    register(RES_SURROUND);
+    register(
+      RES_FLY_SPLIT,
+      /** Restores the original boolean fly split item. @param value - Native wire value. @returns Actual item. */
+      (value) => new SwFormatFlySplit(Boolean(value)),
+    );
+    register(
+      RES_FOLLOW_TEXT_FLOW,
+      /** Restores the original native containment item. @param value - Native wire value. @returns Actual item. */
+      (value) => new SwFormatFollowTextFlow(Boolean(value)),
+    );
+    register(RES_WRAP_INFLUENCE_ON_OBJPOS);
+    register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
+    register(WriterWhich.RES_TXTATR_AUTOFMT);
     register(
       WriterWhich.RES_TEXTGRID,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (
@@ -218,6 +257,31 @@ export class SwAttrPool extends SfxItemPool {
       /** Applies register to value. @param value - value value. @returns Callback result. */ (
         value,
       ) => new SwTableBoxValue(Number(value)),
+    );
+    register(
+      RES_FRAMEDIR,
+      /** Restores the existing browser snapshot through the original signed16 WritingMode conversion. @param value - Stored native item value. @returns Native item. */ (
+        value,
+      ) => {
+        const item = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
+        if (!item.PutValue(value)) {
+          item.Dispose();
+          throw new Error("Writer frame-direction snapshot is invalid.");
+        }
+        return item;
+      },
+    );
+    register(
+      RES_FILL_ORDER,
+      /** Restores the existing browser scalar snapshot to the original concrete enum item. @param value - Stored enum value. @returns Native item. */
+      (value) => {
+        const item = new SwFormatFillOrder();
+        if (!item.PutValue(value, 0)) {
+          item.Dispose();
+          throw new Error("Writer fill-order snapshot is invalid.");
+        }
+        return item;
+      },
     );
     register(RES_LR_SPACE, undefined);
     register(WriterWhich.RES_FRM_SIZE);
@@ -668,6 +732,30 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original frame direction item query. @param searchInParent - Native inheritance flag. @returns Borrowed direction item. */
+  GetFrameDir(searchInParent = true): SvxFrameDirectionItem {
+    return this.Get(RES_FRAMEDIR, searchInParent) as SvxFrameDirectionItem;
+  }
+  /** Original opacity getter from swatrset.hxx. @param searchInParent - Native inherited lookup. @returns Actual opacity item. */
+  GetOpaque(searchInParent = true): SvxOpaqueItem {
+    return this.Get(RES_OPAQUE, searchInParent) as SvxOpaqueItem;
+  }
+  /** Original inline content getter from fmtcntnt.hxx. @param searchInParent - Native inherited lookup. @returns Actual content item. */
+  GetContent(searchInParent = true): SwFormatContent {
+    return this.Get(RES_CNTNT, searchInParent) as SwFormatContent;
+  }
+  /** Original typed anchor getter from fmtanchr.hxx. @param searchInParent - Native inherited lookup. @returns Actual anchor item. */
+  public GetAnchor(searchInParent = true): SwFormatAnchor {
+    return this.Get(RES_ANCHOR, searchInParent) as SwFormatAnchor;
+  }
+  /** Original typed wrap getter from fmtsrnd.hxx. @param searchInParent - Native inherited lookup. @returns Actual wrap item. */
+  public GetSurround(searchInParent = true): SwFormatSurround {
+    return this.Get(RES_SURROUND, searchInParent) as SwFormatSurround;
+  }
+  /** Original inline fmtfordr.hxx effective item query. @param searchInParent - Native inheritance flag. @returns Borrowed fill-order item. */
+  public GetFillOrder(searchInParent = true): SwFormatFillOrder {
+    return this.Get(RES_FILL_ORDER, searchInParent) as SwFormatFillOrder;
+  }
   private m_pOldSet: SwAttrSet | undefined;
   private m_pNewSet: SwAttrSet | undefined;
 
@@ -730,6 +818,15 @@ export class SwAttrSet extends SfxItemSet {
     } else count = super.ClearItem(first);
     this.m_pOldSet = this.m_pNewSet = undefined;
     return count;
+  }
+
+  /** Original intersection installs the native old/new receivers only during mutation and returns the preferred receiver's count. At least one receiver is a source precondition. @param set - Identity source. @param oldSet - Old delta receiver. @param newSet - New delta receiver. @returns Receiver count. */
+  public Intersect_BC(set: SfxItemSet, oldSet?: SwAttrSet, newSet?: SwAttrSet): number {
+    this.m_pOldSet = oldSet;
+    this.m_pNewSet = newSet;
+    super.Intersect(set);
+    this.m_pOldSet = this.m_pNewSet = undefined;
+    return (newSet ?? (oldSet as SwAttrSet)).Count();
   }
 
   /** Creates a Writer attribute set. @param pool - Owning Writer pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited set. @returns Nothing. */
@@ -798,8 +895,12 @@ export function createWriterTextColorItem(value: unknown): SvxColorItem {
 }
 /** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
 export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
-  const color = item.GetValue();
-  if (color.equals(COL_AUTO)) return "auto";
+  return writerColorValue(item.GetValue());
+}
+
+/** Projects a native color only at an existing primitive boundary. @param color - Original packed color. @param automatic - External sentinel spelling. @returns Primitive color. */
+export function writerColorValue(color: Readonly<Color>, automatic = "auto"): string {
+  if (color.equals(COL_AUTO)) return automatic;
   if (color.GetAlpha() !== 255)
     return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
   return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
@@ -844,11 +945,22 @@ export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "tr
 
 /** Projects a native highlight brush to the Writer text/worker/DOM boundary. @param item - Actual highlight item. @returns Primitive color. */
 export function writerHighlightColorValue(item: Readonly<SvxBrushItem>): string {
-  const color = item.GetColor();
-  if (color.equals(COL_TRANSPARENT)) return "transparent";
-  if (color.GetAlpha() !== 255)
-    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
-  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+  return writerColorValue(item.GetColor(), "transparent");
+}
+
+/** Projects the native paragraph fill at the browser paint boundary. Existing brush items retain their local precedence. @param items - Actual paragraph item set. @returns Primitive color. */
+export function writerParagraphBackgroundColor(items: SwAttrSet): string {
+  for (let scope: SfxItemSet | undefined = items; scope; scope = scope.GetParent()) {
+    const legacy = scope.GetItemIfSet(RES_BACKGROUND, false);
+    if (legacy instanceof SvxBrushItem) return writerHighlightColorValue(legacy);
+    if (scope.GetItemIfSet(XATTR_FILLSTYLE, false)) break;
+  }
+  const brush = getSvxBrushItemFromSourceSet(items, RES_BACKGROUND);
+  try {
+    return writerHighlightColorValue(brush);
+  } finally {
+    brush.Dispose();
+  }
 }
 
 import * as WriterWhich from "../../../inc/hintids";

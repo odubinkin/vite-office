@@ -1,4 +1,9 @@
 /** @fileoverview Consumed native MSWordExportBase document/range and font ownership. Actual SwPaM binds the consumed base portion of the native SwUnoCursor; cursor overrides, traversal and the broader export context are not yet admitted. */
+import type { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import type { SwContentNode } from "../../core/docnode/node";
+import { GetCurrentPageDirection, GetDefaultFrameDirection, TrueFrameDirection } from "./wrtw8nds";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwPaM } from "../../core/crsr/pam";
@@ -25,6 +30,20 @@ export abstract class MSWordExportBase {
   public m_pStyles: MSWordStyles | undefined;
   public m_pOutFormatNode: SwFormat | SwContentNode | undefined;
   public m_pISet: SfxItemSet | undefined;
+  protected m_pCurrentPageDesc: SwPageDesc | undefined;
+  public m_bOutPageDescs = false;
+  /** Native default direction for the represented page, paragraph, and paragraph-style output contexts. @returns Resolved direction. */
+  GetDefaultFrameDirection(): SvxFrameDirection {
+    return GetDefaultFrameDirection(this);
+  }
+  /** Original current page direction comes from the actual page master. @returns Native direction. */
+  GetCurrentPageDirection(): SvxFrameDirection {
+    return GetCurrentPageDirection(this.m_rDoc, this.m_pCurrentPageDesc);
+  }
+  /** Native frame item/anchor walk with fallback to the exporter's current page master. @param format - Actual frame format. @returns Direction. */
+  TrueFrameDirection(format: SwFrameFormat): SvxFrameDirection {
+    return TrueFrameDirection(this, format);
+  }
   /** Original exporter-kind virtual. @returns Actual output format. */
   abstract GetExportFormat(): MSWordExportFormat;
   readonly m_aFontHelper = new wwFontHelper();
@@ -110,7 +129,6 @@ export enum MSWordExportFormat {
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
 
 import type { SwFormat } from "../../core/attr/format";
-import type { SwContentNode } from "../../core/docnode/node";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 import { CorrectTabStopInSet } from "./ww8atr";

@@ -18,14 +18,16 @@
       "convertLanguageToLocale",
       "convertLocaleToLanguage",
       "getFallbackLocale",
-      "getConfiguredSystemLocale"
+      "getConfiguredSystemLocale",
+      "isRightToLeft"
     ],
     "upstreamSymbols": [
       "MsLangId::getRealLanguage",
       "MsLangId::Conversion::convertLanguageToLocale"
     ],
     "preservedResponsibilities": [
-      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
+      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine.",
+      "S3HW1E HTML73: The source language-ID classifier preserves primary-language and exact-ID exceptions and consumes the actual on-the-fly script registry."
     ],
     "omittedResponsibilities": [
       "Full LanguageTag and source system/configuration services,script fallbacks,physical OS ABI,font/pool/document/UI/ODS remain pending."
@@ -35,12 +37,24 @@
         {
           "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.ts",
           "marker": "setConfiguredSystemLanguage"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.ts",
+          "marker": "isRightToLeft"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/mslangid.cxx",
           "marker": "MsLangId::getRealLanguage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/mslangid.cxx",
+          "marker": "MsLangId::isRightToLeft"
         }
       ]
     }

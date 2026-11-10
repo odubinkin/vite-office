@@ -172,6 +172,66 @@
         {
           "path": "apps/office/src/sw/source/core/bastyp/native-defaults.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts",
+          "marker": "GetParagraphMarkerProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.cell-save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-construction-formats.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.margin-context.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtanchr-surround.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtcntnt.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-frame.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "marker": "GetFrameDir"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "marker": "writerColorValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -202,13 +262,64 @@
         {
           "path": "sw/source/core/bastyp/init.cxx",
           "marker": "new SvxWordLineModeItem"
+        },
+        {
+          "path": "sw/inc/fmtfordr.hxx",
+          "marker": "GetFillOrder"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatAnchor::SwFormatAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatSurround::SwFormatSurround"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/format.cxx",
+          "marker": "SwFormat::~SwFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlgrin.cxx",
+          "marker": "void SwHTMLParser::SetAnchorAndAdjustment"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx",
+          "marker": "void Reader::ResetFrameFormatAttrs"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtcntnt.hxx",
+          "marker": "SwFormatContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "case SwPoolFormatId::FRM_FRAME:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+          "marker": "aFrameFormatSetRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/frmatr.hxx",
+          "marker": "SwAttrSet::GetFrameDir"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+          "marker": "RES_FLY_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
+          "marker": "getSvxBrushItemFromSourceSet"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/attr/swatrset.ts",
     "localSymbols": [
       "SwAttrPool",
-      "SwAttrSet"
+      "SwAttrSet",
+      "GetFrameDir",
+      "writerColorValue",
+      "writerParagraphBackgroundColor"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwAttrPool, SwAttrSet, SwAttrPool::SwAttrPool, o3tl::convert and the bounded SwAttrPool, SwAttrSet contract remain intentionally omitted.",
@@ -264,7 +375,18 @@
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "Added actual SdrItemPool secondary ownership for represented solid-fill values. Corrected earlier checkpoint error: native init.cxx creates the pool internet default through SwFormatINetFormat(OUString(),OUString()), with normal/visited style IDs; only CreateDefault uses the separate zero constructor.",
       "Three native language item defaults use LANGUAGE_DONTKNOW, exact source slots and concrete scalar snapshot restoration.",
-      "Module-global Writer defaults checkpoint: SwModule explicitly initializes/gets/removes its owned ItemInfoPackageSwAttributes; its getter requires initialization. Existing browser singleton bootstrap invokes the source swdll initialization boundary. SwDoc injects that package into the two-argument SwAttrPool constructor, while GetDfltAttr directly borrows the global package. Exact163 native Which/slot/flag entries are extracted from pinned init.cxx and macro/Which declarations. Represented defaults share actual static ItemInfo/default identities across documents/pool copies; sparse snapshot registration accepts actual static/dynamic metadata without value cloning. Global fonts use GetDefaultFonts. Existing document-creation font preferences and two-line orphan/widow values are user overlays, distinct from global defaults (orphan/widow zero). Strict lifecycle, identity, reset/copy, complete metadata/slot map and current consumer tests cover this path. Unrepresented native item classes retain no fabricated value; existing generic paragraph bool/count/break value carriers, full InitNew conditions/configuration and full native pool/ABI still require separate alignment. No whole-filter, module or goal promotion."
+      "Module-global Writer defaults checkpoint: SwModule explicitly initializes/gets/removes its owned ItemInfoPackageSwAttributes; its getter requires initialization. Existing browser singleton bootstrap invokes the source swdll initialization boundary. SwDoc injects that package into the two-argument SwAttrPool constructor, while GetDfltAttr directly borrows the global package. Exact163 native Which/slot/flag entries are extracted from pinned init.cxx and macro/Which declarations. Represented defaults share actual static ItemInfo/default identities across documents/pool copies; sparse snapshot registration accepts actual static/dynamic metadata without value cloning. Global fonts use GetDefaultFonts. Existing document-creation font preferences and two-line orphan/widow values are user overlays, distinct from global defaults (orphan/widow zero). Strict lifecycle, identity, reset/copy, complete metadata/slot map and current consumer tests cover this path. Unrepresented native item classes retain no fabricated value; existing generic paragraph bool/count/break value carriers, full InitNew conditions/configuration and full native pool/ABI still require separate alignment. No whole-filter, module or goal promotion.",
+      "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML44 concrete DIR prerequisite: register original RES_FRAMEDIR130, Environment default, existing native slot10944 and original text-node/paragraph-style/frame range admission. Actual frame-direction items and signed16 WritingMode snapshot restoration are used; no bool/number stand-in replaces the source class. These defaults/ranges enable native HTML CellSaveStruct DIR composition. Full production table orchestration/materialization/layout and final current-model TXT/RTF/Markdown/filter/UI coverage, including newly admitted DIR propagation, remain pending; no whole module/ABI certification.",
+      "S3HW1E HTML57: native InsertTable now constructs actual shared row formats, the original four default-border variants and shared borderless box formats; per-column position widths clone only an already registered owner. Source HTML_MODE selects actual gray double borders, ordinary documents black solid borders, each with55twip distances. Original SwFormatFillOrder and92 WhichId are registered in the actual static item package/pool; default TOP_DOWN differs from explicit insertion LEFT_TO_RIGHT, and inline native SwAttrSet/SwFormat getters use the real item. Obsolete uniform all-edge insertion helper is removed. GetMarginsFromContext is moved to its existing htmlcss1 responsibility and numbering-aware resolution uses actual source contexts/rules with the original uint16/short narrowing and depth clamp (WRITER339). Actual parser/core/filter/UI owners remain; no fabricated frame, layout, font metric or whole reader result is introduced. Whole module/native API/ABI/lifetime behavior remains unverified. First-cell context orchestration, recursive HTML table grammar/materialization/layout, RTF direction export and final format/UI audit remain required; browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML64: native anchor/wrap prerequisites for the HTML first-table context now use real SwFormatAnchor/SwFormatSurround items, original RndStdIds/TextContentAnchorType identities, RES_ANCHOR114 and RES_SURROUND111, actual module-global static defaults, document-pool registration and typed inherited frame getters. Anchor owns an optional real copied SwPosition, is nonshareable, allocates a new uint32 order on construction/copy or changed assignment, excludes order from equality, detaches content binding for paragraph/fly anchors and preserves original raw type/page setter behavior. SwPosition now has the original copy form and clone preserves raw node/content bindings, owner category and affinity instead of reattaching a node-only anchor to text. Surround retains PARALLEL/three-false defaults and independent flags through real copy/equality/pooling. SwFormat releases its owned attribute-set member after dependent reparenting and before base modify teardown; this is needed for real owning anchor-position destruction. This is native state/default/position ownership, not completed UNO frame/property conversion, localized presentation, serialized anchor-position restoration, special-frame registry/factory/sections or fly layout. Those absent services are not simulated or certified. HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Save/open/autosave/recovery deviations are unchanged. HTML64 follow-up preserves the actual engaged optional-position identity on anchor copy assignment, using native raw SwPosition value assignment, and preserves SetAnchor destroy-before-copy replacement order. WRITER345 records the potential source self-alias hazard without asserting a defined compiled result or native reachability.",
+      "S3HW1E HTML66: the original table-consumed non-CSS SetAnchorAndAdjustment overload now produces actual native anchor, horizontal/vertical orientation and wrap items, consuming real context/numbering margins, actual HasCurrentParaFlys and SwPaM movement. No-wrap admission queues original point spacing at the front, appends a real no-space paragraph and opens the original successor spacing override only for nonzero upper margin. Character anchoring moves to the previous Unicode character and restores the source point; inline nontext error retains the original already-written vertical item and absent anchor. Original InsertAttr point/head overloads share the existing owned HTMLAttr queue and source context heads. Existing GetULSpaceFromContext body moves unchanged into its original htmlcss1 source fragment to retain the strict parser size cap. Original Reader::ResetFrameFormatAttrs resets only LR/UL/box items. Real nonshareable SwFormatContent owns an optional registered SwNodeIndex, copies/clones independently, reuses engaged optional assignment, resets/destructs the index without owning its section, and compares actual node identity. Static RES_CNTNT105 defaults and pool registration use actual native items; typed GetContent lives on SwAttrSet/SwFormat. No fabricated serialized pointer, fly section/layout or measurement provider is introduced. These are complete consumed state/legacy-alignment source responsibility fragments, not completed first-cell/table production. CSS-positioned/container alignment, full Reader/reset-format families, MakeFlySection/content/contact/layout ownership, recursive HTML first-cell/table grammar/materialization/layout, RTF direction and final current-slice format/UI audit remain unported or unverified. General style-rename migration remains WRITER347; intentional save/open/autosave/recovery deviations stay unchanged. Whole-module/default/contract/desktop ABI parity is not certified.",
+      "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified.",
+      "S3HW1E HTML73: Typed direction reads the actual Which item through the native effective-item owner.",
+      "Projects actual native Color at the existing Writer primitive output boundary, retaining the original packed alpha and auto sentinel.",
+      "Registers concrete fly split, containment and wrap-influence items with native pool ownership.",
+      "Projects the original drawing fill and accepts an existing brush through the current paint boundary."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

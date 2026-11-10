@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/WrapInfluenceOnPosition.ts",
+    "upstreamPath": "offapi/com/sun/star/text/WrapInfluenceOnPosition.idl",
+    "localSymbols": [
+      "WrapInfluenceOnPosition"
+    ],
+    "upstreamSymbols": [
+      "constants WrapInfluenceOnPosition"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the original three published IDL constants."
+    ],
+    "omittedResponsibilities": [
+      "Runtime UNO type registry generation remains outside this constant declaration."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/WrapInfluenceOnPosition.ts",
+          "marker": "WrapInfluenceOnPosition"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/WrapInfluenceOnPosition.idl",
+          "marker": "constants WrapInfluenceOnPosition"
+        }
+      ]
+    }
+  }
+}

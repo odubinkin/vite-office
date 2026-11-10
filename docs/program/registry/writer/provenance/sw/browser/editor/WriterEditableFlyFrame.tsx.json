@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/editor/WriterEditableFlyFrame.tsx",
+    "rationale": "Projects native text-fly width, position and wrap values to browser CSS and reuses the ordinary Writer paragraph, table and cursor device surfaces.",
+    "responsibilities": [
+      "Projects native text-fly width, position and wrap values to browser CSS and reuses the ordinary Writer paragraph, table and cursor device surfaces."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Uses the existing browser CSS and mounted editable text and table device surfaces for original Writer frame content."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableFlyFrame.tsx",
+          "marker": "WriterEditableFlyFrame"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "mounts and edits the native anchored table"
+        }
+      ],
+      "upstream": []
+    }
+  },
+  "legacyOrder": 78
+}

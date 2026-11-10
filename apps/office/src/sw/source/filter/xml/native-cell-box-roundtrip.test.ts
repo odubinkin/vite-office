@@ -62,7 +62,7 @@ it("retains native border export fallbacks and rejects malformed legacy storage 
                 format: {},
                 cells: [
                   {
-                    paragraphs: [],
+                    content: [],
                     format: {
                       padding: 20,
                       border: "1pt double #112233",

@@ -6,12 +6,21 @@ import { importOdfLength } from "../core/xmluconv";
 import type { XMLTextImportTarget } from "../text/txtparai";
 import { XMLTextImportHelper } from "../text/txtimp";
 import type { OdfBoxProperties } from "../style/bordrhdl";
+import { Converter } from "../../../sax/source/tools/converter";
+import { importWritingDirection } from "../style/prhdlfac";
+
+/** Source table item properties shared by table, row and cell styles. */
+export interface OdfTableVisualProperties {
+  readonly background?: string | undefined;
+  readonly writingMode?: number | undefined;
+}
 
 /** Supported ODF table style families and physical properties. */
 export type OdfTableStyle =
-  | {
+  | (OdfTableVisualProperties & {
       readonly family: "table";
       readonly width?: number | undefined;
+      readonly relativeWidth?: number | undefined;
       readonly align?: "left" | "center" | "right" | "margins" | undefined;
       readonly marginLeft?: number | undefined;
       readonly marginRight?: number | undefined;
@@ -19,18 +28,43 @@ export type OdfTableStyle =
       readonly marginBottom?: number | undefined;
       readonly borderModel?: "collapsing" | "separating" | undefined;
       readonly layoutSplit?: boolean | undefined;
-    }
-  | { readonly family: "table-column"; readonly columnWidth?: number | undefined }
+    })
   | {
+      readonly family: "table-column";
+      readonly columnWidth?: number | undefined;
+      readonly relativeColumnWidth?: number | undefined;
+    }
+  | (Pick<OdfTableVisualProperties, "background"> & {
       readonly family: "table-row";
       readonly minHeight?: number | undefined;
       readonly height?: number | undefined;
       readonly keepTogether?: boolean | undefined;
+    })
+  | (OdfBoxProperties &
+      OdfTableVisualProperties & {
+        readonly family: "table-cell";
+        readonly verticalAlign?: "" | "top" | "middle" | "bottom" | undefined;
+      });
+
+/** Reads the original brush color and the last recognized writing mode in attribute order. @param attributes - Original ordered XML attributes. @returns Represented native table items. */
+function importTableVisualProperties(attributes: FastAttributeList): OdfTableVisualProperties {
+  const text = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+  let background: string | undefined;
+  if (text === "transparent") background = text;
+  else if (text !== null) {
+    const color: [number] = [0];
+    if (Converter.convertColor(color, text)) {
+      const token: [string] = [""];
+      Converter.convertColor(token, color[0]);
+      background = token[0];
     }
-  | (OdfBoxProperties & {
-      readonly family: "table-cell";
-      readonly verticalAlign?: "" | "top" | "middle" | "bottom" | undefined;
-    });
+  }
+  let writingMode: number | undefined;
+  for (const [token, value] of attributes)
+    if (token === XMLToken.STYLE_WRITING_MODE || token === XMLToken.LOEXT_WRITING_MODE)
+      writingMode = importWritingDirection(value) ?? writingMode;
+  return { background, writingMode };
+}
 
 /** Writer-facing streaming table operations; canonical ownership stays in sw. */
 export interface XMLTableImportTarget extends XMLTextImportTarget {
@@ -40,8 +74,8 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
   beginTableHeaderRows(): void;
   endTableHeaderRows(): void;
   beginTableRow(styleName: string): void;
-  beginTableCell(styleName: string, columnSpan?: number): void;
-  coveredTableCell?(): void;
+  beginTableCell(styleName: string, columnSpan?: number, rowSpan?: number): void;
+  coveredTableCell?(styleName?: string): void;
   endTableCell(): void;
   endTableRow(): void;
   endTable(): void;
@@ -114,6 +148,8 @@ export class XMLTableStyleContext extends SvXMLImportContext {
           XMLToken.TABLE_ALIGN,
           XMLToken.TABLE_BORDER_MODEL,
           XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS,
+          XMLToken.FO_BACKGROUND_COLOR,
+          XMLToken.STYLE_WRITING_MODE,
         ],
         "table properties",
       );
@@ -130,9 +166,16 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       if (borderModel !== undefined && borderModel !== "collapsing" && borderModel !== "separating")
         throw new Error(`Unsupported ODF table border model: ${borderModel}`);
       const split = attributes.get(XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS);
+      const relative = attributes.get(XMLToken.STYLE_REL_WIDTH);
+      const percent: [number] = [0];
       this.style = {
         family: "table",
+        ...importTableVisualProperties(attributes),
         width: length(XMLToken.STYLE_WIDTH, "table width"),
+        relativeWidth:
+          relative !== null && Converter.convertPercent(percent, relative)
+            ? Math.max(1, Math.min(100, percent[0]))
+            : undefined,
         marginLeft:
           attributes.get(XMLToken.FO_MARGIN_LEFT) === null
             ? undefined
@@ -166,14 +209,28 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       this.family === "table-column" &&
       element === XMLToken.STYLE_TABLE_COLUMN_PROPERTIES
     ) {
-      attributes.assertOnly([XMLToken.STYLE_COLUMN_WIDTH], "table column properties");
+      attributes.assertOnly(
+        [XMLToken.STYLE_COLUMN_WIDTH, XMLToken.STYLE_REL_COLUMN_WIDTH],
+        "table column properties",
+      );
+      const relative = attributes.get(XMLToken.STYLE_REL_COLUMN_WIDTH);
+      const value: [number] = [0];
       this.style = {
         family: "table-column",
         columnWidth: length(XMLToken.STYLE_COLUMN_WIDTH, "table column width"),
+        relativeColumnWidth:
+          relative?.endsWith("*") && Converter.convertNumber(value, relative.slice(0, -1), 0, 65535)
+            ? value[0]
+            : undefined,
       };
     } else if (this.family === "table-row" && element === XMLToken.STYLE_TABLE_ROW_PROPERTIES) {
       attributes.assertOnly(
-        [XMLToken.STYLE_MIN_ROW_HEIGHT, XMLToken.STYLE_ROW_HEIGHT, XMLToken.FO_KEEP_TOGETHER],
+        [
+          XMLToken.STYLE_MIN_ROW_HEIGHT,
+          XMLToken.STYLE_ROW_HEIGHT,
+          XMLToken.FO_KEEP_TOGETHER,
+          XMLToken.FO_BACKGROUND_COLOR,
+        ],
         "table row properties",
       );
       const keep = attributes.get(XMLToken.FO_KEEP_TOGETHER);
@@ -181,6 +238,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         throw new Error(`Unsupported ODF table row keep-together: ${keep}`);
       this.style = {
         family: "table-row",
+        background: importTableVisualProperties(attributes).background,
         keepTogether: keep === null ? undefined : keep === "always",
       };
       // Native item import visits attributes in document order; the last size member wins.
@@ -202,6 +260,9 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       attributes.assertOnly(
         [
           XMLToken.STYLE_VERTICAL_ALIGN,
+          XMLToken.FO_BACKGROUND_COLOR,
+          XMLToken.STYLE_WRITING_MODE,
+          XMLToken.LOEXT_WRITING_MODE,
           XMLToken.FO_PADDING,
           XMLToken.FO_BORDER,
           XMLToken.FO_PADDING_TOP,
@@ -231,6 +292,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         throw new Error(`Unsupported ODF cell vertical alignment: ${align}`);
       this.style = {
         family: "table-cell",
+        ...importTableVisualProperties(attributes),
         padding: length(XMLToken.FO_PADDING, "table cell padding"),
         border: attributes.get(XMLToken.FO_BORDER) ?? undefined,
         paddingTop: length(XMLToken.FO_PADDING_TOP, "table cell padding"),
@@ -354,8 +416,8 @@ class XMLTableRowContext extends SvXMLImportContext {
     if (element === XMLToken.TABLE_TABLE_CELL)
       return new XMLTableCellContext(this.target, attributes, this.helper);
     if (element === XMLToken.TABLE_COVERED_TABLE_CELL) {
-      attributes.assertOnly([], "covered table cell");
-      this.target.coveredTableCell?.();
+      attributes.assertOnly([XMLToken.TABLE_STYLE_NAME], "covered table cell");
+      this.target.coveredTableCell?.(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
       return new SvXMLIgnoreContext();
     }
     return null;
@@ -376,12 +438,18 @@ class XMLTableCellContext extends SvXMLImportContext {
   ) {
     super();
     attributes.assertOnly(
-      [XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_VALUE_TYPE, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED],
+      [
+        XMLToken.TABLE_STYLE_NAME,
+        XMLToken.TABLE_VALUE_TYPE,
+        XMLToken.TABLE_NUMBER_COLUMNS_SPANNED,
+        XMLToken.TABLE_NUMBER_ROWS_SPANNED,
+      ],
       "table cell",
     );
     this.target.beginTableCell(
       attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
       repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED),
+      repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 65535),
     );
   }
   /** Imports a cell paragraph with the existing Writer text context. @param element - Child token. @param attributes - Paragraph values. @returns Child context. */
@@ -397,11 +465,11 @@ class XMLTableCellContext extends SvXMLImportContext {
   }
 }
 
-/** Validates a bounded ODF column repeat count. @param attributes - XML attributes. @param token - Repeat attribute. @returns Repeat count. */
-function repeatCount(attributes: FastAttributeList, token: XMLToken): number {
+/** Validates a bounded ODF table repeat or span count. @param attributes - XML attributes. @param token - Repeat attribute. @param maximum - Native admitted range. @returns Repeat count. */
+function repeatCount(attributes: FastAttributeList, token: XMLToken, maximum = 256): number {
   const raw = attributes.get(token);
   const count = raw === null ? 1 : Number(raw);
-  if (!Number.isInteger(count) || count < 1 || count > 256)
+  if (!Number.isInteger(count) || count < 1 || count > maximum)
     throw new Error(`Unsupported ODF table repeat count: ${raw}`);
   return count;
 }

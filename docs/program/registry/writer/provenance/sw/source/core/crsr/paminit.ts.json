@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/crsr/paminit.ts",
+          "marker": "fnMoveForward"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-directional-content-move.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/paminit.cxx",
+          "marker": "aFwrd"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/crsr/paminit.ts",
+    "localSymbols": [
+      "fnMoveForward",
+      "fnMoveBackward",
+      "fnParaStart",
+      "fnParaEnd"
+    ],
+    "omittedResponsibilities": [
+      "The six unconsumed movement/search/document/section slots and Cells/hidden/full locale/ICU service family are not represented or fabricated; whole upstream API/ABI/default/lifetime parity is unverified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML63: actual SwPaM.Move dispatches the native selected strategy and only then clears label affinity; Markdown EndTable now calls this entry with the actual forward collection instead of the extracted free forward helper. Native default Chars content movement lives on SwContentNode GoNext/GoPrevious over real registered content indices and the original SAL Unicode non-SKIPCELL code-point primitive; real SwNode.GetTextNode preserves the inline nullable type getter. GoInContent and GoInNode preserve checked actual node movement, default forward and backward-end positioning. Temporary node indices are reassigned and disposed with original scope ownership. Original GoPrevPara/GoNextPara/GoCurrPara and forward/start/backward/end alias identity are represented, retaining point/mark identities and original at-edge crossing. Movement types and directional bindings live in native pamtyp/paminit responsibilities; no dummy function slots or ICU providers are supplied. This is the currently consumed fnNd/fnPos, Chars nonhidden/noncell profile only: the other six collection slots, full Cells/grapheme/hidden/search/document/section movement and locale/ICU services remain unrepresented/unverified. Whole module/API/ABI/default parity, HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Intentional browser save/open/autosave/recovery deviations remain unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/crsr/paminit.cxx",
+    "upstreamSymbols": [
+      "aFwrd",
+      "aBwrd",
+      "fnParaStart",
+      "fnParaEnd"
+    ]
+  },
+  "legacyOrder": 153
+}

@@ -3,9 +3,17 @@
  * LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` ownership boundary.
  */
 
+import { InsertItemSet } from "./DocumentContentOperationsManager.attr";
+import { SetAttrMode } from "../../../inc/swtypes";
 import { SwUndoReplace } from "../undo/unins";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { PaMCorrAbs } from "./doccorr";
+import { DelBookmarks } from "./docbm";
+import { SwNodeIndex } from "../crsr/pam";
+import type { SwNode } from "../docnode/node";
+import type { SwNodeRange } from "../../../inc/ndindex";
 import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -31,6 +39,44 @@ export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
+  /** Moves a represented native interval with its complete nested table sections. @param range - Actual half-open source interval. @param destination - Actual insertion boundary. @returns Whether the native move occurred. */
+  public MoveNodeRange(range: SwNodeRange, destination: SwNode): boolean {
+    return this.document.GetNodes().MoveNodes(range, destination);
+  }
+
+  /** Original full-section deletion orders native bookmark deletion, global cursor correction and node destruction. Fly/redline objects are not represented by this current document model; no stand-in managers are called. @param node - Any actual node in the designated section. @returns Nothing. */
+  public DeleteSection(node: SwNode): void {
+    const first = node.IsStartNode() ? node : node.StartOfSectionNode(),
+      start = new SwNodeIndex(first),
+      end = new SwNodeIndex(node.EndOfSectionNode());
+    try {
+      DelBookmarks(start.GetNode(), end.GetNode());
+      const begin = new SwPosition(start.GetNode()),
+        finish = new SwPosition(end.GetNode()),
+        range = new SwPaM(finish, begin);
+      try {
+        const target = GetCorrPosition(range);
+        try {
+          PaMCorrAbs(range, target);
+        } finally {
+          target.Dispose();
+        }
+      } finally {
+        range.Dispose();
+        begin.Dispose();
+        finish.Dispose();
+      }
+      this.document.GetNodes().DelNodes(start, end.GetIndex() - start.GetIndex() + 1);
+    } finally {
+      start.Dispose();
+      end.Dispose();
+    }
+  }
+
+  /** Native filter InsertItemSet boundary entry; general editing/undo/layout profiles remain separate. @param range - Actual collapsed paragraph boundary. @param set - Native target items. @param mode - Native flags. @returns Nothing. */
+  public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {
+    InsertItemSet(this.document, range, set, mode);
+  }
   /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Native regex/structured replacement remains unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
   public ReplaceRange(range: SwPaM, replacement: string | SwTextFragment, regExp = false): boolean {
     if (typeof replacement !== "string") {
@@ -96,7 +142,19 @@ export class DocumentContentOperationsManager {
 
   /** Appends an empty paragraph with the source AppendNode successor policy; import callers retain the same style and no text hints. @param position - Current text position, updated to the new paragraph. @returns Success. */
   public AppendTextNode(position: SwPosition): boolean {
-    const source = this.GetTextNode(position, "paragraph append");
+    const node = position.GetNode();
+    const source = node.GetTextNode();
+    if (source === null) {
+      const nodes = this.document.GetNodes();
+      const index = nodes.indexOfOrUndefined(node);
+      if (node.GetDoc() !== this.document || index === undefined || index + 1 >= nodes.Count())
+        throw new Error("Writer paragraph append requires a connected position.");
+      const next = nodes.MakeTextNode(nodes.at(index + 1), this.document.GetDfltTextFormatColl());
+      position.Assign(next, 0);
+      this.document.NotifyModelChange({ kind: "document-modified", modified: true });
+      return true;
+    }
+    this.AssertConnectedTextNode(source, "paragraph append");
     const next = new SwTextNode(
       source.GetNodes(),
       source.StartOfSectionNode(),
@@ -198,6 +256,7 @@ export class DocumentContentOperationsManager {
     const source = this.GetTextNode(position, "split");
     const trailing = source.SplitContent(position.GetContentIndex());
     source.GetNodes().insertTextNodeAfter(source, trailing);
+    position.Assign(trailing, 0);
     return trailing;
   }
 
@@ -330,4 +389,19 @@ export function createParagraphStyleResetSet(document: SwDoc): SfxItemSet {
       if (which < RES_PARATR_LIST_ID || which > RES_PARATR_LIST_ISCOUNTED)
         result.Put(pool.GetUserOrPoolDefaultItem(which));
   return result;
+}
+
+/** Original GetCorrPosition keeps content boundaries when present; a structural-only range chooses the actual node immediately following End, even when it too is structural. It does not search for a nearest paragraph. @param range - Original native deletion range. @returns Owned correction position. */
+export function GetCorrPosition(range: SwPaM): SwPosition {
+  return range.GetPoint().GetNode() instanceof SwContentNode
+    ? range.GetPoint().clone()
+    : range.GetMark().GetNode() instanceof SwContentNode
+      ? range.GetMark().clone()
+      : new SwPosition(
+          range
+            .End()
+            .GetNode()
+            .GetNodes()
+            .at(range.End().GetNodeIndex() + 1),
+        );
 }

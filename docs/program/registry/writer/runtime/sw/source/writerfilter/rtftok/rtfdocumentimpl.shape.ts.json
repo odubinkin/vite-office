@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.shape.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.shape.ts#RTFShape",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx#class RTFShape",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "Retains original shape instructions and property order with an independent shape text scope. Grouped and non-text drawing objects, inline graphics and old drawing object destinations are outside this owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RTFShape",
+        "DispatchShape",
+        "FinishShapeGroup"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+      "upstreamSymbols": [
+        "class RTFShape"
+      ]
+    }
+  }
+}

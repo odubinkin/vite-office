@@ -3,6 +3,7 @@
  * `sw/inc/contentindex.hxx` and `sw/source/core/bastyp/index.cxx`.
  */
 
+import { assert } from "../../../../sal/inc/cassert";
 import { BroadcastingModify } from "../../../inc/calbck";
 import type { SwContentNode } from "../docnode/node";
 
@@ -24,6 +25,11 @@ export const enum SwContentIndexUpdateMode {
 export abstract class SwContentIndexRegistry extends BroadcastingModify {
   private readonly indexReferences = new Set<WeakRef<SwContentIndex>>();
   private readonly referencesByIndex = new WeakMap<SwContentIndex, WeakRef<SwContentIndex>>();
+
+  /** Original SwContentIndexReg destructor assertion; native callers must have released or corrected every content index before the node dies. This does not invent a nearest-text fallback for unowned external positions. @returns Nothing. */
+  public DisposeContentIndexRegistry(): void {
+    assert(this.GetContentIndices().length === 0, "There are still indices registered");
+  }
 
   /** Registers one content index without making the registry its lifetime owner. @param index - Attached index. @returns Nothing. */
   public RegisterContentIndex(index: SwContentIndex): void {
@@ -137,9 +143,8 @@ export class SwContentIndex {
     this.Assign(node, index);
   }
 
-  /** Returns the owning content node. @returns Registered content node. */
-  public GetContentNode(): SwContentNode {
-    if (this.contentNode === undefined) throw new Error("SwContentIndex is disposed.");
+  /** Original nullable content owner; an unattached index is valid, including structural SwPosition bounds. @returns Registered content node or native-null binding. */
+  public GetContentNode(): SwContentNode | undefined {
     return this.contentNode;
   }
 

@@ -1,4 +1,27 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
+import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
+import {
+  RES_OPAQUE,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_UNKNOWNATR_BEGIN,
+  RES_UNKNOWNATR_END,
+} from "../../../inc/hintids";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
+import { SwFormatContent } from "../../../inc/fmtcntnt";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
+import { SwFormatSurround } from "../../../inc/fmtsrnd";
+
+import { SwFormatFillOrder } from "../../../inc/fmtfordr";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FRAMEDIR } from "../../../inc/hintids";
+import { SwFormatAutoFormat } from "../txtnode/txatbase";
+import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
 
@@ -35,6 +58,7 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
+import { SvxScriptHintItem } from "../../../../editeng/source/items/textitem.modes";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -63,6 +87,7 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
+  RES_CHRATR_SCRIPT_HINT,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_WORDLINEMODE,
@@ -99,6 +124,13 @@ import {
   type ItemInfo,
 } from "../../../../svl/source/items/itempool";
 import { RES_CHRATR_BEGIN, POOLATTR_END } from "../../../inc/hintids";
+/** Original complete frame-format ranges from init.cxx, including unknown XML attributes and all drawing-layer fill items. */
+export const aFrameFormatSetRange: WhichRangesContainer = [
+  [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+  [RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1],
+  [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+];
+
 /** Source ItemInfoPackageSwAttributes for all currently represented Writer item types. Unknown native entries stay explicitly unrepresented; no stand-in items are created. */
 class ItemInfoPackageSwAttributes extends ItemInfoPackage {
   private readonly maItemInfos = defaultMetadata.map(
@@ -137,6 +169,15 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatHoriOrient());
     add(new SwFormatLayoutSplit());
     add(new SwFormatRowSplit());
+    add(new SwFormatFlySplit());
+    add(new SwFormatFollowTextFlow());
+    add(new SwFormatWrapInfluenceOnObjPos());
+    add(new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR));
+    add(new SwFormatFillOrder());
+    add(new SvxOpaqueItem(RES_OPAQUE));
+    add(new SwFormatContent());
+    add(new SwFormatAnchor());
+    add(new SwFormatSurround());
     add(new SvxBoxItem(RES_BOX));
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));
@@ -159,6 +200,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     add(new SvxColorItem(RES_CHRATR_COLOR));
     add(new SvxBrushItem(RES_CHRATR_HIGHLIGHT));
+    add(new SvxScriptHintItem(RES_CHRATR_SCRIPT_HINT));
     add(new SvxBrushItem(RES_BACKGROUND));
     add(new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST));
     add(new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP));
@@ -178,6 +220,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, false));
     add(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 1));
     add(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, true));
+    add(new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT));
+    add(new SwFormatAutoFormat(RES_TXTATR_AUTOFMT));
   }
   /** Native member-table destruction releases every owned default; source shutdown ordering excludes live pool users. @returns Nothing. */
   override Dispose(): void {

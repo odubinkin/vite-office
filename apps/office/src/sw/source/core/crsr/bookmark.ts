@@ -15,7 +15,25 @@ export class UnoMark {
   }
   /** Implements the represented native GetOtherMarkPos operation. @returns The represented native operation result. */
   GetOtherMarkPos(): SwPosition {
-    return this.other ?? this.point;
+    if (!this.other) throw new Error("assert(UnoMark has an expanded other position)");
+    return this.other;
+  }
+  /** Original MarkBase start query preserves the other endpoint's reference on an expanded equality tie. @returns Borrowed actual start position. */
+  GetMarkStart(): SwPosition {
+    return !this.other || this.point.compare(this.other) < 0 ? this.point : this.other;
+  }
+  /** Original MarkBase end query preserves the primary endpoint's reference on equality. @returns Borrowed actual end position. */
+  GetMarkEnd(): SwPosition {
+    return !this.other || this.point.compare(this.other) >= 0 ? this.point : this.other;
+  }
+  /** Original ordered pair contains original endpoint references, including distinct equal-coordinate positions. @returns Native borrowed start/end pair. */
+  GetMarkStartEnd(): readonly [SwPosition, SwPosition] {
+    return [this.GetMarkStart(), this.GetMarkEnd()];
+  }
+  /** Original MarkBase endpoint removal releases the owned other position without replacing the primary one. @returns Nothing. */
+  ClearOtherMarkPos(): void {
+    this.other?.Dispose();
+    this.other = undefined;
   }
   /** Implements the represented native IsExpanded operation. @returns The represented native operation result. */
   IsExpanded(): boolean {

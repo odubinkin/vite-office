@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/datetime/datetimeutils.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "date-time-values",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/datetime/datetimeutils.ts",
+        "apps/office/src/tools/source/datetime/datetimeutils.test.ts",
+        "vendor/libreoffice-reference/tools/source/datetime/datetimeutils.cxx"
+      ],
+      "justification": "S3HW1E HTML69 implements original DateTimeToOUString using actual borrowed DateTime fields, signed decimal year, two-digit 00 fallback, no fraction and no timezone conversion. Original local fields retain the final Z marker (WRITER350); this is preserved source behavior, not an invented UTC conversion. Other datetimeutils serializers, parsing and platform/native ABI parity remain unported/unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DateTimeToOUString"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "tools/source/datetime/datetimeutils.cxx",
+      "upstreamSymbols": [
+        "DateTimeToOUString",
+        "DateTimeToStringImpl",
+        "lcl_AppendTwoDigits"
+      ]
+    }
+  }
+}

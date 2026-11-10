@@ -118,6 +118,7 @@ export class SwWrtShell extends SwFEShell {
     } finally {
       position.Dispose();
     }
+    this.BindViewDocument(this.GetDoc());
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.undoContext = {
       GetDoc: /** Returns the shell's current SwDoc. @returns Active document. */ () =>
@@ -362,6 +363,7 @@ export class SwWrtShell extends SwFEShell {
   public DocumentReplaced(): void {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
     this.composition = undefined;
+    this.BindViewDocument(this.GetDoc());
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.AssignCursor(paragraph, paragraph.Len());
     this.NotifySelection();
@@ -376,6 +378,7 @@ export class SwWrtShell extends SwFEShell {
     this.tableCursor = undefined;
     while (this.cursor.GetNext() !== this.cursor) this.cursor.GetNext().Dispose();
     this.cursor.Dispose();
+    this.ReleaseViewDocument();
     this.DisposeModify();
   }
   /** Collapses the persistent cursor to one canonical Writer position. @param position - Document-owned node/content position. @returns Whether the cursor changed. */
@@ -455,7 +458,12 @@ export class SwWrtShell extends SwFEShell {
     if (this.getShellCursor().GetPoint().GetNode() === paragraph) {
       return;
     }
-    this.SetPaM(new SwPosition(paragraph, paragraph.Len()));
+    const position = new SwPosition(paragraph, paragraph.Len());
+    try {
+      this.SetPaM(position);
+    } finally {
+      position.Dispose();
+    }
   }
   /** Selects the current native cell, then table, then surrounding text from actual range state. @returns Nothing. */
   public SelectAll(): void {

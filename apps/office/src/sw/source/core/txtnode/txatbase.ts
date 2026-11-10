@@ -1,7 +1,7 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
-import { acquireStyleHandle, releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import {
   writerTextColorValue,
@@ -27,7 +27,7 @@ import {
   SvxWordLineModeItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
   RES_CHRATR_CJK_POSTURE,
@@ -53,7 +53,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
-import { SwFormatINetFormat } from "./fmtatr2";
+import { SwFormatINetFormat, SwFormatAutoFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
@@ -104,63 +104,8 @@ export function createWriterCharacterItemSet(
   }
 }
 
-/** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
-export class SwFormatAutoFormat extends SfxPoolItem {
-  private styleHandle: SfxItemSet;
-
-  /** Creates a non-shareable attribute referencing an explicit style handle. @param styleHandle - Shared character style. @param which - Auto-format WhichId. @returns Nothing. */
-  public constructor(styleHandle: SfxItemSet, which: number = RES_TXTATR_AUTOFMT) {
-    super(which);
-    if (which !== RES_TXTATR_AUTOFMT) throw new Error("SwFormatAutoFormat WhichId is invalid.");
-    this.setNonShareable();
-    this.styleHandle = acquireStyleHandle(styleHandle);
-  }
-
-  /** Returns the shared style handle. @returns Referenced item set. */
-  public GetStyleHandle(): SfxItemSet {
-    return this.styleHandle;
-  }
-
-  /** Assigns the shared handle without cloning its contents. @param styleHandle - New style reference. @returns Nothing. */
-  public SetStyleHandle(styleHandle: SfxItemSet): void {
-    const copy = acquireStyleHandle(styleHandle);
-    releaseStyleHandle(this.styleHandle);
-    this.styleHandle = copy;
-  }
-
-  /** Releases the actual shared handle in the native virtual item destructor. @returns Nothing. */
-  public override Dispose(): void {
-    releaseStyleHandle(this.styleHandle);
-  }
-
-  /** Creates an independent item sharing the same style handle. @returns Cloned item. */
-  public Clone(): SwFormatAutoFormat {
-    return new SwFormatAutoFormat(this.styleHandle, this.Which());
-  }
-
-  /** Compares automatic items by shared handle identity. @param other - Candidate pool item. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SwFormatAutoFormat &&
-      other.Which() === this.Which() &&
-      this.styleHandle === other.styleHandle
-    );
-  }
-
-  /** Exposes the contained item values to the persistence codec. @returns Nested item records. */
-  public override QueryValue(): readonly SfxPoolItemSnapshot[] {
-    return this.styleHandle.entries().map(
-      /** Projects one nested item. @param item - Direct pooled item. @returns Primitive item record. */ (
-        item,
-      ) => ({
-        value: (item instanceof SvxBrushItem
-          ? item.GetColor().toUInt32()
-          : item.QueryValue()) as SfxPoolItemSnapshot["value"],
-        which: item.Which(),
-      }),
-    );
-  }
-}
+/** Original item declaration is owned by fmtatr2; the historical local import remains a compatibility re-export. */
+export { SwFormatAutoFormat } from "./fmtatr2";
 
 /** Native text attribute base with a start position and an optional end. */
 export class SwTextAttr<

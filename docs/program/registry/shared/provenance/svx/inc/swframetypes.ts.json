@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/swframetypes.ts",
+    "localSymbols": [
+      "RndStdIds"
+    ],
+    "upstreamPath": "include/svx/swframetypes.hxx",
+    "upstreamSymbols": [
+      "RndStdIds"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML64: native anchor/wrap prerequisites for the HTML first-table context now use real SwFormatAnchor/SwFormatSurround items, original RndStdIds/TextContentAnchorType identities, RES_ANCHOR114 and RES_SURROUND111, actual module-global static defaults, document-pool registration and typed inherited frame getters. Anchor owns an optional real copied SwPosition, is nonshareable, allocates a new uint32 order on construction/copy or changed assignment, excludes order from equality, detaches content binding for paragraph/fly anchors and preserves original raw type/page setter behavior. SwPosition now has the original copy form and clone preserves raw node/content bindings, owner category and affinity instead of reattaching a node-only anchor to text. Surround retains PARALLEL/three-false defaults and independent flags through real copy/equality/pooling. SwFormat releases its owned attribute-set member after dependent reparenting and before base modify teardown; this is needed for real owning anchor-position destruction. This is native state/default/position ownership, not completed UNO frame/property conversion, localized presentation, serialized anchor-position restoration, special-frame registry/factory/sections or fly layout. Those absent services are not simulated or certified. HTML first-cell/recursive production/materialization/layout, RTF direction and final format/UI audit remain unverified. Save/open/autosave/recovery deviations are unchanged. HTML64 follow-up preserves the actual engaged optional-position identity on anchor copy assignment, using native raw SwPosition value assignment, and preserves SetAnchor destroy-before-copy replacement order. WRITER345 records the potential source self-alias hazard without asserting a defined compiled result or native reachability."
+    ],
+    "omittedResponsibilities": [
+      "Complete native UNO type/property/frame-interface conversion, localized presentations, anchor snapshot restoration, special/fly-format registry/factory/section/layout lifecycle and whole-module/ABI parity remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/swframetypes.ts",
+          "marker": "RndStdIds"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtanchr-surround.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/swframetypes.hxx",
+          "marker": "RndStdIds"
+        }
+      ]
+    }
+  }
+}

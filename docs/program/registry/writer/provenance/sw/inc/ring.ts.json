@@ -17,7 +17,8 @@
       "RingContainer"
     ],
     "preservedResponsibilities": [
-      "Original sw/inc/ring.hxx intrusive ownership: constructor/link-before, unlink reset, MoveTo/self, iterator begin/end/current sentinel and equality assertion, size and exact two-swap merge with both original adjacency assertions. SwPaM consumes this owner and FindAll merges actual result cursor objects. Native const/template/operator/storage syntax is adapted to TypeScript generics, explicit iterator operations and JavaScript iterable protocol; module-internal public link fields represent native friend access. Checked assert uses the existing SAL compiler binding. Source nonadjacent same-ring merge split is preserved and documented as WRITER-028; no whole native service or Writer fidelity certification."
+      "Original sw/inc/ring.hxx intrusive ownership: constructor/link-before, unlink reset, MoveTo/self, iterator begin/end/current sentinel and equality assertion, size and exact two-swap merge with both original adjacency assertions. SwPaM consumes this owner and FindAll merges actual result cursor objects. Native const/template/operator/storage syntax is adapted to TypeScript generics, explicit iterator operations and JavaScript iterable protocol; module-internal public link fields represent native friend access. Checked assert uses the existing SAL compiler binding. Source nonadjacent same-ring merge split is preserved and documented as WRITER-028; no whole native service or Writer fidelity certification.",
+      "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required."
     ],
     "omittedResponsibilities": [
       "Native C++ const/template ABI and process-aborting assert are represented by existing language/compiler boundaries; no compiled full native service equivalence is claimed."
@@ -31,6 +32,10 @@
         {
           "path": "apps/office/src/sw/inc/ring.test.ts",
           "marker": "testIntrusiveRing"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-global-absolute-correction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

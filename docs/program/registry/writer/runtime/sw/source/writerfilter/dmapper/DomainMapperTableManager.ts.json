@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#LN_CT_TblPrBase_tblpPr",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#LN_CT_TblPrBase_tblW",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
+      ],
+      "justification": "S3HW1E HTML75: Real table, temporary row and cell PropertyMap owners consume native bidiVisual and textDirection modifiers, preserving supported/ignored values and table merge semantics. Full TableManager layout/position/style/nested-row orchestration remains unverified. RTF90. Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path. RTF91. Maps hMerge restart/continue to the native boolean horizontal merge property. RTF96. Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties. RTF101. Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position. RTF105. Resolves the original preferred-width and indent measures and preserves source grid fallback. RTF107. Accumulates original row properties and the contiguous header prefix with its source limit.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DomainMapperTableManager",
+        "sprm",
+        "endOfRowAction",
+        "GetTableGridSeparators",
+        "cellProps",
+        "resolvePositionSprm",
+        "takeRowPosition",
+        "insertTableProps",
+        "insertRowProps",
+        "takeRowProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+      "upstreamSymbols": [
+        "DomainMapperTableManager::sprm",
+        "DomainMapperTableManager::endOfRowAction"
+      ]
+    }
+  }
+}

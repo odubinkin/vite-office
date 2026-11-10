@@ -313,3 +313,32 @@ it("retains actual native page-layout type rejection before and after descriptor
 });
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+it("retains only the last top-level section through the actual native SvRef owner", /** Original PopProperties keeps the previous map alive for the next section, while nested section contexts do not replace it. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    model = new SwXTextDocument(doc),
+    mapper = new DomainMapper(model, SourceDocumentType.RTF).impl;
+  try {
+    const first = mapper.PushProperties(C.CONTEXT_SECTION) as SectionPropertyMap;
+    const released = vi.spyOn(first, "dispose");
+    expect(first.GetRefCount()).toBe(1);
+    mapper.PopProperties(C.CONTEXT_SECTION);
+    expect(mapper.GetLastSectionContext()).toBe(first);
+    expect(first.GetRefCount()).toBe(1);
+    expect(released).not.toHaveBeenCalled();
+    const outer = mapper.PushProperties(C.CONTEXT_SECTION) as SectionPropertyMap;
+    const inner = mapper.PushProperties(C.CONTEXT_SECTION) as SectionPropertyMap;
+    const nestedRelease = vi.spyOn(inner, "dispose");
+    mapper.PopProperties(C.CONTEXT_SECTION);
+    expect(nestedRelease).toHaveBeenCalledTimes(1);
+    expect(mapper.GetLastSectionContext()).toBe(first);
+    mapper.PopProperties(C.CONTEXT_SECTION);
+    expect(mapper.GetLastSectionContext()).toBe(outer);
+    expect(released).toHaveBeenCalledTimes(1);
+    expect(first.GetRefCount()).toBe(1 << 30);
+  } finally {
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});

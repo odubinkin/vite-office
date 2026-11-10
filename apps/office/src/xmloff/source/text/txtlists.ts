@@ -95,10 +95,10 @@ export class XMLTextListsHelper {
     }
     return listId;
   }
-  private readonly contexts: ListContext[] = [];
-  /** Pushes a new block with no current item. @param block - Active list. @returns Nothing. */
-  public PushListContext(block: XMLTextListBlock): void {
-    this.contexts.push({ block, item: undefined });
+  private readonly contexts: (ListContext | undefined)[] = [];
+  /** Pushes a new block with no current item, or isolates a frame text location. @param block - Active list if present. @returns Nothing. */
+  public PushListContext(block?: XMLTextListBlock): void {
+    this.contexts.push(block === undefined ? undefined : { block, item: undefined });
   }
   /** Restores the enclosing list context. @returns Nothing. */
   public PopListContext(): void {

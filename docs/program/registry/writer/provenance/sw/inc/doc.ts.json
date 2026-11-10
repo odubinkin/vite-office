@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/inc/doc.ts",
+    "upstreamPath": "sw/inc/doc.hxx",
+    "localSymbols": [
+      "SetNumRuleMode",
+      "SwDocOptions",
+      "WriterEmbeddedFont"
+    ],
+    "upstreamSymbols": [
+      "SetNumRuleMode"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "preservedResponsibilities": [
+      "S3HW1E HTML70 relocates the original SetNumRuleMode0/1/2/4/8 scalar contract to its doc.hxx header responsibility. Existing document re-exports retain the identical runtime enum and all clients keep their import paths. SwDocOptions and WriterEmbeddedFont are unchanged type-only browser construction/package ingress contracts, not claimed native fields/classes/default or ABI parity. No new model, constructor policy or font provider is introduced. Full native document header/default/contracts remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibility is implemented. Complete native module/default/layout/document lifecycle, frame factory/create-delete undo/modified restoration and end-to-end TXT/RTF/Markdown/UI parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/doc.ts",
+          "marker": "SetNumRuleMode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc-frameformats.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+          "marker": "SetNumRuleMode"
+        }
+      ]
+    }
+  }
+}

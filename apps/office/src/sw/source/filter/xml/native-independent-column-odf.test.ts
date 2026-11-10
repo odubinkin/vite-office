@@ -1,7 +1,8 @@
 /** @fileoverview Checks source union-grid ODF spans and complete native box frame sizes across codec boundaries. */
 import { expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import type { SwTable } from "../../core/table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
@@ -40,6 +41,67 @@ function fixture() {
       required(box.GetParagraphs()[0]).SetText(`Original ${rowIndex}:${column}`);
   return { doc, table };
 }
+
+/** Reads the original signed span on each native box. @param table - Actual table. @returns Row-major model span values. */
+function signedSpans(table: SwTable): number[][] {
+  const spans: number[][] = [];
+  for (const row of table.GetTabLines()) {
+    const values: number[] = [];
+    for (const box of row.GetTabBoxes()) values.push(box.getRowSpan());
+    spans.push(values);
+  }
+  return spans;
+}
+
+it("keeps vertical Writer spans through ODT, the worker codec and clipped source spans", /** The package carries the original positive master and reconstructs covered native boxes. @returns Completion. */ async () => {
+  const doc = new SwDoc();
+  const restored: SwDoc[] = [];
+  try {
+    const table = doc.nodes.MakeTableNode("Vertical spans", { width: 3600 });
+    for (let row = 0; row < 3; ++row) {
+      const boxes = doc.nodes.AppendTableRow(table, 2).GetTabBoxes();
+      for (const box of boxes)
+        box.SetFrameSize(new SwFormatFrameSize(SwFrameSize.Variable, 1800, 0));
+      const first = required(boxes[0]);
+      first.setRowSpan(row === 0 ? 3 : row - 3);
+      required(required(boxes[1]).GetParagraphs()[0]).SetText(String(row));
+    }
+    const spans = [
+      [3, 1],
+      [-2, 1],
+      [-1, 1],
+    ];
+    const encoded = encodeWriterDocument(doc);
+    const decoded = decodeWriterDocument(structuredClone(encoded));
+    restored.push(decoded);
+    expect(signedSpans(required(decoded.GetTables()[0]))).toEqual(spans);
+    const bytes = writeOdtDocument(doc, { title: "Vertical spans" });
+    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    expect(content).toContain('table:number-rows-spanned="3"');
+    expect(content.match(/<table:covered-table-cell table:style-name="[^"]+"\/>/gu)).toHaveLength(
+      2,
+    );
+    const reopened = (await readOdtDocument(bytes, { title: "Vertical spans" })).document;
+    restored.push(reopened);
+    expect(signedSpans(required(reopened.GetTables()[0]))).toEqual(spans);
+    const { document: clipped } = importWriterXml(
+      exportStylesXml(doc),
+      content
+        .replace('table:number-rows-spanned="3"', 'table:number-rows-spanned="4"')
+        .replaceAll(/<table:covered-table-cell table:style-name="[^"]+"\/>/gu, ""),
+      { title: "Clipped vertical spans" },
+    );
+    restored.push(clipped);
+    const clippedTable = required(clipped.GetTables()[0]);
+    expect(signedSpans(clippedTable)).toEqual(spans);
+    expect(clippedTable.GetTabLines()[2]?.GetTabBoxes()[1]?.GetParagraphs()[0]?.GetText()).toBe(
+      "2",
+    );
+  } finally {
+    for (const copy of restored) copy.Dispose();
+    doc.Dispose();
+  }
+});
 it("ODF union grid emits literal spans and covered slots and reopens original native cells", /** Checks real package roundtrip rather than a synthetic width record. @returns Completion. */ async () => {
   const f = fixture(),
     bytes = writeOdtDocument(f.doc, { title: "Independent" }),

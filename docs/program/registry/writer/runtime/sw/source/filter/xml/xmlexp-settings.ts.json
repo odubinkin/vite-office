@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlexp-settings.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlexp-settings.ts#exportSettingsXml",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx#SwXMLExport::GetConfigurationSettings",
+        "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Exports the represented native Writer configuration vector through xmloff. View settings, document-specific properties and settings outside the represented Writer service are unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportSettingsXml"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
+      "upstreamSymbols": [
+        "SwXMLExport::GetConfigurationSettings"
+      ]
+    }
+  }
+}

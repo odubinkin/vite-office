@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmltab.save.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmltab.save.ts",
+        "apps/office/src/sw/source/filter/html/htmltab.save.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmltab.cxx"
+      ],
+      "justification": "S3HW1E HTML43: native SectionSaveStruct snapshots actual font/context lower bounds, heading-stack start and definition depth, freezes existing stacks, and restores original counters and paragraph flags after callers clean local contexts. PopContext, EndContext PopStack, heading/list/definition searches, margin/spacing lookups and SetTextCollAttrs consume the original distinct context/attribute minima. Terminal cleanup follows the original two-pass recovery without hanging on protected contexts. Same-owner parser fields are exposed to permanent source fragments without replacement state. Native synchronous section values do not claim pending-device ownership; row/cell/caption orchestration, table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain pending. Broad semantic parity stays unverified. Font bounds and heading-stack start preserve original uint16 narrowing independently of size_t context bounds (WRITER326); the regression uses65536 actual native font producers, not injected minima or synthetic operation results.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SectionSaveStruct"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmltab.cxx",
+      "upstreamSymbols": [
+        "SectionSaveStruct"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
+    "upstreamPath": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+    "localSymbols": [
+      "ANY_WORD",
+      "ANYWORD_IGNOREWHITESPACES",
+      "DICTIONARY_WORD",
+      "WORD_COUNT"
+    ],
+    "upstreamSymbols": [
+      "ANY_WORD",
+      "ANYWORD_IGNOREWHITESPACES",
+      "DICTIONARY_WORD",
+      "WORD_COUNT"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
+    ],
+    "omittedResponsibilities": [
+      "Other UNO word modes, grapheme and line operations, and binary UNO ABI remain outside this Writer dictionary path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/WordType.ts",
+          "marker": "ANY_WORD"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+          "marker": "ANY_WORD"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+          "marker": "ANYWORD_IGNOREWHITESPACES"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+          "marker": "DICTIONARY_WORD"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/WordType.idl",
+          "marker": "WORD_COUNT"
+        }
+      ]
+    }
+  }
+}

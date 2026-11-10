@@ -1,4 +1,5 @@
 /** @fileoverview Writer Markdown parser/document owner from pinned sw/source/filter/md/swmd.cxx. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { md_parse } from "../../../../external/md4c/src/md4c";
 import {
   MD_DIALECT_GITHUB,
@@ -25,7 +26,7 @@ import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { resetTextFormatCollAttributes, setTextFormatCollAtNode } from "../../core/doc/docfmt";
 import { resetParagraphTextAttributes } from "../../core/txtnode/txtedt";
-import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { SwPaM, SwPosition, fnMoveForward } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { DontExpandFormat } from "../../core/txtnode/ndtxt-format-change";
 import { SwNumRule } from "../../core/doc/number";
@@ -35,6 +36,12 @@ import { MDTable } from "./mdtab";
 import * as callbacks from "./mdcallbcks";
 
 const MD_PARSPACE = Math.round((5 * 1440) / 25.4);
+const adjustMap: ReadonlyMap<MD_ALIGN, SvxAdjust> = new Map([
+  [MD_ALIGN.MD_ALIGN_DEFAULT, SvxAdjust.Left],
+  [MD_ALIGN.MD_ALIGN_LEFT, SvxAdjust.Left],
+  [MD_ALIGN.MD_ALIGN_CENTER, SvxAdjust.Center],
+  [MD_ALIGN.MD_ALIGN_RIGHT, SvxAdjust.Right],
+]);
 /** Native append mode values retain explicit spacing versus soft state. */
 export enum SwMdAppendMode {
   /** Preserve margins. */ AM_NORMAL,
@@ -55,14 +62,16 @@ export class MarkdownReader {
     const position = new SwPosition(first),
       pam = new SwPaM(position);
     position.Dispose();
+    const parser = new SwMarkdownParser(document, pam, baseURL);
+    let complete = false;
     try {
-      new SwMarkdownParser(document, pam, baseURL).CallParser(bytes);
+      parser.CallParser(bytes);
+      complete = true;
       return document;
-    } catch (error) {
-      document.Dispose();
-      throw error;
     } finally {
+      parser.SourceDispose();
       pam.Dispose();
+      if (!complete) document.Dispose();
     }
   }
 }
@@ -73,15 +82,34 @@ export class SwMarkdownParser {
   public m_bInsideImage = false;
   public m_htmlData = "";
   private readonly numInfo = new SwMdNumRuleInfo();
-  private blockQuoteDepth = 0;
-  private noParSpace = false;
+  private blockQuoteDepth = -1;
+  private noParSpace = true;
   private table: MDTable | undefined;
+  private readonly m_aTables: WeakRef<MDTable>[] = [];
   /** Binds the native document, registered cursor and source medium. @param m_xDoc - Document. @param m_pPam - Cursor. @param m_sBaseURL - Medium URL. @returns Parser. */
   public constructor(
     public readonly m_xDoc: SwDoc,
     public readonly m_pPam: SwPaM,
     public readonly m_sBaseURL = "",
   ) {}
+  /** Original raw-pointer table registry does not own table cursors. @param table - Actual borrowed cursor. @returns Nothing. */
+  public RegisterTable(table: MDTable): void {
+    this.m_aTables.push(new WeakRef(table));
+  }
+  /** Original std::erase removes all occurrences of the actual pointer. @param table - Actual cursor being destroyed. @returns Nothing. */
+  public DeRegisterTable(table: MDTable): void {
+    for (let i = this.m_aTables.length; i;)
+      if (this.m_aTables[--i]?.deref() === table) this.m_aTables.splice(i, 1);
+  }
+  /** Original parser/member destruction releases current table and owned span items, not the caller-owned document or cursor. @returns Nothing. */
+  public SourceDispose(): void {
+    this.numInfo.Clear();
+    const table = this.table;
+    this.table = undefined;
+    table?.SourceDispose();
+    this.m_aTables.length = 0;
+    for (const item of this.m_aAttrStack.splice(0)) item?.Dispose();
+  }
   /** Calls the actual pinned md4c port with Writer's source flags. @param source - Native UTF-8 byte stream. @returns Nothing on success. */
   public CallParser(source: Uint8Array): void {
     if (source.length === 0) throw new Error("Invalid Markdown byte stream.");
@@ -396,51 +424,50 @@ export class SwMarkdownParser {
   /** Starts a real native table with source header/repetition/border defaults. @param rows - Rows. @param columns - Columns. @returns Nothing. */
   public StartTable(rows: number, columns: number): void {
     this.StartPara();
-    this.table = new MDTable();
+    const previous = this.table;
+    this.table = new MDTable(this);
+    previous?.SourceDispose();
     this.table.SetTable(
       this.m_xDoc.InsertTable(
         { mnInsMode: SwInsertTableFlags.All, mnRowsToRepeat: 1 },
         this.m_pPam.GetPoint(),
         rows,
         columns,
+        HoriOrientation.FULL,
       ),
     );
   }
   /** Advances the actual row cursor. @returns Nothing. */
   public StartRow(): void {
-    this.table?.IncCurRow();
+    if (!this.table) throw new Error("assert(Markdown row requires an active table cursor)");
+    this.table.IncCurRow();
   }
   /** Selects the actual cell paragraph and assigns native alignment. @param align - md4c alignment. @returns Nothing. */
   public StartCell(align: MD_ALIGN): void {
     const state = this.table;
-    if (state === undefined) return;
+    if (!state) throw new Error("assert(Markdown cell requires an active table cursor)");
     state.IncCurCol();
-    const row = state.GetTable().GetTabLines()[state.GetCurRow()];
-    const box = row?.GetTabBoxes()[state.GetCurCol()];
-    const node = box?.GetParagraphs()[0];
-    if (node === undefined) return;
-    node.SetAttr(
-      new SvxAdjustItem(
-        align === MD_ALIGN.MD_ALIGN_CENTER
-          ? SvxAdjust.Center
-          : align === MD_ALIGN.MD_ALIGN_RIGHT
-            ? SvxAdjust.Right
-            : SvxAdjust.Left,
-        RES_PARATR_ADJUST,
-      ),
-    );
+    const table = state.GetTable();
+    if (!table) throw new Error("assert(Markdown cell requires an inserted table)");
+    const row = table.GetTabLines()[state.GetCurRow()],
+      box = row?.GetTabBoxes()[state.GetCurCol()];
+    if (!box) throw new Error("assert(Markdown cell requires an actual table box)");
+    const start = box.GetSttNd();
+    if (!start) throw new Error("assert(Markdown content box has a start node)");
+    const node = start.GetNodes().at(start.GetIndex() + 1);
+    if (!(node instanceof SwTextNode)) return;
+    const adjust = adjustMap.get(align);
+    if (adjust === undefined) throw new RangeError("Markdown alignment is absent from adjustMap");
+    node.SetAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
     this.m_pPam.GetPoint().Assign(node, 0);
   }
-  /** Moves after the completed table using the existing body paragraph. @returns Nothing. */
+  /** Original EndTable moves the actual PaM forward, appends with AM_SPACE, then releases the table cursor. The retained post-table paragraph is preserved as upstream. @returns Nothing. */
   public EndTable(): void {
-    const table = this.table?.GetTable().GetTableNode();
-    if (table !== undefined) {
-      const after = this.m_xDoc.GetNodes().at(table.EndOfSectionNode().GetIndex() + 1);
-      if (!(after instanceof SwTextNode))
-        throw new Error("Markdown table has no trailing paragraph.");
-      this.m_pPam.GetPoint().Assign(after, 0);
-    }
+    this.m_pPam.Move(fnMoveForward);
+    this.AppendTextNode(SwMdAppendMode.AM_SPACE);
+    const table = this.table;
     this.table = undefined;
+    table?.SourceDispose();
   }
   /** Starts a raw HTML block at a paragraph boundary. @returns Nothing. */
   public BeginHtmlBlock(): void {

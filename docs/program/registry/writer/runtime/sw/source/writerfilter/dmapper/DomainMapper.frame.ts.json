@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.frame.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.frame.ts#ApplyFrameAttribute",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx#case NS_ooxml::LN_CT_FramePr_hAnchor:",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts"
+      ],
+      "justification": "Maps native framePr attribute values, source orientation and wrap, and the original distance conversion. Paragraph drop-cap resolution is a distinct source responsibility.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ApplyFrameAttribute"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+      "upstreamSymbols": [
+        "case NS_ooxml::LN_CT_FramePr_hAnchor:"
+      ]
+    }
+  }
+}

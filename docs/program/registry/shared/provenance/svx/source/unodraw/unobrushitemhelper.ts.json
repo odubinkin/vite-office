@@ -7,13 +7,15 @@
     "localPath": "apps/office/src/svx/source/unodraw/unobrushitemhelper.ts",
     "upstreamPath": "svx/source/unodraw/unobrushitemhelper.cxx",
     "localSymbols": [
-      "setSvxBrushItemAsFillAttributesToTargetSet"
+      "setSvxBrushItemAsFillAttributesToTargetSet",
+      "getSvxBrushItemFromSourceSet"
     ],
     "upstreamSymbols": [
       "setSvxBrushItemAsFillAttributesToTargetSet"
     ],
     "preservedResponsibilities": [
-      "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping."
+      "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping.",
+      "Projects the represented native empty and solid drawing fills back to a brush."
     ],
     "omittedResponsibilities": [
       "Graphics/bitmap positioning and reverse fill conversion remain outside this non-graphic brush family; compiled native document-level differential remains unverified."
@@ -27,12 +29,20 @@
         {
           "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
           "marker": "setSvxBrushItemAsFillAttributesToTargetSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
+          "marker": "getSvxBrushItemFromSourceSet"
         }
       ]
     }

@@ -1,4 +1,7 @@
 /** @fileoverview Owns numeric native table insertion history through Writer's SwUndoTableNdsChg from untbl.cxx. */
+import { RES_PAGEDESC, RES_BREAK } from "../../../inc/hintids";
+import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
@@ -10,10 +13,10 @@ import type {
 import { MoveTableLineHint, MoveTableBoxHint } from "../../../inc/hints";
 import type { SwFrameFormat } from "../layout/atrfrm";
 import { SwTabFrame } from "../layout/tabfrm";
-import { SwTableNode } from "../docnode/node";
+import { SwTableNode, SwContentNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
-import { SwPosition } from "../crsr/pam";
+import { SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   SwUndo,
@@ -80,7 +83,8 @@ export class SwUndoInsTable extends SwUndo {
   private readonly m_nSttNode: number;
   private readonly options: SwInsertTableOptions;
   private readonly boxFormat: SwTableBoxFormat | undefined;
-  /** Captures bounded construction parameters without retaining an inserted graph. @param options - Native insertion flags. @param rows - Row count. @param columns - Column count. @param name - Requested table name. @param cursor - Insertion point after any split. @param boxFormat - Represented browser autoformat attributes. @returns Nothing. */
+  private readonly columnPositions: readonly number[] | null;
+  /** Captures bounded construction parameters without retaining an inserted graph. @param options - Native insertion flags. @param rows - Row count. @param columns - Column count. @param name - Requested table name. @param cursor - Insertion point after any split. @param boxFormat - Represented browser autoformat attributes. @param adjust - Original horizontal orientation. @param columnsPosition - Copied native column-position vector. @returns Nothing. */
   public constructor(
     options: SwInsertTableOptions,
     private readonly rows: number,
@@ -88,8 +92,11 @@ export class SwUndoInsTable extends SwUndo {
     private name: string,
     cursor: SwUndoCursorState,
     boxFormat?: SwTableBoxFormat,
+    private readonly adjust: number = HoriOrientation.FULL,
+    columnsPosition: readonly number[] | null = null,
   ) {
     super("Insert Table", cursor, cursor);
+    this.columnPositions = columnsPosition?.slice() ?? null;
     this.m_nSttNode = cursor.point.node.GetIndex();
     this.options = { ...options };
     this.boxFormat =
@@ -98,6 +105,9 @@ export class SwUndoInsTable extends SwUndo {
         : {
             ...boxFormat,
             ...(boxFormat.box === undefined ? {} : { box: boxFormat.box.Clone() }),
+            ...(boxFormat.frameSize === undefined
+              ? {}
+              : { frameSize: boxFormat.frameSize.Clone() }),
             ...(boxFormat.vertOrient === undefined
               ? {}
               : { vertOrient: boxFormat.vertOrient.Clone() }),
@@ -109,29 +119,87 @@ export class SwUndoInsTable extends SwUndo {
   }
   /** Deletes the actual section rather than retaining its model graph. @param context - Native context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    context.GetDoc().GetNodes().DeleteTable(this.GetTable(context.GetDoc()).GetTableNode());
+    const doc = context.GetDoc(),
+      index = new SwNodeIndex(doc.GetNodes(), this.m_nSttNode);
+    try {
+      const node = index.GetNode();
+      if (!(node instanceof SwTableNode)) return;
+      const table = node.GetTable(),
+        format = table.GetFrameFormat();
+      for (const client of new SwIterator(SwClient, format))
+        if (client instanceof SwTabFrame && client.GetTable() === table) client.DestroyImpl();
+      SwUndo.RemoveIdxFromSection(doc, this.m_nSttNode);
+      const next = doc.GetNodes().at(node.EndOfSectionIndex() + 1);
+      if (next instanceof SwContentNode)
+        for (const which of [RES_PAGEDESC, RES_BREAK]) {
+          const item = format.GetAttrSet().GetItemIfSet(which, false);
+          if (item) next.SetAttr(item);
+        }
+      this.name = format.GetName();
+      doc.GetNodes().DelNodes(index, node.EndOfSectionIndex() - index.GetIndex() + 1);
+    } finally {
+      index.Dispose();
+    }
   }
-  /** Reconstructs the table at the numeric boundary and selects its first native cell. @param context - Native context. @returns Nothing. */
+  /** Executes the browser's existing initial-operation bridge with the original shell flag, independently of redo defaults. @param context - Actual shell-owned context. @returns Nothing. */
+  public InsertFromShell(context: SwUndoRedoContext): void {
+    this.Insert(context, true);
+  }
+  /** Reconstructs with the original redo defaults and restores the saved table name. @param context - Actual native context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
+    if (!context.GetDoc().GetEditShell()) throw new RuntimeException();
+    this.Insert(context, false);
+  }
+  /** Shares represented construction without recording a duplicate undo action. @param context - Native shell context. @param initial - Initial shell execution rather than native redo. @returns Nothing. */
+  private Insert(context: SwUndoRedoContext, initial: boolean): void {
     const document = context.GetDoc(),
       position = new SwPosition(document.GetNodes().at(this.m_nSttNode) as SwTextNode, 0);
+    const undo = document.GetUndoManager(),
+      enabled = undo.DoesUndo();
+    undo.DoUndo(false);
     try {
       const table = document.InsertTable(
         this.options,
         position,
         this.rows,
         this.columns,
-        this.name,
-        this.boxFormat,
+        this.adjust,
+        null,
+        this.columnPositions,
+        initial,
+        true,
+        initial ? this.name : "",
       );
+      if (!table)
+        throw new Error("assert(table history insertion is outside the footnote section)");
+      if (this.boxFormat)
+        for (const row of table.GetTabLines())
+          for (const box of row.GetTabBoxes()) box.SetFormat(this.boxFormat);
+      if (!initial) table.GetFrameFormat().SetFormatName(this.name);
       this.name = table.GetName();
       const line = table.GetTabLines()[0] as SwTableLine,
         box = line.GetTabBoxes()[0] as SwTableBox,
         cell = box.GetParagraphs()[0] as SwTextNode;
-      this.SetAfterCursor(createWriterCollapsedCursorState(cell, 0, cell.GetCharacterItemsAt(0)));
+      const items = cell.GetCharacterItemsAt(0),
+        state = createWriterCollapsedCursorState(cell, 0, items);
+      try {
+        this.SetAfterCursor(state);
+        if (initial) context.RestoreCursor(state);
+      } finally {
+        state.pendingCharacterItems.Dispose();
+        items.Dispose();
+      }
     } finally {
+      undo.DoUndo(enabled);
       position.Dispose();
     }
+  }
+  /** Original action payload destruction releases copied native item values. @returns Nothing. */
+  public override Dispose(): void {
+    this.boxFormat?.box?.Dispose();
+    this.boxFormat?.frameSize?.Dispose();
+    this.boxFormat?.vertOrient?.Dispose();
+    super.Dispose();
   }
 }
 

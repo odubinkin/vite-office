@@ -5,7 +5,15 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP, RES_CNTNT, POOLATTR_END } from "../../../inc/hintids";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { SwTextFormatColl } from "../doc/fmtcol";
+import type { SwFormat } from "../attr/format";
+import {
+  RES_TXTFMTCOLL,
+  RES_CHRFMT,
+  RES_FRMFMT,
+  RES_FLYFRMFMT,
+  RES_DRAWFRMFMT,
+  RES_GRFFMTCOLL,
+} from "../../../inc/hintids";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -486,10 +494,12 @@ export class SwUndoMoveLeftMargin extends SwUndo {
 export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
   public m_oOldSet: SfxItemSet | undefined;
   private readonly m_sFormatName: string;
-  /** Original item-set rvalue or scalar constructor; the represented format family is paragraph collections. @param source - Transferred set or borrowed item. @param format - Original text collection. @returns Action. */
-  public constructor(source: SfxItemSet | SfxPoolItem, format: SwTextFormatColl) {
+  private readonly m_nFormatWhich: number;
+  /** Original item-set rvalue or scalar constructor; represented name-lookup families use their actual document tables. @param source - Transferred set or borrowed item. @param format - Actual native format. @returns Action. */
+  public constructor(source: SfxItemSet | SfxPoolItem, format: SwFormat) {
     super();
     this.m_sFormatName = format.GetName();
+    this.m_nFormatWhich = format.Which();
     this.m_oOldSet =
       source instanceof SfxItemSet ? source : format.GetAttrSet().CloneAsValue(false);
     if (!(source instanceof SfxItemSet)) this.m_oOldSet.Put(source);
@@ -513,13 +523,13 @@ export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
   /** Applies the native old set and captures the reverse delta through original format notifications. @param context - Current document. @returns Nothing. */
   public override UndoWithContext(context: SwUndoRedoContext): void {
     if (!this.m_oOldSet) return;
-    const format = context.GetDoc().FindTextFormatCollByName(this.m_sFormatName);
+    const format = this.GetFormat(context.GetDoc());
     if (!format) return;
     const helper = new SwUndoFormatAttrHelper(format);
     try {
       format.SetFormatAttrSet(this.m_oOldSet);
       const undo = helper.GetUndo();
-      if (undo?.m_oOldSet) {
+      if (undo) {
         this.m_oOldSet.Dispose();
         this.m_oOldSet = undo.m_oOldSet;
         undo.m_oOldSet = undefined;
@@ -528,17 +538,40 @@ export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
       helper.Dispose();
     }
   }
+  /** Original represented name lookup branches over real family tables. Volatile table/section/box node-index capture, fly-anchor restore and draw-selection responsibilities remain unported. @param document - Actual document. @returns Actual named owner or absence. */
+  private GetFormat(document: SwDoc): SwFormat | undefined {
+    switch (this.m_nFormatWhich) {
+      case RES_TXTFMTCOLL:
+        return document.FindTextFormatCollByName(this.m_sFormatName);
+      case RES_CHRFMT:
+        return document.FindCharFormatByName(this.m_sFormatName);
+      case RES_GRFFMTCOLL: {
+        const format = document.GetDfltGrfFormatColl();
+        return format.GetName() === this.m_sFormatName ? format : undefined;
+      }
+      case RES_FRMFMT:
+      case RES_FLYFRMFMT:
+      case RES_DRAWFRMFMT: {
+        const special = document.GetSpzFrameFormats();
+        const position = special.findByTypeAndName(this.m_nFormatWhich, this.m_sFormatName);
+        if (position !== special.typeAndNameEnd()) return special.GetFormatByTypeAndName(position);
+        return document.FindFrameFormatByName(this.m_sFormatName);
+      }
+      default:
+        return undefined;
+    }
+  }
   /** Original redo calls the same operation. @param context - Current document. @returns Nothing. */
   public override RedoWithContext(context: SwUndoRedoContext): void {
     this.UndoWithContext(context);
   }
 }
 
-/** Original text-format notification helper owns the captured SwUndoFormatAttr until its old set is transferred. */
+/** Original format notification helper owns the captured SwUndoFormatAttr until its old set is transferred. */
 export class SwUndoFormatAttrHelper extends SwClient {
   private m_pUndo: SwUndoFormatAttr | undefined;
   /** Registers the actual client on the actual text collection. @param m_rFormat - Borrowed collection. @returns Helper. */
-  constructor(private readonly m_rFormat: SwTextFormatColl) {
+  constructor(private readonly m_rFormat: SwFormat) {
     super();
     this.RegisterToModify(m_rFormat);
   }

@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/htmltbl.column.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/htmltbl.column.ts",
+          "marker": "SwHTMLTableLayoutColumn"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/doc/htmltbl.cxx",
+          "marker": "SwHTMLTableLayoutColumn"
+        },
+        {
+          "path": "sw/inc/htmltbl.hxx",
+          "marker": "SwHTMLTableLayoutColumn"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/htmltbl.cxx",
+    "localSymbols": [
+      "SwHTMLTableLayoutColumn"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLTableLayoutColumn"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML36: native HTMLTableCnts paragraph-section chains, HTMLTableCell/Row/Column value owners and original SwHTMLTableLayoutCnts/Cell/Column value families now retain real SwStartNode/SwTableBox/SwFrameFormat and shared brush/box identities. Original protection selective resets, row expand/shrink span updates, width-family merge differences, six borrowed format slots, output-reference writes, lazy cached content layout and uint8 pass references are preserved. Actual current core cell sections and pooled formats are used in tests, with no fake table/document/layout or computed width substitution. Native SwTableBox.GetSttNd is exposed on its existing section owner; the established GetStartNode binding delegates to it. Paragraph-content constructor variants are represented; nested table and merged core box ownership are absent from the current SwTableBox slice, and nested-table constructor variants are not silently substituted. Main HTMLTable grid/token reader/BuildTable, automatic text/layout passes, insertion boundary snapshots and final model/UI audit remain pending. Broader native module/API/ABI/64-bit metric-domain certification is not claimed; file UI/autosave/recovery deviations are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Native table grid/token reader/layout passes and table insertion are pending. Current core owns paragraph cell sections but no nested/merged core boxes, so nested-table constructor variants are not provided or simulated. Complete native API/ABI, pointer/vector-invalid-borrow and full unsigned64 metric domains are not certified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/htmltbl.column.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original HTML table and layout value responsibilities are split from native monoliths under authored source-size limits; actual sections/formats remain borrowed from existing core owners, without DTOs, fake providers or a second document graph."
+    }
+  }
+}

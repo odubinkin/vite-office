@@ -707,8 +707,8 @@ export class StyleSheetTable {
       }
     }
   }
-  /** Original constructor seeds only three 10pt heights and disabled auto-kerning. @returns Table. */
-  constructor() {
+  /** Original constructor seeds only three 10pt heights and disabled auto-kerning. @param m_rDMapper - Original optional stream owner for consumed style creation. @returns Table. */
+  constructor(private readonly m_rDMapper?: DomainMapper_Impl) {
     const height = new Any([10], "double"),
       kerning = new Any([false], "bool");
     try {
@@ -719,6 +719,79 @@ export class StyleSheetTable {
       height.dispose();
       kerning.dispose();
     }
+  }
+  private readonly m_aListCharStylePropertyVector: { name: OUString; values: PropertyValue[] }[] =
+    [];
+  /** Original count and first-name-match comparison ignores ordering and uses actual Any equality. @param values - Borrowed native values. @returns Owned matching name or empty string. */
+  HasListCharStyle(values: readonly PropertyValue[]): OUString {
+    for (const entry of this.m_aListCharStylePropertyVector) {
+      if (entry.values.length !== values.length) continue;
+      let match = true;
+      for (const value of values) {
+        const found = entry.values.find(
+          /** Native first matching property name. @param candidate - Cached native value. @returns Match. */ (
+            candidate,
+          ) => text(candidate.Name) === text(value.Name),
+        );
+        if (!found || !found.Value.operatorEquals(value.Value)) {
+          match = false;
+          break;
+        }
+      }
+      if (match) return new OUString(entry.name);
+    }
+    return new OUString();
+  }
+  /** Original list-label style creation preserves independent UNO property exceptions and always-create semantics. @param values - Character properties. @param alwaysCreate - Skip cache reuse. @returns Owned native name. */
+  getOrCreateCharStyle(values: readonly PropertyValue[], alwaysCreate: boolean): OUString {
+    if (!alwaysCreate) {
+      const found = this.HasListCharStyle(values);
+      if (found.getLength()) return found;
+      found.dispose();
+    }
+    const mapper = this.m_rDMapper;
+    if (!mapper) throw new RuntimeException();
+    const styles = mapper.GetCharacterStyles(),
+      name = mapper.GetUnusedCharacterStyleName();
+    try {
+      const style = mapper.model.createCharacterStyle();
+      try {
+        for (const value of values) {
+          try {
+            style.setPropertyValueIgnoreUnknown(value.Name, value.Value);
+          } catch (error) {
+            if (!(error instanceof Exception)) throw error;
+            error.dispose();
+          }
+        }
+        styles.insertStyleByName(name, style);
+        this.m_aListCharStylePropertyVector.push({
+          name: new OUString(name),
+          values: values.map(
+            /** Native vector copy retains generated value owners. @param value - Borrowed value. @returns Copy. */ (
+              value,
+            ) => new PropertyValue(value),
+          ),
+        });
+      } finally {
+        style.dispose();
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) {
+        name.dispose();
+        throw error;
+      }
+      error.dispose();
+    }
+    return name;
+  }
+  /** Original numbering-name postprocessing operates on this same entry table. @returns Nothing. */
+  ApplyNumberingStyleNameToParaStyles(): void {
+    ApplyNumberingStyleNameToParaStyles.call(this);
+  }
+  /** Original outline inheritance recovery operates on this same entry table. @returns Nothing. */
+  ReApplyInheritedOutlineLevelFromChapterNumbering(): void {
+    ReApplyInheritedOutlineLevelFromChapterNumbering.call(this);
   }
   /** Native entry completion admission and first-ID insertion, used by the parser's entry callback. @param entry - Completed native entry. @returns Nothing. */
   AppendEntry(entry: StyleSheetEntry): void {
@@ -788,6 +861,14 @@ export class StyleSheetTable {
     ];
   }
   /** Releases filter-owned native maps. @returns Nothing. */ dispose(): void {
+    for (const entry of this.m_aListCharStylePropertyVector) {
+      entry.name.dispose();
+      for (const value of entry.values) {
+        value.Name.dispose();
+        value.Value.dispose();
+      }
+    }
+    this.m_aListCharStylePropertyVector.length = 0;
     for (const entry of this.m_aStyleSheetEntries) entry.dispose();
     this.m_aStyleSheetEntries.length = 0;
     this.m_aStyleSheetEntriesMap.clear();
@@ -854,3 +935,13 @@ import type { SwXStyle } from "../../core/unocore/unostyle";
 import type { Property } from "../../../../udkapi/com/sun/star/beans/Property";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+
+import type { DomainMapper_Impl } from "./DomainMapper_Impl";
+import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
+
+import { text } from "../../core/unocore/unocrsrhelper";
+
+import {
+  ApplyNumberingStyleNameToParaStyles,
+  ReApplyInheritedOutlineLevelFromChapterNumbering,
+} from "./StyleSheetTable.numbering";

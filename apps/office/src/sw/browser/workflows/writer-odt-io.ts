@@ -6,6 +6,9 @@ import {
 } from "../../../framework/browser/storage/document-store";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SwDoc } from "../../source/core/doc/doc";
+import { SwTableNode } from "../../source/core/docnode/node";
+import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import { CollectTextFlyFrames } from "../../source/core/layout/flycnt";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { BrowserWriterDocument, WriterOdtStore } from "../storage/writer-odt-store";
 
@@ -15,12 +18,30 @@ export interface ImportedWriterIdentity {
   readonly title: string;
 }
 
-/** Reports whether the currently supported Writer body has visible content. @param document - Live Writer model. @returns True when at least one paragraph is nonempty. */
+/** Checks nonempty text through its canonical body, cell and anchored frame owners. @param document - Live Writer model. @returns Whether visible document text exists. */
 export function hasWriterContent(document: SwDoc): boolean {
-  return document.paragraphs.some(
-    /** Checks visible paragraph text. @param paragraph - Candidate paragraph. @returns Whether it has text. */
-    (paragraph) => paragraph.GetText().trim().length > 0,
-  );
+  /** Checks original paragraph content under the existing trim rule. @param node - Actual Writer paragraph. @returns Whether the paragraph has text. */
+  function hasText(node: SwTextNode): boolean {
+    return node.GetText().trim().length > 0;
+  }
+
+  /** Tests direct section blocks and the original cell paragraphs within tables. @param blocks - Native direct content. @returns Whether the section has text. */
+  function hasSectionText(blocks: readonly (SwTextNode | SwTableNode)[]): boolean {
+    for (const block of blocks) {
+      if (!(block instanceof SwTableNode)) {
+        if (hasText(block)) return true;
+        continue;
+      }
+      for (const row of block.GetTable().GetTabLines())
+        for (const cell of row.GetTabBoxes()) if (cell.GetParagraphs().some(hasText)) return true;
+    }
+    return false;
+  }
+
+  if (hasSectionText(document.nodes.getBodyContent())) return true;
+  for (const frames of CollectTextFlyFrames(document).values())
+    for (const frame of frames) if (hasSectionText(frame.content)) return true;
+  return false;
 }
 
 /** Returns the first two whitespace-delimited words, which become an untitled document's first browser name. @param document - Live Writer model. @returns Two-word title or undefined until the threshold is reached. */

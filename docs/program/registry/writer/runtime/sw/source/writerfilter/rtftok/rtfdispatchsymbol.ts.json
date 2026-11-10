@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchsymbol.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchsymbol.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-symbol.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#case Destination::SHAPETEXT:"
+      ],
+      "justification": "Original dispatchSymbol text stage: fixed MS1252 trivial punctuation/TAB conversion through the actual SAL converter, destination-aware text emission and original SVT hard-space/hyphen/soft-hyphen constants. LINE preserves its distinct singleChar/runProps path without prematurely capturing paragraph properties, including PN label destinations (WRITER279). Existing paragraph/table/section handlers retain their actual owner; no full module/ABI or goal completion claim. RTF102. Text symbols append within the current native body or shape text scope.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DispatchTextSymbol"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::dispatchSymbol"
+      ]
+    }
+  }
+}

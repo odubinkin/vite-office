@@ -22,6 +22,98 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.context-owners.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.numbering.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.definitions.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.paragraph-classes.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.table-styles.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.colgroup.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.cell-save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-writing-mode.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.direction.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.attribute-scope.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-node-index-removal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-section-deletion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.caption-reader.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-construction-formats.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.margin-context.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/frameformats.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtcntnt.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -36,6 +128,50 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
           "marker": "case HtmlTokenId::LINEBREAK:"
+        },
+        {
+          "path": "sw/source/filter/html/htmlcss1.cxx",
+          "marker": "SwCSS1Parser::GetTextFormatColl"
+        },
+        {
+          "path": "sw/source/filter/html/htmlcss1.cxx",
+          "marker": "lcl_swcss1_setEncoding"
+        },
+        {
+          "path": "sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::NewPara"
+        },
+        {
+          "path": "sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::NewHeading"
+        },
+        {
+          "path": "sw/source/filter/html/htmltab.cxx",
+          "marker": "SwHTMLParser::DeleteSection"
+        },
+        {
+          "path": "sw/source/filter/html/swhtml.hxx",
+          "marker": "m_xTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::HasCurrentParaFlys"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlgrin.cxx",
+          "marker": "void SwHTMLParser::SetAnchorAndAdjustment"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx",
+          "marker": "void Reader::ResetFrameFormatAttrs"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtcntnt.hxx",
+          "marker": "SwFormatContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::NextToken"
         }
       ]
     },
@@ -47,7 +183,9 @@
       "NewPara",
       "EndPara",
       "NewHeading",
-      "EndHeading"
+      "EndHeading",
+      "DeleteSection",
+      "NextToken"
     ],
     "upstreamSymbols": [
       "SwHTMLParser::NewStdAttr",
@@ -55,7 +193,9 @@
       "SwHTMLParser::NewPara",
       "SwHTMLParser::EndPara",
       "SwHTMLParser::NewHeading",
-      "SwHTMLParser::EndHeading"
+      "SwHTMLParser::EndHeading",
+      "SwHTMLParser::NextToken",
+      "SwHTMLParser::GetCurrentBrowseWidth"
     ],
     "preservedResponsibilities": [
       "Original constructor/destructor temporarily select and restore the actual document HTML_MODE setting for native pool-style defaults. Connected native HTMLParser tokens to actual Writer document/cursor, original HTMLAttrTable heads, HTMLAttrContext token search/removal and deferred attribute ownership. Consumed body/paragraph/division/center, heading, quotation/address/preformatted modes, text/entity/space handling, three-script bold/posture, strike/underline aliases and native80percent super/sub attributes retain original property defaults and queue ordering. AppendTextNode uses native script services and clone/previous-list precedence. Markdown supplies a blank paragraph at section EOF; the consumed empty-tail cleanup preserves real node/cursor owners. SwReader/SfxHTMLParser desktop/media orchestration and arbitrary mid-paragraph standalone HTML insertion are not ported or certified. Full CSS/named-semantic-character/font/link/list/table producers remain concrete HTML filter work. No DOM or clipboard conversion is used.",
@@ -65,7 +205,30 @@
       "S3HW1E connects consumed native margin/indent/spacing/background-color properties and restores the original inline-versus-block selector in InsertAttrs. Actual nearest context lookups and paragraph style margin contributions feed existing attribute heads, with original queued paragraph invalidation and negative/unsigned arithmetic. Block background survives Worker/UI transport; inline background has no current model owner and is not fabricated. Native source quirks are documented as WRITER218/219. Broader style-graph, positioning, background images, border/language/link/list/table and remaining RTF behavior remain open; no whole-module promotion.",
       "S3HW1E connects actual ID and no-HREF named targets to native queued point bookmarks. Filter-private RES_FLTR_BOOKMARK is174, with no document pool default. Actual HTMLAttr can retain a null table for unheaded queued marks; SetAttr_ uses exact original name/position deduplication, raw offset clamping and real DocumentMarkAccess name allocation. HTML ID/font/style consumers retain source option order. Native implicit target separator and Unambiguous decode selection preserve encoded name spelling; WRITER221 documents queue-boundary naming. Actual parser/Markdown/Worker/RTF tests cover this profile; language/direction/section/HREF and full filter parity remain open.",
       "B8TCAE fixes the existing ADDRESS import path that selected Sender metadata but failed its materialization gate. Sender is admitted only as an internal collection, retaining its original Standard parent/follow identity. The original DocumentStylePoolManager.cxx1005 HTML branch creates all-script italic; the ordinary branch creates3pt lower spacing; both disable line counting. No extra user-facing style is exposed. Real byte-stream block, mixed-script native item-range and existing Worker codec regressions verify address/block transitions, style identity and all3 posture/weight slots. Western-only browser character projection is not used as an oracle for CJK/CTL source items. No full HTML/native ABI parity or semantic status promotion is claimed.",
-      "B8TCAE restores original swhtml.cxx LINEBREAK-in-PRE/NEWPARA shared control flow using grouped TypeScript case labels because compiler noFallthroughCasesInSwitch remains enabled. The extra raw TABCHAR insertion case has no original SwHTMLParser counterpart and is removed; real HTMLParser FilterPRE tab expansion remains covered by actual byte-stream input. Original soft-hyphen, repeated PRE break and existing block behavior are retained. Context API regressions use actual constructors/setters for default-only spacing, NONE search boundaries, PopStack, real node preconditions, paragraph-space restoration and interrupted real-token consumer lifetimes; no private parser fields or original operation results are fabricated. Seven suites119 assertions pass. Current HTML source maps differ from the initial integration run, so old HTML coverage is historical only; broad100% remains unfinished and semantic statuses are unchanged."
+      "B8TCAE restores original swhtml.cxx LINEBREAK-in-PRE/NEWPARA shared control flow using grouped TypeScript case labels because compiler noFallthroughCasesInSwitch remains enabled. The extra raw TABCHAR insertion case has no original SwHTMLParser counterpart and is removed; real HTMLParser FilterPRE tab expansion remains covered by actual byte-stream input. Original soft-hyphen, repeated PRE break and existing block behavior are retained. Context API regressions use actual constructors/setters for default-only spacing, NONE search boundaries, PopStack, real node preconditions, paragraph-space restoration and interrupted real-token consumer lifetimes; no private parser fields or original operation results are fabricated. Seven suites119 assertions pass. Current HTML source maps differ from the initial integration run, so old HTML coverage is historical only; broad100% remains unfinished and semantic statuses are unchanged.",
+      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion.",
+      "S3HW1E HTML list checkpoint: original htmlnumreader token/context handlers now consume the actual SwHTMLNumRuleInfo and document-owned SwNumRule/SwNumFormat values. New-level defaults, native explicit TYPE glyphs, START/VALUE unsigned-short narrowing, numbered versus LH/continuation state, sibling ordered/bullet conflict with saved parent rule, nested depth clamping, outer unused-level completion, unmatched/orphan and EOF paths are connected. Original AppendTextNode updateNum control is preserved. CSS list-style-type fills the source independent number/bullet flags; new-level margin/text-indent conversion occurs before normal context insertion. Actual Markdown HTML callbacks and Worker transport are covered. All temporary native formats are explicitly disposed. Existing AddNumRule ingress binds the consumed MakeNumRule new/unique-name profile; general undo/ChgNumRuleFormats, graphic bullets, positioned contexts, definition-list producers and full native HTML/table reader remain unverified or pending. Source TYPE cancellation, context-dependent CSS and LI whitespace findings WRITER289-291 are retained. No broad module/ABI confidence promotion, browser file UI/autosave/recovery change or goal completion.",
+      "S3HW1E definition-list and nested-style checkpoint: native DL/DT/DD transitions consume the existing HTML contexts and unsigned definition depth, preserve implicit-list EndPara cleanup, mixed numbered-list spacing, current-DD-sensitive nested margins and explicit close behavior. Original HTML_DD/HTML_DT IDs12291/12292 are materialized as internal List Contents/List Heading collections with direct567/0twip left items, Standard parents and DT-to-DD follow identity; public available-style admission is unchanged. Original SetTextCollAttrs now retains displaced direct styles through owned hard item sets, Differentiate, PRE priority, nearest fallback context and native DD-minus-DT/DT-zero margin arithmetic. Shared GetAttrTabEntry/InsertParaAttrs use real registered Which IDs and original heads; InsertAttrs no longer maintains an incomplete duplicate map. Empty-paragraph script attribute loss and unsigned margin wrap are retained (WRITER292/293). Tests use real HTML/Markdown/documents/Worker and original public parser operations; no private-state or operation-result forging. Generated CSS class derivation, target insertion snapshots, stylesheet composition, raw HTML tables and full native reader ABI remain unverified or pending. No intentional browser file UI/autosave/recovery changes or full-goal promotion.",
+      "S3HW1E HTML31: Original NewPara retains the whole nonempty CLASS string in a COLL_TEXT context; classless P remains default-only. SetTextCollAttrs delegates paragraph resolution to the actual SwCSS1Parser.GetTextFormatColl owner for each context and top-context margin set; fallback resolution uses GetTextCollFromPool. Consumed existing-document lookup retains script suffix stripping, ASCII-insensitive sdfootnote/sdendnote pool selection only for COLL_TEXT, USER_FMT-to-Standard fallback, exact existing named descendant identity and table-to-TextBody named fallback. Original lcl_swcss1_setEncoding changes direct non-symbol fonts only, preserving all other font fields and not materializing inherited fonts. The production Markdown HTML caller uses existing-document mode, where pinned StyleParsed exits before creating class/ID/tag rules. New-document stylesheet/class-map derivation, border/page-break CSS producers, target insertion snapshots, HTML tables and broad module/ABI parity remain unverified or pending; their presence in earlier historical lists is not automatic proof of a critical Markdown dependency. Real HTML/Markdown/Worker cases exercise actual owners without private state or provider/result substitution. NewHeading also retains the original CLASS on its actual context (swhtml.cxx:4113-4170); the fresh heading-owner regression exposed and closes the previously missing producer.",
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML35: complete original HTMLTableOptions default fields, reverse option iteration, uint16-before-percent conversion, final zero/unset-border suppression, explicit frame/rules precedence, color priority and raw option strings are implemented against actual HTMLOption/HTMLParser owners. Original public table enums and HTMLOption bool/output GetEnum plus GetTableFrame/GetTableRules reuse module-owned native alias tables. The connected Writer ALIGN helper now consumes original aHTMLPAlignTable, replacing its reduced switch and preserving native middle/char aliases and ASCII-only matching. Actual lexer/option and Markdown paragraph tests provide bounded evidence. This is a concrete table-reader prerequisite; HTML table construction/context/geometry/node insertion is not yet connected or claimed complete, and broader native API/module/ABI status is unchanged. File UI/autosave/recovery deviations remain preserved.",
+      "S3HW1E HTML37: original HTMLTable constructor, actual parser registration, row/column grid growth, identity-based overlap repair/protection, empty-row reuse, trimming, adjustment inheritance, context/PRE/Listing/XMP suspension, class/ID/inline brush precedence and real nested intermediate-layout references are implemented. SwHTMLTableLayout owns the native grid/options and source spacing/availability utilities. No automatic text measurement, layout-pass success, table token reading or core BuildTable materialization is synthesized. Source source-state findings WRITER311-313 are retained. Protected visibility permits same-owner responsibility fragments under TypeScript/source-size constraints, without a second state object. Existing-document insertion boundaries and final current-model/filter/UI reconciliation remain pending. Graphic-link brushes, merged/nested core box ownership and broad native module/API/ABI completeness remain unrepresented; intentional browser file UI/autosave/recovery deviations are preserved.",
+      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
+      "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML42: original synchronous InsertTableSection overloads and InsertTableContents consume actual document/current-table/cursor/section owners. The explicit outer-table argument borrows original current-table state across a permanent TypeScript responsibility split; it does not fabricate the still-pending BuildTable producer. Same-slot inherited eState is declared public for source fragments without emitted replacement state. Preserve first-cell reuse, subsequent native section placement, pool cursor advancement versus predecessor non-advancement, exact40twip three-script heights, Error timing, actual numbering continuation and raw attribute-head rebase. Native COL/COLGROUP uses original lexer/options/filter/ring operations and a bound real virtual consumer, reverse duplicate precedence, uint16-before256 span admission, asterisk-relative widths, child-COL span-zero marker, structural rewind, whitespace/body fallback and native bookmarks. Actual MakeParentContents consumes those section operations. SwTable retains its original shared HTML-layout reference and clears it in native SetTabCols/destruction. Synchronous memory streams have no pending device or floating/applet consumer owners; these are not simulated. Current-table/table-row/cell/caption token orchestration, final core table materialization, actual text/table automatic layout and final current-model/filter/UI reconciliation remain required. No private parser fields or native results are injected, no fake measurement or alternate graph is introduced, no whole module/API/ABI/desktop parity is claimed, and browser file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML43: native SectionSaveStruct snapshots actual font/context lower bounds, heading-stack start and definition depth, freezes existing stacks, and restores original counters and paragraph flags after callers clean local contexts. PopContext, EndContext PopStack, heading/list/definition searches, margin/spacing lookups and SetTextCollAttrs consume the original distinct context/attribute minima. Terminal cleanup follows the original two-pass recovery without hanging on protected contexts. Same-owner parser fields are exposed to permanent source fragments without replacement state. Native synchronous section values do not claim pending-device ownership; row/cell/caption orchestration, table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain pending. Broad semantic parity stays unverified.",
+      "Font bounds and heading-stack start preserve original uint16 narrowing independently of size_t context bounds (WRITER326); the regression uses65536 actual native font producers, not injected minima or synthetic operation results.",
+      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition.",
+      "S3HW1E HTML47: native StripTrailingPara for represented text/fixed/table/cell/caption sections consumes actual pending attributes, source whole-paragraph Cut, source-order document mark reposition and predecessor cursor reset before removing the actual node. Sole empty table scopes receive original40twip font heights in all three scripts. Native CanRemoveNode is also consumed by existing final HTML insertion cleanup. Standalone Cut preserves source registered positions for negative Update, unlike native joins that explicitly relocate them; existing hint/item transfer owners are retained. Source-size decomposition moves the unchanged existing FindList body to the existing text-node list responsibility fragment. RepositionMark handles actual collapsed bookmarks and internal UNO ranges, normalizes endpoints, clears an absent other endpoint and restores original all-mark order without fabricating modified/undo events. Fly formats, transparent SwSectionNode, nontext content, as-character FLYCNT graphics, native mark-frame invalidation and expanded user-bookmark families have no current producers and are not certified or replaced by fake providers. Complete table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required; browser file/autosave/recovery deviations stay unchanged and broad semantic statuses remain unverified.",
+      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML54: original DeleteSection is composed over real section start/end indices, DelBookmarks, GetCorrPosition, global PaMCorrAbs and DelNodes. Current node removal invalidates actual named numbering rules, removes outline membership and current text-frame clients/follow/sibling chains, removes list membership before borrowed-node-index correction, then destroys represented hint/page-description/modify and table/row/box owners backwards before the array erase. Native SwContentIndexReg destructor assertion rejects remaining live content indices instead of guessing a text destination. The HTML caption DeleteSection wrapper delegates to the actual manager; original caption callers restore their raw importer cursor before deleting its saved section. Real UI stacks and UNO cursors receive the original structural successor, contained marks are deleted and table deletion does not impose the older history helper following-text restriction. Original formatter/list/mark/cursor/native ownership remains on actual document nodes. Current text-frame teardown binds native Cut to the already represented sibling unlink and actual frame destruction; unrepresented merged-redline/footnote/accessibility/geometric resize/paint branches, fly/redline/transparent-section objects, recursive fly destruction temporary entries, chapter-field propagation and full native destructor/ABI behavior are not certified. Browser node-removed publication is retained as the existing revision/layout boundary. Full table/caption token orchestration, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required; whole modules/contracts/defaults/behavior remain unverified.",
+      "S3HW1E HTML55: original fresh BuildTable construction block now reads actual lexer options, applies CSS both-auto-margin parent centering, preserves explicit ALIGN and reverse STYLE precedence, inserts the real table-ID bookmark and installs the actual registered HTMLTable on the parser. Original caption begin/end blocks save actual attributes/context/numbering/position, construct the real caption section, open native centered adjustment, preserve source any-bottom duplicate ALIGN behavior, close local contexts, strip trailing linefeeds/paragraphs, append the required empty top-level paragraph, apply deferred attributes, restore stacks/numbering and finally restore the saved point. Native CSS1 length enum values0/1/2/3 replace an unnamed source constant at the new table consumer. Existing body/inline/UTF8 producers and native document nodes are used, without another parser, table model, token provider, layout result or measurement. These are explicit source construction/lifecycle responsibility fragments, not the completed BuildTable/BuildTableCaption token loops: recursive table/cell/row/caption orchestration, native pending-device stack (current streams are synchronous), node-range caption placement, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required. Whole module/default/contract/behavior/ABI parity remains unverified; browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML57: native InsertTable now constructs actual shared row formats, the original four default-border variants and shared borderless box formats; per-column position widths clone only an already registered owner. Source HTML_MODE selects actual gray double borders, ordinary documents black solid borders, each with55twip distances. Original SwFormatFillOrder and92 WhichId are registered in the actual static item package/pool; default TOP_DOWN differs from explicit insertion LEFT_TO_RIGHT, and inline native SwAttrSet/SwFormat getters use the real item. Obsolete uniform all-edge insertion helper is removed. GetMarginsFromContext is moved to its existing htmlcss1 responsibility and numbering-aware resolution uses actual source contexts/rules with the original uint16/short narrowing and depth clamp (WRITER339). Actual parser/core/filter/UI owners remain; no fabricated frame, layout, font metric or whole reader result is introduced. Whole module/native API/ABI/lifetime behavior remains unverified. First-cell context orchestration, recursive HTML table grammar/materialization/layout, RTF direction export and final format/UI audit remain required; browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML65: actual document-owned FrameFormats<SpzFrameFormat> storage, source fly-format construction/factory registration and native HasCurrentParaFlys registry scan replace the missing prerequisite without an empty-provider substitute. Stored SwFormat Which identities are explicit for character, text, graphic and frame/fly construction. Collection preserves positional traversal, unique object membership, independent name/type/pointer ordering, exact erase, owning deletion and default relocation. Opaque stable JS reference order represents pointer comparison, not a native address/ABI. Registered special-frame rename uses native NameChanged old/new names directly on the notifier. WRITER346 preserves original newDefault back-reference omission. WRITER347 records the source base rename inconsistency and the still-unported native document/style rename route; the existing general base-setter browser notification is not migrated or certified in this special-frame prerequisite block. Actual HTML query admits only current-node paragraph/character anchors, preserves NONE precedence and THROUGH exclusions, and evaluates simultaneous flags in source order. The collection/factory/query are real model owners, but MakeFlySection, fly/drawing contact/layout destruction and anchored-node list maintenance, recursive HTML first-cell/table grammar/materialization/layout, full document teardown, RTF direction and final format/UI audit remain unported or unverified. No synthetic frame/section/measurement or result provider is introduced. Existing save/open/autosave/recovery deviations are unchanged; whole-module semantic/default/contract/ABI parity remains unverified.",
+      "S3HW1E HTML66: the original table-consumed non-CSS SetAnchorAndAdjustment overload now produces actual native anchor, horizontal/vertical orientation and wrap items, consuming real context/numbering margins, actual HasCurrentParaFlys and SwPaM movement. No-wrap admission queues original point spacing at the front, appends a real no-space paragraph and opens the original successor spacing override only for nonzero upper margin. Character anchoring moves to the previous Unicode character and restores the source point; inline nontext error retains the original already-written vertical item and absent anchor. Original InsertAttr point/head overloads share the existing owned HTMLAttr queue and source context heads. Existing GetULSpaceFromContext body moves unchanged into its original htmlcss1 source fragment to retain the strict parser size cap. Original Reader::ResetFrameFormatAttrs resets only LR/UL/box items. Real nonshareable SwFormatContent owns an optional registered SwNodeIndex, copies/clones independently, reuses engaged optional assignment, resets/destructs the index without owning its section, and compares actual node identity. Static RES_CNTNT105 defaults and pool registration use actual native items; typed GetContent lives on SwAttrSet/SwFormat. No fabricated serialized pointer, fly section/layout or measurement provider is introduced. These are complete consumed state/legacy-alignment source responsibility fragments, not completed first-cell/table production. CSS-positioned/container alignment, full Reader/reset-format families, MakeFlySection/content/contact/layout ownership, recursive HTML first-cell/table grammar/materialization/layout, RTF direction and final current-slice format/UI audit remain unported or unverified. General style-rename migration remains WRITER347; intentional save/open/autosave/recovery deviations stay unchanged. Whole-module/default/contract/desktop ABI parity is not certified.",
+      "TABLE_ON calls the original source-ordered table lexer loops with the actual virtual token consumer, live Writer document and cursor. The represented browse width uses a real layout print area or the cached HTML master content width. The ordinary Markdown open UI uses this same path."
     ],
     "omittedResponsibilities": [
       "This consumed fragment is not full native HTMLReader/Writer parity; the omitted producers above remain explicit task work."

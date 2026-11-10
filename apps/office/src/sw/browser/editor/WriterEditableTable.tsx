@@ -7,6 +7,7 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import { SwRowFrame, SwCellFrame } from "../../source/core/layout/tabfrm";
 
 import type { SwTable } from "../../source/core/table/swtable";
+import { SwTableNode } from "../../source/core/docnode/node";
 import { SwTabFrame, type SwTablePrintArea } from "../../source/core/layout/tabfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
@@ -14,6 +15,38 @@ import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
 import { Style } from "../../../svx/source/dialog/framelink";
 import { SwTabFramePainter } from "../../source/core/layout/paintfrm";
+
+import type { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { RES_BACKGROUND } from "../../inc/hintids";
+import { writerColorValue } from "../../source/core/attr/swatrset";
+import type { SwFrameFormat } from "../../source/core/layout/atrfrm";
+
+/** Projects an authored frame brush at the browser paint boundary. @param format - Native frame owner. @returns Browser color or absent. */
+function browserFrameBackground(format: SwFrameFormat): string | undefined {
+  const brush = format.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined;
+  return brush === undefined ? undefined : writerColorValue(brush.GetColor(), "transparent");
+}
+
+/** Maps the source frame axes to CSS without overriding inherited direction. @param format - Native frame owner. @returns Browser writing direction. */
+function browserFrameWritingMode(format: SwFrameFormat): React.CSSProperties {
+  switch (format.GetFrameDir().GetValue()) {
+    case SvxFrameDirection.Horizontal_LR_TB:
+      return { direction: "ltr", writingMode: "horizontal-tb" };
+    case SvxFrameDirection.Horizontal_RL_TB:
+      return { direction: "rtl", writingMode: "horizontal-tb" };
+    case SvxFrameDirection.Vertical_RL_TB:
+      return { direction: "ltr", writingMode: "vertical-rl" };
+    case SvxFrameDirection.Vertical_LR_TB:
+      return { direction: "ltr", writingMode: "vertical-lr" };
+    case SvxFrameDirection.Vertical_LR_BT:
+      return { direction: "ltr", writingMode: "sideways-lr" };
+    case SvxFrameDirection.Vertical_RL_TB90:
+      return { direction: "ltr", writingMode: "sideways-rl" };
+    default:
+      return {};
+  }
+}
 
 /** Projects the four independent native edges and distances directly. @param item - Actual box item. @param fixedGuide - Use isolated fixed-row guides. @returns Browser geometry. */
 function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSProperties {
@@ -28,6 +61,9 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
     paddingRight: item.GetDistance(3) / 15,
   };
 }
+
+/** Paints native frames anchored to a text node within its enclosing print width. */
+export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) => React.ReactNode;
 
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
@@ -44,6 +80,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   paragraphs,
   activeParagraphId,
   retainParagraphElement,
+  renderAnchoredFrames,
 }: Readonly<{
   table: SwTable;
   nativeFrame?: SwTabFrame | undefined;
@@ -59,6 +96,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   activeParagraphId?: string;
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
+  renderAnchoredFrames?: RenderAnchoredFrames | undefined;
 }>): React.JSX.Element {
   const nativeTable = nativeFrame ?? new SwTabFrame(table);
   try {
@@ -84,9 +122,12 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
       <div className="max-w-full" data-writer-table={table.GetName()}>
         <table
           aria-label={table.GetName()}
+          data-writer-table-node={table.GetTableNode().GetIndex()}
           className="table-fixed"
           ref={retainElement}
           style={{
+            ...browserFrameWritingMode(table.GetFrameFormat()),
+            backgroundColor: browserFrameBackground(table.GetFrameFormat()),
             tableLayout: "fixed",
             borderCollapse: collapsing ? "collapse" : "separate",
             borderSpacing: 0,
@@ -157,6 +198,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                     data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
                     key={rowIndex}
                     style={{
+                      backgroundColor: browserFrameBackground(row.GetFrameFormat()),
                       height:
                         measureNaturalRows || rowSize.GetHeightSizeType() === SwFrameSize.Variable
                           ? undefined
@@ -170,6 +212,17 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                       ) => {
                         const frame = nativeCell as SwCellFrame;
                         nativeCell = frame.GetNext();
+                        const signedSpan = frame.GetTabBox().getRowSpan();
+                        // The browser uses the original row frames for each displayed follow fragment.
+                        const startsFollow =
+                          !isRepeatedHeadline && firstRow > 0 && rowIndex === firstRow;
+                        const layoutSpan =
+                          startsFollow && signedSpan < 0 ? -signedSpan : signedSpan;
+                        if (layoutSpan < 1) return null;
+                        const rowSpan = Math.min(
+                          layoutSpan,
+                          (isRepeatedHeadline ? repeatedHeaderRows : lastRow + 1) - rowIndex,
+                        );
                         const cellFormat = frame.GetFormat(),
                           boxItem = cellFormat.GetBox(),
                           boxStyle = browserCellBoxStyle(boxItem, fixed);
@@ -191,20 +244,58 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                             fixed,
                           );
                         }
-                        const content = cell.GetParagraphs().map(
-                          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                        const contentNodes = cell.GetContentNodes();
+                        const hasChildren =
+                          renderAnchoredFrames !== undefined ||
+                          contentNodes.some(
+                            /** Checks whether child sections need the native cell print width. @param node - Direct native content. @returns Whether this is a nested table. */
+                            (node) => node instanceof SwTableNode,
+                          );
+                        const cellPrintWidth = hasChildren
+                          ? Math.max(
+                              0,
+                              nativeTable.GetBoxPrintWidth(
+                                cell,
+                                availableWidth ?? area.left + area.width + area.right,
+                              ) -
+                                boxItem.GetDistance(2) -
+                                boxItem.GetDistance(3),
+                            )
+                          : 0;
+                        let paragraphIndex = 0;
+                        const content = contentNodes.map(
+                          /** Renders the actual child table or direct paragraph in cell order. @param paragraph - Direct content node. @returns Connected browser content. */ (
                             paragraph,
-                            paragraphIndex,
                           ) => {
+                            if (paragraph instanceof SwTableNode) {
+                              return (
+                                <WriterEditableTable
+                                  key={paragraph.GetIndex()}
+                                  table={paragraph.GetTable()}
+                                  availableWidth={cellPrintWidth}
+                                  renderAnchoredFrames={renderAnchoredFrames}
+                                  paragraphs={paragraphs}
+                                  selectedBoxes={isRepeatedHeadline ? undefined : selectedBoxes}
+                                  {...(activeParagraphId === undefined
+                                    ? {}
+                                    : { activeParagraphId })}
+                                  {...(retainParagraphElement === undefined
+                                    ? {}
+                                    : { retainParagraphElement })}
+                                  measureNaturalRows={measureNaturalRows}
+                                />
+                              );
+                            }
+                            const index = paragraphIndex++;
                             const projection = paragraphs.get(paragraph.GetIndex());
                             if (projection === undefined)
                               throw new Error(
                                 "Writer table cell has no connected paragraph projection.",
                               );
-                            return (
+                            const paragraphElement = (
                               <WriterEditableParagraph
-                                cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
-                                index={paragraphIndex}
+                                cellPosition={{ rowIndex, cellIndex, paragraphIndex: index }}
+                                index={index}
                                 isActive={activeParagraphId === projection.id}
                                 key={projection.id}
                                 listMarker={projection.listMarker}
@@ -216,6 +307,18 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                   ) => retainParagraphElement?.(id, element)
                                 }
                               />
+                            );
+                            const flies = renderAnchoredFrames?.(
+                              paragraph.GetIndex(),
+                              cellPrintWidth,
+                            );
+                            return flies ? (
+                              <div key={projection.id} style={{ display: "flow-root" }}>
+                                {flies}
+                                {paragraphElement}
+                              </div>
+                            ) : (
+                              paragraphElement
                             );
                           },
                         );
@@ -245,8 +348,11 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                 : "relative"
                             }
                             colSpan={grid.GetColumnSpan(cell)}
+                            rowSpan={rowSpan > 1 ? rowSpan : undefined}
                             key={cellIndex}
                             style={{
+                              ...browserFrameWritingMode(cellFormat),
+                              backgroundColor: browserFrameBackground(cellFormat),
                               ...(fixed ? { border: "none", padding: 0 } : boxStyle),
                               outline: [0, 1, 2, 3].every(
                                 /** Keeps borderless table guides outside native column geometry. @param edge - Native side. @returns Whether unpainted. */

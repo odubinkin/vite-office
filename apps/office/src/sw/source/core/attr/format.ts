@@ -2,6 +2,20 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import type { SwFormatFlySplit } from "../../../inc/formatflysplit";
+import type { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import type { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
+import {
+  RES_FLY_SPLIT,
+  RES_FOLLOW_TEXT_FLOW,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
+import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import type { SwFormatContent } from "../../../inc/fmtcntnt";
+import type { SwFormatAnchor } from "../../../inc/fmtanchr";
+import type { SwFormatSurround } from "../../../inc/fmtsrnd";
+import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -20,17 +34,23 @@ import { RES_LR_SPACE, RES_HORI_ORIENT, RES_UL_SPACE, RES_PAGEDESC } from "../..
 
 /** Base class for identity-bearing Writer styles and formats. */
 export class SwFormat extends BroadcastingModify {
+  /** Original inline fmtfordr.hxx effective item query. @param searchInParent - Native inheritance flag. @returns Borrowed fill-order item. */
+  public GetFillOrder(searchInParent = true): SwFormatFillOrder {
+    return this.attributeSet.GetFillOrder(searchInParent);
+  }
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
+  private m_bAutoUpdateOnDirectFormat = false;
   private poolFormatId = SwPoolFormatId.UNKNOWN;
   private formatInDTOR = false;
 
-  /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @returns Nothing. */
+  /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @param formatWhich - Original required format identity. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,
     private formatName: string,
     ranges: WhichRangesContainer,
-    derivedFrom?: SwFormat,
+    derivedFrom: SwFormat | undefined,
+    private readonly formatWhich: number,
   ) {
     super();
     this.attributeSet = new SwAttrSet(pool, ranges);
@@ -42,6 +62,10 @@ export class SwFormat extends BroadcastingModify {
     }
   }
 
+  /** Original SwFormat identity, distinct from pool attribute identities. @returns Native format WhichId. */
+  public Which(): number {
+    return this.formatWhich;
+  }
   /** Reads the native common-format pool identity, initially UNKNOWN. @returns Identity. */
   public GetPoolFormatId(): SwPoolFormatId {
     return this.poolFormatId;
@@ -67,6 +91,52 @@ export class SwFormat extends BroadcastingModify {
     if (broadcast) this.NotifyFormatInheritance();
   }
 
+  /** Original independent auto-update flag query from format.hxx. @returns Flag. */
+  IsAutoUpdateOnDirectFormat(): boolean {
+    return this.m_bAutoUpdateOnDirectFormat;
+  }
+  /** Original flag setter, default true; this does not change IsAuto. @param value - Native new flag. @returns Nothing. */
+  SetAutoUpdateOnDirectFormat(value = true): void {
+    this.m_bAutoUpdateOnDirectFormat = value;
+  }
+  /** Original effective frame direction query. @param searchInParent - Native inheritance flag. @returns Borrowed direction item. */
+  GetFrameDir(searchInParent = true): SvxFrameDirectionItem {
+    return this.attributeSet.GetFrameDir(searchInParent);
+  }
+  /** Original generic opacity getter. @param searchInParent - Native inherited lookup. @returns Actual item. */
+  GetOpaque(searchInParent = true): SvxOpaqueItem {
+    return this.attributeSet.GetOpaque(searchInParent);
+  }
+  /** Reads the effective original fly split item. @param searchInParent - Whether inherited attributes participate. @returns Actual native split item. */
+  GetFlySplit(searchInParent = true): SwFormatFlySplit {
+    return this.attributeSet.Get(RES_FLY_SPLIT, searchInParent) as SwFormatFlySplit;
+  }
+
+  /** Reads the effective original fly containment item. @param searchInParent - Whether inherited attributes participate. @returns Actual native flow item. */
+  GetFollowTextFlow(searchInParent = true): SwFormatFollowTextFlow {
+    return this.attributeSet.Get(RES_FOLLOW_TEXT_FLOW, searchInParent) as SwFormatFollowTextFlow;
+  }
+
+  /** Reads the effective original wrap and overlap item. @param searchInParent - Whether inherited attributes participate. @returns Actual native wrap item. */
+  GetWrapInfluenceOnObjPos(searchInParent = true): SwFormatWrapInfluenceOnObjPos {
+    return this.attributeSet.Get(
+      RES_WRAP_INFLUENCE_ON_OBJPOS,
+      searchInParent,
+    ) as SwFormatWrapInfluenceOnObjPos;
+  }
+
+  /** Original inline content getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual content item. */
+  GetContent(searchInParent = true): SwFormatContent {
+    return this.attributeSet.GetContent(searchInParent);
+  }
+  /** Original inline generic format anchor getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
+  public GetAnchor(searchInParent = true): SwFormatAnchor {
+    return this.attributeSet.GetAnchor(searchInParent);
+  }
+  /** Original inline generic format wrap getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
+  public GetSurround(searchInParent = true): SwFormatSurround {
+    return this.attributeSet.GetSurround(searchInParent);
+  }
   /** Returns the owned attribute set. @returns Format attributes. */
   public GetAttrSet(): SwAttrSet {
     return this.attributeSet;
@@ -176,6 +246,19 @@ export class SwFormat extends BroadcastingModify {
     }
     return newSet.Count();
   }
+  /** Original DelDiffs intersects direct identities before a following SetFormatAttrSet, retaining source lock and broadcast behavior. @param set - Source identity set. @returns Nothing. */
+  public DelDiffs(set: SfxItemSet): void {
+    if (this.attributeSet.Count() === 0) return;
+    if (this.IsModifyLocked()) {
+      this.attributeSet.Intersect(set);
+      return;
+    }
+    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+    if (this.attributeSet.Intersect_BC(set, oldSet, newSet) !== 0)
+      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+  }
+
   /** Filters inherited native deltas by every locally-present WhichId. @param source - Original notifying parent. @param hint - Native change. @returns Nothing. */
   public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
     if (hint.kind === "object-dying") {
@@ -233,6 +316,7 @@ export class SwFormat extends BroadcastingModify {
   /** Runs native format destruction before inherited notifier and modify teardown. @returns Nothing. */
   public override DisposeModify(): void {
     this.Destr();
+    this.attributeSet.Dispose();
     super.DisposeModify();
   }
 

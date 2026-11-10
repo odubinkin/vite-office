@@ -14,15 +14,68 @@ import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/Proper
 import { scalar, stringValue, illegal, unknown } from "./unocrsrhelper";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import {
-  BorderLine,
-  cppu_detail_getUnoType_BorderLine,
-} from "../../../../offapi/com/sun/star/table/BorderLine";
+import { MID_FRMSIZE_SIZE_TYPE } from "../../../inc/unomid";
+import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import type { SwTableBox } from "../table/swtable";
-import { RES_BOX } from "../../../inc/hintids";
-import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { RES_BACKGROUND, RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { MID_BACK_COLOR } from "../../../../editeng/inc/memberids";
+import { lcl_extractBorderLine, type SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { TableMergeErr } from "../../../inc/tblenum";
+import { SwUnoTableCursor } from "./unocrsr";
+
+/** UNO table cursor over actual cell endpoints and the document's merge operation. */
+export class SwXTextTableCursor {
+  private readonly cursor: SwUnoTableCursor;
+
+  /** Constructs the cursor at the actual first cell. @param box - Connected Writer cell. @returns Native table cursor. */
+  constructor(box: SwTableBox) {
+    const position = new SwPosition(box.GetParagraphs()[0] as SwTextNode);
+    try {
+      this.cursor = new SwUnoTableCursor(position);
+    } finally {
+      position.Dispose();
+    }
+  }
+
+  /** Resolves the flat cell name's coordinates in the table at the cursor, as native GotoTableBox does. @param box - Cell supplying the name. @param expand - Whether to expand the selection. @returns Whether the cell was reached. */
+  gotoCell(box: SwTableBox, expand: boolean): boolean {
+    const point = this.cursor.GetPoint();
+    const current = point.GetNode().FindTableNode();
+    const coordinates = box.GetCoordinates();
+    if (expand) this.cursor.SetMark();
+    else this.cursor.DeleteMark();
+    const line = current?.GetTable().GetTabLines()[coordinates.Y() - 1];
+    const cell = line?.GetTabBoxes()[coordinates.X() - 1];
+    const target = cell?.GetParagraphs()[0];
+    if (!target || current !== target.FindTableNode()) return false;
+    point.Assign(target, 0);
+    return true;
+  }
+
+  /** Original mergeRange delegates to the document and rebuilds the native selection. @returns Whether the range merged. */
+  mergeRange(): boolean {
+    this.cursor.NewTableSelection();
+    this.cursor.MakeBoxSels(this.cursor.GetSelRing());
+    const result = this.cursor.GetPoint().GetNode().GetDoc().MergeTable(this.cursor);
+    if (result === TableMergeErr.Ok)
+      for (let index = this.cursor.GetSelectedBoxesCount(); index-- > 0;)
+        this.cursor.DeleteBox(index);
+    this.cursor.NewTableSelection();
+    this.cursor.MakeBoxSels(this.cursor.GetSelRing());
+    return result === TableMergeErr.Ok;
+  }
+
+  /** Releases the owned native cursor and its registered range. @returns Nothing. */
+  dispose(): void {
+    this.cursor.Dispose();
+  }
+}
+
 /** Row property owner does not retain a separate row DTO. */
 export class SwXTextTableRow {
   /** Binds the represented native owner and its declared inputs. @param line - Original line input. @returns Nothing. */
@@ -35,14 +88,27 @@ export class SwXTextTableRow {
   setPropertyValue(name: OUStringConstReference, value: Any): void {
     const n = text(name),
       format = this.line.ClaimFrameFormat();
-    if (n === "IsSplitAllowed")
-      format.SetFormatAttr(new SwFormatRowSplit(scalar(value, "bool") as boolean));
-    else if (n === "Height" || n === "IsAutoHeight") {
-      const size = this.line.GetFrameSize();
-      if (n === "Height")
-        size.SetHeight(Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)));
-      else size.SetHeightSizeType(scalar(value, "bool") ? SwFrameSize.Variable : SwFrameSize.Fixed);
-      format.SetFormatAttr(size);
+    if (n === "IsSplitAllowed") {
+      const split = new SwFormatRowSplit(scalar(value, "bool") as boolean);
+      try {
+        format.SetFormatAttr(split);
+      } finally {
+        split.Dispose();
+      }
+    } else if (n === "Height" || n === "IsAutoHeight" || n === "SizeType") {
+      const size = format.GetFrameSize().Clone();
+      try {
+        if (n === "Height")
+          size.SetHeight(
+            Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)),
+          );
+        else if (n === "IsAutoHeight")
+          size.SetHeightSizeType(scalar(value, "bool") ? SwFrameSize.Variable : SwFrameSize.Fixed);
+        else if (!size.PutValue(value, MID_FRMSIZE_SIZE_TYPE)) illegal("Invalid row SizeType.");
+        format.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
     } else unknown(n);
   }
 }
@@ -88,16 +154,20 @@ export class SwXTextTable {
       table.SetRowsToRepeat(scalar(value, "sal_Int32") as number);
       return;
     }
-    const fields: Record<
-      string,
-      "width" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom"
-    > = {
-      Width: "width",
+    const fields: Record<string, "marginLeft" | "marginRight" | "marginTop" | "marginBottom"> = {
       LeftMargin: "marginLeft",
       RightMargin: "marginRight",
       TopMargin: "marginTop",
       BottomMargin: "marginBottom",
     };
+    if (n === "Width") {
+      const format = table.GetFrameFormat();
+      const size = format.GetFrameSize().Clone();
+      size.SetWidthPercent(0);
+      size.SetWidth(Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)));
+      format.SetFormatAttr(size);
+      return;
+    }
     if (fields[n]) {
       table.SetFormat({
         ...table.GetFormat(),
@@ -105,6 +175,29 @@ export class SwXTextTable {
           toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100),
         ),
       });
+      return;
+    }
+    if (n === "RelativeWidth" || n === "IsWidthRelative") {
+      const format = table.GetFrameFormat();
+      const size = format.GetFrameSize().Clone();
+      if (n === "RelativeWidth") {
+        const width = scalar(value, "sal_Int16") as number;
+        if (width !== 0 && width <= 100) size.SetWidthPercent(width & 255);
+      } else if (scalar(value, "bool") === false) size.SetWidthPercent(0);
+      else if (size.GetWidthPercent() === 0)
+        illegal("relative width cannot be switched on with this property");
+      format.SetFormatAttr(size);
+      return;
+    }
+    if (n === "WritingMode") {
+      const format = table.GetFrameFormat(),
+        item = format.GetFrameDir().Clone();
+      try {
+        if (!item.PutValue(value, 0)) illegal("Invalid table writing mode");
+        format.SetFormatAttr(item);
+      } finally {
+        item.Dispose();
+      }
       return;
     }
     if (n === "HoriOrient") {
@@ -268,10 +361,43 @@ export function convertToTable(
 
 /** Native cell-format properties write the claimed box format rather than a browser table record. @param box - Actual cell. @param name - Native property name. @param value - Native Any. @returns Whether the cell-format map consumed the property. */
 export function setCellProperty(box: SwTableBox, name: string, value: Any): boolean {
+  if (name === "BackColor") {
+    const format = box.ClaimFrameFormat();
+    const item = (format.GetAttrSet().Get(RES_BACKGROUND) as SvxBrushItem).Clone();
+    try {
+      if (!item.PutValue(value, MID_BACK_COLOR)) illegal("Invalid cell background color");
+      format.SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    return true;
+  }
+  if (name === "RowSpan") {
+    box.setRowSpan(scalar(value, "sal_Int32") as number);
+    return true;
+  }
+  if (name === "VerticalMerge") {
+    for (const node of box.GetParagraphs()) node.SetCountedInList(false);
+    return true;
+  }
+  if (name === "FRMDirection") {
+    const item = new SvxFrameDirectionItem(SvxFrameDirection.Environment, RES_FRAMEDIR);
+    try {
+      item.PutValue(value, 0);
+      box.GetFrameFormat().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    return true;
+  }
   if (name === "VertOrient") {
     const item = box.GetVertOrient();
-    item.PutValue(scalar(value, "sal_Int16"), 0);
-    box.ClaimFrameFormat().SetFormatAttr(item);
+    try {
+      item.PutValue(scalar(value, "sal_Int16"), 0);
+      box.ClaimFrameFormat().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
     return true;
   }
   const members: Record<string, number> = {
@@ -288,26 +414,32 @@ export function setCellProperty(box: SwTableBox, name: string, value: Any): bool
   const member = members[name];
   if (member === undefined) return false;
   const item = box.GetFrameFormat().GetAttrSet().Get(RES_BOX).Clone() as SvxBoxItem;
-  let input: unknown;
-  if (member <= 4) {
-    const line = new BorderLine();
-    if (!value.extract(line, cppu_detail_getUnoType_BorderLine)) illegal("Expected BorderLine");
-    input = line;
-  } else input = scalar(value, "sal_Int32");
-  if (!item.PutValue(input, member | 0x80)) illegal("Invalid cell border");
-  box.ClaimFrameFormat().SetFormatAttr(item);
-  return true;
+  try {
+    let input: unknown;
+    if (member <= 4) {
+      const line = new BorderLine2();
+      if (!lcl_extractBorderLine(value, line)) illegal("Expected BorderLine or BorderLine2");
+      input = line;
+    } else input = scalar(value, "sal_Int32");
+    if (!item.PutValue(input, member | 0x80)) illegal("Invalid cell border");
+    box.ClaimFrameFormat().SetFormatAttr(item);
+    return true;
+  } finally {
+    item.Dispose();
+  }
 }
 
 /** Reads native current row values in public units. @param line - Actual row. @param name - Native property name. @returns Typed Any. */
 export function getRowProperty(line: SwTableLine, name: string): Any {
   const result = new Any(),
-    size = line.GetFrameSize();
-  if (name === "IsSplitAllowed") result.insert([line.GetRowSplit().GetValue()], "bool");
+    format = line.GetFrameFormat(),
+    size = format.GetFrameSize();
+  if (name === "IsSplitAllowed") result.insert([format.GetRowSplit().GetValue()], "bool");
   else if (name === "Height")
     result.insert([Number(convertTwipToMm100(BigInt(size.GetHeight())))], "sal_Int32");
   else if (name === "IsAutoHeight")
-    result.insert([size.GetHeightSizeType() !== SwFrameSize.Fixed], "bool");
+    result.insert([size.GetHeightSizeType() === SwFrameSize.Variable], "bool");
+  else if (name === "SizeType") size.QueryValue(result, MID_FRMSIZE_SIZE_TYPE);
   else unknown(name);
   return result;
 }

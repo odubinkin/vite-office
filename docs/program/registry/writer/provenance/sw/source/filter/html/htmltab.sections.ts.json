@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmltab.sections.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.sections.ts",
+          "marker": "InsertTableSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.sections.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.attribute-scope.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/html/htmltab.cxx",
+          "marker": "SwHTMLParser::InsertTableSection"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmltab.cxx",
+    "localSymbols": [
+      "InsertTableSection",
+      "InsertTableContents",
+      "InsertTempTableCaptionSection"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::InsertTableSection",
+      "SwHTMLParser::InsertTableContents",
+      "SwHTMLParser::InsertTempTableCaptionSection"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML42: original synchronous InsertTableSection overloads and InsertTableContents consume actual document/current-table/cursor/section owners. The explicit outer-table argument borrows original current-table state across a permanent TypeScript responsibility split; it does not fabricate the still-pending BuildTable producer. Same-slot inherited eState is declared public for source fragments without emitted replacement state. Preserve first-cell reuse, subsequent native section placement, pool cursor advancement versus predecessor non-advancement, exact40twip three-script heights, Error timing, actual numbering continuation and raw attribute-head rebase. Native COL/COLGROUP uses original lexer/options/filter/ring operations and a bound real virtual consumer, reverse duplicate precedence, uint16-before256 span admission, asterisk-relative widths, child-COL span-zero marker, structural rewind, whitespace/body fallback and native bookmarks. Actual MakeParentContents consumes those section operations. SwTable retains its original shared HTML-layout reference and clears it in native SetTabCols/destruction. Synchronous memory streams have no pending device or floating/applet consumer owners; these are not simulated. Current-table/table-row/cell/caption token orchestration, final core table materialization, actual text/table automatic layout and final current-model/filter/UI reconciliation remain required. No private parser fields or native results are injected, no fake measurement or alternate graph is introduced, no whole module/API/ABI/desktop parity is claimed, and browser file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML46: original table-boundary SplitAttrTab and RestoreAttrTab preserve actual open owner identity, cloned pre-table ranges, next/previous chains, front/back queue ordering, native previous-content and fixed-section boundary checks, raw reset offsets and original diagnostic-only assertions. Actual SwHTMLParser exposes these original operations without replacement state. CaptionSaveStruct freezes native section stacks, saves actual heads, suspends/restores borrowed numbering in source order and owns one tracked cursor copy. InsertTempTableCaptionSection creates the original COLL_TEXT normal section before EndOfExtras and advances the real cursor. These are concrete native table grammar dependencies; the production BuildTable/cell/row/caption orchestration, materialization, automatic layout and final filter/UI audit remain required. No private results, fabricated measurement or alternate parser/table is introduced; broad module/ABI parity stays unverified. WRITER331 preserves the original unequal raw-offset split condition."
+    ],
+    "omittedResponsibilities": [
+      "Pending device input and unrepresented floating/applet modes have no current owners. Original full current-table/row/cell/caption producer, final table materialization, actual text/table automatic layout and final filter/UI reconciliation remain required; broad module/API/ABI/desktop parity is unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmltab.sections.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original same-owner table routines are split under the source-size limit. Arguments borrow actual parser/current-table objects and the bound original virtual consumer; they own no replacement parser, table state or token stream."
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmltextframe.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0129",
+      "CAP-0138",
+      "CAP-0139",
+      "CAP-0140",
+      "CAP-0141",
+      "CAP-0142",
+      "CAP-0143",
+      "CAP-0144",
+      "CAP-0145",
+      "CAP-b3d6ebc6-e2c7-4358-be0a-bae5a60758bc",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmltextframe.ts#importTextFrame",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx#SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx#m_isSplitAllowed",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_RELWIDTHREL"
+      ],
+      "justification": "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF. Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice. RTF100. Uses the common native bound fly collection rather than a separate filter-only anchor registry. RTF101. Preserves original split, flow, overlap, frame border and transparency values in ODF. RTF102. Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importTextFrame",
+        "endTextFrame",
+        "projectAnchoredTextFrames"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/unocore/unoframe.cxx",
+      "upstreamSymbols": [
+        "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
+      ]
+    }
+  }
+}

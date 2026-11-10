@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-box-item-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-box-item-codec.ts",
+          "marker": "encodeNativeBoxItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.border.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed.",
+    "responsibilities": [
+      "S3HW1E HTML32: original pending CSS border/color/width/style and padding handlers now feed actual SvxCSS1PropertyInfo border owners, deep copy/Clear/Merge/component copies and SetBoxItem. Actual registered border slot10024 supplies RES_BOX; no new Which or pool owner is fabricated. Native named widths1/10/15 and MIN_BORDER_DIST28 retain source line styles, four-side partial shorthand, pixel hairline differences, absent-side zero distance and unsigned-to-signed distance behavior. ParseStyleOptions consumes SetBoxItem before language/ordinary context insertion; char-level boxes do not fall back to paragraph boxes when RES_CHRATR_BOX is unrepresented. Real HTML/Markdown/Worker tests inspect original items. A local transport loss was fixed by sharing existing lossless table-native box fields with paragraph/page item records; native UNO QueryValue/PutValue remains unchanged and old array ingress remains explicit. Native CSS six-hex priority is preserved (WRITER160); further border findings WRITER294-296 are documented. No standalone stylesheet/class generation, page-break producer, table-reader, full module/ABI certification or browser file UI/autosave/recovery change is claimed."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}

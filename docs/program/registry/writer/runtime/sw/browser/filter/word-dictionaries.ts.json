@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/word-dictionaries.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-workflows",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/word-dictionaries.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Loads the five built-in ICU Dict resources through Vite URLs and shares the prepared native factory across Writer Markdown opens, with retry after a failed local asset request.",
+      "knownViolations": [],
+      "localSymbols": [
+        "prepareWriterWordDictionaries"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

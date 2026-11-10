@@ -2,6 +2,7 @@
 
 /** Lexical events consumed by the Writer RTF document mapper. */
 export type RtfToken =
+  | Readonly<{ kind: "character-source"; firstByte: number; lastByte: number }>
   | Readonly<{ kind: "group-start" }>
   | Readonly<{ kind: "group-end" }>
   | Readonly<{ kind: "control"; name: string; parameter?: number }>
@@ -18,6 +19,9 @@ export class RtfSyntaxError extends Error {
   }
 }
 
+/** Existing browser bound for parser nesting and materialized nested tables. */
+export const RTF_MAX_NESTING_DEPTH = 1024;
+
 /** Tokenizes one RTF byte stream without projecting it through HTML or browser DOM. */
 export class RtfTokenizer {
   private readonly source: Uint8Array;
@@ -29,6 +33,8 @@ export class RtfTokenizer {
   private groupUnicodeSkip: number[] = [1];
   private groupFallback: number[] = [0];
   private bytes: number[] = [];
+  private rawRun = false;
+  private rawFirstByte: number | undefined;
 
   /** Returns the current parser state's remaining Unicode fallback characters.  @returns The number result. */
   private get fallback(): number {
@@ -65,10 +71,12 @@ export class RtfTokenizer {
       throw new RtfSyntaxError("RTF document header is missing.");
     while (this.offset < this.source.length) {
       const byte = this.source[this.offset++] as number;
+      if (byte === 0x7b || byte === 0x7d || byte === 0x5c) this.FlushCharacterSource(byte);
       if (byte === 0x7b) {
         this.FlushText();
         this.depth++;
-        if (this.depth > 1024) throw new RtfSyntaxError("RTF group nesting is too deep.");
+        if (this.depth > RTF_MAX_NESTING_DEPTH)
+          throw new RtfSyntaxError("RTF group nesting is too deep.");
         this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) as number);
         this.groupFallback.push(this.fallback);
         this.Emit({ kind: "group-start" });
@@ -81,14 +89,22 @@ export class RtfTokenizer {
         this.Emit({ kind: "group-end" });
       } else if (byte === 0x5c) {
         this.ReadEscape();
-      } else if (byte !== 0x0d && byte !== 0x0a && byte !== 0x00) {
+      } else {
+        if (this.depth === 0 && (byte === 0x0d || byte === 0x0a || byte === 0x00)) continue;
+        this.rawRun = true;
+        if (byte === 0x0d || byte === 0x0a || byte === 0x00) continue;
+        if (this.fallback === 0 && this.rawFirstByte === undefined) this.rawFirstByte = byte;
         this.AppendByte(byte);
         if (this.currentCodepage?.() === 932 && isShiftJisLead(byte)) {
           const trail = this.source[this.offset++];
-          if (trail !== undefined) this.AppendByte(trail);
+          if (trail !== undefined) {
+            if (this.fallback === 0 && this.rawFirstByte === undefined) this.rawFirstByte = trail;
+            this.AppendByte(trail);
+          }
         }
       }
     }
+    this.FlushCharacterSource(this.source.at(-1) ?? 0);
     this.FlushText();
     if (this.depth !== 0) throw new RtfSyntaxError("Unclosed RTF group.");
     if (this.tokens.at(-1)?.kind !== "group-end")
@@ -106,6 +122,11 @@ export class RtfTokenizer {
       const digits = String.fromCharCode(a, b);
       if (!/^[0-9a-fA-F]{2}$/u.test(digits)) throw new RtfSyntaxError("Invalid RTF hex byte.");
       const value = Number.parseInt(digits, 16);
+      this.Emit({
+        kind: "character-source",
+        firstByte: this.fallback === 0 ? value : 0,
+        lastByte: (value << 24) >> 24,
+      });
       if (value === 0x0d || value === 0x0a) {
         // Keep the byte origin until the destination-aware resolveChars boundary.
         if (this.fallback !== 0) this.fallback--;
@@ -153,7 +174,7 @@ export class RtfTokenizer {
       const codeUnit = parameter ?? 0;
       if (codeUnit >= -32768 && codeUnit <= 65535) {
         this.FlushText();
-        this.Emit({ kind: "text", value: String.fromCharCode(codeUnit & 0xffff) });
+        this.Emit({ kind: "control", name: "u", parameter: codeUnit });
         this.fallback = this.groupUnicodeSkip.at(-1) as number;
       }
     } else {
@@ -165,6 +186,18 @@ export class RtfTokenizer {
         ...(parameter === undefined ? {} : { parameter }),
       });
     }
+  }
+
+  /** Original resolveChars ordinary run keeps the terminator in its char variable after rewinding the stream. The first collected byte is independent of the following delimiter and skipped fallback. @param terminator - Native char left by the read loop. @returns Nothing. */
+  private FlushCharacterSource(terminator: number): void {
+    if (!this.rawRun) return;
+    this.Emit({
+      kind: "character-source",
+      firstByte: this.rawFirstByte ?? 0,
+      lastByte: (terminator << 24) >> 24,
+    });
+    this.rawRun = false;
+    this.rawFirstByte = undefined;
   }
 
   /** Adds one raw text byte, or consumes one fallback character after Unicode. @param byte - Input byte.  @returns Nothing. */
@@ -203,4 +236,37 @@ function isLetter(byte: number | undefined): boolean {
 /** Tests ASCII control-parameter digit syntax. @param byte - Candidate. @returns Whether a digit. */
 function isDigit(byte: number | undefined): boolean {
   return byte !== undefined && byte >= 48 && byte <= 57;
+}
+
+import controlWordData from "./rtftokenizer.controlwords.json";
+import type { RTFKeyword } from "./rtfcontrolwords";
+/** Original control-word dispatch kind order. */
+export enum RTFControlType {
+  FLAG,
+  DESTINATION,
+  SYMBOL,
+  TOGGLE,
+  VALUE,
+}
+/** Original immutable native symbol metadata. */
+export interface RTFSymbol {
+  readonly controlType: RTFControlType;
+  readonly index: RTFKeyword;
+  readonly defValue: number;
+}
+/** Original static unordered lookup, preserving exact case-sensitive spellings and first insertion. */
+const controlWords = new Map<string, Readonly<RTFSymbol>>();
+for (const row of controlWordData.controls) {
+  const [keyword, controlType, index, defValue] = row as [
+    string,
+    RTFControlType,
+    RTFKeyword,
+    number,
+  ];
+  if (!controlWords.has(keyword))
+    controlWords.set(keyword, Object.freeze({ controlType, index, defValue }));
+}
+/** Original null-on-unknown symbol lookup. @param keyword - Exact spelling. @returns Borrowed immutable metadata or null. */
+export function getSymbolData(keyword: string): Readonly<RTFSymbol> | null {
+  return controlWords.get(keyword) ?? null;
 }

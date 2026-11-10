@@ -17,10 +17,19 @@ import { applyTextImportProperties, xmlTextString } from "./txtprmap";
 import { APPEND_PARAGRAPH } from "../../../offapi/com/sun/star/text/ControlCharacter";
 import { XMLParaContext, type XMLTextImportTarget } from "./txtparai";
 import { XMLTextListsHelper } from "./txtlists";
+import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell";
+export type XMLTextType = "Body" | "Cell" | "TextBox";
+
+/** Original pending ranged character and link properties for the current text context. */
+interface TextImportHint {
+  start: XMLTextRange;
+  end: XMLTextRange;
+  properties: OdfCharacterProperties;
+  hyperlink?: OdfHyperlink;
+}
 
 /** One native text import owner keeps processed list roots across body and every cell. */
 export class XMLTextImportHelper {
@@ -34,13 +43,45 @@ export class XMLTextImportHelper {
   private cursor: XMLTextCursor | undefined;
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
-  private readonly hints: {
-    start: XMLTextRange;
-    end: XMLTextRange;
-    properties: OdfCharacterProperties;
-    hyperlink?: OdfHyperlink;
+  private hints: TextImportHint[] = [];
+  private bookmarkStarts = new Map<string, XMLTextRange>();
+  private readonly frameContexts: {
+    cursor: XMLTextCursor;
+    start: XMLTextRange | undefined;
+    applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
+    hints: TextImportHint[];
+    bookmarkStarts: Map<string, XMLTextRange>;
   }[] = [];
-  private readonly bookmarkStarts = new Map<string, XMLTextRange>();
+
+  /** Saves the original cursor, enclosing paragraph ranges and list context for a nested text frame. @param cursor - Frame text cursor. @returns Nothing. */
+  public PushTextFrameCursor(cursor: XMLTextCursor): void {
+    this.frameContexts.push({
+      cursor: this.GetCursor(),
+      start: this.start,
+      applyParagraph: this.applyParagraph,
+      hints: this.hints,
+      bookmarkStarts: this.bookmarkStarts,
+    });
+    this.cursor = cursor;
+    this.start = undefined;
+    this.applyParagraph = undefined;
+    this.hints = [];
+    this.bookmarkStarts = new Map();
+    this.lists.PushListContext();
+  }
+
+  /** Releases frame text ranges and restores the enclosing original paragraph and list context. @returns Nothing. */
+  public PopTextFrameCursor(): void {
+    const saved = this.frameContexts.pop();
+    if (saved === undefined) throw new RuntimeException();
+    this.ClearCursor();
+    this.cursor = saved.cursor;
+    this.start = saved.start;
+    this.applyParagraph = saved.applyParagraph;
+    this.hints = saved.hints;
+    this.bookmarkStarts = saved.bookmarkStarts;
+    this.lists.PopListContext();
+  }
   /** Borrows the current native text cursor. @returns Active cursor. */
   public GetCursor(): XMLTextCursor {
     if (!this.cursor) throw new RuntimeException();
@@ -52,10 +93,17 @@ export class XMLTextImportHelper {
   }
   /** Releases import-owned cursor and hint positions after stream completion or failure. @returns Nothing. */
   public ResetCursor(): void {
+    while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
+    this.ClearCursor();
+  }
+
+  /** Releases the current text location without clearing suspended parent contexts. @returns Nothing. */
+  private ClearCursor(): void {
     this.cursor?.dispose();
     this.cursor = undefined;
     this.start?.dispose();
     this.start = undefined;
+    this.applyParagraph = undefined;
     for (const hint of this.hints) {
       hint.start.dispose();
       hint.end.dispose();
@@ -295,6 +343,21 @@ export class XMLTextImportHelper {
     }
   }
 
+  /** Creates the original inline draw:frame context for an active Writer text importer. @param attributes - Source frame attributes. @returns Text frame context or native inert fallback. */
+  public CreateTextFrameContext(attributes: FastAttributeList): SvXMLImportContext | null {
+    const { target } = this;
+    return target.beginTextFrame && target.endTextFrame
+      ? new XMLTextFrameContext(
+          {
+            beginTextFrame: target.beginTextFrame.bind(target),
+            endTextFrame: target.endTextFrame.bind(target),
+          },
+          this,
+          attributes,
+        )
+      : null;
+  }
+
   /** Creates the supported native paragraph/list/table context for this text location. @param element - Child token. @param attributes - Child values. @param type - Native text location. @returns Context or native inert-child fallback. */
   public CreateTextChildContext(
     element: XMLToken,
@@ -306,7 +369,6 @@ export class XMLTextImportHelper {
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE) {
-      if (type === "Cell") throw new Error("Unsupported ODF table cell section or nested table.");
       if ("beginTable" in this.target)
         return new XMLTableContext(this.target as XMLTableImportTarget, attributes, this);
       return null;
@@ -315,9 +377,7 @@ export class XMLTextImportHelper {
       return new SvXMLIgnoreContext(true);
     if (element === XMLToken.TEXT_SECTION)
       throw new Error(
-        type === "Cell"
-          ? "Unsupported ODF table cell section or nested table."
-          : "Unsupported ODF text section.",
+        type === "Cell" ? "Unsupported ODF table cell section." : "Unsupported ODF text section.",
       );
     return null;
   }

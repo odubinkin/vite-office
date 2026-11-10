@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/formatflysplit.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/formatflysplit.ts#SwFormatFlySplit",
+        "vendor/libreoffice-reference/sw/inc/formatflysplit.hxx#class SW_DLLPUBLIC SwFormatFlySplit",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Preserves the original default-false native split item and concrete clone. Full native multi-page fly layout is not part of the item owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFormatFlySplit"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/formatflysplit.hxx",
+      "upstreamSymbols": [
+        "class SW_DLLPUBLIC SwFormatFlySplit"
+      ]
+    }
+  }
+}

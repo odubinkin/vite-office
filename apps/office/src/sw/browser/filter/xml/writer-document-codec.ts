@@ -1,10 +1,5 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import {
-  encodeTextHint,
-  decodeTextHint,
-  type WriterTextHintRecord,
-} from "./writer-text-hint-codec";
-import {
   encodeCharacterStyles,
   restoreCharacterStyles,
   decodeCharacterStyleReference,
@@ -20,36 +15,11 @@ import {
   restoreTextGridDefault,
   type WriterPageFormatRecord,
 } from "./writer-page-format-codec";
-import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
-import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
-
 import { createWriterNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
 import { restoreFontMetadata } from "../../../../vcl/browser/font-metadata-codec";
 import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwPosition } from "../../../source/core/crsr/pam";
-import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
-import { SwTableNode } from "../../../source/core/docnode/node";
-import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
-import type { SwTableBoxFormat } from "../../../source/core/table/swtable";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
-import {
-  encodeTableFormat,
-  restoreTableGeometry,
-  restoreTableSpacing,
-  restoreTableFlow,
-  type WriterTableFormatRecord,
-  encodeRowFormat,
-  decodeRowFormat,
-  encodeFrameSize,
-  decodeFrameSize,
-  type WriterRowFormatRecord,
-  type WriterFrameSizeRecord,
-} from "./writer-table-item-codec";
 import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
 import {
   isWriterParagraphStyle,
@@ -57,18 +27,30 @@ import {
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
+import { RES_PARATR_OUTLINELEVEL } from "../../../inc/hintids";
+import { SwTableNode } from "../../../source/core/docnode/node";
+import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
+import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import {
-  RES_PARATR_OUTLINELEVEL,
-  RES_BOX,
-  WRITER_TEXT_NODE_WHICH_RANGES,
-} from "../../../inc/hintids";
-import { SwpHints } from "../../../source/core/txtnode/ndhints";
+  sectionTextNodes,
+  encodeTextNode,
+  decodeTextNode,
+  encodeWriterTableSteps,
+  decodeWriterTableSteps,
+  type WriterTableRecord,
+  type WriterTextNodeRecord,
+} from "./writer-document-content-codec";
+import {
+  encodeTextFrames,
+  decodeTextFrames,
+  type WriterTextFrameRecord,
+} from "./writer-text-frame-codec";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import {
   getDefaultDocumentSettings,
   type DocumentSettingId,
 } from "../../../source/core/doc/DocumentSettingManager";
-import { decodeSfxItemSet, decodeSfxPoolItem, encodeSfxItemSet } from "./item-codec";
+import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Native scalar rule state transported independently of copy-constructor policy. */
 interface WriterNumberRuleScalarState {
@@ -107,205 +89,11 @@ interface WriterStyleRecord {
   readonly poolId: number;
 }
 
-/** Primitive graph record for one ordered text node. */
-interface WriterTextNodeRecord {
-  readonly autoAttributes: readonly SfxPoolItemSnapshot[];
-  readonly formatCollId: WriterParagraphStyle;
-  readonly hints: readonly WriterTextHintRecord[];
-  readonly listGeometryWins?: boolean;
-  /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
-  readonly emptyListStyle?: true;
-  readonly softPageBreaks?: readonly number[];
-  readonly text: string;
-}
-
-/** Table sections retain their own text nodes in body order. */
-interface WriterTableRecord {
-  readonly name: string;
-  readonly format: WriterTableFormatRecord;
-  readonly columnWidths: readonly number[];
-  readonly softPageBreakRows: readonly number[];
-  readonly rows: readonly Readonly<{
-    format: WriterRowFormatRecord;
-    cells: readonly Readonly<{
-      format: WriterBoxFormatRecord;
-      paragraphs: readonly WriterTextNodeRecord[];
-    }>[];
-  }>[];
-}
-
-/** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
-type WriterBoxFormatRecord = {
-  readonly frameSize?: WriterFrameSizeRecord | undefined;
-  readonly box?:
-    | Readonly<{
-        which: number;
-        lines: readonly (BorderLineRecord | null)[];
-        distances: readonly number[];
-        removeAdjacent: boolean;
-      }>
-    | undefined;
-  readonly padding?: number | undefined;
-  readonly border?: string | undefined;
-  readonly vertOrient?:
-    Readonly<{ position: number; orientation: number; relation: number }> | undefined;
-  readonly verticalAlign?: "top" | "middle" | "bottom" | undefined;
-};
-/** Encodes complete public native fields without transporting a class. @param value - Original box format. @returns Primitive format. */
-function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
-  const { vertOrient, box, frameSize } = value;
-  return {
-    frameSize: encodeFrameSize(frameSize),
-    box:
-      box === undefined
-        ? undefined
-        : {
-            which: box.Which(),
-            lines: [0, 1, 2, 3].map(
-              /** Encodes complete native line state. @param edge - Side. @returns Primitive line or null. */ (
-                edge,
-              ) => box.GetLine(edge)?.toJSON() ?? null,
-            ),
-            distances: [0, 1, 2, 3].map(
-              /** Preserves authored signed distance. @param edge - Side. @returns Signed twips. */ (
-                edge,
-              ) => box.GetDistance(edge, true),
-            ),
-            removeAdjacent: box.IsRemoveAdjacentCellBorder(),
-          },
-    vertOrient:
-      vertOrient === undefined
-        ? undefined
-        : {
-            position: vertOrient.GetPos(),
-            orientation: vertOrient.GetVertOrient(),
-            relation: vertOrient.GetRelationOrient(),
-          },
-  };
-}
-/** Restores native item ownership from primitive or prior scalar storage. @param value - Primitive box record. @returns Native box format. */
-function decodeBoxFormat(value: WriterBoxFormatRecord): SwTableBoxFormat {
-  const { vertOrient, verticalAlign } = value;
-  const format: SwTableBoxFormat = {
-    box: decodeBoxItem(value),
-    ...(value.frameSize === undefined ? {} : { frameSize: decodeFrameSize(value.frameSize) }),
-  };
-  if (vertOrient === undefined)
-    return {
-      ...format,
-      ...(verticalAlign === undefined
-        ? {}
-        : {
-            vertOrient: new SwFormatVertOrient(
-              0,
-              verticalAlign === "middle"
-                ? VertOrientation.CENTER
-                : verticalAlign === "bottom"
-                  ? VertOrientation.BOTTOM
-                  : VertOrientation.NONE,
-            ),
-          }),
-    };
-  if (
-    !isRecord(vertOrient) ||
-    [vertOrient.position, vertOrient.orientation, vertOrient.relation].some(
-      /** Rejects malformed native fields at the untrusted graph boundary. @param field - Primitive value. @returns Whether invalid. */
-      (field) => typeof field !== "number" || !Number.isFinite(field),
-    ) ||
-    !Number.isSafeInteger(vertOrient.position) ||
-    !Number.isInteger(vertOrient.orientation) ||
-    vertOrient.orientation < -32768 ||
-    vertOrient.orientation > 32767 ||
-    !Number.isInteger(vertOrient.relation) ||
-    vertOrient.relation < -32768 ||
-    vertOrient.relation > 32767
-  )
-    throw new Error("Stored Writer box orientation is invalid.");
-  return {
-    ...format,
-    vertOrient: new SwFormatVertOrient(
-      vertOrient.position,
-      vertOrient.orientation,
-      vertOrient.relation,
-    ),
-  };
-}
-
-/** Validates and restores primitive native box state; legacy CSS enters only here. @param value - Untrusted stored format. @returns Owned native box or absent. */
-function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
-  const record = value.box;
-  if (record === undefined) {
-    if (
-      (value.padding !== undefined && !Number.isSafeInteger(value.padding)) ||
-      (value.border !== undefined && typeof value.border !== "string")
-    )
-      throw new Error("Stored Writer legacy box is invalid.");
-    return importBoxProperties({ padding: value.padding, border: value.border }, RES_BOX);
-  }
-  if (
-    !isRecord(record) ||
-    !Number.isInteger(record.which) ||
-    record.which < 0 ||
-    record.which > 32767 ||
-    !Array.isArray(record.lines) ||
-    record.lines.length !== 4 ||
-    !Array.isArray(record.distances) ||
-    record.distances.length !== 4 ||
-    typeof record.removeAdjacent !== "boolean"
-  )
-    throw new Error("Stored Writer native box is invalid.");
-  const item = new SvxBoxItem(record.which);
-  for (const edge of [0, 1, 2, 3]) {
-    const distance = record.distances[edge];
-    if (
-      typeof distance !== "number" ||
-      !Number.isInteger(distance) ||
-      distance < -32768 ||
-      distance > 32767
-    )
-      throw new Error("Stored Writer box distance is invalid.");
-    item.SetDistance(distance, edge);
-    const line = record.lines[edge];
-    if (line === null) continue;
-    if (
-      !isRecord(line) ||
-      typeof line.color !== "number" ||
-      !Number.isInteger(line.color) ||
-      line.color < 0 ||
-      line.color > 0xffffffff ||
-      !Number.isSafeInteger(line.width) ||
-      typeof line.style !== "number" ||
-      !Number.isInteger(line.style) ||
-      (line.style !== 32767 && (line.style < 0 || line.style > 17)) ||
-      typeof line.scale !== "number" ||
-      !Number.isFinite(line.scale) ||
-      typeof line.mirror !== "boolean" ||
-      typeof line.useLeftTop !== "boolean" ||
-      !Array.isArray(line.implementation) ||
-      line.implementation.length !== 4 ||
-      !Number.isInteger(line.implementation[0]) ||
-      line.implementation[0] < 0 ||
-      line.implementation[0] > 7 ||
-      line.implementation
-        .slice(1)
-        .some(
-          /** Rejects invalid native rate fields. @param rate - Stored rate. @returns Whether malformed. */ (
-            rate: unknown,
-          ) => typeof rate !== "number" || !Number.isFinite(rate),
-        )
-    )
-      throw new Error("Stored Writer native border line is invalid.");
-    item.SetLine(SvxBorderLine.FromRecord(line as unknown as BorderLineRecord), edge);
-  }
-  item.SetRemoveAdjacentCellBorder(record.removeAdjacent);
-  return item;
-}
-
-/** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly tables?: readonly WriterTableRecord[];
+  readonly textFrames?: readonly WriterTextFrameRecord[];
   readonly bookmarks?: readonly Readonly<{ name: string; nodeIndex: number; offset: number }>[];
   readonly embeddedFonts?: readonly WriterEmbeddedFont[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
@@ -334,32 +122,13 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     textNodes.push(encodeTextNode(document, node));
     yield;
   }
-  for (const table of document.GetTables()) {
-    const rows: WriterTableRecord["rows"][number][] = [];
-    for (const row of table.GetTabLines()) {
-      const cells: WriterTableRecord["rows"][number]["cells"][number][] = [];
-      for (const cell of row.GetTabBoxes()) {
-        const paragraphs: WriterTextNodeRecord[] = [];
-        for (const node of cell.GetParagraphs()) {
-          paragraphs.push(encodeTextNode(document, node));
-          yield;
-        }
-        cells.push({ format: encodeBoxFormat(cell.GetFormat()), paragraphs });
-        yield;
-      }
-      rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
-      yield;
-    }
-    tables.push({
-      name: table.GetName(),
-      format: encodeTableFormat(table),
-      columnWidths: table.GetColumnWidths(),
-      softPageBreakRows: table.GetSoftPageBreakRows(),
-      rows,
-    });
-  }
+  for (const table of document.GetTables())
+    tables.push(yield* encodeWriterTableSteps(document, table));
+  const textOwners = sectionTextNodes(document.nodes.getBodyContent());
+  const textFrames = yield* encodeTextFrames(document, textOwners);
   const textGridDefault = encodeTextGridDefault(document);
   return {
+    ...(textFrames.length ? { textFrames } : {}),
     embeddedFonts: document.GetEmbeddedFonts(),
     bookmarks: document
       .GetIDocumentMarkAccess()
@@ -368,7 +137,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         /** Encodes one live collapsed Writer mark. @param mark - Mark. @returns Primitive position. */
         (mark) => ({
           name: mark.GetName(),
-          nodeIndex: allTextNodes(document).indexOf(mark.GetMarkPos().GetNode() as SwTextNode),
+          nodeIndex: textOwners.indexOf(mark.GetMarkPos().GetNode() as SwTextNode),
           offset: mark.GetMarkPos().GetContentIndex(),
         }),
       ),
@@ -454,51 +223,6 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
       ),
     tables,
     textNodes,
-  };
-}
-
-/** Encodes one canonical text node, including its own soft page hints. */
-/** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ function encodeTextNode(
-  document: SwDoc,
-  node: SwTextNode,
-): WriterTextNodeRecord {
-  const direct = node.GetpSwAttrSet();
-  return {
-    autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
-    formatCollId: node.GetTextFormatColl().id,
-    ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
-    ...(node.IsEmptyListStyleDueToSetOutlineLevelAttr() ? { emptyListStyle: true as const } : {}),
-    ...(document
-      .GetIDocumentMarkAccess()
-      .GetSoftPageBreaks()
-      .some(
-        /** Selects hints on this node. @param position - Soft boundary. @returns Whether owned. */
-        (position) => position.GetNode() === node,
-      )
-      ? {
-          softPageBreaks: document
-            .GetIDocumentMarkAccess()
-            .GetSoftPageBreaks()
-            .filter(
-              /** Selects hints on this node. @param position - Soft boundary. @returns Whether owned. */
-              (position) => position.GetNode() === node,
-            )
-            .map(
-              /** Encodes a UTF-16 offset. @param position - Soft boundary. @returns Offset. */
-              (position) => position.GetContentIndex(),
-            ),
-        }
-      : {}),
-    hints:
-      node
-        .GetpSwpHints()
-        ?.entries()
-        .map(
-          /** Encodes one canonical ranged text attribute. @param hint - Writer hint. @returns Primitive hint record. */ (
-            hint,
-          ): WriterTextHintRecord => encodeTextHint(document, hint),
-        ) ?? [],
-    text: node.GetText(),
   };
 }
 
@@ -636,6 +360,18 @@ export function* decodeWriterDocumentSteps(
               format.bulletGlyph > 0xffffffff))
         )
           throw new Error("Stored Writer numbering marker ownership is invalid.");
+        if (
+          (format.nativeNumberingType !== undefined &&
+            (!Number.isInteger(format.nativeNumberingType) ||
+              format.nativeNumberingType < -32768 ||
+              format.nativeNumberingType > 32767)) ||
+          (format.numAdjust !== undefined &&
+            (!Number.isInteger(format.numAdjust) ||
+              format.numAdjust < 0 ||
+              format.numAdjust > 7)) ||
+          (format.isLegal !== undefined && typeof format.isLegal !== "boolean")
+        )
+          throw new Error("Stored Writer numbering level scalar state is invalid.");
         const metadata = format.bulletFontMetadata;
         if (metadata !== undefined && format.bulletFontPresent !== true)
           throw new Error("Stored Writer numbering font metadata is invalid.");
@@ -656,6 +392,10 @@ export function* decodeWriterDocumentSteps(
           start: format.start,
           suffix: format.suffix,
         });
+        if (format.nativeNumberingType !== undefined)
+          decoded.SetNumberingType(format.nativeNumberingType);
+        if (format.numAdjust !== undefined) decoded.SetNumAdjust(format.numAdjust);
+        if (format.isLegal !== undefined) decoded.SetIsLegal(format.isLegal);
         decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
@@ -763,46 +503,16 @@ export function* decodeWriterDocumentSteps(
       }
       const tableRecord = record.tables?.[tableIndex++];
       if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-      const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
-      const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
-      restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
-      restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
-      restoreTableFlow(table.GetFrameFormat(), nativeFlow);
-      for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
-      for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
-        if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();
-        const row = document.nodes.AppendTableRow(
-          table,
-          rowRecord.cells.length,
-          decodeRowFormat(rowRecord.format),
-          rowRecord.cells.map(
-            /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-              cell,
-            ) => decodeBoxFormat(cell.format),
-          ),
-        );
-        for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
-          const cell = row.GetTabBoxes()[cellIndex];
-          if (cell === undefined || cellRecord.paragraphs.length === 0)
-            throw new Error("Stored Writer table cell is invalid.");
-          for (const [paragraphIndex, paragraphRecord] of cellRecord.paragraphs.entries()) {
-            const node =
-              paragraphIndex === 0
-                ? cell.GetParagraphs()[0]
-                : document.nodes.AppendTableCellParagraph(cell);
-            decodeTextNode(document, node as SwTextNode, paragraphRecord);
-            yield;
-          }
-        }
-      }
-      if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();
+      yield* decodeWriterTableSteps(document, tableRecord);
     }
     if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
       throw new Error("Stored Writer body order is invalid.");
+    const textOwners = sectionTextNodes(document.nodes.getBodyContent());
+    yield* decodeTextFrames(document, record.textFrames, textOwners);
     if (record.bookmarks !== undefined) {
       if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
       for (const mark of record.bookmarks) {
-        const node = allTextNodes(document)[mark.nodeIndex];
+        const node = textOwners[mark.nodeIndex];
         if (node === undefined) throw new Error("Stored Writer bookmark position is invalid.");
         document.GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
       }
@@ -812,74 +522,6 @@ export function* decodeWriterDocumentSteps(
   } finally {
     if (!complete) document.Dispose();
   }
-}
-
-/** Restores one text node already placed in the correct body or table section. */
-/** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @param argument3 - Callback input. @returns Callback result. */ function decodeTextNode(
-  document: SwDoc,
-  node: SwTextNode,
-  nodeRecord: WriterTextNodeRecord,
-): void {
-  if (
-    !isWriterParagraphStyle(nodeRecord.formatCollId) &&
-    document.FindTextFormatColl(nodeRecord.formatCollId) === undefined
-  )
-    throw new Error("Stored Writer paragraph style is invalid.");
-  node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId), false);
-  node.ResetAllAttr();
-  node.SetListGeometryWins(nodeRecord.listGeometryWins === true);
-  const direct = new SfxItemSet(document.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
-  for (const item of nodeRecord.autoAttributes)
-    direct.Put(decodeSfxPoolItem(document.GetAttrPool(), item));
-  node.SetAttr(direct);
-  if (nodeRecord.emptyListStyle === true) node.SetEmptyListStyleDueToSetOutlineLevelAttr();
-  const hints = nodeRecord.hints.map(
-    /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
-      hint,
-    ) => {
-      return decodeTextHint(document, hint);
-    },
-  );
-  const position = new SwPosition(node, 0, "redline");
-  try {
-    document.GetDocumentContentOperationsManager().InsertTextFragment(position, {
-      hints: new SwpHints(document.GetAttrPool(), hints),
-      text: nodeRecord.text,
-    });
-  } finally {
-    position.Dispose();
-  }
-  node.AddToList();
-  for (const offset of nodeRecord.softPageBreaks ?? [])
-    document.GetIDocumentMarkAccess().AddSoftPageBreak(node, offset);
-}
-
-/** Lists all canonical text nodes including table cell paragraphs in body order. */
-/** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ function allTextNodes(
-  document: SwDoc,
-): SwTextNode[] {
-  return document.nodes.getBodyContent().flatMap(
-    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-      block,
-    ) =>
-      block instanceof SwTableNode
-        ? block
-            .GetTable()
-            .GetTabLines()
-            .flatMap(
-              /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                row,
-              ) =>
-                row
-                  .GetTabBoxes()
-                  .flatMap(
-                    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                      cell,
-                    ) => cell.GetParagraphs(),
-                  ),
-            )
-        : [block],
-  );
 }
 
 /** Checks for a non-array object. @param value - Candidate. @returns Whether a record. */

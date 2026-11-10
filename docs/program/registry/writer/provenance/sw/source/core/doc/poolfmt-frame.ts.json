@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-frame.ts",
+          "marker": "ApplyFrameFormatPoolDefaults"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-frame.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "case SwPoolFormatId::FRM_FRAME:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "case SwPoolFormatId::FRM_LABEL:"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt-frame.ts",
+    "localSymbols": [
+      "ApplyFrameFormatPoolDefaults"
+    ],
+    "omittedResponsibilities": [
+      "Native frame style family lookup/fallback, document-owned style collections/factory/undo/modified restoration and localized style/resource creation are separate unported responsibilities; the source default switch does not supply fake lookup or modified-state providers. Full native module/ABI, MakeFlySection and production HTML-table integration remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "upstreamSymbols": [
+      "DocumentStylePoolManager::GetFormatFromPool"
+    ],
+    "rationale": " TaskDVQ9ES extends the consumed paragraph style path with editable raw-name acceptance, full pool-name lookup beyond displayed rows, actual document-shell UpdateStyle/MakeByExample, point-node FillByEx filtering, first selected text collection lookup, native grouped update and separate attribute/create/apply histories, Sfx ignored asynchronous naming and existing collection deletion/follow correction. Source quirks WRITER067/068 are preserved. Named-style references are XML-escaped during paragraph/list body export. The Style panel retains native command order; FormatPaintbrush and standalone Writer ResetAttributes remain disabled because their original execute paths are not implemented. This corrects the initial task assumption that ResetAttributes was already registered; the private style-application reset is a distinct owner. Wider style families/masks/hidden default table, complete style-box popup/completion/preview/clear/more/platform services and complete UI/core parity remain unverified. Existing save/open/autosave/no-recovery deviations and classification/default statuses are unchanged.",
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/poolfmt-frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original frame default-switch items are split from the large style-pool manager by cohesive source responsibility and source-size/ESM constraints; original owners/items remain, with no replacement style model, factory or modified-state provider."
+    }
+  },
+  "legacyOrder": 161
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native cell format ownership, sharing, defaults and change hints. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { Color } from "../../../../tools/inc/color";
 import { expect, it, vi } from "vitest";
 import { SwPosition } from "../crsr/pam";
@@ -234,7 +235,7 @@ it("invalid insertion and incomplete table teardown preserve native cell registr
     position = new SwPosition(required(f.doc.paragraphs[0]), 0);
   expect(
     /** Rejects zero native table dimensions. @returns Table. */ () =>
-      f.doc.InsertTable({ mnInsMode: 0, mnRowsToRepeat: 0 }, position, 0, 1),
+      f.doc.InsertTable({ mnInsMode: 0, mnRowsToRepeat: 0 }, position, 0, 1, HoriOrientation.FULL),
   ).toThrow("positive unsigned table dimensions");
   expect(
     /** Refuses a table without a following body paragraph. @returns Nothing. */ () =>

@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.tablerowbuffer.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+    "localSymbols": [
+      "TableRowBuffer",
+      "DispatchTableControl",
+      "CollectTableRowSprms",
+      "CollectBlockSprms",
+      "AppendWidthAfterCell"
+    ],
+    "upstreamSymbols": [
+      "TableRowBuffer"
+    ],
+    "preservedResponsibilities": [
+      "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path.",
+      "Binds rows to the active text append context and releases actual shape and table properties recursively.",
+      "Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell.",
+      "Restores native default cell resource properties at each CELLX and clears them on ROW.",
+      "Emits native row height, split and header properties and cell vertical alignment into original row snapshots.",
+      "Uses original cell resource snapshots for border definitions and the grid-after cell.",
+      "Uses the common border dispatcher while retaining the native table cell resource snapshots."
+    ],
+    "omittedResponsibilities": [
+      "Malformed row-definition restoration, full resource buffer polymorphism and the desktop renderer remain unverified. The preexisting browser nesting bound also applies to explicit ITAP depth."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.tablerowbuffer.ts",
+          "marker": "TableRowBuffer"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+          "marker": "class TableRowBuffer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "case RTFKeyword::NESTROW:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::ITAP:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::PushShapeContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "restoreTableRowProperties()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "The scope of the table cell defaults is one row."
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::TRHDR:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "aBorderIds"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFBorderState::CELL"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.tablerowbuffer.ts",
+      "rationale": "Separates the original table row buffer and depth dispatch from the main parser implementation to retain the authored file limit.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

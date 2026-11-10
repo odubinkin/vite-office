@@ -1,0 +1,67 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+    "localSymbols": [
+      "dispatchTableShading",
+      "dispatchFloatingTableValue",
+      "dispatchTableMeasure",
+      "dispatchTableMargin",
+      "putTableIndent"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::dispatchTableValue"
+    ],
+    "preservedResponsibilities": [
+      "Preserves all original shade thresholds and CLCBPAT aliases through the native nested cell sprm owner (WRITER396).",
+      "Routes the source RTF floating coordinates and distances to the nested row properties.",
+      "Emits native width, half-gap and padding resource values, including the original top/left cell token swap."
+    ],
+    "omittedResponsibilities": [
+      "Registered CLCFPAT and CLCFPATRAW retain the upstream absence of a consumer. Other table value families use existing owner paths."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+          "marker": "dispatchTableShading"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+          "marker": "dispatchFloatingTableValue"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::CLSHDNG:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::TPOSX:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::TRGAPH:"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchvalue.table.ts",
+      "rationale": "Keeps the consumed original rtftok table shading values in a focused fragment of the native value dispatcher.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

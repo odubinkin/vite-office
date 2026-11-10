@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/docary.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/docary.ts",
+        "apps/office/src/sw/inc/frameformats.native.test.ts",
+        "vendor/libreoffice-reference/sw/inc/docary.hxx"
+      ],
+      "justification": "S3HW1E HTML65: actual document-owned FrameFormats<SpzFrameFormat> storage, source fly-format construction/factory registration and native HasCurrentParaFlys registry scan replace the missing prerequisite without an empty-provider substitute. Stored SwFormat Which identities are explicit for character, text, graphic and frame/fly construction. Collection preserves positional traversal, unique object membership, independent name/type/pointer ordering, exact erase, owning deletion and default relocation. Opaque stable JS reference order represents pointer comparison, not a native address/ABI. Registered special-frame rename uses native NameChanged old/new names directly on the notifier. WRITER346 preserves original newDefault back-reference omission. WRITER347 records the source base rename inconsistency and the still-unported native document/style rename route; the existing general base-setter browser notification is not migrated or certified in this special-frame prerequisite block. Actual HTML query admits only current-node paragraph/character anchors, preserves NONE precedence and THROUGH exclusions, and evaluates simultaneous flags in source order. The collection/factory/query are real model owners, but MakeFlySection, fly/drawing contact/layout destruction and anchored-node list maintenance, recursive HTML first-cell/table grammar/materialization/layout, full document teardown, RTF direction and final format/UI audit remain unported or unverified. No synthetic frame/section/measurement or result provider is introduced. Existing save/open/autosave/recovery deviations are unchanged; whole-module semantic/default/contract/ABI parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFormatsBase"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/docary.hxx",
+      "upstreamSymbols": [
+        "SwFormatsBase"
+      ]
+    }
+  }
+}

@@ -38,6 +38,58 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts",
+          "marker": "GetParagraphMarkerProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-label.test.ts",
+          "marker": "RtfDocumentImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-list-overrides.test.ts",
+          "marker": "RtfDocumentImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/paragraph-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SectionPropertyMap.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -52,6 +104,14 @@
         {
           "path": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
           "marker": "DomainMapper_Impl::RemoveLastParagraph"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::SetLineNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::handlePreviousParagraphBorderInBetween"
         }
       ]
     },
@@ -65,7 +125,16 @@
       "GetAnyProperty",
       "GetPropertyFromCharStyleSheet",
       "deferCharacterProperty",
-      "processDeferredCharacterProperties"
+      "processDeferredCharacterProperties",
+      "GetListLevel",
+      "ValidateListLevel",
+      "PrepareParagraphNumbering",
+      "FinishParagraphNumbering",
+      "getNumberingProperty",
+      "getCurrentNumberingProperty",
+      "ApplyLineNumberSettings",
+      "SetLineNumbering",
+      "handlePreviousParagraphBorderInBetween"
     ],
     "upstreamSymbols": [
       "DomainMapper_Impl::GetPropertyFromStyleSheet",
@@ -77,14 +146,29 @@
       "DomainMapper_Impl::GetAnyProperty",
       "DomainMapper_Impl::GetPropertyFromCharStyleSheet",
       "DomainMapper_Impl::deferCharacterProperty",
-      "DomainMapper_Impl::processDeferredCharacterProperties"
+      "DomainMapper_Impl::processDeferredCharacterProperties",
+      "DomainMapper_Impl::GetListLevel",
+      "DomainMapper_Impl::ValidateListLevel",
+      "DomainMapper_Impl::finishParagraph",
+      "DomainMapper_Impl::getNumberingProperty",
+      "DomainMapper_Impl::getCurrentNumberingProperty"
     ],
     "preservedResponsibilities": [
       "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending.",
       "V4DQJW section attachment prerequisite adds real SwXPageStyle identity, native typed page factory/family entrypoints, lazy DomainMapper page-family cache and original scan-once Converted suffix allocation using o3tl signed32 prefix conversion. Section contexts now own SectionPropertyMap with original consumed Letter dimensions, one-inch margins, typed ALL layout and disabled grid defaults. GetPageStyle retains cached actual wrappers and original UNO-only catch/name-reservation behavior. ApplyProperties_ retains ordinary-then-character-bag-then-paragraph-bag order, section-only protection exclusion, real UNO failure catch and partial-write semantics. Existing page property algorithms remain on the inherited SwXStyle implementation over actual SwPageDesc; no parallel catalog, property DTO or fabricated model is introduced. Actual Any get signed32 specialization ports default initialization, extraction and original cppu failure diagnostic. This is source-backed evidence, not compiled native differential. Complete section field owners, SetStart/pre-start cursor navigation, CloseSectionGroup/header/footer/columns, section parser mapping, document/style loading, DOCX export and production file workflows remain pending; all previous semantic statuses and intentional file UI/autosave/recovery deviations remain unchanged.",
       "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced.",
       "S3HW1E RTF strike/highlight checkpoint: original explicit SourceDocumentType now selects RTF integer highlight colors versus OOXML palette tokens, and character-style highlights follow the original mapper exclusion. RTF parser groups and emitted run snapshots own genuine RTFSprms copies for strike/dstrike/highlight; ordered independent toggle values, overwrite positions, native COW and native normalization replace the collapsed strike DTO as the materialization input. Plain clears the admitted modifier state. Actual style/run mapper vectors retain direct zero-valued items and native equal-value deduplication. Existing difference-based strike/highlight item creation was removed; escapement remains on its prior path pending a concrete position/inheritance fix. Actual group members and all queued paragraph/table snapshots release at the atomic reader lifetime boundary, including parse errors. Tests exercise valid RTF inputs, inherited/direct values and source-profile colors, rather than requiring unrelated module API completeness. Whole native parser state and unconsumed factory/UNO/module operations are not claimed complete and are not independent filter completion gates.",
-      "S3HW1E native position/vertAlign checkpoint supersedes earlier legacy escapement notes: raw RTF up/dn and super/sub now retain independent original RTFSprms values and source ordering; nosupersub erases only vertAlign and zero position replaces raw state while remaining a mapper no-op. Actual native style/run normalization precedes model insertion. DomainMapper owns nonzero stylesheet substitution and deferred run/negative-paragraph calculation; DomainMapper_Impl retains actual Any copies in the represented body SubstreamContext, resolves final height through direct paragraph/character maps, retained stylesheet entries and original defaults, and flushes at nonempty text application. Named SwFormatCharFormat insertion remains with the existing atomic hint binding; its mapper property participates in final-height lookup without duplicate named-reference application. Obsolete half-point DTO state, pendingUpDn interpretation, difference-based escapement hints and unused projected character callbacks were removed. Native writerfilter ignores the legacy exporter updnprop extension, preserving source reductions rather than inventing roundtrip fidelity. Related actual-model integration and mapper tests cover these consumed branches; whole desktop parser, substream replay, unrelated UNO API and physical ABI parity are not certified or independent filter completion gates."
+      "S3HW1E native position/vertAlign checkpoint supersedes earlier legacy escapement notes: raw RTF up/dn and super/sub now retain independent original RTFSprms values and source ordering; nosupersub erases only vertAlign and zero position replaces raw state while remaining a mapper no-op. Actual native style/run normalization precedes model insertion. DomainMapper owns nonzero stylesheet substitution and deferred run/negative-paragraph calculation; DomainMapper_Impl retains actual Any copies in the represented body SubstreamContext, resolves final height through direct paragraph/character maps, retained stylesheet entries and original defaults, and flushes at nonempty text application. Named SwFormatCharFormat insertion remains with the existing atomic hint binding; its mapper property participates in final-height lookup without duplicate named-reference application. Obsolete half-point DTO state, pendingUpDn interpretation, difference-based escapement hints and unused projected character callbacks were removed. Native writerfilter ignores the legacy exporter updnprop extension, preserving source reductions rather than inventing roundtrip fidelity. Related actual-model integration and mapper tests cover these consumed branches; whole desktop parser, substream replay, unrelated UNO API and physical ABI parity are not certified or independent filter completion gates.",
+      "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
+      "S3HW1E list-label checkpoint: real RTFSprms table state preserves associated font rPr appends and native list-level size/weight/posture/strike/kerning modifiers, including independent RunType flags and F not changing list-text decoding. Original level-text length feeds ListLevel, ListsManager delegates real modifiers through borrowed DomainMapper list contexts, and ListDef character-property collection uses native UTF16 symbol-length exclusions. Actual ListLabel allocation, typed UNO style creation/cache/always-create and CharStyleName rule assignment preserve real style ownership through Worker/RTF. Concrete override levels create styles once before paragraph application, including unused levels. Typed numbering patches apply supplied fields to the copied format without replaying lossy public font/geometry/pattern projections; native local format lifetimes release registrations. Native no-DocShell unknown-style fallback is outside the valid consumed existing-style profile (WRITER257); full numerical list-level/list-format/override/section/HTML and complete module/ABI parity remain unverified. Existing browser save/open/recovery behavior and broad semantic confidence are unchanged.",
+      "S3HW1E concrete-list checkpoint: actual saved tableAttributes/listLevelEntries and RTFValue containers carry LISTLEVEL/LFOLEVEL/NumLvl overrides; RTFReferenceTable retains intrusive property references and signed map order. Each original LISTOVERRIDETABLE callback captures the cumulative raw table for ordered delivery at the existing atomic model boundary. DomainMapper table import flags and its lazy ListsManager own actual AbstractListDef/ListDef sparse levels, first-ID lookup, retained numbering service and native numeric HasValues merge. Native WWNum style creation, typed NumberingRules replacement/commit and property-owner lifetimes replace the detached list-ID/level maps. Explicit empty concrete text remains distinct from absent text. Original ignored listoverride flags, reversed temporary character merge, omitted LISTTAB reset and geometry-only stub exclusion are retained and documented as WRITER264-WRITER267. Repeated table callbacks preserve duplicate style suffixes and label allocation. Malformed-level first-indent recovery, old-style paragraph numbering, special sections/HTML and full native/compiled ABI/module parity remain unverified; broad confidence and intentional browser save/open/recovery behavior are unchanged.",
+      "Actual mapper delegates source GetListLevel and ValidateListLevel to its numbering responsibility, retaining direct/style precedence, source parent recursion and first-claim semantics. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "Native finishParagraph numbering phases operate before/after actual XParagraphAppend and retain the original once-per-list override set on this owner; the atomic RTF boundary invokes those same phases without allocating a substitute document/list service. S3HW1E paragraph NumPr checkpoint: actual native/RTF cases cover these consumed paths. Malformed-level recovery, old-style numbering and remaining section/HTML/current-core export producer audits remain required. No complete current-slice or full module/ABI confidence claim; intentional browser open/save/autosave/recovery behavior is unchanged.",
+      "Actual direct-context numbering-property lookup reads the native XIndexAccess sequence. Represented twip left/first-line producers preserve nonzero equality suppression and left-to-first / hanging-to-left compensation rather than manufacturing direct geometry equal to the numbering format. These are bounded consumed filter contracts, not full module/ABI or current-slice completion claims; browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E section geometry checkpoint: group-owned raw section RTFSprms now replace global scalar page DTOs. Global/default controls, SECTD reset, inherited SECT state, actual section capture before group pop, initial and later page restarts and needPar empty/final section paragraphs follow the consumed native path. Actual DomainMapper pgSz/pgMar/pgNumType handlers preserve Letter and compound defaults, PaperInfo sloppy dimension fit, original twip/mm100 conversions, limited margins and absolute negative top/bottom body margins. SectionPropertyMap stores deferred margins/restart and the represented no-header/no-footer margin phase; its actual GetPageStyle/ApplyProperties_ applies real UNO properties. Atomic materialization attaches the real generated page-style identity to its first paragraph/table; unsupported desktop section services are not fabricated. New literal RTF tests cover scopes, reset timing, standard dimension snap, defaults, restart and dummy paragraphs. Section types/page-style chains and PAGE-to-section interactions, plus remaining HTML/current-model producer/export audit, remain required; no full goal, broad module or ABI confidence promotion. Intentional browser file UI/autosave/recovery behavior is unchanged.",
+      "S3HW1E section type/parity checkpoint: raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD use exact generated resource tokens and original paragraph sectPr wrapper. SectionPropertyMap preserves nextPage default, one-column nextColumn promotion, continuous orientation promotion and inherited page-style identity. Real metadata-driven even/odd style copies retain the native denylist, unrestricted/mirrored regular follow style, even-only mirrored margin swap and actual Converted name allocation. DomainMapper_Impl now retains the last top-level section map with genuine tools::SvRef, leaving nested maps out of that slot and releasing old maps only after replacement. Original page-section grid defaults, document DefaultPageMode and Standard Asian-height precedence are applied after styles are imported. Original first-run SettingsTable emission snapshots actual RTFReferenceTable/RTFReferenceProperties and delivers the consumed mirror-margin flag through native mapper callbacks; late flags do not mutate the emitted table. Actual RTF/UNO tests preserve continuous restart omission and grid defaults/export no-op (WRITER281-283). Remaining PAGE/terminal-SECT state and first/follow/title-page producer/export checks, plus HTML/current-model audits, prevent full goal completion. No whole-module/ABI confidence promotion; intentional browser file UI/autosave/recovery deviations remain unchanged.",
+      "Uses the original line number defaults and first-section behavior through the existing UNO property owner.",
+      "Uses the previous paragraph in the current text stream for between-border bottom-edge removal."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

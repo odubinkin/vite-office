@@ -562,3 +562,40 @@ it("processes deferred position in resource-ID order while ignoring unrelated re
     doc.Dispose();
   }
 });
+
+import {
+  Locale,
+  cppu_detail_getUnoType_Locale as localeType,
+} from "../../../../udkapi/com/sun/star/lang/Locale";
+for (const [resource, property, input, expected] of [
+  [N.LN_CT_Language_val, P.PROP_CHAR_LOCALE, "de", ["de", "DE", ""]],
+  [N.LN_CT_Language_eastAsia, P.PROP_CHAR_LOCALE_ASIAN, "ja", ["ja", "JP", ""]],
+  [N.LN_CT_Language_bidi, P.PROP_CHAR_LOCALE_COMPLEX, "ar", ["ar", "SA", ""]],
+  [N.LN_CT_Language_val, P.PROP_CHAR_LOCALE, "qaa", ["qaa", "", ""]],
+] as const)
+  it(`maps native language attribute ${resource}/${input} to a typed Locale`, /** Source language-only fallback keeps matching languages and declines fallback to another language. @returns Nothing. */ () => {
+    const { mapper, model, doc } = session();
+    mapper.startCharacterGroup();
+    const value = unicode(input),
+      locale = new Locale();
+    try {
+      mapper.attribute(resource, V.createString(value));
+      const pair = mapper.impl.GetTopContext()?.getProperty(property);
+      assert(pair);
+      try {
+        expect(pair[1].extract(locale, localeType)).toBe(true);
+        expect([text(locale.Language), text(locale.Country), text(locale.Variant)]).toEqual(
+          expected,
+        );
+      } finally {
+        pair[1].dispose();
+      }
+    } finally {
+      locale.dispose();
+      value.dispose();
+      mapper.endCharacterGroup();
+      mapper.dispose();
+      model.dispose();
+      doc.Dispose();
+    }
+  });

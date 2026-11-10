@@ -7,7 +7,7 @@ import { unicode } from "./unocrsrhelper";
 import { SwUnoPageStylePropertyMap } from "./unomap";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { SwTextGridItem } from "../../../inc/tgrditem";
-import { RES_TEXTGRID } from "../../../inc/hintids";
+import { RES_FRAMEDIR, RES_TEXTGRID } from "../../../inc/hintids";
 import { UseOnPage } from "../layout/pagedesc";
 import {
   PageStyleLayout,
@@ -65,9 +65,9 @@ it("publishes original typed page-only grid properties and routes cloned items t
     style = standard(model),
     descriptor = new SwXStyle(doc, "PageStyles");
   try {
-    expect(SwUnoPageStylePropertyMap.size).toBe(11);
+    expect(SwUnoPageStylePropertyMap.size).toBe(12);
     for (const [name, entry] of SwUnoPageStylePropertyMap) {
-      expect(entry.which).toBe(RES_TEXTGRID);
+      expect(entry.which).toBe(name === "WritingMode" ? RES_FRAMEDIR : RES_TEXTGRID);
       const key = unicode(name);
       try {
         expect(style.getPropertySetInfo().hasPropertyByName(key)).toBe(true);

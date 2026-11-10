@@ -11,15 +11,27 @@
       "SwXTextTable",
       "convertToTable",
       "setCellProperty",
-      "getRowProperty"
+      "getRowProperty",
+      "SwXTextTableCursor",
+      "mergeRange",
+      "gotoCell"
     ],
     "upstreamSymbols": [
-      "SwXTextTable"
+      "SwXTextTable",
+      "SwXTextTableCursor::mergeRange"
     ],
     "preservedResponsibilities": [
       "Text table/row/cell canonical wrappers, units and format item property routes.",
       "Task SWRD7X preserves SwXTextTable::getSwCellByName null-result semantics for invalid or absent flat cell names; valid flat A1 names retain the canonical cell owner. Nested table-box name grammar and complete table API parity remain unported. Current statuses and registered deviations are unchanged.",
-      "Task SWRD7X delegates point/range attribute endpoints to the original GetAnyEnd owner, retains nonempty property-result guarantees after validated text spans, and preserves the original live split-boundary endpoint correction after first <= last admission. Unsupported properties and native item rejections retain typed failures. Existing semantic statuses and omitted native responsibilities are unchanged."
+      "Task SWRD7X delegates point/range attribute endpoints to the original GetAnyEnd owner, retains nonempty property-result guarantees after validated text spans, and preserves the original live split-boundary endpoint correction after first <= last admission. Unsupported properties and native item rejections retain typed failures. Existing semantic statuses and omitted native responsibilities are unchanged.",
+      "S3HW1E HTML75: Actual table WritingMode and hidden UNO cell FRMDirection write the original pooled direction items. The original hidden cell conversion failure and direct-format behavior are retained (WRITER358).",
+      "Consumes the native RowSpan property and original internal VerticalMerge numbering cleanup on actual text nodes.",
+      "Selects actual native table endpoints and calls the document merge path before rebuilding the native box selection.",
+      "Applies the original UNO BackColor property to the claimed native cell brush item with MID_BACK_COLOR.",
+      "Resolves the flat cell-name coordinate in the cursor's nearest native table, including the source leading-nested-table asymmetry in WRITER404.",
+      "Applies the original UNO absolute and relative width properties to the actual table frame item.",
+      "Applies the original row SizeType and returns the native variable-height test for IsAutoHeight.",
+      "Preserves the full BorderLine2 values and the original legacy BorderLine extraction fallback on cell properties."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -37,6 +49,22 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-import-api-states.test.ts",
           "marker": "AA1"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unotbl.ts",
+          "marker": "SwXTextTableCursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -47,6 +75,30 @@
         {
           "path": "sw/source/core/unocore/unotbl.cxx",
           "marker": "SwXTextTable::getSwCellByName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
+          "marker": "SwXTextTableCursor::mergeRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomap.cxx",
+          "marker": "MID_BACK_COLOR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+          "marker": "SwCursor::GotoTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
+          "marker": "FN_TABLE_RELATIVE_WIDTH"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx",
+          "marker": "FN_UNO_ROW_AUTO_HEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "lcl_extractBorderLine"
         }
       ]
     }

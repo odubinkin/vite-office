@@ -1,7 +1,18 @@
 /** @fileoverview Browser transport for complete shared native frame-size and LR-space items; table/page owners share these exact encoders. */
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-import { RES_FRM_SIZE, RES_LR_SPACE } from "../../../inc/hintids";
+import {
+  RES_FRM_SIZE,
+  RES_LR_SPACE,
+  RES_HORI_ORIENT,
+  RES_VERT_ORIENT,
+  RES_SURROUND,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
+import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
+import { SwFormatSurround } from "../../../inc/fmtsrnd";
+import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 /** Primitive complete frame item for process and storage boundaries. */
 export interface WriterFrameSizeRecord {
@@ -68,6 +79,26 @@ export function decodeFrameSize(frameSize: WriterFrameSizeRecord): SwFormatFrame
 export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | null {
   if (item instanceof SwFormatFrameSize)
     return { which: item.Which(), value: { ...(encodeFrameSize(item) as WriterFrameSizeRecord) } };
+  if (item instanceof SwFormatHoriOrient)
+    return {
+      which: item.Which(),
+      value: [item.GetPos(), item.GetHoriOrient(), item.GetRelationOrient(), item.IsPosToggle()],
+    };
+  if (item instanceof SwFormatVertOrient)
+    return {
+      which: item.Which(),
+      value: [item.GetPos(), item.GetVertOrient(), item.GetRelationOrient()],
+    };
+  if (item instanceof SwFormatSurround)
+    return {
+      which: item.Which(),
+      value: [item.GetSurround(), item.IsAnchorOnly(), item.IsContour(), item.IsOutside()],
+    };
+  if (item instanceof SwFormatWrapInfluenceOnObjPos)
+    return {
+      which: item.Which(),
+      value: [item.GetWrapInfluenceOnObjPos(), item.GetAllowOverlap(), item.GetOverlapVertOffset()],
+    };
   if (!(item instanceof SvxLRSpaceItem)) return null;
   const measure =
     /** Copies both original measure fields without resolving relative units or rounding doubles. @param value - Measure. @returns Pair. */ (
@@ -94,6 +125,27 @@ export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | 
 export function decodeWriterFrameItem(snapshot: SfxPoolItemSnapshot): SfxPoolItem | null {
   if (snapshot.which === RES_FRM_SIZE)
     return decodeFrameSize(snapshot.value as unknown as WriterFrameSizeRecord);
+  if (
+    snapshot.which === RES_HORI_ORIENT ||
+    snapshot.which === RES_VERT_ORIENT ||
+    snapshot.which === RES_SURROUND
+  )
+    return Array.isArray(snapshot.value) ? decodeFlyOrientationItem(snapshot) : null;
+  if (snapshot.which === RES_WRAP_INFLUENCE_ON_OBJPOS) {
+    const value = snapshot.value;
+    if (
+      !Array.isArray(value) ||
+      value.length !== 3 ||
+      ![1, 2, 3].includes(value[0]) ||
+      typeof value[1] !== "boolean" ||
+      !Number.isSafeInteger(value[2])
+    )
+      throw new Error("Stored Writer wrap influence is invalid.");
+    const item = new SwFormatWrapInfluenceOnObjPos(value[0] as number);
+    item.SetAllowOverlap(value[1]);
+    item.SetOverlapVertOffset(value[2] as number);
+    return item;
+  }
   if (snapshot.which !== RES_LR_SPACE) return null;
   const value = snapshot.value;
   if (!Array.isArray(value) || value.length !== 11)
@@ -145,4 +197,48 @@ export function decodeWriterFrameItem(snapshot: SfxPoolItemSnapshot): SfxPoolIte
   item.SetExplicitZeroMarginValLeft(value[9] as boolean);
   item.SetExplicitZeroMarginValRight(value[10] as boolean);
   return item;
+}
+
+/** Restores complete frame orientation and surround fields; scalar legacy snapshots retain their previous ingress. @param snapshot - Native tuple record. @returns Original item. */
+function decodeFlyOrientationItem(snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  const value = snapshot.value as readonly unknown[];
+  if (snapshot.which === RES_SURROUND) {
+    const [mode, anchorOnly, contour, outside] = value;
+    if (
+      value.length !== 4 ||
+      typeof mode !== "number" ||
+      !Number.isInteger(mode) ||
+      mode < WrapTextMode.NONE ||
+      mode > WrapTextMode.RIGHT ||
+      typeof anchorOnly !== "boolean" ||
+      typeof contour !== "boolean" ||
+      typeof outside !== "boolean"
+    )
+      throw new Error("Stored Writer frame surround is invalid.");
+    const item = new SwFormatSurround(mode);
+    item.SetAnchorOnly(anchorOnly);
+    item.SetContour(contour);
+    item.SetOutside(outside);
+    return item;
+  }
+  const [position, orientation, relation, toggle] = value;
+  const horizontal = snapshot.which === RES_HORI_ORIENT;
+  if (
+    value.length !== (horizontal ? 4 : 3) ||
+    typeof position !== "number" ||
+    !Number.isSafeInteger(position) ||
+    typeof orientation !== "number" ||
+    !Number.isInteger(orientation) ||
+    orientation < -32768 ||
+    orientation > 32767 ||
+    typeof relation !== "number" ||
+    !Number.isInteger(relation) ||
+    relation < -32768 ||
+    relation > 32767 ||
+    (horizontal && typeof toggle !== "boolean")
+  )
+    throw new Error("Stored Writer frame orientation is invalid.");
+  return horizontal
+    ? new SwFormatHoriOrient(position, orientation, relation, toggle === true)
+    : new SwFormatVertOrient(position, orientation, relation);
 }

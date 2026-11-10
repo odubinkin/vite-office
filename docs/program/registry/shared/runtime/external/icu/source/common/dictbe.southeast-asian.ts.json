@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/dictbe.southeast-asian.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-script-attributes",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/dictbe.southeast-asian.ts",
+        "apps/office/src/external/icu/source/common/dictbe.southeast-asian.native.test.ts",
+        "vendor/icu-reference/source/common/dictbe.cpp"
+      ],
+      "justification": "S3HW1E HTML81: the original DictionaryBreakEngine cursor/span and ICU Thai, Lao and Burmese engines preserve native candidate slots, three-word lookahead, resynchronization, script-specific combining mark sets, Thai suffixes and final stack semantics. Source and TS cursor/breaks matched on 4250 real-dictionary inputs plus 48 fixture witnesses. WRITER371 records the unequal four-character admission boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ThaiBreakEngine",
+        "LaoBreakEngine",
+        "BurmeseBreakEngine"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/dictbe.cpp",
+      "upstreamSymbols": [
+        "ThaiBreakEngine::divideUpDictionaryRange",
+        "LaoBreakEngine::divideUpDictionaryRange",
+        "BurmeseBreakEngine::divideUpDictionaryRange"
+      ]
+    }
+  }
+}

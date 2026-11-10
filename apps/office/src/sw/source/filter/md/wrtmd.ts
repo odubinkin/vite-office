@@ -16,14 +16,18 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwPoolFormatId, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import type { SwFormat } from "../../core/attr/format";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { SwTableNode } from "../../core/docnode/node";
-import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
-import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { SwTableNode, type SwEndNode } from "../../core/docnode/node";
+import { CollectTextFlyFrames } from "../../core/layout/flycnt";
+import {
+  SwFormatAutoFormat,
+  SwFormatCharFormat,
+  SwFormatINetFormat,
+} from "../../core/txtnode/fmtatr2";
+import { SwTextNode, type WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 
 const headingLevels = new Map(
   WRITER_PARAGRAPH_STYLE_POOL.flatMap(
@@ -44,45 +48,50 @@ const quotationPoolId = WRITER_PARAGRAPH_STYLE_POOL.find(
 export class SwMDWriter {
   /** Writes a complete Markdown stream. @param document - Canonical source. @returns UTF-8 bytes. */
   public WriteDocument(document: SwDoc): Uint8Array {
-    const blocks = document.GetNodes().getBodyContent(),
+    const nodes = document.GetNodes(),
+      end = nodes.GetEndOfContent().GetIndex(),
+      first = nodes.getBodyContent()[0]?.GetIndex() ?? end,
       output: string[] = [];
+    const flys = this.CollectFlys(document);
+    const tables: SwMDTableInfo[] = [];
     const listPrefixSizes = new Map<number, number>();
-    for (let index = 0; index < blocks.length; index++) {
-      const block = blocks[index];
-      if (block === undefined) continue;
-      if (block instanceof SwTableNode) {
-        output.push("\n", writeTable(block), "\n");
-        continue;
-      }
-      if (block.GetParagraphStyle() === "preformatted-text") {
-        if (block.GetText().length > 0) {
-          if (index > 0) output.push("\n");
-          const previous = blocks[index - 1];
-          if (
-            !(previous instanceof SwTextNode) ||
-            previous.GetParagraphStyle() !== "preformatted-text"
-          )
-            output.push("```\n");
-          output.push(writeRuns(block, true));
-          const next = blocks[index + 1];
-          if (!(next instanceof SwTextNode) || next.GetParagraphStyle() !== "preformatted-text")
-            output.push("\n```");
-        }
-        output.push("\n");
-        continue;
-      }
-      if (block.GetText().length > 0) {
-        if (index > 0) output.push("\n");
-        output.push(writeParagraph(block, listPrefixSizes));
-      }
-      output.push("\n");
+    for (let index = first; index < end; ++index) {
+      const node = nodes.at(index);
+      if (node instanceof SwTextNode)
+        OutMarkdown_SwTextNode(
+          node,
+          index === first,
+          tables,
+          listPrefixSizes,
+          output,
+          flys.get(node),
+        );
+      else if (node instanceof SwTableNode) {
+        tables.push(OutMarkdown_SwTableNode(node));
+        if (tables.length === 1) output.push("\n");
+      } else if (node === tables.at(-1)?.pEndNode) tables.pop();
     }
     return OUStringToOString(output.join(""), RTL_TEXTENCODING_UTF8);
   }
+
+  /** Collects native text fly positions for ApplyFlyFrameFormat. This model has text and table content only, so each position has the same single empty SwMDImageInfo. @param document - Actual Writer document. @returns Anchor offsets by native text node. */
+  private CollectFlys(document: SwDoc): ReadonlyMap<SwTextNode, ReadonlySet<number>> {
+    const result = new Map<SwTextNode, ReadonlySet<number>>();
+    for (const [node, frames] of CollectTextFlyFrames(document)) {
+      const positions = new Set<number>();
+      for (const { format } of frames) positions.add(format.GetAnchor().GetAnchorContentOffset());
+      result.set(node, positions);
+    }
+    return result;
+  }
 }
 
-/** Emits upstream-style heading, list, quote and fenced-code paragraph markers. @param node - Body paragraph. @returns Markdown block.  @param listPrefixSizes - List Prefix Sizes. */
-function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>): string {
+/** Emits original heading, list and quote prefixes before already rendered run content. @param node - Actual paragraph. @param listPrefixSizes - Original list prefix widths. @param text - Rendered Markdown runs. @returns Markdown block. */
+function writeParagraph(
+  node: SwTextNode,
+  listPrefixSizes: Map<number, number>,
+  text: string,
+): string {
   const format = node.GetTextFormatColl();
   let headingLevel = 0;
   for (
@@ -93,7 +102,6 @@ function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>):
     if (headingLevel === 0 && ancestor instanceof SwTextFormatColl)
       headingLevel = headingLevels.get(ancestor.poolId) ?? 0;
   }
-  const text = writeRuns(node);
   const quote = format.poolId === quotationPoolId ? "> " : "";
   if (headingLevel > 0) return `${quote}${"#".repeat(headingLevel)} ${text}`;
   if (node.GetNumRule() !== undefined) {
@@ -130,8 +138,11 @@ function applyFormattingItem(
   codeFont: SfxPoolItem,
 ): void {
   if (item instanceof SwFormatAutoFormat) {
-    for (const nested of item.GetStyleHandle().entries())
-      applyFormattingItem(status, nested, codeFont);
+    const items = item.GetStyleHandle() as SfxItemSet | undefined;
+    if (items) applyFormattingSet(status, items, codeFont);
+  } else if (item instanceof SwFormatCharFormat) {
+    const style = item.GetCharFormat();
+    if (style) applyFormattingSet(status, style.GetAttrSet(), codeFont);
   } else if (item instanceof SwFormatINetFormat) {
     const url = item.GetValue();
     if (url.length > 0) status.links.set(url, (status.links.get(url) ?? 0) + 1);
@@ -182,8 +193,8 @@ function shouldOpen(before: number, after: number): boolean {
   return before !== after && before <= 0 && after > 0;
 }
 
-/** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown.  @param codeBlock - Code Block. */
-function writeRuns(node: SwTextNode, codeBlock = false): string {
+/** Emits native items, ranged hints and anchored flys in source delimiter order. @param node - Native text owner. @param codeBlock - Whether inside preformatted text. @param flys - Source anchor offsets. @returns Inline Markdown. */
+function writeRuns(node: SwTextNode, codeBlock: boolean, flys?: ReadonlySet<number>): string {
   const source = node.GetText();
   if (source.length === 0) return "";
   const codeFont = node
@@ -191,7 +202,7 @@ function writeRuns(node: SwTextNode, codeBlock = false): string {
     .GetTextFormatColl("preformatted-text")
     .GetAttrSet()
     .Get(RES_CHRATR_FONT);
-  const positions = new Set<number>([0, source.length]);
+  const positions = new Set<number>([0, source.length, ...(flys ?? [])]);
   const hints = node.GetpSwpHints();
   if (hints !== undefined)
     for (let index = 0; index < hints.Count(); index++) {
@@ -225,6 +236,8 @@ function writeRuns(node: SwTextNode, codeBlock = false): string {
     for (const url of urls)
       if (shouldClose(previous.links.get(url) ?? 0, next.links.get(url) ?? 0))
         output += `](${url})`;
+    // Source OutFormattingChange emits anchored flys between closing and opening markup.
+    if (flys?.has(position)) output += "![]()";
     if (shouldOpen(previous.strikeout, next.strikeout)) output += "~~";
     if (shouldOpen(previous.italic, next.italic)) output += "*";
     if (shouldOpen(previous.bold, next.bold)) output += "**";
@@ -246,32 +259,97 @@ function escapeMarkdown(value: string): string {
   return value.replace(/[\\`*_{}[\]<>#]/gu, "\\$&").replaceAll("\n", "  \n");
 }
 
-/** Emits a GitHub-flavored table from native rows and paragraph adjustments. @param table - Body table. @returns Markdown table. */
-function writeTable(table: SwTableNode): string {
-  const rows = table.GetTable().GetTabLines();
-  if (rows.length === 0) return "";
-  const output: string[] = [];
-  for (const [rowIndex, row] of rows.entries()) {
-    const cells = row.GetTabBoxes().map(
-      /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
-        box
-          .GetParagraphs()
-          .map(
-            /** Checks  . @param node - Node. @returns The computed result. */ (node) =>
-              writeRuns(node),
-          )
-          .join(" "),
-    );
-    output.push(`| ${cells.join(" | ")} |`);
-    if (rowIndex === 0) {
-      const delimiters = row.GetTabBoxes().map(
-        /** Computes the box result. @param box - Box. @returns The computed result. */ (box) => {
-          const alignment = box.GetParagraphs()[0]?.GetParagraphAlignment();
-          return alignment === "center" ? ":-:" : alignment === "right" ? "-:" : "-";
-        },
-      );
-      output.push(`| ${delimiters.join(" | ")} |`);
+/** Source cell-boundary flags are consumed only by the exact text node at that index. */
+interface SwMDCellInfo {
+  bCellStart?: true;
+  bCellEnd?: true;
+  bRowStart?: true;
+  bRowEnd?: true;
+  aFirstRowBoxAdjustments?: readonly (WriterParagraphAlignment | undefined)[];
+}
+
+/** Original per-table stack entry. */
+interface SwMDTableInfo {
+  readonly aCellInfos: Map<number, SwMDCellInfo>;
+  readonly pEndNode: SwEndNode;
+}
+
+/** Returns the source map's shared flags for one start/end node. @param infos - Original table metadata. @param index - Native node index. @returns Mutable source flags. */
+function cellInfo(infos: Map<number, SwMDCellInfo>, index: number): SwMDCellInfo {
+  let info = infos.get(index);
+  if (!info) {
+    info = {};
+    infos.set(index, info);
+  }
+  return info;
+}
+
+/** Collects the original table-cell start/end nodes and the first row's adjustments. @param node - Connected table. @returns Original table metadata. */
+function OutMarkdown_SwTableNode(node: SwTableNode): SwMDTableInfo {
+  const table = node.GetTable(),
+    nodes = node.GetNodes(),
+    aCellInfos = new Map<number, SwMDCellInfo>();
+  for (const [row, line] of table.GetTabLines().entries()) {
+    const boxes = line.GetTabBoxes();
+    const adjustments: (WriterParagraphAlignment | undefined)[] = [];
+    for (const [column, box] of boxes.entries()) {
+      if (!box.GetSttIdx()) continue;
+      const start = box.GetStartNode(),
+        first = start.GetIndex() + 1,
+        head = cellInfo(aCellInfos, first),
+        tail = cellInfo(aCellInfos, start.EndOfSectionIndex() - 1);
+      head.bCellStart = true;
+      if (row === 0) adjustments.push(nodes.at(first).GetTextNode()?.GetParagraphAlignment());
+      if (column === 0) head.bRowStart = true;
+      tail.bCellEnd = true;
+      if (column + 1 === boxes.length) {
+        tail.bRowEnd = true;
+        if (row === 0) tail.aFirstRowBoxAdjustments = adjustments;
+      }
     }
   }
-  return output.join("\n");
+  return { aCellInfos, pEndNode: node.EndOfSectionNode() };
+}
+
+/** Writes the actual text and only the source separators owned by this node. @param node - Native paragraph. @param first - Whether the stream starts at this node. @param tables - Original open table stack. @param listPrefixSizes - Actual list prefix widths. @param output - Original stream fragments. @param flys - Original fly positions. @returns Nothing. */
+function OutMarkdown_SwTextNode(
+  node: SwTextNode,
+  first: boolean,
+  tables: readonly SwMDTableInfo[],
+  listPrefixSizes: Map<number, number>,
+  output: string[],
+  flys?: ReadonlySet<number>,
+): void {
+  const table = tables.at(-1),
+    nested = tables.length > 1,
+    info = table?.aCellInfos.get(node.GetIndex());
+  if (info?.bCellStart && !nested) output.push(info.bRowStart ? "| " : " | ");
+  if (node.Len() > 0) {
+    if (!first && !table) output.push("\n");
+    const preformatted =
+      node.GetTextFormatColl().GetPoolFormatId() === SwPoolFormatId.COLL_HTML_PRE;
+    let text = writeRuns(node, preformatted, flys);
+    if (preformatted) {
+      const nodes = node.GetNodes(),
+        index = node.GetIndex(),
+        previous = nodes.at(index - 1).GetTextNode(),
+        next = nodes.at(index + 1).GetTextNode();
+      if (previous?.GetTextFormatColl().GetPoolFormatId() !== SwPoolFormatId.COLL_HTML_PRE)
+        text = "```\n" + text;
+      if (next?.GetTextFormatColl().GetPoolFormatId() !== SwPoolFormatId.COLL_HTML_PRE)
+        text += "\n```";
+    }
+    output.push(writeParagraph(node, listPrefixSizes, text));
+  }
+  if (info?.bRowEnd && !nested) {
+    output.push(" |");
+    if (info.aFirstRowBoxAdjustments) {
+      output.push("\n");
+      for (const alignment of info.aFirstRowBoxAdjustments)
+        output.push(alignment === "center" ? "| :-: " : alignment === "right" ? "| -: " : "| - ");
+      output.push("|");
+    }
+  }
+  if (table && (!info?.bCellEnd || nested)) output.push(" ");
+  else if (!table || info?.bRowEnd) output.push("\n");
 }

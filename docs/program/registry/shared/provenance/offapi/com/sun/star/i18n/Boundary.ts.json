@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
+    "upstreamPath": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+    "localSymbols": [
+      "Boundary"
+    ],
+    "upstreamSymbols": [
+      "Boundary",
+      "startPos",
+      "endPos"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML85: LibreOffice dictionary range dispatch retains native Unicode category and directional skip behavior, locale overrides and Hungarian fallback. Original source boundary results agreed on 241428 inputs. Writer borrows its actual LanguageTag locale. Browser prepares the five local ICU assets through the existing Markdown open command and supplies the native word factory before shell import."
+    ],
+    "omittedResponsibilities": [
+      "Other UNO word modes, grapheme and line operations, and binary UNO ABI remain outside this Writer dictionary path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/Boundary.ts",
+          "marker": "Boundary"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.dictionary.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+          "marker": "Boundary"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+          "marker": "startPos"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/Boundary.idl",
+          "marker": "endPos"
+        }
+      ]
+    }
+  }
+}

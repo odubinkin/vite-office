@@ -1,27 +1,47 @@
-/** @fileoverview Original DateTime scalar constructors and Duration-backed Sub; Time multiple inheritance is projected through one owned Time subobject. System clock and platform date formats remain unported. */
+/** @fileoverview Original DateTime scalar constructors and Duration-backed Sub; Time multiple inheritance is projected through one owned Time subobject. SYSTEM construction uses the shared local platform clock; platform precision/ABI remains unverified. */
+import { GetSystemDateTime } from "./systemdatetime";
 import { Date, type DateConstReference } from "./tdate";
 import { Time, type TimeConstReference } from "./ttime";
 import { Duration } from "./duration";
 import { DateTime as UNODateTime } from "../../../offapi/com/sun/star/util/DateTime";
 
+/** Original distinct SYSTEM constructor tag. */
+const SYSTEM = Symbol("DateTimeInitSystem");
+
 /** Borrowed source DateTime base-subobject methods used by Duration and calendar conversion. */
 export interface DateTimeConstReference extends DateConstReference, TimeConstReference {}
 
 /** Original Date and Time value state with independent native copying. */
-export class DateTime extends Date implements DateTimeConstReference {
+// Type-only constructor projection permits the original C++ static SYSTEM tag
+// hiding. The actual runtime base remains exactly Date, with no new value owner.
+export class DateTime
+  extends (Date as new (...args: ConstructorParameters<typeof Date>) => Date)
+  implements DateTimeConstReference
+{
   static readonly EMPTY = 0;
+  static readonly SYSTEM: typeof SYSTEM = SYSTEM;
   private readonly maTime: Time;
   /** Original EMPTY, Time-only and UNO constructors. @param value - Tag, clock or published date-time. @returns Initialized value. */
-  constructor(value: typeof DateTime.EMPTY | TimeConstReference | UNODateTime);
+  constructor(value: typeof DateTime.EMPTY | typeof SYSTEM | TimeConstReference | UNODateTime);
   /** Original Date, DateTime-copy or combined Date/Time construction. @param date - Copied Date subobject. @param time - Optional separate Time. @returns Initialized value. */
   constructor(date: DateConstReference, time?: TimeConstReference);
   /** Original EMPTY, Date, Time, DateTime copy and UNO scalar constructor families. @param input - Tag or source value. @param time - Time when a separate Date is supplied. @returns Initialized value. */
   constructor(
-    input: number | DateConstReference | TimeConstReference | UNODateTime,
+    input: number | typeof SYSTEM | DateConstReference | TimeConstReference | UNODateTime,
     time?: TimeConstReference,
   ) {
     let date: DateConstReference, clock: TimeConstReference;
-    if (typeof input === "number") {
+    if (input === SYSTEM) {
+      const packedDate: [number] = [0],
+        packedTime: [bigint] = [0n];
+      if (GetSystemDateTime(packedDate, packedTime)) {
+        date = new Date(packedDate[0]);
+        clock = Time.fromEncodedTime(packedTime[0]);
+      } else {
+        date = new Date(1, 1, 1900);
+        clock = new Time(Time.EMPTY);
+      }
+    } else if (typeof input === "number") {
       date = new Date(0);
       clock = new Time(Time.EMPTY);
     } else if ("GetDate" in input) {

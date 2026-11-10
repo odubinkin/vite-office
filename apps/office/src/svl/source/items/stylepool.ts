@@ -192,7 +192,7 @@ export class StylePool {
     this.ignorableItems = ignorableItems?.Clone(false);
   }
   /** Logical native address name for the existing host pointer binding. @param set - Borrowed shared pointee. @returns Stable hexadecimal identity. */
-  static nameOf(set: SfxItemSet): string {
+  static nameOf(set: SfxItemSet | undefined): string {
     return handleAddress(set).toString(16);
   }
   /** Original item-path insertion with ignorable tail and independent non-shareable copies. @param set - Concrete items. @param parentName - Optional native parent name. @returns Owned shared pointee. */

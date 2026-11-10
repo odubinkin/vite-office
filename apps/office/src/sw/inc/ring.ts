@@ -1,58 +1,98 @@
 /** @fileoverview Intrusive Writer Ring, RingContainer and forward iterator from sw/inc/ring.hxx. Native friendship is represented by module-internal link fields; checked assertions use the existing compiler binding. */
 import { assert } from "../../sal/inc/cassert";
 
-/** A node always belongs to a circular, doubly linked ring, including a singleton. */
-export class Ring<T extends Ring<T>> {
-  /** @internal Link shared with the native friend container and iterator. */
-  public m_pNext: T;
-  /** @internal Link shared with the native friend container and iterator. */
-  public m_pPrev: T;
-
-  /** Inserts immediately before an optional existing member. @param ring - Destination member. @returns Nothing. */
-  public constructor(ring?: T) {
-    this.m_pNext = this as unknown as T;
-    this.m_pPrev = this as unknown as T;
-    if (ring !== undefined) this.linkBefore(ring);
+/** Original native intrusive link requirement; both root Ring and native multiple-inheritance roles use these same actual object links. */
+export interface RingNode<T> {
+  m_pNext: T;
+  m_pPrev: T;
+}
+/** Original recursive intrusive link after TypeScript template erasure. No extra owner is allocated. */
+interface RingLink {
+  m_pNext: RingLink;
+  m_pPrev: RingLink;
+}
+/** Native template-facing ring operations. Internal methods retain the original friend/subclass role; public type visibility binds that role across the erased constructor interface. */
+interface RingFacet<T extends RingNode<T>> extends RingNode<T> {
+  InitRing(ring?: T): void;
+  unlink(): void;
+  MoveTo(destination?: T): void;
+  GetRingContainer(): RingContainer<T>;
+  GetNextInRing(): T;
+  GetPrevInRing(): T;
+  unique(): boolean;
+}
+/** Erased constructor constraint for original native multiple inheritance. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Native role binding requires arbitrary primary-base constructor arguments; this type emits no runtime code.
+type RingBase = new (...args: any[]) => object;
+/** C++ Ring template applied to an actual primary base; TypeScript cannot express a generic mixin constructor directly. This erased constructor contract preserves both original subobjects on one identity. */
+type RingConstructor<TBase extends RingBase> = {
+  new <T extends RingNode<T>>(
+    ...args: ConstructorParameters<TBase>
+  ): InstanceType<TBase> & RingFacet<T>;
+};
+/** Binds one original Ring subobject to an existing native primary base without a wrapper identity or copied links. @param Base - Actual primary base. @returns Native ring role. */
+export function withRing<TBase extends RingBase>(Base: TBase): RingConstructor<TBase> {
+  /** Original intrusive ring algorithms operate only on actual link fields, independent of the erased native template argument. */
+  class RingRole extends Base {
+    public m_pNext: RingLink = this;
+    public m_pPrev: RingLink = this;
+    /** Original insert-before initialization. @internal @param ring - Actual destination. @returns Nothing. */
+    public InitRing(ring?: RingLink): void {
+      if (ring !== undefined) this.linkBefore(ring);
+    }
+    /** Original unlink resets this same owner to a singleton. @returns Nothing. */
+    public unlink(): void {
+      this.m_pPrev.m_pNext = this.m_pNext;
+      this.m_pNext.m_pPrev = this.m_pPrev;
+      this.m_pNext = this;
+      this.m_pPrev = this;
+    }
+    /** Original move unlinks before optional insertion, including self movement. @param destination - Actual destination. @returns Nothing. */
+    public MoveTo(destination?: RingLink): void {
+      this.unlink();
+      if (destination !== undefined) this.linkBefore(destination);
+    }
+    /** Original live container borrows this owner. @returns Native container. */
+    public GetRingContainer(): RingContainer<RingLink> {
+      return new RingContainer<RingLink>(this);
+    }
+    /** Original next member. @internal @returns Actual next owner. */
+    public GetNextInRing(): RingLink {
+      return this.m_pNext;
+    }
+    /** Original previous member. @internal @returns Actual previous owner. */
+    public GetPrevInRing(): RingLink {
+      return this.m_pPrev;
+    }
+    /** Original singleton predicate. @internal @returns Whether alone. */
+    public unique(): boolean {
+      return this.m_pNext === this;
+    }
+    /** Original four insert-before link assignments. @param destination - Existing member. @returns Nothing. */
+    private linkBefore(destination: RingLink): void {
+      this.m_pPrev = destination.m_pPrev;
+      this.m_pNext = destination;
+      destination.m_pPrev.m_pNext = this;
+      destination.m_pPrev = this;
+    }
   }
-  /** Removes this node and resets both links, as the native unlink wrapper requires. @returns Nothing. */
-  public unlink(): void {
-    this.m_pPrev.m_pNext = this.m_pNext;
-    this.m_pNext.m_pPrev = this.m_pPrev;
-    this.m_pNext = this as unknown as T;
-    this.m_pPrev = this as unknown as T;
-  }
-  /** Moves just this member immediately before the destination, including itself. @param destination - Destination or a new singleton. @returns Nothing. */
-  public MoveTo(destination?: T): void {
-    this.unlink();
-    if (destination !== undefined) this.linkBefore(destination);
-  }
-  /** Returns a live container starting at this member. @returns Native ring container. */
-  public GetRingContainer(): RingContainer<T> {
-    return new RingContainer(this as unknown as T);
-  }
-  /** Returns the next member. @returns Linked member. */
-  protected GetNextInRing(): T {
-    return this.m_pNext;
-  }
-  /** Returns the previous member. @returns Linked member. */
-  protected GetPrevInRing(): T {
-    return this.m_pPrev;
-  }
-  /** Reports native singleton state. @returns Whether next points to this member. */
-  protected unique(): boolean {
-    return this.m_pNext === (this as unknown as T);
-  }
-  /** Expands boost's native link_before into its four link assignments. @param destination - Existing member. @returns Nothing. */
-  private linkBefore(destination: T): void {
-    this.m_pPrev = destination.m_pPrev;
-    this.m_pNext = destination;
-    destination.m_pPrev.m_pNext = this as unknown as T;
-    destination.m_pPrev = this as unknown as T;
+  // Only the native template/primary-base type intersection is erased here.
+  // Runtime fields and every operation stay on the actual derived owner.
+  return RingRole as unknown as RingConstructor<TBase>;
+}
+/** Native standalone primary-base binding. */
+const StandaloneRing = withRing(Object);
+/** Original standalone Ring wrapper initializes only its actual intrusive subobject. */
+export class Ring<T extends RingNode<T>> extends StandaloneRing<T> {
+  /** Original optional insert-before constructor. @param ring - Existing member. @returns Native ring owner. */
+  constructor(ring?: T) {
+    super();
+    this.InitRing(ring);
   }
 }
 
 /** Native forward iterator: null current is begin, start current is end. */
-export class RingIterator<T extends Ring<T>> {
+export class RingIterator<T extends RingNode<T>> {
   private m_pCurrent: T | undefined;
   /** Initializes a native iterator, including the default empty sentinel. @param m_pStart - Iteration origin. @param start - Begin rather than end. @returns Nothing. */
   public constructor(
@@ -77,7 +117,7 @@ export class RingIterator<T extends Ring<T>> {
 }
 
 /** Live STL-style container; JavaScript iteration adapts native begin/end/increment. */
-export class RingContainer<T extends Ring<T>> implements Iterable<T> {
+export class RingContainer<T extends RingNode<T>> implements Iterable<T> {
   /** Retains the starting node rather than copying members. @param m_pStart - Container origin. @returns Nothing. */
   public constructor(private readonly m_pStart: T) {}
   /** Returns the native begin sentinel. @returns Forward iterator. */

@@ -18,12 +18,15 @@
       "evidence": [
         "apps/office/src/svx/source/unodraw/unobrushitemhelper.ts",
         "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
-        "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx"
+        "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+        "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx#getSvxBrushItemFromSourceSet"
       ],
-      "justification": "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping. Graphics/bitmap positioning and reverse fill conversion remain outside this non-graphic brush family; compiled native document-level differential remains unverified.",
+      "justification": "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping. Graphics/bitmap positioning and reverse fill conversion remain outside this non-graphic brush family; compiled native document-level differential remains unverified. RTF109. Projects the represented native empty and solid drawing fills back to a brush.",
       "knownViolations": [],
       "localSymbols": [
-        "setSvxBrushItemAsFillAttributesToTargetSet"
+        "setSvxBrushItemAsFillAttributesToTargetSet",
+        "getSvxBrushItemFromSourceSet"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "svx/source/unodraw/unobrushitemhelper.cxx",

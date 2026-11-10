@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/rbbidata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/rbbidata.cpp",
+    "localSymbols": [
+      "RBBIDataWrapper",
+      "RBBIStateTable"
+    ],
+    "upstreamSymbols": [
+      "RBBIDataWrapper::init"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified."
+    ],
+    "omittedResponsibilities": [
+      "Native dictionary engines, reverse cache traversal, full public BreakIterator behavior and non-pinned break resources remain outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/rbbidata.ts",
+          "marker": "RBBIDataWrapper"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/rbbidata.cpp",
+          "marker": "RBBIDataWrapper::init"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/rbbidata.h",
+          "marker": "RBBIStateTable"
+        }
+      ]
+    }
+  }
+}

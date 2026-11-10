@@ -24,6 +24,18 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -48,7 +60,11 @@
     "localPath": "apps/office/src/sw/source/core/doc/docnum.ts",
     "localSymbols": [
       "OutlineUpDown",
-      "GetUniqueNumRuleName"
+      "GetUniqueNumRuleName",
+      "SetNumRule",
+      "SetOutlineNumRule",
+      "PropagateOutlineRule",
+      "UpdateNumRule"
     ],
     "omittedResponsibilities": [
       "Native merged paragraph props/layout/conditional collections/direct document auto-history/framework Repeat/failed-operation dirty flag and full module behavior remain unrepresented and unverified."
@@ -56,13 +72,18 @@
     "preservedResponsibilities": [
       "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged.",
       "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
-      "S3HW1E temporary numbering ownership: SwNumFormat logical destruction releases actual SwClient registration; reference replacement and null-pointer Set now dispose the old owner. SwNumRule binds the document name index, disposes owned levels/current-name map entry/client containers, and retains original unsigned16 first/last-rule ownership of four lazily initialized base families. Effective base formats use the same protected const reference and shipped GetBulletChar resolver. Document teardown releases its actual rule table through the existing aggregate/list-manager binding. MSWordExportBase destroys only its temporary tail after dropping borrowed document entries. Source DuplicateNumRuleImpl builds a fresh legacy-mode NUM_RULE with source defaults, copies all ten effective formats, keeps it outside the document and uses the original unsigned16 post-increment prefix; DuplicateNumRule changes one unsigned16 start and releases its temporary format. The native default automatic-name overload now consumes a preferred name and source prefix-parse/flag logic rather than ignoring the argument. Browser RNG replaces platform RNG; mail-merge/environment-stable and nonautomatic naming branches have no admitted caller. Full-document RTF and test bridges release actual exporter ownership before ranges/documents. WRITER200 records retained counter widths. Tests check shared-base lifetimes, replacement/reset/client teardown, map erase semantics, default metadata, all ten levels, preferred-name collisions, and document-vs-export ownership. This prepares original paragraph restart dispatch; it is not yet wired into ParaNumRule and does not certify full Writer lifetime/ABI, paragraph/style-cache/importer completeness or source ownership location equivalence of the existing browser aggregate."
+      "S3HW1E temporary numbering ownership: SwNumFormat logical destruction releases actual SwClient registration; reference replacement and null-pointer Set now dispose the old owner. SwNumRule binds the document name index, disposes owned levels/current-name map entry/client containers, and retains original unsigned16 first/last-rule ownership of four lazily initialized base families. Effective base formats use the same protected const reference and shipped GetBulletChar resolver. Document teardown releases its actual rule table through the existing aggregate/list-manager binding. MSWordExportBase destroys only its temporary tail after dropping borrowed document entries. Source DuplicateNumRuleImpl builds a fresh legacy-mode NUM_RULE with source defaults, copies all ten effective formats, keeps it outside the document and uses the original unsigned16 post-increment prefix; DuplicateNumRule changes one unsigned16 start and releases its temporary format. The native default automatic-name overload now consumes a preferred name and source prefix-parse/flag logic rather than ignoring the argument. Browser RNG replaces platform RNG; mail-merge/environment-stable and nonautomatic naming branches have no admitted caller. Full-document RTF and test bridges release actual exporter ownership before ranges/documents. WRITER200 records retained counter widths. Tests check shared-base lifetimes, replacement/reset/client teardown, map erase semantics, default metadata, all ten levels, preferred-name collisions, and document-vs-export ownership. This prepares original paragraph restart dispatch; it is not yet wired into ParaNumRule and does not certify full Writer lifetime/ABI, paragraph/style-cache/importer completeness or source ownership location equivalence of the existing browser aggregate.",
+      "Original SetOutlineNumRule records SwUndoOutlineEdit, assigns the persistent outline, preserves source SetName side effects, corrects foreign character formats, aligns registered node levels, propagates empty direct style numbering and validates invalid rules. Existing SetNumRule body moved from the aggregate. Footnote-index and expression-field services remain unrepresented by this SwDoc. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/docnum.cxx",
     "upstreamSymbols": [
       "SwDoc::OutlineUpDown",
-      "SwDoc::GetUniqueNumRuleName"
+      "SwDoc::GetUniqueNumRuleName",
+      "SwDoc::SetNumRule",
+      "SwDoc::SetOutlineNumRule",
+      "SwDoc::PropagateOutlineRule",
+      "SwDoc::UpdateNumRule"
     ]
   },
   "legacyOrder": 169

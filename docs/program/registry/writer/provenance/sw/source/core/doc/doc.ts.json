@@ -488,6 +488,62 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-chapter-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmltab.cell-save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unocrsr.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-global-absolute-correction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-insertion-contract.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-section-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/frameformats.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "GetTextDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "MergeTable"
         }
       ],
       "upstream": [
@@ -822,6 +878,34 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
           "marker": "void DocumentListsManager::createListForListStyle"
+        },
+        {
+          "path": "sw/inc/doc.hxx",
+          "marker": "GetNumberFormatter"
+        },
+        {
+          "path": "sw/source/core/doc/docfmt.cxx",
+          "marker": "SwDoc::EnsureNumberFormatter"
+        },
+        {
+          "path": "sw/source/core/doc/docnew.cxx",
+          "marker": "mpNumberFormatter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::HasCurrentParaFlys"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+          "marker": "SwDoc::MakeFlyFrameFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/doclay.cxx",
+          "marker": "SwDoc::GetTextDirection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+          "marker": "TableMergeErr SwDoc::MergeTable"
         }
       ]
     },
@@ -829,14 +913,13 @@
     "localSymbols": [
       "SwDoc",
       "createWriterDocument",
-      "SetNumRuleMode",
-      "SwDocOptions",
-      "WriterEmbeddedFont",
       "GetDefault",
       "SetDefault",
       "IsSquaredPageMode",
       "SetDefaultPageMode",
-      "ForEachParaAtrTabStopItem"
+      "ForEachParaAtrTabStopItem",
+      "GetTextDirection",
+      "MergeTable"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
@@ -905,7 +988,21 @@
       "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged.",
       "S3HW1E RTF numbering-table integration: actual GetNumberingId pointer identity and the InitFontTable used-rule snapshot replace the separate name-keyed RTF list map. Original abstract/instance loops emit nine Word levels or one continuous level, including the actual outline owner. Source level preparation preserves ListFormat UTF16 placeholders, separator suppression, unsupported level10 handling, unsigned-byte positions and signed16 geometry; RtfAttributeOutput writes original NFC/CJK-language, alignment, start, legal, follow, font/character properties and destinations. The browser command-rule assembler now supplies level-specific ListFormat instead of creating deprecated patternless numeric levels. Original character color/underline visitors run before header serialization to admit numbering-style colors; native accumulated automatic-style vector order and shared-handle release are preserved. New owned item sets are disposed. WRITER198 records retained adjacent separators. Common numbering preparation is currently bound to the actual RTF virtual output; full common AttributeOutputBase/DOCX numbering, graphic brush ownership, paragraph numbering/restart temporary-rule lifetimes, character-style table/cache and complete OutColorTable responsibilities remain unverified. This source-bound focused integration does not certify full upstream parity or filter completeness.",
       "S3HW1E temporary numbering ownership: SwNumFormat logical destruction releases actual SwClient registration; reference replacement and null-pointer Set now dispose the old owner. SwNumRule binds the document name index, disposes owned levels/current-name map entry/client containers, and retains original unsigned16 first/last-rule ownership of four lazily initialized base families. Effective base formats use the same protected const reference and shipped GetBulletChar resolver. Document teardown releases its actual rule table through the existing aggregate/list-manager binding. MSWordExportBase destroys only its temporary tail after dropping borrowed document entries. Source DuplicateNumRuleImpl builds a fresh legacy-mode NUM_RULE with source defaults, copies all ten effective formats, keeps it outside the document and uses the original unsigned16 post-increment prefix; DuplicateNumRule changes one unsigned16 start and releases its temporary format. The native default automatic-name overload now consumes a preferred name and source prefix-parse/flag logic rather than ignoring the argument. Browser RNG replaces platform RNG; mail-merge/environment-stable and nonautomatic naming branches have no admitted caller. Full-document RTF and test bridges release actual exporter ownership before ranges/documents. WRITER200 records retained counter widths. Tests check shared-base lifetimes, replacement/reset/client teardown, map erase semantics, default metadata, all ten levels, preferred-name collisions, and document-vs-export ownership. This prepares original paragraph restart dispatch; it is not yet wired into ParaNumRule and does not certify full Writer lifetime/ABI, paragraph/style-cache/importer completeness or source ownership location equivalence of the existing browser aggregate.",
-      "B8TCAE adds bounded source-contract/native evidence: A real public SetInXMLImport phase enables the original overlapping character-style preservation, then clearing that phase restores ordinary replacement. Actual ranges, pooled Strong/Emphasis owners, retained sort numbers and effective italic/weight items are checked without private state writes."
+      "B8TCAE adds bounded source-contract/native evidence: A real public SetInXMLImport phase enables the original overlapping character-style preservation, then clearing that phase restores ordinary replacement. Actual ranges, pooled Strong/Emphasis owners, retained sort numbers and effective italic/weight items are checked without private state writes.",
+      "SwDoc delegates SetNumRule and native outline operations to its original docnum responsibility; public numbering application flags and persistent outline ownership remain unchanged. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML34: native HTML paragraph SetFormatBreak now consumes pending before/after CSS through actual item heads, real page-pool IDs and native page creation/copy/follow transitions. Consuming core prerequisites are original identity-only SfxItemSet.Intersect, SwAttrSet.Intersect_BC, SwFormat.DelDiffs, four-frame CopyPageDesc and current-model native ChgPageDesc. Master-owned pool IDs survive copy/Worker transfer; native MakePageDesc copy no longer uses browser Clone self-follow rebasing. Original AUTO switch ordering, asymmetric requested-page All usage, source-self-follow no-write copy, selective page attribute table and mutation of supplied changed frames are preserved. Existing scalar item/name-reference bindings, browser geometry ingress and initial locale geometry remain explicit current-core boundaries. Only HTML/Standard/First/Left/Right pool branches are represented, and no full API/module/ABI/header-footer/footnote/page-undo/desktop-layout certification is claimed. HTML tables, insertion boundary/snapshots and final model/UI audit remain pending; file UI/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML51: SwDoc creates actual ordinary/table UNO cursors, retains only weak control blocks and locks a real strong value across each destruction hint broadcast. UnoCursorPointer uses the existing native SfxListener/SfxBroadcaster identities and source subscription order; the native text cursor API owns this pointer and rejects access after invalidation. Original flags, readonly availability, separate table selection ring and whole-ring destruction are preserved. Concrete cursor-specific shared/weak value carriers reify deterministic C++ ownership; no alternate document/selection model or generic standard-library ABI is claimed. Global PaMCorrAbs edit-shell traversal, section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required. Whole-module contracts/defaults/behavior remain unverified.",
+      "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required.",
+      "S3HW1E HTML56: SwDoc::InsertTable now forwards the required fifth horizontal orientation and original null-autoformat/column-position/called-from-shell/new-model/final-name argument order. Flat construction preserves source column-count admission (NONE requires one extra endpoint), source direction, direct page attributes and shell-only paragraph adjustment; SwTable stores the source model flag. The actual document records numeric insertion history; undo destroys native table frames, corrects marks and global cursor rings to EndOfPostIts, transfers live table page attributes and deletes the actual section. Redo requires an actual edit shell, uses original false/true flag defaults and restores the saved name separately (WRITER338); the existing browser initial-operation bridge retains first-execution shell semantics and cell-style adjuncts without pretending they are SwTableAutoFormat. Markdown supplies native FULL. Regression evidence is scoped to admitted flat tables and actual document/shell ownership. Non-null native autoformat, redlines, DDE, full old-model algorithms, recursive HTML table construction/layout, RTF direction export and final format/UI audit remain unverified or required. Whole module contract/default/behavior statuses remain unverified; browser file/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML59: native InsertTable now admits connected text in actual sections/cells, returns original null for the inserts/footnote node interval before any undo or mutation, and exposes that nullable result through SwDoc and current MDTable pointer contracts. New SwNode.GetTableBox resolves actual enclosing cell ownership. Original tblrwcl.cxx base-line/leaf predecessor algorithms live in their source responsibility, including null-search leaf identity, row-local mode and empty previous rows; actual owning lines are resolved from the real current flat graph, with no alternate owner list. Anonymous nested-line boxes and their original upper hierarchy are not represented or certified. Nested break transfer now copies parent direct page/break items only at the source first-paragraph/first-cell boundary, retains parent items (WRITER340), and does not move following paragraph items for a nested insertion. Existing used-format lookup includes actual table owners in every section instead of only direct body UI blocks. GetUniqueTableName uses the native bitmap and actual o3tl integer suffix conversion (WRITER341), retaining the current English used-format profile; mail merge, localization and unused/default native format-registry owners are not represented or certified. Production history/Markdown consumers retain nullable inputs without inventing a fallback table; native admitted valid pointers remain actual owners. Whole native module/API/ABI/default/lifetime parity is unverified. Structural nontext admission, default SwTable/early-frame bootstrap, full anonymous/nested table rendering/materialization/layout, first-cell HTML orchestration/grammar, RTF direction export, MDTable parser registration/lifetime and final format/UI audit remain required. Browser file/autosave/recovery deviations stay unchanged.",
+      "S3HW1E HTML65: actual document-owned FrameFormats<SpzFrameFormat> storage, source fly-format construction/factory registration and native HasCurrentParaFlys registry scan replace the missing prerequisite without an empty-provider substitute. Stored SwFormat Which identities are explicit for character, text, graphic and frame/fly construction. Collection preserves positional traversal, unique object membership, independent name/type/pointer ordering, exact erase, owning deletion and default relocation. Opaque stable JS reference order represents pointer comparison, not a native address/ABI. Registered special-frame rename uses native NameChanged old/new names directly on the notifier. WRITER346 preserves original newDefault back-reference omission. WRITER347 records the source base rename inconsistency and the still-unported native document/style rename route; the existing general base-setter browser notification is not migrated or certified in this special-frame prerequisite block. Actual HTML query admits only current-node paragraph/character anchors, preserves NONE precedence and THROUGH exclusions, and evaluates simultaneous flags in source order. The collection/factory/query are real model owners, but MakeFlySection, fly/drawing contact/layout destruction and anchored-node list maintenance, recursive HTML first-cell/table grammar/materialization/layout, full document teardown, RTF direction and final format/UI audit remain unported or unverified. No synthetic frame/section/measurement or result provider is introduced. Existing save/open/autosave/recovery deviations are unchanged; whole-module semantic/default/contract/ABI parity remains unverified.",
+      "S3HW1E HTML69 adds real document mbInMailMerge false state and silent native inline getter/setter, and GetUniqueFrameName delegates to its original doclay responsibility. Existing pure row/column forwarders use the existing typed optional argument/default contract; defaults and actual operations/history are unchanged. Full document copy/clone/destruction and broad contracts remain unverified.",
+      "S3HW1E HTML70 adds the actual ordinary FrameFormats table, original default-format push_back membership after initialization, GetFrameFormats and source positional FindFrameFormatByName. Native early frame-owned content/anchor index clearing precedes page descriptor teardown; actual history is disposed before this cleanup. Special and ordinary table teardown removes the separately owned default, explicitly deletes special formats, then runs both actual owning table destructors. Complete default/layout/node/document destruction remains unported/unverified; no fake factory/undo/modified-state provider is added. Existing public SetNumRuleMode scalar identity and browser constructor/font-ingress types move to the native doc.hxx header boundary and are re-exported unchanged from the old document entry. MakeFrameFormat and native generic create/delete undo, frame-pool factory/modified restoration, MakeFlySection, production HTML tables and RTF direction remain incomplete.",
+      "S3HW1E HTML71 exposes the original generic SwFormat ChgFormat document argument contract without a parallel formatter or factory. The real generic format-create owner restores copied direct attributes through this entry under actual manager Undo/Redo recording suppression. Native frame factory/create-delete/broadcast/modified restoration, MakeFlySection and production table/RTF direction/final native filter/UI completion remain incomplete.",
+      "S3HW1E HTML72 paragraph deletion delegates to the original docfmt owner, which records actual generic delete history before real collection removal/death and retains native default protection/nondefault next-loop boundaries. Public creation undo continues through actual recording suppression. This adds no fake frame factory, style pool, modified-state or deletion-result provider. Full native style-pool broadcast/conditional collection, frame factories/generic frame undo/modified restoration and final text-filter/UI completion remain unported/unverified.",
+      "S3HW1E HTML73: The actual SwDoc exposes the source layout-first direction query through doclay.",
+      "Delegates the actual selected cell merge to the original document table-operation owner."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",

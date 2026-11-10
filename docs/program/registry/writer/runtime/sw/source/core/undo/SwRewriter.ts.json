@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/SwRewriter.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/SwRewriter.ts",
+        "apps/office/src/sw/source/core/undo/SwRewriter.native.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/undo/SwRewriter.cxx"
+      ],
+      "justification": "S3HW1E HTML71 implements the actual ordered value-owned rule vector, original default/implicit copy, in-place same-key replacement without reordering, ordered all-occurrence Apply with cascading rules and literal replacement text, plus native unknown-ID placeholder fallback1. Logical immutable UTF-16 strings bind the existing host naming/label boundary; JS replacement-string dollar interpolation is avoided by actual literal callbacks. No separate interpolation grammar, localization/resource or model provider is introduced. Native OUString/UIName/SwMarkName storage/refcount/ABI and complete compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwRewriter"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/SwRewriter.cxx",
+      "upstreamSymbols": [
+        "SwRewriter::SwRewriter",
+        "SwRewriter::AddRule",
+        "SwRewriter::Apply",
+        "SwRewriter::GetPlaceHolder"
+      ]
+    }
+  }
+}

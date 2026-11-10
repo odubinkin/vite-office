@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts",
+    "upstreamPath": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
+    "localSymbols": [
+      "CalcRelPosX"
+    ],
+    "upstreamSymbols": [
+      "SwAnchoredObjectPosition::CalcRelPosX"
+    ],
+    "preservedResponsibilities": [
+      "Uses original horizontal position arithmetic for the represented native text fly and page/paragraph references."
+    ],
+    "omittedResponsibilities": [
+      "Vertical and character-relative geometry, draw-aside collision and full page alignment environment remain outside the current browser projection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts",
+          "marker": "CalcRelPosX"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "mounts and edits the native anchored table"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/objectpositioning/anchoredobjectposition.cxx",
+          "marker": "SwAnchoredObjectPosition::CalcRelPosX"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 193
+}

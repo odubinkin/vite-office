@@ -481,10 +481,7 @@ it("native generic positions and clones keep structural node identity without a 
     position.Assign(table);
     expect(position.GetNode()).toBe(table);
     expect(position.GetContentIndex()).toBe(0);
-    expect(
-      /** Rejects a detached structural content registry. @returns Nothing. */ () =>
-        position.nContent.GetContentNode(),
-    ).toThrow(/disposed/);
+    expect(position.nContent.GetContentNode()).toBeUndefined();
     expect(
       /** Rejects structural nonzero content. @returns Nothing. */ () => position.SetContent(1),
     ).toThrow(/outside/);
@@ -532,10 +529,7 @@ it("native nullable content index detaches and re-registers its native callback 
     expect(changes).toEqual([owner.body]);
     index.Assign(undefined, 0);
     expect(index.GetIndex()).toBe(0);
-    expect(
-      /** Rejects absent native registry ownership. @returns Nothing. */ () =>
-        index.GetContentNode(),
-    ).toThrow(/disposed/);
+    expect(index.GetContentNode()).toBeUndefined();
     index.Assign(owner.secondBody, 1);
     expect(changes).toEqual([owner.body, owner.secondBody]);
     index.Assign(owner.secondBody, 2);

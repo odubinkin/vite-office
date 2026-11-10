@@ -1,6 +1,9 @@
 /** @fileoverview Exercises real Markdown list ownership with valid user-supplied bullet configuration. */
 import { afterEach, assert, expect, it, vi } from "vitest";
 import nativeConfig from "../../core/doc/number-bullet-data.json";
+// Transform the actual reader graph during collection. Each test still resets
+// runtime modules before installing its resource overlay and loading fresh owners.
+import "./swmd";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { MD_BLOCKTYPE } from "../../../../external/md4c/src/md4c.h";
 afterEach(
@@ -66,6 +69,7 @@ it("retains configured non-default starts on reused depth and normalizes bitmap 
     parser.EndNumberedBulletList();
     expect(last.Get(1).GetNumberingType()).toBe(SvxNumType.SVX_NUM_CHAR_SPECIAL);
   } finally {
+    parser.SourceDispose();
     pam.Dispose();
     doc.Dispose();
   }

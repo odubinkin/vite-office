@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/fmtfollowtextflow.ts",
+    "upstreamPath": "sw/inc/fmtfollowtextflow.hxx",
+    "localSymbols": [
+      "SwFormatFollowTextFlow"
+    ],
+    "upstreamSymbols": [
+      "class SW_DLLPUBLIC SwFormatFollowTextFlow"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the original native containment flag, false default and concrete clone."
+    ],
+    "omittedResponsibilities": [
+      "Full original object layout constraints are handled outside the item owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtfollowtextflow.ts",
+          "marker": "SwFormatFollowTextFlow"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfollowtextflow.hxx",
+          "marker": "class SW_DLLPUBLIC SwFormatFollowTextFlow"
+        }
+      ]
+    }
+  }
+}

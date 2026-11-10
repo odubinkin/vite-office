@@ -1,8 +1,21 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
-import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import { SectionLineNumbering } from "./rtfattributeoutput.linenumbering";
+import {
+  CollectTextFlyFrames,
+  type BoundTextFrame,
+  type BoundTextFrames,
+} from "../../core/layout/flycnt";
+import { OutputFlyFrame } from "./rtfattributeoutput.frame";
+import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
+import { OutString, OutStringUpr } from "../../../../filter/source/msfilter/rtfutil";
 import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
-import { rtl_TextEncodingToWinCharset } from "./writerwordglue";
+import {
+  rtl_TextEncodingToWinCharset,
+  GetPseudoCharRuns,
+  IsPlausableSingleWordSection,
+} from "./writerwordglue";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { CharFormat } from "../../core/text/atrstck";
@@ -36,6 +49,7 @@ import {
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import {
   RES_BOX,
+  RES_FRAMEDIR,
   RES_PAGEDESC,
   RES_PARATR_TABSTOP,
   WRITER_CHARACTER_WHICH_RANGES,
@@ -46,7 +60,7 @@ import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { type SwNumRule } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
-import type { SwPageDesc } from "../../core/layout/pagedesc";
+import { type SwPageDesc, UseOnPage } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -54,6 +68,7 @@ import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
+import { TableBackgroundColor, IndexParagraphBackgrounds } from "./rtfattributeoutput.background";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { SwWW8AttrIter } from "./wrtw8nds";
 import { MSWordStyles, type wwFont } from "./wrtw8sty";
@@ -93,6 +108,7 @@ export class RtfExport extends MSWordExportBase {
     this,
   );
   private readonly colors = new Map<string, number>();
+  private textFlyFrames: BoundTextFrames = new Map();
 
   private readonly m_eDefaultEncoding = rtl_getTextEncodingFromWindowsCharset(
     rtl_TextEncodingToWinCharset(RTL_TEXTENCODING_ASCII_US),
@@ -107,8 +123,8 @@ export class RtfExport extends MSWordExportBase {
     this.m_aFontHelper.m_bLoadAllFonts = true;
   }
 
-  /** Existing browser full-document bridge owns and releases the actual temporary selections around the source exporter. @param document - Actual document. @returns RTF bytes. */
-  static WriteDocument(document: SwDoc): Uint8Array {
+  /** Existing browser full-document bridge owns and releases the actual temporary selections around the source exporter. @param document - Actual document. @param title - Represented shell document title. @returns RTF bytes. */
+  static WriteDocument(document: SwDoc, title = ""): Uint8Array {
     const nodes = document.GetNodes().getTextNodes();
     const first = nodes[0] ?? document.GetNodes().GetEndOfContent();
     const last = nodes.at(-1) ?? first;
@@ -119,11 +135,19 @@ export class RtfExport extends MSWordExportBase {
     mark.Dispose();
     const exporter = new RtfExport(document, range, range);
     try {
-      return exporter.ExportDocument();
+      return exporter.ExportDocument(title);
     } finally {
       exporter.Dispose();
       range.Dispose();
     }
+  }
+
+  /** Writes the source INFO group and its represented Unicode title. @param title - Current document title. @returns Nothing. */
+  private WriteInfo(title: string): void {
+    this.Strm().WriteOString("{\\info");
+    if (title.length > 0)
+      this.Strm().WriteOString(OutStringUpr("\\title", title, this.GetCurrentEncoding()));
+    this.Strm().WriteChar("}");
   }
 
   private readonly m_aStyTable = new Map<number, string>();
@@ -184,8 +208,8 @@ export class RtfExport extends MSWordExportBase {
     this.m_eCurrentEncoding = encoding & 0xffff;
   }
 
-  /** Exports the complete represented document from the actual native owner. @returns RTF bytes. */
-  public ExportDocument(): Uint8Array {
+  /** Exports the complete represented document from the actual native owner. @param title - Represented document title. @returns RTF bytes. */
+  public ExportDocument(title = ""): Uint8Array {
     const document = this.m_rDoc;
     this.SetCurrentEncoding(this.GetDefaultEncoding());
     this.m_aFontHelper.InitFontTable(this);
@@ -195,6 +219,10 @@ export class RtfExport extends MSWordExportBase {
     const styleTable = new MSWordStyles(this);
     this.m_pStyles = styleTable;
     const blocks = document.GetNodes().getBodyContent();
+    this.textFlyFrames = CollectTextFlyFrames(document);
+    const indexBackground =
+      /** Registers original paragraph fill and brush colors in the document palette. @param color - Actual RGB. @returns Color index. */
+      (color: Readonly<Color>) => this.IndexColor(rtfColorKey(color));
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
       for (const run of this.GetTextRuns(node as SwTextNode)) {
@@ -205,22 +233,31 @@ export class RtfExport extends MSWordExportBase {
       }
       const paragraph = node as SwTextNode;
       this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
+      IndexParagraphBackgrounds(paragraph.GetSwAttrSet(), indexBackground);
     }
     for (const style of styleTable.GetStyles()) {
       if (!(style instanceof SwTextFormatColl)) continue;
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
+      IndexParagraphBackgrounds(style.GetAttrSet(), indexBackground);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
         this.IndexColor(attributes.underlineColor);
     }
-    for (const block of blocks) {
+    for (const block of document.GetNodes().entries()) {
       if (!(block instanceof SwTableNode)) continue;
-      for (const row of block.GetTable().GetTabLines())
+      const table = block.GetTable();
+      for (const row of table.GetTabLines())
         for (const cell of row.GetTabBoxes()) {
           const box = cell.GetFormat().box;
           if (box !== undefined) this.IndexBoxColors(box);
+          const background = TableBackgroundColor(
+            table.GetFrameFormat(),
+            row.GetFrameFormat(),
+            cell.GetFrameFormat(),
+          );
+          if (!background.IsTransparent()) this.IndexColor(rtfColorKey(background));
         }
     }
     // Source OutColorTable visits native character items before attribute callbacks.
@@ -278,12 +315,14 @@ export class RtfExport extends MSWordExportBase {
     let output = "";
     this.BuildNumbering();
     this.WriteNumbering();
+    this.WriteInfo(title);
     const defaultTabs = document
       .GetTextFormatColl("default")
       .GetAttrSet()
       .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
     if (defaultTabs.Count() > 0) output += `\\deftab${defaultTabs.At(0).GetTabPos()}`;
     output += this.WriteInitialPageDescription(document, blocks[0]);
+    output += this.WriteSectionLineNumbering();
     output += "\n";
     let currentPage = this.ResolvePageDescription(document, blocks[0]);
     let previousPageDesc: SwPageDesc | undefined;
@@ -293,112 +332,21 @@ export class RtfExport extends MSWordExportBase {
         if (item !== undefined) {
           const page = document.FindPageDesc(item.GetPageDescName()) ?? currentPage;
           if (currentPage.GetFollow() !== page) {
-            const section = this.WriteLaterSection(page, item.GetNumOffset());
+            const section = this.WriteLaterSection(
+              page,
+              item.GetNumOffset(),
+              !(blocks[blockIndex - 1] instanceof SwTableNode),
+            );
             output += section.output;
             currentPage = section.currentPage;
           } else currentPage = page;
         }
       }
+      this.m_pCurrentPageDesc = currentPage;
       if (block instanceof SwTableNode) {
-        for (const row of block.GetTable().GetTabLines()) {
-          const boxes = row.GetTabBoxes();
-          const tableFormat = block.GetTable().GetFrameFormat();
-          const rowFormat = row.GetFrameFormat();
-          const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
-          const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
-          output += "\\trowd";
-          if (orientation === HoriOrientation.CENTER) output += "\\trqc";
-          else if (orientation === HoriOrientation.RIGHT) output += "\\trqr";
-          else {
-            output += "\\trql";
-            if (
-              orientation === HoriOrientation.NONE ||
-              orientation === HoriOrientation.LEFT_AND_WIDTH
-            )
-              output += `\\trleft${tableLeft}`;
-          }
-          // TableDefinition emits orientation, resolved frame direction, height,
-          // then row splitting. The current table frame has no direction item.
-          output += "\\ltrrow";
-          const rowSize = rowFormat.GetFrameSize();
-          if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
-            output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
-          if (!rowFormat.GetRowSplit().GetValue()) output += "\\trkeep";
-          const tableBox = tableFormat.GetBox();
-          for (const [edge, unitControl, valueControl] of [
-            [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
-            [SvxBoxItemLine.LEFT, "trpaddfl", "trpaddl"],
-            [SvxBoxItemLine.BOTTOM, "trpaddfb", "trpaddb"],
-            [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
-          ] as const)
-            output += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
-          const nativeWidths = boxes.map(
-            /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
-              box.GetFrameSize().GetWidth(),
-          );
-          const hasNativeWidths = nativeWidths.every(
-            /** Computes the width result. @param width - Width. @returns The computed result. */ (
-              width,
-            ) => width > 0,
-          );
-          const tableSize = tableFormat.GetFrameSize();
-          const tableWidth = tableSize.GetWidth();
-          // GetTablePageSize supplies SwWriteTable's target width; its base is
-          // the table frame width, not the sum of this row's cell widths.
-          let widthPercent = tableSize.GetWidthPercent();
-          if (orientation === HoriOrientation.FULL || orientation === HoriOrientation.NONE)
-            widthPercent = 100;
-          const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
-          const page = this.ResolvePageDescription(document, block).GetValue();
-          const pageWidth = page.width - page.leftMargin - page.rightMargin;
-          const targetWidth = relative
-            ? widthPercent === 0
-              ? pageWidth
-              : Math.trunc((pageWidth * widthPercent) / 100)
-            : tableWidth;
-          const widthRatio = hasNativeWidths && tableWidth > 0 ? targetWidth / tableWidth : 1;
-          let right = 0;
-          for (const [index, width] of nativeWidths.entries()) {
-            const box = boxes[index]?.GetFormat().box;
-            if (box !== undefined)
-              for (const [edge, control] of [
-                [SvxBoxItemLine.TOP, "clbrdrt"],
-                [SvxBoxItemLine.LEFT, "clbrdrl"],
-                [SvxBoxItemLine.BOTTOM, "clbrdrb"],
-                [SvxBoxItemLine.RIGHT, "clbrdrr"],
-              ] as const)
-                output += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
-            if (box !== undefined)
-              for (const [edge, unitControl, valueControl] of [
-                [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
-                [SvxBoxItemLine.LEFT, "clpadft", "clpadt"],
-                [SvxBoxItemLine.BOTTOM, "clpadfb", "clpadb"],
-                [SvxBoxItemLine.RIGHT, "clpadfr", "clpadr"],
-              ] as const) {
-                const distance = box.GetDistance(edge);
-                if (distance > 0) output += `\\${unitControl}3\\${valueControl}${distance}`;
-              }
-            const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
-            if (vertical !== undefined)
-              output +=
-                vertical === VertOrientation.CENTER
-                  ? "\\clvertalc"
-                  : vertical === VertOrientation.BOTTOM
-                    ? "\\clvertalb"
-                    : "\\clvertalt";
-            right += hasNativeWidths ? width : 1440;
-            output += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
-          }
-          for (const box of boxes) {
-            for (const [paragraphIndex, paragraph] of box.GetParagraphs().entries()) {
-              if (paragraphIndex > 0) output += "\\par ";
-              output += `\\pard\\intbl ${this.WriteParagraph(paragraph)}`;
-            }
-            output += "\\cell ";
-          }
-          output += "\\row\n";
-        }
+        output += this.WriteTable(block, 1);
       } else {
+        output += this.WriteFloatingTables(block, 1);
         const result = this.WriteTextNode(document, block, currentPage, previousPageDesc);
         output += result.output;
         currentPage = result.currentPage;
@@ -410,6 +358,163 @@ export class RtfExport extends MSWordExportBase {
     output += "}";
     this.Strm().WriteOString(output);
     return this.Strm().GetData();
+  }
+
+  /** Original splittable text fly output revisits its actual table contents at the anchor. @param anchor - Actual text owner. @param depth - Original RTF table depth in this context. @returns Floating table controls and contents. */
+  private WriteFloatingTables(anchor: SwTextNode, depth: number): string {
+    let output = "";
+    for (const fly of this.textFlyFrames.get(anchor) ?? []) {
+      if (!fly.format.GetFlySplit().GetValue()) continue;
+      for (const block of fly.content)
+        if (block instanceof SwTableNode) output += this.WriteTable(block, depth);
+    }
+    return output;
+  }
+
+  /** Writes the text box's own range with a fresh RTF table state. @param frame - Native fly and connected content. @returns RTF shape syntax. */
+  private WriteTextFrame(frame: BoundTextFrame): string {
+    let text = "";
+    for (const block of frame.content) {
+      if (block instanceof SwTableNode) text += this.WriteTable(block, 1);
+      else
+        text +=
+          this.WriteFloatingTables(block, 1) +
+          `\\pard${this.WriteParagraph(block)}${this.WriteParagraphEnd(block)}\n`;
+    }
+    return OutputFlyFrame(frame.format, text, this.GetDefaultFrameDirection());
+  }
+
+  /** Writes native table definitions and interleaved nested table content in source depth order. @param block - Actual table node. @param depth - Original table depth. @returns RTF table bytes. */
+  private WriteTable(block: SwTableNode, depth: number): string {
+    let output = "";
+    const fly = block.GetFlyFormat();
+    for (const row of block.GetTable().GetTabLines()) {
+      const boxes = row.GetTabBoxes();
+      const tableFormat = block.GetTable().GetFrameFormat();
+      const rowFormat = row.GetFrameFormat();
+      const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
+      const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
+      let definition = "\\trowd";
+      if (orientation === HoriOrientation.CENTER) definition += "\\trqc";
+      else if (orientation === HoriOrientation.RIGHT) definition += "\\trqr";
+      else {
+        definition += "\\trql";
+        if (orientation === HoriOrientation.NONE || orientation === HoriOrientation.LEFT_AND_WIDTH)
+          definition += `\\trleft${tableLeft}`;
+      }
+      definition +=
+        this.TrueFrameDirection(tableFormat) === SvxFrameDirection.Horizontal_RL_TB
+          ? "\\rtlrow"
+          : "\\ltrrow";
+      const rowSize = rowFormat.GetFrameSize();
+      if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
+        definition += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
+      if (!rowFormat.GetRowSplit().GetValue()) definition += "\\trkeep";
+      definition += this.attributeOutput.TablePositioning(fly);
+      const tableBox = tableFormat.GetBox();
+      for (const [edge, unitControl, valueControl] of [
+        [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
+        [SvxBoxItemLine.LEFT, "trpaddfl", "trpaddl"],
+        [SvxBoxItemLine.BOTTOM, "trpaddfb", "trpaddb"],
+        [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
+      ] as const)
+        definition += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
+      const nativeWidths = boxes.map(
+        /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
+          box.GetFrameSize().GetWidth(),
+      );
+      const hasNativeWidths = nativeWidths.every(
+        /** Computes the width result. @param width - Width. @returns The computed result. */ (
+          width,
+        ) => width > 0,
+      );
+      const tableSize = tableFormat.GetFrameSize();
+      const tableWidth = tableSize.GetWidth();
+      // GetTablePageSize supplies SwWriteTable's target width; its base is
+      // the table frame width, not the sum of this row's cell widths.
+      let widthPercent = tableSize.GetWidthPercent();
+      if (orientation === HoriOrientation.FULL || orientation === HoriOrientation.NONE)
+        widthPercent = 100;
+      const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
+      const page = this.ResolvePageDescription(this.m_rDoc, block).GetValue();
+      const flyMargins = fly?.GetLRSpace();
+      const pageWidth = fly?.GetFlySplit().GetValue()
+        ? fly.GetFrameSize().GetWidth() -
+          (flyMargins?.ResolveLeft() ?? 0) -
+          (flyMargins?.ResolveRight() ?? 0)
+        : page.width - page.leftMargin - page.rightMargin;
+      const targetWidth = relative
+        ? widthPercent === 0
+          ? pageWidth
+          : Math.trunc((pageWidth * widthPercent) / 100)
+        : tableWidth;
+      const widthRatio = hasNativeWidths && tableWidth > 0 ? targetWidth / tableWidth : 1;
+      let right = 0;
+      for (const [index, width] of nativeWidths.entries()) {
+        const box = boxes[index]?.GetFormat().box;
+        const format = boxes[index]?.GetFrameFormat();
+        if (box !== undefined)
+          for (const [edge, control] of [
+            [SvxBoxItemLine.TOP, "clbrdrt"],
+            [SvxBoxItemLine.LEFT, "clbrdrl"],
+            [SvxBoxItemLine.BOTTOM, "clbrdrb"],
+            [SvxBoxItemLine.RIGHT, "clbrdrr"],
+          ] as const)
+            definition += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
+        if (box !== undefined)
+          for (const [edge, unitControl, valueControl] of [
+            [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
+            [SvxBoxItemLine.LEFT, "clpadft", "clpadt"],
+            [SvxBoxItemLine.BOTTOM, "clpadfb", "clpadb"],
+            [SvxBoxItemLine.RIGHT, "clpadfr", "clpadr"],
+          ] as const) {
+            const distance = box.GetDistance(edge);
+            if (distance > 0) definition += `\\${unitControl}3\\${valueControl}${distance}`;
+          }
+        if (format !== undefined) {
+          definition += this.attributeOutput.TableBackgrounds(tableFormat, rowFormat, format);
+          const direction = this.TrueFrameDirection(format);
+          if (direction === SvxFrameDirection.Vertical_RL_TB) definition += "\\cltxtbrl";
+          else if (direction === SvxFrameDirection.Vertical_LR_BT) definition += "\\cltxbtlr";
+        }
+        const rowSpan = boxes[index]?.getRowSpan() ?? 1;
+        if (rowSpan > 1) definition += "\\clvmgf";
+        else if (rowSpan < 1) definition += "\\clvmrg";
+        const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
+        if (vertical !== undefined)
+          definition +=
+            vertical === VertOrientation.CENTER
+              ? "\\clvertalc"
+              : vertical === VertOrientation.BOTTOM
+                ? "\\clvertalb"
+                : "\\clvertalt";
+        right += hasNativeWidths ? width : 1440;
+        definition += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
+      }
+      if (depth === 1) output += definition;
+      for (const box of boxes) {
+        const content = box.GetContentNodes();
+        for (const [index, node] of content.entries()) {
+          if (node instanceof SwTableNode) output += this.WriteTable(node, depth + 1);
+          else {
+            output += this.WriteFloatingTables(node, depth + 1);
+            output += "\\pard\\intbl";
+            if (depth > 1) output += `\\itap${depth}`;
+            output += " " + this.WriteParagraph(node);
+            if (index + 1 < content.length) {
+              const terminator = this.WriteParagraphEnd(node);
+              output += terminator === "\\par" ? terminator + " " : terminator;
+            }
+          }
+        }
+        output += depth === 1 ? "\\cell " : "\\nestcell ";
+      }
+      output +=
+        depth === 1
+          ? "\\row\n"
+          : "{\\*\\nesttableprops" + definition + "\\nestrow}{\\nonesttables\\par}";
+    }
+    return output;
   }
 
   /** Emits the first native page descriptor as global paper and first-section controls.  @param document - Document. @param firstBlock - First Block. @returns The string result. */
@@ -440,7 +545,8 @@ export class RtfExport extends MSWordExportBase {
   /** Mirrors OutPageDescription for the currently represented physical page fields.  @param page - Page. @param titlePage - Title Page. @returns The string result. */
   private WriteSectionPageDescription(page: SwPageDesc, titlePage = true): string {
     const follow = page.GetFollow();
-    const value = titlePage ? follow.GetValue() : page.GetValue();
+    const sectionPage = titlePage ? follow : page;
+    const value = sectionPage.GetValue();
     let output = "";
     if (value.landscape) output += "\\lndscpsxn";
     output += `\\pgwsxn${value.width}\\pghsxn${value.height}`;
@@ -448,39 +554,53 @@ export class RtfExport extends MSWordExportBase {
     if (value.rightMargin !== 0) output += `\\margrsxn${value.rightMargin}`;
     if (value.topMargin !== 0) output += `\\margtsxn${value.topMargin}`;
     if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
-    if (titlePage && follow !== page) output += "\\titlepg";
+    const direction = sectionPage.GetMaster().GetAttrSet().GetItemIfSet(RES_FRAMEDIR, true);
+    if (direction !== undefined) {
+      const previous = this.m_pCurrentPageDesc;
+      this.m_pCurrentPageDesc = sectionPage;
+      this.m_bOutPageDescs = true;
+      try {
+        output += this.attributeOutput.FormatFrameDirection(sectionPage.GetMaster().GetFrameDir());
+      } finally {
+        this.m_bOutPageDescs = false;
+        this.m_pCurrentPageDesc = previous;
+      }
+    }
+    if (titlePage && (follow !== page || !follow.IsFirstShared())) output += "\\titlepg";
     return output;
   }
 
   /** Projects the represented physical tests in IsPlausableSingleWordSection.  @param page - Page. @returns The boolean result. */
   private IsSingleWordSectionPageChain(page: SwPageDesc): boolean {
     const follow = page.GetFollow();
-    if (follow === page || follow.GetFollow() !== follow) return false;
-    return this.IsPlausibleSingleWordSection(page, follow);
+    if (
+      follow === page ||
+      follow.GetFollow() !== follow ||
+      (page.ReadUseOn() & UseOnPage.All) !== UseOnPage.All
+    )
+      return false;
+    return IsPlausableSingleWordSection(page.GetFirstMaster(), follow.GetMaster());
   }
 
-  /** Projects the physical fields tested by the pinned section plausibility helper.  @param page - Page. @param follow - Follow. @returns The boolean result. */
-  private IsPlausibleSingleWordSection(page: SwPageDesc, follow: SwPageDesc): boolean {
-    const first = page.GetValue(),
-      next = follow.GetValue();
-    return (
-      first.width === next.width &&
-      first.height === next.height &&
-      first.leftMargin === next.leftMargin &&
-      first.rightMargin === next.rightMargin &&
-      first.topMargin === next.topMargin &&
-      first.bottomMargin === next.bottomMargin
-    );
+  /** Reads the current Writer line numbering only when it is active. @returns Original section controls. */
+  private WriteSectionLineNumbering(): string {
+    const info = this.m_rDoc.GetLineNumberInfo();
+    return info.IsPaintLineNumbers() ? SectionLineNumbering(info) : "";
   }
 
-  /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @returns The { output: string; currentPage: SwPageDesc } result. */
+  /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @param buffered - Whether the previous text node buffers the section break. @returns The { output: string; currentPage: SwPageDesc } result. */
   private WriteLaterSection(
     page: SwPageDesc,
     restart?: number,
+    buffered = false,
   ): { output: string; currentPage: SwPageDesc } {
-    const titlePage = this.IsSingleWordSectionPageChain(page);
-    const currentPage = titlePage ? page.GetFollow() : page;
-    let output = "\\sect\\sectd\\sectunlocked1";
+    const combined = this.IsSingleWordSectionPageChain(page);
+    const titlePage = combined || !page.IsFirstShared();
+    const currentPage = combined ? page.GetFollow() : page;
+    const numbering = this.WriteSectionLineNumbering();
+    let output = buffered
+      ? `${numbering}\\sect\\sectd\\sectunlocked1`
+      : `\\sect\\sectd${numbering}\\sectunlocked1`;
     output += this.WriteSectionPageDescription(currentPage, false);
     if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
     if (titlePage) output += "\\titlepg";
@@ -526,21 +646,24 @@ export class RtfExport extends MSWordExportBase {
     if (
       positions.length === 0 ||
       follow === currentPage ||
-      this.IsPlausibleSingleWordSection(currentPage, follow)
+      IsPlausableSingleWordSection(currentPage.GetFirstMaster(), follow.GetMaster())
     )
-      return { output: `\\pard${this.WriteParagraph(paragraph)}\\par\n`, currentPage };
+      return {
+        output: `\\pard${this.WriteParagraph(paragraph)}${this.WriteParagraphEnd(paragraph)}\n`,
+        currentPage,
+      };
     let output = "";
     let start = 0;
     for (const offset of positions) {
       const nextPage = currentPage.GetFollow();
       if (nextPage === currentPage) break;
-      output += `\\pard${this.WriteParagraph(paragraph, start, offset)}\\par\n`;
+      output += `\\pard${this.WriteParagraph(paragraph, start, offset)}${this.WriteParagraphEnd(paragraph)}\n`;
       if (previousPageDesc?.GetFollow() !== nextPage)
         output += this.WriteLaterSection(nextPage).output;
       currentPage = nextPage;
       start = offset;
     }
-    output += `\\pard${this.WriteParagraph(paragraph, start)}\\par\n`;
+    output += `\\pard${this.WriteParagraph(paragraph, start)}${this.WriteParagraphEnd(paragraph)}\n`;
     return { output, currentPage };
   }
 
@@ -551,6 +674,17 @@ export class RtfExport extends MSWordExportBase {
         ? block.GetTable().GetFrameFormat().GetAttrSet()
         : block.GetSwAttrSet();
     return set.Get(RES_PAGEDESC) as SwFormatPageDesc;
+  }
+
+  /** Native EndParagraph wraps the actual terminator only when marker properties exist. Last cell paragraphs retain the source cell-end path. @param paragraph - Actual text node. @returns Paragraph terminator markup. */
+  private WriteParagraphEnd(paragraph: SwTextNode): string {
+    const items = GetParagraphMarkerProperties(paragraph);
+    try {
+      const properties = this.attributeOutput.WriteParagraphMarkerProperties(items);
+      return properties ? "{" + properties + "\\par}" : "\\par";
+    } finally {
+      items.Dispose();
+    }
   }
 
   /** Reads only a block's authored item, as OutputSectionBreaks receives GetpSwAttrSet.  @param block - Block. @returns The SwFormatPageDesc | undefined result. */
@@ -590,24 +724,39 @@ export class RtfExport extends MSWordExportBase {
       .GetIDocumentMarkAccess()
       .GetBookmarks()
       .filter(
-        /** Computes the mark result. @param mark - Mark. @returns The computed result. */ (
-          mark,
-        ) => {
-          if (mark.GetMarkPos().GetNode() !== paragraph) return false;
-          const offset = mark.GetMarkPos().GetContentIndex();
-          return (
-            offset >= start &&
-            (offset < end || (offset === end && end === paragraph.GetText().length))
-          );
-        },
+        /** Selects bookmarks owned by the current paragraph. @param mark - Native mark. @returns Whether this paragraph owns it. */
+        (mark) => mark.GetMarkPos().GetNode() === paragraph,
+      )
+      .map(
+        /** Takes the native bookmark position. @param mark - Bookmark. @returns Positioned export event. */
+        (mark) => ({ offset: mark.GetMarkPos().GetContentIndex(), mark }),
+      );
+    const frames = (this.textFlyFrames.get(paragraph) ?? [])
+      .filter(
+        /** Selects the ordinary text-box route. @param frame - Native fly. @returns Whether this is an ordinary text box. */
+        (frame) => !frame.format.GetFlySplit().GetValue(),
+      )
+      .map(
+        /** Takes the native fly anchor position. @param frame - Native fly. @returns Positioned export event. */
+        (frame) => ({ offset: frame.format.GetAnchor().GetAnchorContentOffset(), frame }),
+      );
+    const markers = [...marks, ...frames]
+      .filter(
+        /** Applies original half-open paragraph ranges, including the end of the native node. @param marker - Positioned event. @returns Whether this output range contains it. */
+        ({ offset }) =>
+          offset >= start && (offset < end || (offset === end && end === paragraph.Len())),
+      )
+      .sort(
+        /** Orders markers in text stream order. @param a - First event. @param b - Second event. @returns Numeric order. */
+        (a, b) => a.offset - b.offset,
       );
     let offset = 0;
-    let markIndex = 0;
+    let markerIndex = 0;
     let activeLink: WriterHyperlink | undefined;
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
       run: RtfTextRun,
     ): void => {
-      if (run.text.length === 0) return;
+      if (run.text.length === 0 && paragraph.Len() !== 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
         if (activeLink !== undefined) output += "}}";
         if (run.hyperlink !== undefined) output += this.StartURL(run.hyperlink);
@@ -615,28 +764,37 @@ export class RtfExport extends MSWordExportBase {
       }
       output += this.WriteRun(run);
     };
+    const writeMarker =
+      /** Writes a positioned bookmark or fly. @param marker - Native owner. @returns Nothing. */ (
+        marker: (typeof markers)[number],
+      ): void => {
+        output +=
+          "mark" in marker
+            ? this.WriteBookmark(marker.mark.GetName())
+            : this.WriteTextFrame(marker.frame);
+      };
     for (const run of this.GetTextRuns(paragraph)) {
       const runStart = offset;
       offset += run.text.length;
       const sliceStart = Math.max(start, runStart);
       const sliceEnd = Math.min(end, offset);
-      if (sliceEnd <= sliceStart) continue;
+      if (sliceEnd < sliceStart || (sliceEnd === sliceStart && paragraph.Len() !== 0)) continue;
       let cursor = sliceStart;
-      while (markIndex < marks.length) {
+      while (markerIndex < markers.length) {
         // filter() produced a dense local array and this loop is bounded by its unchanged length.
-        const mark = marks[markIndex] as (typeof marks)[number];
-        const position = mark.GetMarkPos().GetContentIndex();
+        const marker = markers[markerIndex] as (typeof markers)[number];
+        const position = marker.offset;
         if (position >= sliceEnd) break;
         writeRun({ ...run, text: run.text.slice(cursor - runStart, position - runStart) });
-        output += this.WriteBookmark(mark.GetName());
+        writeMarker(marker);
         cursor = position;
-        markIndex++;
+        markerIndex++;
       }
       writeRun({ ...run, text: run.text.slice(cursor - runStart, sliceEnd - runStart) });
     }
     if (activeLink !== undefined) output += "}}";
-    for (; markIndex < marks.length; markIndex++)
-      output += this.WriteBookmark((marks[markIndex] as (typeof marks)[number]).GetName());
+    for (; markerIndex < markers.length; markerIndex++)
+      writeMarker(markers[markerIndex] as (typeof markers)[number]);
     return output;
   }
 
@@ -659,13 +817,22 @@ export class RtfExport extends MSWordExportBase {
   private *GetTextRuns(paragraph: SwTextNode): Generator<RtfTextRun> {
     const text = paragraph.GetText();
     const hints = paragraph.GetpSwpHints()?.entries() ?? [];
-    const boundaries = new Set([0, text.length]);
+    const characterRuns = GetPseudoCharRuns(paragraph);
+    const boundaries = new Set([
+      0,
+      text.length,
+      ...characterRuns.map(
+        /** Native pseudo-run ends also split attribute iteration. @param run - Source run. @returns UTF16 boundary. */ (
+          run,
+        ) => run.mnEndPos,
+      ),
+    ]);
     for (const hint of hints) {
       boundaries.add(Math.min(text.length, hint.start));
       boundaries.add(Math.min(text.length, hint.end));
     }
     const iterator = new SwAttrIter(paragraph);
-    const ordered = [...boundaries].sort(
+    const ordered = (text.length ? [...boundaries] : [0, 0]).sort(
       /** Applies sort to left, right. @param left - left value. @param right - right value. @returns Callback result. */ (
         left,
         right,
@@ -674,6 +841,13 @@ export class RtfExport extends MSWordExportBase {
     for (let index = 0; index + 1 < ordered.length; index++) {
       const start = ordered[index] as number;
       const end = ordered[index + 1] as number;
+      const characterRun =
+        characterRuns.find(
+          /** Selects the same logical pseudo-run as IterToCurrent. @param run - Source run. @returns Coverage. */ (
+            run,
+          ) => run.mnEndPos > start,
+        ) ?? (text.length === 0 ? characterRuns[0] : undefined);
+      if (!characterRun) throw new Error("assert(nonempty character run)");
       const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       items.SetParent(paragraph.GetSwAttrSet());
       const active = hints.filter(
@@ -707,6 +881,8 @@ export class RtfExport extends MSWordExportBase {
       try {
         yield {
           ...(named?.format instanceof SwFormatCharFormat ? { charFormat: named.format } : {}),
+          script: characterRun.mnScript,
+          isRTL: characterRun.mbRTL,
           text: text.slice(start, end),
           items,
           attributes: projectWriterCharacterAttributes(items, items.GetParent()),
@@ -722,14 +898,15 @@ export class RtfExport extends MSWordExportBase {
 
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
   private WriteRun(run: RtfTextRun): string {
-    // The paragraph writer admits only nonempty slices before calling this private method.
+    // Native StartRun/EndRun omit braces only for the single empty paragraph run.
+    this.attributeOutput.RTLAndCJKState(run.isRTL, run.script);
     const controls =
       (run.charFormat === undefined
         ? ""
         : this.attributeOutput.OutputTextCharFormat(run.charFormat)) +
       this.attributeOutput.WriteNativeCharacter(run.items, GetCharacterPropertiesMode.ForRun);
     return (
-      "{" +
+      (run.text.length ? "{" : "") +
       controls +
       (controls.length === 0 ? "" : " ") +
       this.attributeOutput.RunText(
@@ -737,7 +914,7 @@ export class RtfExport extends MSWordExportBase {
         this.GetCurrentEncoding(),
         "",
       ) +
-      "}"
+      (run.text.length ? "}" : "")
     );
   }
 
@@ -811,4 +988,9 @@ import { StyleType } from "./attributeoutputbase";
 
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 /** The real run items and optional borrowed native named-style item for the existing RTF string sink. */
-type RtfTextRun = WriterTextRun & { items: SfxItemSet; charFormat?: SwFormatCharFormat };
+type RtfTextRun = WriterTextRun & {
+  items: SfxItemSet;
+  charFormat?: SwFormatCharFormat;
+  script: number;
+  isRTL: boolean;
+};

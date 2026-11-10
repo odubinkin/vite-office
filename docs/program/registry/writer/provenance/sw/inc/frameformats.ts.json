@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/inc/frameformats.ts",
+    "upstreamPath": "sw/inc/frameformats.hxx",
+    "localSymbols": [
+      "FrameFormats"
+    ],
+    "upstreamSymbols": [
+      "FrameFormats",
+      "DeleteAndDestroyAll",
+      "ContainsFormat",
+      "FindFrameFormatByName"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "preservedResponsibilities": [
+      "S3HW1E HTML65: actual document-owned FrameFormats<SpzFrameFormat> storage, source fly-format construction/factory registration and native HasCurrentParaFlys registry scan replace the missing prerequisite without an empty-provider substitute. Stored SwFormat Which identities are explicit for character, text, graphic and frame/fly construction. Collection preserves positional traversal, unique object membership, independent name/type/pointer ordering, exact erase, owning deletion and default relocation. Opaque stable JS reference order represents pointer comparison, not a native address/ABI. Registered special-frame rename uses native NameChanged old/new names directly on the notifier. WRITER346 preserves original newDefault back-reference omission. WRITER347 records the source base rename inconsistency and the still-unported native document/style rename route; the existing general base-setter browser notification is not migrated or certified in this special-frame prerequisite block. Actual HTML query admits only current-node paragraph/character anchors, preserves NONE precedence and THROUGH exclusions, and evaluates simultaneous flags in source order. The collection/factory/query are real model owners, but MakeFlySection, fly/drawing contact/layout destruction and anchored-node list maintenance, recursive HTML first-cell/table grammar/materialization/layout, full document teardown, RTF direction and final format/UI audit remain unported or unverified. No synthetic frame/section/measurement or result provider is introduced. Existing save/open/autosave/recovery deviations are unchanged; whole-module semantic/default/contract/ABI parity remains unverified.",
+      "S3HW1E HTML71 adds actual composite-index iterator dereference at the existing host ordered-position boundary; no positional-storage index is substituted for the source type/name iterator. GetFormatByTypeAndName returns the actual registered format from the existing composite ordering and asserts the native valid-dereference precondition. A real reordered-name collection test proves the distinction. Opaque JS pointer ordering, invalid native iterator/ABI/performance/full container parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete native collection dump/XML and Boost storage performance/ABI, full frame/fly contact/layout, anchored-node list lifecycle, full document destruction and whole-module parity remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/frameformats.ts",
+          "marker": "FrameFormats"
+        },
+        {
+          "path": "apps/office/src/sw/inc/frameformats.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/frameformats.hxx",
+          "marker": "FrameFormats"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/format.cxx",
+          "marker": "SwFormatsBase::FindFormatByName"
+        }
+      ]
+    }
+  }
+}

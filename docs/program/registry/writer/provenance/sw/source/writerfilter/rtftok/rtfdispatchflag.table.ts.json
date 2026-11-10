@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+    "localSymbols": [
+      "dispatchTableFlag",
+      "dispatchFloatingTableFlag"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::dispatchFlag"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML75: Original RTF row and cell direction flags publish their native resource identities and exact generated values into the actual group property owners.",
+      "Captures clvmgf/clvmrg as the original group-owned cell merge sprm using existing native merge resource values.",
+      "Uses the original CLMGF/CLMRG group-owned horizontal merge sprm.",
+      "Routes the exact original floating table flag set to row properties."
+    ],
+    "omittedResponsibilities": [
+      "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+          "marker": "dispatchTableFlag"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+          "marker": "dispatchFloatingTableFlag"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFlag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::CLVMGF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::CLMGF:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFloatingTableFlag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdispatchflag.table.ts",
+      "rationale": "Separates direction-specific flag handling from the existing tokenizer event dispatch while preserving its real parser-state owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

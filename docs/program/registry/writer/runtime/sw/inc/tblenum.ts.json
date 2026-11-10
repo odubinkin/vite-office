@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/tblenum.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/tblenum.ts",
+        "vendor/libreoffice-reference/sw/inc/tblenum.hxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts"
+      ],
+      "justification": "Owns the original ordered table merge result enum.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TableMergeErr"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/tblenum.hxx",
+      "upstreamSymbols": [
+        "TableMergeErr"
+      ]
+    }
+  }
+}

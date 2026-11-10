@@ -7,6 +7,7 @@ import {
   convertIsoNamesToLanguage,
   getDefinedLanguagetags,
 } from "../source/isolang/isolang";
+import { makeLangID, primary, subLanguage } from "./lang";
 export type { LanguagetagMapping } from "../source/isolang/isolang";
 import { lookupFallbackLocale } from "../source/isolang/isolang.fallback";
 import {
@@ -17,12 +18,16 @@ import {
   getConfiguredSystemLanguage,
   getConfiguredSystemUILanguage,
   getRealLanguage,
+  isRightToLeft,
   convertLanguageToLocale,
   convertLocaleToLanguage,
   getFallbackLocale,
 } from "../source/isolang/mslangid";
 /** Source static namespace;private/friend access is a compile-time boundary in the native source. */
 export const MsLangId = {
+  makeLangID,
+  getPrimaryLanguage: primary,
+  getSubLanguage: subLanguage,
   LanguageTagAccess: { setConfiguredSystemLanguage },
   setConfiguredSystemUILanguage,
   getSystemLanguage,
@@ -30,6 +35,7 @@ export const MsLangId = {
   getConfiguredSystemLanguage,
   getConfiguredSystemUILanguage,
   getRealLanguage,
+  isRightToLeft,
   getFallbackLocale,
   getDefinedLanguagetags,
   Conversion: {

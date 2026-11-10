@@ -1,5 +1,7 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
-import { Color } from "../../../../tools/inc/color";
+import { SwTableSortBoxes, DelBoxNode, GetTableBoxByStartIndex } from "./swtable-content-boxes";
+export { SwTableSortBoxes } from "./swtable-content-boxes";
+import type { SwHTMLTableLayout } from "../doc/htmltbl";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { SwTableBox, SwTableLine } from "./swtable-boxline";
@@ -22,8 +24,6 @@ import {
   SvxLRSpaceItem,
   SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
-import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import { RES_BOX } from "../../../inc/hintids";
 import { RES_COLLAPSING_BORDERS, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -56,17 +56,18 @@ export interface SwTableBoxFormat {
   readonly frameSize?: SwFormatFrameSize | undefined;
 }
 
-/** Creates Writer insertion border defaults without a CSS intermediary. @param borders - Default borders enabled. @returns Owned box item. */
-export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
-  const item = new SvxBoxItem(RES_BOX);
-  item.SetAllDistances(borders ? 55 : 0);
-  if (borders)
-    for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(new Color(0), 10), edge);
-  return item;
-}
-
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable extends SwClient {
+  private m_xHTMLLayout: SwHTMLTableLayout | null = null;
+  /** Original shared HTML layout borrow; null until assigned by native construction. @returns Actual layout or null. */
+  public GetHTMLTableLayout(): SwHTMLTableLayout | null {
+    return this.m_xHTMLLayout;
+  }
+  /** Original shared layout assignment publishes no synthetic resize or model result. @param layout - Original layout reference or null. @returns Nothing. */
+  public SetHTMLTableLayout(layout: SwHTMLTableLayout | null): void {
+    this.m_xHTMLLayout = layout;
+  }
+
   private m_bModifyLocked = false;
   private format: Omit<
     SwTableFormat,
@@ -82,11 +83,34 @@ export class SwTable extends SwClient {
     | "marginLeft"
     | "marginRight"
   > = {};
+  private m_bNewModel = true;
+  /** Original table-model selector. Wider old/new-model merge/split families remain outside this current flat model. @param value - Source model flag. @returns Nothing. */
+  SetTableModel(value: boolean): void {
+    this.m_bNewModel = value;
+  }
+  /** Original source model query. @returns Stored native flag. */
+  IsNewModel(): boolean {
+    return this.m_bNewModel;
+  }
   private rowsToRepeat = 1;
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
   public static readonly SEARCH_COL = 2;
   private readonly lines: SwTableLine[] = [];
+  private readonly m_TabSortContentBoxes = new SwTableSortBoxes();
+  /** Original borrowed content-box pointer registry, independent of row-vector placement. @returns Actual native container. */
+  public GetTabSortBoxes(): SwTableSortBoxes {
+    return this.m_TabSortContentBoxes;
+  }
+  /** Original complexity predicate detects actual nested upper rows, not nested document table nodes. @returns Whether a content box belongs to an anonymous parent box. */
+  public IsTableComplex(): boolean {
+    for (const box of this.m_TabSortContentBoxes) {
+      const upper = box.GetUpper();
+      if (!upper) throw new Error("assert(content box has an upper line)");
+      if (upper.GetUpper()) return true;
+    }
+    return false;
+  }
   private readonly declaredColumnWidths: number[] = [];
   private readonly softPageBreakRows: number[] = [];
 
@@ -141,9 +165,13 @@ export class SwTable extends SwClient {
   }
   /** Releases the original table client and only a final-client frame owner. @returns Nothing. */
   public override Dispose(): void {
+    this.SetHTMLTableLayout(null);
     const format = this.GetRegisteredIn();
     super.Dispose();
     if (format !== undefined && !format.HasWriterListeners()) format.DisposeModify();
+    DelBoxNode(this.m_TabSortContentBoxes);
+    this.m_TabSortContentBoxes.clear();
+    for (const line of this.lines.splice(0)) line.Dispose();
   }
 
   /** Returns the owning start node. @returns Table node. */
@@ -450,6 +478,7 @@ export class SwTable extends SwClient {
     start: SwTableBox,
     currentRowOnly: boolean,
   ): boolean {
+    this.SetHTMLTableLayout(null);
     if (
       !this.lines.some(
         /** Checks actual box ownership. @param line - Native row. @returns Whether connected. */ (
@@ -804,12 +833,9 @@ export class SwTable extends SwClient {
     return this.lines;
   }
 
-  /** Resolves a connected native box by its section start index. @param startIndex - Native node coordinate. @returns Actual box or undefined. */
+  /** Original layout-first content-box lookup with reverse sorted-pointer fallback. @param startIndex - Actual section index. @returns Original box or absent. */
   public GetTableBox(startIndex: number): SwTableBox | undefined {
-    for (const line of this.lines)
-      for (const box of line.GetTabBoxes())
-        if (box.GetStartNode().GetIndex() === startIndex) return box;
-    return undefined;
+    return GetTableBoxByStartIndex(this, startIndex);
   }
 
   /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */

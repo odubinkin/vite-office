@@ -2,6 +2,10 @@
  * @fileoverview Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.
  */
 
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { SwContentIndex } from "../bastyp/index";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { AttrSetChangeHint, SwAttrSetChg } from "../../../inc/hints";
@@ -11,12 +15,21 @@ import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
+import type { SwTableBox } from "../table/swtable";
 import type { SwTable } from "../table/swtable";
-import type { SwPosition } from "../crsr/pam";
+import type { SwPosition, SwNodeIndex } from "../crsr/pam";
 import type { SwRootFrame } from "../layout/newfrm";
-import type { SwContentFrame } from "../layout/ssfrm";
+import { SwContentFrame } from "../layout/ssfrm";
+import { SwClient, SwIterator } from "../../../inc/calbck";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import { SwNumRuleItem } from "../para/paratr";
 import { SwFrameType } from "../layout/wsfrm";
 import { GetFrameOfModify } from "../layout/frmtool";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { RES_FLYFRMFMT, RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFrameFormat } from "../layout/atrfrm";
+import type { SwFormatPageDesc } from "../attr/fmtpdsc";
+import type { SwPageDesc } from "../layout/pagedesc";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
@@ -24,6 +37,36 @@ export type SwNodeType = "end" | "start" | "text";
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
   private m_bIgnoreDontExpand = false;
+  // Original m_vIndices is a borrowed ring. Weak references retain that lifetime
+  // boundary in JavaScript without making every temporary index a node-owned object.
+  private readonly m_vIndices = new Set<WeakRef<SwNodeIndex>>();
+  private readonly nodeIndexFinalizers = new FinalizationRegistry<WeakRef<SwNodeIndex>>(
+    /** Releases only a borrowed reference when its JavaScript index is collected. Explicit native Dispose/Assign already unlink synchronously. @param reference - Collected index reference. @returns Nothing. */ (
+      reference,
+    ) => {
+      this.m_vIndices.delete(reference);
+    },
+  );
+  /** Original node-index registration across the TypeScript owner split. @param reference - Borrowed native index reference. @returns Nothing. */
+  RegisterNodeIndex(reference: WeakRef<SwNodeIndex>): void {
+    this.m_vIndices.add(reference);
+    const index = reference.deref();
+    if (index) this.nodeIndexFinalizers.register(index, reference, reference);
+  }
+  /** Original node-index unlink on reassignment/destruction. @param reference - Registered borrowed reference. @returns Nothing. */
+  DeRegisterNodeIndex(reference: WeakRef<SwNodeIndex>): void {
+    this.m_vIndices.delete(reference);
+    this.nodeIndexFinalizers.unregister(reference);
+  }
+  /** Original RemoveNode index correction assigns each live index to the first following node before removal. Assignment unlinks it from this owner. @param target - Actual first surviving node. @returns Nothing. */
+  MoveNodeIndicesTo(target: SwNode): void {
+    if (target === this) return;
+    for (const reference of this.m_vIndices) {
+      const index = reference.deref();
+      if (index) index.Assign(target);
+      else this.m_vIndices.delete(reference);
+    }
+  }
 
   /**
    * Creates a node owned by one SwNodes array.
@@ -40,6 +83,10 @@ export abstract class SwNode extends SwContentIndexRegistry {
     super();
   }
 
+  /** Original inline node-type getter from ndtxt.hxx returns null for nontext nodes. @returns Actual text owner or null. */
+  public GetTextNode(): SwTextNode | null {
+    return this.nodeType === "text" ? (this as SwNode as SwTextNode) : null;
+  }
   /** Reports whether end-equal hints ignore DontExpand during coordinate updates. @returns Native node state. */
   public IsIgnoreDontExpand(): boolean {
     return this.m_bIgnoreDontExpand;
@@ -50,6 +97,49 @@ export abstract class SwNode extends SwContentIndexRegistry {
     this.m_bIgnoreDontExpand = value;
   }
 
+  /** Original enclosing-table lookup includes a table node itself, then follows actual section owners up to the root sentinel. @returns Actual enclosing table or null. */
+  public FindTableNode(): SwTableNode | null {
+    if (this instanceof SwTableNode) return this;
+    let current = this.StartOfSectionNode();
+    while (!(current instanceof SwTableNode) && current.GetIndex())
+      current = current.StartOfSectionNode();
+    return current instanceof SwTableNode ? current : null;
+  }
+  /** Original node.cxx lookup resolves the actual containing cell and its table-owned box. @returns Actual box or null outside a cell. */
+  public GetTableBox(): SwTableBox | null {
+    const start = this.FindTableBoxStartNode();
+    if (!start) return null;
+    const table = start.FindTableNode();
+    if (!table) throw new Error("assert(native cell has a containing table)");
+    return table.GetTable().GetTableBox(start.GetIndex()) ?? null;
+  }
+  /** Original typed-start lookup includes a start node itself and preserves the root-index termination condition. @param type - Native section tag. @returns Actual matching start or null. */
+  public FindStartNodeByType(type: SwStartNodeType): SwStartNode | null {
+    let current = this instanceof SwStartNode ? this : this.StartOfSectionNode();
+    while (current.GetStartNodeType() !== type && current.GetIndex())
+      current = current.StartOfSectionNode();
+    return current.GetStartNodeType() === type ? current : null;
+  }
+  /** Original fly start-node query. @returns Actual fly section or null. */
+  public FindFlyStartNode(): SwStartNode | null {
+    return this.FindStartNodeByType(SwStartNodeType.SwFlyStartNode);
+  }
+  /** Original registry branch of GetFlyFormat for the represented model, where there are no physical fly frames. @returns Actual original owning fly format, if any. */
+  public GetFlyFormat(): SwFrameFormat | undefined {
+    const start = this.FindFlyStartNode();
+    if (start !== null)
+      for (const format of this.GetDoc().GetSpzFrameFormats())
+        if (
+          format.Which() === RES_FLYFRMFMT &&
+          format.GetContent().GetContentIdx()?.GetNode() === start
+        )
+          return format;
+    return undefined;
+  }
+  /** Original table-box section lookup delegates to the generic tag search. @returns Actual start or null. */
+  public FindTableBoxStartNode(): SwStartNode | null {
+    return this.FindStartNodeByType(SwStartNodeType.SwTableBoxStartNode);
+  }
   /** Returns the owning node array. @returns Owning SwNodes. */
   public GetNodes(): SwNodes {
     return this.nodes;
@@ -75,6 +165,15 @@ export abstract class SwNode extends SwContentIndexRegistry {
     if (this instanceof SwStartNode && this.startOfSection === undefined) return this;
     if (this.startOfSection === undefined) throw new Error("SwNode has no section owner.");
     return this.startOfSection;
+  }
+
+  /** Original inline node.hxx section-end index resolves the actual shared section owner. @returns Native end-node offset. */
+  public EndOfSectionIndex(): number {
+    return this.EndOfSectionNode().GetIndex();
+  }
+  /** Original common matching-end query uses a start node itself or the node's enclosing start. @returns Actual matching end sentinel. */
+  public EndOfSectionNode(): SwEndNode {
+    return this.StartOfSectionNode().EndOfSectionNode();
   }
 
   /** Reassigns the canonical section during native TextToTable, retaining node and registered index identity. @param start - Connected new section. @returns Nothing. */
@@ -103,9 +202,18 @@ export abstract class SwNode extends SwContentIndexRegistry {
 export class SwStartNode extends SwNode {
   private endOfSection?: SwEndNode;
 
-  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @returns Nothing. */
-  public constructor(nodes: SwNodes, parent?: SwStartNode) {
+  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @param startNodeType - Original structural section tag. @returns Nothing. */
+  public constructor(
+    nodes: SwNodes,
+    parent?: SwStartNode,
+    private readonly startNodeType = SwStartNodeType.SwNormalStartNode,
+  ) {
     super(nodes, "start", parent);
+  }
+
+  /** Original section-kind value is independent of the ordinary node category. @returns Native section tag. */
+  public GetStartNodeType(): SwStartNodeType {
+    return this.startNodeType;
   }
 
   /** Links the matching end sentinel during SwNodes construction. @param end - Matching end sentinel. @returns Nothing. */
@@ -114,7 +222,7 @@ export class SwStartNode extends SwNode {
   }
 
   /** Returns the matching section end sentinel. @returns Matching end sentinel. */
-  public EndOfSectionNode(): SwEndNode {
+  public override EndOfSectionNode(): SwEndNode {
     if (this.endOfSection === undefined) throw new Error("SwStartNode has no end sentinel.");
     return this.endOfSection;
   }
@@ -143,9 +251,9 @@ export class SwTableNode extends SwStartNode {
 
 /** Begins one table cell section inside its table node. */
 export class SwTableBoxStartNode extends SwStartNode {
-  /** Creates a cell section. @param nodes - Owning array. @param table - Containing table section. @returns Nothing. */
-  public constructor(nodes: SwNodes, table: SwTableNode) {
-    super(nodes, table);
+  /** Creates a cell section. @param nodes - Owning array. @param parent - Containing native section; HTML can allocate a real cell section before assigning a core box. @returns Nothing. */
+  public constructor(nodes: SwNodes, parent?: SwStartNode) {
+    super(nodes, parent, SwStartNodeType.SwTableBoxStartNode);
   }
 }
 
@@ -161,9 +269,96 @@ export class SwEndNode extends SwNode {
 export abstract class SwContentNode extends SwNode {
   private readonly mpAttrSet: SwAttrSetHandle = { value: undefined };
 
+  /** Original GoNext content-index overload for the consumed Chars (0), nonhidden/noncell responsibility. Other skip-mode services are not represented by this signature. @param index - Actual registered content index. @param mode - Original SwCursorSkipMode::Chars. @returns Whether one original code point was consumed. */
+  public GoNext(index: SwContentIndex, mode: 0): boolean {
+    void mode;
+    if (index.GetIndex() >= this.Len()) return false;
+    let offset = index.GetIndex() + 1;
+    const node = this.GetTextNode();
+    if (node) {
+      const text = unicode(node.GetText()),
+        pos: [number] = [index.GetIndex()];
+      try {
+        text.iterateCodePoints(pos);
+        offset = pos[0];
+      } finally {
+        text.dispose();
+      }
+    }
+    index.Assign(index.GetContentNode(), offset);
+    return true;
+  }
+  /** Original GoPrevious content-index overload for the consumed Chars (0), nonhidden/noncell responsibility. @param index - Actual registered content index. @param mode - Original SwCursorSkipMode::Chars. @returns Whether one original code point was consumed. */
+  public GoPrevious(index: SwContentIndex, mode: 0): boolean {
+    void mode;
+    if (index.GetIndex() <= 0) return false;
+    let offset = index.GetIndex() - 1;
+    const node = this.GetTextNode();
+    if (node) {
+      const text = unicode(node.GetText()),
+        pos: [number] = [index.GetIndex()];
+      try {
+        text.iterateCodePoints(pos, -1);
+        offset = pos[0];
+      } finally {
+        text.dispose();
+      }
+    }
+    index.Assign(index.GetContentNode(), offset);
+    return true;
+  }
   /** Borrows a registered content frame through the native no-view-position query. Only text content frames are represented; native geometry/Calc and non-text content remain unported. @param layout - Optional original layout filter. @param position - Optional original model position. @returns Original text content frame or no registered match. */
   public getLayoutFrame(layout?: SwRootFrame, position?: SwPosition): SwContentFrame | undefined {
     return GetFrameOfModify(layout, this, SwFrameType.Txt, position) as SwContentFrame | undefined;
+  }
+
+  /** Original physical direction query uses the current registered frame without invoking formatting. @param position - Actual model position. @returns Physical direction or Unknown when there is no frame. */
+  public GetTextDirection(position: SwPosition): SvxFrameDirection {
+    const frame = this.getLayoutFrame(
+      this.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
+      position,
+    );
+    if (frame === undefined) return SvxFrameDirection.Unknown;
+    if (frame.IsVertical()) {
+      if (frame.IsVertLRBT()) return SvxFrameDirection.Vertical_LR_BT;
+      return frame.IsRightToLeft()
+        ? SvxFrameDirection.Vertical_LR_TB
+        : SvxFrameDirection.Vertical_RL_TB;
+    }
+    return frame.IsRightToLeft()
+      ? SvxFrameDirection.Horizontal_RL_TB
+      : SvxFrameDirection.Horizontal_LR_TB;
+  }
+  /** Original content-node page assignment and no-physical-pages fallback in FindPageDesc. The existing page item binds by name to the actual owned descriptor. @returns Borrowed descriptor, or absent outside the document node array. */
+  public FindPageDesc(): SwPageDesc | undefined {
+    if (!this.GetNodes().IsDocNodes()) return undefined;
+    const doc = this.GetDoc(),
+      assignment = this.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+    return doc.FindPageDesc(assignment.GetPageDescName()) ?? doc.GetPageDesc(0);
+  }
+
+  /** Original numbering invalidation for represented nonconditional collections and actual document-owned rules. @returns Whether a named native rule was found. */
+  public InvalidateNumRule(): boolean {
+    const item = this.GetAttr(RES_PARATR_NUMRULE),
+      name = item instanceof SwNumRuleItem ? item.GetValue() : "",
+      rule = this.GetNodes().IsDocNodes() && name ? this.GetDoc().FindNumRulePtr(name) : undefined;
+    rule?.Invalidate();
+    return rule !== undefined;
+  }
+  /** Original current text-frame listener teardown and follow unlinking. Current layout owns text frames and sibling chains; merged redline/footnote/accessibility frame families are not represented. @param layout - Optional native root filter. @returns Nothing. */
+  public DelFrames(layout?: SwRootFrame): void {
+    for (const client of new SwIterator(SwClient, this)) {
+      if (!(client instanceof SwContentFrame) || (layout && layout !== client.getRootFrame()))
+        continue;
+      if (client.IsFollow()) {
+        const master = client.FindMaster();
+        if (!master) throw new Error("assert(content follow has a master)");
+        master.SetFollow(client.GetFollow());
+      }
+      client.SetFollow(undefined);
+      client.RemoveFromLayout();
+      client.DestroyImpl();
+    }
   }
 
   /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
@@ -177,6 +372,35 @@ export abstract class SwContentNode extends SwNode {
       throw new Error("SwContentNode format collection belongs to another document.");
   }
 
+  /** Original adjacent join admission and optional index/position output. Current node graph has fixed/table/cell sections, but no transparent SwSectionNode owner to skip. @param index - Optional borrowed native output. @returns Whether the next content owner fits. */
+  public CanJoinNext(index?: SwNodeIndex | SwPosition): boolean {
+    const nodes = this.GetNodes(),
+      nextIndex = this.GetIndex() + 1;
+    if (nextIndex === nodes.Count() - 1) return false;
+    const next = nodes.at(nextIndex);
+    if (
+      !(next instanceof SwContentNode) ||
+      next.GetNodeType() !== this.GetNodeType() ||
+      this.Len() + next.Len() >= 0x7ffffffd
+    )
+      return false;
+    index?.Assign(next);
+    return true;
+  }
+  /** Original previous-content join admission preserves the caller output on failure and uses the preceding owner's capacity. @param index - Optional borrowed node-index output. @returns Whether the previous content owner fits. */
+  public CanJoinPrev(index?: SwNodeIndex): boolean {
+    const previousIndex = this.GetIndex() - 1;
+    if (previousIndex === 0) return false;
+    const previous = this.GetNodes().at(previousIndex);
+    if (
+      !(previous instanceof SwContentNode) ||
+      previous.GetNodeType() !== this.GetNodeType() ||
+      previous.Len() + this.Len() >= 0x7ffffffd
+    )
+      return false;
+    index?.Assign(previous);
+    return true;
+  }
   /** Returns the current content length. @returns UTF-16 content length. */
   public abstract Len(): number;
 

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts#encodeWriterTableSteps",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+      ],
+      "justification": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeWriterTableSteps",
+        "decodeWriterTableSteps",
+        "encodeTextNode",
+        "decodeTextNode",
+        "sectionTextNodes"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

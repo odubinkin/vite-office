@@ -172,6 +172,58 @@
         {
           "path": "apps/office/src/sw/source/core/doc/native-outline-owner.test.ts",
           "marker": "creates the persistent outline rule"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-text-section.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-node-index-removal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-section-deletion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-node-matrix.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+          "marker": "InsertTableNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-anonymous-box-hierarchy.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/ndindex.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-section-down.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+          "marker": "MoveNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+          "marker": "GetSectionContent"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -294,6 +346,54 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
           "marker": "void DocumentListsManager::createListForListStyle"
+        },
+        {
+          "path": "sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwNodes::MakeTextNode"
+        },
+        {
+          "path": "sw/source/core/docnode/nodes.cxx",
+          "marker": "void SwNodes::RemoveNode"
+        },
+        {
+          "path": "sw/inc/ndarr.hxx",
+          "marker": "static SwTableNode* InsertTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableBox::SwTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+          "marker": "SwTableLines::~SwTableLines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/tblrwcl.cxx",
+          "marker": "SwTableLine::FindPreviousBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "void SwNodes::SectionDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "void SwNodes::SectionUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx",
+          "marker": "SwNode::SwNode( const SwNode& rWhere"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "SwNodes::MoveNodes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "GetIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "SwNodes::MoveNodes"
         }
       ]
     },
@@ -303,7 +403,11 @@
       "SwTableRowSection",
       "SwTableBoxSection",
       "GoNext",
-      "GoPrevious"
+      "GoPrevious",
+      "DelNodes",
+      "RemoveNode",
+      "MoveNodes",
+      "GetSectionContent"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
@@ -332,7 +436,16 @@
       "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894.",
       "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
       "Native SwNodes.GoNext/GoPrevious content lookup overloads for actual node indices and positions. Original goNext/goPrevious lookup and global-section bounds are split into nodes.navigation.ts to keep TypeScript module initialization independent of the table/cursor inheritance graph. The explicit canCrossBoundary flag is retained; specialized fly/header/footer/footnote lookup remains outside represented node kinds.",
-      "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged."
+      "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML48: original borrowed SwNodeIndex registration/reassignment/destruction and RemoveNode correction now operate on the actual SwNode owners. Native m_vIndices borrowing is represented with real WeakRef/FinalizationRegistry substrate, avoiding ownership of temporary JavaScript indices; explicit Assign/Dispose unlink synchronously. Finalizer timing/GC and C++ allocation identity are not certification claims. Every live node-only index in a removed body/table/row/box range follows the original first following structural/content node; content-position correction remains the existing separate operation and can target a different surviving paragraph. Replacements preserve actual replacement identity. Actual SwPosition destruction releases both content and node indices, and actual HTMLAttr/parser destruction releases their owned node-index members. No global index registry, serialized parallel state, synthetic removal result or private-state injection is introduced. Existing insertion/movement and retained history owners are preserved. This is a concrete prerequisite of native caption-section deletion, not completion of DeleteSection, table grammar/materialization/layout, RTF direction export or final model/filter/UI reconciliation. Broad module/API/ABI parity and unrepresented fly/nontext/transparent-section/native destructor families remain unverified; browser file/autosave/recovery deviations remain unchanged.",
+      "S3HW1E HTML54: original DeleteSection is composed over real section start/end indices, DelBookmarks, GetCorrPosition, global PaMCorrAbs and DelNodes. Current node removal invalidates actual named numbering rules, removes outline membership and current text-frame clients/follow/sibling chains, removes list membership before borrowed-node-index correction, then destroys represented hint/page-description/modify and table/row/box owners backwards before the array erase. Native SwContentIndexReg destructor assertion rejects remaining live content indices instead of guessing a text destination. The HTML caption DeleteSection wrapper delegates to the actual manager; original caption callers restore their raw importer cursor before deleting its saved section. Real UI stacks and UNO cursors receive the original structural successor, contained marks are deleted and table deletion does not impose the older history helper following-text restriction. Original formatter/list/mark/cursor/native ownership remains on actual document nodes. Current text-frame teardown binds native Cut to the already represented sibling unlink and actual frame destruction; unrepresented merged-redline/footnote/accessibility/geometric resize/paint branches, fly/redline/transparent-section objects, recursive fly destruction temporary entries, chapter-field propagation and full native destructor/ABI behavior are not certified. Browser node-removed publication is retained as the existing revision/layout boundary. Full table/caption token orchestration, table materialization/layout, RTF direction export and final current-model/filter/UI audit remain required; whole modules/contracts/defaults/behavior remain unverified.",
+      "S3HW1E HTML58: original static SwNodes::InsertTable now forwards to its actual ndtbl.cxx node-matrix responsibility InsertTableNodes. Zero boxes return null without mutation; zero lines create one body row; supplied headline/body collections transition using the original repetition condition. Actual table/cell/text/end nodes retain their real enclosing section, including extra/caption and genuine existing cell boundaries. The seven native propagation identities (adjustment, Latin/CJK/CTL font families and heights) copy only effective SET source items when the selected cell collection has no effective SET value; direct or inherited collection values win, defaults and other source items do not propagate. SwDoc consumes this actual matrix before page-attribute transfer and builds its original shared line/box formats over those existing sections instead of rebuilding text sections and unconditionally overwriting adjustment. The old independent browser empty-table builder is explicitly named MakeTableNodeBefore and migrated in real XML/RTF and test consumers; it no longer masquerades as the native static InsertTable API. The existing bound SwTable/early frame bootstrap remains a representation difference requiring further native constructor/lifetime audit; no raw/default table or nullable frame contract is certified by these node-matrix tests. Full native module/API/ABI/default/lifetime behavior remains unverified. First-cell context/floating/section orchestration, recursive table grammar, caption placement/materialization/layout/real text measurement, RTF direction export and final format/UI audit remain required. Browser open/save/autosave/recovery deviations are unchanged.",
+      "S3HW1E HTML61: real SwTableBox anonymous construction preserves a null start node and does not turn reserve capacities into child lines or dummy content. Original borrowed GetUpper/SetUpper pointers and owned nested GetTabLines vectors are represented, with explicit TypeScript vector mutation bridges binding actual owners. GetSttNd is nullable; existing required-leaf convenience boundaries assert an actual start rather than inventing one. The original tblrwcl predecessor algorithm now ascends through actual upper boxes/rows, descends last nested rows/boxes and preserves the source overTableLines flag, including its parent-ascent behavior when false and empty preceding-row recursion. Actual table/box member vectors and line destructor responsibilities own recursive model deletion; node deletion removes live frame clients separately and invokes each actual model destructor once. The existing table section-index graph query now visits actual descendants; native layout-first/sorted-content-box registry lookup is not certified. Core sorted-content registration/removal, complete default table/format lifetime, document destructor orchestration, native recursive HTML first-cell/grammar/materialization/layout and RTF direction remain unverified. Actual DeleteTable is used to test destruction; SwDoc.Dispose currently tears down the notification graph without routing all node-owned table destructors, so this checkpoint does not claim whole document teardown parity. Save/open/autosave/recovery exceptions are unchanged.",
+      "S3HW1E HTML67: actual SwNodeRange value constructors own two existing native SwNodeIndex members, retain original absolute/relative defaults including end0, do not normalize endpoints, copy independently, assign contained index values in place and destroy end before start. The ndindex header owner reexports the same existing index class without a second index/registry. SwNodes::SectionDown now wraps actual existing nodes through original positional InsertNode, opposing EndNode/StartNode deletion, registered-index correction and native private static SectionUpDown stack repair. Matching ends/parent identities are repaired by the original forward walk until its stack empties at or beyond the completion boundary; ancestor continuation and traversal past the bound are retained. Genuine nested section/table/box/format/content and cursor owners survive wrapping. WRITER348 records original output endpoint ambiguity, including reversed output after both opposing boundaries are deleted; no endpoint sorting or matching-end substitute is introduced. This is actual structural wrapping needed by MakeFlySection_, not a fake fly-format/section result provider. Pure InsertNode retains native raw-array insertion without invented document-modified/undo publication; existing source host removal notifications remain unchanged. Full SectionUp/general Delete/native node-array/RTTI/ABI completion, MakeFlySection/style-pool/name/inline-fly/contact/layout/undo owners, recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed current-slice format/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations and WRITER347 general style-rename gap remain unchanged. No broad semantic/default/contract/source-responsibility status is promoted.",
+      "Moves actual contiguous caption text nodes between native sections without reallocation or changing tracked node identities. Maintains the outline registry and publishes the existing model change notifications. Other move profiles remain unverified.",
+      "Visits direct section text and table nodes by native node index and parent ownership.",
+      "Moves complete native table node sections with actual registered descendant nodes and outline identities intact."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/nodes.cxx",
@@ -342,7 +455,11 @@
       "SwNodes::~SwNodes",
       "SwNodes::ChgNode",
       "GoNext",
-      "GoPrevious"
+      "GoPrevious",
+      "SwNodes::MakeTextSection",
+      "DelNodes",
+      "RemoveNode",
+      "SwNodes::MoveNodes"
     ]
   },
   "legacyOrder": 180

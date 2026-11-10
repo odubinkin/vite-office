@@ -288,7 +288,7 @@ it("keeps the source RTF table-header export omission for represented repeat row
   try {
     const first = document.paragraphs[0];
     if (first === undefined) throw new Error("Missing paragraph.");
-    const table = document.nodes.InsertTable(first, "Header Table", {});
+    const table = document.nodes.MakeTableNodeBefore(first, "Header Table", {});
     for (let index = 0; index < 2; index++) {
       const line = document.nodes.AppendTableRow(table, 1);
       line.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText(`Row ${index}`);

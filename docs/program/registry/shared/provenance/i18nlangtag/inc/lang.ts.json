@@ -53,7 +53,13 @@
       "LANGUAGE_TIBETAN",
       "LANGUAGE_TIGRIGNA_ETHIOPIA",
       "LANGUAGE_NF_SYSTEM_TIME",
-      "LANGUAGE_NF_SYSTEM_DATE"
+      "LANGUAGE_NF_SYSTEM_DATE",
+      "LANGUAGE_ON_THE_FLY_START",
+      "LANGUAGE_ON_THE_FLY_END",
+      "LANGUAGE_ON_THE_FLY_SUB_START",
+      "LANGUAGE_ON_THE_FLY_SUB_END",
+      "makeLangID",
+      "subLanguage"
     ],
     "upstreamSymbols": [
       "LanguageType",
@@ -105,7 +111,8 @@
       "RTF numbering consumes original LANGUAGE_CHINESE_SIMPLIFIED=0x0804 for NFC39.",
       "Adds exact original LANGUAGE_* identities used by all scanner keyword-override families and Thai T. The native scanner witness uses unchanged lang.h macro declarations across 52 requested language IDs.",
       "AQF9AG adds pinned Chinese/simplified alias, Japanese and Korean language identities consumed by native-number format tables.",
-      "AQF9AG adds only pinned language identities consumed by the original extended locale calendar/numeral map and the original NF_SYSTEM_TIME/DATE substitutions."
+      "AQF9AG adds only pinned language identities consumed by the original extended locale calendar/numeral map and the original NF_SYSTEM_TIME/DATE substitutions.",
+      "S3HW1E connects native HTML LANG admission through LanguageTag::convertToLanguageTypeWithFallback, actual SvxLanguageItem Western/CJK/CTL Which slots, source CSS range initialization, script-specific attribute heads and existing deferred insertion. Existing standard/semantic/font/anchor/paragraph/heading/block consumers read LANG with source first-option precedence. Actual Markdown, Worker and RTF integration is exercised; direction lacks a current Writer frame-direction owner and is not substituted. No whole HTML/CSS or compiled desktop promotion."
     ],
     "omittedResponsibilities": [
       "Other named lang.h constants,full LanguageTag/system-language resolution,localized presentation and complete Calc model/UI/ODS remain pending. Task187 separately implements actual ordered mapping tables and private Conversion owners;native ABI/memory machinery is erased."
@@ -123,6 +130,10 @@
         {
           "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
           "marker": "uses actual configured system locale"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

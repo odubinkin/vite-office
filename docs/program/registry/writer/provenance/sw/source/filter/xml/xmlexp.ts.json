@@ -296,6 +296,34 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-named-tabs-only.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "marker": "projectBlock"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -506,6 +534,26 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
           "marker": "SwXMLExport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "SwXMLExport::ExportTableLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "SwXMLExport::ExportTableBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlitemm.cxx",
+          "marker": "aTableCellItemMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport::_exportTextFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
+          "marker": "nPercentWidth"
         }
       ]
     },
@@ -515,7 +563,8 @@
       "exportContentXml",
       "exportMetaXml",
       "getCharacterProperties",
-      "projectXmlTextRuns"
+      "projectXmlTextRuns",
+      "projectBlock"
     ],
     "omittedResponsibilities": [
       "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
@@ -562,7 +611,13 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "V4DQJW preserves newly admitted native word-line-mode/automatic-kerning items in primary ODT export and its supported-item admission. Actual item values flow into existing typed xmloff transport; previous storage/UI deviations are unchanged.",
       "S3HW1E projects actual direct fill items into native ODF paragraph attributes, preserves parent inheritance and emits original drawing namespace. Root Writer NONE override remains serializable.",
-      "B8TCAE source-contract regression: A real named paragraph style containing only an explicit empty tab-stop child survives package export/import without paragraph attributes. No production algorithm or private state is replaced."
+      "B8TCAE source-contract regression: A real named paragraph style containing only an explicit empty tab-stop child survives package export/import without paragraph attributes. No production algorithm or private state is replaced.",
+      "The ODF table source borrows the signed native model row span before export.",
+      "Projects native direct cell text and child tables through original table cell text export in node order.",
+      "Supplies original direct table, row and cell brush and writing-direction items to ODF export.",
+      "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export.",
+      "Shares the native text-fly collection with browser projection and retains anchored section output.",
+      "Projects native percentage table widths and headless relative column references."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

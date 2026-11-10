@@ -314,6 +314,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       "styles.xml",
       "content.xml",
       "meta.xml",
+      "settings.xml",
     ]);
     expect(archive.hasEntry("content.xml")).toBe(true);
     expect(archive.hasEntry("missing")).toBe(false);

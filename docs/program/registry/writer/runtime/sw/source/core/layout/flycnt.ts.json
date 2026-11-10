@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/flycnt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "layout",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/flycnt.ts#CollectTextFlyFrames",
+        "vendor/libreoffice-reference/sw/source/core/layout/flycnt.cxx#GetAnchorFrameContainingAnchPos",
+        "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+      ],
+      "justification": "Collects actual native fly sections and resolves paragraph master or character-containing follow ownership. Full fly frame formatting, contact registration and fly layout notification remain outside the represented projection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CollectTextFlyFrames",
+        "IsTextFlyAnchorFrame"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/flycnt.cxx",
+      "upstreamSymbols": [
+        "GetAnchorFrameContainingAnchPos"
+      ]
+    }
+  }
+}

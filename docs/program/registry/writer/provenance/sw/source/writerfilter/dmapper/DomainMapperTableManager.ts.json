@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+    "localSymbols": [
+      "DomainMapperTableManager",
+      "sprm",
+      "endOfRowAction",
+      "GetTableGridSeparators",
+      "cellProps",
+      "resolvePositionSprm",
+      "takeRowPosition",
+      "insertTableProps",
+      "insertRowProps",
+      "takeRowProperties"
+    ],
+    "upstreamSymbols": [
+      "DomainMapperTableManager::sprm",
+      "DomainMapperTableManager::endOfRowAction"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML75: Real table, temporary row and cell PropertyMap owners consume native bidiVisual and textDirection modifiers, preserving supported/ignored values and table merge semantics. Full TableManager layout/position/style/nested-row orchestration remains unverified.",
+      "Consumes the original vMerge sprm into the actual boolean table-cell property and computes source relative grid separators for the represented one-grid-slot path.",
+      "Maps hMerge restart/continue to the native boolean horizontal merge property.",
+      "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties.",
+      "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position.",
+      "Resolves the original preferred-width and indent measures and preserves source grid fallback.",
+      "Accumulates original row properties and the contiguous header prefix with its source limit."
+    ],
+    "omittedResponsibilities": [
+      "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "DomainMapperTableManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "GetTableGridSeparators"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "cellProps"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "resolvePositionSprm"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "DomainMapperTableManager::sprm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "DomainMapperTableManager::endOfRowAction"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "m_pTablePropsHandler->sprm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "LN_CT_TblPrBase_tblpPr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "LN_CT_TblPrBase_tblW"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
+        }
+      ]
+    }
+  }
+}

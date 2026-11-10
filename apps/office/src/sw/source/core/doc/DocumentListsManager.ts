@@ -88,6 +88,16 @@ export class DocumentListsManager {
     return list;
   }
 
+  /** Original list-style rename tracks the default mapping and every list's default style name. @param previous - Old style name. @param next - New style name. @returns Nothing. */
+  public trackChangeOfListStyleName(previous: string, next: string): void {
+    const list = this.listStyleLists.get(previous);
+    if (list) {
+      this.listStyleLists.delete(previous);
+      this.listStyleLists.set(next, list);
+    }
+    for (const entry of this.lists.values())
+      if (entry.GetDefaultListStyleName() === previous) entry.SetDefaultListStyleName(next);
+  }
   /** Creates a deterministic unique list id, the browser equivalent of CreateUniqueListId. @returns Unique identity. */
   public CreateUniqueListId(): string {
     let id: string;

@@ -1,8 +1,13 @@
-/** @fileoverview Original SvxLanguageItem initialized value/copy/int Any behavior. Native LanguageTag locale conversion and SvtLanguageTable presentation remain unported; no fake Locale or Intl mapping. The MSVC-only intermediate base and native instance manager are erased under JS primitives/GC. */
+/** @fileoverview Original SvxLanguageItem initialized value/copy/int Any behavior. Native LanguageTag supplies Locale conversion; localized SvtLanguageTable presentation remains separate. The MSVC-only intermediate base and native instance manager are erased under JS primitives/GC. */
 import { SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { LanguageType, LANGUAGE_GERMAN } from "../../../i18nlangtag/inc/lang";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import {
+  Locale,
+  cppu_detail_getUnoType_Locale as localeType,
+} from "../../../udkapi/com/sun/star/lang/Locale";
 import { MID_LANG_INT, MID_LANG_LOCALE } from "../../inc/memberids";
 /** Original language pooled value, directly inheriting the logical enum base. */
 export class SvxLanguageItem extends SfxEnumItem<LanguageType> {
@@ -32,7 +37,7 @@ export class SvxLanguageItem extends SfxEnumItem<LanguageType> {
   }
   /** Existing unwrapped enum value boundary, with no native struct claim. @returns Language ID. */
   public override QueryValue(): LanguageType;
-  /** Original integer Any query. Real LanguageTag-dependent locale member is explicitly unsupported. @param output - Actual Any. @param member - Native member. @returns Success. */
+  /** Original integer Any query. Locale members use the actual shared LanguageTag. @param output - Actual Any. @param member - Native member. @returns Success. */
   public override QueryValue(output: Any, member?: number): boolean;
   /** Original int16 projection and unknown-member untouched success. @param output - Optional actual Any. @param member - Native unsigned8 selector. @returns Scalar value or success. */
   public override QueryValue(output?: Any, member = 0): LanguageType | boolean {
@@ -41,12 +46,19 @@ export class SvxLanguageItem extends SfxEnumItem<LanguageType> {
       case MID_LANG_INT:
         output.insert([(this.GetLanguage() << 16) >> 16], "sal_Int16");
         break;
-      case MID_LANG_LOCALE:
-        return false;
+      case MID_LANG_LOCALE: {
+        const locale = LanguageTag.convertToLocale(this.GetLanguage(), false);
+        try {
+          output.insert(locale, localeType);
+        } finally {
+          locale.dispose();
+        }
+        break;
+      }
     }
     return true;
   }
-  /** Original int32 extraction followed by unsigned16 LanguageType construction. Locale conversion is explicitly unsupported until the real provider exists. @param input - Actual Any or established scalar binding. @param member - Native member. @returns Success. */
+  /** Original int32 extraction followed by unsigned16 LanguageType construction. Locale conversion preserves unresolved SYSTEM and the native single-item cache. @param input - Actual Any or established scalar binding. @param member - Native member. @returns Success. */
   public override PutValue(input: unknown, member: number): boolean {
     switch (member & 0xff & ~0x80) {
       case MID_LANG_INT: {
@@ -66,8 +78,16 @@ export class SvxLanguageItem extends SfxEnumItem<LanguageType> {
         this.SetValue(LanguageType(value[0]));
         break;
       }
-      case MID_LANG_LOCALE:
-        return false;
+      case MID_LANG_LOCALE: {
+        const locale = new Locale();
+        try {
+          if (!(input instanceof Any) || !input.extract(locale, localeType)) return false;
+          this.SetValue(LanguageTag.convertToLanguageType(locale, false));
+        } finally {
+          locale.dispose();
+        }
+        break;
+      }
     }
     return true;
   }

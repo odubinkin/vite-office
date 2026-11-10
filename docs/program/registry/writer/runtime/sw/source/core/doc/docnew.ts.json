@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/docnew.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/docnew.ts",
+        "apps/office/src/sw/source/core/doc/docnew.native-lifecycle.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx"
+      ],
+      "justification": "S3HW1E HTML70 implements native lcl_DelFormatIndices and actual ordinary/special destructor-loop/table ownership fragments. Effective SwFormatContent optional index and SwFormatAnchor optional position are reset in place, content before anchor, with original pointer guards and no item-set replacement, section deletion or invented model notification. Inherited effective items are changed at their actual owner, as source const-casts do. The actual separately owned default is removed before special-format destruction, ordinary/special owning table destructors follow, and source second DeleteAndDestroyAll on the now-empty special table is preserved. This is a source fragment, not complete section-format/default/layout/node/document destruction. No dummy collection, substitute index/section/factory/undo/modified-state provider is supplied; broad semantic/default/contracts remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DelFormatIndices",
+        "ClearFrameFormatIndices",
+        "DestroyFrameFormatTables"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docnew.cxx",
+      "upstreamSymbols": [
+        "lcl_DelFormatIndices",
+        "SwDoc::~SwDoc"
+      ]
+    }
+  }
+}

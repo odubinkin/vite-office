@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.tablerowbuffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.tablerowbuffer.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::PushShapeContext",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#restoreTableRowProperties()",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#The scope of the table cell defaults is one row.",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx#case RTFKeyword::TRHDR:",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx#aBorderIds",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx#RTFBorderState::CELL"
+      ],
+      "justification": "Owns original stacked row buffering, nested row transfer, group reference repair and recursive sprm disposal in the represented RTF replay path. RTF102. Binds rows to the active text append context and releases actual shape and table properties recursively. RTF104. Restores saved row definitions, uses the running last-column maximum, and replays the original borderless width-after cell. RTF105. Restores native default cell resource properties at each CELLX and clears them on ROW. RTF107. Emits native row height, split and header properties and cell vertical alignment into original row snapshots. RTF110. Uses original cell resource snapshots for border definitions and the grid-after cell. RTF111. Uses the common border dispatcher while retaining the native table cell resource snapshots.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TableRowBuffer",
+        "DispatchTableControl",
+        "CollectTableRowSprms",
+        "CollectBlockSprms",
+        "AppendWidthAfterCell"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.hxx",
+      "upstreamSymbols": [
+        "TableRowBuffer"
+      ]
+    }
+  }
+}

@@ -3,6 +3,15 @@ import { BorderLineStyle } from "../../../offapi/com/sun/star/table/BorderLineSt
 import { BorderWidthImpl } from "../../../svtools/source/control/ctrlbox";
 import { Color, ColorTransparency } from "../../../tools/inc/color";
 export { BorderLineStyle as SvxBorderLineStyle };
+/** Original borderline.hxx named line widths, in twips. */
+export const SvxBorderLineWidth = {
+  Hairline: 1,
+  VeryThin: 10,
+  Thin: 15,
+  Medium: 30,
+  Thick: 45,
+  ExtraThick: 90,
+} as const;
 
 /** Rounds signed metrics as native BigInt::Scale(double), with ties away from zero. @param value - Metric. @param scale - Scale factor. @returns Rounded metric. */
 export function roundBorderMetric(value: number, scale: number): number {

@@ -208,6 +208,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -406,6 +410,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
           "marker": "SwNumFormat aFormat(rNumRule.Get("
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
+          "marker": "XML_TEXT_BOX"
         }
       ]
     },
@@ -441,7 +449,8 @@
       "Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved.",
       "Iteration221 restores the represented optional bullet Font family ODT path through actual Writer UNO/xmloff owners: nonempty CHAR_SPECIAL family uses existing font pool Find or direct quoted fo:font-family fallback without artificial font registration; import resolves existing declaration then applies nonempty direct-family override, publishes represented BulletFont descriptor and copy/applies/commits with native empty-Name ignore and malformed descriptor rejection. Common/automatic/body/cell/Worker/custom Chromium cases exercise the slice. Existing family handlers shared without a new font owner or cyclic export dependency. Native admitted tight-tab ruler drag consumes label click intentionally, no pointer-affinity patch. Full FontDescriptor style/family/pitch/charset/metrics and StarBats/StarMath glyph recoding remain unrepresented/unverified; all prior statuses/defaults/registered I/O/recovery deviations preserved.",
       "Task1KGJBF connects native Calc Bold/Italic/Underline slots through the actual shared Writer command controls to real script-specific weight/posture and underline items,selection state,attribute undo and cell painting. Shared xmloff weight/posture/underline/color handlers retain actual Any,source maps,failed conversion,merge order and consumed unit-converter contracts. Writer text filters now preserve native independent script scalars,font metadata and exact underline style/color instead of browser booleans;automatic-style keys include every represented field,and insertion fragments retain actual native items. Original Writer underline-color ContextFilter suppression is retained. Shared literal underline Worker transport preserves style and packed alpha/color using the real pool;unported complex interface state rejects rather than silently flattening. Native source full constructors,UNO property-set/service/factory graph,complex color XML/Worker transport,rich-text editing,script/device layout,named Calc styles and complete UI/filter parity remain unverified. Source-based managed tests are not a compiled native parity certificate;intentional browser primary-save/open/no-recovery policy remains. Bounded managed verification is recorded in task1KGJBF;no broad parity flags are promoted.",
-      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
+      "Dispatches draw:frame inline under the existing shared paragraph importer."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparai.cxx",

@@ -24,7 +24,15 @@
       "areaDefinition",
       "GetFrameId",
       "getFrameArea",
-      "getFramePrintArea"
+      "getFramePrintArea",
+      "CheckDir",
+      "CheckDirection",
+      "SetDirFlags",
+      "CheckDirChange",
+      "IsVertical",
+      "IsVertLR",
+      "IsVertLRBT",
+      "IsRightToLeft"
     ],
     "upstreamSymbols": [
       "SwFrame::SwFrame",
@@ -56,7 +64,8 @@
       "Resumed correction SV3P04 restores the represented SwRowFrame::OnFrameSize last-sibling containing-table position invalidation before forwarding the exact borrowed size/split item. FindTabFrame traverses original upper links, uses the native table type and destruction guard, and returns the nearest original table without a model or geometry map. Detached admission and uncached represented traversal are bounded; native environment-flag caching, persistent page/root/content geometry and table master/follow/flow-line families remain unrepresented and unverified. Non-last size notifications retain next-original-sibling invalidation and native generic row hint filtering remains unchanged. Seven fresh original hierarchy/destructor/order/filter/default preparation, real command/history and mounted last-row clipping cases plus related modules accept178unique scenarios:177initial passes and1new-only closure pass with4intentional passing skips, followed by178passes in one materially affected current-source revalidation after adapting the native self traversal to the declared no-this-alias lint rule. There are no runtime failures or unresolved skips; initial/closure coverage maps are retained as superseded and supply no current counters. Real Undo/Redo retargets original linked clients without inventing a size notification; node/cursor/table/row identities survive three cycles. Actual entire current-source wsfrm.ts/tabfrm.ts Istanbul274lines313statements70functions197branches is all-four100 with0negative counters from one complete current-source profile; no prior-task/V8 counters or normalization. Tests run physically upstream-absent with finally restoration. Raw superseded initial/closure partial-profile threshold exits and the resolved static lint failure stay retained in ignored cache; evidence is task202610091519-SV3P04. Old status/default/classification/responsibility/evidence prefixes and registered recovery/open/save/settings deviations are retained; no full module/goal parity promotion. Historical full XJTGF0 remains the baseline; correction5/10, next full after ten resumed executable corrections.",
       "Task202610101854-FSYVCZ restores original-node content-frame registration: SwTextFrame extends SwContentFrame/SwFrame, has the native Txt discriminator and obtains the represented unmerged first text node from its original modify owner. Actual frame clients remain mutable for native pooled attribute invalidation. Cursor measurement replacement, pagination reconciliation, discarded or failed partial pagination and per-view root close release original clients; geometry candidates are destroyed when original frames are reused. Required native-node inputs replace detached old fixture owners without changing cases, device inputs or expected matcher arguments. The browser still supplies fragment geometry and the root remains a per-view browser-owned layout object; complete native SwFlowFrame mixin/follow links, root/page/content hierarchy, redlines, text Prepare/callbacks, merged/vertical/native geometry and per-node frame-width guards remain unverified. Original global Repeat/rich units and registered recovery/open/save/settings deviations remain unchanged. No full module or goal parity promotion.",
       "Task202610101959-1ZNFNB restores source SwFrame mpRoot ownership and native optional original sibling constructor propagation through SwLayoutFrame/SwContentFrame/SwTextFrame. SwRootFrame is now an actual registered SwLayoutFrame with native Root type, original self root and an independent original Root SwFrameFormat derived from the document default. Production body pagination/master/follow and cursor measurements receive the actual original view root; retained native frames keep their original root. Root close releases its original derived format before base frame destruction and preserves the original document default; the existing browser document-shell replacement boundary rebinds the original format to the replacement document. SwView creates the native root after docShell binding instead of invoking a document callback during field initialization. Actual native owners, independent same-document roots, constructor null/actual sibling inputs, pagination/reuse/partial error/document replacement/close and mounted edit/history checks cover this correction. The Root format currently uses the original native SwFrameFormat constructor directly; full SwDoc MakeFrameFormat/DelFrameFormat registry/modified-state/creation-deletion Undo responsibilities remain unported. Full root/view flags, native page/body/content hierarchy, table-frame root propagation, GetFrameOfModify/GetAdjFrameAtPos/native geometry/merged/vertical/flow flags/redlines/text callbacks remain unverified; margin movement still uses the measured cursor map/MoveTextFrameMargin. Existing browser device/snapshot fields and registered recovery/open/save/settings deviations retained. Historical semantic statuses/defaults/classifications/source responsibilities/evidence unchanged, no whole-module or goal promotion.",
-      "Task202610111735-R760SH restores the original SwFrameAreaDefinition owner composed by every real SwFrame, replacing misplaced validity fields with native-owned zero-default absolute/relative SwRects, guarded flags and uint32 frame IDs. Point/Size template bases own by-value integer storage; SwRect retains inclusive integer edge access, signed center division, height-before-width SSize, and WRITER-006 zero-area containment. Nested write-access values write back on explicit Dispose in finally without replacing borrowed members or changing validity. Composition represents C++ multiple inheritance while preserving original SwClient registration identity. Actual root/text/table/row/cell owners and independent scope values are checked without executing upstream. Numeric support is limited to finite integers in the JavaScript exact range; full native tools/SwRect operators, transforms, invalidation consumers, geometry formatting/query integration and browser measured geometry remain unported. No broad semantic/default/whole-capability promotion; registered recovery/open/save deviations retained."
+      "Task202610111735-R760SH restores the original SwFrameAreaDefinition owner composed by every real SwFrame, replacing misplaced validity fields with native-owned zero-default absolute/relative SwRects, guarded flags and uint32 frame IDs. Point/Size template bases own by-value integer storage; SwRect retains inclusive integer edge access, signed center division, height-before-width SSize, and WRITER-006 zero-area containment. Nested write-access values write back on explicit Dispose in finally without replacing borrowed members or changing validity. Composition represents C++ multiple inheritance while preserving original SwClient registration identity. Actual root/text/table/row/cell owners and independent scope values are checked without executing upstream. Numeric support is limited to finite integers in the JavaScript exact range; full native tools/SwRect operators, transforms, invalidation consumers, geometry formatting/query integration and browser measured geometry remain unported. No broad semantic/default/whole-capability promotion; registered recovery/open/save deviations retained.",
+      "S3HW1E HTML73: Native lazy direction flags are owned by real layout frames. The represented frame hierarchy derives flags from actual upper frames. Physical fly anchors, cell predecessor derivation, header/footer and page-frame flags require their own owners."
     ],
     "omittedResponsibilities": [
       "Complete native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified."
@@ -158,6 +167,42 @@
         {
           "path": "apps/office/src/sw/source/core/inc/native-frame-area.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "CheckDir"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "CheckDirection"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "SetDirFlags"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "CheckDirChange"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "IsVertical"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "IsVertLR"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "IsVertLRBT"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/wsfrm.ts",
+          "marker": "IsRightToLeft"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -244,6 +289,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/inc/frame.hxx",
           "marker": "SwFrameAreaDefinition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/findfrm.cxx",
+          "marker": "SwFrame::SetDirFlags"
         }
       ]
     }

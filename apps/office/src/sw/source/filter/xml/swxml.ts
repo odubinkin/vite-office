@@ -66,7 +66,7 @@ export class SwXMLReader {
     const readText =
       /** Reads an unpacked Writer stream under the existing import limits. @param name - name. @param stage - stage. @returns Operation result. */ (
         name: string,
-        stage: OdtImportProgressStage,
+        stage?: OdtImportProgressStage,
       ) =>
         bytes instanceof Uint8Array
           ? readXmlEntry(packageFile, name, control, stage)
@@ -90,11 +90,13 @@ export class SwXMLReader {
       mimetype,
     );
     const manifest = packageMetadata.streamMediaTypes;
+    const settingsXml = names.includes("settings.xml") ? await readText("settings.xml") : undefined;
     const stylesXml = await optionalText("styles.xml", "styles");
     const contentXml = await optionalText("content.xml", "content");
     const metaXml = await optionalText("meta.xml", "metadata");
     checkpoint(control, "mapping");
     const imported = importWriterXml(stylesXml, contentXml, metadata, metaXml, {
+      ...(settingsXml === undefined ? {} : { settingsXml }),
       ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
       ...(control.defaultFontDevice === undefined
         ? {}
@@ -166,7 +168,7 @@ async function readXmlEntry(
   packageFile: Pick<ZipFile, "getEntryNames" | "readEntry" | "getEntryMethod">,
   name: string,
   control: OdtImportControl,
-  stage: OdtImportProgressStage,
+  stage?: OdtImportProgressStage,
 ): Promise<string> {
   checkpoint(control, stage);
   const bytes = await packageFile.readEntry(name);
@@ -176,10 +178,10 @@ async function readXmlEntry(
   return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
 }
 
-/** Emits progress then rejects cancelled work before another heavy stage. @param control - Cooperative controls. @param stage - Current stage. @returns Nothing. */
-function checkpoint(control: OdtImportControl, stage: OdtImportProgressStage): void {
+/** Emits progress then rejects cancelled work before another heavy stage. @param control - Cooperative controls. @param stage - Public stage when applicable. @returns Nothing. */
+function checkpoint(control: OdtImportControl, stage?: OdtImportProgressStage): void {
   if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
-  control.onProgress?.(stage);
+  if (stage !== undefined) control.onProgress?.(stage);
 }
 
 /** Reads browser XML text without archive, byte-copy or decode work. @param data - Stored XML. @param name - Stream. @param control - Limits. @param stage - Progress stage. @returns XML. */
@@ -187,7 +189,7 @@ function readStoredXml(
   data: XmlPackage,
   name: string,
   control: OdtImportControl,
-  stage: OdtImportProgressStage,
+  stage?: OdtImportProgressStage,
 ): string {
   checkpoint(control, stage);
   const xml = data.files[name];

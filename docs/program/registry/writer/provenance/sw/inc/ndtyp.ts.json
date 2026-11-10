@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/ndtyp.ts",
+          "marker": "SwStartNodeType"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-text-section.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/inc/ndtyp.hxx",
+          "marker": "enum SwStartNodeType"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/ndtyp.ts",
+    "localSymbols": [
+      "SwStartNodeType"
+    ],
+    "omittedResponsibilities": [
+      "Structural tags do not implement associated fly/header/footer/footnote/view services. Physical layout and whole-module/API/ABI parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML41: original typed structural start tags, SwNode FindStartNodeByType/FindTableBoxStartNode/FindTableNode and SwNodes MakeTextSection now operate on the actual node array and its existing parent/end/cursor identities. Positioned native text construction shares the existing SwTextNode/outline/model notification owner; the established body-text overload is retained. Table-box sections can be parked under a real non-table section before core box assignment, without fabricating a table or frame. Original HTMLTable GetPrevBoxStartNode uses prior-row spans, current-row candidates, origin fallback, actual content-chain tails and trailing nested-table recursion. Native TD/TH pool identities, one-shot tag then tag-P style cascade and terminal SetDelayedStyles preserve mutable margin merge, script-height percentage removal and page-break publication on actual document styles. Source WRITER321 completion-before-late-entry behavior is preserved. Import construction uses the represented no-view-layout profile. Native desktop physical frame creation and transparent sections are unrepresented. Actual table token/current-table production, box materialization, real text/table automatic layout and final current-model/filter/UI reconciliation remain required for the parent goal. No private parser state, native operation result, measurement device or alternate graph is fabricated, and whole module/API/ABI/desktop parity remains unverified. Browser file UI/autosave/recovery deviations are unchanged."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/ndtyp.hxx",
+    "upstreamSymbols": [
+      "SwStartNodeType"
+    ]
+  },
+  "legacyOrder": 142
+}

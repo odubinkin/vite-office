@@ -3,29 +3,14 @@ import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import {
-  SvxFirstLineIndentItem,
-  SvxIndentValue,
-  SvxRightMarginItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
-import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { SwFrameSize } from "../../../inc/fmtfsize";
-import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BREAK,
-  RES_BOX,
-  RES_PARATR_CONNECT_BORDER,
   RES_KEEP,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_RIGHT,
-  RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
@@ -39,8 +24,6 @@ import {
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { applyWriterParagraphList } from "../../core/doc/list";
-import { SwNumFormat } from "../../core/doc/number";
 import { SwpHints } from "../../core/txtnode/ndhints";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
@@ -53,45 +36,22 @@ import {
   type RtfParagraph,
   type RtfParagraphState,
 } from "./rtfdocumentimpl.context";
+import {
+  ExecuteFrameConversion,
+  type PendingParagraphFrame,
+} from "../dmapper/DomainMapper_Impl.frame";
+import { ResolveTextFrame } from "./rtfsdrimport";
 import { RtfSyntaxError } from "./rtftokenizer";
-import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
-
-/** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
-function paragraphBorderBox(
-  inherited: SvxBoxItem,
-  paragraph: RtfParagraphState,
-  colors: readonly string[],
-  previous?: SwTextNode,
-): SvxBoxItem | undefined {
-  let box: SvxBoxItem | undefined;
-  for (const [side, border] of paragraph.borders ?? []) {
-    let edge = side;
-    if (edge === "between") {
-      if (
-        previous === undefined ||
-        (previous.GetAttr(RES_PARATR_CONNECT_BORDER) as SfxBoolItem).GetValue()
-      )
-        continue;
-      const priorBox = (previous.GetAttr(RES_BOX) as SvxBoxItem).Clone();
-      priorBox.SetLine(undefined, SvxBoxItemLine.BOTTOM);
-      previous.SetAttr(priorBox);
-      edge = SvxBoxItemLine.TOP;
-    }
-    box ??= inherited.Clone();
-    box.SetLine(createRtfBorderLine(border, colors), edge);
-    box.SetDistance(getRtfBorderDistance(border), edge);
-  }
-  return box;
-}
+import { ConvertFloatingRtfTable } from "../dmapper/DomainMapperTableHandler";
+import { MaterializeRtfTable, type PendingRtfTableFrame } from "./rtfdocumentimpl.table";
 
 /** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result.  @param this - Original native owner shared by its implementation fragments. */
 export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwDoc {
   if (!this["sawHeader"]) throw new RtfSyntaxError("RTF version control is missing.");
   if (
-    this["runs"].length > 0 ||
-    (this["blocks"].length === 0 && this["tableRows"].length === 0) ||
-    !this["terminatedParagraph"] ||
-    (this["pendingPageBreak"] && this["tableRows"].length === 0)
+    this["m_aTextBuffer"].HasParagraphContent() ||
+    (this["m_aTextBuffer"].blocks.length === 0 && this["m_aTextBuffer"].tableRows.length === 0) ||
+    !this["m_aTextBuffer"].terminatedParagraph
   )
     this["CommitParagraph"]();
   this["FlushTable"]();
@@ -99,14 +59,18 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   const model = new SwXTextDocument(document),
     mapper = new DomainMapper(model, SourceDocumentType.RTF);
   this["m_pMapperStream"] = mapper;
+  const pendingTableFrames: PendingRtfTableFrame[] = [];
+  const pendingParagraphFrames: PendingParagraphFrame[] = [];
   let complete = false;
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
     nativeStyles = deduplicateRtfStyleTable(this["m_pStyleTableEntries"]);
-    const defaultPage = { ...document.GetPageDesc().GetValue(), ...this["defaultSectionPage"] };
-    document.ChgPageDesc({ ...defaultPage, ...this["sectionPages"][0] });
-    // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
-    document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
+    const settings = this["m_pSettingsTable"].get();
+    if (settings) mapper.table(N.LN_settings_settings, settings);
+    const sectionStyles = new Map<
+      number,
+      { name: string; numOffset?: number; continuous: boolean }
+    >();
     const defaultTabs = (
       document.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem
     ).Clone();
@@ -247,155 +211,119 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         appliedStyles.add(slot);
       }
     }
+    PrepareListNumbering.call(this);
+    for (const [id, section] of this["m_aSectionSprms"]) {
+      sectionStyles.set(id, ApplyRtfSectionProperties(mapper, section));
+    }
     let firstParagraph = true;
-    const sectionStyles = new Map<number, string>();
-    for (const block of this["blocks"]) {
-      let sectionStyle = sectionStyles.get(block.section);
-      const startsSection = block.section > 0 && sectionStyle === undefined;
-      if (block.section > 0 && sectionStyle === undefined) {
-        // This fresh document receives one generated page descriptor per unique parsed section ID.
-        sectionStyle = `Converted${block.section}`;
-        const page = document.MakePageDesc(sectionStyle);
-        document.ChgPageDesc(
-          { ...defaultPage, ...this["sectionPages"][block.section], name: sectionStyle },
-          sectionStyle,
-        );
-        sectionStyles.set(block.section, page.GetName());
-      }
+    const startedSections = new Set<number>();
+    for (const block of this["m_aTextBuffer"].blocks) {
+      const sectionStyle = sectionStyles.get(block.section);
+      const startsSection = !startedSections.has(block.section);
+      startedSections.add(block.section);
       if (block.kind === "paragraph") {
         // A fresh SwDoc owns its initial text node; later nodes are returned by the native constructor.
         const node = firstParagraph
           ? (document.paragraphs[0] as SwTextNode)
           : document.nodes.MakeTextNode();
-        this["ApplyParagraph"](node, block.paragraph);
-        if (startsSection && sectionStyle !== undefined)
+        const properties = this["ApplyParagraph"](node, block.paragraph);
+        if (properties) pendingParagraphFrames.push({ node, properties });
+        if (
+          startsSection &&
+          sectionStyle !== undefined &&
+          (sectionStyle.continuous
+            ? block.section === 0
+            : block.section > 0 ||
+              sectionStyle.name !== "Standard" ||
+              sectionStyle.numOffset !== undefined)
+        )
           node.SetAttr(
             new SwFormatPageDesc(
-              sectionStyle,
-              this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
+              sectionStyle.name,
+              sectionStyle.continuous ? undefined : sectionStyle.numOffset,
             ),
           );
         firstParagraph = false;
       } else {
         const table = firstParagraph
-          ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
+          ? document.nodes.MakeTableNodeBefore(
+              document.paragraphs[0] as SwTextNode,
+              "RTF Table",
+              {},
+            )
           : document.nodes.MakeTableNode("RTF Table");
-        if (startsSection && sectionStyle !== undefined)
+        if (
+          startsSection &&
+          sectionStyle !== undefined &&
+          (sectionStyle.continuous
+            ? block.section === 0
+            : block.section > 0 ||
+              sectionStyle.name !== "Standard" ||
+              sectionStyle.numOffset !== undefined)
+        )
           table
             .GetFrameFormat()
             .SetFormatAttr(
               new SwFormatPageDesc(
-                sectionStyle,
-                this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
+                sectionStyle.name,
+                sectionStyle.continuous ? undefined : sectionStyle.numOffset,
               ),
             );
         if (block.pageBreakBefore)
           table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
-        const firstRow = block.rows[0];
-        if (firstRow !== undefined) {
-          const format = table.GetFrameFormat();
-          const orient = format.GetHoriOrient().Clone();
-          orient.SetHoriOrient(
-            firstRow.alignment === "center"
-              ? HoriOrientation.CENTER
-              : firstRow.alignment === "right"
-                ? HoriOrientation.RIGHT
-                : firstRow.left !== 0
-                  ? HoriOrientation.NONE
-                  : HoriOrientation.LEFT,
-          );
-          format.SetFormatAttr(orient);
-          if (firstRow.left !== 0) {
-            const lr = format.GetLRSpace().Clone();
-            lr.SetLeft(SvxIndentValue.twips(firstRow.left));
-            format.SetFormatAttr(lr);
-          }
-          if (firstRow.defaultPaddings.size > 0) {
-            const item = format.GetBox().Clone();
-            for (const [edge, value] of firstRow.defaultPaddings) item.SetDistance(value, edge);
-            format.SetFormatAttr(item);
-          }
-        }
-        const rightEdge = block.rows.reduce(
-          /** Computes the maximum result. @param maximum - Maximum. @param row - Row. @returns The computed result. */ (
-            maximum,
-            row,
-          ) => Math.max(maximum, (row.boundaries.at(-1) ?? 0) - row.left),
-          0,
-        );
-        if (rightEdge > 0) {
-          const size = table.GetFrameFormat().GetFrameSize().Clone();
-          size.SetWidth(rightEdge);
-          table.GetFrameFormat().SetFormatAttr(size);
-        }
-        for (const row of block.rows) {
-          const line = document.nodes.AppendTableRow(table, row.cells.length);
-          if (row.height !== 0) {
-            const size = line.GetFrameFormat().GetFrameSize().Clone();
-            size.SetHeight(Math.abs(row.height));
-            size.SetHeightSizeType(row.height < 0 ? SwFrameSize.Fixed : SwFrameSize.Minimum);
-            line.GetFrameFormat().SetFormatAttr(size);
-          }
-          if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
-          for (const [index, cell] of row.cells.entries()) {
-            // AppendTableRow created exactly row.cells.length boxes before this bounded iteration.
-            const box = line.GetTabBoxes()[index] as ReturnType<typeof line.GetTabBoxes>[number];
-            const vertical = row.verticals[index];
-            if (vertical !== undefined) {
-              const item = box.GetVertOrient();
-              item.SetVertOrient(vertical);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const borders = row.borders[index];
-            if (borders !== undefined && borders.size > 0) {
-              const item = box.GetBox();
-              for (const [edge, border] of borders)
-                item.SetLine(createRtfBorderLine(border, this["colors"]), edge);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const paddings = row.paddings[index];
-            if (row.defaultPaddings.size > 0 || (paddings !== undefined && paddings.size > 0)) {
-              const item = box.GetBox();
-              for (const [edge, value] of row.defaultPaddings) item.SetDistance(value, edge);
-              for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
-              box.ClaimFrameFormat().SetFormatAttr(item);
-            }
-            const right = row.boundaries[index];
-            const left = index === 0 ? row.left : row.boundaries[index - 1];
-            if (right !== undefined && left !== undefined && right > left) {
-              const size = box.GetFrameSize();
-              size.SetWidth(right - left);
-              box.SetFrameSize(size);
-            }
-            for (const [paragraphIndex, paragraph] of cell.entries()) {
-              const node =
-                paragraphIndex === 0
-                  ? (box.GetParagraphs()[0] as SwTextNode)
-                  : document.nodes.AppendTableCellParagraph(box);
-              this["ApplyParagraph"](node, paragraph);
-            }
-          }
-        }
-        let repeatedRows = 0;
-        for (const row of block.rows) {
-          if (!row.header) break;
-          if (repeatedRows === 10) {
-            repeatedRows = 0;
-            break;
-          }
-          repeatedRows++;
-        }
-        table.SetRowsToRepeat(repeatedRows);
+        MaterializeRtfTable.call(this, document, table, block.rows, pendingTableFrames);
       }
     }
+    for (const pending of pendingTableFrames)
+      ConvertFloatingRtfTable(pending.table, pending.position, pending.horizontalShift);
+    ExecuteFrameConversion(pendingParagraphFrames);
     complete = true;
     return document;
   } finally {
+    for (const pending of pendingTableFrames) pending.position.dispose();
     for (const pointer of nativeStyles?.values() ?? []) pointer.clear();
     this["m_pMapperStream"] = undefined;
     mapper.dispose();
     model.dispose();
     if (!complete) document.Dispose();
+  }
+}
+
+/** Replays the original shape text append context into its own Writer fly section. @param this - Original reader. @param owner - Body or cell paragraph that holds the native anchor. @param paragraph - Original paragraph with shape events. @returns Nothing. */
+function MaterializeTextFrames(
+  this: RtfDocumentImplContext,
+  owner: SwTextNode,
+  paragraph: RtfParagraph,
+): void {
+  const document = owner.GetDoc();
+  for (const { shape, offset } of paragraph.frames ?? []) {
+    const frame = ResolveTextFrame(shape, owner, offset);
+    const start = frame.GetContent().GetContentIdx()?.GetNode();
+    if (!start?.IsStartNode()) throw new Error("assert(RTF text frame section)");
+    const first = document.nodes.at(start.GetIndex() + 1).GetTextNode();
+    if (!first) throw new Error("assert(RTF text frame initial paragraph)");
+    const end = start.EndOfSectionNode();
+    let available: SwTextNode | undefined = first;
+    const pending: PendingParagraphFrame[] = [];
+    for (const block of shape.blocks ?? []) {
+      if (block.kind === "paragraph") {
+        const node =
+          available ?? document.nodes.MakeTextNode(end, document.GetDfltTextFormatColl());
+        const properties = this["ApplyParagraph"](node, block.paragraph);
+        if (properties) pending.push({ node, properties });
+        available = undefined;
+      } else {
+        const table = document.nodes.MakeTableNodeBefore(
+          available ?? end,
+          document.GetUniqueTableName(),
+          {},
+        );
+        MaterializeRtfTable.call(this, document, table, block.rows, undefined);
+      }
+    }
+    if (available && available.GetIndex() > start.GetIndex() + 1)
+      document.nodes.RemoveNode(available.GetIndex(), 1, true);
+    ExecuteFrameConversion(pending);
   }
 }
 
@@ -427,20 +355,6 @@ export function ApplyStyleDefinition(
     if (paragraph.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
     collection.SetFormatAttr(adjust);
   }
-  // createStyleProperties removes zero indents only when no basedOn exists.
-  const hasBase = definition.basedOnStyleIndex !== undefined;
-  if ((controls.has("li") || controls.has("lin")) && (hasBase || paragraph.left !== 0))
-    collection.SetFormatAttr(
-      new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
-    );
-  if ((controls.has("ri") || controls.has("rin")) && (hasBase || paragraph.right !== 0))
-    collection.SetFormatAttr(
-      new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
-    );
-  if ((controls.has("fi") || controls.has("li")) && (hasBase || paragraph.firstLine !== 0))
-    collection.SetFormatAttr(
-      new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
-    );
   if (controls.has("sb") || controls.has("sa") || controls.has("contextualspace")) {
     const spacing = (collection.GetAttrSet().Get(RES_UL_SPACE) as SvxULSpaceItem).Clone();
     if (controls.has("sb")) spacing.SetUpper(paragraph.before);
@@ -457,38 +371,20 @@ export function ApplyStyleDefinition(
   if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
   if (controls.has("sl") || controls.has("slmult"))
     collection.SetFormatAttr(createRtfLineSpacing(paragraph));
-  const borders = paragraphBorderBox(
-    collection.GetAttrSet().Get(RES_BOX) as SvxBoxItem,
-    paragraph,
-    this["colors"],
-  );
-  if (borders !== undefined) collection.SetFormatAttr(borders);
-  if (paragraph.borders?.has("between"))
-    collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
 }
 
-/** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
+/** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. @returns Deferred frame properties when present.  @param this - Original native owner shared by its implementation fragments. */
 export function ApplyParagraph(
   this: RtfDocumentImplContext,
   node: SwTextNode,
   paragraph: RtfParagraph,
-): void {
+): ReturnType<typeof ApplyRtfParagraphProperties> {
   const style =
     paragraph.state.styleIndex === undefined
       ? undefined
       : this["importedStyles"].get(paragraph.state.styleIndex);
   if (style !== undefined) node.ChgFormatColl(style);
-  const section = node.StartOfSectionNode();
-  const borders = paragraphBorderBox(
-    node.GetAttr(RES_BOX) as SvxBoxItem,
-    paragraph.state,
-    this["colors"],
-    this["previousParagraphs"].get(section),
-  );
-  if (borders !== undefined) node.SetAttr(borders);
-  if (paragraph.state.borders?.has("between"))
-    node.SetAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
-  this["previousParagraphs"].set(section, node);
+  let frame: ReturnType<typeof ApplyRtfParagraphProperties>;
   const propertyPointers: ReferencePointer<Properties>[] = [];
   try {
     const runs = paragraph.runs.map(
@@ -517,6 +413,8 @@ export function ApplyParagraph(
         )
         .join(""),
     );
+    if (paragraph.paragraphSprms)
+      frame = ApplyRtfParagraphProperties(this["Mapper"](), node, paragraph.paragraphSprms);
     const hints = new SwpHints(node.GetDoc().GetAttrPool());
     let offset = 0;
     for (const run of runs) {
@@ -542,6 +440,13 @@ export function ApplyParagraph(
       if (nativeOffset > start)
         ApplyRtfCharacterProperties(this["Mapper"](), node, start, nativeOffset, run.properties);
     }
+    if (paragraph.marker)
+      ApplyRtfParagraphMarker(
+        this["Mapper"](),
+        node,
+        paragraph.marker,
+        this["m_pStyleTableEntries"],
+      );
   } finally {
     for (const pointer of propertyPointers) pointer.clear();
   }
@@ -552,9 +457,6 @@ export function ApplyParagraph(
     if (paragraph.state.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
     node.SetAttr(adjust);
   }
-  if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
-  if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
-  if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
   if (paragraph.state.beforeSet || paragraph.state.afterSet || paragraph.state.contextualSet) {
     const spacing = (node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).Clone();
     if (paragraph.state.beforeSet) spacing.SetUpper(paragraph.state.before);
@@ -572,31 +474,8 @@ export function ApplyParagraph(
   if (paragraph.state.pageBreakBeforeSet)
     node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
   if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
-  const override = paragraph.state.listOverride;
-  if (override !== undefined) {
-    const sourceList = this["listOverrides"].get(override),
-      format =
-        sourceList === undefined
-          ? undefined
-          : this["listFormats"].get(sourceList)?.[paragraph.state.listLevel];
-    if (format !== undefined) {
-      applyWriterParagraphList(node, {
-        kind: format.kind,
-        level: paragraph.state.listLevel,
-        listId: `RTF-list-${override}`,
-      });
-      const rule = node.GetNumRule();
-      if (rule !== undefined) {
-        const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
-        native.SetNumberingType(format.numberingType);
-        native.SetStart(format.start);
-        if (format.kind === "bullet" && format.bullet !== undefined)
-          native.SetBulletChar(format.bullet);
-        rule.Set(paragraph.state.listLevel, native);
-        node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
-      }
-    }
-  }
+  MaterializeTextFrames.call(this, node, paragraph);
+  return frame;
 }
 
 import type { SwCharFormat } from "../../../inc/charfmt";
@@ -605,6 +484,8 @@ import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import {
   getRtfCharacterProperties,
   ApplyRtfCharacterProperties,
+  ApplyRtfParagraphProperties,
+  ApplyRtfParagraphMarker,
 } from "./rtfdocumentimpl.character";
 
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -621,3 +502,9 @@ import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+import { PrepareListNumbering } from "./rtfdocumentimpl.numbering";
+
+import { ApplyRtfSectionProperties } from "./rtfdocumentimpl.section";
+
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";

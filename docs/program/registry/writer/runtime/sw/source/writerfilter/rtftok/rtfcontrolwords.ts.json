@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfcontrolwords.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx"
+      ],
+      "justification": "Exact pinned RTFKeyword numeric declaration data, including invalid=-1 and all 1814 source enum entries, shared with the literal 1823-row native tokenizer table. No parser grammar is replaced. Every enum value, spelling, dispatch kind and default is independently compared with unchanged pinned source; full tokenizer and reader semantics remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RTFKeyword"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
+      "upstreamSymbols": [
+        "RTFKeyword"
+      ]
+    }
+  }
+}

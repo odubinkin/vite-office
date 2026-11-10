@@ -1,0 +1,118 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-41e22378-32c9-45d6-9fdc-ea961184de42",
+    "capabilityId": "CAP-41e22378-32c9-45d6-9fdc-ea961184de42",
+    "suite": "shared",
+    "subsystem": "language-tag-normal-value-registry",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
+    },
+    "capability": "Normal shared LanguageTag value and semantic registry",
+    "gaps": [
+      "Strict raw100,Chromium/Worker and final task verification pending.",
+      "POSIX/glibc,full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS remain outside this implementation."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag::registerImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/qa/cppunit/test_languagetag.cxx",
+          "marker": "testAllTags"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
+          "marker": "class"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/i18nlangtag/inc/languagetag.ts",
+          "marker": "LanguageTag"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+          "marker": "LanguageTag"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
+          "marker": "LanguageTagImpl"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
+          "marker": "canonicalize"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+          "marker": "registerImpl"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
+          "marker": "createValueState"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
+          "marker": "getIsoFallbackStrings"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
+          "marker": "convertToLocale"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+          "marker": "replays native normal LanguageTag QA"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
+          "marker": "preserves finite native on-the-fly"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.language.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-native-text-filter-slice.md",
+          "marker": "Connected native HTML LANG"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "normal-language-tag-value-canonicalization-id-registry",
+    "scopeLimitations": [
+      "Source-derived managed tests;no executed native oracle,no binary or physical ownership parity."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "S3HW1E connects the actual LanguageTag string/Locale/numeric value, lazy canonicalization, ISO/non-ISO fallback and semantic tag/ID registries required by SwHTMLParser::ParseStyleOptions LANG. Reuses the existing normal liblangtag parser, MsLangId, Locale and OUString owners. Source initialization order, alias remapping, finite IDs and first-wins behavior are retained, including WRITER250. Reuses reviewed source responsibilities from the deferred task197 snapshot without changing that task or its Calc milestone. Native physical ownership is bound to JS GC and semantic registries to Map/Set. Source-derived managed tests and current Writer integration are evidence for this caller; full library, native ABI and compiled desktop parity remain unverified."
+    }
+  }
+}

@@ -24,8 +24,14 @@ import {
   FontLineStyle as L,
   FontStrikeout as S,
 } from "../../../../tools/inc/fontenum";
-import { SvxCaseMap as C, SvxAdjust as A } from "../../../../editeng/inc/svxenum";
+import { SvxCaseMap as C, SvxAdjust as A, SvxNumType as N } from "../../../../editeng/inc/svxenum";
 import { ParseCSS1ParagraphProperty } from "./svxcss1.paragraph";
+import { ParseCSS1BorderProperty } from "./svxcss1.border";
+import { ParseCSS1PaginationProperty } from "./svxcss1.pagination";
+import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
+import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { Color } from "../../../../tools/inc/color";
 /** Original ASCII case folding; no Unicode/browser normalization is added. @param value - Native string. @returns Folded string. */
 export function cssAsciiLower(value: string): string {
@@ -167,8 +173,36 @@ export function ParseCSS1Property(
 ): void {
   const type = expression.GetType(),
     value = cssAsciiLower(expression.GetString());
+  if (ParseCSS1PaginationProperty(cssAsciiLower(property), expression, set, info)) return;
+  if (ParseCSS1BorderProperty(cssAsciiLower(property), expression, info)) return;
   if (ParseCSS1ParagraphProperty(cssAsciiLower(property), expression, set, info)) return;
   switch (cssAsciiLower(property)) {
+    case "list-style-type": {
+      if (type !== T.IDENT) return;
+      const number = new Map<string, N>([
+        ["decimal", N.SVX_NUM_ARABIC],
+        ["lower-alpha", N.SVX_NUM_CHARS_LOWER_LETTER],
+        ["lower-latin", N.SVX_NUM_CHARS_LOWER_LETTER],
+        ["lower-roman", N.SVX_NUM_ROMAN_LOWER],
+        ["upper-alpha", N.SVX_NUM_CHARS_UPPER_LETTER],
+        ["upper-latin", N.SVX_NUM_CHARS_UPPER_LETTER],
+        ["upper-roman", N.SVX_NUM_ROMAN_UPPER],
+      ]).get(value);
+      if (number !== undefined) {
+        info.m_bNumbering = true;
+        info.m_nNumberingType = number;
+      }
+      const bullet = new Map([
+        ["circle", 0xe009],
+        ["disc", 0xe008],
+        ["square", 0xe00b],
+      ]).get(value);
+      if (bullet !== undefined) {
+        info.m_bBullet = true;
+        info.m_cBulletChar = bullet;
+      }
+      break;
+    }
     case "font-family":
       fontFamily(expression, set, parser);
       break;
@@ -363,6 +397,19 @@ export function ParseCSS1Property(
       ]).get(value);
       if ((type === T.IDENT || type === T.STRING) && adjust !== undefined)
         put(set, new SvxAdjustItem(adjust, aItemIds.nAdjust));
+      break;
+    }
+    case "so-language": {
+      if (type !== T.IDENT && type !== T.STRING) break;
+      const language = LanguageTag.convertToLanguageTypeWithFallback(
+        unicode(expression.GetString()),
+      );
+      if (language !== LANGUAGE_DONTKNOW)
+        scripts(set, new SvxLanguageItem(language, aItemIds.nLanguage), [
+          aItemIds.nLanguage,
+          aItemIds.nLanguageCJK,
+          aItemIds.nLanguageCTL,
+        ]);
       break;
     }
     case "white-space":

@@ -9,14 +9,7 @@ import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import {
-  RES_CHRATR_WEIGHT,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_UNDERLINE,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_COLOR,
-} from "../../../inc/hintids";
+import { RES_CHRATR_UNDERLINE, RES_CHRATR_COLOR } from "../../../inc/hintids";
 /** Represented native underline token conversion shared with the actual mapper's admitted families. */
 const underline = new Map<number, number>([
   [L.LINESTYLE_NONE, N.LN_Value_ST_Underline_none],
@@ -37,8 +30,8 @@ const underline = new Map<number, number>([
   [L.LINESTYLE_BOLDWAVE, N.LN_Value_ST_Underline_wavyHeavy],
   [L.LINESTYLE_DOUBLEWAVE, N.LN_Value_ST_Underline_wavyDouble],
 ]);
-/** Copies a real host UTF16 boundary value into the native string constructor. @param value - Character value. @returns Unacquired value pointer. */
-export function stringValue(value: string): RTFValue {
+/** Copies a real host UTF16 boundary value into the native string constructor. @param value - Character value. @param forceString - Original RTFValue force-string selector. @returns Unacquired value pointer. */
+export function stringValue(value: string, forceString = false): RTFValue {
   const text = new OUString(
     Uint16Array.from(
       value.split(""),
@@ -48,7 +41,7 @@ export function stringValue(value: string): RTFValue {
     value.length,
   );
   try {
-    return new RTFValue(text);
+    return new RTFValue(text, forceString);
   } finally {
     text.dispose();
   }
@@ -60,17 +53,6 @@ function characterProperties(
   has: (which: number) => boolean,
   underlineColorSet = false,
 ): void {
-  if (has(RES_CHRATR_WEIGHT)) target.set(N.LN_EG_RPrBase_b, new RTFValue(Number(values.bold)));
-  if (has(RES_CHRATR_POSTURE)) target.set(N.LN_EG_RPrBase_i, new RTFValue(Number(values.italic)));
-  if (has(RES_CHRATR_FONTSIZE) && values.fontSizeTwips !== undefined)
-    target.set(N.LN_EG_RPrBase_sz, new RTFValue(values.fontSizeTwips / 10));
-  if (has(RES_CHRATR_FONT) && values.fontFamily !== undefined)
-    putNestedAttribute(
-      target,
-      N.LN_EG_RPrBase_rFonts,
-      N.LN_CT_Fonts_ascii,
-      stringValue(values.fontFamily),
-    );
   if (has(RES_CHRATR_COLOR))
     putNestedAttribute(
       target,
@@ -173,16 +155,8 @@ function writeRtfCharacterProperties(
       which,
     ) => {
       switch (which) {
-        case RES_CHRATR_WEIGHT:
-          return controls.has("b");
-        case RES_CHRATR_POSTURE:
-          return controls.has("i");
         case RES_CHRATR_UNDERLINE:
           return hasRtfUnderlineControl(controls);
-        case RES_CHRATR_FONT:
-          return controls.has("f");
-        case RES_CHRATR_FONTSIZE:
-          return controls.has("fs");
         case RES_CHRATR_COLOR:
           return controls.has("cf");
         default:
@@ -194,15 +168,17 @@ function writeRtfCharacterProperties(
   if (autoKerning !== undefined)
     target.set(N.LN_EG_RPrBase_kern, new RTFValue(Number(autoKerning)));
 }
-/** Native admitted character-reference part of createStyleProperties. Remaining paragraph property families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @param characterSprms - Original group-scoped native character modifiers. @returns Owned source table entry. */
+/** Native character and migrated paragraph-reference parts of createStyleProperties. Other paragraph families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @param characterSprms - Original group-scoped native character modifiers. @param paragraphSprms - Optional original group paragraph modifiers. @returns Owned source table entry. */
 export function createRtfStyleProperties(
   definition: RtfStyleDefinition,
   characterSprms: RTFSprms,
+  paragraphSprms?: RTFSprms,
 ): ReferencePointer<Properties> {
   const attrs = new RTFSprms(),
     sprms = new RTFSprms(),
     characters = new RTFSprms(),
-    empty = new RTFSprms();
+    empty = new RTFSprms(),
+    paragraphs = new RTFSprms(paragraphSprms);
   try {
     attrs.set(
       N.LN_CT_Style_type,
@@ -226,11 +202,30 @@ export function createRtfStyleProperties(
     );
     for (const [id, value] of characterSprms) characters.set(id, value);
     sprms.set(N.LN_CT_Style_rPr, new RTFValue(empty, characters));
+    if (definition.basedOnStyleName === undefined) {
+      for (const id of [
+        N.LN_CT_Ind_firstLine,
+        N.LN_CT_Ind_left,
+        N.LN_CT_Ind_right,
+        N.LN_CT_Ind_start,
+        N.LN_CT_Ind_end,
+      ]) {
+        const value = getNestedAttribute(paragraphs, N.LN_CT_PPrBase_ind, id);
+        try {
+          if (value.is() && value.operatorDereference().getInt() === 0)
+            eraseNestedAttribute(paragraphs, N.LN_CT_PPrBase_ind, id);
+        } finally {
+          value.clear();
+        }
+      }
+    }
+    sprms.set(N.LN_CT_Style_pPr, new RTFValue(empty, paragraphs));
     return new ReferencePointer(new RTFReferenceProperties(attrs, sprms));
   } finally {
     attrs.dispose();
     sprms.dispose();
     characters.dispose();
+    paragraphs.dispose();
     empty.dispose();
   }
 }
@@ -461,6 +456,20 @@ export function ApplyRtfCharacterStyleProperties(
       const name = textValue(value.Name);
       if (name !== "ParaStyleName" && name !== "CharStyleName") sorted.Insert(value);
     }
+    const outline = entry.m_pProperties.GetOutlineLevel();
+    if (entry.m_nStyleTypeCode === StyleType.Paragraph && outline !== -1) {
+      const name = unicode("OutlineLevel"),
+        value = new Any([outline === 9 ? 0 : outline + 1], "sal_Int16"),
+        property = new PropertyValue(name, 0, value, 0);
+      try {
+        sorted.Insert(property);
+      } finally {
+        property.Name.dispose();
+        property.Value.dispose();
+        name.dispose();
+        value.dispose();
+      }
+    }
     const names = sorted.getNames(),
       values = sorted.getValues();
     try {
@@ -504,3 +513,112 @@ import { ContextType } from "../dmapper/DomainMapper_Impl";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+
+/** Resolves the paragraph properties previously emitted by native checkNeedPap. Actual UNO setters retain full-paragraph character attributes on the node, including empty paragraphs. @param mapper - Native mapper. @param node - Current paragraph. @param sprms - Original emitted paragraph sprms. @returns Retained frame properties when present. */
+export function ApplyRtfParagraphProperties(
+  mapper: DomainMapper,
+  node: SwTextNode,
+  sprms: RTFSprms,
+): ReturnType<typeof MakeFrameProperties> | undefined {
+  const attributes = new RTFSprms(),
+    properties = new ReferencePointer<Properties>(new RTFReferenceProperties(attributes, sprms));
+  attributes.dispose();
+  const point = new SwPosition(node, 0),
+    mark = new SwPosition(node, node.Len()),
+    range = new SwPaM(point, mark);
+  point.Dispose();
+  mark.Dispose();
+  mapper.startParagraphGroup();
+  try {
+    const style = node.GetTextFormatColl();
+    mapper.impl.SetRtfParagraphNode(node);
+    mapper.impl.SetCurrentParaStyleName(
+      SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
+    );
+    mapper.props(properties);
+    const context = mapper.impl.GetTopContext();
+    if (!(context instanceof ParagraphPropertyMap)) throw new Error("assert(ParagraphPropertyMap)");
+    const numbering = mapper.impl.PrepareParagraphNumbering(context);
+    SetPropertyValues(
+      range,
+      context
+        .GetPropertyValues()
+        .filter(
+          /** The actual style is already selected by this atomic import boundary. @param property - Native property. @returns Direct property admission. */ (
+            property,
+          ) => textValue(property.Name) !== "ParaStyleName",
+        ),
+    );
+    const paragraph = new SwXParagraph(node, mapper.model.getText());
+    try {
+      mapper.impl.FinishParagraphNumbering(paragraph, context, numbering);
+    } finally {
+      paragraph.Release();
+    }
+    return context.props().IsFrameMode() ? MakeFrameProperties(context.props()) : undefined;
+  } finally {
+    mapper.endParagraphGroup();
+    range.Dispose();
+    properties.clear();
+  }
+}
+
+/** Original PAR calls runProps in paragraph context before the break; apply marker properties at EOF plus the native ListAutoFormat owner without changing visible text ranges. @param mapper - Native mapper. @param node - Actual paragraph. @param marker - Original runProps input. @param table - Raw native style table. @returns Nothing. */
+export function ApplyRtfParagraphMarker(
+  mapper: DomainMapper,
+  node: SwTextNode,
+  marker: RtfRun,
+  table: Map<number, ReferencePointer<Properties>>,
+): void {
+  const properties = getRtfCharacterProperties(marker, table),
+    point = new SwPosition(node, node.Len()),
+    range = new SwPaM(point);
+  point.Dispose();
+  mapper.startParagraphGroup();
+  try {
+    const context = mapper.impl.GetTopContext();
+    if (!(context instanceof ParagraphPropertyMap)) throw new Error("assert(ParagraphPropertyMap)");
+    const style = node.GetTextFormatColl();
+    const name = SwStyleNameMapper.GetProgName(style.poolId, style.GetName()),
+      value = stringAny(name);
+    try {
+      context.Insert(P.PROP_PARA_STYLE_NAME, value);
+    } finally {
+      value.dispose();
+    }
+    mapper.impl.SetCurrentParaStyleName(name);
+    mapper.props(properties);
+    mapper.impl.processDeferredCharacterProperties(false);
+    const values = mapper.impl.GetParagraphPropertyValues(context);
+    try {
+      SetPropertyValues(
+        range,
+        values.filter(
+          /** Paragraph/named styles are already owned by the atomic importer. @param value - Actual value. @returns Direct marker admission. */ (
+            value,
+          ) => !["ParaStyleName", "CharStyleName"].includes(textValue(value.Name)),
+        ),
+        SetAttrMode.NOFORMATATTR,
+      );
+    } finally {
+      for (const value of values) {
+        value.Value.dispose();
+        value.Name.dispose();
+      }
+    }
+  } finally {
+    mapper.endParagraphGroup();
+    range.Dispose();
+    properties.clear();
+  }
+}
+
+import { getNestedAttribute, eraseNestedAttribute } from "./rtfdocumentimpl.properties";
+import { unicode, stringAny } from "../../core/unocore/unocrsrhelper";
+import { PropertyIds as P } from "../dmapper/PropertyIds";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+
+import { MakeFrameProperties } from "../dmapper/DomainMapper_Impl.frame";
+import { ParagraphPropertyMap } from "../dmapper/PropertyMap";
+import { SwXParagraph } from "../../core/unocore/unoparagraph";

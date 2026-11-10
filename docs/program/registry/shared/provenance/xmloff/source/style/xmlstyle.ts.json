@@ -84,6 +84,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -162,6 +166,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
           "marker": "XML_FILL_COLOR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "CTF_HORIZONTALREL"
         }
       ]
     },
@@ -184,7 +192,8 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified.",
       "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
-      "S3HW1E imports represented paragraph FillStyle/FillColor/FillTransparence fields through native exact enum/color/NEG_PERCENT16 behavior, retaining failure omission."
+      "S3HW1E imports represented paragraph FillStyle/FillColor/FillTransparence fields through native exact enum/color/NEG_PERCENT16 behavior, retaining failure omission.",
+      "Dispatches the native graphic family properties used by a Writer text frame."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/style/xmlstyle.cxx",

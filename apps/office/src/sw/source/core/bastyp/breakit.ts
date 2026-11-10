@@ -1,9 +1,11 @@
-/** @fileoverview Native SwBreakIt script queries from breakit.cxx over pinned ICU and BreakIteratorImpl. Locale/word/grapheme services remain separate unported responsibilities. */
+/** @fileoverview Native SwBreakIt script queries from breakit.cxx over pinned ICU and BreakIteratorImpl. Native language tags supply locales for the represented dictionary word path. */
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { u_charType } from "../../../../external/icu/source/common/uchar";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { GetI18NScriptTypeOfLanguage, SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { getConfiguredSystemLanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
+import { LanguageTag } from "../../../../i18nlangtag/source/languagetag/languagetag.value";
+import type { LocaleConstReference } from "../../../../udkapi/com/sun/star/lang/Locale";
 /** Logical OUString view adapter; preserves individual surrogate units. @param text - Native logical text. @returns Native code units. */
 export function GetWriterTextUnits(text: string): Uint16Array {
   const units = new Uint16Array(text.length);
@@ -13,6 +15,14 @@ export function GetWriterTextUnits(text: string): Uint16Array {
 /** Native script owner; the core module binding supplies the process instance at Writer initialization. */
 export class SwBreakIt {
   private readonly m_xBreak = new BreakIteratorImpl();
+  private m_xLanguageTag: LanguageTag | undefined;
+  /** Original cached LanguageTag locale for one native language type. @param language - Native language ID. @returns Borrowed native locale. */
+  public GetLocale(language: number): LocaleConstReference {
+    if (this.m_xLanguageTag === undefined) this.m_xLanguageTag = new LanguageTag(language);
+    else if (this.m_xLanguageTag.getLanguageType() !== language)
+      this.m_xLanguageTag.reset(language);
+    return this.m_xLanguageTag.getLocale();
+  }
   /** Borrows the real represented native break service. @returns Shared service. */
   public GetBreakIter(): BreakIteratorImpl {
     return this.m_xBreak;

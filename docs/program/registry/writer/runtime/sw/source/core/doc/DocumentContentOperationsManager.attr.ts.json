@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.attr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0110",
+      "CAP-0111",
+      "CAP-0124"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.attr.ts",
+        "apps/office/src/sw/source/core/doc/native-filter-itemset.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx#lcl_ApplyOtherSet"
+      ],
+      "justification": "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified. RTF109. Applies drawing fill as native paragraph OtherSet across the actual selection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InsertItemSet"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "upstreamSymbols": [
+        "DocumentContentOperationsManager::InsertItemSet"
+      ]
+    }
+  }
+}

@@ -77,6 +77,8 @@ const allowedEdges = new Map([
       "comphelper",
       "docmodel",
       "cppu",
+      // Original textitem.cxx includes com/sun/star/lang/Locale.hpp for language member transport.
+      "udkapi",
       // Original langitem.hxx uses i18nlangtag/lang.h language values.
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
@@ -105,7 +107,8 @@ const allowedEdges = new Map([
   ["framework", new Set(["sfx2", "svl"])],
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
-  ["i18nlangtag", new Set(["sal", "udkapi"])],
+  // Native Library_i18nlangtag.mk uses liblangtag; languagetag.cxx includes langtag.h.
+  ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
   // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
   // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
@@ -181,9 +184,21 @@ const allowedEdges = new Map([
   // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
   // Library_sfx links cppu/cppuhelper and uses the SDK API.
   // Original SfxBaseModel listener containers use comphelper and published document/util SDK listeners.
+  // Native sfxhtml.cxx includes o3tl/string_view.hxx; sfxhtml.hxx includes i18nlangtag/lang.h.
   [
     "sfx2",
-    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "svl", "tools", "udkapi"]),
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "i18nlangtag",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "tools",
+      "udkapi",
+    ]),
   ],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.

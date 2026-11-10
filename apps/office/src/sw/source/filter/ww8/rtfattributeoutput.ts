@@ -1,7 +1,13 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
+import { CollectCharFormatItems } from "./wrtw8nds.paragraph-marker";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import type { wwFont } from "./wrtw8sty";
-import { RES_CHRATR_FONT } from "../../../inc/hintids";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { RES_BACKGROUND, RES_CHRATR_FONT, RES_FRAMEDIR } from "../../../inc/hintids";
 import type { RtfExport } from "./rtfexport";
 import { OutHex, OutString } from "../../../../filter/source/msfilter/rtfutil";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
@@ -39,6 +45,12 @@ import {
   type SvxBorderLine,
 } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import {
+  FormatBackground,
+  FormatParagraphFill,
+  TableBackgroundColor,
+} from "./rtfattributeoutput.background";
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { TransColToIco } from "../../../../filter/source/msfilter/util";
@@ -54,6 +66,7 @@ import {
   RES_BREAK,
   RES_BOX,
   RES_KEEP,
+  RES_LINENUMBER,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -64,9 +77,11 @@ import {
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
+import { FormatLineNumbering } from "./rtfattributeoutput.linenumbering";
 import type { SwAttrSet } from "../../core/attr/swatrset";
-import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swatrset";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -86,6 +101,54 @@ export class RtfAttributeOutput extends AttributeOutputBase {
       /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
       (font, assoc) => this.OutputCharFontAssoc(font, assoc),
     );
+  }
+
+  /** Emits original native floating-table row positioning and distance controls. @param fly - Actual enclosing frame. @returns RTF row controls. */
+  TablePositioning(fly: SwFrameFormat | undefined): string {
+    if (!fly?.GetFlySplit().GetValue()) return "";
+    const horizontal = fly.GetHoriOrient();
+    const vertical = fly.GetVertOrient();
+    const vertRelation = vertical.GetRelationOrient();
+    const horiRelation = horizontal.GetRelationOrient();
+    const vert = vertical.GetVertOrient();
+    const hori = horizontal.GetHoriOrient();
+    const lr = fly.GetLRSpace();
+    const ul = fly.GetULSpace();
+    return (
+      (vertRelation === RelOrientation.PAGE_PRINT_AREA
+        ? "\\tpvmrg"
+        : vertRelation === RelOrientation.PAGE_FRAME
+          ? "\\tpvpg"
+          : "\\tpvpara") +
+      (horiRelation === RelOrientation.FRAME
+        ? "\\tphcol"
+        : horiRelation === RelOrientation.PAGE_PRINT_AREA
+          ? "\\tphmrg"
+          : "\\tphpg") +
+      (hori === HoriOrientation.LEFT
+        ? "\\tposxl"
+        : hori === HoriOrientation.CENTER
+          ? "\\tposxc"
+          : hori === HoriOrientation.RIGHT
+            ? "\\tposxr"
+            : `\\tposx${horizontal.GetPos() | 0}`) +
+      (vert === VertOrientation.TOP
+        ? "\\tposyt"
+        : vert === VertOrientation.CENTER
+          ? "\\tposyc"
+          : vert === VertOrientation.BOTTOM
+            ? "\\tposyb"
+            : `\\tposy${vertical.GetPos() | 0}`) +
+      `\\tdfrmtxtTop${ul.GetUpper() & 0xffff}\\tdfrmtxtBottom${ul.GetLower() & 0xffff}` +
+      `\\tdfrmtxtLeft${lr.ResolveLeft() & 0xffff}\\tdfrmtxtRight${lr.ResolveRight() & 0xffff}` +
+      (fly.GetWrapInfluenceOnObjPos().GetAllowOverlap() ? "" : "\\tabsnoovrlp1")
+    );
+  }
+
+  /** Original TableBackgrounds writes only an opaque selected color as a cell background. @param table - Native table format. @param row - Native row format. @param cell - Native cell format. @returns RTF cell controls. */
+  TableBackgrounds(table: SwFrameFormat, row: SwFrameFormat, cell: SwFrameFormat): string {
+    const color = TableBackgroundColor(table, row, cell);
+    return color.IsTransparent() ? "" : `\\clcbpat${this.colorIndex(writerColorValue(color))}`;
   }
 
   /** Original virtual returns the genuine RTF owner. @returns Actual exporter. */
@@ -322,7 +385,7 @@ export class RtfAttributeOutput extends AttributeOutputBase {
   public WriteParagraphProperties(paragraph: SwTextNode): string {
     const previousNode = this.exporter.m_pOutFormatNode,
       previousSet = this.exporter.m_pISet;
-    const temporary = PrepareParagraphNumbering(paragraph);
+    const temporary = PrepareParagraphProperties(paragraph);
     const set = temporary ?? paragraph.GetpSwAttrSet();
     this.exporter.m_pOutFormatNode = paragraph;
     this.exporter.m_pISet = set;
@@ -350,7 +413,7 @@ export class RtfAttributeOutput extends AttributeOutputBase {
           ) => a.Which() - b.Which(),
         ))
         if (item.Which() !== RES_PARATR_NUMRULE) output += this.WriteParagraphItem(item, paragraph);
-      return output;
+      return output + FormatParagraphFill(set, this.colorIndex);
     } finally {
       this.exporter.m_pOutFormatNode = previousNode;
       this.exporter.m_pISet = previousSet;
@@ -361,6 +424,8 @@ export class RtfAttributeOutput extends AttributeOutputBase {
   /** Admitted native paragraph item callbacks in OutputItemSet order. Other native item families remain outside this existing property sink. @param item - Actual set entry. @param node - Actual text context. @returns Controls. */
   private WriteParagraphItem(item: SfxPoolItem, node: SwTextNode): string {
     switch (item.Which()) {
+      case RES_FRAMEDIR:
+        return this.FormatFrameDirection(item as SvxFrameDirectionItem);
       case RES_PARATR_ADJUST: {
         const adjust = item as SvxAdjustItem;
         switch (adjust.GetAdjust()) {
@@ -389,6 +454,10 @@ export class RtfAttributeOutput extends AttributeOutputBase {
         const value = item as SvxULSpaceItem;
         return `\\sb${value.GetUpper()}\\sa${value.GetLower()}${value.GetContext() ? "\\contextualspace" : ""}`;
       }
+      case RES_BACKGROUND:
+        return FormatBackground(item as SvxBrushItem, this.colorIndex);
+      case RES_LINENUMBER:
+        return FormatLineNumbering(item as SfxBoolItem);
       case RES_KEEP:
         return (item as SfxBoolItem).GetValue() ? "\\keepn" : "";
       case RES_PARATR_SPLIT:
@@ -447,6 +516,16 @@ export class RtfAttributeOutput extends AttributeOutputBase {
     }
   }
 
+  /** Source page and ordinary paragraph direction callbacks. Fly shape output requires a physical fly syntax owner. @param item - Original direction item. @returns RTF controls for the active context. */
+  public FormatFrameDirection(item: SvxFrameDirectionItem): string {
+    let direction = item.GetValue();
+    if (direction === SvxFrameDirection.Environment)
+      direction = this.exporter.GetDefaultFrameDirection();
+    if (this.exporter.m_bOutPageDescs)
+      return direction === SvxFrameDirection.Vertical_RL_TB ? "\\stextflow1" : "";
+    return direction === SvxFrameDirection.Horizontal_RL_TB ? "\\rtlpar" : "\\ltrpar";
+  }
+
   /** Emits effective paragraph values for one named Writer style definition.  @param style - Style. @returns The string result. */
   public WriteStyleParagraphProperties(style: SwTextFormatColl): string {
     const items = style.GetAttrSet();
@@ -471,8 +550,30 @@ export class RtfAttributeOutput extends AttributeOutputBase {
           items,
           LATIN,
         ),
-      ) + this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined)
+      ) +
+      this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined) +
+      FormatLineNumbering(items.GetItemIfSet(RES_LINENUMBER, true) as SfxBoolItem | undefined) +
+      this.WriteStyleFrameDirection(style) +
+      FormatBackground(
+        items.GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined,
+        this.colorIndex,
+      ) +
+      FormatParagraphFill(items, this.colorIndex)
     );
+  }
+
+  /** Writes explicit/inherited direction, or the original forced default for a root style. @param style - Actual paragraph collection. @returns RTF direction controls. */
+  private WriteStyleFrameDirection(style: SwTextFormatColl): string {
+    const item = style.GetAttrSet().GetItemIfSet(RES_FRAMEDIR, true) as
+      SvxFrameDirectionItem | undefined;
+    if (item === undefined && style.DerivedFrom() !== undefined) return "";
+    const previous = this.exporter.m_pOutFormatNode;
+    this.exporter.m_pOutFormatNode = style;
+    try {
+      return this.FormatFrameDirection(item ?? style.GetFrameDir());
+    } finally {
+      this.exporter.m_pOutFormatNode = previous;
+    }
   }
 
   /** Emits adjustment and margins shared by paragraph and stylesheet paths.  @param adjust - Adjust. @param left - Left. @param right - Right. @param firstLine - First Line. @param spacing - Spacing. @param keep - Keep. @param split - Split. @param widows - Widows. @param tabs - Tabs. @param tabOffset - Tab Offset. @param breakValue - Break Value. @param styleDefinition - Style Definition. @param lineSpacing - Line Spacing. @returns The string result. */
@@ -683,6 +784,16 @@ export class RtfAttributeOutput extends AttributeOutputBase {
     }
   }
 
+  /** Original EndParagraphProperties character-item stage over a detached native buffer for the current string sink. @param items - Selected paragraph-marker set. @returns Source StyleDefinition controls. */
+  public WriteParagraphMarkerProperties(items: SfxItemSet): string {
+    const buffer = CollectCharFormatItems(items);
+    try {
+      return this.WriteNativeCharacter(buffer, GetCharacterPropertiesMode.StyleDefinition);
+    } finally {
+      buffer.Dispose();
+    }
+  }
+
   /** Source non-associated underline selection: four basic styles defer their keyword to associated groups but retain the shared color. @param underlineStyle - Actual line style. @param wordMode - Ancillary native word mode. @param color - Existing color-table value binding. @param deferBasic - Whether associated groups emit basic keywords. @returns Native underline/color controls. */
   private WriteUnderlineValue(
     underlineStyle: FontLineStyle,
@@ -870,7 +981,7 @@ import { AttributeOutputBase } from "./attributeoutputbase";
 import { SwNumRuleType } from "../../core/doc/number";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
-import { PrepareParagraphNumbering } from "./wrtw8nds";
+import { PrepareParagraphProperties } from "./wrtw8nds";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import type { SwNumRuleItem } from "../../core/para/paratr";

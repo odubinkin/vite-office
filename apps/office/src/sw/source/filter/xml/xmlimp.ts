@@ -1,4 +1,13 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
+import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import type {
+  XMLTextFrameAttributes,
+  XMLTextFrameStyle,
+} from "../../../../xmloff/source/text/XMLTextFrameContext";
+import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
+import type { SwXTextCursor } from "../../core/unocore/unoobj";
+import { importTextFrame, endTextFrame } from "./xmltextframe";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -74,6 +83,7 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
   const roots: Readonly<Record<string, XMLToken>> = {
     "document-content": XMLToken.OFFICE_DOCUMENT_CONTENT,
     "document-meta": XMLToken.OFFICE_DOCUMENT_META,
+    "document-settings": XMLToken.OFFICE_DOCUMENT_SETTINGS,
     "document-styles": XMLToken.OFFICE_DOCUMENT_STYLES,
   };
   const expected = roots[expectedRoot];
@@ -100,7 +110,10 @@ export function importWriterXml(
   contentXml: string | undefined,
   metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
-  options: OdfXmlParseOptions & { readonly defaultFontDevice?: DefaultFontDevice } = {},
+  options: OdfXmlParseOptions & {
+    readonly defaultFontDevice?: DefaultFontDevice;
+    readonly settingsXml?: string;
+  } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
   if (metaXml !== undefined) {
@@ -119,6 +132,8 @@ export function importWriterXml(
   );
   xmlImport.document.SetInReading(true);
   try {
+    if (options.settingsXml !== undefined)
+      xmlImport.parse(options.settingsXml, XMLToken.OFFICE_DOCUMENT_SETTINGS, options);
     if (stylesXml !== undefined) {
       xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
       xmlImport.finishNamedStyles();
@@ -143,6 +158,46 @@ class SwXMLImport
   extends SwXMLTableImport
   implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
 {
+  private readonly textFrameStyles = new Map<
+    string,
+    { style: XMLTextFrameStyle; parent: string | undefined }
+  >();
+
+  /** Registers the native graphic style values referenced by a text frame. @param name - ODF style name. @param style - Native frame values. @param parent - Optional inherited style. @returns Nothing. */
+  public registerTextFrameStyle(name: string, style: XMLTextFrameStyle, parent?: string): void {
+    this.textFrameStyles.set(name, { style, parent });
+  }
+
+  /** Enters the native Writer frame anchored at the current paragraph cursor. @param value - Original frame attributes. @returns Native frame text cursor. */
+  public beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor {
+    const chain: XMLTextFrameStyle[] = [];
+    const visited = new Set<string>();
+    let name: string | undefined = value.styleName;
+    while (name !== undefined && !visited.has(name)) {
+      visited.add(name);
+      const entry = this.textFrameStyles.get(name);
+      if (!entry) break;
+      chain.unshift(entry.style);
+      name = entry.parent;
+    }
+    const style = Object.fromEntries(
+      chain.flatMap(
+        /** Retains only the actual style deltas, allowing parent properties to survive. @param entry - Current style. @returns Defined values. */
+        (entry) =>
+          Object.entries(entry).filter(
+            /** Omits unauthored values. @param pair - Property tuple. @returns Whether present. */
+            ([, value]) => value !== undefined,
+          ),
+      ),
+    );
+    return importTextFrame(this.GetTextImport().GetCursor() as SwXTextCursor, value, style);
+  }
+
+  /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
+  public endTextFrame(cursor: XMLTextCursor): void {
+    endTextFrame(cursor as SwXTextCursor);
+  }
+
   private lineNumberingSeen = false;
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
@@ -181,6 +236,7 @@ class SwXMLImport
   /** Releases import API cursors and model wrappers without destroying the imported SwDoc. @returns Nothing. */
   public dispose(): void {
     this.textImport?.ResetCursor();
+    this.DisposeTableContexts();
     this.model.dispose();
   }
 
@@ -192,7 +248,9 @@ class SwXMLImport
         ? "styles.xml"
         : expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT
           ? "content.xml"
-          : "meta.xml";
+          : expectedRoot === XMLToken.OFFICE_DOCUMENT_SETTINGS
+            ? "settings.xml"
+            : "meta.xml";
     const onDiagnostic = options.onDiagnostic;
     parseOdfXmlStream(xml, this, {
       ...options,
@@ -214,6 +272,11 @@ class SwXMLImport
     if (element !== this.expectedRoot) return null;
     attributes.assertOnly([XMLToken.OFFICE_VERSION], "document root");
     return new SwXMLDocContext(this, element);
+  }
+
+  /** Applies the native Writer configuration settings vector through the document service. @param properties - Native input. @returns Nothing. */
+  public SetConfigurationSettings(properties: readonly PropertyValue[]): void {
+    this.model.createDocumentSettings().setConfigurationSettings(properties);
   }
 
   /** Rejects unknown document roots. @returns Null. */
@@ -607,6 +670,12 @@ class SwXMLDocContext extends SvXMLImportContext {
     if (element === XMLToken.OFFICE_META && this.root === XMLToken.OFFICE_DOCUMENT_META) {
       attributes.assertOnly([], "metadata");
       return new XMLMetaContext(this.xmlImport);
+    }
+    if (element === XMLToken.OFFICE_SETTINGS && this.root === XMLToken.OFFICE_DOCUMENT_SETTINGS) {
+      return new XMLDocumentSettingsContext(
+        /** Applies the original native configuration properties. @param properties - Borrowed properties. @returns Nothing. */
+        (properties) => this.xmlImport.SetConfigurationSettings(properties),
+      );
     }
     if (ignoredDocumentChildren.has(element)) return new SvXMLIgnoreContext();
     return null;

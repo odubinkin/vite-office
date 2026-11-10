@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/fmtfollowtextflow.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/fmtfollowtextflow.ts#SwFormatFollowTextFlow",
+        "vendor/libreoffice-reference/sw/inc/fmtfollowtextflow.hxx#class SW_DLLPUBLIC SwFormatFollowTextFlow",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Preserves the original native containment flag, false default and concrete clone. Full original object layout constraints are handled outside the item owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFormatFollowTextFlow"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/fmtfollowtextflow.hxx",
+      "upstreamSymbols": [
+        "class SW_DLLPUBLIC SwFormatFollowTextFlow"
+      ]
+    }
+  }
+}

@@ -3,6 +3,7 @@
 import { getWriterMaterializedParagraphStyleDefinition } from "../../../inc/poolfmt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { createWriterTextFormatColl, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
+import { GetPageDescFromPool } from "./poolfmt-page";
 import { applyWriterParagraphStyleDefaults } from "./poolfmt-defaults";
 
 import { SwCharFormat } from "../../../inc/charfmt";
@@ -11,8 +12,23 @@ import {
   POOLGRP_CHARFMT,
   COLL_GET_RANGE_BITS,
   POOLGRP_NOCOLLID,
+  POOLGRP_FRAMEFMT,
+  SwPoolFormatId,
 } from "../../../inc/poolfmt";
 import { applyWriterCharacterStyleDefaults } from "./poolfmt-char";
+import { ApplyFrameFormatPoolDefaults } from "./poolfmt-frame";
+import { SwFrameFormat } from "../layout/atrfrm";
+
+const framePoolNames = [
+  "Frame",
+  "Graphics",
+  "OLE",
+  "Formula",
+  "Marginalia",
+  "Watermark",
+  "Labels",
+  "Inline Heading",
+] as const;
 
 /** Owns document paragraph-style collections and their parent/follow graph. */
 export class DocumentStylePoolManager {
@@ -23,6 +39,30 @@ export class DocumentStylePoolManager {
   /** Creates the manager and materializes Writer's default collection. @param attrPool - Document pool. @returns Nothing. */
   public constructor(private readonly attrPool: SwAttrPool) {
     this.GetTextFormatColl("default");
+  }
+
+  /** Native consumed page-pool entry using the actual document page collection. @param id - Native pool ID. @param regardLanguage - Original creation flag. @returns Borrowed page owner. */
+  public GetPageDescFromPool(id: number, regardLanguage = true) {
+    return GetPageDescFromPool(this.attrPool.GetDoc(), id, regardLanguage);
+  }
+
+  /** Original frame-format pool lookup scans special formats before ordinary formats and creates the native named style only if absent. @param id - Source pool identity. @returns Actual pooled frame style or undefined outside its family. */
+  public GetFrameFormatFromPool(id: number): SwFrameFormat | undefined {
+    id &= 65535;
+    if ((id & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID)) !== POOLGRP_FRAMEFMT) return undefined;
+    if (id < SwPoolFormatId.FRM_BEGIN || id >= SwPoolFormatId.FRM_END)
+      id = SwPoolFormatId.FRM_BEGIN;
+    const doc = this.attrPool.GetDoc();
+    for (const formats of [doc.GetSpzFrameFormats(), doc.GetFrameFormats()])
+      for (const format of formats) if (format.GetPoolFormatId() === id) return format;
+    const name = framePoolNames[id - SwPoolFormatId.FRM_BEGIN];
+    if (name === undefined) throw new Error("assert(Writer frame pool name)");
+    const format = new SwFrameFormat(this.attrPool, name, undefined, doc.GetDfltFrameFormat());
+    doc.GetFrameFormats().push_back(format);
+    format.SetPoolFormatId(id);
+    format.SetAuto(false);
+    ApplyFrameFormatPoolDefaults(format);
+    return format;
   }
 
   /** Returns the original stable character table, including its default format. @returns Native character owners. */

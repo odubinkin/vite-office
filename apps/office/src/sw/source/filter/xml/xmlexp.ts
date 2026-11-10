@@ -1,13 +1,15 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { getTextFrameExportParagraphs, projectAnchoredTextFrames } from "./xmltextframe";
+import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
+import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
-
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
@@ -23,10 +25,9 @@ import {
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
-
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { exportBoxProperties } from "./xmlexpit";
+import { exportBoxProperties, exportFrameVisualProperties } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -62,6 +63,7 @@ import {
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
   type XMLTextParagraphSource,
+  type XMLTextParagraphMarker,
   type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -335,132 +337,17 @@ function exportWriterText(
   ) => string,
   existingFontFaceName: (family: string) => string | undefined,
 ): OdfTextExport {
+  const anchored = CollectTextFlyFrames(document);
   return exportTextParagraphs(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
-        for (const block of document.nodes.getBodyContent()) {
-          if (block instanceof SwTableNode) {
-            for (const row of block.GetTable().GetTabLines())
-              for (const cell of row.GetTabBoxes())
-                for (const node of cell.GetParagraphs()) yield projectParagraph(node);
-          } else yield projectParagraph(block);
-        }
+        for (const node of getTextFrameExportParagraphs(document, anchored))
+          yield projectParagraph(node);
       },
       /** Iterates ordered direct body blocks and projects table cells through the same text exporter. @returns Body blocks. */
       *blocks() {
-        for (const block of document.nodes.getBodyContent()) {
-          if (!(block instanceof SwTableNode)) {
-            yield { kind: "paragraph" as const, paragraph: projectParagraph(block) };
-            continue;
-          }
-          const table = block.GetTable(),
-            grid = new SwXMLTableLines(table);
-          const items = table.GetFrameFormat().GetAttrSet();
-          const size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined;
-          const orientation = items.GetItemIfSet(RES_HORI_ORIENT, false) as
-            SwFormatHoriOrient | undefined;
-          const orient = orientation?.GetHoriOrient();
-          // Normal items require direct SET state; the native LR special handler searches parents for its orientation guard.
-          const marginOrient = (
-            items.GetItemIfSet(RES_HORI_ORIENT) as SwFormatHoriOrient | undefined
-          )?.GetHoriOrient();
-          const lr = items.GetItemIfSet(RES_LR_SPACE, false) as SvxLRSpaceItem | undefined;
-          const ul = items.GetItemIfSet(RES_UL_SPACE, false) as SvxULSpaceItem | undefined;
-          const split = items.GetItemIfSet(RES_LAYOUT_SPLIT, false) as
-            SwFormatLayoutSplit | undefined;
-          const borders = items.GetItemIfSet(RES_COLLAPSING_BORDERS, false) as
-            SfxBoolItem | undefined;
-          yield {
-            kind: "table" as const,
-            table: {
-              name: table.GetName(),
-              format: {
-                width: size?.GetWidth(),
-                marginTop: ul?.GetUpper(),
-                marginBottom: ul?.GetLower(),
-                layoutSplit: split?.GetValue(),
-                borderModel:
-                  borders === undefined
-                    ? undefined
-                    : borders.GetValue()
-                      ? "collapsing"
-                      : "separating",
-                headerRows: table.GetRowsToRepeat(),
-                repeatHeaderRows: table.GetRowsToRepeat() !== 0,
-                align:
-                  orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
-                    ? "left"
-                    : orient === HoriOrientation.RIGHT
-                      ? "right"
-                      : orient === HoriOrientation.CENTER
-                        ? "center"
-                        : orient === HoriOrientation.FULL || orient === HoriOrientation.NONE
-                          ? "margins"
-                          : orient === undefined
-                            ? undefined
-                            : "",
-                marginLeft:
-                  marginOrient === HoriOrientation.NONE ||
-                  marginOrient === HoriOrientation.LEFT_AND_WIDTH
-                    ? lr?.ResolveLeft()
-                    : undefined,
-                marginRight: marginOrient === HoriOrientation.NONE ? lr?.ResolveRight() : undefined,
-              },
-              columnWidths: grid.GetColumnWidths(),
-              softPageBreakRows: table.GetSoftPageBreakRows(),
-              rows: table.GetTabLines().map(
-                /** Exports direct original row items. @param row - Original table line. @returns Filter-only row values. */ (
-                  row,
-                ) => {
-                  const items = row.GetFrameFormat().GetAttrSet();
-                  const size = items.GetItemIfSet(RES_FRM_SIZE, false) as
-                    SwFormatFrameSize | undefined;
-                  const split = items.GetItemIfSet(RES_ROW_SPLIT, false) as
-                    SwFormatRowSplit | undefined;
-                  return {
-                    format: {
-                      keepTogether: split === undefined ? undefined : !split.GetValue(),
-                      ...(size?.GetHeightSizeType() === SwFrameSize.Minimum
-                        ? { minHeight: size.GetHeight() }
-                        : size?.GetHeightSizeType() === SwFrameSize.Fixed
-                          ? { height: size.GetHeight() }
-                          : {}),
-                    },
-                    cells: row.GetTabBoxes().map(
-                      /** Exports direct original box items. @param cell - Original table box. @returns Filter-only cell values. */ (
-                        cell,
-                      ) => {
-                        const items = cell.GetFrameFormat().GetAttrSet();
-                        const box = items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined;
-                        const orientation = items.GetItemIfSet(RES_VERT_ORIENT, false) as
-                          SwFormatVertOrient | undefined;
-                        const orient = orientation?.GetVertOrient();
-                        return {
-                          columnSpan: grid.GetColumnSpan(cell),
-                          format: {
-                            ...exportBoxProperties(box),
-                            verticalAlign:
-                              orient === undefined
-                                ? undefined
-                                : orient === VertOrientation.CENTER
-                                  ? "middle"
-                                  : orient === VertOrientation.BOTTOM
-                                    ? "bottom"
-                                    : orient === VertOrientation.TOP
-                                      ? "top"
-                                      : "",
-                          },
-                          paragraphs: cell.GetParagraphs().map(projectParagraph),
-                        };
-                      },
-                    ),
-                  };
-                },
-              ),
-            },
-          };
-        }
+        for (const block of document.nodes.getBodyContent()) yield projectBlock(block, anchored);
       },
     },
     isCancelled,
@@ -469,13 +356,126 @@ function exportWriterText(
   );
 }
 
+/** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
+function projectBlock(
+  block: SwTextNode | SwTableNode,
+  anchored: BoundTextFrames,
+): XMLTextExportBlock {
+  if (!(block instanceof SwTableNode))
+    return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
+  const table = block.GetTable(),
+    grid = new SwXMLTableLines(table);
+  const items = table.GetFrameFormat().GetAttrSet();
+  const size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined;
+  const orientation = items.GetItemIfSet(RES_HORI_ORIENT, false) as SwFormatHoriOrient | undefined;
+  const orient = orientation?.GetHoriOrient();
+  // Normal items require direct SET state; the native LR special handler searches parents for its orientation guard.
+  const marginOrient = (
+    items.GetItemIfSet(RES_HORI_ORIENT) as SwFormatHoriOrient | undefined
+  )?.GetHoriOrient();
+  const lr = items.GetItemIfSet(RES_LR_SPACE, false) as SvxLRSpaceItem | undefined;
+  const ul = items.GetItemIfSet(RES_UL_SPACE, false) as SvxULSpaceItem | undefined;
+  const split = items.GetItemIfSet(RES_LAYOUT_SPLIT, false) as SwFormatLayoutSplit | undefined;
+  const borders = items.GetItemIfSet(RES_COLLAPSING_BORDERS, false) as SfxBoolItem | undefined;
+  return {
+    kind: "table" as const,
+    table: {
+      name: table.GetName(),
+      format: {
+        ...exportFrameVisualProperties(items),
+        width: size?.GetWidthPercent() ? undefined : size?.GetWidth(),
+        relativeWidth: size?.GetWidthPercent() || undefined,
+        marginTop: ul?.GetUpper(),
+        marginBottom: ul?.GetLower(),
+        layoutSplit: split?.GetValue(),
+        borderModel:
+          borders === undefined ? undefined : borders.GetValue() ? "collapsing" : "separating",
+        headerRows: table.GetRowsToRepeat(),
+        repeatHeaderRows: table.GetRowsToRepeat() !== 0,
+        align:
+          orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
+            ? "left"
+            : orient === HoriOrientation.RIGHT
+              ? "right"
+              : orient === HoriOrientation.CENTER
+                ? "center"
+                : orient === HoriOrientation.FULL || orient === HoriOrientation.NONE
+                  ? "margins"
+                  : orient === undefined
+                    ? undefined
+                    : "",
+        marginLeft:
+          marginOrient === HoriOrientation.NONE || marginOrient === HoriOrientation.LEFT_AND_WIDTH
+            ? lr?.ResolveLeft()
+            : undefined,
+        marginRight: marginOrient === HoriOrientation.NONE ? lr?.ResolveRight() : undefined,
+      },
+      columnWidths: grid.GetColumnWidths(),
+      softPageBreakRows: table.GetSoftPageBreakRows(),
+      rows: table.GetTabLines().map(
+        /** Exports direct original row items. @param row - Original table line. @returns Filter-only row values. */ (
+          row,
+        ) => {
+          const items = row.GetFrameFormat().GetAttrSet();
+          const size = items.GetItemIfSet(RES_FRM_SIZE, false) as SwFormatFrameSize | undefined;
+          const split = items.GetItemIfSet(RES_ROW_SPLIT, false) as SwFormatRowSplit | undefined;
+          return {
+            format: {
+              background: exportFrameVisualProperties(items).background,
+              keepTogether: split === undefined ? undefined : !split.GetValue(),
+              ...(size?.GetHeightSizeType() === SwFrameSize.Minimum
+                ? { minHeight: size.GetHeight() }
+                : size?.GetHeightSizeType() === SwFrameSize.Fixed
+                  ? { height: size.GetHeight() }
+                  : {}),
+            },
+            cells: row.GetTabBoxes().map(
+              /** Exports direct original box items. @param cell - Original table box. @returns Filter-only cell values. */ (
+                cell,
+              ) => {
+                const items = cell.GetFrameFormat().GetAttrSet();
+                const box = items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined;
+                const orientation = items.GetItemIfSet(RES_VERT_ORIENT, false) as
+                  SwFormatVertOrient | undefined;
+                const orient = orientation?.GetVertOrient();
+                return {
+                  columnSpan: grid.GetColumnSpan(cell),
+                  rowSpan: cell.getRowSpan(),
+                  format: {
+                    ...exportBoxProperties(box),
+                    ...exportFrameVisualProperties(items),
+                    verticalAlign:
+                      orient === undefined
+                        ? undefined
+                        : orient === VertOrientation.CENTER
+                          ? "middle"
+                          : orient === VertOrientation.BOTTOM
+                            ? "bottom"
+                            : orient === VertOrientation.TOP
+                              ? "top"
+                              : "",
+                  },
+                  content: cell.GetContentNodes().map(
+                    /** Projects one actual cell text or table block. @param child - Native block. @returns ODF block. */
+                    (child) => projectBlock(child, anchored),
+                  ),
+                };
+              },
+            ),
+          };
+        },
+      ),
+    },
+  };
+}
+
 /** Serializes document metadata into meta.xml. @param title - Shell-owned title. @param locale - Stored document language. @returns Complete XML. */
 export function exportMetaXml(title: string, locale?: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-meta xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" office:version="1.3"><office:meta><dc:title>${escapeXml(title)}</dc:title>${locale === undefined ? "" : `<dc:language>${escapeXml(locale)}</dc:language>`}<meta:generator>vite-office LibreOffice TypeScript reimplementation</meta:generator></office:meta></office:document-meta>`;
 }
 
-/** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @returns Neutral paragraph. */
-function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
+/** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @param anchored - Actual frame sets during body export. @returns Neutral paragraph. */
+function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLTextParagraphSource {
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
   assertSupportedItems(directItems, `paragraph at node ${node.GetIndex()}`, true);
   const ruleName = node.GetNumRuleName();
@@ -499,7 +499,8 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
   const marks = node.GetDoc().GetIDocumentMarkAccess();
-  const markers = [
+  const markers: XMLTextParagraphMarker[] = [
+    ...projectAnchoredTextFrames(node, anchored, projectBlock),
     ...marks
       .GetBookmarks()
       .filter(

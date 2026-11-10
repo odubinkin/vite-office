@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.ts",
+    "upstreamPath": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+    "localSymbols": [
+      "loadDictionaryWordRule"
+    ],
+    "upstreamSymbols": [
+      "loadICUBreakIterator"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E HTML79: native ICU78.3 Brk format-6 assets compile all three pinned LibreOffice dictionary rule sets via genbrk. The forward state machine and dictionary admission match unchanged native handleNext for 105 inputs across the three tables. No dictionary refinement, public break-cache behavior, UNO locale selection or Writer paragraph measurement is certified."
+    ],
+    "omittedResponsibilities": [
+      "Native dictionary engines, reverse cache traversal, full public BreakIterator behavior and non-pinned break resources remain outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.ts",
+          "marker": "loadDictionaryWordRule"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/data/dict-word.brk.json",
+          "marker": "dict_word"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx",
+          "marker": "loadICUBreakIterator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/CustomTarget_breakiterator.mk",
+          "marker": "genbrk"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/data/dict_word.txt",
+          "marker": "!!chain;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/data/dict_word_hu.txt",
+          "marker": "!!chain;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/data/dict_word_prepostdash.txt",
+          "marker": "!!chain;"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.rules.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original Unicode break rule data-loading fragment is separate from locale routing and public queries."
+    }
+  }
+}

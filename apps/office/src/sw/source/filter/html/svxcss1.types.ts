@@ -1,15 +1,19 @@
 /** @fileoverview Consumed scalar SvxCSS1PropertyInfo and map-entry ownership from svxcss1.hxx/cxx. Border-producing branches remain separate native consumers. */
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxAdjust, SvxNumType } from "../../../../editeng/inc/svxenum";
-/** Original CSS script flags. */
-export enum Css1ScriptFlags {
-  Western = 1,
-  CJK = 2,
-  CTL = 4,
-  AllMask = 7,
-}
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import {
+  SvxCSS1BorderInfo,
+  SVX_CSS1_BORDERINFO_WIDTH,
+  SVX_CSS1_BORDERINFO_COLOR,
+  SVX_CSS1_BORDERINFO_STYLE,
+} from "./svxcss1.border-info";
+import { aItemIds } from "./svxcss1";
+import { SvxCSS1PageBreak } from "./svxcss1.enums";
+export { Css1ScriptFlags, SvxCSS1PageBreak } from "./svxcss1.enums";
 /** Native scalar property state; the source copy/Clear/Merge omissions for preserve-space and visible are deliberate. */
 export class SvxCSS1PropertyInfo {
+  private readonly m_aBorderInfos: (SvxCSS1BorderInfo | null)[] = [null, null, null, null];
   static readonly UNSET_BORDER_DISTANCE = 0xffff;
   m_aId = "";
   m_bTopMargin = false;
@@ -43,23 +47,33 @@ export class SvxCSS1PropertyInfo {
   m_eLeftMarginType = 0;
   m_eRightMarginType = 0;
   m_eSizeType = 0;
-  m_ePageBreakBefore = 0;
-  m_ePageBreakAfter = 0;
+  m_ePageBreakBefore = SvxCSS1PageBreak.NONE;
+  m_ePageBreakAfter = SvxCSS1PageBreak.NONE;
   /** Original default or scalar copy construction; flags omitted by the native initializer list keep their member defaults. @param source - Optional native source. @returns Owner. */
   constructor(source?: SvxCSS1PropertyInfo) {
-    if (source)
-      for (const key of Object.keys(this) as (keyof this)[]) {
-        if (key !== "m_bPreserveSpace" && key !== "m_bVisible")
-          this[key] = source[key as keyof SvxCSS1PropertyInfo] as this[keyof this];
+    if (source) {
+      for (const key of Object.keys(this)) {
+        if (key !== "m_bPreserveSpace" && key !== "m_bVisible" && key !== "m_aBorderInfos") {
+          const field = key as keyof this;
+          this[field] = source[field as keyof SvxCSS1PropertyInfo] as this[keyof this];
+        }
       }
+      for (let i = 0; i < 4; i++) {
+        const info = source.m_aBorderInfos[i];
+        if (info) this.m_aBorderInfos[i] = new SvxCSS1BorderInfo(info);
+      }
+    }
   }
   /** Original clear resets source scalars but not preserve-space/visibility. @returns Nothing. */
   Clear(): void {
     const fresh = new SvxCSS1PropertyInfo();
-    for (const key of Object.keys(fresh) as (keyof this)[]) {
-      if (key !== "m_bPreserveSpace" && key !== "m_bVisible")
-        this[key] = fresh[key as keyof SvxCSS1PropertyInfo] as this[keyof this];
+    for (const key of Object.keys(fresh)) {
+      if (key !== "m_bPreserveSpace" && key !== "m_bVisible" && key !== "m_aBorderInfos") {
+        const field = key as keyof this;
+        this[field] = fresh[field as keyof SvxCSS1PropertyInfo] as this[keyof this];
+      }
     }
+    this.DestroyBorderInfos();
   }
   /** Original scalar merge, including unconditional column-count overwrite and omitted preserve-space/visibility. @param source - Borrowed source. @returns Nothing. */
   Merge(source: SvxCSS1PropertyInfo): void {
@@ -74,6 +88,10 @@ export class SvxCSS1PropertyInfo {
       this.m_nRightMargin = source.m_nRightMargin;
     }
     if (source.m_bTextIndent) this.m_bTextIndent = true;
+    for (let i = 0; i < 4; i++) {
+      const info = source.m_aBorderInfos[i];
+      if (info) this.m_aBorderInfos[i] = new SvxCSS1BorderInfo(info);
+    }
     for (const key of [
       "m_nTopBorderDistance",
       "m_nBottomBorderDistance",
@@ -101,6 +119,77 @@ export class SvxCSS1PropertyInfo {
         this[type] = source[type];
         this[value] = source[value];
       }
+  }
+  /** Original pending-side destruction keeps scalar distance state separate. @returns Nothing. */
+  private DestroyBorderInfos(): void {
+    this.m_aBorderInfos.fill(null);
+  }
+  /** Original side lookup and optional lazy creation. @param edge - Native side. @param create - Native default true. @returns Pending owned side or null. */
+  GetBorderInfo(edge: SvxBoxItemLine, create?: true): SvxCSS1BorderInfo;
+  /** Borrows an optional existing pending side without allocation. @param edge - Native side. @param create - Explicit false. @returns Pending side or null. */
+  GetBorderInfo(edge: SvxBoxItemLine, create: false): SvxCSS1BorderInfo | null;
+  /** Implements original optional allocation on the same native property owner. @param edge - Native side. @param create - Allocation admission. @returns Owned pending side or null. */
+  GetBorderInfo(edge: SvxBoxItemLine, create = true): SvxCSS1BorderInfo | null {
+    const index = edge >= 0 && edge <= 3 ? edge : 0;
+    if (!this.m_aBorderInfos[index] && create) this.m_aBorderInfos[index] = new SvxCSS1BorderInfo();
+    return this.m_aBorderInfos[index] ?? null;
+  }
+  /** Original side/component or shorthand-count copy overloads. @param first - Source edge or shorthand index. @param second - Destination edge or mask. @param what - Optional component mask. @returns Nothing. */
+  CopyBorderInfo(first: number, second: number, what?: number): void {
+    if (what === undefined) {
+      if (first === 0) {
+        this.CopyBorderInfo(SvxBoxItemLine.BOTTOM, SvxBoxItemLine.TOP, second);
+        this.CopyBorderInfo(SvxBoxItemLine.TOP, SvxBoxItemLine.LEFT, second);
+      }
+      if (first <= 1) this.CopyBorderInfo(SvxBoxItemLine.LEFT, SvxBoxItemLine.RIGHT, second);
+      return;
+    }
+    const source = this.GetBorderInfo(first, false);
+    if (!source) return;
+    const target = this.GetBorderInfo(second);
+    if (what & SVX_CSS1_BORDERINFO_WIDTH) {
+      target.nAbsWidth = source.nAbsWidth;
+      target.nNamedWidth = source.nNamedWidth;
+    }
+    if (what & SVX_CSS1_BORDERINFO_COLOR) target.aColor.assign(source.aColor);
+    if (what & SVX_CSS1_BORDERINFO_STYLE) target.eStyle = source.eStyle;
+  }
+  /** Original SetBoxItem consumes pending sides/distances into an owned actual box, preserving minimum-distance and no-line rules. @param items - Actual item set. @param minimum - Native border distance. @param defaults - Optional default box. @returns Nothing. */
+  SetBoxItem(items: SfxItemSet, minimum: number, defaults?: SvxBoxItem): void {
+    const fields = [
+      "m_nTopBorderDistance",
+      "m_nBottomBorderDistance",
+      "m_nLeftBorderDistance",
+      "m_nRightBorderDistance",
+    ] as const;
+    if (
+      !fields.some(
+        /** Finds pending distances. @param key - Side field. @returns Changed. */ (key) =>
+          this[key] !== 0xffff,
+      ) &&
+      !this.m_aBorderInfos.some(
+        /** Finds a pending side. @param info - Side. @returns Present. */ (info) => info !== null,
+      )
+    )
+      return;
+    const box = defaults ? defaults.Clone() : new SvxBoxItem(aItemIds.nBox);
+    try {
+      for (let edge = 0; edge < 4; edge++)
+        this.GetBorderInfo(edge, false)?.SetBorderLine(edge, box);
+      for (const [edge, field] of fields.entries()) {
+        let distance = this[field];
+        this[field] = 0xffff;
+        if (box.GetLine(edge)) {
+          if (distance === 0xffff) distance = box.GetDistance(edge);
+          if (distance < minimum) distance = minimum;
+        } else distance = 0;
+        box.SetDistance(distance, edge);
+      }
+      items.Put(box);
+      this.DestroyBorderInfos();
+    } finally {
+      box.Dispose();
+    }
   }
 }
 /** Original class/ID/tag map value owns an independent item set and property copy. */

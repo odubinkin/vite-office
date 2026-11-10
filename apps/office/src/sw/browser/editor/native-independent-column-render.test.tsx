@@ -1,9 +1,25 @@
 /** @fileoverview Checks mounted independent native box widths, actual Ctrl+Shift tracking and union-grid device spans. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
+
+import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirectionItem } from "../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { Color } from "../../../tools/inc/color";
+import { RES_BACKGROUND, RES_FRAMEDIR, RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
+
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { WrapTextMode } from "../../../offapi/com/sun/star/text/WrapTextMode";
+import { RelOrientation } from "../../../offapi/com/sun/star/text/RelOrientation";
+import { MakeFlySection } from "../../source/core/doc/doclay";
+import { SwPosition } from "../../source/core/crsr/pam";
+import { SwFormatHoriOrient } from "../../inc/fmtornt";
+import { SwFormatSurround } from "../../inc/fmtsrnd";
+import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
@@ -13,6 +29,124 @@ afterEach(
     vi.restoreAllMocks();
   },
 );
+
+it("renders a nested native table inside its actual cell between surrounding paragraphs", /** Verifies ordered mounted content and the browser's native table-node coordinates. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  sessions.push(session);
+  const doc = session.docShell.GetDoc(),
+    outer = doc.nodes.MakeTableNode("Outer", { width: 3600 }, required(doc.paragraphs[0]));
+  outer.AddColumnWidth(3600);
+  const cell = required(doc.nodes.AppendTableRow(outer, 1).GetTabBoxes()[0]);
+  required(cell.GetParagraphs()[0]).SetText("Before inner table");
+  const inner = doc.nodes.MakeTableNodeBefore(cell.GetStartNode().EndOfSectionNode(), "Inner", {
+    width: 1200,
+  });
+  inner.AddColumnWidth(1200);
+  required(doc.nodes.AppendTableRow(inner, 1).GetTabBoxes()[0]?.GetParagraphs()[0]).SetText(
+    "Inside",
+  );
+  doc.nodes.AppendTableCellParagraph(cell).SetText("After inner table");
+  const background = new SvxBrushItem(new Color(0xc86428), RES_BACKGROUND);
+  const direction = new SvxFrameDirectionItem(SvxFrameDirection.Vertical_LR_BT, RES_FRAMEDIR);
+  try {
+    cell.GetFrameFormat().SetFormatAttr(background);
+    cell.GetFrameFormat().SetFormatAttr(direction);
+  } finally {
+    background.Dispose();
+    direction.Dispose();
+  }
+  render(<WriterWorkbench isActive view={session.view} />);
+  const outerElement = screen.getByRole("table", { name: "Outer" }),
+    innerElement = screen.getByRole("table", { name: "Inner" }),
+    owner = required(innerElement.closest("td,th"));
+  expect(outerElement).toContainElement(innerElement);
+  expect(owner).toHaveStyle({ backgroundColor: "rgb(200, 100, 40)", writingMode: "sideways-lr" });
+  expect(innerElement).toHaveAttribute(
+    "data-writer-table-node",
+    String(inner.GetTableNode().GetIndex()),
+  );
+  expect(
+    [...owner.children].map(
+      /** Observes the real element order within the outer native box. @param node - Mounted direct child. @returns Display text. */ (
+        node,
+      ) => node.textContent,
+    ),
+  ).toEqual(["Before inner table", "Inside", "After inner table"]);
+});
+
+it.each([
+  [HoriOrientation.LEFT, WrapTextMode.RIGHT, "left"],
+  [HoriOrientation.RIGHT, WrapTextMode.LEFT, "right"],
+] as const)(
+  "mounts and edits the native anchored table with %s orientation",
+  /** Checks native table paint and the common DOM-to-PaM editing route. @param orientation - Native horizontal orientation. @param surround - Native wrap side. @param side - Browser float placement. @returns Nothing. */ (
+    orientation,
+    surround,
+    side,
+  ) => {
+    const session = createWriterDocumentSession();
+    sessions.push(session);
+    const doc = session.docShell.GetDoc();
+    const body = required(doc.paragraphs[0]);
+    body.SetText("Body anchor");
+    const position = new SwPosition(body);
+    const items = new SfxItemSet(doc.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+    const size = new SwFormatFrameSize(SwFrameSize.Variable, 1800, 23);
+    const horizontal = new SwFormatHoriOrient(0, orientation, RelOrientation.FRAME);
+    const wrap = new SwFormatSurround(surround);
+    let fly: ReturnType<typeof MakeFlySection>;
+    try {
+      items.Put(size);
+      items.Put(horizontal);
+      items.Put(wrap);
+      fly = MakeFlySection(doc, RndStdIds.FLY_AT_PARA, position, items);
+    } finally {
+      wrap.Dispose();
+      horizontal.Dispose();
+      size.Dispose();
+      items.Dispose();
+      position.Dispose();
+    }
+    const start = required(fly.GetContent().GetContentIdx()?.GetNode());
+    const bootstrap = doc.nodes.at(start.GetIndex() + 1);
+    const table = doc.nodes.MakeTableNodeBefore(bootstrap, "Floating", { width: 1800 });
+    table.AddColumnWidth(1800);
+    const node = required(doc.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetParagraphs()[0]);
+    node.SetText("Inside");
+    doc.nodes.RemoveNode(bootstrap.GetIndex(), 1, true);
+
+    render(<WriterWorkbench isActive view={session.view} />);
+    const page = screen.getByRole("document", { name: "Page 1" });
+    const mounted = within(page).getByRole("table", { name: "Floating" });
+    const owner = required(mounted.closest("[data-writer-fly-frame]"));
+    expect(owner).toHaveAttribute("data-writer-fly-anchor", String(body.GetIndex()));
+    expect(owner).toHaveStyle({ float: side, width: "120px" });
+    expect(mounted).toHaveAttribute(
+      "data-writer-table-node",
+      String(table.GetTableNode().GetIndex()),
+    );
+    expect(doc.GetTables()).toEqual([]);
+    const paragraph = within(mounted).getByRole("textbox");
+    const text = required(paragraph.firstChild);
+    const event = new InputEvent("beforeinput", {
+      bubbles: true,
+      cancelable: true,
+      inputType: "insertText",
+      data: "!",
+    });
+    act(
+      /** Sends one actual platform edit to the Writer host. @returns Nothing. */ () => {
+        required(globalThis.getSelection()).collapse(text, 6);
+        paragraph.dispatchEvent(event);
+      },
+    );
+    expect(event.defaultPrevented).toBe(true);
+    expect(node.GetText()).toBe("Inside!");
+    expect(body.GetText()).toBe("Body anchor");
+    expect(session.view.GetWrtShell().GetCursor().GetPoint().GetNode()).toBe(node);
+  },
+);
+
 /** Requires an original native/DOM owner. @param value - Optional owner. @returns Actual value. */
 function required<T>(value: T | undefined | null): T {
   if (value === undefined || value === null)

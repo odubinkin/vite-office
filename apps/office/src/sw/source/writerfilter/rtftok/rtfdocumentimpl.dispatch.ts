@@ -1,35 +1,65 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
-import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
 import {
+  RunType,
   CHARACTER_PROPERTY_CONTROLS,
   DEFAULT_CHARACTER,
   DEFAULT_PARAGRAPH,
-  fromRtfNfc,
   parseRtfHyperlinkInstruction,
   RTF_UNDERLINE_STYLES,
+  RTFColorTableEntry,
   SKIPPED_DESTINATIONS,
   STYLE_PROPERTY_CONTROLS,
-  type RtfCellBorder,
   type RtfDocumentImplContext,
-  type RtfSectionPage,
   type RtfState,
 } from "./rtfdocumentimpl.context";
-import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
+import { DispatchFrameControl, RTFFrame } from "./rtfdocumentimpl.frame";
+import { DispatchShape, FinishShapeGroup } from "./rtfdocumentimpl.shape";
+import { DispatchBorder, DispatchBorderValue, RTFBorderState } from "./rtfdocumentimpl.border";
+import { DispatchTableControl } from "./rtfdocumentimpl.tablerowbuffer";
+import {
+  dispatchFloatingTableValue,
+  dispatchTableMeasure,
+  dispatchTableMargin,
+  dispatchTableShading,
+} from "./rtfdispatchvalue.table";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
+import { COL_AUTO, COL_BLACK } from "../../../../tools/inc/color";
 
 /** Dispatches one lexical event under the current group state. @param token - Source event.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
 export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (token.kind === "group-start") {
     const previous = this["states"].at(-1);
+    // Original pushState resets the current state before copying, except the two completed RTL pairs (fdo#85812).
+    if (
+      previous &&
+      previous.runType !== RunType.LTRCH_RTLCH_2 &&
+      previous.runType !== RunType.RTLCH_LTRCH_2
+    )
+      previous.runType = RunType.NONE;
+    const destinationText = new OUStringBuffer(previous?.destinationText ?? 512);
+    destinationText.setLength(0);
     this["states"].push({
       destination: previous?.destination ?? "body",
+      frame: new RTFFrame(previous?.frame),
+      borderState: previous?.borderState ?? RTFBorderState.NONE,
+      shape: previous?.shape,
       characterSprms:
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
+      paragraphSprms:
+        previous === undefined ? new RTFSprms() : new RTFSprms(previous.paragraphSprms),
+      sectionSprms: new RTFSprms(previous?.sectionSprms),
+      tableRowSprms: new RTFSprms(previous?.tableRowSprms),
+      tableCellSprms: new RTFSprms(previous?.tableCellSprms),
+      tableBuffer: previous?.tableBuffer,
+      tableRowWidthAfter: previous?.tableRowWidthAfter ?? 0,
+      currentColor: new RTFColorTableEntry(previous?.currentColor),
+      tableSprms: new RTFSprms(previous?.tableSprms),
+      tableAttributes: new RTFSprms(previous?.tableAttributes),
+      listLevelEntries: new RTFSprms(previous?.listLevelEntries),
+      runType: previous?.runType ?? RunType.NONE,
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
 
@@ -39,9 +69,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       currentCodepage: previous?.currentCodepage ?? this["defaultCodepage"],
       ...(previous?.fontCodepage === undefined ? {} : { fontCodepage: previous.fontCodepage }),
       colorIndex: previous?.colorIndex ?? 0,
-      ...(previous?.paragraphBorder === undefined
-        ? {}
-        : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
       ...(previous?.basedOnStyleName === undefined
@@ -57,6 +84,13 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         : { characterStyleIndex: previous.characterStyleIndex }),
       bookmarkName: "",
       levelText: "",
+      levelNumbers: [...(previous?.levelNumbers ?? [])],
+      levelNumbersValid: previous?.levelNumbersValid ?? true,
+      listLevelNum: previous?.listLevelNum ?? 0,
+      currentListIndex: previous?.currentListIndex ?? -1,
+      currentListOverrideIndex: previous?.currentListOverrideIndex ?? -1,
+      destinationText,
+      currentDestinationText: previous?.currentDestinationText ?? null,
       ...(previous?.field === undefined ? {} : { field: previous.field }),
       ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
       ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
@@ -72,12 +106,35 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (token.kind === "group-end") {
-    if (this["states"].length === 1 && this["runs"].length > 0)
-      this["CommitParagraph"](this["states"][0]);
+    if (this["states"].length === 1 && !this["firstRun"])
+      FinishRtfSections.call(this, this["states"][0] as RtfState);
     const previous = this["states"].pop();
     try {
+      const parent = this["states"].at(-1);
+      if (previous) this["m_bWasInFrame"] = previous.frame.hasProperties();
+      if (parent && previous?.destination === "flymaincontent")
+        parent.frame = new RTFFrame(previous.frame);
+      if (this["m_nResetBreakOnSectBreak"] !== RTFKeyword.invalid && previous && parent) {
+        const type = previous.sectionSprms.find(N.LN_EG_SectPrContents_type);
+        try {
+          if (type.is()) parent.sectionSprms.set(N.LN_EG_SectPrContents_type, type);
+        } finally {
+          type.dispose();
+        }
+      }
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
         this["CommitFont"](previous);
+      if (
+        previous?.destination === "fonttbl" &&
+        this["states"].at(-1)?.destination !== "fonttbl" &&
+        this["defaultFontIndex"] >= 0
+      )
+        putNestedAttribute(
+          this["m_aDefaultCharacterSprms"],
+          N.LN_EG_RPrBase_rFonts,
+          N.LN_CT_Fonts_ascii,
+          stringValue(this["fonts"].get(this["defaultFontIndex"]) ?? ""),
+        );
       if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
         const name = (previous.styleName.split(";")[0] as string).trim();
         if (name.length > 0) {
@@ -103,79 +160,166 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
               : { nextStyleIndex: previous.nextStyleIndex }),
           };
           this["m_aStyleNames"].set(previous.styleIndex, name);
-          const properties = createRtfStyleProperties(definition, previous.characterSprms);
+          const properties = createRtfStyleProperties(
+            definition,
+            previous.characterSprms,
+            previous.paragraphSprms,
+          );
           if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
             this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
             this["styles"].set(previous.styleIndex, definition);
           } else properties.clear();
         }
       }
+      if (
+        previous?.destination === "title" &&
+        previous.currentDestinationText === previous.destinationText
+      ) {
+        const title = previous.destinationText.makeStringAndClear();
+        try {
+          this["documentTitle"] = text(title);
+        } finally {
+          title.dispose();
+        }
+      }
       if (previous?.destination === "bookmarkstart") {
         const name = previous.bookmarkName.trim();
         if (name.length > 0)
-          this["marks"].push({
+          this["m_aTextBuffer"].marks.push({
             name,
-            offset: this["runs"].reduce(
-              /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
-                length,
-                run,
-              ) => length + run.text.length,
-              0,
-            ),
+            offset: this["m_aTextBuffer"].GetTextLength(),
           });
       }
-      if (previous?.destination === "leveltext") {
-        const glyph = [...previous.levelText].find(
-          /** Computes the value result. @param value - Value. @returns The computed result. */ (
-            value,
-          ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
-        );
-        if (glyph !== undefined) {
-          const level = this["currentListLevels"].at(-1);
-          if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
-        }
+      if (previous) {
+        FinishShapeGroup.call(this, previous);
+        FinishLegacyNumbering.call(this, previous);
+        FinishListLevelGroup.call(this, previous);
       }
-      if (previous?.destination === "list")
-        this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
-      if (previous?.destination === "listoverride")
-        this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
       if (previous?.destination === "fldinst" && previous.field !== undefined) {
         const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
         if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
       }
     } finally {
       previous?.characterSprms.dispose();
+      previous?.destinationText.dispose();
+      previous?.paragraphSprms.dispose();
+      previous?.sectionSprms.dispose();
+      previous?.tableRowSprms.dispose();
+      previous?.tableCellSprms.dispose();
+      previous?.tableSprms.dispose();
+      previous?.tableAttributes.dispose();
+      previous?.listLevelEntries.dispose();
     }
     return;
   }
   const state = this["states"].at(-1);
   if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
+  if (state.destination === "skip") return;
+  if (token.kind === "control") {
+    const symbol = getSymbolData(token.name);
+    if (symbol) {
+      this["setNeedSect"](true);
+      if (
+        state.destination === "upr" &&
+        symbol.controlType === RTFControlType.DESTINATION &&
+        symbol.index !== RTFKeyword.UD
+      ) {
+        state.destination = "skip";
+        return;
+      }
+      if (symbol.index === RTFKeyword.PAR) token = { ...token, name: "par" };
+      if (symbol.controlType === RTFControlType.VALUE && token.parameter === undefined)
+        token = { ...token, parameter: symbol.defValue };
+      else if (
+        symbol.controlType !== RTFControlType.TOGGLE &&
+        symbol.controlType !== RTFControlType.VALUE &&
+        token.parameter !== undefined
+      )
+        token = { kind: "control", name: token.name };
+    }
+  }
+  if (token.kind === "character-source") {
+    if (state.destination === "levelnumbers")
+      ReadLevelNumbers(state, token.firstByte, token.lastByte);
+    return;
+  }
   if (token.kind === "hex-break") {
     // resolveChars converts hex CR and LF into separate PAR controls except
     // in destinations such as LEVELTEXT, where their bytes remain data.
-    if (state.destination === "body") this["DispatchBodyControl"]("par", undefined, state);
+    if (state.destination === "body") this["Dispatch"]({ kind: "control", name: "par" });
     else if (state.destination === "leveltext") state.levelText += token.value;
     return;
   }
+  if (token.kind === "control" && token.name === "u") {
+    const value = token.parameter ?? 0;
+    if (state.destination === "levelnumbers") {
+      if (value === 59) state.levelNumbersValid = false;
+      else state.levelNumbers.push(value);
+    } else this["Dispatch"]({ kind: "text", value: String.fromCharCode(value & 0xffff) });
+    return;
+  }
   if (token.kind === "text" || token.kind === "ansi-bytes") {
+    if (state.destination === "levelnumbers") {
+      return;
+    }
     const value = token.kind === "text" ? token.value : this["DecodeBytes"](token.value, state);
     if (state.destination === "fonttbl") this["ReadFontText"](value, state);
     else if (state.destination === "styleentry") state.styleName += value;
     else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
       state.bookmarkName += value;
     else if (state.destination === "leveltext") state.levelText += value;
-    else if (state.destination === "colortbl") this["ReadColorText"](value);
+    else if (
+      state.destination === "title" ||
+      state.destination === "pntxta" ||
+      state.destination === "pntxtb" ||
+      state.destination === "shapepropertyname" ||
+      state.destination === "shapepropertyvalue"
+    ) {
+      const native = unicode(value);
+      try {
+        state.currentDestinationText?.append(native);
+      } finally {
+        native.dispose();
+      }
+    } else if (state.destination === "colortbl") this["ReadColorText"](value, state);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;
-    else if (state.destination === "body") this["AppendText"](value, state);
+    else if (
+      state.destination === "body" ||
+      state.destination === "flymaincontent" ||
+      state.destination === "upr" ||
+      state.destination === "info"
+    )
+      this["AppendText"](value, state);
     return;
   }
   if (token.name === "*") {
     state.starred = true;
     return;
   }
+  if (
+    token.name === "info" ||
+    token.name === "upr" ||
+    token.name === "title" ||
+    token.name === "ud"
+  ) {
+    state.destination = token.name === "ud" ? "body" : token.name;
+    state.currentDestinationText = state.destinationText;
+    state.starred = false;
+    return;
+  }
+  if (token.name === "flymaincnt") {
+    state.destination = "flymaincontent";
+    state.starred = false;
+    return;
+  }
+  if (DispatchShape.call(this, token.name, token.parameter, state)) return;
   if (token.name === "rtf") {
-    this["sawHeader"] = token.parameter === 1;
+    this["sawHeader"] = true;
+    return;
+  }
+  if (token.name === "margmirror") {
+    this["m_aSettingsTableSprms"].set(N.LN_CT_Settings_mirrorMargins, new RTFValue(1));
     return;
   }
   if (token.name === "deff" && token.parameter !== undefined) {
@@ -231,6 +375,18 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = false;
     return;
   }
+  if (state.destination === "body" && token.name === "nesttableprops") {
+    state.destination = "nestedtableproperties";
+    state.starred = false;
+    state.tableCellSprms.dispose();
+    state.tableCellSprms = new RTFSprms(this["m_aTextBuffer"].m_aDefaultTableCellSprms);
+    return;
+  }
+  if (state.destination === "body" && token.name === "nonesttables") {
+    state.destination = "skip";
+    state.starred = false;
+    return;
+  }
   if (
     token.name === "fonttbl" ||
     token.name === "colortbl" ||
@@ -242,6 +398,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = false;
     return;
   }
+  if (DispatchTextSymbol.call(this, token.name, state)) return;
+  if (DispatchLegacyNumberingDestination(token.name, state)) return;
+  if (token.name === "listid") state.currentListIndex = token.parameter ?? 0;
+  if (DispatchLegacyNumbering.call(this, token.name, token.parameter, state)) return;
   if (state.destination === "stylesheet" && (token.name === "s" || token.name === "cs")) {
     state.starred = false;
     state.styleType = token.name === "cs" ? "character" : "paragraph";
@@ -279,17 +439,18 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
   if (state.destination === "stylesheet") return;
   if (state.destination === "listtable" && token.name === "list") {
     state.destination = "list";
-    this["currentListId"] = 0;
-    this["currentListLevels"] = [];
     return;
   }
-  if (state.destination === "list" && token.name === "listlevel") {
+  if (
+    (state.destination === "list" || state.destination === "lfolevel") &&
+    token.name === "listlevel"
+  ) {
     state.destination = "listlevel";
-    this["currentListLevels"].push({
-      kind: "numbered",
-      start: 1,
-      numberingType: SvxNumType.SVX_NUM_ARABIC,
-    });
+    this["m_nListLevel"]++;
+    return;
+  }
+  if (state.destination === "list" && token.name === "listname") {
+    state.destination = "listname";
     return;
   }
   if (state.destination === "listlevel" && token.name === "leveltext") {
@@ -297,10 +458,20 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.levelText = "";
     return;
   }
-  if (state.destination === "listoverridetable" && token.name === "listoverride") {
+  if (state.destination === "listlevel" && token.name === "levelnumbers") {
+    state.destination = "levelnumbers";
+    return;
+  }
+  if (
+    (state.destination === "listoverridetable" || state.destination === "listoverride") &&
+    token.name === "listoverride"
+  ) {
     state.destination = "listoverride";
-    this["currentOverrideListId"] = 0;
-    this["currentOverrideIndex"] = 0;
+    return;
+  }
+  if (state.destination === "listoverride" && token.name === "lfolevel") {
+    state.destination = "lfolevel";
+    state.tableSprms.clear();
     return;
   }
   if (SKIPPED_DESTINATIONS.has(token.name) || state.starred) {
@@ -309,42 +480,92 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     return;
   }
   if (state.destination === "fonttbl") {
-    if (token.name === "f" && token.parameter !== undefined) {
+    if (token.name === "f" || token.name === "af") {
       this["CommitFont"](state);
-      state.fontIndex = token.parameter;
+      state.fontIndex = token.parameter ?? 0;
       Reflect.deleteProperty(state, "fontCodepage");
     }
     return;
   }
   if (state.destination === "colortbl") {
-    if (token.name === "red") this["color"].red = token.parameter ?? 0;
-    else if (token.name === "green") this["color"].green = token.parameter ?? 0;
-    else if (token.name === "blue") this["color"].blue = token.parameter ?? 0;
+    if (token.name === "red") state.currentColor.SetRed(token.parameter ?? 0);
+    else if (token.name === "green") state.currentColor.SetGreen(token.parameter ?? 0);
+    else if (token.name === "blue") state.currentColor.SetBlue(token.parameter ?? 0);
+    return;
+  }
+  if (
+    state.destination === "pn" ||
+    state.destination === "pntxta" ||
+    state.destination === "pntxtb"
+  ) {
+    this["DispatchBodyControl"](token.name, token.parameter, state);
     return;
   }
   if (state.destination === "list" || state.destination === "listlevel") {
-    if (token.name === "listid") this["currentListId"] = token.parameter ?? 0;
-    else if (token.name === "levelnfc") {
-      const level = this["currentListLevels"].at(-1);
-      if (level !== undefined) {
-        level.kind = token.parameter === 23 ? "bullet" : "numbered";
-        level.numberingType = fromRtfNfc(token.parameter ?? 0);
-      }
-    } else if (token.name === "levelstartat") {
-      const level = this["currentListLevels"].at(-1);
-      if (level !== undefined && token.parameter !== undefined)
-        level.start = Math.max(0, token.parameter);
+    if (
+      state.destination === "listlevel" &&
+      [
+        "loch",
+        "hich",
+        "dbch",
+        "ltrch",
+        "rtlch",
+        "ltrpar",
+        "rtlpar",
+        "ltrrow",
+        "rtlrow",
+        "plain",
+      ].includes(token.name)
+    ) {
+      this["DispatchBodyControl"](token.name, token.parameter, state);
+      return;
+    }
+
+    if (
+      state.destination === "listlevel" &&
+      dispatchAssociatedCharacter.call(this, token.name, token.parameter, state)
+    )
+      return;
+    if (state.destination === "listlevel" && token.name === "s") {
+      const name = this["m_aStyleNames"].get(token.parameter ?? 0);
+      if (name) state.tableSprms.set(N.LN_CT_Lvl_pStyle, stringValue(name));
+      return;
+    }
+    if (token.name === "listid") {
+      if (state.destination === "list")
+        state.tableAttributes.set(
+          N.LN_CT_AbstractNum_abstractNumId,
+          new RTFValue(token.parameter ?? 0),
+        );
+    } else if (state.destination === "listlevel") {
+      if (token.name === "fi" && !state.levelNumbersValid)
+        this["m_aInvalidListLevelFirstIndents"].set(this["m_nListLevel"], token.parameter ?? 0);
+      dispatchNumberingValue(token.name, token.parameter, state);
     }
     return;
   }
-  if (state.destination === "leveltext") return;
+  if (
+    state.destination === "leveltext" ||
+    state.destination === "levelnumbers" ||
+    state.destination === "listname"
+  )
+    return;
   if (state.destination === "listoverride") {
-    if (token.name === "listid") this["currentOverrideListId"] = token.parameter ?? 0;
-    else if (token.name === "ls") this["currentOverrideIndex"] = token.parameter ?? 0;
+    if (token.name === "listid") {
+      state.tableSprms.set(N.LN_CT_Num_abstractNumId, new RTFValue(token.parameter ?? 0));
+    } else if (token.name === "ls") {
+      state.currentListOverrideIndex = token.parameter ?? 0;
+      state.tableAttributes.set(N.LN_CT_AbstractNum_nsid, new RTFValue(token.parameter ?? 0));
+    }
+    return;
+  }
+  if (state.destination === "lfolevel") {
+    if (["levelnfc", "levelstartat", "levellegal", "leveljc", "levelfollow"].includes(token.name))
+      dispatchNumberingValue(token.name, token.parameter, state);
     return;
   }
   if (state.destination === "listtable" || state.destination === "listoverridetable") return;
-  if (state.destination === "skip") return;
+  if (state.destination === "title" || state.destination === "info") return;
   this["DispatchBodyControl"](token.name, token.parameter, state);
 }
 
@@ -355,306 +576,87 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
+  dispatchStyleParagraphNumbering(name, parameter, state);
+  if (name === "outlinelevel") {
+    state.paragraphSprms.set(N.LN_CT_PPrBase_outlineLvl, new RTFValue(parameter ?? 0));
+    return;
+  }
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
-  if (name === "sect") {
-    if (this["runs"].length > 0) this["CommitParagraph"](state);
-    this["FlushTable"]();
-    this["currentSection"]++;
-    this["sectionPages"].push({ ...this["defaultSectionPage"] });
-    this["terminatedParagraph"] = true;
+  if (dispatchLanguageValue.call(this, name, parameter ?? 0, state)) return;
+  if (dispatchAssociatedCharacter.call(this, name, parameter, state)) return;
+  if (name === "loch" || name === "hich" || name === "dbch") {
+    state.runType = name === "loch" ? RunType.LOCH : name === "hich" ? RunType.HICH : RunType.DBCH;
     return;
   }
-  if (name === "sectd") {
-    this["sectionPages"][this["currentSection"]] = { ...this["defaultSectionPage"] };
-    this["sectionPageRestarts"].delete(this["currentSection"]);
+  if (name === "ltrch") {
+    state.runType =
+      state.runType === RunType.RTLCH_LTRCH_1 ? RunType.RTLCH_LTRCH_2 : RunType.LTRCH_RTLCH_1;
     return;
   }
-  if (name === "pgnrestart") {
-    this["sectionPageRestarts"].add(this["currentSection"]);
+  if (name === "rtlch") {
+    state.runType =
+      state.runType === RunType.LTRCH_RTLCH_1 ? RunType.LTRCH_RTLCH_2 : RunType.RTLCH_LTRCH_1;
+    if (this["defaultCodepage"] === 1255) state.currentCodepage = 1255;
     return;
   }
-  {
-    const page = this["sectionPages"][this["currentSection"]] as RtfSectionPage;
-    if (name === "landscape" || name === "lndscpsxn") {
-      page.landscape = true;
-      if (name === "landscape") this["defaultSectionPage"].landscape = true;
-    } else if (parameter !== undefined) {
-      switch (name) {
-        case "paperw":
-          this["defaultSectionPage"].width = parameter;
-          page.width = parameter;
-          break;
-        case "pgwsxn":
-          page.width = parameter;
-          break;
-        case "paperh":
-          this["defaultSectionPage"].height = parameter;
-          page.height = parameter;
-          break;
-        case "pghsxn":
-          page.height = parameter;
-          break;
-        case "margl":
-          this["defaultSectionPage"].leftMargin = parameter;
-          page.leftMargin = parameter;
-          break;
-        case "marglsxn":
-          page.leftMargin = parameter;
-          break;
-        case "margr":
-          this["defaultSectionPage"].rightMargin = parameter;
-          page.rightMargin = parameter;
-          break;
-        case "margrsxn":
-          page.rightMargin = parameter;
-          break;
-        case "margt":
-          this["defaultSectionPage"].topMargin = parameter;
-          page.topMargin = parameter;
-          break;
-        case "margtsxn":
-          page.topMargin = parameter;
-          break;
-        case "margb":
-          this["defaultSectionPage"].bottomMargin = parameter;
-          page.bottomMargin = parameter;
-          break;
-        case "margbsxn":
-          page.bottomMargin = parameter;
-          break;
-      }
-    }
+  if (name === "ltrsect" || name === "rtlsect") {
+    state.runType = RunType.NONE;
+    state.paragraphSprms.set(
+      N.LN_EG_SectPrContents_textDirection,
+      new RTFValue(name === "rtlsect" ? 1 : 0),
+    );
+    return;
   }
+  if (name === "ltrpar" || name === "rtlpar") {
+    state.runType = RunType.NONE;
+    state.paragraphSprms.set(N.LN_CT_PPrBase_bidi, new RTFValue(name === "rtlpar" ? 1 : 0));
+    return;
+  }
+  if (name === "cbpat") {
+    if (parameter)
+      putNestedAttribute(
+        state.paragraphSprms,
+        N.LN_CT_PrBase_shd,
+        N.LN_CT_Shd_fill,
+        new RTFValue((this["colors"][parameter >>> 0] ?? COL_BLACK).toUInt32() | 0),
+      );
+    return;
+  }
+  if (dispatchTableFlag(name, state)) return;
+  if (dispatchFloatingTableValue(name, parameter ?? 0, state)) return;
+  if (dispatchTableShading.call(this, name, parameter ?? 0, state)) return;
+  if (dispatchTableMeasure(name, parameter ?? 0, state)) return;
+  if (
+    dispatchTableMargin(name, parameter ?? 0, state, this["m_aTextBuffer"].m_aDefaultTableCellSprms)
+  )
+    return;
+  if (DispatchTableControl.call(this, name, parameter, state)) return;
+  if (
+    DispatchBorder(state, name) ||
+    DispatchBorderValue(state, name, parameter ?? 0, this["colors"])
+  )
+    return;
+  if (DispatchFrameControl.call(this, name, parameter ?? 0, state)) return;
+  if (
+    !this["m_aTextBufferStack"].length &&
+    DispatchSectionControl.call(this, name, parameter, state)
+  )
+    return;
   if (name === "deftab" && parameter !== undefined) {
     this["defaultTabStop"] = parameter;
     return;
   }
   if (name === "pagebb") {
     if (!this["firstRun"])
-      state.paragraph = {
-        ...state.paragraph,
-        pageBreakBefore: true,
-        pageBreakBeforeSet: true,
-      };
+      state.paragraphSprms.set(N.LN_CT_PPrBase_pageBreakBefore, new RTFValue(1));
     return;
   }
   if (name === "page" || name === "column") {
-    // The represented document has one column: pinned COLUMN dispatches PAGE.
-    // PAGE is ignored while the RTF table buffer owns the current row.
-    if (this["inTable"]) return;
-    if (this["runs"].length > 0 || (this["pendingPageBreak"] && this["tableRows"].length === 0))
-      this["CommitParagraph"](state);
-    if (this["tableRows"].length > 0) this["FlushTable"]();
-    this["pendingPageBreak"] = true;
-    return;
-  }
-  if (name === "trowd") {
-    this["inTable"] = true;
-    this["rowBoundaries"] = [];
-    this["rowAlignment"] = "left";
-    this["rowLeft"] = 0;
-    this["rowHeight"] = 0;
-    this["rowSplit"] = true;
-    this["rowHeader"] = false;
-    this["rowVerticals"] = [];
-    this["nextCellVertical"] = undefined;
-    this["rowBorders"] = [];
-    this["nextCellBorders"] = new Map();
-    this["activeBorder"] = undefined;
-    this["rowPaddings"] = [];
-    this["nextCellPaddings"] = new Map();
-    this["rowDefaultPaddings"] = new Map();
-    return;
-  }
-  if (name === "trpaddt" || name === "trpaddl" || name === "trpaddb" || name === "trpaddr") {
-    const edge =
-      name === "trpaddt"
-        ? SvxBoxItemLine.TOP
-        : name === "trpaddl"
-          ? SvxBoxItemLine.LEFT
-          : name === "trpaddb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    this["rowDefaultPaddings"].set(edge, parameter ?? 0);
-    return;
-  }
-  if (name === "clpadl" || name === "clpadt" || name === "clpadb" || name === "clpadr") {
-    const edge =
-      name === "clpadl"
-        ? SvxBoxItemLine.TOP
-        : name === "clpadt"
-          ? SvxBoxItemLine.LEFT
-          : name === "clpadb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    this["nextCellPaddings"].set(edge, parameter ?? 0);
-    return;
-  }
-  if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
-    delete state.paragraphBorder;
-    const edge =
-      name === "clbrdrt"
-        ? SvxBoxItemLine.TOP
-        : name === "clbrdrl"
-          ? SvxBoxItemLine.LEFT
-          : name === "clbrdrb"
-            ? SvxBoxItemLine.BOTTOM
-            : SvxBoxItemLine.RIGHT;
-    const border: RtfCellBorder = createRtfBorder();
-    this["nextCellBorders"].set(edge, border);
-    this["activeBorder"] = border;
-    return;
-  }
-  if (["box", "brdrt", "brdrl", "brdrb", "brdrr", "brdrbtw"].includes(name)) {
-    const edge =
-      name === "box"
-        ? "box"
-        : name === "brdrbtw"
-          ? "between"
-          : name === "brdrt"
-            ? SvxBoxItemLine.TOP
-            : name === "brdrl"
-              ? SvxBoxItemLine.LEFT
-              : name === "brdrb"
-                ? SvxBoxItemLine.BOTTOM
-                : SvxBoxItemLine.RIGHT;
-    state.paragraphBorder = edge;
-    const borders = new Map(state.paragraph.borders);
-    if (edge === "box")
-      for (const side of [
-        SvxBoxItemLine.TOP,
-        SvxBoxItemLine.LEFT,
-        SvxBoxItemLine.BOTTOM,
-        SvxBoxItemLine.RIGHT,
-      ])
-        borders.set(side, createRtfBorder());
-    else borders.set(edge, createRtfBorder());
-    state.paragraph = { ...state.paragraph, borders };
-    return;
-  }
-  if (
-    Object.hasOwn(RTF_BORDER_STYLES, name) ||
-    name === "brdrw" ||
-    name === "brdrcf" ||
-    name === "brsp"
-  ) {
-    if (state.paragraphBorder !== undefined) {
-      const borders = new Map(state.paragraph.borders);
-      const edges =
-        state.paragraphBorder === "box"
-          ? ([
-              SvxBoxItemLine.TOP,
-              SvxBoxItemLine.LEFT,
-              SvxBoxItemLine.BOTTOM,
-              SvxBoxItemLine.RIGHT,
-            ] as const)
-          : [state.paragraphBorder];
-      for (const edge of edges) {
-        const border = { ...(borders.get(edge) ?? createRtfBorder()) };
-        dispatchRtfBorder(border, name, parameter);
-        borders.set(edge, border);
-      }
-      state.paragraph = { ...state.paragraph, borders };
-    } else if (this["activeBorder"] !== undefined)
-      dispatchRtfBorder(this["activeBorder"], name, parameter);
-    else {
-      // putBorderProperty with border state NONE clears all paragraph borders.
-      const borders = new Map(state.paragraph.borders);
-      for (const side of [
-        SvxBoxItemLine.TOP,
-        SvxBoxItemLine.LEFT,
-        SvxBoxItemLine.BOTTOM,
-        SvxBoxItemLine.RIGHT,
-      ])
-        borders.set(side, createRtfBorder());
-      state.paragraph = { ...state.paragraph, borders };
-    }
-    return;
-  }
-  if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
-    this["nextCellVertical"] =
-      name === "clvertalc"
-        ? VertOrientation.CENTER
-        : name === "clvertalb"
-          ? VertOrientation.BOTTOM
-          : VertOrientation.TOP;
-    return;
-  }
-  if (name === "trrh") {
-    this["rowHeight"] = parameter ?? 0;
-    return;
-  }
-  if (name === "trkeep") {
-    this["rowSplit"] = false;
-    return;
-  }
-  if (name === "trhdr") {
-    this["rowHeader"] = true;
-    return;
-  }
-  if (name === "trql" || name === "trqc" || name === "trqr") {
-    this["rowAlignment"] = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
-    return;
-  }
-  if (name === "trleft") {
-    this["rowLeft"] = parameter ?? 0;
-    return;
-  }
-  if (name === "cellx") {
-    if (parameter !== undefined) {
-      this["rowBoundaries"].push(parameter);
-      this["rowVerticals"].push(this["nextCellVertical"]);
-      this["nextCellVertical"] = undefined;
-      this["rowBorders"].push(this["nextCellBorders"]);
-      this["nextCellBorders"] = new Map();
-      this["rowPaddings"].push(this["nextCellPaddings"]);
-      this["nextCellPaddings"] = new Map();
-      this["activeBorder"] = undefined;
-    }
-    return;
-  }
-  if (name === "intbl") {
-    this["inTable"] = true;
-    return;
-  }
-  if (name === "cell") {
-    if (this["runs"].length > 0 || this["tableCell"].length === 0) this["CommitParagraph"](state);
-    this["tableRow"].push(this["tableCell"].splice(0));
-    this["terminatedParagraph"] = true;
-    return;
-  }
-  if (name === "row") {
-    if (this["tableCell"].length > 0 || this["runs"].length > 0) {
-      if (this["runs"].length > 0) this["CommitParagraph"](state);
-      this["tableRow"].push(this["tableCell"].splice(0));
-    }
-    if (this["tableRow"].length > 0)
-      this["tableRows"].push({
-        cells: this["tableRow"].splice(0),
-        header: this["rowHeader"],
-        boundaries: this["rowBoundaries"].splice(0),
-        alignment: this["rowAlignment"],
-        left: this["rowLeft"],
-        height: this["rowHeight"],
-        split: this["rowSplit"],
-        verticals: this["rowVerticals"].splice(0),
-        borders: this["rowBorders"].splice(0),
-        paddings: this["rowPaddings"].splice(0),
-        defaultPaddings: this["rowDefaultPaddings"],
-      });
-    this["inTable"] = false;
-    this["terminatedParagraph"] = true;
+    DispatchPageBreak.call(this, name, state);
     return;
   }
   if (name === "par") {
-    this["CommitParagraph"](state);
-    return;
-  }
-  if (name === "line" || name === "tab" || name === "~" || name === "-") {
-    this["AppendText"](
-      name === "line" ? "\n" : name === "tab" ? "\t" : name === "~" ? "\u00a0" : "\u00ad",
-      state,
-    );
+    this["CommitParagraph"](state, true);
     return;
   }
   if (name === "kerning") {
@@ -662,7 +664,9 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "plain") {
+    state.runType = RunType.NONE;
     state.characterSprms.clear();
+    for (const [id, value] of this["m_aDefaultCharacterSprms"]) state.characterSprms.set(id, value);
     delete state.characterStyleIndex;
     delete state.currentCharacterStyleIndex;
     delete state.autoKerning;
@@ -673,16 +677,10 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "pard") {
-    if (!this["inTable"] && this["tableRows"].length > 0) this["FlushTable"]();
+    state.frame = new RTFFrame();
+    state.paragraphSprms.clear();
+    this["m_aTextBuffer"].m_bNeedPap = true;
     state.paragraph = { ...DEFAULT_PARAGRAPH };
-    delete state.paragraphBorder;
-    return;
-  }
-  if (name === "b" || name === "i") {
-    state.character = {
-      ...state.character,
-      [name === "b" ? "bold" : "italic"]: parameter !== 0,
-    };
     return;
   }
   const underlineStyle = Object.hasOwn(RTF_UNDERLINE_STYLES, name)
@@ -705,7 +703,7 @@ export function DispatchBodyControl(
   } else if (name === "ulc" && parameter !== undefined) {
     state.character = {
       ...state.character,
-      underlineColor: parameter === 0 ? "auto" : (this["colors"][parameter] ?? "auto"),
+      underlineColor: writerColorValue(this["getColorTable"](parameter)),
     };
   } else if (name === "strike" || name === "striked") {
     state.characterSprms.set(
@@ -733,43 +731,33 @@ export function DispatchBodyControl(
       N.LN_EG_RPrBase_position,
       new RTFValue((parameter ?? 6) * (name === "up" ? 1 : -1)),
     );
-  } else if (name === "ls" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, listOverride: parameter };
-  else if (name === "cs" && parameter !== undefined) {
+  } else if (name === "cs" && parameter !== undefined) {
     state.currentCharacterStyleIndex = parameter;
     if (this["styles"].has(parameter)) {
       state.characterStyleIndex = parameter;
       const name = this["m_aStyleNames"].get(parameter);
       if (name) state.characterSprms.set(N.LN_EG_RPrBase_rStyle, stringValue(name));
     }
-  } else if (name === "s" && parameter !== undefined)
+  } else if (name === "s" && parameter !== undefined) {
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
-  else if (name === "ilvl" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
-  else if (name === "fs" && parameter !== undefined && parameter > 0)
-    state.character = { ...state.character, fontSizeTwips: parameter * 10 };
-  else if (name === "f" && parameter !== undefined) {
-    state.fontIndex = parameter;
-    state.currentCodepage = this["fontCodepages"].get(parameter) ?? this["defaultCodepage"];
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "fontFamily");
-    const fontFamily = this["fonts"].get(parameter);
-    state.character = { ...character, ...(fontFamily === undefined ? {} : { fontFamily }) };
+    const styleName = this["m_aStyleNames"].get(parameter);
+    if (styleName && state.destination !== "styleentry")
+      state.paragraphSprms.set(N.LN_CT_PPrBase_pStyle, stringValue(styleName));
   } else if (name === "cf" && parameter !== undefined) {
     state.colorIndex = parameter;
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "color");
-    const color = parameter === 0 ? undefined : this["colors"][parameter];
-    state.character = { ...character, ...(color === undefined ? {} : { color }) };
+    state.character = {
+      ...state.character,
+      color: writerColorValue(this["getColorTable"](parameter)),
+    };
   } else if (name === "highlight" && parameter !== undefined) {
     const character = { ...state.character };
     Reflect.deleteProperty(character, "highlight");
-    const highlight = parameter === 0 ? undefined : this["colors"][parameter];
-    state.characterSprms.set(
-      N.LN_EG_RPrBase_highlight,
-      new RTFValue(writerColorFromPrimitive(highlight ?? "auto", "auto").toInt32()),
-    );
-    state.character = { ...character, ...(highlight === undefined ? {} : { highlight }) };
+    const highlight = parameter === 0 ? COL_AUTO : this["getColorTable"](parameter);
+    state.characterSprms.set(N.LN_EG_RPrBase_highlight, new RTFValue(highlight.toInt32()));
+    state.character = {
+      ...character,
+      ...(highlight.equals(COL_AUTO) ? {} : { highlight: writerColorValue(highlight) }),
+    };
   } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj" || name === "qd")
     state.paragraph = {
       ...state.paragraph,
@@ -778,20 +766,6 @@ export function DispatchBodyControl(
       alignment:
         name === "ql" ? "left" : name === "qc" ? "center" : name === "qr" ? "right" : "justify",
     };
-  else if (name === "li" && parameter !== undefined)
-    state.paragraph = {
-      ...state.paragraph,
-      left: Math.max(0, parameter),
-      leftSet: true,
-      // rtftok LI inserts firstLine=0 with Ignore conflict policy.
-      ...(!state.paragraph.firstLineSet ? { firstLine: 0, firstLineSet: true } : {}),
-    };
-  else if (name === "lin" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, left: Math.max(0, parameter), leftSet: true };
-  else if ((name === "ri" || name === "rin") && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, right: Math.max(0, parameter), rightSet: true };
-  else if (name === "fi" && parameter !== undefined)
-    state.paragraph = { ...state.paragraph, firstLine: parameter, firstLineSet: true };
   else if (name === "sb" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, before: Math.max(0, parameter), beforeSet: true };
   else if (name === "sa" && parameter !== undefined)
@@ -851,6 +825,36 @@ import { createRtfStyleProperties } from "./rtfdocumentimpl.character";
 import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { writerColorValue } from "../../core/attr/swatrset";
 
 import { stringValue } from "./rtfdocumentimpl.character";
+
+import { dispatchLanguageValue } from "./rtfdispatchvalue.language";
+
+import { dispatchAssociatedCharacter } from "./rtfdispatchvalue.character";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";
+
+import { FinishListLevelGroup, ReadLevelNumbers } from "./rtfdocumentimpl.numbering-state";
+import { dispatchNumberingValue } from "./rtfdispatchvalue.numbering";
+
+import { dispatchStyleParagraphNumbering } from "./rtfdispatchvalue.numbering";
+
+import {
+  FinishLegacyNumbering,
+  DispatchLegacyNumbering,
+  DispatchLegacyNumberingDestination,
+} from "./rtfdocumentimpl.legacy-numbering";
+
+import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
+
+import { DispatchTextSymbol } from "./rtfdispatchsymbol";
+
+import {
+  FinishRtfSections,
+  DispatchSectionControl,
+  DispatchPageBreak,
+} from "./rtfdocumentimpl.section";
+import { dispatchTableFlag } from "./rtfdispatchflag.table";
+import { RTFKeyword } from "./rtfcontrolwords";
+import { getSymbolData, RTFControlType } from "./rtftokenizer";

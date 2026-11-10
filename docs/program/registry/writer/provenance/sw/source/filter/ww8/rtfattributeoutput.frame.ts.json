@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.frame.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "OutputFlyFrame"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::OutputFlyFrame_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Emits the represented RTF ordinary text-box shape, native size, position, wrap, box, fill and text orientation."
+    ],
+    "omittedResponsibilities": [
+      "Drawing shape, gradient and shadow export and native rendered frame measurements are outside this represented geometry path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.frame.ts",
+          "marker": "OutputFlyFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputFlyFrame_Impl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.frame.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates native text fly property emission from paragraph and character output."
+    }
+  }
+}

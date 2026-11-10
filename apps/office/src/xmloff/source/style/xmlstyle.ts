@@ -12,6 +12,7 @@ import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
 } from "../text/XMLLineNumberingImportContext";
+import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
@@ -24,6 +25,7 @@ const ignoredStyleDefinitions = new Set([
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
+  registerTextFrameStyle?(name: string, style: XMLTextFrameStyle, parent?: string): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   getFontFaceGeneric?(name: string): string | undefined;
@@ -109,6 +111,11 @@ export class XMLStylesContext extends SvXMLImportContext {
       return new XMLStyleContext(this.target, attributes, this, true);
     if (element === XMLToken.STYLE_STYLE) {
       const family = attributes.get(XMLToken.STYLE_FAMILY);
+      if (family === "graphic" && this.target.registerTextFrameStyle)
+        return new XMLTextFrameStyleContext(
+          attributes,
+          this.target.registerTextFrameStyle.bind(this.target),
+        );
       if (
         family === "table" ||
         family === "table-column" ||

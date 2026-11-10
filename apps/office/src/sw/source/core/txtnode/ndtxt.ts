@@ -2,6 +2,7 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 import { GetTextNodeLanguage } from "./thints-language";
+import { GetMinMaxSize, type SwMinMaxSize } from "../text/itratr.minmax";
 import { InsertTextNodeHint } from "./thints-insert";
 import {
   SetTextNodeAttributes,
@@ -9,7 +10,7 @@ import {
   type TextAttributeOutput,
 } from "./thints-setattr";
 import { ResetTextNodeAttributes } from "./txtedt-reset";
-import type { SwFormatCharFormat } from "./fmtatr2";
+import type { SwFormatCharFormat, SwFormatINetFormat, WriterHyperlink } from "./fmtatr2";
 import { PrepareTextNodeReplacementHints, UpdateTextNodeReplacementIndices } from "./ndtxt-hints";
 import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
 import type { UpdateAttrHint } from "../../../inc/hints";
@@ -43,6 +44,7 @@ import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import { SwContentIndexUpdateMode, type SwContentIndex } from "../bastyp/index";
 import type { SwPosition } from "../crsr/pam";
+import { JoinNext, JoinPrev } from "./ndtxt-join";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
 import { SwList, WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../doc/list";
@@ -51,7 +53,6 @@ import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
-import type { WriterHyperlink } from "./fmtatr2";
 import {
   HandleResetAttrAtTextNode,
   HandleSetAttrAtTextNode,
@@ -70,10 +71,10 @@ import {
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
-import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwpHints } from "./ndhints";
 import {
   AppendTextNodeHints,
+  CloneTextNodeTo,
   AssertTextNodeRange,
   CopyTextNodeHints,
   CreateTextNodeColorFragment,
@@ -92,6 +93,7 @@ import {
   SplitTextNodeEndHints,
 } from "./ndtxt-hints";
 import {
+  FindTextNodeList,
   CaptureSwTextNodeListItems,
   UpdateSwTextNodeOutlineLevel,
   SetSwTextNodeListItems,
@@ -99,6 +101,7 @@ import {
   GetSwTextNodeListLabel,
   GetSwTextNodeNumString,
   HasSwTextNodeVisibleNumbering,
+  HasSwTextNodeMarkedLabel,
   resolveSwLeftMarginForTabCalculation,
   resolveSwLeftMarginWithNum,
   resolveSwListLevelIndents,
@@ -109,8 +112,6 @@ export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
 
 /**
  * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
- *
- * The compatibility `runs` accessor delegates to the separate immutable projection boundary.
  */
 export class SwTextNode extends SwContentNode {
   private mText: string;
@@ -143,7 +144,10 @@ export class SwTextNode extends SwContentNode {
   public GetText(): string {
     return this.mText;
   }
-
+  /** Original import-time paragraph width. @param index - Native anchor scan index or zero. @returns Native width metrics. */
+  public GetMinMaxSize(index: number): SwMinMaxSize {
+    return GetMinMaxSize(this, index);
+  }
   /** Reports whether a list style overrides paragraph indentation inherited from an ancestor style. @returns List precedence. */
   public DoesListGeometryWin(): boolean {
     return this.listGeometryWins;
@@ -544,9 +548,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Queries marked-label state through the existing list and derived tree depth. @returns Whether this member's label is marked. */
   public HasMarkedLabel(): boolean {
-    if (!this.IsInList()) return false;
-    const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
-    return list?.IsListLevelMarked(this.GetActualListLevel()) ?? false;
+    return HasSwTextNodeMarkedLabel(this);
   }
   /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
   public HasNumber(): boolean {
@@ -583,13 +585,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Finds or creates the effective document list. @returns List when a rule and identity exist. */
   private FindList(): SwList | undefined {
-    const id = this.GetListId();
-    if (id.length === 0) return undefined;
-    const lists = this.GetDoc().GetDocumentListsManager();
-    const existing = lists.GetListByName(id);
-    if (existing !== undefined) return existing;
-    const rule = this.GetNumRule();
-    return rule === undefined ? undefined : lists.CreateList(rule.GetName(), id);
+    return FindTextNodeList(this);
   }
   /** Allocates and inserts the shown record for a connected document node. @returns Nothing. */
   public AddToList(): void {
@@ -689,13 +685,13 @@ export class SwTextNode extends SwContentNode {
     this.ReplaceRange(start, end, { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) });
   }
 
-  /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable native fragment. */
-  public CutTextFragment(start: number, end: number): SwTextFragment {
+  /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @param preservePortions - Preserve native CutImpl insertion order before the destination resolves portions. @returns Consumable native fragment. */
+  public CutTextFragment(start: number, end: number, preservePortions = false): SwTextFragment {
     AssertTextNodeRange(this, start, end);
     if (start === end) return this.CaptureTextFragment(start, end);
     const text = this.mText.slice(start, end);
     const remaining = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
-    const hints = remaining.Cut(start, end);
+    const hints = remaining.Cut(start, end, preservePortions);
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
     this.pSwpHints = remaining.CanBeDeleted() ? undefined : remaining;
     this.UpdateContentIndices(start, end - start, SwContentIndexUpdateMode.Negative);
@@ -883,35 +879,41 @@ export class SwTextNode extends SwContentNode {
     });
     return trailing;
   }
-  /** Appends another text node's content while preserving its direct attributes. @param source - Appended text node. @returns Nothing. */
-  public AppendTextNode(source: SwTextNode): void {
+  /** Original JoinNext retains this owner and removes the admitted following paragraph. @returns Same native content owner. */
+  public JoinNext(): SwTextNode {
+    return JoinNext(this);
+  }
+  /** Original JoinPrev retains this trailing owner and transfers preceding contents and indices. @returns Nothing. */
+  public JoinPrev(): void {
+    JoinPrev(this);
+  }
+  /** Whole-paragraph CutText binding used by the current native join consumers. Source indices move once, after any destination-prefix insertion update. @param source - Consumed source paragraph. @param prepend - Insert at zero instead of appending. @param consume - Native Cut transfer; the established portable copy adapter retains its source. @param moveSourceIndices - Join relocates indices; standalone Cut retains source indices for native negative update. @returns Nothing. */
+  public AppendTextNode(
+    source: SwTextNode,
+    prepend = false,
+    consume = false,
+    moveSourceIndices = true,
+  ): void {
     if (source === this) throw new Error("SwTextNode cannot append itself.");
     if (source.GetNodes() !== this.GetNodes())
       throw new Error("Joined SwTextNodes belong to different documents.");
-    const offset = this.Len();
-    const joinedHints = AppendTextNodeHints(this, source, offset);
-    this.mText += source.mText;
+    const text = source.mText,
+      oldLength = this.Len(),
+      offset = prepend ? 0 : oldLength;
+    if (prepend) this.UpdateContentIndices(0, text.length);
+    if (moveSourceIndices) source.MoveAllContentIndicesTo(this, offset);
+    this.mText = prepend ? text + this.mText : this.mText + text;
+    const joinedHints = AppendTextNodeHints(this, source, offset, prepend, oldLength, consume);
     this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
-    source.MoveAllContentIndicesTo(this, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
     });
   }
-
   /** Creates an independent text node in another document graph. @param nodes - Destination node array. @returns Detached clone. */
   public CloneTo(nodes: SwNodes): SwTextNode {
-    const clone = new SwTextNode(
-      nodes,
-      nodes.GetEndOfContent().StartOfSectionNode(),
-      nodes.GetDoc().CopyTextColl(this.GetTextFormatColl()),
-    );
-    const direct = this.GetpSwAttrSet();
-    if (direct !== undefined) clone.SetAttr(direct);
-    clone.SetText(this.mText);
-    if (this.pSwpHints !== undefined)
-      clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
-    clone.SetListGeometryWins(this.listGeometryWins);
+    const clone = CloneTextNodeTo(this, nodes);
+    if (this.pSwpHints) clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
     clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
       this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
     return clone;

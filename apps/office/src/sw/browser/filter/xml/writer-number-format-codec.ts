@@ -15,6 +15,9 @@ import { encodeCharacterStyleReference } from "./writer-character-style-codec";
 /** Primitive graph record for one numbering level. */
 export interface WriterNumberFormatRecord {
   readonly characterStyle?: number;
+  readonly nativeNumberingType?: number;
+  readonly numAdjust?: number;
+  readonly isLegal?: boolean;
   readonly bulletFont: string;
   readonly bulletFontPresent?: boolean;
   readonly bulletFontMetadata?: FontMetadataRecord;
@@ -47,6 +50,9 @@ export function encodeNumberFormat(
   const characterStyle = encodeCharacterStyleReference(document, format.GetCharFormat());
   return {
     ...(characterStyle === undefined ? {} : { characterStyle }),
+    nativeNumberingType: format.GetNumberingType(),
+    numAdjust: format.GetNumAdjust(),
+    isLegal: format.GetIsLegal(),
     ...format.GetPositionProperties(),
     bulletFont: font?.GetFamilyName() ?? "",
     ...(font === undefined

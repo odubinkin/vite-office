@@ -39,8 +39,16 @@ export function MakeTextAttr(
     set.Put(attr);
     return MakeTextAttr(doc, set, start, end);
   }
-  if (attr instanceof SwFormatAutoFormat && attr.GetStyleHandle().GetPool() !== doc.GetAttrPool())
-    return MakeTextAttr(doc, attr.GetStyleHandle().Clone(true, doc.GetAttrPool()), start, end);
+  if (
+    attr instanceof SwFormatAutoFormat &&
+    (attr.GetStyleHandle() as SfxItemSet).GetPool() !== doc.GetAttrPool()
+  )
+    return MakeTextAttr(
+      doc,
+      (attr.GetStyleHandle() as SfxItemSet).Clone(true, doc.GetAttrPool()),
+      start,
+      end,
+    );
   if (attr instanceof SwFormatCharFormat) {
     const style = attr.GetCharFormat();
     const copied =

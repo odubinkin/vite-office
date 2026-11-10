@@ -2,6 +2,8 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
+import type { ICULanguageBreakFactory } from "../../../../external/icu/source/common/brkeng";
+import { g_pBreakIt } from "../../core/bastyp/breakit";
 import { SwXTextDocument } from "../uno/unotxdoc";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
@@ -102,7 +104,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Serializes the live Writer model through the native RTF writer. @returns RTF bytes. */
   public SerializeRtf(): Uint8Array {
     this.EnsureOpen();
-    return RtfExport.WriteDocument(this.document);
+    return RtfExport.WriteDocument(this.document, this.GetTitle());
   }
 
   /** Serializes the live Writer model through the native Markdown writer. @returns UTF-8 Markdown bytes. */
@@ -111,13 +113,16 @@ export class SwDocShell extends SfxObjectShell {
     return new SwMDWriter().WriteDocument(this.document);
   }
 
-  /** Reads Markdown before atomically replacing the active model. @param bytes - Complete UTF-8 stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
+  /** Reads Markdown before atomically replacing the active model. @param bytes - Complete UTF-8 stream. @param metadata - Target identity. @param medium - Source medium. @param dictionaries - Prepared native word dictionaries. @returns Installed model. */
   public OpenMarkdown(
     bytes: Uint8Array,
     metadata: SfxObjectShellState,
     medium: SfxMediumInput,
+    dictionaries?: ICULanguageBreakFactory,
   ): SwDoc {
     this.EnsureOpen();
+    if (dictionaries !== undefined)
+      g_pBreakIt.GetBreakIter().BindWordDictionaryFactory(dictionaries);
     const document = new MarkdownReader().Read(
       bytes,
       {
@@ -144,14 +149,17 @@ export class SwDocShell extends SfxObjectShell {
   /** Reads an RTF candidate before atomically replacing the active model. @param bytes - Complete RTF stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
   public OpenRtf(bytes: Uint8Array, metadata: SfxObjectShellState, medium: SfxMediumInput): SwDoc {
     this.EnsureOpen();
-    const document = new RtfDocumentImpl().ResolveBytes(bytes, {
+    const reader = new RtfDocumentImpl();
+    const document = reader.ResolveBytes(bytes, {
       ...(this.defaultFontDevice === undefined
         ? {}
         : { defaultFontDevice: this.defaultFontDevice }),
       locale: this.defaultLocale,
     });
+    const title = reader.GetDocumentTitle();
     const state: SfxObjectShellState = Object.freeze({
       ...metadata,
+      title: title?.trim() ? title : metadata.title,
       isModified: false,
       lifecycle: "saved",
       recoveryGeneration: null,

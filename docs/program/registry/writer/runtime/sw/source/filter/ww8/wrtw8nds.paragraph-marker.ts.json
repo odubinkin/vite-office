@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/wrtw8nds.paragraph-marker.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/wrtw8nds.paragraph-marker.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx",
+        "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts"
+      ],
+      "justification": "S3HW1E paragraph-marker checkpoint: native RES_PARATR_LIST_AUTOFMT and empty SwFormatAutoFormat defaults, shared-pointer style-name QueryValue, real NamedValue sequence ListAutoFormat mapping, paragraph-marker selection/recursive formatting, RTF PAR run properties and DomainMapper marker insertion are consumed. Collapsed character insertion delegates to native text-node SetAttr with NOFORMATATTR instead of changing whole-paragraph attributes. Browser graph codec preserves owned automatic handles and nested named-style identity, interning restored handles into the destination document. Native list-gated getter/DIRECT state/VOID default/no-op reset and terminal non-character-hint suppression remain unchanged (WRITER253/254). Current no-DocShell SetCharStyle early return is retained. Last table-cell, special section dummy paragraph, unrepresented auto-style properties and full desktop/ABI parity are not certified; all broad confidence remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetParagraphMarkerProperties",
+        "CollectCharFormatItems"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/wrtw8nds.cxx",
+      "upstreamSymbols": [
+        "MSWordExportBase::OutputTextNode"
+      ]
+    }
+  }
+}

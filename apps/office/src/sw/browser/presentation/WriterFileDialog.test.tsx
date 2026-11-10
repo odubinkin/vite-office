@@ -1,20 +1,42 @@
 /** @fileoverview Verifies accessible Writer Open and Export dialog states. */
 
+import { readFileSync } from "node:fs";
+import {
+  ICULanguageBreakFactory,
+  type WordDictionaryName,
+} from "../../../external/icu/source/common/brkeng";
+import { DICTIONARY_WORD } from "../../../offapi/com/sun/star/i18n/WordType";
+import { g_pBreakIt } from "../../source/core/bastyp/breakit";
+import { prepareWriterWordDictionaries } from "../filter/word-dictionaries";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { describe, expect, it, vi } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../source/core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
+import type { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { RES_BACKGROUND } from "../../inc/hintids";
+import { SwTableNode } from "../../source/core/docnode/node";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-odt-store";
 import type { WriterSessionServices } from "../workflows/writer-workflows";
+import { openBrowserWriterDocument } from "../workflows/writer-odt-io";
 import { WriterFileDialog } from "./WriterFileDialog";
 
-/** Creates a Writer shell for dialog behavior. @returns Active shell. */
-function shell(): SwDocShell {
+/** Creates a Writer shell for dialog behavior. @param measure - Supplies the device used by native HTML tables. @returns Active shell. */
+function shell(measure = false): SwDocShell {
   return new SwDocShell(
-    createWriterDocument(),
+    measure
+      ? new SwDoc({
+          defaultFontDevice: {
+            /** Uses the existing default. @returns No override. */
+            getDefaultFont: () => undefined,
+            /** Supplies deterministic measurements through the output-device interface. @param _font - Selected font. @param _text - Original input. @param _start - UTF16 range start. @param length - UTF16 range length. @returns Twip width. */
+            measureTextWidth: (_font, _text, _start, length) => length * 30,
+          },
+        })
+      : createWriterDocument(),
     createDocument({ id: "dialog-document", suiteId: "writer", title: "Draft" }),
   );
 }
@@ -192,40 +214,209 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     };
     expect(ArrayBuffer.isView(payload.data)).toBe(true);
     expect([payload.mediaType, payload.name]).toEqual(["application/rtf", "Draft.rtf"]);
-    expect(new TextDecoder().decode(payload.data)).toContain("RTF body");
+    const text = new TextDecoder().decode(payload.data);
+    expect(text).toContain("RTF body");
+    expect(text).toContain(String.raw`{\info{\upr{\title Draft}{\*\ud{\title Draft}}}}`);
     documentShell.Close();
   });
 
-  it("imports RTF through the native shell and persists the browser identity", /** Checks the existing Open flow with RTF content. @returns Completion. */ async () => {
+  it.each([
+    ["", "Imported"],
+    [String.raw`{\info{\title  }}`, "Imported"],
+    [String.raw`{\info{\title Embedded title}}`, "Embedded title"],
+  ])(
+    "imports RTF through the native shell and persists the browser identity (%s)",
+    /** Checks the existing Open flow with RTF content. @param info - Optional RTF metadata group. @param title - Expected browser document title. @returns Completion. */ async (
+      info,
+      title,
+    ) => {
+      const documentShell = shell();
+      const store = new IndexedDbWriterOdtStore("dialog-rtf-import", new IDBFactory());
+      const close = vi.fn();
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: {
+          files: [
+            new File([String.raw`{\rtf1\ansi ${info}\li720\tx1440 Imported}`], "Imported.rtf"),
+          ],
+        },
+      });
+      await waitFor(
+        /** Waits for completed import. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
+      expect(
+        (await store.list()).map(
+          /** Checks imports RTF through the native shell and persists the browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+            record,
+          ) => record.title,
+        ),
+      ).toEqual([title]);
+      expect(documentShell.GetTitle()).toBe(title);
+      expect(documentShell.GetMedium().source).toMatchObject({
+        kind: "external",
+        reference: { name: "Imported.rtf" },
+      });
+      await openBrowserWriterDocument(documentShell, store, documentShell.GetDocumentState().id);
+      expect(
+        documentShell.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT"),
+      ).toBe(false);
+      expect(new TextDecoder().decode(documentShell.SerializeRtf())).toContain("\\tx1440");
+      documentShell.Close();
+    },
+  );
+
+  it("reopens a table-only floating RTF document through normal browser storage", /** Exercises the real Open path with no text outside the native table. @returns Completion. */ async () => {
     const documentShell = shell();
-    const store = new IndexedDbWriterOdtStore("dialog-rtf-import", new IDBFactory());
+    const store = new IndexedDbWriterOdtStore("dialog-floating-rtf", new IDBFactory());
     const close = vi.fn();
-    render(
-      <WriterFileDialog
-        docShell={documentShell}
-        kind="open"
-        onClose={close}
-        services={services(store)}
-      />,
-    );
-    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
-    fireEvent.change(screen.getByLabelText("Browse"), {
-      target: { files: [new File(["{\\rtf1\\ansi Imported}"], "Imported.rtf")] },
-    });
-    await waitFor(
-      /** Waits for completed import. @returns Nothing. */ () =>
-        expect(close).toHaveBeenCalledOnce(),
-    );
-    expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
-    expect(
-      (await store.list()).map(
-        /** Checks imports RTF through the native shell and persists the browser identity. @param record - Record. @returns Test completion or assertion result. */ (
-          record,
-        ) => record.title,
-      ),
-    ).toEqual(["Imported"]);
-    documentShell.Close();
+    try {
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      const source = String.raw`{\rtf1\trowd\tpvpara\tphcol\tposxr\cellx3000\intbl Inside\cell\row}`;
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([source], "Floating.rtf")] },
+      });
+      await waitFor(
+        /** Waits for the existing open and persistence workflow. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      const [record] = await store.list();
+      assert(record);
+      expect(await openBrowserWriterDocument(documentShell, store, record.id)).toBe(true);
+      const doc = documentShell.GetDoc();
+      expect(doc.paragraphs[0]?.GetText()).toBe("");
+      const fly = doc.GetSpzFrameFormats().GetFormat(0);
+      expect(fly.GetFlySplit().GetValue()).toBe(true);
+      const section = fly.GetContent().GetContentIdx()?.GetNode();
+      assert(section?.IsStartNode());
+      const table = doc.nodes.GetSectionContent(section)[0];
+      assert(table instanceof SwTableNode);
+      expect(
+        table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+      ).toBe("Inside");
+    } finally {
+      documentShell.Close();
+    }
   });
+
+  it.each([
+    [
+      "nested RTF",
+      "rtf",
+      String.raw`{\rtf1{\colortbl;\red200\green100\blue40;}Lead\par\trowd\rtlrow\cellx3000\pard\intbl before\par\pard\itap2 nested\nestcell{\*\nesttableprops\trowd\clcbpat1\cltxbtlr\cellx1200\nestrow}\pard\intbl after\cell\row}`,
+    ],
+    [
+      "nested Markdown",
+      "md",
+      "Lead\n\n<table><tr><td>before<table><tr><td>nested</td></tr></table>after</td></tr></table>\n",
+    ],
+    [
+      "anchored Markdown",
+      "md",
+      'Lead\n\n<table align="left"><tr><td>before<table><tr><td>nested</td></tr></table>after</td></tr></table>\n',
+    ],
+  ] as const)(
+    "preserves %s tables when the imported document is reopened from browser storage",
+    /** Opens the selected source, then opens the saved ODF package through the normal browser workflow. @param scenario - Source case. @param extension - Imported format. @param source - Actual input. @returns Completion. */ async (
+      scenario,
+      extension,
+      source,
+    ) => {
+      const documentShell = shell(extension === "md");
+      const store = new IndexedDbWriterOdtStore(`dialog-nested-${extension}`, new IDBFactory());
+      const close = vi.fn();
+      const read =
+        /** Reads one pinned dictionary asset. @param name - Native dictionary. @returns Bytes. */ (
+          name: WordDictionaryName,
+        ) => readFileSync(`src/external/icu/source/data/brkitr/${name}.dict`);
+      try {
+        render(
+          <WriterFileDialog
+            docShell={documentShell}
+            kind="open"
+            onClose={close}
+            services={{
+              ...services(store),
+              prepareWordDictionaries:
+                /** Provides the shipped ICU assets to the real Markdown import. @returns Prepared native factory. */ async () =>
+                  new ICULanguageBreakFactory({
+                    thaidict: read("thaidict"),
+                    laodict: read("laodict"),
+                    burmesedict: read("burmesedict"),
+                    khmerdict: read("khmerdict"),
+                    cjdict: read("cjdict"),
+                  }),
+            }}
+          />,
+        );
+        fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+        fireEvent.change(screen.getByLabelText("Browse"), {
+          target: { files: [new File([source], `Nested.${extension}`)] },
+        });
+        await waitFor(
+          /** Waits for the primary browser copy before reopening. @returns Nothing. */ () =>
+            expect(close).toHaveBeenCalledOnce(),
+        );
+        const [record] = await store.list();
+        assert(record);
+        expect(await openBrowserWriterDocument(documentShell, store, record.id)).toBe(true);
+        const doc = documentShell.GetDoc();
+        let outer = doc.GetTables()[0];
+        if (scenario === "anchored Markdown") {
+          expect(outer).toBeUndefined();
+          const fly = doc.GetSpzFrameFormats().GetFormat(0);
+          const content = fly.GetContent().GetContentIdx()?.GetNode();
+          assert(content?.IsStartNode());
+          const table = doc.nodes.GetSectionContent(content)[0];
+          assert(table instanceof SwTableNode);
+          expect(table.GetFlyFormat()).toBe(fly);
+          expect(fly.GetAnchor().GetAnchorNode()?.GetTextNode()).toBeDefined();
+          outer = table.GetTable();
+        }
+        const cell = outer?.GetTabLines()[0]?.GetTabBoxes()[0];
+        const nested = cell
+          ?.GetContentNodes()
+          .find(
+            /** Locates the actual nested table inside the outer cell. @param node - Direct content node. @returns Whether the node is the nested table. */ (
+              node,
+            ) => node instanceof SwTableNode,
+          );
+        assert(cell && nested instanceof SwTableNode);
+        expect(nested.StartOfSectionNode()).toBe(cell.GetStartNode());
+        const inner = nested.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+        expect(inner?.GetParagraphs()[0]?.GetText()).toBe("nested");
+        if (extension === "rtf") {
+          assert(inner);
+          const frame = inner.GetFrameFormat();
+          const brush = frame.GetAttrSet().GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem;
+          expect(brush.GetColor().toUInt32()).toBe(0xc86428);
+          expect(frame.GetFrameDir().GetValue()).toBe(SvxFrameDirection.Vertical_LR_BT);
+          expect(
+            documentShell.GetDoc().GetTables()[0]?.GetFrameFormat().GetFrameDir().GetValue(),
+          ).toBe(SvxFrameDirection.Horizontal_RL_TB);
+        }
+      } finally {
+        documentShell.Close();
+      }
+    },
+  );
 
   it("exports Markdown from the native Writer model", /** Checks shell-owned Markdown output reaches the browser port. @returns Completion. */ async () => {
     const documentShell = shell();
@@ -258,34 +449,81 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   });
 
   it("imports Markdown through the native shell and persists browser identity", /** Checks existing Open flow with Markdown content. @returns Completion. */ async () => {
-    const documentShell = shell();
+    const documentShell = shell(true);
     const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
     const close = vi.fn();
-    render(
-      <WriterFileDialog
-        docShell={documentShell}
-        kind="open"
-        onClose={close}
-        services={services(store)}
-      />,
+    let rejectOnce = true;
+    const fetchDictionary = vi.fn(
+      /** Serves the actual built-in binary assets. @param url - Browser asset URL. @returns Response. */ async (
+        url: URL,
+      ) => {
+        if (rejectOnce) {
+          rejectOnce = false;
+          return new Response(null, { status: 503 });
+        }
+        const name = url.pathname.split("/").at(-1);
+        return new Response(
+          new Uint8Array(readFileSync(`src/external/icu/source/data/brkitr/${name}`)),
+        );
+      },
     );
-    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
-    fireEvent.change(screen.getByLabelText("Browse"), {
-      target: { files: [new File(["# Imported"], "Imported.md")] },
-    });
-    await waitFor(
-      /** Waits for completed import. @returns Nothing. */ () =>
-        expect(close).toHaveBeenCalledOnce(),
-    );
-    expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
-    expect(
-      (await store.list()).map(
-        /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (
-          record,
-        ) => record.title,
-      ),
-    ).toEqual(["Imported"]);
-    documentShell.Close();
+    vi.stubGlobal("fetch", fetchDictionary);
+    try {
+      await expect(prepareWriterWordDictionaries()).rejects.toThrow("could not be loaded");
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={{ ...services(store), prepareWordDictionaries: prepareWriterWordDictionaries }}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: {
+          files: [
+            new File(
+              ["# Imported\n\n<table><tr><td>ภาษาไทย</td><td>Cell</td></tr></table>\n"],
+              "Imported.md",
+            ),
+          ],
+        },
+      });
+      await waitFor(
+        /** Waits for completed import. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+      );
+      expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+      const table = documentShell
+        .GetDoc()
+        .GetNodes()
+        .entries()
+        .find(
+          /** Locates the actual native table node from the same open action. @param node - Actual document node. @returns Whether this is the table node. */ (
+            node,
+          ): node is SwTableNode => node instanceof SwTableNode,
+        );
+      expect(
+        table?.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+      ).toBe("ภาษาไทย");
+      expect(table?.GetTable().GetHTMLTableLayout()?.GetMax()).toBeGreaterThan(0);
+      expect(
+        (await store.list()).map(
+          /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+            record,
+          ) => record.title,
+        ),
+      ).toEqual(["Imported"]);
+      expect(fetchDictionary).toHaveBeenCalledTimes(10);
+      expect(
+        g_pBreakIt
+          .GetBreakIter()
+          .getWordBoundary("ภาษาไทย", 0, g_pBreakIt.GetLocale(0x041e), DICTIONARY_WORD, true),
+      ).toEqual({ startPos: 0, endPos: 4 });
+    } finally {
+      vi.unstubAllGlobals();
+      documentShell.Close();
+    }
   });
 
   it("reports list failures and allows switching between source tabs", /** Checks recoverable browser-list errors. @returns Completion. */ async () => {

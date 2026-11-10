@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.formatter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.formatter.ts",
+        "apps/office/src/svl/source/numbers/zforlist.formatter-entry.test.ts",
+        "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx"
+      ],
+      "justification": "S3HW1E HTML44: original CellSaveStruct freezes actual native section stacks, parses reverse TD/TH options, source uint16 spans/widths and normal-mode8192 row limit, composes actual default contexts, clones/steals CSS box items, shares original content chains and tracks actual SwNodeIndex NOBR positions. It consumes the real document-owned SvNumberFormatter through original SfxHTMLParser table-number option logic. SwDoc lazily constructs one SYSTEM formatter, sets FormatThenInternational and the shipped TwoDigitYear configuration, supports non-creating queries and disposes actual entries with the document. Original public PutEntry/PutandConvertEntry use the actual compiled table/scanner and retain native conversion/Boolean retry semantics. The existing SvNumberFormatter class and its process currency fields move intact into a permanent same-directory size fragment; zforlist reexports the same class identity. Original DIR composition and PRE/XMP/LISTING context suspension/restart are consumed, with original source order and actual lexer modes. No replacement parser, formatter/provider, graph, measurement, private result or successful stub is introduced. Production row/cell/caption/table orchestration, final table materialization, actual automatic layout and final current-model/filter/UI reconciliation remain required. Whole module/UNO ABI/global registry/native thread scheduling parity remains unverified; browser open/save/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvNumberFormatter"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNumberFormatter"
+      ]
+    }
+  }
+}

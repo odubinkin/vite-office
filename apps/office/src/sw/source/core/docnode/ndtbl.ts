@@ -1,21 +1,76 @@
 /** @fileoverview Owns native Writer row-boundary collection and row-height deltas from ndtbl.cxx. */
-import type { SwNodes } from "./nodes";
-import { SwTableBoxStartNode, SwEndNode } from "./node";
+import { SfxItemState } from "../../../../svl/source/items/itemset";
+import type { SwAttrSet } from "../attr/swatrset";
+import type { SwTextFormatColl } from "../doc/fmtcol";
+import { SwStartNodeType } from "../../../inc/ndtyp";
+import {
+  RES_PARATR_ADJUST,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+} from "../../../inc/hintids";
+import type { SwFrameFormat } from "../layout/atrfrm";
+import { SwTableBoxStartNode, SwEndNode, type SwNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
+import { SwFormatFillOrder, SwFillOrder } from "../../../inc/fmtfordr";
+import { SwNodes } from "./nodes";
+import { SwTableBoxFormat } from "../../../inc/swtblfmt";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import {
+  SvxBorderLine,
+  SvxBorderLineStyle,
+  SvxBorderLineWidth,
+} from "../../../../editeng/source/items/borderline";
+import { COL_BLACK, COL_GRAY } from "../../../../tools/inc/color";
 import type { SwDoc } from "../doc/doc";
 import { TableHeadingChange } from "../../../inc/hints";
-import { SwTable, createWriterTableBoxItem, type SwTableBoxFormat } from "../table/swtable";
+import { SwTable } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
-import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SwPosition } from "../crsr/pam";
-import { SwCursor } from "../crsr/swcrsr";
+import { SwFrameSize, SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwPosition, type SwPaM } from "../crsr/pam";
+import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
-import { SwUndoAttrTable, SwUndoTableNdsChg, SwUndoTableHeadline } from "../undo/untbl";
+import {
+  SwUndoInsTable,
+  SwUndoAttrTable,
+  SwUndoTableNdsChg,
+  SwUndoTableHeadline,
+} from "../undo/untbl";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
+import { RES_FRAMEDIR, RES_PAGEDESC, RES_BREAK, RES_BOX } from "../../../inc/hintids";
+import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { TableMergeErr } from "../../../inc/tblenum";
+import { CollectBoxSelection, NewMerge, PrepareMerge } from "../table/swnewtable";
+
+/** Original document merge boundary for a rectangular new-model selection. @param doc - Native document. @param pam - Actual cell selection. @returns Native merge result. */
+export function MergeTable(doc: SwDoc, pam: SwPaM): TableMergeErr {
+  const start = pam.Start().GetNode().GetTableBox(),
+    end = pam.End().GetNode().GetTableBox(),
+    table = pam.GetPoint().GetNode().FindTableNode()?.GetTable();
+  if (!start || !end || !table?.IsNewModel() || table.GetFrameFormat().GetDoc() !== doc)
+    return TableMergeErr.NoSelection;
+  const selection = CollectBoxSelection(table, start, end);
+  if (!selection) return TableMergeErr.NoSelection;
+  return doc.RunModelTransaction(
+    /** Moves the PaM off deleted boxes before native structural removal. @returns Successful merge. */ () => {
+      const merge = PrepareMerge(selection);
+      if (!merge) return TableMergeErr.NoSelection;
+      pam.DeleteMark();
+      pam.GetPoint().Assign(merge.master.GetParagraphs()[0] as SwTextNode, 0);
+      if (pam instanceof SwTableCursor) pam.NewTableSelection();
+      NewMerge(table, merge);
+      doc.GetDocumentStateManager().SetModified();
+      return TableMergeErr.Ok;
+    },
+  );
+}
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
   const count = requested & 0xffff,
@@ -251,6 +306,16 @@ export function SetSwTabCols(
   );
 }
 
+/** Original document row/column insertion call contract, including its optional wrapper defaults and existing shell cursor transport. */
+export type SwInsertRowsColsArgs = [
+  boxes: readonly SwTableBox[],
+  count?: number,
+  behind?: boolean,
+  insertDummy?: boolean,
+  cursorState?: SwUndoCursorState,
+  afterCursor?: SwUndoCursorState,
+];
+
 /** Inserts columns with source-owned history gating. @param doc - Actual owner. @param boxes - Original selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Native redline flag. @param cursorState - Optional shell cursor. @param afterCursor - Optional preserved selection. @returns Whether inserted. */
 export function InsertSwTableColumns(
   doc: SwDoc,
@@ -411,20 +476,141 @@ export function TextToTableNodes(
   );
 }
 
-/** Native SwDoc::InsertTable implementation belongs to ndtbl.cxx; constructs represented flat table geometry before the actual body position. @param doc - Document. @param options - Source insertion flags. @param position - Body position. @param rows - Rows. @param columns - Columns. @param name - Requested name. @param boxFormat - Existing browser autoformat attributes. @returns Native table. */
+/** Original default border construction has four position-dependent variants and the actual HTML document-mode color/style. @param format - Actual new native box format. @param id - Original0..3 position variant. @returns Nothing. */
+function lcl_SetDfltBoxAttr(format: SwTableBoxFormat, id: number): void {
+  const html = format.GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
+    line = new SvxBorderLine(html ? COL_GRAY : COL_BLACK, SvxBorderLineWidth.VeryThin),
+    box = new SvxBoxItem(RES_BOX);
+  if (html) line.SetBorderLineStyle(SvxBorderLineStyle.DOUBLE);
+  box.SetAllDistances(55);
+  if (id < 2) box.SetLine(line, SvxBoxItemLine.TOP);
+  box.SetLine(line, SvxBoxItemLine.BOTTOM);
+  box.SetLine(line, SvxBoxItemLine.LEFT);
+  if (id === 1 || id === 3) box.SetLine(line, SvxBoxItemLine.RIGHT);
+  try {
+    format.SetFormatAttr(box);
+  } finally {
+    box.Dispose();
+  }
+}
+/** Original four-slot format cache shares owners until a different actual column width requires a clone. @param doc - Actual document. @param formats - Native four-slot cache. @param columns - Original column count. @param id - Border variant. @returns Actual native owner. */
+function lcl_CreateDfltBoxFormat(
+  doc: SwDoc,
+  formats: (SwTableBoxFormat | null)[],
+  columns: number,
+  id: number,
+): SwTableBoxFormat {
+  if (!formats[id]) {
+    const format = doc.MakeTableBoxFormat();
+    if (columns !== 65535) {
+      const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
+      try {
+        format.SetFormatAttr(size);
+      } finally {
+        size.Dispose();
+      }
+    }
+    lcl_SetDfltBoxAttr(format, id);
+    formats[id] = format;
+  }
+  return formats[id] as SwTableBoxFormat;
+}
+
+/** Original SwNodes::InsertTable node-matrix responsibility from ndtbl.cxx. The existing node/table-frame bootstrap is retained and unverified; all returned sections, styles and items are actual document owners. @param where - Actual insertion node. @param boxes - Native column count. @param content - Body collection. @param lines - Row count; zero creates one content row. @param repeat - Headline repetition count. @param headline - Optional headline collection. @param attrs - Optional effective source paragraph set. @returns Actual table node or null for zero boxes. */
+export function InsertTableNodes(
+  where: SwNode,
+  boxes: number,
+  content: SwTextFormatColl,
+  lines: number,
+  repeat: number,
+  headline: SwTextFormatColl | null,
+  attrs: SwAttrSet | null,
+): SwTableNode | null {
+  if (!boxes) return null;
+  if (!headline || !lines) headline = content;
+  const nodes = where.GetNodes(),
+    table = nodes.MakeTableNodeBefore(where, "", {}),
+    node = table.GetTableNode();
+  if (!lines) lines++;
+  let collection = headline;
+  for (let row = 0; row < lines; row++) {
+    for (let column = 0; column < boxes; column++) {
+      const start = nodes.MakeTextSection(
+          node.EndOfSectionNode(),
+          SwStartNodeType.SwTableBoxStartNode,
+          collection,
+        ),
+        paragraph = nodes.at(start.GetIndex() + 1) as SwTextNode;
+      if (attrs)
+        for (const which of [
+          RES_PARATR_ADJUST,
+          RES_CHRATR_FONT,
+          RES_CHRATR_FONTSIZE,
+          RES_CHRATR_CJK_FONT,
+          RES_CHRATR_CJK_FONTSIZE,
+          RES_CHRATR_CTL_FONT,
+          RES_CHRATR_CTL_FONTSIZE,
+        ]) {
+          const item = attrs.GetItemIfSet(which, true);
+          if (paragraph.GetSwAttrSet().GetItemState(which) !== SfxItemState.SET && item)
+            paragraph.SetAttr(item);
+        }
+    }
+    if (row + 1 >= repeat) collection = content;
+  }
+  return node;
+}
+
+/** Original first-paragraph/first-cell transfer keeps the parent's direct attributes, including the source TODO-not-reset behavior. @param parent - Actual containing box. @param target - Actual nested table node. @param format - New table frame. @returns Nothing. */
+function lcl_transferTableBreaks(
+  parent: SwTableBox,
+  target: SwTableNode,
+  format: SwFrameFormat,
+): void {
+  if (target.StartOfSectionNode().GetIndex() + 1 !== target.GetIndex()) return;
+  const tableNode = parent.GetStartNode().FindTableNode();
+  if (!tableNode) throw new Error("assert(parent box has a native table)");
+  const table = tableNode.GetTable();
+  if (parent.FindPreviousBox(table, parent)) return;
+  for (const which of [RES_PAGEDESC, RES_BREAK]) {
+    const item = table.GetFrameFormat().GetAttrSet().GetItemIfSet(which, false);
+    if (item) format.SetFormatAttr(item);
+  }
+}
+
+/** Original represented InsertTable argument order. The current model has no SwTableAutoFormat owner, so only the original null autoformat argument is admitted; browser cell styling is applied by its existing shell/history owner after construction. */
+export type SwInsertTableArgs = [
+  options: SwInsertTableOptions,
+  position: SwPosition,
+  rows: number,
+  columns: number,
+  adjust: number,
+  autoFormat?: null,
+  columnPositions?: readonly number[] | null,
+  calledFromShell?: boolean,
+  newModel?: boolean,
+  name?: string,
+];
+/** Native SwDoc::InsertTable argument/default and flat construction responsibility from ndtbl.cxx. @param doc - Actual document. @param options - Native flags. @param position - Insertion position. @param rows - Native row count. @param columns - Native column count. @param adjust - Required source horizontal orientation. @param autoFormat - Original null default, the admitted current model family. @param columnPositions - Original column positions, not widths. @param calledFromShell - Propagate paragraph adjustment. @param newModel - Original table-model flag. @param name - Original final argument. @returns Actual inserted table. */
 export function InsertTable(
   doc: SwDoc,
   options: SwInsertTableOptions,
   position: SwPosition,
   rows: number,
   columns: number,
+  adjust: number,
+  autoFormat: null = null,
+  columnPositions: readonly number[] | null = null,
+  calledFromShell = false,
+  newModel = true,
   name = "",
-  boxFormat?: SwTableBoxFormat,
-): SwTable {
+): SwTable | null {
+  void autoFormat;
   const node = position.GetNode();
   if (
     !(node instanceof SwTextNode) ||
-    !doc.paragraphs.includes(node) ||
+    node.GetNodes() !== doc.GetNodes() ||
+    doc.GetNodes().indexOf(node) < 0 ||
     !Number.isInteger(rows) ||
     rows < 1 ||
     rows > 65535 ||
@@ -432,47 +618,178 @@ export function InsertTable(
     columns < 1 ||
     columns > 65535
   )
-    throw new Error("Writer insertion requires body text and positive unsigned table dimensions.");
+    throw new Error(
+      "Writer insertion requires connected text and positive unsigned table dimensions.",
+    );
+  const endOfInserts = doc.GetNodes().GetEndOfInserts();
+  if (
+    node.GetIndex() < endOfInserts.GetIndex() &&
+    node.GetIndex() >= endOfInserts.StartOfSectionNode().GetIndex()
+  )
+    return null;
   const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
     borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
     repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
-    width = Math.floor(65535 / columns) * columns;
-  if (
-    name === "" ||
-    doc
-      .GetTables()
-      .some(
-        /** Checks the actual native name set. @param table - Existing owner. @returns Collision. */ (
-          table,
-        ) => table.GetName() === name,
-      )
-  )
-    name = doc.GetUniqueTableName();
-  const table = doc.nodes.InsertTable(node, name, {
+    positions =
+      columnPositions &&
+      columnPositions.length === columns + (adjust === HoriOrientation.NONE ? 2 : 1)
+        ? columnPositions
+        : null,
+    first = positions?.[0] ?? 0,
+    last = positions?.[positions.length - (adjust === HoriOrientation.NONE ? 2 : 1)] ?? 0,
+    width = positions ? last - first : Math.floor(65535 / columns) * columns;
+  if (name === "" || doc.FindTableFormatByName(name)) name = doc.GetUniqueTableName();
+  if (doc.GetUndoManager().DoesUndo()) {
+    const items = node.GetCharacterItemsAt(position.GetContentIndex()),
+      cursor = createWriterCollapsedCursorState(node, 0, items);
+    try {
+      doc
+        .GetUndoManager()
+        .AddUndoAction(
+          new SwUndoInsTable(options, rows, columns, name, cursor, undefined, adjust, positions),
+        );
+    } finally {
+      cursor.pendingCharacterItems.Dispose();
+      items.Dispose();
+    }
+  }
+  const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents",
+    tableNode = SwNodes.InsertTable(
+      node,
+      columns,
+      doc.GetTextFormatColl("table-contents"),
+      rows,
+      repeat,
+      doc.GetTextFormatColl(headStyle),
+      calledFromShell ? node.GetSwAttrSet() : null,
+    );
+  if (!tableNode) throw new Error("assert(nonzero native table cell count)");
+  const table = tableNode.GetTable();
+  table.GetFrameFormat().SetFormatName(name);
+  table.SetFormat({
     width,
-    horiOrient: HoriOrientation.FULL,
+    horiOrient: adjust,
+    ...(positions && adjust === HoriOrientation.NONE
+      ? { marginLeft: first, marginRight: (positions.at(-1) ?? 0) - last }
+      : {}),
     headerRows: header ? Math.max(1, repeat) : 0,
     repeatHeaderRows: repeat !== 0,
     layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
   });
-  for (let column = 0; column < columns; column++) table.AddColumnWidth(width / columns);
-  const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
+  table.SetTableModel(newModel);
+  const frame = table.GetFrameFormat(),
+    direction = node.GetSwAttrSet().GetItemIfSet(RES_FRAMEDIR, true);
+  if (direction) frame.SetFormatAttr(direction);
+  const parent = tableNode.GetTableBox();
+  if (parent) lcl_transferTableBreaks(parent, tableNode, frame);
+  else
+    for (const which of [RES_PAGEDESC, RES_BREAK]) {
+      const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
+      if (item) {
+        frame.SetFormatAttr(item);
+        node.ResetAttr(which);
+      }
+    }
+  const lineFormat = doc.MakeTableLineFormat(),
+    fillOrder = new SwFormatFillOrder(SwFillOrder.ATT_LEFT_TO_RIGHT);
+  try {
+    lineFormat.SetFormatAttr(fillOrder);
+  } finally {
+    fillOrder.Dispose();
+  }
+  const formats: (SwTableBoxFormat | null)[] = [null, null, null, null],
+    common = borders ? null : doc.MakeTableBoxFormat();
+  if (common) {
+    const size = new SwFormatFrameSize(SwFrameSize.Variable, Math.floor(65535 / columns), 0);
+    try {
+      common.SetFormatAttr(size);
+    } finally {
+      size.Dispose();
+    }
+  }
   for (let row = 0; row < rows; row++) {
-    const line = doc.nodes.AppendTableRow(
-      table,
-      columns,
-      {},
-      Array.from(
-        { length: columns },
-        /** Creates independent represented box attributes. @returns Box format. */ () =>
-          boxFormat === undefined ? { box: createWriterTableBoxItem(borders) } : { ...boxFormat },
-      ),
-    );
-    for (const box of line.GetTabBoxes())
-      for (const paragraph of box.GetParagraphs())
-        paragraph.ChgFormatColl(
-          doc.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
+    const line = new SwTableLine(lineFormat);
+    for (let column = 0; column < columns; column++) {
+      let format =
+        common ??
+        lcl_CreateDfltBoxFormat(
+          doc,
+          formats,
+          columns,
+          (column < columns - 1 ? 0 : 1) + (row ? 2 : 0),
         );
+      if (positions) {
+        const cellWidth = (positions[column + 1] as number) - (positions[column] as number);
+        if (format.GetFrameSize().GetWidth() !== cellWidth) {
+          if (format.HasWriterListeners()) {
+            const copy = doc.MakeTableBoxFormat();
+            copy.CopyFormatFrom(format);
+            format = copy;
+          }
+          const size = new SwFormatFrameSize(SwFrameSize.Variable, cellWidth);
+          try {
+            format.SetFormatAttr(size);
+          } finally {
+            size.Dispose();
+          }
+        }
+      }
+      const start = doc.nodes.at(
+          tableNode.GetIndex() + 1 + (row * columns + column) * 3,
+        ) as SwTableBoxStartNode,
+        box = new SwTableBox(format, start);
+      line.AddBox(box);
+    }
+    table.AddLine(line);
   }
   return table;
+}
+
+/** Existing used-format profile now includes actual tables in every document section. Unused/default native format-registry owners and mail merge are not represented by this profile. @param doc - Actual document. @returns Actual used frame references. */
+function GetUsedTableFormats(doc: SwDoc): SwFrameFormat[] {
+  return [
+    ...new Set(
+      doc
+        .GetNodes()
+        .entries()
+        .flatMap(
+          /** Retains actual table-owned frame identities in all sections. @param node - Actual node. @returns Actual used format. */
+          (node) => (node instanceof SwTableNode ? [node.GetTable().GetFrameFormat()] : []),
+        ),
+    ),
+  ];
+}
+/** Original ndtbl.cxx bitmap/name-number algorithm for the current English default-name and used-format profile. Native integer suffix conversion is deliberately not a strict digit check. @param doc - Actual document. @returns First free source name. */
+export function GetUniqueTableName(doc: SwDoc): string {
+  const formats = GetUsedTableFormats(doc),
+    flags = new Uint8Array(Math.floor(formats.length / 8) + 2),
+    prefix = "Table";
+  for (const format of formats)
+    if (format.GetName().startsWith(prefix)) {
+      const value = toInt32(format.GetName().slice(prefix.length));
+      if (value > 0 && value <= formats.length) {
+        const pos = value - 1;
+        flags[Math.floor(pos / 8)] = (flags[Math.floor(pos / 8)] as number) | (1 << (pos & 7));
+      }
+    }
+  let number = formats.length;
+  for (let i = 0; i < flags.length; i++) {
+    let value = flags[i] as number;
+    if (value !== 255) {
+      number = i * 8;
+      while (value & 1) {
+        number++;
+        value >>= 1;
+      }
+      break;
+    }
+  }
+  return prefix + String(number + 1);
+}
+/** Existing used-table lookup retains actual frames in every represented section. @param doc - Actual document. @param name - Requested name. @returns Used frame or no match. */
+export function FindTableFormatByName(doc: SwDoc, name: string): SwFrameFormat | undefined {
+  return GetUsedTableFormats(doc).find(
+    /** Matches the original exact native name. @param format - Actual used frame. @returns Name match. */
+    (format) => format.GetName() === name,
+  );
 }

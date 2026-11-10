@@ -13,6 +13,7 @@ import {
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import breakIteratorRules from "./data/break-iterator-rules.json" with { type: "json" };
 import calendars from "./data/calendars.json" with { type: "json" };
 import currencies from "./data/currencies.json" with { type: "json" };
 import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
@@ -155,6 +156,13 @@ function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap
     if (value !== undefined) return value;
   }
   return values.get("en_US") as T;
+}
+
+const breakRuleResources = new Map<string, readonly string[]>(Object.entries(breakIteratorRules));
+
+/** Borrows the five source LocaleNode break rule names after the original locale-data fallback. @param locale - Native locale. @returns Original ordered rule names. */
+export function getLocaleDataBreakIteratorRules(locale: LocaleConstReference): readonly string[] {
+  return getLocaleDataField(locale, breakRuleResources);
 }
 
 /** Original LC_INFO fields projected from LCInfoNode/getLanguageCountryInfo;this is not a fabricated UNO LanguageCountryInfo value/ABI. */
