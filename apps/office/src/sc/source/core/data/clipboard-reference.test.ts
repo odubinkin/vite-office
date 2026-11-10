@@ -22,7 +22,11 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
-import { LANGUAGE_SYSTEM, LANGUAGE_ENGLISH_US } from "../../../../i18nlangtag/inc/lang";
+import {
+  LANGUAGE_SYSTEM,
+  LANGUAGE_ENGLISH_US,
+  LANGUAGE_GERMAN,
+} from "../../../../i18nlangtag/inc/lang";
 import { ScGlobal } from "../../../inc/global";
 import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
 import { ColumnBlockPosition } from "../../../inc/mtvelements";
@@ -403,21 +407,18 @@ it("retains native format cache values across copy and invalidates original item
   const copy = new ScPatternAttr(pattern);
   expect(copy.GetNumberFormatKey()).toBe(7);
   expect(copy.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
-  pattern.ItemSetPut(new SvxLanguageItem(LANGUAGE_ENGLISH_US, 147));
-  expect(pattern.GetLanguageType()).toBe(LANGUAGE_ENGLISH_US);
+  pattern.ItemSetPut(new SvxLanguageItem(LANGUAGE_GERMAN, 147));
+  expect(pattern.GetLanguageType()).toBe(LANGUAGE_GERMAN);
   expect(pattern.GetNumberFormat(null)).toBe(7);
-  expect(
-    /** Missing native formatter conversion is an explicit service boundary. @returns Format key. */ () =>
-      pattern.GetNumberFormat(context),
-  ).toThrow("language conversion");
+  const localized = pattern.GetNumberFormat(context);
+  const germanOffset = context.GetFormatTable().GetStandardIndex(LANGUAGE_GERMAN);
+  expect(germanOffset).toBeGreaterThanOrEqual(SV_COUNTRY_LANGUAGE_OFFSET);
+  expect(localized).toBe(germanOffset + 7);
   pattern.ItemSetClearItem(147);
   expect(pattern.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
   pattern.ItemSetPut(new SfxUInt32Item(146, SV_COUNTRY_LANGUAGE_OFFSET));
   expect(pattern.GetNumberFormat(null)).toBe(SV_COUNTRY_LANGUAGE_OFFSET);
-  expect(
-    /** Missing native formatter conversion is an explicit service boundary. @returns Format key. */ () =>
-      pattern.GetNumberFormat(context),
-  ).toThrow("language conversion");
+  expect(pattern.GetNumberFormat(context)).toBe(0);
   pattern.ClearItems([146, 0]);
   expect(pattern.GetNumberFormatKey()).toBe(0);
   pattern.GetItemSetWritable().InvalidateItem(146);

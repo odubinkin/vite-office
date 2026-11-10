@@ -327,7 +327,14 @@ function tentativeBoundaries(
 export class LibreOfficeKhmerBreakEngine extends DictionaryBreakEngine {
   /** Binds the actual Khmer dictionary. @param dictionary - Native patched Khmer matcher. @returns Engine. */
   constructor(private readonly dictionary: DictionaryMatcher) {
-    super(new UnicodeSet(sets.khmerWord.map((bound, index) => bound + (index % 2))));
+    super(
+      new UnicodeSet(
+        sets.khmerWord.map(
+          /** Converts a closed range end to an inversion-list bound. @param bound - Original range bound. @param index - Lower or upper bound index. @returns Inversion-list bound. */
+          (bound, index) => bound + (index % 2),
+        ),
+      ),
+    );
   }
 
   /** Releases the adopted LibreOffice dictionary. @returns Nothing. */

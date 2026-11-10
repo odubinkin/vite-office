@@ -86,9 +86,9 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
     // The shared token table also recognizes the single fo:wrap-option in each styles.xml.
     // Incoming main recognizes the two style:letter-kerning attributes in each styles.xml.
     // Writer drawing-fill tokens also recognize draw:fill, draw:fill-color and draw:opacity.
-    // Token recognition does not claim complete Writer table-cell wrapping support.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 66 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 77 },
+    // The integrated Writer also recognizes writing mode and relative column dimensions.
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 62 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 70 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -357,10 +357,11 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
           "styles.xml",
           "content.xml",
           "meta.xml",
+          "settings.xml",
         ]);
-        expect(await archive.readTextEntry("META-INF/manifest.xml")).toContain(
-          'manifest:full-path="content.xml"',
-        );
+        const manifest = await archive.readTextEntry("META-INF/manifest.xml");
+        expect(manifest).toContain('manifest:full-path="content.xml"');
+        expect(manifest).toContain('manifest:full-path="settings.xml"');
         expect(await archive.readTextEntry("meta.xml")).toContain(
           "<dc:title>Phase 7 parity</dc:title>",
         );
@@ -369,7 +370,13 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
           normalizeWriterSemantics(imported.document),
         );
         const second = new ZipFile(writeOdtDocument(reopened.document, { title: reopened.title }));
-        for (const entry of ["META-INF/manifest.xml", "styles.xml", "content.xml", "meta.xml"])
+        for (const entry of [
+          "META-INF/manifest.xml",
+          "styles.xml",
+          "content.xml",
+          "meta.xml",
+          "settings.xml",
+        ])
           expect(normalizeAutomaticListIdentities(await second.readTextEntry(entry))).toBe(
             normalizeAutomaticListIdentities(await archive.readTextEntry(entry)),
           );
