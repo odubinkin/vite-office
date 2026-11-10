@@ -2375,3 +2375,17 @@ previous paragraph's bottom border through its native property
 owner. Stylesheet borders use the same mapper path. WRITER418
 and WRITER419 record the source's shared group values and
 competing resource order.
+
+### Markdown export of anchored flies and named character styles
+
+The writer visits registered text flies at their actual paragraph
+or character offsets, including the paragraph end. The empty image
+record is emitted after closing attributes and before opening
+attributes at the same offset. Equal records collapse at a
+position. Empty anchor paragraphs retain the source omission
+(WRITER420).
+
+Ranged named character styles now pass their own direct items
+through the same Markdown formatting counters as autoformat
+items. A named parent alone does not add formatting to a child
+hint. Empty native autoformat handles have no effect.

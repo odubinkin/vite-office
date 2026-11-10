@@ -21,9 +21,13 @@ import type { SwFormat } from "../../core/attr/format";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwTableNode, type SwEndNode } from "../../core/docnode/node";
-import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
+import { CollectTextFlyFrames } from "../../core/layout/flycnt";
+import {
+  SwFormatAutoFormat,
+  SwFormatCharFormat,
+  SwFormatINetFormat,
+} from "../../core/txtnode/fmtatr2";
 import { SwTextNode, type WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
-import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 
 const headingLevels = new Map(
   WRITER_PARAGRAPH_STYLE_POOL.flatMap(
@@ -48,18 +52,37 @@ export class SwMDWriter {
       end = nodes.GetEndOfContent().GetIndex(),
       first = nodes.getBodyContent()[0]?.GetIndex() ?? end,
       output: string[] = [];
+    const flys = this.CollectFlys(document);
     const tables: SwMDTableInfo[] = [];
     const listPrefixSizes = new Map<number, number>();
     for (let index = first; index < end; ++index) {
       const node = nodes.at(index);
       if (node instanceof SwTextNode)
-        OutMarkdown_SwTextNode(node, index === first, tables, listPrefixSizes, output);
+        OutMarkdown_SwTextNode(
+          node,
+          index === first,
+          tables,
+          listPrefixSizes,
+          output,
+          flys.get(node),
+        );
       else if (node instanceof SwTableNode) {
         tables.push(OutMarkdown_SwTableNode(node));
         if (tables.length === 1) output.push("\n");
       } else if (node === tables.at(-1)?.pEndNode) tables.pop();
     }
     return OUStringToOString(output.join(""), RTL_TEXTENCODING_UTF8);
+  }
+
+  /** Collects native text fly positions for ApplyFlyFrameFormat. This model has text and table content only, so each position has the same single empty SwMDImageInfo. @param document - Actual Writer document. @returns Anchor offsets by native text node. */
+  private CollectFlys(document: SwDoc): ReadonlyMap<SwTextNode, ReadonlySet<number>> {
+    const result = new Map<SwTextNode, ReadonlySet<number>>();
+    for (const [node, frames] of CollectTextFlyFrames(document)) {
+      const positions = new Set<number>();
+      for (const { format } of frames) positions.add(format.GetAnchor().GetAnchorContentOffset());
+      result.set(node, positions);
+    }
+    return result;
   }
 }
 
@@ -115,8 +138,11 @@ function applyFormattingItem(
   codeFont: SfxPoolItem,
 ): void {
   if (item instanceof SwFormatAutoFormat) {
-    for (const nested of (item.GetStyleHandle() as SfxItemSet).entries())
-      applyFormattingItem(status, nested, codeFont);
+    const items = item.GetStyleHandle() as SfxItemSet | undefined;
+    if (items) applyFormattingSet(status, items, codeFont);
+  } else if (item instanceof SwFormatCharFormat) {
+    const style = item.GetCharFormat();
+    if (style) applyFormattingSet(status, style.GetAttrSet(), codeFont);
   } else if (item instanceof SwFormatINetFormat) {
     const url = item.GetValue();
     if (url.length > 0) status.links.set(url, (status.links.get(url) ?? 0) + 1);
@@ -167,8 +193,8 @@ function shouldOpen(before: number, after: number): boolean {
   return before !== after && before <= 0 && after > 0;
 }
 
-/** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown.  @param codeBlock - Code Block. */
-function writeRuns(node: SwTextNode, codeBlock = false): string {
+/** Emits native items, ranged hints and anchored flys in source delimiter order. @param node - Native text owner. @param codeBlock - Whether inside preformatted text. @param flys - Source anchor offsets. @returns Inline Markdown. */
+function writeRuns(node: SwTextNode, codeBlock: boolean, flys?: ReadonlySet<number>): string {
   const source = node.GetText();
   if (source.length === 0) return "";
   const codeFont = node
@@ -176,7 +202,7 @@ function writeRuns(node: SwTextNode, codeBlock = false): string {
     .GetTextFormatColl("preformatted-text")
     .GetAttrSet()
     .Get(RES_CHRATR_FONT);
-  const positions = new Set<number>([0, source.length]);
+  const positions = new Set<number>([0, source.length, ...(flys ?? [])]);
   const hints = node.GetpSwpHints();
   if (hints !== undefined)
     for (let index = 0; index < hints.Count(); index++) {
@@ -210,6 +236,8 @@ function writeRuns(node: SwTextNode, codeBlock = false): string {
     for (const url of urls)
       if (shouldClose(previous.links.get(url) ?? 0, next.links.get(url) ?? 0))
         output += `](${url})`;
+    // Source OutFormattingChange emits anchored flys between closing and opening markup.
+    if (flys?.has(position)) output += "![]()";
     if (shouldOpen(previous.strikeout, next.strikeout)) output += "~~";
     if (shouldOpen(previous.italic, next.italic)) output += "*";
     if (shouldOpen(previous.bold, next.bold)) output += "**";
@@ -283,13 +311,14 @@ function OutMarkdown_SwTableNode(node: SwTableNode): SwMDTableInfo {
   return { aCellInfos, pEndNode: node.EndOfSectionNode() };
 }
 
-/** Writes the actual text and only the source separators owned by this node. @param node - Native paragraph. @param first - Whether the stream starts at this node. @param tables - Original open table stack. @param listPrefixSizes - Actual list prefix widths. @param output - Original stream fragments. @returns Nothing. */
+/** Writes the actual text and only the source separators owned by this node. @param node - Native paragraph. @param first - Whether the stream starts at this node. @param tables - Original open table stack. @param listPrefixSizes - Actual list prefix widths. @param output - Original stream fragments. @param flys - Original fly positions. @returns Nothing. */
 function OutMarkdown_SwTextNode(
   node: SwTextNode,
   first: boolean,
   tables: readonly SwMDTableInfo[],
   listPrefixSizes: Map<number, number>,
   output: string[],
+  flys?: ReadonlySet<number>,
 ): void {
   const table = tables.at(-1),
     nested = tables.length > 1,
@@ -299,7 +328,7 @@ function OutMarkdown_SwTextNode(
     if (!first && !table) output.push("\n");
     const preformatted =
       node.GetTextFormatColl().GetPoolFormatId() === SwPoolFormatId.COLL_HTML_PRE;
-    let text = writeRuns(node, preformatted);
+    let text = writeRuns(node, preformatted, flys);
     if (preformatted) {
       const nodes = node.GetNodes(),
         index = node.GetIndex(),

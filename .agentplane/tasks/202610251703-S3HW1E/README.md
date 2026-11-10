@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 564
+revision: 567
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-09T23:56:40.503Z"
+  updated_at: "2026-11-10T00:01:39.721Z"
   updated_by: "CODER"
-  note: "RTF111 passes related checks. Markdown anchored-fly output and final current-model matrix remain open."
-  attempts: 122
+  note: "The represented Markdown export frame and character style checkpoint passes. The RTF represented document-title path and final scope review remain open."
+  attempts: 123
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1957,8 +1960,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-10T00:01:39.721Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "The represented Markdown export frame and character style checkpoint passes. The RTF represented document-title path and final scope review remain open."
+  -
+    type: "status"
+    at: "2026-11-10T00:02:03.231Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-09T23:57:00.450Z"
+doc_updated_at: "2026-11-10T00:02:03.231Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -5333,6 +5349,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-10T00:01:39.721Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: The represented Markdown export frame and character style checkpoint passes. The RTF represented document-title path and final scope review remain open.
+    Attempts: 123
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-10T00:01:39.091Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     ### HTML39 insertion boundary checkpoint
@@ -7291,6 +7337,12 @@ sections:
     - DomainMapper resolves BorderHandler values for both native paragraphs and styles. Native UNO edge, distance and connection properties feed the actual box item. Between-border handling removes the previous bottom edge in the current text stream through SwXParagraph.
     - WRITER418 records inherited BOX mutation across group pop. WRITER419 records source resource ordering and the PARD selector fallback. Focused regressions cover both quirks, border destination isolation, and style inheritance.
     - Related Writer sweep: 1,391 tests passed across 86 files. Typecheck, scoped ESLint/Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.
+
+    ### Markdown native anchored flies and named character hints
+
+    - SwMDWriter consumes original anchored text-frame positions, including end-of-paragraph anchors. The represented empty image value is emitted between closing and opening formatting. Multiple equal records at one offset collapse and an empty paragraph omits the frame, as in WRITER420.
+    - Named character hints add their style's direct items to the same formatting counters as autoformat hints. Empty native style handles have no effect. A native derived character style does not synthesize ancestor items in this path.
+    - 115 focused tests across 12 files passed, including mounted Writer file dialogs, native TXT/Markdown and HTML-table import. Typecheck, scoped lint/format, JSDoc, dependency boundaries, file size, source tree, provenance and Writer registry passed.
 id_source: "generated"
 ---
 ## Summary
@@ -10676,6 +10728,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-10T00:01:39.721Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: The represented Markdown export frame and character style checkpoint passes. The RTF represented document-title path and final scope review remain open.
+Attempts: 123
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-10T00:01:39.091Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ### HTML39 insertion boundary checkpoint
@@ -12638,3 +12720,9 @@ RTF109 paragraph shading checkpoint: CBPAT through CellColorHandler creates live
 - DomainMapper resolves BorderHandler values for both native paragraphs and styles. Native UNO edge, distance and connection properties feed the actual box item. Between-border handling removes the previous bottom edge in the current text stream through SwXParagraph.
 - WRITER418 records inherited BOX mutation across group pop. WRITER419 records source resource ordering and the PARD selector fallback. Focused regressions cover both quirks, border destination isolation, and style inheritance.
 - Related Writer sweep: 1,391 tests passed across 86 files. Typecheck, scoped ESLint/Prettier, module boundaries, JSDoc, file size, source tree, hint IDs, source provenance and Writer registry passed.
+
+### Markdown native anchored flies and named character hints
+
+- SwMDWriter consumes original anchored text-frame positions, including end-of-paragraph anchors. The represented empty image value is emitted between closing and opening formatting. Multiple equal records at one offset collapse and an empty paragraph omits the frame, as in WRITER420.
+- Named character hints add their style's direct items to the same formatting counters as autoformat hints. Empty native style handles have no effect. A native derived character style does not synthesize ancestor items in this path.
+- 115 focused tests across 12 files passed, including mounted Writer file dialogs, native TXT/Markdown and HTML-table import. Typecheck, scoped lint/format, JSDoc, dependency boundaries, file size, source tree, provenance and Writer registry passed.

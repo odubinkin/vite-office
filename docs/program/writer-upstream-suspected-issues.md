@@ -3455,3 +3455,13 @@ parent after an already-inserted BOX. PARD clears paragraph
 resources but retains the border selector. Preserve this order
 and the original fallback when the selected border parent is
 missing.
+
+### WRITER420 — Markdown writes a text fly as an empty image
+
+SwMDWriter places anchored flies into the native text positions.
+ApplyFlyFrameFormat only fills the graphic URL for graphic and
+OLE content, but still inserts an image record for a text fly.
+Without object metadata this emits `![]()`. Equal image records
+at one offset collapse. An empty anchor paragraph bypasses the
+formatting loop, so its fly is omitted. Preserve these results
+for the current Writer text-frame model.
