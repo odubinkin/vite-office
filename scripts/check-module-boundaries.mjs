@@ -62,7 +62,7 @@ const allowedEdges = new Map([
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original cppuhelper uses UNO/SAL, o3tl/cow_wrapper and comphelper/sequence.
-  ["cppuhelper", new Set(["comphelper", "cppu", "o3tl", "sal", "udkapi"])],
+  ["cppuhelper", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors.
   [
@@ -200,10 +200,8 @@ const allowedEdges = new Map([
       "xmloff",
     ]),
   ],
-  // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
-  // Library_sfx.mk links SAL; objstor.cxx takes rtl_TextEncoding directly.
-  // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
-  // Original SfxBaseModel listener containers use comphelper and published document/util SDK listeners.
+  // Library_sfx links tl for objembed map units and SAL for objstor text encoding.
+  // SfxBaseModel uses WeakImplHelper, UNO references, XChild and comphelper listener containers.
   // Native sfxhtml uses lang.h and o3tl/string_view.hxx.
   [
     "sfx2",
@@ -213,7 +211,6 @@ const allowedEdges = new Map([
   ],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
-  // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
   // Native grabbagitem.cxx consumes generated UDK beans PropertyValue.hpp.
   // Original SharedStringPool borrows CharClass; Library_svl links utl.
   // Original zforlist.cxx consumes generated i18n NumberFormatCode;Library_svl uses SDK API.
@@ -965,6 +962,7 @@ for (const sourceFile of runtimeSources) {
     }
     if (
       isForbiddenModuleEdge(sourceModule, targetModule) &&
+      !inlineSequence &&
       !isOriginalCharacterValueImport(relativeSource, relativeTarget) &&
       !isSidebarPresentationImport(relativeSource, relativeTarget)
     )
