@@ -15,6 +15,9 @@ it("omits an absent formatting region and mounts the owning view's supplied cont
     toolbar: <button type="button">Open document</button>,
   };
   const mounted = render(<OfficeWorkspaceHeader {...common} />);
+  expect(screen.getByRole("button", { name: "Shared document" })).toHaveAccessibleDescription(
+    "Edit document title",
+  );
   expect(screen.getByRole("toolbar", { name: "Standard controls" })).toBeVisible();
   expect(screen.queryByRole("toolbar", { name: "Formatting controls" })).not.toBeInTheDocument();
   mounted.rerender(

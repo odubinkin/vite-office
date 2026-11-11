@@ -187,7 +187,7 @@ it("hit-tests references through actual hidden and resized native rows and colum
       c.StartInput(ScInputMode.SC_INPUT_TOP, "=");
     },
   );
-  expect(screen.queryByRole("gridcell", { name: "B2" })).toBe(null);
+  expect(screen.queryByRole("gridcell", { name: /^B2(?:\s|$)/ })).toBe(null);
   fireEvent.pointerDown(cell("A1"), { button: 0, pointerId: 12, clientX: 60, clientY: 30 });
   fireEvent.pointerMove(document.body, { pointerId: 12, clientX: 190, clientY: 70 });
   fireEvent.pointerUp(document.body, { pointerId: 12, clientX: 190, clientY: 70 });
@@ -248,7 +248,7 @@ it("retains the same inline editor and keyboard owner when a reference scrolls i
   fireEvent.pointerMove(document.body, { pointerId: 51, clientX: 450, clientY: 280 });
   fireEvent.pointerUp(document.body, { pointerId: 51, clientX: 450, clientY: 280 });
   expect(c.viewport.firstRow).toBeGreaterThan(0);
-  expect(screen.queryByRole("gridcell", { name: "A1" })).toBe(null);
+  expect(screen.queryByRole("gridcell", { name: /^A1(?:\s|$)/ })).toBe(null);
   expect(screen.getByRole("textbox", { name: "Edit cell A1" })).toBe(input);
   expect(input).toHaveFocus();
   const draft = c.Input();

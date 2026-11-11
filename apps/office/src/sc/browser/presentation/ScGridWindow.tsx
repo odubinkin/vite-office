@@ -512,6 +512,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       fontColor,
                     } = cellTypography(pattern);
                     const active = column === col && row === r;
+                    const cellId = `${props.idPrefix}-${tab}-${col}-${r}`;
                     const marks = viewData.GetMarkData();
                     const selected =
                       (!(marks.IsMarked() || marks.IsMultiMarked()) && active) ||
@@ -579,13 +580,16 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     return (
                       <div
                         key={col}
-                        id={`${props.idPrefix}-${tab}-${col}-${r}`}
+                        id={cellId}
                         data-calc-column={col}
                         data-calc-row={r}
                         role="gridcell"
                         aria-colindex={col + 1 + Number(headers)}
                         aria-selected={selected}
                         aria-label={`${columnLabel(col)}${r + 1}`}
+                        // Upstream exposes address and text separately. ARIA composes the address
+                        // (self-reference) with the existing displayed text, without a second value owner.
+                        aria-labelledby={editing && active ? cellId : `${cellId} ${cellId}-text`}
                         onPointerDown={
                           /** Focuses the grid and routes selection with button/modifiers intact. @param event - Platform pointer. @returns Nothing. */ (
                             event,
@@ -632,7 +636,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           />
                         )}
                         {editing && active ? null : (
-                          <div className="w-full shrink-0">
+                          <div id={`${cellId}-text`} className="w-full shrink-0">
                             <SpecialText
                               enabled={outlined}
                               shadow={shadowed}

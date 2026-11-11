@@ -605,7 +605,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     const handle = screen.getByRole("button", { name: "Left page margin" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerMove(window, { clientX: 107 });
-    expect(handle.style.left).toBe(`${page.leftMargin / 15 + 2 * (1440 / 2.54 / 10 / 15)}px`);
+    expect(handle).toHaveStyle({ left: `${page.leftMargin / 15 + 2 * (1440 / 2.54 / 10 / 15)}px` });
     expect(document.querySelector('[data-ruler-guide="x"]')).not.toBeNull();
     fireEvent.pointerUp(window, { clientX: 107 });
     expect(onPageChange).toHaveBeenCalledWith("left", 113);
@@ -847,7 +847,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
         <span>Pages</span>
       </WriterWorkspaceChrome>,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     const title = screen.getByRole("textbox", { name: "Document title" });
     fireEvent.change(title, { target: { value: "  Renamed  " } });
     fireEvent.keyDown(title, { key: "Enter" });

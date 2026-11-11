@@ -26,7 +26,7 @@ test("imports CSV, saves the primary ODS copy and exports the active sheet", /**
   await address.fill("A3");
   await address.press("Enter");
   await expect(address).toHaveValue("A3");
-  await expect(page.getByRole("gridcell", { name: "A3", exact: true })).toHaveText(
+  await expect(page.getByRole("gridcell", { name: /^A3(?:\s|$)/ })).toHaveText(
     /two\s+columns\s+lines/u,
   );
   await page.getByRole("menuitem", { name: "File", exact: true }).click();

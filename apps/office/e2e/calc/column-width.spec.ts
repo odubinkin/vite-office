@@ -49,7 +49,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcColumnFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true });
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Column geometry");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await expect(cell).toHaveCSS("width", "85px");

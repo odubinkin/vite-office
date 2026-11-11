@@ -69,7 +69,7 @@ for (const width of [1280, 390])
       await expect(cells.nth(0)).toHaveCSS("vertical-align", "bottom");
       await expect(cells.nth(1)).toHaveCSS("vertical-align", "middle");
       const fixed = rendered.locator("[data-writer-fixed-row-content]").nth(1);
-      await expect(fixed).toHaveCSS("justify-content", "safe flex-end");
+      await expect(fixed).toHaveCSS("justify-content", "safe flow-end");
       await selectBrowserTableRow(page, "NativeAlign", 2);
       await page
         .getByRole("complementary", { name: "Writer properties sidebar" })

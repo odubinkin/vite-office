@@ -15,8 +15,8 @@ for (const width of [1280, 390]) {
       },
     );
     await page.goto("/calc");
-    const a1 = page.getByRole("gridcell", { name: "A1", exact: true }),
-      b2 = page.getByRole("gridcell", { name: "B2", exact: true });
+    const a1 = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
+      b2 = page.getByRole("gridcell", { name: /^B2(?:\s|$)/ });
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("Color sample");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await page.getByRole("button", { name: "Font Color", exact: true }).click();

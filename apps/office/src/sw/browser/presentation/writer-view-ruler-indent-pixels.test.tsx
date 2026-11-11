@@ -1,4 +1,5 @@
 /** @fileoverview Checks rounded paragraph ruler coordinates preserve precise Writer items and history. */
+import { serializeStyleValue } from "../../../test/css-style-matchers";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
@@ -100,6 +101,19 @@ describe("Writer paragraph indent pixel conversion", /** Groups source-domain pr
       const history = owner.session.docShell.GetUndoManager().GetUndoActionCount();
       const generation = owner.session.docShell.GetContentGeneration();
       const snapshot = owner.store.GetSnapshot();
+      const stylePrototype = Object.getPrototypeOf(
+        document.createElement("div").style,
+      ) as CSSStyleDeclaration;
+      const originalLeft = Object.getOwnPropertyDescriptor(stylePrototype, "left")?.set;
+      if (!originalLeft) throw new Error("Missing native CSS left setter");
+      const nativePixels = new Map<CSSStyleDeclaration, string>();
+      vi.spyOn(stylePrototype, "left", "set").mockImplementation(
+        /** Captures the exact native position before browser serialization. @param this - Real declaration. @param value - Native CSS input. @returns Nothing. */
+        function (this: CSSStyleDeclaration, value: string): void {
+          nativePixels.set(this, value);
+          originalLeft.call(this, value);
+        },
+      );
       render(
         <WriterRulers
           horizontalVisible
@@ -109,11 +123,20 @@ describe("Writer paragraph indent pixel conversion", /** Groups source-domain pr
           onParagraphIndentChange={vi.fn()}
         />,
       );
+      expect(
+        ["Paragraph left indent", "First line indent", "Paragraph right indent"].map(
+          /** Reads the exact integer supplied to the real CSS setter. @param name - Native anchor. @returns Original integer pixel coordinate. */
+          (name) =>
+            Number.parseFloat(
+              nativePixels.get(screen.getByRole("button", { name }).style) ?? "NaN",
+            ),
+        ),
+      ).toEqual(item.pixels);
       expect(anchors()).toEqual(
         item.pixels.map(
           /** Converts literal expectations to CSS. @param pixel - Expected integer. @returns CSS position. */ (
             pixel,
-          ) => `${pixel}px`,
+          ) => serializeStyleValue("left", `${pixel}px`),
         ),
       );
       expect(snapshot.activeParagraph.textLeftMargin).toBe(item.left);

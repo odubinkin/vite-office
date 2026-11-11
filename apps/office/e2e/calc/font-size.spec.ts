@@ -17,8 +17,8 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     const grid = page.getByRole("grid"),
       size = page.getByRole("combobox", { name: "Font Size", exact: true }),
-      a1 = grid.getByRole("gridcell", { name: "A1", exact: true }),
-      b2 = grid.getByRole("gridcell", { name: "B2", exact: true });
+      a1 = grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
+      b2 = grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ });
     await expect(size).toBeEnabled();
     await expect(size).toHaveValue("10 pt");
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("Font sample");
@@ -45,7 +45,7 @@ for (const width of [1280, 390]) {
     const name = page.getByRole("textbox", { name: "Name Box", exact: true });
     await name.fill("A1048576");
     await name.press("Enter");
-    const last = grid.getByRole("gridcell", { name: "A1048576", exact: true });
+    const last = grid.getByRole("gridcell", { name: /^A1048576(?:\s|$)/ });
     await expect(last).toBeInViewport({ ratio: 1 });
     await last.click();
     await expect(grid).toHaveAttribute("aria-activedescendant", /-0-0-1048575$/);

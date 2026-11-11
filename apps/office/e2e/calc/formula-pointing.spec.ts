@@ -9,7 +9,7 @@ for (const width of [1280, 390])
     await page.goto("/calc");
     const grid = page.getByRole("grid"),
       line = page.getByRole("textbox", { name: "Input line" });
-    await grid.getByRole("gridcell", { name: "A1", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ }).click();
     await page.keyboard.type("4");
     await page.keyboard.press("Enter");
     await page.keyboard.type("6");
@@ -19,8 +19,8 @@ for (const width of [1280, 390])
     await name.press("Enter");
     await page.getByRole("button", { name: "Formula", exact: true }).click();
     await line.fill("=SUM(");
-    const first = await grid.getByRole("gridcell", { name: "A1", exact: true }).boundingBox(),
-      last = await grid.getByRole("gridcell", { name: "A2", exact: true }).boundingBox();
+    const first = await grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ }).boundingBox(),
+      last = await grid.getByRole("gridcell", { name: /^A2(?:\s|$)/ }).boundingBox();
     if (!first || !last) throw Error("Missing actual grid geometry");
     await page.mouse.move(first.x + first.width / 2, first.y + first.height / 2);
     await page.mouse.down();
@@ -41,16 +41,16 @@ for (const width of [1280, 390])
     await page.keyboard.type(")");
     await expect(line).toHaveValue("=SUM(A1:A2)");
     await line.press("Enter");
-    await expect(grid.getByRole("gridcell", { name: "D5", exact: true })).toHaveText("10");
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
-    await grid.getByRole("gridcell", { name: "C4", exact: true }).click({ modifiers: ["Shift"] });
-    await expect(grid.getByRole("gridcell", { name: "B4", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^D5(?:\s|$)/ })).toHaveText("10");
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
+    await grid.getByRole("gridcell", { name: /^C4(?:\s|$)/ }).click({ modifiers: ["Shift"] });
+    await expect(grid.getByRole("gridcell", { name: /^B4(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
     await expect(grid).toHaveAttribute("aria-activedescendant", /-0-1-1$/);
-    await grid.getByRole("gridcell", { name: "C3", exact: true }).click({ modifiers: ["Control"] });
-    await expect(grid.getByRole("gridcell", { name: "C3", exact: true })).toHaveAttribute(
+    await grid.getByRole("gridcell", { name: /^C3(?:\s|$)/ }).click({ modifiers: ["Control"] });
+    await expect(grid.getByRole("gridcell", { name: /^C3(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "false",
     );
@@ -58,11 +58,11 @@ for (const width of [1280, 390])
     await page
       .getByRole("button", { name: "Column C", exact: true })
       .click({ modifiers: ["Shift"] });
-    await expect(grid.getByRole("gridcell", { name: "B5", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await expect(grid.getByRole("gridcell", { name: "C5", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^C5(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -71,7 +71,7 @@ for (const width of [1280, 390])
     await page.keyboard.type("=");
     const inline = page.getByRole("textbox", { name: "Edit cell A1" }),
       original = await inline.elementHandle(),
-      start = await grid.getByRole("gridcell", { name: "B2", exact: true }).boundingBox(),
+      start = await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).boundingBox(),
       viewport = await grid.boundingBox();
     if (!original || !start || !viewport) throw Error("Missing actual inline reference window");
     const mouseX = start.x + start.width / 2,
@@ -80,7 +80,7 @@ for (const width of [1280, 390])
     await page.mouse.down();
     await page.mouse.move(mouseX, mouseY, { steps: 6 });
     await page.mouse.up();
-    await expect(grid.getByRole("gridcell", { name: "A1", exact: true })).toHaveCount(0);
+    await expect(grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveCount(0);
     await expect(inline).toBeFocused();
     expect(
       await inline.evaluate(
@@ -96,7 +96,7 @@ for (const width of [1280, 390])
     await expect(inline).toHaveValue(pointed + "+1");
     await page.keyboard.press("Escape");
     await expect(inline).toHaveCount(0);
-    await expect(grid.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("4");
+    await expect(grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("4");
     await page.keyboard.type("=SUM(B2)");
     const caretEditor = page.getByRole("textbox", { name: "Edit cell A1" });
     await caretEditor.click({ position: { x: 15, y: 5 } });
@@ -104,7 +104,7 @@ for (const width of [1280, 390])
     await expect(caretEditor).toHaveValue("=SUM(B2)");
     await page.keyboard.press("Escape");
     await page.keyboard.type("=");
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
     const wordEditor = page.getByRole("textbox", { name: "Edit cell A1" });
     await wordEditor.dblclick({ position: { x: 15, y: 5 } });
     await page.keyboard.type("7");

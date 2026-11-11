@@ -41,7 +41,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcOverlineFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true });
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Overline text");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await page.getByRole("menuitem", { name: "Format", exact: true }).click();

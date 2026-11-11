@@ -1,4 +1,5 @@
 /** @fileoverview Connects native character items and original numbering font values to actual sidebar controls and rendering. */
+import { copyStyleDeclaration } from "../../../test/css-style-matchers";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -38,8 +39,9 @@ it("paints actual native body/number decoration and preserves source effect orde
       element,
       pseudo,
     ) => {
-      const style = realStyle(element, pseudo);
+      let style = realStyle(element, pseudo);
       if (element.hasAttribute("data-native-strikeout")) {
+        style = copyStyleDeclaration(style);
         style.fontSize = "16px";
         style.fontFamily = "Liberation Serif";
         style.fontWeight = "400";

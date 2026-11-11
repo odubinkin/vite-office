@@ -51,7 +51,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcOutlineFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true });
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Outline text");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await page.getByRole("menuitem", { name: "Format", exact: true }).click();
@@ -247,7 +247,7 @@ test("paints the native white center on colored background with independently co
   );
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("button", { name: "Outline paint", exact: true }).click();
-  const cell = page.getByRole("gridcell", { name: "A1", exact: true });
+  const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
   await expect(cell).toHaveCSS("background-color", "rgb(255, 255, 0)");
   await expect(cell).toHaveCSS("color", "rgb(0, 0, 255)");
   await expect(cell.getByText("OO", { exact: true })).toHaveCSS(

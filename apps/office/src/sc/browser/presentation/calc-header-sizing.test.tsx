@@ -29,7 +29,7 @@ it("resizes actual columns and rows through shared tracking,retains marks,and re
     expect(doc.GetColWidth(1, 0)).toBe(1280);
     fireEvent.pointerUp(window, { pointerId: 1, clientX: 237 });
     expect(doc.GetColWidth(1, 0)).toBe(1590);
-    expect(screen.getByRole("gridcell", { name: "B1" })).toHaveStyle({ width: "106px" });
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveStyle({ width: "106px" });
     expect(c.viewData.GetMarkData().GetMarkArea().aStart.Col()).toBe(1);
     expect(c.viewData.GetMarkData().GetMarkArea().aEnd.Row()).toBe(doc.MaxRow());
     act(
@@ -53,7 +53,7 @@ it("resizes actual columns and rows through shared tracking,retains marks,and re
     expect(doc.GetRowHeight(0, 0, false)).toBe(256);
     fireEvent.pointerUp(window, { pointerId: 2, clientY: 138 });
     expect(doc.GetRowHeight(0, 0, false)).toBe(600);
-    expect(screen.getByRole("gridcell", { name: "B1" })).toHaveStyle({ height: "40px" });
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveStyle({ height: "40px" });
     const copy = await readOdsDocument(c.shell.SerializeOds());
     expect(copy.GetColWidth(1, 0)).toBe(1590);
     expect(copy.GetRowHeight(0, 0, false)).toBe(600);

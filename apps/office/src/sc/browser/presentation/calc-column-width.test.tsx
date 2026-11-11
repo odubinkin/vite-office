@@ -49,7 +49,7 @@ it("uses shared menus,actual width history and source hide/show without losing w
       /** Awaits actual native application. @returns Assertion. */ () =>
         expect(doc.GetColWidth(0, 0)).toBe(1440),
     );
-    expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
       width: "96px",
     });
     act(
@@ -69,7 +69,7 @@ it("uses shared menus,actual width history and source hide/show without losing w
     expect(doc.ColHidden(0, 0)).toBe(true);
     expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("B1");
     expect(doc.GetColWidth(0, 0, false)).toBe(1440);
-    expect(screen.queryByRole("gridcell", { name: "A1" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("gridcell", { name: /^A1(?:\s|$)/ })).not.toBeInTheDocument();
     act(
       /** Selects the actual hidden column by address. @returns Nothing. */ () => {
         c.Select(0, 0);

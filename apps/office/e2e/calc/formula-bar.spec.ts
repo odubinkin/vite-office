@@ -18,7 +18,7 @@ for (const width of [1280, 390])
     await page.goto("/calc");
     const grid = page.getByRole("grid"),
       name = page.getByRole("textbox", { name: "Name Box" });
-    await grid.getByRole("gridcell", { name: "A1", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ }).click();
     for (const value of ["Block totals", "2", "3"]) {
       await page.keyboard.type(value);
       await page.keyboard.press("Enter");
@@ -31,7 +31,7 @@ for (const width of [1280, 390])
     }
     await name.fill("A4");
     await name.press("Enter");
-    await grid.getByRole("gridcell", { name: "B5", exact: true }).click({ modifiers: ["Shift"] });
+    await grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ }).click({ modifiers: ["Shift"] });
     const sum = page.getByRole("button", { name: "Sum", exact: true });
     await expect(sum).toBeEnabled();
     await sum.click();
@@ -42,12 +42,14 @@ for (const width of [1280, 390])
       ["A5", "8"],
       ["B5", "16"],
     ] as const)
-      await expect(grid.getByRole("gridcell", { name: address, exact: true })).toHaveText(value);
+      await expect(
+        grid.getByRole("gridcell", { name: new RegExp(`^${address}(?:\\s|$)`) }),
+      ).toHaveText(value);
     await page.getByRole("button", { name: "Undo", exact: true }).click();
-    await expect(grid.getByRole("gridcell", { name: "B5", exact: true })).toHaveText("");
-    await expect(grid.getByRole("gridcell", { name: "B3", exact: true })).toHaveText("6");
+    await expect(grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ })).toHaveText("");
+    await expect(grid.getByRole("gridcell", { name: /^B3(?:\s|$)/ })).toHaveText("6");
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(grid.getByRole("gridcell", { name: "B5", exact: true })).toHaveText("16");
+    await expect(grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ })).toHaveText("16");
     await grid.focus();
     await page.keyboard.press("ControlOrMeta+s");
     await installKernelFixture(page, "CalcSumPersistenceFixture", [
@@ -96,7 +98,7 @@ for (const width of [1280, 390])
     await page.reload();
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("button", { name: "Block totals", exact: true }).click();
-    await expect(grid.getByRole("gridcell", { name: "B5", exact: true })).toHaveText("16");
+    await expect(grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ })).toHaveText("16");
     await name.fill("B5");
     await name.press("Enter");
     await expect(page.getByRole("textbox", { name: "Input line" })).toHaveValue("=SUM(B3:B4)");

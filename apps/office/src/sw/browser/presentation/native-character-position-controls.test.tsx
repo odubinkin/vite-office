@@ -1,4 +1,5 @@
 /** @fileoverview Source Character Position toolbar over actual Writer native frame, original numbering and complete escapement history. */
+import { copyStyleDeclaration } from "../../../test/css-style-matchers";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -32,8 +33,9 @@ it("binds original super/sub pair, body/numbering font and native exclusive stat
       element,
       pseudo,
     ) => {
-      const style = actual(element, pseudo);
+      let style = actual(element, pseudo);
       if (element.hasAttribute("data-native-escapement")) {
+        style = copyStyleDeclaration(style);
         style.fontSize = "16px";
         style.fontFamily = "Liberation Serif";
         style.fontStyle = "normal";

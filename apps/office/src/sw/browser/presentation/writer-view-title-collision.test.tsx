@@ -36,7 +36,7 @@ it("repeats rename collision resolution for an occupied edited alternative", /**
   const rendered = render(
     <WriterWorkbench autosave={autosave} isActive services={services} view={session.view} />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
     target: { value: "Target" },
   });
@@ -91,7 +91,7 @@ it("overwrites a rename conflict after explicit confirmation", /** Checks the sh
       view={session.view}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
     target: { value: "Target" },
   });

@@ -1,5 +1,5 @@
 /** @fileoverview Shared office workspace header extracted from Writer without changing title,menu or toolbar layout and styles. */
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 /** Suite resources and actual semantic actions injected into identical office chrome. */
 export interface OfficeWorkspaceHeaderProps {
   readonly documentTitle: string;
@@ -26,6 +26,7 @@ export function OfficeWorkspaceHeader({
   toolbar,
   formattingToolbar,
 }: OfficeWorkspaceHeaderProps): React.JSX.Element {
+  const editTitleDescriptionId = useId();
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draftTitle, setDraftTitle] = useState(documentTitle);
   /** Commits the normalized title draft and closes the inline editor. @returns Nothing. */
@@ -67,7 +68,7 @@ export function OfficeWorkspaceHeader({
               />
             ) : (
               <button
-                aria-label={editTitleLabel}
+                aria-describedby={editTitleDescriptionId}
                 className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
                 onClick={
                   /** Opens title editing with the current document title. @returns Nothing. */ () => {
@@ -81,6 +82,9 @@ export function OfficeWorkspaceHeader({
               </button>
             )}
           </h1>
+          <span hidden id={editTitleDescriptionId}>
+            {editTitleLabel}
+          </span>
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
             {subtitle}
           </p>

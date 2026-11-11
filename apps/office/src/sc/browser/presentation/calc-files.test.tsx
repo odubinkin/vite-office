@@ -202,20 +202,20 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   );
   expect(c.shell.GetTitle()).toBe("Working document");
   expect(c.viewData.GetDocument()).toBe(c.shell.GetDocument());
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
     target: { value: "Retitled document" },
   });
   fireEvent.keyDown(screen.getByRole("textbox", { name: "Document title" }), { key: "Enter" });
   expect(c.shell.GetTitle()).toBe("Retitled document");
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
     target: { value: " " },
   });
   fireEvent.keyDown(screen.getByRole("textbox", { name: "Document title" }), { key: "a" });
   fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
   expect(c.shell.GetTitle()).toBe("Retitled document");
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
 
   fireEvent.keyDown(screen.getByRole("grid"), { key: "s", shiftKey: true, metaKey: true });

@@ -76,15 +76,27 @@ it("connects Edit Select row and column to the actual shared menu and visible gr
   const row = screen.getByRole("menuitem", { name: "Select Row" });
   expect(row).toBeEnabled();
   fireEvent.click(row);
-  expect(screen.getByRole("gridcell", { name: "A8" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("gridcell", { name: "A7" })).toHaveAttribute("aria-selected", "false");
+  expect(screen.getByRole("gridcell", { name: /^A8(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  expect(screen.getByRole("gridcell", { name: /^A7(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "false",
+  );
   expect(grid).toHaveFocus();
-  fireEvent.pointerDown(screen.getByRole("gridcell", { name: "E8" }), { button: 0 });
+  fireEvent.pointerDown(screen.getByRole("gridcell", { name: /^E8(?:\s|$)/ }), { button: 0 });
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select Column" }));
-  expect(screen.getByRole("gridcell", { name: "E1" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("gridcell", { name: "D1" })).toHaveAttribute("aria-selected", "false");
+  expect(screen.getByRole("gridcell", { name: /^E1(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  expect(screen.getByRole("gridcell", { name: /^D1(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "false",
+  );
   expect(s.controller.Address()).toBe("E8");
   s.Close();
 });

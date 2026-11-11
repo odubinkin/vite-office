@@ -266,9 +266,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   const calcInput = page.getByRole("textbox", { name: "Input line" });
   await calcInput.fill("42");
   await calcInput.press("Enter");
-  await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("42");
+  await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("42");
   await page.getByRole("button", { name: "Undo", exact: true }).click();
-  await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("");
+  await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("");
 
   const accessibilityResults = await new AxeBuilder({ page }).analyze();
   expect(accessibilityResults.violations).toEqual([]);

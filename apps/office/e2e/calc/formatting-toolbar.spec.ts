@@ -106,9 +106,9 @@ for (const viewport of [
     });
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("9");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
-    await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("9");
+    await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("9");
     await bar.getByRole("button", { name: "Bold", exact: true }).click();
-    const cell = page.getByRole("gridcell", { name: "A1", exact: true });
+    const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await expect(cell).toHaveCSS("font-weight", "700");
     await expect(bar.getByRole("button", { name: "Bold", exact: true })).toHaveAttribute(
       "aria-pressed",

@@ -3,6 +3,7 @@
  */
 
 import "@testing-library/jest-dom/vitest";
+import "./css-style-matchers";
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 

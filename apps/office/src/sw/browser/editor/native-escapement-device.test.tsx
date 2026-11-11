@@ -1,4 +1,5 @@
 /** @fileoverview Real escapement spans with only browser font/Canvas ports supplied; literal native horizontal CalcEsc values and live device lifecycle. */
+import { copyStyleDeclaration } from "../../../test/css-style-matchers";
 import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, render } from "@testing-library/react";
 import { EscapementText } from "./EscapementText";
@@ -35,8 +36,9 @@ function device(valid = true) {
       element,
       pseudo,
     ) => {
-      const style = actual(element, pseudo);
+      let style = actual(element, pseudo);
       if (element.hasAttribute("data-native-escapement")) {
+        style = copyStyleDeclaration(style);
         style.fontSize = "16px";
         style.fontWeight = "400";
         style.fontStyle = "normal";

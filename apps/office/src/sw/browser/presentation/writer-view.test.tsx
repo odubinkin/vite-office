@@ -559,17 +559,17 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const session = createWriterDocumentSession();
     const view = render(<WriterWorkbench isActive view={session.view} />);
     const dialogs = session.view.GetDialogController();
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.keyDown(screen.getByRole("textbox", { name: "Document title" }), {
       key: "ArrowLeft",
     });
     fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
       target: { value: " " },
     });
     fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
       target: { value: "Layout parity" },
     });
@@ -637,7 +637,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       Flush: vi.fn().mockRejectedValue(new Error("Name already exists")),
     } as unknown as WriterAutosaveController;
     const rendered = render(<WriterWorkbench autosave={autosave} isActive view={session.view} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
       target: { value: "Conflicting title" },
     });
@@ -764,14 +764,14 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     } as unknown as WriterAutosaveController;
     const rendered = render(<WriterWorkbench autosave={autosave} isActive view={session.view} />);
     rename.mockReturnValueOnce(false);
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
       target: { value: "Rejected" },
     });
     fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
     expect(autosave.Flush).not.toHaveBeenCalled();
     expect(session.docShell.GetTitle()).toBe(previous);
-    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
       target: { value: "Later" },
     });

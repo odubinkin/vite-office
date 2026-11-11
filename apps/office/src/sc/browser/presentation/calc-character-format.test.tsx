@@ -65,7 +65,7 @@ it("uses the shared controls with real three-script attributes,mixed ranges and 
   const pattern = doc.GetPattern(new ScAddress()) as ScPatternAttr;
   for (const which of [102, 113, 118])
     expect((pattern.GetItem(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
     fontWeight: 700,
   });
   fireEvent.keyDown(screen.getByRole("grid"), { key: "b", ctrlKey: true });
@@ -85,7 +85,7 @@ it("uses the shared controls with real three-script attributes,mixed ranges and 
       (doc.GetPattern(new ScAddress()) as ScPatternAttr).GetItem(104) as SvxUnderlineItem
     ).GetLineStyle(),
   ).toBe(FontLineStyle.LINESTYLE_SINGLE);
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
     fontStyle: "italic",
     textDecorationLine: "underline",
   });
@@ -160,7 +160,7 @@ it("uses original fresh-item underline variants from the shared Format menu", /*
       sheetWorkflows={s.sheetWorkflows}
     />,
   );
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
     textDecorationColor: "rgb(17, 34, 51)",
   });
   expect(d.QueryDispatch(".uno:UnderlineSingle")?.slot.slotId).toBe(11196);
@@ -179,7 +179,7 @@ it("uses original fresh-item underline variants from the shared Format menu", /*
       .GetColor()
       .GetAlpha(),
   ).toBe(0);
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
     textDecorationStyle: "double",
   });
   expect(d.QueryState(".uno:UnderlineDouble").checked).toBe(true);

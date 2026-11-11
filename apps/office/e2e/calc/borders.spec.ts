@@ -16,7 +16,7 @@ for (const width of [1280, 390])
       },
     );
     await page.goto("/calc");
-    const cell = page.getByRole("gridcell", { name: "A1", exact: true }),
+    const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       input = page.getByRole("textbox", { name: "Input line", exact: true });
     await input.fill("Native borders");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();

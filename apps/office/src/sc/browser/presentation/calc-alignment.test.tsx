@@ -38,7 +38,7 @@ it("reuses shared buttons and Format menu with original toggle/explicit behavior
         sheetWorkflows={session.sheetWorkflows}
       />,
     );
-    const a1 = screen.getByRole("gridcell", { name: "A1" }),
+    const a1 = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       left = screen.getByRole("button", { name: "Align Left" });
     expect(a1).toHaveStyle({ textAlign: "right" });
     expect(left).toHaveClass("size-8", "rounded-md", "bg-white");

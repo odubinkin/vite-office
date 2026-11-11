@@ -36,7 +36,7 @@ it("uses the existing Writer toolbar button and actual cell attribute, preservin
       />,
     );
     const button = screen.getByRole("button", { name: "Wrap Text" }),
-      cell = screen.getByRole("gridcell", { name: "A1" });
+      cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
     expect(button).toHaveAttribute("aria-pressed", "false");
     expect(cell).toHaveStyle({ whiteSpace: "nowrap" });

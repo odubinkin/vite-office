@@ -16,8 +16,8 @@ for (const width of [1280, 390]) {
     );
     await page.goto("/calc");
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      a1 = page.getByRole("gridcell", { name: "A1", exact: true }),
-      b1 = page.getByRole("gridcell", { name: "B1", exact: true });
+      a1 = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
+      b1 = page.getByRole("gridcell", { name: /^B1(?:\s|$)/ });
     await input.fill("17");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await b1.click();
@@ -51,7 +51,7 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     await expect(a1).toHaveCSS("justify-content", "center");
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(a1).toHaveCSS("justify-content", "flex-end");
+    await expect(a1).toHaveCSS("justify-content", "flow-end");
     for (let count = 0; count < 2; count++) {
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Align Text", exact: true }).click();

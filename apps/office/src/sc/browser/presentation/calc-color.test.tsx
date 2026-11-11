@@ -31,7 +31,7 @@ it("uses the actual shared palette and native recent colors for cell painting an
         sheetWorkflows={session.sheetWorkflows}
       />,
     );
-    const a1 = screen.getByRole("gridcell", { name: "A1" });
+    const a1 = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     fireEvent.click(screen.getByRole("button", { name: "Font Color" }));
     expect(
       (doc.GetPattern(new ScAddress())?.GetItem(109) as SvxColorItem).GetValue().toUInt32(),

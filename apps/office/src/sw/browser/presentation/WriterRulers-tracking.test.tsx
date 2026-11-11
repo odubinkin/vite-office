@@ -234,8 +234,8 @@ it("uses independently supplied native ruler units for horizontal and vertical p
   fireEvent.pointerUp(window, { pointerId: 32, clientY: 120 });
   expect(data.onPageChange).toHaveBeenLastCalledWith("top", 240);
   expect(data.onPageChange).toHaveBeenCalledTimes(2);
-  expect(horizontal.style.left).toBe(`${data.page.leftMargin / 15}px`);
-  expect(vertical.style.top).toBe(`${data.page.topMargin / 15}px`);
+  expect(horizontal).toHaveStyle({ left: `${data.page.leftMargin / 15}px` });
+  expect(vertical).toHaveStyle({ top: `${data.page.topMargin / 15}px` });
   rendered.rerender(<WriterRulers {...data} horizontalVisible />);
   fireEvent.pointerDown(screen.getByRole("button", { name: "Left page margin" }), {
     button: 0,

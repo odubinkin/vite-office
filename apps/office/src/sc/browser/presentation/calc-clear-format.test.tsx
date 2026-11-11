@@ -50,7 +50,9 @@ it("uses the actual shared Clear menu and native attribute deletion without chan
     const clear = screen.getByRole("menuitem", { name: "Clear" });
     expect(clear).toBeEnabled();
     fireEvent.click(clear);
-    expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("Clear formatting");
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent(
+      "Clear formatting",
+    );
     expect(doc.GetPattern(new ScAddress())?.GetItemSet().Count()).toBe(0);
     const manager = c.shell.GetUndoManager();
     expect(manager.GetUndoAction()?.GetComment()).toBe("Delete");

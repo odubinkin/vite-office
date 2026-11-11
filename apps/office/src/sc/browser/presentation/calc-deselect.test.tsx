@@ -76,7 +76,7 @@ it("keeps inline input selection and Escape cancellation independent from the gr
   const s = setup(),
     c = s.controller;
   try {
-    fireEvent.doubleClick(screen.getByRole("gridcell", { name: "E8" }));
+    fireEvent.doubleClick(screen.getByRole("gridcell", { name: /^E8(?:\s|$)/ }));
     const input = screen.getByRole("textbox", { name: "Edit cell E8" });
     fireEvent.change(input, { target: { value: "alpha beta" } });
     input.focus();

@@ -16,55 +16,55 @@ for (const width of [1280, 390]) {
     );
     await page.goto("/calc");
     const grid = page.getByRole("grid");
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
-    await grid.getByRole("gridcell", { name: "C4", exact: true }).click({ modifiers: ["Shift"] });
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
+    await grid.getByRole("gridcell", { name: /^C4(?:\s|$)/ }).click({ modifiers: ["Shift"] });
     await page.getByRole("menubar").getByRole("menuitem", { name: "Edit", exact: true }).click();
     await page.getByRole("menuitem", { name: "Select", exact: true }).click();
     await page.getByRole("menuitem", { name: "Select Row", exact: true }).click();
-    await expect(grid.getByRole("gridcell", { name: "A2", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^A2(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await expect(grid.getByRole("gridcell", { name: "A4", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^A4(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await expect(grid.getByRole("gridcell", { name: "A1", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "false",
     );
     await expect(grid).toHaveAttribute("aria-activedescendant", /-0-1-1$/);
     await expect(grid).toBeFocused();
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
     await page.getByRole("menubar").getByRole("menuitem", { name: "Edit", exact: true }).click();
     await page.getByRole("menuitem", { name: "Select", exact: true }).click();
     await page.getByRole("menuitem", { name: "Select Column", exact: true }).click();
-    await expect(grid.getByRole("gridcell", { name: "B1", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await expect(grid.getByRole("gridcell", { name: "A1", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "false",
     );
     await expect(grid).toHaveAttribute("aria-activedescendant", /-0-1-1$/);
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
     await page.keyboard.press("Shift+Space");
-    await expect(grid.getByRole("gridcell", { name: "A2", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^A2(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
+    await grid.getByRole("gridcell", { name: /^B2(?:\s|$)/ }).click();
     const mac = await page.evaluate(
       /** Reads the real browser platform for the original accelerator variant. @returns Whether Mac. */ () =>
         /Mac/.test(navigator.platform),
     );
     await page.keyboard.press(mac ? "Alt+Space" : "Control+Space");
-    await expect(grid.getByRole("gridcell", { name: "B1", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "true",
     );
-    await expect(grid.getByRole("gridcell", { name: "C1", exact: true })).toHaveAttribute(
+    await expect(grid.getByRole("gridcell", { name: /^C1(?:\s|$)/ })).toHaveAttribute(
       "aria-selected",
       "false",
     );

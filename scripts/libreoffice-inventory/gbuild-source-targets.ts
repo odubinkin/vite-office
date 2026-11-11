@@ -189,7 +189,7 @@ function splitAtTopLevel(value: string, separator: "," | "whitespace"): readonly
     }
     const isSeparator =
       (separator === "," && value[index] === ",") ||
-      (separator === "whitespace" && /\s/u.test(value[index] ?? ""));
+      (separator === "whitespace" && /\s/u.test(value.charAt(index)));
     if (depth === 0 && isSeparator) {
       values.push(value.slice(fragmentStart, index).trim());
       fragmentStart = index + 1;

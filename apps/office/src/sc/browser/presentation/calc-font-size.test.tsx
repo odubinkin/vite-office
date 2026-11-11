@@ -41,7 +41,7 @@ it("binds the real shared font widget,mixed state,paint and native repeated-oper
   fireEvent.change(select, { target: { value: "18" } });
   fireEvent.keyDown(select, { key: "Tab" });
   expect(height(doc, 0, 0)).toBe(360);
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({ fontSize: "18pt" });
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({ fontSize: "18pt" });
   for (const which of [101, 112, 117]) expect(height(doc, 0, 0, 0, which)).toBe(360);
   const count = c.shell.GetUndoManager().GetUndoActionCount(),
     generation = c.shell.GetContentGeneration();

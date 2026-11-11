@@ -37,7 +37,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcWrapFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true }),
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       button = page.getByRole("button", { name: "Wrap Text", exact: true });
     await input.fill("Native wrapping text across multiple lines");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();

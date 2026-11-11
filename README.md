@@ -81,7 +81,11 @@ belong to the browser profile and origin and can be removed when browser data is
 
 ## Local development
 
-Prerequisites are Node.js 22 or newer and npm.
+Prerequisites are the latest Node.js LTS release and npm. The `.nvmrc` selector follows `lts/*`;
+with nvm, run `nvm install` and `nvm use` before installing dependencies. `engines.node` records the
+minimum supported major, without pinning a specific release. Docker follows the same floating LTS
+policy through `node:lts-slim`; build with `docker build --pull .` to refresh the base image. The
+container uses the compiler's `--singleThreaded` mode to reduce build memory usage.
 
 Compilation and type checking use stable TypeScript 7 through the `tsc` command, including the
 type-check step of `npm run build`. Vite performs the subsequent asset bundling. Tools that need the

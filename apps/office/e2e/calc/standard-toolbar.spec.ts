@@ -91,11 +91,11 @@ for (const viewport of [
     if (viewport.width === 390) expect(geometry.content).toBeGreaterThan(geometry.width);
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("7");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
-    await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("7");
+    await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("7");
     await toolbar.getByRole("button", { name: "Undo", exact: true }).click();
-    await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("");
+    await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("");
     await toolbar.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("7");
+    await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("7");
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     expect(errors).toEqual([]);
   });

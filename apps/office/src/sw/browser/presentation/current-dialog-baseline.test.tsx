@@ -38,7 +38,7 @@ function record(title = "Target", id = "target"): BrowserWriterDocument {
 }
 /** Opens the actual inline-title interaction. @param title - Edited title. @returns Nothing. */
 function rename(title: string): void {
-  fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+  fireEvent.click(screen.getByRole("button", { description: "Edit document title" }));
   const input = screen.getByRole("textbox", { name: "Document title" });
   fireEvent.change(input, { target: { value: title } });
   fireEvent.blur(input);

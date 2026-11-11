@@ -204,13 +204,13 @@ for (const width of [1280, 390])
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("button", { name: "Script sizes", exact: true }).click();
     const size = page.getByRole("combobox", { name: "Font Size", exact: true }),
-      a1 = page.getByRole("gridcell", { name: "A1", exact: true });
+      a1 = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await expect(size).toHaveValue("");
     await expect(a1.getByText("A", { exact: true })).toHaveCSS("font-size", "16px");
     await expect(a1.getByText("漢", { exact: true })).toHaveCSS("font-size", "24px");
     await expect(a1.getByText("ش", { exact: true })).toHaveCSS("font-size", "32px");
     await page.screenshot({ path: test.info().outputPath(`font-script-mixed-${width}.png`) });
-    await page.getByRole("gridcell", { name: "B1", exact: true }).click();
+    await page.getByRole("gridcell", { name: /^B1(?:\s|$)/ }).click();
     await expect(size).toHaveValue("12 pt");
     await a1.click();
     await expect(size).toHaveValue("");

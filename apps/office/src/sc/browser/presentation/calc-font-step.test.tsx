@@ -53,7 +53,7 @@ it("paints and queries the actual selected script heights while preserving nativ
         sheetWorkflows={session.sheetWorkflows}
       />,
     );
-    const cell = screen.getByRole("gridcell", { name: "A1" });
+    const cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     expect(within(cell).getByText("A")).toHaveStyle({ fontSize: "10pt" });
     expect(within(cell).getByText("漢")).toHaveStyle({ fontSize: "15pt" });
     expect(within(cell).getByText("ش")).toHaveStyle({ fontSize: "20pt" });

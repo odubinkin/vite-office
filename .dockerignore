@@ -6,3 +6,11 @@ apps/*/dist
 .env
 .env.*
 npm-debug.log*
+
+# Local references and generated verification artifacts are not build inputs.
+vendor
+output
+coverage
+**/coverage
+playwright-report
+test-results

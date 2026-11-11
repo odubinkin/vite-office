@@ -1,17 +1,19 @@
-FROM node:22-alpine AS dependencies
+FROM node:lts-slim AS dependencies
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 COPY apps/office/package.json ./apps/office/package.json
-RUN npm ci
+COPY third_party/libnumbertext-js ./third_party/libnumbertext-js
+RUN npm install --global npm@12.2.2
+RUN npm ci --no-audit --no-fund
 
 FROM dependencies AS builder
 
 COPY . .
-RUN npm run build
+RUN GOMAXPROCS=1 npm run build:single-threaded --workspace @vite-office/office
 
-FROM nginx:1.27-alpine AS runner
+FROM nginx:stable-alpine AS runner
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/apps/office/dist /usr/share/nginx/html

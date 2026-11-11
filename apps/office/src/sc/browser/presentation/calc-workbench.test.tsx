@@ -28,19 +28,19 @@ it("mounts the lazy production factory and edits actual scalar/formula cells thr
   fireEvent.keyDown(input, { key: "Enter", isComposing: true });
   expect(screen.getByRole("textbox", { name: "Edit cell A1" })).toHaveValue("4");
   fireEvent.keyDown(input, { key: "Tab" });
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("4");
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("4");
   fireEvent.focus(line);
   fireEvent.change(line, { target: { value: "=A1*3" } });
   fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
-  expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("12");
+  expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("12");
   fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-  expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("");
+  expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("");
   fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-  expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("12");
+  expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("12");
   fireEvent.keyDown(grid, { key: "z", ctrlKey: true });
   fireEvent.keyDown(grid, { key: "z", metaKey: true, shiftKey: true });
   fireEvent.keyDown(grid, { key: "y", ctrlKey: true });
-  expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("12");
+  expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("12");
   fireEvent.keyDown(grid, { key: "F2" });
   fireEvent.change(screen.getByRole("textbox", { name: "Edit cell B1" }), {
     target: { value: "discard" },
@@ -51,7 +51,7 @@ it("mounts the lazy production factory and edits actual scalar/formula cells thr
   expect(line).toHaveFocus();
   expect(line).toHaveValue("=A1*3");
   fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
-  fireEvent.doubleClick(screen.getByRole("gridcell", { name: "A1" }));
+  fireEvent.doubleClick(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }));
   fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell A1" }), {
     key: "Enter",
     shiftKey: true,
@@ -130,12 +130,12 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
     },
   );
   fireEvent(
-    screen.getByRole("gridcell", { name: "B1" }),
+    screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ }),
     new MouseEvent("pointerdown", { bubbles: true, button: 0 }),
   );
   expect(c.Address()).toBe("B1");
   fireEvent(
-    screen.getByRole("gridcell", { name: "C1" }),
+    screen.getByRole("gridcell", { name: /^C1(?:\s|$)/ }),
     new MouseEvent("pointerdown", { bubbles: true, button: 2 }),
   );
   expect(c.Address()).toBe("B1");
@@ -196,14 +196,14 @@ it("uses native Sum reference selection,accept/cancel and live formula history i
   expect(line).toHaveFocus();
   expect([line.selectionStart, line.selectionEnd]).toEqual([5, 10]);
   fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
-  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  expect(screen.getByRole("gridcell", { name: /^A3(?:\s|$)/ })).toHaveTextContent("");
   fireEvent.click(screen.getByRole("button", { name: "Sum" }));
   fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
-  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  expect(screen.getByRole("gridcell", { name: /^A3(?:\s|$)/ })).toHaveTextContent("10");
   fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  expect(screen.getByRole("gridcell", { name: /^A3(?:\s|$)/ })).toHaveTextContent("");
   fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  expect(screen.getByRole("gridcell", { name: /^A3(?:\s|$)/ })).toHaveTextContent("10");
   cleanup();
   session.Close();
 });
@@ -329,9 +329,9 @@ it("preserves browser-owned select-all when focusing existing formula-line text"
     target: { value: "Updated words", selectionStart: 13, selectionEnd: 13 },
   });
   fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("Updated words");
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("Updated words");
   fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("Original text");
+  expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("Original text");
   cleanup();
   session.Close();
 });

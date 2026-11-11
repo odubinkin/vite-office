@@ -44,7 +44,7 @@ it("uses the actual Writer menu and original typed contour item without disturbi
         sheetWorkflows={s.sheetWorkflows}
       />,
     );
-    const cell = screen.getByRole("gridcell", { name: "A1" }),
+    const cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       glyph = within(cell).getByText("OutlineFont text");
     expect(cell).toHaveStyle({ textDecorationLine: "none" });
     expect(glyph).toHaveStyle({ textDecorationLine: "overline" });

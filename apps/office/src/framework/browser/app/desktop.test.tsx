@@ -457,7 +457,11 @@ describe("App" /**
       await invokeWriterFileCommand("Open…");
       await waitFor(
         /** Finds the imported browser copy without waiting for autosave. @returns Nothing. */ () =>
-          expect(screen.getByRole("button", { name: "Imported package" })).toBeVisible(),
+          expect(
+            within(screen.getByRole("dialog", { name: "Open" })).getByRole("button", {
+              name: "Imported package",
+            }),
+          ).toBeVisible(),
       );
       fireEvent.click(screen.getByRole("button", { name: "Close" }));
       await invokeWriterFileCommand("Export…");
@@ -498,7 +502,11 @@ describe("App" /**
       await invokeWriterFileCommand("Open…");
       await waitFor(
         /** Finds the newly imported browser copy. @returns Nothing. */ () =>
-          expect(screen.getByRole("button", { name: "notes" })).toBeVisible(),
+          expect(
+            within(screen.getByRole("dialog", { name: "Open" })).getByRole("button", {
+              name: "notes",
+            }),
+          ).toBeVisible(),
       );
       fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
       fireEvent.change(screen.getByLabelText("Browse"), {
@@ -511,10 +519,18 @@ describe("App" /**
       await invokeWriterFileCommand("Open…");
       await waitFor(
         /** Confirms the earlier nonempty copy remains available. @returns Nothing. */ () =>
-          expect(screen.getByRole("button", { name: "notes" })).toBeVisible(),
+          expect(
+            within(screen.getByRole("dialog", { name: "Open" })).getByRole("button", {
+              name: "notes",
+            }),
+          ).toBeVisible(),
         { timeout: 5000 },
       );
-      expect(screen.queryByRole("button", { name: "empty" })).not.toBeInTheDocument();
+      expect(
+        within(screen.getByRole("dialog", { name: "Open" })).queryByRole("button", {
+          name: "empty",
+        }),
+      ).not.toBeInTheDocument();
     } finally {
       Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: oldFactory });
     }
@@ -536,9 +552,9 @@ describe("App" /**
       fireEvent.click(screen.getByRole("button", { name: "Save copy" }));
       await waitFor(
         /** Waits for the saved title. @returns Nothing. */ () =>
-          expect(screen.getByRole("button", { name: "Edit document title" })).toHaveTextContent(
-            "First copy",
-          ),
+          expect(
+            screen.getByRole("button", { description: "Edit document title" }),
+          ).toHaveTextContent("First copy"),
         { timeout: 5000 },
       );
       await invokeWriterFileCommand("Open…");
@@ -557,9 +573,17 @@ describe("App" /**
       expect(browserTab).toHaveAttribute("aria-selected", "true");
       await waitFor(
         /** Waits for the browser document list. @returns Nothing. */ () =>
-          expect(screen.getByRole("button", { name: "First copy" })).toBeVisible(),
+          expect(
+            within(screen.getByRole("dialog", { name: "Open" })).getByRole("button", {
+              name: "First copy",
+            }),
+          ).toBeVisible(),
       );
-      fireEvent.click(screen.getByRole("button", { name: "First copy" }));
+      fireEvent.click(
+        within(screen.getByRole("dialog", { name: "Open" })).getByRole("button", {
+          name: "First copy",
+        }),
+      );
       await waitFor(
         /** Waits for the browser copy. @returns Nothing. */ () =>
           expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(

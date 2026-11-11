@@ -58,7 +58,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   };
   const { rerender } = render(<ScGridWindow {...props} />);
   const grid = screen.getByRole("grid"),
-    cell = screen.getByRole("gridcell", { name: "AA5" });
+    cell = screen.getByRole("gridcell", { name: /^AA5(?:\s|$)/ });
   expect(grid).toHaveFocus();
   fireEvent.scroll(grid);
   expect(props.onScroll).toHaveBeenCalledOnce();
@@ -66,11 +66,19 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   expect(grid).toHaveAttribute("aria-rowcount", String(MAXROW + 2));
   expect(grid).toHaveAttribute("aria-colcount", String(MAXCOL + 2));
   expect(cell).toHaveTextContent("42");
+  expect(cell).toHaveAccessibleName("AA5 42");
+  expect(cell).toHaveAttribute("aria-label", "AA5");
   expect(cell).toHaveAttribute("aria-colindex", "28");
   expect(cell).toHaveAttribute("aria-selected", "false");
   expect(cell.parentElement).toHaveAttribute("aria-rowindex", "6");
-  expect(screen.getByRole("gridcell", { name: "AB5" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("gridcell", { name: "AA6" })).toHaveAttribute("aria-selected", "false");
+  expect(screen.getByRole("gridcell", { name: /^AB5(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  expect(screen.getByRole("gridcell", { name: /^AA6(?:\s|$)/ })).toHaveAttribute(
+    "aria-selected",
+    "false",
+  );
   fireEvent.pointerDown(cell, { shiftKey: true, button: 0 });
   const selected = vi.mocked(props.onSelect).mock.calls[0];
   expect(selected?.[0].Col()).toBe(26);
@@ -100,6 +108,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   expect(props.onKeyDown).toHaveBeenCalledOnce();
   rerender(<ScGridWindow {...props} inputMode={ScInputMode.SC_INPUT_TABLE} />);
   const input = screen.getByRole("textbox", { name: "Edit cell AA5" });
+  expect(cell).toHaveAccessibleName("AA5");
   expect(input).toHaveFocus();
   fireEvent.pointerDown(input);
   fireEvent.doubleClick(input);
@@ -121,12 +130,12 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
     />,
   );
   expect(screen.getAllByRole("gridcell")).toHaveLength(1);
-  expect(screen.getByRole("gridcell", { name: "XFD1048576" })).not.toHaveAttribute(
+  expect(screen.getByRole("gridcell", { name: /^XFD1048576(?:\s|$)/ })).not.toHaveAttribute(
     "aria-selected",
     "true",
   );
   expect(screen.getByRole("grid")).not.toHaveAttribute("aria-activedescendant");
-  expect(screen.getByRole("gridcell", { name: "XFD1048576" }).parentElement).toHaveStyle({
+  expect(screen.getByRole("gridcell", { name: /^XFD1048576(?:\s|$)/ }).parentElement).toHaveStyle({
     top: "22px",
   });
   rerender(<ScGridWindow {...props} />);

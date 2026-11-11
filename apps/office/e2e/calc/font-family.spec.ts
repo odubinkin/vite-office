@@ -17,8 +17,8 @@ for (const width of [1280, 390]) {
     );
     await page.goto("/calc");
     const font = page.getByRole("combobox", { name: "Font Name", exact: true }),
-      a1 = page.getByRole("gridcell", { name: "A1", exact: true }),
-      b2 = page.getByRole("gridcell", { name: "B2", exact: true });
+      a1 = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
+      b2 = page.getByRole("gridcell", { name: /^B2(?:\s|$)/ });
     await expect(font).toBeEnabled();
     const initial = await font.inputValue();
     expect(initial).not.toBe("");

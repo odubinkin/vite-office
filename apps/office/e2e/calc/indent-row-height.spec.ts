@@ -33,7 +33,7 @@ for (const width of [1280, 390])
     );
     await page.goto("/calc");
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true });
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Native layout");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await page.getByRole("button", { name: "Increase", exact: true }).click();

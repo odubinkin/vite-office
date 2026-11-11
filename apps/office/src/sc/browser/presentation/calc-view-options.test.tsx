@@ -31,7 +31,7 @@ it("toggles header visibility and all actual cell offsets/accessibility indices 
   const s = setup();
   try {
     const grid = screen.getByRole("grid"),
-      cell = screen.getByRole("gridcell", { name: "A1" });
+      cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     grid.focus();
     expect(cell.style.left).toBe("48px");
     expect(cell.parentElement?.style.top).toBe("22px");
@@ -61,8 +61,8 @@ it("hides only implicit grid lines while retaining actual explicit native cell b
       screen.getByRole("button", { name: getCalcCommandResource(".uno:SetBorderStyle").label }),
     );
     fireEvent.click(screen.getByRole("button", { name: "Outer Border" }));
-    const cell = screen.getByRole("gridcell", { name: "A1" }),
-      empty = screen.getByRole("gridcell", { name: "D4" });
+    const cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
+      empty = screen.getByRole("gridcell", { name: /^D4(?:\s|$)/ });
     toggle("View Grid Lines");
     expect(empty.style.borderRightColor).toBe("transparent");
     expect(empty.style.borderBottomColor).toBe("transparent");
@@ -88,16 +88,16 @@ it("shows actual formula source before errors and keeps scalar/string display un
         c.EnterString("text");
       },
     );
-    expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("3");
-    expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("#DIV/0!");
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("3");
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("#DIV/0!");
     toggle("Show Formulas");
-    expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("=1+2");
-    expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("=1/0");
-    expect(screen.getByRole("gridcell", { name: "C1" })).toHaveTextContent("7");
-    expect(screen.getByRole("gridcell", { name: "D1" })).toHaveTextContent("text");
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("=1+2");
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("=1/0");
+    expect(screen.getByRole("gridcell", { name: /^C1(?:\s|$)/ })).toHaveTextContent("7");
+    expect(screen.getByRole("gridcell", { name: /^D1(?:\s|$)/ })).toHaveTextContent("text");
     expect(cellPresentation(c.shell.GetDocument(), new ScAddress(3, 0, 0), true).text).toBe("text");
     toggle("Show Formulas");
-    expect(screen.getByRole("gridcell", { name: "B1" })).toHaveTextContent("#DIV/0!");
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveTextContent("#DIV/0!");
   } finally {
     s.Close();
   }
@@ -138,7 +138,7 @@ it("keeps global grid visibility distinct from the current-sheet grid flag", /**
     />,
   );
   try {
-    const cell = screen.getByRole("gridcell", { name: "B2" });
+    const cell = screen.getByRole("gridcell", { name: /^B2(?:\s|$)/ });
     expect(cell.style.borderRightColor).toBe("transparent");
     toggle("View Grid Lines");
     expect(c.viewData.GetShowGrid()).toBe(false);

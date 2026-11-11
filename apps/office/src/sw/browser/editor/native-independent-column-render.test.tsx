@@ -1,4 +1,5 @@
 /** @fileoverview Checks mounted independent native box widths, actual Ctrl+Shift tracking and union-grid device spans. */
+import { serializeStyleValue } from "../../../test/css-style-matchers";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -235,7 +236,12 @@ it("mounted device grid spans preserve independent original cell owners", /** Ch
         column,
       ) => column.style.width,
     ),
-  ).toEqual(["33.333333333333336%", "11.11111111111111%", "55.55555555555556%"]);
+  ).toEqual(
+    ["33.333333333333336%", "11.11111111111111%", "55.55555555555556%"].map(
+      /** Serializes exact native grid shares at the CSS boundary. @param value - Exact expected share. @returns Inline CSS width. */
+      (value) => serializeStyleValue("width", value),
+    ),
+  );
 });
 it("actual Ctrl+Shift drag changes only the second native line through release and history", /** Checks mounted physical capture and native current-line document ownership. @returns Nothing. */ () => {
   const f = fixture(),

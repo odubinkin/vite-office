@@ -7,7 +7,7 @@
     "apps/*"
   ],
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=26.0.0"
   },
   "scripts": {
     "build": "npm run build --workspace @vite-office/office",
@@ -69,32 +69,33 @@
     "check:writer-hintids": "tsx scripts/check-writer-hintids.ts"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.12.1",
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.62.1",
-    "@tailwindcss/vite": "4.3.3",
+    "@playwright/test": "1.65.0",
+    "@tailwindcss/vite": "4.3.5",
     "@testing-library/jest-dom": "7.0.1",
-    "@testing-library/react": "16.3.2",
-    "@types/node": "26.2.0",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "@typescript/native": "npm:typescript@7.0.2",
-    "@vitejs/plugin-react": "6.0.5",
-    "@vitest/coverage-istanbul": "4.1.10",
-    "@vitest/coverage-v8": "4.1.10",
-    "eslint": "10.8.1",
-    "eslint-plugin-jsdoc": "63.3.3",
+    "@vitejs/plugin-react": "6.3.0",
+    "@vitest/coverage-istanbul": "5.1.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "eslint": "10.14.0",
+    "eslint-plugin-jsdoc": "65.4.5",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-refresh": "0.5.3",
-    "fake-indexeddb": "6.2.5",
-    "globals": "17.9.0",
-    "jsdom": "29.1.1",
-    "prettier": "3.9.6",
-    "tailwindcss": "4.3.3",
-    "tsx": "4.23.12",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "fake-indexeddb": "6.2.8",
+    "globals": "17.14.0",
+    "jsdom": "31.0.0",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
     "typescript": "npm:@typescript/typescript6@6.0.2",
-    "typescript-eslint": "8.66.0",
-    "vite": "8.2.1",
-    "vitest": "4.1.10"
-  }
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "packageManager": "npm@12.2.2"
 }

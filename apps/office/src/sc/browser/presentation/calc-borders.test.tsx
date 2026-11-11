@@ -43,7 +43,7 @@ it("uses the shared toolbar preset control with original twelve entries and real
     fireEvent.click(screen.getByRole("button", { name: "Outer Border" }));
     expect(box(s).GetTop()?.GetWidth()).toBe(15);
     expect(box(s).GetLeft()?.GetWidth()).toBe(15);
-    expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveStyle({
       borderTopWidth: "0.75pt",
       borderLeftWidth: "0.75pt",
     });

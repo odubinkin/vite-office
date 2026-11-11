@@ -54,7 +54,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcShadowFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true });
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Shadow text");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await page.getByRole("menuitem", { name: "Format", exact: true }).click();
@@ -264,7 +264,7 @@ test("paints native relief over shadow on colored background with independent li
   );
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("button", { name: "Shadow paint", exact: true }).click();
-  const cell = page.getByRole("gridcell", { name: "A1", exact: true });
+  const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
   await expect(cell).toHaveCSS("background-color", "rgb(255, 255, 0)");
   await expect(cell).toHaveCSS("color", "rgb(0, 0, 255)");
   await expect(cell.getByText("OO", { exact: true })).toHaveCSS(
@@ -276,7 +276,7 @@ test("paints native relief over shadow on colored background with independent li
     "rgb(255, 0, 0)",
   );
   await expect(cell.locator("feOffset")).toHaveCount(1);
-  const black = page.getByRole("gridcell", { name: "B1", exact: true }),
+  const black = page.getByRole("gridcell", { name: /^B1(?:\s|$)/ }),
     raster = black.locator('div[style*="filter"]');
   await expect(raster).toHaveCSS("color", "rgb(255, 255, 255)");
   await expect(raster).toHaveCSS("text-decoration-color", "rgb(255, 255, 255)");

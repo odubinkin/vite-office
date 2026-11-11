@@ -46,7 +46,7 @@ it("uses the shared Writer Format/Text menu and real overline metadata with inde
         sheetWorkflows={s.sheetWorkflows}
       />,
     );
-    const cell = screen.getByRole("gridcell", { name: "A1" }),
+    const cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       text = within(cell).getByText("Overline text");
     expect(cell).toHaveStyle({ textDecorationLine: "underline" });
     expect(text).toHaveStyle({

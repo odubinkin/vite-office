@@ -2,6 +2,7 @@ services:
   app:
     build:
       context: .
+      pull: true
     image: vite-office:latest
     restart: unless-stopped
     networks:

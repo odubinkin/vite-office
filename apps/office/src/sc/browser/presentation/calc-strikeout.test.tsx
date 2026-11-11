@@ -46,7 +46,7 @@ it("uses the actual Writer menu and original typed strikeout enum without distur
         sheetWorkflows={s.sheetWorkflows}
       />,
     );
-    const cell = screen.getByRole("gridcell", { name: "A1" }),
+    const cell = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       glyph = within(cell).getByText("Strikeout text");
     expect(cell).toHaveStyle({ textDecorationLine: "underline" });
     expect(glyph).toHaveStyle({ textDecorationLine: "overline" });

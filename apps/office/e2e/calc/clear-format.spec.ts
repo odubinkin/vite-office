@@ -38,7 +38,7 @@ for (const width of [1280, 390]) {
     await page.goto("/calc");
     await installKernelFixture(page, "CalcClearFixture", nativeExports);
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
-      cell = page.getByRole("gridcell", { name: "A1", exact: true }),
+      cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ }),
       bold = page.getByRole("button", { name: "Bold", exact: true });
     await input.fill("Clear formatting");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
