@@ -238,6 +238,8 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
       (view, bytes) => {
         const central = findSignature(bytes, 0x02014b50);
         view.setUint32(central + 20, 0, true);
+        view.setUint16(8, 8, true);
+        view.setUint16(central + 10, 8, true);
       },
     );
     expect(
@@ -255,12 +257,12 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => new ZipFile(new Uint8Array(21)),
-    ).toThrow("end-of-central-directory");
+    ).toThrow("Zip too small!");
     const cases: readonly [number, number, string][] = [
-      [4, 1, "Multi-disk"],
-      [6, 1, "Multi-disk"],
-      [8, 0, "counts differ"],
-      [12, 0, "bounds are invalid"],
+      [4, 1, "invalid end (disk)"],
+      [6, 1, "invalid end (directory disk)"],
+      [8, 0, "invalid end (entries)"],
+      [12, 0, "bad central directory size"],
     ];
     for (const [relative, value, message] of cases) {
       const bytes = changedZip(
@@ -311,14 +313,14 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     ).toThrow("size does not match entries");
   });
 
-  it("rejects encryption, unsupported methods, ZIP64, duplicates, and unsafe names" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("rejects encryption, unsupported methods, broken sizes/offsets, duplicates, and unsafe names" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     const source = storedZip([["a", "x"]]);
     const centralFieldCases: readonly [number, number, 2 | 4, string][] = [
       [8, 0x0801, 2, "Encrypted"],
       [10, 99, 2, "Unsupported ZIP method"],
-      [20, 0xffffffff, 4, "ZIP64"],
-      [24, 0xffffffff, 4, "ZIP64"],
-      [42, 0xffffffff, 4, "ZIP64"],
+      [20, 0xffffffff, 4, "STORED with inconsistent size"],
+      [24, 0xffffffff, 4, "STORED with inconsistent size"],
+      [42, 0xffffffff, 4, "local header is invalid"],
     ];
     for (const [relative, value, width, message] of centralFieldCases) {
       const bytes = changedZip(
@@ -345,6 +347,8 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
         const firstCentral = new DataView(bytes.buffer).getUint32(end + 16, true);
         const secondCentral = firstCentral + 47;
         bytes[secondCentral + 46] = 0x61;
+        const local = new DataView(bytes.buffer).getUint32(secondCentral + 42, true);
+        bytes[local + 30] = 0x61;
       },
     );
     expect(
@@ -422,7 +426,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     await expect(archive.readEntry("missing")).rejects.toThrow("Missing ZIP entry");
     const localCases: readonly [number, number, 2 | 4, string][] = [
       [0, 0, 4, "local header is invalid"],
-      [6, 0, 2, "local and central records differ"],
+      [6, 0x0808, 2, "local and central records differ"],
       [8, 8, 2, "local and central records differ"],
       [14, 1, 4, "local entry metadata differs"],
       [18, 3, 4, "local entry metadata differs"],
@@ -436,7 +440,10 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
           else view.setUint32(offset, value, true);
         },
       );
-      await expect(new ZipFile(bytes).readEntry("a")).rejects.toThrow(message);
+      expect(
+        /** Source LOC validation occurs during CEN construction. @returns Archive. */ () =>
+          new ZipFile(bytes),
+      ).toThrow(message);
     }
     const differentName = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param _view - Callback input. @param bytes - Callback input. @returns Callback result. */,
@@ -444,7 +451,10 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
         bytes[30] = 0x62;
       },
     );
-    await expect(new ZipFile(differentName).readEntry("a")).rejects.toThrow("name differs");
+    expect(
+      /** Source rejects inconsistent local names at construction. @returns Archive. */ () =>
+        new ZipFile(differentName),
+    ).toThrow("name differs");
     const central = findSignature(source, 0x02014b50);
     const badBounds = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @returns Callback result. */,
@@ -452,16 +462,23 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
         view.setUint16(28, central, true);
       },
     );
-    await expect(new ZipFile(badBounds).readEntry("a")).rejects.toThrow("data exceeds bounds");
+    expect(
+      /** Source rejects out-of-region payload bounds at construction. @returns Archive. */ () =>
+        new ZipFile(badBounds),
+    ).toThrow("data exceeds bounds");
     const badSize = changedZip(
-      source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
+      rawZip(
+        encoder.encode("data"),
+        Uint8Array.from(deflateRawSync(encoder.encode("data"))),
+        8,
+      ) /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
       (view, bytes) => {
         const directory = findSignature(bytes, 0x02014b50);
         view.setUint32(22, 5, true);
         view.setUint32(directory + 24, 5, true);
       },
     );
-    await expect(new ZipFile(badSize).readEntry("a")).rejects.toThrow("size mismatch");
+    await expect(new ZipFile(badSize).readEntry("entry.txt")).rejects.toThrow("size mismatch");
     const badCrc = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
       (view, bytes) => {
@@ -492,7 +509,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     );
   });
 
-  it("rejects an EOCD signature whose declared comment does not reach archive end" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("retains original ignored END comment-length semantics" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     const source = storedZip([["a", "x"]]);
     const malformed = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
@@ -500,9 +517,6 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
         view.setUint16(findSignature(bytes, 0x06054b50) + 20, 1, true);
       },
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => new ZipFile(malformed),
-    ).toThrow("end-of-central-directory");
+    expect(new ZipFile(malformed).getEntryNames()).toEqual(["a"]);
   });
 });

@@ -11,6 +11,7 @@ import { XSeekable } from "../../../udkapi/com/sun/star/io/XSeekable";
 import { OUString, OUStringLiteral } from "../../../sal/inc/rtl/ustring";
 import { SAL_MAX_INT32 } from "../../../sal/inc/types";
 import { BYTE_READER, type ByteReader } from "../../inc/bytereader";
+import type { ByteElements } from "../../../sal/inc/rtl/byteseq.h";
 const badLocation = new OUStringLiteral(
   Uint16Array.of(98, 97, 100, 32, 108, 111, 99, 97, 116, 105, 111, 110, 0),
 );
@@ -22,12 +23,18 @@ export class MemoryInputStream
   /** Compiler RTTI for the original ByteReader base. */
   readonly [BYTE_READER] = true as const;
   private m_nPos = 0;
-  /** Original pointer/count constructor; the caller owns the memory lifetime. @param m_pMemoryData - Actual borrowed initialized byte-address cells. @param m_nMemoryDataLength - Signed32 byte length. @returns Stream. */
+  /** Original pointer/count constructor; the caller owns the memory lifetime. @param m_pMemoryData - Actual borrowed initialized byte storage or address cells. @param m_nMemoryDataLength - Signed32 byte length. @returns Stream. */
   constructor(
-    private readonly m_pMemoryData: SequenceElements,
+    private readonly m_pMemoryData: ByteElements,
     private readonly m_nMemoryDataLength: number,
   ) {
     super();
+  }
+  /** Primitive const sal_Int8 pointer read across actual typed storage or existing logical lvalues. @param offset - Source byte offset. @returns Signed byte. */
+  private byteAt(offset: number): number {
+    return this.m_pMemoryData instanceof Uint8Array || this.m_pMemoryData instanceof Int8Array
+      ? ((this.m_pMemoryData[offset] as number) << 24) >> 24
+      : (this.m_pMemoryData.get(offset) as [number])[0];
   }
   /** Original closed check and remaining-size calculation. @returns Signed32 availability. */
   private avail(): number {
@@ -60,9 +67,7 @@ export class MemoryInputStream
     aData.realloc(nBytesToRead);
     const destination = aData.getArray() as SequenceElements;
     for (let i = 0; i < nBytesToRead; ++i)
-      (destination.get(i) as [number])[0] = (
-        this.m_pMemoryData.get(this.m_nPos + i) as [number]
-      )[0];
+      (destination.get(i) as [number])[0] = this.byteAt(this.m_nPos + i);
     this.m_nPos += nBytesToRead;
     return nBytesToRead;
   }
@@ -82,7 +87,7 @@ export class MemoryInputStream
     const nAvail = this.avail();
     if (nAvail < nBytesToRead) nBytesToRead = nAvail;
     for (let i = 0; i < nBytesToRead; ++i)
-      (aData.get(i) as [number])[0] = (this.m_pMemoryData.get(this.m_nPos + i) as [number])[0];
+      (aData.get(i) as [number])[0] = this.byteAt(this.m_nPos + i);
     this.m_nPos += nBytesToRead;
     return nBytesToRead;
   }

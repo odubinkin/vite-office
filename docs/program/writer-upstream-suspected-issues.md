@@ -3570,3 +3570,23 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `package/source/zipapi/MemoryByteGrabber.hxx` declares ReadUInt8 as sal_Int8 and ReadUInt16 as sal_Int16, although their local accumulators are unsigned. On the existing signed SAL binding, octet255 returns-1 and word0xffff returns-1. ReadUInt32 and ReadUInt64 have genuinely unsigned return declarations. The similarly named stream ByteGrabber::ReadUInt16 returns unsigned16 instead.
 - Preserve the actual signed return widths, without renaming or an unsigned compatibility alias. Source ZipFile::readCEN also reads path/extra/comment lengths explicitly as signed16 and rejects negative results;32768-byte filenames are rejected while32767 is nonnegative. Local literal scalar tests and independently changed real ZIP records retain these distinctions. This is source-derived logical SAL behavior, not a compiled native signed-conversion/ABI witness or a full ZIP64/package-service claim.
+
+### WRITER436 — END directory-disk sentinel check consults the other disk field
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, `ZipFile::findCentralDirectory` / `ZipFile::readExtraFields`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- findCentralDirectory allows disk0 or0xffff, then checks directory disk with `nEndDirDisk != 0 && nEndDisk != 0xFFFF`. Thus disk0xffff suppresses rejection of an arbitrary nonzero directory-disk value. The source comment says only single disk is supported; this looks like a copied operand. Preserve that exact condition. A complete real ZIP64 fixture with disk0xffff and directory disk7 retains normal catalog reading; no compiled native multi-disk/service acceptance is claimed.
+
+### WRITER437 — END comment length is not validated by directory search
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, `ZipFile::findCentralDirectory` / `ZipFile::readExtraFields`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- findCentralDirectory scans backward for PK0506 and reads the disk/count/size/offset fields, but does not read or validate the final comment-length field. A mismatched declared comment count alone therefore does not reject a package. The first signature found backward is not retried when later checks fail. Preserve this scan and field consumption, without reinstating the old local exact-comment-length gate. Real ordinary and ZIP64 archive cases cover the ignored field; no general native producer defect is established.
+
+### WRITER438 — Zip64 extras unconditionally overwrite size outputs
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, `ZipFile::findCentralDirectory` / `ZipFile::readExtraFields`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- readExtraFields always reads an unsigned64 size when header ID is1, then compressed size at dataSize>=16 and optional offset at dataSize>=24. It does not condition those assignments on corresponding32-bit sentinel values, and reads the first size even when dataSize<8. Preserve the original ordered lvalue writes and extra-tail skipping rather than introducing a spec-derived conditional field layout. Actual archives with stale nonsentinel CEN sizes and matching64-bit fields retain source successful reading. Invalid/short native view/allocation domains are not certified.
+
+### WRITER439 — Unicode Path extra forms dataSize-minus-five view without a minimum check
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, `ZipFile::findCentralDirectory` / `ZipFile::readExtraFields`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- readExtraFields checks remainingSize against dataSize and checks Version1, then reads CRC and forms the UnicodeName string_view with dataSize-5, without an explicit dataSize>=5 guard. A smaller field cannot satisfy the original valid native view-range contract. Preserve the source branch/operation order; do not claim a deterministic compiled outcome for malformed under-five fields. Tests exercise valid view ranges, wrong versions, insufficient declared remaining data and mismatched names. The typed-storage lowering does not certify physical pointer/size_t behavior for invalid native views.
