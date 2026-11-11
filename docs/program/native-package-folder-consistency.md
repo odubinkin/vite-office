@@ -1,0 +1,9 @@
+# Native package folder consistency
+
+Source: pinned LibreOffice26.8.0.2 commit9bc445578031fecf56086729d8e4940c77e14d65, `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, and `package/source/zippackage/ZipPackage.cxx`, `ZipPackage::parseManifest`. The local reference checkout HEAD and the inspected source file's clean status were verified before correction.
+
+The plain catalog traversal now includes the original `if (bHasUnexpected) break;` after processing each entry. The recursive result remains an assignment, exactly as source. The previous local implementation omitted that exit, and a test incorrectly certified an unexpected stream followed by an empty folder as acceptable. CALC-164 is withdrawn: it described a local transcription error, not an upstream bug.
+
+The corrected tests use actual ZIP32 archives and native manifest PropertyValue rows. They cover six root/nested orders with an unexpected stream before or after a consistent folder, including META-INF. ODF1.3 metadata rejects each inconsistent package; ODF1.1 still reports IsInconsistent=true without applying the later-version rejection. Existing signature-name, empty-directory, MIME fallback, declared stream and hierarchy-conflict cases remain covered. No direct upstream QA case for the named traversal was found under package/qa; these are critical source-derived cases, not a compiled C++ witness or a claimed replay of full package services.
+
+The local Folder remains the existing plain metadata catalog, not a ZipPackageFolder UNO service. Native unordered-map bucket order, wholesome encryption, full package entry/output/storage owners and DOCX/XLSX model/filter/UI acceptance are not certified by these tests. The first-true exit means a later ordinary folder cannot clear an already discovered inconsistency in any iteration order. Existing browser recovery/open/save/autosave choices are unchanged.

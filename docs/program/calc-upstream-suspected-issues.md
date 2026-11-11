@@ -2365,11 +2365,11 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: a namespace alias bound to an unrecognized URI in an inner scope returns an empty conversion,so lookup continues to a recognized outer binding instead of stopping at the shadowing declaration. The same conversion also applies a recognized default namespace to unprefixed attribute names. Raw original names remain the final fallback.
 - Status: compatibility leniency is plausible;the source explicitly mentions accepting inconsistent older documents. Preserve these cases rather than replacing them with standard namespace-resolution behavior. Literal XML/SAX cases exercise the shared importer;no native compiler or memory probe is used.
 
-## CALC-164 — Recursive package-folder consistency assignment can replace an earlier true flag
+## CALC-164 — Withdrawn: recursive package-folder consistency overwrite
 
 - Source: `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
-- Observation: ordinary child folders assign their recursive result directly to `bHasUnexpected` instead of OR-ing it with the current flag. An earlier unexpected stream can therefore cease to affect the final result if a subsequently visited folder has no unexpected entries.
-- Status: suspicious source logic,preserved literally. Native contents use unordered-map traversal,whose bucket order is not a contract to reproduce as binary data. JS Map supplies logical catalog traversal;tests state their order explicitly and do not claim native compiler/hash-layout ordering or broad package parity. No invented monotonic correction or native memory/compiler probe is used.
+- Correction: the previous observation omitted the trailing `if (bHasUnexpected) break;` inside the loop. Although a child result is assigned directly, traversal stops as soon as it becomes true. A later consistent folder cannot erase an earlier inconsistency. This was an error in the local port and source interpretation, not a suspected upstream defect.
+- The local plain catalog traversal now retains the actual recursive assignment and early exit. Real ZIP-catalog tests reject unexpected root/nested streams regardless of whether consistent folders occur before or after them; pre-ODF12 metadata still reports IsInconsistent without adding the later-version rejection. Native unordered-map bucket ordering and full package/storage-service parity are not claimed.
 
 ## CALC-165: Size item HEIGHT extraction failure returns success
 

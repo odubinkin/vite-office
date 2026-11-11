@@ -5,7 +5,7 @@ export type Folder = Map<
   { bFolder: true; pFolder: Folder } | { bFolder: false; fromManifest: boolean }
 >;
 
-/** Original plain folder traversal retains assignment after recursive folders rather than folding every result with OR. Native unordered iteration is not a binary/hash-layout contract;JS Map supplies ordinary logical catalog traversal. @param folder - Actual metadata hierarchy. @param path - Native folder prefix. @returns Original inconsistency flag. */
+/** Original plain folder traversal retains recursive assignment and stops at the first unexpected entry. Native unordered iteration is not a binary/hash-layout contract;JS Map supplies ordinary logical catalog traversal. @param folder - Actual metadata hierarchy. @param path - Native folder prefix. @returns Original inconsistency flag. */
 export function lookForUnexpectedODF12Streams(folder: Folder, path: string): boolean {
   let unexpected = false;
   for (const [name, entry] of folder) {
@@ -17,6 +17,7 @@ export function lookForUnexpectedODF12Streams(folder: Folder, path: string): boo
     } else if (!entry.fromManifest) {
       if (path !== "" || name !== "mimetype") unexpected = true;
     }
+    if (unexpected) break;
   }
   return unexpected;
 }

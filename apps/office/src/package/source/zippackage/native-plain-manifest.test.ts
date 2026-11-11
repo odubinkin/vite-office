@@ -131,17 +131,27 @@ it("enforces ODF12 stream consistency while retaining signature-name and empty-d
       .isInconsistent,
   ).toBe(false);
 });
-it("preserves the original recursive folder assignment that can replace an earlier inconsistency flag", /** Literal logical catalog traversal,not native unordered-map binary bucket order. @returns Nothing. */ () => {
-  const input = [row("/", mime, "1.3")];
-  expect(
-    applyPlainManifestMetadata(archive(["META-INF/manifest.xml", "extra", "empty/"]), input)
-      .isInconsistent,
-  ).toBe(false);
-  expect(
-    /** Moving the unexpected stream after the final folder retains its flag. @returns Metadata. */ () =>
-      applyPlainManifestMetadata(archive(["META-INF/manifest.xml", "empty/", "extra"]), input),
-  ).toThrow("not referred");
-});
+it.each([
+  ["META-INF/manifest.xml", "extra", "empty/"],
+  ["META-INF/manifest.xml", "empty/", "extra"],
+  ["META-INF/manifest.xml", "nested/extra", "nested/empty/"],
+  ["META-INF/manifest.xml", "nested/empty/", "nested/extra"],
+  ["extra", "META-INF/manifest.xml", "empty/"],
+  ["META-INF/other", "META-INF/manifest.xml", "empty/"],
+])(
+  "retains first inconsistency regardless of later folders: %j",
+  /** Original source break after each visited entry. @param paths - Actual archive paths. @returns Nothing. */ (
+    ...paths: string[]
+  ) => {
+    expect(
+      /** Native ODF12 rejection after a root or nested unexpected stream. @returns Metadata. */ () =>
+        applyPlainManifestMetadata(archive(paths), [row("/", mime, "1.3")]),
+    ).toThrow("not referred");
+    expect(applyPlainManifestMetadata(archive(paths), [row("/", mime, "1.1")]).isInconsistent).toBe(
+      true,
+    );
+  },
+);
 it("keeps package-profile unsupported/enforced boundaries distinct from manifest parsing", /** No crypto/storage service or recovery object. @returns Nothing. */ () => {
   expect(
     /** Native required metadata stream. @returns Metadata. */ () =>

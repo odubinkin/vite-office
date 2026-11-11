@@ -10,18 +10,20 @@
     "maturity": "implemented",
     "assertions": [
       "Native namespace/validity stack and actual typed property slots drive application-neutral manifest reading.",
-      "Writer reuses actual package metadata and document defaults when XML streams or Standard declarations are absent."
+      "Writer reuses actual package metadata and document defaults when XML streams or Standard declarations are absent.",
+      "Plain folder consistency stops at the first unexpected entry, preserving the pinned source exit and order-independent rejection."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
+      "rationale": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment with first-true early exit;CALC162..163 remain preserved and CALC-164 is withdrawn;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
     },
     "capability": "Native shared plain manifest import and package metadata",
     "gaps": [
       "Full encryption/UNO/parser/stream/writable-storage services remain unimplemented.",
       "ZIP32,declaration/depth/XML-byte bounds remain explicit browser admission limits.",
       "Source-derived catalog traversal does not claim native unordered-map binary bucket ordering or broad package parity.",
-      "ScDocumentPool/Calc document/connected UI/same-model ODS remain pending."
+      "ScDocumentPool/Calc document/connected UI/same-model ODS remain pending.",
+      "Pinned folder consistency traversal includes the trailing first-true break. CALC-164 was a false source interpretation and is withdrawn; the omitted local exit is restored, so later consistent folders cannot erase unexpected root/nested streams. Actual ZIP catalog order cases cover ODF12 rejection and pre-ODF12 IsInconsistent reporting. Native unordered iteration/physical storage graph and full package/model/filter/Worker/UI parity remain unverified."
     ],
     "local": {
       "implementation": [
@@ -68,6 +70,10 @@
         {
           "path": "docs/program/calc-upstream-suspected-issues.md",
           "marker": "CALC-164"
+        },
+        {
+          "path": "docs/program/native-package-folder-consistency.md",
+          "marker": "# Native package folder consistency"
         }
       ]
     },
@@ -114,7 +120,7 @@
     "aspect": "model-operation",
     "atomicOperation": "native-plain-odf-manifest-import",
     "scopeLimitations": [
-      "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
+      "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment with first-true early exit;CALC162..163 remain preserved and CALC-164 is withdrawn;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
     ],
     "implemented": true,
     "contractParity": false,
