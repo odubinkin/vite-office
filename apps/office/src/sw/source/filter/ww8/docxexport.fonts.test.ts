@@ -1,4 +1,5 @@
 /** @fileoverview Real Writer export context, font metadata fragment routing and committed OOXML ZIP relationships. No text-graph traversal or whole-DOCX readiness is inferred from this part test. */
+import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { readOwnedXml } from "../../../../test/oox-input";
 import { expect, it } from "vitest";
 import { DocxExport } from "./docxexport";
@@ -77,11 +78,12 @@ it("connects actual exporter, shared font registration, collected rFonts and fon
   o.exporter.WriteFonts();
   expect(a.GetSerializer()).toBe(serializer);
   expect(o.doc.GetNodes().entries()).toEqual(baseline);
-  const storage = new ZipStorage(finish(o)),
+  const committed = finish(o),
+    storage = new ZipStorage(committed),
     main = await xml(storage, "word/document.xml"),
     fonts = await xml(storage, "word/fontTable.xml"),
     rels = await xml(storage, "word/_rels/document.xml.rels"),
-    types = await xml(storage, "[Content_Types].xml");
+    types = await new ZipFile(committed).readTextEntry("[Content_Types].xml");
   const reader = new XmlFilterBase(storage);
   expect(await reader.importFragment(new FragmentHandler(reader, "word/document.xml"))).toBe(true);
   expect(await reader.importFragment(new FragmentHandler(reader, "word/fontTable.xml"))).toBe(true);
@@ -145,7 +147,7 @@ it("retains all four native document media-type branches and missing namespace/r
     [true, true, "application/vnd.ms-word.template.macroEnabledTemplate.main+xml"],
   ] as const) {
     const o = setup(docm, template);
-    expect(await xml(new ZipStorage(finish(o)), "[Content_Types].xml")).toContain(type);
+    expect(await new ZipFile(finish(o)).readTextEntry("[Content_Types].xml")).toContain(type);
   }
   expect(new XmlFilterBase(new ZipStorage()).getNamespaceURL(-1)).toBe("");
   expect(getRelationship(Relationship.NUM_ENTRIES)).toBe("");

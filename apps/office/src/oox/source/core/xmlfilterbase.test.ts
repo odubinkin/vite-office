@@ -1,8 +1,8 @@
 /** @fileoverview Actual OOXML package/fragment import and output ownership; no application model or ODF conversion stands in for native package contracts. */
 import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
-import { NotConnectedException } from "../../../cppu/inc/com/sun/star/io/NotConnectedException";
+import { DisposedException } from "../../../cppu/inc/com/sun/star/lang/DisposedException";
 import { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
-import { readOwnedInput, readOwnedXml } from "../../../test/oox-input";
+import { readOwnedInput, readOwnedXml, inputFromBytes } from "../../../test/oox-input";
 import { expect, it, vi } from "vitest";
 import type { SaxesTagNS } from "saxes";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
@@ -26,6 +26,13 @@ import {
 /** Builds actual ZIP entries. @param entries - Path and data. @returns ZIP. */
 function zip(entries: Readonly<Record<string, string | Uint8Array>>): Uint8Array {
   const out = new ZipOutputStream();
+  if (!("[Content_Types].xml" in entries))
+    out.putNextEntry(
+      "[Content_Types].xml",
+      new TextEncoder().encode(
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/></Types>',
+      ),
+    );
   for (const [path, value] of Object.entries(entries))
     out.putNextEntry(path, typeof value === "string" ? new TextEncoder().encode(value) : value);
   return out.finish();
@@ -241,7 +248,15 @@ it("exports a real package, independent native part counters, metadata and escap
   expect(types[1]).not.toContainEqual({ First: "/word/media/image.png", Second: "image/png" });
   const input = new ZipStorage(bytes);
   expect(input.isReadOnly()).toBe(true);
-  expect(input.getElementNames()).toEqual(archive.getEntryNames());
+  expect(input.getElementNames()).toEqual(
+    archive
+      .getEntryNames()
+      .filter(
+        /** Internal metadata is not a storage stream. @param path - Entry. @returns Exposed. */ (
+          path,
+        ) => path !== "[Content_Types].xml",
+      ),
+  );
   expect(readOwnedInput(await input.openInputStream("missing"))).toBeNull();
   expect(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
@@ -317,7 +332,7 @@ it("returns independent native input owners for separate opens and retains old p
   expect(readOwnedXml(await storage.openInputStream("part.xml"))).toBe("<new/>");
 });
 
-it("unwinds actual UNO read exceptions from a specialized fragment stream", /** A closed native component produces the real NotConnectedException; its caught owner is destroyed once. @returns Completion. */ async () => {
+it("unwinds actual UNO read exceptions from a specialized fragment stream", /** A closed native component produces the real DisposedException; its caught owner is destroyed once. @returns Completion. */ async () => {
   /** Actual native stream specialization used by the original virtual fragment hook. */
   class Closed extends FragmentHandler {
     /** Original virtual stream hook may preprocess its actual input. @returns Owned closed stream reference. */
@@ -328,7 +343,7 @@ it("unwinds actual UNO read exceptions from a specialized fragment stream", /** 
     }
   }
   const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<document/>" }))),
-    cleanup = vi.spyOn(NotConnectedException.prototype, "dispose");
+    cleanup = vi.spyOn(DisposedException.prototype, "dispose");
   try {
     expect(await filter.importFragment(new Closed(filter, "root.xml"))).toBe(false);
     expect(cleanup).toHaveBeenCalledTimes(1);
@@ -342,8 +357,9 @@ it("reads actual content-type input through the same native source path", /** Me
   storage
     .openOutputStream("part.xml", "application/xml")
     .writeBytes(new TextEncoder().encode("<document/>"));
-  const reopened = new ZipStorage(storage.commit()),
-    input = await reopened.openInputStream("[Content_Types].xml"),
+  const input = inputFromBytes(
+      await new ZipFile(storage.commit()).readEntry("[Content_Types].xml"),
+    ),
     source = new InputSource();
   try {
     source.aInputStream = input;

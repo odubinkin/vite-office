@@ -249,10 +249,12 @@ it("returns value-owned references sharing the original document input position"
   expect(readOwnedXml(second)).toBe("<document/>");
   expect(readOwnedXml(stream.getDocumentStream())).toBe("");
 });
-it("releases initialized input ownership when a relationship stream fails to parse", /** Uses actual malformed side XML and a subsequent independent open, without injected component factories. @returns Completion. */ async () => {
+it("releases initialized input ownership when a relationship stream fails to parse", /** Malformed metadata refuses the package stream; repairing the side stream permits a fresh independent input without injected factories. @returns Completion. */ async () => {
   const storage = packageOf([]);
   put(storage, "word/_rels/document.xml.rels", "<Relationships><broken>");
   await expect(createStream(storage)).rejects.toThrow();
+  expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBeNull();
+  put(storage, "word/_rels/document.xml.rels", WriteRelationsInfoSequence([]));
   expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBe("<document/>");
 });
 

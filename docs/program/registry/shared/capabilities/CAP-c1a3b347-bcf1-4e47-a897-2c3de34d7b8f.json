@@ -14,10 +14,12 @@
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
-      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical/seekable storage still remain unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
+      "Actual package READ input now returns a genuine OInputCompStream readonly snapshot owning native MediaType/Compressed/Size/RelationsInfo properties, input and independent current position. Existing asynchronous ZIP bytes remain the transport binding; no fake XStorage, parent, mutex or query provider is introduced. Native parseContentType application uses initialized StringPair rows, ordered defaults then explicit overrides, case-sensitive short-name suffixes, last duplicate assignment and hidden internal content metadata. Missing/broken content metadata and malformed own relationships refuse stream opening. Async initialization caches only immutable fields or an error diagnostic, never a shared owned UNO exception; concurrent/repeated failed opens create/destroy their own exceptions. Writer now retains real XStream and obtains part metadata through UNO_QUERY_THROW XRelationshipAccess; private part relationship mirrors and repeated side-stream parsing are removed. Root storage relationships remain the existing binding. Parent-bound lifetime/disposal, complete XStorage/hierarchical SEEKABLEREAD and full DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Synchronous JS/native thread/physical ABI/allocation guarantees stay unverified. Existing browser open/save/autosave/recovery choices are unchanged."
     ],
     "scopeLimitations": [
-      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical/seekable storage still remain unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
+      "Actual package READ input now returns a genuine OInputCompStream readonly snapshot owning native MediaType/Compressed/Size/RelationsInfo properties, input and independent current position. Existing asynchronous ZIP bytes remain the transport binding; no fake XStorage, parent, mutex or query provider is introduced. Native parseContentType application uses initialized StringPair rows, ordered defaults then explicit overrides, case-sensitive short-name suffixes, last duplicate assignment and hidden internal content metadata. Missing/broken content metadata and malformed own relationships refuse stream opening. Async initialization caches only immutable fields or an error diagnostic, never a shared owned UNO exception; concurrent/repeated failed opens create/destroy their own exceptions. Writer now retains real XStream and obtains part metadata through UNO_QUERY_THROW XRelationshipAccess; private part relationship mirrors and repeated side-stream parsing are removed. Root storage relationships remain the existing binding. Parent-bound lifetime/disposal, complete XStorage/hierarchical SEEKABLEREAD and full DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Synchronous JS/native thread/physical ABI/allocation guarantees stay unverified. Existing browser open/save/autosave/recovery choices are unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -36,6 +38,18 @@
         {
           "path": "package/source/xstor/ocompinstream.cxx",
           "marker": "OInputCompStream"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "parseContentType"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "ReadPackageStreamProperties"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "getTargetForId"
         }
       ],
       "tests": [
@@ -68,11 +82,27 @@
         {
           "path": "apps/office/src/package/source/xstor/ocompinstream.ts",
           "marker": "OInputCompStream"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.ts",
+          "marker": "ZipStorage"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+          "marker": "readPlainPackageContentTypes"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+          "marker": "OOXMLStreamImpl"
         }
       ],
       "tests": [
         {
           "path": "apps/office/src/package/source/xstor/ocompinstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage-input.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -80,6 +110,10 @@
         {
           "path": "docs/program/native-package-input-component.md",
           "marker": "# Native standalone package input component"
+        },
+        {
+          "path": "docs/program/native-package-input-wiring.md",
+          "marker": "# Native package input connection"
         }
       ]
     },
@@ -90,7 +124,7 @@
     "verified": false,
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+      "rationale": "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical/seekable storage still remain unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
     },
     "aspect": "model-operation",
     "atomicOperation": "native-package-input-component"

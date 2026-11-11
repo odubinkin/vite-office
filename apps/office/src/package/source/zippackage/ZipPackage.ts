@@ -1,10 +1,13 @@
-/** @fileoverview Ports plain ZipPackage::parseManifest metadata/MIME, folder consistency and WriteContentTypes metadata over actual ZIP entries; UNO storage services and encryption remain outside this package slice. */
+/** @fileoverview Ports plain ZipPackage::parseManifest/parseContentType metadata/MIME, folder consistency and WriteContentTypes metadata over actual ZIP entries; UNO storage services and encryption remain outside this package slice. */
 import { lookForUnexpectedODF12Streams, type Folder } from "./ZipPackageFolder";
 import type { ZipFile } from "../zipapi/ZipFile";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { readManifestSequence } from "../manifest/ManifestReader";
-import { WriteContentSequence } from "../../../comphelper/source/xml/ofopxmlhelper";
+import {
+  ReadContentTypeSequence,
+  WriteContentSequence,
+} from "../../../comphelper/source/xml/ofopxmlhelper";
 import { splitAtLastToken } from "../../../comphelper/source/misc/directoryhelper";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
@@ -16,6 +19,9 @@ import {
   type rtl_uStringSlot,
   type rtl_uString,
 } from "../../../sal/inc/rtl/ustring.h";
+import type { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
+import type { uno_Sequence } from "../../../cppu/inc/uno/sequence2";
+import { IOException } from "../../../cppu/inc/com/sun/star/io/IOException";
 import { PKG_MNFST_MEDIATYPE, PKG_MNFST_FULLPATH } from "../../inc/PackageConstants";
 const Pairs = Sequence.specialize<StringPair>(pairType, 16);
 /** Initializes one source UTF16 literal using the genuine native string owner. @param value - Literal. @returns Owned value. */
@@ -251,5 +257,48 @@ export function WriteContentTypes(manifest: readonly (readonly PropertyValue[])[
   } finally {
     overrides.dispose();
     defaults.dispose();
+  }
+}
+
+/** Original parseContentType application order over the existing flat ZIP catalog binding: defaults first, then explicit overrides; internal content types are excluded from exposed streams. @param archive - Actual catalog. @param source - Actual content-type input. @returns Stream MIME fields at the ZIP boundary. */
+export function readPlainPackageContentTypes(
+  archive: Pick<ZipFile, "getEntryNames">,
+  source: InputSource,
+): ReadonlyMap<string, string> {
+  const parsed = ReadContentTypeSequence(source);
+  try {
+    if (parsed.getLength() !== 2) throw new IOException();
+    const types = new Map<string, string>();
+    for (const path of archive.getEntryNames()) if (!path.endsWith("/")) types.set(path, "");
+    const defaults = Sequence.unacquired(
+      Pairs,
+      (parsed.getConstArray() as SequenceElements).get(0) as [uno_Sequence | null],
+    );
+    for (let i = 0; i < defaults.getLength(); ++i) {
+      const pair = StringPair.unacquired(
+        (defaults.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
+      );
+      const extension = text(pair.First),
+        suffix = extension.startsWith(".") ? extension : "." + extension,
+        mediaType = text(pair.Second);
+      for (const path of types.keys())
+        if (path.slice(path.lastIndexOf("/") + 1).endsWith(suffix)) types.set(path, mediaType);
+    }
+    const overrides = Sequence.unacquired(
+      Pairs,
+      (parsed.getConstArray() as SequenceElements).get(8) as [uno_Sequence | null],
+    );
+    for (let i = 0; i < overrides.getLength(); ++i) {
+      const pair = StringPair.unacquired(
+        (overrides.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
+      );
+      const raw = text(pair.First),
+        path = raw.startsWith("/") ? raw.slice(1) : raw;
+      if (path !== "" && types.has(path)) types.set(path, text(pair.Second));
+    }
+    types.delete("[Content_Types].xml");
+    return types;
+  } finally {
+    parsed.dispose();
   }
 }

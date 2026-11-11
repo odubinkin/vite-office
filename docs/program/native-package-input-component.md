@@ -36,8 +36,8 @@ the unported storage graph.
 
 The OWriteStream_Impl-bound constructor is unported. Native mutex scopes and
 RefCountedMutex identity are not simulated; native synchronization, crosscasts,
-physical ABI and allocation-failure unwind remain unverified. This component is
-not yet connected to ZipStorage, whose current bare input binding remains in use.
+physical ABI and allocation-failure unwind remain unverified. ZipStorage READ snapshots now use this component; the connection and remaining
+parent/hierarchical limitations are recorded in native-package-input-wiring.md.
 Complete storage/output relationship services and DOCX/XLSX model/filter/Worker/UI
 acceptance remain unfinished. Deliberate open/save/autosave/recovery choices are
 unchanged; broad parity flags remain false.

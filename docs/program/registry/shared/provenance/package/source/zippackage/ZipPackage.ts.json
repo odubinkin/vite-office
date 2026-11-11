@@ -9,16 +9,19 @@
     "localSymbols": [
       "applyPlainManifestMetadata",
       "readPlainPackageManifest",
-      "WriteContentTypes"
+      "WriteContentTypes",
+      "readPlainPackageContentTypes"
     ],
     "upstreamSymbols": [
       "ZipPackage::parseManifest",
-      "ZipPackage::WriteContentTypes"
+      "ZipPackage::WriteContentTypes",
+      "ZipPackage::parseContentType"
     ],
     "preservedResponsibilities": [
       "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified.",
       "Native WriteContentTypes defaults and exact extension/type override omission, delegating SAX output to OFOPXMLHelper.",
-      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged."
+      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged.",
+      "Actual package READ input now returns a genuine OInputCompStream readonly snapshot owning native MediaType/Compressed/Size/RelationsInfo properties, input and independent current position. Existing asynchronous ZIP bytes remain the transport binding; no fake XStorage, parent, mutex or query provider is introduced. Native parseContentType application uses initialized StringPair rows, ordered defaults then explicit overrides, case-sensitive short-name suffixes, last duplicate assignment and hidden internal content metadata. Missing/broken content metadata and malformed own relationships refuse stream opening. Async initialization caches only immutable fields or an error diagnostic, never a shared owned UNO exception; concurrent/repeated failed opens create/destroy their own exceptions. Writer now retains real XStream and obtains part metadata through UNO_QUERY_THROW XRelationshipAccess; private part relationship mirrors and repeated side-stream parsing are removed. Root storage relationships remain the existing binding. Parent-bound lifetime/disposal, complete XStorage/hierarchical SEEKABLEREAD and full DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Synchronous JS/native thread/physical ABI/allocation guarantees stay unverified. Existing browser open/save/autosave/recovery choices are unchanged."
     ],
     "omittedResponsibilities": [
       "Encryption/full writable storage/UNO service and stream APIs remain unimplemented;native allocator/refcount/binary unordered-map layout are erased under JS GC."
@@ -42,6 +45,10 @@
         {
           "path": "package/source/zippackage/ZipPackage.cxx",
           "marker": "ZipPackage::WriteContentTypes"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::parseContentType"
         }
       ]
     }

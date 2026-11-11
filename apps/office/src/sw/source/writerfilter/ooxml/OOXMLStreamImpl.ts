@@ -26,7 +26,9 @@ import {
 } from "../../../../stoc/source/uriproc/UriReferenceFactory";
 import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 
-import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { Reference, UNO_QUERY_THROW } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { XRelationshipAccess } from "../../../../offapi/com/sun/star/embed/XRelationshipAccess";
+import { XStream } from "../../../../udkapi/com/sun/star/io/XStream";
 import type { XInputStream } from "../../../../udkapi/com/sun/star/io/XInputStream";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 
@@ -61,10 +63,9 @@ export class OOXMLStreamImpl {
   private readonly maIdCache = new Map<string, string>();
   private msPath = "";
   private msTarget = "";
-  private readonly document = new Reference<XInputStream>();
+  private readonly document = new Reference<XStream>();
   private fastTokenHandler: FastTokenHandler | null = null;
   private fastParser: FastSaxParser | null = null;
-  private readonly relationships = new Relations();
   /** Borrows storage; createStream supplies async native constructor initialization. @param storage - Package. @returns Stream. */
   private constructor(readonly storage: ZipStorage) {}
   /** Original document/type/id constructor paths, including VBA data's project intermediate. @param source - Storage or parent stream. @param type - Stream type or relation ID. @returns Stream. */
@@ -92,9 +93,9 @@ export class OOXMLStreamImpl {
       throw new Error("OOXML parent document stream is missing.");
     const result = new OOXMLStreamImpl(parent ? parent.storage : (source as ZipStorage));
     result.msPath = parent?.msPath ?? "";
-    let relations = parent?.relationships;
+    let relations: Sequence<Sequence<StringPair>> | undefined;
     try {
-      relations ??= await result.readRelations("");
+      relations = parent ? parent.getRelationships() : await result.readRootRelationships();
       const target = result.lcl_getTarget(
         relations,
         typeof type === "string" ? T.UNKNOWN : type,
@@ -105,29 +106,28 @@ export class OOXMLStreamImpl {
         const lastSlash = target.lastIndexOf("/");
         if (lastSlash >= 0) result.msPath = target.slice(0, lastSlash + 1);
         const input = await result.storage.openInputStream(target);
-        result.document.moveAssign(input);
-        input.dispose();
-        if (!result.document.is())
-          throw new Error("OOXML relationship target stream is missing: " + target);
-        result.maIdCache.clear();
-        const ownRelations = await result.readRelations(target);
-        result.relationships.moveAssign(ownRelations);
-        ownRelations.dispose();
+        try {
+          if (!input.is())
+            throw new Error("OOXML relationship target stream is missing: " + target);
+          const stream = new Reference<XStream>(input, UNO_QUERY_THROW, XStream.static_type);
+          result.document.moveAssign(stream);
+          stream.dispose();
+          result.maIdCache.clear();
+        } finally {
+          input.dispose();
+        }
       }
     } catch (error) {
       result.dispose();
       throw error;
     } finally {
-      if (!parent) relations?.dispose();
+      relations?.dispose();
     }
     return result;
   }
-  /** Reads the storage relationship side stream through the native sequence helper. @param target - Part or root. @returns Ordered relationship sequence. */
-  private async readRelations(target: string): Promise<Sequence<Sequence<StringPair>>> {
-    const slash = target.lastIndexOf("/"),
-      directory = target.slice(0, slash + 1),
-      basename = target.slice(slash + 1);
-    const input = await this.storage.openInputStream(directory + "_rels/" + basename + ".rels");
+  /** Root storage relationship binding until the complete XStorage component exists. Part relationships are obtained from the actual input component. @returns Ordered root relationship sequence. */
+  private async readRootRelationships(): Promise<Sequence<Sequence<StringPair>>> {
+    const input = await this.storage.openInputStream("_rels/.rels");
     const source = new InputSource();
     try {
       if (!input.is()) return new Relations();
@@ -156,17 +156,36 @@ export class OOXMLStreamImpl {
   }
   /** Original input reference return shares the current stream position; it is not an independent byte copy. @returns Owned input reference, possibly empty. */
   getDocumentStream(): Reference<XInputStream> {
-    return new Reference(this.document);
+    return this.document.is()
+      ? (this.document.get() as XStream).getInputStream()
+      : new Reference<XInputStream>();
   }
-  /** Releases parser/locator then input ownership; no XStream or relationship service identity is manufactured by this package binding. @returns Nothing. */
+  /** Releases parser/locator then input ownership; the actual XStream owns readonly relationships and property metadata. @returns Nothing. */
   dispose(): void {
     this.fastParser?.dispose();
     this.document.dispose();
-    this.relationships.dispose();
   }
   /** Original ID lookup is relative to the opened stream's relationships. @param id - Relationship ID. @returns Target or empty. */
   getTargetForId(id: string): string {
-    return this.lcl_getTarget(this.relationships, T.UNKNOWN, id) ?? "";
+    const relations = this.getRelationships();
+    try {
+      return this.lcl_getTarget(relations, T.UNKNOWN, id) ?? "";
+    } finally {
+      relations.dispose();
+    }
+  }
+  /** Original query-throw relationship interface on the document stream; no second side-stream parse or private metadata mirror is used for parts. @returns Owned relationship value. */
+  private getRelationships(): Sequence<Sequence<StringPair>> {
+    const access = new Reference<XRelationshipAccess>(
+      this.document,
+      UNO_QUERY_THROW,
+      XRelationshipAccess.static_type,
+    );
+    try {
+      return (access.get() as XRelationshipAccess).getAllRelationships();
+    } finally {
+      access.dispose();
+    }
   }
   /** Native ordered attribute scan, external cache and strict/transitional exact type matching. @param relations - XRelationshipAccess sequence. @param type - Selector. @param id - ID. @returns Target or no match. */
   private lcl_getTarget(

@@ -1,5 +1,5 @@
 /** @fileoverview Observes actual owned OOXML input references in tests; no replacement stream or query provider is installed. */
-import type { Reference } from "../cppu/inc/com/sun/star/uno/Reference";
+import { Reference } from "../cppu/inc/com/sun/star/uno/Reference";
 import { Sequence, type SequenceElements } from "../cppu/inc/com/sun/star/uno/Sequence";
 import type { XInputStream } from "../udkapi/com/sun/star/io/XInputStream";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
@@ -31,3 +31,17 @@ export function readOwnedXml(input: Reference<XInputStream>): string | null {
     bytes,
   );
 }
+
+/** Initializes an actual independent input owner from raw ZIP fixture bytes, including internal metadata unavailable through XStorage. @param bytes - Raw entry bytes. @returns Owned genuine input. */
+export function inputFromBytes(bytes: Uint8Array): Reference<XInputStream> {
+  const data = new Bytes(bytes.length);
+  try {
+    const fields = data.getArray() as SequenceElements;
+    for (let i = 0; i < bytes.length; ++i)
+      (fields.get(i) as [number])[0] = ((bytes[i] as number) << 24) >> 24;
+    return new Reference<XInputStream>(new SequenceInputStream(data));
+  } finally {
+    data.dispose();
+  }
+}
+import { SequenceInputStream } from "../comphelper/source/streaming/seqstream";
