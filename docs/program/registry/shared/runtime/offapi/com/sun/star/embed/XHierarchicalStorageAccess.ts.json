@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-sdk",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts",
+        "apps/office/src/package/source/xstor/native-storage-sdk.test.ts"
+      ],
+      "justification": "Original XStorage/XStorage2 and XHierarchicalStorageAccess/XHierarchicalStorageAccess2 IDL contracts now declare all20 own methods with native Reference, counted Unicode and NamedValue Sequence types. XStorage retains its two required NameAccess/Component bases; version2 interfaces retain their actual single parent and hierarchical access retains implicit XInterface. Optional property/transaction interfaces are not invented as required bases. Normal cppumaker-style static type getters use the genuine CPPU MI factory and type owners; this is not a complete external type-library/member-reflection or physical ABI certificate. Original InvalidStorageException derives from IOException and StorageWrappedTargetException derives from WrappedTargetException, with actual inherited Any value/copy/move/assignment/destruction and correct parent typelib registration. No storage service, partial query provider, fake parent/context/factory or encryption implementation is synthesized. Native OStorage/OWriteStream/package/factory graph, serializer output Reference wiring and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XHierarchicalStorageAccess",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/embed/XHierarchicalStorageAccess.idl",
+      "upstreamSymbols": [
+        "XHierarchicalStorageAccess",
+        "openStreamElementByHierarchicalName",
+        "openEncryptedStreamElementByHierarchicalName",
+        "removeStreamElementByHierarchicalName"
+      ]
+    }
+  }
+}
