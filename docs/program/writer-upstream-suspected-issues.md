@@ -3635,3 +3635,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `sw/source/writerfilter/ooxml/OOXMLDocumentImpl.cxx`, `OOXMLDocument::resolveFastSubStream`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The method saves mpStream and switches it to the selected part before parser setup, parsing and closeInput. Restoration occurs only after those operations. An exception therefore leaves the failed part current, and subsequent target/relationship lookups use that part rather than the original document. Preserve that order and ownership; do not introduce restoration in a finally/RAII guard. Real malformed settings and a second relationship-selected malformed part exercise this behavior through actual ZIP input and SAX. This is source-derived/local mechanism evidence, not a compiled complete native document service witness.
+
+### WRITER449 — Three compatibility flags ignore an explicit false value
+
+- Source: pinned `sw/source/writerfilter/dmapper/SettingsTable.cxx`, `SettingsTable::lcl_sprm`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- doNotExpandShiftReturn, balanceSingleByteDoubleByteWidth and ulTrailSpace assign true on the modifier's presence, ignoring the already parsed integer value. Thus an explicit false/zero turns these flags on and a later false cannot reset them, unlike neighboring boolean compatibility settings. Preserve those assignments rather than normalizing them to nIntValue!=0. Tests use actual OOXMLProperty/OOXMLValue resources and the real DomainMapper settings owner. Full native layout/export QA remains separate and unverified here.

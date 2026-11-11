@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/util.ts",
+    "localSymbols": [
+      "resolveSprmProps"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/util.cxx",
+    "upstreamSymbols": [
+      "resolveSprmProps"
+    ],
+    "preservedResponsibilities": [
+      "SettingsTable consumed scalar/nested/format state now preserves original tab/zoom/view/hyphenation widths/defaults,19 boolean source fields, sticky compatibility assignments (WRITER449), first-value optional linked-style precedence and actual owned decimal/list strings. DomainMapper_Impl.GetSettingsTable now follows native lazy construction, so real RTF/OOXML source-format queries occur after mapper initialization; teardown destroys settings-owned strings. Native resolveSprmProps retains optional original resource references and returned-pointer ownership; original SvxZoomType identities/zoom conversion are used. Byte-exact fdo106029 and tdf146171 settings pass actual ZIP/OOXMLDocument/SAX/DomainMapper into source settings state. Full native QA export/layout, complete protection/grab bags, ApplyProperties/ApplySettingsTable/model/view/default owners and DOCX/XLSX UI drivers remain incomplete. No broad semantic/default/parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Other original utilities/zoom item members and complete document/UNO service integration are not represented. No full-module parity certificate."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/util.ts",
+          "marker": "resolveSprmProps"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/util.cxx",
+          "marker": "resolveSprmProps"
+        }
+      ]
+    }
+  }
+}

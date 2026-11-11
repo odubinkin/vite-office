@@ -74,10 +74,10 @@ interface LineNumberSettings {
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
 export class DomainMapper_Impl {
-  private readonly m_pSettingsTable: SettingsTable;
+  private m_pSettingsTable: SettingsTable | null = null;
   /** Original document settings owner. @returns Actual table. */
   GetSettingsTable(): SettingsTable {
-    return this.m_pSettingsTable;
+    return (this.m_pSettingsTable ??= new SettingsTable(this.m_rDMapper));
   }
   private readonly m_pLastSectionContext = new SvRef<SectionPropertyMap>();
   private m_bParaSectpr = false;
@@ -251,7 +251,6 @@ export class DomainMapper_Impl {
     private readonly m_eDocumentType: SourceDocumentType,
   ) {
     this.body = model.getText();
-    this.m_pSettingsTable = new SettingsTable(m_rDMapper);
   }
   /** Original document-default phase. @param value - Import phase. @returns Nothing. */
   SetDocDefaultsImport(value: boolean): void {
@@ -707,6 +706,7 @@ export class DomainMapper_Impl {
     this.m_pLastSectionContext.clear();
     this.m_pListTable?.dispose();
     this.m_pListTable = undefined;
+    this.m_pSettingsTable?.dispose();
     this.styleSheetTable.dispose();
   }
 }
