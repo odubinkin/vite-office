@@ -161,3 +161,40 @@ export function WeakImplHelper_getTypes(data: class_data): Sequence<Type> {
     throw error;
   }
 }
+
+/** Original non-root lookup for inheritance helpers. @param type - Demanded interface. @param data - Specialization class data. @param that - Compiler interface cast. @returns Acquired Any, or empty. */
+export function ImplHelper_queryNoXInterface(
+  type: Type,
+  data: class_data,
+  that: ImplementationPointer,
+): Any {
+  checkInterface(type);
+  const demanded = type.getTypeLibType() as R,
+    pointer = queryDeepNoXInterface(demanded, data, that);
+  return pointer ? new Any([pointer], demanded) : new Any();
+}
+/** Original declared types followed by the complete base sequence, including repeated entries. @param data - Specialization class data. @param additional - Borrowed base types. @returns Owned concatenated type sequence. */
+export function ImplInhHelper_getTypes(
+  data: class_data,
+  additional: Sequence<Type>,
+): Sequence<Type> {
+  const result = new (Sequence.specialize<Type>("Type", 8))(data.m_nTypes + additional.getLength());
+  try {
+    const values = result.getArray() as ReadonlyMap<number, [R | null]>,
+      entries = getTypeEntries(data);
+    for (let index = data.m_nTypes; index--;)
+      typelib_typedescriptionreference_assign(
+        values.get(index * 8) as [R | null],
+        reference(entries[index] as type_entry),
+      );
+    for (let index = 0; index < additional.getLength(); ++index)
+      typelib_typedescriptionreference_assign(
+        values.get((data.m_nTypes + index) * 8) as [R | null],
+        additional.operatorIndex(index).getTypeLibType(),
+      );
+    return result;
+  } catch (error) {
+    result.dispose();
+    throw error;
+  }
+}

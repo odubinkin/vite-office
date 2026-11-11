@@ -22,4 +22,9 @@ export interface class_data {
 }
 /** Erased static_cast<char*>(that)+offset operation. Concrete caller binds actual interface facets; no runtime interface inference occurs here. */
 export type ImplementationPointer = (offset: number) => XInterface;
-export { WeakImplHelper_query, WeakImplHelper_getTypes } from "../source/implbase_ex";
+export {
+  WeakImplHelper_query,
+  WeakImplHelper_getTypes,
+  ImplHelper_queryNoXInterface,
+  ImplInhHelper_getTypes,
+} from "../source/implbase_ex";

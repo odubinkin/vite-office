@@ -10,16 +10,15 @@
     "maturity": "implemented",
     "assertions": [
       "Original standalone OInputCompStream uses actual native input/value/query/listener owners and complete declared readonly component methods.",
-      "Original custom interface query, property denial and closure failure contracts are preserved without substitute parent/mutex/service providers."
+      "Original custom interface query, property denial and closure failure contracts are preserved without substitute parent/mutex/service providers.",
+      "Writer document parts request actual OInputSeekStream SEEKABLEREAD; ordinary ZipStorage READ remains nonseekable."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
-      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical/seekable storage still remain unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
-      "Actual package READ input now returns a genuine OInputCompStream readonly snapshot owning native MediaType/Compressed/Size/RelationsInfo properties, input and independent current position. Existing asynchronous ZIP bytes remain the transport binding; no fake XStorage, parent, mutex or query provider is introduced. Native parseContentType application uses initialized StringPair rows, ordered defaults then explicit overrides, case-sensitive short-name suffixes, last duplicate assignment and hidden internal content metadata. Missing/broken content metadata and malformed own relationships refuse stream opening. Async initialization caches only immutable fields or an error diagnostic, never a shared owned UNO exception; concurrent/repeated failed opens create/destroy their own exceptions. Writer now retains real XStream and obtains part metadata through UNO_QUERY_THROW XRelationshipAccess; private part relationship mirrors and repeated side-stream parsing are removed. Root storage relationships remain the existing binding. Parent-bound lifetime/disposal, complete XStorage/hierarchical SEEKABLEREAD and full DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Synchronous JS/native thread/physical ABI/allocation guarantees stay unverified. Existing browser open/save/autosave/recovery choices are unchanged."
+      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged."
     ],
     "scopeLimitations": [
-      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical/seekable storage still remain unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
-      "Actual package READ input now returns a genuine OInputCompStream readonly snapshot owning native MediaType/Compressed/Size/RelationsInfo properties, input and independent current position. Existing asynchronous ZIP bytes remain the transport binding; no fake XStorage, parent, mutex or query provider is introduced. Native parseContentType application uses initialized StringPair rows, ordered defaults then explicit overrides, case-sensitive short-name suffixes, last duplicate assignment and hidden internal content metadata. Missing/broken content metadata and malformed own relationships refuse stream opening. Async initialization caches only immutable fields or an error diagnostic, never a shared owned UNO exception; concurrent/repeated failed opens create/destroy their own exceptions. Writer now retains real XStream and obtains part metadata through UNO_QUERY_THROW XRelationshipAccess; private part relationship mirrors and repeated side-stream parsing are removed. Root storage relationships remain the existing binding. Parent-bound lifetime/disposal, complete XStorage/hierarchical SEEKABLEREAD and full DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Synchronous JS/native thread/physical ABI/allocation guarantees stay unverified. Existing browser open/save/autosave/recovery choices are unchanged."
+      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -50,6 +49,18 @@
         {
           "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
           "marker": "getTargetForId"
+        },
+        {
+          "path": "package/source/xstor/oseekinstream.cxx",
+          "marker": "OInputSeekStream"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/ElementModes.idl",
+          "marker": "SEEKABLEREAD"
+        },
+        {
+          "path": "include/cppuhelper/implbase.hxx",
+          "marker": "ImplInheritanceHelper"
         }
       ],
       "tests": [
@@ -94,6 +105,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
           "marker": "OOXMLStreamImpl"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/oseekinstream.ts",
+          "marker": "OInputSeekStream"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/ElementModes.ts",
+          "marker": "SEEKABLEREAD"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/implbase.ts",
+          "marker": "ImplInheritanceHelper"
         }
       ],
       "tests": [
@@ -103,6 +126,14 @@
         },
         {
           "path": "apps/office/src/oox/source/helper/zipstorage-input.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/oseekinstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/native-inheritance.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -114,6 +145,10 @@
         {
           "path": "docs/program/native-package-input-wiring.md",
           "marker": "# Native package input connection"
+        },
+        {
+          "path": "docs/program/native-package-seekable-input.md",
+          "marker": "# Native seekable package input"
         }
       ]
     },

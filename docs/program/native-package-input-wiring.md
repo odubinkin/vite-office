@@ -36,7 +36,9 @@ related fragment cleanup tests preserve that exception contract.
 The snapshot constructor domain is the genuine standalone native overload. It
 does not impersonate the unported parent-bound OWriteStream_Impl path. Complete
 parent invalidation/locking, native mutex/ABI/allocation guarantees, XStorage and
-hierarchical SEEKABLEREAD remain unported or unverified. DOCX/XLSX document model,
+the complete hierarchical parent graph remain unported or unverified.
+Standalone SEEKABLEREAD components and the consumed Writer readonly open path are
+now connected; see native-package-seekable-input.md. DOCX/XLSX document model,
 filter, Worker and existing UI acceptance remain incomplete. Browser open/save,
 autosave and recovery decisions are unchanged.
 

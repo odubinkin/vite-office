@@ -1,5 +1,6 @@
 /** @fileoverview Actual ZIP input snapshots expose native stream/property/relationship components with source metadata precedence, ownership and failure boundaries. */
 import { expect, it, vi } from "vitest";
+import { SEEKABLEREAD } from "../../../offapi/com/sun/star/embed/ElementModes";
 import { ZipStorage } from "./zipstorage";
 import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
 import { XStream } from "../../../udkapi/com/sun/star/io/XStream";
@@ -211,5 +212,38 @@ it("refuses malformed own relationships instead of returning a stream with an em
     expect(input.is()).toBe(false);
   } finally {
     input.dispose();
+  }
+});
+
+it("keeps READ separate from seekable hierarchical snapshots and propagates native open errors", /** Existing flat transport creates actual readonly components; it does not certify full hierarchy/parent storage behavior. @returns Completion. */ async () => {
+  const storage = new ZipStorage(archive({ "word/document.xml": "<root/>" })),
+    first = await storage.openStreamElementByHierarchicalName("word/document.xml", SEEKABLEREAD),
+    second = await storage.openStreamElementByHierarchicalName("word/document.xml", SEEKABLEREAD),
+    seek = first.query(XSeekable.static_type),
+    other = second.query(XSeekable.static_type);
+  try {
+    expect(first.get()).not.toBe(second.get());
+    (seek.get() as XSeekable).seek(4n);
+    expect((other.get() as XSeekable).getPosition()).toBe(0n);
+    expect((seek.get() as XSeekable).getLength()).toBe(7n);
+    (first.get() as XStream).getInputStream().dispose();
+  } finally {
+    other.dispose();
+    seek.dispose();
+    second.dispose();
+    first.dispose();
+  }
+  for (const path of ["absent.xml", "[Content_Types].xml", "word/"]) {
+    try {
+      await storage.openStreamElementByHierarchicalName(path, SEEKABLEREAD);
+      throw new Error("Expected IOException");
+    } catch (error) {
+      if (!(error instanceof IOException)) throw error;
+      try {
+        expect(nativeText(error.Message)).toBe("");
+      } finally {
+        error.dispose();
+      }
+    }
   }
 });

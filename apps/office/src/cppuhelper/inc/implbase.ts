@@ -1,6 +1,12 @@
 /** @fileoverview Original internal WeakImplHelper variadic template over source-owned class_data/query and OWeakObject. Static specialization binding erases compiler inheritance casts; there is no per-instance type cache or alternate UNO provider. */
 import { OWeakObject } from "./weak";
-import { WeakImplHelper_query, WeakImplHelper_getTypes, type class_data } from "./implbase_ex";
+import {
+  WeakImplHelper_query,
+  WeakImplHelper_getTypes,
+  ImplHelper_queryNoXInterface,
+  ImplInhHelper_getTypes,
+  type class_data,
+} from "./implbase_ex";
 import { XTypeProvider } from "../../udkapi/com/sun/star/lang/XTypeProvider";
 import { Sequence } from "../../cppu/inc/com/sun/star/uno/Sequence";
 import type { Type } from "../../cppu/inc/com/sun/star/uno/Type";
@@ -13,7 +19,7 @@ export interface DeclaredInterface {
 /** Original compiler-emitted specialization constructor. */
 export interface WeakImplHelperConstructor {
   /** Constructs the genuine weak/type-provider base. @param source - Optional copy/move source. @returns Actual base. */
-  new (source?: Readonly<OWeakObject>): WeakImplHelper;
+  new (source?: Readonly<OWeakObject>): OWeakObject & XTypeProvider;
   readonly ClassData: class_data;
 }
 /** Exact ordered template argument identity, with no instantiated value or UNO type registry. */
@@ -50,7 +56,21 @@ export abstract class WeakImplHelper extends OWeakObject implements XTypeProvide
         ) => ({ m_type: { getCppuType: value.static_type }, m_offset: 0 }),
       ),
     };
-    const body = /** Original compiler-emitted template specialization, with shared source-owned methods. */ class extends WeakImplHelper {};
+    const body = /** Original compiler-emitted specialization retains its own cd even under qualified base calls from inheritance helpers. */ class extends WeakImplHelper {
+      /** Original specialization-qualified query. @param type - Demanded interface. @returns Owned Any. */
+      override queryInterface(type: Type): Any {
+        return WeakImplHelper_query(
+          type,
+          ClassData,
+          /** Compiler cast to the actual object. @returns Same identity. */ () => this,
+          this,
+        );
+      }
+      /** Original specialization-qualified declared types. @returns Owned sequence. */
+      override getTypes(): Sequence<Type> {
+        return WeakImplHelper_getTypes(ClassData);
+      }
+    };
     Object.defineProperty(body, "ClassData", { value: ClassData });
     const result = body as unknown as WeakImplHelperConstructor;
     specializations.push({ interfaces: [...interfaces], constructor: result });
@@ -64,22 +84,94 @@ export abstract class WeakImplHelper extends OWeakObject implements XTypeProvide
   override release(): void {
     super.release();
   }
-  /** Original weak query body uses specialization-static class data and the qualified weak root. @param type - Demanded type. @returns Acquired Any. */
-  override queryInterface(type: Type): Any {
-    return WeakImplHelper_query(
-      type,
-      (this.constructor as WeakImplHelperConstructor).ClassData,
-      /** Erased structural static_cast to this actual object; no interface is manufactured. @returns Borrowed same object. */ () =>
-        this,
-      this,
-    );
-  }
-  /** Original class-data sequence includes the final XWeak entry. @returns Owned declared Type sequence. */
-  getTypes(): Sequence<Type> {
-    return WeakImplHelper_getTypes((this.constructor as WeakImplHelperConstructor).ClassData);
-  }
+  /** Implemented by each compiler specialization with its own lexical cd. @returns Owned declared types. */
+  abstract getTypes(): Sequence<Type>;
   /** Original obsolete identifier is always empty. @returns Actual empty byte sequence. */
   getImplementationId(): Sequence<number> {
     return new (Sequence.specialize<number>("sal_Int8", 1))();
   }
 }
+
+/** Erased complete native BaseClass constructor; actual argument tuples are retained by specialize. */
+type InheritanceBase = new (...args: never[]) => OWeakObject & XTypeProvider;
+/** Exact native BaseClass and ordered interface template arguments. */
+interface InheritanceSpecialization {
+  readonly base: InheritanceBase;
+  readonly interfaces: readonly DeclaredInterface[];
+  readonly constructor: InheritanceBase;
+}
+const inheritanceSpecializations: InheritanceSpecialization[] = [];
+/** Original ImplInheritanceHelper compiler specializations; no additional component or UNO provider. */
+export const ImplInheritanceHelper = {
+  /** Extends the actual complete base and adds only declared interfaces. @param Base - Actual native base constructor. @param interfaces - Ordered additional interfaces. @returns Same constructor argument/result contract, with native inherited virtual methods. */
+  specialize<B extends InheritanceBase>(Base: B, ...interfaces: readonly DeclaredInterface[]): B {
+    const previous = inheritanceSpecializations.find(
+      /** Exact template identity. @param entry - Existing specialization. @returns Match. */ (
+        entry,
+      ) =>
+        entry.base === Base &&
+        entry.interfaces.length === interfaces.length &&
+        entry.interfaces.every(
+          /** Exact interface argument identity. @param value - Declaration. @param index - Position. @returns Match. */ (
+            value,
+            index,
+          ) => value === interfaces[index],
+        ),
+    );
+    if (previous) return previous.constructor as B;
+    const data: class_data = {
+      m_nTypes: interfaces.length + 1,
+      m_storedTypeRefs: false,
+      m_createdId: false,
+      m_id: new Int8Array(16),
+      m_typeEntries: [...interfaces, XTypeProvider].map(
+        /** Original ImplClassData adds XTypeProvider. @param value - Declaration. @returns Entry. */ (
+          value,
+        ) => ({ m_type: { getCppuType: value.static_type }, m_offset: 0 }),
+      ),
+    };
+    const Parent = Base as unknown as new (...args: unknown[]) => OWeakObject & XTypeProvider;
+    /** Compiler-erased variadic inheritance; all base calls remain statically qualified. */
+    class Body extends Parent {
+      /** Original additional-interface query then qualified base fallback. @param type - Demanded interface. @returns Owned Any. */
+      override queryInterface(type: Type): Any {
+        const result = ImplHelper_queryNoXInterface(
+          type,
+          data,
+          /** Compiler cast. @returns Same identity. */ () => this,
+        );
+        if (result.hasValue()) return result;
+        result.dispose();
+        return Parent.prototype.queryInterface.call(this, type);
+      }
+      /** Original qualified base acquire. @returns Nothing. */
+      override acquire(): void {
+        Parent.prototype.acquire.call(this);
+      }
+      /** Original qualified base release. @returns Nothing. */
+      override release(): void {
+        Parent.prototype.release.call(this);
+      }
+      /** Original additional types precede all base types without deduplication. @returns Owned sequence. */
+      override getTypes(): Sequence<Type> {
+        const additional = Parent.prototype.getTypes.call(this);
+        try {
+          return ImplInhHelper_getTypes(data, additional);
+        } finally {
+          additional.dispose();
+        }
+      }
+      /** Original obsolete identifier is empty. @returns Owned empty bytes. */
+      override getImplementationId(): Sequence<number> {
+        return new (Sequence.specialize<number>("sal_Int8", 1))();
+      }
+    }
+    const result = Body as unknown as B;
+    inheritanceSpecializations.push({
+      base: Base,
+      interfaces: [...interfaces],
+      constructor: result,
+    });
+    return result;
+  },
+};

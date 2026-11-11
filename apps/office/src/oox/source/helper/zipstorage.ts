@@ -13,6 +13,9 @@ import { createManifestProperty } from "../../../package/source/manifest/Manifes
 
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { OInputSeekStream } from "../../../package/source/xstor/oseekinstream";
+import { READ, SEEKABLEREAD } from "../../../offapi/com/sun/star/embed/ElementModes";
+import type { XExtendedStorageStream } from "../../../offapi/com/sun/star/embed/XExtendedStorageStream";
 import { OInputCompStream } from "../../../package/source/xstor/ocompinstream";
 import { OFOPXML } from "../../../offapi/com/sun/star/embed/StorageFormats";
 import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
@@ -249,26 +252,41 @@ export class ZipStorage {
       }
     }
   }
-  /** Native READ input contract over an independent byte snapshot: genuine component/query/property/relationship ownership, with empty reference for native open failures. Parent-bound storage/disposal linkage remains unported. @param path - Exact stream path. @returns Owned native input reference. */
+  /** Existing flat ZIP transport binds the readonly hierarchical call consumed by Writer; it is not an XStorage/XHierarchicalStorageAccess service or parent ownership graph. Native failures propagate, unlike ZipStorage's READ convenience path. @param path - Exact stream path. @param mode - Supported readonly source mode. @returns Actual extended storage component. */
+  async openStreamElementByHierarchicalName(
+    path: string,
+    mode: typeof READ | typeof SEEKABLEREAD,
+  ): Promise<Reference<XExtendedStorageStream>> {
+    if (this.input) await this.typeMap();
+    if ((this.input && path === "[Content_Types].xml") || path.endsWith("/")) ioError("");
+    const bytes = await this.readBytes(path);
+    if (bytes === null) ioError("");
+    const relations = await this.readRelationships(path);
+    try {
+      const properties = await this.inputProperties(path, bytes.length, relations),
+        input = inputBytes(bytes);
+      try {
+        return new Reference<XExtendedStorageStream>(
+          mode === SEEKABLEREAD
+            ? new OInputSeekStream(input, properties, OFOPXML)
+            : new OInputCompStream(input, properties, OFOPXML),
+        );
+      } finally {
+        input.dispose();
+        properties.dispose();
+      }
+    } finally {
+      relations.dispose();
+    }
+  }
+  /** Native ZipStorage READ convenience path catches native open failures and returns empty input. @param path - Exact stream path. @returns Owned native input. */
   async openInputStream(path: string): Promise<Reference<XInputStream>> {
     try {
-      if (this.input) await this.typeMap();
-      if ((this.input && path === "[Content_Types].xml") || path.endsWith("/"))
-        return new Reference<XInputStream>();
-      const bytes = await this.readBytes(path);
-      if (bytes === null) return new Reference<XInputStream>();
-      const relations = await this.readRelationships(path);
+      const stream = await this.openStreamElementByHierarchicalName(path, READ);
       try {
-        const properties = await this.inputProperties(path, bytes.length, relations),
-          input = inputBytes(bytes);
-        try {
-          return new Reference<XInputStream>(new OInputCompStream(input, properties, OFOPXML));
-        } finally {
-          input.dispose();
-          properties.dispose();
-        }
+        return (stream.get() as XExtendedStorageStream).getInputStream();
       } finally {
-        relations.dispose();
+        stream.dispose();
       }
     } catch (error) {
       if (!(error instanceof Exception)) throw error;

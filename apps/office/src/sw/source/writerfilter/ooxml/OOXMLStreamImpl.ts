@@ -28,6 +28,7 @@ import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 
 import { Reference, UNO_QUERY_THROW } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { XRelationshipAccess } from "../../../../offapi/com/sun/star/embed/XRelationshipAccess";
+import { SEEKABLEREAD } from "../../../../offapi/com/sun/star/embed/ElementModes";
 import { XStream } from "../../../../udkapi/com/sun/star/io/XStream";
 import type { XInputStream } from "../../../../udkapi/com/sun/star/io/XInputStream";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
@@ -105,10 +106,11 @@ export class OOXMLStreamImpl {
         result.msTarget = target;
         const lastSlash = target.lastIndexOf("/");
         if (lastSlash >= 0) result.msPath = target.slice(0, lastSlash + 1);
-        const input = await result.storage.openInputStream(target);
+        const input = await result.storage.openStreamElementByHierarchicalName(
+          target,
+          SEEKABLEREAD,
+        );
         try {
-          if (!input.is())
-            throw new Error("OOXML relationship target stream is missing: " + target);
           const stream = new Reference<XStream>(input, UNO_QUERY_THROW, XStream.static_type);
           result.document.moveAssign(stream);
           stream.dispose();

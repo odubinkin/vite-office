@@ -82,10 +82,10 @@ export class OInputCompStream
   )
   implements XInputStream, XExtendedStorageStream, XRelationshipAccess, XPropertySet, ByteReader
 {
-  private readonly m_xStream: Reference<XInputStream & ByteReader>;
+  protected readonly m_xStream: Reference<XInputStream & ByteReader>;
   private readonly m_aProperties: Sequence<PropertyValue>;
   private m_pInterfaceContainer: OInterfaceContainerHelper3<XEventListener> | null = null;
-  private m_bDisposed = false;
+  protected m_bDisposed = false;
   /** Original standalone constructor copies the actual properties and moves the by-value input reference. The ByteReader intersection erases the original asserted successful dynamic_cast. @param stream - Actual input/ByteReader component. @param properties - Actual initialized native properties. @param m_nStorageType - Original storage format. @returns Component. */
   constructor(
     stream: Reference<XInputStream & ByteReader>,

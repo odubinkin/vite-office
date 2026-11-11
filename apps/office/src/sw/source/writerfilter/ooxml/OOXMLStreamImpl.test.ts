@@ -12,6 +12,18 @@ import {
   WriteRelationsInfoSequence,
   type StringPair,
 } from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { IOException } from "../../../../cppu/inc/com/sun/star/io/IOException";
+import { XSeekable } from "../../../../udkapi/com/sun/star/io/XSeekable";
+/** Asserts the native hierarchical open failure and releases its exception. @param operation - Async open. @returns Completion. */
+async function missingStream(operation: Promise<Stream>): Promise<void> {
+  try {
+    await operation;
+    throw new Error("Expected native IOException");
+  } catch (error) {
+    if (!(error instanceof IOException)) throw error;
+    error.dispose();
+  }
+}
 const streams: Stream[] = [];
 /** Tracks actual successfully constructed owners for native destructor cleanup. @param args - Original factory arguments. @returns Actual stream. */
 async function createStream(...args: Parameters<typeof Stream.createStream>): Promise<Stream> {
@@ -181,14 +193,12 @@ it("keeps absent optional parts distinct from invalid targets and missing parent
   await expect(createStream(empty, T.STYLES)).rejects.toThrow("parent document stream");
   const storage = packageOf([relation("missing", transitional + "styles", "missing.xml")]);
   const doc = await createStream(storage);
-  await expect(createStream(doc, T.STYLES)).rejects.toThrow("target stream is missing");
+  await missingStream(createStream(doc, T.STYLES));
   const externalStorage = packageOf([
     relation("external", transitional + "styles", "https://external.test/styles.xml", "External"),
   ]);
   const externalDoc = await createStream(externalStorage);
-  await expect(createStream(externalDoc, T.STYLES)).rejects.toThrow(
-    "https://external.test/styles.xml",
-  );
+  await missingStream(createStream(externalDoc, T.STYLES));
   const failure = vi.spyOn(UriReferenceFactory.prototype, "makeAbsolute").mockReturnValueOnce(null);
   try {
     expect(readOwnedInput((await createStream(storage)).getDocumentStream())).toBeNull();
@@ -263,4 +273,32 @@ it("keeps a returned input alive after its Writer wrapper is destroyed", /** Nat
     input = stream.getDocumentStream();
   stream.dispose();
   expect(readOwnedXml(input)).toBe("<document/>");
+});
+
+it("opens Writer document input with native SEEKABLEREAD and shared position", /** Writer init requests a seekable component while ordinary ZipStorage READ stays nonseekable. @returns Completion. */ async () => {
+  const doc = await createStream(packageOf([])),
+    input = doc.getDocumentStream(),
+    seek = input.query(XSeekable.static_type);
+  try {
+    expect(seek.is()).toBe(true);
+    const value = seek.get() as XSeekable;
+    expect(value.getLength()).toBeGreaterThan(0n);
+    value.seek(value.getLength());
+    const again = doc.getDocumentStream();
+    try {
+      expect(again.get()).toBe(input.get());
+      expect(
+        (
+          again.get() as import("../../../../udkapi/com/sun/star/io/XInputStream").XInputStream
+        ).available(),
+      ).toBe(0);
+    } finally {
+      again.dispose();
+    }
+    value.seek(0n);
+    expect(readOwnedXml(doc.getDocumentStream())).toBeTruthy();
+  } finally {
+    seek.dispose();
+    input.dispose();
+  }
 });
