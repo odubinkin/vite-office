@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 133
+revision: 136
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T22:58:32.077Z"
+  updated_at: "2026-11-11T23:15:28.674Z"
   updated_by: "CODER"
-  note: "Native storage SDK prerequisite passes8 whole-six-module profile cases at approved90percent thresholds and47 related cases. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global docs remains existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-storage-sdk-checkpoint.json. Native OStorage/OWriteStream/services/serializer Reference wiring and complete XLSX/DOCX model/filter/Worker/UI acceptance remain unfinished. No whole-epic completion or pause."
-  attempts: 39
+  note: "Bounded Writer fast-substream checkpoint verified:56 profile tests,127 related tests, S98.59/B95.68/F100/L98.94 aggregate; native stream-switch failure state WRITER448 preserved; CT_Settings generated unchanged; real fdo73541 complex-settings rejection and partial mirror callback remain explicitly uncertified. Typecheck/static/scoped gates pass except two unchanged JSDoc baseline errors. Full DOCX/XLSX core/export/UI remains incomplete; continue active goal. Evidence: evidence/writer-fast-substreams-checkpoint.json."
+  attempts: 40
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -632,8 +635,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T23:15:28.674Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded Writer fast-substream checkpoint verified:56 profile tests,127 related tests, S98.59/B95.68/F100/L98.94 aggregate; native stream-switch failure state WRITER448 preserved; CT_Settings generated unchanged; real fdo73541 complex-settings rejection and partial mirror callback remain explicitly uncertified. Typecheck/static/scoped gates pass except two unchanged JSDoc baseline errors. Full DOCX/XLSX core/export/UI remains incomplete; continue active goal. Evidence: evidence/writer-fast-substreams-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T23:15:33.909Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T22:59:34.980Z"
+doc_updated_at: "2026-11-11T23:15:33.909Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1818,6 +1834,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T23:15:28.674Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded Writer fast-substream checkpoint verified:56 profile tests,127 related tests, S98.59/B95.68/F100/L98.94 aggregate; native stream-switch failure state WRITER448 preserved; CT_Settings generated unchanged; real fdo73541 complex-settings rejection and partial mirror callback remain explicitly uncertified. Typecheck/static/scoped gates pass except two unchanged JSDoc baseline errors. Full DOCX/XLSX core/export/UI remains incomplete; continue active goal. Evidence: evidence/writer-fast-substreams-checkpoint.json.
+    Attempts: 40
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T23:15:22.583Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2034,6 +2080,10 @@ sections:
     - Observation: Native storage SDK prerequisite now declares four original interface families with20 own methods and two real storage exception values. The initial eight-case profile failed two fixture calls: it attempted a nonexistent runtime XInterface.static_type API and passed a raw scalar instead of its actual address to typed Any construction.
       Impact: Tests must exercise the existing genuine UnoType root and native pointer/value contracts, without fabricating a partial XStorage/query provider or weakening the generated storage interfaces.
       Resolution: Corrected the root type lookup to UnoType and supplied an initialized scalar cell. Final eight-case whole-six-module profile passes at the approved90percent thresholds with S78/78 B24/24 F22/22 L72/72; this naturally small SDK graph required no100percent chase.47 related cases validate actual input/transaction/type/wrapped-value/OOXML/Worker owners. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. Global JSDoc retains only css-style-matchers17/76 baseline. Native OStorage/OWriteStream/factory and serializer Reference output wiring remain unfinished; no storage service, encryption implementation or complete DOCX/XLSX model/filter/Worker/UI acceptance is claimed.
+
+    - Observation: Writer fast-substream checkpoint: original OOXMLDocument stream switching, SAX/resource delivery and relationship input ownership are now represented. CT_Settings native generation adds96 elements and97 resources. Real fdo73541 reveals unported CT_Zoom and source saved-error callback continuation; it is not certified as a successful native QA scenario.
+      Impact: 56 profile tests and127 related regressions pass; aggregate coverage S98.59/B95.68/F100/L98.94. OOXMLDocument individual branches54.54 reflect unported progress-statistics initialization, without fabricated state. Full DOCX/XLSX resolve/export/UI remains incomplete. Existing JSDoc baseline remains two css-style-matchers errors.
+      Resolution: Preserve exceptional current-stream state as WRITER448, actual input references and exactly-once substream cleanup. Typecheck/static/scoped checks pass, aside from unchanged docs baseline. Evidence: evidence/writer-fast-substreams-checkpoint.json. Continue the approved task and active goal without pause.
 id_source: "generated"
 ---
 ## Summary
@@ -3228,6 +3278,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T23:15:28.674Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded Writer fast-substream checkpoint verified:56 profile tests,127 related tests, S98.59/B95.68/F100/L98.94 aggregate; native stream-switch failure state WRITER448 preserved; CT_Settings generated unchanged; real fdo73541 complex-settings rejection and partial mirror callback remain explicitly uncertified. Typecheck/static/scoped gates pass except two unchanged JSDoc baseline errors. Full DOCX/XLSX core/export/UI remains incomplete; continue active goal. Evidence: evidence/writer-fast-substreams-checkpoint.json.
+Attempts: 40
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T23:15:22.583Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3448,3 +3528,7 @@ DecisionContextRef:
 - Observation: Native storage SDK prerequisite now declares four original interface families with20 own methods and two real storage exception values. The initial eight-case profile failed two fixture calls: it attempted a nonexistent runtime XInterface.static_type API and passed a raw scalar instead of its actual address to typed Any construction.
   Impact: Tests must exercise the existing genuine UnoType root and native pointer/value contracts, without fabricating a partial XStorage/query provider or weakening the generated storage interfaces.
   Resolution: Corrected the root type lookup to UnoType and supplied an initialized scalar cell. Final eight-case whole-six-module profile passes at the approved90percent thresholds with S78/78 B24/24 F22/22 L72/72; this naturally small SDK graph required no100percent chase.47 related cases validate actual input/transaction/type/wrapped-value/OOXML/Worker owners. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. Global JSDoc retains only css-style-matchers17/76 baseline. Native OStorage/OWriteStream/factory and serializer Reference output wiring remain unfinished; no storage service, encryption implementation or complete DOCX/XLSX model/filter/Worker/UI acceptance is claimed.
+
+- Observation: Writer fast-substream checkpoint: original OOXMLDocument stream switching, SAX/resource delivery and relationship input ownership are now represented. CT_Settings native generation adds96 elements and97 resources. Real fdo73541 reveals unported CT_Zoom and source saved-error callback continuation; it is not certified as a successful native QA scenario.
+  Impact: 56 profile tests and127 related regressions pass; aggregate coverage S98.59/B95.68/F100/L98.94. OOXMLDocument individual branches54.54 reflect unported progress-statistics initialization, without fabricated state. Full DOCX/XLSX resolve/export/UI remains incomplete. Existing JSDoc baseline remains two css-style-matchers errors.
+  Resolution: Preserve exceptional current-stream state as WRITER448, actual input references and exactly-once substream cleanup. Typecheck/static/scoped checks pass, aside from unchanged docs baseline. Evidence: evidence/writer-fast-substreams-checkpoint.json. Continue the approved task and active goal without pause.
