@@ -1,0 +1,251 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native UNOMemoryStream, seekable input/truncate SDK and actual package snapshot cache",
+  "sourceBlobs": {
+    "apps/office/src/oox/source/helper/zipstorage.ts": "008ba28810d6a8bc03ccaf0a17951c152f3bd8a7",
+    "docs/program/calc-upstream-suspected-issues.md": "d6c7d7f3d82109dbb1740d2d72ba49482612e34d",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "c27aeb38af1e317e5130d729a489a40bcf985888",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "664c3659eb0875499e895e684d8b99e37aeedf0f",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "4b899152c5f42feab978a3d2d91a7ea4ba862baa",
+    "docs/program/writer-upstream-suspected-issues.md": "64f273fc3354a0c90f8d7d0b2f815069fa9d79a2",
+    "apps/office/src/comphelper/source/streaming/memorystream.test.ts": "2501114f501b0a0b91ff6b6f7ca2cab2f7323b9c",
+    "apps/office/src/comphelper/source/streaming/memorystream.ts": "8364d99ed6d81d029bab70a6cbd5f2acd745828d",
+    "apps/office/src/udkapi/com/sun/star/io/XSeekableInputStream.ts": "a2aac4bac187508116bba8d402da4d4f2eedbc26",
+    "apps/office/src/udkapi/com/sun/star/io/XTruncate.ts": "ff893081abc1b6bd3cc1ef8302a6068ba3d8f6e7",
+    "docs/program/native-memory-stream-cache.md": "da706d13d32b2025ff75ba8fb3e781eb2717ccb1",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/memorystream.ts.json": "bb5d283725736176a49bfe313969b94130b66c67",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XSeekableInputStream.ts.json": "65649ffa97c86e14ba25dd2983724999870909bd",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XTruncate.ts.json": "cc0ea743d69abe75a444b5a9c0b4cdefddc8afc3",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/memorystream.ts.json": "26c308d33b5bad55b47e23dda8a29ca68bc1f418",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XSeekableInputStream.ts.json": "79d58c1556b0fad5b54d7857536c82173302521e",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XTruncate.ts.json": "0f1dfd82509485f0e10e21f307040ea1906114b6"
+  },
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/comphelper/source/streaming/memorystream.test.ts",
+        "apps/office/src/comphelper/source/streaming/memorystream.ts",
+        "apps/office/src/udkapi/com/sun/star/io/XSeekableInputStream.ts",
+        "apps/office/src/udkapi/com/sun/star/io/XTruncate.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-0.log"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json",
+        "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "apps/office/src/comphelper/source/streaming/memorystream.test.ts",
+        "apps/office/src/comphelper/source/streaming/memorystream.ts",
+        "apps/office/src/udkapi/com/sun/star/io/XSeekableInputStream.ts",
+        "apps/office/src/udkapi/com/sun/star/io/XTruncate.ts",
+        "docs/program/native-memory-stream-cache.md",
+        "docs/program/registry/shared/provenance/comphelper/source/streaming/memorystream.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XSeekableInputStream.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XTruncate.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/streaming/memorystream.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XSeekableInputStream.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XTruncate.ts.json"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-1.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-2.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/memory-stream-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-4.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-5.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-6.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-7.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-8.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-9.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-10.log"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-11.log"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-12.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-check-13.log"
+    }
+  ],
+  "tests": {
+    "coverage": {
+      "files": 5,
+      "cases": 48,
+      "threshold": 90,
+      "summary": {
+        "lines": {
+          "total": 91,
+          "covered": 91,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 103,
+          "covered": 103,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 32,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "log": "apps/office/coverage/memory-stream-coverage.log"
+    },
+    "integration": {
+      "files": 6,
+      "cases": 42,
+      "log": "apps/office/coverage/memory-stream-integration.log"
+    }
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-typecheck.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/memory-stream-static.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/memory-stream-docs-final.log"
+    }
+  ],
+  "upstreamIssues": [
+    "CALC-496",
+    "WRITER427"
+  ],
+  "limitations": [
+    "Final docs check reports only unchanged css-style-matchers.ts lines17 and76; new overload documentation failures were fixed.",
+    "Coverage preceded documentation-only overload comments; executable code remains unchanged.",
+    "Separate scenario groups overlap and are not a count of unique cases.",
+    "Primitive std::vector noinit physical allocation and indeterminate gap values remain unverified; tests assert only initialized bytes.",
+    "The original memory-stream component factory, parent storage/OWriteStream and spill graph, full output serializer/package ownership and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished.",
+    "Full suite deferred under the approved ten-completed-task cadence."
+  ]
+}
