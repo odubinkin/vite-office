@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 83
+revision: 86
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T19:15:01.122Z"
+  updated_at: "2026-11-11T19:34:41.181Z"
   updated_by: "CODER"
-  note: "Bounded native serializer-byte checkpoint passes82 scoped coverage scenarios and74 integration scenarios, global90 thresholds with93.33 percent branches. Native cache/mark values, shared ownership, helper destruction and UNO byte ZIP output are connected; WRITER137/CALC-303 alias witness preserves upstream behavior. Type/build/static and scoped/source/registry/resource/doctor/routing checks pass; unchanged global JSDoc baseline remains. Full XOutputStream Reference/OWriteStream/parent graph and complete DOCX/XLSX model/filter/UI acceptance are still unfinished. Evidence native-serializer-byte-owners-checkpoint.json."
-  attempts: 27
+  note: "Bounded package-owner support checkpoint passes35 current coverage cases at global90 with90.38 percent branches and66 related integration cases. Pinned IfTest and all four TestInterfaceContainer2 scopes, including iterator lifetime through disposal, are retained. OTypeCollection actual owners and container2/multi-type state are implemented; Reference query typing is corrected without runtime changes. Final type/build/static/scoped/source/registry/resource/doctor/routing gates pass except unchanged JSDoc baseline. Evidence native-package-owner-support-checkpoint.json. Whole OWriteStream/parent-storage/DOCX/XLSX model/filter/UI task remains incomplete."
+  attempts: 28
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -440,8 +443,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T19:34:41.181Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded package-owner support checkpoint passes35 current coverage cases at global90 with90.38 percent branches and66 related integration cases. Pinned IfTest and all four TestInterfaceContainer2 scopes, including iterator lifetime through disposal, are retained. OTypeCollection actual owners and container2/multi-type state are implemented; Reference query typing is corrected without runtime changes. Final type/build/static/scoped/source/registry/resource/doctor/routing gates pass except unchanged JSDoc baseline. Evidence native-package-owner-support-checkpoint.json. Whole OWriteStream/parent-storage/DOCX/XLSX model/filter/UI task remains incomplete."
+  -
+    type: "status"
+    at: "2026-11-11T19:35:05.212Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T19:15:12.032Z"
+doc_updated_at: "2026-11-11T19:35:05.212Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1266,6 +1282,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T19:34:41.181Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded package-owner support checkpoint passes35 current coverage cases at global90 with90.38 percent branches and66 related integration cases. Pinned IfTest and all four TestInterfaceContainer2 scopes, including iterator lifetime through disposal, are retained. OTypeCollection actual owners and container2/multi-type state are implemented; Reference query typing is corrected without runtime changes. Final type/build/static/scoped/source/registry/resource/doctor/routing gates pass except unchanged JSDoc baseline. Evidence native-package-owner-support-checkpoint.json. Whole OWriteStream/parent-storage/DOCX/XLSX model/filter/UI task remains incomplete.
+    Attempts: 28
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T19:33:53.307Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1378,6 +1424,10 @@ sections:
     - Observation: Command: native serializer/cache/mark coverage at global90; Result: pass82 scenarios across six files,93.33 percent branches,95.65 percent statements,98.98 percent functions,97.45 percent lines. Separate74 integration scenarios pass. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass after correcting local docs evidence paths; global JSDoc retains unchanged css-style-matchers.ts baseline errors. ZipStorage input error coverage remains below90 per-file in this output profile, explicitly retained.
       Impact: CachedOutputStream and mark data now use actual SAL ByteSequence and toUnoSequence; ZIP transport consumes genuine UNO byte values. Explicit shared mark ownership and helper destruction preserve failure boundaries. WRITER137/CALC-303 has an actual retained-native-value alias witness without a COW fix.
       Resolution: Evidence: native-serializer-byte-owners-checkpoint.json and docs/program/native-serializer-byte-owners.md. Continue full XOutputStream Reference/OWriteStream/parent storage and DOCX/XLSX model/filter/Worker/UI implementation; keep epic incomplete. No fake component/provider, enforcement relaxation, full-suite replay or browser persistence policy change.
+
+    - Observation: Command: native container2/type-collection coverage at global90; Result: pass35 current-source cases,194/201 statements94/104 branches41/41 functions171/174 lines. Both pinned IfTest cases and all four TestInterfaceContainer2::test1 scopes are translated, including iterator lifetime through disposal. Separate66 related integration cases pass. Per-container branches89.58 are retained without private-state coverage fixtures. Final source/registry gates pass after correcting header provenance reexport symbols; JSDoc retains unchanged baseline errors.
+      Impact: Real zero/one/vector listener unions, snapshot iterators, multi-type owner and OTypeCollection are available as OWriteStream prerequisites. Original null-insertion/debug-clear findings CALC-497/498 and WRITER428/429 are documented and preserved. Reference query signatures now accept the source XInterface pointer independently of target T, with erased root casts and no runtime query change.
+      Resolution: Evidence: native-package-owner-support-checkpoint.json and docs/program/native-package-owner-support.md. Continue original write/parent-storage/model/filter/Worker/UI implementation; current modules do not advertise an incomplete output service. Native mutex/union/ABI/allocation and unused typeprovider families stay unverified or unported. No full-suite or whole-task completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -2212,6 +2262,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T19:34:41.181Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded package-owner support checkpoint passes35 current coverage cases at global90 with90.38 percent branches and66 related integration cases. Pinned IfTest and all four TestInterfaceContainer2 scopes, including iterator lifetime through disposal, are retained. OTypeCollection actual owners and container2/multi-type state are implemented; Reference query typing is corrected without runtime changes. Final type/build/static/scoped/source/registry/resource/doctor/routing gates pass except unchanged JSDoc baseline. Evidence native-package-owner-support-checkpoint.json. Whole OWriteStream/parent-storage/DOCX/XLSX model/filter/UI task remains incomplete.
+Attempts: 28
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T19:33:53.307Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2328,3 +2408,7 @@ DecisionContextRef:
 - Observation: Command: native serializer/cache/mark coverage at global90; Result: pass82 scenarios across six files,93.33 percent branches,95.65 percent statements,98.98 percent functions,97.45 percent lines. Separate74 integration scenarios pass. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass after correcting local docs evidence paths; global JSDoc retains unchanged css-style-matchers.ts baseline errors. ZipStorage input error coverage remains below90 per-file in this output profile, explicitly retained.
   Impact: CachedOutputStream and mark data now use actual SAL ByteSequence and toUnoSequence; ZIP transport consumes genuine UNO byte values. Explicit shared mark ownership and helper destruction preserve failure boundaries. WRITER137/CALC-303 has an actual retained-native-value alias witness without a COW fix.
   Resolution: Evidence: native-serializer-byte-owners-checkpoint.json and docs/program/native-serializer-byte-owners.md. Continue full XOutputStream Reference/OWriteStream/parent storage and DOCX/XLSX model/filter/Worker/UI implementation; keep epic incomplete. No fake component/provider, enforcement relaxation, full-suite replay or browser persistence policy change.
+
+- Observation: Command: native container2/type-collection coverage at global90; Result: pass35 current-source cases,194/201 statements94/104 branches41/41 functions171/174 lines. Both pinned IfTest cases and all four TestInterfaceContainer2::test1 scopes are translated, including iterator lifetime through disposal. Separate66 related integration cases pass. Per-container branches89.58 are retained without private-state coverage fixtures. Final source/registry gates pass after correcting header provenance reexport symbols; JSDoc retains unchanged baseline errors.
+  Impact: Real zero/one/vector listener unions, snapshot iterators, multi-type owner and OTypeCollection are available as OWriteStream prerequisites. Original null-insertion/debug-clear findings CALC-497/498 and WRITER428/429 are documented and preserved. Reference query signatures now accept the source XInterface pointer independently of target T, with erased root casts and no runtime query change.
+  Resolution: Evidence: native-package-owner-support-checkpoint.json and docs/program/native-package-owner-support.md. Continue original write/parent-storage/model/filter/Worker/UI implementation; current modules do not advertise an incomplete output service. Native mutex/union/ABI/allocation and unused typeprovider families stay unverified or unported. No full-suite or whole-task completion claim.

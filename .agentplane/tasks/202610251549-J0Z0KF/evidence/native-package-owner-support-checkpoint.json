@@ -1,0 +1,306 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native OTypeCollection and container2/iterator/multi-type owners required by package output",
+  "sourceBlobs": {
+    "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts": "7830f5bcea1515e536685e9886ea7b6947424997",
+    "docs/program/calc-upstream-suspected-issues.md": "89da6b95e9311016d05d697ab615ef990de75b17",
+    "docs/program/registry/shared/capabilities/CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06.json": "a4be98632d4d18111d5d5116759a23f82a8a03e8",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "d5d57a2c0622a17edfd89ac060e400c528b639cb",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json": "c7f01adae0d654341779b52b26eb1cd5c3fd096f",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json": "e6f9ccb15d2f5079c85592d8efca00032e62fbb6",
+    "docs/program/writer-upstream-suspected-issues.md": "6438818a310ed225175cb59290eaee510172bfdc",
+    "apps/office/src/comphelper/inc/interfacecontainer2.ts": "150aa034ea7d87806241dcfdbcd3032729c17705",
+    "apps/office/src/comphelper/inc/multicontainer2.ts": "2afb54c75906f04d98ae58a2bb0206b4a1272f19",
+    "apps/office/src/comphelper/source/container/interfacecontainer2.test.ts": "d501edc8a29e6f9657cf26f8aa218c231e9494d7",
+    "apps/office/src/comphelper/source/container/interfacecontainer2.ts": "87369feb270f23ffff100a512463653c396ebb7b",
+    "apps/office/src/cppuhelper/inc/typeprovider.ts": "fe09fe34af7bdf3d11588f249f42133e56b1ed25",
+    "apps/office/src/cppuhelper/source/typeprovider.test.ts": "0959394121a8dc72cb07c98ab918e138643286ba",
+    "apps/office/src/cppuhelper/source/typeprovider.ts": "c2834cb2cbfe2b62579d54a1f0a189d49253ac51",
+    "docs/program/native-package-owner-support.md": "444b8d247491f832d93da99f42a1a8a469f1d83b",
+    "docs/program/registry/shared/provenance/comphelper/inc/interfacecontainer2.ts.json": "6605f8d13bac59954f043f9b1ef2f2b204e21063",
+    "docs/program/registry/shared/provenance/comphelper/inc/multicontainer2.ts.json": "fee07390f21129dc6b8b01f397c8ba096c365633",
+    "docs/program/registry/shared/provenance/comphelper/source/container/interfacecontainer2.ts.json": "d24a320108d8ba05cfce3ee71148bed6792f26a0",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/typeprovider.ts.json": "f2074fdbf600545af94f1bea4c8abea5ec4578bf",
+    "docs/program/registry/shared/provenance/cppuhelper/source/typeprovider.ts.json": "2741476f698574a57ac98e4a4a0617ae2f422bf7",
+    "docs/program/registry/shared/runtime/comphelper/inc/interfacecontainer2.ts.json": "ea412dfa77a712f2771cabd7e00da994190d76fc",
+    "docs/program/registry/shared/runtime/comphelper/inc/multicontainer2.ts.json": "3437e5a0ab09eb23525793f729ab437851475baf",
+    "docs/program/registry/shared/runtime/comphelper/source/container/interfacecontainer2.ts.json": "c59d241b240fb38e7387966f83348ffbd24a5147",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/typeprovider.ts.json": "8ceba6452fa33acaec20efced575f858d6092795",
+    "docs/program/registry/shared/runtime/cppuhelper/source/typeprovider.ts.json": "bc50e3578a33659176f8d948fea7da50dd01c4b1"
+  },
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer2.ts",
+        "apps/office/src/comphelper/inc/multicontainer2.ts",
+        "apps/office/src/comphelper/source/container/interfacecontainer2.test.ts",
+        "apps/office/src/comphelper/source/container/interfacecontainer2.ts",
+        "apps/office/src/cppuhelper/inc/typeprovider.ts",
+        "apps/office/src/cppuhelper/source/typeprovider.test.ts",
+        "apps/office/src/cppuhelper/source/typeprovider.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-0.log"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/registry/shared/capabilities/CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06.json",
+        "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "apps/office/src/comphelper/inc/interfacecontainer2.ts",
+        "apps/office/src/comphelper/inc/multicontainer2.ts",
+        "apps/office/src/comphelper/source/container/interfacecontainer2.test.ts",
+        "apps/office/src/comphelper/source/container/interfacecontainer2.ts",
+        "apps/office/src/cppuhelper/inc/typeprovider.ts",
+        "apps/office/src/cppuhelper/source/typeprovider.test.ts",
+        "apps/office/src/cppuhelper/source/typeprovider.ts",
+        "docs/program/native-package-owner-support.md",
+        "docs/program/registry/shared/provenance/comphelper/inc/interfacecontainer2.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/multicontainer2.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/container/interfacecontainer2.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/typeprovider.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/source/typeprovider.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/interfacecontainer2.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/multicontainer2.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/container/interfacecontainer2.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/typeprovider.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/source/typeprovider.ts.json"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-1.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-2.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-owner-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-4.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-5.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-owner-check-6.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-owner-check-7.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-owner-check-8.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-9.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-10.log"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-11.log"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-12.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-check-13.log"
+    }
+  ],
+  "finalRegistryChecks": [
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-final-0.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-final-1.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-final-2.log"
+    }
+  ],
+  "tests": {
+    "coverage": {
+      "files": 2,
+      "cases": 35,
+      "threshold": 90,
+      "summary": {
+        "lines": {
+          "total": 174,
+          "covered": 171,
+          "skipped": 0,
+          "pct": 98.27
+        },
+        "statements": {
+          "total": 201,
+          "covered": 194,
+          "skipped": 0,
+          "pct": 96.51
+        },
+        "functions": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 104,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 90.38
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "log": "apps/office/coverage/package-owner-coverage-final.log"
+    },
+    "integration": {
+      "files": 8,
+      "cases": 66,
+      "log": "apps/office/coverage/package-owner-integration.log",
+      "note": "Includes the35 scenarios also represented in the coverage group; integration preceded a test-only correction retaining upstream iterator lifetime through disposeAndClear. Final coverage replays the corrected scopes."
+    }
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-typecheck-final.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-static.log"
+    },
+    {
+      "command": "npm run typecheck (final QA fixture lifetime)",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-typecheck-current.log"
+    },
+    {
+      "command": "Final scoped Prettier check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-format-final.log"
+    },
+    {
+      "command": "Final fixture ESLint check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-owner-lint-final.log"
+    }
+  ],
+  "upstreamQA": [
+    "comphelper/qa/container/comphelper_ifcontainer.cxx#IfTest::testCreateDispose",
+    "comphelper/qa/container/comphelper_ifcontainer.cxx#IfTest::testEnumerate",
+    "comphelper/qa/container/testifcontainer.cxx#TestInterfaceContainer2::test1 (all four scopes, including iterator lifetime through disposal)"
+  ],
+  "upstreamIssues": [
+    "CALC-497",
+    "CALC-498",
+    "WRITER428",
+    "WRITER429"
+  ],
+  "limitations": [
+    "Global check:docs retains only unchanged css-style-matchers.ts lines17 and76.",
+    "Initial provenance parser rejected empty header symbol lists; provenance now names actual public reexports while runtime-local symbol lists remain empty; final source/invariant/parity checks pass unchanged enforcement.",
+    "Container2 per-file branches89.58 percent are explicitly retained; global90 profile passes90.38 percent. No invalid private state or synthetic pointer equality provider is introduced to force uncovered paths.",
+    "Reference signature/root casts are type-only corrections. Final typecheck and related runtime Reference tests pass; final coverage follows test-only QA lifetime clarification.",
+    "Native mutex parameters/scopes, union/ABI/allocation behavior and internal const-reference OTypeCollection getter/OImplementationId remain unported or unverified.",
+    "The actual OWriteStream/parent storage/service/model/filter/Worker/UI graph remains unfinished; no complete DOCX/XLSX acceptance claim.",
+    "Full suite deferred under the approved ten-completed-task cadence."
+  ]
+}
