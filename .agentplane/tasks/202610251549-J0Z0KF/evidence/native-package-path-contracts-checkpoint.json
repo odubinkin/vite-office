@@ -1,0 +1,125 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Original UTF16 ZIP name validator and path-segment contracts in shared storage helper",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/source/misc/storagehelper.ts": "5c6563c9ad3fc0c3c5f307dc851195d46dbb5d4c",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "76dbecf0e767095da7246f5a6bf159494cf594cf",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "acf6538772dfc3395c456595393b68b7f1476683",
+    "docs/program/calc-upstream-suspected-issues.md": "2d087afb5824bce8a3606e9a107a0d02431c3632",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "1da57785385299184ec5f5d9e546f6a83d88f595",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/storagehelper.ts.json": "25e4a7c9208c87df6c345766b5625df816052ea3",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipFile.ts.json": "4f2ea10fdd85f6180a68b4c9f26e98c8c2313c9e",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/storagehelper.ts.json": "a46442a8b00898e065fe485b41b87e1955207b63",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipFile.ts.json": "5a30d18b667248f88be4d3831f6532ff7c1ba76e",
+    "docs/program/writer-upstream-suspected-issues.md": "cf54cd50bb882e0d512d0b140d231d5924de4189",
+    "apps/office/src/comphelper/source/misc/storagehelper-paths.test.ts": "ce0e4fe74f76ea5ec01d3c2c6a685aa204baddd7",
+    "docs/program/native-package-path-contracts.md": "9991e748e529a8d98753cb1b664eaa29d04f8169"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-0.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-package-paths-gate-1.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-2.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-3.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-4.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-5.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-6.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-7.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-gate-11.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-package-paths-docs-final.log",
+      "result": "known css-style-matchers.ts baseline only; new callbacks corrected"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-static.log"
+    },
+    {
+      "command": "scoped ESLint (four changed TS files)",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-lint-final.log"
+    },
+    {
+      "command": "npx vitest run storagehelper-paths, storagehelper, ZipFile; whole storagehelper coverage; thresholds90",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-coverage.log",
+      "cases": 92,
+      "coverage": {
+        "statements": "62/62",
+        "branches": "50/50",
+        "functions": "3/3",
+        "lines": "50/50"
+      }
+    },
+    {
+      "command": "npx vitest run upstream-packages, zipstorage-input, ods-worker-runtime, ods-worker-entry, ods-worker-boundaries, writer-odt-io",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-paths-integration.log",
+      "cases": 29
+    }
+  ],
+  "limitations": [
+    "Bounded prerequisite checkpoint; full native package/storage owners, models, DOCX/XLSX import/export and Worker/UI acceptance remain unfinished.",
+    "Full suite not run: user approved related-only checks, full suite once per ten completed agentplane tasks.",
+    "Initial one wrong expected path-segment result corrected without production repair; initial two new JSDoc callback errors corrected; final docs gate retains unrelated baseline only.",
+    "No compiled native ABI witness or full semantic parity claim."
+  ]
+}

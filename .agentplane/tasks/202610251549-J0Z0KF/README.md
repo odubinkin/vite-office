@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 89
+revision: 94
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T20:03:45.559Z"
+  updated_at: "2026-11-11T20:15:24.416Z"
   updated_by: "CODER"
-  note: "Bounded native transfer/transaction contract checkpoint passes56 scoped coverage scenarios at global90 with all56 statements18 branches12 functions53 lines covered,22 strengthened current copy cases and47 related integration cases. Explicit original ByteReader/ByteWriter RTTI selects both32000-byte copy paths; actual seekable package cache uses this helper. Source short-read and commited spelling findings are documented. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass except unchanged global JSDoc baseline. Full write/parent-storage/model/filter/UI acceptance remains unfinished. Evidence native-package-transfer-contracts-checkpoint.json."
-  attempts: 29
+  note: "Bounded native package path checkpoint: original UTF16 name/dot/slash and segment contracts now replace handwritten ZIP name validation. 92 scoped cases and29 OOXML/ODF/Worker cases pass; whole storagehelper coverage62/62S50/50B3/3F50/50L at approved90. Typecheck, static build, scoped lint and registry/source gates pass. Final check:docs has only known css-style-matchers baseline; initial fixture/JSDoc issues corrected and recorded. Evidence: evidence/native-package-path-contracts-checkpoint.json. Full storage/write/model/filter/UI acceptance remains incomplete; continue active goal."
+  attempts: 30
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -472,8 +475,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T20:15:24.416Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native package path checkpoint: original UTF16 name/dot/slash and segment contracts now replace handwritten ZIP name validation. 92 scoped cases and29 OOXML/ODF/Worker cases pass; whole storagehelper coverage62/62S50/50B3/3F50/50L at approved90. Typecheck, static build, scoped lint and registry/source gates pass. Final check:docs has only known css-style-matchers baseline; initial fixture/JSDoc issues corrected and recorded. Evidence: evidence/native-package-path-contracts-checkpoint.json. Full storage/write/model/filter/UI acceptance remains incomplete; continue active goal."
+  -
+    type: "status"
+    at: "2026-11-11T20:15:29.133Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T20:04:56.618Z"
+doc_updated_at: "2026-11-11T20:15:29.133Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1358,6 +1374,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T20:15:24.416Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native package path checkpoint: original UTF16 name/dot/slash and segment contracts now replace handwritten ZIP name validation. 92 scoped cases and29 OOXML/ODF/Worker cases pass; whole storagehelper coverage62/62S50/50B3/3F50/50L at approved90. Typecheck, static build, scoped lint and registry/source gates pass. Final check:docs has only known css-style-matchers baseline; initial fixture/JSDoc issues corrected and recorded. Evidence: evidence/native-package-path-contracts-checkpoint.json. Full storage/write/model/filter/UI acceptance remains incomplete; continue active goal.
+    Attempts: 30
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:14:54.608Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1478,6 +1524,18 @@ sections:
     - Observation: Command: native transfer/RTTI/transaction SDK coverage at global90; Result: pass56 scenarios with all56 statements18 branches12 functions53 lines across five executable owners. Current block-varying byte fixtures22 cases pass, and47 related native stream/package/ODF Worker cases pass. Type/build/static and scoped/source/registry/resource/doctor/routing checks pass; global JSDoc retains unchanged css-style-matchers.ts baseline errors.
       Impact: OStorageHelper.CopyInputToOutput now preserves both32000-byte source paths through explicit declared ByteReader/ByteWriter RTTI, final zero writes, short-read completion and native exception propagation. Seekable ZIP snapshots use this actual helper. Published transaction SDK retains the XEventListener base and commited spelling; CALC-499/500 and WRITER430/431 are documented without corrections.
       Resolution: Evidence: native-package-transfer-contracts-checkpoint.json and docs/program/native-package-transfer-contracts.md. Continue real OWriteStream/parent-storage/service/model/filter/Worker/UI ownership work; no dummy storage/transaction provider or whole-format acceptance claim. Native physical RTTI/stack/ABI/thread behavior remains unverified. No full-suite replay or browser persistence policy change.
+
+    - Observation: Initial path-helper table incorrectly expected PathHasSegment(a//b, /) to be true; the pinned implementation searches for /// and returns false.
+      Impact: One new test expectation failed; production implementation already matched the source.
+      Resolution: Correct the literal expected result and add the corresponding triple-slash true case; rerun the scoped profile.
+
+    - Observation: Native package path checkpoint: check:docs retains the known css-style-matchers.ts line17 missing JSDoc and line76 this-parameter documentation baseline.
+      Impact: The repository-wide documentation gate is not green; modified module documentation and scoped lint have no errors.
+      Resolution: Retain the unrelated baseline unchanged and record it alongside successful bounded verification; full DOCX/XLSX task stays incomplete.
+
+    - Observation: First check:docs log additionally reported two newly added assertion callbacks without JSDoc; the preceding baseline-only finding was premature.
+      Impact: The new test requires two callback comments before final documentation verification.
+      Resolution: Add the required callback documentation, rerun check:docs and retain only the confirmed css-style-matchers baseline in the final evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -2372,6 +2430,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T20:15:24.416Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native package path checkpoint: original UTF16 name/dot/slash and segment contracts now replace handwritten ZIP name validation. 92 scoped cases and29 OOXML/ODF/Worker cases pass; whole storagehelper coverage62/62S50/50B3/3F50/50L at approved90. Typecheck, static build, scoped lint and registry/source gates pass. Final check:docs has only known css-style-matchers baseline; initial fixture/JSDoc issues corrected and recorded. Evidence: evidence/native-package-path-contracts-checkpoint.json. Full storage/write/model/filter/UI acceptance remains incomplete; continue active goal.
+Attempts: 30
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:14:54.608Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2496,3 +2584,15 @@ DecisionContextRef:
 - Observation: Command: native transfer/RTTI/transaction SDK coverage at global90; Result: pass56 scenarios with all56 statements18 branches12 functions53 lines across five executable owners. Current block-varying byte fixtures22 cases pass, and47 related native stream/package/ODF Worker cases pass. Type/build/static and scoped/source/registry/resource/doctor/routing checks pass; global JSDoc retains unchanged css-style-matchers.ts baseline errors.
   Impact: OStorageHelper.CopyInputToOutput now preserves both32000-byte source paths through explicit declared ByteReader/ByteWriter RTTI, final zero writes, short-read completion and native exception propagation. Seekable ZIP snapshots use this actual helper. Published transaction SDK retains the XEventListener base and commited spelling; CALC-499/500 and WRITER430/431 are documented without corrections.
   Resolution: Evidence: native-package-transfer-contracts-checkpoint.json and docs/program/native-package-transfer-contracts.md. Continue real OWriteStream/parent-storage/service/model/filter/Worker/UI ownership work; no dummy storage/transaction provider or whole-format acceptance claim. Native physical RTTI/stack/ABI/thread behavior remains unverified. No full-suite replay or browser persistence policy change.
+
+- Observation: Initial path-helper table incorrectly expected PathHasSegment(a//b, /) to be true; the pinned implementation searches for /// and returns false.
+  Impact: One new test expectation failed; production implementation already matched the source.
+  Resolution: Correct the literal expected result and add the corresponding triple-slash true case; rerun the scoped profile.
+
+- Observation: Native package path checkpoint: check:docs retains the known css-style-matchers.ts line17 missing JSDoc and line76 this-parameter documentation baseline.
+  Impact: The repository-wide documentation gate is not green; modified module documentation and scoped lint have no errors.
+  Resolution: Retain the unrelated baseline unchanged and record it alongside successful bounded verification; full DOCX/XLSX task stays incomplete.
+
+- Observation: First check:docs log additionally reported two newly added assertion callbacks without JSDoc; the preceding baseline-only finding was premature.
+  Impact: The new test requires two callback comments before final documentation verification.
+  Resolution: Add the required callback documentation, rerun check:docs and retain only the confirmed css-style-matchers baseline in the final evidence.
