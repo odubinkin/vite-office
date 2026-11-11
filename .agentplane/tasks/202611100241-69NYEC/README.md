@@ -1,10 +1,11 @@
 ---
 id: "202611100241-69NYEC"
 title: "Integrate current native Writer filters and Calc CSV changes into main"
-status: "DOING"
+result_summary: "Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -21,7 +22,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-11T10:06:00.707Z"
+  updated_at: "2026-11-11T10:06:15.704Z"
   updated_by: "CODER"
   note: "Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred."
   attempts: 0
@@ -43,11 +44,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs"
   findings:
     - "All integration failures were repaired and branch synchronization verified. The original application coverage failure remains documented and is explicitly waived for this closure by the user's latest instruction; coverage thresholds are unchanged."
-commit: null
+commit:
+  hash: "e1bd3eefca1614d953162efdd4ae51b772a4cb9a"
+  message: "🧩 69NYEC task: record integration verification and remaining coverage gate"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -74,8 +80,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred."
+  -
+    type: "verify"
+    at: "2026-11-11T10:06:15.704Z"
+    author: "CODER"
+    state: "ok"
+    note: "Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred."
+  -
+    type: "status"
+    at: "2026-11-11T10:06:15.900Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-11T10:06:00.790Z"
+doc_updated_at: "2026-11-11T10:06:15.901Z"
 doc_updated_by: "CODER"
 description: "November synchronization of Writer 0d5e5b16c and Calc 2eded1223 with main, including full verification, integration regression repairs, and reverse synchronization. Prior integration 581KM2 retains its historical coverage dependency."
 sections:
@@ -188,6 +207,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T10:06:15.704Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T10:06:00.790Z, excerpt_hash=sha256:b9f19d622eb9bcedf7e13f3df3938faf22fc68887b8770374bfe32973d29ab65
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611100241-69NYEC/blueprint/resolved-snapshot.json
+    - old_digest: e6736f70324a1411043b303b8d93f516cc916f612b5c62e7ef58d737e6fc5e8d
+    - current_digest: e6736f70324a1411043b303b8d93f516cc916f612b5c62e7ef58d737e6fc5e8d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611100241-69NYEC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611100241-69NYEC --result verified-202611100241-69NYEC --commit 3b1a57ae278f0f0dd2fe05c73175cda53adbec2d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
 
     User-approved closure exception (2026-11-11): The user explicitly requested closing this task and stated that reaching 100% coverage is not required now. The previously recorded application coverage failure remains factual; the integration is accepted with that known deviation. No implementation or coverage thresholds were changed for closure. Existing completed checks are reused for this task-metadata-only change.
@@ -200,6 +249,10 @@ sections:
     The full application coverage gate remains red. The broad run left 4,106 uncovered branches; the largest gaps include sw/source/filter/html/htmltab.reader.ts (140), svl/source/numbers/zformat.date.ts (82), sw/source/core/table/swnewtable.ts (72), and svl/source/numbers/zformat.number.ts (62). Coverage percentages and the original failed gate remain recorded. On 2026-11-11 the user explicitly approved closing this integration task without bringing application coverage to 100% now; that remaining coverage work is deferred and does not block this closure. Node 24 avoids the Node 26/jsdom global-storage incompatibility observed during the initial run.
 
     User-approved closure exception (2026-11-11): The user explicitly requested closing this task and stated that reaching 100% coverage is not required now. The previously recorded application coverage failure remains factual; the integration is accepted with that known deviation. No implementation or coverage thresholds were changed for closure. Existing completed checks are reused for this task-metadata-only change.
+extensions:
+  implementation_commit:
+    hash: "c7d5aa7111b152caea8e9e251a24807c64089940"
+    message: "🧩 69NYEC code: allow full registry validation under coverage"
 id_source: "generated"
 ---
 ## Summary
@@ -316,6 +369,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611100241-69NYEC --result verified-202611100241-69NYEC --commit e1bd3eefca1614d953162efdd4ae51b772a4cb9a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-11T10:06:15.704Z — VERIFY — ok
+
+By: CODER
+
+Note: Integrated and synchronized main, writer and calc; user approved closure with 100% application coverage deferred.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T10:06:00.790Z, excerpt_hash=sha256:b9f19d622eb9bcedf7e13f3df3938faf22fc68887b8770374bfe32973d29ab65
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611100241-69NYEC/blueprint/resolved-snapshot.json
+- old_digest: e6736f70324a1411043b303b8d93f516cc916f612b5c62e7ef58d737e6fc5e8d
+- current_digest: e6736f70324a1411043b303b8d93f516cc916f612b5c62e7ef58d737e6fc5e8d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611100241-69NYEC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611100241-69NYEC --result verified-202611100241-69NYEC --commit 3b1a57ae278f0f0dd2fe05c73175cda53adbec2d
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
