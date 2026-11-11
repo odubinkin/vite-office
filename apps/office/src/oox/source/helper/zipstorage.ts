@@ -1,6 +1,7 @@
 /** @fileoverview Ports consumed oox::ZipStorage stream and commit responsibilities over the existing ZIP32 binding; output content types remain owned by package/comphelper. */
 import {
   ZipFile,
+  Checks,
   assertSafeZipEntryName,
   type ZipFileLimits,
 } from "../../../package/source/zipapi/ZipFile";
@@ -144,7 +145,7 @@ export class ZipStorage {
   private readonly streams = new Map<string, ZipFragmentStream>();
   /** Opens input bytes, or creates writable storage when bytes are absent. @param bytes - Input ZIP. @param limits - Browser resource limits. @returns Storage. */
   constructor(bytes?: Uint8Array, limits?: ZipFileLimits) {
-    if (bytes !== undefined) this.input = new ZipFile(bytes, limits);
+    if (bytes !== undefined) this.input = new ZipFile(bytes, limits, Checks.CheckInsensitive);
   }
   /** Reports native storage mode. @returns Readonly input. */
   isReadOnly(): boolean {

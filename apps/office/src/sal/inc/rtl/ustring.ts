@@ -25,6 +25,7 @@ import {
   rtl_uString_newFromSubString,
   rtl_uString_newConcat,
   rtl_uString_newConcatUtf16L,
+  rtl_uString_newToAsciiLowerCase,
   rtl_uString_newReplaceStrAt,
   rtl_uString_newReplaceStrAtUtf16L,
   rtl_uString_newReplaceAllFromIndexUtf16LUtf16L,
@@ -416,6 +417,12 @@ export class OUString {
     return this.pData.buffer;
   }
 
+  /** Original ASCII-only lowercase result aliases unchanged data and returns a no-acquire owner of converted data. @returns Owned result. */
+  toAsciiLowerCase(): OUString {
+    const slot: rtl_uStringSlot = [null];
+    rtl_uString_newToAsciiLowerCase(slot, this.pData);
+    return new OUString(slot[0] as rtl_uString, SAL_NO_ACQUIRE);
+  }
   /** Original character and UTF16 string-view/const-reference search overloads. ASCII literal overloads remain separate. @param value - Character, borrowed UTF16 view or original string reference. @param fromIndex - Original starting offset. @returns First original unit offset or -1. */
   indexOf(value: number | Uint16Array | OUStringConstReference, fromIndex = 0): number {
     if (fromIndex < 0) throw new Error("assert(fromIndex >= 0)");

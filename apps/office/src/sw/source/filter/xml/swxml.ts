@@ -4,7 +4,7 @@
 
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
-import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import { ZipFile, Checks, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
@@ -44,8 +44,8 @@ export class SwXMLReader {
     const packageFile =
       bytes instanceof Uint8Array
         ? limits === undefined
-          ? new ZipFile(bytes)
-          : new ZipFile(bytes, limits)
+          ? new ZipFile(bytes, undefined, Checks.TryCheckInsensitive)
+          : new ZipFile(bytes, limits, Checks.TryCheckInsensitive)
         : {
             getEntryNames:
               /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>

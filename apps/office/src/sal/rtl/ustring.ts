@@ -565,3 +565,8 @@ export function rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
 ): void {
   str.newReplaceAllFromIndex(destination, original, from, fromLength, to, toLength, fromIndex);
 }
+
+/** Original C ASCII lowercase value operation delegates to the common replacement template. @param slot - Actual owned output slot. @param source - Borrowed source. @returns Nothing. */
+export function rtl_uString_newToAsciiLowerCase(slot: rtl_uStringSlot, source: rtl_uString): void {
+  str.newReplaceChars(slot, source, str.toAsciiLower);
+}

@@ -18,7 +18,8 @@
     ],
     "preservedResponsibilities": [
       "Task204 binds native ScXMLImportWrapper package responsibilities to browser byte input/output using existing shared ZipFile/ZipOutputStream,plain manifest reader/writer and actual PropertyValue sequences. The plain modern ODS mimetype and resource/cancellation bounds are explicit;there is no ZIP or manifest clone.",
-      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted."
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "Original ZipFile Checks modes retain exact duplicate rejection, ASCII-only case collisions and the first retained entry decision for TryCheckInsensitive, including empty mimetype AutoCorrect behavior after FAT-directory filtering. OOXML ZipStorage selects CheckInsensitive; Writer/Calc ODF byte entry points select TryCheckInsensitive, matching ZipPackage StorageFormat routing. The actual OUString lowercase path delegates to rtl_uString_newToAsciiLowerCase and original newReplaceChars allocation/assign/release logic with reused native CaseReplace and SAL character helpers. Unchanged strings alias data; conversions preserve UTF16/embedded-zero/non-ASCII units and release old destination after copying. No Unicode locale folding, path normalization or fake model/storage/service owner is introduced. Flat transport/resource/error boundaries and incomplete native package/storage/output/model/filter/Worker/UI acceptance remain explicit; physical pointer/ABI/allocator/thread guarantees remain unverified."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -32,6 +33,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
           "marker": "opens exported actual document bytes"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-case-checks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ascii-lower-ownership.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

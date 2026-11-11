@@ -358,7 +358,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => new ZipFile(duplicate),
-    ).toThrow("Duplicate ZIP entry");
+    ).toThrow("Duplicate CEN entry");
     for (const name of [
       "a\0b",
       "a\\b",

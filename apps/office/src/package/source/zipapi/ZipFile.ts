@@ -23,6 +23,16 @@ const LOCAL_FILE_HEADER = 0x04034b50;
 const CENTRAL_DIRECTORY_HEADER = 0x02014b50;
 const DATA_DESCRIPTOR_FLAG = 0x0008;
 
+/** Original ZipFile::Checks; package initialization selects the mode from StorageFormat. */
+export enum Checks {
+  /** Raw ZIP retains exact-name duplicate checks. */
+  Default,
+  /** OOXML also rejects ASCII-case collisions. */
+  CheckInsensitive,
+  /** ODF inspects its first retained entry to select the case policy. */
+  TryCheckInsensitive,
+}
+
 /** Resource ceilings applied before compressed content is materialized. */
 export interface ZipFileLimits {
   /** Maximum complete archive size. */
@@ -65,8 +75,8 @@ export class ZipFile {
   private readonly entriesByName = new Map<string, ZipEntry>();
   private readonly centralOffset: number;
 
-  /** Parses and validates a ZIP central directory. @param bytes - Complete package bytes. @param limits - Resource ceilings. @returns Nothing. */
-  public constructor(bytes: Uint8Array, limits = DEFAULT_ZIP_FILE_LIMITS) {
+  /** Parses and validates a ZIP central directory. @param bytes - Complete package bytes. @param limits - Resource ceilings. @param checks - Original source check mode selected by the package owner; raw ZIP defaults to Default at this transport boundary. @returns Nothing. */
+  public constructor(bytes: Uint8Array, limits = DEFAULT_ZIP_FILE_LIMITS, checks = Checks.Default) {
     validateLimits(limits);
     if (bytes.length > limits.maxArchiveBytes) throw new Error("ZIP archive exceeds size limit.");
     this.bytes = bytes.slice();
@@ -84,6 +94,7 @@ export class ZipFile {
       const endOffset = this.centralOffset + centralSize;
       const centralBuffer = Int8Array.from(this.bytes.subarray(this.centralOffset, endOffset));
       const grabber = new MemoryByteGrabber([centralBuffer, 0], centralBuffer.length);
+      const entriesInsensitive = new Set<string>();
       const unallocated: [number, number][] = [[0, this.centralOffset]];
       const localBuffers: [Map<number, [number]>, Map<number, [number]>] = [new Map(), new Map()];
       let offset = this.centralOffset;
@@ -163,7 +174,28 @@ export class ZipFile {
           (externalFileAttributes & 16) !== 0
         )
           continue;
-        if (this.entriesByName.has(name)) throw new Error(`Duplicate ZIP entry: ${name}`);
+        if (this.entriesByName.has(name)) throw zipException("Duplicate CEN entry");
+        if (this.entriesByName.size === 0 && checks === Checks.TryCheckInsensitive)
+          checks =
+            name === "mimetype" && uncompressedSize === 0n
+              ? Checks.Default
+              : Checks.CheckInsensitive;
+        const units = new Uint16Array(name.length);
+        for (let i = 0; i < name.length; ++i) units[i] = name.charCodeAt(i);
+        const original = new OUString(units, units.length);
+        let lower: OUString | null = null;
+        let lowerPath: string;
+        try {
+          lower = original.toAsciiLowerCase();
+          lowerPath = nativeText(lower);
+        } finally {
+          lower?.dispose();
+          original.dispose();
+        }
+        const inserted = !entriesInsensitive.has(lowerPath);
+        entriesInsensitive.add(lowerPath);
+        if (!inserted && checks === Checks.CheckInsensitive)
+          throw zipException("Duplicate CEN entry (case insensitive)");
         this.entriesByName.set(name, { ...entry, dataOffset });
         offset = nextOffset;
       }

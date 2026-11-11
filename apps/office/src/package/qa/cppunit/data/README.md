@@ -16,3 +16,15 @@ is intentionally outside this application slice.
   `testDataDescriptorDeflatedDOCX` rejection is asserted at LOC consistency. The STORED descriptor
   fixture requires the still-unported native package/encryption service graph; its policy is not
   moved into ZipFile.
+- `duplicate-files.odt`: `package/qa/cppunit/data/duplicate-files.odt`, SHA256
+  `256b573143d767f144e6bc3ee128bd3ff4b2e502d1896360f0b6c5356e073026`. Unmodified normal source
+  duplicate/case/overlap/gap assertion at the real current ZIP layer.
+- `casing.docx`: `package/qa/cppunit/data/casing.docx`, SHA256
+  `b616af60520ba5acee81d0dd290780cedf0db45b9c40706f4c95574c694976b0`. Unmodified normal source
+  duplicate/case/overlap/gap assertion at the real current ZIP layer.
+- `overlap.docx`: `package/qa/cppunit/data/overlap.docx`, SHA256
+  `c58f5b46ed632a6df0551a40ac02ca7899420eaf5001743119cf423eaeb4bb03`. Unmodified normal source
+  duplicate/case/overlap/gap assertion at the real current ZIP layer.
+- `inner-gap.docx`: `package/qa/cppunit/data/inner-gap.docx`, SHA256
+  `7cd806987aeb38bd3013786d2ee5988f5074db9af040c3a49da019911c674b86`. Unmodified normal source
+  duplicate/case/overlap/gap assertion at the real current ZIP layer.

@@ -2,10 +2,18 @@
 import { readFileSync } from "node:fs";
 import { URL as NodeURL } from "node:url";
 import { expect, it } from "vitest";
-import { ZipFile } from "../../source/zipapi/ZipFile";
+import { ZipFile, Checks } from "../../source/zipapi/ZipFile";
 /** Loads committed unchanged upstream fixture bytes. @param name - Pinned fixture basename. @returns Actual archive bytes. */
 export function packageFixture(
-  name: "tdf163341.ods" | "unicode-path.odt" | "unicode-path.docx" | "dd-deflated.docx",
+  name:
+    | "tdf163341.ods"
+    | "unicode-path.odt"
+    | "unicode-path.docx"
+    | "dd-deflated.docx"
+    | "duplicate-files.odt"
+    | "casing.docx"
+    | "overlap.docx"
+    | "inner-gap.docx",
 ): Uint8Array {
   return new Uint8Array(readFileSync(new NodeURL("./data/" + name, import.meta.url)));
 }
@@ -46,3 +54,28 @@ it("ZipPackageTest::testDataDescriptorDeflatedDOCX rejects the unchanged source 
       new ZipFile(packageFixture("dd-deflated.docx")),
   ).toThrow("The stream seems to be broken!");
 });
+
+it.each([
+  ["testDuplicate", "duplicate-files.odt", Checks.Default, "Duplicate CEN entry"],
+  [
+    "testCaseInsensitiveDOCX",
+    "casing.docx",
+    Checks.CheckInsensitive,
+    "Duplicate CEN entry (case insensitive)",
+  ],
+  ["testOverlapDOCX", "overlap.docx", Checks.Default, "overlapping entries"],
+  ["testInnerGapDOCX", "inner-gap.docx", Checks.Default, "Zip file has holes! It will leak!"],
+] as const)(
+  "ZipPackageTest::%s preserves normal source rejection",
+  /** Unmodified source archives at their actual consumed ZIP layer; native package service wrapping and recovery are not fabricated. @param _case - Upstream case. @param name - Fixture. @param checks - Source StorageFormat policy. @param message - Source failure. @returns Nothing. */ (
+    _case,
+    name,
+    checks,
+    message,
+  ) => {
+    expect(
+      /** Opens source data with original mode. @returns Archive. */ () =>
+        new ZipFile(packageFixture(name), undefined, checks),
+    ).toThrow(message);
+  },
+);

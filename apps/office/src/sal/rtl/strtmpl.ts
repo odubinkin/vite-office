@@ -1,6 +1,11 @@
 /** @fileoverview Original SAL shared byte/Unicode ownership templates and represented Unicode/string algorithms. */
 import { compareIgnoreAsciiCase } from "../inc/rtl/character";
-import { isAsciiLowerCase, toAsciiUpperCase } from "../inc/rtl/character";
+import {
+  isAsciiLowerCase,
+  toAsciiUpperCase,
+  isAsciiUpperCase,
+  toAsciiLowerCase,
+} from "../inc/rtl/character";
 import type { rtl_String, rtl_StringSlot } from "../inc/rtl/string.h";
 import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import {
@@ -831,4 +836,30 @@ export function newReplaceAllFromIndex(
     );
     if (previous) release(previous);
   } else assign(destination, original);
+}
+
+/** Original lowercase replacement template strategy; only ASCII uppercase units are applicable. */
+export const toAsciiLower = new CaseReplace(isAsciiUpperCase, toAsciiLowerCase);
+/** Original newReplaceChars template preserves unchanged-data aliasing and releases the old destination only after copying. @param slot - Actual owned pointer slot. @param source - Borrowed source data. @param replacer - Actual native replacement strategy. @returns Nothing. */
+export function newReplaceChars(
+  slot: rtl_uStringSlot | rtl_StringSlot,
+  source: rtl_uString | rtl_String,
+  replacer: Pick<CaseReplace, "Applicable" | "Replace">,
+): void {
+  const applicable = replacer.Applicable();
+  let at = 0;
+  while (at < source.length && !applicable(source.buffer[at] as number)) ++at;
+  if (at !== source.length) {
+    const previous = slot[0];
+    const allocated =
+      source.buffer instanceof Uint8Array ? Alloc(source.length, Uint8Array) : Alloc(source.length);
+    slot[0] = allocated;
+    if (allocated === null) throw new Error("assert(*ppThis != nullptr)");
+    Copy(allocated.buffer, source.buffer, at);
+    do {
+      allocated.buffer[at] = replacer.Replace(source.buffer[at] as number);
+      ++at;
+    } while (at !== source.length);
+    if (previous !== null) release(previous);
+  } else assign(slot, source);
 }

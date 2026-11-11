@@ -1,5 +1,5 @@
 /** @fileoverview Calc browser-byte composition for native XML import/export wrapper responsibilities over shared ZIP/manifest services. */
-import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import { ZipFile, Checks, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import { packXmlPackage } from "../../../../package/source/zippackage/xml-package";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
@@ -26,8 +26,8 @@ export class ScXMLImportWrapper {
     const zip =
       bytes instanceof Uint8Array
         ? options.zipLimits === undefined
-          ? new ZipFile(bytes)
-          : new ZipFile(bytes, options.zipLimits)
+          ? new ZipFile(bytes, undefined, Checks.TryCheckInsensitive)
+          : new ZipFile(bytes, options.zipLimits, Checks.TryCheckInsensitive)
         : {
             getEntryNames:
               /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
