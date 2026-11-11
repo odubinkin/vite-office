@@ -18,7 +18,7 @@ OUTPUT = ROOT / "apps/office/src/sw/source/writerfilter/ooxml"
 # This is the current consumed factory surface. References retain their complete
 # native IDs; omitted definitions never renumber admitted definitions or tokens.
 CONSUMED = (
-    "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_Style CT_Styles "
+    "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_Style CT_Styles CT_Settings "
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_DecimalNumber CT_String "
     "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "

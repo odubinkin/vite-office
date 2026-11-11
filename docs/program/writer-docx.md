@@ -79,11 +79,11 @@ The script invokes unchanged pinned `namespaces.py`, `modelpreprocess.py`,
 `factoryimpl_ns.py` schema collectors. Native temporary outputs stay inside an
 owned, automatically removed repository-local coverage directory.
 
-The current data slice contains 24 complex definitions plus their referenced
-list definitions: 59 attributes, 231 element mappings, 253 resource mappings,
-82 list spellings and 25 action records. Omitted definitions never renumber
-admitted IDs. Attribute actions are executed by the namespace factory; the
-remaining stream action records are metadata for the pending context pipeline.
+The current generated data slice contains54 definitions including referenced lists:
+107 attributes,451 element mappings,525 resource mappings,315 list spellings
+and41 action records. This includes CT_Settings; omitted definitions never
+renumber admitted IDs. Attribute and consumed stream actions execute through
+the native factory/context owners. Full document dispatch remains incomplete.
 The original generated header/implementation contracts share the existing
 `OOXMLFactory.ts` owner; generated namespace lookup and constant tables retain
 their `OOXMLFactory_wml` owner names. No schema DTO replaces the Writer graph.

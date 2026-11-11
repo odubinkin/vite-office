@@ -3630,3 +3630,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - getCurrentDosTime ignores boolean results from osl_getSystemTime and osl_getDateTimeFromTimeValue, then reads calendar members. Original non-MACH clock failure returnsfalse before initializing TimeValue, and failed gmtime leaves the output calendar unchanged. This can enter an indeterminate native value domain. Preserve the calls and lack of a retry/status repair; the browser Date backend has no represented OS failure path. That failure/undefined-data behavior remains unverified, without fake failures or invented fallback calendar values.
+
+### WRITER448 — Fast-substream errors leave the document's current stream switched
+
+- Source: pinned `sw/source/writerfilter/ooxml/OOXMLDocumentImpl.cxx`, `OOXMLDocument::resolveFastSubStream`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- The method saves mpStream and switches it to the selected part before parser setup, parsing and closeInput. Restoration occurs only after those operations. An exception therefore leaves the failed part current, and subsequent target/relationship lookups use that part rather than the original document. Preserve that order and ownership; do not introduce restoration in a finally/RAII guard. Real malformed settings and a second relationship-selected malformed part exercise this behavior through actual ZIP input and SAX. This is source-derived/local mechanism evidence, not a compiled complete native document service witness.

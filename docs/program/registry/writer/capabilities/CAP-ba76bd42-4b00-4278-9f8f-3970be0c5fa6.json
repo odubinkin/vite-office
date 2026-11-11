@@ -13,7 +13,8 @@
       "Native parser state and break protocol are implemented; full fast-context/document dispatch and application import remain pending.",
       "Native text/property/value fast contexts and registered SAX token dispatch are implemented for the admitted schema slice; document/section/style/list/table loading and application Open remain pending.",
       "Real document-owned page frames, grid item/UNO properties and lossless browser graph transport are implemented as section-import prerequisites; section application and application DOCX import remain pending.",
-      "Consumed Writer identities now resolve to the actual pinned native values; explicit browser graph v16 migration preserves existing data before native restoration. Document default formats and page teardown use actual core owners. DOCX section/document/UI acceptance remains pending."
+      "Consumed Writer identities now resolve to the actual pinned native values; explicit browser graph v16 migration preserves existing data before native restoration. Document default formats and page teardown use actual core owners. DOCX section/document/UI acceptance remains pending.",
+      "Native OOXMLDocument.resolveFastSubStream and getInputStreamForId now use actual relationship-selected ZIP components, owned InputSource/Reference values, original SAX document/token handlers and note identity. Only UNO opening exceptions are swallowed; parse/close failures preserve the original switched stream and subsequent relative lookups (WRITER448). Native CT_Settings generation adds96 elements and97 resources without renumbering:54defines/107attributes/451elements/525resources/315lists/41actions. Strict/Transitional simple settings reach the actual DomainMapper mirror flag. The unchanged fdo73541 native fixture still rejects at unported CT_Zoom while later SAX callbacks can deliver mirror state; full native QA import/export/page-layout is not certified. Full resolve, shape/DOM/services/model statistics, complete settings/application and DOCX/XLSX UI drivers remain incomplete. No broad capability/parity/default promotion."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -192,6 +193,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/native-cell-color.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -210,6 +215,14 @@
         {
           "path": "docs/program/writer-upstream-suspected-issues.md",
           "marker": "WRITER159"
+        },
+        {
+          "path": "docs/program/writer-fast-substreams.md",
+          "marker": "Writer fast substreams"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER448"
         }
       ]
     },

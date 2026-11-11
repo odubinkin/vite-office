@@ -450,9 +450,8 @@ it("clones property sets before unconditional property-table delivery even at ze
     [2, 20],
   ]);
   expect(
-    /** The factory reaches the native property-table owner but preserves the unported definition guard. @returns Never. */ () =>
-      OOXMLFactory.createFastChildContextFromStart(new Base(), token("doc:settings")),
-  ).toThrow("OOXML definition is not implemented");
+    OOXMLFactory.createFastChildContextFromStart(new Base(), token("doc:settings")),
+  ).toBeInstanceOf(PropertyTable);
 });
 
 it("retains original send-before-clear actions and virtual property-set replacement", /** Actual factory contexts send the old set before replacing it; the base setter remains inert. @returns Nothing. */ async () => {
