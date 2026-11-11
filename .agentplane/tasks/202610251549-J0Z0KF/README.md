@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 117
+revision: 121
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T21:33:33.803Z"
+  updated_at: "2026-11-11T21:56:31.769Z"
   updated_by: "CODER"
-  note: "Bounded native ZIP64 directory/extra block: actual byte/reference/ZipException owners, source signed arithmetic/END/locator/extra conditions, eager consumed LOC checks and committed normal upstream QA.73 scoped cases pass; full owners464/472S267/275B47/47F415/419L at approved90.118 related scenarios pass;11 final overlapping Worker/workflow checks after causal ownership correction pass. Final types/static build/lint and source/registry checks pass; check:docs retains css-style-matchers baseline17/76. Source/data witnesses and corrected failure history recorded in evidence/native-zip64-catalog-checkpoint.json. Full native descriptor/overlap/parent storage/model/filter/UI acceptance remains incomplete; continue active goal."
-  attempts: 34
+  note: "Bounded native LOC/descriptor/occupied-extent checkpoint passes62 whole-owner profile cases and118 related cases,90percent thresholds, typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff. Global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-local-records-checkpoint.json. Native package/storage/output and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished; this is not whole-epic verification or completion."
+  attempts: 35
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -552,8 +555,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T21:56:31.769Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native LOC/descriptor/occupied-extent checkpoint passes62 whole-owner profile cases and118 related cases,90percent thresholds, typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff. Global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-local-records-checkpoint.json. Native package/storage/output and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished; this is not whole-epic verification or completion."
+  -
+    type: "status"
+    at: "2026-11-11T21:56:38.680Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T21:33:41.696Z"
+doc_updated_at: "2026-11-11T21:56:38.680Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1588,6 +1604,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T21:56:31.769Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native LOC/descriptor/occupied-extent checkpoint passes62 whole-owner profile cases and118 related cases,90percent thresholds, typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff. Global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-local-records-checkpoint.json. Native package/storage/output and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished; this is not whole-epic verification or completion.
+    Attempts: 35
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T21:55:41.253Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1780,6 +1826,14 @@ sections:
     - Observation: Final ordered ZIP64 source passes73 scoped scenarios, with full ZipFile/seqstream/ZipException profiles at464/472 statements,267/275 branches,47/47 functions and415/419 lines using approved90 thresholds. Related118 scenarios pass;11 final Worker/workflow checks overlap that related set. Final docs check retains only css-style-matchers.ts17/76 baseline.
       Impact: Original normal ZIP64/Unicode QA and critical current ZIP mechanisms are verified within the explicit transport boundary; this does not prove full native package/storage/model/UI acceptance.
       Resolution: Record current source and unchanged upstream fixture blobs, final type/build/lint/source/registry checks and remaining descriptor/overlap/hole/owner/UI work; keep the epic and goal active.
+
+    - Observation: The first native LOC profile exposed stale empty-ZIP, flag-only descriptor and host LOC diagnostic expectations, plus a Unicode extra-field binding that assumed typed arrays when the actual reused byte vector used raw lvalue cells. Scoped ESLint also rejected assignment to a catch parameter.
+      Impact: Native descriptor/extent checks must preserve source rejection and error priority; borrowed raw byte storage cannot be reinterpreted as a typed-array-only provider. These were checkpoint integration failures, not a reason to broaden the source contracts.
+      Resolution: Migrated the external ZIP fixtures and source diagnostics, bound Unicode byte views to either genuine typed storage or native raw cells, and used an explicit local exception slot. The final whole-owner profile passes62 cases at90percent thresholds and scoped ESLint passes. Full epic remains incomplete.
+
+    - Observation: Final native LOC checkpoint checks pass except the unchanged global JSDoc baseline at css-style-matchers.ts17 and76. The initial related-test command named zipstorage.test.ts, which does not exist; Vitest still ran nine matched files.
+      Impact: The global docs gate cannot be reported fully green. The real OOXML input-storage regression had to be run explicitly rather than counted from an unmatched path.
+      Resolution: Ran the actual zipstorage-input.test.ts separately:7 cases pass, supplementing111 cases in nine related files. The final62-case whole-owner profile, typecheck, static build, scoped lint, module boundaries, resources, size, source tree, provenance, invariants, parity, doctor, routing and diff checks pass. Full suite remains deferred under the approved ten-task cadence; no unrelated baseline fix or full core/UI claim.
 id_source: "generated"
 ---
 ## Summary
@@ -2824,6 +2878,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T21:56:31.769Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native LOC/descriptor/occupied-extent checkpoint passes62 whole-owner profile cases and118 related cases,90percent thresholds, typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff. Global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-local-records-checkpoint.json. Native package/storage/output and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished; this is not whole-epic verification or completion.
+Attempts: 35
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T21:55:41.253Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3020,3 +3104,11 @@ DecisionContextRef:
 - Observation: Final ordered ZIP64 source passes73 scoped scenarios, with full ZipFile/seqstream/ZipException profiles at464/472 statements,267/275 branches,47/47 functions and415/419 lines using approved90 thresholds. Related118 scenarios pass;11 final Worker/workflow checks overlap that related set. Final docs check retains only css-style-matchers.ts17/76 baseline.
   Impact: Original normal ZIP64/Unicode QA and critical current ZIP mechanisms are verified within the explicit transport boundary; this does not prove full native package/storage/model/UI acceptance.
   Resolution: Record current source and unchanged upstream fixture blobs, final type/build/lint/source/registry checks and remaining descriptor/overlap/hole/owner/UI work; keep the epic and goal active.
+
+- Observation: The first native LOC profile exposed stale empty-ZIP, flag-only descriptor and host LOC diagnostic expectations, plus a Unicode extra-field binding that assumed typed arrays when the actual reused byte vector used raw lvalue cells. Scoped ESLint also rejected assignment to a catch parameter.
+  Impact: Native descriptor/extent checks must preserve source rejection and error priority; borrowed raw byte storage cannot be reinterpreted as a typed-array-only provider. These were checkpoint integration failures, not a reason to broaden the source contracts.
+  Resolution: Migrated the external ZIP fixtures and source diagnostics, bound Unicode byte views to either genuine typed storage or native raw cells, and used an explicit local exception slot. The final whole-owner profile passes62 cases at90percent thresholds and scoped ESLint passes. Full epic remains incomplete.
+
+- Observation: Final native LOC checkpoint checks pass except the unchanged global JSDoc baseline at css-style-matchers.ts17 and76. The initial related-test command named zipstorage.test.ts, which does not exist; Vitest still ran nine matched files.
+  Impact: The global docs gate cannot be reported fully green. The real OOXML input-storage regression had to be run explicitly rather than counted from an unmatched path.
+  Resolution: Ran the actual zipstorage-input.test.ts separately:7 cases pass, supplementing111 cases in nine related files. The final62-case whole-owner profile, typecheck, static build, scoped lint, module boundaries, resources, size, source tree, provenance, invariants, parity, doctor, routing and diff checks pass. Full suite remains deferred under the approved ten-task cadence; no unrelated baseline fix or full core/UI claim.

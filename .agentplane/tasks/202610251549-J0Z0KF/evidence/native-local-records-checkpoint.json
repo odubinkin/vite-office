@@ -1,0 +1,193 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Original LOC data descriptors, CEN occupied extents and generated ZipIOException",
+  "baseCommit": "44a835ec6fdff11f86423defe0588de5f091ed36",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts": "d56eb7b80bf650c05a83b435f6ceee9f8353cce8",
+    "apps/office/src/package/qa/cppunit/data/README.md": "2cf963f3493f1f1b468602a84d3f5dbfa9f1a502",
+    "apps/office/src/package/qa/cppunit/data/dd-deflated.docx": "a4638147ce917921b9258cfc887a20f91bbeda08",
+    "apps/office/src/package/qa/cppunit/test_zippackage.test.ts": "ef1e4ab7ff9399ffe673aa4a91c3732bcad91194",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "b758d0244d5220b67324e3a9f3ba2608d20d6f2a",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "020ddd76e222d4d5ff6023693598614e8f9a2d20",
+    "apps/office/src/package/source/zipapi/native-local-records.test.ts": "14e57d7600ce6582207ff46c1eb4ac57a0729f10",
+    "docs/program/calc-upstream-suspected-issues.md": "48c8e776f0a600f6636c2005f82f4c9f9880c559",
+    "docs/program/native-local-zip-records.md": "00afcdac7c004d5a3d3a2ae3549a3c41a28ca325",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "c49fe697ac91252261737f7c45b2d7f2228fda7a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipIOException.ts.json": "95a285c9bfd5722dfb29d56a3c206c1c7e0d145a",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipFile.ts.json": "150c13fa9a6592f368f81f15ad9f68037968203b",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipIOException.ts.json": "4f876ad3812681e369e410ab118b9cc522d88281",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipFile.ts.json": "e3c93fb629b3493cd5c104dd4b5af6611b10a0e8",
+    "docs/program/registry/writer/capabilities/CAP-0113.json": "48016ce291120de80d225f6f85d63da57bf10fcf",
+    "docs/program/writer-upstream-suspected-issues.md": "18e4a0f376c6dcc8d110e735b1dae49cca0082ef"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-loc-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-gate-11.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-static.log"
+    },
+    {
+      "command": "scoped ESLint five changed runtime/test files --max-warnings0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-lint-ordered.log"
+    },
+    {
+      "command": "scoped Prettier15 changed source/docs/records",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-format-final.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-loc-registry-build-final.log"
+    }
+  ],
+  "coverage": {
+    "command": "npx vitest run src/package/source/zipapi/native-local-records.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/native-zip64.test.ts src/package/qa/cppunit/test_zippackage.test.ts --coverage --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.include=src/offapi/com/sun/star/packages/zip/ZipIOException.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 62,
+    "files": 4,
+    "wholeOwners": [
+      "ZipFile.ts",
+      "ZipIOException.ts"
+    ],
+    "summary": {
+      "lines": {
+        "total": 384,
+        "covered": 374,
+        "skipped": 0,
+        "pct": 97.39
+      },
+      "statements": {
+        "total": 445,
+        "covered": 427,
+        "skipped": 0,
+        "pct": 95.95
+      },
+      "functions": {
+        "total": 29,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 298,
+        "covered": 280,
+        "skipped": 0,
+        "pct": 93.95
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "log": "apps/office/coverage/native-loc-profile-ordered.log"
+  },
+  "integration": {
+    "command": "npx vitest run src/comphelper/source/misc/storagehelper.test.ts src/comphelper/source/streaming/memorystream.test.ts src/package/source/zipapi/native-byte-io.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/oox/source/core/upstream-packages.test.ts src/oox/source/helper/zipstorage.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sw/source/filter/xml/native-optional-streams.test.ts src/sw/browser/workflows/writer-odt-io.test.ts",
+    "exitCode": 0,
+    "cases": 111,
+    "files": 9,
+    "unmatchedPath": "src/oox/source/helper/zipstorage.test.ts",
+    "log": "apps/office/coverage/native-loc-integration.log"
+  },
+  "inputStorageRegression": {
+    "command": "npx vitest run src/oox/source/helper/zipstorage-input.test.ts",
+    "exitCode": 0,
+    "cases": 7,
+    "files": 1,
+    "log": "apps/office/coverage/native-loc-input-storage.log"
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "package/source/zipapi/ZipFile.cxx": "f5d6edbffebe136b806887b2c4c132e7b333da6eb9e4ce0477a6a10e8fdd15e0",
+      "package/source/zippackage/ZipPackage.cxx": "be8a854493c067906f5b29c674c67737be9f45540d5843af00262e42d26718a5",
+      "offapi/com/sun/star/packages/zip/ZipIOException.idl": "d1e011a447ea950f36af09a31f547dbb979b817cb186df408651aea00f57bc74",
+      "package/qa/cppunit/test_zippackage.cxx": "c423a44549c955c6a63cc0fadda2100a55a2319d5d6357cce303877bcc7de94b",
+      "package/qa/cppunit/data/dd-deflated.docx": "701532bb07094f86361d51e046c3132432ecdba559e9fa4bdf0f5aac6dfb17a4"
+    }
+  },
+  "fixture": {
+    "path": "apps/office/src/package/qa/cppunit/data/dd-deflated.docx",
+    "unchanged": true,
+    "sha256": "701532bb07094f86361d51e046c3132432ecdba559e9fa4bdf0f5aac6dfb17a4"
+  },
+  "limitations": [
+    "Bounded flat ZIP input prerequisite; complete native case-insensitive/created-entry/recovery/services, ZipEntry/package/storage/output and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished.",
+    "Source STORED descriptor policy requires native ZipPackage hierarchy/service/encryption state and remains unported; it is not incorrectly added to ZipFile.",
+    "CALC-509..511/WRITER440..442 retain empty-archive,64-bit placeholder and zero-descriptor source conditions. Physical pointer/ABI/allocator/thread behavior and invalid native Unicode views remain unverified.",
+    "Global JSDoc fails only unchanged css-style-matchers.ts17/76. Initial fixture/Unicode raw-vector/lint/format failures were corrected and recorded. No unrelated baseline fixes or full parity claims.",
+    "Related tests only under approved ten-agentplane-task cadence. Intentional browser open/save/autosave/recovery policies unchanged. Epic remains active and incomplete."
+  ]
+}
