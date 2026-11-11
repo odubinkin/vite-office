@@ -1,0 +1,310 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native byte transfer RTTI, original storage copy and transaction SDK contracts",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/inc/bytereader.ts": "e9ea81a6380046357328caeb63de0e8456a40780",
+    "apps/office/src/comphelper/source/streaming/memorystream.ts": "7d7e686beff7ad6f51626088396479e37b1a335b",
+    "apps/office/src/comphelper/source/streaming/seqstream.ts": "9e7e6b7b83039898e075dbbe07595114c600fde2",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "9596774aee28af1c147727a7c81cc2653aba6281",
+    "apps/office/src/package/source/xstor/ocompinstream.ts": "96cdab26fca1a0cdc9aeccb44df2b6dfbe63245a",
+    "docs/program/calc-upstream-suspected-issues.md": "1752cb04fbec9d59b3c044f463a7ac4218b35fe5",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "2037c08a404e50fb703006a528aa6b9f30ca8b3e",
+    "docs/program/registry/shared/provenance/comphelper/inc/bytereader.ts.json": "5d7d797526b4ca6eb38d49551e117d68bfdc62b7",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/memorystream.ts.json": "7e4a3d203804d1e29f05fe8037042087163ad536",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/seqstream.ts.json": "43643cd02b5cce38a5660c3309cd8a06b7f6a236",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "c03ea77624d0b1ec4d522c674f8218922662c588",
+    "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json": "359a0b9015c4019dd30b620d5479658fd6e935a0",
+    "docs/program/registry/shared/runtime/comphelper/inc/bytereader.ts.json": "a37dc7dc11ca7a6ef92eee24bfc04cb0e74c0876",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/memorystream.ts.json": "50c9ed6adf9de71e6b84157af65dba592657f23b",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/seqstream.ts.json": "5e543879e1daff712bdc4526c8f1fcecf5329c1b",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "ddaea6d5a93a4a497e41a879694a8f47adafe678",
+    "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json": "4a1cf1aedca04b85dec10199d7049d88a03d6b90",
+    "docs/program/writer-upstream-suspected-issues.md": "a3046e830ffe75da9c8859a92dcfac51dbd10be7",
+    "apps/office/src/comphelper/inc/storagehelper.ts": "71a61d1d499e64c234e80463193dcc0213a8c851",
+    "apps/office/src/comphelper/source/misc/storagehelper.test.ts": "5ad5fbd4a8f416dc61b82751bef6b5b289424621",
+    "apps/office/src/comphelper/source/misc/storagehelper.ts": "610f108b67bdfbef3862e794fa76ee55cce85742",
+    "apps/office/src/offapi/com/sun/star/embed/XTransactedObject.ts": "3c87620385aa70baad8bac5e4d2abcef41da6ab0",
+    "apps/office/src/offapi/com/sun/star/embed/XTransactionBroadcaster.ts": "efe560930416d1c7046963b391947041b11a74f8",
+    "apps/office/src/offapi/com/sun/star/embed/XTransactionListener.ts": "a1d42dec2cd528e2cff08bc4a17635dcdc9179ab",
+    "apps/office/src/package/source/xstor/transaction-contracts.test.ts": "875e3186a92a660a190df54c941ac84d41ba9c5c",
+    "docs/program/native-package-transfer-contracts.md": "9943e2743e69bc975c3427fb5fd8c165ba159d7b",
+    "docs/program/registry/shared/provenance/comphelper/inc/storagehelper.ts.json": "2a139746a6d97947463c01c20e10466a5d1a9080",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/storagehelper.ts.json": "555add5d018ff675c844640b2e761d7c0351fb62",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactedObject.ts.json": "aae757f21f7e54d5c35da76fc8bd277c4c5e744b",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactionBroadcaster.ts.json": "bef780616c90942651ac9fc5ee9fedae7965e950",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactionListener.ts.json": "868df53511567fe0d99de094e18c876aabc5482a",
+    "docs/program/registry/shared/runtime/comphelper/inc/storagehelper.ts.json": "1664779b59cf73ea3727834ff4c00483479e5c03",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/storagehelper.ts.json": "09951ec6217497fc01a2facd92b0219dc5f62dcc",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactedObject.ts.json": "2795ddf682664e8f88c66ec88ccabc4bf0902834",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactionBroadcaster.ts.json": "8c32b0f52d875bcfec45a11dcd34bf99d2aa68fc",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactionListener.ts.json": "39d2990e994a56acabe41e56f1d9bdbc14efeced"
+  },
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/comphelper/inc/bytereader.ts",
+        "apps/office/src/comphelper/source/streaming/memorystream.ts",
+        "apps/office/src/comphelper/source/streaming/seqstream.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/package/source/xstor/ocompinstream.ts",
+        "apps/office/src/comphelper/inc/storagehelper.ts",
+        "apps/office/src/comphelper/source/misc/storagehelper.test.ts",
+        "apps/office/src/comphelper/source/misc/storagehelper.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactedObject.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactionBroadcaster.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactionListener.ts",
+        "apps/office/src/package/source/xstor/transaction-contracts.test.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-0.log"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/comphelper/inc/bytereader.ts",
+        "apps/office/src/comphelper/source/streaming/memorystream.ts",
+        "apps/office/src/comphelper/source/streaming/seqstream.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/package/source/xstor/ocompinstream.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/bytereader.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/streaming/memorystream.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/streaming/seqstream.ts.json",
+        "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/bytereader.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/streaming/memorystream.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/streaming/seqstream.ts.json",
+        "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "apps/office/src/comphelper/inc/storagehelper.ts",
+        "apps/office/src/comphelper/source/misc/storagehelper.test.ts",
+        "apps/office/src/comphelper/source/misc/storagehelper.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactedObject.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactionBroadcaster.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XTransactionListener.ts",
+        "apps/office/src/package/source/xstor/transaction-contracts.test.ts",
+        "docs/program/native-package-transfer-contracts.md",
+        "docs/program/registry/shared/provenance/comphelper/inc/storagehelper.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/misc/storagehelper.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactedObject.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactionBroadcaster.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XTransactionListener.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/storagehelper.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/misc/storagehelper.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactedObject.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactionBroadcaster.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XTransactionListener.ts.json"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-1.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-2.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-transfer-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-4.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-5.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-6.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-7.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-8.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-9.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-10.log"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-11.log"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-12.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-check-13.log"
+    }
+  ],
+  "tests": {
+    "coverage": {
+      "files": 4,
+      "cases": 56,
+      "threshold": 90,
+      "summary": {
+        "lines": {
+          "total": 53,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 56,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "log": "apps/office/coverage/package-transfer-coverage-final.log"
+    },
+    "currentCopyFixtures": {
+      "files": 1,
+      "cases": 22,
+      "log": "apps/office/coverage/package-transfer-copy-current.log",
+      "note": "After the full coverage run, fixture bytes were strengthened to vary between32000-byte blocks; production executable code is unchanged."
+    },
+    "integration": {
+      "files": 8,
+      "cases": 47,
+      "log": "apps/office/coverage/package-transfer-integration.log"
+    }
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-typecheck-current.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-static.log"
+    },
+    {
+      "command": "Final scoped Prettier check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-format-final.log"
+    },
+    {
+      "command": "Final copy-fixture ESLint check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-transfer-lint-final.log"
+    }
+  ],
+  "upstreamIssues": [
+    "CALC-499",
+    "CALC-500",
+    "WRITER430",
+    "WRITER431"
+  ],
+  "limitations": [
+    "Global check:docs retains only unchanged css-style-matchers.ts lines17 and76.",
+    "Initial tracing counted an erased internal Sequence-to-pointer write overload twice; the fixture now traces external call depth and asserts the selected original overload kind.",
+    "Final scoped coverage includes whole five new executable owners; source-tag declarations and pre-existing producer classes are additionally covered by related integration.",
+    "RTTI/stack/vtable/ABI/concurrency are compiler bindings rather than a compiled upstream witness; no method inference, fake UNO query or provider registry is introduced.",
+    "The transaction callers validate actual SDK types and signatures, not a substitute OWriteStream or package transaction service.",
+    "Full parent storage/OWriteStream/services/model/filter/Worker/UI acceptance remains incomplete.",
+    "Full suite deferred under the approved ten-completed-task cadence."
+  ]
+}

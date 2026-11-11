@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 86
+revision: 89
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T19:34:41.181Z"
+  updated_at: "2026-11-11T20:03:45.559Z"
   updated_by: "CODER"
-  note: "Bounded package-owner support checkpoint passes35 current coverage cases at global90 with90.38 percent branches and66 related integration cases. Pinned IfTest and all four TestInterfaceContainer2 scopes, including iterator lifetime through disposal, are retained. OTypeCollection actual owners and container2/multi-type state are implemented; Reference query typing is corrected without runtime changes. Final type/build/static/scoped/source/registry/resource/doctor/routing gates pass except unchanged JSDoc baseline. Evidence native-package-owner-support-checkpoint.json. Whole OWriteStream/parent-storage/DOCX/XLSX model/filter/UI task remains incomplete."
-  attempts: 28
+  note: "Bounded native transfer/transaction contract checkpoint passes56 scoped coverage scenarios at global90 with all56 statements18 branches12 functions53 lines covered,22 strengthened current copy cases and47 related integration cases. Explicit original ByteReader/ByteWriter RTTI selects both32000-byte copy paths; actual seekable package cache uses this helper. Source short-read and commited spelling findings are documented. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass except unchanged global JSDoc baseline. Full write/parent-storage/model/filter/UI acceptance remains unfinished. Evidence native-package-transfer-contracts-checkpoint.json."
+  attempts: 29
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -456,8 +459,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T20:03:45.559Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native transfer/transaction contract checkpoint passes56 scoped coverage scenarios at global90 with all56 statements18 branches12 functions53 lines covered,22 strengthened current copy cases and47 related integration cases. Explicit original ByteReader/ByteWriter RTTI selects both32000-byte copy paths; actual seekable package cache uses this helper. Source short-read and commited spelling findings are documented. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass except unchanged global JSDoc baseline. Full write/parent-storage/model/filter/UI acceptance remains unfinished. Evidence native-package-transfer-contracts-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T20:04:56.618Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T19:35:05.212Z"
+doc_updated_at: "2026-11-11T20:04:56.618Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1312,6 +1328,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T20:03:45.559Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native transfer/transaction contract checkpoint passes56 scoped coverage scenarios at global90 with all56 statements18 branches12 functions53 lines covered,22 strengthened current copy cases and47 related integration cases. Explicit original ByteReader/ByteWriter RTTI selects both32000-byte copy paths; actual seekable package cache uses this helper. Source short-read and commited spelling findings are documented. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass except unchanged global JSDoc baseline. Full write/parent-storage/model/filter/UI acceptance remains unfinished. Evidence native-package-transfer-contracts-checkpoint.json.
+    Attempts: 29
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:01:53.783Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1428,6 +1474,10 @@ sections:
     - Observation: Command: native container2/type-collection coverage at global90; Result: pass35 current-source cases,194/201 statements94/104 branches41/41 functions171/174 lines. Both pinned IfTest cases and all four TestInterfaceContainer2::test1 scopes are translated, including iterator lifetime through disposal. Separate66 related integration cases pass. Per-container branches89.58 are retained without private-state coverage fixtures. Final source/registry gates pass after correcting header provenance reexport symbols; JSDoc retains unchanged baseline errors.
       Impact: Real zero/one/vector listener unions, snapshot iterators, multi-type owner and OTypeCollection are available as OWriteStream prerequisites. Original null-insertion/debug-clear findings CALC-497/498 and WRITER428/429 are documented and preserved. Reference query signatures now accept the source XInterface pointer independently of target T, with erased root casts and no runtime query change.
       Resolution: Evidence: native-package-owner-support-checkpoint.json and docs/program/native-package-owner-support.md. Continue original write/parent-storage/model/filter/Worker/UI implementation; current modules do not advertise an incomplete output service. Native mutex/union/ABI/allocation and unused typeprovider families stay unverified or unported. No full-suite or whole-task completion claim.
+
+    - Observation: Command: native transfer/RTTI/transaction SDK coverage at global90; Result: pass56 scenarios with all56 statements18 branches12 functions53 lines across five executable owners. Current block-varying byte fixtures22 cases pass, and47 related native stream/package/ODF Worker cases pass. Type/build/static and scoped/source/registry/resource/doctor/routing checks pass; global JSDoc retains unchanged css-style-matchers.ts baseline errors.
+      Impact: OStorageHelper.CopyInputToOutput now preserves both32000-byte source paths through explicit declared ByteReader/ByteWriter RTTI, final zero writes, short-read completion and native exception propagation. Seekable ZIP snapshots use this actual helper. Published transaction SDK retains the XEventListener base and commited spelling; CALC-499/500 and WRITER430/431 are documented without corrections.
+      Resolution: Evidence: native-package-transfer-contracts-checkpoint.json and docs/program/native-package-transfer-contracts.md. Continue real OWriteStream/parent-storage/service/model/filter/Worker/UI ownership work; no dummy storage/transaction provider or whole-format acceptance claim. Native physical RTTI/stack/ABI/thread behavior remains unverified. No full-suite replay or browser persistence policy change.
 id_source: "generated"
 ---
 ## Summary
@@ -2292,6 +2342,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T20:03:45.559Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native transfer/transaction contract checkpoint passes56 scoped coverage scenarios at global90 with all56 statements18 branches12 functions53 lines covered,22 strengthened current copy cases and47 related integration cases. Explicit original ByteReader/ByteWriter RTTI selects both32000-byte copy paths; actual seekable package cache uses this helper. Source short-read and commited spelling findings are documented. Type/build/static/scoped/source/registry/resource/doctor/routing checks pass except unchanged global JSDoc baseline. Full write/parent-storage/model/filter/UI acceptance remains unfinished. Evidence native-package-transfer-contracts-checkpoint.json.
+Attempts: 29
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:01:53.783Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2412,3 +2492,7 @@ DecisionContextRef:
 - Observation: Command: native container2/type-collection coverage at global90; Result: pass35 current-source cases,194/201 statements94/104 branches41/41 functions171/174 lines. Both pinned IfTest cases and all four TestInterfaceContainer2::test1 scopes are translated, including iterator lifetime through disposal. Separate66 related integration cases pass. Per-container branches89.58 are retained without private-state coverage fixtures. Final source/registry gates pass after correcting header provenance reexport symbols; JSDoc retains unchanged baseline errors.
   Impact: Real zero/one/vector listener unions, snapshot iterators, multi-type owner and OTypeCollection are available as OWriteStream prerequisites. Original null-insertion/debug-clear findings CALC-497/498 and WRITER428/429 are documented and preserved. Reference query signatures now accept the source XInterface pointer independently of target T, with erased root casts and no runtime query change.
   Resolution: Evidence: native-package-owner-support-checkpoint.json and docs/program/native-package-owner-support.md. Continue original write/parent-storage/model/filter/Worker/UI implementation; current modules do not advertise an incomplete output service. Native mutex/union/ABI/allocation and unused typeprovider families stay unverified or unported. No full-suite or whole-task completion claim.
+
+- Observation: Command: native transfer/RTTI/transaction SDK coverage at global90; Result: pass56 scenarios with all56 statements18 branches12 functions53 lines across five executable owners. Current block-varying byte fixtures22 cases pass, and47 related native stream/package/ODF Worker cases pass. Type/build/static and scoped/source/registry/resource/doctor/routing checks pass; global JSDoc retains unchanged css-style-matchers.ts baseline errors.
+  Impact: OStorageHelper.CopyInputToOutput now preserves both32000-byte source paths through explicit declared ByteReader/ByteWriter RTTI, final zero writes, short-read completion and native exception propagation. Seekable ZIP snapshots use this actual helper. Published transaction SDK retains the XEventListener base and commited spelling; CALC-499/500 and WRITER430/431 are documented without corrections.
+  Resolution: Evidence: native-package-transfer-contracts-checkpoint.json and docs/program/native-package-transfer-contracts.md. Continue real OWriteStream/parent-storage/service/model/filter/Worker/UI ownership work; no dummy storage/transaction provider or whole-format acceptance claim. Native physical RTTI/stack/ABI/thread behavior remains unverified. No full-suite replay or browser persistence policy change.
