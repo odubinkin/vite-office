@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 65
+revision: 68
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T17:14:53.246Z"
+  updated_at: "2026-11-11T17:28:41.070Z"
   updated_by: "CODER"
-  note: "Bounded relationship result integration checkpoint:62 focused coverage scenarios,27 related regression scenarios and2 Writer resource tests pass. Actual nested Sequence/StringPair owners reach Writer target lookup; COW/lvalue/destruction are verified. All owners exceed user-authorized90 floor; initial100 gate failure retained. Type/build/static/source/registry/lint/format/resources/doctor/routing pass; global JSDoc fails two unchanged HEAD css-style-matchers.ts diagnostics. Full XLSX/DOCX package/model/filter/Worker/UI acceptance remains pending. Evidence: evidence/native-relationship-sequences-checkpoint.json."
-  attempts: 21
+  note: "Connected native content-type prerequisite:56 scoped coverage scenarios plus1 fixed-slot test,89 related regressions,48 boundary tests and2 resource tests pass. Whole4owner S381/381 B134/135 F39/39 L351/351 passes user-authorized90. Type/build/static/source/registry/module/lint/format/size/resource/doctor/routing pass. Global JSDoc retains only unchanged baseline diagnostics. Full XLSX/DOCX model/filter/Worker/UI acceptance remains incomplete. Evidence: evidence/native-content-type-sequences-checkpoint.json."
+  attempts: 22
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -344,8 +347,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T17:28:41.070Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Connected native content-type prerequisite:56 scoped coverage scenarios plus1 fixed-slot test,89 related regressions,48 boundary tests and2 resource tests pass. Whole4owner S381/381 B134/135 F39/39 L351/351 passes user-authorized90. Type/build/static/source/registry/module/lint/format/size/resource/doctor/routing pass. Global JSDoc retains only unchanged baseline diagnostics. Full XLSX/DOCX model/filter/Worker/UI acceptance remains incomplete. Evidence: evidence/native-content-type-sequences-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T17:28:51.588Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T17:14:59.115Z"
+doc_updated_at: "2026-11-11T17:28:51.588Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -990,6 +1006,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T17:28:41.070Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Connected native content-type prerequisite:56 scoped coverage scenarios plus1 fixed-slot test,89 related regressions,48 boundary tests and2 resource tests pass. Whole4owner S381/381 B134/135 F39/39 L351/351 passes user-authorized90. Type/build/static/source/registry/module/lint/format/size/resource/doctor/routing pass. Global JSDoc retains only unchanged baseline diagnostics. Full XLSX/DOCX model/filter/Worker/UI acceptance remains incomplete. Evidence: evidence/native-content-type-sequences-checkpoint.json.
+    Attempts: 22
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:28:40.065Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1078,6 +1124,10 @@ sections:
     - Observation: Resume after user reactivated the goal: current main includes the merged Node LTS/accessibility work and began clean. Relationship result and Writer consumers now use genuine nested Sequence/StringPair owners with compiler lvalue field binding, native row allocation/assignment/shrink and failure cleanup.
       Impact: Focused tests pass53; expanded coverage profile passes62 scenarios plus27 separate regressions and2 Writer resource tests. Whole changed owners S337/341 B188/188 F59/60 L306/310; existing toUnoSequence bridge is not exercised by this profile. Original100 threshold exits1, but all per-owner metrics exceed the latest user-authorized90 floor. Global JSDoc check fails only unchanged HEAD css-style-matchers.ts lines17/76; source/module/provenance/registry/size/type/build/static/lint/format/resource/doctor/routing checks pass.
       Resolution: Persist bounded evidence and this integration checkpoint without marking the overall task complete. Existing SAX shape-error envelopes, host content/output metadata, complete package/relationship service and actual DOCX/XLSX model/filter/Worker/UI acceptance remain pending. User goal resume revokes prior merge pause; keep the goal active.
+
+    - Observation: Connected content-type import/lookup/export now uses actual nested Sequence/StringPair and owned OUString results. ZipPackage now reads original fixed property slots, builds actual default/override sequences and calls the native-pair SAX writer; ZipStorage supplies FullPath0, empty Version1, MediaType2. Missing original DirectoryHelper splitAtLastToken is implemented; CALC-494/WRITER425 preserve stale-right-output boundaries.
+      Impact: Pass:56 focused coverage scenarios plus1 fixed-slot regression,89 related Writer/Calc/serializer/ODS Worker scenarios,48 module boundary scenarios and2 Writer resource tests. Whole-four-owner coverage S381/381 B134/135 F39/39 L351/351 passes latest user-authorized90 floor. Initial new test incorrectly used direct text for native byte-prefix behavior; it now uses actual InputSource. Initial package-cppu edge and missing mutation inventory entry were corrected using Library_package2 source evidence and a canonical operation record; validators remain strict.
+      Resolution: Evidence will be bound in evidence/native-content-type-sequences-checkpoint.json. Type/build/static/lint/format/source/registry/module/size/resources/doctor/routing pass. Global JSDoc still fails only unchanged HEAD css-style-matchers.ts lines17/76; do not claim all gates green. Full DOCX/XLSX model/filter/Worker/UI acceptance, relationship/output service implementation and remaining native package contracts are still pending; task and goal remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -1732,6 +1782,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T17:28:41.070Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Connected native content-type prerequisite:56 scoped coverage scenarios plus1 fixed-slot test,89 related regressions,48 boundary tests and2 resource tests pass. Whole4owner S381/381 B134/135 F39/39 L351/351 passes user-authorized90. Type/build/static/source/registry/module/lint/format/size/resource/doctor/routing pass. Global JSDoc retains only unchanged baseline diagnostics. Full XLSX/DOCX model/filter/Worker/UI acceptance remains incomplete. Evidence: evidence/native-content-type-sequences-checkpoint.json.
+Attempts: 22
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:28:40.065Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1824,3 +1904,7 @@ DecisionContextRef:
 - Observation: Resume after user reactivated the goal: current main includes the merged Node LTS/accessibility work and began clean. Relationship result and Writer consumers now use genuine nested Sequence/StringPair owners with compiler lvalue field binding, native row allocation/assignment/shrink and failure cleanup.
   Impact: Focused tests pass53; expanded coverage profile passes62 scenarios plus27 separate regressions and2 Writer resource tests. Whole changed owners S337/341 B188/188 F59/60 L306/310; existing toUnoSequence bridge is not exercised by this profile. Original100 threshold exits1, but all per-owner metrics exceed the latest user-authorized90 floor. Global JSDoc check fails only unchanged HEAD css-style-matchers.ts lines17/76; source/module/provenance/registry/size/type/build/static/lint/format/resource/doctor/routing checks pass.
   Resolution: Persist bounded evidence and this integration checkpoint without marking the overall task complete. Existing SAX shape-error envelopes, host content/output metadata, complete package/relationship service and actual DOCX/XLSX model/filter/Worker/UI acceptance remain pending. User goal resume revokes prior merge pause; keep the goal active.
+
+- Observation: Connected content-type import/lookup/export now uses actual nested Sequence/StringPair and owned OUString results. ZipPackage now reads original fixed property slots, builds actual default/override sequences and calls the native-pair SAX writer; ZipStorage supplies FullPath0, empty Version1, MediaType2. Missing original DirectoryHelper splitAtLastToken is implemented; CALC-494/WRITER425 preserve stale-right-output boundaries.
+  Impact: Pass:56 focused coverage scenarios plus1 fixed-slot regression,89 related Writer/Calc/serializer/ODS Worker scenarios,48 module boundary scenarios and2 Writer resource tests. Whole-four-owner coverage S381/381 B134/135 F39/39 L351/351 passes latest user-authorized90 floor. Initial new test incorrectly used direct text for native byte-prefix behavior; it now uses actual InputSource. Initial package-cppu edge and missing mutation inventory entry were corrected using Library_package2 source evidence and a canonical operation record; validators remain strict.
+  Resolution: Evidence will be bound in evidence/native-content-type-sequences-checkpoint.json. Type/build/static/lint/format/source/registry/module/size/resources/doctor/routing pass. Global JSDoc still fails only unchanged HEAD css-style-matchers.ts lines17/76; do not claim all gates green. Full DOCX/XLSX model/filter/Worker/UI acceptance, relationship/output service implementation and remaining native package contracts are still pending; task and goal remain active.

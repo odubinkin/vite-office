@@ -1,0 +1,369 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native content-type Sequence import/lookup/package export connection",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/source/misc/directoryhelper.test.ts": "27a601b47ff79ae0ee489eba4ea6a0612d980e02",
+    "apps/office/src/comphelper/source/misc/directoryhelper.ts": "616a9074b2be03eb1d067b2efa8625530d3d0a4b",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "a8e4426f20f48aa4de420c4b2479f84f290e250b",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "6ca11ab73273de87a2f45392970bb7f67ee8aa00",
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "c1d139ac4b1c7227d7d8c2da2d63855032c824e9",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "74e235626b59c6509f9165a21d75f1549023bbcc",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "8f465ca4eed35d6f6d02351948e4568c2b1a25d7",
+    "apps/office/src/test/ofopxml-values.ts": "fd81499f4685f733ebd80eb3e295d80d14f8083c",
+    "docs/program/calc-upstream-suspected-issues.md": "d85b8e26d1f679a8abe19d97af19b335b73d2d0e",
+    "docs/program/native-content-type-sequences.md": "9e0cd16c1781151ed350ccfecb90c2a26d5bef72",
+    "docs/program/registry/shared/capabilities/CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708.json": "3d2d4717ee6381eeb18143b2e6c02c25bf63b1ca",
+    "docs/program/registry/shared/operations/shared.internal.comphelper.split-at-last-token.json": "801213dbd3e336d0f1e375d168b10e9d8d3aae24",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/directoryhelper.ts.json": "3241c08cd5f707c1601ad83cd42159f58aa30f92",
+    "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json": "8ae0aa3863542c936f10d41be00c8fc4beaed679",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "a8fc590978c99dfa4d8f0f580fa34bfa949e312f",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json": "bea1c088b9d73753568f0279f2357d77d8e3f29d",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/directoryhelper.ts.json": "48f7eaa347134f83dba5dc31e342a8ca2ac9fe1b",
+    "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json": "80fa49c70f1e70dc8e199ea764ae0f8b9e6f068d",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "1c5a712ff8c2f0965125edc8953919571031166f",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json": "51c10a18b36c2bc780bf53e700cf4c67a6443cea",
+    "docs/program/writer-upstream-suspected-issues.md": "6d20765cb9b2b3c13756fbccad68d61291455205",
+    "scripts/check-module-boundaries.mjs": "6bc68e588a844ae90219b8397581dd529484cc8f",
+    "scripts/check-module-boundaries.test.ts": "e68d4838946158875d8ee71cf461a753590b113e"
+  },
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 351,
+        "covered": 351,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 381,
+        "covered": 381,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 135,
+        "covered": 134,
+        "skipped": 0,
+        "pct": 99.25
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/misc/directoryhelper.ts": {
+      "lines": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": {
+      "lines": {
+        "total": 156,
+        "covered": 156,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 19,
+        "covered": 19,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 164,
+        "covered": 164,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 47,
+        "covered": 46,
+        "skipped": 0,
+        "pct": 97.87
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/helper/zipstorage.ts": {
+      "lines": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 56,
+        "covered": 56,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zippackage/ZipPackage.ts": {
+      "lines": {
+        "total": 135,
+        "covered": 135,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 150,
+        "covered": 150,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 62,
+        "covered": 62,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "coveragePolicy": "User goal authorizes90; applied to targeted command only. Production thresholds, guards and exclusions unchanged.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 1,
+      "log": "apps/office/coverage/content-types-check-0.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/content-types-check-1.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-2.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-3.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-4.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 1,
+      "log": "apps/office/coverage/content-types-check-5.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 1,
+      "log": "apps/office/coverage/content-types-check-6.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-7.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-check-11.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-typecheck-final.log",
+      "logSha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-build.log",
+      "logSha256": "03856c79b3daf365a719285bde69f313e01ea4254b8f9d70c68848b5d61b1a3a",
+      "workingDirectory": "."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-static.log",
+      "logSha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-boundaries-final.log",
+      "logSha256": "9b8de73931453e7bc514c5ae9bcc9257ea028f4bddf2521917f4304d1467d87c",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-size-final.log",
+      "logSha256": "98c5873fcf063ee2ce07953dd40cfd89142f436ecdbfd18550136783d5a074b3",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-tools-final.log",
+      "logSha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-invariants-final.log",
+      "logSha256": "f174cf302930a48ffb9ed588c9554bbcaa849014314153b625d62c6703837c7a",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-parity-final.log",
+      "logSha256": "269136ccf030a4fd7a573e52ebd97f879ee6f757aa3b406151e3b5d1e658498e",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-boundary-tests.log",
+      "logSha256": "c1142eded11e33bc4489e0f69e06b31f722410bca752bb9cec256aba228965c0",
+      "workingDirectory": "."
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/xml/ofopxmlhelper.test.ts src/comphelper/source/misc/directoryhelper.test.ts src/oox/source/core/xmlfilterbase.test.ts src/package/source/zippackage/native-plain-manifest.test.ts --coverage --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.include=src/comphelper/source/misc/directoryhelper.ts --coverage.include=src/package/source/zippackage/ZipPackage.ts --coverage.include=src/oox/source/helper/zipstorage.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/content-types-final",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-final-coverage.log",
+      "logSha256": "87ffab252e92abd8d5e5f03f8a8ae486cf5d73b37ad7d4e622ede5f9af54b6ef",
+      "workingDirectory": "apps/office"
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/xml/ofopxmlhelper.test.ts -t 'reads native package manifest slots'",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-slots.log",
+      "logSha256": "abec63df30ca309680e3b337d76b8265e3085899ac3e0717e635220ee05528ec",
+      "workingDirectory": "apps/office"
+    },
+    {
+      "command": "npx vitest run src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sc/source/filter/excel/xestream.test.ts src/sax/source/tools/fastserializer.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-boundaries.test.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-regressions.log",
+      "logSha256": "629f9532392e3b782736b77de75f21ab90b3f3e1b40aa4df55b0448aebe0922a",
+      "workingDirectory": "apps/office"
+    }
+  ],
+  "otherChecks": {
+    "scopedEslintRuntime": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-lint.log"
+    },
+    "scopedEslintBoundaryTools": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-boundary-lint.log"
+    },
+    "scopedPrettier": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/content-types-format.log"
+    }
+  },
+  "tests": {
+    "coverageProfile": 56,
+    "laterFixedSlotRegression": 1,
+    "relatedRegressions": 89,
+    "boundaryTests": 48,
+    "writerResources": 2,
+    "countsArePerRun": true
+  },
+  "initialFailures": [
+    "New short-prefix test used direct host text instead of actual InputSource; test corrected, no production behavior changed for the failure.",
+    "First coverage profile omitted existing native-plain-manifest tests for the changed ZipPackage owner; final related profile includes them.",
+    "New package-cppu edge now reflects original Library_package2.mk and retains reverse/application bans.",
+    "New mutation helper registered canonically; exhaustive validator unchanged."
+  ],
+  "baselineFailure": {
+    "command": "npm run check:docs",
+    "file": "apps/office/src/test/css-style-matchers.ts",
+    "headBlob": "24871de94e8a9e323989746ed19eae872d5dc282",
+    "diagnostics": [
+      "line17 function missing JSDoc",
+      "line76 documents2/3 parameters"
+    ]
+  },
+  "nativeSourceEvidence": [
+    "comphelper/source/xml/ofopxmlhelper.cxx",
+    "comphelper/source/misc/directoryhelper.cxx",
+    "package/source/zippackage/ZipPackage.cxx",
+    "package/source/zippackage/ZipPackageStream.cxx",
+    "package/Library_package2.mk",
+    "package/inc/PackageConstants.hxx"
+  ],
+  "newSuspectedIssues": [
+    "CALC-494",
+    "WRITER425"
+  ],
+  "remaining": [
+    "Actual relationship/output/storage/parser/writer components and remaining native metadata contracts",
+    "Complete DOCX/XLSX model/filter/Worker/UI import/export acceptance"
+  ],
+  "fullSuite": "Not run; unchanged ongoing task, user cadence once per10 completed tasks.",
+  "goalStatus": "active"
+}
