@@ -15,7 +15,8 @@
       "Seekable package snapshots use the actual UNOMemoryStream shared input/output cache with complete declared interface methods and source closure behavior.",
       "Native package output prerequisites preserve actual Type collection and container2 ownership contracts without a fake output/parent/provider.",
       "Seekable package snapshot transfer uses actual native streams and original RTTI/UNO copy paths; transaction SDK retains source interface bases and spelling.",
-      "Original shared package-name/path helpers retain UTF16 and segment contracts; bounded ZIP input/output uses the common source name validator."
+      "Original shared package-name/path helpers retain UTF16 and segment contracts; bounded ZIP input/output uses the common source name validator.",
+      "Original complete ByteChucker/ByteGrabber helpers retain actual native integer/byte/reference contracts as package I/O prerequisites."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
@@ -23,14 +24,16 @@
       "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged.",
       "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged.",
       "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged.",
-      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished."
+      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished.",
+      "Original ByteChucker and ByteGrabber now own actual native Reference/Sequence values, preserve optional XSeekable queries, cached byte-pointer output, explicit non-UNO ByteReader crosscasts, UNO/raw read distinctions, exact signed16/32 and unsigned16/32/64 widths, short-number zero results and method-time seek failures. Raw array/pointer cells lower only primitive native storage. Constructor exception unwinding and reverse member destruction are explicit. CALC-502/WRITER433 retain partial-number zero/consumption; CALC-503/WRITER434 retain mutation of copied output Sequences through cached raw pointers. Complete helper declarations are present, not fake ZIP/service/component providers. Existing bounded ZipFile/ZipOutputStream transport is not yet replaced with complete native ZIP owners; actual package/output/storage graph and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Native RTTI/pointer/ABI/allocation/unwind and thread guarantees are not certified; existing browser persistence policies are unchanged."
     ],
     "scopeLimitations": [
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
       "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged.",
       "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged.",
       "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged.",
-      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished."
+      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished.",
+      "Original ByteChucker and ByteGrabber now own actual native Reference/Sequence values, preserve optional XSeekable queries, cached byte-pointer output, explicit non-UNO ByteReader crosscasts, UNO/raw read distinctions, exact signed16/32 and unsigned16/32/64 widths, short-number zero results and method-time seek failures. Raw array/pointer cells lower only primitive native storage. Constructor exception unwinding and reverse member destruction are explicit. CALC-502/WRITER433 retain partial-number zero/consumption; CALC-503/WRITER434 retain mutation of copied output Sequences through cached raw pointers. Complete helper declarations are present, not fake ZIP/service/component providers. Existing bounded ZipFile/ZipOutputStream transport is not yet replaced with complete native ZIP owners; actual package/output/storage graph and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Native RTTI/pointer/ABI/allocation/unwind and thread guarantees are not certified; existing browser persistence policies are unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -117,6 +120,14 @@
         {
           "path": "offapi/com/sun/star/embed/XTransactionListener.idl",
           "marker": "XTransactionListener"
+        },
+        {
+          "path": "package/source/zipapi/ByteChucker.cxx",
+          "marker": "ByteChucker"
+        },
+        {
+          "path": "package/source/zipapi/ByteGrabber.cxx",
+          "marker": "ByteGrabber"
         }
       ],
       "tests": [
@@ -217,6 +228,22 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/embed/XTransactionListener.ts",
           "marker": "XTransactionListener"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ByteChucker.ts",
+          "marker": "ByteChucker"
+        },
+        {
+          "path": "apps/office/src/package/inc/ByteChucker.ts",
+          "marker": "ByteChucker"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ByteGrabber.ts",
+          "marker": "ByteGrabber"
+        },
+        {
+          "path": "apps/office/src/package/inc/ByteGrabber.ts",
+          "marker": "ByteGrabber"
         }
       ],
       "tests": [
@@ -255,6 +282,10 @@
         {
           "path": "apps/office/src/comphelper/source/misc/storagehelper-paths.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-byte-io.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -285,6 +316,10 @@
         {
           "path": "docs/program/native-package-path-contracts.md",
           "marker": "# Native package name and path contracts"
+        },
+        {
+          "path": "docs/program/native-zip-byte-streams.md",
+          "marker": "# Native ZIP byte streams"
         }
       ]
     },

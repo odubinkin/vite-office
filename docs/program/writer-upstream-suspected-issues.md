@@ -3555,3 +3555,13 @@ issue; the incorrect property ordering in the local port was fixed.
 ### Shared package source correction — CALC-164 withdrawn
 
 The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pinned `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, exits the loop immediately after the first true inconsistency result. The local port had omitted that exit. Restoring it preserves upstream behavior and also corrects Writer's shared ODF metadata path; this is not a new upstream defect or an intentional browser persistence-policy change. See the corrected CALC-164 entry and `native-package-folder-consistency.md` for evidence and limitations.
+
+### WRITER433 — ByteGrabber returns zero after consuming a partial integer
+
+- Source: pinned `package/source/zipapi/ByteGrabber.cxx`, ReadUInt16/ReadUInt32/ReadUInt64. A read count different from the requested width returns zero without restoring the cursor or throwing. Raw ByteReader uses readSomeBytes once; fallback uses XInputStream.readBytes. Thus a zero result alone does not distinguish an encoded zero from a truncated/partial number. A legal short raw result can occur before EOF.
+- Preserve these calls and return values; do not add a retry, rewind or truncation exception. Actual input owners verify both raw/UNO EOF boundaries; a genuine nonfinal MemoryInputStream subclass returns7 of8 while23 bytes remain. This is a local contract witness, not a compiled upstream or full ZIP parsing defect claim.
+
+### WRITER434 — ByteChucker cached raw pointers bypass later Sequence COW checks
+
+- Source: pinned `package/inc/ByteChucker.hxx` caches writable pointers for its2/4/8-byte Sequence members once. Integer writes subsequently fill those pointers directly and pass the same Sequence to output. An output retaining native Sequence copies can therefore observe an earlier argument changing when a later same-width integer is written.
+- Preserve pointer reuse and alias effects, without a fresh Sequence or getArray COW repair on each write. A complete caller XOutputStream retaining actual Sequence copies verifies the effect independently for all three buffers; normal UNOMemoryStream output copies bytes during the call. This is source-derived and local value-owner evidence, not a compiled ABI witness or an established application-visible corruption.
