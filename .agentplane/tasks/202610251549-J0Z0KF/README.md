@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 62
+revision: 65
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T15:47:58.274Z"
+  updated_at: "2026-11-11T17:14:53.246Z"
   updated_by: "CODER"
-  note: "Verified bounded relationship SDK block:49 targeted tests pass; whole-two-owner coverage100 S45/45 B14/14 F17/17 L44/44, type/build/static/source/provenance/registry/resources/lint/docs/format/doctor/routing pass. Full DOCX/XLSX core/UI task remains incomplete. User requests pause after committing this block for parallel branch merge; no further metadata/output integration is authorized before resume. Evidence: evidence/native-relationship-sdk-checkpoint.json."
-  attempts: 20
+  note: "Bounded relationship result integration checkpoint:62 focused coverage scenarios,27 related regression scenarios and2 Writer resource tests pass. Actual nested Sequence/StringPair owners reach Writer target lookup; COW/lvalue/destruction are verified. All owners exceed user-authorized90 floor; initial100 gate failure retained. Type/build/static/source/registry/lint/format/resources/doctor/routing pass; global JSDoc fails two unchanged HEAD css-style-matchers.ts diagnostics. Full XLSX/DOCX package/model/filter/Worker/UI acceptance remains pending. Evidence: evidence/native-relationship-sequences-checkpoint.json."
+  attempts: 21
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -328,8 +331,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T17:14:53.246Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded relationship result integration checkpoint:62 focused coverage scenarios,27 related regression scenarios and2 Writer resource tests pass. Actual nested Sequence/StringPair owners reach Writer target lookup; COW/lvalue/destruction are verified. All owners exceed user-authorized90 floor; initial100 gate failure retained. Type/build/static/source/registry/lint/format/resources/doctor/routing pass; global JSDoc fails two unchanged HEAD css-style-matchers.ts diagnostics. Full XLSX/DOCX package/model/filter/Worker/UI acceptance remains pending. Evidence: evidence/native-relationship-sequences-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T17:14:59.115Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T15:48:14.378Z"
+doc_updated_at: "2026-11-11T17:14:59.115Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -944,6 +960,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T17:14:53.246Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded relationship result integration checkpoint:62 focused coverage scenarios,27 related regression scenarios and2 Writer resource tests pass. Actual nested Sequence/StringPair owners reach Writer target lookup; COW/lvalue/destruction are verified. All owners exceed user-authorized90 floor; initial100 gate failure retained. Type/build/static/source/registry/lint/format/resources/doctor/routing pass; global JSDoc fails two unchanged HEAD css-style-matchers.ts diagnostics. Full XLSX/DOCX package/model/filter/Worker/UI acceptance remains pending. Evidence: evidence/native-relationship-sequences-checkpoint.json.
+    Attempts: 21
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:13:47.253Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1028,6 +1074,10 @@ sections:
     - Observation: Current block adds actual original StringPair value/type owners and complete XRelationshipAccess SDK declarations. Any and initialized struct Sequence COW verify genuine fields, retained const views and lifetime behavior; no replacement storage/relationship service is instantiated.
       Impact: 49 targeted tests pass; whole-two-owner unchanged100 coverage S45/45 B14/14 F17/17 L44/44. Build/type/static/source/registry/lint/docs/format checks pass. Full storage/relationship/output/model/filter/worker/UI acceptance remains incomplete; this SDK scope does not supersede earlier broader coverage failures.
       Resolution: Evidence: evidence/native-relationship-sdk-checkpoint.json. User explicitly requests pausing the goal after this tested block for parallel branch merge. Persist this block, confirm clean checkout, then pause; do not begin OFOPXMLHelper or output migration and do not perform the merge.
+
+    - Observation: Resume after user reactivated the goal: current main includes the merged Node LTS/accessibility work and began clean. Relationship result and Writer consumers now use genuine nested Sequence/StringPair owners with compiler lvalue field binding, native row allocation/assignment/shrink and failure cleanup.
+      Impact: Focused tests pass53; expanded coverage profile passes62 scenarios plus27 separate regressions and2 Writer resource tests. Whole changed owners S337/341 B188/188 F59/60 L306/310; existing toUnoSequence bridge is not exercised by this profile. Original100 threshold exits1, but all per-owner metrics exceed the latest user-authorized90 floor. Global JSDoc check fails only unchanged HEAD css-style-matchers.ts lines17/76; source/module/provenance/registry/size/type/build/static/lint/format/resource/doctor/routing checks pass.
+      Resolution: Persist bounded evidence and this integration checkpoint without marking the overall task complete. Existing SAX shape-error envelopes, host content/output metadata, complete package/relationship service and actual DOCX/XLSX model/filter/Worker/UI acceptance remain pending. User goal resume revokes prior merge pause; keep the goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -1652,6 +1702,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T17:14:53.246Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded relationship result integration checkpoint:62 focused coverage scenarios,27 related regression scenarios and2 Writer resource tests pass. Actual nested Sequence/StringPair owners reach Writer target lookup; COW/lvalue/destruction are verified. All owners exceed user-authorized90 floor; initial100 gate failure retained. Type/build/static/source/registry/lint/format/resources/doctor/routing pass; global JSDoc fails two unchanged HEAD css-style-matchers.ts diagnostics. Full XLSX/DOCX package/model/filter/Worker/UI acceptance remains pending. Evidence: evidence/native-relationship-sequences-checkpoint.json.
+Attempts: 21
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:13:47.253Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1740,3 +1820,7 @@ DecisionContextRef:
 - Observation: Current block adds actual original StringPair value/type owners and complete XRelationshipAccess SDK declarations. Any and initialized struct Sequence COW verify genuine fields, retained const views and lifetime behavior; no replacement storage/relationship service is instantiated.
   Impact: 49 targeted tests pass; whole-two-owner unchanged100 coverage S45/45 B14/14 F17/17 L44/44. Build/type/static/source/registry/lint/docs/format checks pass. Full storage/relationship/output/model/filter/worker/UI acceptance remains incomplete; this SDK scope does not supersede earlier broader coverage failures.
   Resolution: Evidence: evidence/native-relationship-sdk-checkpoint.json. User explicitly requests pausing the goal after this tested block for parallel branch merge. Persist this block, confirm clean checkout, then pause; do not begin OFOPXMLHelper or output migration and do not perform the merge.
+
+- Observation: Resume after user reactivated the goal: current main includes the merged Node LTS/accessibility work and began clean. Relationship result and Writer consumers now use genuine nested Sequence/StringPair owners with compiler lvalue field binding, native row allocation/assignment/shrink and failure cleanup.
+  Impact: Focused tests pass53; expanded coverage profile passes62 scenarios plus27 separate regressions and2 Writer resource tests. Whole changed owners S337/341 B188/188 F59/60 L306/310; existing toUnoSequence bridge is not exercised by this profile. Original100 threshold exits1, but all per-owner metrics exceed the latest user-authorized90 floor. Global JSDoc check fails only unchanged HEAD css-style-matchers.ts lines17/76; source/module/provenance/registry/size/type/build/static/lint/format/resource/doctor/routing checks pass.
+  Resolution: Persist bounded evidence and this integration checkpoint without marking the overall task complete. Existing SAX shape-error envelopes, host content/output metadata, complete package/relationship service and actual DOCX/XLSX model/filter/Worker/UI acceptance remain pending. User goal resume revokes prior merge pause; keep the goal active.
