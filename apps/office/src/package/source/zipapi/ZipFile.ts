@@ -4,12 +4,14 @@
 import { OStorageHelper } from "../../../comphelper/inc/storagehelper";
 
 import { CRC32 } from "./CRC32";
+import { MemoryByteGrabber } from "./MemoryByteGrabber";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 
 const LOCAL_FILE_HEADER = 0x04034b50;
 const CENTRAL_DIRECTORY_HEADER = 0x02014b50;
 const END_OF_CENTRAL_DIRECTORY = 0x06054b50;
 const DATA_DESCRIPTOR_FLAG = 0x0008;
-const UTF8_FLAG = 0x0800;
 const ZIP32_SENTINEL = 0xffffffff;
 
 /** Resource ceilings applied before compressed content is materialized. */
@@ -70,31 +72,46 @@ export class ZipFile {
     this.centralOffset = readUint32(view, endOffset + 16);
     if (this.centralOffset + centralSize !== endOffset)
       throw new Error("ZIP central-directory bounds are invalid.");
+    const centralBuffer = Int8Array.from(this.bytes.subarray(this.centralOffset, endOffset));
+    const grabber = new MemoryByteGrabber([centralBuffer, 0], centralBuffer.length);
     let offset = this.centralOffset;
     let totalBytes = 0;
     for (let index = 0; index < totalEntries; index += 1) {
-      if (offset + 46 > endOffset || readUint32(view, offset) !== CENTRAL_DIRECTORY_HEADER)
+      if (grabber.remainingSize() < 46 || grabber.ReadInt32() !== CENTRAL_DIRECTORY_HEADER)
         throw new Error("ZIP central-directory entry is invalid.");
-      const flags = readUint16(view, offset + 8);
+      grabber.ReadUInt16(); // Original version-made-by field, unused by this bounded catalog.
+      grabber.ReadInt16(); // Original version-needed field.
+      const flags = grabber.ReadInt16() & 0xffff;
       if ((flags & 1) !== 0) throw new Error("Encrypted ZIP entries are unsupported.");
-      const method = readUint16(view, offset + 10);
+      const method = grabber.ReadInt16();
       if (method !== 0 && method !== 8) throw new Error(`Unsupported ZIP method: ${method}`);
-      const compressedSize = readUint32(view, offset + 20);
-      const uncompressedSize = readUint32(view, offset + 24);
-      const localOffset = readUint32(view, offset + 42);
+      grabber.ReadInt32(); // Original packed modification time.
+      const crc32 = grabber.ReadInt32() >>> 0;
+      const compressedSize = grabber.ReadUInt32();
+      const uncompressedSize = grabber.ReadUInt32();
+      const nameLength = grabber.ReadInt16();
+      const extraLength = grabber.ReadInt16();
+      const commentLength = grabber.ReadInt16();
+      grabber.skipBytes(4);
+      grabber.ReadUInt32(); // Original external file attributes.
+      const localOffset = grabber.ReadUInt32();
+      if (nameLength < 0) throw new Error("unexpected name length");
+      if (commentLength < 0) throw new Error("unexpected comment length");
+      if (extraLength < 0) throw new Error("unexpected extra header info length");
       if (
         compressedSize === ZIP32_SENTINEL ||
         uncompressedSize === ZIP32_SENTINEL ||
         localOffset === ZIP32_SENTINEL
       )
         throw new Error("ZIP64 entries are unsupported.");
-      const nameLength = readUint16(view, offset + 28);
-      const extraLength = readUint16(view, offset + 30);
-      const commentLength = readUint16(view, offset + 32);
       const nextOffset = offset + 46 + nameLength + extraLength + commentLength;
       if (nextOffset > endOffset) throw new Error("ZIP central-directory entry exceeds bounds.");
-      const nameBytes = this.bytes.slice(offset + 46, offset + 46 + nameLength);
-      const name = decodeZipName(nameBytes, flags);
+      const [nameStorage, nameOffset] = grabber.getCurrentPos();
+      const nameBytes = Uint8Array.from(
+        (nameStorage as Int8Array).subarray(nameOffset, nameOffset + nameLength),
+      );
+      grabber.skipBytes(nameLength + extraLength + commentLength);
+      const name = decodeZipName(nameBytes);
       assertSafeZipEntryName(name);
       if (this.entriesByName.has(name)) throw new Error(`Duplicate ZIP entry: ${name}`);
       if (uncompressedSize > limits.maxEntryBytes)
@@ -109,7 +126,7 @@ export class ZipFile {
         throw new Error("ZIP contents exceed total size limit.");
       this.entriesByName.set(name, {
         compressedSize,
-        crc32: readUint32(view, offset + 16),
+        crc32,
         flags,
         localOffset,
         method,
@@ -214,20 +231,16 @@ function findEndRecord(bytes: Uint8Array): number {
   throw new Error("ZIP end-of-central-directory record is missing.");
 }
 
-/** Decodes UTF-8 or ASCII ZIP names without legacy-codepage ambiguity. @param bytes - Name bytes. @param flags - ZIP flags. @returns Decoded path. */
-function decodeZipName(bytes: Uint8Array, flags: number): string {
-  if (
-    (flags & UTF8_FLAG) === 0 &&
-    bytes.some(
-      /** Detects bytes requiring a declared UTF-8 encoding. @param byte - Name byte. @returns Whether non-ASCII. */
-      (byte) => byte > 0x7f,
-    )
-  )
-    throw new Error("Non-UTF-8 ZIP entry names are unsupported.");
+/** Original readCEN counted UTF8 OUString construction ignores the ZIP UTF8 flag and retains SAL default conversion behavior. @param bytes - Actual name bytes. @returns Exact decoded UTF16 at the existing transport catalog boundary. */
+function decodeZipName(bytes: Uint8Array): string {
+  const name = new OUString(bytes, bytes.length, RTL_TEXTENCODING_UTF8);
   try {
-    return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
-  } catch {
-    throw new Error("ZIP entry name is not valid UTF-8.");
+    let text = "";
+    const units = name.getStr();
+    for (let i = 0; i < name.getLength(); ++i) text += String.fromCharCode(units[i] as number);
+    return text;
+  } finally {
+    name.dispose();
   }
 }
 

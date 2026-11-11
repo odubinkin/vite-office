@@ -290,7 +290,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
       (view, bytes) => {
         const central = findSignature(bytes, 0x02014b50);
-        view.setUint16(central + 28, 0xffff, true);
+        view.setUint16(central + 28, 0x7fff, true);
       },
     );
     expect(
@@ -373,7 +373,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     ]);
   });
 
-  it("validates UTF-8 entry names and supports ASCII legacy flags and ZIP comments" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
+  it("uses original counted UTF8 names regardless of flag, SAL replacement and ZIP comments" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const source = storedZip([["a", "x"]]);
     const ascii = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
@@ -388,25 +388,24 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @param bytes - Callback input. @returns Callback result. */,
       (view, bytes) => {
         const central = findSignature(bytes, 0x02014b50);
+        view.setUint16(6, 0, true);
         view.setUint16(central + 8, 0, true);
         bytes[central + 46] = 0xff;
+        bytes[30] = 0xff;
       },
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => new ZipFile(nonUtf8),
-    ).toThrow("Non-UTF-8");
+    expect(new ZipFile(nonUtf8).getEntryNames()).toEqual(["\ufffd"]);
+    expect(await new ZipFile(nonUtf8).readTextEntry("\ufffd")).toBe("x");
     const invalidUtf8 = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param _view - Callback input. @param bytes - Callback input. @returns Callback result. */,
       (_view, bytes) => {
         const central = findSignature(bytes, 0x02014b50);
         bytes[central + 46] = 0xff;
+        bytes[30] = 0xff;
       },
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => new ZipFile(invalidUtf8),
-    ).toThrow("not valid UTF-8");
+    expect(new ZipFile(invalidUtf8).getEntryNames()).toEqual(["\ufffd"]);
+    expect(await new ZipFile(invalidUtf8).readTextEntry("\ufffd")).toBe("x");
     const end = findSignature(source, 0x06054b50);
     const commented = new Uint8Array(source.length + 2);
     commented.set(source);

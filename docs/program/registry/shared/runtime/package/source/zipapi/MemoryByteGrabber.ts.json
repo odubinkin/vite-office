@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-byte-streams",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+        "apps/office/src/package/source/zipapi/MemoryByteGrabber.test.ts",
+        "apps/office/src/package/source/zipapi/ZipFile.ts"
+      ],
+      "justification": "Original complete MemoryByteGrabber borrows actual Sequence const storage or a raw byte pointer/count, preserves unchecked skip, signed remaining count and no-advance zero on incomplete fields. Primitive pointer storage-plus-offset tuples lower actual pointer addition without a provider or copied Sequence. UInt8 and UInt16 retain original signed8/16 return types (CALC-504/WRITER435);32/64-bit unsigned values remain exact. Bounded ZipFile central-directory parsing now uses this actual helper in original sequential field order and signed negative name/extra/comment length rejection. Existing ZIP32/resource/host-error/EOCD/local-header transport boundaries remain explicit, not full native ZipFile parity. Original final helper declarations are complete; physical pointer/lvalue/rvalue/ABI/allocation/thread guarantees and full ZIP/package/storage/model/filter/Worker/UI acceptance remain unverified or unfinished. Existing browser open/save/autosave/recovery policies remain unchanged. The same CEN source always decodes counted name bytes as UTF8 through the genuine OUString constructor and its original default SAL conversion flags, regardless of the ZIP UTF8 bit. The old host fatal-decoder/undeclared-UTF8 gate is removed. Matching real local/CEN raw malformed bytes retain source replacement behavior and BMP non-ASCII paths without that bit load normally; no codepage guessing or private decoder is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MemoryByteGrabber",
+        "MemoryByteGrabberPointer"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/MemoryByteGrabber.hxx",
+      "upstreamSymbols": [
+        "MemoryByteGrabber",
+        "getCurrentPos",
+        "remainingSize",
+        "skipBytes",
+        "ReadUInt8",
+        "ReadInt16",
+        "ReadUInt16",
+        "ReadInt32",
+        "ReadUInt32",
+        "ReadUInt64"
+      ]
+    }
+  }
+}

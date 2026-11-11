@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/MemoryByteGrabber.hxx",
+    "localSymbols": [
+      "MemoryByteGrabber",
+      "MemoryByteGrabberPointer"
+    ],
+    "upstreamSymbols": [
+      "MemoryByteGrabber",
+      "getCurrentPos",
+      "remainingSize",
+      "skipBytes",
+      "ReadUInt8",
+      "ReadInt16",
+      "ReadUInt16",
+      "ReadInt32",
+      "ReadUInt32",
+      "ReadUInt64"
+    ],
+    "preservedResponsibilities": [
+      "Original complete MemoryByteGrabber borrows actual Sequence const storage or a raw byte pointer/count, preserves unchecked skip, signed remaining count and no-advance zero on incomplete fields. Primitive pointer storage-plus-offset tuples lower actual pointer addition without a provider or copied Sequence. UInt8 and UInt16 retain original signed8/16 return types (CALC-504/WRITER435);32/64-bit unsigned values remain exact. Bounded ZipFile central-directory parsing now uses this actual helper in original sequential field order and signed negative name/extra/comment length rejection. Existing ZIP32/resource/host-error/EOCD/local-header transport boundaries remain explicit, not full native ZipFile parity. Original final helper declarations are complete; physical pointer/lvalue/rvalue/ABI/allocation/thread guarantees and full ZIP/package/storage/model/filter/Worker/UI acceptance remain unverified or unfinished. Existing browser open/save/autosave/recovery policies remain unchanged.",
+      "The same CEN source always decodes counted name bytes as UTF8 through the genuine OUString constructor and its original default SAL conversion flags, regardless of the ZIP UTF8 bit. The old host fatal-decoder/undeclared-UTF8 gate is removed. Matching real local/CEN raw malformed bytes retain source replacement behavior and BMP non-ASCII paths without that bit load normally; no codepage guessing or private decoder is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Native physical pointer arithmetic/ABI, invalid arithmetic or out-of-allocation dereferences, deleted-rvalue static enforcement and complete ZIP/storage/model/filter/UI ownership remain unverified or unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Primitive raw pointers use existing native byte storage and an explicit byte offset, as existing SequenceEnd-style bindings do. Uint8/Int8 views and actual Sequence lvalue cells represent source bytes; signed8/16/32 casts and BigInt64 results preserve declared scalar widths. No replacement Sequence, storage or query provider is installed."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+          "marker": "MemoryByteGrabber"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/MemoryByteGrabber.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/MemoryByteGrabber.hxx",
+          "marker": "MemoryByteGrabber"
+        },
+        {
+          "path": "package/source/zipapi/ZipFile.cxx",
+          "marker": "ZipFile::readCEN"
+        }
+      ]
+    }
+  }
+}
