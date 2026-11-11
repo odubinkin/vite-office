@@ -34,18 +34,29 @@ import { IOException } from "../../../cppu/inc/com/sun/star/io/IOException";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { ByteReader } from "../../../comphelper/inc/bytereader";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { UNOMemoryStream } from "../../../comphelper/source/streaming/memorystream";
 import { SequenceInputStream } from "../../../comphelper/source/streaming/seqstream";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
 const Properties = Sequence.specialize<PropertyValue>(propertyType, 48);
 const Relations = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8);
-/** Existing ZIP transport creates an actual independently owned signed-byte stream. @param bytes - Decompressed bytes. @returns Owned input with its genuine ByteReader implementation. */
-function inputBytes(bytes: Uint8Array): Reference<XInputStream & ByteReader> {
+/** Existing ZIP transport creates an actual independently owned signed-byte stream. @param bytes - Decompressed bytes. @param seekable - Native cache-backed mode. @returns Owned input with its genuine ByteReader implementation. */
+function inputBytes(bytes: Uint8Array, seekable = false): Reference<XInputStream & ByteReader> {
   const data = new Bytes(bytes.length);
   try {
     const pointer = data.getArray() as SequenceElements;
     for (let i = 0; i < bytes.length; ++i)
       (pointer.get(i) as [number])[0] = ((bytes[i] as number) << 24) >> 24;
-    return new Reference(new SequenceInputStream(data));
+    if (!seekable) return new Reference(new SequenceInputStream(data));
+    const cache = new UNOMemoryStream(),
+      input = new Reference<XInputStream & ByteReader>(cache);
+    try {
+      cache.writeBytes(data);
+      cache.seek(0n);
+      return input;
+    } catch (error) {
+      input.dispose();
+      throw error;
+    }
   } finally {
     data.dispose();
   }
@@ -264,7 +275,7 @@ export class ZipStorage {
     const relations = await this.readRelationships(path);
     try {
       const properties = await this.inputProperties(path, bytes.length, relations),
-        input = inputBytes(bytes);
+        input = inputBytes(bytes, mode === SEEKABLEREAD);
       try {
         return new Reference<XExtendedStorageStream>(
           mode === SEEKABLEREAD

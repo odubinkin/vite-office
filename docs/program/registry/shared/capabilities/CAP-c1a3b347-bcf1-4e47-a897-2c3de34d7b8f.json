@@ -11,14 +11,17 @@
     "assertions": [
       "Original standalone OInputCompStream uses actual native input/value/query/listener owners and complete declared readonly component methods.",
       "Original custom interface query, property denial and closure failure contracts are preserved without substitute parent/mutex/service providers.",
-      "Writer document parts request actual OInputSeekStream SEEKABLEREAD; ordinary ZipStorage READ remains nonseekable."
+      "Writer document parts request actual OInputSeekStream SEEKABLEREAD; ordinary ZipStorage READ remains nonseekable.",
+      "Seekable package snapshots use the actual UNOMemoryStream shared input/output cache with complete declared interface methods and source closure behavior."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
-      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged."
+      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
+      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged."
     ],
     "scopeLimitations": [
-      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged."
+      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
+      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -61,6 +64,18 @@
         {
           "path": "include/cppuhelper/implbase.hxx",
           "marker": "ImplInheritanceHelper"
+        },
+        {
+          "path": "comphelper/source/streaming/memorystream.cxx",
+          "marker": "UNOMemoryStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XSeekableInputStream.idl",
+          "marker": "XSeekableInputStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XTruncate.idl",
+          "marker": "XTruncate"
         }
       ],
       "tests": [
@@ -117,6 +132,18 @@
         {
           "path": "apps/office/src/cppuhelper/inc/implbase.ts",
           "marker": "ImplInheritanceHelper"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/memorystream.ts",
+          "marker": "literal"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XSeekableInputStream.ts",
+          "marker": "XSeekableInputStream"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XTruncate.ts",
+          "marker": "XTruncate"
         }
       ],
       "tests": [
@@ -135,6 +162,10 @@
         {
           "path": "apps/office/src/cppuhelper/source/native-inheritance.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/memorystream.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -149,6 +180,10 @@
         {
           "path": "docs/program/native-package-seekable-input.md",
           "marker": "# Native seekable package input"
+        },
+        {
+          "path": "docs/program/native-memory-stream-cache.md",
+          "marker": "# Native memory stream cache"
         }
       ]
     },

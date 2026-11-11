@@ -5287,3 +5287,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `vendor/libreoffice-reference/package/source/xstor/ocompinstream.hxx` derives from `cppu::WeakImplHelper`, which implements `XTypeProvider`. The override in `ocompinstream.cxx`, `OInputCompStream::queryInterface`, checks the five common stream/component/property interfaces, conditionally checks `XRelationshipAccess`, then calls `OWeakObject::queryInterface` directly.
 - Consequently the inherited `XTypeProvider` implementation is not reached by this query path. Preserve the original override and format-dependent relationship identity. The local genuine component test expects the type-provider query to be empty; no native compiled component witness or upstream correction is claimed.
+
+### CALC-496 — UNOMemoryStream close resets its cursor without disconnecting
+
+- Source: `vendor/libreoffice-reference/comphelper/source/streaming/memorystream.cxx`, `UNOMemoryStream::closeInput`, `closeOutput`, `readBytes` and `writeBytes`.
+- Both close methods only set the shared cursor to zero. Reads and writes remain available; writing after closeOutput overwrites the start of the existing data rather than raising NotConnectedException. This appears inconsistent with `udkapi/com/sun/star/io/XOutputStream.idl`, which forbids further writes after closeOutput. Intentional reliance by storage-cache consumers remains possible.
+- Preserve the original state changes without adding a disconnected flag. The genuine component and BinaryXInputStream/BinaryXOutputStream tests cover cursor reset and reuse. The outer OInputCompStream/OInputSeekStream keeps its own disposed guard, so closing that wrapper still prevents subsequent operations. No upstream correction is applied.
