@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 108
+revision: 117
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T20:41:36.477Z"
+  updated_at: "2026-11-11T21:33:33.803Z"
   updated_by: "CODER"
-  note: "Bounded native ZIP catalog block: complete borrowed MemoryByteGrabber now drives actual sequential CEN field reads, native signed length rejection and counted UTF8 OUString name conversion independent of ZIP flag, using actual SAL defaults.37 scoped cases pass; whole owners226/226S119/119B30/30F196/196L at approved90.91 related scenarios in7 files, current typecheck/static build and final scoped/source/registry gates pass. check:docs retains known css-style-matchers baseline17/76 only. Source-backed fixture migrations and failures recorded. Evidence: evidence/native-memory-zip-catalog-checkpoint.json. Full ZIP/package/storage/model/filter/Worker/UI acceptance remains unfinished; continue active goal."
-  attempts: 33
+  note: "Bounded native ZIP64 directory/extra block: actual byte/reference/ZipException owners, source signed arithmetic/END/locator/extra conditions, eager consumed LOC checks and committed normal upstream QA.73 scoped cases pass; full owners464/472S267/275B47/47F415/419L at approved90.118 related scenarios pass;11 final overlapping Worker/workflow checks after causal ownership correction pass. Final types/static build/lint and source/registry checks pass; check:docs retains css-style-matchers baseline17/76. Source/data witnesses and corrected failure history recorded in evidence/native-zip64-catalog-checkpoint.json. Full native descriptor/overlap/parent storage/model/filter/UI acceptance remains incomplete; continue active goal."
+  attempts: 34
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -536,8 +539,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T21:33:33.803Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native ZIP64 directory/extra block: actual byte/reference/ZipException owners, source signed arithmetic/END/locator/extra conditions, eager consumed LOC checks and committed normal upstream QA.73 scoped cases pass; full owners464/472S267/275B47/47F415/419L at approved90.118 related scenarios pass;11 final overlapping Worker/workflow checks after causal ownership correction pass. Final types/static build/lint and source/registry checks pass; check:docs retains css-style-matchers baseline17/76. Source/data witnesses and corrected failure history recorded in evidence/native-zip64-catalog-checkpoint.json. Full native descriptor/overlap/parent storage/model/filter/UI acceptance remains incomplete; continue active goal."
+  -
+    type: "status"
+    at: "2026-11-11T21:33:41.696Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T20:41:44.092Z"
+doc_updated_at: "2026-11-11T21:33:41.696Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1542,6 +1558,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T21:33:33.803Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native ZIP64 directory/extra block: actual byte/reference/ZipException owners, source signed arithmetic/END/locator/extra conditions, eager consumed LOC checks and committed normal upstream QA.73 scoped cases pass; full owners464/472S267/275B47/47F415/419L at approved90.118 related scenarios pass;11 final overlapping Worker/workflow checks after causal ownership correction pass. Final types/static build/lint and source/registry checks pass; check:docs retains css-style-matchers baseline17/76. Source/data witnesses and corrected failure history recorded in evidence/native-zip64-catalog-checkpoint.json. Full native descriptor/overlap/parent storage/model/filter/UI acceptance remains incomplete; continue active goal.
+    Attempts: 34
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T21:33:32.676Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1706,6 +1752,34 @@ sections:
     - Observation: Final current-source memory/CEN/SAL checks pass except check:docs, which reports only the unchanged css-style-matchers.ts lines17 and76 baseline.
       Impact: Repository-wide documentation gate remains non-green independently of this native ZIP parser block.
       Resolution: Retain the unrelated baseline, record final passing37 scoped and91 related scenarios plus type/build/source/registry checks, and continue the incomplete DOCX/XLSX goal.
+
+    - Observation: Initial ZIP64 integration edit left one stale map-insertion delimiter while moving LOC validation into construction; formatter/typecheck rejected it before execution.
+      Impact: The new parser block temporarily did not compile; no test result is claimed for that source.
+      Resolution: Correct the constructor metadata assembly and rerun formatting/typecheck before focused ZIP64 and existing parser tests.
+
+    - Observation: Initial executable ZIP64 checks passed the memory-reader/sequence tests but exposed five legacy parser expectations: old host END diagnostics, blanket ZIP64 rejection, lazy LOC validation, strict comment-length rejection and STORE/ratio fixture ordering. Typecheck additionally needs an explicit metadata declaration to retain the narrowed compression method.
+      Impact: Legacy cases must be migrated to the inspected native source contracts; no broad pass is claimed.
+      Resolution: Type the temporary catalog record explicitly, preserve test intent with source-valid fixtures, assert original END diagnostics/ignored comment semantics, and move malformed LOC expectations to construction. Add committed upstream ZIP64 fixture and critical native field variants before final coverage.
+
+    - Observation: After source-backed expectation migration, the only remaining legacy failure read the old name a from the new compressed size-mismatch fixture, whose authored rawZip helper names its entry entry.txt.
+      Impact: The metadata fixture compiled and passed native construction; the assertion addressed the wrong actual entry.
+      Resolution: Read entry.txt in that fixture and rerun the final profile; no production repair or compatibility branch is introduced.
+
+    - Observation: During command preparation an unintended empty temporary marker was created outside the repository and immediately removed; it contained no data and no outside file contents were read.
+      Impact: A transient path-boundary mistake occurred; no outside artifact remains and no repository source behavior depends on it.
+      Resolution: Removed the self-created empty marker immediately; all implementation, fixtures, logs and verification evidence remain inside this repository.
+
+    - Observation: Registry generation rejected adding a native-service out-of-scope note to the legacy verified bounded ODF operation gaps field: verified records cannot retain unresolved gaps.
+      Impact: The new native ZIP mechanism records remain unverified; the existing bounded ODF operation must keep its declared scope distinct from unfinished full native services.
+      Resolution: Move that note to the bounded operation scopeLimitations, retain existing maturity/flags, correct only ZIP64 input versus output wording, and regenerate/validate the canonical registry.
+
+    - Observation: Current-source checks found a test-helper typed-array default inference error and preserve-caught-error lint at the native-to-host boundary; check:docs still reports only the existing css-style-matchers baseline.
+      Impact: Typecheck/static build and scoped lint need correction. Retaining the caught UNO value as a host Error cause would be invalid after native destruction.
+      Resolution: Explicitly type test byte parameters and preserve immutable native type/message causal metadata in the host Error before disposing the genuine exception once. Add a transport-lifetime assertion, then rerun scoped coverage and affected checks without suppressing lint rules.
+
+    - Observation: Final ordered ZIP64 source passes73 scoped scenarios, with full ZipFile/seqstream/ZipException profiles at464/472 statements,267/275 branches,47/47 functions and415/419 lines using approved90 thresholds. Related118 scenarios pass;11 final Worker/workflow checks overlap that related set. Final docs check retains only css-style-matchers.ts17/76 baseline.
+      Impact: Original normal ZIP64/Unicode QA and critical current ZIP mechanisms are verified within the explicit transport boundary; this does not prove full native package/storage/model/UI acceptance.
+      Resolution: Record current source and unchanged upstream fixture blobs, final type/build/lint/source/registry checks and remaining descriptor/overlap/hole/owner/UI work; keep the epic and goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -2720,6 +2794,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T21:33:33.803Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native ZIP64 directory/extra block: actual byte/reference/ZipException owners, source signed arithmetic/END/locator/extra conditions, eager consumed LOC checks and committed normal upstream QA.73 scoped cases pass; full owners464/472S267/275B47/47F415/419L at approved90.118 related scenarios pass;11 final overlapping Worker/workflow checks after causal ownership correction pass. Final types/static build/lint and source/registry checks pass; check:docs retains css-style-matchers baseline17/76. Source/data witnesses and corrected failure history recorded in evidence/native-zip64-catalog-checkpoint.json. Full native descriptor/overlap/parent storage/model/filter/UI acceptance remains incomplete; continue active goal.
+Attempts: 34
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T21:33:32.676Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2888,3 +2992,31 @@ DecisionContextRef:
 - Observation: Final current-source memory/CEN/SAL checks pass except check:docs, which reports only the unchanged css-style-matchers.ts lines17 and76 baseline.
   Impact: Repository-wide documentation gate remains non-green independently of this native ZIP parser block.
   Resolution: Retain the unrelated baseline, record final passing37 scoped and91 related scenarios plus type/build/source/registry checks, and continue the incomplete DOCX/XLSX goal.
+
+- Observation: Initial ZIP64 integration edit left one stale map-insertion delimiter while moving LOC validation into construction; formatter/typecheck rejected it before execution.
+  Impact: The new parser block temporarily did not compile; no test result is claimed for that source.
+  Resolution: Correct the constructor metadata assembly and rerun formatting/typecheck before focused ZIP64 and existing parser tests.
+
+- Observation: Initial executable ZIP64 checks passed the memory-reader/sequence tests but exposed five legacy parser expectations: old host END diagnostics, blanket ZIP64 rejection, lazy LOC validation, strict comment-length rejection and STORE/ratio fixture ordering. Typecheck additionally needs an explicit metadata declaration to retain the narrowed compression method.
+  Impact: Legacy cases must be migrated to the inspected native source contracts; no broad pass is claimed.
+  Resolution: Type the temporary catalog record explicitly, preserve test intent with source-valid fixtures, assert original END diagnostics/ignored comment semantics, and move malformed LOC expectations to construction. Add committed upstream ZIP64 fixture and critical native field variants before final coverage.
+
+- Observation: After source-backed expectation migration, the only remaining legacy failure read the old name a from the new compressed size-mismatch fixture, whose authored rawZip helper names its entry entry.txt.
+  Impact: The metadata fixture compiled and passed native construction; the assertion addressed the wrong actual entry.
+  Resolution: Read entry.txt in that fixture and rerun the final profile; no production repair or compatibility branch is introduced.
+
+- Observation: During command preparation an unintended empty temporary marker was created outside the repository and immediately removed; it contained no data and no outside file contents were read.
+  Impact: A transient path-boundary mistake occurred; no outside artifact remains and no repository source behavior depends on it.
+  Resolution: Removed the self-created empty marker immediately; all implementation, fixtures, logs and verification evidence remain inside this repository.
+
+- Observation: Registry generation rejected adding a native-service out-of-scope note to the legacy verified bounded ODF operation gaps field: verified records cannot retain unresolved gaps.
+  Impact: The new native ZIP mechanism records remain unverified; the existing bounded ODF operation must keep its declared scope distinct from unfinished full native services.
+  Resolution: Move that note to the bounded operation scopeLimitations, retain existing maturity/flags, correct only ZIP64 input versus output wording, and regenerate/validate the canonical registry.
+
+- Observation: Current-source checks found a test-helper typed-array default inference error and preserve-caught-error lint at the native-to-host boundary; check:docs still reports only the existing css-style-matchers baseline.
+  Impact: Typecheck/static build and scoped lint need correction. Retaining the caught UNO value as a host Error cause would be invalid after native destruction.
+  Resolution: Explicitly type test byte parameters and preserve immutable native type/message causal metadata in the host Error before disposing the genuine exception once. Add a transport-lifetime assertion, then rerun scoped coverage and affected checks without suppressing lint rules.
+
+- Observation: Final ordered ZIP64 source passes73 scoped scenarios, with full ZipFile/seqstream/ZipException profiles at464/472 statements,267/275 branches,47/47 functions and415/419 lines using approved90 thresholds. Related118 scenarios pass;11 final Worker/workflow checks overlap that related set. Final docs check retains only css-style-matchers.ts17/76 baseline.
+  Impact: Original normal ZIP64/Unicode QA and critical current ZIP mechanisms are verified within the explicit transport boundary; this does not prove full native package/storage/model/UI acceptance.
+  Resolution: Record current source and unchanged upstream fixture blobs, final type/build/lint/source/registry checks and remaining descriptor/overlap/hole/owner/UI work; keep the epic and goal active.

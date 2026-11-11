@@ -1,0 +1,223 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Original ZIP64 directory/extras with native byte/exception owners and normal upstream package QA",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/source/streaming/seqstream.ts": "7f6534b2c2a15f160da5151f85c2f285e6720645",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "07a40ebb5111d4c0cfec43d758712b556db89a2e",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "8b39dbe69dcdc2ec6ab41818d19c81c3066b3565",
+    "docs/program/calc-upstream-suspected-issues.md": "47b4ca2bce90edf9027a6a9a07285fabc836906d",
+    "docs/program/native-memory-zip-catalog.md": "9819bbc42f09e97d8461f9cdf9e23c1b80055ac4",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "401f1f372457623b74d62e913fbd47e7bd08cf36",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/seqstream.ts.json": "1cf24aa7ce1342f5e2bbb211961600eac60ca327",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipFile.ts.json": "a2235cff94ad80d50c197b71370dad706f600270",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/seqstream.ts.json": "d0b342672716068f93dcebda04adfa9cf5e6e5bf",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipFile.ts.json": "f413a807b83f532788e6cd7e9c4dae2956bb9bc1",
+    "docs/program/registry/writer/capabilities/CAP-0113.json": "628bb227a7e1e62b962ba5e88b1d6d2d34765d5e",
+    "docs/program/writer-upstream-suspected-issues.md": "8092fa0b5749639eda7383e95cf495ce3ae3f39b",
+    "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts": "a244512235de2a01a9cb74e5af026752aea005a4",
+    "apps/office/src/package/qa/cppunit/data/README.md": "31269567d96ca0530627f749e771ae73a7b940da",
+    "apps/office/src/package/qa/cppunit/data/tdf163341.ods": "5971e0123883cdfeda6d7a87456dacc51ba23c50",
+    "apps/office/src/package/qa/cppunit/data/unicode-path.docx": "1855aa1e74083d039cbf79521019d87aedfa51c8",
+    "apps/office/src/package/qa/cppunit/data/unicode-path.odt": "9edaaeb688096de3483a61729c92a34e929eb879",
+    "apps/office/src/package/qa/cppunit/test_zippackage.test.ts": "6293cc49be50e528505193199c06b40998d9de75",
+    "apps/office/src/package/source/zipapi/native-zip64.test.ts": "cdfb73f41a52394c6d9c55b59318bc1430c088c9",
+    "docs/program/native-zip64-catalog.md": "c264b58cf1f3133ef0000b44285a19fae54da3d3",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipException.ts.json": "ce6c7936d092fa1810de1f38cbb81604db2547d0",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipException.ts.json": "3f1e9737cc4f901c4ee14f57e5571262490ba77e"
+  },
+  "checks": [
+    {
+      "command": "npx eslint apps/office/src/comphelper/source/streaming/seqstream.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/ZipFile.test.ts apps/office/src/package/source/zipapi/native-zip64.test.ts apps/office/src/package/qa/cppunit/test_zippackage.test.ts apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts --max-warnings 0",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip64-gate-0.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/comphelper/source/streaming/seqstream.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/ZipFile.test.ts apps/office/src/package/source/zipapi/native-zip64.test.ts apps/office/src/package/qa/cppunit/test_zippackage.test.ts apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-1.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip64-gate-2.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-3.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip64-gate-4.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-6.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-8.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-9.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-10.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-11.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-12.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-13.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-gate-14.log"
+    }
+  ],
+  "finalSourceRegistryChecks": [
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip64-final-0.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-final-1.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-final-2.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-final-3.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-final-4.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-final-5.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-typecheck-ordered.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-static-ordered.log"
+    },
+    {
+      "command": "scoped ESLint six changed runtime/test files",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-lint-ordered.log"
+    },
+    {
+      "command": "scoped Prettier six changed runtime/test files",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip64-format-final.log"
+    }
+  ],
+  "coverage": {
+    "command": "npx vitest run src/package/qa/cppunit/test_zippackage.test.ts src/package/source/zipapi/native-zip64.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/MemoryByteGrabber.test.ts src/comphelper/source/streaming/seqstream.test.ts --coverage --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.include=src/comphelper/source/streaming/seqstream.ts --coverage.include=src/offapi/com/sun/star/packages/zip/ZipException.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 73,
+    "files": 5,
+    "statements": "464/472",
+    "branches": "267/275",
+    "functions": "47/47",
+    "lines": "415/419",
+    "log": "apps/office/coverage/native-zip64-coverage-ordered.log"
+  },
+  "integration": {
+    "exitCode": 0,
+    "cases": 118,
+    "files": 10,
+    "log": "apps/office/coverage/native-zip64-integration.log",
+    "scope": "Native transfer/memory/byte/manifest, actual Strict/Transitional OOXML packages, input storage and ODF/Worker/workflows before the final primitive causal-snapshot/order follow-up; final scoped profile covers those changed failure paths."
+  },
+  "finalWorkerRegression": {
+    "command": "npx vitest run src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sw/browser/workflows/writer-odt-io.test.ts",
+    "exitCode": 0,
+    "cases": 11,
+    "files": 2,
+    "log": "apps/office/coverage/native-zip64-worker-final.log",
+    "scope": "After the native-to-host cause ownership change; overlaps related cases, not an additional unique-case total."
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "package/source/zipapi/ZipFile.cxx": "f5d6edbffebe136b806887b2c4c132e7b333da6eb9e4ce0477a6a10e8fdd15e0",
+      "package/inc/ZipFile.hxx": "f4e79e86cdfbddf0bf182e7f62d287f1c4e5b787ad70d194b574bd11e9a82150",
+      "package/source/zipapi/MemoryByteGrabber.hxx": "44d68861d59d7d7e3d958f88271d236159cd4e30af71b90ec2f489c621f6238e",
+      "comphelper/source/streaming/seqstream.cxx": "a98587feb9248dfeee2a91d3735f5997c56ff23b7f0b081f22c5c1d3205126c1",
+      "include/comphelper/seqstream.hxx": "df7f52352a3136d91bad5893d6ed8776d25ac7773e96f703105d94de708116d4",
+      "offapi/com/sun/star/packages/zip/ZipException.idl": "b855a4286231539474ccec80dc11b3f1012060d93386027e94abd0f1d948b06f",
+      "package/qa/cppunit/test_zippackage.cxx": "c423a44549c955c6a63cc0fadda2100a55a2319d5d6357cce303877bcc7de94b"
+    }
+  },
+  "fixtures": {
+    "apps/office/src/package/qa/cppunit/data/tdf163341.ods": {
+      "upstreamPath": "package/qa/cppunit/data/tdf163341.ods",
+      "sha256": "576284324ca7c41f9b2047121ca578cbb704696e3519dd2cf6d360b88e66901d",
+      "unchanged": true
+    },
+    "apps/office/src/package/qa/cppunit/data/unicode-path.odt": {
+      "upstreamPath": "package/qa/cppunit/data/unicode-path.odt",
+      "sha256": "c55888e2a42314f3f369f24e6044ace3bc780144fd062702c4533dd739170ff3",
+      "unchanged": true
+    },
+    "apps/office/src/package/qa/cppunit/data/unicode-path.docx": {
+      "upstreamPath": "package/qa/cppunit/data/unicode-path.docx",
+      "sha256": "4d8b0b3dd8ada4eb6bf141e88f8dffc07f993545d9fdd25f505d8ac839918946",
+      "unchanged": true
+    }
+  },
+  "limitations": [
+    "Bounded prerequisite; full native descriptor validation, overlap/hole/FAT/case-insensitive graph, native ZipEntry/ZipOutputStream/ZipPackage/XStorage, DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished.",
+    "Normal upstream testTdf163341/testUnicodeODT/testUnicodeDOCX assertions are translated at the real current ZIP layer, without a fake service factory or complete native service exception parity. Recovery portions remain intentionally outside application policy.",
+    "Source CALC-505..508 / WRITER436..439 preserved, including invalid physical Unicode view-domain limitations; no compiled native pointer/ABI/allocator/thread witness is claimed.",
+    "Existing64MiB/entry/count/expansion/total-byte admission boundaries remain unchanged; ZIP64 output remains unsupported by the old bounded writer.",
+    "Known check:docs baseline css-style-matchers.ts lines17/76 remains. Initial syntax/type/fixture/lint/registry failures and corrections are recorded; legacy verified bounded ODF scope exclusions retain ordered X classification without broadening parity flags.",
+    "Full suite deferred per approved related-only/ten-agentplane-task cadence; this epic remains incomplete."
+  ]
+}
