@@ -4,7 +4,7 @@ title: "Update Node LTS and all npm dependencies to latest stable"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -29,6 +29,28 @@ verification:
   updated_by: "CODER"
   note: "All approved accessibility/upgrade regressions fixed. Fresh complete verification: 1894 application files/29857 tests and all537 e2e pass; tooling174 and inventory130 pass with inventory100%; lint/typecheck/build/Docker/HTTP/static/policy checks pass. Modified Calc grid and shared title presenter have100% coverage. Only the pre-existing global app coverage deficit remains (97.68/95.47/99.36/98.29 against unchanged100%); no task waiver or green closure is inferred."
   attempts: 2
+quality_review:
+  state: "rework"
+  updated_at: "2026-11-11T16:48:05.586Z"
+  updated_by: "EVALUATOR"
+  note: "Approved runtime/dependency and Calc accessibility work is implemented and fully exercised; global application coverage remains below its pre-existing unchanged100% gate, so overall task closure is not recommended."
+  evaluated_sha: "adeebd90aec0caa8f377fe7065d5aec3bf548093"
+  blueprint_digest: "0b6df0a100e8dfd90aa3b68aba6d1f522c38e6941a05195c0a00dc29dddad037"
+  evidence_refs:
+    - ".agentplane/tasks/202611111016-E4CA0H/README.md"
+    - ".agentplane/tasks/202611111016-E4CA0H/quality/20261111-164805586-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611111016-E4CA0H/quality/20261111-164805586-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611111016-E4CA0H/quality/20261111-164805586-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611111016-E4CA0H/blueprint/resolved-snapshot.json"
+    - ".agentplane/tmp/dependency-upgrade-E4CA0H/calc-a11y-final-verification-state.json"
+    - ".agentplane/tmp/dependency-upgrade-E4CA0H/calc-a11y-final-app-progress.json"
+    - ".agentplane/tmp/dependency-upgrade-E4CA0H/calc-a11y-final-e2e.log"
+    - "apps/office/coverage/all/coverage-summary.json"
+    - ".agentplane/tmp/dependency-upgrade-E4CA0H/calc-a11y-final-container-http.log"
+  findings:
+    - "Canonical upstream address and separately owned displayed text are preserved; ARIA composes them through self-reference and the existing text node. No alternate model, formatter, input, history or selection owner was introduced. Address-boundary selectors preserve A1/A10 distinction."
+    - "Fresh full verification on committed implementation adeebd90aec0 passes all29857 application tests and537 e2e, including full axe on desktop/mobile Calc. Tooling174 and inventory130 pass; modified presenters and inventory have100% coverage; lint, types, build, Docker and HTTP smoke pass."
+    - "The global app coverage gate still fails at97.68% statements,95.47% branches,99.36% functions and98.29% lines. This deficit is documented before the upgrade and its uncovered counts do not increase. No100% threshold or axe rule was removed, and the prior integration waiver is not reused for this task."
 commit: null
 comments:
   -
