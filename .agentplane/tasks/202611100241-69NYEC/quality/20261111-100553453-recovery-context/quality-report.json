@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611100241-69NYEC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-11T10:05:53.453Z",
+  "verdict": "pass",
+  "summary": "Integration accepted for closure with the user's explicit deferral of 100% application coverage.",
+  "evaluated_sha": "c7d5aa7111b152caea8e9e251a24807c64089940",
+  "blueprint_digest": "e6736f70324a1411043b303b8d93f516cc916f612b5c62e7ef58d737e6fc5e8d",
+  "findings": [
+    "All integration failures were repaired and branch synchronization verified. The original application coverage failure remains documented and is explicitly waived for this closure by the user's latest instruction; coverage thresholds are unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611100241-69NYEC/README.md",
+    ".agentplane/tmp/69NYEC/final-git.json",
+    ".agentplane/tmp/69NYEC/closure-doctor.log",
+    "node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
