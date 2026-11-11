@@ -1,0 +1,303 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Actual native package READ input metadata and Writer XStream relationship connection",
+  "sourceBlobs": {
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "b0f87cd7995066c488951b14573f35d1145065a4",
+    "apps/office/src/oox/source/helper/zipstorage-input.test.ts": "052770a0510f8ca72488ca11d8208cbf43c3ff71",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "f798e30b9583f5d6bf10d95cbaf9cd9bbe793a98",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "83b2dba1c87fff1514737084e99ea289fd6d8b27",
+    "apps/office/src/sax/source/tools/fastserializer.test.ts": "858b9509adf2f4d3540ab7b87a028f082816616c",
+    "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts": "f180bc8e0d31dc1b5054bd003a7027f651be0c97",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "f0f7f0c79b63af59cd6c96ad00b2cca9657d1a0f",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "0cb6d5b46ac79d1836f8c35e59b0322b8fd893f3",
+    "apps/office/src/test/oox-input.ts": "8df57e4b7a0182fda975f0c8d1aef0cad475dad7",
+    "docs/program/native-package-input-component.md": "5e350de2c0d593ea8bec5b9258534c4840b02484",
+    "docs/program/native-package-input-wiring.md": "a9b20da81ed646623cb91ca1efcee5f26cfc699a",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "95c6efc607d6fd7a50108d42bc3c562e2a2726eb",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/StorageFormats.ts.json": "718e6741956edfaa4d1752a4a4fc4820a52fe0bd",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XExtendedStorageStream.ts.json": "f5ce032e81ec77cdfdf05ebf400816ba788393a3",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "0a2b2cae157012fbf792e585461423faed1d727b",
+    "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json": "88ba38c5a71c1f9061378be38f18e6483fe93bc2",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json": "439714c7041033eb2028f07cfc1e8e28f1cb60aa",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XStream.ts.json": "520ec407ecc89f4e2d9aae5618d4e2a636fff0ad",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/StorageFormats.ts.json": "648a21ea6a8804e72d7acdb8b36d3c64ebe57cdf",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XExtendedStorageStream.ts.json": "882e4d5c547ac41c68f63ebc65411e73c64b790c",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "c630f397115a4ce2e073b1065b4a7492e95369cf",
+    "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json": "879018232cf2c53cc551780b7b1c9d421786a608",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json": "046d321f8cfd218c1e26a97287308953f05436d4",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XStream.ts.json": "c443839523ef11677b74ff864b2d43977361164c",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "6b9d1fc4c61a8ef73d6f6eecf48f61228b31a420",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "269c6474b2eb15e2b80f06ee4d0dd35d1e56dd0c"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-0.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-input-wiring-check-1.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-2.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-3.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-4.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-5.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-6.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-7.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-check-11.log"
+    },
+    {
+      "command": "npx vitest run src/oox/source/helper/zipstorage-input.test.ts src/oox/source/core/xmlfilterbase.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/oox/source/core/upstream-packages.test.ts --coverage --coverage.include=src/oox/source/helper/zipstorage.ts --coverage.include=src/package/source/zippackage/ZipPackage.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/package-input-wiring",
+      "workingDirectory": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-coverage.log",
+      "logSha256": "12ebc96b6e9f5bb425234434dfb589851cd02d6b8b6576120ca2c56aa850acba"
+    },
+    {
+      "command": "npx vitest run src/oox/source/core/xmlfilterbase.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sax/source/tools/fastserializer.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/oox/source/core/upstream-packages.test.ts src/sc/source/filter/excel/xestream.test.ts",
+      "workingDirectory": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-integration-final.log",
+      "logSha256": "348408f0e47ff7e94650f9eaca124364e2c21f2a87fff769155d8287ce0b9e5f"
+    },
+    {
+      "command": "npx vitest run src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sc/browser/filter/xml/ods-worker-boundaries.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/package/source/xstor/ocompinstream.test.ts",
+      "workingDirectory": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-odf.log",
+      "logSha256": "725e6c53141808580d63eeaf4fca0e3a4230bd5cfd4abcab0897772ef05ab046"
+    },
+    {
+      "command": "npm run typecheck",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-types.log",
+      "logSha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run build",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-build.log",
+      "logSha256": "dce42d6aa53e20c834bcae2ff73f2f0c4965b0a897cfe68e3d1d8f8f3683cbbf"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-static.log",
+      "logSha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    }
+  ],
+  "otherChecks": {
+    "scopedEslint": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-lint.log"
+    },
+    "scopedPrettier": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-input-wiring-format.log"
+    }
+  },
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 421,
+        "covered": 420,
+        "skipped": 0,
+        "pct": 99.76
+      },
+      "statements": {
+        "total": 483,
+        "covered": 478,
+        "skipped": 0,
+        "pct": 98.96
+      },
+      "functions": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 222,
+        "covered": 217,
+        "skipped": 0,
+        "pct": 97.74
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/helper/zipstorage.ts": {
+      "lines": {
+        "total": 138,
+        "covered": 137,
+        "skipped": 0,
+        "pct": 99.27
+      },
+      "functions": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 158,
+        "covered": 153,
+        "skipped": 0,
+        "pct": 96.83
+      },
+      "branches": {
+        "total": 49,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 89.79
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zippackage/ZipPackage.ts": {
+      "lines": {
+        "total": 157,
+        "covered": 157,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 179,
+        "covered": 179,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 76,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": {
+      "lines": {
+        "total": 126,
+        "covered": 126,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 146,
+        "covered": 146,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 97,
+        "covered": 97,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "coveragePolicy": "Latest user permits90; global whole-profile threshold passes. ZipStorage alone branch89.79 retained. No forced unconsumed alternatives, exclusions or production threshold changes.",
+  "tests": {
+    "coverageRun": 82,
+    "separateIntegrationRun": 98,
+    "odfAndComponentRun": 29,
+    "writerResources": 2,
+    "runsOverlapDoNotSumAsUniqueTotal": true,
+    "actualPinnedPackages": [
+      "sw/qa/extras/ooxmlexport/data/hello.docx",
+      "sw/qa/extras/ooxmlexport/data/strict.docx",
+      "sc/qa/unit/data/xlsx/preserve_space.xlsx",
+      "sc/qa/unit/data/xlsx/universal-content-strict.xlsx"
+    ]
+  },
+  "sourceContracts": [
+    "ZipPackage::parseContentType and ZipPackageFolder::setChildStreamsTypeByExtension",
+    "OWriteStream_Impl::ReadPackageStreamProperties/InsertOwnProps/GetStream_Impl",
+    "OInputCompStream standalone constructor and declared native interfaces",
+    "ZipStorage::implOpenInputStream catches native open failures",
+    "OOXMLStreamImpl::getDocumentStream/getTargetForId query/use actual XStream/XRelationshipAccess"
+  ],
+  "transportScope": "Existing asynchronous flat ZIP byte transport creates independent standalone readonly snapshots. It does not impersonate full XStorage, parent-bound stream bookkeeping, mutex or hierarchical SEEKABLEREAD. Host SAX diagnostics are bound to original native metadata refusal; full parser service parity remains unverified.",
+  "initialCorrections": [
+    "Removed unused PropertyState import.",
+    "Fixture packages now include mandatory content metadata instead of relying on incomplete ZIP acceptance.",
+    "Internal content XML assertions read raw ZipFile; storage stream access no longer exposes that entry.",
+    "Closed wrapper cleanup expects native DisposedException, not underlying raw NotConnectedException.",
+    "Malformed own relationship metadata refuses part input; repair permits a new snapshot rather than silently supplying an empty table."
+  ],
+  "baselineFailure": {
+    "command": "npm run check:docs",
+    "file": "apps/office/src/test/css-style-matchers.ts",
+    "headBlob": "24871de94e8a9e323989746ed19eae872d5dc282",
+    "diagnostics": [
+      "line17 function missing JSDoc",
+      "line76 documents2/3 parameters"
+    ]
+  },
+  "remaining": [
+    "Complete native XStorage/root relationship/parent disposal/locking and hierarchical seekable input path",
+    "Existing output stream/relationship/core filter ownership",
+    "Full DOCX/XLSX model/filter/Worker/UI import/export acceptance"
+  ],
+  "fullSuite": "Not run; same ongoing tasks, user cadence once per10 completed agentplane tasks.",
+  "goalStatus": "active"
+}
