@@ -24,7 +24,7 @@ export type SequenceEnd = readonly [storage: uno_Sequence["elements"], byteOffse
 /** Erased original overload argument lists; caller elements are initialized native logical addresses. */
 type SequenceArgs<E> =
   | []
-  | [source: Sequence<E>]
+  | [source: SequenceReference<E>]
   | [handle: uno_Sequence | null, noAcquire: SalNoAcquireArgument]
   | [elements: SequenceElements | null, length: number]
   | [length: number];
@@ -34,9 +34,14 @@ export interface SequenceConstructor<E> {
   readonly ElementType: UnoTypeArgument;
   /** Original compile-time sizeof(E), an explicit logical address stride. */
   readonly ElementSize: number;
+  /** Compiler-emitted specialization prototype, without constructing a value. */
+  readonly prototype: Sequence<E>;
   /** Original selected value constructor. @param args - Native overload inputs. @returns Actual shared sequence owner. */
   new (...args: SequenceArgs<E>): Sequence<E>;
 }
+/** Native lvalue reference; its lifetime belongs to the enclosing initialized value. */
+export type SequenceReference<E> = Omit<Sequence<E>, "dispose">;
+const references = new WeakMap<[uno_Sequence | null], Map<unknown, SequenceReference<unknown>>>();
 /** Compiler specialization identity only; contains no UNO reference or sequence data/default allocation. */
 const specializations = new Map<unknown, SequenceConstructor<unknown>>();
 /** Public template body: exactly one owned pointer-cell address. An erased template is instantiated through its explicit compiler binding; copy/adopt/read do not initialize a type or add another owner. */
@@ -57,6 +62,24 @@ export abstract class Sequence<E = unknown> {
       specializations.set(key, compiled);
     }
     return compiled as SequenceConstructor<E>;
+  }
+  /** Compiler lvalue binding over an existing initialized Sequence field; no construction, acquire or separate destruction. @param binding - Original erased specialization. @param address - Actual pointer field. @returns Borrowed lvalue following pointer replacement. */
+  static unacquired<E>(
+    binding: SequenceConstructor<E>,
+    address: [uno_Sequence | null],
+  ): SequenceReference<E> {
+    let views = references.get(address);
+    if (views === undefined) {
+      views = new Map();
+      references.set(address, views);
+    }
+    let view = views.get(binding);
+    if (view === undefined) {
+      view = Object.create(binding.prototype) as Sequence<E>;
+      Object.defineProperty(view, "pointer", { value: address });
+      views.set(binding, view);
+    }
+    return view as SequenceReference<E>;
   }
   /** Original default/copy/adopt/elements/length constructors. Explicit source pointer/length also represents an initializer_list's begin/size, retaining the same actual C body. There is no native move constructor: rvalue construction still copies. @param args - Original constructor overload. @returns Original owned value. */
   constructor(...args: SequenceArgs<E>) {
@@ -94,7 +117,7 @@ export abstract class Sequence<E = unknown> {
       uno_type_sequence_destroy(sequence, this.type(), cpp_release);
   }
   /** Original copy assignment uses its actual C owner even for self/identical handles. @param source - Same declared source template. @returns This same value. */
-  assign(source: Sequence<E>): this {
+  assign(source: SequenceReference<E>): this {
     uno_type_sequence_assign(this.pointer, source.get() as uno_Sequence, this.type(), cpp_release);
     return this;
   }

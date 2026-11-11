@@ -1,8 +1,21 @@
 /** @fileoverview Ports native Writer OOXMLStreamImpl target lookup, external cache and relative URI resolution over shared ZIP input; distinct from oox::Relations. */
+import { ReadRelationsInfoSequence } from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { Sequence, type SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { uno_Sequence } from "../../../../cppu/inc/uno/sequence2";
 import {
-  ReadRelationsInfoSequence,
-  type StringPair,
-} from "../../../../comphelper/source/xml/ofopxmlhelper";
+  StringPair,
+  cppu_detail_getUnoType_StringPair as pairType,
+} from "../../../../udkapi/com/sun/star/beans/StringPair";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+const Pairs = Sequence.specialize<StringPair>(pairType, 16);
+const Relations = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8);
+/** Existing URI binding reads exact UTF16 units from a borrowed field. @param value - Native string. @returns Host URI text. */
+function text(value: OUStringConstReference): string {
+  let result = "";
+  const units = value.getStr();
+  for (let i = 0; i < value.getLength(); ++i) result += String.fromCharCode(units[i] as number);
+  return result;
+}
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import { FastSaxParser } from "../../../../sax/source/fastparser/fastparser";
@@ -51,7 +64,7 @@ export class OOXMLStreamImpl {
   private readonly document = new Reference<XInputStream>();
   private fastTokenHandler: FastTokenHandler | null = null;
   private fastParser: FastSaxParser | null = null;
-  private relationships: readonly (readonly StringPair[])[] = [];
+  private readonly relationships = new Relations();
   /** Borrows storage; createStream supplies async native constructor initialization. @param storage - Package. @returns Stream. */
   private constructor(readonly storage: ZipStorage) {}
   /** Original document/type/id constructor paths, including VBA data's project intermediate. @param source - Storage or parent stream. @param type - Stream type or relation ID. @returns Stream. */
@@ -79,40 +92,45 @@ export class OOXMLStreamImpl {
       throw new Error("OOXML parent document stream is missing.");
     const result = new OOXMLStreamImpl(parent ? parent.storage : (source as ZipStorage));
     result.msPath = parent?.msPath ?? "";
-    const relations = parent ? parent.relationships : await result.readRelations("");
-    const target = result.lcl_getTarget(
-      relations,
-      typeof type === "string" ? T.UNKNOWN : type,
-      typeof type === "string" ? type : "",
-    );
-    if (target !== null) {
-      result.msTarget = target;
-      const lastSlash = target.lastIndexOf("/");
-      if (lastSlash >= 0) result.msPath = target.slice(0, lastSlash + 1);
-      const input = await result.storage.openInputStream(target);
-      result.document.moveAssign(input);
-      input.dispose();
-      if (!result.document.is())
-        throw new Error("OOXML relationship target stream is missing: " + target);
-      result.maIdCache.clear();
-      try {
-        result.relationships = await result.readRelations(target);
-      } catch (error) {
-        result.dispose();
-        throw error;
+    let relations = parent?.relationships;
+    try {
+      relations ??= await result.readRelations("");
+      const target = result.lcl_getTarget(
+        relations,
+        typeof type === "string" ? T.UNKNOWN : type,
+        typeof type === "string" ? type : "",
+      );
+      if (target !== null) {
+        result.msTarget = target;
+        const lastSlash = target.lastIndexOf("/");
+        if (lastSlash >= 0) result.msPath = target.slice(0, lastSlash + 1);
+        const input = await result.storage.openInputStream(target);
+        result.document.moveAssign(input);
+        input.dispose();
+        if (!result.document.is())
+          throw new Error("OOXML relationship target stream is missing: " + target);
+        result.maIdCache.clear();
+        const ownRelations = await result.readRelations(target);
+        result.relationships.moveAssign(ownRelations);
+        ownRelations.dispose();
       }
+    } catch (error) {
+      result.dispose();
+      throw error;
+    } finally {
+      if (!parent) relations?.dispose();
     }
     return result;
   }
   /** Reads the storage relationship side stream through the native sequence helper. @param target - Part or root. @returns Ordered relationship sequence. */
-  private async readRelations(target: string): Promise<readonly (readonly StringPair[])[]> {
+  private async readRelations(target: string): Promise<Sequence<Sequence<StringPair>>> {
     const slash = target.lastIndexOf("/"),
       directory = target.slice(0, slash + 1),
       basename = target.slice(slash + 1);
     const input = await this.storage.openInputStream(directory + "_rels/" + basename + ".rels");
     const source = new InputSource();
     try {
-      if (!input.is()) return [];
+      if (!input.is()) return new Relations();
       source.aInputStream = input;
       return ReadRelationsInfoSequence(source);
     } finally {
@@ -144,6 +162,7 @@ export class OOXMLStreamImpl {
   dispose(): void {
     this.fastParser?.dispose();
     this.document.dispose();
+    this.relationships.dispose();
   }
   /** Original ID lookup is relative to the opened stream's relationships. @param id - Relationship ID. @returns Target or empty. */
   getTargetForId(id: string): string {
@@ -151,19 +170,28 @@ export class OOXMLStreamImpl {
   }
   /** Native ordered attribute scan, external cache and strict/transitional exact type matching. @param relations - XRelationshipAccess sequence. @param type - Selector. @param id - ID. @returns Target or no match. */
   private lcl_getTarget(
-    relations: readonly (readonly StringPair[])[],
+    relations: Sequence<Sequence<StringPair>>,
     type: T,
     id: string,
   ): string | null {
     if (this.maIdCache.size === 0) {
-      for (const sequence of relations) {
+      for (let i = 0; i < relations.getLength(); ++i) {
+        const sequence = Sequence.unacquired(
+          Pairs,
+          (relations.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+        );
         let relationId = "",
           target = "",
           external = false;
-        for (const pair of sequence) {
-          if (pair.First === "Id") relationId = pair.Second;
-          else if (pair.First === "Target") target = pair.Second;
-          else if (pair.First === "TargetMode" && pair.Second === "External") external = true;
+        for (let j = 0; j < sequence.getLength(); ++j) {
+          const pair = StringPair.unacquired(
+            (sequence.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
+          );
+          const first = text(pair.First),
+            second = text(pair.Second);
+          if (first === "Id") relationId = second;
+          else if (first === "Target") target = second;
+          else if (first === "TargetMode" && second === "External") external = true;
         }
         if (external || target.startsWith("#")) this.maIdCache.set(relationId, target);
       }
@@ -181,27 +209,35 @@ export class OOXMLStreamImpl {
     else if (type === T.VBADATA)
       typeName = strictName = "http://schemas.microsoft.com/office/2006/relationships/wordVbaData";
     let found = false;
-    for (const sequence of relations) {
+    for (let i = 0; i < relations.getLength(); ++i) {
+      const sequence = Sequence.unacquired(
+        Pairs,
+        (relations.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+      );
       let external = false,
         target = "";
-      for (const pair of sequence) {
-        if (pair.First === "Type" && (pair.Second === typeName || pair.Second === strictName))
-          found = true;
+      for (let j = 0; j < sequence.getLength(); ++j) {
+        const pair = StringPair.unacquired(
+          (sequence.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
+        );
+        const first = text(pair.First),
+          second = text(pair.Second);
+        if (first === "Type" && (second === typeName || second === strictName)) found = true;
         else if (
-          pair.First === "Type" &&
+          first === "Type" &&
           type === T.EMBEDDINGS &&
-          (pair.Second === transitional + "oleObject" || pair.Second === strict + "oleObject")
+          (second === transitional + "oleObject" || second === strict + "oleObject")
         )
           found = true;
-        else if (pair.First === "Id" && pair.Second === id) found = true;
-        else if (pair.First === "Target") {
+        else if (first === "Id" && second === id) found = true;
+        else if (first === "Target") {
           if (
-            streamTargets.customTarget !== pair.Second &&
+            streamTargets.customTarget !== second &&
             (type === T.CUSTOMXML || type === T.CHARTS || type === T.FOOTER || type === T.HEADER)
           )
             found = false;
-          else target = pair.Second;
-        } else if (pair.First === "TargetMode" && pair.Second === "External") external = true;
+          else target = second;
+        } else if (first === "TargetMode" && second === "External") external = true;
       }
       if (found) {
         if (external) return target;

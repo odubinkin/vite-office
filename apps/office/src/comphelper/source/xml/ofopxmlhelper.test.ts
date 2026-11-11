@@ -1,5 +1,39 @@
 /** @fileoverview Source-backed OFOPXMLHelper parsing, lookup precedence and original SAX serialization contracts. */
 import { expect, it } from "vitest";
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { uno_Sequence } from "../../../cppu/inc/uno/sequence2";
+import {
+  StringPair,
+  cppu_detail_getUnoType_StringPair as pairType,
+} from "../../../udkapi/com/sun/star/beans/StringPair";
+const Pairs = Sequence.specialize<StringPair>(pairType, 16);
+/** Observes then destroys the real returned result; host records exist only as assertions. @param xml - Input. @returns Ordered observed fields. */
+function readRelations(xml: string): { First: string; Second: string }[][] {
+  const result = ReadRelationsInfoSequence(xml);
+  try {
+    const observed: { First: string; Second: string }[][] = [];
+    for (let i = 0; i < result.getLength(); ++i) {
+      const row = Sequence.unacquired(
+        Pairs,
+        (result.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+      );
+      const fields: { First: string; Second: string }[] = [];
+      for (let j = 0; j < row.getLength(); ++j) {
+        const pair = StringPair.unacquired(
+          (row.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
+        );
+        fields.push({
+          First: String.fromCharCode(...pair.First.getStr().subarray(0, pair.First.getLength())),
+          Second: String.fromCharCode(...pair.Second.getStr().subarray(0, pair.Second.getLength())),
+        });
+      }
+      observed.push(fields);
+    }
+    return observed;
+  } finally {
+    result.dispose();
+  }
+}
 import {
   GetContentTypeByName,
   ReadContentTypeSequence,
@@ -12,7 +46,7 @@ import { createManifestProperty } from "../../../package/source/manifest/Manifes
 
 it("retains native ordered relationship sequences, duplicates and Id-only entries", /** Verifies XRelationshipAccess admission used by Writer. @returns Nothing. */ () => {
   expect(
-    ReadRelationsInfoSequence(
+    readRelations(
       '<Relationships><Relationship TargetMode="Other" Target="a&amp;b" Type="t" Id="r"/><Relationship Id="r"/><Relationship Id="last" Type="" Target=""/></Relationships>',
     ),
   ).toEqual([
@@ -25,7 +59,7 @@ it("retains native ordered relationship sequences, duplicates and Id-only entrie
     [{ First: "Id", Second: "r" }],
     [{ First: "Id", Second: "last" }],
   ]);
-  expect(ReadRelationsInfoSequence("<Relationships>ignored</Relationships>")).toEqual([]);
+  expect(readRelations("<Relationships>ignored</Relationships>")).toEqual([]);
 });
 
 it.each([
@@ -39,8 +73,7 @@ it.each([
   "rejects native relationship shape violations %s",
   /** Executes original admission. @param xml - Invalid sequence. @returns Nothing. */ (xml) => {
     expect(
-      /** Attempts native read. @returns Sequence or throws. */ () =>
-        ReadRelationsInfoSequence(xml),
+      /** Attempts native read. @returns Sequence or throws. */ () => readRelations(xml),
     ).toThrow();
   },
 );
@@ -169,4 +202,31 @@ it("keeps native package defaults and omits only identical extension/type overri
         property.Value.dispose();
       }
   }
+});
+
+it("keeps nested native ownership and COW across returned result copies", /** Exercises real nested Sequence fields and SAL string owners rather than reconstructed arrays. @returns Nothing. */ () => {
+  const result = ReadRelationsInfoSequence(
+    '<Relationships><Relationship Id="😀" Target="a&amp;b"/></Relationships>',
+  );
+  const Relations = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8);
+  const copy = new Relations(result);
+  const originalHeader = result.get() as uno_Sequence;
+  const row = Sequence.unacquired(
+    Pairs,
+    (result.getConstArray() as SequenceElements).get(0) as [uno_Sequence | null],
+  );
+  const header = row.get() as uno_Sequence;
+  expect(originalHeader.nRefCount).toBe(2);
+  expect(header.nRefCount).toBe(1);
+  const pair = StringPair.unacquired(
+    (row.getConstArray() as SequenceElements).get(0) as SequenceElements,
+  );
+  expect(pair.Second.getLength()).toBe(2);
+  result.realloc(0);
+  expect(originalHeader.nRefCount).toBe(1);
+  expect(row.getLength()).toBe(2);
+  result.dispose();
+  copy.dispose();
+  expect(originalHeader.nRefCount).toBe(0);
+  expect(header.nRefCount).toBe(0);
 });

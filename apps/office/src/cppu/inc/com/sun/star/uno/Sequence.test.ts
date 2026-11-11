@@ -260,3 +260,25 @@ it("preserves actual original index/range/size assertion rejection boundaries", 
     }
   }
 });
+
+it("binds an initialized Sequence lvalue without acquisition and follows COW pointer replacement", /** Compiler lvalue binding exercises original getArray/realloc/copy ownership, not a new sequence provider. @returns Nothing. */ async () => {
+  const { Sequence } = await import("./Sequence");
+  const Values = Sequence.specialize<number>("sal_Int32", 4);
+  const owner = new Values(1),
+    copy = new Values(owner);
+  const original = owner.get() as uno_Sequence;
+  const view = Sequence.unacquired(Values, owner.getAddress());
+  expect(view).toBe(Sequence.unacquired(Values, owner.getAddress()));
+  expect(original.nRefCount).toBe(2);
+  expect(view.get()).toBe(original);
+  view.realloc(2);
+  expect(owner.getLength()).toBe(2);
+  expect(copy.getLength()).toBe(1);
+  expect(view.get()).toBe(owner.get());
+  expect(original.nRefCount).toBe(1);
+  const acquired = new Values(view);
+  expect((owner.get() as uno_Sequence).nRefCount).toBe(2);
+  acquired.dispose();
+  copy.dispose();
+  owner.dispose();
+});

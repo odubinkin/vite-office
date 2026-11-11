@@ -94,7 +94,7 @@
       "evidence": "relationship-sequences-boundaries.log"
     },
     {
-      "command": "Scoped ESLint over five changed TypeScript files",
+      "command": "npx eslint apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts apps/office/src/cppu/inc/com/sun/star/uno/Sequence.test.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --max-warnings 0",
       "exitCode": 0,
       "evidence": "relationship-sequences-lint.log"
     },
@@ -104,19 +104,23 @@
       "evidence": "relationship-sequences-format.log"
     },
     {
-      "command": "Six-file targeted Vitest coverage profile; exact source includes and user-authorized90 thresholds recorded in session",
+      "command": "npx vitest run src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/cppu/inc/com/sun/star/uno/Sequence-type-index.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts --coverage --coverage.include=src/cppu/inc/com/sun/star/uno/Sequence.ts --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/relationship-sequences",
       "exitCode": 0,
-      "evidence": "relationship-sequences-coverage90.log"
+      "evidence": "relationship-sequences-coverage90.log",
+      "workingDirectory": "apps/office"
     },
     {
-      "command": "Initial same coverage profile under unchanged100 thresholds",
+      "command": "npx vitest run src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/cppu/inc/com/sun/star/uno/Sequence-type-index.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts --coverage --coverage.include=src/cppu/inc/com/sun/star/uno/Sequence.ts --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/relationship-sequences",
       "exitCode": 1,
-      "evidence": "relationship-sequences-coverage.log"
+      "evidence": "relationship-sequences-coverage.log",
+      "workingDirectory": "apps/office"
     },
     {
-      "command": "Five-file related Vitest regression profile",
+      "command": "npx vitest run src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts src/sw/source/writerfilter/ooxml/OOXMLTable.test.ts src/oox/source/core/xmlfilterbase.test.ts src/udkapi/com/sun/star/beans/StringPair.test.ts src/cppu/source/uno/sequence-engine.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
       "exitCode": 0,
-      "evidence": "relationship-sequences-regressions.log"
+      "evidence": "relationship-sequences-regressions.log",
+      "workingDirectory": "apps/office",
+      "note": "OOXMLTable.test.ts does not exist; Vitest matched five actual files. Real OOXMLFastContextHandlerTable.test.ts is included in the main six-file coverage profile."
     }
   ],
   "coverage": {
