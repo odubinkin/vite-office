@@ -5382,3 +5382,23 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, writeLOC/writeCEN, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The full UTF8 OString length is narrowed to sal_Int16 for header lengths, but the full byte sequence is written. writeLOC then computes nOffset as current position minus (LOCHDR + the signed name length). A real32768-byte ASCII path therefore emits name bits0x8000, then records offset65536 for a LOC that began at0; readCEN rejects its negative name length. Preserve the original narrowing and arithmetic in the admitted output path rather than silently repairing it. A real public writer call exercises the boundary without private-state forcing. This is source-derived/local owner evidence, not a compiled native ABI witness or a general ZIP64 output claim.
+
+### CALC-513 — TimeValue seconds wrap before the DOS upper-year boundary
+
+- Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- include/osl/time.h declares Seconds as sal_uInt32 and warns about2106. OSL assigns signed platform seconds into that field. Values before1970 or after the uint32 epoch range wrap; a clock value-1ms becomes seconds0xffffffff with nanoseconds999000000. getCurrentDosTime later sees the wrapped UTC year, not the original clock year. Preserve the source width and warning; local initialized-value/platform tests cover the wrapping without a compiled native clock witness.
+
+### CALC-514 — DOS time assertion excludes the valid ZIP year1980
+
+- Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- ZipOutputStream::getCurrentDosTime asserts Year>1980 and Year<2108, though the subsequent year subtraction can encode DOS year0. Thus a real1980 calendar value stops in the checked binding. Preserve this assertion, its original calendar alternatives and odd-second truncation rather than widening the range. NDEBUG fallback behavior is not certified.
+
+### CALC-515 — Signed CRC-1 sentinel collides with a legitimate STORE checksum
+
+- Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- ZipOutputStream::setEntry interprets nCrc==-1 as unknown, setting compressed size0 and descriptor bit3. Four real ff bytes have CRC32 ffffffff, whose sal_Int32 value is-1. ZipPackageStream::ImplSetStoredData supplies the actual CRC before setEntry; the STORE save branch then writes the bytes and rawCloseEntry emits no descriptor for STORE. The local current STORE transport retains this sequence: zero LOC fields and inconsistent CEN compressed size, rejected by readCEN. This is a source-derived pipeline inference plus actual local caller evidence, not a compiled full native package-service reproduction. Preserve the sentinel and conditions.
+
+### CALC-516 — DOS clock caller ignores failed OSL output statuses
+
+- Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- getCurrentDosTime ignores boolean results from osl_getSystemTime and osl_getDateTimeFromTimeValue, then reads calendar members. Original non-MACH clock failure returnsfalse before initializing TimeValue, and failed gmtime leaves the output calendar unchanged. This can enter an indeterminate native value domain. Preserve the calls and lack of a retry/status repair; the browser Date backend has no represented OS failure path. That failure/undefined-data behavior remains unverified, without fake failures or invented fallback calendar values.

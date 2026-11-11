@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/package/source/zipapi/ZipOutputStream.ts#ZipOutputStream",
         "vendor/libreoffice-reference/package/source/zipapi/ZipOutputStream.cxx#ZipOutputStream::ZipOutputStream",
-        "apps/office/src/package/source/zipapi/native-output-owners.test.ts"
+        "apps/office/src/package/source/zipapi/native-output-owners.test.ts",
+        "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts"
       ],
-      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipOutputStream.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint.",
+      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipOutputStream.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint. Original static ZipOutputStream::setEntry and getCurrentDosTime now provide version20, UTF8 flag reset, DEFLATED method fallback, unknown CRC/size descriptor decisions and UTC DOS packing through actual TimeValue/oslDateTime owners. Existing STORE package output calls setEntry rather than supplying a constant1980 timestamp, and LOC writes zero CRC/sizes when source bit3 is set. The source checked year assertion, ignored OSL success statuses, uint32 TimeValue seconds wrapping and all-ones CRC sentinel collision are preserved, not repaired. Date is the explicit browser CLOCK_REALTIME/gmtime primitive boundary with millisecond precision; native OS failures, submillisecond clock precision, ABI/thread behavior, chrono constructors and unconsumed OSL time functions remain unverified or unported. Full native ZipOutputStream threadpool/deflate/ZIP64/encryption/package/output-storage and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Browser open/save/autosave/recovery policies are unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "ZipOutputStream"
@@ -35,7 +36,8 @@
         "ZipOutputStream::setEntry",
         "ZipOutputStream::writeLOC",
         "ZipOutputStream::writeCEN",
-        "ZipOutputStream::writeEND"
+        "ZipOutputStream::writeEND",
+        "ZipOutputStream::getCurrentDosTime"
       ]
     }
   }

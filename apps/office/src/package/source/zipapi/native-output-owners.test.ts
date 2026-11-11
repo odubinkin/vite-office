@@ -1,5 +1,5 @@
 /** @fileoverview Genuine ZipEntry values and native output framing over ByteChucker/UNOMemoryStream, including counted SAL UTF8 conversion. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { ZipEntry } from "../../inc/ZipEntry";
 import { ZipOutputStream } from "./ZipOutputStream";
 import { ZipFile } from "./ZipFile";
@@ -109,16 +109,22 @@ it("admits the source null UTF16 pointer with zero count", /** A genuine constru
   }
 });
 it("matches the independently packed single-entry ZIP32 golden bytes", /** Golden fields were packed independently with Python struct/zlib; no production encoder constructs the expectation. @returns Nothing. */ () => {
-  const output = new ZipOutputStream();
-  output.putNextEntry("a", new Uint8Array([65]));
-  const hex =
-    "504b0304140000080000000021008b9ed9d30100000001000000010000006141504b01021400140000080000000021008b9ed9d3010000000100000001000000000000000000000000000000000061504b050600000000010001002f000000200000000000";
-  const expected = Uint8Array.from(
-    hex.match(/../g) as string[],
-    /** Exact independently packed octet. @param byte - Hex. @returns Value. */ (byte) =>
-      parseInt(byte, 16),
-  );
-  expect(output.finish()).toEqual(expected);
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-01-02T03:04:05.006Z"));
+  try {
+    const output = new ZipOutputStream();
+    output.putNextEntry("a", new Uint8Array([65]));
+    const hex =
+      "504b03041400000800008218225c8b9ed9d30100000001000000010000006141504b010214001400000800008218225c8b9ed9d3010000000100000001000000000000000000000000000000000061504b050600000000010001002f000000200000000000";
+    const expected = Uint8Array.from(
+      hex.match(/../g) as string[],
+      /** Exact independently packed octet. @param byte - Hex. @returns Value. */ (byte) =>
+        parseInt(byte, 16),
+    );
+    expect(output.finish()).toEqual(expected);
+  } finally {
+    vi.useRealTimers();
+  }
 });
 it("preserves full payload bytes, non-ASCII paths and independent input copies", /** Existing putNextEntry byte binding copies payload before native framing and real reopening validates CRC. @returns Nothing. */ async () => {
   const payload = Uint8Array.of(0, 255, 128, 1),

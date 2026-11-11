@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/osl/unx/time.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/osl/unx/time.cxx",
+    "localSymbols": [
+      "osl_getSystemTime",
+      "osl_getDateTimeFromTimeValue"
+    ],
+    "upstreamSymbols": [
+      "osl_getSystemTime",
+      "osl_getDateTimeFromTimeValue",
+      "gmtime_r"
+    ],
+    "preservedResponsibilities": [
+      "Original static ZipOutputStream::setEntry and getCurrentDosTime now provide version20, UTF8 flag reset, DEFLATED method fallback, unknown CRC/size descriptor decisions and UTC DOS packing through actual TimeValue/oslDateTime owners. Existing STORE package output calls setEntry rather than supplying a constant1980 timestamp, and LOC writes zero CRC/sizes when source bit3 is set. The source checked year assertion, ignored OSL success statuses, uint32 TimeValue seconds wrapping and all-ones CRC sentinel collision are preserved, not repaired. Date is the explicit browser CLOCK_REALTIME/gmtime primitive boundary with millisecond precision; native OS failures, submillisecond clock precision, ABI/thread behavior, chrono constructors and unconsumed OSL time functions remain unverified or unported. Full native ZipOutputStream threadpool/deflate/ZIP64/encryption/package/output-storage and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Browser open/save/autosave/recovery policies are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed OSL time/chrono functions, native clock/gmtime failures, physical submillisecond/ABI/thread behavior and complete package/filter/model/UI graph remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/osl/unx/time.ts",
+          "marker": "osl_getSystemTime"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/osl/unx/time.cxx",
+          "marker": "osl_getSystemTime"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Date supplies only the consumed successful CLOCK_REALTIME/gmtime primitive operations; source UTC field assignments, uint32 seconds and caller conditions are retained. OS errors and physical clock resolution are not fabricated or certified."
+    }
+  }
+}

@@ -16,7 +16,10 @@ const encoder = new TextEncoder();
 
 afterEach(
   /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-  () => vi.unstubAllGlobals(),
+  () => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  },
 );
 
 /** Creates one deterministic stored ZIP. @param entries - Name/text pairs. @returns Bytes. */
@@ -93,6 +96,8 @@ function limits(overrides: Partial<ZipFileLimits>): ZipFileLimits {
 
 describe("ZipOutputStream" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
   it("writes deterministic empty and stored archives" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-01-02T03:04:05.006Z"));
     expect(
       /** Source readCEN retains even the zero-length initial free interval. @returns Archive. */
       () => new ZipFile(new ZipOutputStream().finish()),

@@ -22,7 +22,8 @@
       "Original END/Zip64/extra-field mechanisms and genuine ZipException support actual normal ZIP64 package reads with source-backed CEN/LOC consistency checks.",
       "Original LOC descriptors and CEN occupied-extent validation retain native field order, diagnostics and FAT-directory filtering.",
       "Native ZIP/OOXML/ODF case-check selection uses the original ASCII-only SAL string value/ownership path and source CEN ordering.",
-      "Bounded ZIP32 package output framing now uses actual native ZipEntry, SAL byte/Unicode owners, ByteChucker and shared memory output instead of an independent DataView encoder."
+      "Bounded ZIP32 package output framing now uses actual native ZipEntry, SAL byte/Unicode owners, ByteChucker and shared memory output instead of an independent DataView encoder.",
+      "Native ZIP entry initialization now supplies original current UTC DOS time/default fields and preserves CRC sentinel/descriptor conditions."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
@@ -37,7 +38,8 @@
       "Original findCentralDirectory and static readExtraFields now operate through actual ByteGrabber/MemoryByteGrabber/native byte/reference/ZipException owners. ZIP32/ZIP64 END/locator/signature/disk/count/signed arithmetic/record consistency and ordered Zip64/Unicode/unknown extras retain source conditions, lvalue writes and diagnostics. MemoryInputStream const sal_Int8 pointer binding now also borrows actual signed/unsigned typed byte storage without an archive-sized address provider. CEN checks record count/size, STORE consistency and eagerly applies the consumed LOC name/flag/extra/duplicated-value checks; actual payload CRC/inflate remains on read. Committed unmodified testTdf163341 ZIP64 and normal Unicode ODT/DOCX rejection cases exercise the real catalog; recovery/service factories are not fabricated. The existing flat byte/catalog/host-error/resource boundary remains explicit. Full native descriptor/overlap/hole/FAT/case-insensitive/recovery/ZipEntry/ZipOutputStream/package/storage/model/filter/Worker/UI acceptance and physical pointer/ABI/thread/allocation guarantees are unverified or unfinished. CALC-505..508 and WRITER436..439 retain source surprises and invalid-view limitations. Existing browser recovery/open/save/autosave choices remain unchanged.",
       "Original readLOC_Impl uses genuine ByteGrabber/MemoryByteGrabber owners for header, reused zero-initialized name/extra vectors, optional-signature 32/64-bit data descriptors, Excel version45 fallback and nonzero duplicated-field comparisons. Source readCEN partitions occupied extents, rejects overlaps/holes with original diagnostics and skips FAT-compatible empty directory entries after consuming their extents. Actual generated ZipIOException derives from IOException with the correct parent type. A committed unchanged dd-deflated.docx exercises original normal QA rejection. Flat byte/catalog/resource/host-error boundaries remain explicit; native case-insensitive modes, created-entry/recovery/service/package/ZipEntry/output/model/filter/Worker/UI graphs and physical pointer/ABI/allocation/thread guarantees remain unverified or unfinished. Browser open/save/autosave/recovery choices are unchanged.",
       "Original ZipFile Checks modes retain exact duplicate rejection, ASCII-only case collisions and the first retained entry decision for TryCheckInsensitive, including empty mimetype AutoCorrect behavior after FAT-directory filtering. OOXML ZipStorage selects CheckInsensitive; Writer/Calc ODF byte entry points select TryCheckInsensitive, matching ZipPackage StorageFormat routing. The actual OUString lowercase path delegates to rtl_uString_newToAsciiLowerCase and original newReplaceChars allocation/assign/release logic with reused native CaseReplace and SAL character helpers. Unchanged strings alias data; conversions preserve UTF16/embedded-zero/non-ASCII units and release old destination after copying. No Unicode locale folding, path normalization or fake model/storage/service owner is introduced. Flat transport/resource/error boundaries and incomplete native package/storage/output/model/filter/Worker/UI acceptance remain explicit; physical pointer/ABI/allocator/thread guarantees remain unverified.",
-      "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint."
+      "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint.",
+      "Original static ZipOutputStream::setEntry and getCurrentDosTime now provide version20, UTF8 flag reset, DEFLATED method fallback, unknown CRC/size descriptor decisions and UTC DOS packing through actual TimeValue/oslDateTime owners. Existing STORE package output calls setEntry rather than supplying a constant1980 timestamp, and LOC writes zero CRC/sizes when source bit3 is set. The source checked year assertion, ignored OSL success statuses, uint32 TimeValue seconds wrapping and all-ones CRC sentinel collision are preserved, not repaired. Date is the explicit browser CLOCK_REALTIME/gmtime primitive boundary with millisecond precision; native OS failures, submillisecond clock precision, ABI/thread behavior, chrono constructors and unconsumed OSL time functions remain unverified or unported. Full native ZipOutputStream threadpool/deflate/ZIP64/encryption/package/output-storage and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Browser open/save/autosave/recovery policies are unchanged."
     ],
     "scopeLimitations": [
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
@@ -183,6 +185,18 @@
         {
           "path": "package/source/zipapi/ZipOutputStream.cxx",
           "marker": "ZipOutputStream::writeLOC"
+        },
+        {
+          "path": "include/osl/time.h",
+          "marker": "TimeValue"
+        },
+        {
+          "path": "sal/osl/unx/time.cxx",
+          "marker": "osl_getDateTimeFromTimeValue"
+        },
+        {
+          "path": "package/source/zipapi/ZipOutputStream.cxx",
+          "marker": "ZipOutputStream::getCurrentDosTime"
         }
       ],
       "tests": [
@@ -347,6 +361,14 @@
         {
           "path": "apps/office/src/sal/inc/rtl/string.ts",
           "marker": "OString"
+        },
+        {
+          "path": "apps/office/src/sal/inc/osl/time.ts",
+          "marker": "TimeValue"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/time.ts",
+          "marker": "osl_getDateTimeFromTimeValue"
         }
       ],
       "tests": [
@@ -417,6 +439,10 @@
         {
           "path": "apps/office/src/package/source/zipapi/native-output-owners.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -475,6 +501,10 @@
         {
           "path": "docs/program/native-zip-output-framing.md",
           "marker": "# Native ZIP output framing"
+        },
+        {
+          "path": "docs/program/native-zip-entry-defaults.md",
+          "marker": "# Native ZIP entry defaults and UTC clock"
         }
       ]
     },
