@@ -1,5 +1,7 @@
 /** @fileoverview Original internal OString literal and consumed ownership/search/copy methods; every dynamic value uses actual SAL byte data and C template owners. */
 import {
+  rtl_uString2String,
+  OUSTRING_TO_OSTRING_CVTFLAGS,
   rtl_string_acquire,
   rtl_string_new,
   rtl_string_release,
@@ -11,6 +13,7 @@ import {
   type rtl_String,
   type rtl_StringSlot,
 } from "./string.h";
+import type { rtl_TextEncoding } from "./textenc";
 import { SAL_NO_ACQUIRE, type __sal_NoAcquire } from "../types";
 /** Original OStringLiteral str/more union over one static byte allocation. */
 export class OStringLiteral {
@@ -55,8 +58,23 @@ export class OString {
       | [source: OStringConstReference | OStringLiteral | rtl_String]
       | [bytes: Uint8Array | null, length: number]
       | [source: rtl_String, noAcquire: __sal_NoAcquire]
+      | [
+          source: Uint16Array | null,
+          length: number,
+          encoding: rtl_TextEncoding,
+          convertFlags?: number,
+        ]
   ) {
-    if (args.length === 0) this.pData = OString.empty.str;
+    if (args.length >= 3) {
+      const [source, length, encoding, flags = OUSTRING_TO_OSTRING_CVTFLAGS] = args as [
+        Uint16Array | null,
+        number,
+        rtl_TextEncoding,
+        number?,
+      ];
+      rtl_uString2String(this.slot, source, length, encoding, flags);
+      if (this.slot[0] === null) throw new Error("std::bad_alloc");
+    } else if (args.length === 0) this.pData = OString.empty.str;
     else if (args.length === 2 && (args[0] === null || args[0] instanceof Uint8Array))
       rtl_string_newFromStr_WithLength(this.slot, args[0] as Uint8Array | null, args[1]);
     else if (args[0] instanceof OStringLiteral) this.pData = args[0].str;

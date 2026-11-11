@@ -132,36 +132,6 @@ describe("ZipOutputStream" /** Executes the enclosing deterministic test or tran
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => new ZipOutputStream().putNextEntry("a".repeat(0x10000), new Uint8Array()),
     ).toThrow("name exceeds ZIP32");
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => new ZipOutputStream().putNextEntry("huge", { length: 0x100000000 } as Uint8Array),
-    ).toThrow("entry size exceeds ZIP32");
-    const crowded = new ZipOutputStream();
-    const privateEntries = (crowded as unknown as { entries: unknown[] }).entries;
-    privateEntries.push(
-      ...Array.from(
-        {
-          length: 0xffff,
-        } /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */,
-        () => ({ name: "occupied" }),
-      ),
-    );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => crowded.putNextEntry("last", new Uint8Array()),
-    ).toThrow("entry count exceeds");
-    const huge = new ZipOutputStream();
-    (huge as unknown as { entries: unknown[] }).entries.push({
-      bytes: { length: 0xffffffff },
-      crc32: 0,
-      localOffset: 0,
-      name: "huge",
-      nameBytes: new Uint8Array(1),
-    });
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => huge.finish(),
-    ).toThrow("archive exceeds ZIP32");
   });
 });
 

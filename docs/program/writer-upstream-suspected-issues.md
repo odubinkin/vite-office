@@ -3605,3 +3605,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `package/source/zipapi/ZipFile.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - ZipFile::readLOC_Impl accepts zero duplicated LOC values and copies descriptor values into them; its final CRC/size comparisons only reject nonzero disagreement. Thus a complete descriptor containing zero CRC/size values can survive construction against nonzero CEN values. Preserve these conditions. The real payload still undergoes size/CRC verification when read by the bounded transport. No stricter descriptor check is introduced.
+
+### WRITER443 — ZIP output narrows UTF8 name length before LOC offset calculation
+
+- Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, writeLOC/writeCEN, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- The full UTF8 OString length is narrowed to sal_Int16 for header lengths, but the full byte sequence is written. writeLOC then computes nOffset as current position minus (LOCHDR + the signed name length). A real32768-byte ASCII path therefore emits name bits0x8000, then records offset65536 for a LOC that began at0; readCEN rejects its negative name length. Preserve the original narrowing and arithmetic in the admitted output path rather than silently repairing it. A real public writer call exercises the boundary without private-state forcing. This is source-derived/local owner evidence, not a compiled native ABI witness or a general ZIP64 output claim.

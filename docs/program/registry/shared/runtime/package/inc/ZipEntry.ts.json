@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/inc/ZipEntry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-output",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/inc/ZipEntry.ts",
+        "apps/office/src/package/source/zipapi/native-output-owners.test.ts"
+      ],
+      "justification": "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipEntry"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/inc/ZipEntry.hxx",
+      "upstreamSymbols": [
+        "ZipEntry",
+        "nVersion",
+        "nFlag",
+        "nMethod",
+        "nTime",
+        "nCrc",
+        "nCompressedSize",
+        "nSize",
+        "nOffset",
+        "nPathLen",
+        "nExtraLen",
+        "sPath"
+      ]
+    }
+  }
+}

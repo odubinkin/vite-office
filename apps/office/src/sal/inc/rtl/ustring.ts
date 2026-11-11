@@ -1,4 +1,6 @@
 /** @fileoverview Original internal OUString literal, lifetime and reference contracts from include/rtl/ustring.hxx. */
+import { OString } from "./string";
+import { OUSTRING_TO_OSTRING_CVTFLAGS } from "./string.h";
 import { OUStringBuffer } from "./ustrbuf";
 import {
   rtl_uString_acquire,
@@ -552,4 +554,13 @@ export class OUStringHash {
   call(value: OUStringConstReference): bigint {
     return BigInt.asUintN(64, BigInt(value.hashCode()));
   }
+}
+
+/** Original internal Unicode-view conversion helper returns the actual OString owner through its counted Unicode constructor. @param unicode - Original borrowed UTF16 view. @param encoding - Native encoding. @param flags - Original conversion flags. @returns Owned byte string. */
+export function OUStringToOString(
+  unicode: Uint16Array,
+  encoding: rtl_TextEncoding,
+  flags = OUSTRING_TO_OSTRING_CVTFLAGS,
+): OString {
+  return new OString(unicode, unicode.length, encoding, flags);
 }
