@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/io/XStream.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/io/XStream.idl",
+    "localSymbols": [
+      "XStream",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XStream",
+      "getInputStream",
+      "getOutputStream"
+    ],
+    "preservedResponsibilities": [
+      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Parent-bound constructor, mutex/native threading and physical ABI/casts/allocation guarantees, complete storage/relationship services and DOCX/XLSX application acceptance remain unverified or unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. Synchronous JS omits native mutex scopes without supplying a fake lock or parent."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XStream.ts",
+          "marker": "XStream"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/ocompinstream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/io/XStream.idl",
+          "marker": "XStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XStream.idl",
+          "marker": "getInputStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XStream.idl",
+          "marker": "getOutputStream"
+        }
+      ]
+    }
+  }
+}

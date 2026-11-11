@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/io/XStream.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-input-component",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/io/XStream.ts#XStream",
+        "apps/office/src/package/source/xstor/ocompinstream.test.ts"
+      ],
+      "justification": "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XStream",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/io/XStream.idl",
+      "upstreamSymbols": [
+        "XStream",
+        "getInputStream",
+        "getOutputStream"
+      ]
+    }
+  }
+}

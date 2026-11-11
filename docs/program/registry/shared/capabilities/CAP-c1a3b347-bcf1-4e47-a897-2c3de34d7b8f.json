@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+    "capabilityId": "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+    "suite": "shared",
+    "subsystem": "native-package-input-component",
+    "type": "filter",
+    "maturity": "implemented",
+    "assertions": [
+      "Original standalone OInputCompStream uses actual native input/value/query/listener owners and complete declared readonly component methods.",
+      "Original custom interface query, property denial and closure failure contracts are preserved without substitute parent/mutex/service providers."
+    ],
+    "capability": "Native standalone readonly package input component and stream SDK",
+    "gaps": [
+      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+    ],
+    "scopeLimitations": [
+      "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/io/XStream.idl",
+          "marker": "XStream"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/XExtendedStorageStream.idl",
+          "marker": "XExtendedStorageStream"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/StorageFormats.idl",
+          "marker": "PACKAGE"
+        },
+        {
+          "path": "package/source/xstor/ocompinstream.cxx",
+          "marker": "OInputCompStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/TestHelper.java",
+          "marker": "InternalCheckStream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/source/xstor/ocompinstream.hxx",
+          "marker": "OInputCompStream"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XStream.ts",
+          "marker": "XStream"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/XExtendedStorageStream.ts",
+          "marker": "XExtendedStorageStream"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/StorageFormats.ts",
+          "marker": "PACKAGE"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/ocompinstream.ts",
+          "marker": "OInputCompStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/xstor/ocompinstream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-input-component.md",
+          "marker": "# Native standalone package input component"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. This component is not yet wired into ZipStorage; existing package input remains its current binding. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged."
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-package-input-component"
+  }
+}

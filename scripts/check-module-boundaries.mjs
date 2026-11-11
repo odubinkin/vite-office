@@ -150,8 +150,8 @@ const allowedEdges = new Map([
     "oox",
     new Set(["comphelper", "cppu", "o3tl", "offapi", "package", "sal", "sax", "tools", "udkapi"]),
   ],
-  // Library_package2 links cppu; WriteContentTypes uses actual UNO Sequence/StringPair values alongside ManifestExport/SAX.
-  ["package", new Set(["comphelper", "cppu", "sal", "sax", "udkapi"])],
+  // Library_package2/Library_xstor link cppu/cppuhelper; native storage streams use embed SDK and actual component/value owners.
+  ["package", new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
   // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
   ["salhelper", new Set(["sal"])],

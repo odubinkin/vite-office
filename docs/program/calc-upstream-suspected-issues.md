@@ -5282,3 +5282,8 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `vendor/libreoffice-reference/comphelper/source/misc/directoryhelper.cxx`, `DirectoryHelper::splitAtLastToken`.
 - A delimiter at offset zero returns an empty left view and does not modify `rRight`. A trailing delimiter returns the prefix and also leaves `rRight` unchanged. With right initially `old`, `.xml` yields empty/old and `a.` yields a/old. A source with no delimiter explicitly clears the output instead.
 - Preserve the branch and mutation order. `ZipPackage::WriteContentTypes` passes a fresh empty extension each time, so its leading/trailing-dot paths still produce overrides. The shared helper tests retain the nonempty-output cases independently. No upstream correction is applied.
+
+### CALC-495 — OInputCompStream custom query bypasses its inherited type provider
+
+- Source: `vendor/libreoffice-reference/package/source/xstor/ocompinstream.hxx` derives from `cppu::WeakImplHelper`, which implements `XTypeProvider`. The override in `ocompinstream.cxx`, `OInputCompStream::queryInterface`, checks the five common stream/component/property interfaces, conditionally checks `XRelationshipAccess`, then calls `OWeakObject::queryInterface` directly.
+- Consequently the inherited `XTypeProvider` implementation is not reached by this query path. Preserve the original override and format-dependent relationship identity. The local genuine component test expects the type-provider query to be empty; no native compiled component witness or upstream correction is claimed.
