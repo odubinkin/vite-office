@@ -1,0 +1,295 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Standalone OInputSeekStream, specialization-qualified ImplInheritanceHelper and Writer SEEKABLEREAD input",
+  "sourceBlobs": {
+    "apps/office/src/cppuhelper/inc/implbase.ts": "c69774ed96db5157d5bff4419ffeab3385aee4bb",
+    "apps/office/src/cppuhelper/inc/implbase_ex.ts": "50531832a402fe8746bfceaeff49d9830d26e4f4",
+    "apps/office/src/cppuhelper/source/implbase_ex.ts": "5459976737dec8c4b1c5552a25b4538e552e4b19",
+    "apps/office/src/oox/source/helper/zipstorage-input.test.ts": "548da098fcaee8c24edf0ed0d7e5f396ce09106f",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "2e20fed0eca478e29fb184852b9c0f25093482b4",
+    "apps/office/src/package/source/xstor/ocompinstream.ts": "7ea6d1eaba7e910fb8709e6070dd010d94e14b79",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "d31fabae4b91795f7010982c4fad9e9c7f3adab7",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "d03c1e95c56621ab3a7e3fcebf75ae58ec2f542a",
+    "docs/program/native-package-input-wiring.md": "7f34309847142e2b93063220c878a6495aa3e6f8",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "b5e31045c8788576fae9a43577dd2b4130b7fd3a",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/implbase.ts.json": "928a4995935bc692005bec6cec4b78ca526b207b",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/implbase_ex.ts.json": "fda38ba833b5d926917f52b459cbdedc940b800e",
+    "docs/program/registry/shared/provenance/cppuhelper/source/implbase_ex.ts.json": "5df20d41b30a2fc4eb73ea6694e13dee916b02cc",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "c0831f9bd81d594f5e080e688355c0bf699f1ae0",
+    "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json": "a0368d5821d80bf2d7a1d42c9a499e16576ccb3a",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/implbase.ts.json": "93cfa2f779ae5e052ed17d25b0dacb240293cb43",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/implbase_ex.ts.json": "2fbfbc68af8c1871872b8af45afe8d7ccfdb81da",
+    "docs/program/registry/shared/runtime/cppuhelper/source/implbase_ex.ts.json": "b4a23281359a8a6d5061be4325c9fc82299a1246",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "9e3cfbcee64223250748550f18a4037760ddb47c",
+    "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json": "d0c9791b99946d9427d72d7dad62f0f80d82b6bc",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "ca126722f692f9d585137410dd2c5c60399cbd06",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "aedc0ad25e4b7507263dfffec7f452224f87c79e",
+    "apps/office/src/cppuhelper/source/native-inheritance.test.ts": "3c46c94cebb80ebbff3d91094bb814911e6af60f",
+    "apps/office/src/offapi/com/sun/star/embed/ElementModes.ts": "df92bd2a7dbe1e58d6a9ba4afab6d8d7a06fa46b",
+    "apps/office/src/package/source/xstor/oseekinstream.test.ts": "3f9f0f385647ebd41e3489997f0f274f2426f8c9",
+    "apps/office/src/package/source/xstor/oseekinstream.ts": "fc81d6c47810b236832e47819e785cb1db9c2f26",
+    "docs/program/native-package-seekable-input.md": "a660d8b4b57ae3bcbd589bf089051e99250e939d",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/ElementModes.ts.json": "6fae4abf5b314e9abc974b6d62d6a4754748efb1",
+    "docs/program/registry/shared/provenance/package/source/xstor/oseekinstream.ts.json": "633770783543203beb01ed742d55c681dcc35dcf",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/ElementModes.ts.json": "e4f006fef700dc3ee8d84b7f8795207353e0f0f2",
+    "docs/program/registry/shared/runtime/package/source/xstor/oseekinstream.ts.json": "8f44ea70d646be42124d4e6f555f28e10a1ae5bc"
+  },
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/cppuhelper/inc/implbase.ts",
+        "apps/office/src/cppuhelper/inc/implbase_ex.ts",
+        "apps/office/src/cppuhelper/source/implbase_ex.ts",
+        "apps/office/src/oox/source/helper/zipstorage-input.test.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/package/source/xstor/ocompinstream.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/cppuhelper/source/native-inheritance.test.ts",
+        "apps/office/src/offapi/com/sun/star/embed/ElementModes.ts",
+        "apps/office/src/package/source/xstor/oseekinstream.test.ts",
+        "apps/office/src/package/source/xstor/oseekinstream.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-0.log"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/cppuhelper/inc/implbase.ts",
+        "apps/office/src/cppuhelper/inc/implbase_ex.ts",
+        "apps/office/src/cppuhelper/source/implbase_ex.ts",
+        "apps/office/src/oox/source/helper/zipstorage-input.test.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/package/source/xstor/ocompinstream.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/implbase.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/implbase_ex.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/source/implbase_ex.ts.json",
+        "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/implbase.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/implbase_ex.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/source/implbase_ex.ts.json",
+        "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json",
+        "apps/office/src/cppuhelper/source/native-inheritance.test.ts",
+        "apps/office/src/offapi/com/sun/star/embed/ElementModes.ts",
+        "apps/office/src/package/source/xstor/oseekinstream.test.ts",
+        "apps/office/src/package/source/xstor/oseekinstream.ts",
+        "docs/program/native-package-seekable-input.md",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/ElementModes.ts.json",
+        "docs/program/registry/shared/provenance/package/source/xstor/oseekinstream.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/ElementModes.ts.json",
+        "docs/program/registry/shared/runtime/package/source/xstor/oseekinstream.ts.json"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-1.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-2.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/seekable-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-4.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-5.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-6.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-7.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-8.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-9.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-10.log"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-11.log"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-12.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-check-13.log"
+    }
+  ],
+  "tests": {
+    "coverage": {
+      "files": 9,
+      "cases": 77,
+      "log": "apps/office/coverage/seekable-coverage.log",
+      "summary": {
+        "lines": {
+          "total": 276,
+          "covered": 273,
+          "skipped": 0,
+          "pct": 98.91
+        },
+        "statements": {
+          "total": 315,
+          "covered": 308,
+          "skipped": 0,
+          "pct": 97.77
+        },
+        "functions": {
+          "total": 65,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 96,
+          "covered": 91,
+          "skipped": 0,
+          "pct": 94.79
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "threshold": 90
+    },
+    "integration": {
+      "files": 6,
+      "cases": 27,
+      "log": "apps/office/coverage/seekable-integration.log"
+    },
+    "finalOpenErrors": {
+      "files": 2,
+      "cases": 33,
+      "log": "apps/office/coverage/seekable-open-final.log",
+      "note": "Native missing stream IOException now retains the original empty default message."
+    },
+    "odfWorker": {
+      "files": 5,
+      "cases": 20,
+      "log": "apps/office/coverage/seekable-odf-worker.log"
+    }
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-typecheck.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-static.log"
+    },
+    {
+      "command": "Scoped final Prettier check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-final-format.log"
+    },
+    {
+      "command": "Scoped final ESLint check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/seekable-final-lint.log"
+    }
+  ],
+  "limitations": [
+    "Global check:docs fails only at pre-existing unchanged css-style-matchers.ts lines17 and76.",
+    "Separate scenario counts overlap; do not sum as unique cases.",
+    "Full suites are deferred under the approved ten-completed-task cadence.",
+    "Full native parent storage/hierarchy, writable stream components, DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished."
+  ]
+}

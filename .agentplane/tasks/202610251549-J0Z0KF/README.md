@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 74
+revision: 77
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T18:17:41.964Z"
+  updated_at: "2026-11-11T18:49:16.204Z"
   updated_by: "CODER"
-  note: "Connected native package READ/metadata/Writer stream checkpoint:82 scoped coverage cases,98 overlapping integration cases including4 real pinned DOCX/XLSX packages,29 ODF/component and2 resource cases pass. Whole3owner S478/483 B217/222 F45/45 L420/421 passes user global90. Type/build/static/source/module/registry/lint/format/size/resources/doctor/routing pass; unchanged JSDoc baseline retained. Complete XStorage/hierarchical/parent/output and actual DOCX/XLSX model/filter/Worker/UI acceptance remain incomplete. Evidence: evidence/native-package-input-wiring-checkpoint.json."
-  attempts: 24
+  note: "Bounded seekable input checkpoint passed: native OInputSeekStream and ImplInheritanceHelper, Writer SEEKABLEREAD, 77 scoped coverage cases with94.79 percent branches at global90,27 related integration cases,33 final native-open checks and20 ODF Worker regressions. Type/build/static and required scoped/source/registry gates pass; global JSDoc retains unchanged baseline errors. Evidence: native-package-seekable-input-checkpoint.json. Epic remains incomplete: parent storage, output components and actual DOCX/XLSX model/filter/UI acceptance require further implementation."
+  attempts: 25
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -392,8 +395,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T18:49:16.204Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded seekable input checkpoint passed: native OInputSeekStream and ImplInheritanceHelper, Writer SEEKABLEREAD, 77 scoped coverage cases with94.79 percent branches at global90,27 related integration cases,33 final native-open checks and20 ODF Worker regressions. Type/build/static and required scoped/source/registry gates pass; global JSDoc retains unchanged baseline errors. Evidence: native-package-seekable-input-checkpoint.json. Epic remains incomplete: parent storage, output components and actual DOCX/XLSX model/filter/UI acceptance require further implementation."
+  -
+    type: "status"
+    at: "2026-11-11T18:49:22.598Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T18:18:28.673Z"
+doc_updated_at: "2026-11-11T18:49:22.598Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1128,6 +1144,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T18:49:16.204Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded seekable input checkpoint passed: native OInputSeekStream and ImplInheritanceHelper, Writer SEEKABLEREAD, 77 scoped coverage cases with94.79 percent branches at global90,27 related integration cases,33 final native-open checks and20 ODF Worker regressions. Type/build/static and required scoped/source/registry gates pass; global JSDoc retains unchanged baseline errors. Evidence: native-package-seekable-input-checkpoint.json. Epic remains incomplete: parent storage, output components and actual DOCX/XLSX model/filter/UI acceptance require further implementation.
+    Attempts: 25
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T18:48:52.354Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1228,6 +1274,10 @@ sections:
     - Observation: Connected genuine OInputCompStream to actual ZipStorage READ snapshots with native MediaType/Compressed/Size/RelationsInfo PropertyValue sequences. Package parseContentType now enforces internal metadata, default-then-override/last-assignment/case-sensitive suffix rules and hidden content metadata. Writer stores actual XStream and queries XRelationshipAccess for part metadata instead of keeping its own relationship mirror and reparsing side streams.
       Impact: Pass:82 scenarios in six-file whole3owner coverage profile (S478/483 B217/222 F45/45 L420/421),98 in separate overlapping integration run including four pinned Strict/Transitional DOCX/XLSX packages,29 ODS Worker/Writer ODT/component cases and2 Writer resource cases. User global90 gate passes; ZipStorage branch coverage89.79 is retained without forced alternatives. Malformed content/own relationships now refuse opening; concurrent bad initialization caches a diagnostic, never a reusable owned native exception. Initial tests expecting exposed content metadata and readable parts with broken relationships were corrected to upstream contracts.
       Resolution: Evidence: evidence/native-package-input-wiring-checkpoint.json. Type/build/static/lint/format/source/module/registry/size/resources/doctor/routing pass except unchanged baseline JSDoc css-style-matchers.ts lines17/76. Actual parent-bound XStorage/disposal/locking, hierarchical SEEKABLEREAD, root storage relationship service and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Preserve existing file/autosave/recovery policy; keep the whole task and goal active.
+
+    - Observation: Command: focused seekable input and native helper coverage; Result: pass, 77 cases across nine files, branches 94.79 percent and global90 thresholds; separate integration27 and final open-error33 pass. Typecheck, build/static, scoped lint/format, module/resource/source/registry/doctor/routing checks pass. Global check:docs retains only unchanged css-style-matchers.ts baseline errors.
+      Impact: Writer now opens real standalone OInputSeekStream via SEEKABLEREAD; ordinary READ stays nonseekable. ImplInheritanceHelper preserves qualified base queries, duplicate types and genuine owners. Complete DOCX/XLSX import/export/UI and parent hierarchy remain unfinished.
+      Resolution: Evidence: native-package-seekable-input-checkpoint.json and docs/program/native-package-seekable-input.md. Continue approved implementation without marking the epic complete; no full-suite run or unrelated baseline repair.
 id_source: "generated"
 ---
 ## Summary
@@ -1972,6 +2022,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T18:49:16.204Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded seekable input checkpoint passed: native OInputSeekStream and ImplInheritanceHelper, Writer SEEKABLEREAD, 77 scoped coverage cases with94.79 percent branches at global90,27 related integration cases,33 final native-open checks and20 ODF Worker regressions. Type/build/static and required scoped/source/registry gates pass; global JSDoc retains unchanged baseline errors. Evidence: native-package-seekable-input-checkpoint.json. Epic remains incomplete: parent storage, output components and actual DOCX/XLSX model/filter/UI acceptance require further implementation.
+Attempts: 25
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T18:48:52.354Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2076,3 +2156,7 @@ DecisionContextRef:
 - Observation: Connected genuine OInputCompStream to actual ZipStorage READ snapshots with native MediaType/Compressed/Size/RelationsInfo PropertyValue sequences. Package parseContentType now enforces internal metadata, default-then-override/last-assignment/case-sensitive suffix rules and hidden content metadata. Writer stores actual XStream and queries XRelationshipAccess for part metadata instead of keeping its own relationship mirror and reparsing side streams.
   Impact: Pass:82 scenarios in six-file whole3owner coverage profile (S478/483 B217/222 F45/45 L420/421),98 in separate overlapping integration run including four pinned Strict/Transitional DOCX/XLSX packages,29 ODS Worker/Writer ODT/component cases and2 Writer resource cases. User global90 gate passes; ZipStorage branch coverage89.79 is retained without forced alternatives. Malformed content/own relationships now refuse opening; concurrent bad initialization caches a diagnostic, never a reusable owned native exception. Initial tests expecting exposed content metadata and readable parts with broken relationships were corrected to upstream contracts.
   Resolution: Evidence: evidence/native-package-input-wiring-checkpoint.json. Type/build/static/lint/format/source/module/registry/size/resources/doctor/routing pass except unchanged baseline JSDoc css-style-matchers.ts lines17/76. Actual parent-bound XStorage/disposal/locking, hierarchical SEEKABLEREAD, root storage relationship service and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Preserve existing file/autosave/recovery policy; keep the whole task and goal active.
+
+- Observation: Command: focused seekable input and native helper coverage; Result: pass, 77 cases across nine files, branches 94.79 percent and global90 thresholds; separate integration27 and final open-error33 pass. Typecheck, build/static, scoped lint/format, module/resource/source/registry/doctor/routing checks pass. Global check:docs retains only unchanged css-style-matchers.ts baseline errors.
+  Impact: Writer now opens real standalone OInputSeekStream via SEEKABLEREAD; ordinary READ stays nonseekable. ImplInheritanceHelper preserves qualified base queries, duplicate types and genuine owners. Complete DOCX/XLSX import/export/UI and parent hierarchy remain unfinished.
+  Resolution: Evidence: native-package-seekable-input-checkpoint.json and docs/program/native-package-seekable-input.md. Continue approved implementation without marking the epic complete; no full-suite run or unrelated baseline repair.
