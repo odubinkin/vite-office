@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 121
+revision: 124
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T21:56:31.769Z"
+  updated_at: "2026-11-11T22:05:49.132Z"
   updated_by: "CODER"
-  note: "Bounded native LOC/descriptor/occupied-extent checkpoint passes62 whole-owner profile cases and118 related cases,90percent thresholds, typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff. Global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-local-records-checkpoint.json. Native package/storage/output and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished; this is not whole-epic verification or completion."
-  attempts: 35
+  note: "Native package Checks/SAL lowercase checkpoint passes83 profile cases and88 related cases; ZipFile whole-owner profile exceeds90percent thresholds. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-package-case-checks-checkpoint.json. Complete XLSX/DOCX model/filter/output/service/Worker/UI acceptance remains unfinished; no whole-epic completion or pause."
+  attempts: 36
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -568,8 +571,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T22:05:49.132Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native package Checks/SAL lowercase checkpoint passes83 profile cases and88 related cases; ZipFile whole-owner profile exceeds90percent thresholds. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-package-case-checks-checkpoint.json. Complete XLSX/DOCX model/filter/output/service/Worker/UI acceptance remains unfinished; no whole-epic completion or pause."
+  -
+    type: "status"
+    at: "2026-11-11T22:06:03.119Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T21:56:38.680Z"
+doc_updated_at: "2026-11-11T22:06:03.119Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1634,6 +1650,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T22:05:49.132Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native package Checks/SAL lowercase checkpoint passes83 profile cases and88 related cases; ZipFile whole-owner profile exceeds90percent thresholds. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-package-case-checks-checkpoint.json. Complete XLSX/DOCX model/filter/output/service/Worker/UI acceptance remains unfinished; no whole-epic completion or pause.
+    Attempts: 36
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:05:03.868Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1834,6 +1880,10 @@ sections:
     - Observation: Final native LOC checkpoint checks pass except the unchanged global JSDoc baseline at css-style-matchers.ts17 and76. The initial related-test command named zipstorage.test.ts, which does not exist; Vitest still ran nine matched files.
       Impact: The global docs gate cannot be reported fully green. The real OOXML input-storage regression had to be run explicitly rather than counted from an unmatched path.
       Resolution: Ran the actual zipstorage-input.test.ts separately:7 cases pass, supplementing111 cases in nine related files. The final62-case whole-owner profile, typecheck, static build, scoped lint, module boundaries, resources, size, source tree, provenance, invariants, parity, doctor, routing and diff checks pass. Full suite remains deferred under the approved ten-task cadence; no unrelated baseline fix or full core/UI claim.
+
+    - Observation: Native package case-check checkpoint:83 profile cases and88 related SAL/ODF/Worker/OOXML cases pass. ZipFile whole-owner coverage is S428/446 B285/303 F25/25 L376/386 at approved90percent thresholds; new SAL value/template ownership cases are exercised alongside existing captured ownership regressions, without a broader SAL whole-module coverage claim. An initial lint shell wrapper had a heredoc parse error before ESLint executed.
+      Impact: OOXML previously used raw ZIP name policy and ODF did not select the native first-retained-entry case policy. Replacing these policies requires the actual ASCII-only SAL conversion owner, unchanged-data aliasing and release-after-copy semantics rather than host Unicode case folding.
+      Resolution: Connected original Checks policies at real OOXML and Writer/Calc ODF byte entries, added genuine SAL lowercase/template owners and unchanged upstream duplicate/case/overlap/gap fixtures. Reran ESLint with a direct explicit file list successfully. Typecheck, static build, format, boundaries, resources, size, source-tree/provenance, invariants/parity, doctor/routing/diff pass. Global docs remains only the existing css-style-matchers17/76 baseline. Native package/output services and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished; goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -2908,6 +2958,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T22:05:49.132Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native package Checks/SAL lowercase checkpoint passes83 profile cases and88 related cases; ZipFile whole-owner profile exceeds90percent thresholds. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global JSDoc retains only existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-package-case-checks-checkpoint.json. Complete XLSX/DOCX model/filter/output/service/Worker/UI acceptance remains unfinished; no whole-epic completion or pause.
+Attempts: 36
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:05:03.868Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3112,3 +3192,7 @@ DecisionContextRef:
 - Observation: Final native LOC checkpoint checks pass except the unchanged global JSDoc baseline at css-style-matchers.ts17 and76. The initial related-test command named zipstorage.test.ts, which does not exist; Vitest still ran nine matched files.
   Impact: The global docs gate cannot be reported fully green. The real OOXML input-storage regression had to be run explicitly rather than counted from an unmatched path.
   Resolution: Ran the actual zipstorage-input.test.ts separately:7 cases pass, supplementing111 cases in nine related files. The final62-case whole-owner profile, typecheck, static build, scoped lint, module boundaries, resources, size, source tree, provenance, invariants, parity, doctor, routing and diff checks pass. Full suite remains deferred under the approved ten-task cadence; no unrelated baseline fix or full core/UI claim.
+
+- Observation: Native package case-check checkpoint:83 profile cases and88 related SAL/ODF/Worker/OOXML cases pass. ZipFile whole-owner coverage is S428/446 B285/303 F25/25 L376/386 at approved90percent thresholds; new SAL value/template ownership cases are exercised alongside existing captured ownership regressions, without a broader SAL whole-module coverage claim. An initial lint shell wrapper had a heredoc parse error before ESLint executed.
+  Impact: OOXML previously used raw ZIP name policy and ODF did not select the native first-retained-entry case policy. Replacing these policies requires the actual ASCII-only SAL conversion owner, unchanged-data aliasing and release-after-copy semantics rather than host Unicode case folding.
+  Resolution: Connected original Checks policies at real OOXML and Writer/Calc ODF byte entries, added genuine SAL lowercase/template owners and unchanged upstream duplicate/case/overlap/gap fixtures. Reran ESLint with a direct explicit file list successfully. Typecheck, static build, format, boundaries, resources, size, source-tree/provenance, invariants/parity, doctor/routing/diff pass. Global docs remains only the existing css-style-matchers17/76 baseline. Native package/output services and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished; goal stays active.

@@ -1,0 +1,228 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native package case-check modes wired to OOXML and ODF through actual SAL lowercase owners",
+  "baseCommit": "598f3e5682b0ecd0d8babfc06d63ad6371ef9bac",
+  "sourceBlobs": {
+    "apps/office/src/oox/source/helper/zipstorage.ts": "baa369c6af96a00c482b219ebe6613c0059d48a7",
+    "apps/office/src/package/qa/cppunit/data/README.md": "19c6c5565f1efda2115d600cdfc1713ef1d2ffcd",
+    "apps/office/src/package/qa/cppunit/data/casing.docx": "d8d0dffc71a65ba0b63d096f86ce946670833d2f",
+    "apps/office/src/package/qa/cppunit/data/duplicate-files.odt": "cc24f7024ad13e1de7c1fbfa9f572966d9113d05",
+    "apps/office/src/package/qa/cppunit/data/inner-gap.docx": "d8e9a232465c51606c8eb776c61f732d23fece11",
+    "apps/office/src/package/qa/cppunit/data/overlap.docx": "2d5d115ed800536afa07c60f6798f379364b0718",
+    "apps/office/src/package/qa/cppunit/test_zippackage.test.ts": "ab86089209e495ea52045e4928e9a001c82ec3db",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "ef3d9ca8ea524698b0ad8a46afb721915b2a121d",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "ad7dea6e29f2765f496881c904e626b7310bfffa",
+    "apps/office/src/package/source/zipapi/native-case-checks.test.ts": "b584b72816f75dba726a1489ab3bd398d81ace1c",
+    "apps/office/src/sal/inc/rtl/ustring.h.ts": "e25409bb53e47992f2e8eb371c73da5b6c79bd59",
+    "apps/office/src/sal/inc/rtl/ustring.ts": "dc90af0069a177638b6d96457759d0557d1f0140",
+    "apps/office/src/sal/rtl/ascii-lower-ownership.test.ts": "e6a9743b172ac4239ca5b73781844d266ddcd193",
+    "apps/office/src/sal/rtl/strtmpl.ts": "b2183a739848832e00790434323399e76318fcaa",
+    "apps/office/src/sal/rtl/ustring.ts": "ba06de4f001401cf3cf09fd5849b17fdbb152e73",
+    "apps/office/src/sc/source/filter/xml/xmlwrap.ts": "84a9f9e2698f71f2b388a4eb29206d3d655861b6",
+    "apps/office/src/sw/source/filter/xml/swxml.ts": "63ecd9439fdbbf7e4795551d157de5881d7068d1",
+    "docs/program/native-package-case-checks.md": "666a2cc66241c9deee461ccff2274d8ffd21db99",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlwrap.ts.json": "c40fd6879362484531cbd600022dcde738c3c15e",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlwrap.ts.json": "547aab55c7e35568750e74e2fdab65cd74007173",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "9fec3df25c01687bc96c02ca0c6f40cf150927b7",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "7dcf8bcd91aab93bb2cd2906ab160dbf74420877",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipFile.ts.json": "e4e079e6822834499003e2d2ab7d4abdf973850d",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json": "0f616256fc7bdbbd1afc23a08b73cca9a5d4c336",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json": "b9f5d08f95f7d3e962c081334888031381680664",
+    "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json": "957516de4a8bee48f74b482c16a5a0a62e93a701",
+    "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json": "728deaaf8cea7a338cda09af4c6898c932856578",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "3193fad1356a15006726c361ce656ae71f4aa245",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipFile.ts.json": "26d00f468f7e083908a8b245bd5a34001c2c2398",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json": "5139824432cb02496b6ea6a2dfb3bddc30fb4254",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json": "bb0b66bf0bb28e9ce893438b59b3fe369172240a",
+    "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json": "c7f533462794c805ed98ea0d699d6336a08925bb",
+    "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json": "24a1b15cc6e659745d2b95bb602c9d298b5adfe4",
+    "docs/program/registry/writer/provenance/sw/source/filter/xml/swxml.ts.json": "601c22061a7f681f07588fac29e147d43518656a",
+    "docs/program/registry/writer/runtime/sw/source/filter/xml/swxml.ts.json": "d0f07443892a43fbee73deba4c27181c660aedb8"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-case-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-gate-11.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-static.log"
+    },
+    {
+      "command": "scoped ESLint12 changed runtime/test files --max-warnings0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-lint-final.log"
+    },
+    {
+      "command": "scoped Prettier31 changed runtime/test/docs/records",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-format.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-case-registry-build.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/package/source/zipapi/native-case-checks.test.ts src/package/source/zipapi/native-local-records.test.ts src/package/source/zipapi/native-zip64.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/qa/cppunit/test_zippackage.test.ts src/sal/rtl/ascii-lower-ownership.test.ts --coverage --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 83,
+    "files": 6,
+    "wholeCoverageOwners": [
+      "ZipFile.ts"
+    ],
+    "summary": {
+      "lines": {
+        "total": 386,
+        "covered": 376,
+        "skipped": 0,
+        "pct": 97.4
+      },
+      "statements": {
+        "total": 446,
+        "covered": 428,
+        "skipped": 0,
+        "pct": 95.96
+      },
+      "functions": {
+        "total": 25,
+        "covered": 25,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 303,
+        "covered": 285,
+        "skipped": 0,
+        "pct": 94.05
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "log": "apps/office/coverage/native-case-profile.log"
+  },
+  "related": {
+    "command": "npx vitest run src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-ownership.test.ts src/sal/rtl/strtmpl.assembly.test.ts src/sal/rtl/ustring-replacement.native.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/inc/rtl/native-ostring.test.ts src/sal/inc/rtl/character.test.ts src/oox/source/core/upstream-packages.test.ts src/oox/source/helper/zipstorage-input.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sw/source/filter/xml/native-optional-streams.test.ts src/sw/browser/workflows/writer-odt-io.test.ts",
+    "exitCode": 0,
+    "cases": 88,
+    "files": 14,
+    "log": "apps/office/coverage/native-case-related.log",
+    "scope": "Actual native SAL ownership/view/character and Strict/Transitional OOXML/ODF/Worker/workflow regressions; native captured scalar/caller counts are internal to these test cases and are not added as Vitest cases."
+  },
+  "fixtures": {
+    "apps/office/src/package/qa/cppunit/data/duplicate-files.odt": {
+      "upstreamPath": "package/qa/cppunit/data/duplicate-files.odt",
+      "sha256": "256b573143d767f144e6bc3ee128bd3ff4b2e502d1896360f0b6c5356e073026",
+      "unchanged": true
+    },
+    "apps/office/src/package/qa/cppunit/data/casing.docx": {
+      "upstreamPath": "package/qa/cppunit/data/casing.docx",
+      "sha256": "b616af60520ba5acee81d0dd290780cedf0db45b9c40706f4c95574c694976b0",
+      "unchanged": true
+    },
+    "apps/office/src/package/qa/cppunit/data/overlap.docx": {
+      "upstreamPath": "package/qa/cppunit/data/overlap.docx",
+      "sha256": "c58f5b46ed632a6df0551a40ac02ca7899420eaf5001743119cf423eaeb4bb03",
+      "unchanged": true
+    },
+    "apps/office/src/package/qa/cppunit/data/inner-gap.docx": {
+      "upstreamPath": "package/qa/cppunit/data/inner-gap.docx",
+      "sha256": "7cd806987aeb38bd3013786d2ee5988f5074db9af040c3a49da019911c674b86",
+      "unchanged": true
+    }
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "package/inc/ZipFile.hxx": "f4e79e86cdfbddf0bf182e7f62d287f1c4e5b787ad70d194b574bd11e9a82150",
+      "package/source/zipapi/ZipFile.cxx": "f5d6edbffebe136b806887b2c4c132e7b333da6eb9e4ce0477a6a10e8fdd15e0",
+      "package/source/zippackage/ZipPackage.cxx": "be8a854493c067906f5b29c674c67737be9f45540d5843af00262e42d26718a5",
+      "sal/rtl/strtmpl.hxx": "12d2bc50c11768dd386a3fde274e538f62ae7617ea7ae8ee258ee3940efebcab",
+      "sal/rtl/ustring.cxx": "1d0ebdbf05c73420d9a27041f36bcc73bbee0ff6c20509c15d2311985d083f96",
+      "include/rtl/ustring.h": "977a5dbfb359bd5f22b9f409df602ef7828e50861aa203c011bc1a7c856e1163",
+      "include/rtl/ustring.hxx": "37efb666cb299adff72e148dac5ad86abf7351ad94127bff645e89e7f9d6ee73",
+      "package/qa/cppunit/test_zippackage.cxx": "c423a44549c955c6a63cc0fadda2100a55a2319d5d6357cce303877bcc7de94b",
+      "package/qa/cppunit/data/duplicate-files.odt": "256b573143d767f144e6bc3ee128bd3ff4b2e502d1896360f0b6c5356e073026",
+      "package/qa/cppunit/data/casing.docx": "b616af60520ba5acee81d0dd290780cedf0db45b9c40706f4c95574c694976b0",
+      "package/qa/cppunit/data/overlap.docx": "c58f5b46ed632a6df0551a40ac02ca7899420eaf5001743119cf423eaeb4bb03",
+      "package/qa/cppunit/data/inner-gap.docx": "7cd806987aeb38bd3013786d2ee5988f5074db9af040c3a49da019911c674b86"
+    }
+  },
+  "limitations": [
+    "Flat ZIP bytes/catalog/resource/error envelope remains an explicit transport projection; full native required mutex/context/input/ZipEntry/service owners are not claimed.",
+    "Source normal QA rejection is asserted at the consumed ZIP layer, not fabricated native ZipPackage factory wrapping or recovery. Existing browser recovery policy remains unchanged.",
+    "ASCII lowercase uses actual SAL value/template owners with source-derived initialized caller expectations and existing captured ownership regressions; no new compiled native ABI/allocation/thread witness or broad SAL whole-module coverage claim. The different in-place terminated C lowercase QA overload remains unported.",
+    "Native package/output storage and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave policies are unchanged.",
+    "Global JSDoc fails only unchanged css-style-matchers.ts17/76. Initial lint wrapper failed before ESLint executed; corrected explicit command passes. Related-only tests follow the approved ten-task full-suite cadence."
+  ]
+}
