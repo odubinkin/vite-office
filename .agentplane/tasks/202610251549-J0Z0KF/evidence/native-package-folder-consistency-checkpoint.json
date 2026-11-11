@@ -1,0 +1,170 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Restore native first-inconsistency exit and withdraw incorrect CALC-164 upstream claim",
+  "sourceBlobs": {
+    "apps/office/src/package/source/zippackage/ZipPackageFolder.ts": "3eb6820aa331e9d2dd4fefc5ca603dd1b2f282f3",
+    "apps/office/src/package/source/zippackage/native-plain-manifest.test.ts": "07d588929ce2088ff60ababe1f54a8c17c72c9d0",
+    "docs/program/calc-ui-readiness.md": "a853a9fa9a8b9daab6a34331477b30e448f744a7",
+    "docs/program/calc-upstream-suspected-issues.md": "3657a1ed81110590f97716dd82d4a2151fd78cb8",
+    "docs/program/registry/shared/capabilities/CAP-3678aa65-4d47-43cc-b07f-deb755e87470.json": "5517a1221ce5b47d89a24157f9159b4b80dbe3b4",
+    "docs/program/registry/shared/provenance/package/inc/PackageConstants.ts.json": "9ac78f575389f25d4934fe96bf0ec81fc6e5bc18",
+    "docs/program/registry/shared/provenance/package/source/manifest/ManifestExport.ts.json": "57c5bafba3f5af13f4b76c8db90752e180e72f01",
+    "docs/program/registry/shared/provenance/package/source/manifest/ManifestImport.ts.json": "8f5dce5510572d5edc32e2073596e216651c1741",
+    "docs/program/registry/shared/provenance/package/source/manifest/ManifestReader.ts.json": "f769224491e84ca0aeeeee44f0bdfc5baba45470",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json": "38da88c043b04a53c2269244020e43d1945d5b52",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackageFolder.ts.json": "370f2ac1d343c66401fef0d3c17be9127071807c",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json": "984ddba287fad29b4feac1c8833c9a414a1b8daf",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json": "4437d535784e1ddd0c4e2b515dd08d0f5d6fdb68",
+    "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json": "1a806003cdb04536a1a94710e83fb1e826b2365e",
+    "docs/program/registry/shared/runtime/package/inc/PackageConstants.ts.json": "a4836490499de76c84402b8987b9d108e3346cbd",
+    "docs/program/registry/shared/runtime/package/source/manifest/ManifestExport.ts.json": "3486c03dc7bc731f66aed2c8dcb5fe36ee16c20c",
+    "docs/program/registry/shared/runtime/package/source/manifest/ManifestImport.ts.json": "71e4902b06592d5fabfe6a975ec6ec3e464b15f3",
+    "docs/program/registry/shared/runtime/package/source/manifest/ManifestReader.ts.json": "70982b9f05d303d501e02e2ceb0948443c6fb70f",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json": "222ab8d088324577e9f0c928ab4d80cb735d4255",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackageFolder.ts.json": "4f6ee8981c5c4c0b71bdb4a9334c281973a40c5d",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json": "db6a8b2ba5b17273ad9d0b33fddc63b2ce981ff6",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json": "ab8ffe1b8ba88f8214a17bd57dde0870d8629b21",
+    "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json": "20f4ab6769e6a0852e94d7410944a2dbbc79fe4a",
+    "docs/program/registry/writer/provenance/sw/source/filter/xml/swxml.ts.json": "e654bbc853ef0f3abeaa4a4b17a9c5c89e0a1389",
+    "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json": "8de8f73f809a385ffaa336c1f519327c24d99cc8",
+    "docs/program/registry/writer/runtime/sw/source/filter/xml/swxml.ts.json": "ec2261c2bf683987a1d32d09721aa768a28a2fbd",
+    "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json": "0193ec1b83e2926d992e8bad1065aaaa2a25d76a",
+    "docs/program/writer-upstream-suspected-issues.md": "f2168eaf5b82467e324cc0d35b4bc5625b01ae01",
+    "docs/program/native-package-folder-consistency.md": "4c95793020ff035b3805bb74361c82e5b0800244"
+  },
+  "checks": [
+    {
+      "command": "npx eslint apps/office/src/package/source/zippackage/ZipPackageFolder.ts apps/office/src/package/source/zippackage/native-plain-manifest.test.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-0.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/package/source/zippackage/ZipPackageFolder.ts apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-1.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-package-folder-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-8.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-9.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-10.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-11.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-12.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-gate-13.log"
+    }
+  ],
+  "coverage": {
+    "command": "npx vitest run src/package/source/zippackage/native-plain-manifest.test.ts --coverage --coverage.include=src/package/source/zippackage/ZipPackageFolder.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "cases": 12,
+    "statements": "15/15",
+    "branches": "18/18",
+    "functions": "1/1",
+    "lines": "11/11",
+    "log": "apps/office/coverage/native-package-folder-coverage.log"
+  },
+  "integration": {
+    "cases": 38,
+    "files": 9,
+    "log": "apps/office/coverage/native-package-folder-integration.log"
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-static.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-final-0.log",
+      "scope": "After stale inherited CALC-164 evidence-reference corrections"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-final-1.log",
+      "scope": "After stale inherited CALC-164 evidence-reference corrections"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-final-2.log",
+      "scope": "After stale inherited CALC-164 evidence-reference corrections"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-package-folder-final-3.log",
+      "scope": "After stale inherited CALC-164 evidence-reference corrections"
+    }
+  ],
+  "sourceWitness": {
+    "referenceCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "path": "package/source/zippackage/ZipPackageFolder.cxx",
+    "sha256": "8bf007b7772ec6aa6c18bd418a023713591d30fadba9acae90dd026dfeeb77f2",
+    "referencePathClean": true
+  },
+  "limitations": [
+    "Bounded shared core correction; full DOCX/XLSX package/storage/model/filter/Worker/UI acceptance remains incomplete.",
+    "CALC-164 was a mistaken source interpretation, not an upstream defect. Real source includes the first-true break.",
+    "Known check:docs baseline remains css-style-matchers.ts lines17/76 only.",
+    "Full suite deferred per user cadence; only affected package/Worker/import paths were run.",
+    "No direct upstream QA case for the traversal found in package/qa; source-derived critical cases and existing related fixture checks do not establish compiled native package/service parity."
+  ]
+}

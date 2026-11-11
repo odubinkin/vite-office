@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 94
+revision: 98
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T20:15:24.416Z"
+  updated_at: "2026-11-11T20:20:45.559Z"
   updated_by: "CODER"
-  note: "Bounded native package path checkpoint: original UTF16 name/dot/slash and segment contracts now replace handwritten ZIP name validation. 92 scoped cases and29 OOXML/ODF/Worker cases pass; whole storagehelper coverage62/62S50/50B3/3F50/50L at approved90. Typecheck, static build, scoped lint and registry/source gates pass. Final check:docs has only known css-style-matchers baseline; initial fixture/JSDoc issues corrected and recorded. Evidence: evidence/native-package-path-contracts-checkpoint.json. Full storage/write/model/filter/UI acceptance remains incomplete; continue active goal."
-  attempts: 30
+  note: "Bounded shared package correction restores the pinned first-true exit in folder consistency traversal. CALC-164 is withdrawn as a local transcription/source-interpretation error; affected provenance references corrected. 12 profile cases pass, whole owner15/15S18/18B1/1F11/11L at approved90;38 related scenarios in9 files, typecheck, production/static build, scoped lint/format and registry/source gates pass. check:docs retains only css-style-matchers.ts baseline17/76. Evidence: evidence/native-package-folder-consistency-checkpoint.json. Full DOCX/XLSX storage/model/filter/UI acceptance remains unfinished; continue active goal."
+  attempts: 31
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -488,8 +491,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T20:20:45.559Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded shared package correction restores the pinned first-true exit in folder consistency traversal. CALC-164 is withdrawn as a local transcription/source-interpretation error; affected provenance references corrected. 12 profile cases pass, whole owner15/15S18/18B1/1F11/11L at approved90;38 related scenarios in9 files, typecheck, production/static build, scoped lint/format and registry/source gates pass. check:docs retains only css-style-matchers.ts baseline17/76. Evidence: evidence/native-package-folder-consistency-checkpoint.json. Full DOCX/XLSX storage/model/filter/UI acceptance remains unfinished; continue active goal."
+  -
+    type: "status"
+    at: "2026-11-11T20:20:52.385Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T20:15:29.133Z"
+doc_updated_at: "2026-11-11T20:20:52.385Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1404,6 +1420,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T20:20:45.559Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded shared package correction restores the pinned first-true exit in folder consistency traversal. CALC-164 is withdrawn as a local transcription/source-interpretation error; affected provenance references corrected. 12 profile cases pass, whole owner15/15S18/18B1/1F11/11L at approved90;38 related scenarios in9 files, typecheck, production/static build, scoped lint/format and registry/source gates pass. check:docs retains only css-style-matchers.ts baseline17/76. Evidence: evidence/native-package-folder-consistency-checkpoint.json. Full DOCX/XLSX storage/model/filter/UI acceptance remains unfinished; continue active goal.
+    Attempts: 31
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:19:50.590Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1536,6 +1582,14 @@ sections:
     - Observation: First check:docs log additionally reported two newly added assertion callbacks without JSDoc; the preceding baseline-only finding was premature.
       Impact: The new test requires two callback comments before final documentation verification.
       Resolution: Add the required callback documentation, rerun check:docs and retain only the confirmed css-style-matchers baseline in the final evidence.
+
+    - Observation: Pinned ZipPackageFolder::LookForUnexpectedODF12Streams includes if (bHasUnexpected) break after each entry. The existing port omitted this branch and CALC-164 incorrectly attributed its resulting overwrite behavior to upstream.
+      Impact: A later consistent folder could clear the local inconsistency flag; actual ODF12 package acceptance differed from source.
+      Resolution: Restore the source early exit, replace the false-preservation regression with root/nested order cases on actual ZIP catalogs, retract CALC-164 and correct current registry evidence without claiming full storage/service parity.
+
+    - Observation: Folder consistency checkpoint: check:docs reports only the unchanged css-style-matchers.ts line17 and line76 baseline; new and modified callbacks pass documentation validation.
+      Impact: Repository-wide documentation validation is not green, independent of the source traversal correction.
+      Resolution: Keep unrelated baseline unchanged and retain explicit failing documentation evidence with the passing related tests and remaining static gates.
 id_source: "generated"
 ---
 ## Summary
@@ -2460,6 +2514,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T20:20:45.559Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded shared package correction restores the pinned first-true exit in folder consistency traversal. CALC-164 is withdrawn as a local transcription/source-interpretation error; affected provenance references corrected. 12 profile cases pass, whole owner15/15S18/18B1/1F11/11L at approved90;38 related scenarios in9 files, typecheck, production/static build, scoped lint/format and registry/source gates pass. check:docs retains only css-style-matchers.ts baseline17/76. Evidence: evidence/native-package-folder-consistency-checkpoint.json. Full DOCX/XLSX storage/model/filter/UI acceptance remains unfinished; continue active goal.
+Attempts: 31
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:19:50.590Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2596,3 +2680,11 @@ DecisionContextRef:
 - Observation: First check:docs log additionally reported two newly added assertion callbacks without JSDoc; the preceding baseline-only finding was premature.
   Impact: The new test requires two callback comments before final documentation verification.
   Resolution: Add the required callback documentation, rerun check:docs and retain only the confirmed css-style-matchers baseline in the final evidence.
+
+- Observation: Pinned ZipPackageFolder::LookForUnexpectedODF12Streams includes if (bHasUnexpected) break after each entry. The existing port omitted this branch and CALC-164 incorrectly attributed its resulting overwrite behavior to upstream.
+  Impact: A later consistent folder could clear the local inconsistency flag; actual ODF12 package acceptance differed from source.
+  Resolution: Restore the source early exit, replace the false-preservation regression with root/nested order cases on actual ZIP catalogs, retract CALC-164 and correct current registry evidence without claiming full storage/service parity.
+
+- Observation: Folder consistency checkpoint: check:docs reports only the unchanged css-style-matchers.ts line17 and line76 baseline; new and modified callbacks pass documentation validation.
+  Impact: Repository-wide documentation validation is not green, independent of the source traversal correction.
+  Resolution: Keep unrelated baseline unchanged and retain explicit failing documentation evidence with the passing related tests and remaining static gates.
