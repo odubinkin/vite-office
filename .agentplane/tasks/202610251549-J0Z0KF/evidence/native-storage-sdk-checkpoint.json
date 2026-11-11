@@ -1,0 +1,190 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native storage/hierarchical SDK contracts and storage exception inheritance",
+  "baseCommit": "78b72d920c761c7df1f5c147c15c4bc6aea41227",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/embed/InvalidStorageException.ts": "2290732ff0ea81f5f854d2625e22c9b945af2f71",
+    "apps/office/src/offapi/com/sun/star/embed/StorageWrappedTargetException.ts": "e657522870c7d96e07569a45b0141dbe734b75a8",
+    "apps/office/src/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts": "4fe1e42742df5c95d013efcd15c11f0c31176bff",
+    "apps/office/src/offapi/com/sun/star/embed/XHierarchicalStorageAccess2.ts": "52c9b672a48241da75da02960ae35b63612178ca",
+    "apps/office/src/offapi/com/sun/star/embed/XStorage.ts": "89d6b436f60f463446b58432b3e54bc6737e5a6b",
+    "apps/office/src/offapi/com/sun/star/embed/XStorage2.ts": "d2b3af73ddc72b65689c29bdefdbafd05197a7c7",
+    "apps/office/src/package/source/xstor/native-storage-sdk.test.ts": "85c53bb16fda754e67af0a9be8f7040ea5cab14a",
+    "docs/program/native-storage-sdk.md": "dcce62a8dfa15aa4c90a352665033dcbf362fc56",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "c5925bbe28f1294b7e95cdee732a7a9073cc70ee",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/InvalidStorageException.ts.json": "faa97dd9f9eabc137360f983ca6e5145f04dca95",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json": "93a87f757505e9d4dbbf201bf87c19c439f2dded",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts.json": "0e8036eae76b793363a9289eee4fd21a908945a1",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XHierarchicalStorageAccess2.ts.json": "7edc5f4d6091d31c31c4ce413528e3cf3cca4f08",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XStorage.ts.json": "7c1507e3b14aefaefb22e54f16fc79a91d1f9161",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XStorage2.ts.json": "1b5177d916a4e18e7ac3a1d4eaeeebce58c203ae",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/InvalidStorageException.ts.json": "851b280efbca3f1983473cca0a9064b3c13529df",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json": "c49cb0f2c136f3eeea302f338c477f3cc575a574",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts.json": "e517337057aefd8cad12e9349ffe3ffce61b4c61",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XHierarchicalStorageAccess2.ts.json": "1baed2fd9d31ec933ca10ab0a45945a026d28684",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XStorage.ts.json": "eeb65523938aacb90e382258c60c9726e7cbeda5",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XStorage2.ts.json": "26acaaa4c4c4149c43ca660e0261697d685f1a29"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-storage-sdk-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-gate-11.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-static.log"
+    },
+    {
+      "command": "scoped ESLint seven new source/test files --max-warnings0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-lint-final.log"
+    },
+    {
+      "command": "scoped Prettier21 changed source/test/docs/records",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-format.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-storage-sdk-registry-build.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/package/source/xstor/native-storage-sdk.test.ts --coverage --coverage.include=src/offapi/com/sun/star/embed/XStorage.ts --coverage.include=src/offapi/com/sun/star/embed/XStorage2.ts --coverage.include=src/offapi/com/sun/star/embed/XHierarchicalStorageAccess.ts --coverage.include=src/offapi/com/sun/star/embed/XHierarchicalStorageAccess2.ts --coverage.include=src/offapi/com/sun/star/embed/InvalidStorageException.ts --coverage.include=src/offapi/com/sun/star/embed/StorageWrappedTargetException.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 8,
+    "files": 1,
+    "wholeOwners": [
+      "XStorage",
+      "XStorage2",
+      "XHierarchicalStorageAccess",
+      "XHierarchicalStorageAccess2",
+      "InvalidStorageException",
+      "StorageWrappedTargetException"
+    ],
+    "summary": {
+      "lines": {
+        "total": 72,
+        "covered": 72,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 78,
+        "covered": 78,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 22,
+        "covered": 22,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "log": "apps/office/coverage/native-storage-sdk-profile-final.log"
+  },
+  "related": {
+    "command": "npx vitest run src/package/source/xstor/transaction-contracts.test.ts src/package/source/xstor/ocompinstream.test.ts src/package/source/xstor/oseekinstream.test.ts src/cppu/inc/com/sun/star/lang/WrappedTargetException.test.ts src/cppu/inc/com/sun/star/uno/Type.test.ts src/oox/source/helper/zipstorage-input.test.ts src/oox/source/core/upstream-packages.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts",
+    "exitCode": 0,
+    "cases": 47,
+    "files": 10,
+    "log": "apps/office/coverage/native-storage-sdk-related.log"
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "offapi/com/sun/star/embed/XStorage.idl": "bfa8bf35628ffc035934856a407c85de304ae8e531c6edffada3b21a3a521538",
+      "offapi/com/sun/star/embed/XStorage2.idl": "0bb3e2b9ba97e2614112a1718d9959d101b1ee617eda0bea6a629ec61993f96d",
+      "offapi/com/sun/star/embed/XHierarchicalStorageAccess.idl": "82df060496076f7d9f352a2b30e2f66df496c2485a76089495ce988fc33cbae9",
+      "offapi/com/sun/star/embed/XHierarchicalStorageAccess2.idl": "921499bf3ee7d42619d2de8e4d1f7d2c796de4c0efa055115a622b9eb37bbd63",
+      "offapi/com/sun/star/embed/InvalidStorageException.idl": "6ed975e108b8867b626a60281fc367a0f09181d2941a91fd45474f0d7c77c559",
+      "offapi/com/sun/star/embed/StorageWrappedTargetException.idl": "6e6b94abd499f493036a063582f8d893f438d1f1c171097dd371899e5af5aeb7"
+    }
+  },
+  "limitations": [
+    "Normal cppumaker-style static getters/type bases and all20 declared methods are present, not a complete external type-library-driven reflection/member table or compiled ABI/thread certificate.",
+    "No concrete storage, partial query provider, fake parent/package/context/factory or encryption implementation is constructed; existing flat ZipStorage is not relabeled XStorage.",
+    "Native OStorage/OWriteStream/package/factory graph, actual serializer XOutputStream Reference wiring and complete DOCX/XLSX core/filter/Worker/mounted UI acceptance remain unfinished.",
+    "Initial root/type-address fixture errors were corrected; no production fallback or fake value was introduced. Global docs remains only existing css-style-matchers17/76 baseline.",
+    "Only related checks run under the approved ten-task full-suite cadence. Browser Open/Save/autosave/recovery policies remain unchanged. Goal remains active and incomplete."
+  ]
+}

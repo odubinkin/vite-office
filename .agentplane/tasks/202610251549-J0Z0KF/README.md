@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 130
+revision: 133
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T22:34:07.594Z"
+  updated_at: "2026-11-11T22:58:32.077Z"
   updated_by: "CODER"
-  note: "Native ZIP entry default/UTC clock checkpoint passes142 package I/O profile cases and58 related cases,92.48percent aggregate branches with narrow-file limits disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; final docs retains only existing css-style-matchers17/76 baseline after correcting new callback docs. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-entry-defaults-checkpoint.json. Native output/storage and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished. No full-epic completion or pause."
-  attempts: 38
+  note: "Native storage SDK prerequisite passes8 whole-six-module profile cases at approved90percent thresholds and47 related cases. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global docs remains existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-storage-sdk-checkpoint.json. Native OStorage/OWriteStream/services/serializer Reference wiring and complete XLSX/DOCX model/filter/Worker/UI acceptance remain unfinished. No whole-epic completion or pause."
+  attempts: 39
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -616,8 +619,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T22:58:32.077Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native storage SDK prerequisite passes8 whole-six-module profile cases at approved90percent thresholds and47 related cases. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global docs remains existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-storage-sdk-checkpoint.json. Native OStorage/OWriteStream/services/serializer Reference wiring and complete XLSX/DOCX model/filter/Worker/UI acceptance remain unfinished. No whole-epic completion or pause."
+  -
+    type: "status"
+    at: "2026-11-11T22:59:34.980Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T22:34:51.529Z"
+doc_updated_at: "2026-11-11T22:59:34.980Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1772,6 +1788,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T22:58:32.077Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native storage SDK prerequisite passes8 whole-six-module profile cases at approved90percent thresholds and47 related cases. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global docs remains existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-storage-sdk-checkpoint.json. Native OStorage/OWriteStream/services/serializer Reference wiring and complete XLSX/DOCX model/filter/Worker/UI acceptance remain unfinished. No whole-epic completion or pause.
+    Attempts: 39
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:58:30.911Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1984,6 +2030,10 @@ sections:
     - Observation: Native entry-default checkpoint replaces constant1980 output timestamps with original static setEntry/getCurrentDosTime and actual OSL UTC values. The narrow output profile passed30 cases but had88.37percent branches because it retains checked-unreachable calendar alternatives and legacy multi-gigabyte bounds. Adding ByteChucker alone did not change branch coverage. Initial docs also found a missing callback JSDoc in the new test.
       Impact: No invalid clock/provider or private-state forcing should be added to activate source-unreachable branches. The package I/O profile must cover real reader/writer interactions, including the actual all-ones CRC sentinel collision, while narrower file coverage remains disclosed.
       Resolution: Ran the complete related package I/O profile with unchanged native byte/ZIP64/LOC/QA cases:142 cases, S662/686 B320/346 F52/52 L592/607,92.48percent aggregate branches. Narrow ZipOutputStream branches remain86.48percent and are not claimed otherwise. Related ODF/Worker/OOXML/Writer-font tests add58 passing cases. Corrected callback JSDoc; final docs has only existing css-style-matchers17/76 baseline. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. CALC-513..516/WRITER444..447 preserve source time widths/assertion/CRC/status logic. Native OS failures/resolution, output services and full DOCX/XLSX model/filter/Worker/UI acceptance remain unverified or unfinished.
+
+    - Observation: Native storage SDK prerequisite now declares four original interface families with20 own methods and two real storage exception values. The initial eight-case profile failed two fixture calls: it attempted a nonexistent runtime XInterface.static_type API and passed a raw scalar instead of its actual address to typed Any construction.
+      Impact: Tests must exercise the existing genuine UnoType root and native pointer/value contracts, without fabricating a partial XStorage/query provider or weakening the generated storage interfaces.
+      Resolution: Corrected the root type lookup to UnoType and supplied an initialized scalar cell. Final eight-case whole-six-module profile passes at the approved90percent thresholds with S78/78 B24/24 F22/22 L72/72; this naturally small SDK graph required no100percent chase.47 related cases validate actual input/transaction/type/wrapped-value/OOXML/Worker owners. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. Global JSDoc retains only css-style-matchers17/76 baseline. Native OStorage/OWriteStream/factory and serializer Reference output wiring remain unfinished; no storage service, encryption implementation or complete DOCX/XLSX model/filter/Worker/UI acceptance is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -3148,6 +3198,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T22:58:32.077Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native storage SDK prerequisite passes8 whole-six-module profile cases at approved90percent thresholds and47 related cases. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; global docs remains existing css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-storage-sdk-checkpoint.json. Native OStorage/OWriteStream/services/serializer Reference wiring and complete XLSX/DOCX model/filter/Worker/UI acceptance remain unfinished. No whole-epic completion or pause.
+Attempts: 39
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:58:30.911Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3364,3 +3444,7 @@ DecisionContextRef:
 - Observation: Native entry-default checkpoint replaces constant1980 output timestamps with original static setEntry/getCurrentDosTime and actual OSL UTC values. The narrow output profile passed30 cases but had88.37percent branches because it retains checked-unreachable calendar alternatives and legacy multi-gigabyte bounds. Adding ByteChucker alone did not change branch coverage. Initial docs also found a missing callback JSDoc in the new test.
   Impact: No invalid clock/provider or private-state forcing should be added to activate source-unreachable branches. The package I/O profile must cover real reader/writer interactions, including the actual all-ones CRC sentinel collision, while narrower file coverage remains disclosed.
   Resolution: Ran the complete related package I/O profile with unchanged native byte/ZIP64/LOC/QA cases:142 cases, S662/686 B320/346 F52/52 L592/607,92.48percent aggregate branches. Narrow ZipOutputStream branches remain86.48percent and are not claimed otherwise. Related ODF/Worker/OOXML/Writer-font tests add58 passing cases. Corrected callback JSDoc; final docs has only existing css-style-matchers17/76 baseline. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. CALC-513..516/WRITER444..447 preserve source time widths/assertion/CRC/status logic. Native OS failures/resolution, output services and full DOCX/XLSX model/filter/Worker/UI acceptance remain unverified or unfinished.
+
+- Observation: Native storage SDK prerequisite now declares four original interface families with20 own methods and two real storage exception values. The initial eight-case profile failed two fixture calls: it attempted a nonexistent runtime XInterface.static_type API and passed a raw scalar instead of its actual address to typed Any construction.
+  Impact: Tests must exercise the existing genuine UnoType root and native pointer/value contracts, without fabricating a partial XStorage/query provider or weakening the generated storage interfaces.
+  Resolution: Corrected the root type lookup to UnoType and supplied an initialized scalar cell. Final eight-case whole-six-module profile passes at the approved90percent thresholds with S78/78 B24/24 F22/22 L72/72; this naturally small SDK graph required no100percent chase.47 related cases validate actual input/transaction/type/wrapped-value/OOXML/Worker owners. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. Global JSDoc retains only css-style-matchers17/76 baseline. Native OStorage/OWriteStream/factory and serializer Reference output wiring remain unfinished; no storage service, encryption implementation or complete DOCX/XLSX model/filter/Worker/UI acceptance is claimed.
