@@ -1,0 +1,341 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native standalone OInputCompStream and stream SDK",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/embed/StorageFormats.ts": "85e7bd8879181123525b5899953490a608c1eda5",
+    "apps/office/src/offapi/com/sun/star/embed/XExtendedStorageStream.ts": "f26b52cfaba090286f7215fc93b0a86642395eb5",
+    "apps/office/src/package/source/xstor/ocompinstream.test.ts": "2cfc05fe76fa4424d2d865d22d430220d4c95392",
+    "apps/office/src/package/source/xstor/ocompinstream.ts": "140e91e9ec326e2db115b8a3dc02128ae1353a41",
+    "apps/office/src/udkapi/com/sun/star/io/XStream.ts": "3a880516c01d37516312ee6f24d04eb687c91cd8",
+    "docs/program/calc-upstream-suspected-issues.md": "02ac94fdc70196e3176826c03718382afaf5a3cc",
+    "docs/program/native-package-input-component.md": "65d0f45ca12a7c3ee11b70426239d808d37e952d",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "3c5520067a2ce83cc6aa74622547bd4610c32c25",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/StorageFormats.ts.json": "a0f835b095bbeee6ae81b5eeeea7406284161930",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XExtendedStorageStream.ts.json": "2c8f20ed5ea29346f7717b74f9d58f77648d3601",
+    "docs/program/registry/shared/provenance/package/source/xstor/ocompinstream.ts.json": "210fd131751c79ba01ee562df6cad8a4096b0247",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XStream.ts.json": "6a2b25cee6e3147e8c4a54fc3b1b6c74a8dd86ba",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/StorageFormats.ts.json": "9ad36097ce262237c68fedaf9d6ed6692c58b7f4",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XExtendedStorageStream.ts.json": "0111c82889c491c63295561d7f05fd039bb86643",
+    "docs/program/registry/shared/runtime/package/source/xstor/ocompinstream.ts.json": "c30edcaed8030a264df971308b7f501a776bf209",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XStream.ts.json": "9f89033ce0fa1cae43df132e4ea39d0c74b91831",
+    "docs/program/writer-upstream-suspected-issues.md": "246b1860652a5de8b701086043ddd2f7f6304708",
+    "scripts/check-module-boundaries.mjs": "5c8a4ce0144c480cf1c0d8f9e1b24967ae9d863e",
+    "scripts/check-module-boundaries.test.ts": "08f8c0dd0e82d2e3c86ae91e63749ade9f9d2f03"
+  },
+  "capability": "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 221,
+        "covered": 221,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 241,
+        "covered": 239,
+        "skipped": 0,
+        "pct": 99.17
+      },
+      "functions": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 52,
+        "covered": 50,
+        "skipped": 0,
+        "pct": 96.15
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/embed/StorageFormats.ts": {
+      "lines": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/embed/XExtendedStorageStream.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/xstor/ocompinstream.ts": {
+      "lines": {
+        "total": 200,
+        "covered": 200,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 220,
+        "covered": 218,
+        "skipped": 0,
+        "pct": 99.09
+      },
+      "branches": {
+        "total": 48,
+        "covered": 46,
+        "skipped": 0,
+        "pct": 95.83
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/io/XStream.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "coveragePolicy": "User-authorized90 applied only to command; production thresholds/exclusions unchanged. No forced remaining alternatives.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-0.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/input-component-check-1.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-2.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-3.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 1,
+      "log": "apps/office/coverage/input-component-check-4.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 1,
+      "log": "apps/office/coverage/input-component-check-5.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 1,
+      "log": "apps/office/coverage/input-component-check-6.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-7.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-check-11.log"
+    },
+    {
+      "command": "npx vitest run src/package/source/xstor/ocompinstream.test.ts --coverage --coverage.include=src/package/source/xstor/ocompinstream.ts --coverage.include=src/udkapi/com/sun/star/io/XStream.ts --coverage.include=src/offapi/com/sun/star/embed/XExtendedStorageStream.ts --coverage.include=src/offapi/com/sun/star/embed/StorageFormats.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/input-component-final",
+      "workingDirectory": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-final-coverage.log",
+      "logSha256": "d3bb11d93346a1bfd8749f834930be25d092a19df5cbd2b38b342333aa43296c"
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/streaming/seqstream.test.ts src/comphelper/inc/interfacecontainer3.test.ts src/udkapi/com/sun/star/beans/StringPair.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+      "workingDirectory": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-regressions.log",
+      "logSha256": "b496b94c0eec35eb84fc8c3e343f08c11a7edaad7800b5c19e0ba06a3043d9f4"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-boundary-tests.log",
+      "logSha256": "c55cb3409be84c909f741660ffc01019c5ca6727e473ab8b2b69964f3af47f2b"
+    },
+    {
+      "command": "npm run typecheck",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-typecheck-all.log",
+      "logSha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run build",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-build-final.log",
+      "logSha256": "a947d2cea8789d847e210095e087d56d83765b46c0b012f71f3bec43ffe42ccb"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-static-final.log",
+      "logSha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-provenance-final2.log",
+      "logSha256": "374b1a7db2303e3d6e7bee7226838c619a56d290fbf481fb8d4ca6e1926bd4f5"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-invariants-final2.log",
+      "logSha256": "044bdd88855142cb2a85272643a7ba37171f8a768a0bfe0254a784425756e3ea"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "workingDirectory": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-parity-final2.log",
+      "logSha256": "523d21d5538bfa8d9c06e658742ce51d615db89ef3008a93e92a17ddc9a74656"
+    }
+  ],
+  "otherChecks": {
+    "scopedEslint": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-lint-final2.log"
+    },
+    "scopedPrettier": {
+      "exitCode": 0,
+      "log": "apps/office/coverage/input-component-format-final.log"
+    }
+  },
+  "tests": {
+    "focused": 9,
+    "related": 69,
+    "moduleBoundaries": 48,
+    "writerResources": 2,
+    "countsArePerRun": true
+  },
+  "upstreamTest": {
+    "path": "package/qa/ofopxmlstorages/TestHelper.java",
+    "marker": "InternalCheckStream",
+    "replayed": "Actual queried stream read expected length+1, exact signed bytes, MediaType, Size and relationships. Full storage-factory Java suites remain pending."
+  },
+  "suspectedIssues": [
+    "CALC-495",
+    "WRITER426"
+  ],
+  "initialCorrections": [
+    "Removed unused imported XInterface from multiple-base SDK declaration and replaced forbidden TS non-null assertions with explicit original valid-pointer casts.",
+    "Expanded source provenance from basename-only markers to original methods/required bases, while local semantic symbols name actual owned declarations. Validators remain unchanged.",
+    "Native Any rvalue query assignment now uses genuine moveAssign rather than a copy. Final coverage ran after this source change."
+  ],
+  "baselineFailure": {
+    "command": "npm run check:docs",
+    "file": "apps/office/src/test/css-style-matchers.ts",
+    "headBlob": "24871de94e8a9e323989746ed19eae872d5dc282",
+    "diagnostics": [
+      "line17 function missing JSDoc",
+      "line76 documents2/3 parameters"
+    ]
+  },
+  "remaining": [
+    "OWriteStream_Impl-bound constructor and genuine native mutex identity/synchronization",
+    "ZipStorage metadata and wrapper integration; current bare input binding unchanged",
+    "Complete storage/output relationships and full DOCX/XLSX model/filter/Worker/UI import/export acceptance"
+  ],
+  "nativeUnverified": [
+    "Physical ABI/casts and allocation/unwind/shutdown/thread behavior",
+    "Full upstream storage factory and transaction suites"
+  ],
+  "fullSuite": "Not run: same ongoing tasks; user cadence once per10 completed agentplane tasks.",
+  "goalStatus": "active"
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 68
+revision: 71
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T17:28:41.070Z"
+  updated_at: "2026-11-11T17:50:58.275Z"
   updated_by: "CODER"
-  note: "Connected native content-type prerequisite:56 scoped coverage scenarios plus1 fixed-slot test,89 related regressions,48 boundary tests and2 resource tests pass. Whole4owner S381/381 B134/135 F39/39 L351/351 passes user-authorized90. Type/build/static/source/registry/module/lint/format/size/resource/doctor/routing pass. Global JSDoc retains only unchanged baseline diagnostics. Full XLSX/DOCX model/filter/Worker/UI acceptance remains incomplete. Evidence: evidence/native-content-type-sequences-checkpoint.json."
-  attempts: 22
+  note: "Bounded standalone package input component checkpoint:9 focused tests including upstream InternalCheckStream replay,69 related cases,48 boundary cases and2 resource cases pass. Four owners coverage S239/241 B50/52 F45/45 L221/221 passes user90 floor. Type/build/static/module/source/registry/lint/format/size/resources/doctor/routing pass; JSDoc retains unchanged baseline diagnostics. Parent-bound constructor, actual ZipStorage connection and full DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Evidence: evidence/native-package-input-component-checkpoint.json."
+  attempts: 23
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -360,8 +363,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T17:50:58.275Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded standalone package input component checkpoint:9 focused tests including upstream InternalCheckStream replay,69 related cases,48 boundary cases and2 resource cases pass. Four owners coverage S239/241 B50/52 F45/45 L221/221 passes user90 floor. Type/build/static/module/source/registry/lint/format/size/resources/doctor/routing pass; JSDoc retains unchanged baseline diagnostics. Parent-bound constructor, actual ZipStorage connection and full DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Evidence: evidence/native-package-input-component-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T17:51:22.974Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T17:28:51.588Z"
+doc_updated_at: "2026-11-11T17:51:22.974Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1036,6 +1052,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T17:50:58.275Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded standalone package input component checkpoint:9 focused tests including upstream InternalCheckStream replay,69 related cases,48 boundary cases and2 resource cases pass. Four owners coverage S239/241 B50/52 F45/45 L221/221 passes user90 floor. Type/build/static/module/source/registry/lint/format/size/resources/doctor/routing pass; JSDoc retains unchanged baseline diagnostics. Parent-bound constructor, actual ZipStorage connection and full DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Evidence: evidence/native-package-input-component-checkpoint.json.
+    Attempts: 23
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:50:57.286Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1128,6 +1174,10 @@ sections:
     - Observation: Connected content-type import/lookup/export now uses actual nested Sequence/StringPair and owned OUString results. ZipPackage now reads original fixed property slots, builds actual default/override sequences and calls the native-pair SAX writer; ZipStorage supplies FullPath0, empty Version1, MediaType2. Missing original DirectoryHelper splitAtLastToken is implemented; CALC-494/WRITER425 preserve stale-right-output boundaries.
       Impact: Pass:56 focused coverage scenarios plus1 fixed-slot regression,89 related Writer/Calc/serializer/ODS Worker scenarios,48 module boundary scenarios and2 Writer resource tests. Whole-four-owner coverage S381/381 B134/135 F39/39 L351/351 passes latest user-authorized90 floor. Initial new test incorrectly used direct text for native byte-prefix behavior; it now uses actual InputSource. Initial package-cppu edge and missing mutation inventory entry were corrected using Library_package2 source evidence and a canonical operation record; validators remain strict.
       Resolution: Evidence will be bound in evidence/native-content-type-sequences-checkpoint.json. Type/build/static/lint/format/source/registry/module/size/resources/doctor/routing pass. Global JSDoc still fails only unchanged HEAD css-style-matchers.ts lines17/76; do not claim all gates green. Full DOCX/XLSX model/filter/Worker/UI acceptance, relationship/output service implementation and remaining native package contracts are still pending; task and goal remain active.
+
+    - Observation: Added original standalone OInputCompStream constructor domain and complete declared readonly input/stream/component/property/relationship method set using genuine shared UNO value/query/listener owners. Added normal XStream/XExtendedStorageStream SDK metadata and original StorageFormats constants. CALC-495/WRITER426 preserve original custom query bypass of inherited XTypeProvider. Parent-bound constructor, mutex scopes and actual ZipStorage connection remain unported; no fake parent or mutex is introduced.
+      Impact: Nine focused source/SDK cases pass including upstream package/qa/ofopxmlstorages/TestHelper.java InternalCheckStream replay through queried input/property/relationship interfaces. Whole4owner coverage S239/241 B50/52 F45/45 L221/221 exceeds user90 floor. Related actual stream/container/StringPair/metadata/Writer tests pass69 cases; boundaries48 and resources2 pass. Initial unused SDK import and overly weak provenance symbol mappings were corrected without weakening validators. Existing JSDoc failures remain only unchanged css-style-matchers.ts lines17/76.
+      Resolution: Record bounded evidence in evidence/native-package-input-component-checkpoint.json. Current-source type/build/static/lint/format/source/module/registry/size/resources/doctor/routing checks pass except documented baseline JSDoc. No complete package storage, DOCX/XLSX model/filter/Worker/UI acceptance is claimed. Existing input binding stays unchanged until real metadata/wrapper integration; goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -1812,6 +1862,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T17:50:58.275Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded standalone package input component checkpoint:9 focused tests including upstream InternalCheckStream replay,69 related cases,48 boundary cases and2 resource cases pass. Four owners coverage S239/241 B50/52 F45/45 L221/221 passes user90 floor. Type/build/static/module/source/registry/lint/format/size/resources/doctor/routing pass; JSDoc retains unchanged baseline diagnostics. Parent-bound constructor, actual ZipStorage connection and full DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Evidence: evidence/native-package-input-component-checkpoint.json.
+Attempts: 23
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T17:50:57.286Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1908,3 +1988,7 @@ DecisionContextRef:
 - Observation: Connected content-type import/lookup/export now uses actual nested Sequence/StringPair and owned OUString results. ZipPackage now reads original fixed property slots, builds actual default/override sequences and calls the native-pair SAX writer; ZipStorage supplies FullPath0, empty Version1, MediaType2. Missing original DirectoryHelper splitAtLastToken is implemented; CALC-494/WRITER425 preserve stale-right-output boundaries.
   Impact: Pass:56 focused coverage scenarios plus1 fixed-slot regression,89 related Writer/Calc/serializer/ODS Worker scenarios,48 module boundary scenarios and2 Writer resource tests. Whole-four-owner coverage S381/381 B134/135 F39/39 L351/351 passes latest user-authorized90 floor. Initial new test incorrectly used direct text for native byte-prefix behavior; it now uses actual InputSource. Initial package-cppu edge and missing mutation inventory entry were corrected using Library_package2 source evidence and a canonical operation record; validators remain strict.
   Resolution: Evidence will be bound in evidence/native-content-type-sequences-checkpoint.json. Type/build/static/lint/format/source/registry/module/size/resources/doctor/routing pass. Global JSDoc still fails only unchanged HEAD css-style-matchers.ts lines17/76; do not claim all gates green. Full DOCX/XLSX model/filter/Worker/UI acceptance, relationship/output service implementation and remaining native package contracts are still pending; task and goal remain active.
+
+- Observation: Added original standalone OInputCompStream constructor domain and complete declared readonly input/stream/component/property/relationship method set using genuine shared UNO value/query/listener owners. Added normal XStream/XExtendedStorageStream SDK metadata and original StorageFormats constants. CALC-495/WRITER426 preserve original custom query bypass of inherited XTypeProvider. Parent-bound constructor, mutex scopes and actual ZipStorage connection remain unported; no fake parent or mutex is introduced.
+  Impact: Nine focused source/SDK cases pass including upstream package/qa/ofopxmlstorages/TestHelper.java InternalCheckStream replay through queried input/property/relationship interfaces. Whole4owner coverage S239/241 B50/52 F45/45 L221/221 exceeds user90 floor. Related actual stream/container/StringPair/metadata/Writer tests pass69 cases; boundaries48 and resources2 pass. Initial unused SDK import and overly weak provenance symbol mappings were corrected without weakening validators. Existing JSDoc failures remain only unchanged css-style-matchers.ts lines17/76.
+  Resolution: Record bounded evidence in evidence/native-package-input-component-checkpoint.json. Current-source type/build/static/lint/format/source/module/registry/size/resources/doctor/routing checks pass except documented baseline JSDoc. No complete package storage, DOCX/XLSX model/filter/Worker/UI acceptance is claimed. Existing input binding stays unchanged until real metadata/wrapper integration; goal remains active.
