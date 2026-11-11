@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.comphelper.split-at-last-token",
+    "modulePath": "apps/office/src/comphelper/source/misc/directoryhelper.ts",
+    "symbol": "splitAtLastToken",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+    "description": "Original reverse UTF16 token search mutates an actual OUString output, clearing only on absent delimiter and preserving old output at leading/trailing delimiters. Left result borrows source storage; filesystem operations remain unported."
+  }
+}

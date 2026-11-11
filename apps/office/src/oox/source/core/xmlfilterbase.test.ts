@@ -8,7 +8,7 @@ import type { SaxesTagNS } from "saxes";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
 import { DEFAULT_ZIP_FILE_LIMITS } from "../../../package/source/zipapi/ZipFile";
-import { ReadContentTypeSequence } from "../../../comphelper/source/xml/ofopxmlhelper";
+import { readContentTypes } from "../../../test/ofopxml-values";
 import { ZipStorage } from "../helper/zipstorage";
 import { FragmentHandler, type FragmentContext } from "./fragmenthandler";
 import { XmlFilterBase } from "./xmlfilterbase";
@@ -236,7 +236,7 @@ it("exports a real package, independent native part counters, metadata and escap
   const relationships = await reopened.importRelations("word/document.xml");
   expect(relationships.getFragmentPathFromRelId("rId1")).toBe("word/styles.xml");
   expect(relationships.getExternalTargetFromRelId("rId2")).toBe("https://e.test/é%2F?q=1&b=2");
-  const types = ReadContentTypeSequence(await archive.readTextEntry("[Content_Types].xml"));
+  const types = readContentTypes(await archive.readTextEntry("[Content_Types].xml"));
   expect(types[1]).toContainEqual({ First: "/word/document.xml", Second: main.mediaType });
   expect(types[1]).not.toContainEqual({ First: "/word/media/image.png", Second: "image/png" });
   const input = new ZipStorage(bytes);
@@ -347,8 +347,8 @@ it("reads actual content-type input through the same native source path", /** Me
     source = new InputSource();
   try {
     source.aInputStream = input;
-    const [defaults, overrides] = ReadContentTypeSequence(source);
-    expect([...defaults, ...overrides]).toContainEqual({
+    const [defaults, overrides] = readContentTypes(source);
+    expect([...(defaults ?? []), ...(overrides ?? [])]).toContainEqual({
       First: "xml",
       Second: "application/xml",
     });

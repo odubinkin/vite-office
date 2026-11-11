@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/source/misc/directoryhelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/source/misc/directoryhelper.ts#splitAtLastToken",
+        "apps/office/src/comphelper/source/misc/directoryhelper.test.ts"
+      ],
+      "justification": "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged. Only splitAtLastToken is ported; filesystem operations and physical string_view pointer layout remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "splitAtLastToken"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "comphelper/source/misc/directoryhelper.cxx",
+      "upstreamSymbols": [
+        "DirectoryHelper::splitAtLastToken"
+      ]
+    }
+  }
+}

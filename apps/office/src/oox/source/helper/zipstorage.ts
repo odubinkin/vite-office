@@ -109,8 +109,9 @@ export class ZipStorage {
         if (path === "[Content_Types].xml") continue;
         output.putNextEntry(path, stream.getBytes());
         manifest.push([
-          createManifestProperty("MediaType", stream.mediaType),
           createManifestProperty("FullPath", path),
+          createManifestProperty("Version", ""),
+          createManifestProperty("MediaType", stream.mediaType),
         ]);
       }
       output.putNextEntry(

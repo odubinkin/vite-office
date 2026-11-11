@@ -1,10 +1,14 @@
-/** @fileoverview Ports consumed OFOPXMLHelper content-type and relationship sequence XML contracts; relationship results use actual nested UNO sequences; remaining content/output fields bind UTF16 XML values, without claiming UNO service identity. */
+/** @fileoverview Ports consumed OFOPXMLHelper content-type and relationship sequence XML contracts; content-type and relationship results use actual nested UNO sequences; relationship output still binds host XML attribute fields, without claiming UNO service identity. */
 import type { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
 import { parseFastXmlStream } from "../../../sax/source/fastparser/fastparser";
 import { XmlStringDocumentHandler } from "../../../sax/source/expatwrap/saxwriter";
-import { OUString } from "../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { AttributeList } from "./attributelist";
-import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  Sequence,
+  type SequenceElements,
+  type SequenceReference,
+} from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import type { uno_Sequence } from "../../../cppu/inc/uno/sequence2";
 import {
   cppu_detail_getUnoType_StringPair as pairType,
@@ -24,8 +28,8 @@ export interface StringPair {
   readonly First: string;
   readonly Second: string;
 }
-/** Native ordered Defaults/Overrides sequence. */
-export type ContentTypeSequence = readonly [readonly StringPair[], readonly StringPair[]];
+/** Original initialized native Defaults/Overrides sequence. */
+export type ContentTypeSequence = Sequence<Sequence<NativeStringPair>>;
 
 /** Reads the native relationship sequence without the stricter oox::Relations admission rules. @param xml - Relationship XML. @returns Ordered attributes and entries. */
 export function ReadRelationsInfoSequence(
@@ -97,60 +101,104 @@ function native(value: string): OUString {
 
 /** Reads the original qualified-name/depth/required-attribute content sequence contract. @param xml - Content types XML. @returns Defaults and overrides in source order. */
 export function ReadContentTypeSequence(xml: string | InputSource): ContentTypeSequence {
-  const defaults: StringPair[] = [],
-    overrides: StringPair[] = [];
+  const result = new Relations();
   let depth = 0;
-  parseFastXmlStream(xml, {
-    /** Applies original SAX name matching; namespace prefixes are deliberately not normalized. @param tag - Tag. @param attributes - Attributes. @returns Nothing. */
-    open(tag, attributes) {
-      ++depth;
-      if (depth === 1 && tag.name === "Types") return;
-      if (depth !== 2 || (tag.name !== "Default" && tag.name !== "Override"))
-        throw new Error("Invalid OOXML content type element.");
-      const keyName = tag.name === "Default" ? "Extension" : "PartName";
-      const key =
-        attributes.find(
-          /** Matches original exact attribute name. @param a - Attribute. @returns Match. */ (a) =>
-            a.name === keyName,
-        )?.value ?? "";
-      const type =
-        attributes.find(
-          /** Matches original exact attribute name. @param a - Attribute. @returns Match. */ (a) =>
-            a.name === "ContentType",
-        )?.value ?? "";
-      if (key === "" || type === "") throw new Error("Missing OOXML content type attribute.");
-      (tag.name === "Default" ? defaults : overrides).push({ First: key, Second: type });
-    },
-    /** Native helper ignores text. @returns Nothing. */ characters() {},
-    /** Closes one native SAX stack element. @returns Nothing. */ close() {
-      --depth;
-    },
-  });
-  return [defaults, overrides];
+  try {
+    parseFastXmlStream(xml, {
+      /** Applies original SAX name matching, initialized row growth and native field ownership. @param tag - Tag. @param attributes - Attributes. @returns Nothing. */
+      open(tag, attributes) {
+        ++depth;
+        if (depth === 1 && tag.name === "Types") {
+          if (!result.hasElements()) result.realloc(2);
+          return;
+        }
+        if (depth !== 2 || (tag.name !== "Default" && tag.name !== "Override"))
+          throw new Error("Invalid OOXML content type element.");
+        const keyName = tag.name === "Default" ? "Extension" : "PartName";
+        const key =
+          attributes.find(
+            /** Matches original exact attribute name. @param a - Attribute. @returns Match. */ (
+              a,
+            ) => a.name === keyName,
+          )?.value ?? "";
+        const type =
+          attributes.find(
+            /** Matches original exact attribute name. @param a - Attribute. @returns Match. */ (
+              a,
+            ) => a.name === "ContentType",
+          )?.value ?? "";
+        if (key === "" || type === "") throw new Error("Missing OOXML content type attribute.");
+        const row = Sequence.unacquired(
+          Pairs,
+          (result.getArray() as SequenceElements).get(tag.name === "Default" ? 0 : 8) as [
+            uno_Sequence | null,
+          ],
+        );
+        const length = row.getLength() + 1;
+        row.realloc(length);
+        const pair = (row.getArray() as SequenceElements).get(
+          (length - 1) * 16,
+        ) as SequenceElements;
+        const first = native(key),
+          second = native(type);
+        try {
+          rtl_uString_assign(pair.get(0) as rtl_uStringSlot, first.pData as rtl_uString);
+          rtl_uString_assign(pair.get(8) as rtl_uStringSlot, second.pData as rtl_uString);
+        } finally {
+          second.dispose();
+          first.dispose();
+        }
+      },
+      /** Native helper ignores text. @returns Nothing. */ characters() {},
+      /** Closes one native SAX stack element. @returns Nothing. */ close() {
+        --depth;
+      },
+    });
+    return result;
+  } catch (error) {
+    result.dispose();
+    throw error;
+  }
 }
 
-/** Preserves the original extension-first, overrides-before-defaults search at each key. @param contentTypes - Native sequence. @param filename - Package path without leading slash. @returns MIME or empty. */
+/** Preserves original extension-first, overrides-before-defaults search with actual native string values. @param contentTypes - Native sequence. @param filename - Package path without leading slash. @returns Owned MIME or empty string. */
 export function GetContentTypeByName(
-  contentTypes: readonly (readonly StringPair[])[],
-  filename: string,
-): string {
-  if (contentTypes.length < 2) return "";
-  const defaults = contentTypes[0] as readonly StringPair[],
-    overrides = contentTypes[1] as readonly StringPair[];
-  const dot = filename.lastIndexOf(".");
-  for (const name of [dot >= 0 ? filename.slice(dot + 1) : filename, "/" + filename]) {
-    const match =
-      overrides.find(
-        /** Native exact first match. @param pair - Candidate. @returns Match. */ (pair) =>
-          pair.First === name,
-      ) ??
-      defaults.find(
-        /** Native exact first match. @param pair - Candidate. @returns Match. */ (pair) =>
-          pair.First === name,
-      );
-    if (match) return match.Second;
+  contentTypes: SequenceReference<Sequence<NativeStringPair>>,
+  filename: OUStringConstReference,
+): OUString {
+  if (contentTypes.getLength() < 2) return new OUString();
+  const defaults = Sequence.unacquired(
+    Pairs,
+    (contentTypes.getConstArray() as SequenceElements).get(0) as [uno_Sequence | null],
+  );
+  const overrides = Sequence.unacquired(
+    Pairs,
+    (contentTypes.getConstArray() as SequenceElements).get(8) as [uno_Sequence | null],
+  );
+  const dot = filename.lastIndexOf(46);
+  const extension = dot >= 0 ? filename.copy(dot + 1) : new OUString(filename);
+  const slash = native("/");
+  const path = new OUString(slash);
+  path.append(filename);
+  const names = [new OUString(extension), path];
+  try {
+    for (const name of names) {
+      for (const row of [overrides, defaults]) {
+        for (let i = 0; i < row.getLength(); ++i) {
+          const pair = NativeStringPair.unacquired(
+            (row.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
+          );
+          if (pair.First.equals(name)) return new OUString(pair.Second);
+        }
+      }
+    }
+    return new OUString();
+  } finally {
+    path.dispose();
+    names[0]?.dispose();
+    slash.dispose();
+    extension.dispose();
   }
-  return "";
 }
 
 /** Serializes original metadata element events through the existing native SAX writer. @param root - Root element. @param namespace - Namespace. @param children - Ordered child elements and attributes. @returns XML. */
@@ -206,31 +254,63 @@ function writeSequence(
 
 /** Original WriteContentSequence event order, whitespace and attribute names. @param defaults - Default pairs. @param overrides - Override pairs. @returns XML. */
 export function WriteContentSequence(
-  defaults: readonly StringPair[],
-  overrides: readonly StringPair[],
+  defaults: SequenceReference<NativeStringPair>,
+  overrides: SequenceReference<NativeStringPair>,
 ): string {
-  const children: [string, readonly StringPair[]][] = [];
-  for (const pair of defaults)
-    children.push([
-      "Default",
-      [
-        { First: "Extension", Second: pair.First },
-        { First: "ContentType", Second: pair.Second },
-      ],
-    ]);
-  for (const pair of overrides)
-    children.push([
-      "Override",
-      [
-        { First: "PartName", Second: pair.First },
-        { First: "ContentType", Second: pair.Second },
-      ],
-    ]);
-  return writeSequence(
-    "Types",
-    "http://schemas.openxmlformats.org/package/2006/content-types",
-    children,
-  );
+  const writer = new XmlStringDocumentHandler();
+  const root = native("Types"),
+    space = native(" "),
+    defaultName = native("Default"),
+    overrideName = native("Override"),
+    extension = native("Extension"),
+    partName = native("PartName"),
+    contentType = native("ContentType"),
+    xmlns = native("xmlns"),
+    namespace = native("http://schemas.openxmlformats.org/package/2006/content-types");
+  const rootAttributes = new AttributeList();
+  try {
+    rootAttributes.AddAttribute(xmlns, namespace);
+    writer.startDocument();
+    writer.startElement(root, rootAttributes);
+    for (const [row, element, key] of [
+      [defaults, defaultName, extension],
+      [overrides, overrideName, partName],
+    ] as const) {
+      for (let i = 0; i < row.getLength(); ++i) {
+        const pair = NativeStringPair.unacquired(
+          (row.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
+        );
+        const attributes = new AttributeList();
+        try {
+          attributes.AddAttribute(key, pair.First);
+          attributes.AddAttribute(contentType, pair.Second);
+          writer.startElement(element, attributes);
+          writer.ignorableWhitespace(space);
+          writer.endElement(element);
+        } finally {
+          attributes.Clear();
+        }
+      }
+    }
+    writer.ignorableWhitespace(space);
+    writer.endElement(root);
+    writer.endDocument();
+    return writer.getXml();
+  } finally {
+    rootAttributes.Clear();
+    for (const value of [
+      namespace,
+      xmlns,
+      contentType,
+      partName,
+      extension,
+      overrideName,
+      defaultName,
+      space,
+      root,
+    ])
+      value.dispose();
+  }
 }
 
 /** Original relation writer admits only the four relationship attribute names. @param sequence - Ordered relationship attributes. @returns XML. */

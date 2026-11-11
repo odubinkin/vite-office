@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/misc/directoryhelper.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/misc/directoryhelper.cxx",
+    "localSymbols": [
+      "splitAtLastToken"
+    ],
+    "upstreamSymbols": [
+      "DirectoryHelper::splitAtLastToken"
+    ],
+    "preservedResponsibilities": [
+      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Filesystem operations, physical view pointers/ABI, allocation failure, thread behavior and complete package/application service paths are unported or unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Borrowed Uint16Array views represent native u16string_view units over existing native string storage; actual SAL owns the output string. No alternate text/default/type provider is introduced."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/directoryhelper.ts",
+          "marker": "splitAtLastToken"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/directoryhelper.test.ts",
+          "marker": "splitAtLastToken"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/misc/directoryhelper.cxx",
+          "marker": "DirectoryHelper::splitAtLastToken"
+        }
+      ]
+    }
+  }
+}

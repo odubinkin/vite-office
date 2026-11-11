@@ -3500,3 +3500,9 @@ ParentNumbering (xmloff/source/style/xmlnumi.cxx). Preserve that
 sequence, including in ODT and internal-codec round-trip coverage.
 The order-sensitive UNO API contract remains a suspected upstream
 issue; the incorrect property ordering in the local port was fixed.
+
+### WRITER425 — DirectoryHelper may leave an old right token at path boundaries
+
+- Source: `vendor/libreoffice-reference/comphelper/source/misc/directoryhelper.cxx`, `DirectoryHelper::splitAtLastToken`.
+- A delimiter at offset zero returns an empty left view and does not modify `rRight`. A trailing delimiter returns the prefix and also leaves `rRight` unchanged. With right initially `old`, `.xml` yields empty/old and `a.` yields a/old. A source with no delimiter explicitly clears the output instead.
+- Preserve the branch and mutation order. `ZipPackage::WriteContentTypes` passes a fresh empty extension each time, so its leading/trailing-dot paths still produce overrides. The shared helper tests retain the nonempty-output cases independently. No upstream correction is applied.

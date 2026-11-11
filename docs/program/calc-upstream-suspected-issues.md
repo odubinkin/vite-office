@@ -5276,3 +5276,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source `vendor/libreoffice-reference/sal/textenc/convertgb18030.cxx`, `ImplConvertUnicodeToGb18030`, and `sal/textenc/convertiso2022cn.cxx`, `ImplConvertUnicodeToIso2022Cn`.
 - With `FLUSH` set, a final unmatched high surrogate sets `SRCBUFFERTOSMALL` and remains in the context. Without `FLUSH`, the original path applies the invalid-input policy and clears the surrogate if that policy can finish.
 - Keep the condition and resulting state. The native comparison includes all single surrogate units.
+
+### CALC-494 — DirectoryHelper may leave an old right token at path boundaries
+
+- Source: `vendor/libreoffice-reference/comphelper/source/misc/directoryhelper.cxx`, `DirectoryHelper::splitAtLastToken`.
+- A delimiter at offset zero returns an empty left view and does not modify `rRight`. A trailing delimiter returns the prefix and also leaves `rRight` unchanged. With right initially `old`, `.xml` yields empty/old and `a.` yields a/old. A source with no delimiter explicitly clears the output instead.
+- Preserve the branch and mutation order. `ZipPackage::WriteContentTypes` passes a fresh empty extension each time, so its leading/trailing-dot paths still produce overrides. The shared helper tests retain the nonempty-output cases independently. No upstream correction is applied.

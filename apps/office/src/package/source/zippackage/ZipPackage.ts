@@ -4,10 +4,30 @@ import type { ZipFile } from "../zipapi/ZipFile";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { readManifestSequence } from "../manifest/ManifestReader";
+import { WriteContentSequence } from "../../../comphelper/source/xml/ofopxmlhelper";
+import { splitAtLastToken } from "../../../comphelper/source/misc/directoryhelper";
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
-  WriteContentSequence,
-  type StringPair,
-} from "../../../comphelper/source/xml/ofopxmlhelper";
+  StringPair,
+  cppu_detail_getUnoType_StringPair as pairType,
+} from "../../../udkapi/com/sun/star/beans/StringPair";
+import {
+  rtl_uString_assign,
+  type rtl_uStringSlot,
+  type rtl_uString,
+} from "../../../sal/inc/rtl/ustring.h";
+import { PKG_MNFST_MEDIATYPE, PKG_MNFST_FULLPATH } from "../../inc/PackageConstants";
+const Pairs = Sequence.specialize<StringPair>(pairType, 16);
+/** Initializes one source UTF16 literal using the genuine native string owner. @param value - Literal. @returns Owned value. */
+function native(value: string): OUString {
+  return new OUString(
+    Uint16Array.from(
+      value.split(""),
+      /** Literal UTF16 unit. @param c - Unit. @returns Numeric unit. */ (c) => c.charCodeAt(0),
+    ),
+    value.length,
+  );
+}
 /** Native stored folder properties. */
 interface FolderProperties {
   mediaType: string;
@@ -159,41 +179,77 @@ export function readPlainPackageManifest(
 
 /** Native ZipPackage::WriteContentTypes standard defaults and manifest override selection. @param manifest - Actual package PropertyValue sequences. @returns Content types XML. */
 export function WriteContentTypes(manifest: readonly (readonly PropertyValue[])[]): string {
-  const defaults: StringPair[] = [
-      { First: "fntdata", Second: "application/x-fontdata" },
-      { First: "jpeg", Second: "image/jpeg" },
-      { First: "png", Second: "image/png" },
-      { First: "rels", Second: "application/vnd.openxmlformats-package.relationships+xml" },
-      { First: "xml", Second: "application/xml" },
-    ],
-    overrides: StringPair[] = [];
-  for (const sequence of manifest) {
-    const type = new OUString(),
-      path = new OUString();
-    try {
-      for (const property of sequence) {
-        const name = text(property.Name);
-        if (name === "MediaType") property.Value.extract(type, "OUString");
-        else if (name === "FullPath") property.Value.extract(path, "OUString");
+  const defaults = new Pairs(5),
+    overrides = new Pairs(manifest.length);
+  const defaultFields = defaults.getArray() as SequenceElements;
+  const overrideFields = overrides.getArray() as SequenceElements;
+  let length = 0;
+  try {
+    const literals = [
+      ["fntdata", "application/x-fontdata"],
+      ["jpeg", "image/jpeg"],
+      ["png", "image/png"],
+      ["rels", "application/vnd.openxmlformats-package.relationships+xml"],
+      ["xml", "application/xml"],
+    ] as const;
+    for (let i = 0; i < literals.length; ++i) {
+      const literal = literals[i] as readonly [string, string];
+      const first = native(literal[0]),
+        second = native(literal[1]);
+      const pair = defaultFields.get(i * 16) as SequenceElements;
+      try {
+        rtl_uString_assign(pair.get(0) as rtl_uStringSlot, first.pData as rtl_uString);
+        rtl_uString_assign(pair.get(8) as rtl_uStringSlot, second.pData as rtl_uString);
+      } finally {
+        second.dispose();
+        first.dispose();
       }
-      const mediaType = text(type),
-        fullPath = text(path);
-      if (mediaType === "") continue;
-      const dot = fullPath.lastIndexOf("."),
-        extension = dot > 0 ? fullPath.slice(dot + 1) : "";
-      if (
-        extension !== "" &&
-        defaults.some(
-          /** Original exact default match. @param pair - Default. @returns Match. */ (pair) =>
-            pair.First === extension && pair.Second === mediaType,
-        )
-      )
-        continue;
-      overrides.push({ First: "/" + fullPath, Second: mediaType });
-    } finally {
-      type.dispose();
-      path.dispose();
     }
+    for (const sequence of manifest) {
+      const type = new OUString();
+      try {
+        (sequence[PKG_MNFST_MEDIATYPE] as PropertyValue).Value.extract(type, "OUString");
+        if (type.isEmpty()) continue;
+        const path = new OUString(),
+          extension = new OUString();
+        try {
+          (sequence[PKG_MNFST_FULLPATH] as PropertyValue).Value.extract(path, "OUString");
+          splitAtLastToken(path.subView(0), 46, extension);
+          let found = false;
+          if (!extension.isEmpty()) {
+            for (let i = 0; i < defaults.getLength(); ++i) {
+              const pair = StringPair.unacquired(
+                (defaults.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
+              );
+              if (pair.First.equals(extension) && pair.Second.equals(type)) {
+                found = true;
+                break;
+              }
+            }
+          }
+          if (found) continue;
+          const fullPath = native("/");
+          try {
+            fullPath.append(path);
+            const pair = overrideFields.get(length * 16) as SequenceElements;
+            rtl_uString_assign(pair.get(0) as rtl_uStringSlot, fullPath.pData as rtl_uString);
+            rtl_uString_assign(pair.get(8) as rtl_uStringSlot, type.pData as rtl_uString);
+            ++length;
+          } finally {
+            fullPath.dispose();
+          }
+        } finally {
+          extension.dispose();
+          path.dispose();
+        }
+      } finally {
+        type.dispose();
+      }
+    }
+    overrides.realloc(length);
+    return WriteContentSequence(defaults, overrides);
+  } finally {
+    overrides.dispose();
+    defaults.dispose();
   }
-  return WriteContentSequence(defaults, overrides);
 }
