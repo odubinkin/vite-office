@@ -125,7 +125,8 @@ describe("parity mapping CLI" /**
         capabilityIds: expect.arrayContaining(["CAP-80646669-70d5-4641-9fe5-29b1639adab9"]),
       }),
     );
-  }, 30_000);
+    // Full coverage also instruments the complete owned runtime registry.
+  }, 120_000);
 
   it("rejects unknown global operation capabilities before emitting output", /** Exercises missing global registry evidence independently of successful report composition. @returns Completion after rejection. */ async () => {
     const { runtimeDeclaration, readOwnedEvidence } = await ownedEvidence();
