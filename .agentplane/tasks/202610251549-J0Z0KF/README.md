@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 102
+revision: 108
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T20:30:35.952Z"
+  updated_at: "2026-11-11T20:41:36.477Z"
   updated_by: "CODER"
-  note: "Bounded package I/O prerequisite: complete original ByteChucker/ByteGrabber declarations and methods now use actual native Reference/Sequence/ByteReader/XSeekable owners, widths, cached pointer aliases and short read contracts. 55 scenarios pass; whole owners100/104S30/30B20/20F86/90L at approved90. 76 related scenarios in10 files pass. Typecheck, static build, scoped lint/format and final source/registry gates pass; check:docs retains only css-style-matchers baseline17/76. Initial compile/provenance errors corrected and recorded. Evidence: evidence/native-zip-byte-streams-checkpoint.json. Full native ZIP/storage/model/filter/Worker/UI acceptance unfinished; continue goal."
-  attempts: 32
+  note: "Bounded native ZIP catalog block: complete borrowed MemoryByteGrabber now drives actual sequential CEN field reads, native signed length rejection and counted UTF8 OUString name conversion independent of ZIP flag, using actual SAL defaults.37 scoped cases pass; whole owners226/226S119/119B30/30F196/196L at approved90.91 related scenarios in7 files, current typecheck/static build and final scoped/source/registry gates pass. check:docs retains known css-style-matchers baseline17/76 only. Source-backed fixture migrations and failures recorded. Evidence: evidence/native-memory-zip-catalog-checkpoint.json. Full ZIP/package/storage/model/filter/Worker/UI acceptance remains unfinished; continue active goal."
+  attempts: 33
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -520,8 +523,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T20:41:36.477Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native ZIP catalog block: complete borrowed MemoryByteGrabber now drives actual sequential CEN field reads, native signed length rejection and counted UTF8 OUString name conversion independent of ZIP flag, using actual SAL defaults.37 scoped cases pass; whole owners226/226S119/119B30/30F196/196L at approved90.91 related scenarios in7 files, current typecheck/static build and final scoped/source/registry gates pass. check:docs retains known css-style-matchers baseline17/76 only. Source-backed fixture migrations and failures recorded. Evidence: evidence/native-memory-zip-catalog-checkpoint.json. Full ZIP/package/storage/model/filter/Worker/UI acceptance remains unfinished; continue active goal."
+  -
+    type: "status"
+    at: "2026-11-11T20:41:44.092Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T20:30:41.408Z"
+doc_updated_at: "2026-11-11T20:41:44.092Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1496,6 +1512,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T20:41:36.477Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native ZIP catalog block: complete borrowed MemoryByteGrabber now drives actual sequential CEN field reads, native signed length rejection and counted UTF8 OUString name conversion independent of ZIP flag, using actual SAL defaults.37 scoped cases pass; whole owners226/226S119/119B30/30F196/196L at approved90.91 related scenarios in7 files, current typecheck/static build and final scoped/source/registry gates pass. check:docs retains known css-style-matchers baseline17/76 only. Source-backed fixture migrations and failures recorded. Evidence: evidence/native-memory-zip-catalog-checkpoint.json. Full ZIP/package/storage/model/filter/Worker/UI acceptance remains unfinished; continue active goal.
+    Attempts: 33
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:41:35.483Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1644,6 +1690,22 @@ sections:
     - Observation: Native byte-helper checks: check:docs retains only known css-style-matchers baseline; source-provenance rejects the new header declaration records for basename-only upstream symbols.
       Impact: The header records need actual declared method symbols before source provenance can pass; runtime tests, scoped lint/format, typecheck and static build pass.
       Resolution: Add original ByteChucker/ByteGrabber header method symbols, regenerate canonical registry views and rerun affected source/registry gates. Keep the unrelated JSDoc baseline explicit.
+
+    - Observation: First memory-reader profile passed all27 new cases but one legacy ZipFile bad-length fixture expected a bounds error for0xffff. Native readCEN first interprets this field as signed16 and rejects the negative length.
+      Impact: The old test no longer reaches the bounds branch after correcting the parser widths; production matches the pinned check order.
+      Resolution: Use0x7fff in that existing bounds fixture, preserving its original purpose. Dedicated new raw ZIP mutations and32767/32768-byte names independently assert native negative-length rejection. Rerun the scoped profile.
+
+    - Observation: Pinned ZipFile::readCEN always decodes path bytes as UTF8 with the counted OUString constructor, independent of ZIP UTF8 flag. Existing decodeZipName instead rejected non-ASCII names without that flag and used fatal host decoding.
+      Impact: Central catalog names and malformed-byte handling differed from the requested upstream contract.
+      Resolution: Use the genuine existing OUString UTF8 constructor/default conversion flags, remove the duplicate charset gate, and migrate source-backed cases to actual valid/malformed name bytes in matching local/CEN records. Keep the unchanged css-style-matchers documentation baseline explicit.
+
+    - Observation: The first SAL name-decoder profile found one migrated fixture clearing the UTF8 bit only in CEN, leaving the local header bit set.
+      Impact: Name decoding passed as expected, then real payload validation correctly rejected the deliberately mismatched headers.
+      Resolution: Clear the bit in both actual header records for the valid source-name fixture, preserving the existing independent header-mismatch regression. Rerun the final related profile and current-source checks.
+
+    - Observation: Final current-source memory/CEN/SAL checks pass except check:docs, which reports only the unchanged css-style-matchers.ts lines17 and76 baseline.
+      Impact: Repository-wide documentation gate remains non-green independently of this native ZIP parser block.
+      Resolution: Retain the unrelated baseline, record final passing37 scoped and91 related scenarios plus type/build/source/registry checks, and continue the incomplete DOCX/XLSX goal.
 id_source: "generated"
 ---
 ## Summary
@@ -2628,6 +2690,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T20:41:36.477Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native ZIP catalog block: complete borrowed MemoryByteGrabber now drives actual sequential CEN field reads, native signed length rejection and counted UTF8 OUString name conversion independent of ZIP flag, using actual SAL defaults.37 scoped cases pass; whole owners226/226S119/119B30/30F196/196L at approved90.91 related scenarios in7 files, current typecheck/static build and final scoped/source/registry gates pass. check:docs retains known css-style-matchers baseline17/76 only. Source-backed fixture migrations and failures recorded. Evidence: evidence/native-memory-zip-catalog-checkpoint.json. Full ZIP/package/storage/model/filter/Worker/UI acceptance remains unfinished; continue active goal.
+Attempts: 33
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:41:35.483Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2780,3 +2872,19 @@ DecisionContextRef:
 - Observation: Native byte-helper checks: check:docs retains only known css-style-matchers baseline; source-provenance rejects the new header declaration records for basename-only upstream symbols.
   Impact: The header records need actual declared method symbols before source provenance can pass; runtime tests, scoped lint/format, typecheck and static build pass.
   Resolution: Add original ByteChucker/ByteGrabber header method symbols, regenerate canonical registry views and rerun affected source/registry gates. Keep the unrelated JSDoc baseline explicit.
+
+- Observation: First memory-reader profile passed all27 new cases but one legacy ZipFile bad-length fixture expected a bounds error for0xffff. Native readCEN first interprets this field as signed16 and rejects the negative length.
+  Impact: The old test no longer reaches the bounds branch after correcting the parser widths; production matches the pinned check order.
+  Resolution: Use0x7fff in that existing bounds fixture, preserving its original purpose. Dedicated new raw ZIP mutations and32767/32768-byte names independently assert native negative-length rejection. Rerun the scoped profile.
+
+- Observation: Pinned ZipFile::readCEN always decodes path bytes as UTF8 with the counted OUString constructor, independent of ZIP UTF8 flag. Existing decodeZipName instead rejected non-ASCII names without that flag and used fatal host decoding.
+  Impact: Central catalog names and malformed-byte handling differed from the requested upstream contract.
+  Resolution: Use the genuine existing OUString UTF8 constructor/default conversion flags, remove the duplicate charset gate, and migrate source-backed cases to actual valid/malformed name bytes in matching local/CEN records. Keep the unchanged css-style-matchers documentation baseline explicit.
+
+- Observation: The first SAL name-decoder profile found one migrated fixture clearing the UTF8 bit only in CEN, leaving the local header bit set.
+  Impact: Name decoding passed as expected, then real payload validation correctly rejected the deliberately mismatched headers.
+  Resolution: Clear the bit in both actual header records for the valid source-name fixture, preserving the existing independent header-mismatch regression. Rerun the final related profile and current-source checks.
+
+- Observation: Final current-source memory/CEN/SAL checks pass except check:docs, which reports only the unchanged css-style-matchers.ts lines17 and76 baseline.
+  Impact: Repository-wide documentation gate remains non-green independently of this native ZIP parser block.
+  Resolution: Retain the unrelated baseline, record final passing37 scoped and91 related scenarios plus type/build/source/registry checks, and continue the incomplete DOCX/XLSX goal.
