@@ -12,16 +12,19 @@
       "Original standalone OInputCompStream uses actual native input/value/query/listener owners and complete declared readonly component methods.",
       "Original custom interface query, property denial and closure failure contracts are preserved without substitute parent/mutex/service providers.",
       "Writer document parts request actual OInputSeekStream SEEKABLEREAD; ordinary ZipStorage READ remains nonseekable.",
-      "Seekable package snapshots use the actual UNOMemoryStream shared input/output cache with complete declared interface methods and source closure behavior."
+      "Seekable package snapshots use the actual UNOMemoryStream shared input/output cache with complete declared interface methods and source closure behavior.",
+      "Native package output prerequisites preserve actual Type collection and container2 ownership contracts without a fake output/parent/provider."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
-      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged."
+      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged.",
+      "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged."
     ],
     "scopeLimitations": [
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
-      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged."
+      "Original UNOMemoryStream standalone class now supplies genuine XServiceInfo/XStream/XSeekableInputStream/XOutputStream/XTruncate and ByteReader/ByteWriter, native shared cursor/overwrite/truncate behavior and exact exceptions. Both close methods only reset the cursor (CALC-496/WRITER427), without a corrective disconnected flag. ZipStorage SEEKABLEREAD initializes and rewinds this actual cache; real BinaryXInputStream/BinaryXOutputStream integration is exercised. The primitive vector is lowered to signed typed storage with separate logical length and initial1MiB capacity; indeterminate gap bytes, native noinit/allocation/growth/ABI guarantees remain unverified. Factory registration, parent storage/OWriteStream graph, spill files, complete output serializer/package/model/filter/Worker/UI acceptance remain unfinished. Browser file/autosave/recovery choices are unchanged.",
+      "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -76,6 +79,18 @@
         {
           "path": "udkapi/com/sun/star/io/XTruncate.idl",
           "marker": "XTruncate"
+        },
+        {
+          "path": "comphelper/source/container/interfacecontainer2.cxx",
+          "marker": "OInterfaceIteratorHelper2"
+        },
+        {
+          "path": "include/comphelper/interfacecontainer2.hxx",
+          "marker": "OInterfaceIteratorHelper2"
+        },
+        {
+          "path": "include/comphelper/multicontainer2.hxx",
+          "marker": "OMultiTypeInterfaceContainerHelper2"
         }
       ],
       "tests": [
@@ -144,6 +159,18 @@
         {
           "path": "apps/office/src/udkapi/com/sun/star/io/XTruncate.ts",
           "marker": "XTruncate"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/container/interfacecontainer2.ts",
+          "marker": "element_alias2"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/interfacecontainer2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/multicontainer2.ts",
+          "marker": "@fileoverview"
         }
       ],
       "tests": [
@@ -166,6 +193,10 @@
         {
           "path": "apps/office/src/comphelper/source/streaming/memorystream.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/container/interfacecontainer2.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -184,6 +215,10 @@
         {
           "path": "docs/program/native-memory-stream-cache.md",
           "marker": "# Native memory stream cache"
+        },
+        {
+          "path": "docs/program/native-package-owner-support.md",
+          "marker": "# Native package owner support"
         }
       ]
     },

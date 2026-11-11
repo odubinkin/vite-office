@@ -10,11 +10,13 @@
     "maturity": "implemented",
     "assertions": [
       "Preserve actual original listener/adapter ownership, construction gate and overload differences, hardening, temporary destruction and catch-only RuntimeException state.",
-      "Reuse actual shared Reference/RuntimeException/OSL/generated interfaces and Type/Any/queryInterface; original compiler specialization identity only."
+      "Reuse actual shared Reference/RuntimeException/OSL/generated interfaces and Type/Any/queryInterface; original compiler specialization identity only.",
+      "Native package output prerequisites preserve actual Type collection and container2 ownership contracts without a fake output/parent/provider."
     ],
     "capability": "Original weak reference listener helper and typed wrapper lifecycle",
     "gaps": [
-      "Native aggregate/component/inheritance helper families, physical ABI/layout, generic native exception bridge, native differential capture, full reflection and complete document/UI filter workflows remain unverified."
+      "Native aggregate/component/inheritance helper families, physical ABI/layout, generic native exception bridge, native differential capture, full reflection and complete document/UI filter workflows remain unverified.",
+      "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged."
     ],
     "upstream": {
       "implementation": [
@@ -45,6 +47,14 @@
         {
           "path": "udkapi/com/sun/star/lang/XTypeProvider.idl",
           "marker": "XTypeProvider"
+        },
+        {
+          "path": "cppuhelper/source/typeprovider.cxx",
+          "marker": "TypeSeqLen"
+        },
+        {
+          "path": "include/cppuhelper/typeprovider.hxx",
+          "marker": "OTypeCollection"
         }
       ],
       "tests": [
@@ -89,6 +99,14 @@
         {
           "path": "apps/office/src/udkapi/com/sun/star/lang/XTypeProvider.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/typeprovider.ts",
+          "marker": "Arguments"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/typeprovider.ts",
+          "marker": "@fileoverview"
         }
       ],
       "tests": [
@@ -107,12 +125,20 @@
         {
           "path": "apps/office/src/cppuhelper/source/native-implbase.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/typeprovider.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
         {
           "path": "docs/program/calc-core.md",
           "marker": "Original weak reference listener and helper lifecycle"
+        },
+        {
+          "path": "docs/program/native-package-owner-support.md",
+          "marker": "# Native package owner support"
         }
       ]
     },
@@ -128,7 +154,8 @@
     "scopeLimitations": [
       "Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task.",
       "V4DQJW extends the same original weak.cxx owner with non-aggregating OWeakObject and internal OWeakConnectionPoint: zero-starting actual OSL count, lazy independently acquired adapter, guard increment/rollback against resurrection, reverse pointer search then actual root identity comparison, detached ordered listener snapshot, disposed-listener handling, last RuntimeException selection, weak invalidation before virtual destruction and dummy copy/assignment. Actual Reference, queryInterface, XWeak/XAdapter/XReference, Any and exception owners are reused. Synchronous browser execution replaces mutex scope; caught UNO exception values are retained directly rather than copied through the absent native C++/binary exception bridge. This preserves dynamic JS exception fields and selection, but does not certify native exception allocation/context-refcount traces, binary ABI, threads or shutdown. Ten added real-owner tests plus six existing complete native weak-helper replays cover both changed executable owners at unchanged scoped100. No new native OWeakObject capture or generic bridge parity is claimed. OWeakAggObject, WeakImplHelper, UnoComplexColor, CellColorHandler and full DOCX/XLSX model/UI workflows remain incomplete; broad parity flags stay unverified.",
-      "V4DQJW now implements real non-aggregating WeakImplHelper/class-data/XTypeProvider and UnoComplexColor ownership. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete."
+      "V4DQJW now implements real non-aggregating WeakImplHelper/class-data/XTypeProvider and UnoComplexColor ownership. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete.",
+      "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged."
     ],
     "aspect": "model-operation",
     "atomicOperation": "weak-reference-listener-helper-lifecycle"

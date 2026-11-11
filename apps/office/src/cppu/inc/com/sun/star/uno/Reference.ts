@@ -116,9 +116,9 @@ export class BaseReference {
     const pointer = value instanceof BaseReference ? value.get() : value;
     if (this._pInterface === pointer) return true;
     try {
-      const first = new Reference(this._pInterface, UNO_QUERY);
+      const first = new Reference(this._pInterface as XInterface | null, UNO_QUERY);
       try {
-        const second = new Reference(pointer, UNO_QUERY);
+        const second = new Reference(pointer as XInterface | null, UNO_QUERY);
         try {
           return first._pInterface === second._pInterface;
         } finally {
@@ -149,7 +149,7 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
       | [value: Reference<T> | T | null]
       | [value: T | null, noAcquire: __sal_NoAcquire | UnoReference_NoAcquire]
       | [
-          value: BaseReference | Any | T | null,
+          value: BaseReference | Any | XInterface | null,
           tag: UnoReference_Query | UnoReference_QueryThrow,
           argument?: UnoTypeArgument,
         ]

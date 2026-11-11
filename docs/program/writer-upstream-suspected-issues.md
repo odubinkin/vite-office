@@ -3519,3 +3519,16 @@ issue; the incorrect property ordering in the local port was fixed.
 - Source: `vendor/libreoffice-reference/comphelper/source/streaming/memorystream.cxx`, `UNOMemoryStream::closeInput`, `closeOutput`, `readBytes` and `writeBytes`.
 - Both close methods only set the shared cursor to zero. Reads and writes remain available; writing after closeOutput overwrites the start of the existing data rather than raising NotConnectedException. This appears inconsistent with `udkapi/com/sun/star/io/XOutputStream.idl`, which forbids further writes after closeOutput. Intentional reliance by storage-cache consumers remains possible.
 - Preserve the original state changes without adding a disconnected flag. The genuine component and BinaryXInputStream/BinaryXOutputStream tests cover cursor reset and reuse. The outer OInputCompStream/OInputSeekStream keeps its own disposed guard, so closing that wrapper still prevents subsequent operations. No upstream correction is applied.
+
+### WRITER428 — Interface container2 rejects null despite its insertion contract
+
+- Source: pinned `include/comphelper/interfacecontainer2.hxx`, `OInterfaceContainerHelper2::addInterface` documentation, and `comphelper/source/container/interfacecontainer2.cxx`, the method body.
+- The documentation allows insertion of a null interface, but the implementation asserts nonnull and immediately returns0 for null. It neither inserts nor returns the existing count: a one-listener container still contains one listener after the method returns0. The multi-type wrapper also creates and retains an empty keyed container when its first insertion is null.
+- Preserve this early return, state and key lifetime. The translated native-container tests assert both empty and nonempty cases, including retained multi-type keys. No assertion is promoted into a new production exception or API correction.
+
+
+### WRITER429 — Interface container2 clear diagnoses a normal unshared list
+
+- Source: pinned `comphelper/source/container/interfacecontainer2.cxx`, `OInterfaceContainerHelper2::clear`, uses `OSL_ENSURE(!bIsList || bInUse, ...)` immediately before its conditional detachment.
+- A normal list with no active iterator has bIsList=true and bInUse=false, so clearing it emits that debug diagnostic even though clear is a supported operation and the upstream IfTest::testEnumerate scenario does exactly this. This looks like a stale diagnostic predicate copied from disposeAndClear; it does not change the release-build operation.
+- Preserve the state transitions and release behavior. The browser port does not simulate debug logging or add a corresponding exception. Native debug-diagnostic execution and downstream impact remain unverified.

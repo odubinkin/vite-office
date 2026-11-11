@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/inc/interfacecontainer2.ts",
+    "status": "mapped",
+    "upstreamPath": "include/comphelper/interfacecontainer2.hxx",
+    "localSymbols": [
+      "OInterfaceContainerHelper2",
+      "OInterfaceIteratorHelper2"
+    ],
+    "upstreamSymbols": [
+      "OInterfaceIteratorHelper2",
+      "OInterfaceContainerHelper2"
+    ],
+    "preservedResponsibilities": [
+      "Original OTypeCollection and comphelper container2 owners are ported as OWriteStream prerequisites. Type collections preserve original1..12 arities/default tail/order/duplicates and actual Sequence/Type assignment/copy/COW/destruction. Container2 preserves the single raw acquired interface/vector union, iterator copy-on-change/ownership, pointer-first/root equality, duplicates, null early return, reverse snapshot callbacks, detach-before-dispose and source exception handling. Multi-type storage uses real Type keys and snapshots borrowed container pointers while retaining empty containers. Pinned IfTest testCreateDispose/testEnumerate and all four TestInterfaceContainer2::test1 scopes are translated with genuine components/owners; critical reentrancy/error scenarios are added. CALC-497/WRITER428 and CALC-498/WRITER429 retain original null and debug-diagnostic contracts. Synchronous calls erase native mutex parameters/scopes without a surrogate; native locking/union ABI/allocations and full OWriteStream/parent storage/model/filter/Worker/UI remain unverified or unfinished. Browser persistence policies are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Native locking/physical union ABI/allocation and complete write/parent/model/UI owners remain unfinished. Internal const-reference OTypeCollection getter and OImplementationId remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/inc/interfacecontainer2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/container/interfacecontainer2.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/comphelper/interfacecontainer2.hxx",
+          "marker": "OInterfaceIteratorHelper2"
+        }
+      ]
+    }
+  }
+}
