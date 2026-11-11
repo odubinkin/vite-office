@@ -1,0 +1,160 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Original native ByteChucker and ByteGrabber helpers with complete integer/stream/ownership contracts",
+  "sourceBlobs": {
+    "docs/program/calc-upstream-suspected-issues.md": "2d1d7f26abc80b879f7721a6da30d8c091eba788",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "7aef179e26dbc3b6ed4c08d1747a8970ea1ad48c",
+    "docs/program/writer-upstream-suspected-issues.md": "ba1aea01fa6fa977f56129d36f97a3ba39d4fe00",
+    "apps/office/src/package/inc/ByteChucker.ts": "3530de47651e5bf9c4cf6bb351e48597c40356f7",
+    "apps/office/src/package/inc/ByteGrabber.ts": "326bf33d5c73ef9aef26b5181e293ad2d6be3a7f",
+    "apps/office/src/package/source/zipapi/ByteChucker.ts": "3fcb4466f1ec6d672adc13656046cf8bc2804dfe",
+    "apps/office/src/package/source/zipapi/ByteGrabber.ts": "faadabfb3d0515df806e24be667f684e333b57ea",
+    "apps/office/src/package/source/zipapi/native-byte-io.test.ts": "c7f4cd34e01a34c07f6fe4cfdcc61e82c6a4a538",
+    "docs/program/native-zip-byte-streams.md": "afd8927eff905b4c6f934085efdecb1bfa5c59af",
+    "docs/program/registry/shared/provenance/package/inc/ByteChucker.ts.json": "181be9420f9e5325c179c9fc29e675b8142e4d73",
+    "docs/program/registry/shared/provenance/package/inc/ByteGrabber.ts.json": "8dc33afd474001f21d855e595b4faaf262015492",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ByteChucker.ts.json": "ab70ace9fff2c975fb1c79d0f7f97759240c2ee7",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ByteGrabber.ts.json": "cc937e868fcd48010b653464ea18d4e471183cd4",
+    "docs/program/registry/shared/runtime/package/inc/ByteChucker.ts.json": "66834e2f8f45d84ecec34f1a1ad41f67e5185418",
+    "docs/program/registry/shared/runtime/package/inc/ByteGrabber.ts.json": "838fff01a08f677a88b0073d62d360256ab875f6",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ByteChucker.ts.json": "f0477b6a1b283c55541bdccac178c581282681f9",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ByteGrabber.ts.json": "ada9305e09ef91b11126bad7710f42ee45473c6e"
+  },
+  "checks": [
+    {
+      "command": "npx eslint apps/office/src/package/inc/ByteChucker.ts apps/office/src/package/inc/ByteGrabber.ts apps/office/src/package/source/zipapi/ByteChucker.ts apps/office/src/package/source/zipapi/ByteGrabber.ts apps/office/src/package/source/zipapi/native-byte-io.test.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-0.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/package/inc/ByteChucker.ts apps/office/src/package/inc/ByteGrabber.ts apps/office/src/package/source/zipapi/ByteChucker.ts apps/office/src/package/source/zipapi/ByteGrabber.ts apps/office/src/package/source/zipapi/native-byte-io.test.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-1.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-2.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-3.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-byte-gate-4.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-6.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-byte-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-byte-gate-8.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-byte-gate-9.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-10.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-11.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-12.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-13.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-gate-14.log"
+    }
+  ],
+  "coverage": {
+    "command": "npx vitest run src/package/source/zipapi/native-byte-io.test.ts --coverage --coverage.include=src/package/source/zipapi/ByteChucker.ts --coverage.include=src/package/source/zipapi/ByteGrabber.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 55,
+    "statements": "100/104",
+    "branches": "30/30",
+    "functions": "20/20",
+    "lines": "86/90",
+    "log": "apps/office/coverage/native-zip-byte-coverage-complete.log",
+    "uncovered": "Two constructor query-exception unwind statements per owner retained without artificial query providers."
+  },
+  "integration": {
+    "command": "npx vitest run seqstream, memorystream, storagehelper, ZipFile, ocompinstream, oseekinstream, upstream-packages, zipstorage-input, ods-worker-runtime, writer-odt-io",
+    "exitCode": 0,
+    "cases": 76,
+    "files": 10,
+    "log": "apps/office/coverage/native-zip-byte-integration-complete.log"
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-static-complete.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-final-0.log",
+      "scope": "After original declared method symbols added to new header provenance records"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-final-1.log",
+      "scope": "After original declared method symbols added to new header provenance records"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-byte-final-2.log",
+      "scope": "After original declared method symbols added to new header provenance records"
+    }
+  ],
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "package/inc/ByteChucker.hxx": "92991086a7730688f784c23aa120899b1b2c029d3b5ff2984bef529b922b7940",
+      "package/inc/ByteGrabber.hxx": "15df82df82b098dd87b4676cbeb7d230278ed6cd69c56ecbff8963ce8f5674ef",
+      "package/source/zipapi/ByteChucker.cxx": "53afea9b465edfd4def33bc560e9c9efde70004c0dc27cf0257118d5ecd2575a",
+      "package/source/zipapi/ByteGrabber.cxx": "f58b28751064e06350d628c1d05a832986c4e9ef1add8dbf062aa96fb39299b1"
+    }
+  },
+  "limitations": [
+    "Bounded prerequisite checkpoint; current ZIP32 transport is not yet replaced with complete native ZIP/package/storage owners. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete.",
+    "No direct helper case was found in package/qa. Critical source-derived scenarios are not a compiled native ABI/RTTI/thread witness.",
+    "Known check:docs css-style-matchers baseline17/76 remains unchanged.",
+    "Initial invalid import and readonly view initialization compile errors corrected before successful tests; header basename-only provenance corrected and affected gates rerun.",
+    "Related-only tests per user cadence; no full-suite rerun or task completion claim."
+  ]
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 98
+revision: 102
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T20:20:45.559Z"
+  updated_at: "2026-11-11T20:30:35.952Z"
   updated_by: "CODER"
-  note: "Bounded shared package correction restores the pinned first-true exit in folder consistency traversal. CALC-164 is withdrawn as a local transcription/source-interpretation error; affected provenance references corrected. 12 profile cases pass, whole owner15/15S18/18B1/1F11/11L at approved90;38 related scenarios in9 files, typecheck, production/static build, scoped lint/format and registry/source gates pass. check:docs retains only css-style-matchers.ts baseline17/76. Evidence: evidence/native-package-folder-consistency-checkpoint.json. Full DOCX/XLSX storage/model/filter/UI acceptance remains unfinished; continue active goal."
-  attempts: 31
+  note: "Bounded package I/O prerequisite: complete original ByteChucker/ByteGrabber declarations and methods now use actual native Reference/Sequence/ByteReader/XSeekable owners, widths, cached pointer aliases and short read contracts. 55 scenarios pass; whole owners100/104S30/30B20/20F86/90L at approved90. 76 related scenarios in10 files pass. Typecheck, static build, scoped lint/format and final source/registry gates pass; check:docs retains only css-style-matchers baseline17/76. Initial compile/provenance errors corrected and recorded. Evidence: evidence/native-zip-byte-streams-checkpoint.json. Full native ZIP/storage/model/filter/Worker/UI acceptance unfinished; continue goal."
+  attempts: 32
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -504,8 +507,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T20:30:35.952Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded package I/O prerequisite: complete original ByteChucker/ByteGrabber declarations and methods now use actual native Reference/Sequence/ByteReader/XSeekable owners, widths, cached pointer aliases and short read contracts. 55 scenarios pass; whole owners100/104S30/30B20/20F86/90L at approved90. 76 related scenarios in10 files pass. Typecheck, static build, scoped lint/format and final source/registry gates pass; check:docs retains only css-style-matchers baseline17/76. Initial compile/provenance errors corrected and recorded. Evidence: evidence/native-zip-byte-streams-checkpoint.json. Full native ZIP/storage/model/filter/Worker/UI acceptance unfinished; continue goal."
+  -
+    type: "status"
+    at: "2026-11-11T20:30:41.408Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T20:20:52.385Z"
+doc_updated_at: "2026-11-11T20:30:41.408Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1450,6 +1466,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T20:30:35.952Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded package I/O prerequisite: complete original ByteChucker/ByteGrabber declarations and methods now use actual native Reference/Sequence/ByteReader/XSeekable owners, widths, cached pointer aliases and short read contracts. 55 scenarios pass; whole owners100/104S30/30B20/20F86/90L at approved90. 76 related scenarios in10 files pass. Typecheck, static build, scoped lint/format and final source/registry gates pass; check:docs retains only css-style-matchers baseline17/76. Initial compile/provenance errors corrected and recorded. Evidence: evidence/native-zip-byte-streams-checkpoint.json. Full native ZIP/storage/model/filter/Worker/UI acceptance unfinished; continue goal.
+    Attempts: 32
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:29:39.596Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1590,6 +1636,14 @@ sections:
     - Observation: Folder consistency checkpoint: check:docs reports only the unchanged css-style-matchers.ts line17 and line76 baseline; new and modified callbacks pass documentation validation.
       Impact: Repository-wide documentation validation is not green, independent of the source traversal correction.
       Resolution: Keep unrelated baseline unchanged and retain explicit failing documentation evidence with the passing related tests and remaining static gates.
+
+    - Observation: First native byte-helper check failed before tests: UNO_QUERY used a nonexistent Reference.h import, and scratch-array initialization called set through the readonly SequenceElements view type.
+      Impact: The new helper modules did not compile; no runtime scenario executed in the first profile.
+      Resolution: Import UNO_QUERY from the real Reference owner, initialize the primitive Map through its concrete type before publishing the view, then rerun the focused profile and typecheck.
+
+    - Observation: Native byte-helper checks: check:docs retains only known css-style-matchers baseline; source-provenance rejects the new header declaration records for basename-only upstream symbols.
+      Impact: The header records need actual declared method symbols before source provenance can pass; runtime tests, scoped lint/format, typecheck and static build pass.
+      Resolution: Add original ByteChucker/ByteGrabber header method symbols, regenerate canonical registry views and rerun affected source/registry gates. Keep the unrelated JSDoc baseline explicit.
 id_source: "generated"
 ---
 ## Summary
@@ -2544,6 +2598,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T20:30:35.952Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded package I/O prerequisite: complete original ByteChucker/ByteGrabber declarations and methods now use actual native Reference/Sequence/ByteReader/XSeekable owners, widths, cached pointer aliases and short read contracts. 55 scenarios pass; whole owners100/104S30/30B20/20F86/90L at approved90. 76 related scenarios in10 files pass. Typecheck, static build, scoped lint/format and final source/registry gates pass; check:docs retains only css-style-matchers baseline17/76. Initial compile/provenance errors corrected and recorded. Evidence: evidence/native-zip-byte-streams-checkpoint.json. Full native ZIP/storage/model/filter/Worker/UI acceptance unfinished; continue goal.
+Attempts: 32
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T20:29:39.596Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2688,3 +2772,11 @@ DecisionContextRef:
 - Observation: Folder consistency checkpoint: check:docs reports only the unchanged css-style-matchers.ts line17 and line76 baseline; new and modified callbacks pass documentation validation.
   Impact: Repository-wide documentation validation is not green, independent of the source traversal correction.
   Resolution: Keep unrelated baseline unchanged and retain explicit failing documentation evidence with the passing related tests and remaining static gates.
+
+- Observation: First native byte-helper check failed before tests: UNO_QUERY used a nonexistent Reference.h import, and scratch-array initialization called set through the readonly SequenceElements view type.
+  Impact: The new helper modules did not compile; no runtime scenario executed in the first profile.
+  Resolution: Import UNO_QUERY from the real Reference owner, initialize the primitive Map through its concrete type before publishing the view, then rerun the focused profile and typecheck.
+
+- Observation: Native byte-helper checks: check:docs retains only known css-style-matchers baseline; source-provenance rejects the new header declaration records for basename-only upstream symbols.
+  Impact: The header records need actual declared method symbols before source provenance can pass; runtime tests, scoped lint/format, typecheck and static build pass.
+  Resolution: Add original ByteChucker/ByteGrabber header method symbols, regenerate canonical registry views and rerun affected source/registry gates. Keep the unrelated JSDoc baseline explicit.
