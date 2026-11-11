@@ -1,4 +1,5 @@
 /** @fileoverview Source-backed Writer stream relationship traversal against real ZIP storage, with native duplicate ordering, strict types, external caching and URI behavior. */
+import { writeOutput } from "../../../../test/oox-output";
 import { readOwnedInput, readOwnedXml } from "../../../../test/oox-input";
 import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { expect, it, vi, afterEach } from "vitest";
@@ -52,7 +53,7 @@ function relation(id: string, type: string, target: string, mode = ""): StringPa
 }
 /** Writes actual storage bytes. @param storage - Storage. @param path - Part. @param text - XML. @returns Nothing. */
 function put(storage: ZipStorage, path: string, text: string): void {
-  storage.openOutputStream(path, "application/xml").writeBytes(new TextEncoder().encode(text));
+  writeOutput(storage.openOutputStream(path, "application/xml"), new TextEncoder().encode(text));
 }
 /** Builds native root and document relationships around actual ZIP storage. @param entries - Document relationships. @returns Storage. */
 function packageOf(entries: StringPair[][]): ZipStorage {
@@ -228,7 +229,7 @@ it("decodes UTF16 metadata and document parts through the actual input stream", 
       if (bom) view.setUint16(0, 0xfeff, little);
       for (let i = 0; i < text.length; ++i)
         view.setUint16(offset + i * 2, text.charCodeAt(i), little);
-      storage.openOutputStream(path, "application/xml").writeBytes(bytes);
+      writeOutput(storage.openOutputStream(path, "application/xml"), bytes);
     }
     const doc = await createStream(storage);
     expect(readOwnedXml(doc.getDocumentStream())).toBe("<doc>日本😀</doc>");

@@ -1215,6 +1215,8 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: flush changes the cached sequence length and passes its UNO reinterpretation to the output stream. Subsequent writes reuse the same raw buffer. A stream retaining a copied native Sequence may therefore observe changed content or length despite ordinary sequence value expectations. This is source-level suspicion; native retention/copy-on-write behavior and desktop impact have not been compiled or demonstrated.
 - Preservation: retain buffer reuse, flush order and synchronous output calls. Host byte views are explicitly borrowed and actual ZIP output copies them immediately; a simulated native allocator or copy-on-write layer is not introduced. Exact native ABI/retention behavior remains unverified.
 
+- The native byte-owner connection now has a local witness using genuine SAL ByteSequence/toUnoSequence and retained UNO Sequence copies: overwriting the cache changes the earlier value, and a later flush changes its observed length. The port deliberately retains this mutation and adds no COW repair. This is not a compiled upstream ABI witness or evidence of an application-visible defect. Actual ZIP output consumes the native sequence synchronously and copies at the archive transport boundary.
+
 ### WRITER138 — failed initial serializer mark setup leaves its empty flag inconsistent
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element start methods.

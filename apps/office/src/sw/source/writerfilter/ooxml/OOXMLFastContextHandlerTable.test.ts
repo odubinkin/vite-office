@@ -1,4 +1,5 @@
 /** @fileoverview Native resource-table and property-table contexts through real DOCX ZIP input, SAX factories, value tables and ordered reference callbacks. */
+import { writeOutput } from "../../../../test/oox-output";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 import { BorderHandler } from "../dmapper/BorderHandler";
 import { TDefTableHandler } from "../dmapper/TDefTableHandler";
@@ -127,7 +128,7 @@ function string(properties: Reference<Properties>, id: number): string | undefin
 }
 /** Writes actual ZIP part bytes. @param storage - Native host storage. @param path - Part path. @param xml - XML. @returns Nothing. */
 function put(storage: ZipStorage, path: string, xml: string): void {
-  storage.openOutputStream(path, "application/xml").writeBytes(new TextEncoder().encode(xml));
+  writeOutput(storage.openOutputStream(path, "application/xml"), new TextEncoder().encode(xml));
 }
 
 const ownedStreams: OOXMLStreamImpl[] = [];

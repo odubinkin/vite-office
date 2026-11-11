@@ -42,7 +42,11 @@ export class FastSerializerHelper {
   /** Original owner moves out before endDocument, including an output failure. @returns Nothing. */ endDocument(): void {
     const serializer = this.serializer();
     this.mpSerializer = undefined;
-    serializer.endDocument();
+    try {
+      serializer.endDocument();
+    } finally {
+      serializer.dispose();
+    }
   }
   /** Explicit native destructor binding, retaining release-build unfinished-document flush. @returns Nothing. */ dispose(): void {
     if (this.mpSerializer) this.endDocument();

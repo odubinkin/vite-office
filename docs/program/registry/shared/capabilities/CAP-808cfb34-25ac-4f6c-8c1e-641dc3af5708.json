@@ -9,7 +9,8 @@
     "type": "filter",
     "maturity": "implemented",
     "assertions": [
-      "Actual OOXML ZIP fragments and relationships retain native lookup, context, metadata and output ownership contracts in the consumed XML package slice."
+      "Actual OOXML ZIP fragments and relationships retain native lookup, context, metadata and output ownership contracts in the consumed XML package slice.",
+      "Serializer cache and sorted/unsorted marks use actual native byte owners; ZIP output consumes genuine UNO byte sequences and preserves source aliasing/lifetime/error behavior."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -20,7 +21,8 @@
       "DOCX Writer and XLSX Calc document/model/UI integration follows in V4DQJW and J0Z0KF.",
       "General UNO services, encrypted and ZIP64 packages, binary XLSB RecordParser and full native package hierarchy remain outside the consumed XML slice.",
       "Source-backed tests and pinned fixture package probes do not establish complete native module or application parity.",
-      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged."
+      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged.",
+      "Native serializer byte owners now use genuine SAL ByteSequence/NODEFAULT cache storage, raw nElements mutation and toUnoSequence output aliases. ForMerge/ForSort own actual native sequence values, preserve native realloc/prepend/postpone/sort behavior and copy the merge value before pop. Stack/cache std::shared_ptr lifetime is explicitly lowered to a private local control count with virtual destruction, including failed destination switches. Helper endDocument destroys its moved serializer on success or error. ZipFragmentStream and relationship export consume initialized UNO byte Sequence values; host Uint8Array chunks remain only at the ZIP transport copy boundary. WRITER137/CALC-303 has a local retained-native-value alias witness without a COW correction. Full native output Reference/OWriteStream/parent storage/transaction/service and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Numeric/encoding edge cases, physical allocation/ABI/shared_ptr layout and debug-only guarantees stay unverified. Browser file/persistence policy is unchanged."
     ],
     "local": {
       "implementation": [
@@ -97,6 +99,10 @@
         {
           "path": "apps/office/src/comphelper/source/misc/directoryhelper.test.ts",
           "marker": "splitAtLastToken"
+        },
+        {
+          "path": "apps/office/src/sax/source/tools/native-cache.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -111,6 +117,10 @@
         {
           "path": "docs/program/native-content-type-sequences.md",
           "marker": "# Native content type sequences"
+        },
+        {
+          "path": "docs/program/native-serializer-byte-owners.md",
+          "marker": "# Native serializer byte owners"
         }
       ]
     },
@@ -190,7 +200,8 @@
     "atomicOperation": "shared-ooxml-xml-package-fragment-io",
     "scopeLimitations": [
       "The prerequisite implements consumed package contracts, not DOCX/XLSX application feature parity. Pinned fixture tests require the ignored local corpus and exercise package selection/XML only; deterministic core tests require no corpus.",
-      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged."
+      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged.",
+      "Native serializer byte owners now use genuine SAL ByteSequence/NODEFAULT cache storage, raw nElements mutation and toUnoSequence output aliases. ForMerge/ForSort own actual native sequence values, preserve native realloc/prepend/postpone/sort behavior and copy the merge value before pop. Stack/cache std::shared_ptr lifetime is explicitly lowered to a private local control count with virtual destruction, including failed destination switches. Helper endDocument destroys its moved serializer on success or error. ZipFragmentStream and relationship export consume initialized UNO byte Sequence values; host Uint8Array chunks remain only at the ZIP transport copy boundary. WRITER137/CALC-303 has a local retained-native-value alias witness without a COW correction. Full native output Reference/OWriteStream/parent storage/transaction/service and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Numeric/encoding edge cases, physical allocation/ABI/shared_ptr layout and debug-only guarantees stay unverified. Browser file/persistence policy is unchanged."
     ],
     "implemented": true,
     "contractParity": false,

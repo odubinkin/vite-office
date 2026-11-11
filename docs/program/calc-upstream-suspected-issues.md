@@ -3996,6 +3996,8 @@ Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected mark
 - Observation: flush forwards a UNO reinterpretation of its cache sequence and then reuses raw storage on later writes. A native output stream retaining a Sequence copy could observe subsequent mutations, including length changes. Copy-on-write/retention behavior and a user-visible Calc defect remain unverified; this is a source-level suspicion.
 - Preservation: retain original buffer reuse and flush sequencing. The host stream binding consumes borrowed byte views synchronously, and the actual ZIP stream copies immediately. Native allocator, ABI and retained-sequence semantics are not simulated or certified.
 
+- The native byte-owner connection now has a local witness using genuine SAL ByteSequence/toUnoSequence and retained UNO Sequence copies: overwriting the cache changes the earlier value, and a later flush changes its observed length. The port deliberately retains this mutation and adds no COW repair. This is not a compiled upstream ABI witness or evidence of an application-visible defect. Actual ZIP output consumes the native sequence synchronously and copies at the archive transport boundary.
+
 ### CALC-304 — initial fast-serializer mark failure can retain an inconsistent empty flag
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element starts.

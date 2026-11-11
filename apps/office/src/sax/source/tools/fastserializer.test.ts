@@ -1,15 +1,40 @@
 /** @fileoverview Native serializer byte escaping, cache boundaries and mark ordering over actual ZIP fragment streams and native OOXML token IDs. */
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { readOwnedInput } from "../../../test/oox-input";
-import { expect, it } from "vitest";
+import { expect, it, afterEach } from "vitest";
 import { FastSerializerHelper, FSNS, MergeMarks as M } from "../../inc/fshelper";
 import { FastSaxSerializer, TokenValue, invalidChar } from "./fastserializer";
-import { CachedOutputStream } from "./CachedOutputStream";
+import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
+import { CachedOutputStream, ForMergeBase } from "./CachedOutputStream";
 import { FastTokenHandler } from "../../../oox/source/core/fasttokenhandler";
 import { XmlFilterBase } from "../../../oox/source/core/xmlfilterbase";
 import { ZipStorage } from "../../../oox/source/helper/zipstorage";
 import { ZipFragmentStream } from "../../../oox/source/helper/zipstorage";
 import { getTokenFromUtf8 as token } from "../../../oox/source/token/tokenmap";
+const directSerializers: FastSaxSerializer[] = [],
+  directCaches: CachedOutputStream[] = [];
+/** Tracks native direct serializer owners; helper-owned serializers destroy themselves. @param stream - Actual transport. @returns Serializer. */
+function directSerializer(stream: ZipFragmentStream): FastSaxSerializer {
+  const serializer = new FastSaxSerializer(stream, new FastTokenHandler());
+  directSerializers.push(serializer);
+  return serializer;
+}
+afterEach(
+  /** Destroys direct native owners exactly once after fixture assertions, including exception paths. @returns Nothing. */ () => {
+    for (const serializer of directSerializers) serializer.dispose();
+    for (const cache of directCaches) cache.dispose();
+    directSerializers.length = 0;
+    directCaches.length = 0;
+  },
+);
+/** Copies initialized native SAL bytes for assertions only. @param bytes - Native sequence. @returns Byte copy. */
+function nativeBytes(bytes: ByteSequence): Uint8Array {
+  const data = bytes.getConstArray(),
+    out = new Uint8Array(bytes.getLength());
+  for (let i = 0; i < out.length; ++i)
+    out[i] = ArrayBuffer.isView(data) ? (data[i] as number) : (data.get(i) as [number])[0];
+  return out;
+}
 const encoder = new TextEncoder(),
   decoder = new TextDecoder();
 /** Actual native output stream owner. @returns Fragment. */ function output(): ZipFragmentStream {
@@ -18,7 +43,7 @@ const encoder = new TextEncoder(),
 /** Escapes a string through the actual native serializer. @param text - Input. @param allow - Original switch. @returns Output. */
 function escaped(text: string | Uint8Array, allow = true): string {
   const stream = output(),
-    serializer = new FastSaxSerializer(stream, new FastTokenHandler());
+    serializer = directSerializer(stream);
   serializer.setAllowXEscape(allow);
   serializer.write(text, true);
   serializer.endDocument();
@@ -127,7 +152,7 @@ it("retains append/prepend/postpone ordering, final merge mode irrelevance and n
   helper.mergeTopMarks(1, M.PREPEND);
   helper.endDocument();
   expect(decoder.decode(stream.getBytes())).toBe("ABCED");
-  const empty = new FastSaxSerializer(output(), new FastTokenHandler());
+  const empty = directSerializer(output());
   empty.mark(1);
   expect(
     /** Native unfinished-mark precondition. @returns Never. */ () => empty.endDocument(),
@@ -167,37 +192,39 @@ it("keeps exact 1MiB buffering, oversized direct writes and flush-before-switch 
     exact = new Uint8Array(size).fill(65),
     huge = new Uint8Array(size + 1).fill(66),
     collected: Uint8Array[] = [];
+  directCaches.push(cache);
   expect(cache.getOutputStream()).toBeNull();
   expect(
     /** Original unset stream violates the output precondition. @returns Never. */ () =>
       cache.flush(),
   ).toThrow("not assigned");
   cache.setOutputStream(a);
-  cache.writeBytes(exact);
+  cache.writeBytes(exact, exact.length);
   expect(a.getBytes()).toHaveLength(0);
-  cache.writeBytes(new Uint8Array([67]));
+  cache.writeBytes(new Uint8Array([67]), 1);
   expect(a.getBytes()).toHaveLength(size);
-  cache.setOutput({
-    /** Receives immediate native borrowed values. @param bytes - Input. @returns Nothing. */ append(
-      bytes,
-    ) {
-      collected.push(bytes.slice());
-    },
-  });
+  /** Complete original mark base fixture; real native cache supplies its actual SAL value. */
+  class Collected extends ForMergeBase {
+    /** Copies initialized data at the assertion boundary. @param bytes - Native value. @returns Nothing. */
+    override append(bytes: ByteSequence): void {
+      collected.push(nativeBytes(bytes));
+    }
+  }
+  cache.setOutput(new Collected());
   expect(a.getBytes()[size]).toBe(67);
-  cache.writeBytes(huge);
+  cache.writeBytes(huge, huge.length);
   expect(
     collected.some(
       /** Finds the oversized native chunk. @param bytes - Chunk. @returns Match. */ (bytes) =>
         bytes.length === size + 1,
     ),
   ).toBe(true);
-  cache.writeBytes(new Uint8Array([68]));
+  cache.writeBytes(new Uint8Array([68]), 1);
   cache.resetOutputToStream();
   expect(collected.at(-1)).toEqual(new Uint8Array([68]));
   cache.setOutputStream(b);
   expect(cache.getOutputStream()).toBe(b);
-  cache.writeBytes(huge);
+  cache.writeBytes(huge, huge.length);
   expect(b.getBytes()).toHaveLength(size + 1);
   cache.flush();
 });
@@ -275,7 +302,7 @@ it("retains native invalidChar XML10 admission for whitespace in diagnostic and 
 
 it("retains original TokenValue borrowed-view mutation before synchronous element emission", /** Native string_view ownership is not replaced by an attribute snapshot. @returns Nothing. */ () => {
   const stream = output(),
-    serializer = new FastSaxSerializer(stream, new FastTokenHandler()),
+    serializer = directSerializer(stream),
     bytes = new Uint8Array([65]),
     entry = new TokenValue(token("val"), bytes);
   serializer.getTokenValueList().push(entry);
@@ -289,7 +316,7 @@ it("retains original TokenValue borrowed-view mutation before synchronous elemen
 it("retains the native mark-stack/empty-flag inconsistency after initial output failure", /** The original flag assignment follows the fallible cache destination switch. @returns Nothing. */ () => {
   const stream = output();
   stream.closeOutput();
-  const serializer = new FastSaxSerializer(stream, new FastTokenHandler());
+  const serializer = directSerializer(stream);
   expect(
     /** Fails while flushing the old destination after pushing the mark. @returns Never. */ () =>
       serializer.mark(1),

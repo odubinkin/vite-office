@@ -17,6 +17,8 @@ import { OFFICE_DOCUMENT_RELATION, STRICT_OFFICE_DOCUMENT_RELATION, Relations } 
 import { RelationsFragment, getRelationsPath } from "./relationshandler";
 import { decodeToIUri } from "../../../tools/source/fsys/urlobj";
 
+import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
+import { toUnoSequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
@@ -192,7 +194,15 @@ export class XmlFilterBase {
         getRelationsPath(path),
         "application/vnd.openxmlformats-package.relationships+xml",
       );
-      stream.writeBytes(new TextEncoder().encode(WriteRelationsInfoSequence(output.entries)));
+      const encoded = new TextEncoder().encode(WriteRelationsInfoSequence(output.entries)),
+        bytes = new ByteSequence(encoded, encoded.length),
+        data = toUnoSequence(bytes);
+      try {
+        stream.writeBytes(data);
+      } finally {
+        data.dispose();
+        bytes.dispose();
+      }
       stream.closeOutput();
     }
     return this.storage.commit();

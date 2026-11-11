@@ -1,6 +1,9 @@
 /** @fileoverview Native FastSaxSerializer UTF8 escaping, token emission and mark/sort owners from fastserializer.cxx; JS byte arrays bind original value sequences and GC erases physical reference counts. */
+import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
+import type { ByteElements } from "../../../sal/inc/rtl/byteseq.h";
+import type { SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { MergeMarks } from "../../inc/fshelper";
-import { CachedOutputStream, type ForMergeBase, type OutputStream } from "./CachedOutputStream";
+import { CachedOutputStream, ForMergeBase, type OutputStream } from "./CachedOutputStream";
 import { FastAttributeList } from "./fastattribs";
 /** Native token-handler dependency is supplied by the actual caller in place of component-service construction. */
 export interface FastTokenHandler {
@@ -14,90 +17,113 @@ export class TokenValue {
     public pValue: Uint8Array,
   ) {}
 }
-/** Original byte sequence concatenation owns its result. @param left - Left input. @param right - Right input. @returns Independent sequence. */
-function merge(left: Uint8Array, right: Uint8Array): Uint8Array {
-  const data = new Uint8Array(left.length + right.length);
-  data.set(left);
-  data.set(right, left.length);
-  return data;
+/** Original memcpy/pointer read over actual initialized SAL byte addresses. @param source - Borrowed native pointer. @param index - Byte offset. @returns Signed byte. */
+function byte(source: ByteElements, index: number): number {
+  return ArrayBuffer.isView(source)
+    ? ((source[index] as number) << 24) >> 24
+    : (source.get(index) as [number])[0];
 }
-/** Original unsorted mark. */
-class ForMerge implements ForMergeBase {
-  private maData: Uint8Array = new Uint8Array(0);
-  private maPostponed: Uint8Array = new Uint8Array(0);
-  /** Retains original debug identity. @param m_Tag - Mark tag. @returns Mark. */ constructor(
-    readonly m_Tag: number,
-  ) {}
-  /** Original base hook is inert. @param token - Element. @returns Nothing. */ setCurrentElement(
-    token: number,
-  ): void {
+/** Original ForMerge::merge overloads retain native realloc and backward prepend order. @param top - Actual destination owner. @param input - Initialized source pointer. @param length - Byte count. @param append - Append versus prepend. @returns Nothing. */
+function merge(top: ByteSequence, input: ByteElements, length: number, append: boolean): void {
+  if (length <= 0) return;
+  const previous = top.getLength();
+  top.realloc(previous + length);
+  const data = top.getArray() as SequenceElements;
+  if (!append)
+    for (let i = previous; i--;)
+      (data.get(length + i) as [number])[0] = (data.get(i) as [number])[0];
+  for (let i = 0; i < length; ++i)
+    (data.get((append ? previous : 0) + i) as [number])[0] = byte(input, i);
+}
+/** Original unsorted mark owns a SAL sequence and a primitive postponed vector. */
+class ForMerge extends ForMergeBase {
+  private readonly maData = new ByteSequence();
+  private readonly maPostponed: number[] = [];
+  /** Original debug identity. @param m_Tag - Mark tag. @returns Mark. */
+  constructor(readonly m_Tag: number) {
+    super();
+  }
+  /** Original base hook is inert. @param token - Element. @returns Nothing. */
+  setCurrentElement(token: number): void {
     void token;
   }
-  /** Original postponed data is appended once on read. @returns Borrowed accumulated bytes. */ getData(): Uint8Array {
-    this.maData = merge(this.maData, this.maPostponed);
-    this.maPostponed = new Uint8Array(0);
+  /** Original postponed vector is appended and cleared on access. @returns Borrowed native data owner. */
+  getData(): ByteSequence {
+    merge(this.maData, Int8Array.from(this.maPostponed), this.maPostponed.length, true);
+    this.maPostponed.length = 0;
     return this.maData;
   }
-  /** Original prepend. @param bytes - Input. @returns Nothing. */ prepend(
-    bytes: Uint8Array,
-  ): void {
-    this.maData = merge(bytes, this.maData);
+  /** Original prepend. @param bytes - Borrowed SAL sequence. @returns Nothing. */
+  prepend(bytes: ByteSequence): void {
+    merge(this.maData, bytes.getConstArray(), bytes.getLength(), false);
   }
-  /** Original append. @param bytes - Input. @returns Nothing. */ append(bytes: Uint8Array): void {
-    this.maData = merge(this.maData, bytes);
+  /** Original append. @param bytes - Borrowed SAL sequence. @returns Nothing. */
+  override append(bytes: ByteSequence): void {
+    merge(this.maData, bytes.getConstArray(), bytes.getLength(), true);
   }
-  /** Original postponed values remain separate until getData. @param bytes - Input. @returns Nothing. */ postpone(
-    bytes: Uint8Array,
-  ): void {
-    this.maPostponed = merge(this.maPostponed, bytes);
+  /** Original vector insertion retains initialized scalar bytes. @param bytes - Borrowed SAL sequence. @returns Nothing. */
+  postpone(bytes: ByteSequence): void {
+    const source = bytes.getConstArray();
+    for (let i = 0; i < bytes.getLength(); ++i) this.maPostponed.push(byte(source, i));
   }
-  /** Original sort resets only ordinary data, preserving postponed bytes. @returns Nothing. */ protected resetData(): void {
-    this.maData = new Uint8Array(0);
+  /** Original assignment from an empty temporary. @returns Nothing. */
+  protected resetData(): void {
+    const empty = new ByteSequence();
+    try {
+      this.maData.moveAssign(empty);
+    } finally {
+      empty.dispose();
+    }
+  }
+  /** Original native member destruction. @returns Nothing. */
+  protected override destroy(): void {
+    this.maData.dispose();
   }
 }
-/** Original sorted mark retains the last recognized element when an unrecognized token arrives. */
+/** Original sorted mark preserves current recognized token and duplicate order entries. */
 class ForSort extends ForMerge {
-  private readonly maDataByElement = new Map<number, Uint8Array>();
+  private readonly maDataByElement = new Map<number, ByteSequence>();
   private mnCurrentElement = 0;
-  /** Retains original token order as a value. @param tag - Mark identity. @param maOrder - Schema order. @returns Sorted mark. */ constructor(
+  /** Original schema order. @param tag - Mark identity. @param maOrder - Token order. @returns Sorted mark. */
+  constructor(
     tag: number,
     private readonly maOrder: readonly number[],
   ) {
     super(tag);
   }
-  /** Original membership check does not clear the current element for unknown tokens. @param token - Element. @returns Nothing. */ override setCurrentElement(
-    token: number,
-  ): void {
+  /** Original unknown tokens retain the previous bucket. @param token - Element. @returns Nothing. */
+  override setCurrentElement(token: number): void {
     if (this.maOrder.includes(token)) {
       this.mnCurrentElement = token;
-      if (!this.maDataByElement.has(token)) this.maDataByElement.set(token, new Uint8Array(0));
+      if (!this.maDataByElement.has(token)) this.maDataByElement.set(token, new ByteSequence());
     }
   }
-  /** Original sorted prepend deliberately appends. @param bytes - Input. @returns Nothing. */ override prepend(
-    bytes: Uint8Array,
-  ): void {
+  /** Original sorted prepend deliberately appends. @param bytes - Borrowed value. @returns Nothing. */
+  override prepend(bytes: ByteSequence): void {
     this.append(bytes);
   }
-  /** Original data buckets are keyed by the current recognized token, initially zero. @param bytes - Input. @returns Nothing. */ override append(
-    bytes: Uint8Array,
-  ): void {
-    this.maDataByElement.set(
-      this.mnCurrentElement,
-      merge(this.maDataByElement.get(this.mnCurrentElement) ?? new Uint8Array(0), bytes),
-    );
+  /** Original map subscript inserts an empty sequence for the current token. @param bytes - Borrowed value. @returns Nothing. */
+  override append(bytes: ByteSequence): void {
+    let data = this.maDataByElement.get(this.mnCurrentElement);
+    if (!data) {
+      data = new ByteSequence();
+      this.maDataByElement.set(this.mnCurrentElement, data);
+    }
+    merge(data, bytes.getConstArray(), bytes.getLength(), true);
   }
-  /** Original sort rebuilds ordinary output in the supplied order, retaining repeated order entries. @returns Nothing. */
-  private sort(): void {
+  /** Original rebuild avoids accumulated duplicate output while retaining duplicate schema entries. @returns Borrowed data. */
+  override getData(): ByteSequence {
     this.resetData();
     for (const token of this.maOrder) {
-      const bytes = this.maDataByElement.get(token);
-      if (bytes) super.append(bytes);
+      const data = this.maDataByElement.get(token);
+      if (data) super.append(data);
     }
-  }
-  /** Original data access sorts before consuming postponed values. @returns Borrowed sorted bytes. */
-  override getData(): Uint8Array {
-    this.sort();
     return super.getData();
+  }
+  /** Original map values are destroyed before base members. @returns Nothing. */
+  protected override destroy(): void {
+    for (const data of this.maDataByElement.values()) data.dispose();
+    super.destroy();
   }
 }
 /** Original invalid XML10 byte recognition deliberately does not validate all UTF8 sequences. @param bytes - UTF8 bytes. @param index - Current byte. @returns Invalid code point and consumed length or absence. */
@@ -311,13 +337,14 @@ export class FastSaxSerializer {
   }
   /** Original byte forwarding uses the actual stream cache; native debug-only warning scans are not simulated. @param bytes - Borrowed bytes. @returns Nothing. */
   private writeBytes(bytes: Uint8Array): void {
-    this.maCachedOutputStream.writeBytes(bytes);
+    this.maCachedOutputStream.writeBytes(bytes, bytes.length);
   }
   /** Original cache flush/destination transition retains the old destination while flushing. @param tag - Debug tag. @param order - Native element order or empty unsorted mode. @returns Nothing. */ mark(
     tag: number,
     order: readonly number[] = [],
   ): void {
     const mark = order.length ? new ForSort(tag, [...order]) : new ForMerge(tag);
+    mark.acquire();
     this.maMarkStack.push(mark);
     this.maCachedOutputStream.setOutput(mark);
     this.mbMarkStackEmpty = false;
@@ -329,26 +356,38 @@ export class FastSaxSerializer {
     void tag;
     if (this.mbMarkStackEmpty) return;
     this.maCachedOutputStream.flush();
-    const bytes = (this.maMarkStack.at(-1) as ForMerge).getData();
+    const top = this.maMarkStack.at(-1) as ForMerge,
+      bytes = new ByteSequence(top.getData());
     this.maMarkStack.pop();
-    const parent = this.maMarkStack.at(-1);
-    if (!parent) {
-      this.mbMarkStackEmpty = true;
-      this.maCachedOutputStream.resetOutputToStream();
-      this.maCachedOutputStream.writeBytes(bytes);
-      return;
+    try {
+      const parent = this.maMarkStack.at(-1);
+      if (!parent) {
+        this.mbMarkStackEmpty = true;
+        this.maCachedOutputStream.resetOutputToStream();
+        this.maCachedOutputStream.writeBytes(bytes.getConstArray(), bytes.getLength());
+        return;
+      }
+      this.maCachedOutputStream.setOutput(parent);
+      switch (mode) {
+        case MergeMarks.APPEND:
+          parent.append(bytes);
+          break;
+        case MergeMarks.PREPEND:
+          parent.prepend(bytes);
+          break;
+        case MergeMarks.POSTPONE:
+          parent.postpone(bytes);
+          break;
+      }
+    } finally {
+      bytes.dispose();
+      top.release();
     }
-    this.maCachedOutputStream.setOutput(parent);
-    switch (mode) {
-      case MergeMarks.APPEND:
-        parent.append(bytes);
-        break;
-      case MergeMarks.PREPEND:
-        parent.prepend(bytes);
-        break;
-      case MergeMarks.POSTPONE:
-        parent.postpone(bytes);
-        break;
-    }
+  }
+  /** Original native member destruction releases mark owners and the output cache without flushing. @returns Nothing. */
+  dispose(): void {
+    for (const mark of this.maMarkStack) mark.release();
+    this.maMarkStack.length = 0;
+    this.maCachedOutputStream.dispose();
   }
 }

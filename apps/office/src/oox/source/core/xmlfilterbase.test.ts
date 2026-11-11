@@ -1,4 +1,5 @@
 /** @fileoverview Actual OOXML package/fragment import and output ownership; no application model or ODF conversion stands in for native package contracts. */
+import { writeOutput } from "../../../test/oox-output";
 import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
 import { DisposedException } from "../../../cppu/inc/com/sun/star/lang/DisposedException";
 import { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
@@ -203,26 +204,27 @@ it("exports a real package, independent native part counters, metadata and escap
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
   );
   const text = new TextEncoder().encode("<root/>");
-  main.writeBytes(text);
+  writeOutput(main, text);
   text[0] = 0;
-  main.writeBytes(new Uint8Array());
+  writeOutput(main, new Uint8Array());
   main.closeOutput();
   expect(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
-      main.writeBytes(new Uint8Array()),
+      writeOutput(main, new Uint8Array()),
   ).toThrow("closed");
   const styles = filter.openFragmentStream(
     "word/styles.xml",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
   );
-  styles.writeBytes(new TextEncoder().encode("<styles/>"));
+  writeOutput(styles, new TextEncoder().encode("<styles/>"));
   const untyped = filter.openFragmentStream("untyped", "");
   untyped.closeOutput();
   const image = filter.openFragmentStream("word/media/image.png", "image/png");
-  image.writeBytes(new Uint8Array([1, 2]));
-  filter
-    .openFragmentStream("[Content_Types].xml", "ignored")
-    .writeBytes(new TextEncoder().encode("stale"));
+  writeOutput(image, new Uint8Array([1, 2]));
+  writeOutput(
+    filter.openFragmentStream("[Content_Types].xml", "ignored"),
+    new TextEncoder().encode("stale"),
+  );
   expect(storage.getElementNames()).toContain("word/document.xml");
   expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBe("<root/>");
   expect(filter.addRelation(O + "officeDocument", "word/document.xml")).toBe("rId1");
@@ -280,7 +282,7 @@ it("replaces an owning output stream without carrying its old relationship colle
     first = f.openFragmentStream("part.xml", "application/xml");
   f.addRelation(first, "type", "old", false);
   const replacement = f.openFragmentStream("part.xml", "application/xml");
-  replacement.writeBytes(new TextEncoder().encode("<root/>"));
+  writeOutput(replacement, new TextEncoder().encode("<root/>"));
   expect(f.addRelation(replacement, "type", "new", false)).toBe("rId1");
   const input = new XmlFilterBase(new ZipStorage(f.commitStorage()));
   expect((await input.importRelations("part.xml")).getInternalTargetFromRelId("rId1")).toBe("new");
@@ -318,15 +320,17 @@ it("imports legacy and UTF32 package XML through the actual source converter", /
 });
 it("returns independent native input owners for separate opens and retains old part contents after truncation", /** Actual SequenceInputStream construction shares no mutable host byte array with later output. @returns Completion. */ async () => {
   const storage = new ZipStorage();
-  storage
-    .openOutputStream("part.xml", "application/xml")
-    .writeBytes(new TextEncoder().encode("<original/>"));
+  writeOutput(
+    storage.openOutputStream("part.xml", "application/xml"),
+    new TextEncoder().encode("<original/>"),
+  );
   const first = await storage.openInputStream("part.xml"),
     second = await storage.openInputStream("part.xml");
   expect(first.get()).not.toBe(second.get());
-  storage
-    .openOutputStream("part.xml", "application/xml")
-    .writeBytes(new TextEncoder().encode("<new/>"));
+  writeOutput(
+    storage.openOutputStream("part.xml", "application/xml"),
+    new TextEncoder().encode("<new/>"),
+  );
   expect(readOwnedXml(first)).toBe("<original/>");
   expect(readOwnedXml(second)).toBe("<original/>");
   expect(readOwnedXml(await storage.openInputStream("part.xml"))).toBe("<new/>");
@@ -354,9 +358,10 @@ it("unwinds actual UNO read exceptions from a specialized fragment stream", /** 
 
 it("reads actual content-type input through the same native source path", /** Metadata accepts the package stream contract without a second decoder. @returns Completion. */ async () => {
   const storage = new ZipStorage();
-  storage
-    .openOutputStream("part.xml", "application/xml")
-    .writeBytes(new TextEncoder().encode("<document/>"));
+  writeOutput(
+    storage.openOutputStream("part.xml", "application/xml"),
+    new TextEncoder().encode("<document/>"),
+  );
   const input = inputFromBytes(
       await new ZipFile(storage.commit()).readEntry("[Content_Types].xml"),
     ),

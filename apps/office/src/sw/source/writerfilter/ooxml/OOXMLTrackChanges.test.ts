@@ -1,4 +1,5 @@
 /** @fileoverview Actual committed ZIP TrackChange XML attributes through native SAX actions and TrackChangesHandler; downstream document redline creation remains separate. */
+import { writeOutput } from "../../../../test/oox-output";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 import { expect, it, afterEach } from "vitest";
 import { OOXMLStreamImpl } from "./OOXMLStreamImpl";
@@ -43,7 +44,7 @@ it.each([
     const storage = new ZipStorage();
     /** Commits actual part bytes to native package storage. @param path - Part path. @param xml - Original XML. @returns Nothing. */
     function put(path: string, xml: string): void {
-      storage.openOutputStream(path, "application/xml").writeBytes(new TextEncoder().encode(xml));
+      writeOutput(storage.openOutputStream(path, "application/xml"), new TextEncoder().encode(xml));
     }
     put(
       "[Content_Types].xml",

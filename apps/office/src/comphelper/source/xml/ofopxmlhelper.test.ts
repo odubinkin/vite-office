@@ -1,4 +1,5 @@
 /** @fileoverview Source-backed OFOPXMLHelper parsing, lookup precedence and original SAX serialization contracts. */
+import { writeOutput } from "../../../test/oox-output";
 import { expect, it } from "vitest";
 import {
   createPairs,
@@ -307,7 +308,7 @@ it("returns an owned native MIME that remains alive after destroying parsed resu
 });
 it("preserves short-prefix empty result and content result copy-on-write", /** The native parser's initial short EOF and actual outer Sequence copy remain observable. @returns Completion. */ async () => {
   const storage = new ZipStorage();
-  storage.openOutputStream("short.xml", "application/xml").writeBytes(Uint8Array.of(32));
+  writeOutput(storage.openOutputStream("short.xml", "application/xml"), Uint8Array.of(32));
   const input = await storage.openInputStream("short.xml"),
     source = new InputSource();
   source.aInputStream = input;

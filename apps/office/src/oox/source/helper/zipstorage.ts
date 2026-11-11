@@ -97,10 +97,13 @@ export class ZipFragmentStream {
   GetNewRelId(): number {
     return this.relId++;
   }
-  /** Writes a value copy to this stream. @param bytes - Chunk. @returns Nothing. */
-  writeBytes(bytes: Uint8Array): void {
+  /** Writes a value copy to this stream. @param data - Native byte sequence borrowed for this call. @returns Nothing. */
+  writeBytes(data: Sequence<number>): void {
     if (this.closed) throw new Error("OOXML output stream is closed.");
-    this.chunks.push(bytes.slice());
+    const bytes = new Uint8Array(data.getLength()),
+      pointer = data.getConstArray() as SequenceElements;
+    for (let i = 0; i < bytes.length; ++i) bytes[i] = (pointer.get(i) as [number])[0];
+    this.chunks.push(bytes);
   }
   /** Original output close retains written bytes for storage commit. @returns Nothing. */
   closeOutput(): void {
