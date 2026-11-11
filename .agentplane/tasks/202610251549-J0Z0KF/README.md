@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 127
+revision: 130
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T22:20:23.509Z"
+  updated_at: "2026-11-11T22:34:07.594Z"
   updated_by: "CODER"
-  note: "Native ZIP output framing checkpoint passes18 profile and186 related cases; whole ZipEntry/ZipOutputStream aggregate90percent branches, with infeasible multi-gigabyte branches disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass after correcting basename-only provenance; global JSDoc retains css-style-matchers17/76 baseline. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-zip-output-framing-checkpoint.json. Flat STORE-only deterministic output/native service/model/filter/UI gaps remain unfinished; no full epic completion or pause."
-  attempts: 37
+  note: "Native ZIP entry default/UTC clock checkpoint passes142 package I/O profile cases and58 related cases,92.48percent aggregate branches with narrow-file limits disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; final docs retains only existing css-style-matchers17/76 baseline after correcting new callback docs. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-entry-defaults-checkpoint.json. Native output/storage and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished. No full-epic completion or pause."
+  attempts: 38
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -600,8 +603,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T22:34:07.594Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ZIP entry default/UTC clock checkpoint passes142 package I/O profile cases and58 related cases,92.48percent aggregate branches with narrow-file limits disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; final docs retains only existing css-style-matchers17/76 baseline after correcting new callback docs. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-entry-defaults-checkpoint.json. Native output/storage and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished. No full-epic completion or pause."
+  -
+    type: "status"
+    at: "2026-11-11T22:34:51.529Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T22:20:47.791Z"
+doc_updated_at: "2026-11-11T22:34:51.529Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1726,6 +1742,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T22:34:07.594Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ZIP entry default/UTC clock checkpoint passes142 package I/O profile cases and58 related cases,92.48percent aggregate branches with narrow-file limits disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; final docs retains only existing css-style-matchers17/76 baseline after correcting new callback docs. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-entry-defaults-checkpoint.json. Native output/storage and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished. No full-epic completion or pause.
+    Attempts: 38
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:34:06.412Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -1934,6 +1980,10 @@ sections:
     - Observation: ZIP output checkpoint removes the manual DataView record encoder and old tests that forged huge byte objects or injected incomplete private entries. Initial aggregate coverage after removing those tests was85percent branches; the first new ZipEntry provenance record also failed basename-only enforcement.
       Impact: Coverage must use real initialized caller values and valid native ownership, not impossible substitute buffers. Provenance must identify the actual source aggregate fields, not just the header basename.
       Resolution: Added actual65535-entry public admission coverage and replaced repeated list scans with a name set/running transport offset. Final whole ZipEntry/ZipOutputStream profile passes18 cases at90percent aggregate branches, with the two multi-gigabyte legacy branches disclosed. Bound the new record to all actual ZipEntry field declarations and rebuilt the registry. Source signed16 name/LOC-offset behavior is preserved in CALC-512/WRITER443. Deterministic timestamp/flat STORE-only output and full native threadpool/deflate/ZIP64/output-storage/filter/model/UI gaps remain explicitly unfinished rather than claimed as parity.
+
+    - Observation: Native entry-default checkpoint replaces constant1980 output timestamps with original static setEntry/getCurrentDosTime and actual OSL UTC values. The narrow output profile passed30 cases but had88.37percent branches because it retains checked-unreachable calendar alternatives and legacy multi-gigabyte bounds. Adding ByteChucker alone did not change branch coverage. Initial docs also found a missing callback JSDoc in the new test.
+      Impact: No invalid clock/provider or private-state forcing should be added to activate source-unreachable branches. The package I/O profile must cover real reader/writer interactions, including the actual all-ones CRC sentinel collision, while narrower file coverage remains disclosed.
+      Resolution: Ran the complete related package I/O profile with unchanged native byte/ZIP64/LOC/QA cases:142 cases, S662/686 B320/346 F52/52 L592/607,92.48percent aggregate branches. Narrow ZipOutputStream branches remain86.48percent and are not claimed otherwise. Related ODF/Worker/OOXML/Writer-font tests add58 passing cases. Corrected callback JSDoc; final docs has only existing css-style-matchers17/76 baseline. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. CALC-513..516/WRITER444..447 preserve source time widths/assertion/CRC/status logic. Native OS failures/resolution, output services and full DOCX/XLSX model/filter/Worker/UI acceptance remain unverified or unfinished.
 id_source: "generated"
 ---
 ## Summary
@@ -3068,6 +3118,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T22:34:07.594Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ZIP entry default/UTC clock checkpoint passes142 package I/O profile cases and58 related cases,92.48percent aggregate branches with narrow-file limits disclosed. Typecheck/static/lint/format/boundaries/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass; final docs retains only existing css-style-matchers17/76 baseline after correcting new callback docs. Evidence: .agentplane/tasks/202610251549-J0Z0KF/evidence/native-entry-defaults-checkpoint.json. Native output/storage and complete XLSX/DOCX core/filter/Worker/UI acceptance remain unfinished. No full-epic completion or pause.
+Attempts: 38
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T22:34:06.412Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3280,3 +3360,7 @@ DecisionContextRef:
 - Observation: ZIP output checkpoint removes the manual DataView record encoder and old tests that forged huge byte objects or injected incomplete private entries. Initial aggregate coverage after removing those tests was85percent branches; the first new ZipEntry provenance record also failed basename-only enforcement.
   Impact: Coverage must use real initialized caller values and valid native ownership, not impossible substitute buffers. Provenance must identify the actual source aggregate fields, not just the header basename.
   Resolution: Added actual65535-entry public admission coverage and replaced repeated list scans with a name set/running transport offset. Final whole ZipEntry/ZipOutputStream profile passes18 cases at90percent aggregate branches, with the two multi-gigabyte legacy branches disclosed. Bound the new record to all actual ZipEntry field declarations and rebuilt the registry. Source signed16 name/LOC-offset behavior is preserved in CALC-512/WRITER443. Deterministic timestamp/flat STORE-only output and full native threadpool/deflate/ZIP64/output-storage/filter/model/UI gaps remain explicitly unfinished rather than claimed as parity.
+
+- Observation: Native entry-default checkpoint replaces constant1980 output timestamps with original static setEntry/getCurrentDosTime and actual OSL UTC values. The narrow output profile passed30 cases but had88.37percent branches because it retains checked-unreachable calendar alternatives and legacy multi-gigabyte bounds. Adding ByteChucker alone did not change branch coverage. Initial docs also found a missing callback JSDoc in the new test.
+  Impact: No invalid clock/provider or private-state forcing should be added to activate source-unreachable branches. The package I/O profile must cover real reader/writer interactions, including the actual all-ones CRC sentinel collision, while narrower file coverage remains disclosed.
+  Resolution: Ran the complete related package I/O profile with unchanged native byte/ZIP64/LOC/QA cases:142 cases, S662/686 B320/346 F52/52 L592/607,92.48percent aggregate branches. Narrow ZipOutputStream branches remain86.48percent and are not claimed otherwise. Related ODF/Worker/OOXML/Writer-font tests add58 passing cases. Corrected callback JSDoc; final docs has only existing css-style-matchers17/76 baseline. Typecheck/static/lint/format/dependencies/resources/size/source-tree/provenance/invariants/parity/doctor/routing/diff pass. CALC-513..516/WRITER444..447 preserve source time widths/assertion/CRC/status logic. Native OS failures/resolution, output services and full DOCX/XLSX model/filter/Worker/UI acceptance remain unverified or unfinished.

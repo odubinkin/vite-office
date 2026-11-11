@@ -1,0 +1,199 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Original ZIP entry defaults/current DOS clock with actual consumed OSL UTC value bindings",
+  "baseCommit": "4749189a20b4ba904bb5132df46ea0a5f478418a",
+  "sourceBlobs": {
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "38ba2cd62d34dc66bb38deb27d9ce7d93cac92cb",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.ts": "3c50b9ec7b6ab224f4d740c8a70c3e2cacf66b64",
+    "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts": "f2dfc09ba05405d5f43399a9191c542a1e8772ac",
+    "apps/office/src/package/source/zipapi/native-output-owners.test.ts": "9606921021d99839de5d7bdf7e2d109cc203a5ff",
+    "apps/office/src/sal/inc/osl/time.ts": "a32e58254517d1f11f5b0d0dc6ad77eb21e5eb92",
+    "apps/office/src/sal/osl/unx/time.ts": "a3ea8f5143709beaf6bdebd8a344270cdcd3c464",
+    "docs/program/calc-upstream-suspected-issues.md": "874cf8e25b9b9ba2ce565f13474745b4ae9f1f7e",
+    "docs/program/native-zip-entry-defaults.md": "8c1411ec3e5074a1baa330923510cbb84c7dd6c7",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "29ebe122ca8e4b6fb8704b0cb30093e14fb93343",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json": "eb9689a93dd7a829b8a1d944dd9e1b19b16d72aa",
+    "docs/program/registry/shared/provenance/sal/inc/osl/time.ts.json": "c8b0bbde9efef872e14d1835a9cabb6018f1b6bc",
+    "docs/program/registry/shared/provenance/sal/osl/unx/time.ts.json": "7a21dc0f61a57336d7703a04892b99408f6f830f",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json": "1720ec8f53a7ef173920cd6679992a35ff920ebc",
+    "docs/program/registry/shared/runtime/sal/inc/osl/time.ts.json": "10152e9b89395a8fb281de8c4027c0589d79f473",
+    "docs/program/registry/shared/runtime/sal/osl/unx/time.ts.json": "603d61e35eeab81ad87a5c2a7c91f5d4c84e9cf1",
+    "docs/program/registry/writer/capabilities/CAP-0113.json": "a825340cce382114d04beb6d409c6788f4a0a250",
+    "docs/program/writer-upstream-suspected-issues.md": "2a49c49b6580ab48fa20ad10f1601b2f616ad62e"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-entry-defaults-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-gate-11.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-static.log"
+    },
+    {
+      "command": "scoped ESLint six changed source/test files --max-warnings0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-lint.log"
+    },
+    {
+      "command": "final new-test ESLint after documentation-only correction",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-lint-final.log"
+    },
+    {
+      "command": "scoped Prettier17 changed source/test/docs/records",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-format-final.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-entry-defaults-docs-final.log",
+      "limitation": "Only unchanged css-style-matchers.ts17/76 baseline remains; the new callback documentation failure is corrected."
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-entry-defaults-registry-build.log"
+    }
+  ],
+  "packageProfile": {
+    "command": "npx vitest run src/package/source/zipapi/native-entry-defaults.test.ts src/package/source/zipapi/native-output-owners.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/native-byte-io.test.ts src/package/source/zipapi/native-zip64.test.ts src/package/source/zipapi/native-local-records.test.ts src/package/qa/cppunit/test_zippackage.test.ts --coverage --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.include=src/package/source/zipapi/ZipOutputStream.ts --coverage.include=src/package/inc/ZipEntry.ts --coverage.include=src/package/source/zipapi/ByteChucker.ts --coverage.include=src/sal/inc/osl/time.ts --coverage.include=src/sal/osl/unx/time.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 142,
+    "files": 7,
+    "summary": {
+      "lines": {
+        "total": 607,
+        "covered": 592,
+        "skipped": 0,
+        "pct": 97.52
+      },
+      "statements": {
+        "total": 686,
+        "covered": 662,
+        "skipped": 0,
+        "pct": 96.5
+      },
+      "functions": {
+        "total": 52,
+        "covered": 52,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 346,
+        "covered": 320,
+        "skipped": 0,
+        "pct": 92.48
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "log": "apps/office/coverage/native-entry-defaults-package-profile.log",
+    "scope": "Complete related ZIP reader/writer/value/time/byte owner aggregate; no individual-file90percent assertion. Narrow ZipOutputStream branch coverage remains86.48percent."
+  },
+  "narrowProfile": {
+    "cases": 30,
+    "files": 3,
+    "testsPass": true,
+    "coverageGatePass": false,
+    "aggregateBranchPercent": 88.37,
+    "log": "apps/office/coverage/native-entry-defaults-profile.log",
+    "limitation": "Preserved checked-unreachable calendar alternatives plus infeasible legacy large-output bounds. No invalid/fake providers or private state is introduced. The ByteChucker-only profile remained88.37percent; the final broader package profile includes actual native read/write/reopen cases."
+  },
+  "related": {
+    "command": "npx vitest run src/oox/source/core/upstream-packages.test.ts src/oox/source/core/xmlfilterbase.test.ts src/oox/source/helper/zipstorage-input.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sw/source/filter/xml/native-optional-streams.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/comphelper/source/streaming/memorystream.test.ts",
+    "exitCode": 0,
+    "cases": 58,
+    "files": 10,
+    "log": "apps/office/coverage/native-entry-defaults-related.log"
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "include/osl/time.h": "55c91aef32a8bad86a1bfb160f2a991850a581408a41208b713485b13a052d92",
+      "sal/osl/unx/time.cxx": "e3968fed222f5ca05c5cab457fa004bf61d386317475cc3488448a66516e1ee3",
+      "package/inc/ZipOutputStream.hxx": "9df589f0c54719879b0da83e31ca807c6f1bd3a377cd989badf7351692307372",
+      "package/source/zipapi/ZipOutputStream.cxx": "c1604c685987e7c53d5e9e6ee46848dfe15c70d5e2b9e880d5c81482079a19f1",
+      "package/source/zippackage/ZipPackageStream.cxx": "4c5f1f2ca6632fa2e5558ed5806e7b662048f56259e6ed5afbbc8b99c30d9d3d"
+    }
+  },
+  "limitations": [
+    "Date lowers the successful CLOCK_REALTIME/gmtime platform operations only; native OS failures, physical submillisecond clock precision, ABI/thread behavior, chrono constructors and unconsumed OSL APIs remain unverified or unported.",
+    "Source getCurrentDosTime ignores statuses; undefined failure output is not simulated. Original checked year assertion and calendar alternatives remain; NDEBUG-only unknown-size fallback is unverified.",
+    "CALC-513..516/WRITER444..447 retain source unsigned time wrapping,1980 assertion, legitimate CRC ffffffff sentinel collision and ignored statuses. Four real ff bytes reproduce the current STORE path symptom; full native package-service reproduction is a source-derived inference, not a compiled witness.",
+    "Legacy deterministic1980 output is removed and the canonical verified bounded ODF scope wording is updated in both matching limitation/divergence rows without broadening parity flags. Byte-stable golden tests control only Date; Open/Save/autosave/recovery policies are unchanged.",
+    "Native output threadpool/deflate/descriptors/ZIP64/encryption/package/storage and complete DOCX/XLSX model/filter/Worker/mounted UI acceptance remain unfinished.",
+    "Related-only tests follow the approved ten-agentplane-task full-suite cadence. No complete epic or native service parity claim. Goal remains active."
+  ]
+}
