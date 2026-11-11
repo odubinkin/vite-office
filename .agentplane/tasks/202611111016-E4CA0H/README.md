@@ -1,10 +1,11 @@
 ---
 id: "202611111016-E4CA0H"
 title: "Update Node LTS and all npm dependencies to latest stable"
-status: "DOING"
+result_summary: "verified-202611111016-E4CA0H"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 39
+revision: 41
 origin:
   system: "manual"
 depends_on: []
@@ -25,7 +26,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-11T16:55:00.324Z"
+  updated_at: "2026-11-11T16:55:27.795Z"
   updated_by: "CODER"
   note: "verified-202611111016-E4CA0H"
   attempts: 0
@@ -50,7 +51,9 @@ quality_review:
     - "All 29857 application tests and 537 e2e pass, including every axe rule and all earlier regression cases. Tooling, inventory100%, types, lint, production/Docker builds and container HTTP smoke pass. Modified accessible presenters have100% coverage."
     - "The original general application coverage gate remains failed at97.68/95.47/99.36/98.29 percent against unchanged100% thresholds. The user requested task closure after these exact results were disclosed. This is an explicit closure exception; neither the failed command nor its coverage evidence is relabeled as passing."
     - "Only task acceptance metadata changed after the fully tested implementation adeebd90aec0 was committed and pushed. Reuse completed functional evidence for this closure-only update."
-commit: null
+commit:
+  hash: "6448dec32fee4c79c2b3a1dd40c730bacc3f83a0"
+  message: "🧩 E4CA0H task: accept user-approved coverage closure exception"
 comments:
   -
     author: "CODER"
@@ -58,6 +61,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Apply the user-approved Calc cell accessibility expansion with canonical upstream evidence, migrate dependent selectors and repeat every complete verification suite."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611111016-E4CA0H. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -97,8 +103,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611111016-E4CA0H"
+  -
+    type: "verify"
+    at: "2026-11-11T16:55:27.795Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611111016-E4CA0H"
+  -
+    type: "status"
+    at: "2026-11-11T16:55:27.925Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611111016-E4CA0H. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-11T16:55:00.383Z"
+doc_updated_at: "2026-11-11T16:55:27.926Z"
 doc_updated_by: "CODER"
 description: "Approved by user: floating latest LTS Node locally and in Docker, update all npm libraries and tools, resolve compatibility and validate in vite-office only. Network access to registry and official documentation approved."
 sections:
@@ -195,6 +214,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T16:55:27.795Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611111016-E4CA0H
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T16:55:00.383Z, excerpt_hash=sha256:916f4bc7ea0bc43d0e5a13505c9edc1d5434ca2a095c7d4484105b8e3b06c1ba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611111016-E4CA0H/blueprint/resolved-snapshot.json
+    - old_digest: 0b6df0a100e8dfd90aa3b68aba6d1f522c38e6941a05195c0a00dc29dddad037
+    - current_digest: 0b6df0a100e8dfd90aa3b68aba6d1f522c38e6941a05195c0a00dc29dddad037
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611111016-E4CA0H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611111016-E4CA0H --result verified-202611111016-E4CA0H --commit 6448dec32fee4c79c2b3a1dd40c730bacc3f83a0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task commit and restore the previous dependency tree with npm ci."
   Findings: |-
@@ -237,6 +286,10 @@ sections:
       Resolution: Preserve the existing native address in aria-label and existing displayed ScCellText as the separate DOM text source. aria-labelledby references the cell itself plus its displayed-text container; while inline editing owns its separate textbox, reference the address only. No synthetic cell state, alternate formatting, model mutation, changed history, hidden-value workaround or disabled axe rule. Address-boundary regex selectors accept the appended display text without matching A10 for A1. Regression coverage exercises original input/history owners, errors/formula display, hidden headers and active descendant. References: vendor/libreoffice-reference/sc/source/ui/Accessibility/AccessibleCellBase.cxx:173-196 and AccessibleCell.cxx:205-214; https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/ (self-referencing aria-labelledby composition).
 
     User-approved closure exception: The user explicitly requested pushing these changes and closing the task after the final report disclosed the remaining pre-existing application coverage deficit. All approved runtime/accessibility changes and full functional verification are complete. Accept that known deficit for this closure, retain its measurements and original failed command result, and keep all coverage thresholds unchanged. This authorization applies to task closure; no additional implementation or coverage claims are made.
+extensions:
+  implementation_commit:
+    hash: "adeebd90aec0caa8f377fe7065d5aec3bf548093"
+    message: "🧩 E4CA0H code: update Node LTS, dependencies and accessible Calc cells"
 id_source: "generated"
 ---
 ## Summary
@@ -337,6 +390,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611111016-E4CA0H --result verified-202611111016-E4CA0H --commit 6c21515ae0755625ee84696be3dca104a3554417
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-11T16:55:27.795Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611111016-E4CA0H
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T16:55:00.383Z, excerpt_hash=sha256:916f4bc7ea0bc43d0e5a13505c9edc1d5434ca2a095c7d4484105b8e3b06c1ba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611111016-E4CA0H/blueprint/resolved-snapshot.json
+- old_digest: 0b6df0a100e8dfd90aa3b68aba6d1f522c38e6941a05195c0a00dc29dddad037
+- current_digest: 0b6df0a100e8dfd90aa3b68aba6d1f522c38e6941a05195c0a00dc29dddad037
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611111016-E4CA0H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611111016-E4CA0H --result verified-202611111016-E4CA0H --commit 6448dec32fee4c79c2b3a1dd40c730bacc3f83a0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
