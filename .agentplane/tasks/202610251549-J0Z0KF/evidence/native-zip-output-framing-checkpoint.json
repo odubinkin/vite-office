@@ -1,0 +1,199 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native ZipEntry/value owners and admitted ZIP32 output framing through ByteChucker",
+  "baseCommit": "99afa23fc50d4cc76f0e58b74e14a43aba509588",
+  "sourceBlobs": {
+    "apps/office/src/package/inc/ZipEntry.ts": "2cac860a25bd5539359fbd9528ae2871286d486d",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "1d6237b8109dd9b7e02154cd4d04dd2081cc29f3",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.ts": "491e476f13f27f6bca6b75ac54450dc3a0bba08f",
+    "apps/office/src/package/source/zipapi/native-output-owners.test.ts": "fd7a17e65951d4a2c478515a0947671707860d72",
+    "apps/office/src/sal/inc/rtl/string.ts": "1cc7d98be13045a7b1fda7fd0588b1c21cabbd09",
+    "apps/office/src/sal/inc/rtl/ustring.ts": "ccd375f05768b1c65ec29aa97d650cd608764824",
+    "docs/program/calc-upstream-suspected-issues.md": "d31a30c747873a9905d8aab458d510ffb4a278a4",
+    "docs/program/native-zip-output-framing.md": "f50467ccba6215ebad6acb14577cb8ddbef648da",
+    "docs/program/registry/shared/capabilities/CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f.json": "cf8c7f5055e026bd93cfd5fdcbe7ef0bcf78b81e",
+    "docs/program/registry/shared/provenance/package/inc/ZipEntry.ts.json": "15914e6a190de50fd80e39a6a412ff5d7399b0ef",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json": "f81773105c10954933dae9fcb5e16fe0e76ae014",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/string.ts.json": "7afe1418a898d5912b03caecc8d996ea54c315f8",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json": "dac86a5e38b59b237a2fe52e9ac728a5baf16318",
+    "docs/program/registry/shared/runtime/package/inc/ZipEntry.ts.json": "6e543b2d7c79feda9549f7f61f01be85cc43716b",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json": "4bbd80091d2415a4b7e8e24b15b14c0243cd7289",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/string.ts.json": "a4aafb2142d0915cfac0b3a1fe4977c3531abc44",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json": "541af4b7413085c68a24e06754efd4d73c067593",
+    "docs/program/writer-upstream-suspected-issues.md": "1bb3dc1e458b8d573253b4dae12fcd627790daca"
+  },
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-output-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-output-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-output-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-zip-output-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-gate-11.log"
+    }
+  ],
+  "finalRegistryChecks": [
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-final-0.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-final-1.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-final-2.log"
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-static.log"
+    },
+    {
+      "command": "scoped ESLint six changed runtime/test files --max-warnings0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-lint-final.log"
+    },
+    {
+      "command": "scoped Prettier18 changed source/docs/records",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-format-final.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-zip-output-registry-build-final.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/package/source/zipapi/native-output-owners.test.ts src/package/source/zipapi/ZipFile.test.ts --coverage --coverage.include=src/package/source/zipapi/ZipOutputStream.ts --coverage.include=src/package/inc/ZipEntry.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "exitCode": 0,
+    "cases": 18,
+    "files": 2,
+    "summary": {
+      "lines": {
+        "total": 144,
+        "covered": 143,
+        "skipped": 0,
+        "pct": 99.3
+      },
+      "statements": {
+        "total": 158,
+        "covered": 156,
+        "skipped": 0,
+        "pct": 98.73
+      },
+      "functions": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 20,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 90
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "scope": "Whole ZipEntry/ZipOutputStream aggregate exceeds90percent; ZipOutputStream itself has87.5percent branches because two infeasible multi-gigabyte legacy admission branches are not forced with fake state.",
+    "log": "apps/office/coverage/native-zip-output-profile-final.log"
+  },
+  "related": {
+    "command": "npx vitest run src/package/source/zipapi/native-byte-io.test.ts src/package/source/zipapi/native-case-checks.test.ts src/package/source/zipapi/native-local-records.test.ts src/package/source/zipapi/native-zip64.test.ts src/package/qa/cppunit/test_zippackage.test.ts src/comphelper/source/streaming/memorystream.test.ts src/sal/inc/rtl/native-ostring.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-convert.test.ts src/sal/rtl/string-convert.test.ts src/oox/source/core/upstream-packages.test.ts src/oox/source/helper/zipstorage-input.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sw/source/filter/xml/native-optional-streams.test.ts src/sw/browser/workflows/writer-odt-io.test.ts",
+    "exitCode": 0,
+    "cases": 186,
+    "files": 16,
+    "log": "apps/office/coverage/native-zip-output-related.log"
+  },
+  "upstreamWitness": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "cleanPaths": true,
+    "sourceSHA256": {
+      "package/inc/ZipEntry.hxx": "9d24c56dfa2139682b3ac63a96a791e51cddd17232433821b2f598d1eaac9160",
+      "package/inc/ZipOutputStream.hxx": "9df589f0c54719879b0da83e31ca807c6f1bd3a377cd989badf7351692307372",
+      "package/source/zipapi/ZipOutputStream.cxx": "c1604c685987e7c53d5e9e6ee46848dfe15c70d5e2b9e880d5c81482079a19f1",
+      "include/rtl/string.hxx": "5efd1740ff3baaae8160c349db46a5fcb26d36a1b2970eec914c34c61884635c",
+      "include/rtl/ustring.hxx": "37efb666cb299adff72e148dac5ad86abf7351ad94127bff645e89e7f9d6ee73",
+      "package/source/zipapi/ByteChucker.cxx": "53afea9b465edfd4def33bc560e9c9efde70004c0dc27cf0257118d5ecd2575a",
+      "comphelper/source/streaming/memorystream.cxx": "f5f40b4e4e48cd90f6d6fd96ffd743c357f919d9f53de007261efd523c82c0ca"
+    }
+  },
+  "limitations": [
+    "Current flat bytes/putNextEntry/finish STORE-only output is a transport projection, not native ZipOutputStream constructor/threadpool/deflate/encryption/descriptor/extra/ZIP64/package/output-storage parity. Complete XLSX/DOCX model/filter/Worker/UI acceptance remains unfinished.",
+    "Deterministic1980 caller timestamp, existing flat duplicate/count/size gates and empty output policy remain explicit legacy output boundaries; complete native setEntry/current-time defaults are not claimed. Native memory output has its source2GB bound; multi-gigabyte output is not certified.",
+    "Primitive allocation/pointer/ABI/thread behavior is unverified; default ZipEntry primitive scalar reads are outside the valid native domain until caller initialization. New SAL constructor/helper tests are source-derived owner witnesses, not a new compiled native capture.",
+    "Initial coverage85percent branches was corrected with real65535-entry public calls, not fabricated private metadata or huge byte objects. The output record count/offset bookkeeping now avoids repeated full-list scans.",
+    "Initial new ZipEntry basename-only provenance failure was corrected with all actual field declaration symbols. Global docs remains only unchanged css-style-matchers.ts17/76. CALC-512/WRITER443 preserves signed16 name narrowing and LOC offset arithmetic.",
+    "Only related tests run under the approved ten-task full-suite cadence. Existing browser open/save/autosave/recovery policies are unchanged. Goal remains active and incomplete."
+  ]
+}
