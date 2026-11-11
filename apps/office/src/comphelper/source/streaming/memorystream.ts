@@ -14,7 +14,7 @@ import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/Il
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { rtl_uStringSlot } from "../../../sal/inc/rtl/ustring.h";
 import { SAL_MAX_INT32 } from "../../../sal/inc/types";
-import type { ByteReader, ByteWriter } from "../../inc/bytereader";
+import { BYTE_READER, BYTE_WRITER, type ByteReader, type ByteWriter } from "../../inc/bytereader";
 const Names = Sequence.specialize<rtl_uStringSlot>("OUString", 8);
 /** Original ASCII source literal bound to a genuine Unicode value. @param value - Literal. @returns Owned string. */
 function literal(value: string): OUString {
@@ -43,6 +43,10 @@ export class UNOMemoryStream
     ByteReader,
     ByteWriter
 {
+  /** Compiler RTTI for the original two independent byte bases. */
+  readonly [BYTE_READER] = true as const;
+  /** Compiler RTTI for the original ByteWriter base. */
+  readonly [BYTE_WRITER] = true as const;
   private maData: Int8Array<ArrayBuffer>;
   private mnSize = 0;
   private mnCursor = 0;

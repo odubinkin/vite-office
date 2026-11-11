@@ -48,7 +48,7 @@ import { XExtendedStorageStream } from "../../../offapi/com/sun/star/embed/XExte
 import { XRelationshipAccess } from "../../../offapi/com/sun/star/embed/XRelationshipAccess";
 import { OFOPXML } from "../../../offapi/com/sun/star/embed/StorageFormats";
 import { OInterfaceContainerHelper3 } from "../../../comphelper/inc/interfacecontainer3";
-import type { ByteReader } from "../../../comphelper/inc/bytereader";
+import { BYTE_READER, type ByteReader } from "../../../comphelper/inc/bytereader";
 const Properties = Sequence.specialize<PropertyValue>(propertyType, 48);
 const Pairs = Sequence.specialize<StringPair>(pairType, 16);
 const Rows = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8);
@@ -82,6 +82,8 @@ export class OInputCompStream
   )
   implements XInputStream, XExtendedStorageStream, XRelationshipAccess, XPropertySet, ByteReader
 {
+  /** Compiler RTTI for the original ByteReader crosscast. */
+  readonly [BYTE_READER] = true as const;
   protected readonly m_xStream: Reference<XInputStream & ByteReader>;
   private readonly m_aProperties: Sequence<PropertyValue>;
   private m_pInterfaceContainer: OInterfaceContainerHelper3<XEventListener> | null = null;

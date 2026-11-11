@@ -34,6 +34,7 @@ import { IOException } from "../../../cppu/inc/com/sun/star/io/IOException";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { ByteReader } from "../../../comphelper/inc/bytereader";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { OStorageHelper } from "../../../comphelper/inc/storagehelper";
 import { UNOMemoryStream } from "../../../comphelper/source/streaming/memorystream";
 import { SequenceInputStream } from "../../../comphelper/source/streaming/seqstream";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
@@ -49,13 +50,18 @@ function inputBytes(bytes: Uint8Array, seekable = false): Reference<XInputStream
     if (!seekable) return new Reference(new SequenceInputStream(data));
     const cache = new UNOMemoryStream(),
       input = new Reference<XInputStream & ByteReader>(cache);
+    const source = new Reference<XInputStream>(new SequenceInputStream(data)),
+      output = cache.getOutputStream();
     try {
-      cache.writeBytes(data);
+      OStorageHelper.CopyInputToOutput(source, output);
       cache.seek(0n);
       return input;
     } catch (error) {
       input.dispose();
       throw error;
+    } finally {
+      output.dispose();
+      source.dispose();
     }
   } finally {
     data.dispose();

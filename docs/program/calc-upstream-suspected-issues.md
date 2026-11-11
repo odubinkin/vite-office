@@ -5308,3 +5308,16 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: pinned `comphelper/source/container/interfacecontainer2.cxx`, `OInterfaceContainerHelper2::clear`, uses `OSL_ENSURE(!bIsList || bInUse, ...)` immediately before its conditional detachment.
 - A normal list with no active iterator has bIsList=true and bInUse=false, so clearing it emits that debug diagnostic even though clear is a supported operation and the upstream IfTest::testEnumerate scenario does exactly this. This looks like a stale diagnostic predicate copied from disposeAndClear; it does not change the release-build operation.
 - Preserve the state transitions and release behavior. The browser port does not simulate debug logging or add a corresponding exception. Native debug-diagnostic execution and downstream impact remain unverified.
+
+### CALC-499 — Storage copy treats a short ByteReader result as completion
+
+- Source: pinned `comphelper/source/misc/storagehelper.cxx`, `OStorageHelper::CopyInputToOutput`; `include/comphelper/bytereader.hxx`, `ByteReader::readSomeBytes`.
+- The fast path repeats only while the raw reader returns exactly32000 bytes. A reader returning a smaller initialized chunk while more data remains causes copying to stop without checking availability or retrying until zero. The ByteReader declaration does not state that every nonfinal call fills the requested buffer; whether existing native producers rely on such an implicit convention is unverified.
+- Preserve the continuation condition and final short/empty write. A genuine MemoryInputStream subclass returning7 bytes leaves23 bytes available and copies only7. This is a local native-owner witness, not a compiled upstream or application-level truncation claim. No retry repair is added.
+
+
+### CALC-500 — Published transaction listener keeps the commited spelling
+
+- Source: pinned `offapi/com/sun/star/embed/XTransactionListener.idl` declares `commited`, and package OWriteStream/OStorage call that same method after commit.
+- The spelling has one t, while surrounding identifiers use COMMITTED. It looks like a historical naming typo but is part of the published contract. Renaming it or silently adding an alias would change that contract.
+- Preserve `commited` exactly in the SDK declaration and actual listener dispatch. The interface/query tests use the published spelling. No upstream correction or compatibility alias is introduced.

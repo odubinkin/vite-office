@@ -10,7 +10,7 @@ import { XOutputStream } from "../../../udkapi/com/sun/star/io/XOutputStream";
 import { XSeekable } from "../../../udkapi/com/sun/star/io/XSeekable";
 import { OUString, OUStringLiteral } from "../../../sal/inc/rtl/ustring";
 import { SAL_MAX_INT32 } from "../../../sal/inc/types";
-import type { ByteReader } from "../../inc/bytereader";
+import { BYTE_READER, type ByteReader } from "../../inc/bytereader";
 const badLocation = new OUStringLiteral(
   Uint16Array.of(98, 97, 100, 32, 108, 111, 99, 97, 116, 105, 111, 110, 0),
 );
@@ -19,6 +19,8 @@ export class MemoryInputStream
   extends WeakImplHelper.specialize(XInputStream, XSeekable)
   implements XInputStream, XSeekable, ByteReader
 {
+  /** Compiler RTTI for the original ByteReader base. */
+  readonly [BYTE_READER] = true as const;
   private m_nPos = 0;
   /** Original pointer/count constructor; the caller owns the memory lifetime. @param m_pMemoryData - Actual borrowed initialized byte-address cells. @param m_nMemoryDataLength - Signed32 byte length. @returns Stream. */
   constructor(

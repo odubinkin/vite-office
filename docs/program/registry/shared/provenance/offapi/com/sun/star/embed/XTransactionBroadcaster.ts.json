@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/embed/XTransactionBroadcaster.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/embed/XTransactionBroadcaster.idl",
+    "localSymbols": [
+      "XTransactionBroadcaster",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XTransactionBroadcaster",
+      "addTransactionListener",
+      "removeTransactionListener"
+    ],
+    "preservedResponsibilities": [
+      "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Native RTTI/stack/vtable/ABI and full storage/write/service/model/UI owners remain unverified or unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. Synchronous JS omits native mutex scopes without supplying a fake lock or parent."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/XTransactionBroadcaster.ts",
+          "marker": "XTransactionBroadcaster"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/transaction-contracts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/embed/XTransactionBroadcaster.idl",
+          "marker": "XTransactionBroadcaster"
+        }
+      ]
+    }
+  }
+}
