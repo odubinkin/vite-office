@@ -307,10 +307,10 @@ it("sets destruction before list removal and retains existing undo and state dis
   try {
     document.Dispose();
     expect(calls).toEqual([
+      ["undo", true],
       ["text0", true],
       ["text1", true],
       ["text2", true],
-      ["undo", true],
       ["state", true],
     ]);
     expect(document.IsInDtor()).toBe(true);

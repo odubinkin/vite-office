@@ -1,14 +1,39 @@
 /** @fileoverview Compiles the original LibreOffice Unicode word methods against native ICU rule iterators. */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { format, resolveConfig } from "prettier";
 
 const icu = resolve("vendor/icu-reference/source");
-const build = resolve("output/native/AQF9AG-icu-grego");
-const ruleObjects = resolve(build, "openoffice-rule-iterator");
-const root = resolve(build, "lo-word-break-witness");
+const patched = process.argv.includes("--libreoffice-patched");
+const build = resolve(
+  process.argv
+    .find(
+      /** Selects a native probe path option. @param value - Command argument. @returns Whether this option matches. */ (
+        value,
+      ) => value.startsWith("--build="),
+    )
+    ?.slice(8) ?? "output/native/AQF9AG-icu-grego",
+);
+const ruleObjects = resolve(
+  process.argv
+    .find(
+      /** Selects a native probe path option. @param value - Command argument. @returns Whether this option matches. */ (
+        value,
+      ) => value.startsWith("--rule-objects="),
+    )
+    ?.slice(15) ?? resolve(build, "openoffice-rule-iterator"),
+);
+const root = resolve(
+  process.argv
+    .find(
+      /** Selects a native probe path option. @param value - Command argument. @returns Whether this option matches. */ (
+        value,
+      ) => value.startsWith("--output="),
+    )
+    ?.slice(9) ?? resolve(build, "lo-word-break-witness" + (patched ? "-patched" : "")),
+);
 mkdirSync(root, { recursive: true });
 const sourcePath =
   "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiterator_unicode.cxx";
@@ -131,6 +156,63 @@ int main(int argc, char **argv) {
 }
 `;
 writeFileSync(resolve(root, "witness.cpp"), cpp);
+const overrides = [];
+let dataDirectory = resolve(icu, "data/in");
+if (patched) {
+  const overlay = resolve(root, "patched-common");
+  mkdirSync(overlay, { recursive: true });
+  for (const name of [
+    "dictbe.cpp",
+    "dictbe.h",
+    "dictionarydata.cpp",
+    "dictionarydata.h",
+    "brkeng.cpp",
+  ])
+    copyFileSync(resolve(icu, "common", name), resolve(overlay, name));
+  execFileSync("patch", ["-p3", "--batch"], {
+    cwd: overlay,
+    input: readFileSync("vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1"),
+    stdio: ["pipe", "inherit", "inherit"],
+  });
+  for (const name of ["dictbe", "dictionarydata", "brkeng"]) {
+    const object = resolve(overlay, name + ".o");
+    execFileSync(
+      "clang++",
+      [
+        "-std=c++17",
+        "-O2",
+        "-DU_STATIC_IMPLEMENTATION",
+        "-DU_COMMON_IMPLEMENTATION",
+        `-I${overlay}`,
+        `-I${icu}/common`,
+        "-c",
+        resolve(overlay, name + ".cpp"),
+        "-o",
+        object,
+      ],
+      { stdio: "inherit" },
+    );
+    overrides.push(object);
+  }
+  dataDirectory = resolve(root, "data");
+  mkdirSync(resolve(dataDirectory, "brkitr"), { recursive: true });
+  copyFileSync(
+    "vendor/libreoffice-reference/external/icu/khmerdict.dict",
+    resolve(dataDirectory, "brkitr/khmerdict.dict"),
+  );
+  execFileSync(
+    resolve(build, "bin/icupkg"),
+    [
+      "-a",
+      "brkitr/khmerdict.dict",
+      "-s",
+      dataDirectory,
+      resolve(build, "data/out/tmp/icudt78l.dat"),
+      resolve(dataDirectory, "icudt78l.dat"),
+    ],
+    { stdio: "inherit" },
+  );
+}
 const objects = [
   "OpenOffice_tmp",
   "count_word_brk",
@@ -153,6 +235,7 @@ execFileSync(
       /** Names one actual compiled source rule object. @param name - Original generated stem. @returns Object path. */
       (name) => resolve(ruleObjects, name + ".o"),
     ),
+    ...overrides,
     resolve(build, "lib/libicuuc.a"),
     resolve(build, "stubdata/libicudata.a"),
     "-o",
@@ -218,7 +301,7 @@ for (const { name, rule, wordType, value, operations } of cases) {
   for (const [op, p, direction] of operations) input += `${op} ${p} ${direction} `;
   input += "\n";
 }
-const output = execFileSync(resolve(root, "witness"), [resolve(icu, "data/in")], {
+const output = execFileSync(resolve(root, "witness"), [dataDirectory], {
   input,
   encoding: "utf8",
   maxBuffer: 4 * 1024 * 1024,
@@ -240,11 +323,25 @@ if (localeIndex !== cases.length || boundaryIndex !== cases.length || props === 
   throw new Error("Incomplete native word observations");
 
 const path = resolve(
-  "apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.native-observations.json",
+  `apps/office/src/i18npool/source/breakiterator/breakiterator_unicode.${patched ? "libreoffice-patched" : "native"}-observations.json`,
 );
 const bytes = await format(
   JSON.stringify({
     icuVersion: "78.3",
+    ...(patched
+      ? {
+          libreOfficeKhmerPatchSha256: createHash("sha256")
+            .update(
+              readFileSync(
+                "vendor/libreoffice-reference/external/icu/icu4c-khmerbreakengine.patch.1",
+              ),
+            )
+            .digest("hex"),
+          libreOfficeKhmerDictionarySha256: createHash("sha256")
+            .update(readFileSync("vendor/libreoffice-reference/external/icu/khmerdict.dict"))
+            .digest("hex"),
+        }
+      : {}),
     originalMethodsSha256: createHash("sha256").update(methods).digest("hex"),
     props,
     cases,

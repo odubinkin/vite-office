@@ -1,5 +1,6 @@
 /** @fileoverview Checks real document-owned automatic character handles, copying, hint normalization and snapshot decoding. */
 import { describe, expect, it } from "vitest";
+import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
@@ -132,11 +133,9 @@ describe("document-owned automatic character handles", /** Groups actual model c
       (required(a.GetpSwpHints()).Get(0).format as SwFormatAutoFormat).GetStyleHandle(),
     );
     expect(left.GetStyleHandle().GetPool()).toBe(restored.GetAttrPool());
-    expect(left.QueryValue()).toEqual([
-      { which: 15, value: 8 },
-      { which: 26, value: 8 },
-      { which: 31, value: 8 },
-    ]);
+    expect(left.QueryValue()).toBe(StylePool.nameOf(left.GetStyleHandle()));
+    expect(left.QueryValue()).toBe(right.QueryValue());
+    expect(left.QueryValue()).not.toBe("");
     expect(encodeWriterDocument(restored)).toEqual(record);
     const factory = createSwFormatAutoFormat(restored.GetAttrPool(), attributes);
     expect(factory.GetStyleHandle()).toBe(left.GetStyleHandle());

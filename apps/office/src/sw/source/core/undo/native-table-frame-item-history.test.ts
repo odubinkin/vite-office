@@ -53,6 +53,8 @@ it.each(["width", "columns"])(
       else {
         const columns = new SwTabCols();
         expect(shell.GetTabCols(columns)).toBe(true);
+        // Native SetTabCols resolves relative width before constructing its undo item.
+        before.SetWidth(columns.GetRight() - columns.GetLeft());
         columns.SetRight(4500);
         columns.GetEntry(0).nPos = 1500;
         expect(shell.SetTabCols(columns, false)).toBe(true);
@@ -68,7 +70,11 @@ it.each(["width", "columns"])(
         for (let cycle = 0; cycle < 3; cycle++) {
           expect(shell.Undo()).toBe(true);
           expect(format.GetFrameSize()).toEqual(before);
-          expect(table.GetColumnWidths()).toEqual([1000, 2000]);
+          expect(table.GetColumnWidths()).toEqual(
+            operation === "columns"
+              ? [before.GetWidth() / 3, (before.GetWidth() * 2) / 3]
+              : [1000, 2000],
+          );
           expect(shell.Redo()).toBe(true);
           expect(format.GetFrameSize()).toEqual(after);
           expect(table.GetColumnWidths()).toEqual(afterWidths);

@@ -4,7 +4,7 @@ title: "Integrate current native Writer filters and Calc CSV changes into main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-10T02:42:08.314Z"
+doc_updated_at: "2026-11-11T09:35:41.965Z"
 doc_updated_by: "CODER"
 description: "November synchronization of Writer 0d5e5b16c and Calc 2eded1223 with main, including full verification, integration regression repairs, and reverse synchronization. Prior integration 581KM2 retains its historical coverage dependency."
 sections:
@@ -52,7 +52,10 @@ sections:
     3. Verify that main contains both input tips, both development branches contain published main, each checkout is on its designated branch, and all three local tips match origin. Check full Git status and preserve pre-existing Calc output.
   Verification: "Pending."
   Rollback Plan: "Keep the original tips in history. Resolve locally before publishing main and use revert commits if a published correction is needed."
-  Findings: "This is a new integration of the November Writer and Calc tips. Historical task 581KM2 has an incomplete coverage dependency and remains separate."
+  Findings: |-
+    Writer and Calc input tips were published and merged into main. Shared source owners were reconciled against pinned LibreOffice and ICU sources. Full app coverage replay on Node 24 executed 29,837 tests: 29,824 passed, 13 failed, with two additional worker startup errors. Focused repairs and replays are in progress. The retained 100% coverage gate failed: statements 97.64%, branches 95.43%, functions 99.33%, lines 98.26%. Coverage thresholds have not been lowered. The inventory coverage and browser replays are also in progress; no final green verification is claimed.
+
+    The native UNO numbering service applies PropertyValue entries in sequence order. The port's XML importer incorrectly emitted ListFormat before ParentNumbering. The pinned xmloff/source/style/xmlnumi.cxx emits ListFormat last; the port now preserves that order and the existing explicit-pattern ODT round-trip test remains unchanged. WRITER424 records the underlying order-sensitive upstream API contract. Native patched ICU observations were independently compiled using the existing LibreOffice-patched ICU library and original C++ Unicode word methods; the stock ICU observation fixture is retained separately.
 id_source: "generated"
 ---
 ## Summary
@@ -83,4 +86,6 @@ Keep the original tips in history. Resolve locally before publishing main and us
 
 ## Findings
 
-This is a new integration of the November Writer and Calc tips. Historical task 581KM2 has an incomplete coverage dependency and remains separate.
+Writer and Calc input tips were published and merged into main. Shared source owners were reconciled against pinned LibreOffice and ICU sources. Full app coverage replay on Node 24 executed 29,837 tests: 29,824 passed, 13 failed, with two additional worker startup errors. Focused repairs and replays are in progress. The retained 100% coverage gate failed: statements 97.64%, branches 95.43%, functions 99.33%, lines 98.26%. Coverage thresholds have not been lowered. The inventory coverage and browser replays are also in progress; no final green verification is claimed.
+
+The native UNO numbering service applies PropertyValue entries in sequence order. The port's XML importer incorrectly emitted ListFormat before ParentNumbering. The pinned xmloff/source/style/xmlnumi.cxx emits ListFormat last; the port now preserves that order and the existing explicit-pattern ODT round-trip test remains unchanged. WRITER424 records the underlying order-sensitive upstream API contract. Native patched ICU observations were independently compiled using the existing LibreOffice-patched ICU library and original C++ Unicode word methods; the stock ICU observation fixture is retained separately.

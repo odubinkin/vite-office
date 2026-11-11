@@ -1,4 +1,6 @@
 /** @fileoverview Original XML rich-string text ownership and attribute conversion into actual Calc model values; full shared-string filter/context/font/phonetic acceptance remains pending. */
+import { implementations } from "../../../../desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it } from "vitest";
 import { RichString, RichStringPortion } from "../inc/richstring";
 import { AttributeList } from "../../../../oox/source/helper/attributelist";
@@ -8,6 +10,8 @@ import { getTokenFromUtf8 } from "../../../../oox/source/token/tokenmap";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+InitApplicationServiceManager(implementations);
+
 it("owns decoded portion values independently of inputs and borrowed output references", /** Uses real SAL owners and retained COW member identity. @returns Nothing. */ () => {
   const portion = new RichStringPortion(),
     input = unicode("A_x0000__xD83D__xDE00_");

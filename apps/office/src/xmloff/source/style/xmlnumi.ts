@@ -355,7 +355,6 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
       );
       addString("Prefix", level.prefix);
       addString("Suffix", level.suffix);
-      addString("ListFormat", level.listFormat);
       if (level.startWith !== undefined)
         add("StartWith", new Any([(level.startWith << 16) >> 16], "sal_Int16"));
       if (level.parentNumbering !== undefined)
@@ -381,6 +380,8 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
           "LabelFollowedBy",
           new Any([["listtab", "space", "nothing"].indexOf(position.labelFollowedBy)], "sal_Int16"),
         );
+      // Native FillUnoProperties applies the explicit pattern after ParentNumbering.
+      addString("ListFormat", level.listFormat);
       const sequence = new ListPropertySequence(
         {
           get: /** Executes this bounded native operation. @param offset - Native operation input. @returns Native operation result. */ (

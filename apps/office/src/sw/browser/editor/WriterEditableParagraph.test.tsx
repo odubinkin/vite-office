@@ -158,11 +158,14 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
   it("renders the native Markdown paragraph brush independently of text highlight", /** Actual Markdown, native items and the existing presentation projection feed mounted CSS. @returns Nothing. */ () => {
     const doc = new MarkdownReader().Read(
       OUStringToOString(
-        '<p style="background-color: #123456; margin-left: 12pt">Native background</p>',
+        '<p>Before</p><p style="background-color: #123456; margin-left: 12pt">Native background</p><p>After</p>',
         RTL_TEXTENCODING_UTF8,
       ),
     );
-    const node = doc.paragraphs[0];
+    const node = doc.paragraphs.find(
+      /** Selects the shaded paragraph outside the native HTML insertion join. @param paragraph - Imported text node. @returns Whether it owns the tested content. */
+      (paragraph) => paragraph.GetText() === "Native background",
+    );
     if (!node) throw new Error("Missing native paragraph");
     const position = new SwPosition(node),
       cursor = new SwPaM(position);

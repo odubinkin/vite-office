@@ -612,17 +612,18 @@ it.each([
   },
 );
 
-it("reports a recognized but unavailable RTL encoding without closing input", /** GB18030 is known to the native charset catalog but its descriptor is outside the currently represented converter set; this checks the existing local limitation, not native parity. @returns Nothing. */ () => {
+it("parses declared GB18030 through the integrated RTL converter without closing input", /** Exercises the native converter through the SAX entry point. @returns Nothing. */ () => {
   const value = source(
       new TextEncoder().encode('<?xml version="1.0" encoding="gb18030"?><root/>'),
       3,
     ),
     parser = new FastSaxParser();
   try {
-    expect(
-      /** Uses genuine charset lookup/factory results. @returns Never. */ () =>
-        parser.parseStream(value.input),
-    ).toThrow("XML encoding converter is unavailable: gb18030");
+    const handler = new Handler();
+    parser.setFastDocumentHandler(handler);
+    parser.parseStream(value.input);
+    expect(handler.events).toContain("element");
+    expect(handler.events.at(-1)).toBe("end");
     expect(value.stream.closed).toBe(false);
   } finally {
     parser.dispose();

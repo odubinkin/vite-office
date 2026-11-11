@@ -6,7 +6,6 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwModify } from "../../../inc/calbck";
 import { Font } from "../../../../vcl/source/font/font";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
@@ -112,10 +111,9 @@ it("exports actual NONE type with empty format and suppresses display levels whi
 it("applies UNO properties to a native copy preserving font glyph visibility registration and inactive geometry", /** Checks removal of raw-field reconstruction and independent native setters. @returns Nothing. */ () => {
   const rule = createWriterNumRule("NativeCopy"),
     source = new SwNumFormat(),
-    modify = new SwModify();
-  source.GetRegisteredIn =
-    /** Supplies the source registration; all target clients are actual owners. @returns Modify owner. */ () =>
-      modify;
+    document = new SwDoc(),
+    modify = document.MakeCharFormat("NativeCopyStyle", undefined);
+  source.SetCharFormat(modify);
   const font = new Font();
   font.SetFamilyName("NativeFont");
   source.SetBulletFont(font);
@@ -159,6 +157,9 @@ it("applies UNO properties to a native copy preserving font glyph visibility reg
     bulletChar: "",
   });
   expect(rule.Get(2).GetBulletChar()).toBe(0);
+  rule.Dispose();
+  source.Dispose();
+  document.Dispose();
 });
 
 it("rejects negative native NumberingType before committing the copied level", /** Verifies native invalid-property atomicity and numeric property precedence. @returns Nothing. */ () => {

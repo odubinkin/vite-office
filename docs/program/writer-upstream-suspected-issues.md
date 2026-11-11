@@ -3486,3 +3486,17 @@ The pinned RtfAttributeOutput::FormatTextGrid logs a TODO and emits
 no control. The pinned RTF tokenizer also recognizes the section
 grid flags without a corresponding dispatch handler. Preserve the
 lack of a portable grid mapping.
+
+### WRITER424 — Numbering property order changes explicit pattern metadata
+
+The pinned SwXNumberingRules::SetPropertiesToNumFormat applies
+ListFormat and ParentNumbering inside the same ordered property
+loop (sw/source/core/unocore/unosett.cxx). SetListFormat derives
+the upper-level count from the explicit placeholders, but a later
+ParentNumbering overwrites that count. Consequently an explicit pattern can retain its text and label
+while its upper-level metadata reflects the later property. The
+native XML importer avoids this by emitting ListFormat after
+ParentNumbering (xmloff/source/style/xmlnumi.cxx). Preserve that
+sequence, including in ODT and internal-codec round-trip coverage.
+The order-sensitive UNO API contract remains a suspected upstream
+issue; the incorrect property ordering in the local port was fixed.

@@ -14,6 +14,7 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { getBreakIteratorRules } from "../localedata/localedata";
 import { BreakIterator_Unicode } from "./breakiterator_unicode";
+import patched from "./breakiterator_unicode.libreoffice-patched-observations.json" with { type: "json" };
 import native from "./breakiterator_unicode.native-observations.json" with { type: "json" };
 
 /** Builds an original owned Locale triplet. @param language - Language field. @param country - Country field. @param variant - Optional original variant. @returns Locale owner. */
@@ -64,7 +65,10 @@ it("matches original stock ICU word rule locales", /** Exercises the actual brki
 
 it("matches the original LibreOffice Unicode word methods", /** Uses real text owners across all word modes and locale rule fallbacks. @returns Nothing. */ () => {
   const iterator = new BreakIterator_Unicode();
-  for (const c of native.cases) {
+  for (const [index, patchedCase] of patched.cases.entries()) {
+    // ANY_WORD uses stock ICU; explicit LibreOffice rules use its patched Khmer engine.
+    const c = patchedCase.rule === "-" ? native.cases[index] : patchedCase;
+    if (c === undefined) throw new Error("Missing stock ICU observation");
     const locale = localeFor(c.language, c.country, c.variant);
     const value = unicode(c.value);
     try {

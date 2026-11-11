@@ -2,6 +2,10 @@
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwUndoTableNdsChg } from "./untbl";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { RES_BOX } from "../../../inc/hintids";
+import { Color } from "../../../../tools/inc/color";
+import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SwInsertTableFlags } from "../../../inc/itabenum";
 import { SwPosition } from "../crsr/pam";
 import { type SwTableBox } from "../table/swtable";
@@ -169,9 +173,13 @@ it("native counted column borders replay with row text and recreated table owner
   const session = createWriterDocumentSession(),
     doc = session.docShell.GetDoc(),
     shell = session.view.GetWrtShell();
+  const borders = new SvxBoxItem(RES_BOX);
+  borders.SetLine(new SvxBorderLine(new Color(0x123456), 20), SvxBoxItemLine.RIGHT);
   try {
     const original = required(
-        shell.InsertTable({ mnInsMode: SwInsertTableFlags.All, mnRowsToRepeat: 1 }, 3, 2),
+        shell.InsertTable({ mnInsMode: SwInsertTableFlags.All, mnRowsToRepeat: 1 }, 3, 2, "", {
+          box: borders,
+        }),
       ),
       first = required(original.GetTabLines()[0]),
       source = required(first.GetTabBoxes()[0]);
@@ -228,6 +236,7 @@ it("native counted column borders replay with row text and recreated table owner
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(4);
     }
   } finally {
+    borders.Dispose();
     session.Close();
   }
 });
