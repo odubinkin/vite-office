@@ -1,0 +1,291 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native serializer cache/marks and UNO byte-output contract at the ZIP transport boundary",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "a57143ffb998511626b8b252f052e00f4d0c5d86",
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "b0b07eec347918d777c5ba117e5717796fea81cf",
+    "apps/office/src/oox/source/core/xmlfilterbase.ts": "160542687ca1f4e4e9f22a2e6432250ff86684ff",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "a28f8af00ef09fe617c4abaf296585043b7e2532",
+    "apps/office/src/sax/inc/fshelper.ts": "01f1485e953fba10553d01fcd7455e7154376fb7",
+    "apps/office/src/sax/source/tools/CachedOutputStream.ts": "ccb21c681046d3ed4028fd8adddd557eaa3c1f53",
+    "apps/office/src/sax/source/tools/fastserializer.test.ts": "1df6b49d33fec19809ca5bb75914c3ed64a6c5cd",
+    "apps/office/src/sax/source/tools/fastserializer.ts": "b73d6757db1790960277eef77f1d93bb68dad3b9",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "aa955260133b9fb190f244e6f9f6aabb0cecf9a0",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "51876bc309d25ccd18ad3ea371d23559de0ca575",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts": "7a9368c620b65cdf3805cb6c827281f0078151e6",
+    "docs/program/calc-upstream-suspected-issues.md": "8ecdd6048c46814c3fa8bb9632b536903d6bb9dc",
+    "docs/program/registry/shared/capabilities/CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708.json": "9ad5958b0fd38b8fe4c9ed59b66c1b3bbb6fa7bc",
+    "docs/program/registry/shared/provenance/oox/source/core/xmlfilterbase.ts.json": "e2104931068ae52cf5498a7a68f1a3755549cad8",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "1ba2daa003794cc55ff89f444f116214001822c1",
+    "docs/program/registry/shared/provenance/sax/inc/fshelper.ts.json": "9cc43781adfe5ce7370f3b6c4d8af224e7716696",
+    "docs/program/registry/shared/provenance/sax/source/tools/CachedOutputStream.ts.json": "0c4d88f01948a36870ae3f2d7d96f8d3155fcd37",
+    "docs/program/registry/shared/provenance/sax/source/tools/fastserializer.ts.json": "07e0ddf2eed7cdef80d02bd962bcf5ee38b5de0b",
+    "docs/program/registry/shared/runtime/oox/source/core/xmlfilterbase.ts.json": "97ec6c3bd24a198db4c49f5782f3b289705f7533",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "4160dc4d43f386a939aee5b2cab92db921dd7c55",
+    "docs/program/registry/shared/runtime/sax/inc/fshelper.ts.json": "289514cbb7ac4ea778d4ca95669427a2d532513c",
+    "docs/program/registry/shared/runtime/sax/source/tools/CachedOutputStream.ts.json": "32233ca06e399cd606080b57f34a9e05796b4dbd",
+    "docs/program/registry/shared/runtime/sax/source/tools/fastserializer.ts.json": "b2f678aa0a1845b783773dfe648027eb83d890b8",
+    "docs/program/writer-upstream-suspected-issues.md": "2d33dcf6d7832f2fd6416bb64f717fd24e054e45",
+    "apps/office/src/sax/source/tools/native-cache.test.ts": "08268005fe93519260dbe2e48f4b9237cf3106d4",
+    "apps/office/src/test/oox-output.ts": "8b4733d71b09ac42082ce454ef04fc851071eedc",
+    "docs/program/native-serializer-byte-owners.md": "18f71fb979ab37caa92eb9c11014dd4c679359c7"
+  },
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/inc/fshelper.ts",
+        "apps/office/src/sax/source/tools/CachedOutputStream.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sax/source/tools/fastserializer.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "apps/office/src/sax/source/tools/native-cache.test.ts",
+        "apps/office/src/test/oox-output.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-0.log"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/inc/fshelper.ts",
+        "apps/office/src/sax/source/tools/CachedOutputStream.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sax/source/tools/fastserializer.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/registry/shared/capabilities/CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708.json",
+        "docs/program/registry/shared/provenance/oox/source/core/xmlfilterbase.ts.json",
+        "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/provenance/sax/inc/fshelper.ts.json",
+        "docs/program/registry/shared/provenance/sax/source/tools/CachedOutputStream.ts.json",
+        "docs/program/registry/shared/provenance/sax/source/tools/fastserializer.ts.json",
+        "docs/program/registry/shared/runtime/oox/source/core/xmlfilterbase.ts.json",
+        "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json",
+        "docs/program/registry/shared/runtime/sax/inc/fshelper.ts.json",
+        "docs/program/registry/shared/runtime/sax/source/tools/CachedOutputStream.ts.json",
+        "docs/program/registry/shared/runtime/sax/source/tools/fastserializer.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "apps/office/src/sax/source/tools/native-cache.test.ts",
+        "apps/office/src/test/oox-output.ts",
+        "docs/program/native-serializer-byte-owners.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-1.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-2.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-serializer-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-4.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-5.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-serializer-check-6.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-serializer-check-7.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-serializer-check-8.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-9.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-10.log"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-11.log"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-12.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-check-13.log"
+    }
+  ],
+  "finalRegistryChecks": [
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-final-0.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-final-1.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-final-2.log"
+    }
+  ],
+  "tests": {
+    "coverage": {
+      "files": 6,
+      "cases": 82,
+      "threshold": 90,
+      "summary": {
+        "lines": {
+          "total": 432,
+          "covered": 421,
+          "skipped": 0,
+          "pct": 97.45
+        },
+        "statements": {
+          "total": 483,
+          "covered": 462,
+          "skipped": 0,
+          "pct": 95.65
+        },
+        "functions": {
+          "total": 99,
+          "covered": 98,
+          "skipped": 0,
+          "pct": 98.98
+        },
+        "branches": {
+          "total": 195,
+          "covered": 182,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "log": "apps/office/coverage/native-serializer-coverage.log"
+    },
+    "integration": {
+      "files": 8,
+      "cases": 74,
+      "log": "apps/office/coverage/native-serializer-integration.log"
+    }
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-typecheck.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-serializer-static.log"
+    }
+  ],
+  "upstreamIssues": [
+    "WRITER137",
+    "CALC-303 (shared SAX cache section)"
+  ],
+  "limitations": [
+    "Global check:docs retains only unchanged css-style-matchers.ts lines17 and76.",
+    "Initial source-provenance/registry checks rejected a local docs path placed in source evidence; corrected metadata and all three final checks pass unchanged enforcement.",
+    "Whole-module ZipStorage coverage in this profile is88.06 percent statements/77.77 percent branches; unchanged input error paths are outside this selected output profile, whose global90 thresholds pass.",
+    "No specific serializer/cache tests were found in pinned sax/qa C++ sources; translated existing serializer scenarios and new critical alias/ownership/exception cases are retained.",
+    "Full native XOutputStream Reference and OWriteStream/parent storage/service ownership, full document model/filter/Worker/UI acceptance remain incomplete.",
+    "Full suite deferred under the approved ten-completed-task cadence."
+  ]
+}
