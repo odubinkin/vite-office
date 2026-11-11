@@ -19,7 +19,7 @@
         "apps/office/src/package/source/zipapi/ZipFile.ts#ZipFileLimits",
         "vendor/libreoffice-reference/package/source/zipapi/ZipFile.cxx#ZipFile::ZipFile"
       ],
-      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipFile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipFile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "ZipFileLimits",

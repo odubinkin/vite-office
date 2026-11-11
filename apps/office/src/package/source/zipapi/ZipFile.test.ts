@@ -351,7 +351,17 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => new ZipFile(duplicate),
     ).toThrow("Duplicate ZIP entry");
-    for (const name of ["", "a\0b", "a\\b", "/a", "C:a", "a//b", "a/./b", "a/../b"])
+    for (const name of [
+      "a\0b",
+      "a\\b",
+      "/a",
+      "C:a",
+      "a/./b",
+      "a/../b",
+      "a?b",
+      "a:b",
+      "a\ud83d\ude00b",
+    ])
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => assertSafeZipEntryName(name),

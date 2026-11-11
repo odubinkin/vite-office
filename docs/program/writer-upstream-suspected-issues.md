@@ -3545,3 +3545,9 @@ issue; the incorrect property ordering in the local port was fixed.
 - Source: pinned `offapi/com/sun/star/embed/XTransactionListener.idl` declares `commited`, and package OWriteStream/OStorage call that same method after commit.
 - The spelling has one t, while surrounding identifiers use COMMITTED. It looks like a historical naming typo but is part of the published contract. Renaming it or silently adding an alias would change that contract.
 - Preserve `commited` exactly in the SDK declaration and actual listener dispatch. The interface/query tests use the published spelling. No upstream correction or compatibility alias is introduced.
+
+### WRITER432 — ZIP name helper accepts empty names and repeated internal separators
+
+- Source: pinned `comphelper/source/misc/storagehelper.cxx`, `OStorageHelper::IsValidZipEntryFileName`; consumed by `package/source/zipapi/ZipFile.cxx` central-directory parsing.
+- The helper initializes its dot counter to zero and returns true for empty input. Slashes after the first position reset that counter, so `a//b` and `a//` also return true. OStorage explicitly rejects empty element names separately; the inspected ZipFile call does not add that check. Whether later package construction rejects or collapses such names remains unverified. This is a potentially surprising contract, not a demonstrated native exploit or full-package acceptance claim.
+- Preserve this helper and call-site behavior without adding normalization or an extra rejection. The bounded local ZIP catalog retains exact names. The same helper rejects every UTF16 surrogate unit, including both units of a valid supplementary character. Local boundary tables and actual ZIP read/write exercise these decisions; no compiled upstream witness or correction is claimed.

@@ -11,10 +11,13 @@
     ],
     "upstreamSymbols": [
       "OStorageHelper",
-      "CopyInputToOutput"
+      "CopyInputToOutput",
+      "IsValidZipEntryFileName",
+      "PathHasSegment"
     ],
     "preservedResponsibilities": [
-      "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged."
+      "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged.",
+      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished."
     ],
     "omittedResponsibilities": [
       "Native RTTI/stack/vtable/ABI and full storage/write/service/model/UI owners remain unverified or unfinished."
@@ -31,6 +34,10 @@
         },
         {
           "path": "apps/office/src/comphelper/source/misc/storagehelper.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/storagehelper-paths.test.ts",
           "marker": "@fileoverview"
         }
       ],

@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded ZIP32 central-directory and local-record validation from pinned LibreOffice `package/source/zipapi/ZipFile.cxx`.
  */
+import { OStorageHelper } from "../../../comphelper/inc/storagehelper";
 
 import { CRC32 } from "./CRC32";
 
@@ -193,20 +194,11 @@ export class ZipFile {
   }
 }
 
-/** Rejects names that could escape or ambiguously address package storage. @param name - Candidate ZIP path. @returns Nothing. */
+/** Applies the original central-directory name helper at the existing JS transport boundary. This does not normalize paths; host errors remain the explicit bounded ZIP binding. @param name - Decoded UTF16 ZIP path. @returns Nothing. */
 export function assertSafeZipEntryName(name: string): void {
-  const path = name.endsWith("/") ? name.slice(0, -1) : name;
-  if (
-    name.length === 0 ||
-    name.includes("\0") ||
-    name.includes("\\") ||
-    name.startsWith("/") ||
-    /^[A-Za-z]:/.test(name) ||
-    path.split("/").some(
-      /** Detects ambiguous path segments. @param part - One path segment. @returns Whether unsafe. */
-      (part) => part.length === 0 || part === "." || part === "..",
-    )
-  )
+  const units = new Uint16Array(name.length);
+  for (let i = 0; i < name.length; ++i) units[i] = name.charCodeAt(i);
+  if (!OStorageHelper.IsValidZipEntryFileName(units, true))
     throw new Error(`Unsafe ZIP entry name: ${name}`);
 }
 

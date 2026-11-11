@@ -28,7 +28,8 @@
       "Upstream obligations outside ZipFile::ZipFile, std::move, ZipFile::~ZipFile, ZipFile::setInputStream and the bounded ZipFileLimits, DEFAULT_ZIP_FILE_LIMITS, ZipFile contract remain intentionally omitted."
     ],
     "preservedResponsibilities": [
-      "Reimplements bounded ZIP32 central-directory and local-record validation from pinned LibreOffice `package/source/zipapi/ZipFile.cxx`."
+      "Reimplements bounded ZIP32 central-directory and local-record validation from pinned LibreOffice `package/source/zipapi/ZipFile.cxx`.",
+      "Original UTF16 IsValidZipEntryFileName dot/slash/control/surrogate scan and PathHasSegment internal/start/end checks are preserved. The bounded ZIP catalog delegates its decoded-name check to this actual helper instead of a separate path rule, retaining empty/internal-empty segment acceptance (CALC-501/WRITER432) without normalization. Full native package/storage owners, ZipException/decoding/ABI and model/filter/Worker/UI acceptance remain unverified or unfinished."
     ],
     "status": "mapped",
     "upstreamPath": "package/source/zipapi/ZipFile.cxx",
